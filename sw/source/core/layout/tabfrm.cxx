@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabfrm.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.105.58.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1228,8 +1228,22 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     //
     if ( !bSplitRowAllowed )
     {
-        if ( pRow == GetFirstNonHeadlineRow() )
+        SwRowFrm* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
+        if ( pRow == pFirstNonHeadlineRow )
             return false;
+
+        // --> OD 2008-10-21 #i91764#
+        // Ignore row span lines
+        SwRowFrm* pTmpRow = pFirstNonHeadlineRow;
+        while ( pTmpRow && pTmpRow->IsRowSpanLine() )
+        {
+            pTmpRow = static_cast<SwRowFrm*>(pTmpRow->GetNext());
+        }
+        if ( !pTmpRow || pRow == pTmpRow )
+        {
+            return false;
+        }
+        // <--
     }
 
     //

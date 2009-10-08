@@ -95,7 +95,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         if(xTSupplier.is())
         {
             Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            DBG_ASSERT(xTbls->hasByName(rTblQryName), "table not available anymore?")
+            DBG_ASSERT(xTbls->hasByName(rTblQryName), "table not available anymore?");
             try
             {
                 Any aTable = xTbls->getByName(rTblQryName);
@@ -112,7 +112,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         if(xQSupplier.is())
         {
             Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            DBG_ASSERT(xQueries->hasByName(rTblQryName), "table not available anymore?")
+            DBG_ASSERT(xQueries->hasByName(rTblQryName), "table not available anymore?");
             try
             {
                 Any aQuery = xQueries->getByName(rTblQryName);
@@ -133,7 +133,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception in getColumns()")
+            DBG_ERROR("Exception in getColumns()");
         }
         if(xCols.is() && xCols->hasByName(rFldName))
         {

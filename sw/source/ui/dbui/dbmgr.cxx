@@ -313,7 +313,7 @@ BOOL lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
         }
         else
         {
-            DBG_ERROR("no absolute positioning available")
+            DBG_ERROR("no absolute positioning available");
         }
     }
     catch(Exception aExcept)
@@ -364,7 +364,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
     SetMergeType( rMergeDesc.nMergeType );
 
-    DBG_ASSERT(!bInMerge && !pImpl->pMergeData, "merge already activated!")
+    DBG_ASSERT(!bInMerge && !pImpl->pMergeData, "merge already activated!");
 
     SwDBData aData;
     aData.nCommandType = CommandType::TABLE;
@@ -442,7 +442,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     {
         pImpl->pMergeData->bEndOfDB = TRUE;
         pImpl->pMergeData->CheckEndOfDB();
-        DBG_ERROR("exception in MergeNew()")
+        DBG_ERROR("exception in MergeNew()");
     }
 
     uno::Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
@@ -1092,14 +1092,14 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
     rView.SetAdditionalPrintOptions(aViewProperties);
 
     SwMailMergeConfigItem* pConfigItem = rView.GetMailMergeConfigItem();
-    DBG_ASSERT(pConfigItem, "mail merge config item is missing")
+    DBG_ASSERT(pConfigItem, "mail merge config item is missing");
     if(!pConfigItem)
         return sal_False;
 
     USHORT nDocStart = pConfigItem->GetPrintRangeStart();
     USHORT nDocEnd = pConfigItem->GetPrintRangeEnd();
     DBG_ASSERT(nDocStart < nDocEnd && nDocEnd <= pConfigItem->GetMergedDocumentCount(),
-            "merge print settings are not correct")
+            "merge print settings are not correct");
 
     for( sal_uInt32 nPrintDocument = nDocStart; nPrintDocument < nDocEnd; ++nPrintDocument)
     {
@@ -1490,7 +1490,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile )
                             {
-                                DBG_ASSERT( pTargetShell, "no target shell available!" )
+                                DBG_ASSERT( pTargetShell, "no target shell available!" );
                                 // copy created file into the target document
                                 rWorkShell.ConvertFieldsToText();
                                 rWorkShell.SetNumberingRestart();
@@ -1527,7 +1527,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
                                 else
                                     pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
-                                DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended")
+                                DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
                                 //#i51359# add a second paragraph in case there's only one
                                 {
                                     SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -1563,6 +1563,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                         pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
                                 }
 
+                                //convert fields to text if we are exporting to PDF
+                                //this prevents a second merge while updating the fields in SwXTextDocument::getRendererCount()
+                                if( pStoreToFilter && pStoreToFilter->GetFilterName().EqualsAscii("writer_pdf_Export"))
+                                    rWorkShell.ConvertFieldsToText();
                                 xWorkDocSh->DoSaveAs(*pDstMed);
                                 xWorkDocSh->DoSaveCompleted(pDstMed);
                                 if( xWorkDocSh->GetError() )
@@ -1580,7 +1584,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     String sMailAddress = GetDBField( xColumnProp, aDBFormat);
                                     if(!SwMailMergeHelper::CheckMailAddress( sMailAddress ))
                                     {
-                                        DBG_ERROR("invalid e-Mail address in database column")
+                                        DBG_ERROR("invalid e-Mail address in database column");
                                     }
                                     else
                                     {
@@ -1609,7 +1613,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                 //read in the temporary file and use it as mail body
                                                 SfxMedium aMedium( sFileURL, STREAM_READ, TRUE);
                                                 SvStream* pInStream = aMedium.GetInStream();
-                                                DBG_ASSERT(pInStream, "no output file created?")
+                                                DBG_ASSERT(pInStream, "no output file created?");
                                                 if(pInStream)
                                                 {
                                                     pInStream->SetStreamCharSet( eEncoding );
@@ -1663,7 +1667,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             // save the single output document
             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
             {
-                DBG_ASSERT( aTempFile.get(), "Temporary file not available" )
+                DBG_ASSERT( aTempFile.get(), "Temporary file not available" );
                 INetURLObject aTempFileURL(bAsSingleFile ? sSubject : aTempFile->GetURL());
                 SfxMedium* pDstMed = new SfxMedium(
                     aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
@@ -1791,7 +1795,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             }
             catch(Exception&)
             {
-                DBG_ERROR("Exception in getColumns()")
+                DBG_ERROR("Exception in getColumns()");
             }
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
@@ -1878,14 +1882,14 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                     }
                     catch(const Exception&)
                     {
-                        DBG_ERROR("illegal number format key")
+                        DBG_ERROR("illegal number format key");
                     }
                 }
             }
         }
         catch( const Exception& )
         {
-            DBG_ERROR("no FormatKey property found")
+            DBG_ERROR("no FormatKey property found");
         }
         if(bUseDefault)
             nRet = SwNewDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
@@ -2010,7 +2014,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
     }
     catch( const uno::Exception& )
     {
-        DBG_ERROR("Exception in SwDBMgr::GetColumnSupplier")
+        DBG_ERROR("Exception in SwDBMgr::GetColumnSupplier");
     }
 
     return xRet;
@@ -2024,7 +2028,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
 {
     uno::Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
     String sRet;
-    DBG_ASSERT(xColumn.is(), "SwNewDBMgr::::ImportDBField: illegal arguments")
+    DBG_ASSERT(xColumn.is(), "SwNewDBMgr::::ImportDBField: illegal arguments");
     if(!xColumn.is())
         return sRet;
 
@@ -2081,7 +2085,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             }
             catch(Exception& )
             {
-                DBG_ERROR("exception caught")
+                DBG_ERROR("exception caught");
             }
 
         }
@@ -2114,7 +2118,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
  ---------------------------------------------------------------------------*/
 void    SwNewDBMgr::EndMerge()
 {
-    DBG_ASSERT(bInMerge, "merge is not active")
+    DBG_ASSERT(bInMerge, "merge is not active");
     bInMerge = FALSE;
     delete pImpl->pMergeData;
     pImpl->pMergeData = 0;
@@ -2230,7 +2234,7 @@ BOOL    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, USHORT nLanguag
  ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ToNextMergeRecord()
 {
-    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge")
+    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     return ToNextRecord(pImpl->pMergeData);
 }
 /* -----------------------------10.07.01 14:28--------------------------------
@@ -2315,7 +2319,7 @@ BOOL SwNewDBMgr::ExistsNextRecord() const
 sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
 {
     sal_uInt32  nRet = 0;
-    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge")
+    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is())
         return FALSE;
     try
@@ -2332,7 +2336,7 @@ sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
  ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
 {
-    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge")
+    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is()|| nSet < 0)
         return FALSE;
     sal_Bool bRet = FALSE;
@@ -2835,7 +2839,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
     {
-        DBG_ERROR("PropertyValues missing or unset")
+        DBG_ERROR("PropertyValues missing or unset");
         return;
     }
 
@@ -2997,7 +3001,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     }
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
     {
-        DBG_ERROR("PropertyValues missing or unset")
+        DBG_ERROR("PropertyValues missing or unset");
         return;
     }
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -3033,7 +3037,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         }
         catch(Exception& )
         {
-            DBG_ERROR("exception caught")
+            DBG_ERROR("exception caught");
         }
     }
     delete pDlg;
@@ -3074,7 +3078,7 @@ uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Referen
     }
     catch(const Exception&)
     {
-        DBG_ERROR("exception in getDataSourceAsParent caught")
+        DBG_ERROR("exception in getDataSourceAsParent caught");
     }
     return xSource;
 }
@@ -3158,7 +3162,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     {
         pImpl->pMergeData->bEndOfDB = TRUE;
         pImpl->pMergeData->CheckEndOfDB();
-        DBG_ERROR("exception in MergeNew()")
+        DBG_ERROR("exception in MergeNew()");
     }
 
     //bCancel is set from the PrintMonitor
@@ -3323,7 +3327,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
                 }
                 USHORT nPageCountBefore = pTargetShell->GetPageCnt();
-                DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended")
+                DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
                 //#i51359# add a second paragraph in case there's only one
                 {
                     SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -3381,7 +3385,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     }
     catch( Exception& )
     {
-        DBG_ERROR("exception caught in SwNewDBMgr::MergeDocuments")
+        DBG_ERROR("exception caught in SwNewDBMgr::MergeDocuments");
     }
     if(sSourceDocURL.Len())
         File::remove( sSourceDocURL );

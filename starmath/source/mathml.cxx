@@ -1323,6 +1323,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
                 rContext.GetSmImport().GetMM100UnitConverter().
                     setXMLMeasureUnit(MAP_POINT);
                 if (-1 == sValue.indexOf(GetXMLToken(XML_UNIT_PT)))
+                {
                     if (-1 == sValue.indexOf('%'))
                         nFontSize=0.0;
                     else
@@ -1330,6 +1331,7 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
                         rContext.GetSmImport().GetMM100UnitConverter().
                             setXMLMeasureUnit(MAP_RELATIVE);
                     }
+                }
                 break;
             case XML_TOK_FONTFAMILY:
                 sFontFamily = sValue;

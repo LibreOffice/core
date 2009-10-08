@@ -431,6 +431,7 @@
 #define HID_MD_COPY_TO_CLIPBOARD    (HID_BASE + 673)
 #define HID_MD_GLOS_IMPORT          (HID_BASE + 674)
 #define HID_SMARTTAG_MAIN           (HID_BASE + 675)    // SMARTTAGS
+#define HID_LINGU_IGNORE_SELECTION  (HID_BASE + 676)    // grammar check context menu
 
 // Weiter Help-IDs **********************************************************
 

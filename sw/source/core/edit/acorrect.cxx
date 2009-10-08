@@ -284,8 +284,8 @@ const String* SwAutoCorrDoc::GetPrevPara( BOOL bAtNormalPos )
         (*pIdx)--;
         pTNd = pIdx->GetNode().GetTxtNode();
     }
-
-    if( pTNd && NO_NUMBERING == pTNd->GetTxtColl()->GetOutlineLevel() )
+    //if( pTNd && NO_NUMBERING == pTNd->GetTxtColl()->GetOutlineLevel() )
+    if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
         pStr = &pTNd->GetTxt();
 
     if( bUndoIdInitialized )

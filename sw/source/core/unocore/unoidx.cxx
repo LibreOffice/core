@@ -431,7 +431,7 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 OUString sNewName;
                 aValue >>= sNewName;
                 lcl_ConvertTOUNameToUserName(sNewName);
-                DBG_ASSERT(TOX_USER == eTxBaseType, "tox type name can only be changed for user indexes")
+                DBG_ASSERT(TOX_USER == eTxBaseType, "tox type name can only be changed for user indexes");
                 if(GetFmt())
                 {
                     OUString sTmp = pTOXBase->GetTOXType()->GetTypeName();
@@ -975,28 +975,28 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
   -----------------------------------------------------------------------*/
 void SwXDocumentIndex::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 09:35:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXDocumentIndex::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 09:35:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXDocumentIndex::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 09:35:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXDocumentIndex::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 09:35:07---------------------------------------------------
 
@@ -1889,28 +1889,28 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
   -----------------------------------------------------------------------*/
 void SwXDocumentIndexMark::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 10:25:46---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXDocumentIndexMark::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 10:25:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXDocumentIndexMark::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 10:25:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXDocumentIndexMark::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 10:25:47---------------------------------------------------
 

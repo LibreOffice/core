@@ -116,8 +116,6 @@
 #include <globals.hrc>
 #endif
 
-// #107253#
-#include <swlinguconfig.hxx>
 
 // #i18732#
 #include <fmtfollowtextflow.hxx>
@@ -791,8 +789,7 @@ void SwDocShell::SubInitNew()
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
 
-    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-    SwLinguConfig().GetOptions( aLinguOpt );
+    SvtLinguConfig().GetOptions( aLinguOpt );
 
     sal_Int16   nVal = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,

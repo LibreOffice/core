@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtxtsh.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.42.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,8 @@
 
 #include <cppuhelper/bootstrap.hxx>
 
-
+#include "swabstdlg.hxx" //CHINA001
+#include "misc.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -151,11 +152,9 @@ void SwDrawTextShell::Init()
     if(pVOpt->IsOnlineSpell())
     {
         nCtrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
-        if(pVOpt->IsHideSpell())
-            nCtrl |= EE_CNTRL_NOREDLINES;
     }
     else
-        nCtrl &= ~(EE_CNTRL_ONLINESPELLING|EE_CNTRL_NOREDLINES);
+        nCtrl &= ~(EE_CNTRL_ONLINESPELLING);
 
     pOutliner->SetControlWord(nCtrl);
     pOLV->ShowCursor();
@@ -496,9 +495,6 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -530,9 +526,23 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             rReq.Done();
         }
         break;
-        case FN_INSERT_SYMBOL:  // Sonderzeichen einfuegen
+        case FN_INSERT_SYMBOL:
+    {  // Sonderzeichen einfuegen
             InsertSymbol(rReq);
             break;
+    }
+          case FN_INSERT_STRING:
+                {
+            const SfxItemSet *pNewAttrs = rReq.GetArgs();
+                        sal_uInt16 nSlot = rReq.GetSlot();
+            const SfxPoolItem* pItem = 0;
+                        if(pNewAttrs)
+            {
+                                pNewAttrs->GetItemState(nSlot, FALSE, &pItem );
+                             pOLV->InsertText(((const SfxStringItem *)pItem)->GetValue());
+            }
+                        break;
+                }
 
         case SID_SELECTALL:
         {
@@ -546,7 +556,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         }
         break;
 
-        case FN_FORMAT_RESET:   // Harte Textattributierung l�schen
+        case FN_FORMAT_RESET:   // delete hard text attributes
         {
             pOLV->RemoveAttribsKeepLanguages( true );
             pOLV->GetEditView().GetEditEngine()->RemoveFields(TRUE);
@@ -566,7 +576,6 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 return;
             }
             break;
-
         case FN_DRAWTEXT_ATTR_DLG:
             {
                 SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool() );

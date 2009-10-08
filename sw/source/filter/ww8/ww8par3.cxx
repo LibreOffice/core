@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.93.92.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1072,6 +1072,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     bool bLVLOk = true;
     sal_uInt8  aBits1;
 
+    nLastLFOPosition = USHRT_MAX;
     long nOriginalPos = rSt.Tell();
     //
     // 1. PLCF LST auslesen und die Listen Vorlagen im Writer anlegen
@@ -1480,7 +1481,6 @@ bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
 
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     const BYTE nLevel, std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode)
-    const
 {
     sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
     if( nLFOInfos <= nLFOPosition )
@@ -1497,6 +1497,16 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     if( !pLFOInfo->pNumRule )
         return 0;
 
+    // #i25545#
+    SwNumFmt pFmt(*(pLFOInfo->pNumRule->GetNumFmt(nLevel)));
+    if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
+        if ( pFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
+            pFmt.SetNumAdjust(SVX_ADJUST_LEFT);
+        else if ( pFmt.GetNumAdjust() == SVX_ADJUST_LEFT)
+            pFmt.SetNumAdjust(SVX_ADJUST_RIGHT);
+        pLFOInfo->pNumRule->Set(nLevel, pFmt);
+    }
+    nLastLFOPosition = nLFOPosition;
     /*
     #i1869#
     If this list has had its bits set in word 2000 to pretend that it is a
@@ -1804,12 +1814,9 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                     {
                         pTxtNd->SetAttr
                             (SwNumRuleItem(pRule->GetName()));
-
                     }
                 }
-
             }
-
             // --> OD 2005-10-17 #126238#
             // - re-introduce fix for issue #i49037#, which got lost by
             // accident on a re-synchronisation on the master.
@@ -2363,8 +2370,8 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
             break;
 
         case RES_CHRATR_UNDERLINE:
-            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetUnderline());
-            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetUnderline());
+            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetLineStyle());
+            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetLineStyle());
             break;
 
         case RES_CHRATR_CROSSEDOUT:
@@ -2552,7 +2559,7 @@ sal_Bool SwMSConvertControls::InsertControl(
     uno::Reference< drawing::XShape > xShape =
         uno::Reference< drawing::XShape >(xCreate, uno::UNO_QUERY);
 
-    DBG_ASSERT(xShape.is(), "XShape nicht erhalten")
+    DBG_ASSERT(xShape.is(), "XShape nicht erhalten");
     xShape->setSize(rSize);
 
     uno::Reference< beans::XPropertySet > xShapePropSet(

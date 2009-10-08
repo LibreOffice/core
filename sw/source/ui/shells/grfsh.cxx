@@ -86,12 +86,8 @@
 #include <usrpref.hxx>
 #include <edtwin.hxx>
 #include <swwait.hxx>
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
 
 #define SwGrfShell
 #include "itemdef.hxx"
@@ -114,6 +110,11 @@ void SwGrfShell::Execute(SfxRequest &rReq)
     USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
+        case SID_TWAIN_TRANSFER:
+        {
+            GetView().ExecuteScan( rReq );
+            break;
+        }
         case FN_SAVE_GRAPHIC:
         {
             const Graphic *pGraphic;
@@ -383,8 +384,8 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
 
         switch( nSlot )
         {
-        case FN_FLIP_VERT_GRAFIC:
-        case FN_FLIP_HORZ_GRAFIC:
+            case FN_FLIP_VERT_GRAFIC:
+            case FN_FLIP_HORZ_GRAFIC:
             {
                 GetShell().GetCurAttr( aGrfSet );
                 SwMirrorGrf aMirror( (SwMirrorGrf&)aGrfSet.Get(
@@ -475,7 +476,6 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             aToolboxAccess.toggleToolbox();
             break;
         }
-
         case SID_GRFFILTER:
         case SID_GRFFILTER_INVERT:
         case SID_GRFFILTER_SMOOTH:
@@ -534,7 +534,11 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         BOOL bDisable = bParentCntProt;
         switch( nWhich )
         {
+        case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
+        case SID_TWAIN_TRANSFER:
+            if( bParentCntProt || !bIsGrfCntnt )
+                bDisable = TRUE;
             break;
         case FN_SAVE_GRAPHIC:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndcopy.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,7 +129,9 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
         // ??? reicht das ??? was ist mit PostIts/Feldern/FeldTypen ???
-    pCpyTxtNd->Copy( pTxtNd, SwIndex( pCpyTxtNd ), pCpyTxtNd->GetTxt().Len() );
+    // --> OD 2008-11-18 #i96213# - force copy of all attributes
+    pCpyTxtNd->Copy( pTxtNd, SwIndex( pCpyTxtNd ), pCpyTxtNd->GetTxt().Len(), true );
+    // <--
 
 //FEATURE::CONDCOLL
     if( RES_CONDTXTFMTCOLL == pColl->Which() )
@@ -488,9 +490,11 @@ void lcl_SetCpyPos( const SwPosition& rOrigPos,
     nNdOff -= nDelCount;
     xub_StrLen nCntntPos = rOrigPos.nContent.GetIndex();
 
-    if( nNdOff )
-        rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
-    else
+    // --> OD, AMA 2008-07-07 #b6713815#
+    // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
+    rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
+    if( !nNdOff )
+    // <--
     {
         // dann nur den Content anpassen
         if( nCntntPos > rOrigStt.nContent.GetIndex() )

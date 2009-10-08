@@ -284,11 +284,12 @@ void SwXTextCursor::getTextFromPam(SwPaM& aCrsr, OUString& rBuffer)
 #endif
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
-    SwIoSystem::GetWriter( C2S(FILTER_TEXT_DLG), String(), xWrt );
+    SwReaderWriter::GetWriter( C2S(FILTER_TEXT_DLG), String(), xWrt );
     if( xWrt.Is() )
     {
         SwWriter aWriter( aStream, aCrsr );
         xWrt->bASCII_NoLastLineEnd = sal_True;
+        xWrt->bExportPargraphNumbering = sal_False;
         SwAsciiOptions aOpt = xWrt->GetAsciiOptions();
         aOpt.SetCharSet( RTL_TEXTENCODING_UNICODE );
         xWrt->SetAsciiOptions( aOpt );
@@ -543,24 +544,6 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             case FN_UNO_NUM_START_VALUE  :
                 lcl_SetNodeNumStart( rPam, aValue );
             break;
-            case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
-                {
-/*                  Will be used in OOo 3.0
-                    SwTxtNode * pTmpNode = rPam.GetNode()->GetTxtNode();
-
-                    BYTE nLevel;
-                    aValue >>= nLevel;
-
-                    if ( pTmpNode )
-                    {
-                        pTmpNode->SetOutlineLevel(nLevel);
-
-                        // --> OD 2005-09-01 #i53198# - update outline nodes array
-                        rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
-                        // <--
-                    }*/
-                }
-                break;
             case FN_UNO_NUM_LEVEL  :
             // --> OD 2008-07-14 #i91601#
             case FN_UNO_LIST_ID:
@@ -913,7 +896,7 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
             {
                 if( !SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, *_pStartCrsr, rText ) )
                 {
-                    DBG_ASSERT( sal_False, "Doc->Insert(Str) failed." )
+                    DBG_ASSERT( sal_False, "Doc->Insert(Str) failed." );
                 }
                 SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);
                 _pStartCrsr->Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
@@ -2132,28 +2115,28 @@ Any SwXTextCursor::getPropertyValue(const OUString& rPropertyName)
   -----------------------------------------------------------------------*/
 void SwXTextCursor::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 09.12.98 14:18:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextCursor::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 09.12.98 14:18:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextCursor::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 09.12.98 14:18:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextCursor::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 05.03.99 11:36:11---------------------------------------------------
 

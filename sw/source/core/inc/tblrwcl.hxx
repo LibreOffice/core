@@ -77,7 +77,7 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
                 SwTableLine* pLine, SwTableBoxFmt* pBoxFrmFmt,
                 SwTableBox* pBox, USHORT nInsPos, USHORT nCnt = 1 );
 
-void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0,
+SW_DLLPUBLIC void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0,
                 BOOL bCalcNewSize = TRUE, const BOOL bCorrBorder = TRUE,
                 SwShareBoxFmts* pShareFmts = 0 );
 

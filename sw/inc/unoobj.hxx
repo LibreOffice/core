@@ -234,7 +234,7 @@ public:
 
     // wenn ein SwXText attached wird, wird das Doc gesetzt
     void                    SetDoc(SwDoc* pDc)
-                                {DBG_ASSERT(!pDoc || !pDc, "Doc schon gesetzt?")
+                                {DBG_ASSERT(!pDoc || !pDc, "Doc schon gesetzt?");
                                     pDoc = pDc;
                                     bObjectValid = 0 != pDc;
                                 }
@@ -710,7 +710,7 @@ public:
 /*-----------------23.02.98 12:05-------------------
 
 --------------------------------------------------*/
-class SwXTextRange : public cppu::WeakImplHelper8
+class SW_DLLPUBLIC SwXTextRange : public cppu::WeakImplHelper8
 <
     ::com::sun::star::text::XTextRange,
     ::com::sun::star::lang::XUnoTunnel,

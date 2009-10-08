@@ -1318,7 +1318,7 @@ void SmParser::SubSup(ULONG nActiveGroup)
         }
         nIndex++;
         DBG_ASSERT(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,
-                   "SmParser::Power() : sub-/supscript index falsch")
+                   "SmParser::Power() : sub-/supscript index falsch");
 
         // set sub-/supscript if not already done
         if (aSubNodes.Get(nIndex) != NULL)

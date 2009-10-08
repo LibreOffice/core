@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postithelper.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.2.118.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,13 @@
 #include "precompiled_sw.hxx"
 
 #include <tools/gen.hxx>
+
 #include <postithelper.hxx>
 #include <PostItMgr.hxx>
+#include <postit.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
+#include <docufld.hxx>
 #include <ndtxt.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
@@ -43,12 +46,15 @@
 #include <txtfrm.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
+#include <scriptinfo.hxx>
+#include <svx/charhiddenitem.hxx>
 
 
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLayoutInfo >& rInfo, SwPosition& rPos )
 {
     SwLayoutStatus aRet = INVISIBLE;
-    SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();
+    const SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
+    SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();   // getfirstcontentnode // getnext...
     if( !pNode )
         return aRet;
     SwClientIter aIter( *pNode );
@@ -68,6 +74,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
                 aInfo.mPagePrtArea.Pos() += aInfo.mPageFrame.Pos();
                 aInfo.mnPageNumber = pPage->GetPhyPageNum();
                 aInfo.mbMarginSide = pPage->MarginSide();
+                aInfo.mRedlineAuthor = 0;
 
                 if( aRet == INVISIBLE )
                 {
@@ -86,12 +93,11 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
                         }
                     }
                 }
-
                  rInfo.push_back( aInfo );
             }
         }
     }
-    return aRet;
+    return ((aRet==VISIBLE) && SwScriptInfo::IsInHiddenRange( *pTxtNode , rPos.nContent.GetIndex()) ) ? HIDDEN : aRet;
 }
 
 long SwPostItHelper::getLayoutHeight( const SwRootFrm* pRoot )
@@ -138,4 +144,44 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
     return aRet;
 }
 
+SwPosition SwPostItItem::GetPosition()
+{
+    SwTxtFld* pFld = pFmtFld->GetTxtFld();
+    //if( pFld )
+    //{
+        SwTxtNode* pTNd = pFld->GetpTxtNode();
+    //  if( pTNd )
+    //  {
+            SwPosition aPos( *pTNd );
+            aPos.nContent.Assign( pTNd, *pFld->GetStart() );
+            return aPos;
+    //  }
+    //}
+}
 
+bool SwPostItItem::UseElement()
+{
+    return pFmtFld->IsFldInDoc();
+}
+
+SwMarginWin* SwPostItItem::GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
+{
+    return new SwPostIt(pParent,nBits,pFmtFld,aMgr,aBits);
+}
+
+/*
+SwPosition SwRedCommentItem::GetPosition()
+{
+    return *pRedline->Start();
+}
+
+SwMarginWin* SwRedCommentItem::GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
+{
+    return new SwRedComment(pParent,nBits,aMgr,aBits,pRedline);
+}
+
+bool SwRedCommentItem::UseElement()
+{
+    return true;
+}
+*/

@@ -220,7 +220,13 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
         {
             SwNode *pNode = 0;
             {
-                SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 1 );
+                // --> OD 2008-10-07 #i92993#
+                // Begin with start node of page header/footer to assure that
+                // complete content is checked for cursors and the complete content
+                // is deleted on below made method call <pDoc->DeleteSection(pNode)>
+//                SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 1 );
+                SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 0 );
+                // <--
                 //Wenn in einem der Nodes noch ein Crsr angemeldet ist, muss das
                 //ParkCrsr einer (beliebigen) Shell gerufen werden.
                 pNode = pDoc->GetNodes()[ aIdx ];
@@ -1021,7 +1027,7 @@ BOOL SwFmtCol::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        DBG_ERROR("not implemented")
+        DBG_ERROR("not implemented");
     }
     else
     {
@@ -1038,7 +1044,7 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
     sal_Bool bRet = sal_False;
     if(MID_COLUMN_SEPARATOR_LINE == nMemberId)
     {
-        DBG_ERROR("not implemented")
+        DBG_ERROR("not implemented");
     }
     else
     {

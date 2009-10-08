@@ -151,7 +151,7 @@ public:
             const String& rName, const String& rShortName);
 };
 
-class SwFieldBookmark : public SwBookmark
+class SW_DLLPUBLIC SwFieldBookmark : public SwBookmark
 {
 private:
     int fftype; // Type: 0 = Text, 1 = Check Box, 2 = List

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabsh.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.46.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include <svx/colritem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/numinf.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
 #include <svtools/zformat.hxx>
 #include <sfx2/bindings.hxx>
@@ -580,9 +581,16 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 {ASSERT( !this, "Wo ist das Box-Item?" )}
 
+            //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
             if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, TRUE, &pBoxItem) == SFX_ITEM_SET)
                 aInfo = *(SvxBoxInfoItem*)pBoxItem;
+            else if( pArgs->GetItemState(SDRATTR_TABLE_BORDER_INNER, TRUE, &pBoxItem) == SFX_ITEM_SET )
+            {
+                aInfo = *(SvxBoxInfoItem*)pBoxItem;
+                aInfo.SetWhich(SID_ATTR_BORDER_INNER);
+            }
+
             aInfo.SetTable( TRUE );
             aInfo.SetValid( VALID_DISABLE, FALSE );
 
@@ -1032,13 +1040,32 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_SPLIT_TABLE:
         {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            SFX_REQUEST_ARG( rReq, pType, SfxUInt16Item, FN_PARAM_1, sal_False );
+            if( pType )
+            {
+                switch( pType->GetValue() )
+                {
+                    case HEADLINE_NONE    :
+                    case HEADLINE_BORDERCOPY:
+                    case HEADLINE_CNTNTCOPY:
+                    case HEADLINE_BOXATTRCOPY:
+                    case HEADLINE_BOXATRCOLLCOPY:
+                        rSh.SplitTable(pType->GetValue()) ;
+                    default: ;//wrong parameter, do nothing
+                }
+            }
+            else
+            {
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh ,DLG_SPLIT_TABLE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            pDlg->Execute();
-            delete pDlg;
+                AbstractSplitTableDialog* pDlg = pFact->CreateSplitTblDialog( GetView().GetWindow(), rSh );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                pDlg->Execute();
+                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, pDlg->GetSplitMode() ) );
+                delete pDlg;
+                bCallDone = sal_True;
+            }
         }
         break;
 

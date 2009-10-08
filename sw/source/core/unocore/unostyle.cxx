@@ -92,6 +92,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "ccoll.hxx"
+#include "unocore.hrc"
 
 #include <set>
 
@@ -1055,6 +1056,76 @@ void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuc
     else
         throw uno::RuntimeException();
 }
+
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+    return uno::Reference< beans::XPropertySetInfo >();
+}
+
+void SAL_CALL SwXStyleFamily::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const ::rtl::OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Any aRet;
+
+    if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ) )
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        sal_uInt32 nResId = 0;
+        switch ( eFamily )
+        {
+            case SFX_STYLE_FAMILY_CHAR:
+                nResId = STR_STYLE_FAMILY_CHARACTER; break;
+            case SFX_STYLE_FAMILY_PARA:
+                nResId = STR_STYLE_FAMILY_PARAGRAPH; break;
+            case SFX_STYLE_FAMILY_FRAME:
+                nResId = STR_STYLE_FAMILY_FRAME; break;
+            case SFX_STYLE_FAMILY_PAGE:
+                nResId = STR_STYLE_FAMILY_PAGE; break;
+            case SFX_STYLE_FAMILY_PSEUDO:
+                nResId = STR_STYLE_FAMILY_NUMBERING; break;
+            default:
+                OSL_ENSURE( 0, "SwXStyleFamily::getPropertyValue(): invalid family" );
+        }
+        if ( nResId > 0 )
+        {
+            OUString sDisplayName( String( SW_RES( nResId ) ) );
+            aRet = uno::makeAny( sDisplayName );
+        }
+    }
+    else
+    {
+        throw beans::UnknownPropertyException( OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property: ") ) + sPropertyName, static_cast<OWeakObject *>(this) );
+    }
+
+    return aRet;
+}
+
+void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL SwXStyleFamily::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+
 /*-- 16.12.98 16:03:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1702,7 +1773,7 @@ struct SwStyleBase_Impl
     sal_Bool HasItemSet() {return mxNewBase.is();}
     SfxItemSet& GetItemSet()
         {
-            DBG_ASSERT(mxNewBase.is(), "no SwDocStyleSheet available")
+            DBG_ASSERT(mxNewBase.is(), "no SwDocStyleSheet available");
             if(!pItemSet)
                 pItemSet = new SfxItemSet(mxNewBase->GetItemSet());
             return *pItemSet;
@@ -1893,15 +1964,23 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                 throw lang::IllegalArgumentException();
         }
         break;
-        case FN_UNO_DEFAULT_OUTLINE_LEVEL:
+        // case FN_UNO_DEFAULT_OUTLINE_LEVEL:       //#outline level,removed by zahojianwei
+        //{
+        //    sal_Int8 nLevel = 0;
+        //    if( rValue >>= nLevel )
+        //        rBase.mxNewBase->GetCollection()->SetOutlineLevel( nLevel );
+        //    else
+        //        rBase.mxNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );
+        //}
+        //break;
+        case RES_PARATR_OUTLINELEVEL:               //add by zahojianwei
         {
-            sal_Int8 nLevel = 0;
-            if( rValue >>= nLevel )
-                rBase.mxNewBase->GetCollection()->SetOutlineLevel( nLevel );
-            else
-                rBase.mxNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );
+            sal_Int16 nLevel = 0;
+               rValue >>= nLevel;
+            if( 0 <= nLevel && nLevel <= MAXLEVEL)
+                rBase.mxNewBase->GetCollection()->SetAttrOutlineLevel( nLevel );
         }
-        break;
+        break;                                      //<-end,zhaojianwei
         case FN_UNO_FOLLOW_STYLE:
         {
             OUString sTmp;
@@ -2143,7 +2222,9 @@ put_itemset:
             if ( SFX_STYLE_FAMILY_PARA == eFamily &&
                  pMap->nWID == RES_PARATR_NUMRULE &&
                  rBase.mxNewBase.is() && rBase.mxNewBase->GetCollection() &&
-                 rBase.mxNewBase->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */)
+                 //rBase.mxNewBase->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */)    //#outline level,removed by zhaojianwei
+                 rBase.mxNewBase->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )      ////<-end,add by zhaojianwei
+
             {
                 OUString sNewNumberingRuleName;
                 rValue >>= sNewNumberingRuleName;
@@ -2152,7 +2233,8 @@ put_itemset:
                      sTmp != pDoc->GetOutlineNumRule()->GetName() )
                 {
                     // delete assignment to list level of outline style.
-                    rBase.mxNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );
+                    //rBase.mxNewBase->GetCollection()->SetOutlineLevel( NO_NUMBERING );            //#outline level,removed by zhaojianwei
+                    rBase.mxNewBase->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end,adde by zhaojianwei
                 }
             }
         }
@@ -2301,19 +2383,26 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
             case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
             {
                 const SwNumRule* pRule = rBase.mxNewBase->GetNumRule();
-                DBG_ASSERT(pRule, "Wo ist die NumRule?")
+                DBG_ASSERT(pRule, "Wo ist die NumRule?");
                 uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule);
                 aRet.setValue(&xRules, ::getCppuType((uno::Reference<container::XIndexReplace>*)0));
             }
             break;
-            case FN_UNO_DEFAULT_OUTLINE_LEVEL:
+            //case FN_UNO_DEFAULT_OUTLINE_LEVEL:        //#outline level,removed by zahojianwei
+            //{
+            //    DBG_ASSERT( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
+            //    BYTE nLevel = rBase.mxNewBase->GetCollection()->GetOutlineLevel();
+            //    if( nLevel != NO_NUMBERING )
+            //        aRet <<= static_cast<sal_Int8>( nLevel );
+            //}
+            //break;
+            case RES_PARATR_OUTLINELEVEL:               //add by zahojianwei
             {
                 DBG_ASSERT( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
-                BYTE nLevel = rBase.mxNewBase->GetCollection()->GetOutlineLevel();
-                if( nLevel != NO_NUMBERING )
-                    aRet <<= static_cast<sal_Int8>( nLevel );
+                int nLevel = rBase.mxNewBase->GetCollection()->GetAttrOutlineLevel();
+                    aRet <<= static_cast<sal_Int16>( nLevel );
             }
-            break;
+            break;                                      //<-end,zhaojianwei
             case FN_UNO_FOLLOW_STYLE:
             {
                 String aString;
@@ -2351,7 +2440,7 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
             break;
             case FN_UNO_DISPLAY_NAME:
             {
-                OUString sName(rBase.mxNewBase->GetName());
+                OUString sName(rBase.mxNewBase->GetDisplayName());
                 aRet <<= sName;
             }
             break;
@@ -2619,7 +2708,7 @@ void SwXStyle::addPropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 08:26:54---------------------------------------------------
 
@@ -2628,7 +2717,7 @@ void SwXStyle::removePropertyChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 08:26:54---------------------------------------------------
 
@@ -2637,7 +2726,7 @@ void SwXStyle::addVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 08:26:54---------------------------------------------------
 
@@ -2646,7 +2735,7 @@ void SwXStyle::removeVetoableChangeListener(const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 /*-- 08.03.99 10:50:26---------------------------------------------------
@@ -2708,14 +2797,14 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
                 {
                     pStates[i] = beans::PropertyState_DIRECT_VALUE;
                 }
-                else if( FN_UNO_DEFAULT_OUTLINE_LEVEL == pMap->nWID )
-                {
-                    pStates[i] =
-                        ( xStyle->GetCollection()->GetOutlineLevel()
-                          == NO_NUMBERING )
-                        ? beans::PropertyState_DEFAULT_VALUE
-                        : beans::PropertyState_DIRECT_VALUE;
-                }
+        //        else if( FN_UNO_DEFAULT_OUTLINE_LEVEL == pMap->nWID ) //#outline level,removed by zahojianwei
+        //        {
+        //            pStates[i] =
+        //                ( xStyle->GetCollection()->GetOutlineLevel()
+        //                  == NO_NUMBERING )
+        //                ? beans::PropertyState_DEFAULT_VALUE
+        //                : beans::PropertyState_DIRECT_VALUE;
+        //        }                                                     //<-end,zhaojianwei
                 else if(SFX_STYLE_FAMILY_PAGE == eFamily &&
                         (rPropName.EqualsAscii("Header", 0, 6)
                             || rPropName.EqualsAscii("Footer", 0, 6)))
@@ -2787,7 +2876,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "Where is the style?")
+        DBG_ASSERT(pBase, "Where is the style?");
 
         if(pBase)
         {
@@ -2839,10 +2928,14 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
             if ( pMap->nFlags & beans::PropertyAttribute::READONLY )
                 throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertiesToDefault: property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-            if( pMap->nWID == FN_UNO_DEFAULT_OUTLINE_LEVEL )
-                static_cast<SwTxtFmtColl*>(pTargetFmt)->SetOutlineLevel( NO_NUMBERING );
+            //if( pMap->nWID == FN_UNO_DEFAULT_OUTLINE_LEVEL )      //#outline level, removed by zhaojianwei
+            //  static_cast<SwTxtFmtColl*>(pTargetFmt)->SetOutlineLevel( NO_NUMBERING );
+            //else
+            //  pTargetFmt->ResetFmtAttr( pMap->nWID );
+            if( pMap->nWID == RES_PARATR_OUTLINELEVEL )             //add by zhaojianwei
+                static_cast<SwTxtFmtColl*>(pTargetFmt)->DeleteAssignmentToListLevelOfOutlineStyle();
             else
-                pTargetFmt->ResetFmtAttr( pMap->nWID );
+                pTargetFmt->ResetFmtAttr( pMap->nWID );             //<-end,zhaojianwei
         }
     }
     else if ( bIsDescriptor )
@@ -2860,7 +2953,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-        DBG_ASSERT(pBase, "where is the style, you fiend!?")
+        DBG_ASSERT(pBase, "where is the style, you fiend!?");
 
         if(pBase)
         {
@@ -2879,7 +2972,8 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     // --> OD 2007-07-25 #132402# - make code robust
                     if ( xStyle->GetCollection() )
                     {
-                        xStyle->GetCollection()->SetOutlineLevel( NO_NUMBERING );
+                    //  xStyle->GetCollection()->SetOutlineLevel( NO_NUMBERING );               //#outline level,removed by zhaojianwei
+                        xStyle->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();   //<-end,add by zhaojianwei
                     }
                     // <--
                 }
@@ -2990,7 +3084,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
         {
             pBasePool->SetSearchMask(eFamily);
             SfxStyleSheetBase* pBase = pBasePool->Find(sStyleName);
-            DBG_ASSERT(pBase, "Doesn't seem to be a style!")
+            DBG_ASSERT(pBase, "Doesn't seem to be a style!");
 
             if(pBase)
             {

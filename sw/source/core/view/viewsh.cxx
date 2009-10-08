@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.87.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,7 +159,7 @@ void ViewShell::DLPrePaint2(const Region& rRegion)
     mnPrePostPaintCount++;
 }
 
-void ViewShell::DLPostPaint2()
+void ViewShell::DLPostPaint2(bool bPaintFormLayer)
 {
     OSL_ENSURE(mnPrePostPaintCount > 0L, "ViewShell::DLPostPaint2: Pre/PostPaint encapsulation broken (!)");
     mnPrePostPaintCount--;
@@ -173,7 +173,7 @@ void ViewShell::DLPostPaint2()
         }
 
         // #i74769# use SdrPaintWindow now direct
-        Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow);
+        Imp()->GetDrawView()->EndDrawLayers(*mpTargetPaintWindow, bPaintFormLayer);
         mpTargetPaintWindow = 0;
     }
 }
@@ -356,7 +356,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                             pOut = pOld;
 
                             // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
-                            DLPostPaint2();
+                            DLPostPaint2(true);
                         }
                     }
                     if ( bPaint )
@@ -374,7 +374,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         pLayout->Paint( aRect );
 
                         // #i75172# end DrawingLayer paint
-                        DLPostPaint2();
+                        DLPostPaint2(true);
                     }
                 }
 
@@ -485,7 +485,7 @@ void ViewShell::ImplUnlockPaint( BOOL bVirDev )
                                   VisArea().Pos(), aSize, *pVout );
 
                 // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
-                DLPostPaint2();
+                DLPostPaint2(true);
             }
             else
             {
@@ -761,7 +761,7 @@ void ViewShell::LayoutIdle()
         // #125243# there are lots of stacktraces indicating that Imp() returns NULL
         // this ViewShell seems to be invalid - but it's not clear why
         // this return is only a workaround!
-        DBG_ASSERT(Imp(), "ViewShell already deleted?")
+        DBG_ASSERT(Imp(), "ViewShell already deleted?");
         if(!Imp())
             return;
         SwLayIdle aIdle( GetLayout(), Imp() );
@@ -1006,6 +1006,14 @@ void ViewShell::Reformat()
         EndAction();
     }
 }
+
+ void ViewShell::ChgNumberDigits()
+ {
+     SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
+     if ( pTmpDrawModel )
+            pTmpDrawModel->ReformatAllTextObjects();
+     Reformat();
+ }
 
 /******************************************************************************
 |*
@@ -1419,7 +1427,7 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                 ViewShell::bLstAct = FALSE;
 
                 // end paint and destroy ObjectContact again
-                DLPostPaint2();
+                DLPostPaint2(true);
                 pDrawView->DeleteWindowFromPaintView(pVout);
 
                 // temporary debug paint checking...
@@ -1560,7 +1568,7 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                             pVout->EnableMapMode(bMapModeWasEnabledSource);
 
                             // end paint on logoc base
-                            DLPostPaint2();
+                            DLPostPaint2(true);
                         }
                         else
                         {
@@ -1587,7 +1595,7 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                             // #i75172# Corret repaint end
                             // Note: This also correcty creates the overlay, thus smooth scroll will
                             // also be allowed now wth selection (see big IF above)
-                            DLPostPaint2();
+                            DLPostPaint2(true);
                         }
                     }
                     else
@@ -1715,6 +1723,32 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     {
         const Rectangle aRectangle(rRegion[i].SVRect());
 
+        // #i93170#
+        // Here we have a real Problem. On the one hand we have the buffering for paint
+        // and overlay which needs an embracing pair of DLPrePaint2/DLPostPaint2 calls,
+        // on the other hand the MapMode is not set correctly when this code is executed.
+        // This is done in the users of this method, for each SWpage before painting it.
+        // Since the MapMode is not correct here, the call to DLPostPaint2 will paint
+        // existing FormControls due to the current MapMode.
+        //
+        // There are basically three solutions for this:
+        //
+        // (1) Set the MapMode correct, move the background painting to the users of
+        //     this code
+        //
+        // (2) Do no DLPrePaint2/DLPostPaint2 here; no SdrObjects are allowed to lie in
+        //     the desktop region. Disadvantage: the desktop will not be part of the
+        //     buffers, e.g. overlay. Thus, as soon as overlay will be used over the
+        //     desktop, it will not work.
+        //
+        // (3) expand DLPostPaint2 with a flag to signal if FormControl paints shall
+        //     be done or not
+        //
+        // Currently, (3) will be the best possible solution. It will keep overlay and
+        // buffering intact and work without MapMode for single pages. In the medium
+        // to long run, (1) will need to be used and the bool bPaintFormLayer needs
+        // to be removed again
+
         // #i68597# inform Drawinglayer about display change
         DLPrePaint2(Region(aRectangle));
 
@@ -1724,7 +1758,7 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
         GetOut()->SetLineColor();
         GetOut()->DrawRect(aRectangle);
 
-        DLPostPaint2();
+        DLPostPaint2(false);
     }
 
     GetOut()->Pop();
@@ -1985,7 +2019,7 @@ void ViewShell::Paint(const Rectangle &rRect)
             pOut->Pop();
 
             // #i68597#
-            DLPostPaint2();
+            DLPostPaint2(true);
         }
     }
 }
@@ -2446,7 +2480,7 @@ void ViewShell::UISizeNotify()
 
 void    ViewShell::SetRestoreActions(USHORT nSet)
 {
-    DBG_ASSERT(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?")
+    DBG_ASSERT(!GetRestoreActions()||!nSet, "mehrfaches Restore der Actions ?");
     Imp()->SetRestoreActions(nSet);
 }
 USHORT  ViewShell::GetRestoreActions() const

@@ -37,19 +37,8 @@
 CDEFS+=-DACCESSIBLE_LAYOUT
 
 # define SW_DLLIMPLEMENTATION (see @ swdllapi.h)
+.IF "$(MAKING_LIBMSWORD)" != "TRUE"
 CDEFS += -DSW_DLLIMPLEMENTATION
+.ENDIF
 
-# set default symbol visibility / scope to hidden
-.IF "$(COMNAME)" == "gcc3"
-.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-CFLAGS += -fvisibility=hidden
-.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-.ENDIF # gcc3
-
-.IF "$(COMNAME)" == "sunpro5"
-.IF "$(CCNUMVER)" >= "00050005"
-CFLAGS += -xldscope=hidden
-.ENDIF # 5.5
-.ENDIF # sunpro5
-
-# ------------------------------------------------------------------------
+VISIBILITY_HIDDEN=TRUE

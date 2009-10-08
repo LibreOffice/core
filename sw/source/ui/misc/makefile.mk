@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.14.236.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,6 +61,7 @@ SRC1FILES=\
 EXCEPTIONSFILES = \
         $(SLO)$/glossary.obj \
         $(SLO)$/glosdoc.obj \
+        $(SLO)$/glshell.obj \
         $(SLO)$/numberingtypelistbox.obj \
         $(SLO)$/outline.obj \
         $(SLO)$/redlndlg.obj

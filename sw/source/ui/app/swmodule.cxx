@@ -504,7 +504,7 @@ void SwDLL::RegisterControls()
  * --------------------------------------------------*/
 void    SwModule::InitAttrPool()
 {
-    DBG_ASSERT(!pAttrPool, "Pool ist schon da!")
+    DBG_ASSERT(!pAttrPool, "Pool ist schon da!");
     pAttrPool = new SwAttrPool(0);
     SetPool(pAttrPool);
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _annotsh.sdi,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.82.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,12 @@
 interface _Annotation
 [ Automation = FALSE; ]
 {
+    FN_DELETE_COMMENT
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
     FN_DELETE_NOTE
     [
         ExecMethod = NoteExec ;
@@ -67,6 +73,17 @@ interface _Annotation
         StateMethod = GetNoteState ;
     ]
 
+    FN_POSTIT
+        [
+                ExecMethod = NoteExec ;
+                StateMethod = GetNoteState ;
+        ]
+
+    FN_REPLY
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
     FN_ESCAPE // api:
     [
         ExecMethod = NoteExec ;
@@ -151,10 +168,37 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Exec ;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Exec ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Exec;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Exec ;
+    ]
+
     FN_INSERT_SYMBOL // api:
     [
         ExecMethod = Exec ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_STRING
+    [
+            ExecMethod = Exec ;
+            StateMethod = NoState ;
+            DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_CHAR_FONT // status()
@@ -193,6 +237,13 @@ interface _Annotation
     ]
 
     SID_ATTR_CHAR_UNDERLINE // api:
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_OVERLINE // api:
     [
         ExecMethod = Exec ;
         StateMethod = GetState ;
@@ -302,5 +353,44 @@ interface _Annotation
         ExecMethod = Exec ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_SEARCH_ITEM // status()
+    [
+        ExecMethod = ExecSearch ;
+        StateMethod = StateSearch ;
+        Export = FALSE;
+    ]
+    FN_REPEAT_SEARCH // status(final|play)
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_NOW // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    SID_SEARCH_OPTIONS // status()
+    [
+        StateMethod = StateSearch ;
+    ]
+    FID_SEARCH_SEARCHSET // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_REPLACESET // status()
+    [
+        ExecMethod = ExecSearch ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+      // ab hier Export = FALSE;
+    FID_SEARCH_ON // status()
+    [
+        ExecMethod = ExecSearch ;
+        Export = FALSE;
+    ]
+    FID_SEARCH_OFF // status()
+    [
+        ExecMethod = ExecSearch ;
+        Export = FALSE;
     ]
 }

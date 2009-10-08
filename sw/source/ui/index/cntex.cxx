@@ -194,7 +194,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
     }
     catch(Exception&)
     {
-        DBG_ERROR("::CreateExample() - exception caught")
+        DBG_ERROR("::CreateExample() - exception caught");
     }
     return 0;
 }
@@ -223,7 +223,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
     {
         DBG_ASSERT(pxIndexSectionsArr[nTOXIndex] &&
                         pxIndexSectionsArr[nTOXIndex]->xContainerSection.is(),
-                            "Section not created")
+                            "Section not created");
          uno::Reference< frame::XModel > & xModel = pExampleFrame->GetModel();
         sal_Bool bInitialCreate = sal_True;
         if(!pxIndexSectionsArr[nTOXIndex]->xDocumentIndex.is())
@@ -449,7 +449,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
                     uno::Any aFormatAccess = xIdxProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEVEL_FORMAT)));
                     DBG_ASSERT(aFormatAccess.getValueType() == ::getCppuType((uno::Reference<container::XIndexReplace>*)0),
-                        "wrong property type")
+                        "wrong property type");
 
 
                     uno::Reference< container::XIndexReplace >  xFormatAccess;
@@ -513,7 +513,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
     }
     catch(Exception&)
     {
-        DBG_ERROR("::CreateExample() - exception caught")
+        DBG_ERROR("::CreateExample() - exception caught");
     }
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pam.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.172.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,7 @@ namespace utl {
     class TextSearch;
 }
 
-struct SwPosition
+struct SW_DLLPUBLIC SwPosition
 {
     SwNodeIndex nNode;
     SwIndex nContent;
@@ -113,12 +113,12 @@ SwComparePosition ComparePosition(
 struct SwMoveFnCollection;
 typedef SwMoveFnCollection* SwMoveFn;
 SW_DLLPUBLIC extern SwMoveFn fnMoveForward; // SwPam::Move()/Find() default argument.
-extern SwMoveFn fnMoveBackward;
+SW_DLLPUBLIC extern SwMoveFn fnMoveBackward;
 
 typedef BOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
-extern SwGoInDoc fnGoDoc;
+SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
-extern SwGoInDoc fnGoNode;
+SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
 SW_DLLPUBLIC extern SwGoInDoc fnGoCntnt; // SwPam::Move() default argument.
 extern SwGoInDoc fnGoCntntCells;
 extern SwGoInDoc fnGoCntntSkipHidden;
@@ -126,7 +126,7 @@ extern SwGoInDoc fnGoCntntCellsSkipHidden;
 
 void _InitPam();
 
-class SwPaM : public Ring
+class SW_DLLPUBLIC SwPaM : public Ring
 {
     SwPosition aBound1;
     SwPosition aBound2;
@@ -162,6 +162,7 @@ public:
 
     // Suchen
     BYTE Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
+                BOOL bSearchInNotes,
                 utl::TextSearch& rSTxt,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, BOOL bInReadOnly = FALSE);
@@ -175,6 +176,9 @@ public:
                 SwMoveFn fnMove,
                 const SwPaM *pPam, BOOL bInReadOnly, BOOL bMoveFirst );
 
+    bool DoSearch( const com::sun::star::util::SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
+                    SwMoveFn fnMove, BOOL bSrchForward, BOOL bRegSearch, BOOL bChkEmptyPara, BOOL bChkParaEnd,
+                    xub_StrLen &nStart, xub_StrLen &nEnde,xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam);
 
     inline BOOL IsInFrontOfLabel() const { return bIsInFrontOfLabel; }
     inline void _SetInFrontOfLabel( BOOL bNew ) { bIsInFrontOfLabel = bNew; }
@@ -195,7 +199,7 @@ public:
     void Exchange();
 #endif
     /*
-     * Undokumented Feature: Liefert zurueck, ob das Pam ueber
+     * Undocumented Feature: Liefert zurueck, ob das Pam ueber
      * eine Selektion verfuegt oder nicht. Definition einer
      * Selektion: Point und Mark zeigen auf unterschiedliche
      * Puffer.
@@ -250,6 +254,8 @@ public:
 
     BOOL ContainsPosition(const SwPosition & rPos)
     { return *Start() <= rPos && rPos <= *End(); }
+
+    static BOOL Overlap(const SwPaM & a, const SwPaM & b);
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 

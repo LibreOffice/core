@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmsh.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.22.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,24 +70,23 @@
 #include <usrpref.hxx>
 #include <edtwin.hxx>
 #include <swdtflvr.hxx>
+#include <swwait.hxx>
+#include <docstat.hxx>
+#include <IDocumentStatistics.hxx>
 
-#ifndef _HELPID_H
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 #include "swabstdlg.hxx"
+#include "misc.hrc"
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 // Prototypen ------------------------------------------------------------
 
@@ -236,7 +235,66 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             rSh.Unchain( (SwFrmFmt&)*rSh.GetFlyFrmFmt() );
             GetView().GetViewFrame()->GetBindings().Invalidate(FN_FRAME_CHAIN);
             break;
+        case FN_FORMAT_FOOTNOTE_DLG:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
+            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), GetView().GetWrtShell(), DLG_DOC_FOOTNOTE );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            break;
+        }
+        case FN_NUMBERING_OUTLINE_DLG:
+        {
+            SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            pDlg->Execute();
+            delete pDlg;
+            rReq.Done();
+            break;
+        }
+        case SID_OPEN_XML_FILTERSETTINGS:
+        {
+            try
+            {
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                if( xDialog.is() )
+                {
+                    xDialog->execute();
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+            rReq.Ignore ();
+        }
+        break;
+        case FN_WORDCOUNT_DIALOG:
+        {
+            SwDocStat aCurr;
+            SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
+            {
+                SwWait aWait( *GetView().GetDocShell(), TRUE );
+                rSh.StartAction();
+                rSh.CountWords( aCurr );
+                rSh.UpdateDocStat( aDocStat );
+                rSh.EndAction();
+            }
+
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
+            pDialog->SetValues(aCurr, aDocStat );
+            pDialog->Execute();
+            delete pDialog;
+        }
+        break;
         default: bMore = TRUE;
     }
 
@@ -468,7 +526,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pPrevFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sPrevName);
-                                DBG_ASSERT(pPrevFmt, "No frame found!")
+                                DBG_ASSERT(pPrevFmt, "No frame found!");
                                 if(pPrevFmt)
                                 {
                                     rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
@@ -502,7 +560,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pNextFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sNextName);
-                                DBG_ASSERT(pNextFmt, "No frame found!")
+                                DBG_ASSERT(pNextFmt, "No frame found!");
                                 if(pNextFmt)
                                 {
                                     rSh.Chain(*(SwFrmFmt*)

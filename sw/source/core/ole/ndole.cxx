@@ -940,7 +940,7 @@ void SwOLELRUCache::Load()
     Sequence< OUString > aNames( GetPropertyNames() );
     Sequence< Any > aValues = GetProperties( aNames );
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" )
+    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     if( aValues.getLength() == aNames.getLength() && pValues->hasValue() )
     {
         sal_Int32 nVal = 0;

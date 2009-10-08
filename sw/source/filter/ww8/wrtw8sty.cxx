@@ -1740,6 +1740,32 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt(SwWW8Writer& rWrt, BYTE nTTyp,
                     rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
                                        pNdIdx->GetNode().EndOfSectionIndex(),
                                        nTTyp );
+                    // --> OD 2008-08-07 #156757#
+                    {
+                        SwNodeIndex aContentIdx = *pNdIdx;
+                        aContentIdx++;
+                        if ( aContentIdx.GetNode().IsTableNode() )
+                        {
+                            bool bContainsOnlyTables = true;
+                            do {
+                                aContentIdx = *(aContentIdx.GetNode().EndOfSectionNode());
+                                aContentIdx++;
+                                if ( !aContentIdx.GetNode().IsTableNode() &&
+                                     aContentIdx.GetIndex() != pNdIdx->GetNode().EndOfSectionIndex() )
+                                {
+                                    bContainsOnlyTables = false;
+                                }
+                            } while ( aContentIdx.GetNode().IsTableNode() );
+                            if ( bContainsOnlyTables )
+                            {
+                                // Additional paragraph containing a space to
+                                // assure that by WW created RTF from written WW8
+                                // does not crash WW.
+                                rWrt.WriteStringAsPara( String::CreateFromAscii( " " ) );
+                            }
+                        }
+                    }
+                    // <--
                 }
 
                 // CR at end of one textbox text ( otherwise WW gpft :-( )

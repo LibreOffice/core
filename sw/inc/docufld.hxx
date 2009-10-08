@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,8 @@
 #ifndef _DOCUFLD_HXX
 #define _DOCUFLD_HXX
 
-#ifndef _DATE_HXX //autogen
-    #include <tools/date.hxx>
-#endif
 
+#include <tools/date.hxx>
 #include <tools/datetime.hxx>
 
 
@@ -99,6 +97,7 @@ namespace nsSwDocInfoSubType
     const SwDocInfoSubType DI_SUB_TIME      = 0x0200;
     const SwDocInfoSubType DI_SUB_DATE      = 0x0300;
     const SwDocInfoSubType DI_SUB_FIXED     = 0x1000;
+    const SwDocInfoSubType DI_SUB_MASK      = 0xff00;
 }
 
 
@@ -170,7 +169,7 @@ public:
     Beschreibung: Seitennummerierung
  --------------------------------------------------------------------*/
 
-class SwPageNumberField : public SwField
+class SW_DLLPUBLIC SwPageNumberField : public SwField
 {
     String  sUserStr;
     USHORT  nSubType;
@@ -247,7 +246,7 @@ public:
     Beschreibung: FileName
  --------------------------------------------------------------------*/
 
-class SwFileNameField : public SwField
+class SW_DLLPUBLIC SwFileNameField : public SwField
 {
     String aContent;
 
@@ -282,7 +281,7 @@ public:
     Beschreibung: TemplName
  --------------------------------------------------------------------*/
 
-class SwTemplNameField : public SwField
+class SW_DLLPUBLIC SwTemplNameField : public SwField
 {
 public:
     SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFmt = 0);
@@ -315,7 +314,7 @@ public:
     Beschreibung: Dokumentstatistik
  --------------------------------------------------------------------*/
 
-class SwDocStatField : public SwField
+class SW_DLLPUBLIC SwDocStatField : public SwField
 {
     USHORT nSubType;
 
@@ -461,7 +460,7 @@ public:
     Beschreibung: Macrofeld
  --------------------------------------------------------------------*/
 
-class SwMacroField : public SwField
+class SW_DLLPUBLIC SwMacroField : public SwField
 {
     String  aMacro;
     String  aText;
@@ -518,7 +517,7 @@ public:
     Beschreibung: PostIt
  --------------------------------------------------------------------*/
 
-class SwPostItField : public SwField
+class SW_DLLPUBLIC SwPostItField : public SwField
 {
     String      sTxt;       // die Anmerkung
     String      sAuthor;    // der Author
@@ -567,7 +566,7 @@ public:
     virtual SwFieldType*    Copy() const;
 };
 
-class SwDocInfoField : public SwValueField
+class SW_DLLPUBLIC SwDocInfoField : public SwValueField
 {
     USHORT  nSubType;
     String  aContent;
@@ -816,7 +815,7 @@ public:
 
 #define MAX_COMBINED_CHARACTERS     6
 
-class SwCombinedCharField : public SwField
+class SW_DLLPUBLIC SwCombinedCharField : public SwField
 {
     String  sCharacters;    // combine these characters
 

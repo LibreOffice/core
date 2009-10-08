@@ -234,7 +234,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
     const SwDBData& rCurrentData = rConfigItem.GetCurrentDBData();
 
-    DBG_ASSERT(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!")
+    DBG_ASSERT(m_xDBContext.is(), "service 'com.sun.star.sdb.DatabaseContext' not found!");
     sal_Bool bEnableEdit = sal_False;
     sal_Bool bEnableOK = sal_True;
     m_aListLB.SelectAll( FALSE );
@@ -359,7 +359,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
             }
             catch(Exception& )
             {
-                DBG_ERROR("exception caught in SwAddressListDialog::FilterHdl_Impl")
+                DBG_ERROR("exception caught in SwAddressListDialog::FilterHdl_Impl");
             }
         }
     }
@@ -651,7 +651,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
     }
     catch(Exception& )
     {
-        DBG_ERROR("exception caught in SwAddressListDialog::DetectTablesAndQueries")
+        DBG_ERROR("exception caught in SwAddressListDialog::DetectTablesAndQueries");
         m_aOK.Enable( sal_False );
     }
 }

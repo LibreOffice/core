@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: redlndlg.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.29.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,7 @@
 
 #include <unomid.h>
 
+#include <docsh.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 
@@ -1247,18 +1248,25 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
             switch( nRet )
             {
-            case MN_EDIT_COMMENT:
+                case MN_EDIT_COMMENT:
                 {
                     String sComment;
-
                     if (pEntry)
                     {
                         if (pTable->GetParent(pEntry))
                             pEntry = pTable->GetParent(pEntry);
 
                         USHORT nPos = GetRedlinePos(*pEntry);
-
                         const SwRedline &rRedline = pSh->GetRedline(nPos);
+
+
+                        /* enable again once we have redline comments in the margin
+                        sComment = rRedline.GetComment();
+                        if ( sComment == String(::rtl::OUString::createFromAscii("")) )
+                            GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
+                        const_cast<SwRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
+                        */
+
                         sComment = rRedline.GetComment();
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "Dialogdiet fail!");
@@ -1316,6 +1324,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                         delete pDlg;
                         pSh->SetCareWin(NULL);
                     }
+
                 }
                 break;
 
@@ -1410,5 +1419,3 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
     }
     rExtraData += ')';
 }
-
-

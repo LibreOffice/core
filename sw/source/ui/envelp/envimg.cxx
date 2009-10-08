@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: envimg.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.13.176.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,7 +82,7 @@ SW_DLLPUBLIC String MakeSender()
         if(sToken.EqualsAscii("COMPANY"))
         {
             xub_StrLen nOldLen = sRet.Len();
-            sRet += rUserOpt.GetCompany();
+            sRet += (String)rUserOpt.GetCompany();
             bLastLength = sRet.Len() != nOldLen;
         }
         else if(sToken.EqualsAscii("CR"))
@@ -92,19 +92,19 @@ SW_DLLPUBLIC String MakeSender()
             bLastLength = TRUE;
         }
         else if(sToken.EqualsAscii("FIRSTNAME"))
-            sRet += rUserOpt.GetFirstName();
+            sRet += (String)rUserOpt.GetFirstName();
         else if(sToken.EqualsAscii("LASTNAME"))
-            sRet += rUserOpt.GetLastName();
+            sRet += (String)rUserOpt.GetLastName();
         else if(sToken.EqualsAscii("ADDRESS"))
-            sRet += rUserOpt.GetStreet();
+            sRet += (String)rUserOpt.GetStreet();
         else if(sToken.EqualsAscii("COUNTRY"))
-            sRet += rUserOpt.GetCountry();
+            sRet += (String)rUserOpt.GetCountry();
         else if(sToken.EqualsAscii("POSTALCODE"))
-            sRet += rUserOpt.GetZip();
+            sRet += (String)rUserOpt.GetZip();
         else if(sToken.EqualsAscii("CITY"))
-            sRet += rUserOpt.GetCity();
+            sRet += (String)rUserOpt.GetCity();
         else if(sToken.EqualsAscii("STATEPROV"))
-            sRet += rUserOpt.GetState();
+            sRet += (String)rUserOpt.GetState();
         else if(sToken.Len()) //spaces
             sRet += sToken;
     }
@@ -200,7 +200,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)

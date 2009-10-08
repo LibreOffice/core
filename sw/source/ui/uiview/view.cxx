@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.cxx,v $
- * $Revision: 1.112.110.1 $
+ * $Revision: 1.112.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,8 +158,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmluconv.hxx>
 
-// #107253#
-#include <swlinguconfig.hxx>
 #include "formatclipboard.hxx"
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
@@ -689,6 +687,7 @@ void SwView::_CheckReadonlyState()
             SID_ATTR_CHAR_FONT,         SID_ATTR_CHAR_FONTHEIGHT,   SID_ATTR_CHAR_COLOR_BACKGROUND,
             SID_ATTR_CHAR_COLOR_BACKGROUND_EXT,                     SID_ATTR_CHAR_COLOR_EXT,
             SID_ATTR_CHAR_COLOR,        SID_ATTR_CHAR_WEIGHT,       SID_ATTR_CHAR_POSTURE,
+            SID_ATTR_CHAR_OVERLINE,
             SID_ATTR_CHAR_UNDERLINE,    SID_ATTR_FLASH,             SID_ATTR_CHAR_STRIKEOUT,
             FN_UNDERLINE_DOUBLE,        SID_ATTR_CHAR_CONTOUR,      SID_ATTR_CHAR_SHADOWED,
             SID_ATTR_CHAR_AUTOKERN,     SID_ATTR_CHAR_ESCAPEMENT,   FN_SET_SUPER_SCRIPT,
@@ -880,11 +879,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
 
-    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-    SwLinguConfig().GetOptions( aLinguOpt );
+    SvtLinguConfig().GetOptions( aLinguOpt );
 
     aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
-    aUsrPref.SetHideSpell( aLinguOpt.bIsSpellHideMarkings );
 
     sal_Bool bOldShellWasSrcView = FALSE;
 
@@ -937,7 +934,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             aUsrPref.SetZoom( 100 );
         }
         if(pDocSh->IsPreview())
+        {
             aUsrPref.SetZoomType( SVX_ZOOM_WHOLEPAGE );
+            aUsrPref.SetViewLayoutBookMode( false );
+            aUsrPref.SetViewLayoutColumns( 1 );
+        }
         pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, &aUsrPref );
         //#97610# creating an SwView from a SwPagePreView needs to
         // add the ViewShell to the ring of the other ViewShell(s)
@@ -1460,6 +1461,11 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             {
                pValue->Value >>= bSelectedFrame;
                bGotIsSelectedFrame = sal_True;
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
+            {
+                pValue->Value >>= bSelectedFrame;
+                bGotIsSelectedFrame = sal_True;
             }
             pValue++;
         }

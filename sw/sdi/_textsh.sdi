@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _textsh.sdi,v $
- * $Revision: 1.42 $
+ * $Revision: 1.42.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,6 +104,12 @@ interface BaseText
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    //#outline level,add by zhaojianwei
+    SID_ATTR_PARA_OUTLINE_LEVEL
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]//<-end,zhaojianwei
 
     SID_ATTR_PARA_PAGENUM
     [
@@ -359,6 +365,18 @@ interface BaseText
         StateMethod = GetState;
     ]
     FN_EDIT_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_REMOVE_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_COPY_HYPERLINK_LOCATION
     [
         ExecMethod = Execute ;
         StateMethod = GetState;
@@ -1348,6 +1366,12 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_ATTR_CHAR_UNDERLINE // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl;
+        StateMethod = GetTxtCtrlState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_OVERLINE // status(final|play)
     [
         ExecMethod = ExecTxtCtrl;
         StateMethod = GetTxtCtrlState;

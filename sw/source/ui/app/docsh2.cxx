@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.103.144.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,6 +160,8 @@
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
 #include "swabstdlg.hxx"
+
+#include <ndtxt.hxx>    //#outline level,add by zhaojianwei
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
@@ -947,7 +949,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 #ifdef DBG_UTIL
                 {
                     BOOL bWeb = 0 != dynamic_cast<SwWebDocShell*>(this);
-                    DBG_ASSERT(bWeb == TRUE, "SourceView nur in der WebDocShell")
+                    DBG_ASSERT(bWeb == TRUE, "SourceView nur in der WebDocShell");
                 }
 #endif
                 // die SourceView ist fuer die SwWebDocShell die 1
@@ -1201,7 +1203,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                         SID_HTML_MODE,
                                         SID_RULER_PROTECT,
                                         SID_AUTOSPELL_CHECK,
-                                        SID_AUTOSPELL_MARKOFF,
                                         FN_RULER,       /*20211*/
                                         FN_VIEW_GRAPHIC,    /*20213*/
                                         FN_VIEW_BOUNDS,     /**/
@@ -1254,6 +1255,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 bDone = FALSE;
                 BOOL bCreateHtml = FN_NEW_HTML_DOC == nWhich;
+
+                BOOL bCreateByOutlineLevel = false;     //#outline level,add by zhaojianwei
+                sal_Int32  nTemplateOutlineLevel = 0 ;      //#outline level,add by zhaojianwei
+
                 String aFileName, aTemplateName;
                 if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich, FALSE, &pItem ) )
                 {
@@ -1327,35 +1332,85 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(!bError)
                     {
                         uno::Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
-                        const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
-                        Sequence<OUString> aListBoxEntries(nCount);
+
+                //#removed by zhaojianwei
+
+        //             const USHORT nCount = pDoc->GetTxtFmtColls()->Count();
+        //                Sequence<OUString> aListBoxEntries(nCount);
+        //                OUString* pEntries = aListBoxEntries.getArray();
+        //                sal_Int32 nIdx = 0;
+        //                sal_Int16 nSelect = 0;
+        //                OUString sStartTemplate;
+        //                SwTxtFmtColl *pFnd = 0, *pAny = 0;
+        //                for(USHORT i = 0; i < nCount; ++i)
+        //                {
+        //                    SwTxtFmtColl &rTxtColl =
+        //                                    *pDoc->GetTxtFmtColls()->GetObject( i );
+        //                    if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
+        //                    {
+        //                        //if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||            //#outline level,zhaojianwei
+                                //if(  rTxtColl.IsAssignedToListLevelOfOutlineStyle()  && ( !pFnd ||    //<-end,zhaojianwei
+        //                            pFnd->GetAssignedOutlineStyleLevel() > rTxtColl.GetAssignedOutlineStyleLevel() ))
+        //                        {
+        //                                nSelect = (sal_Int16)nIdx;
+        //                                pFnd = &rTxtColl;
+        //                                sStartTemplate = rTxtColl.GetName();
+        //                        }
+        //                        else if( !pAny )
+        //                            pAny = &rTxtColl;
+        //                        //pEntries[nIdx++] = rTxtColl.GetName();          //#outline level,remove by zhaojianwei
+        //                        pEntries[nIdx++] = sStyles + rTxtColl.GetName();  //#outline level,add by zhaojianwei
+        //                    }
+        //                }
+        //                if(!sStartTemplate.getLength() && pAny)
+        //                    sStartTemplate = pAny->GetName();
+        //                aListBoxEntries.realloc(nIdx);
+                //<-end,zhaojianwei
+
+
+                    //#outline level,add by zhaojianwei
+                    /////////////////////////////////////////////////////////////////////
+
+                        bool    bOutline[MAXLEVEL] = {false};
+                        const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
+                        if( rOutlNds.Count() )
+                        {
+                            int nLevel;
+                            for(USHORT n = 0; n < rOutlNds.Count(); ++n )
+                                if( ( nLevel = rOutlNds[n]->GetTxtNode()->GetAttrOutlineLevel()) > 0 &&
+                                    ! bOutline[nLevel-1] )
+                                {
+                                    bOutline[nLevel-1] = true;
+                                }
+                        }
+
+                        const USHORT nStyleCount = pDoc->GetTxtFmtColls()->Count();
+                        Sequence<OUString> aListBoxEntries( MAXLEVEL + nStyleCount);
                         OUString* pEntries = aListBoxEntries.getArray();
-                        sal_Int32 nIdx = 0;
-                        sal_Int16 nSelect = 0;
-                        OUString sStartTemplate;
-                        SwTxtFmtColl *pFnd = 0, *pAny = 0;
-                        for(USHORT i = 0; i < nCount; ++i)
+                        sal_Int32   nIdx = 0 ;
+
+                        OUString    sOutline( SW_RESSTR(STR_FDLG_OUTLINE_LEVEL) );
+                        for( USHORT i = 0; i < MAXLEVEL; ++i )
+                        {
+                            if( bOutline[i] )
+                                pEntries[nIdx++] = sOutline + String::CreateFromInt32( i+1 );
+                        }
+
+                        OUString    sStyle( SW_RESSTR(STR_FDLG_STYLE) );
+                        for(USHORT i = 0; i < nStyleCount; ++i)
                         {
                             SwTxtFmtColl &rTxtColl =
-                                            *pDoc->GetTxtFmtColls()->GetObject( i );
+                                *pDoc->GetTxtFmtColls()->GetObject( i );
                             if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
                             {
-                                if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
-                                    pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
-                                {
-                                        nSelect = (sal_Int16)nIdx;
-                                        pFnd = &rTxtColl;
-                                        sStartTemplate = rTxtColl.GetName();
-                                }
-                                else if( !pAny )
-                                    pAny = &rTxtColl;
-                                pEntries[nIdx++] = rTxtColl.GetName();
+                                pEntries[nIdx++] = sStyle + rTxtColl.GetName();
                             }
                         }
-                        if(!sStartTemplate.getLength() && pAny)
-                            sStartTemplate = pAny->GetName();
 
                         aListBoxEntries.realloc(nIdx);
+                        sal_Int16 nSelect = 0;
+                     /////////////////////////////////////////////////////////////////////
+                    //<-end,zhaojianwei
 
                         try
                         {
@@ -1371,7 +1426,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                         catch(Exception& )
                         {
-                            DBG_ERROR("control acces failed")
+                            DBG_ERROR("control acces failed");
                         }
 
                         xFP->setTitle( SW_RESSTR( nStrId ));
@@ -1385,7 +1440,22 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 ListboxControlActions::GET_SELECTED_ITEM );
                             OUString sTmpl;
                             aTemplateValue >>= sTmpl;
-                            aTemplateName = sTmpl;
+                            //aTemplateName = sTmpl;    //#outline level,removed by zhaojianwei
+                            //#outline level,add by zhaojianwei
+
+                            sal_Int32 nColonPos = sTmpl.indexOf( sal_Unicode(':') );
+                            OUString sPrefix = sTmpl.copy( 0L, nColonPos );
+                            if( sPrefix.equalsAscii("Style"))
+                            {
+                                aTemplateName = sTmpl.copy( 7L );   //get string behind "Style: "
+                            }
+                            else if( sPrefix.equalsAscii("Outline"))
+                            {
+                                nTemplateOutlineLevel = ( sTmpl.copy( 15L )).toInt32(); //get string behind "Outline: Leve  ";
+                                bCreateByOutlineLevel = true;
+                            }
+                            //<-end,zhaojianwei
+
                             if ( aFileName.Len() )
                             {
                                 rReq.AppendItem( SfxStringItem( nWhich, aFileName ) );
@@ -1396,19 +1466,35 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                 }
 
-                const SwTxtFmtColl* pSplitColl = 0;
-                if ( aTemplateName.Len() )
-                    pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
-
+                //const SwTxtFmtColl* pSplitColl = 0;       //#outline level,removed by zhaojianwei
+    //            if ( aTemplateName.Len() )
+    //                pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
+                                                            //<-end,zhaojianwei
                 if( aFileName.Len() )
                 {
                     if( PrepareClose( FALSE ) )
                     {
                         SwWait aWait( *this, TRUE );
-                        bDone = bCreateHtml
-                            ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
-                            : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
 
+                        //bDone = bCreateHtml           //#outline level,removed by zhaojianwei
+                        //  ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
+                        //  : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
+                        if ( bCreateByOutlineLevel )    //add by zhaojianwei
+                        {
+                            bDone = bCreateHtml         //#outline level,removed by zhaojianwei
+                                ? pDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
+                                : pDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
+                        }
+                        else
+                        {
+                            const SwTxtFmtColl* pSplitColl = 0;
+                            if ( aTemplateName.Len() )
+                                pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
+                            bDone = bCreateHtml         //#outline level,removed by zhaojianwei
+                                ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
+                                : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
+                        }
+                        //<-end,zhaojianwei
                         if( bDone )
                         {
                             SfxStringItem aName( SID_FILE_NAME, aFileName );
@@ -1452,7 +1538,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
             if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , FALSE, &pItem ))
             {
-                DBG_ASSERT(pItem->ISA(SfxUInt16Item), "falsches Item")
+                DBG_ASSERT(pItem->ISA(SfxUInt16Item), "falsches Item");
                 USHORT nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
                 //ueber Views iterieren und den State an den FormShells setzen
 
@@ -1517,7 +1603,8 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    String * /*pAppName*/,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   sal_Int32 nVersion ) const
+                                   sal_Int32 nVersion,
+                                   sal_Bool bTemplate /* = sal_False */) const
 {
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
@@ -1528,7 +1615,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_8;
+        *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITER_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
 
@@ -1808,7 +1895,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     }
     if( aMed.IsStorage() )
     {
-        DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?")
+        DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?");
         pRead =  ReadXML;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!

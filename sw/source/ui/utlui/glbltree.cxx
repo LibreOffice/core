@@ -943,13 +943,13 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         break;
         case CTX_EDIT:
         {
-            DBG_ASSERT(pCont, "Edit ohne Entry ? " )
+            DBG_ASSERT(pCont, "Edit ohne Entry ? " );
             EditContent(pCont);
         }
         break;
         case CTX_EDIT_LINK:
         {
-            DBG_ASSERT(pCont, "Edit ohne Entry ? " )
+            DBG_ASSERT(pCont, "Edit ohne Entry ? " );
             SfxStringItem aName(FN_EDIT_REGION, pCont->GetSection()->GetName());
             rDispatch.Execute(FN_EDIT_REGION, SFX_CALLMODE_ASYNCHRON, &aName, 0L);
         }
@@ -1174,7 +1174,7 @@ void    SwGlobalTree::HideTree()
 void    SwGlobalTree::ExecCommand(USHORT nCmd)
 {
     SvLBoxEntry* pEntry = FirstSelected();
-    DBG_ASSERT(pEntry, "gleich knallt's")
+    DBG_ASSERT(pEntry, "gleich knallt's");
     if(FN_GLOBAL_EDIT == nCmd)
     {
         const SwGlblDocContent* pCont = (const SwGlblDocContent*)
@@ -1440,7 +1440,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             //update the global document content after each inserted document
             rSh.GetGlobalDocContent(aTempContents);
             SwGlblDocContent* pAnchorContent = 0;
-            DBG_ASSERT(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed")
+            DBG_ASSERT(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
             if ( aTempContents.Count() > (nAnchorContent + nFile) )
                 pAnchorContent = aTempContents.GetObject(nAnchorContent + (USHORT)nFile);
             else

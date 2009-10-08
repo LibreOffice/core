@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfont.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.59.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -337,8 +337,14 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_UNDERLINE,
             TRUE, &pItem ))
         {
-            SetUnderline( ((SvxUnderlineItem*)pItem)->GetUnderline() );
+            SetUnderline( ((SvxUnderlineItem*)pItem)->GetLineStyle() );
             SetUnderColor( ((SvxUnderlineItem*)pItem)->GetColor() );
+        }
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_OVERLINE,
+            TRUE, &pItem ))
+        {
+            SetOverline( ((SvxOverlineItem*)pItem)->GetLineStyle() );
+            SetOverColor( ((SvxOverlineItem*)pItem)->GetColor() );
         }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_CROSSEDOUT,
             TRUE, &pItem ))
@@ -438,6 +444,7 @@ SwFont::SwFont( const SwFont &rFont )
     nActual = rFont.nActual;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
     aUnderColor = rFont.GetUnderColor();
+    aOverColor  = rFont.GetOverColor();
     nToxCnt = nRefCnt = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
@@ -515,12 +522,14 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         aSub[SW_CTL].SetLanguage( pAttrSet->GetCTLLanguage().GetLanguage() );
     }
 
-    const FontUnderline eUnderline = pAttrSet->GetUnderline().GetUnderline();
+    const FontUnderline eUnderline = pAttrSet->GetUnderline().GetLineStyle();
     if ( pAttrSet->GetCharHidden().GetValue() )
         SetUnderline( UNDERLINE_DOTTED );
     else
         SetUnderline( eUnderline );
     SetUnderColor( pAttrSet->GetUnderline().GetColor() );
+    SetOverline( pAttrSet->GetOverline().GetLineStyle() );
+    SetOverColor( pAttrSet->GetOverline().GetColor() );
     SetEmphasisMark( pAttrSet->GetEmphasisMark().GetEmphasisMark() );
     SetStrikeout( pAttrSet->GetCrossedOut().GetStrikeout() );
     SetColor( pAttrSet->GetColor().GetValue() );
@@ -580,6 +589,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     delete pBackColor;
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
     aUnderColor = rFont.GetUnderColor();
+    aOverColor  = rFont.GetOverColor();
     nToxCnt = nRefCnt = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
@@ -629,7 +639,9 @@ BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
     pLastFont->SetDevFont( pSh, rOut );
 
     pLastFont->Lock();
-    return UNDERLINE_NONE != GetUnderline() || STRIKEOUT_NONE != GetStrikeout();
+    return UNDERLINE_NONE != GetUnderline() ||
+           UNDERLINE_NONE != GetOverline()  ||
+           STRIKEOUT_NONE != GetStrikeout();
 }
 
 /*************************************************************************
@@ -658,6 +670,8 @@ void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
     }
     if( rOut.GetTextLineColor() != aUnderColor )
         rOut.SetTextLineColor( aUnderColor );
+    if( rOut.GetOverlineColor() != aOverColor )
+        rOut.SetOverlineColor( aOverColor );
 }
 
 /*************************************************************************
@@ -733,6 +747,8 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic ||
          !IsSameInstance( rInf.GetpOut()->GetFont() ) )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
+
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     Size aTxtSize;
     xub_StrLen nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
@@ -848,6 +864,8 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
 
     if( !pLastFont || pLastFont->GetOwner()!=pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
+
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     Point aPos( rInf.GetPos() );
     const Point &rOld = rInf.GetPos();
@@ -976,6 +994,8 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     if ( !pLastFont || pLastFont->GetOwner() != pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+
     rInf.ApplyAutoColor();
 
     Point aPos( rInf.GetPos() );
@@ -1045,6 +1065,8 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
+
+    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     xub_StrLen nLn = rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
                                                  : rInf.GetLen();

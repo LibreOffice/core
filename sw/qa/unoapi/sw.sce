@@ -1,6 +1,6 @@
 -o sw.CharacterStyle
 -o sw.ConditionalParagraphStyle
-#i92136 -o sw.PageStyle
+-o sw.PageStyle
 -o sw.ParagraphStyle
 -o sw.SwAccessibleDocumentPageView
 #i86751 -o sw.SwAccessibleDocumentView

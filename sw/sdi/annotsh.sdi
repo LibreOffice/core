@@ -82,12 +82,6 @@ interface Annotation : _Annotation
         StateMethod = GetState;
     ]
 
-    SID_AUTOSPELL_MARKOFF
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-    ]
-
     SID_HYPERLINK_SETLINK  // status()
     [
         ExecMethod = Exec ;
@@ -275,11 +269,6 @@ interface Annotation : _Annotation
     [
         ExecMethod = Exec ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_SEARCH_DLG
-    [
-        StateMethod = StateDisableItems
     ]
 
     SID_STYLE_FAMILY1

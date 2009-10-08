@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <math.h>
+// #include <math.h>
 #include <float.h>
 #include <rtl/math.hxx>
 #include <svtools/zforlist.hxx>

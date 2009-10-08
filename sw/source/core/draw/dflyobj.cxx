@@ -69,17 +69,9 @@ using namespace ::com::sun::star;
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 // AW: For VCOfDrawVirtObj and stuff
-#ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -99,6 +91,44 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+namespace sdr
+{
+    namespace contact
+    {
+        // #i95264# currently needed since createViewIndependentPrimitive2DSequence()
+        // is called when RecalcBoundRect() is used. There should currently no VOCs being
+        // constructed since it gets not visualized (instead the corresponding SwVirtFlyDrawObj's
+        // referencing this one are visualized).
+        class VCOfSwFlyDrawObj : public ViewContactOfSdrObj
+        {
+        protected:
+            // This method is responsible for creating the graphical visualisation data
+            // ONLY based on model data
+            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+
+        public:
+            // basic constructor, used from SdrObject.
+            VCOfSwFlyDrawObj(SwFlyDrawObj& rObj)
+            :   ViewContactOfSdrObj(rObj)
+            {
+            }
+            virtual ~VCOfSwFlyDrawObj();
+        };
+
+        drawinglayer::primitive2d::Primitive2DSequence VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        {
+            // currently gets not visualized, return empty sequence
+            return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+
+        VCOfSwFlyDrawObj::~VCOfSwFlyDrawObj()
+        {
+        }
+    } // end of namespace contact
+} // end of namespace sdr
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
     // --> OD 2004-11-22 #117958# - create default properties
@@ -106,7 +136,12 @@ sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
     // <--
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
+{
+    // #i95264# needs an own VC since createViewIndependentPrimitive2DSequence()
+    // is called when RecalcBoundRect() is used
+    return new sdr::contact::VCOfSwFlyDrawObj(*this);
+}
 
 SwFlyDrawObj::SwFlyDrawObj()
 {
@@ -167,6 +202,10 @@ namespace drawinglayer
         private:
             const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
 
+        protected:
+            // method which is to be used to implement the local decomposition of a 2D primitive
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
         public:
             SwVirtFlyDrawObjPrimitive(const SwVirtFlyDrawObj& rSwVirtFlyDrawObj)
             :   BasePrimitive2D(),
@@ -179,9 +218,6 @@ namespace drawinglayer
 
             // get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
-
-            // getDecomposition
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -213,7 +249,7 @@ namespace drawinglayer
             return basegfx::B2DRange(rSnapRect.Left(), rSnapRect.Top(), rSnapRect.Right(), rSnapRect.Bottom());
         }
 
-        Primitive2DSequence SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence SwVirtFlyDrawObjPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // This is the callback to keep the FlyFrame painting in SW alive as long as it
             // is not changed to primitives. This is the method which will be called by the processors
@@ -223,7 +259,7 @@ namespace drawinglayer
             mrSwVirtFlyDrawObj.wrap_DoPaintObject();
 
             // call parent
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BasePrimitive2D::createLocalDecomposition(rViewInformation);
         }
 
         // provide unique ID
@@ -887,4 +923,16 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
     return SdrObject::CheckMacroHit( rRec );
 }
 
+bool SwVirtFlyDrawObj::supportsFullDrag() const
+{
+    // call parent
+    return SdrVirtObj::supportsFullDrag();
+}
 
+SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
+{
+    // call parent
+    return SdrVirtObj::getFullDragClone();
+}
+
+// eof

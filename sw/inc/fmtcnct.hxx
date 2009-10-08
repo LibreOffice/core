@@ -41,7 +41,7 @@ class IntlWrapper;
 
 //Verbindung (Textfluss) zwischen zwei FlyFrms
 
-class SwFmtChain: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtChain: public SfxPoolItem
 {
     SwClient aPrev, //Vorgaenger (SwFlyFrmFmt), wenn es diesen gibt.
              aNext; //Nachfolger (SwFlyFrmFmt), wenn es diesen gibt.

@@ -90,12 +90,30 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #endif
 
+#include <com/sun/star/text/WritingMode2.hpp>
+
 using namespace ::com::sun::star;
 
 
 TYPEINIT1( SwContact, SwClient )
 TYPEINIT1( SwFlyDrawContact, SwContact )
 TYPEINIT1( SwDrawContact, SwContact )
+
+void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor )
+{
+    if( pObj && pAnchor )
+    {
+        short nWritingDirection = text::WritingMode2::LR_TB;
+        if( pAnchor->IsVertical() )
+        {
+            nWritingDirection = text::WritingMode2::TB_RL;
+        } else if( pAnchor->IsRightToLeft() )
+        {
+            nWritingDirection = text::WritingMode2::RL_TB;
+        }
+        pObj->SetContextWritingMode( nWritingDirection );
+    }
+}
 
 
 //Der Umgekehrte Weg: Sucht das Format zum angegebenen Objekt.
@@ -246,6 +264,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
                 "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
         if ( pAnchoredObj )
         {
+            ::setContextWritingMode( _pDrawObj, pAnchoredObj->GetAnchorFrmContainingAnchPos() );
             // Note: as-character anchored objects aren't registered at a page frame and
             //       a notification of its background isn't needed.
             if ( pAnchoredObj->GetPageFrm() )
@@ -2056,6 +2075,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     }
     if ( GetAnchorFrm() )
     {
+        ::setContextWritingMode( maAnchoredDrawObj.DrawObj(), GetAnchorFrm() );
         // OD 2004-04-01 #i26791# - invalidate objects instead of direct positioning
         _InvalidateObjs();
     }
@@ -2373,12 +2393,6 @@ SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
 SwDrawVirtObj::~SwDrawVirtObj()
 {}
 
-const Point SwDrawVirtObj::GetOffset() const
-{
-    return GetLastBoundRect().TopLeft() -
-           GetReferencedObj().GetLastBoundRect().TopLeft();
-}
-
 void SwDrawVirtObj::operator=( const SdrObject& rObj )
 {
     SdrVirtObj::operator=(rObj);
@@ -2491,6 +2505,44 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
     SdrObject::NbcSetAnchorPos( rPnt );
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// #i97197#
+// the methods relevant for positioning
+
+const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
+{
+    if(aOutRect.IsEmpty())
+    {
+        const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
+    }
+
+    return aOutRect;
+}
+
+const Rectangle& SwDrawVirtObj::GetLastBoundRect() const
+{
+    return aOutRect;
+}
+
+const Point SwDrawVirtObj::GetOffset() const
+{
+    // do NOT use IsEmpty() here, there is already a useful offset
+    // in the position
+    if(aOutRect == Rectangle())
+    {
+        return Point();
+    }
+    else
+    {
+        return aOutRect.TopLeft() - GetReferencedObj().GetCurrentBoundRect().TopLeft();
+    }
+}
+
+void SwDrawVirtObj::SetBoundRectDirty()
+{
+    // do nothing to not lose model information in aOutRect
+}
+
 void SwDrawVirtObj::RecalcBoundRect()
 {
     // OD 2004-04-05 #i26791# - switch order of calling <GetOffset()> and
@@ -2499,16 +2551,11 @@ void SwDrawVirtObj::RecalcBoundRect()
     //aOutRect = rRefObj.GetCurrentBoundRect();
     //aOutRect += GetOffset();
 
-    if(ReferencedObj().GetCurrentBoundRect().IsEmpty())
-    {
-        aOutRect = Rectangle();
-    }
-    else
-    {
-        const Point aOffset(GetOffset());
-        aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
-    }
+    const Point aOffset(GetOffset());
+    aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
@@ -2738,5 +2785,18 @@ void SwDrawVirtObj::SetLayer(SdrLayerID nLayer)
     ReferencedObj().SetLayer( nLayer );
     SdrVirtObj::NbcSetLayer( ReferencedObj().GetLayer() );
 }
+
+bool SwDrawVirtObj::supportsFullDrag() const
+{
+    // call parent
+    return SdrVirtObj::supportsFullDrag();
+}
+
+SdrObject* SwDrawVirtObj::getFullDragClone() const
+{
+    // call parent
+    return SdrVirtObj::getFullDragClone();
+}
+
 // eof
 

@@ -86,7 +86,6 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
-            <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuitem menu:id=".uno:EditGlossary"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
@@ -120,6 +119,7 @@
             <menu:menuitem menu:id=".uno:ShowAnnotations"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
+        <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
             <menu:menuitem menu:id=".uno:Zoom"/>
@@ -234,6 +234,7 @@
                     <menu:menuitem menu:id=".uno:OnlineAutoFormat"/>
                     <menu:menuitem menu:id=".uno:AutoFormatApply"/>
                     <menu:menuitem menu:id=".uno:AutoFormatRedlineApply"/>
+            <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
@@ -392,8 +393,6 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:WordCountDialog"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
             <menu:menuitem menu:id=".uno:LineNumberingDialog"/>
             <menu:menuitem menu:id=".uno:FootnoteDialog"/>
@@ -432,6 +431,7 @@
             </menu:menu>
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+              <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
             <menu:menuitem menu:id=".uno:ConfigureDialog"/>
             <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
         </menu:menupopup>

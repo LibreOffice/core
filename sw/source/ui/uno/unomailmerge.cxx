@@ -454,7 +454,7 @@ SwXMailMerge::~SwXMailMerge()
         //! because there is no automatism that will do that later.
         //! #120086#
         if ( eVetoed == CloseModelAndDocSh( xModel, xDocSh ) )
-            DBG_WARNING( "owner ship transfered to vetoing object!" )
+            DBG_WARNING( "owner ship transfered to vetoing object!" );
 
         xModel = 0;
         xDocSh = 0; // destroy doc shell
@@ -645,7 +645,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     {
         if (!aCurDataSourceName.getLength() || !aCurDataCommand.getLength() )
         {
-            DBG_ERROR("PropertyValues missing or unset")
+            DBG_ERROR("PropertyValues missing or unset");
             throw IllegalArgumentException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Either the ResultSet or DataSourceName and DataCommand must be set." ) ), static_cast < cppu::OWeakObject * > ( this ), 0 );
         }
 

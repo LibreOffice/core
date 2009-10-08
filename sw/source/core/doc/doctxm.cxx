@@ -1297,7 +1297,8 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
-            USHORT(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&
+            //USHORT(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&    //#outline level,zhaojianwei
+            USHORT( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() && //<-end,zhaojianwei
             pTxtNd->GetFrm() &&
            !pTxtNd->HasHiddenParaField() &&
            !pTxtNd->HasHiddenCharAttribute( true ) &&
@@ -1330,8 +1331,9 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
             if( !pColl ||
                 ( TOX_CONTENT == SwTOXBase::GetType() &&
                   GetCreateType() & nsSwTOXElement::TOX_OUTLINELEVEL &&
-                  NO_NUMBERING != pColl->GetOutlineLevel() ) )
-                continue;
+                  //NO_NUMBERING != pColl->GetOutlineLevel() ) )//#outline level,zhaojianwei
+                    pColl->IsAssignedToListLevelOfOutlineStyle()) )//<-end,zhaojianwei
+                  continue;
 
             SwClientIter aIter( *pColl );
             SwTxtNode* pTxtNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
@@ -1549,7 +1551,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
         if( pCNd )
         {
             //find node in body text
-            USHORT nSetLevel = USHRT_MAX;
+            int nSetLevel = USHRT_MAX;
 
             //#111105# tables of tables|illustrations|objects don't support hierarchies
             if( IsLevelFromChapter() &&
@@ -1561,9 +1563,11 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                                                         MAXLEVEL - 1 );
                 if( pOutlNd )
                 {
-                    USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();
-                    if( nTmp < NO_NUMBERING )
-                        nSetLevel = nTmp + 1;
+                    //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+                    //if( nTmp < NO_NUMBERING )
+                    //  nSetLevel = nTmp + 1;
+                    if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
+                        nSetLevel = pOutlNd->GetTxtColl()->GetAttrOutlineLevel() ;//<-end,zhaojianwei
                 }
             }
 
@@ -1571,7 +1575,9 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
             {
                 SwTOXPara * pNew = new SwTOXPara( *pCNd, eMyType,
-                            USHRT_MAX != nSetLevel ? nSetLevel : FORM_ALPHA_DELIMITTER );
+                            ( USHRT_MAX != nSetLevel )
+                            ? static_cast<USHORT>(nSetLevel)
+                            : FORM_ALPHA_DELIMITTER );
                 InsertSorted( pNew );
             }
         }
@@ -1616,9 +1622,14 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
                             ::lcl_FindChapterNode( *pCNd, MAXLEVEL - 1 );
                         if( pOutlNd )
                         {
-                            USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();
-                            if( nTmp < NO_NUMBERING )
-                                pNew->SetLevel( nTmp + 1 );
+                            //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+                            //if( nTmp < NO_NUMBERING )
+                            //  pNew->SetLevel( nTmp + 1 );
+                            if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
+                            {
+                                const int nTmp = pOutlNd->GetTxtColl()->GetAttrOutlineLevel();
+                                pNew->SetLevel( static_cast<USHORT>(nTmp) );//<-end ,zhaojianwei
+                            }
                         }
                     }
                     InsertSorted(pNew);
@@ -2323,7 +2334,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
             }
 #ifdef DBG_UTIL
             else
-                DBG_ERROR("Bibliography entries cannot be found here")
+                DBG_ERROR("Bibliography entries cannot be found here");
 #endif
         }
         if(*pNew < *pOld)

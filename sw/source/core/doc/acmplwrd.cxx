@@ -47,6 +47,8 @@
 #include <svx/svxacorr.hxx>
 
 #include <svx/acorrcfg.hxx>
+#include <sfx2/docfile.hxx>
+#include <docsh.hxx>
 
 #include <vector>
 /* -----------------------------05.08.2002 12:43------------------------------
@@ -278,12 +280,22 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 #ifdef DBG_UTIL
     ULONG nStrings = SwAutoCompleteString::GetElementCount();
     ULONG nClients = SwAutoCompleteClient::GetElementCount();
-    DBG_ASSERT(!nStrings && !nClients, "AutoComplete: clients or string count mismatch")
+    DBG_ASSERT(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
 #endif
 }
 
 BOOL SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
 {
+    SwDocShell* pDocShell = rDoc.GetDocShell();
+    SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : 0;
+    // strings from help module should not be added
+    if( pMedium )
+    {
+        const INetURLObject& rURL = pMedium->GetURLObject();
+        if ( rURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+            return sal_False;
+    }
+
     String aNewWord(rWord);
     aNewWord.EraseAllChars( CH_TXTATR_INWORD );
     aNewWord.EraseAllChars( CH_TXTATR_BREAKWORD );
@@ -454,7 +466,7 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
         {
             aWordLst.Remove( nPos - 1 );
             USHORT nLRUPos = aLRULst.GetPos( (void*)pCurrent );
-            DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" )
+            DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" );
             aLRULst.Remove( nLRUPos );
             delete pCurrent;
         }

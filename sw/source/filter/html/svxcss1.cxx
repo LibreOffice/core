@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxcss1.cxx,v $
- * $Revision: 1.20.214.1 $
+ * $Revision: 1.20.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -309,6 +309,7 @@ struct SvxCSS1ItemIds
     USHORT nFontHeightCJK;
     USHORT nFontHeightCTL;
     USHORT nUnderline;
+    USHORT nOverline;
     USHORT nCrossedOut;
     USHORT nColor;
     USHORT nKerning;
@@ -802,6 +803,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const String& rBaseURL, USHORT
     aItemIds.nFontHeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, FALSE );
     aItemIds.nFontHeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, FALSE );
     aItemIds.nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, FALSE );
+    aItemIds.nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, FALSE );
     aItemIds.nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, FALSE );
     aItemIds.nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, FALSE );
     aItemIds.nKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, FALSE );
@@ -1917,10 +1919,12 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
     BOOL bUnderline = FALSE;
+    BOOL bOverline = FALSE;
     BOOL bCrossedOut = FALSE;
     BOOL bBlink = FALSE;
     BOOL bBlinkOn = FALSE;
     FontUnderline eUnderline  = UNDERLINE_NONE;
+    FontUnderline eOverline   = UNDERLINE_NONE;
     FontStrikeout eCrossedOut = STRIKEOUT_NONE;
 
     // der Wert kann zwei Werte enthalten! Und MS-IE auch Strings
@@ -1939,6 +1943,9 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
                 bUnderline = TRUE;
                 eUnderline = UNDERLINE_NONE;
 
+                bOverline = TRUE;
+                eOverline = UNDERLINE_NONE;
+
                 bCrossedOut = TRUE;
                 eCrossedOut = STRIKEOUT_NONE;
 
@@ -1954,6 +1961,16 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
             {
                 bUnderline = TRUE;
                 eUnderline = UNDERLINE_SINGLE;
+
+                bKnown = TRUE;
+            }
+            break;
+
+        case 'o':
+            if( aValue.EqualsAscii( sCSS1_PV_overline ) )
+            {
+                bOverline = TRUE;
+                eOverline = UNDERLINE_SINGLE;
 
                 bKnown = TRUE;
             }
@@ -1991,6 +2008,9 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
 
     if( bUnderline )
         rItemSet.Put( SvxUnderlineItem( eUnderline, aItemIds.nUnderline ) );
+
+    if( bOverline )
+        rItemSet.Put( SvxOverlineItem( eOverline, aItemIds.nOverline ) );
 
     if( bCrossedOut )
         rItemSet.Put( SvxCrossedOutItem( eCrossedOut, aItemIds.nCrossedOut ) );

@@ -418,7 +418,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     }
 
 
-    DBG_ASSERT(pNewTOX, "no TOXBase created!" )
+    DBG_ASSERT(pNewTOX, "no TOXBase created!" );
     if(!pNewTOX)
         return FALSE;
 

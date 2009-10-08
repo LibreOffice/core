@@ -462,7 +462,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             {
                 if( rPage.GetItemSet().GetParent() )
                 {
-                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/2));
+                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/10));
                     aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
                     rPage.PageCreated(aSet);
                 }
@@ -471,6 +471,14 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             break;
         case TP_NUMPARA:
             {
+                //-->#outlinelevel added by zhaojianwei
+                //  handle if the current paragraph style is assigned to a list level of outline style,
+                SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
+                if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
+                {
+                    ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
+                    ((SwParagraphNumTabPage&)rPage).DisableNumbering();
+                }//<-end
                 ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
                 SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
                 pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);

@@ -93,7 +93,7 @@ public:
     Beschreibung: GetExperession
  --------------------------------------------------------------------*/
 
-class SwGetExpField : public SwFormulaField
+class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 {
     String          sExpand;
     BOOL            bIsInBodyTxt;
@@ -228,7 +228,7 @@ inline const String& SwSetExpFieldType::GetSetRefName() const
     Beschreibung: Ausdruck
  --------------------------------------------------------------------*/
 
-class SwSetExpField : public SwFormulaField
+class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
     String          sExpand;
     String          aPText;
@@ -315,7 +315,7 @@ public:
     Beschreibung: Eingabefeld
  --------------------------------------------------------------------*/
 
-class SwInputField : public SwField
+class SW_DLLPUBLIC SwInputField : public SwField
 {
     String  aContent;
     String  aPText;

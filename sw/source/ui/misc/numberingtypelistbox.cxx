@@ -64,7 +64,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResI
     uno::Reference < uno::XInterface > xI = xMSF->createInstance(
         ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(xI, uno::UNO_QUERY);
-    DBG_ASSERT(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+    DBG_ASSERT(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
 
     pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
     Reload(nTypeFlags);
@@ -164,7 +164,7 @@ sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
         nRet = (sal_Int16)(ULONG)GetEntryData(nSelPos);
 #ifdef DBG_UTIL
     else
-        DBG_ERROR("SwNumberingTypeListBox not selected")
+        DBG_ERROR("SwNumberingTypeListBox not selected");
 #endif
     return nRet;
 }

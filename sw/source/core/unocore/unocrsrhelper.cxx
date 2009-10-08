@@ -84,6 +84,9 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+// --> OD 2008-11-26 #158694#
+#include <SwNodeNum.hxx>
+// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -112,7 +115,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
     sal_Bool bDone = sal_True;
     switch(pMap->nWID)
     {
-        case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
+        // --> OD 2008-11-26 #158694#
+        case FN_UNO_PARA_CONT_PREV_SUBTREE:
             if (pAny)
             {
                 const SwTxtNode * pTmpNode = pNode;
@@ -120,13 +124,67 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 if (!pTmpNode)
                     pTmpNode = rPam.GetNode()->GetTxtNode();
 
-                sal_Int8 nRet = -1;
-                if (pTmpNode && pTmpNode->GetOutlineLevel() != NO_NUMBERING)
-                    nRet = sal::static_int_cast< sal_Int8 >(pTmpNode->GetOutlineLevel());
+                bool bRet = false;
+
+                if ( pTmpNode &&
+                     pTmpNode->GetNum() &&
+                     pTmpNode->GetNum()->IsContinueingPreviousSubTree() )
+                {
+                    bRet = true;
+                }
+
+                *pAny <<= bRet;
+            }
+        break;
+        case FN_UNO_PARA_NUM_STRING:
+            if (pAny)
+            {
+                const SwTxtNode * pTmpNode = pNode;
+
+                if (!pTmpNode)
+                    pTmpNode = rPam.GetNode()->GetTxtNode();
+
+                String sRet;
+                if ( pTmpNode && pTmpNode->GetNum() )
+                {
+                    sRet = pTmpNode->GetNumString();
+                }
+
+                *pAny <<= OUString(sRet);
+            }
+        break;
+        // <--
+        // --> OD 2008-05-20 #outlinelevel# - no longer needed
+//        case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
+//            if (pAny)
+//            {
+//                const SwTxtNode * pTmpNode = pNode;
+
+//                if (!pTmpNode)
+//                    pTmpNode = rPam.GetNode()->GetTxtNode();
+
+//                sal_Int8 nRet = -1;
+//                if (pTmpNode && pTmpNode->GetOutlineLevel() != NO_NUMBERING)
+//                nRet = sal::static_int_cast< sal_Int8 >(pTmpNode->GetOutlineLevel());
+//                *pAny <<= nRet;
+//            }
+//        break;
+        // <--
+        case RES_PARATR_OUTLINELEVEL: //#outlinelevel added by zhaojianwei
+            if (pAny)
+            {
+                const SwTxtNode * pTmpNode = pNode;
+
+                if (!pTmpNode)
+                    pTmpNode = rPam.GetNode()->GetTxtNode();
+
+                sal_Int16 nRet = -1;
+                if ( pTmpNode )
+                    nRet = sal::static_int_cast< sal_Int16 >( pTmpNode->GetAttrOutlineLevel() );
 
                 *pAny <<= nRet;
             }
-        break;
+        break; //<-end,zhaojianwei
         case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         case FN_UNO_PARA_STYLE :
         {

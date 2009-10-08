@@ -314,7 +314,7 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
         break;
 #ifdef DBG_UTIL
         default:
-            DBG_ERROR("Which numbering type?")
+            DBG_ERROR("Which numbering type?");
 #endif
     }
     aNumCountBox.SelectEntry(sSelect);

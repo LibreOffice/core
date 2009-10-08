@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postithelper.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.2.118.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +31,22 @@
 #define _POSTITHELPER_HXX
 
 #include <swrect.hxx>
+#include <fmtfld.hxx>
+#include <redline.hxx>
 #include <vector>
+#include <vcl/window.hxx>
+#include <svtools/brdcst.hxx>
 
 class SwTxtFld;
 class SwRootFrm;
-class SwFmtFld;
 class SwPostIt;
+class String;
+class SwMarginWin;
+class SwPostItMgr;
 
 struct SwPosition;
+
+typedef sal_Int64 SwPostItBits;
 
 struct SwLayoutInfo
 {
@@ -54,7 +62,7 @@ namespace SwPostItHelper
 {
     enum SwLayoutStatus
     {
-        INVISIBLE, VISIBLE, INSERTED, DELETED
+        INVISIBLE, VISIBLE, INSERTED, DELETED, NONE, HIDDEN
     };
 
     SwLayoutStatus getLayoutInfos( std::vector< SwLayoutInfo >&, SwPosition& );
@@ -64,30 +72,71 @@ namespace SwPostItHelper
     unsigned long getPageInfo( SwRect& rPageFrm, const SwRootFrm* , const Point& );
 }
 
-struct SwPostItItem
+class SwMarginItem
 {
+public:
+    SwMarginWin* pPostIt;
     bool bShow;
     bool bFocus;
     bool bMarginSide;
-    SwFmtFld* pFmtFld;
-    SwPostIt* pPostIt;
     SwRect mPos;
     SwRect mFramePos;
     SwRect mPagePos;
     unsigned long mnPageNumber;
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
     USHORT mRedlineAuthor;
-    SwPostItItem( SwFmtFld* p, bool aShow, bool aFocus)
-        : bShow(aShow),
+    SwMarginItem(bool aShow, bool aFocus)
+        : pPostIt(0),
+        bShow(aShow),
         bFocus(aFocus),
         bMarginSide(false),
-        pFmtFld(p),
-        pPostIt(0),
         mnPageNumber(1),
         mLayoutStatus( SwPostItHelper::INVISIBLE ),
         mRedlineAuthor(0)
+    {}
+    virtual ~SwMarginItem(){}
+    virtual SwPosition GetPosition() = 0;
+    virtual bool UseElement() = 0;
+    virtual SwFmtFld* GetFmtFld() = 0;
+    virtual SfxBroadcaster* GetBroadCaster() const = 0;
+    virtual SwMarginWin* GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits) = 0;
+};
+/*
+class SwRedCommentItem: public SwMarginItem
+{
+private:
+    SwRedline* pRedline;
+public:
+
+    SwRedCommentItem( SwRedline* pRed, bool aShow, bool aFocus)
+        : SwMarginItem(aShow,aFocus),
+        pRedline(pRed) {}
+    virtual ~SwRedCommentItem() {}
+    virtual SwPosition GetPosition();
+    virtual bool UseElement();
+    virtual SwFmtFld* GetFmtFld() {return 0; }
+    virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pRedline); }
+    virtual SwMarginWin* GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits);
+};
+*/
+
+class SwPostItItem: public SwMarginItem
+{
+    private:
+    SwFmtFld* pFmtFld;
+
+    public:
+    SwPostItItem( SwFmtFld* p, bool aShow, bool aFocus)
+        : SwMarginItem(aShow,aFocus) ,
+        pFmtFld(p)
     {
     }
+    virtual ~SwPostItItem() {}
+    virtual SwPosition GetPosition();
+    virtual bool UseElement();
+    virtual SwFmtFld* GetFmtFld() {return pFmtFld;}
+    virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pFmtFld); }
+    virtual SwMarginWin* GetMarginWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits);
 };
 
 #endif // _POSTITHELPER_HXX

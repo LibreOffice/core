@@ -185,11 +185,7 @@ using namespace nsTransferBufferType;
 
 #ifdef DDE_AVAILABLE
 
-#ifdef PM2
-#define DDE_TXT_ENCODING    RTL_TEXTENCODING_IBM_850
-#else
-#define DDE_TXT_ENCODING    RTL_TEXTENCODING_MS_1252
-#endif
+#define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
 //---------------------------------------------
 // this struct conforms to the Microsoft
@@ -1708,7 +1704,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
             {
                 pStream = &xStrm;
                 if( SOT_FORMAT_RTF == nFmt )
-                    pRead = ReadRtf;
+                    pRead = SwReaderWriter::GetReader( READER_WRITER_RTF );
                 else if( !pRead )
                 {
                     pRead = ReadHTML;
@@ -2105,9 +2101,10 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             return 0;
         }   //sinnvollen Fehler melden!!
 
-        xStrm->ReadCString( aApp, DDE_TXT_ENCODING );
-        xStrm->ReadCString( aTopic, DDE_TXT_ENCODING );
-        xStrm->ReadCString( aItem, DDE_TXT_ENCODING );
+        rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
+        xStrm->ReadCString( aApp, eEncoding );
+        xStrm->ReadCString( aTopic, eEncoding );
+        xStrm->ReadCString( aItem, eEncoding );
     }
 
     String aCmd;
@@ -3712,10 +3709,11 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     if( !refObj.Is() || !FindDocShell() )
         return FALSE;
 
-    const ByteString aAppNm( GetpApp()->GetAppName(),  DDE_TXT_ENCODING );
+    rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
+    const ByteString aAppNm( GetpApp()->GetAppName(), eEncoding );
     const ByteString aTopic( pDocShell->GetTitle( SFX_TITLE_FULLNAME ),
-                            DDE_TXT_ENCODING );
-    const ByteString aName( sName, DDE_TXT_ENCODING );
+                            eEncoding );
+    const ByteString aName( sName, eEncoding );
 
     sal_Char* pMem = new char[ aAppNm.Len() + aTopic.Len() + aName.Len() + 4 ];
 

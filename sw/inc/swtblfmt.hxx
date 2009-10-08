@@ -75,7 +75,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFmt)
 };
 
-class SwTableBoxFmt : public SwFrmFmt
+class SW_DLLPUBLIC SwTableBoxFmt : public SwFrmFmt
 {
     friend class SwDoc;
 

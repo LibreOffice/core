@@ -607,7 +607,7 @@ void SwXFootnoteProperties::addPropertyChangeListener(
     const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:03:21---------------------------------------------------
 
@@ -616,7 +616,7 @@ void SwXFootnoteProperties::removePropertyChangeListener(
     const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:03:21---------------------------------------------------
 
@@ -625,7 +625,7 @@ void SwXFootnoteProperties::addVetoableChangeListener(
     const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:03:22---------------------------------------------------
 
@@ -634,7 +634,7 @@ void SwXFootnoteProperties::removeVetoableChangeListener(
     const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 /******************************************************************
@@ -866,7 +866,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
 void SwXEndnoteProperties::addPropertyChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:27:41---------------------------------------------------
 
@@ -875,7 +875,7 @@ void SwXEndnoteProperties::removePropertyChangeListener(const OUString& /*Proper
         const uno:: Reference< beans::XPropertyChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:27:41---------------------------------------------------
 
@@ -884,7 +884,7 @@ void SwXEndnoteProperties::addVetoableChangeListener(const OUString& /*PropertyN
     const uno:: Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:27:42---------------------------------------------------
 
@@ -892,7 +892,7 @@ void SwXEndnoteProperties::addVetoableChangeListener(const OUString& /*PropertyN
 void SwXEndnoteProperties::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno:: Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /******************************************************************
  * SwXLineNumberingProperties
@@ -1180,21 +1180,21 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
   -----------------------------------------------------------------------*/
 void SwXLineNumberingProperties::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno:: Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-DBG_WARNING("not implemented")
+DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:33:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXLineNumberingProperties::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno:: Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-DBG_WARNING("not implemented")
+DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:33:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXLineNumberingProperties::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno:: Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-DBG_WARNING("not implemented")
+DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 14:33:39---------------------------------------------------
 
@@ -1202,7 +1202,7 @@ DBG_WARNING("not implemented")
 void SwXLineNumberingProperties::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno:: Reference< beans::XVetoableChangeListener > & /*xListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-DBG_WARNING("not implemented")
+DBG_WARNING("not implemented");
 }
 /******************************************************************
  * SwXNumberingRules
@@ -1695,8 +1695,11 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             if(rTxtColl.IsDefault())
                 continue;
 
-            sal_Int8 nOutLevel = rTxtColl.GetOutlineLevel();
-            if(nOutLevel == nIndex)
+            //sal_Int8 nOutLevel = rTxtColl.GetOutlineLevel();      //#outline level,zhaojianwei
+            const sal_Int16 nOutLevel = rTxtColl.IsAssignedToListLevelOfOutlineStyle()
+                                        ? static_cast<sal_Int16>(rTxtColl.GetAssignedOutlineStyleLevel())
+                                        : MAXLEVEL;                 //<-end,zhaojianwei
+            if ( nOutLevel == nIndex )
             {
                 sValue = rTxtColl.GetName();
                 break; // the style for the level in question has been found
@@ -2181,11 +2184,21 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
                         if(rTxtColl.IsDefault())
                             continue;
-                        if(rTxtColl.GetOutlineLevel() == nIndex &&
-                            rTxtColl.GetName() != sStyleName)
-                            rTxtColl.SetOutlineLevel(NO_NUMBERING);
-                        else if(rTxtColl.GetName() == sStyleName)
-                            rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
+                        //if(rTxtColl.GetOutlineLevel() == nIndex &&            //#outline level,removed by zhaojianwei
+                        //  rTxtColl.GetName() != sStyleName)
+                        //  rTxtColl..SetOutlineLevel(NO_NUMBERING);
+                        //else if(rTxtColl.GetName() == sStyleName)
+                        //  rTxtColl.SetOutlineLevel(sal_Int8(nIndex));
+                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&  //add by zhaojianwei
+                             rTxtColl.GetAssignedOutlineStyleLevel() == nIndex &&
+                             rTxtColl.GetName() != sStyleName )
+                        {
+                            rTxtColl.DeleteAssignmentToListLevelOfOutlineStyle();
+                        }
+                        else if ( rTxtColl.GetName() == sStyleName )
+                        {
+                            rTxtColl.AssignToListLevelOfOutlineStyle( nIndex );
+                        }                                                       //<-end,,zhaojianwei,
                     }
                 }
                 break;

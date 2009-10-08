@@ -233,7 +233,8 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
     {
         if( !( nOutLvlBits & ( 1 << nLevel )) )
         {
-            pColl->SetOutlineLevel( nLevel );
+            //pColl->SetOutlineLevel( nLevel );          //#outline level zhaojianwei
+            pColl->AssignToListLevelOfOutlineStyle(nLevel);//<-end,zhaojianwei
             if( !bHTMLMode )
             {
                 SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
@@ -344,8 +345,10 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         {
             return pNewColl;
         }
-        if( pNewColl->GetOutlineLevel() < MAXLEVEL )
-            nOutLvlBits |= ( 1 << pNewColl->GetOutlineLevel() );
+        //if( pNewColl->GetOutlineLevel() < MAXLEVEL )          //#outline level,zhaojianwei
+        //nOutLvlBits |= ( 1 << pNewColl->GetOutlineLevel() );
+        if( pNewColl->IsAssignedToListLevelOfOutlineStyle())
+            nOutLvlBits |= ( 1 << pNewColl->GetAssignedOutlineStyleLevel() );//<-end,zhaojianwei
     }
 
     // bis hierher nicht gefunden -> neu anlegen

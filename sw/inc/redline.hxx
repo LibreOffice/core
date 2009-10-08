@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: redline.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.180.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +37,9 @@
 #include <svtools/svstdarr.hxx>
 #include <pam.hxx>
 
-#ifndef IDOCUMENTREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
-#endif
+
+#include <svtools/smplhint.hxx>
 
 class SfxItemSet;
 
@@ -91,7 +91,7 @@ public:
 };
 
 
-class SwRedlineData
+class SW_DLLPUBLIC SwRedlineData
 {
     friend class SwRedline;
     SwRedlineData* pNext;       // Verweis auf weitere Daten
@@ -169,7 +169,7 @@ public:
 };
 
 
-class SwRedline : public SwPaM
+class SW_DLLPUBLIC SwRedline : public SwPaM
 {
     SwRedlineData* pRedlineData;
     SwNodeIndex* pCntntSect;
@@ -286,5 +286,28 @@ public:
     int operator==( const SwRedline& ) const;
     int operator<( const SwRedline& ) const;
 };
+
+class SW_DLLPUBLIC SwRedlineHint : public SfxHint
+{
+#define SWREDLINE_INSERTED  1
+#define SWREDLINE_REMOVED   2
+#define SWREDLINE_FOCUS     3
+#define SWREDLINE_CHANGED   4
+#define SWREDLINE_LANGUAGE  5
+
+    const SwRedline* pRedline;
+    sal_Int16 nWhich;
+
+public:
+    SwRedlineHint( const SwRedline* p, sal_Int16 n )
+        : pRedline(p)
+        , nWhich(n)
+    {}
+
+    TYPEINFO();
+    const SwRedline* GetRedline() const { return pRedline; }
+    sal_Int16 Which() const { return nWhich; }
+};
+
 
 #endif

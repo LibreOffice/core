@@ -455,7 +455,7 @@ void SwMailMergeOutputPage::ActivatePage()
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
 
     SwView* pTargetView = rConfigItem.GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists")
+    DBG_ASSERT(pTargetView, "no target view exists");
     if(pTargetView)
     {
         SfxPrinter* pPrinter = pTargetView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( true );
@@ -467,7 +467,7 @@ void SwMailMergeOutputPage::ActivatePage()
     m_aPrinterLB.SelectEntry( rConfigItem.GetSelectedPrinter() );
 
     SwView* pSourceView = rConfigItem.GetSourceView();
-    DBG_ASSERT(pSourceView, "no source view exists")
+    DBG_ASSERT(pSourceView, "no source view exists");
     if(pSourceView)
     {
         SwDocShell* pDocShell = pSourceView->GetDocShell();
@@ -686,7 +686,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     SwView* pSourceView = rConfigItem.GetSourceView();
-    DBG_ASSERT( pSourceView, "source view missing")
+    DBG_ASSERT( pSourceView, "source view missing");
     if(pSourceView)
     {
         SfxViewFrame* pSourceViewFrm = pSourceView->GetViewFrame();
@@ -736,7 +736,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     SwView* pTargetView = rConfigItem.GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists")
+    DBG_ASSERT(pTargetView, "no target view exists");
     if(!pTargetView)
         return 0;
 
@@ -778,7 +778,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                String::CreateFromAscii( GetFILTER_XML() ),
+                String::CreateFromAscii( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
 
         uno::Sequence< beans::PropertyValue > aValues(1);
@@ -933,7 +933,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
 IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
 {
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists")
+    DBG_ASSERT(pTargetView, "no target view exists");
     if(!pTargetView)
         return 0;
 
@@ -1038,7 +1038,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     //get the composed document
     SwView* pTargetView = rConfigItem.GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists")
+    DBG_ASSERT(pTargetView, "no target view exists");
     if(!pTargetView)
         return 0;
 
@@ -1093,7 +1093,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
             SfxFilterMatcherIter aIter( &aMatcher );
             const SfxFilter* pFilter = aIter.First();
-            String sFilterUserData( String::CreateFromAscii(GetFILTER_WW8()));
+            String sFilterUserData( String::CreateFromAscii( FILTER_WW8 ));
             while ( pFilter )
             {
                 if( pFilter->GetUserData() == sFilterUserData   && pFilter->CanExport() )
@@ -1180,7 +1180,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
-            String::CreateFromAscii( GetFILTER_XML() ),
+            String::CreateFromAscii( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
 
     uno::Sequence< beans::PropertyValue > aValues(1);
@@ -1256,7 +1256,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         sal_Int32 nTarget =
 #endif
                 rConfigItem.MoveResultSet(rInfo.nDBRow);
-        DBG_ASSERT( nTarget == rInfo.nDBRow, "row of current document could not be selected")
+        DBG_ASSERT( nTarget == rInfo.nDBRow, "row of current document could not be selected");
         DBG_ASSERT( sEMailColumn.Len(), "No email column selected");
         ::rtl::OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;
@@ -1272,7 +1272,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     pInStream->SetStreamCharSet( eEncoding );
                 else
                 {
-                    DBG_ERROR("no output file created?")
+                    DBG_ERROR("no output file created?");
                     continue;
                 }
                 ByteString sLine;

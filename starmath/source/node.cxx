@@ -213,9 +213,13 @@ void SmNode::SetColor(const Color& rColor)
 
 void SmNode::SetAttribut(USHORT nAttrib)
 {
-    if (   nAttrib == ATTR_BOLD  &&  !(Flags() & FLG_BOLD)
-        || nAttrib == ATTR_ITALIC  &&  !(Flags() & FLG_ITALIC))
+    if (
+        (nAttrib == ATTR_BOLD && !(Flags() & FLG_BOLD)) ||
+        (nAttrib == ATTR_ITALIC && !(Flags() & FLG_ITALIC))
+       )
+    {
         nAttributes |= nAttrib;
+    }
 
     SmNode *pNode;
     USHORT nSize = GetNumSubNodes();
@@ -227,9 +231,13 @@ void SmNode::SetAttribut(USHORT nAttrib)
 
 void SmNode::ClearAttribut(USHORT nAttrib)
 {
-    if (   nAttrib == ATTR_BOLD  &&  !(Flags() & FLG_BOLD)
-        || nAttrib == ATTR_ITALIC  &&  !(Flags() & FLG_ITALIC))
+    if (
+        (nAttrib == ATTR_BOLD && !(Flags() & FLG_BOLD)) ||
+        (nAttrib == ATTR_ITALIC && !(Flags() & FLG_ITALIC))
+       )
+    {
         nAttributes &= ~nAttrib;
+    }
 
     SmNode *pNode;
     USHORT nSize = GetNumSubNodes();

@@ -49,6 +49,12 @@ class SwGrammarMarkUp : public SwWrongList
     std::vector< xub_StrLen > maSentence;
 public:
     SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
+    SwGrammarMarkUp( const SwGrammarMarkUp* );
+
+    virtual ~SwGrammarMarkUp();
+    virtual SwWrongList* Clone();
+    virtual void CopyFrom( const SwWrongList& rCopy );
+
     /* SwWrongList::Move() + handling of maSentence */
     void MoveGrammar( xub_StrLen nPos, long nDiff );
     /* SwWrongList::SplitList() + handling of maSentence */
@@ -56,7 +62,7 @@ public:
     /* SwWrongList::JoinList() + handling of maSentence */
     void JoinGrammarList( SwGrammarMarkUp* pNext, xub_StrLen nInsertPos );
     /* SwWrongList::ClearList() + handling of maSentence */
-    void ClearGrammarList();
+    void ClearGrammarList( xub_StrLen nSentenceEnd = STRING_LEN );
     /* setSentence to define the start positionof a sentence,
        at the moment the end position is given by the next start position */
     void setSentence( xub_StrLen nStart );

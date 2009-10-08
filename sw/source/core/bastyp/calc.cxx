@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calc.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.44.174.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@
 #endif
 #include <cstdlib>
 #include <climits>
-#include <cmath>
+// #include <cmath>
 #include <cfloat>
 #include <hintids.hxx>
 #include <rtl/math.hxx>
@@ -390,15 +390,15 @@ static ULONG SwDocStat::* __READONLY_DATA aDocStat2[ 4 ] =
 
     SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( (String)rUserOptions.GetFirstName() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( (String)rUserOptions.GetLastName() );
+    ((SwCalcExp*)VarTable[ aHashValue[ 13 ] ])->nValue.PutString( (String)rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
         ((SwCalcExp*)VarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
-                                        rUserOptions.GetToken( aAdrToken[ n ] ));
+                                        (String)rUserOptions.GetToken( aAdrToken[ n ] ));
 
-    nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
+    nVal.PutString( (String)rUserOptions.GetToken( aAdrToken[ 11 ] ));
     sTmpStr.AssignAscii( sNTypeTab[ 25 ] );
     VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, 0 );
 

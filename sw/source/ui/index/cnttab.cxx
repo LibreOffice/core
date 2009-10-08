@@ -643,12 +643,14 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
 sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
-    if(pColl && pColl->GetOutlineLevel() == NO_NUMBERING)
+    //if(pColl && pColl->GetOutlineLevel() == NO_NUMBERING)     //#outline level,zhaojianwei
+    if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle()) //<-end,zhaojianwei
         return sal_True;
 
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
-       rSh.GetTxtCollFromPool(nId)->GetOutlineLevel() == NO_NUMBERING)
+        //rSh.GetTxtCollFromPool(nId)->GetOutlineLevel() == NO_NUMBERING)       //#outline level,zhaojianwei
+        ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())   //<-end,zhaojianwei
         return sal_True;
 
     return sal_False;
@@ -966,7 +968,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
 
     aCreateFromFL(      this, SW_RES(FL_CREATEFROM       )),
     aFromHeadingsCB(    this, SW_RES(CB_FROMHEADINGS     )),
-    aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),
+//   aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),//#outline level,removed by zhaojianwei
     aAddStylesCB(       this, SW_RES(CB_ADDSTYLES       )),
     aAddStylesPB(       this, SW_RES(PB_ADDSTYLES       )),
 
@@ -1043,7 +1045,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aTypeLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
 
     aAddStylesPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, AddStylesHdl));
-    aChapterDlgPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, ChapterHdl));
+    //aChapterDlgPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, ChapterHdl));//#outline level,removed by zhaojianwei
 
     PopupMenu*  pMenu = aAutoMarkPB.GetPopupMenu();
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
@@ -1221,7 +1223,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     if(TOX_CONTENT == aCurType.eType)
     {
         aFromHeadingsCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
-        aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());
+        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
         aAddStylesCB.SetText(sAddStyleContent);
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
     }
@@ -1279,7 +1281,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     for( long nCnt = 0; nCnt < aSortAlgorithmLB.GetEntryCount(); ++nCnt )
     {
         const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( (USHORT)nCnt );
-        DBG_ASSERT(pEntryData, "no entry data available")
+        DBG_ASSERT(pEntryData, "no entry data available");
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
             aSortAlgorithmLB.SelectEntryPos( (USHORT)nCnt );
@@ -1396,7 +1398,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
     rDesc.SetLanguage(aLanguageLB.GetSelectLanguage());
     const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData(
                                             aSortAlgorithmLB.GetSelectEntryPos() );
-    DBG_ASSERT(pEntryData, "no entry data available")
+    DBG_ASSERT(pEntryData, "no entry data available");
     if(pEntryData)
         rDesc.SetSortAlgorithm(*pEntryData);
 }
@@ -1485,7 +1487,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aAreaFL.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
 
     aFromHeadingsCB.Show( 0 != (nType & (TO_CONTENT)) );
-    aChapterDlgPB.Show( 0 != (nType & (TO_CONTENT)) );
+   // aChapterDlgPB.Show( 0 != (nType & (TO_CONTENT)) );//#outline level,removed by zhaojianwei
     aAddStylesCB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
     aAddStylesPB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
@@ -1517,13 +1519,14 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aSortAlgorithmFT.Show(bEnableSortLanguage);
     aSortAlgorithmLB.Show(bEnableSortLanguage);
 
-    if(nType & TO_CONTENT)
-    {
-         Point aPos(aAddStylesPB.GetPosPixel());
-        aPos.X() = aChapterDlgPB.GetPosPixel().X();
-        aAddStylesPB.SetPosPixel(aPos);
-    }
-    else if( nType & TO_ILLUSTRATION )
+    //if(nType & TO_CONTENT)            //#outline level,removed by zhaojianwei
+    //{
+         //Point aPos(aAddStylesPB.GetPosPixel());
+        //aPos.X() = aChapterDlgPB.GetPosPixel().X();
+        //aAddStylesPB.SetPosPixel(aPos);
+    //}
+    //else if( nType & TO_ILLUSTRATION )//<-removed end.
+    if( nType & TO_ILLUSTRATION )       //add by zhaojianwei
         aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
                                     RES_POOLCOLL_LABEL_ABB, aEmptyStr ));
     else if( nType & TO_TABLE )
@@ -1534,7 +1537,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
         aAddStylesCB.SetText(sAddStyleUser);
         // move left!
          Point aPos(aAddStylesPB.GetPosPixel());
-        aPos.X() = aChapterDlgPB.GetPosPixel().X();
+    //  aPos.X() = aChapterDlgPB.GetPosPixel().X();
         aPos.X() -= 2 * aAddStylesPB.GetSizePixel().Width();
         aAddStylesPB.SetPosPixel(aPos);
     }
@@ -1598,7 +1601,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
             pBox->Check(sal_True);
         }
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
-        aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());
+        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
     }
     if(TOX_USER == aCurType.eType)
     {
@@ -1673,7 +1676,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
  --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     switch((long)pBox->GetEntryData( pBox->GetSelectEntryPos() ))
     {
         case AREA_DOCUMENT  : break;
@@ -1681,42 +1684,45 @@ IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
     }
     return 0;
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
-IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,   PushButton*, pButton)
-{
-    SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
-    SwWrtShell& rSh = pTOXDlg->GetWrtShell();
-
-    SfxItemSet aTmp(rSh.GetView().GetPool(), FN_PARAM_1, FN_PARAM_1);
-    SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(pButton, &aTmp, rSh);
-
-    if(RET_OK == pDlg->Execute())
-    {
-        CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
-        SwForm* pForm = ((SwMultiTOXTabDialog*)GetTabDialog())->GetForm(aCurType);
-        // jetzt muss ueberprueft werden, ob dem sdbcx::Index Ueberschriftenvorlagen
-        // zugewiesen wurden
-        String sStr;
-        for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-        {
-            sal_Bool bNum = !SwMultiTOXTabDialog::IsNoNum(rSh, pForm->GetTemplate( i + 1 ));
-            if(bNum)
-            {
-                //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
-                if(i < 5)
-                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT1 + i), sStr );
-                else
-                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT6 + i - 5), sStr );
-                pForm->SetTemplate( i + 1, sStr );
-            }
-        }
-
-    }
-    delete pDlg;
-    return 0;
-}
+//#outline level, removed by zhaojianwei
+//It is no longer used!
+///* -----------------14.06.99 13:10-------------------
+//
+// --------------------------------------------------*/
+//IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,     PushButton*, pButton)
+//{
+//  SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
+//  SwWrtShell& rSh = pTOXDlg->GetWrtShell();
+//
+//  SfxItemSet aTmp(rSh.GetView().GetPool(), FN_PARAM_1, FN_PARAM_1);
+//  SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(pButton, &aTmp, rSh);
+//
+//  if(RET_OK == pDlg->Execute())
+//  {
+//      CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
+//      SwForm* pForm = ((SwMultiTOXTabDialog*)GetTabDialog())->GetForm(aCurType);
+//      // jetzt muss ueberprueft werden, ob dem sdbcx::Index Ueberschriftenvorlagen
+//      // zugewiesen wurden
+//      String sStr;
+//      for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
+//      {
+//          sal_Bool bNum = !SwMultiTOXTabDialog::IsNoNum(rSh, pForm->GetTemplate( i + 1 ));
+//          if(bNum)
+//          {
+//              //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
+//              if(i < 5)
+//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT1 + i), sStr );
+//              else
+//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT6 + i - 5), sStr );
+//              pForm->SetTemplate( i + 1, sStr );
+//          }
+//      }
+//
+//  }
+//  delete pDlg;
+//  return 0;
+//}
 /* -----------------14.06.99 13:10-------------------
 
  --------------------------------------------------*/
@@ -1938,7 +1944,7 @@ public:
     void SetLinkEnd()
         {
             DBG_ASSERT(TOKEN_LINK_START == aFormToken.eTokenType,
-                                    "call SetLinkEnd for link start only!")
+                                    "call SetLinkEnd for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_END;
             aFormToken.sText.AssignAscii(SwForm::aFormLinkEnd);
             SetText(aFormToken.sText);
@@ -1946,7 +1952,7 @@ public:
     void SetLinkStart()
         {
             DBG_ASSERT(TOKEN_LINK_END == aFormToken.eTokenType,
-                                    "call SetLinkStart for link start only!")
+                                    "call SetLinkStart for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_START;
             aFormToken.sText.AssignAscii(SwForm::aFormLinkStt);
             SetText(aFormToken.sText);
@@ -2588,7 +2594,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
     else
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled")
+        DBG_ASSERT(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled");
         if( WINDOW_EDIT != pCtrl->GetType() )
         {
             //fill it into the ListBox
@@ -2735,7 +2741,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
                 sal_uInt16  nLstBoxPos = aAuthFieldsLB.GetEntryPos( (void*) nSearch );
-                DBG_ASSERT(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?")
+                DBG_ASSERT(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
                 aAuthFieldsLB.RemoveEntry(nLstBoxPos);
             }
 
@@ -2915,7 +2921,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
     if(sEntry == sNoCharStyle)
         sEntry.Erase();
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl, "no active control?")
+    DBG_ASSERT(pCtrl, "no active control?");
     if(pCtrl)
     {
         if(WINDOW_EDIT == pCtrl->GetType())
@@ -2936,7 +2942,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(pCtrl, "no active control?")
+        DBG_ASSERT(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
             ((SwTOXButton*)pCtrl)->SetChapterInfo(nPos);
 
@@ -2950,7 +2956,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
     const sal_uInt16 nLevel = static_cast<BYTE>(pField->GetValue());
 
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl, "no active control?")
+    DBG_ASSERT(pCtrl, "no active control?");
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         ((SwTOXButton*)pCtrl)->SetOutlineLevel(nLevel);
 
@@ -2965,7 +2971,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(pCtrl, "no active control?")
+        DBG_ASSERT(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         {
            ((SwTOXButton*)pCtrl)->SetEntryNumberFormat(nPos);//i89791
@@ -2983,7 +2989,7 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
     Control* pCtrl = aTokenWIN.GetActiveControl();
     DBG_ASSERT(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
-                "no active style::TabStop control?")
+                "no active style::TabStop control?");
     if( pCtrl && WINDOW_EDIT != pCtrl->GetType() )
     {
         ((SwTOXButton*)pCtrl)->SetTabPosition( static_cast< SwTwips >(
@@ -3000,7 +3006,7 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
     Control* pCtrl = aTokenWIN.GetActiveControl();
     DBG_ASSERT(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
-                "no active style::TabStop control?")
+                "no active style::TabStop control?");
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
     {
         sal_Unicode cSet;
@@ -3023,7 +3029,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
     Control* pCurCtrl = aTokenWIN.GetActiveControl();
     DBG_ASSERT(WINDOW_EDIT != pCurCtrl->GetType() &&
             ((SwTOXButton*)pCurCtrl)->GetFormToken().eTokenType == TOKEN_TAB_STOP,
-            "no style::TabStop selected!")
+            "no style::TabStop selected!");
 
     const SwFormToken& rToken = ((SwTOXButton*)pCurCtrl)->GetFormToken();
     sal_Bool bChecked = pBox->IsChecked();
@@ -3167,7 +3173,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
             if(TOKEN_TEXT == aToken.eTokenType)
             {
-                DBG_ASSERT(!bLastWasText, "text following text is invalid")
+                DBG_ASSERT(!bLastWasText, "text following text is invalid");
                 Control* pCtrl = InsertItem(aToken.sText, aToken);
                 bLastWasText = sal_True;
                 if(!GetActiveControl())
@@ -3304,7 +3310,7 @@ void    SwTokenWindow::InsertAtSelection(
             const String& rText,
             const SwFormToken& rToken)
 {
-    DBG_ASSERT(pActiveCtrl, "no active control!")
+    DBG_ASSERT(pActiveCtrl, "no active control!");
     if(!pActiveCtrl)
         return;
     SwFormToken aToInsertToken(rToken);
@@ -3391,7 +3397,7 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPostLinkStartFound)
         {
-            DBG_ASSERT(pExchange, "no control to exchange?")
+            DBG_ASSERT(pExchange, "no control to exchange?");
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkEnd();
@@ -3401,7 +3407,7 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPreEndLinkFound)
         {
-            DBG_ASSERT(pExchange, "no control to exchange?")
+            DBG_ASSERT(pExchange, "no control to exchange?");
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkStart();

@@ -87,11 +87,7 @@ String  CallSaveAsDialog(String& rFilter)
     {
         uno::Reference < ui::dialogs::XFilePicker > xFP = aDialog.GetFilePicker();
         sRet = xFP->getFiles().getConstArray()[0];
-        rFilter = aDialog.GetCurrentFilter();
-        SfxFilterMatcher aMatcher( sFactory );
-        const SfxFilter* p2 = aMatcher.GetFilter4UIName( rFilter );
-        if(p2)
-            rFilter = p2->GetFilterName();
+        rFilter = aDialog.GetRealFilter();
     }
     return sRet;
 }
@@ -192,7 +188,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         }
         catch(uno::Exception& )
         {
-            DBG_ERROR("exception caught")
+            DBG_ERROR("exception caught");
         }
     return xSmtpServer;
 }
@@ -286,7 +282,7 @@ void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
   -----------------------------------------------------------------------*/
 sal_uInt16   SwAddressPreview::GetSelectedAddress()const
 {
-    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid")
+    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
     return pImpl->nSelectedAddress;
 }
 /*-- 25.06.2004 10:32:48---------------------------------------------------
@@ -294,7 +290,7 @@ sal_uInt16   SwAddressPreview::GetSelectedAddress()const
   -----------------------------------------------------------------------*/
 void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
-    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid")
+    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
     pImpl->nSelectedAddress = nSelect;
     // now make it visible..
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
@@ -601,7 +597,7 @@ String SwAddressPreview::FillData(
                     }
                     catch( sdbc::SQLException& )
                     {
-                        DBG_ERROR("SQLException caught")
+                        DBG_ERROR("SQLException caught");
                     }
                 }
             }
@@ -630,7 +626,7 @@ SwMergeAddressItem   SwAddressIterator::Next()
         {
             aRet.bIsColumn = true;
             xub_StrLen nClose = sAddress.Search('>');
-            DBG_ASSERT(nClose != STRING_NOTFOUND, "closing '>' not found")
+            DBG_ASSERT(nClose != STRING_NOTFOUND, "closing '>' not found");
             aRet.sText = sAddress.Copy(1, nClose - 1);
             sAddress.Erase(0, nClose + 1);
         }

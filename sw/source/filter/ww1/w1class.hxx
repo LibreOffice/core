@@ -160,7 +160,7 @@ public:
     ULONG Where() const                 { return ulSeek; }
     void Seek( ULONG ulNew )
         {
-            DBG_ASSERT(ulNew < ulCountBytes, "Ww1PlainText")
+            DBG_ASSERT(ulNew < ulCountBytes, "Ww1PlainText");
             if (ulNew < ulCountBytes)
                 ulSeek = ulNew;
         }

@@ -450,7 +450,7 @@ void SwTestAccountSettingsDialog::Test()
         }
         catch(uno::Exception&)
         {
-            DBG_ERROR("exception caught")
+            DBG_ERROR("exception caught");
         }
     }
 

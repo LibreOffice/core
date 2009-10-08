@@ -786,7 +786,7 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 {
     String* pGroup = (String*)aAutoTextGroupLB.GetEntryData(
                                     aAutoTextGroupLB.GetSelectEntryPos());
-    DBG_ASSERT(pGroup, "no group selected?")
+    DBG_ASSERT(pGroup, "no group selected?");
     if(pGroup)
         aLabItem.sGlossaryGroup = *pGroup;
 

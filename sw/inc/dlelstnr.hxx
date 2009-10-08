@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star {
     namespace linguistic2 {
         class XDictionaryList;
         class XLinguServiceManager;
-        class XGrammarCheckingIterator;
+        class XProofreadingIterator;
     }
     namespace frame {
         class XTerminateListener;
@@ -69,7 +69,7 @@ class SwLinguServiceEventListener :
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XLinguServiceManager >     xLngSvcMgr;
     com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XGrammarCheckingIterator > xGCIterator;
+        com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
 
     // disallow use of copy-constructor and assignment operator
     SwLinguServiceEventListener(const SwLinguServiceEventListener &);

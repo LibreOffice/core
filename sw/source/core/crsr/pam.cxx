@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pam.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1148,4 +1148,9 @@ String SwPaM::GetTxt() const
     while (aNodeIndex != End()->nNode);
 
     return aResult;
+}
+
+BOOL SwPaM::Overlap(const SwPaM & a, const SwPaM & b)
+{
+    return !(*b.End() <= *a.Start() || *a.End() <= *b.End());
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtxtsh.sdi,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.82.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,6 +119,14 @@ interface TextDrawText
         ExecMethod = ExecDraw ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+    FN_INSERT_STRING
+    [
+            ExecMethod = ExecDraw ;
+            StateMethod = NoState ;
+            DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     FN_INSERT_SOFT_HYPHEN // status(final|play)
         [
                 ExecMethod = ExecDraw ;
@@ -145,24 +153,22 @@ interface TextDrawText
     ]
     SID_INSERT_LRM
     [
-                ExecMethod = ExecDraw ;
+        ExecMethod = ExecDraw ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_INSERT_ZWSP
     [
-                ExecMethod = ExecDraw ;
+        ExecMethod = ExecDraw ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_INSERT_ZWNBSP
     [
-                ExecMethod = ExecDraw ;
+        ExecMethod = ExecDraw ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-
-
 
     SID_ATTR_CHAR_WEIGHT // api:
     [
@@ -179,6 +185,13 @@ interface TextDrawText
     ]
 
     SID_ATTR_CHAR_UNDERLINE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_OVERLINE // api:
     [
         ExecMethod = Execute ;
         StateMethod = GetDrawTxtCtrlState ;
@@ -455,12 +468,6 @@ interface TextDrawText
         StateMethod = GetDrawTxtCtrlState
     ]
 
-    SID_AUTOSPELL_MARKOFF
-    [
-        ExecMethod = Execute;
-        StateMethod = GetDrawTxtCtrlState
-    ]
-
     SID_SEARCH_DLG
     [
         StateMethod = StateDisableItems
@@ -517,6 +524,40 @@ interface TextDrawText
         ExecMethod = Execute;
         StateMethod = GetState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
+
+       FN_FORMAT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Execute ;
+    ]
+
+    SID_OPEN_XML_FILTERSETTINGS // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+    ]
+
+    FN_WORDCOUNT_DIALOG
+    [
+        ExecMethod = Execute;
+    ]
+
+       FN_NUMBERING_OUTLINE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+    ]
+
+    SID_INSERT_GRAPHIC
+    [
+        StateMethod = StateDisableItems ;
+    ]
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
     ]
 }
 

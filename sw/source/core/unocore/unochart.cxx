@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unochart.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/zforlist.hxx>     // SvNumberFormatter
+#include <svtools/chartprettypainter.hxx>
 
 #include <tools/link.hxx>
 
@@ -92,6 +93,45 @@ extern int lcl_CompareCellRanges(
         const String &rRange2StartCell, const String &rRange2EndCell,
         sal_Bool bCmpColsFirst );
 extern void lcl_NormalizeRange( String &rCell1, String &rCell2 );
+
+//////////////////////////////////////////////////////////////////////
+
+//static
+void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
+{
+    if (!pDoc)
+        return;
+
+    uno::Reference< frame::XModel > xRes;
+
+    SwOLENode *pONd;
+    SwStartNode *pStNd;
+    SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
+    while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
+    {
+        aIdx++;
+        if (0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
+            ChartPrettyPainter::IsChart( pONd->GetOLEObj().GetObject() ) )
+        {
+            // Load the object and set modified
+
+            uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
+            if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
+            {
+                try
+                {
+                    uno::Reference< util::XModifiable > xModif( xIP->getComponent(), uno::UNO_QUERY_THROW );
+                    xModif->setModified( sal_True );
+                }
+                catch ( uno::Exception& )
+                {
+                }
+
+            }
+        }
+        aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
+    }
+}
 
 //////////////////////////////////////////////////////////////////////
 

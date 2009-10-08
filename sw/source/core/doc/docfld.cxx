@@ -1506,7 +1506,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
                     if( pSFld->IsSequenceFld() )
                     {
-                        BYTE nLvl = pSFldTyp->GetOutlineLvl();
+                        const BYTE nLvl = pSFldTyp->GetOutlineLvl();
                         if( MAXLEVEL > nLvl )
                         {
                             // dann teste, ob die Nummer neu aufsetzen muss
@@ -1597,7 +1597,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     }
     else
     {
-        DBG_ERROR("TODO: what should happen with unnamed DBFields?")
+        DBG_ERROR("TODO: what should happen with unnamed DBFields?");
     }
 }
 
@@ -2199,8 +2199,9 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
             const SwTxtNode* pTNd = rNds[ nStt++ ]->GetTxtNode();
             if( pTNd )
             {
-                if( pTNd->GetFmtColl() &&
-                    MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
+                if( //pTNd->GetFmtColl() &&     //#outline level,zhaojianwei
+                //  MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
+                    pTNd->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
                     // Kapitelfelder aktualisieren
                     b = TRUE;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )

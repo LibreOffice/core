@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swparrtf.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.81.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +140,11 @@ inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,BOOL bInP=TRUE)
 
 /*  */
 
+extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
+{
+    return new RtfReader();
+}
+
 // Aufruf fuer die allg. Reader-Schnittstelle
 ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String &)
 {
@@ -217,13 +222,18 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     nInsTblRow(USHRT_MAX),
     nNewNumSectDef(USHRT_MAX),
     nRowsToRepeat(0),
+    // --> OD 2008-12-22 #i83368#
+    mbReadCellWhileReadSwFly( false ),
+    // <--
     bTrowdRead(0),
+    nReadFlyDepth(0),
     nZOrder(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
     bFirstContinue = true;
     bContainsPara = false;
+    bContainsTablePara = false;
     bNestedField = false;
     bForceNewTable = false;
 
@@ -1051,6 +1061,17 @@ void rtfSections::InsertSegments(bool bNewDoc)
 
 namespace sw{
     namespace util{
+
+InsertedTableClient::InsertedTableClient(SwTableNode & rNode)
+{
+    rNode.Add(this);
+}
+
+SwTableNode * InsertedTableClient::GetTableNode()
+{
+    return dynamic_cast<SwTableNode *> (pRegisteredIn);
+}
+
 InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
     : mbHasRoot(rDoc.GetRootFrm())
 {
@@ -1065,13 +1086,18 @@ void InsertedTablesManager::DelAndMakeTblFrms()
     {
         // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
         // neu erzeugt
-        SwTableNode *pTable = aIter->first;
+        SwTableNode *pTable = aIter->first->GetTableNode();
         ASSERT(pTable, "Why no expected table");
         if (pTable)
         {
-            SwNodeIndex *pIndex = aIter->second;
-            pTable->DelFrms();
-            pTable->MakeFrms(pIndex);
+            SwFrmFmt * pFrmFmt = pTable->GetTable().GetFrmFmt();
+
+            if (pFrmFmt != NULL)
+            {
+                SwNodeIndex *pIndex = aIter->second;
+                pTable->DelFrms();
+                pTable->MakeFrms(pIndex);
+            }
         }
     }
 }
@@ -1082,7 +1108,10 @@ void InsertedTablesManager::InsertTable(SwTableNode &rTableNode, SwPaM &rPaM)
         return;
     //Associate this tablenode with this after position, replace an //old
     //node association if necessary
-    maTables.insert(TblMap::value_type(&rTableNode, &(rPaM.GetPoint()->nNode)));
+
+    InsertedTableClient * pClient = new InsertedTableClient(rTableNode);
+
+    maTables.insert(TblMap::value_type(pClient, &(rPaM.GetPoint()->nNode)));
 }
 }
 }
@@ -1801,6 +1830,9 @@ void SwRTFParser::NextToken( int nToken )
         ReadSectControls( nToken );
         break;
     case RTF_CELL:
+        // --> OD 2008-12-22 #i83368#
+        mbReadCellWhileReadSwFly = bReadSwFly;
+        // <--
         if (CantUseTables())
             InsertPara();
         else
@@ -2037,7 +2069,12 @@ SETCHDATEFIELD:
             ReadSectControls( nToken );
             break;
         case RTF_APOCTL:
-            ReadFly( nToken );
+            if (nReadFlyDepth < 10)
+            {
+                nReadFlyDepth++;
+                ReadFly( nToken );
+                nReadFlyDepth--;
+            }
             break;
 
         case RTF_BRDRDEF | RTF_TABLEDEF:
@@ -2755,11 +2792,13 @@ void SwRTFParser::MakeStyleTab()
         if( !IsNewDoc() )
         {
             // search all outlined collections
-            BYTE nLvl;
+            //BYTE nLvl;
             const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
             for( USHORT n = rColls.Count(); n; )
-                if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))
-                    nValidOutlineLevels |= 1 << nLvl;
+                //if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))//#outline level,zhaojianwei
+                //  nValidOutlineLevels |= 1 << nLvl;
+                if( rColls[ --n ]->IsAssignedToListLevelOfOutlineStyle())
+                    nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
 
         SvxRTFStyleType* pStyle = GetStyleTbl().First();
@@ -3926,7 +3965,8 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     BYTE nOutlineLevel, bool& rbCollExist)
 {
     if( BYTE(-1) == nOutlineLevel )
-        nOutlineLevel = NO_NUMBERING;
+        //nOutlineLevel = NO_NUMBERING;
+        nOutlineLevel = MAXLEVEL;//#outline level,zhaojianwei
 
     rbCollExist = false;
     SwTxtFmtColl* pColl;
@@ -3937,7 +3977,11 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            pColl->SetOutlineLevel( nOutlineLevel );
+            //pColl->SetOutlineLevel( nOutlineLevel );      //#outline level,removed by zhaojianwei
+            if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
+                pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
+            else
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
             return pColl;
         }
 
@@ -3946,7 +3990,6 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         aNm += String::CreateFromInt32( nPos );
         aNm += ')';
     }
-
     ww::sti eSti = ww::GetCanonicalStiFromEnglishName(rName);
     sw::util::ParaStyleMapper::StyleResult aResult =
         maParaStyleMapper.GetStyle(rName, eSti);
@@ -3961,7 +4004,12 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     }
 
     if (!rbCollExist)
-        pColl->SetOutlineLevel(nOutlineLevel);
+        //pColl->SetOutlineLevel( nOutlineLevel );  //#outline level,removed by zhaojianwei
+        if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
+            pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
+        else
+            pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+
     return pColl;
 }
 

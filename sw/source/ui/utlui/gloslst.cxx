@@ -249,7 +249,7 @@ USHORT  SwGlossaryList::GetGroupCount()
 
 String SwGlossaryList::GetGroupName(USHORT nPos, BOOL bNoPath, String* pTitle)
 {
-    DBG_ASSERT(aGroupArr.Count() > nPos, "Gruppe nicht vorhanden")
+    DBG_ASSERT(aGroupArr.Count() > nPos, "Gruppe nicht vorhanden");
     String sRet(aEmptyStr);
     if(nPos < aGroupArr.Count())
     {
@@ -271,7 +271,7 @@ String SwGlossaryList::GetGroupName(USHORT nPos, BOOL bNoPath, String* pTitle)
 
 USHORT  SwGlossaryList::GetBlockCount(USHORT nGroup)
 {
-    DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden")
+    DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden");
     if(nGroup < aGroupArr.Count())
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(nGroup);
@@ -287,7 +287,7 @@ USHORT  SwGlossaryList::GetBlockCount(USHORT nGroup)
 
 String  SwGlossaryList::GetBlockName(USHORT nGroup, USHORT nBlock, String& rShortName)
 {
-    DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden")
+    DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden");
     if(nGroup < aGroupArr.Count())
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(nGroup);

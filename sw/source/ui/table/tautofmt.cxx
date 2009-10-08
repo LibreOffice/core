@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tautofmt.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -665,6 +665,7 @@ void AutoFmtPreview::MakeFonts( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& 
     lcl_SetFontProperties( rCTLFont, rBoxFmt.GetCTLFont(), rBoxFmt.GetCTLWeight(), rBoxFmt.GetCTLPosture() );
 
     SETONALLFONTS( SetUnderline,    (FontUnderline)rBoxFmt.GetUnderline().GetValue() );
+    SETONALLFONTS( SetOverline,     (FontUnderline)rBoxFmt.GetOverline().GetValue() );
     SETONALLFONTS( SetStrikeout,    (FontStrikeout)rBoxFmt.GetCrossedOut().GetValue() );
     SETONALLFONTS( SetOutline,      rBoxFmt.GetContour().GetValue() );
     SETONALLFONTS( SetShadow,       rBoxFmt.GetShadowed().GetValue() );

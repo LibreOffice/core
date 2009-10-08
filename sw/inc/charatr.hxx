@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: charatr.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,8 @@ inline const SvxKerningItem      &SwAttrSet::GetKerning(BOOL bInP) const
     {   return (const SvxKerningItem&)Get( RES_CHRATR_KERNING,bInP); }
 inline const SvxUnderlineItem    &SwAttrSet::GetUnderline(BOOL bInP) const
     {   return (const SvxUnderlineItem&)Get( RES_CHRATR_UNDERLINE,bInP); }
+inline const SvxOverlineItem     &SwAttrSet::GetOverline(BOOL bInP) const
+    {   return (const SvxOverlineItem&)Get( RES_CHRATR_OVERLINE,bInP); }
 inline const SvxCrossedOutItem   &SwAttrSet::GetCrossedOut(BOOL bInP) const
     {   return (const SvxCrossedOutItem&)Get( RES_CHRATR_CROSSEDOUT,bInP); }
 inline const SvxFontHeightItem         &SwAttrSet::GetSize(BOOL bInP) const
@@ -133,6 +135,8 @@ inline const SvxKerningItem          &SwFmt::GetKerning(BOOL bInP) const
     {   return aSet.GetKerning(bInP); }
 inline const SvxUnderlineItem        &SwFmt::GetUnderline(BOOL bInP) const
     {   return aSet.GetUnderline(bInP); }
+inline const SvxOverlineItem         &SwFmt::GetOverline(BOOL bInP) const
+    {   return aSet.GetOverline(bInP); }
 inline const SvxCrossedOutItem       &SwFmt::GetCrossedOut(BOOL bInP) const
     {   return aSet.GetCrossedOut(bInP); }
 inline const SvxFontHeightItem             &SwFmt::GetSize(BOOL bInP) const

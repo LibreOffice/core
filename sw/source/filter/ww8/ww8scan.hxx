@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.hxx,v $
- * $Revision: 1.85 $
+ * $Revision: 1.85.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1403,8 +1403,8 @@ public:
     WW8_FC fcSttbListNames;// 0x0372 PLCF for Listname Table
     INT32 lcbSttbListNames;// 0x0376
 
-    WW8_FC fcMagicTable;
-    INT32 lcbMagicTable;
+    WW8_FC fcPlcfTch;
+    INT32 lcbPlcfTch;
 
     // 0x38A - 41A == ignore
     WW8_FC fcAtrdExtra;

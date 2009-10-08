@@ -2775,8 +2775,28 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     //Ggf. eine Action ausloesen um klare Verhaeltnisse zu schaffen.
     //Durch diesen Kunstgriff kann in allen Paints davon ausgegangen werden,
     //das alle Werte gueltigt sind - keine Probleme, keine Sonderbehandlung(en).
-    if ( !pSh->IsInEndAction() && !pSh->IsPaintInProgress() &&
-         (!pSh->Imp()->IsAction() || !pSh->Imp()->GetLayAction().IsActionInProgress() ) )
+    // --> OD 2008-10-07 #i92745#
+    // Extend check on certain states of the 'current' <ViewShell> instance to
+    // all existing <ViewShell> instances.
+//    if ( !pSh->IsInEndAction() && !pSh->IsPaintInProgress() &&
+//         (!pSh->Imp()->IsAction() || !pSh->Imp()->GetLayAction().IsActionInProgress() ) )
+    bool bPerformLayoutAction( true );
+    {
+        ViewShell* pTmpViewShell = pSh;
+        do {
+            if ( pTmpViewShell->IsInEndAction() ||
+                 pTmpViewShell->IsPaintInProgress() ||
+                 ( pTmpViewShell->Imp()->IsAction() &&
+                   pTmpViewShell->Imp()->GetLayAction().IsActionInProgress() ) )
+            {
+                bPerformLayoutAction = false;
+            }
+
+            pTmpViewShell = static_cast<ViewShell*>(pTmpViewShell->GetNext());
+        } while ( bPerformLayoutAction && pTmpViewShell != pSh );
+    }
+    if ( bPerformLayoutAction )
+    // <--
     {
         ((SwRootFrm*)this)->ResetTurbo();
         SwLayAction aAction( (SwRootFrm*)this, pSh->Imp() );
@@ -2978,7 +2998,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 // #i68597#
                 // moved paint post-process for DrawingLayer overlay here, see above
                 {
-                    pSh->DLPostPaint2();
+                    pSh->DLPostPaint2(true);
                 }
             }
         }
@@ -3035,7 +3055,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 SwPageFrm::PaintNotesSidebar( aEmptyPageRect, pSh, pPage->GetPhyPageNum(), bRightSidebar);
 
                 {
-                    pSh->DLPostPaint2();
+                    pSh->DLPostPaint2(true);
                 }
             }
         }
@@ -6672,7 +6692,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         ::SetOutDevAndWin( pSh, pOld, pWin, nZoom );
 
         // #i92711# end Pre/PostPaint encapsulation when pOut is back and content is painted
-           pSh->DLPostPaint2();
+           pSh->DLPostPaint2(true);
 
         aMet.Stop();
         aMet.Move( -pFly->Frm().Left(), -pFly->Frm().Top() );

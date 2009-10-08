@@ -106,6 +106,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/EnhancedPDFExportHelper.obj \
         $(SLO)$/inftxt.obj \
         $(SLO)$/itradj.obj \
+        $(SLO)$/itrcrsr.obj \
         $(SLO)$/porlay.obj \
         $(SLO)$/pormulti.obj \
         $(SLO)$/SwGrammarMarkUp.obj \

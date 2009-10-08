@@ -49,6 +49,10 @@ class SwFlyDrawObj : public SdrObject
 {
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
+    // #i95264# SwFlyDrawObj needs an own VC since createViewIndependentPrimitive2DSequence()
+    // is called when RecalcBoundRect() is used
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+
 public:
     TYPEINFO();
 
@@ -122,6 +126,10 @@ public:
     virtual FASTBOOL HasMacro() const;
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const;
+
+    // FullDrag support
+    virtual bool supportsFullDrag() const;
+    virtual SdrObject* getFullDragClone() const;
 };
 
 

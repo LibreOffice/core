@@ -141,7 +141,7 @@ public:
 
 //Das FlyFrame-Format ------------------------------
 
-class SwFlyFrmFmt: public SwFrmFmt
+class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
 {
     friend class SwDoc;
 
@@ -207,7 +207,7 @@ public:
 
 //Das DrawFrame-Format -----------------------------
 
-class SwDrawFrmFmt: public SwFrmFmt
+class SW_DLLPUBLIC SwDrawFrmFmt: public SwFrmFmt
 {
     friend class SwDoc;
 

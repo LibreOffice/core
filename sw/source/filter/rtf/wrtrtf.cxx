@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtrtf.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.42.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,6 +108,8 @@ SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL ) :
     bWriteHelpFmt = 'W' == rFltName.GetChar( 0 );
     // schreibe nur Gliederungs Absaetze
     bOutOutlineOnly = 'O' == rFltName.GetChar( 0 );
+    // enable non-standard tags for cut and paste
+    bNonStandard = '\0' == rFltName.GetChar( 0 );
 }
 
 
@@ -290,8 +292,10 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
                     pCurPam->GetPoint()->nContent.Assign( &rCNd, 0 );
 
                 if( !bOutOutlineOnly ||
-                    ( rCNd.IsTxtNode() && NO_NUMBERING !=
-                        ((SwTxtNode&)rCNd).GetTxtColl()->GetOutlineLevel() ))
+                    //( rCNd.IsTxtNode() && NO_NUMBERING !=     //#outline level,removed by zhaojianwei
+                    //((SwTxtNode&)rCNd).GetTxtColl()->GetOutlineLevel() ))
+                    ( rCNd.IsTxtNode() &&                       //->add by zhaojianwei
+                        ((SwTxtNode&)rCNd).GetTxtColl()->IsAssignedToListLevelOfOutlineStyle()))//<-end,zhaojianwei
                     Out( aRTFNodeFnTab, rCNd, *this );
 
             }
@@ -699,6 +703,16 @@ void SwRTFWriter::OutRTFColorTab()
 
         }
 
+        const SvxOverlineItem* pOver = (const SvxOverlineItem*)GetDfltAttr( RES_CHRATR_OVERLINE );
+        InsColor( *pColTbl, pOver->GetColor() );
+        nMaxItem = rPool.GetItemCount(RES_CHRATR_OVERLINE);
+        for( n = 0; n < nMaxItem;n++)
+        {
+            if( 0 != (pOver = (const SvxOverlineItem*)rPool.GetItem( RES_CHRATR_OVERLINE, n ) ) )
+                InsColor( *pColTbl, pOver->GetColor() );
+
+        }
+
     }
 
     // das Frame Hintergrund - Attribut
@@ -1066,10 +1080,12 @@ void SwRTFWriter::OutRTFStyleTab()
                     break;
                 }
 
-        if( NO_NUMBERING != pColl->GetOutlineLevel() )
+        //if( NO_NUMBERING != pColl->GetOutlineLevel() )//#outline level,zhaojianwei
+        if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
         {
             Strm() << '{' << sRTF_IGNORE << sRTF_SOUTLVL;
-            OutULong( pColl->GetOutlineLevel() ) << '}';
+            //OutULong( pColl->GetOutlineLevel() ) << '}';//#outline level,zhaojianwei
+            OutULong( pColl->GetAssignedOutlineStyleLevel() ) << '}';//<-end,zhaojianwei
         }
 
         Strm() << ' ';
@@ -1545,8 +1561,10 @@ void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
     OutRTFBorders(pFmt->GetAttrSet().GetBox());
 
     // falls es gesharte Heaer/Footer gibt, so gebe diese auch noch aus
-    if( nsUseOnPage::PD_MIRROR & pAktPageDesc->GetUseOn() &&
-        !pAktPageDesc->IsFooterShared() || !pAktPageDesc->IsHeaderShared() )
+    if (
+        (nsUseOnPage::PD_MIRROR & pAktPageDesc->GetUseOn()) &&
+        (!pAktPageDesc->IsFooterShared() || !pAktPageDesc->IsHeaderShared())
+       )
     {
         bOutLeftHeadFoot = TRUE;
         const SfxPoolItem* pHt;
@@ -1680,13 +1698,16 @@ void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
                         GetFmt()->GetSectionNode( TRUE ) );
             else
             {
-                Strm() << sRTF_SECT << sRTF_SECTD << sRTF_SBKNONE;
-                OutRTFPageDescription( ( pAktPageDesc
-                                         ? *pAktPageDesc
-                                         : const_cast<const SwDoc *>(pDoc)
-                                         ->GetPageDesc(0) ),
-                                FALSE, TRUE );
-                Strm() << SwRTFWriter::sNewLine;
+                if (! bOutPageDesc)
+                {
+                    Strm() << sRTF_SECT << sRTF_SECTD << sRTF_SBKNONE;
+                    OutRTFPageDescription( ( pAktPageDesc
+                                            ? *pAktPageDesc
+                                            : const_cast<const SwDoc *>(pDoc)
+                                            ->GetPageDesc(0) ),
+                                          FALSE, TRUE );
+                    Strm() << SwRTFWriter::sNewLine;
+                }
             }
         }
         // else
@@ -1742,7 +1763,7 @@ RTFSaveData::~RTFSaveData()
     rWrt.bOutSection = bOldOutSection;
 }
 
-void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwRTFWriter( rFltName, rBaseURL );
 }

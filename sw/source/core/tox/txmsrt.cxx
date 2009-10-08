@@ -696,9 +696,12 @@ USHORT SwTOXPara::GetLevel() const
 
     if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
     {
-        USHORT nTmp = ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();
-        if(nTmp < NO_NUMBERING)
-            nRet = nTmp + 1;
+        //USHORT nTmp = ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+        //if(nTmp < NO_NUMBERING)
+        //  nRet = nTmp + 1;
+        const int nTmp = ((SwTxtNode*)pNd)->GetAttrOutlineLevel();//#outline level,zhaojianwei????
+        if(nTmp != 0 )
+            nRet = static_cast<USHORT>(nTmp);
     }
     return nRet;
 }
@@ -715,7 +718,8 @@ String SwTOXPara::GetURL() const
         {
             const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
 
-            if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())
+            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
+            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
             {
                 aTxt = '#';
                 const SwNumRule * pRule = pTxtNd->GetNumRule();

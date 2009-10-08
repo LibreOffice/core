@@ -101,7 +101,7 @@ sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
             case SetVariableType::FORMULA:  nSet = nsSwGetSetExpType::GSE_FORMULA; break;
             case SetVariableType::STRING:   nSet = nsSwGetSetExpType::GSE_STRING;   break;
             default:
-                DBG_ERROR("wrong value")
+                DBG_ERROR("wrong value");
                 nSet = -1;
         }
         return nSet;

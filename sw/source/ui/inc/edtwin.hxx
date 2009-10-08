@@ -213,6 +213,9 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
+    virtual XubString GetSurroundingText() const;
+    virtual Selection GetSurroundingTextSelection() const;
+
     void    ShowAutoTextCorrectQuickHelp( const String& rWord, SvxAutoCorrCfg* pACfg,
                                 SvxAutoCorrect* pACorr, sal_Bool bFromIME = sal_False );
 public:

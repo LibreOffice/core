@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtww8.hxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.76.172.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +126,8 @@ class WW8OleMaps;
 class SvStorageRef;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
+
+#include "WW8TableInfo.hxx"
 
 #define GRF_MAGIC_1 0x12    // 3 magic Bytes fuer PicLocFc-Attribute
 #define GRF_MAGIC_2 0x34
@@ -393,6 +395,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     SvxMSExportOLEObjects* pOLEExp;
     SwMSConvertControls* pOCXExp;
     WW8OleMaps* pOleMap;
+    ww8::WW8TableInfo::Pointer_t mpTableInfo;
 
     USHORT nCharFmtStart;
     USHORT nFmtCollStart;
@@ -440,6 +443,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     void GatherChapterFields();
     bool FmtHdFtContainsChapterField(const SwFrmFmt &rFmt) const;
     bool CntntContainsChapterField(const SwFmtCntnt &rCntnt) const;
+    void OutWW8_SwEndNode( SwNode * pNode );
 public:
 
     /* implicit bookmark vector containing pairs of node indexes and bookmark names */
@@ -553,6 +557,15 @@ public:
     void AppendFlyInFlys(const sw::Frame& rFrmFmt, const Point& rNdTopLeft);
     void WriteOutliner(const OutlinerParaObject& rOutliner, BYTE nTyp);
     void WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp);
+    void OutWW8TableInfoCell(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableInfoRow(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableDefinition(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableDefaultBorders(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableBackgrounds(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableHeight(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableCanSplit(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableBidi(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableVerticalCell(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
 
     UINT32 GetSdrOrdNum( const SwFrmFmt& rFmt ) const;
     void CreateEscher();
@@ -579,12 +592,13 @@ public:
     void WriteAsStringTable(const ::std::vector<String>&, INT32& rfcSttbf,
         INT32& rlcbSttbf, USHORT nExtraLen = 0);
     void WriteText();
-    void WriteCR();
+    void WriteCR(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo = ww8::WW8TableNodeInfo::Pointer_t());
     void WriteChar( sal_Unicode c );
-    void WriteCellEnd();
-    void WriteRowEnd();
+    void WriteRowEnd(sal_uInt32 nDepth = 1);
+#if 0
     USHORT StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
         SwTwips &rPageSize);
+#endif
 
     void OutSwString(const String&, xub_StrLen nStt, xub_StrLen nLen,
         bool bUnicode, rtl_TextEncoding eChrSet);
@@ -1004,7 +1018,6 @@ public:
 Writer& OutWW8_SwGrfNode( Writer& rWrt, SwCntntNode& rNode );
 Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode );
 Writer& OutWW8_SwSectionNode(Writer& rWrt, SwSectionNode& rSectionNode );
-Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode );
 
 Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
@@ -1013,6 +1026,23 @@ sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
 //A bit of a bag on the side for now
 String FieldString(ww::eField eIndex);
 String BookmarkToWord(const String &rBookmark);
+
+class WW8SHDLong
+{
+    sal_uInt32 m_cvFore;
+    sal_uInt32 m_cvBack;
+    sal_uInt16 m_ipat;
+
+public:
+    WW8SHDLong() : m_cvFore(0), m_cvBack(0), m_ipat(0) {}
+    virtual ~WW8SHDLong() {}
+
+    void Write(SwWW8Writer & rWriter);
+    void setCvFore(sal_uInt32 cvFore) { m_cvFore = cvFore; }
+    void setCvBack(sal_uInt32 cvBack) { m_cvBack = cvBack; }
+    void setIPat(sal_uInt16 ipat) { m_ipat = ipat; }
+};
+
 #endif  //  _WRTWW8_HXX
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

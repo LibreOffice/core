@@ -302,7 +302,7 @@
 #define WID_PAGE_COUNT                          1100
 #define WID_LINE_COUNT                          1101
 #define WID_IS_CONSTANT_SPELLCHECK              1102
-#define WID_IS_HIDE_SPELL_MARKS                 1103
+#define WID_IS_HIDE_SPELL_MARKS                 1103    /* deprecated #i91949 */
 
 #define WID_LAYOUT_SIZE                         1104
 #define WID_DOC_DIALOG_LIBRARIES                1105

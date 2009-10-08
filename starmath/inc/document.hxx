@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,7 +142,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                                   String* pAppName,
                                   String* pFullTypeName,
                                   String* pShortTypeName,
-                                  sal_Int32 nFileFormat ) const;
+                                  sal_Int32 nFileFormat,
+                                  sal_Bool bTemplate = sal_False ) const;
 
     virtual BOOL        SetData( const String& rData );
     virtual ULONG       GetMiscStatus() const;

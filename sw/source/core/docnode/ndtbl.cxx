@@ -344,7 +344,8 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
         pPrvBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
         pLine->GetTabBoxes().C40_INSERT( SwTableBox, pPrvBox, nInsPos + n );
 
-        if( NO_NUMBERING == pTxtColl->GetOutlineLevel()
+        //if( NO_NUMBERING == pTxtColl->GetOutlineLevel()//#outline level,zhaojianwei
+        if( ! pTxtColl->IsAssignedToListLevelOfOutlineStyle()//<-end,zhaojianwei
 //FEATURE::CONDCOLL
             && RES_CONDTXTFMTCOLL != pTxtColl->Which()
 //FEATURE::CONDCOLL

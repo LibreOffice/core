@@ -481,11 +481,11 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
         throw uno::RuntimeException();
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR)))
     {
-        DBG_ERROR("currently not available")
+        DBG_ERROR("currently not available");
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME)))
     {
-        DBG_ERROR("currently not available")
+        DBG_ERROR("currently not available");
 //      util::DateTime aDT;
 //      if(aValue >>= aDT)
 //              pRedline->SetTimeStamp(lcl_DateTimeFromUno(aDT));
@@ -497,7 +497,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TYPE)))
     {
-        DBG_ERROR("currently not available")
+        DBG_ERROR("currently not available");
         OUString sTmp; aValue >>= sTmp;
         if(!sTmp.getLength())
             throw lang::IllegalArgumentException();
@@ -505,7 +505,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
     {
-        DBG_ERROR("currently not available")
+        DBG_ERROR("currently not available");
 /*      SwRedlineData* pNext = pRedline->GetRedlineData().Next();
         uno::Sequence<beans::PropertyValue> aValues;
         if(!(aValue =>> aValues) || !pNext)
@@ -516,7 +516,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
         {
             if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_AUTHOR.pName)
             {
-                DBG_ERROR("currently not available")
+                DBG_ERROR("currently not available");
             }
             else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_DATE_TIME.pName))
             {
@@ -564,14 +564,14 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             case ND_SECTIONNODE:
             {
                 SwSectionNode* pSectNode = pNode->GetSectionNode();
-                DBG_ASSERT(pSectNode, "No section node!")
+                DBG_ASSERT(pSectNode, "No section node!");
                 xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFmt() );
             }
             break;
             case ND_TABLENODE :
             {
                 SwTableNode* pTblNode = pNode->GetTableNode();
-                DBG_ASSERT(pTblNode, "No table node!")
+                DBG_ASSERT(pTblNode, "No table node!");
                 SwTable& rTbl = pTblNode->GetTable();
                 SwFrmFmt* pTblFmt = rTbl.GetFrmFmt();
                 xRet = SwXTextTables::GetObject( *pTblFmt );

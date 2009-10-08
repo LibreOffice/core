@@ -50,10 +50,11 @@ SLOFILES = \
         $(SLO)$/docfact.obj \
         $(SLO)$/fltini.obj \
         $(SLO)$/shellio.obj \
-
+        $(SLO)$/iodetect.obj
 
 EXCEPTIONSFILES = \
-                $(SLO)$/fltini.obj
+        $(SLO)$/fltini.obj \
+        $(SLO)$/iodetect.obj
 
 # --- Tagets -------------------------------------------------------
 

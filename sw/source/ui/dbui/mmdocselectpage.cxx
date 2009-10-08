@@ -212,6 +212,9 @@ sal_Bool SwMailMergeDocSelectPage::commitPage( CommitPageReason _eReason )
                 ((sReloadDocument = m_sLoadFileName).getLength() && m_aLoadDocRB.IsChecked() )||
                 ((sReloadDocument = m_sLoadTemplateName).getLength() && m_aLoadTemplateRB.IsChecked())||
                 (m_aRecentDocRB.IsChecked() && (sReloadDocument = m_aRecentDocLB.GetSelectEntry()).getLength());
+        if( _eReason == eValidate )
+            m_pWizard->SetDocumentLoad(!m_aCurrentDocRB.IsChecked());
+
         if(bNext && !m_aCurrentDocRB.IsChecked())
         {
             if(sReloadDocument.getLength())

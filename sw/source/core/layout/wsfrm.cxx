@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wsfrm.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.86.124.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2030,7 +2030,19 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         else
             nRstHeight = 0;
         if( nRstHeight < 0 )
-            nRstHeight = nDist + nRstHeight;
+        {
+            SwTwips nNextHeight = 0;
+            if( GetUpper()->IsSctFrm() && nDist > LONG_MAX/2 )
+            {
+                SwFrm *pNxt = GetNext();
+                while( pNxt )
+                {
+                    nNextHeight += (pNxt->Frm().*fnRect->fnGetHeight)();
+                    pNxt = pNxt->GetNext();
+                }
+            }
+            nRstHeight = nDist + nRstHeight - nNextHeight;
+        }
         else
             nRstHeight = nDist;
         (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)() - nDist );
@@ -2317,6 +2329,7 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
         case RES_CHRATR_SHADOWED:
         case RES_CHRATR_AUTOKERN:
         case RES_CHRATR_UNDERLINE:
+        case RES_CHRATR_OVERLINE:
         case RES_CHRATR_KERNING:
         case RES_CHRATR_FONT:
         case RES_CHRATR_FONTSIZE:

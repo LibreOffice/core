@@ -39,9 +39,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <swtypes.hxx>
 
-// #107253#
-#include <swlinguconfig.hxx>
-
 #include <unomid.h>
 
 using namespace utl;
@@ -117,8 +114,7 @@ SwStdFontConfig::SwStdFontConfig() :
 {
     SvtLinguOptions aLinguOpt;
 
-    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-    SwLinguConfig().GetOptions( aLinguOpt );
+    SvtLinguConfig().GetOptions( aLinguOpt );
 
     sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
@@ -133,7 +129,7 @@ SwStdFontConfig::SwStdFontConfig() :
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -165,8 +161,7 @@ void    SwStdFontConfig::Commit()
     Any* pValues = aValues.getArray();
     SvtLinguOptions aLinguOpt;
 
-    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-    SwLinguConfig().GetOptions( aLinguOpt );
+    SvtLinguConfig().GetOptions( aLinguOpt );
 
     sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
@@ -201,8 +196,7 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
     BOOL bSame = sal_False;
     SvtLinguOptions aLinguOpt;
 
-    // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
-    SwLinguConfig().GetOptions( aLinguOpt );
+    SvtLinguConfig().GetOptions( aLinguOpt );
 
     sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
@@ -321,11 +315,11 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eL
   -----------------------------------------------------------------------*/
 void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
 {
-    DBG_ASSERT( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()")
+    DBG_ASSERT( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()");
     if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)
     {
         SvtLinguOptions aLinguOpt;
-        SwLinguConfig().GetOptions( aLinguOpt );
+        SvtLinguConfig().GetOptions( aLinguOpt );
         sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                     eCJK = aLinguOpt.nDefaultLanguage_CJK,
                     eCTL = aLinguOpt.nDefaultLanguage_CTL;
@@ -350,7 +344,7 @@ void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
   -----------------------------------------------------------------------*/
 sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang )
 {
-    DBG_ASSERT(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()")
+    DBG_ASSERT(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()");
     sal_Int32 nRet = nDefaultFontHeight[nFont + FONT_PER_GROUP * nScriptType];
     if(nRet <= 0)
         return GetDefaultHeightFor(nFont + FONT_PER_GROUP * nScriptType, eLang);

@@ -2567,6 +2567,22 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
  * Alle Ansichten eines Dokumentes stehen im Ring der Shells.
  */
 
+SwOverlayType impGetOverlayType(OutputDevice* pOut)
+{
+    if(!pOut)
+    {
+        pOut = Application::GetDefaultDevice();
+    }
+
+    if(pOut->GetSettings().GetStyleSettings().GetHighContrastMode()
+        || !pOut->supportsOperation( OutDevSupport_TransparentRect ))
+    {
+        return SW_OVERLAY_INVERT;
+    }
+
+    return SW_OVERLAY_TRANSPARENT;
+}
+
 SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     : ViewShell( rShell, pInitWin ),
     SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
@@ -2574,8 +2590,9 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     eMvState( MV_NONE ),
     // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
-    nMarkedListLevel( 0 )
+    nMarkedListLevel( 0 ),
     // <--
+    maSwOverlayType(SW_OVERLAY_INVERT)
 {
     SET_CURR_SHELL( this );
     // Nur die Position vom aktuellen Cursor aus der Copy-Shell uebernehmen
@@ -2591,6 +2608,9 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
+
+    // #i88893# init cursor selection type
+    maSwOverlayType = impGetOverlayType(pInitWin);
 }
 
 
@@ -2606,8 +2626,9 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
     // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
-    nMarkedListLevel( 0 )
+    nMarkedListLevel( 0 ),
     // <--
+    maSwOverlayType(SW_OVERLAY_INVERT)
 {
     SET_CURR_SHELL( this );
     /*
@@ -2635,6 +2656,9 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = true;
+
+    // #i88893# init cursor selection type
+    maSwOverlayType = impGetOverlayType(pInitWin);
 }
 
 
@@ -3112,7 +3136,7 @@ bool SwCrsrShell::SelectHiddenRange()
 /*  */
 
     // die Suchfunktionen
-ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt,
+ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes,
                             SwDocPositions eStart, SwDocPositions eEnde,
                             BOOL& bCancel,
                             FindRanges eRng, int bReplace )
@@ -3121,7 +3145,7 @@ ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt,
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    ULONG nRet = pCurCrsr->Find( rSearchOpt, eStart, eEnde, bCancel, eRng, bReplace );
+    ULONG nRet = pCurCrsr->Find( rSearchOpt, bSearchInNotes, eStart, eEnde, bCancel, eRng, bReplace );
     if( nRet || bCancel )
         UpdateCrsr();
     return nRet;

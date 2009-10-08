@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.hxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.48.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,7 +240,8 @@ public:
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   sal_Int32 nFileFormat ) const;
+                                   sal_Int32 nFileFormat,
+                                   sal_Bool bTemplate = sal_False ) const;
 
     virtual void LoadStyles( SfxObjectShell& rSource );
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakit.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.112.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,11 @@ SwBreakIt::SwBreakIt(
         xBreak = uno::Reference< i18n::XBreakIterator >(
             m_xMSF->createInstance(
                 rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+            uno::UNO_QUERY);
+
+        xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
+            m_xMSF->createInstance(
+                 rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) ),
             uno::UNO_QUERY);
     }
 }

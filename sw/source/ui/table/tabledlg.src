@@ -703,7 +703,7 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ en-US ] = "~Text direction" ;
+        Text [ en-US ] = "Text ~direction" ;
     };
     ListBox LB_TEXTDIRECTION
     {

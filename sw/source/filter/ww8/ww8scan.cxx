@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.142 $
+ * $Revision: 1.142.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1778,10 +1778,10 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
                     pWwFib->fcPlcfHdrtxbxBkd, pWwFib->lcbPlcfHdrtxbxBkd, 0);
             }
             // Sub table cp positions
-            if (pWwFib->fcMagicTable && pWwFib->lcbMagicTable)
+            if (pWwFib->fcPlcfTch && pWwFib->lcbPlcfTch)
             {
                 pMagicTables = new WW8PLCFspecial( pTblSt,
-                    pWwFib->fcMagicTable, pWwFib->lcbMagicTable, 4);
+                    pWwFib->fcPlcfTch, pWwFib->lcbPlcfTch, 4);
             }
             // Sub document cp positions
             if (pWwFib->fcPlcfwkb && pWwFib->lcbPlcfwkb)
@@ -5534,8 +5534,8 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
             if (cfclcb > 93)
             {
                 rSt.Seek( 0x382 );          // MagicTables
-                rSt >> fcMagicTable;
-                rSt >> lcbMagicTable;
+                rSt >> fcPlcfTch;
+                rSt >> lcbPlcfTch;
             }
 
             if (cfclcb > 113)
@@ -5569,7 +5569,7 @@ WW8Fib::WW8Fib(BYTE nVer)
     {
         fcMin = 0x800;
         wIdent = 0xa5ec;
-        nFib = 0xc2;
+        nFib = 0x0101;
         nFibBack = 0xbf;
         nProduct = 0x204D;
 
@@ -5889,8 +5889,8 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, lcbSttbListNames );
 
         pData += 0x382 - 0x37A;
-        Set_UInt32( pData, fcMagicTable );
-        Set_UInt32( pData, lcbMagicTable );
+        Set_UInt32( pData, fcPlcfTch );
+        Set_UInt32( pData, lcbPlcfTch );
 
         pData += 0x3FA - 0x38A;
         Set_UInt16( pData, (UINT16)0x0002);

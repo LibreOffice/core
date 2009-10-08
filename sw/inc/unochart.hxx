@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unochart.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.256.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,14 @@ class SwSelBoxes;
 //////////////////////////////////////////////////////////////////////
 
 sal_Bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const String &rCellRangeName );
+
+//////////////////////////////////////////////////////////////////////
+
+class SwChartHelper
+{
+public:
+    static void DoUpdateAllCharts( SwDoc* pDoc );
+};
 
 //////////////////////////////////////////////////////////////////////
 

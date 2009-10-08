@@ -33,6 +33,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=view
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 

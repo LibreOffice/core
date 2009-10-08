@@ -112,7 +112,7 @@ String SwMacroField::GetLibName() const
         return aMacro.Copy(0, nPos );
     }
 
-    DBG_ASSERT(0, "Kein Macroname vorhanden")
+    DBG_ASSERT(0, "Kein Macroname vorhanden");
     return aEmptyStr;
 }
 
@@ -135,7 +135,7 @@ String SwMacroField::GetMacroName() const
         }
     }
 
-    DBG_ASSERT(0, "Kein Macroname vorhanden")
+    DBG_ASSERT(0, "Kein Macroname vorhanden");
     return aEmptyStr;
 }
 

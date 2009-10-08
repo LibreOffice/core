@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
@@ -72,43 +71,21 @@
 #include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <viewfunc.hxx>
 #include <doc.hxx>
-#ifndef _ITEMDEF_HXX
 #include <itemdef.hxx>
-#endif
 #include <shellio.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>          // FN_       ...
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _WEB_HRC
 #include <web.hrc>
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
@@ -124,17 +101,16 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
-using ::rtl::OUString;
 using namespace ::sfx2;
+using ::rtl::OUString;
+using ::com::sun::star::util::SearchOptions;
 
 
 #define SWSRCVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|           \
@@ -292,7 +268,7 @@ SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
 SwSrcView::~SwSrcView()
 {
     SwDocShell* pDocShell = GetDocShell();
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?")
+    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
     ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< USHORT >( rSel.GetStart().GetPara() ) );
 
@@ -690,7 +666,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         pTextView->SetSelection( TextSelection( aPaM, aPaM ));
     }
 
-    SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
+    util::SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
     aSearchOpt.Locale = SvxCreateLocale(
         static_cast< LanguageType >( GetAppLanguage() ) );
 
@@ -989,7 +965,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         pDocShell->SetModified();// das Flag wird zwischendurch zurueckgesetzt
     // AutoLoad abschalten
     pDocShell->SetAutoLoad(INetURLObject(), 0, FALSE);
-    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?")
+    DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
     USHORT nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();
     aEditWin.SetStartLine(nLine);
     aEditWin.GetTextEngine()->ResetUndo();

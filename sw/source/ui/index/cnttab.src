@@ -226,13 +226,15 @@ TabPage TP_TOX_SELECT
         Check = TRUE;
         Text [ en-US ] = "Outline";
     };
-    PushButton  PB_CHAPTERDLG
+//  #outline level,removed by zhaojianwei
+/*  PushButton  PB_CHAPTERDLG
     {
         Pos = MAP_APPFONT ( 115 , 98 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "~..." ;
         TabStop = TRUE ;
     };
+*/
     CheckBox CB_ADDSTYLES
     {
         Pos = MAP_APPFONT ( 12 , 115 ) ;

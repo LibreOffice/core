@@ -53,7 +53,7 @@ public:
 // ATT_HARDBLANK ******************************
 // Attribut fuer geschuetzte Leerzeichen.
 
-class SwFmtHardBlank : public SfxPoolItem
+class SW_DLLPUBLIC SwFmtHardBlank : public SfxPoolItem
 {
     sal_Unicode cChar;
 public:

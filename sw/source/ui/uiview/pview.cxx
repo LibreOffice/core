@@ -1793,7 +1793,6 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     aOpt.SetTable( TRUE );
     aOpt.SetSnap( FALSE );
     aOpt.SetGridVisible( FALSE );
-    aOpt.SetHideSpell( TRUE );
     GetViewShell()->ApplyViewOptions( aOpt );
     GetViewShell()->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 

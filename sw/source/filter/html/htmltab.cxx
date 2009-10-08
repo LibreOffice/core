@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmltab.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.186.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1820,8 +1820,10 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                             pCnts->CreateLayoutInfo();
 
                         pCell2->SetContents( pCnts );
-                        pLayoutInfo->GetCell( nTopRow, nStartCol )
-                                   ->SetContents( pCntsLayoutInfo );
+                        SwHTMLTableLayoutCell *pCurrCell = pLayoutInfo->GetCell( nTopRow, nStartCol );
+                        pCurrCell->SetContents( pCntsLayoutInfo );
+                        if( nBoxRowSpan < 0 )
+                            pCurrCell->SetRowSpan( 0 );
 
                         // ggf. COLSPAN beachten
                         for( sal_uInt16 j=nStartCol+1; j<nSplitCol; j++ )

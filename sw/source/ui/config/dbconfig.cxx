@@ -104,7 +104,7 @@ void SwDBConfig::Load()
     }
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed")
+    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == rNames.getLength())
     {
         for(int nProp = 0; nProp < rNames.getLength(); nProp++)

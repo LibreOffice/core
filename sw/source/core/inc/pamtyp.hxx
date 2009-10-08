@@ -59,7 +59,7 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 
 BOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
 BOOL GoPrevious(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
-SwCntntNode* GoNextNds( SwNodeIndex * pIdx, BOOL );
+SW_DLLPUBLIC SwCntntNode* GoNextNds( SwNodeIndex * pIdx, BOOL );
 SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, BOOL );
 
 // --------- Funktionsdefinitionen fuer die SwCrsrShell --------------

@@ -8,7 +8,7 @@
  *
  * $RCSfile: postit.hxx,v $
  *
- * $Revision: 1.9 $
+ * $Revision: 1.8.84.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #include <swrect.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 
+#include <tools/datetime.hxx>
+#include <tools/date.hxx>
+
 #include <vcl/lineinfo.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/editstat.hxx>
@@ -55,6 +58,12 @@ class Edit;
 class MultiLineEdit;
 class PopupMenu;
 class SvxLanguageItem;
+class SwRedline;
+class OutlinerParaObject;
+
+#define ANKORLINE_WIDTH         1
+
+enum AnkorState {AS_ALL, AS_START, AS_END};
 
 class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
 {
@@ -91,6 +100,7 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
         LineInfo                                mLineInfo;
         unsigned long                           mHeight;
         bool                                    mbShadowedEffect;
+        AnkorState                              mAnkorState;
 
     public:
         SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
@@ -125,6 +135,8 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
 
         bool getShadowedEffect() const { return mbShadowedEffect; }
 
+        void SetAnkorState(AnkorState aState);
+        AnkorState GetAnkorState() const {return mAnkorState;}
         virtual void Trigger(sal_uInt32 nTime);
 
         //sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol) const;
@@ -164,7 +176,7 @@ class PostItTxt : public Window
 {
     private:
         OutlinerView*   mpOutlinerView;
-        SwPostIt*       mpPostIt;
+        SwMarginWin*    mpMarginWin;
 
         bool            mMouseOver;
         BOOL            mbShowPopup;
@@ -179,6 +191,11 @@ class PostItTxt : public Window
         virtual void    DataChanged( const DataChangedEvent& aData);
         virtual void    LoseFocus();
         virtual void    RequestHelp(const HelpEvent &rEvt);
+
+        // reconversion /*i94374*/
+        virtual XubString GetSurroundingText() const;
+        virtual Selection GetSurroundingTextSelection() const;
+
         DECL_LINK( Select, Menu* );
 
     public:
@@ -196,9 +213,11 @@ typedef sal_Int64 SwPostItBits;
 
 #define PB_Preview ((SwPostItBits)0x00000001)
 
-class SwPostIt : public Window
+
+class SwMarginWin : public Window
 {
     private:
+        ULONG           mnEventId;
         SwView*         mpView;
         sdr::overlay::OverlayManager* pOverlayManager;
         OutlinerView*   mpOutlinerView;
@@ -206,53 +225,48 @@ class SwPostIt : public Window
         PostItTxt*      mpPostItTxt;
         MultiLineEdit*  mpMeta;
         ScrollBar*      mpVScrollbar;
-        SwFmtFld*       mpFmtFld;
-        SwPostItField*  mpFld;
         SwPostItAnkor*  mpAnkor;
         SwPostItShadow* mpShadow;
         SwPostItMgr*    mpMgr;
         bool            mbMeta;
-        bool            mbReadonly;
         Color           mColorAnkor;
         Color           mColorDark;
         Color           mColorLight;
         basegfx::B2DPolygon aPopupTriangle;
-        Rectangle       mRectMetaButton;
-        PopupMenu*      mpButtonPopup;
-        sal_Int32       mnEventId;
         bool            mbMarginSide;
         Rectangle       mPosSize;
         SwRect          mAnkorRect;
         long            mPageBorder;
         SwPostItBits    nFlags;
-        Color           mChangeColor;
-        SwPostItHelper::SwLayoutStatus mStatus;
-
+        bool            mbMouseOverButton;
     protected:
-
+        bool            mbReadonly;
+        PopupMenu*      mpButtonPopup;
+        bool            mbIsFollow;
+        Rectangle       mRectMetaButton;
+        virtual void    CheckMetaText();
         virtual void    DataChanged( const DataChangedEvent& aEvent);
         virtual void    LoseFocus();
         virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void    MouseMove( const MouseEvent& rMEvt );
         virtual void    Paint( const Rectangle& rRect);
         virtual void    GetFocus();
+
         void            SetPosAndSize();
         void            SetSizePixel( const Size& rNewSize );
 
         DECL_LINK(ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
-
-        void            InitControls();
-        void            CheckMetaText();
+        DECL_LINK(DeleteHdl, void*);
 
     public:
-        SwPostIt( Window* pParent, WinBits nBits,SwFmtFld* aField,SwPostItMgr* aMgr,SwPostItBits aBits);
-        ~SwPostIt();
+        TYPEINFO();
+        SwMarginWin( Window* pParent, WinBits nBits, SwPostItMgr* aMgr,SwPostItBits aBits);
+        virtual ~SwMarginWin();
 
         void    SetSize( const Size& rNewSize );
         void    SetPosSizePixelRect( long nX, long nY,long nWidth, long nHeight,const SwRect &aRect,const long PageBorder);
         void    TranslateTopPosition(const long aAmount);
-
-        void    SetPostItText();
 
         PostItTxt*      PostItText()    { return mpPostItTxt;}
         ScrollBar*      Scrollbar()     { return mpVScrollbar;}
@@ -262,20 +276,29 @@ class SwPostIt : public Window
         SwView*         DocView()       { return mpView;}
         Outliner*       Engine()        { return mpOutliner;}
         SwPostItMgr*    Mgr()           { return mpMgr; }
-        SwFmtFld*       Field()         { return mpFmtFld; }
+
         SwRect          GetAnkorRect()  { return mAnkorRect; }
-        String          GetAuthor()     const;
         SwEditWin*      EditWin();
 
         long            GetPostItTextHeight();
-        void            UpdateData();
 
         void            SwitchToPostIt(USHORT aDirection);
         //void          SwitchToPostIt(bool aDirection);
-        void            SwitchToFieldPos(bool bAfter = true);
+        virtual void    SwitchToFieldPos();
+        virtual sal_uInt32  MoveCaret() { return 0;};
 
-        void            ExecuteCommand(USHORT aSlot);
-        void            Delete();
+        virtual void    UpdateData() = 0;
+        virtual void    SetPostItText() = 0;
+        virtual void    Delete();
+        virtual void    GotoPos() = 0;
+        virtual void    SetPopup() = 0;
+
+        virtual String  GetAuthor();
+        virtual Date    GetDate();
+        virtual Time    GetTime();
+
+        void            ExecuteCommand(USHORT nSlot);
+        void            InitControls();
         void            HidePostIt();
         void            DoResize();
         void            ResizeIfNeccessary(long aOldHeight, long aNewHeight);
@@ -291,18 +314,27 @@ class SwPostIt : public Window
 
         void            ResetAttributes();
 
-        void            SetLanguage(const SvxLanguageItem aNewItem);
         void            SetMarginSide(bool aMarginSide);
         void            SetReadonly(BOOL bSet);
         BOOL            IsReadOnly()        { return mbReadonly;}
         bool            IsPreview()         { return nFlags & PB_Preview;}
+
+        void            SetLanguage(const SvxLanguageItem aNewItem);
+        virtual SvxLanguageItem GetLanguage(void);
 
         void            SetColor(Color aColorDark,Color aColorLight, Color aColorAnkor);
         Color           ColorDark() { return mColorDark; }
         Color           ColorLight() { return mColorLight; }
         void            Rescale();
 
-        void            SetShadowState(ShadowState bState);
+        void            SetViewState(ShadowState bState);
+
+        bool            IsFollow() { return mbIsFollow; }
+        void            SetFollow( bool bIsFollow) { mbIsFollow = bIsFollow;};
+        virtual bool    CalcFollow();
+
+        SwMarginWin*    GetTopReplyNote();
+        bool            IsAnyStackParentVisible();
 
         sal_Int32       GetMetaHeight();
         sal_Int32       GetMinimumSizeWithMeta();
@@ -314,15 +346,82 @@ class SwPostIt : public Window
 
         void            ToggleInsMode();
 
-        void            SetChangeTracking(SwPostItHelper::SwLayoutStatus& aStatus,Color aColor);
-        SwPostItHelper::SwLayoutStatus GetStatus() { return mStatus; }
-        Color           GetChangeColor() { return mChangeColor; }
+        virtual void    ActivatePostIt();
+        virtual void    DeactivatePostIt();
 
+        virtual         SwPostItHelper::SwLayoutStatus GetStatus() { return SwPostItHelper::NONE; }
 
-
-        void            ActivatePostIt();
-        void            DeactivatePostIt();
+        virtual bool    IsProtected() {return mbReadonly;};
 };
 
+// implementation for change tracking comments, fully functional, but not yet used
+/*
+class SwRedComment : public SwMarginWin
+{
+    private:
+        SwRedline*      pRedline;
+
+    protected:
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    public:
+        TYPEINFO();
+        SwRedComment( Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits,SwRedline* pRed);
+        virtual ~SwRedComment() {};
+
+        virtual void    UpdateData();
+        virtual void    SetPostItText();
+        virtual void    Delete();
+        virtual void    GotoPos();
+        virtual void    SetPopup();
+        virtual void    ActivatePostIt();
+        virtual void    DeactivatePostIt();
+
+        virtual String  GetAuthor();
+        virtual Date    GetDate();
+        virtual Time    GetTime();
+
+        virtual bool    IsProtected();
+};
+*/
+class SwPostIt : public SwMarginWin
+{
+    private:
+        SwFmtFld*       mpFmtFld;
+        SwPostItField*  mpFld;
+        SwPostItHelper::SwLayoutStatus mStatus;
+        Color           mChangeColor;
+
+    protected:
+        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+
+    public:
+        TYPEINFO();
+        SwPostIt( Window* pParent, WinBits nBits,SwFmtFld* aField,SwPostItMgr* aMgr,SwPostItBits aBits);
+        virtual ~SwPostIt() {};
+
+        virtual void    UpdateData();
+        virtual void    SetPostItText();
+        virtual void    Delete();
+        virtual void    GotoPos();
+        virtual void    SetPopup();
+
+        virtual String  GetAuthor();
+        virtual Date    GetDate();
+        virtual Time    GetTime();
+
+        virtual sal_uInt32  MoveCaret();
+
+        void            SetChangeTracking(SwPostItHelper::SwLayoutStatus& aStatus,Color aColor);
+        virtual         SwPostItHelper::SwLayoutStatus GetStatus() { return mStatus; }
+        Color           GetChangeColor() { return mChangeColor; }
+
+        sal_uInt32      CountFollowing();
+        virtual bool    CalcFollow();
+        void            InitAnswer(OutlinerParaObject* pText);
+
+        virtual SvxLanguageItem GetLanguage(void);
+
+        virtual bool    IsProtected();
+};
 
 #endif

@@ -122,7 +122,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
 {
     DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
-                "portion exceeds model string!" )
+                "portion exceeds model string!" );
 
     DBG_ASSERT( !bFinished, "We are already done!" );
 
@@ -153,7 +153,7 @@ void SwAccessiblePortionData::Special(
 {
     DBG_ASSERT( nModelPosition >= 0, "illegal position" );
     DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
-                "portion exceeds model string!" )
+                "portion exceeds model string!" );
 
     DBG_ASSERT( !bFinished, "We are already done!" );
 

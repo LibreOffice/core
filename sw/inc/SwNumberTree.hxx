@@ -183,6 +183,10 @@ public:
      */
     SwNumberTree::tSwNumTreeNumber GetNumber( bool bValidate = true ) const;
 
+    // --> OD 2008-11-26 #158694#
+    bool IsContinueingPreviousSubTree() const;
+    // <--
+
     /**
        Returns level numbers of this node.
 
@@ -456,7 +460,6 @@ protected:
     (bool bRecursive, std::vector<const SwNumberTreeNode *> rParents) const;
 #endif // __SW_NUMBER_TREE_SANITY_CHECK
 
-private:
     /**
        the parent node
     */
@@ -466,6 +469,17 @@ private:
        the number of the node
     */
     mutable SwNumberTree::tSwNumTreeNumber mnNumber;
+
+    // --> OD 2008-11-26 #158694#
+    // boolean indicating, that a node of a not counted parent node is continueing
+    // the numbering of parent's previous node sub tree.
+    // Example:
+    //   1. kshdkjfs
+    //     1.1. lskjf
+    //      sdfjlksaf <-- not counted parent node
+    //     1.2. lfjlaskf <-- <mbContinueingPreviousSubTree = true>
+    mutable bool mbContinueingPreviousSubTree;
+    // <--
 
     /**
        true     this node is a phantom

@@ -35,7 +35,7 @@
 #include <svtools/poolitem.hxx>
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
-class SwFmtWrapInfluenceOnObjPos: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtWrapInfluenceOnObjPos: public SfxPoolItem
 {
 private:
     sal_Int16 mnWrapInfluenceOnPosition;

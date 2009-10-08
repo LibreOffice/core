@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: porfld.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.62.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -255,13 +255,32 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         {
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized( aTxt.Len(), 0, &nError );
-            ubidi_setPara( pBidi, aTxt.GetBuffer(), aTxt.Len(), nFldDir, NULL, &nError );
+            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aTxt.GetBuffer()), aTxt.Len(), nFldDir, NULL, &nError );
             int32_t nEnd;
             UBiDiLevel nCurrDir;
             ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
             ubidi_close( pBidi );
             const xub_StrLen nNextDirChg = (xub_StrLen)nEnd;
             nNextScriptChg = Min( nNextScriptChg, nNextDirChg );
+
+            // #i89825# change the script type also to CTL
+            // if there is no strong LTR char in the LTR run (numbers)
+            if ( nCurrDir != UBIDI_RTL )
+            {
+                nCurrDir = UBIDI_RTL;
+                for ( xub_StrLen nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
+                {
+                    UCharDirection nCharDir = u_charDirection ( aTxt.GetChar ( nCharIdx ));
+                    if ( nCharDir == U_LEFT_TO_RIGHT ||
+                         nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
+                         nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
+                    {
+                        nCurrDir = UBIDI_LTR;
+                        break;
+                    }
+                }
+            }
+
             if ( nCurrDir == UBIDI_RTL )
                 nTmp = SW_CTL;
         }
@@ -689,11 +708,13 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
     {
         const SwFont *pTmpFnt = rInf.GetFont();
         sal_Bool bPaintSpace = ( UNDERLINE_NONE != pTmpFnt->GetUnderline() ||
-                             STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
-                            !pTmpFnt->IsWordLineMode();
+                                 UNDERLINE_NONE != pTmpFnt->GetOverline()  ||
+                                 STRIKEOUT_NONE != pTmpFnt->GetStrikeout() ) &&
+                                 !pTmpFnt->IsWordLineMode();
         if( bPaintSpace && pFnt )
             bPaintSpace = ( UNDERLINE_NONE != pFnt->GetUnderline() ||
-                             STRIKEOUT_NONE != pFnt->GetStrikeout() ) &&
+                            UNDERLINE_NONE != pFnt->GetOverline()  ||
+                            STRIKEOUT_NONE != pFnt->GetStrikeout() ) &&
                             !pFnt->IsWordLineMode();
 
         SwFontSave aSave( rInf, pFnt );

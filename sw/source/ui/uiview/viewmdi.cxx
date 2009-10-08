@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewmdi.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.24.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -491,7 +491,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_POSTIT:
         {
-            SwPostIt* pPostIt = pThis->GetPostItMgr()->GetActivePostIt();
+            SwMarginWin* pPostIt = pThis->GetPostItMgr()->GetActivePostIt();
             if (pPostIt)
                 pThis->GetPostItMgr()->SetActivePostIt(0);
             SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
@@ -587,18 +587,16 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
 /* -----------------------------07.04.01 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwView::GetVLinealMetric(FieldUnit& eToFill) const
+void SwView::GetVLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pVRuler->GetUnit();
-    return pVRuler != 0;
 }
 /* -----------------------------07.04.01 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwView::GetHLinealMetric(FieldUnit& eToFill) const
+void SwView::GetHLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pHRuler->GetUnit();
-    return pHRuler != 0;
 }
 /*************************************************************************
 |*
@@ -725,7 +723,7 @@ void SwView::SetImageButtonColor(Color& rColor)
  ---------------------------------------------------------------------------*/
 void SwView::ShowHScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
     pHScrollbar->ExtendedShow(bShow);
 }
 /* -----------------------------2002/06/26 13:57------------------------------
@@ -733,7 +731,7 @@ void SwView::ShowHScrollbar(sal_Bool bShow)
  ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsHScrollbarVisible()const
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
     return pHScrollbar->IsVisible( FALSE ) || pHScrollbar->IsAuto();
 }
 /* -----------------------------2002/06/26 13:57------------------------------
@@ -741,7 +739,7 @@ sal_Bool SwView::IsHScrollbarVisible()const
  ---------------------------------------------------------------------------*/
 void SwView::ShowVScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
     pVScrollbar->ExtendedShow(bShow);
     pPageUpBtn->Show(bShow);
     pPageDownBtn->Show(bShow);
@@ -752,7 +750,7 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
  ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsVScrollbarVisible()const
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
+    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
     return pVScrollbar->IsVisible( FALSE );
 }
 

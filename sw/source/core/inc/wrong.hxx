@@ -80,16 +80,15 @@ class SwWrongList
     void Remove( USHORT nIdx, USHORT nLen );
 
     // forbidden and not implemented
-    SwWrongList( const SwWrongList& rCpy );
     SwWrongList& operator= (const SwWrongList &);
+    SwWrongList( const SwWrongList& rCpy );
 
 public:
-
     SwWrongList( WrongListType eType );
-    ~SwWrongList()
-    {
-        ClearList();
-    }
+
+    virtual ~SwWrongList();
+    virtual SwWrongList* Clone();
+    virtual void CopyFrom( const SwWrongList& rCopy );
 
     inline WrongListType GetWrongListType() const { return meType; }
     inline xub_StrLen GetBeginInv() const { return nBeginInvalid; }
@@ -157,6 +156,8 @@ public:
     {
         return nIdx < maList.size() ? &maList[nIdx] : 0;
     }
+    void RemoveEntry( xub_StrLen nBegin, xub_StrLen nEnd );
+    bool LookForEntry( xub_StrLen nBegin, xub_StrLen nEnd );
 };
 
 #endif

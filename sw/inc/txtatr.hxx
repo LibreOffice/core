@@ -81,7 +81,7 @@ public:
 
 // ******************************
 
-class SwTxtRuby : public SwTxtAttrEnd, public SwClient
+class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrEnd, public SwClient
 {
     SwTxtNode* pMyTxtNd;
 

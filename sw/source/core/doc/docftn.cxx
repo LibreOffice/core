@@ -165,7 +165,7 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
 
 void SwEndNoteInfo::SetCharFmt( SwCharFmt* pChFmt )
 {
-    DBG_ASSERT(pChFmt, "kein CharFmt?")
+    DBG_ASSERT(pChFmt, "kein CharFmt?");
     pChFmt->Add( &((SwClient&)aCharFmtDep) );
 }
 
@@ -182,7 +182,7 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
 
 void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
 {
-    DBG_ASSERT(pChFmt, "kein CharFmt?")
+    DBG_ASSERT(pChFmt, "kein CharFmt?");
     pChFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
 }
 

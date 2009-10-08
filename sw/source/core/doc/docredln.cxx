@@ -57,6 +57,8 @@
 
 using namespace com::sun::star;
 
+TYPEINIT1(SwRedlineHint, SfxHint);
+
 #ifdef PRODUCT
 
     #define _CHECK_REDLINE( pDoc )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calcmove.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.73.252.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1211,6 +1211,15 @@ void SwCntntFrm::MakeAll()
                     ((SwTxtFrm*)pFtn->GetRef())->GetFtnLine( pFtn->GetAttr() ) );
         }
     }
+
+    // --> OD 2008-08-12 #b6732519#
+    if ( GetUpper()->IsSctFrm() &&
+         HasFollow() &&
+         GetFollow()->GetFrm() == GetNext() )
+    {
+        dynamic_cast<SwTxtFrm*>(this)->JoinFrm();
+    }
+    // <--
 
     // --> OD 2004-06-23 #i28701# - move master forward, if it has to move,
     // because of its object positioning.

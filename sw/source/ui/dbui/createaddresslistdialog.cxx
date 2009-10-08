@@ -250,7 +250,7 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
     {
         m_bNoDataSet = false;
         m_nCurrentDataSet = nSet;
-        DBG_ASSERT(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index")
+        DBG_ASSERT(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
         if(m_pData->aDBData.size() > m_nCurrentDataSet)
         {
             ::std::vector<Edit*>::iterator aEditIter;
@@ -258,7 +258,7 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
             for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter, ++nIndex)
             {
                 DBG_ASSERT(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
-                            "number of colums doesn't match number of Edits")
+                            "number of colums doesn't match number of Edits");
                 (*aEditIter)->SetText(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
             }
         }
@@ -457,7 +457,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                     String sHeader = sLine.GetToken( 0, '\t', nIndex );
                     DBG_ASSERT(sHeader.Len() > 2 &&
                             sHeader.GetChar(0) == '\"' && sHeader.GetChar(sHeader.Len() - 1) == '\"',
-                            "Wrong format of header")
+                            "Wrong format of header");
                     if(sHeader.Len() > 2)
                     {
                         m_pCSVData->aDBColumnHeaders.push_back( sHeader.Copy(1, sHeader.Len() -2));
@@ -475,7 +475,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                     String sData = sLine.GetToken( 0, '\t', nIndex );
                     DBG_ASSERT(sData.Len() >= 2 &&
                                 sData.GetChar(0) == '\"' && sData.GetChar(sData.Len() - 1) == '\"',
-                            "Wrong format of line")
+                            "Wrong format of line");
                     if(sData.Len() >= 2)
                         aNewData.push_back(sData.Copy(1, sData.Len() - 2));
                     else

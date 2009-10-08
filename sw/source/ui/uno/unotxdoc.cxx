@@ -802,8 +802,10 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     }
     else
     {
+        //todo/mba: assuming that notes should be omitted
+        BOOL bSearchInNotes = FALSE;
         BOOL bCancel;
-        nResult = pUnoCrsr->Find( aSearchOpt,
+        nResult = pUnoCrsr->Find( aSearchOpt, bSearchInNotes,
             eStart, eEnd, bCancel,
             (FindRanges)eRanges,
             sal_True );
@@ -931,8 +933,10 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
         }
         else
         {
+            //todo/mba: assuming that notes should be omitted
+            BOOL bSearchInNotes = FALSE;
             BOOL bCancel;
-            nResult = (sal_Int32)pUnoCrsr->Find( aSearchOpt,
+            nResult = (sal_Int32)pUnoCrsr->Find( aSearchOpt, bSearchInNotes,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
                     /*int bReplace =*/sal_False );
@@ -2282,7 +2286,7 @@ void SwXTextDocument::addPropertyChangeListener(const OUString& /*PropertyName*/
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 10.05.99 13:58:59---------------------------------------------------
 
@@ -2291,7 +2295,7 @@ void SwXTextDocument::removePropertyChangeListener(const OUString& /*PropertyNam
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 10.05.99 13:59:00---------------------------------------------------
 
@@ -2300,7 +2304,7 @@ void SwXTextDocument::addVetoableChangeListener(const OUString& /*PropertyName*/
     const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 10.05.99 13:59:00---------------------------------------------------
 
@@ -2309,7 +2313,7 @@ void SwXTextDocument::removeVetoableChangeListener(const OUString& /*PropertyNam
                         const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /* -----------------25.10.99 10:42-------------------
 
@@ -3414,7 +3418,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
     sal_Bool bRet = sal_False;
     if(pxDoc)
     {
-        DBG_ERROR("not implemented")
+        DBG_ERROR("not implemented");
     }
     else
     {
@@ -3730,7 +3734,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                 xRet = xDrawDefaults;
             break;
 #ifdef DBG_UTIL
-            default: DBG_ERROR("which table?")
+            default: DBG_ERROR("which table?");
 #endif
         }
     }

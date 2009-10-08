@@ -2929,7 +2929,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             aTmpName1 = ((const SfxStringItem*)pItem)->GetValue();
         }
 
-        DBG_ASSERT(pWrtSh, "keine Shell?")
+        DBG_ASSERT(pWrtSh, "keine Shell?");
         if( bNew || !aTmpName1.Len() )
 
             switch( nDlgType )

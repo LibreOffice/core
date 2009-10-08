@@ -62,7 +62,7 @@ namespace {
                 pTextMarkupList = rTxtNode.GetWrong();
             }
             break;
-            case text::TextMarkupType::GRAMMAR:
+            case text::TextMarkupType::PROOFREADING:
             {
                 // support not implemented yet
                 pTextMarkupList = 0;

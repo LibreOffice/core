@@ -54,7 +54,8 @@ SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     aBoxAttrCopyWithParaRB( this, SW_RES(RB_BOX_PARA    )),
     aBoxAttrCopyNoParaRB(   this, SW_RES(RB_BOX_NOPARA)),
     aBorderCopyRB(          this, SW_RES(RB_BORDER  )),
-    rShell(rSh)
+    rShell(rSh),
+    m_nSplit( HEADLINE_CNTNTCOPY )
 {
     FreeResource();
     aCntntCopyRB.Check();
@@ -65,15 +66,15 @@ SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
 --------------------------------------------------*/
 void SwSplitTblDlg::Apply()
 {
-    USHORT nSplit = HEADLINE_CNTNTCOPY;
+    m_nSplit = HEADLINE_CNTNTCOPY;
     if(aBoxAttrCopyWithParaRB.IsChecked())
-        nSplit = HEADLINE_BOXATRCOLLCOPY;
+        m_nSplit = HEADLINE_BOXATRCOLLCOPY;
     if(aBoxAttrCopyNoParaRB.IsChecked())
-        nSplit = HEADLINE_BOXATTRCOPY;
+        m_nSplit = HEADLINE_BOXATTRCOPY;
     else if(aBorderCopyRB.IsChecked())
-        nSplit = HEADLINE_BORDERCOPY;
+        m_nSplit = HEADLINE_BORDERCOPY;
 
-    rShell.SplitTable( nSplit );
+    rShell.SplitTable( m_nSplit );
 
 }
 

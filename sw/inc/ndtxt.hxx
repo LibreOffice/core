@@ -43,6 +43,9 @@ class SwNodeNum;
 // --> OD 2008-05-06 #refactorlists#
 class SwList;
 // <--
+// --> OD 2008-12-02 #i96772#
+class SvxLRSpaceItem;
+// <--
 
 #include <vector>
 #include <set>
@@ -115,7 +118,10 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     bool bNotifiable;
     mutable BOOL bLastOutlineState : 1;
 
-    BYTE nOutlineLevel;
+    // BYTE nOutlineLevel; //#outline level, removed by zhaojianwei.
+    // --> OD 2008-11-19 #i70748#
+    bool mbEmptyListStyleSetDueToSetOutlineLevelAttr;
+    // <--
 
     // --> OD 2008-03-27 #refactorlists#
     // boolean, indicating that a <SetAttr(..)> or <ResetAttr(..)> or
@@ -305,9 +311,18 @@ public:
     void    Delete( SwTxtAttr * pTxtAttr, BOOL bThisOnly = FALSE );
 
     // Aktionen auf Text und Attributen
-    void    Copy(SwTxtNode *pDest, const SwIndex &rStart, USHORT nLen);
-    void    Copy(SwTxtNode *pDest, const SwIndex &rDestStart,
-                const SwIndex &rStart, xub_StrLen nLen);
+    // --> OD 2008-11-18 #i96213#
+    // introduce optional parameter to control, if all attributes have to be copied.
+    void Copy( SwTxtNode *pDest,
+               const SwIndex &rStart,
+               USHORT nLen,
+               const bool bForceCopyOfAllAttrs = false );
+    void Copy( SwTxtNode *pDest,
+               const SwIndex &rDestStart,
+               const SwIndex &rStart,
+               xub_StrLen nLen,
+               const bool bForceCopyOfAllAttrs = false );
+    // <--
     void    Cut(SwTxtNode *pDest, const SwIndex &rStart, xub_StrLen nLen);
     inline void Cut(SwTxtNode *pDest, const SwIndex &rDestStart,
                     const SwIndex &rStart, xub_StrLen nLen);
@@ -451,6 +466,10 @@ public:
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
+    // --> OD 2008-12-02 #i96772#
+    void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;
+    // <--
+
     /** return left margin for tab stop position calculation
 
         OD 2008-06-30 #i91133#
@@ -548,7 +567,7 @@ public:
 
        @return outline level or NO_NUMBERING if there is no outline level
      */
-    int GetOutlineLevel() const;
+    int GetAttrOutlineLevel() const;//#OutlineLevel,added by zhaojianwei
 
     /**
        Sets the out line level *at* a text node.
@@ -564,6 +583,13 @@ public:
        NOTE: This is subject to change, see GetOutlineLevel.
      */
     //void SetOutlineLevel(int nLevel);
+      void SetAttrOutlineLevel(int nLevel);//#OutlineLevel,added by zhaojianwei
+
+    // --> OD 2008-11-19 #i70748#
+    bool IsEmptyListStyleDueToSetOutlineLevelAttr();
+    void SetEmptyListStyleDueToSetOutlineLevelAttr();
+    void ResetEmptyListStyleDueToResetOutlineLevelAttr();
+    // <--
 
     /**
        Returns the width of leading tabs/blanks in this paragraph.

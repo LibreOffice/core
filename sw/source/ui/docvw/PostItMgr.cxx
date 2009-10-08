@@ -8,7 +8,7 @@
  *
  * $RCSfile: PostItMgr.cxx,v $
  *
- * $Revision: 1.12 $
+ * $Revision: 1.12.34.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +35,10 @@
 #include "PostItMgr.hxx"
 #include <postithelper.hxx>
 
-#include <svtools/smplhint.hxx>
-
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/outdev.hxx>
 
-#include <swmodule.hxx>
 #include <viewopt.hxx>
 
 #include <view.hxx>
@@ -54,6 +52,8 @@
 #include <postit.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
+#include <redline.hxx>
+#include <docary.hxx>
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 #include <tools/color.hxx>
@@ -65,24 +65,22 @@
 #include <undobj.hxx>
 
 #include <sfx2/request.hxx>
-
 #include <sfx2/event.hxx>
+#include <sfx2/srchitem.hxx>
+
 
 #include <svtools/languageoptions.hxx>
 #include <svtools/langtab.hxx>
+#include <svtools/smplhint.hxx>
 
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
-#include <svx/srchitem.hxx>
 #include <svx/outliner.hxx>
-
-#include <vcl/outdev.hxx>
 
 #include <i18npool/mslangid.hxx>
 #include <i18npool/lang.h>
 
 #include "swevent.hxx"
-#include <sfx2/event.hxx>
 
 // distance between ankor Y and initial note position
 #define POSTIT_INITIAL_ANKOR_DISTANCE       20
@@ -94,6 +92,7 @@
 // if we layout more often we stop, this should never happen
 #define MAX_LOOP_COUNT                      50
 
+/*
 bool comp_author( const SwPostItItem* a, const SwPostItItem* b)
 {
     return a->pFmtFld->GetFld()->GetPar1() < b->pFmtFld->GetFld()->GetPar1();
@@ -103,25 +102,19 @@ bool comp_date( const SwPostItItem* a, const SwPostItItem* b)
 {
     return static_cast<SwPostItField*>(a->pFmtFld->GetFld())->GetDate()  < static_cast<SwPostItField*>(b->pFmtFld->GetFld())->GetDate();
 }
-
-bool comp_pos(const SwPostItItem *a, const SwPostItItem *b)
-{
-    // if notes are on the same line, sort by x position, otherwise by y position
-    return (a->mPos.Bottom() == b->mPos.Bottom()) ? a->mPos.Left() < b->mPos.Left() : a->mPos.Bottom() < b->mPos.Bottom();
-}
-
-/*
-bool comp_id(const SwPostItItem *a, const SwPostItItem *b)
-{
-    #define TXTFLD pFmtFld->GetTxtFld()
-    if (a->TXTFLD->GetTxtNode().FindFlyStartNode() || b->TXTFLD->GetTxtNode().FindFlyStartNode() ||
-        a->TXTFLD->GetTxtNode().FindHeaderStartNode() || a->TXTFLD->GetTxtNode().FindFooterStartNode() ||
-        b->TXTFLD->GetTxtNode().FindHeaderStartNode() || b->TXTFLD->GetTxtNode().FindFooterStartNode())
-        return (a->mPos.Bottom() == b->mPos.Bottom()) ? a->mPos.Left() < b->mPos.Left() : a->mPos.Bottom() < b->mPos.Bottom();
-    else
-        return ((*a->TXTFLD->GetPosition()) < (*b->TXTFLD->GetPosition()));
-}
 */
+
+// if position is on the same line, sort by x (Left) position, otherwise by y(Bottom) position
+// if two notes are at the same position, sort by logical node position
+bool comp_pos(const SwMarginItem *a, const SwMarginItem *b)
+{
+    return (a->mPos.Bottom() == b->mPos.Bottom()) ?
+            ( ((a->mPos.Left() == b->mPos.Left()) && (a->GetBroadCaster()->ISA(SwFmtFld) && b->GetBroadCaster()->ISA(SwFmtFld)) ) ?
+                *(static_cast<SwFmtFld*>(a->GetBroadCaster())->GetTxtFld()->GetStart()) <
+                *(static_cast<SwFmtFld*>(b->GetBroadCaster())->GetTxtFld()->GetStart())
+                : a->mPos.Left() < b->mPos.Left() )
+            : a->mPos.Bottom() < b->mPos.Bottom();
+}
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
     : mpView(pView)
@@ -135,12 +128,18 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     , mbLayouting(false)
     , mbReadOnly(mpView->GetDocShell()->IsReadOnly())
     , mbDeleteNote(true)
+    , mpAnswer(0)
 {
     if(!mpView->GetDrawView() )
         mpView->GetWrtShell().MakeDrawView();
-    // collect all PostIts that exist after loading the document
+
+    // collect all PostIts and redline comments that exist after loading the document
     // don't check for existance for any of them, don't focus them
     AddPostIts(false,false);
+    /*  this code can be used once we want redline comments in the margin
+    AddRedlineComments(false,false);
+    */
+    // we want to receive stuff like SFX_HINT_DOCCHANGED
     StartListening(*mpView->GetDocShell());
     if (!mvPostItFlds.empty() && ShowNotes())
     {
@@ -153,8 +152,8 @@ SwPostItMgr::~SwPostItMgr()
 {
     if ( mnEventId )
         Application::RemoveUserEvent( mnEventId );
-    // forget about all PostItFields
-    RemovePostIts();
+    // forget about all our margin windows
+    RemoveMarginWin();
     EndListening( *mpView->GetDocShell() );
 
     for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i!= mPages.end() ; i++)
@@ -165,12 +164,12 @@ SwPostItMgr::~SwPostItMgr()
 void SwPostItMgr::CheckForRemovedPostIts()
 {
     bool bRemoved = false;
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end(); )
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end(); )
     {
-        std::list<SwPostItItem*>::iterator it = i++;
-        if ( !(*it)->pFmtFld->IsFldInDoc() )
+        std::list<SwMarginItem*>::iterator it = i++;
+        if ( !(*it)->UseElement() )
         {
-            SwPostItItem* p = (*it);
+            SwMarginItem* p = (*it);
             mvPostItFlds.remove(*it);
             if (p->pPostIt)
                 delete p->pPostIt;
@@ -195,38 +194,46 @@ void SwPostItMgr::CheckForRemovedPostIts()
     }
 }
 
-void SwPostItMgr::InsertFld(SwFmtFld* aField, bool bCheckExistance, bool bFocus)
+void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus)
 {
     if (bCheckExistance)
     {
-        for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         {
-            if ( (*i)->pFmtFld == aField )
+            if ( (*i)->GetBroadCaster() == pItem )
                 return;
         }
     }
     mbLayout = bFocus;
-    mvPostItFlds.push_back(new SwPostItItem(aField, true, bFocus) );
-    // listen for removal of field
-    StartListening( *aField );
+    if (pItem->ISA(SwFmtFld))
+        mvPostItFlds.push_back(new SwPostItItem(static_cast<SwFmtFld*>(pItem), true, bFocus) );
+    /*
+    else
+    if (pItem->ISA(SwRedline))
+        mvPostItFlds.push_back(new SwRedCommentItem( static_cast<SwRedline*>(pItem), true, bFocus)) ;
+    */
+    DBG_ASSERT(pItem->ISA(SwFmtFld) /*|| pItem->ISA(SwRedline)*/,"Mgr::InsertItem: seems like new stuff was added");
+    StartListening(*pItem);
 }
 
-void SwPostItMgr::RemoveFld( SfxBroadcaster* pFld )
+void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 {
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    EndListening(*pBroadcast);
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
-        if ( (*i)->pFmtFld == pFld )
+        if ( (*i)->GetBroadCaster() == pBroadcast )
         {
-            SwPostItItem* p = (*i);
-            mvPostItFlds.remove(*i);
+            SwMarginItem* p = (*i);
             if (GetActivePostIt() == p->pPostIt)
                 SetActivePostIt(0);
+            mvPostItFlds.remove(*i);
             delete p->pPostIt;
             delete p;
             break;
         }
     }
     mbLayout = true;
+    PrepareView();
 }
 
 void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -282,13 +289,39 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     // field to be removed is the broadcaster
                     DBG_ERROR("Notification for removed SwFmtFld was not sent!");
-                    RemoveFld(&rBC);
-                    PrepareView();
+                    RemoveItem(&rBC);
                 }
                 break;
             }
         }
     }
+    /*
+    else if ( rHint.IsA(TYPE(SwRedlineHint) ) )
+    {
+        SwRedline* pRedline = const_cast<SwRedline*>(((SwRedlineHint&)rHint).GetRedline());
+        switch ( ((SwRedlineHint&)rHint).Which() )
+        {
+            case SWREDLINE_INSERTED :
+            {
+                bool bEmpty = !HasNotes();
+                InsertItem( pRedline, true, false );
+                if (bEmpty && !mvPostItFlds.empty())
+                    PrepareView(true);
+                break;
+            }
+            case SWREDLINE_REMOVED:
+            {
+                RemoveItem(pRedline);
+                break;
+            }
+            case SWREDLINE_FOCUS:
+            {
+                Focus(rBC);
+                break;
+            }
+        }
+    }
+    */
     else if ( rHint.IsA(TYPE(SwFmtFldHint) ) )
     {
         SwFmtFld* pFld = const_cast <SwFmtFld*>( ((SwFmtFldHint&)rHint).GetField() );
@@ -301,12 +334,11 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     AddPostIts(true);
                     break;
                 }
-
                 // get field to be inserted from hint
                 if ( pFld->IsFldInDoc() )
                 {
-                    bool bEmpty = mvPostItFlds.empty();
-                    InsertFld( pFld, true, false );
+                    bool bEmpty = !HasNotes();
+                    InsertItem( pFld, true, false );
                     if (bEmpty && !mvPostItFlds.empty())
                         PrepareView(true);
                 }
@@ -324,47 +356,21 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         CheckForRemovedPostIts();
                         break;
                     }
-
-                    // get field to be removed from hint
-                    EndListening( *pFld );
-                    RemoveFld(pFld);
-                    PrepareView();
+                    RemoveItem(pFld);
                 }
                 break;
             }
             case SWFMTFLD_FOCUS:
             {
-                if (!mpWrtShell->GetViewOptions()->IsPostIts())
-                {
-                    SfxRequest aRequest(mpView->GetViewFrame(),FN_VIEW_NOTES);
-                    mpView->ExecViewOptions(aRequest);
-                }
-                // field to get the focus is the broadcaster, SwFmtFld in Hint may be NULL
-                SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
-                for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-                {
-                    if ( pFmtFld == (*i)->pFmtFld )
-                    {
-                        if ((*i)->pPostIt)
-                        {
-                            (*i)->pPostIt->GrabFocus();
-                            MakeVisible((*i)->pPostIt);
-                        }
-                        else
-                        {
-                                // when the layout algorithm starts, this postit is created and receives focus
-                            (*i)->bFocus = true;
-                        }
-                    }
-                }
+                Focus(rBC);
                 break;
             }
             case SWFMTFLD_CHANGED:
             {
                 SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
-                for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+                for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
                 {
-                    if ( pFmtFld == (*i)->pFmtFld )
+                    if ( pFmtFld == (*i)->GetBroadCaster() )
                     {
                         if ((*i)->pPostIt)
                             (*i)->pPostIt->SetPostItText();
@@ -376,13 +382,13 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SWFMTFLD_LANGUAGE:
             {
                 SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
-                for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+                for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
                 {
-                    if ( pFmtFld == (*i)->pFmtFld )
+                    if ( pFmtFld == (*i)->GetBroadCaster() )
                     {
                         if ((*i)->pPostIt)
                         {
-                            USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->pFmtFld->GetFld()->GetLanguage() );
+                            USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->GetFmtFld()->GetFld()->GetLanguage() );
                             USHORT nLangWhichId = 0;
                             switch (nScriptType)
                             {
@@ -390,12 +396,39 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
                                 case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
                             }
-                            (*i)->pPostIt->SetLanguage(SvxLanguageItem((*i)->pFmtFld->GetFld()->GetLanguage(),nLangWhichId));
+                            (*i)->pPostIt->SetLanguage(SvxLanguageItem((*i)->GetFmtFld()->GetFld()->GetLanguage(),nLangWhichId));
                         }
                         break;
                     }
                 }
                 break;
+            }
+        }
+    }
+}
+
+void SwPostItMgr::Focus(SfxBroadcaster& rBC)
+{
+    if (!mpWrtShell->GetViewOptions()->IsPostIts())
+    {
+        SfxRequest aRequest(mpView->GetViewFrame(),FN_VIEW_NOTES);
+        mpView->ExecViewOptions(aRequest);
+    }
+
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    {
+        // field to get the focus is the broadcaster
+        if ( &rBC == (*i)->GetBroadCaster() )
+        {
+            if ((*i)->pPostIt)
+            {
+                (*i)->pPostIt->GrabFocus();
+                MakeVisible((*i)->pPostIt);
+            }
+            else
+            {
+                // when the layout algorithm starts, this postit is created and receives focus
+                (*i)->bFocus = true;
             }
         }
     }
@@ -419,12 +452,12 @@ bool SwPostItMgr::CalcRects()
     PreparePageContainer();
     if ( !mvPostItFlds.empty() )
     {
-        for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         {
-            SwPostItItem* pItem = (*i);
-            if ( !pItem->pFmtFld->IsFldInDoc() )
+            SwMarginItem* pItem = (*i);
+            if ( !pItem->UseElement() )
             {
-                DBG_ERROR("PostIt is not in doc!");
+                DBG_ERROR("PostIt is not in doc or other wrong use");
                 bRepair = true;
                 continue;
             }
@@ -432,12 +465,12 @@ bool SwPostItMgr::CalcRects()
             //save old rect and visible state
             SwRect aOldRect(pItem->mPos);
             SwPostItHelper::SwLayoutStatus eOldStatus = pItem->mLayoutStatus;
-            if( pItem->pFmtFld )
+            std::vector< SwLayoutInfo > aInfo;
+            //pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, pItem->pFmtFld->GetTxtFld() );
+            SwPosition aPosition = pItem->GetPosition();
+            pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, aPosition );
+            if( aInfo.size() )
             {
-                std::vector< SwLayoutInfo > aInfo;
-                pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, pItem->pFmtFld->GetTxtFld() );
-                if( aInfo.size() )
-                {
                     SwLayoutInfo& rInfo = aInfo[0];
                     pItem->mPos = rInfo.mPosition;
                     pItem->mPagePos = rInfo.mPageFrame;
@@ -445,7 +478,6 @@ bool SwPostItMgr::CalcRects()
                     pItem->bMarginSide = rInfo.mbMarginSide;
                     pItem->mnPageNumber = rInfo.mnPageNumber;
                     pItem->mRedlineAuthor = rInfo.mRedlineAuthor;
-                }
             }
             bChange = bChange || (pItem->mPos != aOldRect) || (eOldStatus != pItem->mLayoutStatus);
         }
@@ -455,11 +487,25 @@ bool SwPostItMgr::CalcRects()
         Sort(SORT_POS);
 
         // sort the items into the right page vector, so layout can be done by page
-        for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         {
-            SwPostItItem* pItem = (*i);
+            SwMarginItem* pItem = (*i);
             if( SwPostItHelper::INVISIBLE == pItem->mLayoutStatus )
+            {
+                if (pItem->pPostIt)
+                    pItem->pPostIt->HideNote();
                 continue;
+            }
+
+            if( SwPostItHelper::HIDDEN == pItem->mLayoutStatus )
+            {
+                if (!mpWrtShell->GetViewOptions()->IsShowHiddenChar())
+                {
+                    if (pItem->pPostIt)
+                        pItem->pPostIt->HideNote();
+                    continue;
+                }
+            }
 
             const unsigned long aPageNum = pItem->mnPageNumber;
             if (aPageNum > mPages.size())
@@ -499,7 +545,7 @@ bool SwPostItMgr::CalcRects()
 
 bool SwPostItMgr::HasScrollbars() const
 {
-    for(std::list<SwPostItItem*>::const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwMarginItem*>::const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
         if ((*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Scrollbar())
             return true;
@@ -554,16 +600,15 @@ void SwPostItMgr::LayoutPostIts()
                 // only layout if there are notes on this page
                 if (mPages[n]->mList->size()>0)
                 {
-                    std::list<SwPostIt*>    aVisiblePostItList;
+                    std::list<SwMarginWin*> aVisiblePostItList;
                     unsigned long           lNeededHeight = 0;
                     long                    mlPageBorder = 0;
                     long                    mlPageEnd = 0;
 
-                    for(SwPostItItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+                    for(SwMarginItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
                     {
-                        SwPostItItem* pItem = (*i);
-                        SwFmtFld* pFmtFld = pItem->pFmtFld;
-                        SwPostIt* pPostIt = pItem->pPostIt;
+                        SwMarginItem* pItem = (*i);
+                        SwMarginWin* pPostIt = pItem->pPostIt;
 
                         if (mPages[n]->bMarginSide)
                         {
@@ -586,13 +631,25 @@ void SwPostItMgr::LayoutPostIts()
                             long aPostItHeight = 0;
                             if (!pPostIt)
                             {
-                                pPostIt = new SwPostIt(static_cast<Window*>(&mpView->GetEditWin()),WINDOW_CONTROL,pFmtFld,this,0);
+                                pPostIt = (*i)->GetMarginWindow(static_cast<Window*>(&mpView->GetEditWin()),WINDOW_CONTROL,this,0);
+                                pPostIt->InitControls();
                                 pPostIt->SetReadonly(mbReadOnly);
-                                SetColors(pPostIt,static_cast<SwPostItField*>(pFmtFld->GetFld()));
                                 pItem->pPostIt = pPostIt;
+                                if (mpAnswer)
+                                {
+                                    if (pPostIt->CalcFollow()) //do we really have another note in front of this one
+                                        static_cast<SwPostIt*>(pPostIt)->InitAnswer(mpAnswer);
+                                    delete mpAnswer;
+                                    mpAnswer = 0;
+                                }
                             }
-                            pPostIt->SetChangeTracking(pItem->mLayoutStatus,GetColorAnkor(pItem->mRedlineAuthor));
+
+                            if (pItem->pPostIt->ISA(SwPostIt))
+                            {
+                                static_cast<SwPostIt*>(pPostIt)->SetChangeTracking(pItem->mLayoutStatus,GetColorAnkor(pItem->mRedlineAuthor));
+                            }
                             pPostIt->SetMarginSide(mPages[n]->bMarginSide);
+                            pPostIt->SetFollow(pPostIt->CalcFollow());
                             aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta() ? pPostIt->GetMinimumSizeWithoutMeta() : pPostIt->GetPostItTextHeight() ) + pPostIt->GetMetaHeight();
                             pPostIt->SetPosSizePixelRect( mlPageBorder ,Y-GetInitialAnchorDistance(), GetNoteWidth() ,aPostItHeight,pItem->mPos, mlPageEnd);
 
@@ -604,7 +661,7 @@ void SwPostItMgr::LayoutPostIts()
                             }
                             // only the visible postits are used for the final layout
                             aVisiblePostItList.push_back(pPostIt);
-                            lNeededHeight += aPostItHeight+GetSpaceBetween();
+                            lNeededHeight += pPostIt->IsFollow() ? aPostItHeight : aPostItHeight+GetSpaceBetween();
                         }
                         else // we don't want to see it
                         {
@@ -636,7 +693,7 @@ void SwPostItMgr::LayoutPostIts()
                        - enlarge all notes till GetNextBorder(), as we resized to average value before
                        */
                         //lets hide the ones which overlap the page
-                        for(SwPostIt_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+                        for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
                         {
                             if (mPages[n]->lOffset != 0)
                                 (*i)->TranslateTopPosition(mPages[n]->lOffset);
@@ -651,7 +708,6 @@ void SwPostItMgr::LayoutPostIts()
                             {
                                 if (mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() < (mPages[n]->mPageRect.Top()+aSidebarheight))
                                 {
-
                                     if (mPages[n]->bMarginSide)
                                         (*i)->ShowAnkorOnly(Point(mPages[n]->mPageRect.Left(),mPages[n]->mPageRect.Top()));
                                     else
@@ -668,7 +724,7 @@ void SwPostItMgr::LayoutPostIts()
                             }
                         }
                         // do some magic so we really see the focused note
-                        for(SwPostIt_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+                        for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
                         {
                             if ((*i)->HasChildPathFocus())
                             {
@@ -694,10 +750,10 @@ void SwPostItMgr::LayoutPostIts()
         else
         {   // we do not want to see the notes anymore -> Options-Writer-View-Notes
             bool bRepair = false;
-            for(SwPostItItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+            for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
             {
-                SwPostItItem* pItem = (*i);
-                if ( !pItem->pFmtFld->IsFldInDoc() )
+                SwMarginItem* pItem = (*i);
+                if ( !pItem->UseElement() )
                 {
                     DBG_ERROR("PostIt is not in doc!");
                     bRepair = true;
@@ -726,13 +782,13 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 {
     if ( mPages[aPage-1]->mList->empty() )
     {
-        DBG_ERROR("Notes SidePane painted but no rects and page lists calculated!")
+        DBG_ERROR("Notes SidePane painted but no rects and page lists calculated!");
         return false;
     }
 
-    SwPostItItem_iterator aItem = mPages[aPage-1]->mList->end();
+    SwMarginItem_iterator aItem = mPages[aPage-1]->mList->end();
     --aItem;
-    DBG_ASSERT ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen")
+    DBG_ASSERT ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen");
     if ((*aItem)->pPostIt)
     {
         const long aSidebarheight = mPages[aPage-1]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
@@ -753,9 +809,10 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
     const bool bOldUp = ArrowEnabled(KEY_PAGEUP,aPage);
     const bool bOldDown = ArrowEnabled(KEY_PAGEDOWN,aPage);
     const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
-    for(SwPostItItem_iterator i = mPages[aPage-1]->mList->begin(); i!= mPages[aPage-1]->mList->end(); i++)
+    for(SwMarginItem_iterator i = mPages[aPage-1]->mList->begin(); i!= mPages[aPage-1]->mList->end(); i++)
     {
-        SwPostIt* pPostIt = (*i)->pPostIt;
+        SwMarginWin* pPostIt = (*i)->pPostIt;
+        // if this is an answer, we should take the normal position and not the real, slightly moved position
         pPostIt->SetVirtualPosSize(pPostIt->GetPosPixel(),pPostIt->GetSizePixel());
         pPostIt->TranslateTopPosition(lScroll);
 
@@ -794,7 +851,7 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
     }
 }
 
-void SwPostItMgr::AutoScroll(const SwPostIt* pPostIt,const unsigned long aPage )
+void SwPostItMgr::AutoScroll(const SwMarginWin* pPostIt,const unsigned long aPage )
 {
     // otherwise all notes are visible
     if (mPages[aPage-1]->bScrollbar)
@@ -814,7 +871,7 @@ void SwPostItMgr::AutoScroll(const SwPostIt* pPostIt,const unsigned long aPage )
     }
 }
 
-void SwPostItMgr::MakeVisible(const SwPostIt* pPostIt,long aPage )
+void SwPostItMgr::MakeVisible(const SwMarginWin* pPostIt,long aPage )
 {
     if (aPage == -1)
     {
@@ -823,7 +880,7 @@ void SwPostItMgr::MakeVisible(const SwPostIt* pPostIt,long aPage )
         {
             if (mPages[n]->mList->size()>0)
             {
-                for(SwPostItItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+                for(SwMarginItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
                 {
                     if ((*i)->pPostIt==pPostIt)
                     {
@@ -872,7 +929,7 @@ Color SwPostItMgr::GetArrowColor(USHORT aDirection,unsigned long aPage) const
     }
 }
 
-bool SwPostItMgr::LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Rectangle aBorder, long lNeededHeight)
+bool SwPostItMgr::LayoutByPage(std::list<SwMarginWin*> &aVisiblePostItList,const Rectangle aBorder, long lNeededHeight)
 {
     /*** General layout idea:***/
     //  - if we have space left, we always move the current one up,
@@ -893,44 +950,27 @@ bool SwPostItMgr::LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Re
     bool            bScrollbars     = false;
 
     // do all neccessary resizings
-    /*
     if (lVisibleHeight < lNeededHeight)
     {
-        // resize the one we showed bigger on purpose and recalculate lNeededHeight
-        lNeededHeight = 0;
-        unsigned long aPostItHeight = 0;
-        for(SwPostIt_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+        // ok, now we have to really resize and adding scrollbars
+        const long lAverageHeight = (lVisibleHeight - aVisiblePostItList.size()*GetSpaceBetween()) / aVisiblePostItList.size();
+        if (lAverageHeight<GetMinimumSizeWithMeta())
         {
-            aPostItHeight = ( (*i)->GetTextHeight()==0 ? 30 : (*i)->GetTextHeight() ) + (*i)->GetMetaHeight();
-            if ((*i)->GetTextHeight() < (*i)->GetMinimumSizeWithoutMeta())
-                (*i)->SetSizePixel(Size((*i)->GetSizePixel().getWidth(), aPostItHeight));
-            lNeededHeight += aPostItHeight+POSTIT_SPACE_BETWEEN;
+            bScrollbars = true;
+            lTopBorder += GetSidebarScrollerHeight() + 10;
+            lBottomBorder -= (GetSidebarScrollerHeight() + 10);
+                for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+                    (*i)->SetSize(Size((*i)->VirtualSize().getWidth(),(*i)->GetMinimumSizeWithMeta()));
         }
-        // do we still need to resize now?
-        */
-        if (lVisibleHeight < lNeededHeight)
+        else
         {
-            // ok, now we have to really resize and adding scrollbars
-            const long lAverageHeight = (lVisibleHeight - aVisiblePostItList.size()*GetSpaceBetween()) / aVisiblePostItList.size();
-            if (lAverageHeight<GetMinimumSizeWithMeta())
+            for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
             {
-                bScrollbars = true;
-                lTopBorder += GetSidebarScrollerHeight() + 10;
-                lBottomBorder -= (GetSidebarScrollerHeight() + 10);
-
-                for(SwPostIt_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
-                        (*i)->SetSize(Size((*i)->VirtualSize().getWidth(),(*i)->GetMinimumSizeWithMeta()));
-            }
-            else
-            {
-                for(SwPostIt_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
-                {
-                    if ( (*i)->VirtualSize().getHeight() > lAverageHeight)
-                        (*i)->SetSize(Size((*i)->VirtualSize().getWidth(),lAverageHeight));
-                }
+                if ( (*i)->VirtualSize().getHeight() > lAverageHeight)
+                    (*i)->SetSize(Size((*i)->VirtualSize().getWidth(),lAverageHeight));
             }
         }
-    //}
+    }
 
     //start the real layout so nothing overlaps anymore
     if (aVisiblePostItList.size()>1)
@@ -941,9 +981,9 @@ bool SwPostItMgr::LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Re
             loop++;
               bDone = true;
             lSpaceUsed = lTopBorder + GetSpaceBetween();
-            for(SwPostIt_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+            for(SwMarginWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
             {
-                SwPostIt_iterator aNextPostIt = i;
+                SwMarginWin_iterator aNextPostIt = i;
                 ++aNextPostIt;
 
                 if (aNextPostIt !=aVisiblePostItList.end())
@@ -961,19 +1001,28 @@ bool SwPostItMgr::LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Re
                             // we have space left, so let's move the current one up
                             if ( ((*i)->VirtualPos().Y()- lTranslatePos - GetSpaceBetween()) > lTopBorder)
                             {
-                                (*i)->TranslateTopPosition(-1*(lTranslatePos+GetSpaceBetween()));
+                                if ((*aNextPostIt)->IsFollow())
+                                    (*i)->TranslateTopPosition(-1*(lTranslatePos+ANKORLINE_WIDTH));
+                                else
+                                    (*i)->TranslateTopPosition(-1*(lTranslatePos+GetSpaceBetween()));
                             }
                             else
                             {
                                 long lMoveUp = (*i)->VirtualPos().Y() - lTopBorder;
                                 (*i)->TranslateTopPosition(-1* lMoveUp);
-                                (*aNextPostIt)->TranslateTopPosition( (lTranslatePos+GetSpaceBetween()) - lMoveUp);
+                                if ((*aNextPostIt)->IsFollow())
+                                    (*aNextPostIt)->TranslateTopPosition( (lTranslatePos+ANKORLINE_WIDTH) - lMoveUp);
+                                else
+                                    (*aNextPostIt)->TranslateTopPosition( (lTranslatePos+GetSpaceBetween()) - lMoveUp);
                             }
                         }
                         else
                         {
                             // no space left, left move the next one down
-                            (*aNextPostIt)->TranslateTopPosition(lTranslatePos+GetSpaceBetween());
+                            if ((*aNextPostIt)->IsFollow())
+                                (*aNextPostIt)->TranslateTopPosition(lTranslatePos+ANKORLINE_WIDTH);
+                            else
+                                (*aNextPostIt)->TranslateTopPosition(lTranslatePos+GetSpaceBetween());
                         }
                     }
                     else
@@ -989,20 +1038,27 @@ bool SwPostItMgr::LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Re
                             }
                         }
                     }
-                    lSpaceUsed += (*i)->VirtualSize().Height() + GetSpaceBetween();
+                    if (aNextPostIt !=aVisiblePostItList.end() && (*aNextPostIt)->IsFollow())
+                        lSpaceUsed += (*i)->VirtualSize().Height() + ANKORLINE_WIDTH;
+                    else
+                        lSpaceUsed += (*i)->VirtualSize().Height() + GetSpaceBetween();
                 }
                 else
                 {
                     //(*i) is the last visible item
-                    SwPostIt_iterator aPrevPostIt = i;
+                    SwMarginWin_iterator aPrevPostIt = i;
                     --aPrevPostIt;
-                    lTranslatePos = ( (*aPrevPostIt)->VirtualPos().Y() + (*aPrevPostIt)->VirtualSize().Height() + GetSpaceBetween() ) - (*i)->VirtualPos().Y();
+                    //lTranslatePos = ( (*aPrevPostIt)->VirtualPos().Y() + (*aPrevPostIt)->VirtualSize().Height() + GetSpaceBetween() ) - (*i)->VirtualPos().Y();
+                    lTranslatePos = ( (*aPrevPostIt)->VirtualPos().Y() + (*aPrevPostIt)->VirtualSize().Height() ) - (*i)->VirtualPos().Y();
                     if (lTranslatePos > 0)
                     {
                         bDone = false;
                         if ( ((*i)->VirtualPos().Y()+ (*i)->VirtualSize().Height()+lTranslatePos) < lBottomBorder)
                         {
-                            (*i)->TranslateTopPosition(lTranslatePos+GetSpaceBetween());
+                            if ( (*i)->IsFollow() )
+                                (*i)->TranslateTopPosition(lTranslatePos+ANKORLINE_WIDTH);
+                            else
+                                (*i)->TranslateTopPosition(lTranslatePos+GetSpaceBetween());
                         }
                         else
                         {
@@ -1032,7 +1088,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Re
     else
     {
         // only one left, make sure it is not hidden at the top or bottom
-        SwPostIt_iterator i = aVisiblePostItList.begin();
+        SwMarginWin_iterator i = aVisiblePostItList.begin();
         lTranslatePos = lTopBorder - (*i)->VirtualPos().Y();
         if (lTranslatePos>0)
         {
@@ -1047,6 +1103,22 @@ bool SwPostItMgr::LayoutByPage(std::list<SwPostIt*> &aVisiblePostItList,const Re
     return bScrollbars;
  }
 
+/*
+void SwPostItMgr::AddRedlineComments(bool bCheckExistance, bool bFocus)
+{
+    bool bEmpty = mvPostItFlds.empty();
+    const SwRedlineTbl& aTable = mpView->GetDocShell()->GetDoc()->GetRedlineTbl();
+    for( USHORT i = 0; i < aTable.Count(); ++i )
+    {
+        SwRedline* pRedline = const_cast<SwRedline*>((aTable)[i]);
+        if ( pRedline->GetComment() != String(rtl::OUString::createFromAscii("")) )
+            InsertItem(pRedline, bCheckExistance, bFocus);
+    }
+    if (bEmpty && !mvPostItFlds.empty())
+        PrepareView(true);
+ }
+ */
+
 void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
 {
     bool bEmpty = mvPostItFlds.empty();
@@ -1059,7 +1131,7 @@ void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
         if ( pSwFmtFld->GetTxtFld())
         {
             if ( pSwFmtFld->IsFldInDoc() )
-                InsertFld(pSwFmtFld,bCheckExistance,bFocus);
+                InsertItem(pSwFmtFld,bCheckExistance,bFocus);
         }
         pFirst = aIter++;
     }
@@ -1069,15 +1141,14 @@ void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
         PrepareView(true);
 }
 
-void SwPostItMgr::RemovePostIts()
+void SwPostItMgr::RemoveMarginWin()
 {
     if (!mvPostItFlds.empty())
     {
-        for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         {
-            EndListening( *((*i)->pFmtFld) );
-            SwPostIt* pPostIt = (*i)->pPostIt;
-            delete pPostIt;
+            EndListening( *((*i)->GetBroadCaster()) );
+            delete (*i)->pPostIt;
             delete (*i);
         }
         mvPostItFlds.clear();
@@ -1087,12 +1158,14 @@ void SwPostItMgr::RemovePostIts()
     PreparePageContainer();
 }
 
-// copy to new vector, otherwise RemoveFld would operate and delete stuff on mvPostItFlds as well
-// RemoveFld will clean up the core field and visible postit if neccessary
+// copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFlds as well
+// RemoveItem will clean up the core field and visible postit if neccessary
 // we cannot just delete everything as before, as postits could move into change tracking
 void SwPostItMgr::Delete(String aAuthor)
 {
     mpWrtShell->StartAllAction();
+    if ( GetActivePostIt() && (GetActivePostIt()->GetAuthor()==aAuthor) )
+        SetActivePostIt(0);
     SwRewriter aRewriter;
     String aUndoString = SW_RES(STR_DELETE_AUTHOR_NOTES);
     aUndoString += aAuthor;
@@ -1101,11 +1174,10 @@ void SwPostItMgr::Delete(String aAuthor)
 
     std::vector<SwFmtFld*> aTmp;
     aTmp.reserve( mvPostItFlds.size() );
-    for(std::list<SwPostItItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; pPostIt++)
+    for(std::list<SwMarginItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; pPostIt++)
     {
-        SwPostItField* pPostItField = static_cast<SwPostItField*>((*pPostIt)->pFmtFld->GetFld());
-        if (pPostItField->GetPar1() == aAuthor)
-            aTmp.push_back( (*pPostIt)->pFmtFld );
+        if ((*pPostIt)->GetFmtFld() && ((*pPostIt)->pPostIt->GetAuthor() == aAuthor) )
+            aTmp.push_back( (*pPostIt)->GetFmtFld() );
     }
     for(std::vector<SwFmtFld*>::iterator i = aTmp.begin(); i!= aTmp.end() ; i++)
     {
@@ -1160,8 +1232,11 @@ void SwPostItMgr::Delete()
 
     std::vector<SwFmtFld*> aTmp;
     aTmp.reserve( mvPostItFlds.size() );
-    for(std::list<SwPostItItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; pPostIt++)
-        aTmp.push_back( (*pPostIt)->pFmtFld );
+    for(std::list<SwMarginItem*>::iterator pPostIt = mvPostItFlds.begin(); pPostIt!= mvPostItFlds.end() ; pPostIt++)
+    {
+        if ((*pPostIt)->GetFmtFld())
+            aTmp.push_back( (*pPostIt)->GetFmtFld() );
+    }
     for(std::vector<SwFmtFld*>::iterator i = aTmp.begin(); i!= aTmp.end() ; i++)
     {
         mpWrtShell->GotoField( *(*i) );
@@ -1195,14 +1270,17 @@ void SwPostItMgr::Delete()
 
 void SwPostItMgr::Hide(SwPostItField* pPostItField )
 {
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
-        SwPostItField* pField = static_cast<SwPostItField*>((*i)->pFmtFld->GetFld());
-        if (pPostItField==pField)
+        if ((*i)->GetFmtFld())
         {
-            (*i)->bShow = false;
-            (*i)->pPostIt->HideNote();
-            break;
+            SwPostItField* pField = static_cast<SwPostItField*>((*i)->GetFmtFld()->GetFld());
+            if (pPostItField==pField)
+            {
+                (*i)->bShow = false;
+                (*i)->pPostIt->HideNote();
+                break;
+            }
         }
     }
 
@@ -1211,10 +1289,9 @@ void SwPostItMgr::Hide(SwPostItField* pPostItField )
 
 void SwPostItMgr::Hide( const String& rAuthor )
 {
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
-        SwPostItField* pPostItField = static_cast<SwPostItField*>((*i)->pFmtFld->GetFld());
-        if ( rAuthor == pPostItField->GetPar1() )
+        if ( (*i)->pPostIt && ((*i)->pPostIt->GetAuthor() == rAuthor) )
         {
             (*i)->bShow  = false;
             (*i)->pPostIt->HideNote();
@@ -1226,7 +1303,7 @@ void SwPostItMgr::Hide( const String& rAuthor )
 
 void SwPostItMgr::Hide()
 {
-    for(SwPostItItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
         (*i)->bShow = false;
         (*i)->pPostIt->HideNote();
@@ -1236,7 +1313,7 @@ void SwPostItMgr::Hide()
 
 void SwPostItMgr::Show()
 {
-    for(SwPostItItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
         (*i)->bShow = true;
     }
@@ -1251,23 +1328,24 @@ void SwPostItMgr::Sort(const short aType)
         {
             case SORT_POS:
                 mvPostItFlds.sort(comp_pos);
-                //mvPostItFlds.sort(comp_id);
                 break;
+            /*
             case SORT_AUTHOR:
                 mvPostItFlds.sort(comp_author);
                 break;
             case SORT_DATE:
                 mvPostItFlds.sort(comp_date);
                 break;
+            */
         }
     }
 }
 
-SwPostIt* SwPostItMgr::GetPostIt(SwFmtFld* pFld) const
+SwMarginWin* SwPostItMgr::GetPostIt(SfxBroadcaster* pBroadcaster) const
 {
     for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
-        if ( (*i)->pFmtFld ==pFld)
+        if ( (*i)->GetBroadCaster() == pBroadcaster)
             return (*i)->pPostIt;
     }
     return NULL;
@@ -1277,17 +1355,17 @@ SwPostIt* SwPostItMgr::GetPostIt(SwPostItField* pFld) const
 {
     for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
-        if ( (*i)->pFmtFld->GetFld() == pFld)
-            return (*i)->pPostIt;
+        if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld() == pFld) )
+            return static_cast<SwPostIt*>((*i)->pPostIt);
     }
     return NULL;
 }
 
-SwPostIt* SwPostItMgr::GetPostIt( const SwFmtFld* pFld) const
+SwMarginWin* SwPostItMgr::GetPostIt( const SfxBroadcaster* pBroadcaster) const
 {
     for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
-        if ( (*i)->pFmtFld ==pFld)
+        if ( (*i)->GetBroadCaster() == pBroadcaster)
             return (*i)->pPostIt;
     }
     return NULL;
@@ -1297,8 +1375,8 @@ SwPostIt* SwPostItMgr::GetPostIt(const SwPostItField* pFld) const
 {
     for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
-        if ( (*i)->pFmtFld->GetFld() == pFld)
-            return (*i)->pPostIt;
+        if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld() == pFld))
+            return static_cast<SwPostIt*>((*i)->pPostIt);
     }
     return NULL;
 }
@@ -1311,9 +1389,9 @@ bool SwPostItMgr::ShowPreview(const SwField* pFld, SwFmtFld*& pFmtFld) const
         {
             for(const_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
             {
-                if ((*i)->pFmtFld->GetFld()==pFld)
+                if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld()==pFld) )
                 {
-                    pFmtFld = (*i)->pFmtFld;
+                    pFmtFld = (*i)->GetFmtFld();
                     const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
                     bool bTopPage = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y())).Y() >= (mPages[n]->mPageRect.Top()+aSidebarheight);
                     bool bBottomPage  = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y()+(*i)->pPostIt->GetSizePixel().Height())).Y() <= (mPages[n]->mPageRect.Bottom()-aSidebarheight);
@@ -1327,57 +1405,34 @@ bool SwPostItMgr::ShowPreview(const SwField* pFld, SwFmtFld*& pFmtFld) const
     return false;
 }
 
-SwPostIt* SwPostItMgr::GetNextPostIt(USHORT aDirection, SwPostIt* aPostIt)
+SwMarginWin* SwPostItMgr::GetNextPostIt(USHORT aDirection, SwMarginWin* aPostIt)
 {
     if (mvPostItFlds.size()>1)
     {
-        for(SwPostItItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         {
             if ( (*i)->pPostIt ==aPostIt)
             {
-                SwPostItItem_iterator iNextPostIt   = i;
-                /*
-                const Rectangle &aVisRect           = mpView->GetVisArea();
-                bool bVisible                       = false;
-                bool bDone                          = false;
-
-                while (!bDone)
+                SwMarginItem_iterator iNextPostIt   = i;
+                if (aDirection==KEY_PAGEUP)
                 {
-                */
-                    if (aDirection==KEY_PAGEUP)
+                    if ( iNextPostIt==mvPostItFlds.begin() )
                     {
-                        if ( iNextPostIt==mvPostItFlds.begin() )
-                        {
-                            //iNextPostIt = mvPostItFlds.end();
-                            return NULL;
-                        }
-                        --iNextPostIt;
-                    }
-                    else
-                    {
-                        iNextPostIt++;
-                        if ( iNextPostIt==mvPostItFlds.end() )
-                        {
-                            return NULL;
-                            //iNextPostIt = mvPostItFlds.begin();
-                        }
-                    }
-                    // lets quit, we are back at the beginng
-                    if ( (*iNextPostIt)->pPostIt==aPostIt)
                         return NULL;
-
-                    //bVisible = (*iNextPostIt)->pFmtFld->GetTxtFld()->GetTxtNode().IsInVisibleArea();
-                    //bVisible = bVisible && ((*iNextPostIt)->mPos.Bottom() < aVisRect.Bottom()) && ((*iNextPostIt)->mPos.Bottom() > aVisRect.Top());
-
-                    /*
-                    const bool bBottom  = mpEditWin->PixelToLogic(Point(0,(*iNextPostIt)->pPostIt->GetPosPixel().Y()+(*iNextPostIt)->pPostIt->GetSizePixel().Height())).Y() <= aVisRect.Bottom();
-                    const bool bTop = mpEditWin->PixelToLogic(Point(0,(*iNextPostIt)->pPostIt->GetPosPixel().Y())).Y() >= aVisRect.Top();
-                    bVisible = bBottom && bTop;
-
-                    bDone = bVisible && (*iNextPostIt)->bShow;
-
+                    }
+                    --iNextPostIt;
                 }
-                */
+                else
+                {
+                    iNextPostIt++;
+                    if ( iNextPostIt==mvPostItFlds.end() )
+                    {
+                        return NULL;
+                    }
+                }
+                // lets quit, we are back at the beginng
+                if ( (*iNextPostIt)->pPostIt==aPostIt)
+                    return NULL;
                 return (*iNextPostIt)->pPostIt;
             }
         }
@@ -1391,27 +1446,24 @@ long SwPostItMgr::GetNextBorder()
 {
     for (unsigned long n=0;n<mPages.size();n++)
     {
-        for(SwPostItItem_iterator b = mPages[n]->mList->begin(); b!= mPages[n]->mList->end(); b++)
+        for(SwMarginItem_iterator b = mPages[n]->mList->begin(); b!= mPages[n]->mList->end(); b++)
         {
             if ((*b)->pPostIt == mpActivePostIt)
             {
-                if (mPages[n]->bScrollbar)
+                SwMarginItem_iterator aNext = b;
+                aNext++;
+                bool bFollow = (aNext == mPages[n]->mList->end()) ? false : (*aNext)->pPostIt->IsFollow();
+                if ( mPages[n]->bScrollbar || bFollow )
                 {
                     return -1;
                 }
                 else
                 {
                     //if this is the last item, return the bottom border otherwise the next item
-                    SwPostItItem_iterator aNext = b;
-                    aNext++;
                     if (aNext == mPages[n]->mList->end())
-                    {
                         return mpEditWin->LogicToPixel(Point(0,mPages[n]->mPageRect.Bottom())).Y() - GetSpaceBetween();
-                    }
                     else
-                    {
                         return (*aNext)->pPostIt->GetPosPixel().Y() - GetSpaceBetween();
-                    }
                 }
             }
         }
@@ -1419,17 +1471,6 @@ long SwPostItMgr::GetNextBorder()
 
     DBG_ERROR("SwPostItMgr::GetNextBorder(): We have to find a next border here");
     return -1;
-}
-
-SwFmtFld* SwPostItMgr::GetFmtFld(SwPostIt* mpPostIt) const
-{
-    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-    {
-        if ( (*i)->pPostIt == mpPostIt)
-            return (*i)->pFmtFld;
-    }
-    DBG_WARNING("SwPostItMgr::GetFmtFld(): PostIt not found, something major must have gone wrong here");
-    return NULL;
 }
 
 void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
@@ -1444,13 +1485,13 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
                 // TODO: does not work properly if mouse and cursor was set
                 SwPostIt* pOldPostIt = GetPostIt(mShadowState.mpShadowFld);
                 if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
-                    pOldPostIt->SetShadowState(SS_NORMAL);
+                    pOldPostIt->SetViewState(SS_NORMAL);
             }
             //set new one, if it is not currently edited
             SwPostIt* pNewPostIt = GetPostIt(pFld);
             if (pNewPostIt && pNewPostIt->Shadow() && (pNewPostIt->Shadow()->GetShadowState() != SS_EDIT))
             {
-                pNewPostIt->SetShadowState(SS_VIEW);
+                pNewPostIt->SetViewState(SS_VIEW);
                 //remember our new field
                 mShadowState.mpShadowFld = pFld;
                 mShadowState.bCursor = false;
@@ -1476,7 +1517,7 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
                 SwPostIt* pOldPostIt = GetPostIt(mShadowState.mpShadowFld);
                 if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
                 {
-                    pOldPostIt->SetShadowState(SS_NORMAL);
+                    pOldPostIt->SetViewState(SS_NORMAL);
                     mShadowState.mpShadowFld = 0;
                 }
             }
@@ -1486,13 +1527,15 @@ void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
 
 void SwPostItMgr::PrepareView(bool bIgnoreCount)
 {
-    if (mvPostItFlds.empty() || bIgnoreCount)
+    if (!HasNotes() || bIgnoreCount)
     {
-        mpEditWin->Invalidate();
+        mpWrtShell->StartAllAction();
+        //mpEditWin->Invalidate(); // really not needed anymore??
         SwRootFrm* pLayout = mpWrtShell->GetLayout();
         if ( pLayout )
             SwPostItHelper::setSidebarChanged( pLayout,
                 mpWrtShell->getIDocumentSettingAccess()->get( IDocumentSettingAccess::BROWSE_MODE ) );
+        mpWrtShell->EndAllAction();
     }
 }
 
@@ -1586,12 +1629,12 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 
 void SwPostItMgr::CorrectPositions()
 {
-   if ( mbWaitingForCalcRects || mbLayouting || mvPostItFlds.empty())
+   if ( mbWaitingForCalcRects || mbLayouting || mvPostItFlds.empty() )
        return;
 
    // find first valid note
-   SwPostIt *pFirstPostIt = 0;
-   for(SwPostItItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+   SwMarginWin *pFirstPostIt = 0;
+   for(SwMarginItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
    {
        pFirstPostIt = (*i)->pPostIt;
        if (pFirstPostIt)
@@ -1611,7 +1654,7 @@ void SwPostItMgr::CorrectPositions()
        long aAnkorPosY = 0;
        for (unsigned long n=0;n<mPages.size();n++)
        {
-           for(SwPostItItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+           for(SwMarginItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
            {
                if ((*i)->bShow && (*i)->pPostIt)
                {
@@ -1635,7 +1678,6 @@ bool SwPostItMgr::ShowNotes() const
 
 bool SwPostItMgr::HasNotes() const
 {
-    //we just want to know if there are notes, no matter if visible or not
     return !mvPostItFlds.empty();
 }
 
@@ -1706,20 +1748,14 @@ Color SwPostItMgr::GetColorAnkor(sal_uInt16 aAuthorIndex)
         return Color(COL_WHITE);
 }
 
-void SwPostItMgr::SetColors(SwPostIt* pPostIt,SwPostItField* pFld)
-{
-    sal_uInt16 aIndex = SW_MOD()->InsertRedlineAuthor(pFld->GetPar1());
-    pPostIt->SetColor(GetColorDark(aIndex),GetColorLight(aIndex),GetColorAnkor(aIndex));
-}
-
-void SwPostItMgr::SetActivePostIt( SwPostIt* p)
+void SwPostItMgr::SetActivePostIt( SwMarginWin* p)
 {
     if ( p != mpActivePostIt )
     {
         // we need the temp variable so we can set mpActivePostIt before we call DeactivatePostIt
         // therefore we get a new layout in DOCCHANGED when switching from postit to document,
         // otherwise, GetActivePostIt() would still hold our old postit
-        SwPostIt* pActive = mpActivePostIt;
+        SwMarginWin* pActive = mpActivePostIt;
         mpActivePostIt = p;
         if (pActive)
         {
@@ -1728,7 +1764,7 @@ void SwPostItMgr::SetActivePostIt( SwPostIt* p)
         }
         if (mpActivePostIt)
         {
-            mpWrtShell->GotoField( *mpActivePostIt->Field() );
+            mpActivePostIt->GotoPos();
             mpView->AttrChangedNotify(0);
             mpActivePostIt->ActivatePostIt();
         }
@@ -1741,6 +1777,7 @@ IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
     if ( mbLayouting )
     {
         DBG_ERROR("Reentrance problem in Layout Manager!");
+        mbWaitingForCalcRects = false;
         return 0;
     }
 
@@ -1755,7 +1792,7 @@ IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
 
 void SwPostItMgr::Rescale()
 {
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         if ( (*i)->pPostIt )
             (*i)->pPostIt->Rescale();
 }
@@ -1792,14 +1829,159 @@ sal_Int32 SwPostItMgr::GetSidebarScrollerHeight() const
 
 void SwPostItMgr::SetSpellChecking()
 {
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         if ( (*i)->pPostIt )
             (*i)->pPostIt->SetSpellChecking();
 }
 
 void SwPostItMgr::SetReadOnlyState()
 {
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
         if ( (*i)->pPostIt )
             (*i)->pPostIt->SetReadonly( mbReadOnly );
+}
+
+void SwPostItMgr::StartSearchAndReplace(const SvxSearchItem& rSearchItem)
+{
+    for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        if ( (*i)->pPostIt )
+        {
+            ESelection aOldSelection = (*i)->pPostIt->View()->GetSelection();
+            (*i)->pPostIt->View()->SetSelection(ESelection(0,0,0,0));
+            if (!(*i)->pPostIt->View()->StartSearchAndReplace( rSearchItem ))
+                (*i)->pPostIt->View()->SetSelection(aOldSelection);
+                /*          if ((*i)->pPostIt->View()->StartSearchAndReplace( rSearchItem ))
+                (*i)->pPostIt->GrabFocus();
+            return;
+        */
+        }
+
+    /*
+    673                                                     BOOL bFromStart,
+    674                                                     BOOL bApi,
+    675                                                     BOOL bRecursive)
+    676 {
+    677     ExtTextView* pTextView = aEditWin.GetTextView();
+    678     TextSelection aSel;
+    679     TextPaM aPaM;
+    680
+    681     BOOL bForward = !rSearchItem.GetBackward();
+    682     BOOL bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
+    683
+    684     if( !bForward )
+    685         aPaM = TextPaM( (ULONG)-1, (USHORT)-1 );
+    686
+    687     if( bFromStart )
+    688     {
+    689         aSel = pTextView->GetSelection();
+    690         pTextView->SetSelection( TextSelection( aPaM, aPaM ));
+    691     }
+    692
+    693     SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
+    694     aSearchOpt.Locale = SvxCreateLocale(
+    695         static_cast< LanguageType >( GetAppLanguage() ) );
+    696
+    697     USHORT nFound;
+    698     BOOL bAll = FALSE;
+    699     switch( rSearchItem.GetCommand() )
+    700     {
+    701     case SVX_SEARCHCMD_FIND:
+    702     case SVX_SEARCHCMD_FIND_ALL:
+    703         nFound = pTextView->Search( aSearchOpt, bForward );
+    704         break;
+    705
+    706     case SVX_SEARCHCMD_REPLACE_ALL: bAll = TRUE;
+    707     case SVX_SEARCHCMD_REPLACE:
+    708         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
+    709         break;
+    710
+    711     default:
+    712         nFound = 0;
+    713     }
+    714
+    715     if( !nFound )
+    716     {
+    717         BOOL bNotFoundMessage = FALSE;
+    718         if(!bRecursive)
+    719         {
+    720             if(!bFromStart)
+    721             {
+    722                 bNotFoundMessage = bAtStart;
+    723             }
+    724             else
+    725             {
+    726                 bNotFoundMessage = TRUE;
+    727                 pTextView->SetSelection( aSel );
+    728             }
+    729         }
+    730         else if(bAtStart)
+    731         {
+    732             bNotFoundMessage = TRUE;
+    733         }
+    734
+    735
+    736         if(!bApi)
+    737             if(bNotFoundMessage)
+    738             {
+    739                 InfoBox( 0, SW_RES(MSG_NOT_FOUND)).Execute();
+    740             }
+    741             else if(!bRecursive && RET_YES ==
+    742                 QueryBox(0, SW_RES( bForward ? MSG_SEARCH_END
+    743                                              : MSG_SEARCH_START)).Execute())
+    744             {
+    745                 pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
+    746                 StartSearchAndReplace( rSearchItem, FALSE, FALSE, TRUE );
+    747             }
+    748     }
+    749     return nFound;
+
+    */
+}
+
+sal_uInt16 SwPostItMgr::Replace(SvxSearchItem* pItem)
+{
+    SwMarginWin* pWin = GetActivePostIt();
+    sal_uInt16 aResult = pWin->View()->StartSearchAndReplace( *pItem );
+    if (!aResult)
+        SetActivePostIt(0);
+    return aResult;
+}
+
+
+sal_uInt16 SwPostItMgr::FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bSrchForward)
+{
+    SwMarginWin* pWin = GetActivePostIt();
+    SvxSearchItem aItem(SID_SEARCH_ITEM );
+    aItem.SetSearchOptions(rSearchOptions);
+    aItem.SetBackward(!bSrchForward);
+    sal_uInt16 aResult = pWin->View()->StartSearchAndReplace( aItem );
+    if (!aResult)
+        SetActivePostIt(0);
+    return aResult;
+}
+
+sal_uInt16 SwPostItMgr::SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions, bool bSrchForward)
+{
+    sal_uInt16 aResult = 0;
+    SwMarginWin* pWin = GetPostIt(&pFld);
+    if (pWin)
+    {
+        ESelection aOldSelection = pWin->View()->GetSelection();
+        if (bSrchForward)
+            pWin->View()->SetSelection(ESelection(0,0,0,0));
+        else
+            pWin->View()->SetSelection(ESelection(0xFFFF,0xFFFF,0xFFFF,0xFFFF));
+        SvxSearchItem aItem(SID_SEARCH_ITEM );
+        aItem.SetSearchOptions(rSearchOptions);
+        aItem.SetBackward(!bSrchForward);
+        aResult = pWin->View()->StartSearchAndReplace( aItem );
+        if (!aResult)
+            pWin->View()->SetSelection(aOldSelection);
+        else
+        {
+            SetActivePostIt(pWin);
+            MakeVisible(pWin);
+        }
+    }
+    return aResult;
 }

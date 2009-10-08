@@ -105,7 +105,9 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_RASTER_RESOLUTION_X,
     HANDLE_VIEWSET_RASTER_RESOLUTION_Y,
     HANDLE_VIEWSET_RASTER_SUBDIVISION_X,
-    HANDLE_VIEWSET_RASTER_SUBDIVISION_Y
+    HANDLE_VIEWSET_RASTER_SUBDIVISION_Y,
+    HANDLE_VIEWSET_HORI_RULER_METRIC,
+    HANDLE_VIEWSET_VERT_RULER_METRIC
 };
 enum SwPrintSettingsPropertyHandles
 {
@@ -131,6 +133,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
     static PropertyInfo aViewSettingsMap_Impl[] =
     {
         { RTL_CONSTASCII_STRINGPARAM ( "HelpURL" ),             HANDLE_VIEWSET_HELP_URL             , CPPUTYPE_OUSTRING,    PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "HorizontalRulerMetric"),HANDLE_VIEWSET_HORI_RULER_METRIC   , CPPUTYPE_INT32, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsRasterVisible"),      HANDLE_VIEWSET_IS_RASTER_VISIBLE,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
@@ -167,6 +170,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "ShowVertScrollBar"),    HANDLE_VIEWSET_VSCROLL              , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "SmoothScrolling"),      HANDLE_VIEWSET_SMOOTH_SCROLLING     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "SolidMarkHandles"),     HANDLE_VIEWSET_SOLID_MARK_HANDLES   , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "VerticalRulerMetric"),  HANDLE_VIEWSET_VERT_RULER_METRIC   , CPPUTYPE_INT32, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ZoomType"),             HANDLE_VIEWSET_ZOOM_TYPE            , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ZoomValue"),            HANDLE_VIEWSET_ZOOM                 , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
@@ -250,7 +254,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeE
     if(!pxViewSettings)
     {
         ((SwXModule*)this)->pxViewSettings = new Reference< XPropertySet > ;
-        DBG_ERROR("Web oder Text?")
+        DBG_ERROR("Web oder Text?");
         *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( sal_False, 0 ) );
     }
     return *pxViewSettings;
@@ -264,7 +268,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     if(!pxPrintSettings)
     {
         ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
-        DBG_ERROR("Web oder Text?")
+        DBG_ERROR("Web oder Text?");
         *pxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
     }
     return *pxPrintSettings;
@@ -596,6 +600,10 @@ SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
 , mpConstViewOption ( NULL )
 , bObjectValid(sal_True)
 , bWeb(bWebView)
+, eHRulerUnit( FUNIT_CM )
+, mbApplyHRulerMetric( sal_False )
+, eVRulerUnit( FUNIT_CM )
+, mbApplyVRulerMetric( sal_False )
 {
     // This property only exists if we have a view (ie, not at the module )
     if ( !pView )
@@ -769,6 +777,34 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 throw UnknownPropertyException();
         }
         break;
+        case HANDLE_VIEWSET_HORI_RULER_METRIC:
+        case HANDLE_VIEWSET_VERT_RULER_METRIC:
+        {
+            sal_Int32 nUnit = -1;
+            if( rValue >>= nUnit )
+            switch( nUnit )
+            {
+                case FUNIT_MM:
+                case FUNIT_CM:
+                case FUNIT_POINT:
+                case FUNIT_PICA:
+                case FUNIT_INCH:
+                if( rInfo.mnHandle == HANDLE_VIEWSET_HORI_RULER_METRIC )
+                {
+                    eHRulerUnit = nUnit;
+                    mbApplyHRulerMetric = sal_True;
+                }
+                else
+                {
+                    eVRulerUnit = nUnit;
+                    mbApplyVRulerMetric = sal_True;
+                }
+                break;
+                default:
+                    throw IllegalArgumentException();
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -777,13 +813,31 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
 void SwXViewSettings::_postSetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    if(mbApplyZoom && pView)
-        pView->SetZoom( (SvxZoomType)mpViewOption->GetZoomType(),
-                        mpViewOption->GetZoom(), sal_True );
+    if( pView )
+    {
+        if(mbApplyZoom )
+            pView->SetZoom( (SvxZoomType)mpViewOption->GetZoomType(),
+                            mpViewOption->GetZoom(), sal_True );
+        if(mbApplyHRulerMetric)
+            pView->ChangeTabMetric((FieldUnit)eHRulerUnit);
+        if(mbApplyVRulerMetric)
+            pView->ChangeVLinealMetric((FieldUnit)eVRulerUnit);
+
+    }
+    else
+    {
+        if(mbApplyHRulerMetric)
+            SW_MOD()->ApplyRulerMetric( (FieldUnit)eHRulerUnit, sal_True, bWeb );
+        if(mbApplyVRulerMetric)
+            SW_MOD()->ApplyRulerMetric( (FieldUnit)eVRulerUnit, sal_False, bWeb );
+    }
+
 
     SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? VIEWOPT_DEST_VIEW_ONLY
                                                   : bWeb ? VIEWOPT_DEST_WEB
                                                           : VIEWOPT_DEST_TEXT );
+
+
     delete mpViewOption;
     mpViewOption = NULL;
 }
@@ -899,6 +953,38 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             }
             else
                 throw UnknownPropertyException();
+        }
+        break;
+        case HANDLE_VIEWSET_HORI_RULER_METRIC:
+        {
+            if ( pView )
+            {
+                FieldUnit eUnit;
+                pView->GetHLinealMetric( eUnit );
+                rValue <<= (sal_Int32)eUnit;
+            }
+            else
+            {
+                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( bWeb );
+                rValue <<= (sal_Int32)pUsrPref->GetHScrollMetric();
+            }
+            bBool = sal_False;
+        }
+        break;
+        case HANDLE_VIEWSET_VERT_RULER_METRIC:
+        {
+            if ( pView )
+            {
+                FieldUnit eUnit;
+                pView->GetVLinealMetric( eUnit );
+                rValue <<= (sal_Int32)eUnit;
+            }
+            else
+            {
+                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( bWeb );
+                rValue <<= (sal_Int32)pUsrPref->GetVScrollMetric();
+            }
+            bBool = sal_False;
         }
         break;
         default: DBG_ERROR("Diese Id gibt's nicht!");

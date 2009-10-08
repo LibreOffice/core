@@ -1331,14 +1331,18 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             }
             SwDocShell *pDocShell(pDoc->GetDocShell());
             DBG_ASSERT(pDocShell, "no SwDocShell");
-            if (pDocShell) {
-                uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                    pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference<document::XDocumentProperties> xDocProps(
-                    xDPS->getDocumentProperties());
-                DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
-                if (IsNewDoc() && xDocProps.is() &&
-                    !ParseMetaOptions( xDocProps, pHTTPHeader ) )
+            if (pDocShell)
+            {
+                uno::Reference<document::XDocumentProperties> xDocProps;
+                if (IsNewDoc())
+                {
+                    const uno::Reference<document::XDocumentPropertiesSupplier>
+                        xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
+                    xDocProps = xDPS->getDocumentProperties();
+                    DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+                }
+                // always call ParseMetaOptions, it sets the encoding (#i96700#)
+                if (!ParseMetaOptions( xDocProps, pHTTPHeader ) && IsNewDoc())
                 {
                     ParseMoreMetaOptions();
                 }

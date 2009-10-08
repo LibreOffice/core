@@ -301,7 +301,7 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
 BOOL SwTransparencyGrf::QueryValue( uno::Any& rVal,
                                         BYTE ) const
 {
-    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
+    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
     DBG_ASSERT( 0 <= nRet && nRet <= 100, "value out of range" );
     rVal <<= nRet;
@@ -312,7 +312,7 @@ BOOL SwTransparencyGrf::PutValue( const uno::Any& rVal,
                                         BYTE )
 {
     //temporary conversion until this is a SfxInt16Item!
-    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
+    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
         return FALSE;

@@ -1148,7 +1148,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
 
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
-    ubidi_setPara( pBidi, pLineString, nLen, nDefaultDir, NULL, &nError );
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, NULL, &nError ); // UChar != sal_Unicode in MinGW
 
     xub_StrLen nTmpPos;
     sal_Bool bOutOfBounds = sal_False;

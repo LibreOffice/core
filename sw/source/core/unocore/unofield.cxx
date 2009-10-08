@@ -925,28 +925,28 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
   -----------------------------------------------------------------------*/
 void SwXFieldMaster::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 11:08:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXFieldMaster::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 11:08:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXFieldMaster::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 11:08:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXFieldMaster::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 /*-- 25.02.99 11:01:57---------------------------------------------------
@@ -1969,7 +1969,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         {
             // hier muss ein neuer Feldtyp angelegt werden und
             // das Feld an den neuen Typ umgehaengt werden
-            DBG_WARNING("not implemented")
+            DBG_WARNING("not implemented");
         }
         else
         {
@@ -2283,28 +2283,28 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
   -----------------------------------------------------------------------*/
 void SwXTextField::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 11:37:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextField::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 11:37:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextField::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 14.12.98 11:37:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextField::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /* -----------------------------23.03.01 13:15--------------------------------
 

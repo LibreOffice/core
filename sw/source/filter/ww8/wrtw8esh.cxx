@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8esh.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.105.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,23 +223,23 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName,
     OutField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              WRITEFIELD_CLOSE);
 
-    ::sw::WW8FFData * pFFData = new ::sw::WW8FFData();
+    ::sw::WW8FFData aFFData;
 
-    pFFData->setType(2);
-    pFFData->setName(rName);
-    pFFData->setHelp(rHelp);
-    pFFData->setStatus(rToolTip);
+    aFFData.setType(2);
+    aFFData.setName(rName);
+    aFFData.setHelp(rHelp);
+    aFFData.setStatus(rToolTip);
 
     sal_uInt32 nListItems = rListItems.getLength();
 
     for (sal_uInt32 i = 0; i < nListItems; i++)
     {
         if (i < 0x20 && rSelected == rListItems[i])
-            pFFData->setResult(::sal::static_int_cast<sal_uInt8>(i));
-        pFFData->addListboxEntry(rListItems[i]);
+            aFFData.setResult(::sal::static_int_cast<sal_uInt8>(i));
+        aFFData.addListboxEntry(rListItems[i]);
     }
 
-    pFFData->Write(pDataStrm);
+    aFFData.Write(pDataStrm);
 
 }
 
@@ -268,10 +268,10 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr1 ), aArr1 );
 
-    ::sw::WW8FFData * pFFData = new ::sw::WW8FFData();
+    ::sw::WW8FFData aFFData;
 
-    pFFData->setType(1);
-    pFFData->setCheckboxHeight(0x14);
+    aFFData.setType(1);
+    aFFData.setCheckboxHeight(0x14);
 
     sal_Int16 nTemp = 0;
     xPropSet->getPropertyValue(C2U("DefaultState")) >>= nTemp;
@@ -285,10 +285,10 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
         switch (nIsChecked)
         {
             case false:
-                pFFData->setResult(0);
+                aFFData.setResult(0);
                 break;
             case true:
-                pFFData->setResult(1);
+                aFFData.setResult(1);
                 break;
             default:
                 ASSERT(!this, "how did that happen");
@@ -300,23 +300,23 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     if (xPropSetInfo->hasPropertyByName(sName))
     {
         xPropSet->getPropertyValue(sName) >>= aStr;
-        pFFData->setName(aStr);
+        aFFData.setName(aStr);
     }
 
     static ::rtl::OUString sHelpText(C2U("HelpText"));
     if (xPropSetInfo->hasPropertyByName(sHelpText))
     {
         xPropSet->getPropertyValue(sHelpText) >>= aStr;
-        pFFData->setHelp(aStr);
+        aFFData.setHelp(aStr);
     }
     static ::rtl::OUString sHelpF1Text(C2U("HelpF1Text"));
     if (xPropSetInfo->hasPropertyByName(sHelpF1Text))
     {
         xPropSet->getPropertyValue(sHelpF1Text) >>= aStr;
-        pFFData->setStatus(aStr);
+        aFFData.setStatus(aStr);
     }
 
-    pFFData->Write(pDataStrm);
+    aFFData.Write(pDataStrm);
 
     OutField(0, ww::eFORMCHECKBOX, aEmptyStr, WRITEFIELD_CLOSE);
 }
@@ -343,13 +343,13 @@ void SwWW8Writer::DoFormText(const SwInputField * pFld)
     pChpPlc->AppendFkpEntry(Strm().Tell(),
                 sizeof( aArr1 ), aArr1 );
 
-    ::sw::WW8FFData * pFFData = new ::sw::WW8FFData();
+    ::sw::WW8FFData aFFData;
 
-    pFFData->setType(0);
-    pFFData->setName(pFld->GetPar2());
-    pFFData->setHelp(pFld->GetHelp());
-    pFFData->setStatus(pFld->GetToolTip());
-    pFFData->Write(pDataStrm);
+    aFFData.setType(0);
+    aFFData.setName(pFld->GetPar2());
+    aFFData.setHelp(pFld->GetHelp());
+    aFFData.setStatus(pFld->GetToolTip());
+    aFFData.Write(pDataStrm);
 
     OutField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
 
@@ -2716,8 +2716,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
         // SdrExchangeView aExchange(pModel, pDevice);
         SdrView aExchange(pModel, pDevice);
 
-        Graphic aGraphic(aExchange.GetObjGraphic(pModel,
-            const_cast<SdrObject*>(pSdrObj)));
+        Graphic aGraphic(aExchange.GetObjGraphic(pModel, pSdrObj));
 
         EscherPropertyContainer aPropOpt;
         WriteOLEPicture(aPropOpt, 0xa00 | SHAPEFLAG_OLESHAPE, aGraphic,

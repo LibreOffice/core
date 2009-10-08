@@ -32,6 +32,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=tablecore
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -40,9 +41,6 @@ TARGET=tablecore
 .INCLUDE :	$(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
-
-EXCEPTIONSFILES = \
-        $(SLO)$/swnewtable.obj
 
 SLOFILES =	\
         $(SLO)$/swtable.obj \

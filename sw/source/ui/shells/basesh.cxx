@@ -1222,7 +1222,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_PAGE_STYLE_SET_PAPER_SIZE:
         case FN_PAGE_STYLE_SET_PAPER_BIN:
         {
-            DBG_ERROR("not implemented")
+            DBG_ERROR("not implemented");
         }
         break;
 

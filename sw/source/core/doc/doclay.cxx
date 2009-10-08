@@ -30,6 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#include <svtools/linguprops.hxx>
+#include <svtools/lingucfg.hxx>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <hintids.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -692,8 +695,12 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( FLY_IN_CNTNT == eAnchorId )
     {
         xub_StrLen nStt = rAnchPos.nContent.GetIndex();
-        rAnchPos.nNode.GetNode().GetTxtNode()->InsertItem(
-                                        SwFmtFlyCnt( pFmt ), nStt, nStt );
+        SwTxtNode * pTxtNode = rAnchPos.nNode.GetNode().GetTxtNode();
+
+        ASSERT(pTxtNode!= 0, "There should be a SwTxtNode!");
+
+        if (pTxtNode != NULL)
+            pTxtNode->InsertItem(SwFmtFlyCnt( pFmt ), nStt, nStt );
     }
 
     if( SFX_ITEM_SET != pFmt->GetAttrSet().GetItemState( RES_FRM_SIZE ))
@@ -1849,7 +1856,12 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         if (GetRootFrm()->IsNeedGrammarCheck())
         {
             BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
-            if (bIsOnlineSpell)
+
+            // right now we don't have view options for automatic grammar checking. Thus...
+            sal_Bool bIsAutoGrammar = sal_False;
+            SvtLinguConfig().GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
+
+            if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( *this, *GetRootFrm() );
         }
 

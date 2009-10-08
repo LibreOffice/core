@@ -32,17 +32,22 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <sfx2/docfile.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sot/formats.hxx>
+#include <sot/storage.hxx>
+#include <svtools/parhtml.hxx>
 #include <tools/string.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 #include <tools/ref.hxx>
-#include <sot/formats.hxx>
-#include "swdllapi.h"
+#include <tools/urlobj.hxx>
+#include <swdllapi.h>
 #include <swtypes.hxx>
 #include <docfac.hxx>   // SwDocFac
-
-#include <sot/storage.hxx>
+#include <errhdl.hxx>
+#include <iodetect.hxx>
 
 // einige Forward - Deklarationen
 class SfxFilterContainer;
@@ -210,7 +215,7 @@ protected:
 #define SW_STREAM_READER    1
 #define SW_STORAGE_READER   2
 
-class Reader
+class SW_DLLPUBLIC Reader
 {
     friend class SwReader;
     SwDoc* pTemplate;
@@ -292,12 +297,6 @@ private:
     virtual int SetStrmStgPtr();
 };
 
-class RtfReader: public Reader
-{
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
-};
-
-
 class AsciiReader: public Reader
 {
     friend class SwReader;
@@ -311,7 +310,7 @@ public:
     virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 */
-class StgReader : public Reader
+class SW_DLLPUBLIC StgReader : public Reader
 {
     String aFltName;
 
@@ -411,7 +410,7 @@ public:
 extern void _InitFilter();
 extern void _FinitFilter();
 
-extern SwRead ReadRtf, ReadAscii, /*ReadSwg, ReadSw3, */ReadHTML, ReadXML;
+extern SwRead ReadAscii, /*ReadSwg, ReadSw3, */ReadHTML, ReadXML;
 
 //SW_DLLPUBLIC SwRead SwGetReaderSw3();
 SW_DLLPUBLIC SwRead SwGetReaderXML();
@@ -435,7 +434,7 @@ extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden s
 class IDocumentSettingAccess;
 class IDocumentStylePoolAccess;
 
-class Writer : public SvRefBase
+class SW_DLLPUBLIC Writer : public SvRefBase
 {
     SwAsciiOptions aAscOpts;
     String          sBaseURL;
@@ -477,6 +476,7 @@ public:
     BOOL bASCII_ParaAsBlanc : 1;
     BOOL bASCII_NoLastLineEnd : 1;
     BOOL bUCS2_WithStartChar : 1;
+    BOOL bExportPargraphNumbering : 1;
 
     BOOL bBlock : 1;
     BOOL bOrganizerMode : 1;
@@ -554,7 +554,7 @@ SV_DECL_REF(Writer)
 SV_IMPL_REF(Writer)
 
 // Basisklasse fuer alle Storage-Writer
-class StgWriter : public Writer
+class SW_DLLPUBLIC StgWriter : public Writer
 {
 protected:
     String aFltName;
@@ -635,81 +635,44 @@ public:
 /*  */
 /////////////////////////////////////////////////////////////////////////////
 
+typedef Reader* (*FnGetReader)();
+typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
+
+struct SwReaderWriterEntry
+{
+    Reader* pReader;
+    FnGetReader fnGetReader;
+    FnGetWriter fnGetWriter;
+    BOOL bDelReader;
+
+    SwReaderWriterEntry( const FnGetReader fnReader, const FnGetWriter fnWriter, BOOL bDel )
+        : pReader( NULL ), fnGetReader( fnReader ), fnGetWriter( fnWriter ), bDelReader( bDel )
+    {}
+
+    /// Get access to the reader
+    Reader* GetReader();
+
+    /// Get access to the writer
+    void GetWriter( const String& rNm, const String& rBaseURL, WriterRef& xWrt ) const;
+};
+
+namespace SwReaderWriter
+{
+    /// Return reader based on ReaderWriterEnum
+    Reader* GetReader( ReaderWriterEnum eReader );
+
+    /// Return reader based on the name
+    Reader* GetReader( const String& rFltName );
+
+    /// Return writer based on the name
+    void GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xWrt );
+}
+
 void GetRTFWriter( const String&, const String&, WriterRef& );
 void GetASCWriter( const String&, const String&, WriterRef& );
 //void GetSw3Writer( const String&, const String&, WriterRef& );
 void GetHTMLWriter( const String&, const String&, WriterRef& );
 void GetXMLWriter( const String&, const String&, WriterRef& );
-
-// Die folgende Klasse ist ein Wrappe fuer die Basic-I/O-Funktionen
-// des Writer 3.0. Alles ist statisch. Alle u.a. Filternamen sind die
-// Writer-internen Namen, d.h. die namen, die in INSTALL.INI vor dem
-// Gleichheitszeichen stehen, z.b. SWG oder ASCII.
-
-class SW_DLLPUBLIC SwIoSystem
-{
-public:
-        // suche ueber den internen FormatNamen den Filtereintrag
-    static const SfxFilter* GetFilterOfFormat( const String& rFormat,
-                                const SfxFilterContainer* pCnt = 0 );
-
-    // Feststellen des zu verwendenden Filters fuer die uebergebene
-    // Datei. Der Filtername wird zurueckgeliefert. Konnte kein Filter
-    // zurueckgeliefert werden, wird der Name des ASCII-Filters geliefert!
-    static const SfxFilter* GetFileFilter( const String& rFileName,
-                                            const String& rPrefFltName,
-                                            SfxMedium* pMedium = 0 );
-
-        // Feststellen ob das File in dem vorgegebenen Format vorliegt.
-        // Z.z werden nur unsere eigene Filter unterstuetzt!!
-    static BOOL IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
-                                    const SfxFilter** ppFlt = 0 );
-
-    static BOOL IsValidStgFilter( SotStorage& , const SfxFilter& );
-    static BOOL IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
-
-        static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
-            CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false);
-//    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
-
-    static const SfxFilter* GetTextFilter(const sal_Char* pBuf, ULONG nLen);
-    // gebe einen bestimmten Reader zurueck
-    static Reader* GetReader( const String& rFltName );
-    // gebe einen bestimmten Writer zurueck
-    static void GetWriter( const String& rFltName, const String& rBaseURL, WriterRef& xWrt );
-
-    static const String GetSubStorageName( const SfxFilter& rFltr );
-};
-
-
-// ----------------------------------
-// diese Filter sind immer vorhanden und koennen ueber die
-// Formatnamen gesucht werden. Alle anderen Filter sind nur intern
-// bekannt. Die UI-Seite benutzt die GetReader()/GetWriter() -Funktionen,
-// um die speziellen zu erhalten.
-
-//extern const sal_Char __FAR_DATA FILTER_SWG[];  // SWG-Filter
-extern const sal_Char __FAR_DATA FILTER_RTF[];  // RTF-Filter
-extern const sal_Char __FAR_DATA FILTER_TEXT[]; // Text-Filter mit Default-CodeSet
-extern const sal_Char __FAR_DATA FILTER_BAS[];  // StarBasic (identisch mit ANSI)
-//extern const sal_Char __FAR_DATA FILTER_W4W[];    // W4W-Filter
-extern const sal_Char __FAR_DATA FILTER_WW8[];  // WinWord 97-Filter
-//extern const sal_Char __FAR_DATA FILTER_SW3[];    // SW3-Storage Filter
-//extern const sal_Char __FAR_DATA FILTER_SW4[];    // SW4-Storage Filter
-//extern const sal_Char __FAR_DATA FILTER_SW4[];    // SW4-Storage Filter
-//extern const sal_Char __FAR_DATA FILTER_SW5[];    // SW5-Storage Filter
-//extern const sal_Char __FAR_DATA FILTER_SWGV[];   // SWG-Vorlagen Filter
-//extern const sal_Char __FAR_DATA FILTER_SW3V[];   // SW3-Storage Vorlagen Filter
-//extern const sal_Char __FAR_DATA FILTER_SW4V[];   // SW4-Storage Vorlagen Filter
-//extern const sal_Char __FAR_DATA FILTER_SW5V[];   // SW5-Storage Vorlagen Filter
-//extern const sal_Char __FAR_DATA FILTER_SWW4V[];  // SW/Web Storage Vorlagen Filter
-//extern const sal_Char __FAR_DATA FILTER_SWW5V[];  // SW/Web Storage Vorlagen Filter
-extern const sal_Char __FAR_DATA FILTER_TEXT_DLG[]; // text filter with encoding dialog
-extern const sal_Char __FAR_DATA FILTER_XML[];  // XML filter
-extern const sal_Char __FAR_DATA FILTER_XMLV[]; // XML filter
-extern const sal_Char __FAR_DATA FILTER_XMLVW[];    // XML filter
-
-SW_DLLPUBLIC const sal_Char* GetFILTER_XML();
-SW_DLLPUBLIC const sal_Char* GetFILTER_WW8();
+void GetWW8Writer( const String&, const String&, WriterRef& );
 
 #endif

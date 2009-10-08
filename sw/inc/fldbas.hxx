@@ -439,7 +439,7 @@ public:
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt);
 };
 
-class SwFormulaField : public SwValueField
+class SW_DLLPUBLIC SwFormulaField : public SwValueField
 {
     String sFormula;
 

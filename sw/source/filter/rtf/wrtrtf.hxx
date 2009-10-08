@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtrtf.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,6 +145,8 @@ public:
     BOOL bOutSection : 1;           // TRUE: Section PageDesc ausgeben
     BOOL bIgnoreNextPgBreak : 1;    // TRUE: naechsten PageDesc/Break ignorieren
     BOOL bAssociated : 1;           // use associated tokens
+
+    BOOL bNonStandard : 1;          // use non-standard tags (for cut and paste)
 
     // --- public Methoden ------------------------------------------------
 

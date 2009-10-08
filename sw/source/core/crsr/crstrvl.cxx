@@ -904,8 +904,11 @@ USHORT SwCrsrShell::GetOutlinePos( BYTE nLevel )
     while( nPos-- )     // immer den davor testen !
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
-        if( ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() <= nLevel )
+
+        //if( ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() <= nLevel )//#outline level,zhaojianwei
+        if( ((SwTxtNode*)pNd)->GetAttrOutlineLevel()-1 <= nLevel )//<-end,zhaojianwei
             return nPos;
+
     }
     return USHRT_MAX;       // davor keiner mehr also Ende
 }
@@ -935,11 +938,13 @@ BOOL SwCrsrShell::MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
 
     if( bWithChilds )
     {
-        BYTE nLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();
+        //BYTE nLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+        const int nLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end.zhaojianwei
         for( ++nEndPos; nEndPos < rOutlNds.Count(); ++nEndPos )
         {
             pEndNd = rOutlNds[ nEndPos ];
-            BYTE nNxtLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();
+            //BYTE nNxtLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+            const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nNxtLevel <= nLevel )
                 break;          // EndPos steht jetzt auf dem naechsten
         }

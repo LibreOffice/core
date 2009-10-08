@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swmn_tmpl.hrc,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +91,10 @@
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_OVERLINE\
                 };\
                 MenuItem\
                 {\
@@ -216,7 +220,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         {                                                                   \
             Identifier = FN_EDIT_FOOTNOTE ;                                 \
             HelpID = FN_EDIT_FOOTNOTE ;                                     \
-            Text [ en-US ] = "Footnote~..." ;                          \
+            Text [ en-US ] = "Footnote/Endnote~..." ;                          \
         };
     #define _MN_EDIT_IDX_ENTRY_DLG                                          \
         MenuItem                                                            \
@@ -225,6 +229,20 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
             HelpID = FN_EDIT_IDX_ENTRY_DLG ;                                \
             Text [ en-US ] = "Inde~x Entry..." ;                       \
     };
+
+#define _MN_EDIT_REDLINE                                          \
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_REDLINE_ACCEPT_DIRECT;                            \
+            HelpID = FN_REDLINE_ACCEPT_DIRECT ;                                \
+            Text [ en-US ] = "Accept Change" ;                       \
+        };\
+        MenuItem                                                            \
+        {                                                                   \
+            Identifier = FN_REDLINE_REJECT_DIRECT ;                            \
+            HelpID = FN_REDLINE_REJECT_DIRECT ;                                \
+            Text [ en-US ] = "Reject Change" ;                       \
+        };
 #define _MN_EDIT_BIB_ENTRY_DLG                                              \
         MenuItem                                                            \
         {                                                                   \
@@ -238,6 +256,24 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     MenuItem                                                                \
     {                                                                       \
         ITEM_OPEN_HYPERLINK                                                 \
+    };\
+    MenuItem                                                            \
+    {                                                                   \
+        Identifier = FN_EDIT_HYPERLINK ;                           \
+        HelpID = FN_EDIT_HYPERLINK ;                               \
+        Text [ en-US ] = "Edit Hyperlink...";                  \
+    };                                                                  \
+    MenuItem                                                            \
+    {                                                                   \
+        Identifier =  FN_COPY_HYPERLINK_LOCATION;                           \
+        HelpID =  FN_COPY_HYPERLINK_LOCATION;                               \
+        Text [ en-US ] = "Copy Hyperlink ~Location";                  \
+    };                                                                  \
+    MenuItem                                                            \
+    {                                                                   \
+        Identifier = FN_REMOVE_HYPERLINK ;                           \
+        HelpID = FN_REMOVE_HYPERLINK ;                               \
+        Text [ en-US ] = "Remo~ve Hyperlink";                  \
     };
 
 #define _MN_EDIT_OPEN_SMARTTAGMENU                                          \
@@ -259,6 +295,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     _MN_EDIT_FOOTNOTE                                                           \
     _MN_EDIT_IDX_ENTRY_DLG                                                      \
     _MN_EDIT_BIB_ENTRY_DLG                                                      \
+    _MN_EDIT_REDLINE                                                            \
     MenuItem                                                            \
     {                                                                   \
         ITEM_POPUP_TEMPLATE_EDIT                                        \

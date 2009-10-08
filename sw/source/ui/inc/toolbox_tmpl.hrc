@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox_tmpl.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,11 @@
     };\
     ToolBoxItem\
     {\
+        Identifier = SID_ATTR_CHAR_OVERLINE ; \
+        HelpID = SID_ATTR_CHAR_OVERLINE ; \
+    };\
+    ToolBoxItem\
+    {\
         Identifier = FN_SET_SUPER_SCRIPT;\
         HelpID = FN_SET_SUPER_SCRIPT;\
         Hide = HIDE;\
@@ -112,6 +117,11 @@
     {\
         Identifier = SID_ATTR_CHAR_UNDERLINE ; \
         HelpID = SID_ATTR_CHAR_UNDERLINE ; \
+    };\
+    ToolBoxItem\
+    {\
+        Identifier = SID_ATTR_CHAR_OVERLINE ; \
+        HelpID = SID_ATTR_CHAR_OVERLINE ; \
     };\
     ToolBoxItem\
     {\

@@ -77,6 +77,7 @@
 #include "comcore.hrc"
 #include "editsh.hxx"
 #include <unoflatpara.hxx>
+#include <SwGrammarMarkUp.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1809,6 +1810,31 @@ bool SwDoc::Delete( SwPaM & rPam )
     return sal_True;
 }
 
+void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult& rResult,
+    xub_StrLen /*nBeginGrammarCheck*/, const ModelToViewHelper::ConversionMap* pConversionMap )
+{
+    if( rTxtNode.IsGrammarCheckDirty() )
+        return;
+    SwGrammarMarkUp* pWrong = rTxtNode.GetGrammarCheck();
+    linguistic2::SingleProofreadingError* pArray = rResult.aErrors.getArray();
+    USHORT i, j = 0;
+    if( pWrong )
+    {
+        for( i = 0; i < rResult.aErrors.getLength(); ++i )
+        {
+            const linguistic2::SingleProofreadingError &rError = rResult.aErrors[i];
+            xub_StrLen nStart = (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart ).mnPos;
+            xub_StrLen nEnd = (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart + rError.nErrorLength ).mnPos;
+            if( i != j )
+                pArray[j] = pArray[i];
+            if( pWrong->LookForEntry( nStart, nEnd ) )
+                ++j;
+        }
+    }
+    if( rResult.aErrors.getLength() > j )
+        rResult.aErrors.realloc( j );
+}
+
 
 uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 >  &xSpeller,
@@ -1878,6 +1904,19 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                         if( pSpellArgs && pSpellArgs->bIsGrammarCheck)
                         {
                             nBeginGrammarCheck = pSpellArgs->pStartNode == pNd ?  pSpellArgs->pStartIdx->GetIndex() : 0;
+                            // if grammar checking starts inside of a sentence the start position has to be adjusted
+                            if( nBeginGrammarCheck )
+                            {
+                                SwIndex aStartIndex( dynamic_cast< SwTxtNode* >( pNd ), nBeginGrammarCheck );
+                                SwPosition aStart( *pNd, aStartIndex );
+                                SwCursor aCrsr(aStart, 0, false);
+                                SwPosition aOrigPos = *aCrsr.GetPoint();
+                                aCrsr.GoSentence( SwCursor::START_SENT );
+                                if( aOrigPos != *aCrsr.GetPoint() )
+                                {
+                                    nBeginGrammarCheck = aCrsr.GetPoint()->nContent.GetIndex();
+                                }
+                            }
                             nEndGrammarCheck = pSpellArgs->pEndNode == pNd ? pSpellArgs->pEndIdx->GetIndex() : ((SwTxtNode*)pNd)->GetTxt().Len();
                         }
 
@@ -1892,13 +1931,15 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pEndPos->nNode = nCurrNd;
                             nCurrNd = nEndNd;
                             if( pSpellArgs )
-                                nSpellErrorPosition = pSpellArgs->pStartIdx->GetIndex();
+                                nSpellErrorPosition = pSpellArgs->pStartIdx->GetIndex() > pSpellArgs->pEndIdx->GetIndex() ?
+                                            pSpellArgs->pEndIdx->GetIndex() :
+                                            pSpellArgs->pStartIdx->GetIndex();
                         }
 
 
                         if( pSpellArgs && pSpellArgs->bIsGrammarCheck )
                         {
-                            uno::Reference< linguistic2::XGrammarCheckingIterator >  xGCIterator( GetGCIterator() );
+                            uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( GetGCIterator() );
                             if (xGCIterator.is())
                             {
                                 String aText( ((SwTxtNode*)pNd)->GetTxt().Copy( nBeginGrammarCheck, nEndGrammarCheck - nBeginGrammarCheck ) );
@@ -1912,33 +1953,38 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
 
                                 // get error position of cursor in XFlatParagraph
                                 sal_Int32 nGrammarErrorPosInText;
-                                linguistic2::GrammarCheckingResult aResult;
+                                linguistic2::ProofreadingResult aResult;
                                 sal_Int32 nGrammarErrors;
                                 do
                                 {
                                     nGrammarErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
-                                    aResult = xGCIterator->checkGrammarAtPos(
+                                    aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
-                                    // get suggestions to use for the specific error position
-                                    nGrammarErrors = aResult.aGrammarErrors.getLength();
-                                    // prepare next iteration
-                                    nBeginGrammarCheck = (xub_StrLen)aResult.nEndOfSentencePos;
-                                }
-                                while( nSpellErrorPosition > aResult.nEndOfSentencePos && !nGrammarErrors && aResult.nEndOfSentencePos < nEndGrammarCheck );
+                                    lcl_syncGrammarError( *((SwTxtNode*)pNd), aResult, nBeginGrammarCheck, pConversionMap );
 
-                                if( nGrammarErrors > 0 && nSpellErrorPosition >= aResult.nEndOfSentencePos )
+                                    // get suggestions to use for the specific error position
+                                    nGrammarErrors = aResult.aErrors.getLength();
+                                    // if grammar checking doesn't have any progress then quit
+                                    if( aResult.nStartOfNextSentencePosition <= nBeginGrammarCheck )
+                                        break;
+                                    // prepare next iteration
+                                    nBeginGrammarCheck = (xub_StrLen)aResult.nStartOfNextSentencePosition;
+                                }
+                                while( nSpellErrorPosition > aResult.nBehindEndOfSentencePosition && !nGrammarErrors && aResult.nBehindEndOfSentencePosition < nEndGrammarCheck );
+
+                                if( nGrammarErrors > 0 && nSpellErrorPosition >= aResult.nBehindEndOfSentencePosition )
                                 {
                                     aRet <<= aResult;
                                     //put the cursor to the current error
-                                    const linguistic2::SingleGrammarError &rError = aResult.aGrammarErrors[0];
+                                    const linguistic2::SingleProofreadingError &rError = aResult.aErrors[0];
                                     nCurrNd = pNd->GetIndex();
                                     pSttPos->nNode = nCurrNd;
                                     pEndPos->nNode = nCurrNd;
                                     pSpellArgs->pStartNode = ((SwTxtNode*)pNd);
                                     pSpellArgs->pEndNode = ((SwTxtNode*)pNd);
-                                    pSpellArgs->pStartIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)rError.nErrorStart );
-                                    pSpellArgs->pEndIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)(rError.nErrorStart + rError.nErrorLength));
+                                    pSpellArgs->pStartIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart ).mnPos );
+                                    pSpellArgs->pEndIdx->Assign(((SwTxtNode*)pNd), (xub_StrLen)ModelToViewHelper::ConvertToModelPosition( pConversionMap, rError.nErrorStart + rError.nErrorLength ).mnPos );
                                     nCurrNd = nEndNd;
                                 }
                             }

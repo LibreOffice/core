@@ -91,7 +91,7 @@ SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0,4)
 
 
 typedef SwNumRule* SwNumRulePtr;
-SV_DECL_PTRARR_DEL( SwNumRuleTbl, SwNumRulePtr, 0, 5 )
+SV_DECL_PTRARR_DEL_VISIBILITY( SwNumRuleTbl, SwNumRulePtr, 0, 5, SW_DLLPUBLIC )
 
 typedef SwRedline* SwRedlinePtr;
 SV_DECL_PTRARR_SORT_DEL( _SwRedlineTbl, SwRedlinePtr, 0, 16 )

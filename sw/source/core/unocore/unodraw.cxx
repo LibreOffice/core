@@ -608,7 +608,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     uno::Reference< uno::XAggregation >     xAgg = pShape->GetAggregationInterface();
 
-    DBG_ASSERT(pSvxShape, "warum gibt es hier kein SvxShape?")
+    DBG_ASSERT(pSvxShape, "warum gibt es hier kein SvxShape?");
     //diese Position ist auf jeden Fall in 1/100 mm
     awt::Point aMM100Pos(pSvxShape->getPosition());
 
@@ -1127,7 +1127,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                 else if(RES_OPAQUE == pMap->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
-                    DBG_ASSERT(pSvxShape, "No SvxShape found!")
+                    DBG_ASSERT(pSvxShape, "No SvxShape found!");
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
@@ -1448,7 +1448,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 if(RES_OPAQUE == pMap->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
-                    DBG_ASSERT(pSvxShape, "No SvxShape found!")
+                    DBG_ASSERT(pSvxShape, "No SvxShape found!");
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
@@ -1462,7 +1462,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 else if(FN_ANCHOR_POSITION == pMap->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
-                    DBG_ASSERT(pSvxShape, "No SvxShape found!")
+                    DBG_ASSERT(pSvxShape, "No SvxShape found!");
                     if(pSvxShape)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
@@ -1906,7 +1906,7 @@ void SwXShape::addPropertyChangeListener(
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 22.01.99 11:42:27---------------------------------------------------
 
@@ -1917,7 +1917,7 @@ void SwXShape::removePropertyChangeListener(
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 22.01.99 11:42:28---------------------------------------------------
 
@@ -1928,7 +1928,7 @@ void SwXShape::addVetoableChangeListener(
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 22.01.99 11:42:28---------------------------------------------------
 
@@ -1939,7 +1939,7 @@ void SwXShape::removeVetoableChangeListener(
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 22.01.99 11:42:28---------------------------------------------------
 
@@ -2728,7 +2728,7 @@ SwXGroupShape::SwXGroupShape(uno::Reference< XInterface > & xShape) :
 {
 #ifdef DBG_UTIL
     uno::Reference<XShapes> xShapes(xShapeAgg, uno::UNO_QUERY);
-    DBG_ASSERT(xShapes.is(), "no SvxShape found or shape is not a group shape")
+    DBG_ASSERT(xShapes.is(), "no SvxShape found or shape is not a group shape");
 #endif
 }
 

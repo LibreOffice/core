@@ -1032,8 +1032,10 @@ void SAL_CALL SwXTextView::setPropertyValue(
     {
         switch (pCur->nWID)
         {
-            case WID_IS_CONSTANT_SPELLCHECK :
             case WID_IS_HIDE_SPELL_MARKS :
+                // deprecated #i91949
+            break;
+            case WID_IS_CONSTANT_SPELLCHECK :
             {
                 sal_Bool bVal = sal_False;
                 const SwViewOption *pOpt = pView->GetWrtShell().GetViewOptions();
@@ -1042,8 +1044,6 @@ void SAL_CALL SwXTextView::setPropertyValue(
                 SwViewOption aNewOpt( *pOpt );
                 if (pCur->nWID == WID_IS_CONSTANT_SPELLCHECK)
                     aNewOpt.SetOnlineSpell(bVal);
-                else
-                    aNewOpt.SetHideSpell(bVal);
                 pView->GetWrtShell().ApplyViewOptions( aNewOpt );
             }
             break;
@@ -1085,14 +1085,15 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
                 aRet <<= nCount;
             }
             break;
-            case WID_IS_CONSTANT_SPELLCHECK :
             case WID_IS_HIDE_SPELL_MARKS :
+                // deprecated #i91949
+            break;
+            case WID_IS_CONSTANT_SPELLCHECK :
             {
                 const SwViewOption *pOpt = pView->GetWrtShell().GetViewOptions();
                 if (!pOpt)
                     throw RuntimeException();
-                UINT32 nFlag = nWID == WID_IS_CONSTANT_SPELLCHECK ?
-                                    VIEWOPT_1_ONLINESPELL : VIEWOPT_1_HIDESPELL;
+                UINT32 nFlag = VIEWOPT_1_ONLINESPELL;
                 sal_Bool bVal = 0 != (pOpt->GetCoreOptions() & nFlag);
                 aRet <<= bVal;
             }
@@ -1111,7 +1112,7 @@ void SAL_CALL SwXTextView::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 
@@ -1120,7 +1121,7 @@ void SAL_CALL SwXTextView::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 
@@ -1129,7 +1130,7 @@ void SAL_CALL SwXTextView::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 
@@ -1138,7 +1139,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 
 /* -----------------------------06.04.00 11:07--------------------------------
@@ -1221,7 +1222,7 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
 sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
     return sal_True;
 }
 /*-- 17.12.98 09:36:25---------------------------------------------------
@@ -1230,7 +1231,7 @@ sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    DBG_WARNING("not implemented")
+    DBG_WARNING("not implemented");
 }
 /*-- 17.12.98 09:36:26---------------------------------------------------
 

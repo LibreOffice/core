@@ -51,6 +51,14 @@
 #include <swundo.hxx>
 #include <breakit.hxx>
 
+/*testarea*/
+#include <docsh.hxx>
+#include <PostItMgr.hxx>
+#include <viewsh.hxx>
+#include <vcl/window.hxx>
+
+#define POSTITMGR ((ViewShell*)pNode->GetDoc()->GetDocShell()->GetWrtShell())->GetPostItMgr()
+
 using namespace ::com::sun::star;
 using namespace util;
 
@@ -188,9 +196,39 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
     return rRet;
 }
 
+// skip all non SwPostIts inside the array
+xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
+{
+    xub_StrLen aIndex = 0;
+    while (aCount)
+    {
+        for (xub_StrLen i = 0; i <pHts->Count();i++)
+        {
+            aIndex++;
+            const SwTxtAttr* pTxtAttr = (*pHts)[i];
+            if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
+                    (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+            {
+                aCount--;
+                if (!aCount)
+                    break;
+            }
+        }
+    }
+    // throw away all following non postits
+    for (xub_StrLen i = aIndex; i <pHts->Count();i++)
+    {
+        const SwTxtAttr* pTxtAttr = (*pHts)[i];
+        if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
+                (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+            break;
+        else
+            aIndex++;
+    }
+    return aIndex;
+}
 
-
-BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
+BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::TextSearch& rSTxt,
                     SwMoveFn fnMove, const SwPaM * pRegion,
                     BOOL bInReadOnly )
 {
@@ -229,11 +267,12 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
      */
     BOOL bFirst = TRUE;
     SwCntntNode * pNode;
-    String sCleanStr;
-    SvULongs aFltArr;
+    //testarea
+    //String sCleanStr;
+    //SvULongs aFltArr;
+    //const SwNode* pSttNd = &rNdIdx.GetNode();
 
     xub_StrLen nStart, nEnde, nTxtLen;
-    const SwNode* pSttNd = &rNdIdx.GetNode();
 
     BOOL bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
     BOOL bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
@@ -242,7 +281,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     BOOL bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
                       !rSearchOpt.searchString.compareToAscii( "$" );
 
-    LanguageType eLastLang = 0;
+//    LanguageType eLastLang = 0;
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
         if( pNode->IsTxtNode() )
@@ -254,135 +293,268 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 nEnde = bSrchForward ? nTxtLen : 0;
             nStart = rCntntIdx.GetIndex();
 
-            // if the search string contains a soft hypen, we don't strip them from the text:
-            bool bRemoveSoftHyphens = true;
-            if ( bRegSearch )
-            {
-                const rtl::OUString a00AD( rtl::OUString::createFromAscii( "\\x00AD" ) );
-                if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
-                     bRemoveSoftHyphens = false;
-            }
-            else
-            {
-                if ( 1 == rSearchOpt.searchString.getLength() &&
-                     CHAR_SOFTHYPHEN == rSearchOpt.searchString.toChar() )
-                     bRemoveSoftHyphens = false;
-            }
+            /* #i80135# */
+            // if there are SwPostItFields inside our current node text, we split the text into seperate pieces
+            // and search for text inside the pieces as well as inside the fields
+            const SwpHints *pHts = ((SwTxtNode*)pNode)->GetpSwpHints();
 
-            if( bSrchForward )
-                lcl_CleanStr( *(SwTxtNode*)pNode, nStart, nEnde,
-                                aFltArr, sCleanStr, bRemoveSoftHyphens );
-            else
-                lcl_CleanStr( *(SwTxtNode*)pNode, nEnde, nStart,
-                                aFltArr, sCleanStr, bRemoveSoftHyphens );
-
-            SwScriptIterator* pScriptIter = 0;
-            USHORT nSearchScript = 0;
-            USHORT nCurrScript = 0;
-
-            if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
-                 pBreakIt->xBreak.is() )
+            // count postitfields by looping over all fields
+            xub_StrLen aNumberPostits = 0;
+            xub_StrLen aIgnore = 0;
+            if (pHts && bSearchInNotes)
             {
-                pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
-                nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
-            }
-
-            xub_StrLen nStringEnd = nEnde;
-            while ( bSrchForward && nStart < nStringEnd ||
-                    ! bSrchForward && nStart > nStringEnd )
-            {
-                // SearchAlgorithms_APPROXIMATE works on a per word base
-                // so we have to provide the text searcher with the correct
-                // locale, because it uses the breakiterator
-                if ( pScriptIter )
+                if (!bSrchForward)
                 {
-                    nEnde = pScriptIter->GetScriptChgPos();
-                    nCurrScript = pScriptIter->GetCurrScript();
-                    if ( nSearchScript == nCurrScript )
-                    {
-                        const LanguageType eCurrLang =
-                                ((SwTxtNode*)pNode)->GetLang( bSrchForward ?
-                                                              nStart :
-                                                              nEnde );
+                    xub_StrLen swap = nEnde;
+                    nEnde = nStart;
+                    nStart = swap;
+                }
 
-                        if ( eCurrLang != eLastLang )
+                for (xub_StrLen i = 0; i <pHts->Count();i++)
+                {
+                    xub_StrLen aPos = *(*pHts)[i]->GetStart();
+                    const SwTxtAttr* pTxtAttr = (*pHts)[i];
+                    if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
+                                (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
+                    {
+                        if ( (aPos >= nStart) && (aPos <= nEnde) )
+                            aNumberPostits++;
+                        else
                         {
-                            const lang::Locale aLocale(
-                                    pBreakIt->GetLocale( eCurrLang ) );
-                            rSTxt.SetLocale( rSearchOpt, aLocale );
-                            eLastLang = eCurrLang;
+                            if (bSrchForward)
+                                aIgnore++;
                         }
                     }
-                    pScriptIter->Next();
                 }
 
-                if( nSearchScript == nCurrScript &&
-                    (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde, 0 ))
+                if (!bSrchForward)
                 {
-                    // setze den Bereich richtig
-                    *GetPoint() = *pPam->GetPoint();
-                    SetMark();
-
-                    // Start und Ende wieder korrigieren !!
-                    if( aFltArr.Count() )
-                    {
-                        xub_StrLen n, nNew;
-                        // bei Rueckwaertssuche die Positionen temp. vertauschen
-                        if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
-
-                        for( n = 0, nNew = nStart;
-                            n < aFltArr.Count() && aFltArr[ n ] <= nStart;
-                            ++n, ++nNew )
-                            ;
-                        nStart = nNew;
-                        for( n = 0, nNew = nEnde;
-                            n < aFltArr.Count() && aFltArr[ n ] < nEnde;
-                            ++n, ++nNew )
-                            ;
-                        nEnde = nNew;
-
-                        // bei Rueckwaertssuche die Positionen temp. vertauschen
-                        if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
-                    }
-                    GetMark()->nContent = nStart;       // Startposition setzen
-                    GetPoint()->nContent = nEnde;
-
-                    if( !bSrchForward )         // rueckwaerts Suche?
-                        Exchange();             // Point und Mark tauschen
-                    bFound = TRUE;
-                    break;
+                    xub_StrLen swap = nEnde;
+                    nEnde = nStart;
+                    nStart = swap;
                 }
 
-                nStart = nEnde;
-            } // end of script while
+            }
 
-            delete pScriptIter;
-
-            if ( bFound )
-                break;
-            else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || bChkParaEnd )
+            xub_StrLen aStart = 0;
+            // do we need to finish a note?
+            if (POSTITMGR->GetActivePostIt())
             {
-                *GetPoint() = *pPam->GetPoint();
-                GetPoint()->nContent = bChkParaEnd ? nTxtLen : 0;
-                SetMark();
-                if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
-                    Move( fnMoveForward, fnGoCntnt ) &&
-                    (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
-                    1 == Abs( (int)( GetPoint()->nNode.GetIndex() -
-                                    GetMark()->nNode.GetIndex()) ) )
+                if (bSearchInNotes)
                 {
-                    if( !bSrchForward )         // rueckwaerts Suche?
-                        Exchange();             // Point und Mark tauschen
-                    bFound = TRUE;
-                    break;
+                    if (bSrchForward)
+                        aStart++;
+                    else
+                    {
+                        if (aNumberPostits)
+                            --aNumberPostits;
+                    }
+                    //search inside and finsih and put focus back into the doc
+                    if (POSTITMGR->FinishSearchReplace(rSearchOpt,bSrchForward))
+                    {
+                        bFound = true ;
+                        break;
+                    }
+                }
+                else
+                {
+                    POSTITMGR->SetActivePostIt(0);
                 }
             }
+
+            if (aNumberPostits)
+            {
+                // now we have to split
+                xub_StrLen nStartInside = 0;
+                xub_StrLen nEndeInside = 0;
+                sal_Int16 aLoop= bSrchForward ? aStart : aNumberPostits;
+
+                while ( (aLoop>=0) && (aLoop<=aNumberPostits))
+                {
+                    if (bSrchForward)
+                    {
+                        nStartInside =  aLoop==0 ? nStart : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
+                        nEndeInside = aLoop==aNumberPostits? nEnde : *(*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
+                        nTxtLen = nEndeInside-nStartInside;
+                    }
+                    else
+                    {
+                        nStartInside =  aLoop==aNumberPostits ? nStart : *(*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
+                        nEndeInside = aLoop==0 ? nEnde : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
+                        nTxtLen = nStartInside-nEndeInside;
+                    }
+                    // search inside the text between a note
+                    bFound = DoSearch(rSearchOpt,rSTxt,fnMove,bSrchForward,bRegSearch,bChkEmptyPara,bChkParaEnd,
+                                nStartInside,nEndeInside,nTxtLen, pNode,pPam);
+                    if (bFound)
+                        break;
+                    else
+                    {
+                        // we should now be right in front of a note, search inside
+                        if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
+                        {
+                            const SwTxtAttr* pTxtAttr = bSrchForward ?  (*pHts)[GetPostIt(aLoop+aIgnore,pHts)] : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)];
+                            if ( POSTITMGR->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFld(),rSearchOpt,bSrchForward) )
+                            {
+                                bFound = true ;
+                                break;
+                            }
+                        }
+                    }
+                    aLoop = bSrchForward ? aLoop+1 : aLoop-1;
+                }
+            }
+            else
+            {
+                // if there is no SwPostItField inside or searching inside notes is disabled, we search the whole length just like before
+                bFound = DoSearch(rSearchOpt,rSTxt,fnMove,bSrchForward,bRegSearch,bChkEmptyPara,bChkParaEnd,
+                            nStart,nEnde,nTxtLen, pNode,pPam);
+            }
+            if (bFound)
+                break;
         }
     }
     delete pPam;
     return bFound;
 }
 
+bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
+                    SwMoveFn fnMove,
+                    BOOL bSrchForward, BOOL bRegSearch, BOOL bChkEmptyPara, BOOL bChkParaEnd,
+                    xub_StrLen &nStart, xub_StrLen &nEnde, xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam)
+{
+    bool bFound = false;
+    SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
+    const SwNode* pSttNd = &rNdIdx.GetNode();
+    String sCleanStr;
+    SvULongs aFltArr;
+    LanguageType eLastLang = 0;
+    // if the search string contains a soft hypen, we don't strip them from the text:
+    bool bRemoveSoftHyphens = true;
+    if ( bRegSearch )
+    {
+        const rtl::OUString a00AD( rtl::OUString::createFromAscii( "\\x00AD" ) );
+        if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
+             bRemoveSoftHyphens = false;
+    }
+    else
+    {
+        if ( 1 == rSearchOpt.searchString.getLength() &&
+             CHAR_SOFTHYPHEN == rSearchOpt.searchString.toChar() )
+             bRemoveSoftHyphens = false;
+    }
+
+    if( bSrchForward )
+        lcl_CleanStr( *(SwTxtNode*)pNode, nStart, nEnde,
+                        aFltArr, sCleanStr, bRemoveSoftHyphens );
+    else
+        lcl_CleanStr( *(SwTxtNode*)pNode, nEnde, nStart,
+                        aFltArr, sCleanStr, bRemoveSoftHyphens );
+
+    SwScriptIterator* pScriptIter = 0;
+    USHORT nSearchScript = 0;
+    USHORT nCurrScript = 0;
+
+    if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
+         pBreakIt->xBreak.is() )
+    {
+        pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
+        nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
+    }
+
+    xub_StrLen nStringEnd = nEnde;
+    while ( bSrchForward && nStart < nStringEnd ||
+            ! bSrchForward && nStart > nStringEnd )
+    {
+        // SearchAlgorithms_APPROXIMATE works on a per word base
+        // so we have to provide the text searcher with the correct
+        // locale, because it uses the breakiterator
+        if ( pScriptIter )
+        {
+            nEnde = pScriptIter->GetScriptChgPos();
+            nCurrScript = pScriptIter->GetCurrScript();
+            if ( nSearchScript == nCurrScript )
+            {
+                const LanguageType eCurrLang =
+                        ((SwTxtNode*)pNode)->GetLang( bSrchForward ?
+                                                      nStart :
+                                                      nEnde );
+
+                if ( eCurrLang != eLastLang )
+                {
+                    const lang::Locale aLocale(
+                            pBreakIt->GetLocale( eCurrLang ) );
+                    rSTxt.SetLocale( rSearchOpt, aLocale );
+                    eLastLang = eCurrLang;
+                }
+            }
+            pScriptIter->Next();
+        }
+
+        if( nSearchScript == nCurrScript &&
+            (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde, 0 ))
+        {
+            // setze den Bereich richtig
+            *GetPoint() = *pPam->GetPoint();
+            SetMark();
+
+            // Start und Ende wieder korrigieren !!
+            if( aFltArr.Count() )
+            {
+                xub_StrLen n, nNew;
+                // bei Rueckwaertssuche die Positionen temp. vertauschen
+                if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
+
+                for( n = 0, nNew = nStart;
+                    n < aFltArr.Count() && aFltArr[ n ] <= nStart;
+                    ++n, ++nNew )
+                    ;
+                nStart = nNew;
+                for( n = 0, nNew = nEnde;
+                    n < aFltArr.Count() && aFltArr[ n ] < nEnde;
+                    ++n, ++nNew )
+                    ;
+                nEnde = nNew;
+
+                // bei Rueckwaertssuche die Positionen temp. vertauschen
+                if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
+            }
+            GetMark()->nContent = nStart;       // Startposition setzen
+            GetPoint()->nContent = nEnde;
+
+            if( !bSrchForward )         // rueckwaerts Suche?
+                Exchange();             // Point und Mark tauschen
+            bFound = TRUE;
+            break;
+        }
+
+        nStart = nEnde;
+    } // end of script while
+
+    delete pScriptIter;
+
+    if ( bFound )
+        return true;
+    else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || bChkParaEnd )
+    {
+        *GetPoint() = *pPam->GetPoint();
+        GetPoint()->nContent = bChkParaEnd ? nTxtLen : 0;
+        SetMark();
+        if( (bSrchForward || pSttNd != &rNdIdx.GetNode()) &&
+            Move( fnMoveForward, fnGoCntnt ) &&
+            (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
+            1 == Abs( (int)( GetPoint()->nNode.GetIndex() -
+                            GetMark()->nNode.GetIndex()) ) )
+        {
+            if( !bSrchForward )         // rueckwaerts Suche?
+                Exchange();             // Point und Mark tauschen
+            //bFound = TRUE;
+            //break;
+            return true;
+        }
+    }
+    return bFound;
+}
 
 // Parameter fuers Suchen und Ersetzen von Text
 struct SwFindParaText : public SwFindParas
@@ -391,9 +563,10 @@ struct SwFindParaText : public SwFindParas
     SwCursor& rCursor;
     utl::TextSearch aSTxt;
     BOOL bReplace;
+    BOOL bSearchInNotes;
 
-    SwFindParaText( const SearchOptions& rOpt, int bRepl, SwCursor& rCrsr )
-        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( 0 != bRepl )
+    SwFindParaText( const SearchOptions& rOpt, BOOL bSearchNotes, int bRepl, SwCursor& rCrsr )
+        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( 0 != bRepl ), bSearchInNotes( bSearchNotes )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, BOOL bInReadOnly );
     virtual int IsReplaceMode() const;
@@ -410,10 +583,12 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     if( bInReadOnly && bReplace )
         bInReadOnly = FALSE;
 
-    BOOL bFnd = (BOOL)pCrsr->Find( rSearchOpt, aSTxt, fnMove, pRegion, bInReadOnly );
-    // kein Bereich ??
+    BOOL bFnd = (BOOL)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
+
+    /*   #i80135# if we found something in a note, Mark and Point is the same
     if( bFnd && *pCrsr->GetMark() == *pCrsr->GetPoint() )
         return FIND_NOT_FOUND;
+    */
 
     if( bFnd && bReplace )          // String ersetzen ??
     {
@@ -461,7 +636,7 @@ int SwFindParaText::IsReplaceMode() const
 }
 
 
-ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
+ULONG SwCursor::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes,
                         SwDocPositions nStart, SwDocPositions nEnde,
                         BOOL& bCancel,
                         FindRanges eFndRngs, int bReplace )
@@ -478,7 +653,7 @@ ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
     BOOL bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
         eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
-    SwFindParaText aSwFindParaText( rSearchOpt, bReplace, *this );
+    SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );
     ULONG nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )

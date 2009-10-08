@@ -133,7 +133,7 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
 BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
-    DBG_ERROR("not implemented")
+    DBG_ERROR("not implemented");
     return FALSE;
 }
 /*-- 11.01.01 15:28:57---------------------------------------------------
@@ -142,7 +142,7 @@ BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    DBG_ERROR("not implemented")
+    DBG_ERROR("not implemented");
     return uno::Sequence< OUString >();
 }
 /*-- 11.01.01 15:28:57---------------------------------------------------

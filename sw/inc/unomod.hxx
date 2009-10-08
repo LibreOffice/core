@@ -41,6 +41,7 @@
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/SettingsHelper.hxx>
+#include <usrpref.hxx>
 
 class SwView;
 class SwViewOption;
@@ -146,6 +147,12 @@ protected:
     SwViewOption*       mpViewOption;
     const SwViewOption*         mpConstViewOption;
     sal_Bool                    bObjectValid:1, bWeb:1, mbApplyZoom;
+
+    sal_Int32   eHRulerUnit;
+    sal_Bool    mbApplyHRulerMetric;
+    sal_Int32   eVRulerUnit;
+    sal_Bool    mbApplyVRulerMetric;
+
     virtual void _preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
     virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )

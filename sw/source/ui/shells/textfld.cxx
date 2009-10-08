@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfld.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.190.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +37,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/itempool.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/whiter.hxx>
@@ -57,19 +55,14 @@
 #include <fmtinfmt.hxx>
 #include <fldwrap.hxx>
 #include <redline.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <flddat.hxx>
 #include <numrule.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
+#include <docsh.hxx>
 #include <docufld.hxx>
 #include <usrfld.hxx>
 #include <ddefld.hxx>
@@ -77,12 +70,8 @@
 #include <fldmgr.hxx>
 #include <uitool.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 
 #include <sfx2/app.hxx>
 #include <svx/svxdlg.hxx>
@@ -92,9 +81,7 @@
 #include <fldui.hrc>
 #include <doc.hxx>
 
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 
 #include "PostItMgr.hxx"
 #include "postit.hxx"
@@ -262,7 +249,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, FALSE, &pItem ))
                         nFormat = ((SfxUInt32Item *)pItem)->GetValue();
-                    DBG_WARNING("Command is not yet used")
+                    DBG_WARNING("Command is not yet used");
                     sal_Unicode cSeparator = ' ';
                     SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                     bRes = aFldMgr.InsertFld(aData);
@@ -334,7 +321,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 rReq.Ignore();
             }
             break;
-
             case FN_DELETE_NOTE:
                 if ( GetView().GetPostItMgr() && GetView().GetPostItMgr()->GetActivePostIt() )
                     GetView().GetPostItMgr()->GetActivePostIt()->Delete();
@@ -369,7 +355,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 SwPostItField* pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
                   BOOL bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
-                if (bNew)
+                if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
                     SvtUserOptions aUserOpt;
                     String sAuthor;
@@ -388,10 +374,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, FALSE);
                     pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
                     rSh.Pop(FALSE); // Cursorpos restaurieren
-                }
-                else
-                {
-                }
+                 }
 
                 if (pPostIt)
                 {
@@ -413,6 +396,20 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             break;
             case FN_REDLINE_COMMENT:
             {
+                /*  this code can be used once we want redline comments in the margin, all other stuff can
+                    then be deleted
+                String sComment;
+                const SwRedline *pRedline = rSh.GetCurrRedline();
+
+                if (pRedline)
+                {
+                    sComment = pRedline->GetComment();
+                    if ( sComment == String(rtl::OUString::createFromAscii("")) )
+                        GetView().GetDocShell()->Broadcast(SwRedlineHint(pRedline,SWREDLINE_INSERTED));
+                    const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS));
+                }
+                */
+
                 String sComment;
                 const SwRedline *pRedline = rSh.GetCurrRedline();
 
@@ -792,10 +789,6 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Traveling zwischen Redlines
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
 {
     SwWrtShell* pSh = GetShellPtr();
@@ -851,10 +844,6 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
 {
     SwWrtShell* pSh = GetShellPtr();
@@ -903,6 +892,5 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
 
     return 0;
 }
-
 
 

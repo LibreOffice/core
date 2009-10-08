@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.188 $
+ * $Revision: 1.188.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,11 +279,12 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
 
     aGrid.SetGridType(eType);
 
-    //Seems to force this behaviour in word ?
+    // seem to not add external leading in word, or the character would run across
+    // two line in some cases.
     if (eType != GRID_NONE)
-        rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, true);
+        rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
 
-    //force to set document as standard page mode
+   //force to set document as standard page mode
     sal_Bool bSquaredMode = sal_False;
     rDoc.SetDefaultPageMode( bSquaredMode );
     aGrid.SetSquaredMode( bSquaredMode );
@@ -6002,7 +6003,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //recorded as 3 byte;
         {0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate},
         {0x6649, 0},                                 //undocumented
-        {0xF614, 0},                                 //undocumented
+        {0xF614, 0},                                 //"sprmTTableWidth"
+                                                     //recorded as 3 bytes;
         {0xD612, 0},                                 //undocumented
         {0xD613, 0},                                 //undocumented
         {0xD61A, 0},                                 //undocumented
@@ -6037,7 +6039,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x9410, 0},                                 //undocumented
         {0x703A, 0},                                 //undocumented
         {0x303B, 0},                                 //undocumented
-        {0x244B, 0},                                 //undocumented, must be
+        {0x244B, &SwWW8ImplReader::Read_TabCellEnd}, //undocumented, must be
                                                      //subtable "sprmPFInTable"
         {0x244C, &SwWW8ImplReader::Read_TabRowEnd},  //undocumented, must be
                                                      // subtable "sprmPFTtp"

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.8.42.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,19 +35,15 @@
 
 #include <popup.hrc>
 #include <docvw.hrc>
+#include <app.hrc>
 
 #include <hintids.hxx>
 #include "viewopt.hxx"
 #include "cmdid.h"
 
-#include <vcl/help.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/button.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/gradient.hxx>
 #include <tools/poly.hxx>   // Polygon
-#include <vcl/salbtype.hxx> // FRound
 
+#include <svx/postitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/fhgtitem.hxx>
@@ -68,17 +64,20 @@
 #include <svx/editstat.hxx> //EditEngine flags
 #include <svx/outliner.hxx>
 #include <svx/editeng.hxx>
+#include <svx/editobj.hxx>
 #include <svx/unolingu.hxx>
 
-#include <svtools/languageoptions.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/slstitm.hxx>
 #include <svtools/securityoptions.hxx>
+#include <svtools/useroptions.hxx>
+#include <svtools/languageoptions.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/svmedit.hxx>
 
 #include <linguistic/lngprops.hxx>
 
+#include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -86,6 +85,12 @@
 
 #include <vcl/vclenum.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/help.hxx>
+#include <vcl/scrbar.hxx>
+#include <vcl/button.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/salbtype.hxx> // FRound
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -100,16 +105,20 @@
 #include <shellres.hxx>
 #include <fmtfld.hxx>
 #include <wrtsh.hxx>
+#include <textsh.hxx>
 #include <doc.hxx>
 #include <txtfld.hxx>
 #include <redline.hxx>
 #include <uitool.hxx>
 #include <SwUndoField.hxx>
 #include <editsh.hxx>
+#include <swmodule.hxx>
+#include <node.hxx>
+#include <ndtxt.hxx>
+#include <langhelper.hxx>
 
 using namespace ::com::sun::star;
 
-#define ANKORLINE_WIDTH         1
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18
 #define METABUTTON_AREA_WIDTH   30
@@ -118,6 +127,13 @@ using namespace ::com::sun::star;
 
 #define POSTIT_SHADOW_BRIGHT    Color(180,180,180)
 #define POSTIT_SHADOW_DARK      Color(83,83,83)
+
+#define LINEBREAK               rtl::OUString::createFromAscii("\n")
+#define EMPTYSTRING             rtl::OUString::createFromAscii("")
+
+TYPEINIT0(SwMarginWin);
+TYPEINIT1(SwPostIt,SwMarginWin);
+//TYPEINIT1(SwRedComment,SwMarginWin);
 
 Color ColorFromAlphaColor(UINT8 aTransparency, Color &aFront, Color &aBack )
 {
@@ -131,7 +147,7 @@ PostItTxt::PostItTxt(Window* pParent, WinBits nBits) : Window(pParent, nBits), m
 {
     SetHelpId(26276);
     AddEventListener( LINK( this, PostItTxt, WindowEventListener ) );
-    mpPostIt = static_cast<SwPostIt*>(GetParent());
+    mpMarginWin = static_cast<SwMarginWin*>(GetParent());
 }
 
 PostItTxt::~PostItTxt()
@@ -141,24 +157,24 @@ PostItTxt::~PostItTxt()
 
 void PostItTxt::GetFocus()
 {
-    BOOL bLockView = mpPostIt->DocView()->GetWrtShell().IsViewLocked();
-    mpPostIt->DocView()->GetWrtShell().LockView( TRUE );
+    BOOL bLockView = mpMarginWin->DocView()->GetWrtShell().IsViewLocked();
+    mpMarginWin->DocView()->GetWrtShell().LockView( TRUE );
 
-    if(mpPostIt && !mpPostIt->IsPreview())
-         mpPostIt->Mgr()->SetActivePostIt(mpPostIt);
+    if(mpMarginWin && !mpMarginWin->IsPreview())
+         mpMarginWin->Mgr()->SetActivePostIt(mpMarginWin);
     Window::GetFocus();
     if (!mMouseOver)
         Invalidate();
 
-    mpPostIt->DocView()->GetWrtShell().LockView( bLockView );
-    mpPostIt->Mgr()->MakeVisible(mpPostIt);
+    mpMarginWin->DocView()->GetWrtShell().LockView( bLockView );
+    mpMarginWin->Mgr()->MakeVisible(mpMarginWin);
 }
 
 void PostItTxt::LoseFocus()
 {
     // write the visible text back into the SwField
-    if ( mpPostIt )
-        mpPostIt->UpdateData();
+    if ( mpMarginWin )
+        mpMarginWin->UpdateData();
 
     Window::LoseFocus();
     if (!mMouseOver)
@@ -168,7 +184,7 @@ void PostItTxt::LoseFocus()
 void PostItTxt::RequestHelp(const HelpEvent &rEvt)
 {
     USHORT nResId = 0;
-    switch( mpPostIt->GetStatus() )
+    switch( mpMarginWin->GetStatus() )
     {
         case SwPostItHelper::INSERTED:  nResId = STR_REDLINE_INSERT; break;
         case SwPostItHelper::DELETED:   nResId = STR_REDLINE_DELETE; break;
@@ -176,7 +192,7 @@ void PostItTxt::RequestHelp(const HelpEvent &rEvt)
     }
 
     SwContentAtPos aCntntAtPos( SwContentAtPos::SW_REDLINE );
-    if ( nResId && mpPostIt->DocView()->GetWrtShell().GetContentAtPos( mpPostIt->GetAnkorRect().Pos(), aCntntAtPos ) )
+    if ( nResId && mpMarginWin->DocView()->GetWrtShell().GetContentAtPos( mpMarginWin->GetAnkorRect().Pos(), aCntntAtPos ) )
     {
         String sTxt;
         sTxt = SW_RESSTR( nResId );
@@ -194,17 +210,17 @@ void PostItTxt::Paint( const Rectangle& rRect)
     {
         if (mMouseOver || HasFocus())
             DrawGradient(Rectangle(Point(0,0),PixelToLogic(GetSizePixel())),
-                Gradient(GRADIENT_LINEAR,mpPostIt->ColorDark(),mpPostIt->ColorDark()));
+                Gradient(GRADIENT_LINEAR,mpMarginWin->ColorDark(),mpMarginWin->ColorDark()));
         else
             DrawGradient(Rectangle(Point(0,0),PixelToLogic(GetSizePixel())),
-                Gradient(GRADIENT_LINEAR,mpPostIt->ColorLight(),mpPostIt->ColorDark()));
+                Gradient(GRADIENT_LINEAR,mpMarginWin->ColorLight(),mpMarginWin->ColorDark()));
      }
 
     mpOutlinerView->Paint( rRect );
 
-    if (mpPostIt->GetStatus()==SwPostItHelper::DELETED)
+    if (mpMarginWin->GetStatus()==SwPostItHelper::DELETED)
     {
-        SetLineColor(mpPostIt->GetChangeColor());
+        SetLineColor(static_cast<SwPostIt*>(mpMarginWin)->GetChangeColor());
         DrawLine(PixelToLogic(GetPosPixel()),PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width(),GetSizePixel().Height())));
         DrawLine(PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width(),0)),PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height())));
     }
@@ -214,60 +230,45 @@ void PostItTxt::KeyInput( const KeyEvent& rKeyEvt )
 {
     const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     USHORT nKey = rKeyCode.GetCode();
-    SwView* pView = mpPostIt->DocView();
-
-    if ( (nKey== KEY_N) && rKeyCode.IsMod1() && rKeyCode.IsMod2())
-    {
-        if ( mpPostIt->Mgr()->GetActivePostIt() == mpPostIt )
-            mpPostIt->Mgr()->SetActivePostIt(0);
-        mpPostIt->SwitchToFieldPos();
-    }
-    else
+    SwView* pView = mpMarginWin->DocView();
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN)))
-    {
-        mpPostIt->SwitchToPostIt(nKey);
-    }
+        mpMarginWin->SwitchToPostIt(nKey);
     else
     if ((nKey == KEY_ESCAPE) || (rKeyCode.IsMod1() && ((nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN))))
-    {
-        if ( mpPostIt->Mgr()->GetActivePostIt() == mpPostIt )
-            mpPostIt->Mgr()->SetActivePostIt(0);
-        if (!mpPostIt->IsReadOnly() && (mpPostIt->GetStatus()!=SwPostItHelper::DELETED) &&
-                mpPostIt->Engine()->GetEditEngine().GetText()==String(::rtl::OUString::createFromAscii("")))
-            mpPostIt->Delete();
-        else
-            mpPostIt->SwitchToFieldPos();
-    }
+            mpMarginWin->SwitchToFieldPos();
     else
     if (nKey == KEY_INSERT)
     {
         if (!rKeyCode.IsMod1() && !rKeyCode.IsMod2())
-            mpPostIt->ToggleInsMode();
+            mpMarginWin->ToggleInsMode();
     }
     else
     {
         //let's make sure we see our note
-        mpPostIt->Mgr()->MakeVisible(mpPostIt);
+        mpMarginWin->Mgr()->MakeVisible(mpMarginWin);
 
-        long aOldHeight = mpPostIt->GetPostItTextHeight();
+        long aOldHeight = mpMarginWin->GetPostItTextHeight();
         bool bDone = false;
 
         /// HACK: need to switch off processing of Undo/Redo in Outliner
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
-            SwPostItHelper::SwLayoutStatus aStatus = mpPostIt->GetStatus();
+            /*
+            SwPostItHelper::SwLayoutStatus aStatus = mpMarginWin->GetStatus();
             if ( (aStatus!=SwPostItHelper::DELETED) ||
-                    ( (aStatus==SwPostItHelper::DELETED) && (!mpPostIt->Engine()->GetEditEngine().DoesKeyChangeText(rKeyEvt))) )
+                    ( (aStatus==SwPostItHelper::DELETED) && (!mpMarginWin->Engine()->GetEditEngine().DoesKeyChangeText(rKeyEvt))) )
+            */
+            bool bIsProtected = mpMarginWin->IsProtected();
+            if (!bIsProtected || (bIsProtected && !mpMarginWin->Engine()->GetEditEngine().DoesKeyChangeText(rKeyEvt)) )
                 bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
         }
         if (bDone)
-            mpPostIt->ResizeIfNeccessary(aOldHeight,mpPostIt->GetPostItTextHeight());
+            mpMarginWin->ResizeIfNeccessary(aOldHeight,mpMarginWin->GetPostItTextHeight());
         else
         {
-            // write back data first when saving or showing navigator
-            //otherwise new content could be lost
-            if ( (rKeyCode.IsMod1() && nKey== KEY_S) || (nKey==KEY_F5) )
-                mpPostIt->UpdateData();
+            // write back data first when showing navigator
+            if ( nKey==KEY_F5 )
+                mpMarginWin->UpdateData();
             if (!pView->KeyInput(rKeyEvt))
                 Window::KeyInput(rKeyEvt);
         }
@@ -324,7 +325,7 @@ void PostItTxt::MouseButtonDown( const MouseEvent& rMEvt )
                 if ( pURL )
                 {
                     mpOutlinerView->MouseButtonDown( rMEvt );
-                    SwWrtShell &rSh = mpPostIt->DocView()->GetWrtShell();
+                    SwWrtShell &rSh = mpMarginWin->DocView()->GetWrtShell();
                     String sURL( pURL->GetURL() );
                     String sTarget( pURL->GetTargetFrame() );
                     ::LoadURL( sURL, &rSh, URLLOAD_NOFILTER, &sTarget);
@@ -337,7 +338,7 @@ void PostItTxt::MouseButtonDown( const MouseEvent& rMEvt )
     GrabFocus();
     if ( mpOutlinerView )
         mpOutlinerView->MouseButtonDown( rMEvt );
-    mpPostIt->DocView()->GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+    mpMarginWin->DocView()->GetViewFrame()->GetBindings().InvalidateAll(FALSE);
 }
 
 void PostItTxt::MouseButtonUp( const MouseEvent& rMEvt )
@@ -348,14 +349,14 @@ void PostItTxt::MouseButtonUp( const MouseEvent& rMEvt )
 
 IMPL_LINK(PostItTxt, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
-    if (mpPostIt && pInfo->nCommand == SPELLCMD_STARTSPELLDLG)
-        mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON);
+    if ( mpMarginWin && (pInfo->nCommand == SPELLCMD_STARTSPELLDLG) )
+        mpMarginWin->DocView()->GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON);
     return 0;
 }
 
 IMPL_LINK( PostItTxt, Select, Menu*, pSelMenu )
 {
-    mpPostIt->ExecuteCommand( pSelMenu->GetCurItemId() );
+    mpMarginWin->ExecuteCommand( pSelMenu->GetCurItemId() );
     return 0;
 }
 
@@ -363,7 +364,8 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        if (!mpPostIt->IsReadOnly() &&  (mpPostIt->GetStatus()!=SwPostItHelper::DELETED) &&
+        if (!mpMarginWin->IsProtected() &&
+        //if (!mpMarginWin->IsReadOnly() &&  (mpMarginWin->GetStatus()!=SwPostItHelper::DELETED) &&
             mpOutlinerView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(),TRUE ))
         {
             Link aLink = LINK(this, PostItTxt, OnlineSpellCallback);
@@ -371,10 +373,10 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            SfxPopupMenuManager* aMgr = mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel());
+            SfxPopupMenuManager* aMgr = mpMarginWin->DocView()->GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel());
             XubString aText = ((PopupMenu*)aMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
             SwRewriter aRewriter;
-            aRewriter.AddRule(UNDO_ARG1, mpPostIt->GetAuthor());
+            aRewriter.AddRule(UNDO_ARG1, mpMarginWin->GetAuthor());
             aText = aRewriter.Apply(aText);
             ((PopupMenu*)aMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
             // SwPostItLinkForwarder_Impl aFwd( ((PopupMenu*)aMgr->GetSVMenu())->pSvMenu->GetSelectHdl(), mpPostIt );
@@ -396,34 +398,61 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
     else
     if (rCEvt.GetCommand() == COMMAND_WHEEL)
     {
-        if (mpPostIt->Scrollbar()->IsVisible())
+        if (mpMarginWin->Scrollbar()->IsVisible())
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if (pData->IsShift() || pData->IsMod1() || pData->IsMod2())
             {
-                mpPostIt->DocView()->HandleWheelCommands(rCEvt);
+                mpMarginWin->DocView()->HandleWheelCommands(rCEvt);
             }
             else
             {
-                HandleScrollCommand( rCEvt, 0 , mpPostIt->Scrollbar());
+                HandleScrollCommand( rCEvt, 0 , mpMarginWin->Scrollbar());
 
                 /*
                 long nLines = pData->GetNotchDelta() * (long)pData->GetScrollLines();
-                if ( ((mpPostIt->Scrollbar()->GetRange().Min() == mpPostIt->Scrollbar()->GetThumbPos()) && (nLines > 0)) ||
-                    ( (mpPostIt->Scrollbar()->GetRange().Max() == mpPostIt->Scrollbar()->GetThumbPos()+mpPostIt->Scrollbar()->GetVisibleSize()) &&  (nLines < 0)) )
+                if ( ((mpMarginWin->Scrollbar()->GetRange().Min() == mpMarginWin->Scrollbar()->GetThumbPos()) && (nLines > 0)) ||
+                    ( (mpMarginWin->Scrollbar()->GetRange().Max() == mpMarginWin->Scrollbar()->GetThumbPos()+mpMarginWin->Scrollbar()->GetVisibleSize()) &&  (nLines < 0)) )
                 {
-                    mpPostIt->DocView()->HandleWheelCommands(rCEvt);
+                    mpMarginWin->DocView()->HandleWheelCommands(rCEvt);
                 }
                 else
                 {
-                    HandleScrollCommand( rCEvt, 0 , mpPostIt->Scrollbar());
+                    HandleScrollCommand( rCEvt, 0 , mpMarginWin->Scrollbar());
                 }
                 */
             }
         }
         else
         {
-            mpPostIt->DocView()->HandleWheelCommands(rCEvt);
+            mpMarginWin->DocView()->HandleWheelCommands(rCEvt);
+        }
+    }
+    else if (rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE)
+    {
+        if ( mpOutlinerView )
+        {
+            const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
+            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+            aSelection.nStartPos = sal::static_int_cast<sal_uInt16, ULONG>(pData->GetStart());
+            aSelection.nEndPos = sal::static_int_cast<sal_uInt16, ULONG>(pData->GetEnd());
+            mpOutlinerView->GetEditView().SetSelection(aSelection);
+        }
+    }
+    else if (rCEvt.GetCommand() == COMMAND_PREPARERECONVERSION)
+    {
+        if ( mpOutlinerView && mpOutlinerView->HasSelection() )
+        {
+            EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
+            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+            aSelection.Adjust();
+            if( aSelection.nStartPara != aSelection.nEndPara )
+            {
+                xub_StrLen aParaLen = aEditEngine->GetTextLen( aSelection.nStartPara );
+                aSelection.nEndPara = aSelection.nStartPara;
+                aSelection.nEndPos = aParaLen;
+                mpOutlinerView->GetEditView().SetSelection( aSelection );
+            }
         }
     }
     else
@@ -440,6 +469,40 @@ void PostItTxt::DataChanged( const DataChangedEvent& aData)
     Window::DataChanged( aData );
 }
 
+XubString PostItTxt::GetSurroundingText() const
+{
+    if( mpOutlinerView )
+    {
+        EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
+        if( mpOutlinerView->HasSelection() )
+            return mpOutlinerView->GetSelected();
+        else
+        {
+            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+            XubString aStr = aEditEngine->GetText(aSelection.nStartPara);
+            return aStr;
+        }
+    }
+    else
+        return XubString::EmptyString();
+}
+
+Selection PostItTxt::GetSurroundingTextSelection() const
+{
+    if( mpOutlinerView )
+    {
+        if( mpOutlinerView->HasSelection() )
+            return Selection( 0, mpOutlinerView->GetSelected().Len() );
+        else
+        {
+            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+            return Selection( aSelection.nStartPos, aSelection.nEndPos );
+        }
+    }
+    else
+        return Selection( 0, 0 );
+}
+
 IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
 {
     if ( pWinEvent && pWinEvent->ISA( VclWindowEvent ) )
@@ -453,22 +516,22 @@ IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
                 mMouseOver = true;
                 if (!mbShowPopup && !HasFocus())
                 {
-                    mpPostIt->SetShadowState(SS_VIEW);
+                    mpMarginWin->SetViewState(SS_VIEW);
                     Invalidate();
                 }
             }
             else if ( pMouseEvt->IsLeaveWindow())
             {
-                if (mpPostIt->IsPreview())
+                if (mpMarginWin->IsPreview())
                 {
-                    //mpPostIt->doLazyDelete();
+                    //mpMarginWin->doLazyDelete();
                 }
                 else
                 {
                     mMouseOver = false;
                     if (!mbShowPopup && !HasFocus())
                     {
-                        mpPostIt->SetShadowState(SS_NORMAL);
+                        mpMarginWin->SetViewState(SS_NORMAL);
                         Invalidate();
                     }
                 }
@@ -478,22 +541,23 @@ IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
     return sal_True;
 }
 
-
-/******* SwPostIt **************************************/
-SwPostIt::SwPostIt( Window* pParent, WinBits nBits, SwFmtFld* aField,SwPostItMgr* aMgr,SwPostItBits aBits) : Window(pParent, nBits),
+/************** SwMarginWin***********************************++*/
+SwMarginWin::SwMarginWin(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
+: Window(pParent, nBits),
+    mnEventId(0),
     mpOutlinerView(0),
     mpOutliner(0),
     mpPostItTxt(0),
     mpMeta(0),
     mpVScrollbar(0),
-    mpFmtFld(aField),
-    mpFld( static_cast<SwPostItField*>(aField->GetFld())),
     mpAnkor(0),
     mpShadow(0),
     mpMgr(aMgr),
     mbMeta(true),
-    mpButtonPopup(new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON))),
-    nFlags(aBits)
+    nFlags(aBits),
+    mbMouseOverButton(false),
+    mpButtonPopup(0),
+    mbIsFollow(false)
 {
     SwEditWin* aWin = static_cast<SwEditWin*>(GetParent());
     mpView = &aWin->GetView();
@@ -507,38 +571,9 @@ SwPostIt::SwPostIt( Window* pParent, WinBits nBits, SwFmtFld* aField,SwPostItMgr
         mpShadow->setVisible(false);
         pOverlayManager->add(*mpShadow);
     }
-
-    InitControls();
-    SetPostItText();
 }
 
-void SwPostIt::SetPostItText()
-{
-    // get text from SwPostItField and insert into our textview
-    mpOutliner->SetModifyHdl( Link() );
-    mpOutliner->EnableUndo( FALSE );
-    mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
-    if( mpFld->GetTextObject() )
-        mpOutliner->SetText( *mpFld->GetTextObject() );
-    else
-    {
-        mpOutliner->Clear();
-        SfxItemSet item( mpView->GetDocShell()->GetPool() );
-        item.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
-        item.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-                            rtl::OUString::createFromAscii(""),PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
-        mpOutlinerView->SetAttribs(item);
-        mpOutlinerView->InsertText(mpFld->GetPar2(),false);
-    }
-
-    mpOutliner->ClearModifyFlag();
-    mpOutliner->GetUndoManager().Clear();
-    mpOutliner->EnableUndo( TRUE );
-    mpOutliner->SetModifyHdl( LINK( this, SwPostIt, ModifyHdl ) );
-    Invalidate();
-}
-
-SwPostIt::~SwPostIt()
+SwMarginWin::~SwMarginWin()
 {
     if (mpOutlinerView)
     {
@@ -589,9 +624,12 @@ SwPostIt::~SwPostIt()
     {
         delete mpButtonPopup;
     }
+
+    if (mnEventId)
+        Application::RemoveUserEvent( mnEventId );
 }
 
-void SwPostIt::Paint( const Rectangle& rRect)
+void SwMarginWin::Paint( const Rectangle& rRect)
 {
     Window::Paint(rRect);
 
@@ -614,7 +652,11 @@ void SwPostIt::Paint( const Rectangle& rRect)
         else
         {
             //draw button
-            Gradient aGradient(GRADIENT_LINEAR,ColorFromAlphaColor(15,mColorAnkor,mColorDark),ColorFromAlphaColor(80,mColorAnkor,mColorDark));
+            Gradient aGradient;
+            if (mbMouseOverButton)
+                aGradient = Gradient(GRADIENT_LINEAR,ColorFromAlphaColor(80,mColorAnkor,mColorDark),ColorFromAlphaColor(15,mColorAnkor,mColorDark));
+            else
+                aGradient = Gradient(GRADIENT_LINEAR,ColorFromAlphaColor(15,mColorAnkor,mColorDark),ColorFromAlphaColor(80,mColorAnkor,mColorDark));
             DrawGradient(mRectMetaButton,aGradient);
             //draw rect around button
             SetFillColor();
@@ -647,7 +689,7 @@ void SwPostIt::Paint( const Rectangle& rRect)
     }
 }
 
-void SwPostIt::SetPosSizePixelRect(long nX, long nY,long nWidth, long nHeight,const SwRect &aRect, const long aPageBorder)
+void SwMarginWin::SetPosSizePixelRect(long nX, long nY,long nWidth, long nHeight,const SwRect &aRect, const long aPageBorder)
 {
     mbMeta = true;
     mPosSize = Rectangle(Point(nX,nY),Size(nWidth,nHeight));
@@ -655,22 +697,22 @@ void SwPostIt::SetPosSizePixelRect(long nX, long nY,long nWidth, long nHeight,co
     mPageBorder = aPageBorder;
 }
 
-void SwPostIt::SetSize( const Size& rNewSize )
+void SwMarginWin::SetSize( const Size& rNewSize )
 {
     mPosSize.SetSize(rNewSize);
 }
 
-void SwPostIt::SetVirtualPosSize( const Point& aPoint, const Size& aSize)
+void SwMarginWin::SetVirtualPosSize( const Point& aPoint, const Size& aSize)
 {
     mPosSize = Rectangle(aPoint,aSize);
 }
 
-void SwPostIt::TranslateTopPosition(const long aAmount)
+void SwMarginWin::TranslateTopPosition(const long aAmount)
 {
     mPosSize.Move(0,aAmount);
 }
 
-void SwPostIt::ShowAnkorOnly(const Point &aPoint)
+void SwMarginWin::ShowAnkorOnly(const Point &aPoint)
 {
     HideNote();
     SetPosAndSize();
@@ -680,12 +722,13 @@ void SwPostIt::ShowAnkorOnly(const Point &aPoint)
         mpAnkor->SetSeventhPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
         mpAnkor->setVisible(true);
     }
+    if (mpShadow)
+        mpShadow->setVisible(false);
 }
 
-void SwPostIt::InitControls()
+void SwMarginWin::InitControls()
 {
     // actual window which holds the user text
-    //mpPostItTxt = new PostItTxt(this, 0x00000100);
     mpPostItTxt = new PostItTxt(this, 0);
     mpPostItTxt->SetPointer(Pointer(POINTER_TEXT));
 
@@ -707,8 +750,6 @@ void SwPostIt::InitControls()
     aStyleSettings.SetFieldFont(aFont);
     aSettings.SetStyleSettings(aStyleSettings);
     mpMeta->SetSettings(aSettings);
-
-    CheckMetaText();
 
     SwDocShell* aShell = mpView->GetDocShell();
     mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
@@ -732,7 +773,7 @@ void SwPostIt::InitControls()
     SfxItemSet item(aShell->GetPool());
     item.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
     item.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
-                            rtl::OUString::createFromAscii(""),PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+                            EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     mpOutlinerView->SetAttribs(item);
 
     // TODO: ??
@@ -743,11 +784,9 @@ void SwPostIt::InitControls()
     mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
     mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
-    mpVScrollbar->SetScrollHdl(LINK(this, SwPostIt, ScrollHdl));
+    mpVScrollbar->SetScrollHdl(LINK(this, SwMarginWin, ScrollHdl));
     mpVScrollbar->EnableDrag();
     mpVScrollbar->AddEventListener( LINK( mpPostItTxt, PostItTxt, WindowEventListener ) );
-
-    mpButtonPopup->SetMenuFlags(MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES);
 
     const SwViewOption* pVOpt = mpView->GetWrtShellPtr()->GetViewOptions();
     ULONG nCntrl = mpOutliner->GetControlWord();
@@ -757,74 +796,55 @@ void SwPostIt::InitControls()
         nCntrl |= EE_CNTRL_MARKFIELDS;
     else
         nCntrl &= ~EE_CNTRL_MARKFIELDS;
-    if (pVOpt->IsHideSpell())
-        nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     mpOutliner->SetControlWord(nCntrl);
 
-    XubString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
-    SwRewriter aRewriter;
-    aRewriter.AddRule(UNDO_ARG1,GetAuthor());
-    aText = aRewriter.Apply(aText);
-    mpButtonPopup->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+    sal_uInt16 aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
+    SetColor(mpMgr->GetColorDark(aIndex),mpMgr->GetColorLight(aIndex),mpMgr->GetColorAnkor(aIndex));
 
-    // TODO: why does this not work?
-    //mpOutliner->SetDefaultLanguage(mpFld->GetLanguage());
-
-    // set initial language for outliner
-    USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
-    USHORT nLangWhichId = 0;
-    switch (nScriptType)
-    {
-        case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
-        case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
-        case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
-    }
-    SetLanguage(SvxLanguageItem(mpFld->GetLanguage(),nLangWhichId));
-    mpOutlinerView->StartSpeller();
+    CheckMetaText();
+    SetPopup();
+    SetPostItText();
+    SetLanguage(GetLanguage());
+    View()->StartSpeller();
 
     mpMeta->Show();
     mpVScrollbar->Show();
     mpPostItTxt->Show();
 }
 
-void SwPostIt::CheckMetaText()
+void SwMarginWin::CheckMetaText()
 {
-    /*
-    String sDateTime;
-    SvNumberFormatter* pNumFormatter = mpView->GetDocShell()->GetDoc()->GetNumberFormatter();
-    const ULONG nFormatDate = pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME , Application::GetSettings().GetLanguage());
-    const DateTime aDateTime( mpFld->GetDate(), mpFld->GetTime());
-    pNumFormatter->GetOutputString( aDateTime - DateTime( *pNumFormatter->GetNullDate()), nFormatDate, sDateTime, &pColor );
-    */
     const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
-    String sMeta = mpFld->GetPar1();
+    String sMeta = GetAuthor();
+    if (sMeta==String(EMPTYSTRING))
+        sMeta = String(SW_RES(STR_NOAUTHOR));
     if (sMeta.Len() > 22)
     {
         sMeta.Erase(20);
         sMeta = sMeta + rtl::OUString::createFromAscii("...");
     }
-    bool bValidTimeStamp = true;
-    if (mpFld->GetDate()==Date())
-        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_TODAY));
-    else if (mpFld->GetDate()==Date(Date()-1))
-        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_YESTERDAY));
-    else if (mpFld->GetDate().IsValid())
-        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + rLocalData.getDate(mpFld->GetDate());
+    Date aDate = GetDate();
+    if (aDate==Date())
+        sMeta = sMeta + LINEBREAK + String(SW_RES(STR_POSTIT_TODAY));
     else
-        bValidTimeStamp = false;
-    if (bValidTimeStamp)
-        sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime(mpFld->GetTime(), false);
+    if (aDate == Date(Date()-1))
+        sMeta = sMeta + LINEBREAK + String(SW_RES(STR_POSTIT_YESTERDAY));
+    else
+    if (aDate.IsValid() )
+        sMeta = sMeta + LINEBREAK + rLocalData.getDate(aDate);
+    else
+        sMeta = sMeta + LINEBREAK + String(SW_RES(STR_NODATE));
+    if (GetTime()!=0)
+        sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( GetTime(),false );
     if (mpMeta->GetText() != sMeta)
         mpMeta->SetText(sMeta);
 }
 
-void SwPostIt::Rescale()
+void SwMarginWin::Rescale()
 {
     MapMode aMode = GetParent()->GetMapMode();
     aMode.SetOrigin( Point() );
@@ -843,7 +863,7 @@ void SwPostIt::Rescale()
     }
 }
 
-void SwPostIt::SetPosAndSize()
+void SwMarginWin::SetPosAndSize()
 {
     bool bChange = false;
 
@@ -918,9 +938,20 @@ void SwPostIt::SetPosAndSize()
         Point aEnd = EditWin()->PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
         mpShadow->SetPosition(basegfx::B2DPoint(aStart.X(),aStart.Y()), basegfx::B2DPoint(aEnd.X(),aEnd.Y()));
     }
+    if (IsFollow() && !HasChildPathFocus())
+    {
+        mpAnkor->SetAnkorState(AS_END);
+    }
+    else
+    {
+        mpAnkor->SetAnkorState(AS_ALL);
+        SwMarginWin* pWin = GetTopReplyNote();
+        if (IsFollow() && pWin )
+            pWin->Ankor()->SetAnkorState(AS_END);
+    }
 }
 
-void SwPostIt::DoResize()
+void SwMarginWin::DoResize()
 {
     long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
     unsigned long aWidth    =   GetSizePixel().Width();
@@ -930,7 +961,7 @@ void SwPostIt::DoResize()
     {
         aHeight -= GetMetaHeight();
         mpMeta->Show();
-        mpPostItTxt->SetQuickHelpText(rtl::OUString::createFromAscii(""));
+        mpPostItTxt->SetQuickHelpText(EMPTYSTRING);
     }
     else
     {
@@ -995,7 +1026,7 @@ void SwPostIt::DoResize()
                 Size( METABUTTON_WIDTH*fx.GetNumerator()/fx.GetDenominator(), METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
 }
 
-void SwPostIt::SetSizePixel( const Size& rNewSize )
+void SwMarginWin::SetSizePixel( const Size& rNewSize )
 {
     Window::SetSizePixel(rNewSize);
 
@@ -1007,12 +1038,12 @@ void SwPostIt::SetSizePixel( const Size& rNewSize )
     }
 }
 
-void SwPostIt::SetScrollbar()
+void SwMarginWin::SetScrollbar()
 {
     mpVScrollbar->SetThumbPos( mpOutlinerView->GetVisArea().Top()+ mpOutlinerView->GetEditView().GetCursor()->GetOffsetY());
 }
 
-void SwPostIt::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
+void SwMarginWin::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
     {
@@ -1033,16 +1064,15 @@ void SwPostIt::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
             else
             {
                 if (GetSizePixel().Height() != GetMinimumSizeWithoutMeta() + GetMetaHeight())
-                {
                     SetSizePixel(Size(GetSizePixel().Width(),GetMinimumSizeWithoutMeta() + GetMetaHeight()));
-                    DoResize();
-                    Invalidate();
-                }
+                DoResize();
+                Invalidate();
             }
         }
         else
         {
-            SetScrollbar();
+            DoResize();
+            Invalidate();
         }
     }
     else
@@ -1051,7 +1081,7 @@ void SwPostIt::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
     }
 }
 
-void SwPostIt::SetColor(Color aColorDark,Color aColorLight, Color aColorAnkor)
+void SwMarginWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnkor)
 {
     mColorDark =  aColorDark;
     mColorLight = aColorLight;
@@ -1082,104 +1112,94 @@ void SwPostIt::SetColor(Color aColorDark,Color aColorLight, Color aColorAnkor)
     }
 }
 
-void SwPostIt::SetChangeTracking(SwPostItHelper::SwLayoutStatus& aStatus,Color aColor)
-{
-    if ( (mStatus != aStatus) || (mChangeColor != aColor) )
-    {
-        mStatus = aStatus;
-        mChangeColor = aColor;
-        Invalidate();
-    }
-}
-
-void SwPostIt::SetMarginSide(bool aMarginSide)
+void SwMarginWin::SetMarginSide(bool aMarginSide)
 {
     mbMarginSide = aMarginSide;
 }
 
-void SwPostIt::SetReadonly(BOOL bSet)
+void SwMarginWin::SetReadonly(BOOL bSet)
 {
     mbReadonly = bSet;
     View()->SetReadOnly(bSet);
 }
 
-void SwPostIt::SetLanguage(const SvxLanguageItem aNewItem)
+void SwMarginWin::SetLanguage(const SvxLanguageItem aNewItem)
 {
-    mpOutliner->SetModifyHdl( Link() );
-    ESelection aOld = mpOutlinerView->GetSelection();
+    Engine()->SetModifyHdl( Link() );
+    ESelection aOld = View()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, (USHORT)mpOutliner->GetParagraphCount()-1, USHRT_MAX );
-    mpOutlinerView->SetSelection( aNewSelection );
-    SfxItemSet aEditAttr(mpOutlinerView->GetAttribs());
+    ESelection aNewSelection( 0, 0, (USHORT)Engine()->GetParagraphCount()-1, USHRT_MAX );
+    View()->SetSelection( aNewSelection );
+    SfxItemSet aEditAttr(View()->GetAttribs());
     aEditAttr.Put(aNewItem);
-    mpOutlinerView->SetAttribs( aEditAttr );
+    View()->SetAttribs( aEditAttr );
 
-    mpOutlinerView->SetSelection(aOld);
-    mpOutliner->SetModifyHdl( LINK( this, SwPostIt, ModifyHdl ) );
+    View()->SetSelection(aOld);
+    Engine()->SetModifyHdl( LINK( this, SwPostIt, ModifyHdl ) );
 
-    const SwViewOption* pVOpt = mpView->GetWrtShellPtr()->GetViewOptions();
-    ULONG nCntrl = mpOutliner->GetControlWord();
+    const SwViewOption* pVOpt = DocView()->GetWrtShellPtr()->GetViewOptions();
+    ULONG nCntrl = Engine()->GetControlWord();
     // turn off
     if (!pVOpt->IsOnlineSpell())
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     else
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-    mpOutliner->SetControlWord(nCntrl);
+    Engine()->SetControlWord(nCntrl);
 
     //turn back on
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-    mpOutliner->SetControlWord(nCntrl);
+    Engine()->SetControlWord(nCntrl);
 
-    mpOutliner->CompleteOnlineSpelling();
+    Engine()->CompleteOnlineSpelling();
     Invalidate();
 }
 
-void SwPostIt::DataChanged( const DataChangedEvent& aEvent)
+void SwMarginWin::DataChanged( const DataChangedEvent& aEvent)
 {
     Window::DataChanged( aEvent );
 }
 
-void SwPostIt::GetFocus()
+void SwMarginWin::GetFocus()
 {
     if (mpPostItTxt)
         mpPostItTxt->GrabFocus();
 }
 
-void SwPostIt::LoseFocus()
+void SwMarginWin::LoseFocus()
 {
 }
 
-void SwPostIt::ShowNote()
+void SwMarginWin::ShowNote()
 {
     SetPosAndSize();
     if (!IsVisible())
         Window::Show();
-    if (mpAnkor)
-        mpAnkor->setVisible(true);
-    if (mpShadow)
+    if (mpAnkor && !mpShadow->isVisible())
         mpShadow->setVisible(true);
+    if (mpAnkor && !mpAnkor->isVisible())
+        mpAnkor->setVisible(true);
 }
 
-void SwPostIt::HideNote()
+void SwMarginWin::HideNote()
 {
     if (IsVisible())
         Window::Hide();
-    if (mpAnkor)
+    if (mpAnkor && mpAnkor->isVisible())
         mpAnkor->setVisible(false);
-    if (mpShadow)
+    if (mpShadow && mpShadow->isVisible())
         mpShadow->setVisible(false);
 }
 
-void SwPostIt::ActivatePostIt()
+void SwMarginWin::ActivatePostIt()
 {
     mpOutliner->ClearModifyFlag();
     mpOutliner->GetUndoManager().Clear();
 
     CheckMetaText();
-    SetShadowState(SS_EDIT);
+    SetViewState(SS_EDIT);
     View()->ShowCursor();
 
     mpOutlinerView->GetEditView().SetInsertMode(mpView->GetWrtShellPtr()->IsInsMode());
@@ -1190,7 +1210,7 @@ void SwPostIt::ActivatePostIt()
     //  mpPostItTxt->SetBackground(Wallpaper(mColorDark));
 }
 
-void SwPostIt::DeactivatePostIt()
+void SwMarginWin::DeactivatePostIt()
 {
     // remove selection, #i87073#
     if (View()->GetEditView().HasSelection())
@@ -1203,7 +1223,7 @@ void SwPostIt::DeactivatePostIt()
 
     mpOutliner->CompleteOnlineSpelling();
 
-    SetShadowState(SS_NORMAL);
+    SetViewState(SS_NORMAL);
     // write the visible text back into the SwField
     UpdateData();
 
@@ -1211,156 +1231,80 @@ void SwPostIt::DeactivatePostIt()
         View()->SetBackgroundColor(COL_TRANSPARENT);
 
     //mpPostItTxt->SetBackground(Gradient(GRADIENT_LINEAR,mColorLight,mColorDark));
+
+    if ( !IsProtected() &&
+    //if (!IsReadOnly() && (GetStatus()!=SwPostItHelper::DELETED) &&
+                Engine()->GetEditEngine().GetText()==String(EMPTYSTRING) )
+        mnEventId = Application::PostUserEvent( LINK( this, SwMarginWin, DeleteHdl), 0 );
 }
 
-void SwPostIt::UpdateData()
+void SwMarginWin::ToggleInsMode()
 {
-    if ( mpOutliner->IsModified() )
+    if (!mpView->GetWrtShell().IsRedlineOn())
     {
-        SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
-        if ( pPos )
-        {
-            SwField* pOldField = mpFld->Copy();
-              mpFld->SetPar2(mpOutliner->GetEditEngine().GetText());
-            mpFld->SetTextObject(mpOutliner->CreateParaObject());
-            mpView->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(*pPos, *pOldField, *mpFld, 0, true));
-            delete pOldField;
-            delete pPos;
-            // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
-            mpMgr->SetLayout();
-            mpView->GetDocShell()->SetModified();
-        }
-    }
-    mpOutliner->ClearModifyFlag();
-    mpOutliner->GetUndoManager().Clear();
-}
-
-void SwPostIt::ToggleInsMode()
-{
-    //change outliner
-    mpOutlinerView->GetEditView().SetInsertMode(!mpOutlinerView->GetEditView().IsInsertMode());
-    //change documnet
-    mpView->GetWrtShell().ToggleInsMode();
-    //update statusbar
-    SfxBindings &rBnd = mpView->GetViewFrame()->GetBindings();
-    rBnd.Invalidate(SID_ATTR_INSERT);
-    rBnd.Update(SID_ATTR_INSERT);
-}
-
-void SwPostIt::Delete()
-{
-    if ( Mgr()->GetActivePostIt() == this)
-        Mgr()->SetActivePostIt(0);
-    // we delete the field directly, the Mgr cleans up the PostIt by listening
-    mpView->GetWrtShellPtr()->GotoField(*mpFmtFld);
-    mpView->GetWrtShellPtr()->DelRight();
-}
-
-SwEditWin*  SwPostIt::EditWin()
-{
-    return &mpView->GetEditWin();
-}
-
-String SwPostIt::GetAuthor() const
-{
-    return mpFld->GetPar1();
-}
-
-long SwPostIt::GetPostItTextHeight()
-{
-    return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
-}
-
-/*
-void SwPostIt::SwitchToPostIt(bool aDirection)
-{
-    if (aDirection)
-        SwitchToPostIt(KEY_PAGEDOWN);
-    else
-        SwitchToPostIt(KEY_PAGEUP);
-}
-*/
-void SwPostIt::SwitchToPostIt(USHORT aDirection)
-{
-    if (mpMgr)
-    {
-        SwPostIt* pPostIt = mpMgr->GetNextPostIt(aDirection, this);
-        if (pPostIt)
-            pPostIt->GrabFocus();
+        //change outliner
+        mpOutlinerView->GetEditView().SetInsertMode(!mpOutlinerView->GetEditView().IsInsertMode());
+        //change documnet
+        mpView->GetWrtShell().ToggleInsMode();
+        //update statusbar
+        SfxBindings &rBnd = mpView->GetViewFrame()->GetBindings();
+        rBnd.Invalidate(SID_ATTR_INSERT);
+        rBnd.Update(SID_ATTR_INSERT);
     }
 }
 
-void SwPostIt::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if (mRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())) && rMEvt.IsLeft())
-    {
-        if (IsPreview())
-        {
-            doLazyDelete();
-            if (mpMgr)
-            {
-                SwPostIt* pPostIt = mpMgr->GetPostIt(mpFmtFld);
-                if (pPostIt)
-                {
-                    pPostIt->GrabFocus();
-                    mpMgr->MakeVisible(pPostIt);
-                }
-            }
-
-        }
-        else
-        {
-            if ( mbReadonly )
-            {
-                mpButtonPopup->EnableItem(FN_DELETE_NOTE,false);
-                mpButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR,false);
-                mpButtonPopup->EnableItem(FN_DELETE_ALL_NOTES,false);
-            }
-            else
-            {
-                if (mStatus==SwPostItHelper::DELETED)
-                    mpButtonPopup->EnableItem(FN_DELETE_NOTE,false);
-                else
-                    mpButtonPopup->EnableItem(FN_DELETE_NOTE,true);
-                mpButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR,true);
-                mpButtonPopup->EnableItem(FN_DELETE_ALL_NOTES,true);
-            }
-
-            ExecuteCommand( mpButtonPopup->Execute( this,Rectangle(LogicToPixel(mRectMetaButton.BottomLeft()),LogicToPixel(mRectMetaButton.BottomLeft())),POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE) );
-        }
-    }
-}
-
-void SwPostIt::ExecuteCommand(USHORT nSlot)
+void SwMarginWin::ExecuteCommand(USHORT nSlot)
 {
     switch (nSlot)
     {
-        case FN_DELETE_NOTE:
-            Delete();
-            break;
-        case FN_HIDE_NOTE:
-            if ( mpMgr->GetActivePostIt() == this )
+        case FN_POSTIT:
+        case FN_REPLY:
+        {
+            // if this note is empty, it will be deleted once losing the focus, so no reply, but only a new note
+            // will be created
+            SwView* pView = DocView();
+            if (Engine()->GetEditEngine().GetText() != String(EMPTYSTRING))
             {
-                mpMgr->SetActivePostIt(0);
+                OutlinerParaObject* pPara = new OutlinerParaObject(*View()->GetEditView().CreateTextObject());
+                Mgr()->RegisterAnswer(pPara);
+            }
+            if (Mgr()->GetActivePostIt())
+                Mgr()->SetActivePostIt(0);
+            SwitchToFieldPos();
+            pView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+            break;
+        }
+        case FN_DELETE_COMMENT:
+        case FN_DELETE_NOTE:
+
+                //Delete(); // do not kill the parent of our open popup menu
+                mnEventId = Application::PostUserEvent( LINK( this, SwMarginWin, DeleteHdl), 0 );
+            break;
+        /*
+        case FN_HIDE_NOTE:
+            if ( Mgr()->GetActivePostIt() == this )
+            {
+                Mgr()->SetActivePostIt(0);
                 // put the cursor back into the document
                 SwitchToFieldPos();
             }
-            mpMgr->Hide(mpFld);
+            Mgr()->Hide(mpFld);
             break;
+        */
         case FN_DELETE_ALL_NOTES:
         case FN_HIDE_ALL_NOTES:
             // not possible as slot as this would require that "this" is the active postit
-            mpView->GetViewFrame()->GetBindings().Execute( nSlot, 0, 0, SFX_CALLMODE_ASYNCHRON );
+            DocView()->GetViewFrame()->GetBindings().Execute( nSlot, 0, 0, SFX_CALLMODE_ASYNCHRON );
             break;
         case FN_DELETE_NOTE_AUTHOR:
         case FN_HIDE_NOTE_AUTHOR:
         {
             // not possible as slot as this would require that "this" is the active postit
-            SfxStringItem aItem( nSlot, mpFld->GetPar1() );
+            SfxStringItem aItem( nSlot, GetAuthor() );
             const SfxPoolItem* aItems[2];
             aItems[0] = &aItem;
             aItems[1] = 0;
-            mpView->GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SFX_CALLMODE_ASYNCHRON );
+            DocView()->GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SFX_CALLMODE_ASYNCHRON );
         }
         default:
             mpView->GetViewFrame()->GetBindings().Execute( nSlot );
@@ -1368,30 +1312,110 @@ void SwPostIt::ExecuteCommand(USHORT nSlot)
     }
 }
 
-void SwPostIt::SwitchToFieldPos(bool bAfter)
+bool SwMarginWin::CalcFollow()
 {
-    mpView->GetDocShell()->GetWrtShell()->GotoField(*mpFmtFld);
-    if (bAfter)
-        mpView->GetDocShell()->GetWrtShell()->SwCrsrShell::Right(1, 0, FALSE);
-    GrabFocusToDocument();
+    return false;
 }
 
-IMPL_LINK(SwPostIt, ScrollHdl, ScrollBar*, pScroll)
+SwEditWin*  SwMarginWin::EditWin()
+{
+    return &mpView->GetEditWin();
+}
+
+String SwPostIt::GetAuthor()
+{
+    return mpFld->GetPar1();
+}
+
+Date SwPostIt::GetDate()
+{
+    return mpFld->GetDate();
+}
+
+Time SwPostIt::GetTime()
+{
+    return mpFld->GetTime();
+}
+
+long SwMarginWin::GetPostItTextHeight()
+{
+    return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
+}
+
+void SwMarginWin::SwitchToPostIt(USHORT aDirection)
+{
+    if (mpMgr)
+    {
+        SwMarginWin* pPostIt = mpMgr->GetNextPostIt(aDirection, this);
+        if (pPostIt)
+            pPostIt->GrabFocus();
+    }
+}
+
+void SwMarginWin::MouseButtonDown( const MouseEvent& /*rMEvt */)
+{
+}
+
+void SwMarginWin::MouseMove( const MouseEvent& rMEvt )
+{
+    if (mRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())))
+    {
+        if (!mbMouseOverButton)
+        {
+            Invalidate(mRectMetaButton);
+            mbMouseOverButton = true;
+        }
+    }
+    else
+    {
+        if (mbMouseOverButton)
+        {
+            Invalidate(mRectMetaButton);
+            mbMouseOverButton = false;
+        }
+    }
+}
+
+void SwMarginWin::Delete()
+{
+    if ( Mgr()->GetActivePostIt() == this)
+    {
+        Mgr()->SetActivePostIt(0);
+        // if the note is empty, the previous line will send a delete event, but we are already there
+        if (mnEventId)
+        {
+            Application::RemoveUserEvent( mnEventId );
+            mnEventId = 0;
+        }
+    }
+}
+
+IMPL_LINK(SwMarginWin, ScrollHdl, ScrollBar*, pScroll)
 {
     long nDiff = View()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     View()->Scroll( 0, nDiff );
     return 0;
 }
 
-IMPL_LINK(SwPostIt, ModifyHdl, void*, pVoid)
+IMPL_LINK(SwMarginWin, ModifyHdl, void*, pVoid)
 {
     // no warnings, please
     pVoid=0;
-    mpView->GetDocShell()->SetModified(sal_True);
+    DocView()->GetDocShell()->SetModified(sal_True);
     return 0;
 }
 
-void SwPostIt::ResetAttributes()
+IMPL_LINK(SwMarginWin, DeleteHdl, void*, pVoid)
+{
+    // no warnings, please
+    pVoid=0;
+    mnEventId = 0;
+    Delete();
+    return 0;
+}
+
+
+void SwMarginWin::ResetAttributes()
 {
     mpOutlinerView->RemoveAttribsKeepLanguages(TRUE);
     mpOutliner->RemoveFields(TRUE);
@@ -1400,12 +1424,12 @@ void SwPostIt::ResetAttributes()
     mpOutlinerView->SetAttribs(aSet);
 }
 
-sal_Int32 SwPostIt::GetScrollbarWidth()
+sal_Int32 SwMarginWin::GetScrollbarWidth()
 {
     return mpView->GetWrtShell().GetViewOptions()->GetZoom() / 10;
 }
 
-sal_Int32 SwPostIt::GetMetaButtonAreaWidth()
+sal_Int32 SwMarginWin::GetMetaButtonAreaWidth()
 {
     const Fraction& f( GetMapMode().GetScaleX() );
     if (IsPreview())
@@ -1414,31 +1438,27 @@ sal_Int32 SwPostIt::GetMetaButtonAreaWidth()
         return METABUTTON_AREA_WIDTH * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwPostIt::GetMetaHeight()
+sal_Int32 SwMarginWin::GetMetaHeight()
 {
     const Fraction& f( GetMapMode().GetScaleY() );
     return POSTIT_META_HEIGHT * f.GetNumerator() / f.GetDenominator();
 }
 
-sal_Int32 SwPostIt::GetMinimumSizeWithMeta()
+sal_Int32 SwMarginWin::GetMinimumSizeWithMeta()
 {
     return mpMgr->GetMinimumSizeWithMeta();
 }
 
-sal_Int32 SwPostIt::GetMinimumSizeWithoutMeta()
+sal_Int32 SwMarginWin::GetMinimumSizeWithoutMeta()
 {
     const Fraction& f( GetMapMode().GetScaleY() );
     return POSTIT_MINIMUMSIZE_WITHOUT_META * f.GetNumerator() / f.GetDenominator();
 }
 
-void SwPostIt::SetSpellChecking()
+void SwMarginWin::SetSpellChecking()
 {
     const SwViewOption* pVOpt = mpView->GetWrtShellPtr()->GetViewOptions();
     ULONG nCntrl = mpOutliner->GetControlWord();
-    if (pVOpt->IsHideSpell())
-        nCntrl |= EE_CNTRL_NOREDLINES;
-    else
-        nCntrl &= ~EE_CNTRL_NOREDLINES;
     if (pVOpt->IsOnlineSpell())
         nCntrl |= EE_CNTRL_ONLINESPELLING;
     else
@@ -1449,16 +1469,22 @@ void SwPostIt::SetSpellChecking()
     Invalidate();
 }
 
-void SwPostIt::SetShadowState(ShadowState bState)
+void SwMarginWin::SetViewState(ShadowState bState)
 {
     switch (bState)
     {
         case SS_EDIT:
         {
-            if ( Ankor() )
-                Ankor()->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
-            if ( Shadow() )
-                Shadow()->SetShadowState(SS_EDIT);
+            if (mpAnkor)
+            {
+                mpAnkor->SetAnkorState(AS_ALL);
+                SwMarginWin* pWin = GetTopReplyNote();
+                if (IsFollow() && pWin)
+                    pWin->Ankor()->SetAnkorState(AS_END);
+                mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+            }
+            if (mpShadow)
+                mpShadow->SetShadowState(bState);
             break;
         }
         case SS_VIEW:
@@ -1466,24 +1492,466 @@ void SwPostIt::SetShadowState(ShadowState bState)
             if (mpAnkor)
                 mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
             if (mpShadow)
-                mpShadow->SetShadowState(SS_VIEW);
+                mpShadow->SetShadowState(bState);
             break;
         }
         case SS_NORMAL:
         {
             if (mpAnkor)
+            {
+                if (IsFollow())
+                {
+                    // if there is no visible parent note, we want to see the complete anchor ??
+                    //if (IsAnyStackParentVisible())
+                    mpAnkor->SetAnkorState(AS_END);
+                    SwMarginWin* pWin = GetTopReplyNote();
+                    if (pWin)
+                        pWin->Ankor()->SetAnkorState(AS_ALL);
+                }
                 mpAnkor->SetLineInfo(LineInfo(LINE_DASH,ANKORLINE_WIDTH*15));
+            }
             if (mpShadow)
-                mpShadow->SetShadowState(SS_NORMAL);
+                mpShadow->SetShadowState(bState);
             break;
         }
     }
 }
 
-/****** SwPostItShadow  ***********************************************************/
+bool SwMarginWin::IsAnyStackParentVisible()
+{
+    SwMarginWin* pMarginWin = mpMgr->GetNextPostIt(KEY_PAGEUP, this);
+    while (pMarginWin)
+    {
+        if (pMarginWin->IsFollow())
+        {
+            pMarginWin = mpMgr->GetNextPostIt(KEY_PAGEUP, pMarginWin);
+            if (pMarginWin && pMarginWin->IsVisible())
+                return true;
+        }
+        else
+            return pMarginWin && pMarginWin->IsVisible() ? true : false;
+    }
+    return false;
+}
 
+SwMarginWin* SwMarginWin::GetTopReplyNote()
+{
+    SwMarginWin* pTopNote = 0;
+    SwMarginWin* pMarginWin = mpMgr->GetNextPostIt(KEY_PAGEUP, this);
+    while (pMarginWin)
+    {
+        pTopNote = pMarginWin;
+        pMarginWin = pMarginWin->IsFollow() ? mpMgr->GetNextPostIt(KEY_PAGEUP, pMarginWin) : 0;
+    }
+    return pTopNote;
+}
+
+void SwMarginWin::SetPostItText()
+{
+}
+
+void SwMarginWin::SwitchToFieldPos()
+{
+    if ( Mgr()->GetActivePostIt() == this )
+            Mgr()->SetActivePostIt(0);
+    GotoPos();
+    sal_uInt32 aCount = MoveCaret();
+    if (aCount)
+        DocView()->GetDocShell()->GetWrtShell()->SwCrsrShell::Right(aCount, 0, FALSE);
+    GrabFocusToDocument();
+}
+
+String SwMarginWin::GetAuthor()
+{
+    return String(EMPTYSTRING);
+}
+
+Date SwMarginWin::GetDate()
+{
+    return Date(0);
+}
+
+Time SwMarginWin::GetTime()
+{
+    return Time(0);
+}
+
+SvxLanguageItem SwMarginWin::GetLanguage(void)
+{
+    return SvxLanguageItem(SwLangHelper::GetLanguage(DocView()->GetWrtShell(),RES_CHRATR_LANGUAGE),RES_CHRATR_LANGUAGE);
+}
+
+/***** SwPostIt *********************************************/
+SwPostIt::SwPostIt( Window* pParent, WinBits nBits, SwFmtFld* aField,SwPostItMgr* aMgr,SwPostItBits aBits)
+    : SwMarginWin(pParent,nBits,aMgr,aBits),
+    mpFmtFld(aField),
+    mpFld( static_cast<SwPostItField*>(aField->GetFld())),
+    mStatus(SwPostItHelper::INVISIBLE)
+{
+}
+
+void SwPostIt::SetPostItText()
+{
+    // get text from SwPostItField and insert into our textview
+    Engine()->SetModifyHdl( Link() );
+    Engine()->EnableUndo( FALSE );
+    mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
+    if( mpFld->GetTextObject() )
+        Engine()->SetText( *mpFld->GetTextObject() );
+    else
+    {
+        Engine()->Clear();
+        SfxItemSet item( DocView()->GetDocShell()->GetPool() );
+        item.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
+        item.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
+                            EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+        View()->SetAttribs(item);
+        View()->InsertText(mpFld->GetPar2(),false);
+    }
+
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+    Engine()->EnableUndo( TRUE );
+    Engine()->SetModifyHdl( LINK( this, SwPostIt, ModifyHdl ) );
+    Invalidate();
+}
+
+void SwPostIt::UpdateData()
+{
+    if ( Engine()->IsModified() )
+    {
+        SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
+        if ( pPos )
+        {
+            SwField* pOldField = mpFld->Copy();
+              mpFld->SetPar2(Engine()->GetEditEngine().GetText());
+            mpFld->SetTextObject(Engine()->CreateParaObject());
+            DocView()->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(*pPos, *pOldField, *mpFld, 0, true));
+            delete pOldField;
+            delete pPos;
+            // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
+            Mgr()->SetLayout();
+            DocView()->GetDocShell()->SetModified();
+        }
+    }
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+}
+
+void SwPostIt::SetChangeTracking(SwPostItHelper::SwLayoutStatus& aStatus,Color aColor)
+{
+    if ( (mStatus != aStatus) || (mChangeColor != aColor) )
+    {
+        mStatus = aStatus;
+        mChangeColor = aColor;
+        Invalidate();
+    }
+}
+
+void SwPostIt::Delete()
+{
+    SwMarginWin::Delete();
+    // we delete the field directly, the Mgr cleans up the PostIt by listening
+    DocView()->GetWrtShellPtr()->GotoField(*mpFmtFld);
+    GrabFocusToDocument();
+    DocView()->GetWrtShellPtr()->DelRight();
+}
+
+void SwPostIt::GotoPos()
+{
+    DocView()->GetDocShell()->GetWrtShell()->GotoField(*mpFmtFld);
+}
+
+sal_uInt32 SwPostIt::MoveCaret()
+{
+    // if this is an answer, do not skip over all following ones, but insert directly behind the current one
+    // but when just leaving a note, skip all following ones as well to continue typing
+    return Mgr()->IsAnswer() ? 1 : 1 + CountFollowing();
+}
+
+//returns true, if there is another note right before this note
+bool SwPostIt::CalcFollow()
+{
+    SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
+    const SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
+    SwTxtAttr* pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( pPos->nContent.GetIndex()-1,RES_TXTATR_FIELD ) : 0;
+    const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
+    delete pPos;
+    return pFld && (pFld->Which()== RES_POSTITFLD);
+}
+
+// counts how many SwPostItField we have right after the current one
+sal_uInt32 SwPostIt::CountFollowing()
+{
+    sal_uInt32 aCount = 1;  // we start with 1, so we have to subtract one at the end again
+    SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
+    const SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
+
+    SwTxtAttr* pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( pPos->nContent.GetIndex()+1,RES_TXTATR_FIELD ) : 0;
+    SwField* pFld = pTxtAttr ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld()) : 0;
+    while (pFld && (pFld->Which()== RES_POSTITFLD))
+    {
+        aCount++;
+        pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( pPos->nContent.GetIndex() + aCount,RES_TXTATR_FIELD ) : 0;
+        pFld = pTxtAttr ? const_cast<SwField*>(pTxtAttr->GetFld().GetFld()) : 0;
+    }
+    delete pPos;
+    return aCount - 1;
+}
+
+void SwPostIt::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (mRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())) && rMEvt.IsLeft())
+    {
+        if (IsPreview())
+        {
+            doLazyDelete();
+            if (Mgr())
+            {
+                SwPostIt* pPostIt = dynamic_cast<SwPostIt*>(Mgr()->GetPostIt(mpFmtFld));
+                if (pPostIt)
+                {
+                    pPostIt->GrabFocus();
+                    Mgr()->MakeVisible(pPostIt);
+                }
+            }
+
+        }
+        else
+        {
+            if ( mbReadonly )
+            {
+                mpButtonPopup->EnableItem(FN_REPLY,false);
+                mpButtonPopup->EnableItem(FN_DELETE_NOTE,false);
+                mpButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR,false);
+                mpButtonPopup->EnableItem(FN_DELETE_ALL_NOTES,false);
+            }
+            else
+            {
+                if (IsProtected())
+                    mpButtonPopup->EnableItem(FN_DELETE_NOTE,false);
+                else
+                    mpButtonPopup->EnableItem(FN_DELETE_NOTE,true);
+                mpButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR,true);
+                mpButtonPopup->EnableItem(FN_DELETE_ALL_NOTES,true);
+            }
+            SvtUserOptions aUserOpt;
+            String sAuthor;
+            if( !(sAuthor = aUserOpt.GetFullName()).Len())
+                if( !(sAuthor = aUserOpt.GetID()).Len() )
+                    sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+            // do not allow to reply to ourself and no answer possible if this note is in a protected section
+            if ((sAuthor == GetAuthor()) || (IsProtected()))
+                mpButtonPopup->EnableItem(FN_REPLY,false);
+            else
+                mpButtonPopup->EnableItem(FN_REPLY,true);
+
+            // show the popup menu and execute the selected command
+            ExecuteCommand( mpButtonPopup->Execute( this,Rectangle(LogicToPixel(mRectMetaButton.BottomLeft()),LogicToPixel(mRectMetaButton.BottomLeft())),POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE) );
+        }
+    }
+}
+
+void SwPostIt::SetPopup()
+{
+    mpButtonPopup = new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON));
+    //mpButtonPopup->SetMenuFlags(MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES);
+    XubString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UNDO_ARG1,GetAuthor());
+    aText = aRewriter.Apply(aText);
+    mpButtonPopup->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+}
+
+void SwPostIt::InitAnswer(OutlinerParaObject* pText)
+{
+    //collect our old meta data
+    SwMarginWin* pWin = Mgr()->GetNextPostIt(KEY_PAGEUP, this);
+    const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
+    String aText = String((SW_RES(STR_REPLY)));
+    aText.Append(String(pWin->GetAuthor() + rtl::OUString::createFromAscii(" (") +
+        String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString::createFromAscii(", ") +
+        String(rLocalData.getTime( pWin->GetTime(),false)) + rtl::OUString::createFromAscii("): \"")));
+    View()->InsertText(aText,false);
+
+    // insert old, selected text or "..."
+    // TOOD: iterate over all paragraphs, not only first one to find out if it is empty
+    if (pText->GetTextObject().GetText(0) != String(EMPTYSTRING))
+        View()->GetEditView().InsertText(pText->GetTextObject());
+    else
+        View()->InsertText(rtl::OUString::createFromAscii("..."),false);
+    View()->InsertText(rtl::OUString::createFromAscii("\"\n"),false);
+
+    View()->SetSelection(ESelection(0x0,0x0,0xFFFF,0xFFFF));
+    SfxItemSet aAnswerSet( DocView()->GetDocShell()->GetPool() );
+    aAnswerSet.Put(SvxFontHeightItem(200,80,EE_CHAR_FONTHEIGHT));
+    aAnswerSet.Put(SvxPostureItem(ITALIC_NORMAL,EE_CHAR_ITALIC));
+    View()->SetAttribs(aAnswerSet);
+    View()->SetSelection(ESelection(0xFFFF,0xFFFF,0xFFFF,0xFFFF));
+
+    //remove all attributes and reset our standard ones
+    View()->GetEditView().RemoveAttribsKeepLanguages(true);
+    SfxItemSet aNormalSet( DocView()->GetDocShell()->GetPool() );
+    aNormalSet.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
+    aNormalSet.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
+                            EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+    View()->SetAttribs(aNormalSet);
+    // lets insert an undo step so the initial text can be easily deleted
+    // but do not use UpdateData() directly, would set modified state again and reentrance into Mgr
+    Engine()->SetModifyHdl( Link() );
+    SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
+    if ( pPos )
+    {
+        SwField* pOldField = mpFld->Copy();
+        mpFld->SetPar2(Engine()->GetEditEngine().GetText());
+        mpFld->SetTextObject(Engine()->CreateParaObject());
+        DocView()->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(*pPos, *pOldField, *mpFld, 0, true));
+        delete pOldField;
+        delete pPos;
+    }
+    Engine()->SetModifyHdl( LINK( this, SwPostIt, ModifyHdl ) );
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+}
+
+SvxLanguageItem SwPostIt::GetLanguage(void)
+{
+    // set initial language for outliner
+    USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
+    USHORT nLangWhichId = 0;
+    switch (nScriptType)
+    {
+        case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
+        case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
+        case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
+        default: DBG_ERROR("GetLanguage: wrong script tye");
+    }
+    return SvxLanguageItem(mpFld->GetLanguage(),nLangWhichId);
+}
+
+bool SwPostIt::IsProtected()
+{
+    bool aReturn;
+    aReturn = mpFmtFld ? (SwMarginWin::IsProtected() || (mStatus==SwPostItHelper::DELETED) ||
+        mpFmtFld->IsProtect()) : (SwMarginWin::IsProtected() || (mStatus==SwPostItHelper::DELETED));
+    return aReturn;
+}
+
+/********** SwRedComment**************/
+/*
+SwRedComment::SwRedComment( Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits,SwRedline* pRed)
+    : SwMarginWin(pParent,nBits,aMgr,aBits),
+    pRedline(pRed)
+{
+}
+
+void SwRedComment::SetPopup()
+{
+    mpButtonPopup = new PopupMenu(SW_RES(MN_REDCOMMENT_BUTTON));
+    //mpButtonPopup->SetMenuFlags(MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES);
+}
+
+void SwRedComment::UpdateData()
+{
+    if ( Engine()->IsModified() )
+    {
+        // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
+        Mgr()->SetLayout();
+        // SetRedline is calling SetModified already
+        DocView()->GetWrtShell().SetRedlineComment(Engine()->GetEditEngine().GetText());
+    }
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+}
+
+void SwRedComment::SetPostItText()
+{
+    Engine()->SetModifyHdl( Link() );
+    Engine()->EnableUndo( FALSE );
+
+    Engine()->Clear();
+    SfxItemSet item( DocView()->GetDocShell()->GetPool() );
+    item.Put(SvxFontHeightItem(200,100,EE_CHAR_FONTHEIGHT));
+    item.Put(SvxFontItem(FAMILY_SWISS,GetSettings().GetStyleSettings().GetFieldFont().GetName(),
+                        EMPTYSTRING,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
+    View()->SetAttribs(item);
+    View()->InsertText(pRedline->GetComment(),false);
+
+    Engine()->ClearModifyFlag();
+    Engine()->GetUndoManager().Clear();
+    Engine()->EnableUndo( TRUE );
+    Engine()->SetModifyHdl( LINK( this, SwMarginWin, ModifyHdl ) );
+    Invalidate();
+}
+
+void SwRedComment::DeactivatePostIt()
+{
+    SwMarginWin::DeactivatePostIt();
+    // current Redline is still selected
+    DocView()->GetWrtShellPtr()->ClearMark();
+}
+
+void SwRedComment::ActivatePostIt()
+{
+    SwMarginWin::ActivatePostIt();
+
+    // do we want the redline selected?
+    // otherwise, SwRedComment::ActivatePostIt() as well as SwRedComment::DeactivatePostIt()
+    // can be thrown out completly
+    DocView()->GetDocShell()->GetWrtShell()->GotoRedline(
+        DocView()->GetDocShell()->GetWrtShell()->FindRedlineOfData(pRedline->GetRedlineData()),true);
+}
+
+void SwRedComment::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (mRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())) && rMEvt.IsLeft())
+    {
+        ExecuteCommand( mpButtonPopup->Execute( this,Rectangle(LogicToPixel(mRectMetaButton.BottomLeft()),LogicToPixel(mRectMetaButton.BottomLeft())),POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE) );
+    }
+}
+
+void SwRedComment::Delete()
+{
+    SwMarginWin::Delete();
+    // we are not neccessarily on our redline, so let's move there
+    GotoPos();
+    DocView()->GetWrtShell().SetRedlineComment(EMPTYSTRING);
+    DocView()->GetWrtShell().ClearMark();
+    // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
+    Mgr()->SetLayout();
+    Mgr()->RemoveItem(pRedline);
+}
+
+void SwRedComment::GotoPos()
+{
+    DocView()->GetDocShell()->GetWrtShell()->GotoRedline(
+        DocView()->GetDocShell()->GetWrtShell()->FindRedlineOfData(pRedline->GetRedlineData()));
+}
+
+String SwRedComment::GetAuthor()
+{
+    return pRedline->GetAuthorString();
+}
+
+Date SwRedComment::GetDate()
+{
+    return pRedline->GetTimeStamp().GetDate();
+}
+
+Time SwRedComment::GetTime()
+{
+    return pRedline->GetTimeStamp().GetTime();
+}
+
+bool SwRedComment::IsProtected()
+{
+    return SwMarginWin::IsProtected() || pRedline->Start()->nNode.GetNode().GetTxtNode()->IsInProtectSect();
+}
+*/
+
+/****** SwPostItShadow  ***********************************************************/
 SwPostItShadow::SwPostItShadow(const basegfx::B2DPoint& rBasePos,const basegfx::B2DPoint& rSecondPosition,
-                               Color aBaseColor,ShadowState aState)
+                                   Color aBaseColor,ShadowState aState)
         :   OverlayObjectWithBasePosition(rBasePos, aBaseColor),
             maSecondPosition(rSecondPosition),
             mShadowState(aState)
@@ -1635,26 +2103,42 @@ void SwPostItAnkor::implDrawGeometry(OutputDevice& rOutputDevice, Color aColor, 
         aLin.transform(aTranslate);
     }
 
-    // draw triangle
-    rOutputDevice.SetLineColor();
-    rOutputDevice.SetFillColor(aColor);
-    rOutputDevice.DrawPolygon(Polygon(aTri));
+    switch (mAnkorState)
+    {
+        case AS_ALL:
+        {
+            rOutputDevice.SetLineColor();
+            rOutputDevice.SetFillColor(aColor);
+            //rOutputDevice.DrawTransparent(Polygon(aTri), 50);
+            rOutputDevice.DrawPolygon(Polygon(aTri));
 
-    /*
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.translate(-aTri.getB2DPoint(0).getX(),-aTri.getB2DPoint(0).getY());
-    aMatrix.scale(1.0, -1.0);
-    aMatrix.translate(aTri.getB2DPoint(0).getX(),aTri.getB2DPoint(0).getY());
-    aMatrix.translate(0,(mHeight*-1) + 13 * 15 );
-    aTri.transform(aMatrix);
-    rOutputDevice.DrawPolygon(Polygon(aTri));
-    */
-
-    // draw line
-    rOutputDevice.SetLineColor(aColor);
-    rOutputDevice.SetFillColor();
-    rOutputDevice.DrawPolyLine(Polygon(aLin), mLineInfo);
-    rOutputDevice.DrawPolyLine(aLinTop,LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+            // draw line
+            rOutputDevice.SetLineColor(aColor);
+            rOutputDevice.SetFillColor();
+            rOutputDevice.DrawPolyLine(Polygon(aLin), mLineInfo);
+            rOutputDevice.DrawPolyLine(aLinTop,LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+            break;
+        }
+        case AS_START:
+        {
+            rOutputDevice.SetLineColor();
+            rOutputDevice.SetFillColor(aColor);
+            rOutputDevice.DrawPolygon(Polygon(aTri));
+            // draw line
+            rOutputDevice.SetLineColor(aColor);
+            rOutputDevice.SetFillColor();
+            rOutputDevice.DrawPolyLine(Polygon(aLin), mLineInfo);
+            break;
+        }
+        case AS_END:
+        {
+            // draw line
+            rOutputDevice.SetLineColor(aColor);
+            rOutputDevice.SetFillColor();
+            rOutputDevice.DrawPolyLine(aLinTop,LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+            break;
+        }
+    }
 }
 
 Color SwPostItAnkor::implBlendColor(const Color aOriginal, sal_Int16 nChange)
@@ -1711,7 +2195,8 @@ SwPostItAnkor::SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
             maLineTop(),
             mLineInfo(aLineInfo),
             mHeight(0),
-            mbShadowedEffect(bShadowedEffect)
+            mbShadowedEffect(bShadowedEffect),
+            mAnkorState(AS_ALL)
 {
     if (mLineInfo.GetStyle()==LINE_DASH)
     {
@@ -1886,6 +2371,15 @@ void SwPostItAnkor::SetLineInfo(const LineInfo &aLineInfo)
             pMgr->remove(*this);
             pMgr->add(*this);
         }
+        objectChange();
+    }
+}
+
+void SwPostItAnkor::SetAnkorState(AnkorState aState)
+{
+    if (mAnkorState != aState)
+    {
+        mAnkorState = aState;
         objectChange();
     }
 }
