@@ -660,8 +660,9 @@ namespace pcr
             sReturn = aEnumStrings[ nIntValue ];
         }
         else
+        {
             DBG_ERROR( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
-
+        }
         return sReturn;
     }
 

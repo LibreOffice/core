@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testapp.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,7 +147,7 @@ void MainWindow::SysDlg()
     switch (QueryBox(this,WB_YES_NO_CANCEL | WB_DEF_YES, CUniString("Want to open another Dialog?")).Execute())
       {
           case RET_YES:
-            while ( WarningBox(this,WB_OK_CANCEL | WB_DEF_OK,CUniString("Well this is the last box now!")).Execute() == RET_OK );
+            while ( WarningBox(this,WB_OK_CANCEL | WB_DEF_OK,CUniString("Well this is the last box now!")).Execute() == RET_OK ) ;
               break;
           case RET_NO:
               break;

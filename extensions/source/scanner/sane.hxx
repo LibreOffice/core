@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sane.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.64.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +97,7 @@ private:
     static void             (*p_cancel)( SANE_Handle );
     static SANE_Status      (*p_set_io_mode)( SANE_Handle, SANE_Bool );
     static SANE_Status      (*p_get_select_fd)( SANE_Handle, SANE_Int* );
-    static const SANE_String_Const (*p_strstatus)( SANE_Status );
+    static SANE_String_Const (*p_strstatus)( SANE_Status );
 
     static SANE_Int             nVersion;
     static SANE_Device**        ppDevices;

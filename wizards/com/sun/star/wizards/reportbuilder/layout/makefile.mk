@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.2.26.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,7 +39,7 @@ PACKAGE = com$/sun$/star$/wizards$/reportbuilder$/layout
 .INCLUDE : settings.mk
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar commonwizards.jar report.jar
+JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar commonwizards.jar report.jar
 
 # CUSTOMMANIFESTFILE= MANIFEST.MF
 

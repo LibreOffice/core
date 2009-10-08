@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.8.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +38,7 @@ PACKAGE = test
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = officebean.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar 
+JARFILES = officebean.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar 
 JAVAFILES       = Test.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

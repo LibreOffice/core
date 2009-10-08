@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: com_sun_star_beans_LocalOfficeWindow.c,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,12 @@
 #include <X11/Intrinsic.h>
 
 #include "jni.h"
+
+// Workaround for problematic IBM JDK 1.6.0 on ppc
+#ifndef _JNI_IMPORT_OR_EXPORT_
+#define _JNI_IMPORT_OR_EXPORT_
+#endif
+
 #include "jawt_md.h"
 #include "jawt.h"
 

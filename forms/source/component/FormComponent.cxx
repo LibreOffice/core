@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.62.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2456,6 +2456,9 @@ void OBoundControlModel::connectExternalValueBinding(
     // remember this new binding
     m_xExternalBinding = _rxBinding;
 
+    // tell the derivee
+    onConnectedExternalValue();
+
     try
     {
         // add as value listener so we get notified when the value changes
@@ -2485,9 +2488,6 @@ void OBoundControlModel::connectExternalValueBinding(
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
-    // tell the derivee
-    onConnectedExternalValue();
 
     // propagate our new value
     transferExternalValueToControl( _rInstanceLock );

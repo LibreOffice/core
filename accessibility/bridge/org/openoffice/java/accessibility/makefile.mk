@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.26.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,13 +34,10 @@ PRJ		= ..$/..$/..$/..$/..
 TARGET	= java_accessibility
 PACKAGE	= org$/openoffice$/java$/accessibility
 
-USE_JAVAVER:=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-.IF "$(JAVANUMVER:s/.//)" >= "000100050000" 
 JAVADIR = $(OUT)$/misc$/java
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
@@ -95,8 +92,6 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java//
 JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 JARCLASSDIRS            = $(PACKAGE)
-
-.ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100050000" 
 
 # --- Targets ------------------------------------------------------
 

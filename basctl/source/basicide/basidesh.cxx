@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basidesh.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.49.26.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,50 +261,36 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
         return;
 
     bool bSetCurWindow = false;
-    bool bSetCurLib = false;
+    bool bSetCurLib = ( _rDocument == m_aCurDocument );
 
-    Sequence< ::rtl::OUString > aLibNames = _rDocument.getLibraryNames();;
-    sal_Int32 nLibCount = aLibNames.getLength();
-    const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
-
-    for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
+    // remove all windows which belong to this document
+    for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
     {
-        String aLibName = pLibNames[ i ];
-        if ( !aLibName.Len() )
-            continue;
-
-        // remove all windows which belong to this library
-        for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
+        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
+        if ( pWin->IsDocument( _rDocument ) )
         {
-            IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
-            if ( pWin->IsDocument( _rDocument ) && pWin->GetLibName() == aLibName )
+            if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
             {
-                if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
-                {
-                    pWin->AddStatus( BASWIN_TOBEKILLED );
-                    pWin->Hide();
-                    StarBASIC::Stop();
-                    // there's no notify
-                    pWin->BasicStopped();
-                }
-                else
-                {
-                    pWin->StoreData();
-                    if ( pWin == pCurWin )
-                        bSetCurWindow = true;
-                    RemoveWindow( pWin, TRUE, FALSE );
-                }
+                pWin->AddStatus( BASWIN_TOBEKILLED );
+                pWin->Hide();
+                StarBASIC::Stop();
+                // there's no notify
+                pWin->BasicStopped();
+            }
+            else
+            {
+                pWin->StoreData();
+                if ( pWin == pCurWin )
+                    bSetCurWindow = true;
+                RemoveWindow( pWin, TRUE, FALSE );
             }
         }
-
-        // remove lib info
-        BasicIDEData* pData = IDE_DLL()->GetExtraData();
-        if ( pData )
-            pData->GetLibInfos().RemoveInfo( LibInfoKey( _rDocument, aLibName ) );
-
-        if ( _rDocument == m_aCurDocument && aLibName == m_aCurLibName )
-            bSetCurLib = true;
     }
+
+    // remove lib info
+    BasicIDEData* pData = IDE_DLL()->GetExtraData();
+    if ( pData )
+        pData->GetLibInfos().RemoveInfoFor( _rDocument );
 
     if ( bSetCurLib )
         SetCurLib( ScriptDocument::getApplicationScriptDocument(), String::CreateFromAscii( "Standard" ), true, false );

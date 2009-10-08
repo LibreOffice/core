@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipPackageStream.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,29 +79,29 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& GetOwnSeekStream();
 
 public:
-    sal_Bool HasOwnKey ()        { return bHaveOwnKey;}
-    sal_Bool IsToBeCompressed () { return bToBeCompressed;}
-    sal_Bool IsToBeEncrypted ()  { return bToBeEncrypted;}
-    sal_Bool IsEncrypted ()      { return bIsEncrypted;}
-    sal_Bool IsPackageMember ()  { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
+    sal_Bool HasOwnKey () const  { return bHaveOwnKey;}
+    sal_Bool IsToBeCompressed () const { return bToBeCompressed;}
+    sal_Bool IsToBeEncrypted () const { return bToBeEncrypted;}
+    sal_Bool IsEncrypted () const    { return bIsEncrypted;}
+    sal_Bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
     vos::ORef < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
-    const com::sun::star::uno::Sequence < sal_Int8 >& getKey ()
+    const com::sun::star::uno::Sequence < sal_Int8 >& getKey () const
     { return xEncryptionData->aKey;}
-    const com::sun::star::uno::Sequence < sal_uInt8 >& getInitialisationVector ()
+    const com::sun::star::uno::Sequence < sal_uInt8 >& getInitialisationVector () const
     { return xEncryptionData->aInitVector;}
-    const com::sun::star::uno::Sequence < sal_uInt8 >& getDigest ()
+    const com::sun::star::uno::Sequence < sal_uInt8 >& getDigest () const
     { return xEncryptionData->aDigest;}
-    const com::sun::star::uno::Sequence < sal_uInt8 >& getSalt ()
+    const com::sun::star::uno::Sequence < sal_uInt8 >& getSalt () const
     { return xEncryptionData->aSalt;}
-    const sal_Int32 getIterationCount ()
+    sal_Int32 getIterationCount () const
     { return xEncryptionData->nIterationCount;}
-    const sal_Int32 getSize ()
+    sal_Int32 getSize () const
     { return aEntry.nSize;}
 
-    sal_uInt8 GetStreamMode() { return m_nStreamMode; }
-    sal_uInt32 GetMagicalHackPos() { return m_nMagicalHackPos; }
-    sal_uInt32 GetMagicalHackSize() { return m_nMagicalHackSize; }
+    sal_uInt8 GetStreamMode() const { return m_nStreamMode; }
+    sal_uInt32 GetMagicalHackPos() const { return m_nMagicalHackPos; }
+    sal_uInt32 GetMagicalHackSize() const { return m_nMagicalHackSize; }
 
     void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
     void SetIsEncrypted (sal_Bool bNewValue) { bIsEncrypted = bNewValue;}

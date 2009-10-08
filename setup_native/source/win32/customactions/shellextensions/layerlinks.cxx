@@ -110,18 +110,9 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 
     if ( IsSetMsiProperty(handle, TEXT("ADMININSTALL")) )
     {
-        string sOooBaseVersion = GetMsiProperty(handle, TEXT("OOOBASEVERSION"));
-        string sBasisRootName = GetMsiProperty(handle, TEXT("BASISROOTNAME"));
-        if ( IsSetMsiProperty(handle, TEXT("SUNDIREXISTS")) )
-        {
-            sBasisInstallPath = TEXT("..\\..\\") + sBasisRootName + TEXT("\\Basis ") + sOooBaseVersion;
-        }
-        else
-        {
-            sBasisInstallPath = TEXT("..\\") + sBasisRootName + TEXT("\\Basis ") + sOooBaseVersion;
-        }
+        sBasisInstallPath = TEXT("Basis");
         sUreInstallPath = TEXT("..\\URE");
-   }
+    }
 
     stripFinalBackslash(&sBasisInstallPath);
     stripFinalBackslash(&sUreInstallPath);
