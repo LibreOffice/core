@@ -63,6 +63,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fontcfg.hxx>
+#include <vcl/sysdata.hxx>
 #ifndef _OSL_FILE_H
 #include <osl/file.h>
 #endif
@@ -7699,6 +7700,97 @@ FontMetric OutputDevice::GetFontMetric( const Font& rFont ) const
 }
 
 // -----------------------------------------------------------------------
+
+/** OutputDevice::GetSysFontData
+ *
+ * @param nFallbacklevel Fallback font level (0 = best matching font)
+ *
+ * Retrieve detailed font information in platform independent structure
+ *
+ * @return SystemFontData
+ **/
+SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
+{
+    SystemFontData aSysFontData;
+    aSysFontData.nSize = sizeof(aSysFontData);
+
+    if (!mpGraphics) ImplGetGraphics();
+    if (mpGraphics) aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
+
+    return aSysFontData;
+}
+
+
+// -----------------------------------------------------------------------
+
+/** OutputDevice::GetSysTextLayoutData
+ *
+ * @param rStartPt Start point of the text
+ * @param rStr Text string that will be transformed into layout of glyphs
+ * @param nIndex Position in the string from where layout will be done
+ * @param nLen Length of the string
+ * @param pDXAry Custom layout adjustment data
+ *
+ * Export finalized glyph layout data as platform independent SystemTextLayoutData
+ * (see vcl/inc/vcl/sysdata.hxx)
+ *
+ * Only parameters rStartPt and rStr are mandatory, the rest is optional
+ * (default values will be used)
+ *
+ * @return SystemTextLayoutData
+ **/
+SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen,
+                                                        const sal_Int32* pDXAry) const
+{
+    DBG_TRACE( "OutputDevice::GetSysTextLayoutData()" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    SystemTextLayoutData aSysLayoutData;
+    aSysLayoutData.nSize = sizeof(aSysLayoutData);
+    aSysLayoutData.rGlyphData.reserve( 256 );
+
+    if ( mpMetaFile ) {
+        if (pDXAry)
+            mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
+        else
+            mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
+    }
+
+    if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
+
+    SalLayout* rLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
+
+    // setup glyphs
+    Point aPos;
+    sal_GlyphId aGlyphId;
+    int nFallbacklevel = 0;
+    for( int nStart = 0; rLayout->GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    {
+        // NOTE: Windows backend is producing unicode chars (ucs4), so on windows,
+        //       ETO_GLYPH_INDEX is unusable, unless extra glyph conversion is made.
+
+        SystemGlyphData aGlyph;
+        aGlyph.index = static_cast<unsigned long> (aGlyphId & GF_IDXMASK);
+        aGlyph.x = aPos.X();
+        aGlyph.y = aPos.Y();
+        aSysLayoutData.rGlyphData.push_back(aGlyph);
+
+        int nLevel = (aGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
+        if (nLevel > nFallbacklevel && nLevel < MAX_FALLBACK)
+            nFallbacklevel = nLevel;
+    }
+
+    // Get font data
+    aSysLayoutData.aSysFontData = GetSysFontData(nFallbacklevel);
+    aSysLayoutData.orientation = rLayout->GetOrientation();
+
+    rLayout->Release();
+
+    return aSysLayoutData;
+}
+
+// -----------------------------------------------------------------------
+
 
 long OutputDevice::GetMinKashida() const
 {

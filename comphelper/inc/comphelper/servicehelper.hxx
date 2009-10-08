@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef _UTL_SERVICEHELPER_HXX_
-#define _UTL_SERVICEHELPER_HXX_
+#ifndef _COMPHELPER_SERVICEHELPER_HXX_
+#define _COMPHELPER_SERVICEHELPER_HXX_
 
 /** the UNO3_GETIMPLEMENTATION_* macros  implement a static helper function
     that gives access to your implementation for a given interface reference,
@@ -47,7 +47,7 @@
 */
 #define UNO3_GETIMPLEMENTATION_DECL( classname ) \
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw(); \
-    static classname* getImplementation( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt ) throw(); \
+    static classname* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt ); \
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
@@ -67,7 +67,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() 
     return *pSeq; \
 } \
 \
-classname* classname::getImplementation( uno::Reference< uno::XInterface > xInt ) throw() \
+classname* classname::getImplementation( const uno::Reference< uno::XInterface >& xInt ) \
 { \
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY ); \
     if( xUT.is() ) \
@@ -104,5 +104,5 @@ sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequenc
 }
 
 
-#endif // _UTL_SERVICEHELPER_HXX_
+#endif // _COMPHELPER_SERVICEHELPER_HXX_
 

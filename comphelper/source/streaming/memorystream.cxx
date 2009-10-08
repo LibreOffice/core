@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
+#include "comphelper_module.hxx"
+
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -76,6 +78,11 @@ public:
     virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
     virtual void SAL_CALL flush() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
     virtual void SAL_CALL closeOutput() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+
+    // XServiceInfo - static versions (used for component registration)
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
+    static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static Reference< XInterface > SAL_CALL Create( const Reference< ::com::sun::star::uno::XComponentContext >& );
 
 private:
     std::vector< sal_Int8 > maData;
@@ -199,22 +206,28 @@ void SAL_CALL UNOMemoryStream::closeOutput() throw (NotConnectedException, Buffe
     mnCursor = 0;
 }
 
-OUString SAL_CALL UNOMemoryStream_getImplementationName() throw()
+::rtl::OUString SAL_CALL UNOMemoryStream::getImplementationName_static()
 {
     static const OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.MemoryStream" ) );
     return sImplName;
 }
 
-Sequence< OUString > SAL_CALL UNOMemoryStream_getSupportedServiceNames() throw()
+Sequence< ::rtl::OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_static()
 {
     Sequence< OUString > aSeq(1);
-    aSeq[0] = UNOMemoryStream_getImplementationName();
+    aSeq[0] = getImplementationName_static();
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL UNOMemoryStream_createInstance(const Reference< XComponentContext > & ) throw( Exception )
+Reference< XInterface > SAL_CALL UNOMemoryStream::Create(
+    const Reference< XComponentContext >& )
 {
     return static_cast<OWeakObject*>(new UNOMemoryStream());
 }
 
 } // namespace comphelper
+
+void createRegistryInfo_UNOMemoryStream()
+{
+    static ::comphelper::module::OAutoRegistration< ::comphelper::UNOMemoryStream > aAutoRegistration;
+}

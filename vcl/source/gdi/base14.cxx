@@ -646,7 +646,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
   "ZapfDingbats", // PSName
   820, -143, // ascend, descend
   FAMILY_DONTKNOW, // family style
-  RTL_TEXTENCODING_SYMBOL, // charset
+  RTL_TEXTENCODING_ADOBE_DINGBATS, // charset
   PITCH_VARIABLE, // pitch
   WIDTH_NORMAL, // width type
   WEIGHT_NORMAL, // weight type

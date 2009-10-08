@@ -79,7 +79,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#include <comphelper/uieventslogger.hxx>
 
 //===============================================
 // namespace
@@ -257,22 +256,6 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     sal_Bool bRet = xDispatch.is();
     if ( bRet )
     {
-        if(::comphelper::UiEventsLogger::isEnabled() && m_xSMGR.is() && m_xDispatcher.is()) //#i88653#
-        {
-            try
-            {
-                css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
-                    m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")),
-                    css::uno::UNO_QUERY_THROW);
-
-                const ::rtl::OUString sModule = xModuleDetection->identify(m_xDispatcher);
-                css::uno::Sequence<css::beans::PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sModule, ::rtl::OUString::createFromAscii("AcceleratorExecute"));
-                ::comphelper::UiEventsLogger::logDispatch(aURL, source);
-            }
-            catch(const css::uno::Exception&)
-                { }
-        }
         // Note: Such instance can be used one times only and destroy itself afterwards .-)
         AsyncAccelExec* pExec = AsyncAccelExec::createOnShotInstance(xDispatch, aURL);
         pExec->execAsync();
@@ -294,7 +277,8 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD1;
     if (aVCLKey.IsMod2())
         aAWTKey.Modifiers |= css::awt::KeyModifier::MOD2;
-
+        if (aVCLKey.IsMod3())
+        aAWTKey.Modifiers |= css::awt::KeyModifier::MOD3;
     return aAWTKey;
 }
 
@@ -304,9 +288,10 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     sal_Bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
     sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
     sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
+    sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
     USHORT   nKey   = (USHORT)aAWTKey.KeyCode;
 
-    return KeyCode(nKey, bShift, bMod1, bMod2);
+    return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
 //-----------------------------------------------
 ::rtl::OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
@@ -482,8 +467,8 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     {
         sModule = xModuleDetection->identify(xFrame);
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
+    catch(const css::uno::RuntimeException&rEx)
+        { (void) rEx; throw; }
     catch(const css::uno::Exception&)
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
@@ -577,7 +562,7 @@ IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
     }
     catch(const css::lang::DisposedException&)
         {}
-    catch(const css::uno::RuntimeException&)
+    catch(const css::uno::RuntimeException& )
         { throw; }
     catch(const css::uno::Exception&)
         {}

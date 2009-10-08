@@ -301,7 +301,7 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nPixelWidth = rArgs.mnLayoutWidth;
     if( !nPixelWidth && rArgs.mpDXArray ) {
         // for now we are only interested in the layout width
-        // TODO: account for individual logical widths
+        // TODO: use all mpDXArray elements for layouting
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
 
         // workaround for ATSUI not using trailing spaces for justification
@@ -309,14 +309,21 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         int i = mnCharCount;
         while( (--i > 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) )
             mnTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
+        if( i <= 0 )
+            return;
+        // #i91685# trailing letters are left aligned (right aligned for RTL)
+        mnTrailingSpaceWidth += rArgs.mpDXArray[i];
+        if( i > 0 )
+            mnTrailingSpaceWidth -= rArgs.mpDXArray[i-1];
+        InitGIA(); // ensure valid mpCharWidths[]
+        mnTrailingSpaceWidth -= Fixed2Vcl( mpCharWidths[i] );
+        // ignore trailing space for calculating the available width
         nOrigWidth -= mnTrailingSpaceWidth;
         nPixelWidth -= mnTrailingSpaceWidth;
-        // trailing spaces can be leftmost spaces in RTL-layouts
+        // in RTL-layouts trailing spaces are leftmost
         // TODO: use BiDi-algorithm to thoroughly check this assumption
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
             mnBaseAdv = mnTrailingSpaceWidth;
-
-        // TODO: use all mpDXArray elements for layouting
     }
     // return early if there is nothing to do
     if( !nPixelWidth )

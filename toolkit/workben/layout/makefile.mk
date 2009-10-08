@@ -40,14 +40,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(ENABLE_LAYOUT)" == "TRUE"
 
-CFLAGS += -I$(PRJ)/source/layout
-
 # Allow zoom and wordcount to be built without depending on svx,sv,sfx2
-CFLAGS += -I../$(PRJ)/svx/inc -I../$(PRJ)/svtools/inc -I../$(PRJ)/sfx2/inc
+CFLAGS += -I../$(PRJ)/svx/inc -I../$(PRJ)/svtools/inc -I../$(PRJ)/sfx2/inc -I../$(PRJ)/sc/inc -I../$(PRJ)/sc/source/ui/inc -I../$(PRJ)/sw/inc
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-CFLAGS += -DENABLE_LAYOUT=1 -DTEST_LAYOUT=1
 
 .IF "$(COMNAME)" == "gcc3"
 CFLAGS+=-Wall -Wno-non-virtual-dtor
@@ -55,6 +51,7 @@ CFLAGS+=-Wall -Wno-non-virtual-dtor
 
 CXXFILES=\
     editor.cxx \
+    plugin.cxx \
     recover.cxx \
     wordcountdialog.cxx \
     test.cxx \
@@ -62,8 +59,11 @@ CXXFILES=\
 
 OBJFILES=\
     $(OBJ)$/editor.obj \
+    $(OBJ)$/plugin.obj \
     $(OBJ)$/recover.obj \
     $(OBJ)$/test.obj \
+    $(OBJ)$/tpsort.obj \
+    $(OBJ)$/sortdlg.obj \
     $(OBJ)$/wordcountdialog.obj \
     $(OBJ)$/zoom.obj
 
@@ -77,27 +77,38 @@ APP1STDLIBS= \
         $(CPPUHELPERLIB)		\
         $(SALLIB)			\
         $(XMLSCRIPTLIB)			\
-        $(TKLIB)
+        $(TKLIB) \
+        $(SVXLIB) \
+        $(ISCLIB) \
+#
 
 svtools = $(INCCOM)/svtools
-all: $(svtools) ALLTAR
+default: ALLTAR
 
-.INCLUDE :  target.mk
+.INCLUDE : target.mk
 
 XML_FILES=\
+    insert-sheet.xml\
+    message-box.xml\
+    move-copy-sheet.xml\
     recover.xml\
+    sort-options.xml\
+    string-input.xml\
+    tab-dialog.xml\
     wordcount.xml\
     zoom.xml\
 
 TRALAY=$(AUGMENT_LIBRARY_PATH) tralay
 XML_LANGS=$(alllangiso)
 
-#ALL_XMLS=$(foreach,i,$(XML_LANGS) $(foreach,j,$(XML_FILES) $i/$j))
-ALLTAR: $(foreach,i,$(XML_FILES) en-US/$i)
+ALLTAR: localize.sdf $(BIN)/testrc $(svtools) $(foreach,i,$(XML_FILES) en-US/$i)
 
 $(XML_LANGS:f:t"/%.xml ")/%.xml: %.xml
     $(TRALAY) -m localize.sdf -o . -l $(XML_LANGS:f:t" -l ") $<
     rm -rf en-US
+
+$(BIN)/%: %.in
+    cp $< $@
 
 $(svtools):
 # FIXME: there's a bug in svtools layout or usage
@@ -109,14 +120,35 @@ $(svtools):
     ln -sf ..$/$(PRJ)$/svtools$/inc $(INCCOM)$/svtools
 
 dist .PHONY :
+    cp -pv message-box.xml $(PRJ)/uiconfig/layout
+    cp -pv tab-dialog.xml $(PRJ)/uiconfig/layout
     $(SHELL) ./un-test.sh zoom.cxx > ../$(PRJ)/svx/source/dialog/zoom.cxx
     $(SHELL) ./un-test.sh zoom.hxx > ../$(PRJ)/svx/source/dialog/zoom.hxx
     touch ../$(PRJ)/svx/source/dialog/dlgfact.cxx
+    cp -pv zoom.xml ../$(PRJ)/svx/uiconfig/layout
     $(SHELL) ./un-test.sh wordcountdialog.cxx > ../$(PRJ)/sw/source/ui/dialog/wordcountdialog.cxx
     $(SHELL) ./un-test.sh wordcountdialog.hxx > ../$(PRJ)/sw/source/ui/inc/wordcountdialog.hxx
     touch ../$(PRJ)/sw/source/ui/dialog/swdlgfact.cxx
-# FIXME: broken setup
+    cp -pv wordcount.xml ../$(PRJ)/sw/uiconfig/layout
+    # FIXME: broken setup
     ln -sf ../inc/wordcountdialog.hxx ../$(PRJ)/sw/source/ui/dialog/wordcountdialog.hxx 
+    $(SHELL) ./un-test.sh tpsort.cxx > ../$(PRJ)/sc/source/ui/dbgui/tpsort.cxx
+    $(SHELL) ./un-test.sh tpsort.hxx > ../$(PRJ)/sc/source/ui/inc/tpsort.hxx
+    $(SHELL) ./un-test.sh sortdlg.cxx > ../$(PRJ)/sc/source/ui/dbgui/sortdlg.cxx
+    $(SHELL) ./un-test.sh sortdlg.hxx > ../$(PRJ)/sc/source/ui/inc/sortdlg.hxx
+    touch ../$(PRJ)/sc/source/ui/attrdlg/scdlgfact.cxx
+    touch ../$(PRJ)/sc/source/ui/view/cellsh2.cxx
+    cp -pv insert-sheet.xml ../$(PRJ)/sc/uiconfig/layout
+    cp -pv move-copy-sheet.xml ../$(PRJ)/sc/uiconfig/layout
+    cp -pv sort-options.xml ../$(PRJ)/sc/uiconfig/layout
+    cp -pv string-input.xml ../$(PRJ)/sc/uiconfig/layout
+
+localize.sdf: $(PRJ)/../svx/source/dialog/localize.sdf $(PRJ)/../sw/source/ui/dialog/localize.sdf $(PRJ)/../sc/source/ui/src/localize.sdf
+    grep sortdlg.src $(PRJ)/../sc/source/ui/src/localize.sdf | awk -F'\t' '{{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "sc\\uiconfig\\layout\\sort-options.xml", $$3, "layout", $$6 "_label", "", "", $$8, "0", $$10, $$11, $$12, "", $$14, $$15}}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SCDLG_SORT_title/' > sort-options-$@
+    grep wordcountdialog.src $(PRJ)/../sw/source/ui/dialog/localize.sdf | awk -F'\t' '{{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "sw\\uiconfig\\layout\\wordcount.xml", $$3, "layout", $$6 "_label", "", "", $$8, "0", $$10, $$11, $$12, "", $$14, $$15}}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tDLG_WORDCOUNT_title/' > wordcount-$@
+    grep zoom.src $(PRJ)/source/dialog/localize.sdf | awk -F'\t' '{{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "layout", "svx\\uiconfig\\layout\\zoom.xml", $$3, "layout", $$6 "_label", "", "", $$8, "0", $$10, $$11, $$12, "", $$14, $$15}}' | sed -e 's/\(\(FL\|STR\)_[^\t]*\)_label/\1_text/' -e 's/\t_label/\tRID_SVXDLG_ZOOM_title/' > zoom-$@
+    echo '#empty' | cat - sort-options-$@ wordcount-$@ zoom-$@ > $@
+    rm -f *-$@
 
 .ELSE # ENABLE_LAYOUT != TRUE
 all .PHONY:

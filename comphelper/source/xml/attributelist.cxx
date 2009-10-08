@@ -74,10 +74,7 @@ sal_Int16 SAL_CALL AttributeList::getLength(void) throw( ::com::sun::star::uno::
 
 OUString SAL_CALL AttributeList::getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if( i < static_cast < sal_Int16 > (m_pImpl->vecAttribute.size()) ) {
-        return m_pImpl->vecAttribute[i].sName;
-    }
-    return OUString();
+    return ( i < static_cast < sal_Int16 > (m_pImpl->vecAttribute.size()) ) ? m_pImpl->vecAttribute[i].sName : OUString();
 }
 
 OUString SAL_CALL AttributeList::getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
@@ -90,11 +87,7 @@ OUString SAL_CALL AttributeList::getTypeByIndex(sal_Int16 i) throw( ::com::sun::
 
 OUString SAL_CALL  AttributeList::getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if( i < static_cast < sal_Int16 > (m_pImpl->vecAttribute.size() ) ) {
-        return m_pImpl->vecAttribute[i].sValue;
-    }
-    return OUString();
-
+    return ( i < static_cast < sal_Int16 > (m_pImpl->vecAttribute.size() ) ) ? m_pImpl->vecAttribute[i].sValue : OUString();
 }
 
 OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName ) throw( ::com::sun::star::uno::RuntimeException )

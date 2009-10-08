@@ -91,6 +91,7 @@ class FontCfgWrapper
     oslModule       m_pLib;
     FcFontSet*      m_pOutlineSet;
 
+    int             m_nFcVersion;
     FcBool          (*m_pFcInit)();
     int             (*m_pFcGetVersion)();
     FcConfig*       (*m_pFcConfigGetCurrent)();
@@ -248,9 +249,10 @@ oslGenericFunction FontCfgWrapper::loadSymbol( const char* pSymbol )
 
 FontCfgWrapper::FontCfgWrapper()
         : m_pLib( NULL ),
-          m_pOutlineSet( NULL )
+          m_pOutlineSet( NULL ),
+          m_nFcVersion( 0 )
 {
-     OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so.1" ) );
+    OUString aLib( RTL_CONSTASCII_USTRINGPARAM( "libfontconfig.so.1" ) );
     m_pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( !m_pLib )
     {
@@ -330,6 +332,19 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcPatternAddString" );
     m_pFcFreeTypeCharIndex = (FT_UInt(*)(FT_Face,FcChar32))
         loadSymbol( "FcFreeTypeCharIndex" );
+
+    m_nFcVersion = FcGetVersion();
+#if (OSL_DEBUG_LEVEL > 1)
+    fprintf( stderr,"FC_VERSION = %05d\n", m_nFcVersion );
+#endif
+    // make minimum version configurable
+    const char* pMinFcVersion = getenv( "SAL_MIN_FC_VERSION");
+    if( pMinFcVersion )
+    {
+        const int nMinFcVersion = atoi( pMinFcVersion );
+        if( m_nFcVersion < nMinFcVersion )
+            m_pFcInit = NULL;
+    }
 
     if( ! (
             m_pFcInit                       &&
@@ -416,8 +431,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
     {
         m_pOutlineSet = FcFontSetCreate();
         addFontSet( FcSetSystem );
-        const int nVersion = FcGetVersion();
-    if( nVersion > 20400 )
+    if( m_nFcVersion > 20400 ) // #i85462# prevent crashes
             addFontSet( FcSetApplication );
     }
     #endif

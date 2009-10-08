@@ -7,20 +7,20 @@
              xmlns:cnt="http://openoffice.org/2007/layout/container"
              id="RID_SVXDLG_ZOOM" _title="Zoom &amp; View Layout" optimumsize="true"
          help-id="SID_ATTR_ZOOM"
-             has_border="true" sizeable="true" moveable="true">
-    <vbox spacing="5" border="5">
+             has_border="true" sizeable="true" moveable="true" closeable="true">
+    <vbox spacing="0" border="12">
     <hbox spacing="0" border="0">
-        <vbox spacing="5" border="5">
-        <fixedline id="FL_ZOOM" _text="Zoom factor" cnt:expand="true"/>
-        <radiobutton radiogroup="zoom" id="BTN_OPTIMAL"   _label="Optimal"/>
-        <radiobutton radiogroup="zoom" id="BTN_WHOLE_PAGE" _label="Whole Page"/>
-        <radiobutton radiogroup="zoom" id="BTN_PAGE_WIDTH" _label="Page Width"/>
-        <radiobutton radiogroup="zoom" id="BTN_100"   _label="100 %"/>
+        <vbox spacing="6" border="0">
+        <fixedline id="FL_ZOOM" _text="Zoom factor" cnt:expand="false"/>
+        <radiobutton radiogroup="zoom-factor" id="BTN_OPTIMAL"   _label="Optimal"/>
+        <radiobutton radiogroup="zoom-factor" id="BTN_WHOLE_PAGE" _label="Whole Page"/>
+        <radiobutton radiogroup="zoom-factor" id="BTN_PAGE_WIDTH" _label="Page Width"/>
+        <radiobutton radiogroup="zoom-factor" id="BTN_100"   _label="100 %"/>
         <hbox cnt:expand="false" cnt:fill="true">
             <align cnt:expand="false" cnt:fill="true">
-            <radiobutton cnt:v-align="0.5" cnt:v-fill="0" radiogroup="zoom" id="BTN_USER" _label="Variable"/>
+            <radiobutton cnt:v-align="0.5" cnt:v-fill="0" radiogroup="zoom-factor" id="BTN_USER" _label="Variable"/>
             </align>
-            <flow cnt:padding="10" cnt:expand="false"/>
+            <flow cnt:padding="12" cnt:expand="false"/>
             <metricfield id="ED_USER" value-step="1"
                  repeat="true" has_border="true" spin="true"
                  _text="100%" unit="11" custom-unit-text="%"
@@ -28,15 +28,16 @@
                  cnt:expand="false"/>
         </hbox>
         </vbox>
-        <vbox spacing="5" border="5">
-        <fixedline id="FL_VIEWLAYOUT" _text="View layout" cnt:expand="true"/>
-        <radiobutton radiogroup="zoom" id="BTN_AUTOMATIC" _label="~Automatic"/>
-        <radiobutton radiogroup="zoom" id="BTN_SINGLE"    _label="~Single page"/>
+        <flow/>
+        <vbox spacing="6" border="0">
+        <fixedline id="FL_VIEWLAYOUT" _text="View layout" cnt:expand="false"/>
+        <radiobutton radiogroup="zoom-layout" id="BTN_AUTOMATIC" _label="~Automatic"/>
+        <radiobutton radiogroup="zoom-layout" id="BTN_SINGLE"    _label="~Single page"/>
         <hbox cnt:expand="false" cnt:fill="true">
             <align cnt:expand="false" cnt:fill="true">
-            <radiobutton cnt:v-align="0.5" cnt:v-fill="0" radiogroup="zoom" id="BTN_COLUMNS" _label="~Columns"/>
+            <radiobutton cnt:v-align="0.5" cnt:v-fill="0" radiogroup="zoom-layout" id="BTN_COLUMNS" _label="~Columns"/>
             </align>
-            <flow cnt:padding="10" cnt:expand="false"/>
+            <flow cnt:padding="12" cnt:expand="false"/>
             <metricfield id="ED_COLUMNS" value-step="1"
                  repeat="true" has_border="true" spin="true"
                  _text="100%"
@@ -45,15 +46,15 @@
                  spin-value="1"
                  cnt:expand="false"/>
         </hbox>
-        <hbox><flow cnt:expand="false" cnt:padding="10"/><checkbox id="CHK_BOOK" _label="~Book mode"/></hbox>
+        <hbox><flow cnt:expand="false" cnt:padding="12"/><checkbox id="CHK_BOOK" _label="~Book mode"/></hbox>
         </vbox>
     </hbox>
-    <fixedline cnt:padding="1" id="FL_BOTTOM"/>
-    <dialogbuttonhbox border="5" spacing="5">
+        <fixedline cnt:padding="6" id="FL_BOTTOM"/>
+    <dialogbuttonhbox border="0" spacing="12">
         <flow/>
-        <okbutton     id="BTN_ZOOM_OK"/>
+        <okbutton defbutton="true" id="BTN_ZOOM_OK"/>
         <cancelbutton id="BTN_ZOOM_CANCEL"/>
-        <helpbutton   id="BTN_ZOOM_HELP"/>
+        <helpbutton id="BTN_ZOOM_HELP"/>
     </dialogbuttonhbox>
     </vbox>
 </modaldialog>

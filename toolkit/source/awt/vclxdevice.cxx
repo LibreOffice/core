@@ -315,7 +315,7 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
     (void)aPoint;
     ::vos::OGuard aGuard( GetMutex() );
     if (SourceUnit == com::sun::star::util::MeasureUnit::PERCENT ||
-        SourceUnit == com::sun::star::util::MeasureUnit::PIXEL)
+        SourceUnit == com::sun::star::util::MeasureUnit::PIXEL )
     {
         // pixel or percentage not allowed here
         throw ::com::sun::star::lang::IllegalArgumentException();

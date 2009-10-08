@@ -4,6 +4,8 @@
         xmlns:cnt="http://openoffice.org/2007/layout/container"
         title="Box Test" optimumsize="true" has_border="true" sizeable="true" moveable="true">
     <vbox>
+      <table>
+        <vbox>
         <hbox cnt:expand="false" cnt:fill="false">
             <pushbutton label="XML Left"
                         cnt:expand="false" cnt:fill="false"/>
@@ -28,5 +30,7 @@
                     <pushbutton label="XML Right"
                                 cnt:expand="true" cnt:fill="true"/>
             </hbox>
+        </vbox>
+    </table>
     </vbox>
 </dialog>

@@ -83,9 +83,9 @@ using namespace com::sun::star;
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMap* lcl_GetNumberFormatPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
-    static SfxItemPropertyMap aNumberFormatPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(PROPERTYNAME_FMTSTR),   0, &getCppuType((rtl::OUString*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_LOCALE),   0, &getCppuType((lang::Locale*)0),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
@@ -105,9 +105,9 @@ const SfxItemPropertyMap* lcl_GetNumberFormatPropertyMap()
     return aNumberFormatPropertyMap_Impl;
 }
 
-const SfxItemPropertyMap* lcl_GetNumberSettingsPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 {
-    static SfxItemPropertyMap aNumberSettingsPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(PROPERTYNAME_NOZERO),   0, &getBooleanCppuType(),         beans::PropertyAttribute::BOUND, 0},
         {MAP_CHAR_LEN(PROPERTYNAME_NULLDATE), 0, &getCppuType((util::Date*)0),  beans::PropertyAttribute::BOUND, 0},

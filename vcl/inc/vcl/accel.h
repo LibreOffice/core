@@ -57,6 +57,6 @@ public:
 // -----------------
 
 // in KEYCOD.CXX
-void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3 );
+void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3, USHORT& rCode4 );
 
 #endif  // _SV_ACCEL_H

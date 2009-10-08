@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.53.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,7 +99,8 @@ X11SalGraphics::X11SalGraphics()
     m_pVDev             = NULL;
     m_pDeleteColormap   = NULL;
     hDrawable_          = None;
-    pRenderFormat_      = NULL;
+    m_aRenderPicture    = 0;
+    m_pRenderFormat     = NULL;
 
     pClipRegion_            = NULL;
     pPaintRegion_       = NULL;
@@ -162,10 +160,10 @@ X11SalGraphics::~X11SalGraphics()
 void X11SalGraphics::freeResources()
 {
     Display *pDisplay = GetXDisplay();
-
+    
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
     if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
-
+    
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
     if( pFontGC_ )      XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
@@ -180,42 +178,70 @@ void X11SalGraphics::freeResources()
     if( m_pDeleteColormap )
         delete m_pDeleteColormap, m_pColormap = m_pDeleteColormap = NULL;
 
+    if( m_aRenderPicture )
+        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture ), m_aRenderPicture = 0;
+
     bPenGC_ = bFontGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = bTrackingGC_ = false;
 }
 
 void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
 {
+    // shortcut if nothing changed
+    if( hDrawable_ == aDrawable )
+        return;
+
+    // free screen specific resources if needed
     if( nScreen != m_nScreen )
     {
         freeResources();
         m_pColormap = &GetX11SalData()->GetDisplay()->GetColormap( nScreen );
         m_nScreen = nScreen;
     }
+
     hDrawable_ = aDrawable;
-    nPenPixel_      = GetPixel( nPenColor_ );
-    nTextPixel_     = GetPixel( nTextColor_ );
-    nBrushPixel_    = GetPixel( nBrushColor_ );
+    SetXRenderFormat( NULL );
+    if( m_aRenderPicture )
+    {
+        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture );
+        m_aRenderPicture = 0;
+    }
+
+    if( hDrawable_ )
+    {
+        nPenPixel_      = GetPixel( nPenColor_ );
+        nTextPixel_     = GetPixel( nTextColor_ );
+        nBrushPixel_    = GetPixel( nBrushColor_ );
+    }
 }
 
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget, int nScreen )
 {
+#if 0 // TODO: use SetDrawable() instead
     m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
     hDrawable_      = aTarget;
     m_nScreen       = nScreen;
-
-    bWindow_        = TRUE;
-    m_pFrame        = pFrame;
-    m_pVDev         = NULL;
+    SetXRenderFormat( NULL );
+    if( m_aRenderPicture )
+        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture ), m_aRenderPicture = 0;
 
     nPenPixel_      = GetPixel( nPenColor_ );
     nTextPixel_     = GetPixel( nTextColor_ );
     nBrushPixel_    = GetPixel( nBrushColor_ );
+#else
+    m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
+    m_nScreen = nScreen;
+    SetDrawable( aTarget, nScreen );
+#endif
+
+    bWindow_        = TRUE;
+    m_pFrame        = pFrame;
+    m_pVDev         = NULL;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::DeInit()
 {
-    hDrawable_ = None;
+    SetDrawable( None, m_nScreen );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -484,7 +510,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     const SalDisplay *pDisplay = GetDisplay();
-
+    
     rDPIX = pDisplay->GetResolution().A();
     rDPIY = pDisplay->GetResolution().B();
     if( !pDisplay->GetExactResolution() && rDPIY < 96 )
@@ -497,12 +523,12 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         rDPIX = Divide( rDPIX * 200, rDPIY );
         rDPIY = 200;
     }
-
+    
     // #i12705# equalize x- and y-resolution if they are close enough
     if( rDPIX != rDPIY )
     {
         // different x- and y- resolutions are usually artifacts of
-        // a wrongly calculated screen size.
+        // a wrongly calculated screen size. 
         //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
         {
 #ifdef DEBUG
@@ -556,7 +582,7 @@ void X11SalGraphics::ResetClipRegion()
         bInvert50GC_    = FALSE;
         bStippleGC_     = FALSE;
         bTrackingGC_    = FALSE;
-
+        
         XDestroyRegion( pClipRegion_ );
         pClipRegion_    = NULL;
     }
@@ -581,9 +607,9 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
     aRect.y         = (short)nY;
     aRect.width     = (unsigned short)nDX;
     aRect.height    = (unsigned short)nDY;
-
+    
     XUnionRectWithRegion( &aRect, pClipRegion_, pClipRegion_ );
-
+    
     return TRUE;
 }
 
@@ -606,7 +632,7 @@ void X11SalGraphics::EndSetClipRegion()
     bInvert50GC_    = FALSE;
     bStippleGC_     = FALSE;
     bTrackingGC_    = FALSE;
-
+    
     if( XEmptyRegion( pClipRegion_ ) )
     {
         XDestroyRegion( pClipRegion_ );
@@ -745,7 +771,7 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     if( nSalColor != SALCOLOR_NONE )
     {
         Display *pDisplay = GetXDisplay();
-
+        
         if( (nPenColor_ == SALCOLOR_NONE) && !bPenGC_ )
         {
             SetLineColor( nSalColor );
@@ -756,12 +782,12 @@ void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
         else
         {
             GC pGC = SelectPen();
-
+            
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, GetPixel( nSalColor ) );
-
+            
             XDrawPoint( pDisplay, GetDrawable(), pGC, nX, nY );
-
+            
             if( nSalColor != nPenColor_ )
                 XSetForeground( pDisplay, pGC, nPenPixel_ );
         }
@@ -816,7 +842,7 @@ void X11SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry, bool b
     if( nPenColor_ != 0xFFFFFFFF )
     {
         SalPolyLine Points( nPoints, pPtAry );
-
+        
         DrawLines( nPoints, Points, SelectPen(), bClose );
     }
 }
@@ -826,7 +852,7 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     if( nPoints == 0 )
         return;
-
+    
     if( nPoints < 3 )
     {
         if( !bXORMode_ )
@@ -839,9 +865,9 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
         }
         return;
     }
-
+    
     SalPolyLine Points( nPoints, pPtAry );
-
+    
     nPoints++;
 
     /* WORKAROUND: some Xservers (Xorg, VIA chipset in this case)
@@ -875,15 +901,15 @@ void X11SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
                 if( Points[i].x < 0 )
                     Points[i].x = 0;
         }
-    }
-
+    }       
+    
     if( nBrushColor_ != SALCOLOR_NONE )
         XFillPolygon( GetXDisplay(),
                       GetDrawable(),
                       SelectBrush(),
                       &Points[0], nPoints,
                       Complex, CoordModeOrigin );
-
+    
     if( nPenColor_ != 0xFFFFFFFF )
         DrawLines( nPoints, Points, SelectPen(), true );
 }
@@ -897,7 +923,7 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
     {
         ULONG       i, n;
         XLIB_Region pXRegA  = NULL;
-
+        
         for( i = 0; i < nPoly; i++ ) {
             n = pPoints[i];
             SalPolyLine Points( n, pPtAry[i] );
@@ -913,24 +939,24 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                 }
             }
         }
-
+        
         if( pXRegA )
         {
             XRectangle aXRect;
             XClipBox( pXRegA, &aXRect );
-
+            
             GC pGC = SelectBrush();
             SetClipRegion( pGC, pXRegA ); // ??? doppelt
             XDestroyRegion( pXRegA );
             bBrushGC_ = FALSE;
-
+            
             XFillRectangle( GetXDisplay(),
                             GetDrawable(),
                             pGC,
                             aXRect.x, aXRect.y, aXRect.width, aXRect.height );
         }
    }
-
+        
    if( nPenColor_ != SALCOLOR_NONE )
        for( ULONG i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i], true );
@@ -965,7 +991,7 @@ void X11SalGraphics::invert( ULONG nPoints,
                              SalInvert nFlags )
 {
     SalPolyLine Points ( nPoints, pPtAry );
-
+    
     GC pGC;
     if( SAL_INVERT_50 & nFlags )
         pGC = GetInvert50GC();
@@ -974,7 +1000,7 @@ void X11SalGraphics::invert( ULONG nPoints,
             pGC = GetTrackingGC();
         else
             pGC = GetInvertGC();
-
+    
     if( SAL_INVERT_TRACKFRAME & nFlags )
         DrawLines ( nPoints, Points, pGC, true );
     else
@@ -994,6 +1020,40 @@ BOOL X11SalGraphics::drawEPS( long,long,long,long,void*,ULONG )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+XID X11SalGraphics::GetXRenderPicture()
+{
+    if( !m_aRenderPicture )
+    {
+        // check xrender support for matching visual
+        // find a XRenderPictFormat compatible with the Drawable
+        XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+        XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
+        if( !pVisualFormat )
+        {
+            Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
+            pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
+            if( !pVisualFormat )
+                return 0;
+            // cache the XRenderPictFormat
+            SetXRenderFormat( static_cast<void*>(pVisualFormat) );
+        }
+
+        // get the matching xrender target for drawable
+        m_aRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
+    }
+
+#if 0
+    // setup clipping so the callers don't have to do it themselves
+    // TODO: avoid clipping if already set correctly
+    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
+        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+#endif
+
+    return m_aRenderPicture;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;
@@ -1005,7 +1065,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.nScreen   = m_nScreen;
     aRes.nDepth    = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
     aRes.aColormap = GetDisplay()->GetColormap( m_nScreen ).GetXColormap();
-    aRes.pRenderFormat = pRenderFormat_;
+    aRes.pRenderFormat = m_pRenderFormat;
     return aRes;
 }
 
@@ -1072,7 +1132,15 @@ struct HalfTrapCompare
     }
 };
 
-typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueue;
+typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueueBase;
+// we need a priority queue with a reserve() to prevent countless reallocations
+class HTQueue
+:   public HTQueueBase
+{
+public:
+    void    reserve( size_t n ) { c.reserve( n ); }
+    int     capacity() { return c.capacity(); }
+};
 
 typedef std::vector<XTrapezoid> TrapezoidVector;
 
@@ -1128,38 +1196,49 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
     if( !rRenderPeer.AreTrapezoidsSupported() )
         return FALSE;
-
-    // check xrender support for matching visual
-    Visual* pVisual = GetVisual().GetVisual();
-    XRenderPictFormat* pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
-    if( !pVisualFormat )
+    Picture aDstPic = GetXRenderPicture();
+    // check xrender support for this drawable
+    if( !aDstPic )
         return FALSE;
 
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
-    aPolyRange.intersect( aViewRange );
-    if( aPolyRange.isEmpty() )
+    const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
+    const bool bNeedViewClip = !aPolyRange.isInside( aViewRange );
+    if( !aPolyRange.overlaps( aViewRange ) )
         return true;
 
     // convert the polypolygon to trapezoids
 
     // first convert the B2DPolyPolygon to HalfTrapezoids
-    HTQueue aHTQueue;
+    // #i100922# try to prevent priority-queue reallocations by reservering enough
+    int nHTQueueReserve = 0;
     for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
     {
-        ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
+        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
+        const int nPointCount = aOuterPolygon.count();
+        nHTQueueReserve += aOuterPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
+    }
+    nHTQueueReserve = ((4*nHTQueueReserve) | 0x1FFF) + 1;
+    HTQueue aHTQueue;
+    aHTQueue.reserve( nHTQueueReserve );
+    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
+    {
+        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
 
-        // get rid of bezier segments
-        if( aOuterPolygon.areControlPointsUsed() )
-            aOuterPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aOuterPolygon, 0.125 );
+        // render-trapezoids should be inside the view => clip polygon against view range
+        basegfx::B2DPolyPolygon aClippedPolygon( aOuterPolygon );
+        if( bNeedViewClip )
+        {
+            aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
+            DBG_ASSERT( aClippedPolygon.count(), "polygon confirmed to overlap with view should not get here" );
+            if( !aClippedPolygon.count() )
+                continue;
+        }
 
-        // clip polygon against view
-        // (the call below for removing self intersections can be made much cheaper by this)
-        // TODO: move clipping before subdivision when clipPolyonRange learns to handle curves
-        const basegfx::B2DPolyPolygon aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
-        if( !aClippedPolygon.count() )
-                return true;
+        // render-trapezoids have linear edges => get rid of bezier segments
+        if( aClippedPolygon.areControlPointsUsed() )
+            aClippedPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aClippedPolygon, 0.125 );
 
         // test and remove self intersections
         // TODO: make code intersection save, then remove this test
@@ -1172,6 +1251,8 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             if( !nPointCount )
                 continue;
 
+            aHTQueue.reserve( aHTQueue.size() + 8 * nPointCount );
+
             // convert polygon point pairs to HalfTrapezoids
             // connect the polygon point with the first one if needed
             XPointFixed aOldXPF = { 0, 0 };
@@ -1180,7 +1261,7 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             {
                 const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
                 const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
-
+                
                 // convert the B2DPoint into XRENDER units
                 if(getAntiAliasB2DDraw())
                 {
@@ -1384,22 +1465,15 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency );
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
-    // notify xrender of target drawable
-    // TODO: cache the matching xrender picture in the X11SalGraphics
-    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
-
     // set clipping
+    // TODO: move into GetXRenderPicture?
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDst, pClipRegion_ );
+        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
 
     // render the trapezoids
     const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
     rRenderPeer.CompositeTrapezoids( PictOpOver,
-        rEntry.m_aPicture, aDst, pMaskFormat, 0, 0, &aTrapVector[0], aTrapVector.size() );
-
-    // release xrender-counterpart of target drawable
-    // TODO: use scoped xrender picture
-    rRenderPeer.FreePicture( aDst );
+        rEntry.m_aPicture, aDstPic, pMaskFormat, 0, 0, &aTrapVector[0], aTrapVector.size() );
 
     return TRUE;
 }
@@ -1430,7 +1504,7 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
     //const basegfx::B2DPolyPolygon aAreaPolyPoly = basegfx::tools::createAreaGeometryForSimplePolygon(
     //    aPolygon, 0.5*rLineWidth.getX(), eLineJoin );
     const basegfx::B2DPolyPolygon aAreaPolyPoly(basegfx::tools::createAreaGeometry(aPolygon, 0.5*rLineWidth.getX(), eLineJoin));
-
+    
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
     {

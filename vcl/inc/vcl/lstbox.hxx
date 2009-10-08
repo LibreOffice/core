@@ -57,6 +57,7 @@ private:
     BOOL                        mbDDAutoSize;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
+    USHORT mnLineCount;
 
 //#if 0 // _SOLAR__PRIVATE
 private:

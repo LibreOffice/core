@@ -1233,6 +1233,10 @@ private:
                 mpLastSuperEvent = mpLastEvent;
                 [NSApp performSelector:@selector(sendSuperEvent:) withObject: mpLastEvent];
                 mpLastSuperEvent = pLastSuperEvent;
+                
+                std::map< NSEvent*, bool >::iterator it = GetSalData()->maKeyEventAnswer.find( mpLastEvent );
+                if( it != GetSalData()->maKeyEventAnswer.end() )
+                    it->second = true;
             }
         }
     }

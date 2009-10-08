@@ -34,39 +34,72 @@
 
 #if ENABLE_LAYOUT
 
+/* Allow re-inclusion for cxx file. */
+#undef _LAYOUT_PRE_HXX
+
+
 #undef AdvancedButton
+#undef ApplyButton
 #undef Box
 #undef Button
 #undef CancelButton
 #undef CheckBox
+#undef ComboBox
 #undef Container
+#undef Control
+#undef Dialog
+#undef Edit
+#undef ErrorBox
 #undef FixedImage
 #undef FixedInfo
 #undef FixedLine
 #undef FixedText
-#undef HelpButton
 #undef HBox
+#undef HelpButton
+#undef IgnoreButton
+#undef ImageButton
+#undef InfoBox
+#undef ListBox
+#undef MessBox
+#undef MessageBox
 #undef MetricField
+#undef MetricFormatter
 #undef MoreButton
 #undef MultiLineEdit
+#undef MultiListBox
+#undef NoButton
+#undef NumericField
+#undef NumericFormatter
 #undef OKButton
+#undef Plugin
 #undef ProgressBar
 #undef PushButton
+#undef QueryBox
 #undef RadioButton
-#undef SfxModalDialog
+#undef ResetButton
+#undef RetryButton
+#undef SfxTabPage
+#undef SfxTabDialog
+#undef SpinField
+#undef TabDialog
+#undef TabControl
+#undef TabPage
 #undef Table
 #undef VBox
+#undef WarningBox
+#undef YesButton
+
+#undef SvxFontListBox
+#undef SvxLanguageBox
+
+#undef ModalDialog
+#undef ModelessDialog
+#undef ScExpandedFixedText
+#undef SfxDialog
+#undef SfxModalDialog
+#undef SfxModelessDialog
 
 #undef Window
-
-#undef SVX_RES
-#define SVX_RES(i) ResId(i,DIALOG_MGR())
-
-#undef SW_RES
-#define SW_RES(i) ResId(i,SWDIALOG_MGR())
-
-/* Allow re-inclusion for cxx file. */
-#undef _LAYOUT_PRE_HXX
 
 #endif /* ENABLE_LAYOUT */
 

@@ -274,7 +274,7 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
     struct stat aStat;
     if( stat( aFilename.GetBuffer(), &aStat ) )
         fprintf( stderr, "stat( %s ) failed\n", aFilename.GetBuffer() );
-    fprintf( stderr, "Tmp file %s has modes: %o\n", aFilename.GetBuffer(), aStat.st_mode );
+    fprintf( stderr, "Tmp file %s has modes: 0%03lo\n", aFilename.GetBuffer(), (long)aStat.st_mode );
 #endif
     const char* argv[4];
     if( ! ( argv[ 0 ] = getenv( "SHELL" ) ) )

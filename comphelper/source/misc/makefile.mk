@@ -59,7 +59,6 @@ SLOFILES=   \
             $(SLO)$/configurationhelper.obj \
             $(SLO)$/documentinfo.obj \
             $(SLO)$/evtlistenerhlp.obj \
-            $(SLO)$/facreg.obj \
             $(SLO)$/ihwrapnofilter.obj \
             $(SLO)$/instancelocker.obj \
             $(SLO)$/interaction.obj \
@@ -89,6 +88,9 @@ SLOFILES=   \
             $(SLO)$/uieventslogger.obj \
             $(SLO)$/weakeventlistener.obj \
             $(SLO)$/weak.obj \
+            $(SLO)$/comphelper_module.obj \
+            $(SLO)$/comphelper_services.obj \
+            $(SLO)$/componentbase.obj \
 
 # --- Targets ----------------------------------
 

@@ -52,7 +52,7 @@
 #include <osl/module.h>
 #endif
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/cursorfont.h>
 #include "salcursors.h"
 #include "invert50.h"
@@ -81,7 +81,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #endif
 #endif
 
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <salunx.h>
 #include <sal/types.h>
@@ -831,24 +831,28 @@ void SalDisplay::Init()
     int nDisplayScreens = ScreenCount( pDisp_ );
     m_aScreens = std::vector<ScreenData>(nDisplayScreens);
 
-    const char *value;
+    mbExactResolution = false;
     /*  #i15507#
      *  Xft resolution should take precedence since
      *  it is what modern desktops use.
      */
-    if ((value = XGetDefault (pDisp_, "Xft", "dpi")))
+    const char* pValStr = XGetDefault( pDisp_, "Xft", "dpi" );
+    if( pValStr != NULL )
     {
-        rtl::OString str (value);
-        long dpi = (long) str.toDouble();
-        aResolution_ = Pair( dpi, dpi );
-        mbExactResolution = true;
+        const rtl::OString aValStr( pValStr );
+        const long nDPI = (long) aValStr.toDouble();
+        // guard against insane resolution
+        if( (nDPI >= 50) && (nDPI <= 500) )
+        {
+            aResolution_ = Pair( nDPI, nDPI );
+            mbExactResolution = true;
+        }
     }
-    else
+    if( mbExactResolution == false )
     {
         aResolution_     =
             Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayWidthMM ( pDisp_, m_nDefaultScreen ) ),
                   DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayHeightMM( pDisp_, m_nDefaultScreen ) ) );
-        mbExactResolution   = false;
     }
 
     nMaxRequestSize_    = XExtendedMaxRequestSize( pDisp_ ) * 4;
@@ -3412,8 +3416,8 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 #ifdef DBG_UTIL
                         else
                             fprintf( stderr, "SalColormap::GetPixel() 0x%06lx=%lu 0x%06lx=%lu\n",
-                                     nSalColor, aColor.pixel,
-                                     nInversColor, aInversColor.pixel);
+                                     static_cast< unsigned long >(nSalColor), aColor.pixel,
+                                     static_cast< unsigned long >(nInversColor), aInversColor.pixel);
 #endif
                     }
                 }
@@ -3423,7 +3427,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 
 #ifdef DBG_UTIL
             fprintf( stderr, "SalColormap::GetPixel() !XAllocColor %lx\n",
-                     nSalColor );
+                     static_cast< unsigned long >(nSalColor) );
 #endif
         }
 
@@ -3431,7 +3435,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
         {
 #ifdef DBG_UTIL
             fprintf( stderr, "SalColormap::GetPixel() Palette empty %lx\n",
-                     nSalColor);
+                     static_cast< unsigned long >(nSalColor));
 #endif
             return nSalColor;
         }

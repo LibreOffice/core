@@ -37,9 +37,9 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <svunx.h>
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xatom.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <vcl/salinst.hxx>
 #include <saldata.hxx>
@@ -79,8 +79,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
         SAL_LOADMODULE_DEFAULT );
     if( aMod )
     {
-        OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "create_SalInstance" ) );
-        salFactoryProc aProc = (salFactoryProc)osl_getFunctionSymbol( aMod, aSym.pData );
+        salFactoryProc aProc = (salFactoryProc)osl_getAsciiFunctionSymbol( aMod, "create_SalInstance" );
         if( aProc )
         {
             pInst = aProc( aMod );
@@ -113,7 +112,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
         {
 #if OSL_DEBUG_LEVEL > 1
             std::fprintf( stderr, "could not load symbol %s from shared object %s\n",
-                     OUStringToOString( aSym, RTL_TEXTENCODING_ASCII_US ).getStr(),
+                     "create_SalInstance",
                      OUStringToOString( aModule, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
             osl_unloadModule( aMod );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wordcountdialog.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,15 @@
 #include <wordcountdialog.hrc>
 #endif /* !TEST_LAYOUT */
 
+#if ENABLE_LAYOUT
+#undef SW_RES
+#define SW_RES(x) #x
+#undef SfxModalDialog
+#define SfxModalDialog( parent, id ) Dialog( parent, "wordcount.xml", id )
+#define SW_WORDCOUNTDIALOG_HRC
+#include <helpid.h>
+#endif /* ENABLE_LAYOUT */
+
 /*-- 06.04.2004 16:05:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -73,6 +82,9 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
 #pragma warning (default : 4355)
 #endif
 {
+#if ENABLE_LAYOUT
+    SetHelpId (HID_DLG_WORDCOUNT);
+#endif /* ENABLE_LAYOUT */
     FreeResource();
 }
 /*-- 06.04.2004 16:05:56---------------------------------------------------
@@ -84,17 +96,12 @@ SwWordCountDialog::~SwWordCountDialog()
 /*-- 06.04.2004 16:05:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void  SwWordCountDialog::SetValues(const SwDocStat&
-#if !TEST_LAYOUT
-                                   rCurrent,
-#endif
-                                   , const SwDocStat&
-#if !TEST_LAYOUT
-                                   rDoc
-#endif
-                                   )
+void  SwWordCountDialog::SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc)
 {
-#if !TEST_LAYOUT
+#if TEST_LAYOUT
+    (void) rCurrent;
+    (void) rDoc;
+#else /* !TEST_LAYOUT */
     aCurrentWordFI.SetText(     String::CreateFromInt32(rCurrent.nWord ));
     aCurrentCharacterFI.SetText(String::CreateFromInt32(rCurrent.nChar ));
     aDocWordFI.SetText(         String::CreateFromInt32(rDoc.nWord ));

@@ -51,6 +51,7 @@
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/stl_types.hxx>
@@ -132,7 +133,6 @@ public:
     inline VclListenerLock( VCLXWindow* _pLockWindow )
         :m_pLockWindow( _pLockWindow )
     {
-//        DBG_ASSERT( m_pLockWindow, "VclListenerLock::VclListenerLock: invalid window!" );
         if ( m_pLockWindow )
             m_pLockWindow->suspendVclEventListening( );
     }
@@ -143,14 +143,23 @@ public:
     }
 
 private:
-    VclListenerLock();                                          // never implemented
+    VclListenerLock();                                      // never implemented
     VclListenerLock( const VclListenerLock& );              // never implemented
     VclListenerLock& operator=( const VclListenerLock& );   // never implemented
 };
 
+typedef ::std::map< ::rtl::OUString, sal_Int32 >    MapString2Int;
 struct UnoControl_Data
 {
-    ::std::set< ::rtl::OUString >   aPropertyNotificationFilter;
+    MapString2Int   aSuspendedPropertyNotifications;
+    /// true if and only if our model has a property ResourceResolver
+    bool            bLocalizationSupport;
+
+    UnoControl_Data()
+        :aSuspendedPropertyNotifications()
+        ,bLocalizationSupport( false )
+    {
+    }
 };
 
 //  ----------------------------------------------------
@@ -245,33 +254,34 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
     return xCompatiblePeer;
 }
 
-bool UnoControl::ImplMapPlaceHolder( ::rtl::OUString& rPlaceHolder )
+bool UnoControl::ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable )
 {
-    rtl::OUString aMappedValue;
+    if  (   !mpData->bLocalizationSupport
+        ||  ( _rPossiblyLocalizable.getLength() == 0 )
+        ||  ( _rPossiblyLocalizable[0] != '&' )
+            // TODO: make this reasonable. At the moment, everything which by accident starts with a & is considered
+            // localizable, which is probably wrong.
+        )
+        return false;
 
-    Reference< XPropertySet > xPropSet( mxModel, UNO_QUERY );
-    if ( xPropSet.is() )
+    try
     {
-        Any a;
-        Reference< resource::XStringResourceResolver > xStringResourceResolver;
-        a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" )));
-        if ( a >>= xStringResourceResolver )
+        Reference< XPropertySet > xPropSet( mxModel, UNO_QUERY_THROW );
+        Reference< resource::XStringResourceResolver > xStringResourceResolver(
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ),
+            UNO_QUERY
+        );
+        if ( xStringResourceResolver.is() )
         {
-            if ( xStringResourceResolver.is() )
-            {
-                try
-                {
-                    rPlaceHolder = xStringResourceResolver->resolveString( rPlaceHolder );
-                    return true;
-                }
-                catch ( resource::MissingResourceException& )
-                {
-                    return false;
-                }
-            }
+            ::rtl::OUString aLocalizationKey( _rPossiblyLocalizable.copy( 1 ) );
+            _rPossiblyLocalizable = xStringResourceResolver->resolveString( aLocalizationKey );
+            return true;
         }
     }
-
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     return false;
 }
 
@@ -284,56 +294,36 @@ void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const An
 
     if ( mxVclWindowPeer.is() )
     {
-        Any aVal( rVal );
+        Any aConvertedValue( rVal );
 
-        // We now support a mapping for language dependent properties. This is the
-        // central method to implement it.
-        if (( rPropName.equalsAsciiL( "Text",            4 )) ||
-            ( rPropName.equalsAsciiL( "Label",           5 )) ||
-            ( rPropName.equalsAsciiL( "Title",           5 )) ||
-            ( rPropName.equalsAsciiL( "HelpText",        8 )) ||
-            ( rPropName.equalsAsciiL( "CurrencySymbol", 14 )) ||
-            ( rPropName.equalsAsciiL( "StringItemList", 14 )) )
+        if ( mpData->bLocalizationSupport )
         {
-            rtl::OUString aValue;
-            uno::Sequence< rtl::OUString > aSeqValue;
-
-            if ( aVal >>= aValue )
+            // We now support a mapping for language dependent properties. This is the
+            // central method to implement it.
+            if (( rPropName.equalsAsciiL( "Text",            4 )) ||
+                ( rPropName.equalsAsciiL( "Label",           5 )) ||
+                ( rPropName.equalsAsciiL( "Title",           5 )) ||
+                ( rPropName.equalsAsciiL( "HelpText",        8 )) ||
+                ( rPropName.equalsAsciiL( "CurrencySymbol", 14 )) ||
+                ( rPropName.equalsAsciiL( "StringItemList", 14 )) )
             {
-                // Map single string value
-                if (( aValue.getLength() > 0 ) &&
-                    ( aValue.compareToAscii( "&", 1 ) == 0 ))
+                ::rtl::OUString aValue;
+                uno::Sequence< rtl::OUString > aSeqValue;
+                if ( aConvertedValue >>= aValue )
                 {
-                    // Magic symbol '&' found at first place. Interpret as a place
-                    // holder identifier. Now try to map it to the real value. The
-                    // magic symbol must be removed.
-                    rtl::OUString aKeyValue( aValue.copy( 1 ));
-                    if ( ImplMapPlaceHolder( aKeyValue ))
-                        aVal <<= aKeyValue;
+                    if ( ImplCheckLocalize( aValue ) )
+                        aConvertedValue <<= aValue;
                 }
-            }
-            else if ( aVal >>= aSeqValue )
-            {
-                // Map sequence strings
-                for ( sal_Int32 i = 0; i < aSeqValue.getLength(); i++ )
+                else if ( aConvertedValue >>= aSeqValue )
                 {
-                    aValue = aSeqValue[i];
-                    if (( aValue.getLength() > 0 ) &&
-                        ( aValue.compareToAscii( "&", 1 ) == 0 ))
-                    {
-                        // Magic symbol '&' found at first place. Interpret as a place
-                        // holder identifier. Now try to map it to the real value. The
-                        // magic symbol must be removed.
-                        rtl::OUString aKeyValue( aValue.copy( 1 ));
-                        if ( ImplMapPlaceHolder( aKeyValue ))
-                            aSeqValue[i] = aKeyValue;
-                    }
+                    for ( sal_Int32 i = 0; i < aSeqValue.getLength(); i++ )
+                        ImplCheckLocalize( aSeqValue[i] );
+                    aConvertedValue <<= aSeqValue;
                 }
-                aVal <<= aSeqValue;
             }
         }
 
-        mxVclWindowPeer->setProperty( rPropName, aVal );
+        mxVclWindowPeer->setProperty( rPropName, aConvertedValue );
     }
 }
 
@@ -455,13 +445,13 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        if ( !mpData->aPropertyNotificationFilter.empty() )
+        if ( !mpData->aSuspendedPropertyNotifications.empty() )
         {
             // strip the property which we are currently updating (somewhere up the stack)
             PropertyChangeEvent* pEvents = aEvents.getArray();
             PropertyChangeEvent* pEventsEnd = pEvents + aEvents.getLength();
             for ( ; pEvents < pEventsEnd; )
-                if ( mpData->aPropertyNotificationFilter.find( pEvents->PropertyName ) != mpData->aPropertyNotificationFilter.end() )
+                if ( mpData->aSuspendedPropertyNotifications.find( pEvents->PropertyName ) != mpData->aSuspendedPropertyNotifications.end() )
                 {
                     if ( pEvents != pEventsEnd )
                         ::std::copy( pEvents + 1, pEventsEnd, pEvents );
@@ -481,17 +471,22 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
 
 void UnoControl::ImplLockPropertyChangeNotification( const ::rtl::OUString& rPropertyName, bool bLock )
 {
+    MapString2Int::iterator pos = mpData->aSuspendedPropertyNotifications.find( rPropertyName );
     if ( bLock )
     {
-        OSL_PRECOND( mpData->aPropertyNotificationFilter.find( rPropertyName ) == mpData->aPropertyNotificationFilter.end(),
-            "UnoControl::ImplLockPropertyChangeNotification: already locked!" );
-        mpData->aPropertyNotificationFilter.insert( rPropertyName );
+        if ( pos == mpData->aSuspendedPropertyNotifications.end() )
+            pos = mpData->aSuspendedPropertyNotifications.insert( MapString2Int::value_type( rPropertyName, 0 ) ).first;
+        ++pos->second;
     }
     else
     {
-        OSL_PRECOND( mpData->aPropertyNotificationFilter.find( rPropertyName ) != mpData->aPropertyNotificationFilter.end(),
-            "UnoControl::ImplLockPropertyChangeNotification: not locked!" );
-        mpData->aPropertyNotificationFilter.erase( rPropertyName );
+        OSL_ENSURE( pos != mpData->aSuspendedPropertyNotifications.end(), "UnoControl::ImplLockPropertyChangeNotification: property not locked!" );
+        if ( pos != mpData->aSuspendedPropertyNotifications.end() )
+        {
+            OSL_ENSURE( pos->second > 0, "UnoControl::ImplLockPropertyChangeNotification: invalid suspension counter!" );
+            if ( 0 == --pos->second )
+                mpData->aSuspendedPropertyNotifications.erase( pos );
+        }
     }
 }
 
@@ -1377,16 +1372,28 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw
     if( xPropSet.is() )
         xPropSet->removePropertiesChangeListener( xListener );
 
+    mpData->bLocalizationSupport = false;
     mxModel = rxModel;
+
     if( mxModel.is() )
     {
-        xPropSet = Reference< XMultiPropertySet > ( mxModel, UNO_QUERY );
-        if( xPropSet.is() )
+        try
         {
+            xPropSet.set( mxModel, UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), UNO_SET_THROW );
+
             Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
             xPropSet->addPropertiesChangeListener( aNames, xListener );
+
+            mpData->bLocalizationSupport = xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            mxModel.clear();
         }
     }
+
     return mxModel.is();
 }
 

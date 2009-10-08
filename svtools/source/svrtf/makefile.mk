@@ -45,8 +45,7 @@ SLOFILES =	\
         $(SLO)$/svparser.obj \
         $(SLO)$/parrtf.obj	\
         $(SLO)$/rtfout.obj \
-        $(SLO)$/rtfkeywd.obj \
-        $(SLO)$/rtfkey2.obj
+        $(SLO)$/rtfkeywd.obj
 
 # ==========================================================================
 

@@ -49,13 +49,13 @@
 
 static HTMLOptionEnum __READONLY_DATA aScriptLangOptEnums[] =
 {
-    { sHTML_LG_starbasic,   HTML_SL_STARBASIC   },
-    { sHTML_LG_javascript,  HTML_SL_JAVASCRIPT  },
-    { sHTML_LG_javascript11,HTML_SL_JAVASCRIPT  },
-    { sHTML_LG_livescript,  HTML_SL_JAVASCRIPT  },
-//  { sHTML_LG_unused_javascript, HTML_SL_UNUSEDJS },
-//  { sHTML_LG_vbscript,    HTML_SL_VBSCRIPT    },
-//  { sHTML_LG_starone,     HTML_SL_STARONE     },
+    { OOO_STRING_SVTOOLS_HTML_LG_starbasic, HTML_SL_STARBASIC   },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript,    HTML_SL_JAVASCRIPT  },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT    },
+    { OOO_STRING_SVTOOLS_HTML_LG_livescript,    HTML_SL_JAVASCRIPT  },
+//  { OOO_STRING_SVTOOLS_HTML_LG_unused_javascript, HTML_SL_UNUSEDJS },
+//  { OOO_STRING_SVTOOLS_HTML_LG_vbscript,  HTML_SL_VBSCRIPT    },
+//  { OOO_STRING_SVTOOLS_HTML_LG_starone,       HTML_SL_STARONE     },
     { 0,                    0                   }
 };
 

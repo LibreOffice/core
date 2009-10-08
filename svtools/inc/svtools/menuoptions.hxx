@@ -122,11 +122,11 @@ class SVL_DLLPUBLIC SvtMenuOptions: public svt::detail::Options
 
         sal_Bool IsEntryHidingEnabled() const;
         sal_Bool IsFollowMouseEnabled() const;
-        sal_Bool IsMenuIconsEnabled() const;
+        sal_Int16 GetMenuIconsState() const;
 
         void SetEntryHidingState( sal_Bool bState );
         void SetFollowMouseState( sal_Bool bState );
-        void SetMenuIconsState( sal_Bool bState );
+        void SetMenuIconsState( sal_Int16 bState );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods

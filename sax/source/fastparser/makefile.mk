@@ -62,7 +62,6 @@ SHL1STDLIBS= \
         $(SAXLIB)  \
         $(CPPULIB) \
         $(CPPUHELPERLIB)\
-        $(COMPHELPERLIB)\
         $(EXPATASCII3RDLIB)
 
 SHL1DEPN=

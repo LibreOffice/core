@@ -33,7 +33,7 @@
 
 #include "sal/config.h"
 
-#include "prex.h"
+#include <tools/prex.h>
 
 #if defined __GNUC__
 #pragma GCC system_header
@@ -47,6 +47,6 @@
 #pragma enable_warn
 #endif
 
-#include "postx.h"
+#include <tools/postx.h>
 
 #endif
