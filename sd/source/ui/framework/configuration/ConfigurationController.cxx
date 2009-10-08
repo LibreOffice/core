@@ -237,6 +237,18 @@ void ConfigurationController::ProcessEvent (void)
 
 
 
+void ConfigurationController::RequestSynchronousUpdate (void)
+{
+    if (mpImplementation.get() == NULL)
+        return;
+    if (mpImplementation->mpQueueProcessor.get() == 0)
+        return;
+    mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
+}
+
+
+
+
 //----- XConfigurationControllerBroadcaster -----------------------------------
 
 void SAL_CALL ConfigurationController::addConfigurationChangeListener (

@@ -62,15 +62,27 @@ class OGLTransitionImpl
 {
 public:
     OGLTransitionImpl() :
+        mbUseMipMapLeaving( true ),
+        mbUseMipMapEntering( true ),
+        mnRequiredGLVersion( 1.0 ),
         maLeavingSlidePrimitives(),
         maEnteringSlidePrimitives(),
-        maSceneObjects()
+        maSceneObjects(),
+        mbReflectSlides( false ),
+        mVertexObject( 0 ),
+        mFragmentObject( 0 ),
+        mProgramObject( 0 ),
+        maHelperTexture( 0 ),
+        mmPrepare( NULL ),
+        mmPrepareTransition( NULL ),
+        mmClearTransition( NULL ),
+        mmDisplaySlides( NULL )
     {}
 
     ~OGLTransitionImpl();
 
-    void prepare();
-    void display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
+    void prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    void display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
     void finish();
 
     void makeOutsideCubeFaceToLeft();
@@ -83,6 +95,25 @@ public:
     void makeTurnDown();
     void makeIris();
     void makeRochade();
+    void makeVenetianBlinds( bool vertical, int parts );
+    void makeStatic();
+    void makeDissolve();
+    void makeNewsflash();
+
+    /** 2D replacements
+     */
+    void makeDiamond();
+    void makeFadeSmoothly();
+    void makeFadeThroughBlack();
+
+    /** Whether to use mipmaping for slides textures
+     */
+    bool mbUseMipMapLeaving;
+    bool mbUseMipMapEntering;
+
+    /** which GL version does the transition require
+     */
+    float mnRequiredGLVersion;
 
 private:
     /** clears all the primitives and operations
@@ -104,6 +135,54 @@ private:
     /** All the operations that should be applied to both leaving and entering slide primitives. These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
     */
     vector<Operation*> OverallOperations;
+
+    /** Whether to reflect slides, the reflection happens on flat surface beneath the slides.
+     ** Now it only works with slides which keep their rectangular shape together.
+     */
+    bool mbReflectSlides;
+
+    /** GLSL objects, shaders and program
+     */
+    GLuint mVertexObject, mFragmentObject, mProgramObject;
+
+    /** various data */
+    GLuint maHelperTexture;
+
+    /** When this method is not NULL, it is called in display method to prepare the slides, scene, etc.
+     ** We might later replace this by cleaner derived class.
+     */
+    void (OGLTransitionImpl::*mmPrepare)( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+
+    /** When this method is not NULL, it is called after glx context is ready to let the transition prepare GL related things, like GLSL program.
+     ** We might later replace this by cleaner derived class.
+     */
+    void (OGLTransitionImpl::*mmPrepareTransition)( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+
+    /** When this method is not NULL, it is called when the transition needs to clear after itself, like delete own textures etc.
+     ** We might later replace this by cleaner derived class.
+     */
+    void (OGLTransitionImpl::*mmClearTransition)();
+
+    /** When this method is not NULL, it is called in display method to display the slides.
+     ** We might later replace this by cleaner derived class.
+     */
+    void (OGLTransitionImpl::*mmDisplaySlides)( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+
+    void displaySlides( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    void displaySlide( double nTime, ::sal_Int32 glSlideTex, std::vector<Primitive>& primitives, double SlideWidthScale, double SlideHeightScale );
+    void displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
+    void applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale );
+
+    /** various transitions helper methods
+     */
+    void prepareDiamond( double nTime, double SlideWidth, double SlideHeight,double DispWidth, double DispHeight );
+    void displaySlidesFadeSmoothly( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+        void displaySlidesFadeThroughBlack( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+        void displaySlidesRochade( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    void displaySlidesShaders( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale );
+    void prepareStatic( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    void prepareDissolve( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    void preparePermShader();
 };
 
 class SceneObject
@@ -147,6 +226,7 @@ public:
     Primitive(const Primitive& rvalue);
     ~Primitive();
 
+    void applyOperations(double nTime, double SlideWidthScale, double SlideHeightScale);
     void display(double nTime, double SlideWidthScale, double SlideHeightScale);
     const Primitive& operator=(const Primitive& rvalue);
 
@@ -403,6 +483,22 @@ public:
 
     RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
     ~RotateAndScaleDepthByWidth(){}
+private:
+    basegfx::B3DVector axis;
+    basegfx::B3DVector origin;
+    double angle;
+};
+
+/** Same as SRotate, except the depth is scaled by the width of the slide divided by the height of the window.
+*/
+class RotateAndScaleDepthByHeight: public Operation
+{
+public:
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
+    RotateAndScaleDepthByHeight* clone();
+
+    RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+    ~RotateAndScaleDepthByHeight(){}
 private:
     basegfx::B3DVector axis;
     basegfx::B3DVector origin;

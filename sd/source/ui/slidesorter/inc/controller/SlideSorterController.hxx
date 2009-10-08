@@ -161,20 +161,6 @@ public:
     void GetAttrState (SfxItemSet& rSet);
     void ExecStatusBar (SfxRequest& rRequest);
 
-    /** Prepare for several model changes, i.e. prevent time-consuming and
-        non-critical operations like repaints until UnlockModelChange() is
-        called.  Ciritcal operations like releasing references to pages that
-        do not exist anymore are executed.
-    */
-    void LockModelChange (void);
-
-    /** Further calls to HandleModelChange() will result in a full featured
-        update of model, view, and controller.  When HandleModelChange() has
-        been called since the last LockModelChange() then this is done right
-        away to bring the view up-to-date.
-    */
-    void UnlockModelChange (void);
-
     bool IsLocked (void) const;
 
     /** Create an object of this inner class to prevent updates due to model
@@ -188,21 +174,8 @@ public:
     private:
         SlideSorterController* mpController;
     };
+    friend class ModelChangeLock;
 
-    /** Prepare for a model change.  This method does all the things that
-        need to be done _before_ the model changes, e.g. because they need
-        access to the model data before the change.
-    */
-    void PreModelChange (void);
-
-    /** Complete a model change.  This includes the recreation of data
-        structures that depend on the model and the request for a repaint to
-        show the changes.
-        @param bSkipModelResync
-            When the SlideSorterModel::Resync() call is not necessary,
-            because already made, then pass <TRUE/> here.
-    */
-    void PostModelChange (const bool bSkipModelResync = false);
 
     /** Handle a change of the model, that is, handle the removal and
         insertion of whole pages or a change of the edit mode.
@@ -301,9 +274,7 @@ private:
 
     int mnModelChangeLockCount;
 
-    /** In this flag we remember whether a call to PreModelChange() has been
-        made and one to PostModelChange() is pending.
-    */
+    bool mbPreModelChangeDone;
     bool mbPostModelChangePending;
 
     ::std::vector<Link> maSelectionChangeListeners;
@@ -354,6 +325,32 @@ private:
             A list of master pages.  Supplying normal pages is an error.
     */
     void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
+
+    /** Prepare for several model changes, i.e. prevent time-consuming and
+        non-critical operations like repaints until UnlockModelChange() is
+        called.  Ciritcal operations like releasing references to pages that
+        do not exist anymore are executed.
+    */
+    void LockModelChange (void);
+
+    /** Further calls to HandleModelChange() will result in a full featured
+        update of model, view, and controller.  When HandleModelChange() has
+        been called since the last LockModelChange() then this is done right
+        away to bring the view up-to-date.
+    */
+    void UnlockModelChange (void);
+
+    /** Prepare for a model change.  This method does all the things that
+        need to be done _before_ the model changes, e.g. because they need
+        access to the model data before the change.
+    */
+    void PreModelChange (void);
+
+    /** Complete a model change.  This includes the recreation of data
+        structures that depend on the model and the request for a repaint to
+        show the changes.
+    */
+    void PostModelChange (void);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

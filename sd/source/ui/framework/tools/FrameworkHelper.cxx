@@ -34,8 +34,9 @@
 
 #include "framework/FrameworkHelper.hxx"
 
-#include "framework/ViewShellWrapper.hxx"
+#include "framework/ConfigurationController.hxx"
 #include "framework/ResourceId.hxx"
+#include "framework/ViewShellWrapper.hxx"
 #include "ViewShellBase.hxx"
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
@@ -511,10 +512,12 @@ Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneO
 
 
 
-void FrameworkHelper::RequestView (
+Reference<XResourceId> FrameworkHelper::RequestView (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)
 {
+    Reference<XResourceId> xViewId;
+
     try
     {
         if (mxConfigurationController.is())
@@ -522,17 +525,23 @@ void FrameworkHelper::RequestView (
             mxConfigurationController->requestResourceActivation(
                 CreateResourceId(rsAnchorURL),
                 ResourceActivationMode_ADD);
+            xViewId = CreateResourceId(rsResourceURL, rsAnchorURL);
             mxConfigurationController->requestResourceActivation(
-                CreateResourceId(rsResourceURL, rsAnchorURL),
+                xViewId,
                 ResourceActivationMode_REPLACE);
         }
     }
     catch (lang::DisposedException&)
     {
         Dispose();
+        xViewId = NULL;
     }
     catch (RuntimeException&)
-    {}
+    {
+        xViewId = NULL;
+    }
+
+    return xViewId;
 }
 
 
@@ -763,6 +772,20 @@ public:
 private:
     bool& mrFlag;
 };
+
+
+
+
+void FrameworkHelper::RequestSynchronousUpdate (void)
+{
+    rtl::Reference<ConfigurationController> pCC (
+        dynamic_cast<ConfigurationController*>(mxConfigurationController.get()));
+    if (pCC.is())
+        pCC->RequestSynchronousUpdate();
+}
+
+
+
 
 void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
 {

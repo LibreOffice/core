@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawshape.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -270,6 +270,7 @@ namespace slideshow
                 mnAttributeAlphaState = mpAttributeLayer->getAlphaState();
                 mnAttributePositionState = mpAttributeLayer->getPositionState();
                 mnAttributeContentState = mpAttributeLayer->getContentState();
+                mnAttributeVisibilityState = mpAttributeLayer->getVisibilityState();
             }
         }
 
@@ -383,27 +384,42 @@ namespace slideshow
             // do we have an attribute layer?
             if( mpAttributeLayer )
             {
-                // TODO(P1): This can be done without conditional branching.
-                // See HAKMEM.
-                if( mpAttributeLayer->getPositionState() != mnAttributePositionState )
+                // Prevent nUpdateFlags to be modified when the shape is not
+                // visible, except when it just was hidden.
+                if (mpAttributeLayer->getVisibility()
+                    || mpAttributeLayer->getVisibilityState() != mnAttributeVisibilityState )
                 {
-                    nUpdateFlags |= ViewShape::POSITION;
-                }
-                if( mpAttributeLayer->getAlphaState() != mnAttributeAlphaState )
-                {
-                    nUpdateFlags |= ViewShape::ALPHA;
-                }
-                if( mpAttributeLayer->getClipState() != mnAttributeClipState )
-                {
-                    nUpdateFlags |= ViewShape::CLIP;
-                }
-                if( mpAttributeLayer->getTransformationState() != mnAttributeTransformationState )
-                {
-                    nUpdateFlags |= ViewShape::TRANSFORMATION;
-                }
-                if( mpAttributeLayer->getContentState() != mnAttributeContentState )
-                {
-                    nUpdateFlags |= ViewShape::CONTENT;
+                    if (mpAttributeLayer->getVisibilityState() != mnAttributeVisibilityState )
+                    {
+                        // Change of the visibility state is mapped to
+                        // content change because when the visibility
+                        // changes then usually a sprite is shown or hidden
+                        // and the background under has to be painted once.
+                        nUpdateFlags |= ViewShape::CONTENT;
+                    }
+
+                    // TODO(P1): This can be done without conditional branching.
+                    // See HAKMEM.
+                    if( mpAttributeLayer->getPositionState() != mnAttributePositionState )
+                    {
+                        nUpdateFlags |= ViewShape::POSITION;
+                    }
+                    if( mpAttributeLayer->getAlphaState() != mnAttributeAlphaState )
+                    {
+                        nUpdateFlags |= ViewShape::ALPHA;
+                    }
+                    if( mpAttributeLayer->getClipState() != mnAttributeClipState )
+                    {
+                        nUpdateFlags |= ViewShape::CLIP;
+                    }
+                    if( mpAttributeLayer->getTransformationState() != mnAttributeTransformationState )
+                    {
+                        nUpdateFlags |= ViewShape::TRANSFORMATION;
+                    }
+                    if( mpAttributeLayer->getContentState() != mnAttributeContentState )
+                    {
+                        nUpdateFlags |= ViewShape::CONTENT;
+                    }
                 }
             }
 
@@ -543,6 +559,7 @@ namespace slideshow
             mnAttributeAlphaState(0),
             mnAttributePositionState(0),
             mnAttributeContentState(0),
+            mnAttributeVisibilityState(0),
             maViewShapes(),
             mxComponentContext( rContext.mxComponentContext ),
             maHyperlinkIndices(),
@@ -603,6 +620,7 @@ namespace slideshow
             mnAttributeAlphaState(0),
             mnAttributePositionState(0),
             mnAttributeContentState(0),
+            mnAttributeVisibilityState(0),
             maViewShapes(),
             mxComponentContext( rContext.mxComponentContext ),
             maHyperlinkIndices(),
@@ -654,6 +672,7 @@ namespace slideshow
             mnAttributeAlphaState(0),
             mnAttributePositionState(0),
             mnAttributeContentState(0),
+            mnAttributeVisibilityState(0),
             maViewShapes(),
             mxComponentContext( rSrc.mxComponentContext ),
             maHyperlinkIndices(),

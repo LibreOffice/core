@@ -294,6 +294,8 @@ private:
 
     void resize( const Size& rSize );
 
+    void setActiveXToolbarsVisible( sal_Bool bVisible );
+
     DECL_LINK( updateHdl, Timer* );
     DECL_LINK( ReadyForNextInputHdl, Timer* );
     DECL_LINK( endPresentationHdl, void* );

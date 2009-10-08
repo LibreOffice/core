@@ -106,6 +106,28 @@ void fillPage( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
 
 class PluginSlideChange: public SlideChangeBase
 {
+    struct TransitionViewPair {
+    uno::Reference<presentation::XTransition> mxTransition;
+    UnoViewSharedPtr mpView;
+
+    TransitionViewPair( uno::Reference<presentation::XTransition> xTransition, const UnoViewSharedPtr pView )
+    {
+        mxTransition = xTransition;
+        mpView = pView;
+    }
+
+    ~TransitionViewPair()
+    {
+        mxTransition.clear();
+        mpView.reset();;
+    }
+
+    void update( double t )
+    {
+        mxTransition->update( t );
+    }
+    };
+
 public:
     /** Create a new SlideChanger, for the given leaving and
         entering slide bitmaps, which uses super secret OpenGL
@@ -127,47 +149,166 @@ public:
                          rViewContainer,
                          rScreenUpdater,
                          rEventMultiplexer ),
-        maTransitions()
+        maTransitions(),
+        mbSuccess( false ),
+    mnTransitionType( nTransitionType ),
+    mnTransitionSubType( nTransitionSubType ),
+    mxFactory( xFactory )
     {
         // create one transition per view
         UnoViewVector::const_iterator aCurrView (rViewContainer.begin());
         const UnoViewVector::const_iterator aEnd(rViewContainer.end());
         while( aCurrView != aEnd )
         {
-            const ::basegfx::B2DHomMatrix aViewTransform(
-                (*aCurrView)->getCanvas()->getTransformation() );
-            const ::basegfx::B2DPoint aOffsetPixel(
-                aViewTransform * ::basegfx::B2DPoint() );
+        if(! addTransition( *aCurrView ) )
+        return;
 
-            maTransitions.push_back(
-                xFactory->createTransition(
-                    nTransitionType,
-                    nTransitionSubType,
-                    (*aCurrView)->getUnoView(),
-                    getLeavingBitmap(ViewEntry(*aCurrView))->getXBitmap(),
-                    getEnteringBitmap(ViewEntry(*aCurrView))->getXBitmap(),
-                    basegfx::unotools::point2DFromB2DPoint(aOffsetPixel) ) );
-
-            ENSURE_OR_THROW(maTransitions.back().is(),
+            ENSURE_OR_THROW(maTransitions.back() && maTransitions.back()->mxTransition.is(),
                             "Failed to create plugin transition");
             ++aCurrView;
         }
+    mbSuccess = true;
+    }
+
+    ~PluginSlideChange()
+    {
+    mxFactory.clear();
+
+        ::std::vector< TransitionViewPair* >::const_iterator aCurrView (maTransitions.begin());
+        ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
+        while( aCurrView != aEnd )
+        {
+        delete (*aCurrView);
+            ++aCurrView;
+    }
+    maTransitions.clear();
+    }
+
+    bool addTransition( const UnoViewSharedPtr& rView )
+    {
+    uno::Reference<presentation::XTransition> rTransition = mxFactory->createTransition(
+        mnTransitionType,
+        mnTransitionSubType,
+        rView->getUnoView(),
+        getLeavingBitmap(ViewEntry(rView))->getXBitmap(),
+        getEnteringBitmap(ViewEntry(rView))->getXBitmap() );
+
+    if( rTransition.is() )
+        maTransitions.push_back( new TransitionViewPair( rTransition, rView ) );
+    else
+        return false;
+
+    return true;
     }
 
     virtual bool operator()( double t )
     {
         std::for_each(maTransitions.begin(),
                       maTransitions.end(),
-                      boost::bind( &presentation::XTransition::update,
+                      boost::bind( &TransitionViewPair::update,
                                    _1, t) );
         return true;
     }
 
+    bool Success()
+    {
+        return mbSuccess;
+    }
+
+    // ViewEventHandler
+    virtual void viewAdded( const UnoViewSharedPtr& rView )
+    {
+    OSL_TRACE("PluginSlideChange viewAdded");
+    SlideChangeBase::viewAdded( rView );
+
+        ::std::vector< TransitionViewPair* >::const_iterator aCurrView (maTransitions.begin());
+        ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
+    bool bKnown = false;
+        while( aCurrView != aEnd )
+        {
+        if( (*aCurrView)->mpView == rView ) {
+        bKnown = true;
+        break;
+        }
+            ++aCurrView;
+    }
+
+    if( !bKnown ) {
+        OSL_TRACE("need to be added");
+
+        addTransition( rView );
+    }
+    }
+
+    virtual void viewRemoved( const UnoViewSharedPtr& rView )
+    {
+    OSL_TRACE("PluginSlideChange viewRemoved");
+    SlideChangeBase::viewRemoved( rView );
+
+        ::std::vector< TransitionViewPair* >::iterator aCurrView (maTransitions.begin());
+        ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
+        while( aCurrView != aEnd )
+        {
+        if( (*aCurrView)->mpView == rView ) {
+        OSL_TRACE( "view removed" );
+        delete (*aCurrView);
+        maTransitions.erase( aCurrView );
+        break;
+        }
+            ++aCurrView;
+    }
+    }
+
+    virtual void viewChanged( const UnoViewSharedPtr& rView )
+    {
+    OSL_TRACE("PluginSlideChange viewChanged");
+    SlideChangeBase::viewChanged( rView );
+
+        ::std::vector< TransitionViewPair* >::const_iterator aCurrView (maTransitions.begin());
+        ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
+        while( aCurrView != aEnd )
+        {
+        if( (*aCurrView)->mpView == rView ) {
+        OSL_TRACE( "view changed" );
+         (*aCurrView)->mxTransition->viewChanged( rView->getUnoView(),
+                             getLeavingBitmap(ViewEntry(rView))->getXBitmap(),
+                             getEnteringBitmap(ViewEntry(rView))->getXBitmap() );
+        } else
+        OSL_TRACE( "view did not changed" );
+
+            ++aCurrView;
+    }
+    }
+
+    virtual void viewsChanged()
+    {
+    OSL_TRACE("PluginSlideChange viewsChanged");
+    SlideChangeBase::viewsChanged();
+
+        ::std::vector< TransitionViewPair* >::const_iterator aCurrView (maTransitions.begin());
+        ::std::vector< TransitionViewPair* >::const_iterator aEnd(maTransitions.end());
+        while( aCurrView != aEnd )
+        {
+        OSL_TRACE( "view changed" );
+        (*aCurrView)->mxTransition->viewChanged( (*aCurrView)->mpView->getUnoView(),
+                             getLeavingBitmap(ViewEntry((*aCurrView)->mpView))->getXBitmap(),
+                             getEnteringBitmap(ViewEntry((*aCurrView)->mpView))->getXBitmap() );
+            ++aCurrView;
+    }
+    }
+
 private:
     // One transition object per view
-    std::vector< uno::Reference<presentation::XTransition> > maTransitions;
-};
+    std::vector< TransitionViewPair* > maTransitions;
 
+    // bool
+    bool mbSuccess;
+
+    sal_Int16 mnTransitionType;
+    sal_Int16 mnTransitionSubType;
+
+    uno::Reference<presentation::XTransitionFactory> mxFactory;
+};
 
 class ClippedSlideChange : public SlideChangeBase
 {
@@ -688,7 +829,7 @@ NumberAnimationSharedPtr createPluginTransition(
     const SoundPlayerSharedPtr&              pSoundPlayer,
     EventMultiplexer&                        rEventMultiplexer)
 {
-    return NumberAnimationSharedPtr(
+    PluginSlideChange* pTransition =
         new PluginSlideChange(
             nTransitionType,
             nTransitionSubType,
@@ -698,7 +839,14 @@ NumberAnimationSharedPtr createPluginTransition(
             rScreenUpdater,
             xFactory,
             pSoundPlayer,
-            rEventMultiplexer ));
+            rEventMultiplexer );
+
+    if( pTransition->Success() )
+        return NumberAnimationSharedPtr( pTransition );
+    else {
+        delete pTransition;
+        return NumberAnimationSharedPtr();
+    }
 }
 
 } // anon namespace
@@ -736,7 +884,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
         xOptionalFactory->hasTransition(nTransitionType, nTransitionSubType) )
     {
         // #i82460# - optional plugin factory claims this transition. delegate.
-        return NumberAnimationSharedPtr(
+        NumberAnimationSharedPtr pTransition(
             createPluginTransition(
                 nTransitionType,
                 nTransitionSubType,
@@ -747,6 +895,9 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                 xOptionalFactory,
                 pSoundPlayer,
                 rEventMultiplexer ));
+
+        if( pTransition.get() )
+            return pTransition;
     }
 
     const TransitionInfo* pTransitionInfo(

@@ -37,6 +37,7 @@
 #include "OutlinerIterator.hxx"
 #include <svx/SpellPortions.hxx>
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 class Dialog;
 class SdPage;
@@ -203,7 +204,7 @@ private:
     /// The view which displays the searched objects.
     ::sd::View* mpView;
     /// The view shell containing the view.
-    ViewShell* mpViewShell;
+    ::boost::shared_ptr<ViewShell> mpViewShell;
     /// This window contains the view.
     ::sd::Window* mpWindow;
     /// The document on whose objects and pages this class operates.
@@ -543,7 +544,7 @@ private:
         It handles i.e. registering at the associated view as selection
         change listener.
     */
-    void SetViewShell (ViewShell* pViewShell);
+    void SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell);
 
     /** Activate or deactivate the search in the current selection.  Call
         this method whenever the selection has changed.  This method creates

@@ -188,9 +188,12 @@ void SdModule::Execute(SfxRequest& rReq)
         {
             const SfxPoolItem* pItem;
             if( pSet &&
+                (
                 SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_LANGUAGE, FALSE, &pItem ) ||
                 SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, FALSE, &pItem ) ||
-                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, FALSE, &pItem ) )
+                SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, FALSE, &pItem )
+                )
+              )
             {
                 // am Dokument sichern:
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
@@ -227,6 +230,7 @@ void SdModule::Execute(SfxRequest& rReq)
 
             break;
 
+        case SID_OPENHYPERLINK:
         case SID_OPENDOC:
         {
             BOOL bIntercept = FALSE;
@@ -398,6 +402,14 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if (rItemSet.GetItemState(SID_OPENDOC) != SFX_ITEM_UNKNOWN)
     {
         const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENDOC, SFX_APP()->GetInterface());
+        if (pItem)
+            rItemSet.Put(*pItem);
+    }
+
+    // der Status von SID_OPENHYPERLINK wird von der Basisklasse bestimmt
+    if (rItemSet.GetItemState(SID_OPENHYPERLINK) != SFX_ITEM_UNKNOWN)
+    {
+        const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENHYPERLINK, SFX_APP()->GetInterface());
         if (pItem)
             rItemSet.Put(*pItem);
     }

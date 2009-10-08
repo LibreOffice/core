@@ -51,8 +51,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES = \
         $(SLO)$/OGLTrans_TransitionImpl.obj \
+        $(SLO)$/OGLTrans_Shaders.obj \
         $(SLO)$/OGLTrans_TransitionerImpl.obj
-        
+
+DLLPRE=
 SHL1TARGET=$(TARGET).uno
 
 .IF "$(GUI)"=="UNX"

@@ -729,6 +729,7 @@ void SdTransferable::SetObjectDescriptor( const TransferableObjectDescriptor& rO
 {
     delete mpObjDesc;
     mpObjDesc = new TransferableObjectDescriptor( rObjDesc );
+    PrepareOLE( rObjDesc );
 }
 
 // -----------------------------------------------------------------------------

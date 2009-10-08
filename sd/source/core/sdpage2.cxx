@@ -60,6 +60,7 @@
 
 // #90477#
 #include <tools/tenccvt.hxx>
+#include <svtools/itemset.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;

@@ -118,8 +118,9 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mpSelectionManager(),
       mpAnimator(new Animator(rSlideSorter)),
       mpListener(),
-      mnModelChangeLockCount (0),
-      mbPostModelChangePending (false),
+      mnModelChangeLockCount(0),
+      mbPreModelChangeDone(false),
+      mbPostModelChangePending(false),
       maSelectionBeforeSwitch(),
       mnCurrentPageBeforeSwitch(0),
       mpEditModeChangeMasterPage(NULL),
@@ -439,7 +440,11 @@ bool SlideSorterController::Command (
             {
                 mbIsContextMenuOpen = true;
                 if (pViewShell != NULL)
-                    pViewShell->GetDispatcher()->ExecutePopup(SdResId(nPopupId));
+                {
+                    SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
+                    if (pDispatcher != NULL)
+                        pDispatcher->ExecutePopup(SdResId(nPopupId));
+                }
             }
             else
             {
@@ -515,6 +520,11 @@ void SlideSorterController::UnlockModelChange (void)
 
 void SlideSorterController::PreModelChange (void)
 {
+    // Prevent PreModelChange to execute more than once per model lock.
+    if (mbPostModelChangePending)
+        return;
+    mbPreModelChangeDone = true;
+
     if (mrSlideSorter.GetViewShell() != NULL)
         mrSlideSorter.GetViewShell()->Broadcast(
             ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
@@ -532,10 +542,10 @@ void SlideSorterController::PreModelChange (void)
 
 
 
-void SlideSorterController::PostModelChange (const bool bSkipModelResync)
+void SlideSorterController::PostModelChange (void)
 {
-    if ( ! bSkipModelResync)
-        mrModel.Resync();
+    mbPostModelChangePending = false;
+    mrModel.Resync();
 
     ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
     if (pWindow != NULL)
@@ -555,7 +565,6 @@ void SlideSorterController::PostModelChange (const bool bSkipModelResync)
 
     mpPageSelector->HandleModelChange ();
 
-    mbPostModelChangePending = false;
     if (mrSlideSorter.GetViewShell() != NULL)
         mrSlideSorter.GetViewShell()->Broadcast(
             ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
@@ -570,22 +579,10 @@ void SlideSorterController::HandleModelChange (void)
     // not the same number of regular and notes pages.
     bool bIsDocumentValid = (mrModel.GetDocument()->GetPageCount() % 2 == 1);
 
-
     if (bIsDocumentValid)
     {
-        if (mnModelChangeLockCount == 0)
-        {
-            PreModelChange();
-            PostModelChange();
-        }
-        else
-            // Call PreModelChange when not already done.
-            if ( ! mbPostModelChangePending)
-            {
-                PreModelChange();
-                // The PostModelChange() call will be made when the model change
-                // is unlocked again.
-            }
+        ModelChangeLock aLock (*this);
+        PreModelChange();
     }
 }
 
@@ -902,13 +899,12 @@ void SlideSorterController::PrepareEditModeChange (void)
 
 bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
 {
-    ModelChangeLock aLock (*this);
-
     bool bResult (false);
     if (mrModel.GetEditMode() != eEditMode)
     {
-        // Do the actual edit mode switching.
+        ModelChangeLock aLock (*this);
         PreModelChange();
+        // Do the actual edit mode switching.
         bResult = mrModel.SetEditMode(eEditMode);
         if (bResult)
             HandleModelChange();
@@ -1030,10 +1026,11 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
 {
     if (mrModel.GetDocumentSlides() != rxSlides)
     {
+        ModelChangeLock aLock (*this);
         PreModelChange();
+
         mrModel.SetDocumentSlides(rxSlides);
         mrView.Layout();
-        PostModelChange(false);
     }
 }
 
