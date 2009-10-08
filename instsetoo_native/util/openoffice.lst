@@ -323,6 +323,55 @@ OpenOffice_SDK
     }
 }
 
+OpenOffice_Dev_SDK
+{
+    Settings
+    {
+        downloadname OOo-Dev-SDK_{packageversion}_{os}_install_{languages}
+        variables
+        {
+            PRODUCTNAME OOo-dev
+            PRODUCTVERSION 3.2
+            PRODUCTEXTENSION
+            LONG_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION
+            BASISROOTNAME OOo-dev
+            UNIXBASISROOTNAME ooo-dev
+            POSTVERSIONEXTENSION SDK
+            POSTVERSIONEXTENSIONUNIX sdk
+            BRANDPACKAGEVERSION 3
+            PACKAGEVERSION 3.2.0
+            PACKAGEREVISION {milestone}
+            BASISPACKAGEPREFIX ooobasis-dev
+            UREPACKAGEPREFIX ooodev
+            SOLSUREPACKAGEPREFIX ooodev
+            REGISTRYLAYERNAME LayerDev
+            PACK_INSTALLED 1
+            POOLPRODUCT 0
+            DMG_VOLUMEEXTENSION SDK
+            DATABASENAME openofficeorg32devsdk
+            NO_README_IN_ROOTDIR 1
+            LICENSENAME LGPL
+            IGNOREDIRECTORYLAYER 1
+            NOVERSIONINDIRNAME 0
+            NOSPACEINDIRECTORYNAME 1
+            CHANGETARGETDIR 1
+            DOWNLOADBANNER ooosdkbanner.bmp
+            DOWNLOADBITMAP ooosdkbitmap.bmp
+            DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+        }
+        active 1
+        compression 5
+        script sdkoo
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
+    }
+}
+
 BrOffice
 {
 	Settings

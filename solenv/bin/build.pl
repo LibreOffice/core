@@ -1939,8 +1939,8 @@ sub is_output_tree {
 
 sub get_tmp_dir {
     my $tmp_dir;
-    if( defined($ENV{TMP}) ) {
-       $tmp_dir = $ENV{TMP} . '/';
+    if( defined($ENV{TMPDIR}) ) {
+       $tmp_dir = $ENV{TMPDIR} . '/';
     } else {
        $tmp_dir = '/tmp/';
     }
@@ -2466,7 +2466,7 @@ sub generate_html_file {
     my @modules_order = sort_modules_appearance();
     my ($successes_percent, $errors_percent) = get_progress_percentage(scalar keys %html_info, scalar keys %build_is_finished, scalar keys %modules_with_errors);
     my $build_duration = get_time_line(time - $build_time);
-    my $temp_html_file = File::Temp::tmpnam($ENV{TMP}),#scalar tmpnam();
+    my $temp_html_file = File::Temp::tmpnam($ENV{TMPDIR});
     my $title;
     $title = $ENV{CWS_WORK_STAMP} . ': ' if (defined $ENV{CWS_WORK_STAMP});
     $title .= $ENV{INPATH};

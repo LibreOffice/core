@@ -29,6 +29,7 @@
  ************************************************************************/
 #include "macros.inc"
 
+#ifdef ENABLE_KDE
 File gid_File_Lib_Kdebe
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -37,4 +38,15 @@ File gid_File_Lib_Kdebe
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "kdebe1-ucd.txt";
 End
+#endif
 
+#ifdef ENABLE_KDE4
+File gid_File_Lib_Kde4be
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(kde4be1.uno,UNXSUFFIX));
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Regmergefile = "kde4be1-ucd.txt";
+End
+#endif

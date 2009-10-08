@@ -1,4 +1,4 @@
-/*************************************************************************
+*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
@@ -559,7 +559,7 @@ End
 
 File gid_File_Lib_Fps
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
     Name = "fps.dll";
@@ -587,6 +587,18 @@ File gid_File_Lib_Fps_Gnome
     Dir = gid_Dir_Program;
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_gnome.uno);
     Regmergefile = "fps-gnome-ucd.txt";
+End
+#endif
+#endif
+#ifdef ENABLE_KDE4
+#ifndef MACOSX
+File gid_File_Lib_Fps_Kde4
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+    Name = SPECIAL_COMPONENT_LIB_NAME(fps_kde4.uno);
+    Regmergefile = "fps-kde4-ucd.txt";
 End
 #endif
 #endif
@@ -894,6 +906,17 @@ End
 
 #endif
 
+#ifdef WNT
+
+File gid_File_Lib_Rebasemsi
+    TXT_FILE_BODY;
+    Name = "rebase.dll";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
+End
+
+#endif
+
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
@@ -1191,6 +1214,16 @@ File gid_File_Lib_Vclplug_Kde
 End
 #endif
 #endif
+#ifdef ENABLE_KDE4
+#ifndef MACOSX
+File gid_File_Lib_Vclplug_Kde4
+    Name = LIBNAME(vclplug_kde4);
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+End
+#endif
+#endif
 #endif
 
 #if defined(QUARTZ)
@@ -1429,7 +1462,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sw , sw)
 STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
 
-STD_LIB_FILE( gid_File_Lib_Msword, msword )
+STD_LIB_FILE_PATCH( gid_File_Lib_Msword, msword )
 
 File gid_File_Lib_Sysdtrans
     TXT_FILE_BODY;

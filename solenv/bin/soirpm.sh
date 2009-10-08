@@ -1,14 +1,14 @@
+#!/bin/bash
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
+# $RCSfile: makefile,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,41 +26,10 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..
-
-PRJPCH=
-
-PRJNAME=scp2
-TARGET=kde
-TARGETTYPE=CUI
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-SCP_PRODUCT_TYPE=osl
-
-.IF "$(ENABLE_KDE)" == "TRUE" || "$(ENABLE_KDE4)" == "TRUE"
-
-.IF "$(ENABLE_KDE)" != ""
-SCPDEFS+=-DENABLE_KDE
-.ENDIF
-
-.IF "$(ENABLE_KDE4)" != ""
-SCPDEFS+=-DENABLE_KDE4
-.ENDIF
-
-PARFILES =                   \
-        module_kde.par     \
-        file_kde.par
-
-ULFFILES= \
-        module_kde.ulf
-.ENDIF
-
-# --- File ---------------------------------------------------------
-
-.INCLUDE :  target.mk
+LIBRPMBUILD=$(find ${COMPATH} -name 'librpmbuild-4.1*' -print)
+# echo $(dirname $LIBRPMBUILD)
+LD_LIBRARY_PATH=$(dirname ${LIBRPMBUILD}) ${BUILD_TOOLS?}/rpm "$@"
+# LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${COMPATH?}/lib \
+# ${BUILD_TOOLS?}/rpm "$@"
