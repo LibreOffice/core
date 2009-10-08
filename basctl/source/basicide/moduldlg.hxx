@@ -131,12 +131,8 @@ public:
                     ~BasicCheckBox();
 
     SvLBoxEntry*    DoInsertEntry( const String& rStr, ULONG nPos = LISTBOX_APPEND );
-    void            RemoveEntry( ULONG nPos );
     SvLBoxEntry*    FindEntry( const String& rName );
 
-    ULONG           GetSelectEntryPos() const;
-
-    ULONG           GetCheckedEntryCount() const;
     void            CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
     BOOL            IsChecked( ULONG nPos ) const;
 

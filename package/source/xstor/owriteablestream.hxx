@@ -161,8 +161,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >       GetTempFileAsStream();
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  GetTempFileAsInputStream();
 
-    void CopyTempFileToOutput( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream );
-
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
                                                                                         sal_Bool bHierarchyAccess );
 

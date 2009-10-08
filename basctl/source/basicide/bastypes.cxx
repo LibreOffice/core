@@ -477,24 +477,6 @@ void __EXPORT BasicDockingWindow::StartDocking()
 
 
 
-
-BasicToolBox::BasicToolBox( Window* pParent, IDEResId nRes ) :
-    ToolBox( pParent, nRes )
-{
-}
-
-
-
-void __EXPORT BasicToolBox::MouseButtonDown( const MouseEvent &rEvt )
-{
-    ToolBox::MouseButtonDown( rEvt );
-    if ( !GetCurItemId() )
-        ((BasicDockingWindow*)GetParent())->MouseButtonDown( rEvt );
-}
-
-
-
-
 ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
     Edit( pParent, nRes )
 {
@@ -526,34 +508,6 @@ IMPL_LINK_INLINE_START( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 
-
-ExtendedMultiLineEdit::ExtendedMultiLineEdit( Window* pParent, IDEResId nRes ) :
-    MultiLineEdit( pParent, nRes )
-{
-    aAcc.SetSelectHdl( LINK( this, ExtendedMultiLineEdit, EditAccHdl ) );
-    Control::SetGetFocusHdl( LINK( this, ExtendedMultiLineEdit, ImplGetFocusHdl ) );
-    Control::SetLoseFocusHdl( LINK( this, ExtendedMultiLineEdit, ImplLoseFocusHdl ) );
-}
-
-IMPL_LINK( ExtendedMultiLineEdit, ImplGetFocusHdl, Control*, EMPTYARG )
-{
-    Application::InsertAccel( &aAcc );
-    return 0;
-}
-
-
-IMPL_LINK( ExtendedMultiLineEdit, ImplLoseFocusHdl, Control*, EMPTYARG )
-{
-    Application::RemoveAccel( &aAcc );
-    return 0;
-}
-
-IMPL_LINK_INLINE_START( ExtendedMultiLineEdit, EditAccHdl, Accelerator *, pAcc )
-{
-    aAccHdl.Call( pAcc );
-    return 0;
-}
-IMPL_LINK_INLINE_END( ExtendedMultiLineEdit, EditAccHdl, Accelerator *, pAcc )
 
 struct TabBarDDInfo
 {
@@ -796,11 +750,6 @@ ULONG CalcLineCount( SvStream& rStream )
     return nCRs;
 }
 
-LibInfoKey::LibInfoKey()
-    :m_aDocument( ScriptDocument::getApplicationScriptDocument() )
-{
-}
-
 LibInfoKey::LibInfoKey( const ScriptDocument& rDocument, const String& rLibName )
     :m_aDocument( rDocument )
     ,m_aLibName( rLibName )
@@ -830,12 +779,6 @@ bool LibInfoKey::operator==( const LibInfoKey& rKey ) const
     if ( m_aDocument == rKey.m_aDocument && m_aLibName == rKey.m_aLibName )
         bRet = true;
     return bRet;
-}
-
-LibInfoItem::LibInfoItem()
-    :m_aDocument( ScriptDocument::getApplicationScriptDocument() )
-    ,m_nCurrentType( 0 )
-{
 }
 
 LibInfoItem::LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, USHORT nCurrentType )

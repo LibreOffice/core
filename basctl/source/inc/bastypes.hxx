@@ -98,8 +98,6 @@ struct BreakPoint
 
 class BasicDockingWindow : public DockingWindow
 {
-    friend class BasicToolBox;
-
     Rectangle       aFloatingPosAndSize;
 
 protected:
@@ -111,14 +109,6 @@ protected:
 
 public:
     BasicDockingWindow( Window* pParent );
-};
-
-class BasicToolBox : public ToolBox
-{
-public:
-                    BasicToolBox( Window* pParent, IDEResId nRes );
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 };
 
 DECLARE_LIST( BreakPL, BreakPoint* )
@@ -268,7 +258,6 @@ private:
     String              m_aLibName;
 
 public:
-    LibInfoKey();
     LibInfoKey( const ScriptDocument& rDocument, const String& rLibName );
     ~LibInfoKey();
 
@@ -291,7 +280,6 @@ private:
     USHORT              m_nCurrentType;
 
 public:
-    LibInfoItem();
     LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, USHORT nCurrentType );
     ~LibInfoItem();
 
