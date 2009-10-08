@@ -79,5 +79,5 @@
   </xsl:template>
   <xsl:template match="info|import|uses|constraints"/>
     <!-- TODO: no longer strip elements when they are eventually read by
-         configmgr2 implementation -->
+         configmgr implementation -->
 </xsl:stylesheet>
