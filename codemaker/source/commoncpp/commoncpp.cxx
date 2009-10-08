@@ -344,7 +344,7 @@ rtl::OString translateUnoToCppIdentifier(
                     || unoIdentifier == "std"))
             // Others:
             || unoIdentifier == "NDEBUG"
-            || forbidden != 0 && unoIdentifier == *forbidden)
+            || (forbidden != 0 && unoIdentifier == *forbidden) )
     {
         rtl::OStringBuffer buf(prefix);
         buf.append('_');

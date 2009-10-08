@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.50 $
+# $Revision: 1.50.20.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -109,6 +109,7 @@ IDLFILES=\
     GradientStyle.idl\
     ImageAlign.idl\
     ImagePosition.idl\
+    ImageScaleMode.idl\
     ImageStatus.idl\
     InputEvent.idl\
     InvalidateStyle.idl\
@@ -324,7 +325,12 @@ IDLFILES=\
     XLayoutFlow.idl\
     XLayoutFlowContainer.idl\
     XLayoutRoot.idl\
-    XLayoutUnit.idl
+    XLayoutUnit.idl \
+    MenuItemType.idl \
+    MenuLogo.idl \
+    XMenuExtended2.idl \
+    XMenuBarExtended.idl \
+    XPopupMenuExtended.idl
 
 # ------------------------------------------------------------------
 

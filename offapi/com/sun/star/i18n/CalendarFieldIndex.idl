@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CalendarFieldIndex.idl,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +45,15 @@ module com { module sun { module star { module i18n {
 
     <p> ZONE_OFFSET and DST_OFFSET cooperate such that both values are added,
     for example, ZoneOffset=1*60 and DstOffset=1*60 results in a time
-    difference of GMT+2. The calculation is
+    difference of GMT+2. The calculation in minutes is
     GMT = LocalTime - ZoneOffset - DstOffset </p>
+
+    <p> With introduction of ZONE_OFFSET_SECOND_MILLIS and
+    DST_OFFSET_SECOND_MILLIS the exact calculation in milliseconds is
+    GMT = LocalTime
+        - (ZoneOffset*60000 + ZoneOffsetMillis * sign(ZoneOffset))
+        - (DstOffset*60000 + DstOffsetMillis * sign(DstOffset))
+    <p>
  */
 published constants CalendarFieldIndex
 {
@@ -58,7 +65,7 @@ published constants CalendarFieldIndex
     const short DAY_OF_WEEK     = 2;
     /// Get     day of  year.
     const short DAY_OF_YEAR     = 3;
-    /** Get     daylight saving time offset in minutes [0*60..1*60]
+    /** Get     daylight saving time offset in minutes, e.g. [0*60..1*60]
         <p> The DST offset value depends on the actual date set at the
         calendar and is determined according to the timezone rules of
         the locale used with the calendar. </p>
@@ -80,16 +87,51 @@ published constants CalendarFieldIndex
     /// Get/Set year.
     const short YEAR            = 11;
     /** Get/Set month [0-...].
-        <p> Note that the maximum value is <b>not</b> necessarily 12 but
-        depends on the calendar used instead. </p> */
+        <p> Note that the maximum value is <b>not</b> necessarily 11 for
+        December but depends on the calendar used instead. </p> */
     const short MONTH           = 12;
     /// Get/Set era, for example, 0:= Before Christ, 1:= After Christ.
     const short ERA             = 13;
-    /// Get/Set time zone offset in minutes [-12*60..12*60]
+    /// Get/Set time zone offset in minutes, e.g. [-14*60..14*60]
     const short ZONE_OFFSET     = 14;
 
-    /// Total number of fields
+    /// Total number of fields for &lt; OOo 3.1
     const short FIELD_COUNT     = 15;
+
+    /** Get/Set additional offset in milliseconds that <b>adds</b> to
+        the value of ZONE_OFFSET. This may be necessary to correctly
+        interpret historical timezone data that consists of fractions of
+        minutes, e.g. seconds. 1 minute == 60000 milliseconds.
+
+        @ATTENTION! Though the field's type is signed 16-bit, the field
+        value is treated as unsigned 16-bit to allow for values up to
+        60000 and expresses an absolute value that inherits its sign
+        from the parent ZONE_OFFSET field.
+
+        @since OOo 3.1
+     */
+    const short ZONE_OFFSET_SECOND_MILLIS = 15;
+
+    /** Get     additional offset in milliseconds that <b>adds</b> to
+        the value of DST_OFFSET. This may be necessary to correctly
+        interpret historical timezone data that consists of fractions of
+        minutes, e.g. seconds. 1 minute == 60000 milliseconds.
+
+        @ATTENTION! Though the field's type is signed 16-bit, the field
+        value is treated as unsigned 16-bit to allow for values up to
+        60000 and expresses an absolute value that inherits its sign
+        from the parent DST_OFFSET field.
+
+        @since OOo 3.1
+     */
+    const short DST_OFFSET_SECOND_MILLIS  = 16;
+
+    /** Total number of fields as of OOo 3.1
+
+        @since OOo 3.1
+     */
+    const short FIELD_COUNT2              = 17;
+
 };
 
 //=============================================================================

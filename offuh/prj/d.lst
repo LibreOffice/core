@@ -61,6 +61,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\registry
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\report
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\report\inspection
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\report\meta
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\resource
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\tools
@@ -246,6 +247,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 ..\%__SRC%\inc\offuh\com\sun\star\report\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\report\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\report\inspection\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\report\inspection\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\report\inspection\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\report\inspection\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\report\meta\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\report\meta\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\report\meta\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\report\meta\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\resource\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\resource\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\resource\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\resource\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\sdb\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\*.hdl

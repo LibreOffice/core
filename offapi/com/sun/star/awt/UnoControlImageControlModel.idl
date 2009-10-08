@@ -137,6 +137,16 @@ published service UnoControlImageControlModel
      */
     [property] boolean ScaleImage;
 
+    /** defines how to scale the image
+
+        <p>If this property is present, it supersedes the <member>ScaleImage</member> property.</p>
+
+        <p>The value of this property is one of the <type>ImageScaleMode</type> constants.</p>
+
+        @since OOo 3.1
+    */
+    [property, optional] short ScaleMode;
+
     //-------------------------------------------------------------------------
 
     /** specifies that the control can be reached with the TAB key.

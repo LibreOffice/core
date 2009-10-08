@@ -27,16 +27,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include <rtl/string.h>
+
+#include <stdlib.h>
+#include <string.h>
+
+#ifdef LINUX
+#  ifndef __USE_GNU
+#  define __USE_GNU
+#  endif
+#endif
 #include <dlfcn.h>
-#include <sal/config.h>
 
 void initpyuno ()
 {
+    Dl_info dl_info;
     void (*func)(void);
-    void* h = dlopen (SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION , RTLD_NOW | RTLD_GLOBAL);
-    if( h )
-    {
-        func = (void (*)())dlsym (h, "initpyuno");
-        (func) ();
+
+    if (dladdr((void*)&initpyuno, &dl_info) != 0) {
+        void* h = 0;
+    size_t len = strrchr(dl_info.dli_fname, '/') - dl_info.dli_fname + 1;
+    char* libname = malloc(len + RTL_CONSTASCII_LENGTH( SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION ) + 1);
+        strncpy(libname, dl_info.dli_fname, len);
+        strcpy(libname + (len), SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION);
+
+        h = dlopen (libname, RTLD_NOW | RTLD_GLOBAL);
+    free(libname);
+        if( h )
+        {
+            func = (void (*)())dlsym (h, "initpyuno");
+            (func) ();
+        }
     }
 }

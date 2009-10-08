@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextTable.idl,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,19 @@
 
 /** is a table of text cells which is anchored to a surrounding text.
 
-    Create and insert a TextTable:
+    <p>Note: The anchor of the actual implementation for text tables
+    does not have a position in the text. Thus that anchor can not be
+    used for some operation like <member>XTextContent::attach</member> or
+    <member>XText::insertTextContent</member>
+    or other function that require the object to have a position in the text.</p>
+
+    <p>The reason why a text table still needs an anchor is that for example
+    tables should be insertable via <member>XText::insertTextContent</member>
+    and that interface uses a parameter of that type.</p>
+
+    @example
+
+    <p>Create and insert a TextTable:</p>
 
     <listing>
     xTable = xTextDoc.createInstance( "com.sun.star.text.TextTable" )
@@ -103,17 +115,6 @@
     xTable.RightMargin = 1500
     xTextDoc.getText.insertTextContent( xTextRange, xTable, false )
     </listing>
-
-
-    <p>Note: The anchor of the actual implementation for text tables
-    does not have a position in the text. Thus that anchor can not be
-    used for some operation like <member>attach</member> for example or
-    <member scope="com::sun::star::text">insertTextContent</member>
-    or other function that require the object to have a position in the text.</p>
-
-    <p>The reason why a text table still needs an anchor is that for example
-    tables should be insertable via <member scope="com::sun::star::text">insertTextContent</member>
-    and that interface uses a parameter of that type.</p>
 
     @see    com::sun::star::text::Cell
     @see    com::sun::star::text::CellRange

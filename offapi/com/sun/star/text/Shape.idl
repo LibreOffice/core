@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Shape.idl,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +75,7 @@ published service Shape
     [property] com::sun::star::text::XTextFrame AnchorFrame;
     //-------------------------------------------------------------------------
     /** specifies how the text content is attached to its surrounding
-        <type scope="com::sun::star::drawing">Text</type>.
+        <type>Text</type>.
     */
     [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
     //-------------------------------------------------------------------------

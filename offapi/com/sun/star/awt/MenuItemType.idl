@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: MenuItemType.idl,v $
+ * $Revision: 1.0 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_MenuItemType_idl__
+#define __com_sun_star_awt_MenuItemType_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the type of a menu item, as returned by
+    <member scope="com::sun::star::awt">XMenuExtended2::getItemType()</member>.
+ */
+enum MenuItemType
+{
+    /** specifies that the menu item type is unkown.
+    */
+    DONTKNOW,
+
+    /** specifies that the menu item has a text.
+    */
+    STRING,
+
+    /** specifies that the menu item has an image.
+    */
+    IMAGE,
+
+    /** specifies that the menu item has a text <b>and</b> an image.
+    */
+    STRINGIMAGE,
+
+    /** specifies that the menu item is a separator.
+    */
+    SEPARATOR
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

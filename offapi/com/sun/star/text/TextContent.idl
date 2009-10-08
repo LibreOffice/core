@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextContent.idl,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@ module com { module sun { module star { module text {
 
 //=============================================================================
 /** is an object which can be anchored in a text, like instances of
-    <type>TextFrame</type> or <type>TextFields</type>.
+    <type>TextFrame</type> or <type>TextField</type>.
 
     <p>If the concrete <type>TextContent</type> has a textual
     representation which fades into the surrounding text, then
@@ -71,13 +71,12 @@ published service TextContent
 
     /** This interface is used for the attachment of this text content
         to the surrounding text.
-
     */
     interface com::sun::star::text::XTextContent;
 
     //-------------------------------------------------------------------------
     /** specifies how the text content is attached to its surrounding
-        <type scope="com::sun::star::drawing">Text</type>.
+        <type>Text</type>.
     */
     [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
 

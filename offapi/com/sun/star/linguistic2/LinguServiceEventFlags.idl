@@ -60,9 +60,11 @@ published constants LinguServiceEventFlags
     const short HYPHENATE_AGAIN = 4;
 
     //-------------------------------------------------------------------------
-    /** The results for grammar checking may have changed.
+    /** Request new proofreading of the document
+
+        @since OOo 3.01
     */
-    const short GRAMMAR_CHECK_AGAIN = 5;
+    const short PROOFREAD_AGAIN = 8;
 
 };
 

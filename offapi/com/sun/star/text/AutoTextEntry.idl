@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AutoTextEntry.idl,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,8 @@
 
 // DocMerge from xml: service com::sun::star::text::AutoTextEntry
 /** provides access to a text block in a group of
-    an <type>AutoTextContainer</type>.@see com::sun::star::text::AutoTextContainer
+    an <type>AutoTextContainer</type>.
+        @see com::sun::star::text::AutoTextContainer
         @see com::sun::star::text::AutoTextGroup
  */
 published service AutoTextEntry
@@ -57,8 +58,7 @@ published service AutoTextEntry
 
 
     // DocMerge from xml: service com::sun::star::text::AutoTextEntry: interface com::sun::star::text::XText
-    /** provides access to the <type scope="com::sun::star::drawing">Text</type> of this entry.
-
+    /** provides access to the <type>Text</type> of this entry.
      */
     interface com::sun::star::text::XText;
 

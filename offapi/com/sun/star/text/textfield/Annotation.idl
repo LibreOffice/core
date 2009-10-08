@@ -33,6 +33,7 @@
 
 #include <com/sun/star/text/TextField.idl>
 #include <com/sun/star/util/Date.idl>
+#include <com/sun/star/util/DateTime.idl>
 
 //=============================================================================
 
@@ -54,6 +55,9 @@ published service Annotation
     /** contains the creation date.
      */
     [property]com::sun::star::util::Date Date;
+    /** contains the creation date.
+     */
+    [optional, property]com::sun::star::util::DateTime DateTimeValue;
 };
 
 //=============================================================================

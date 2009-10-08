@@ -39,6 +39,11 @@
 
 #include <hash_map>
 
+/*See: http://people.redhat.com/drepper/selinux-mem.html*/
+#ifdef LINUX
+#define USE_DOUBLE_MMAP
+#endif
+
 namespace bridges { namespace cpp_uno { namespace shared {
 
 /** Hand out vtable structures for interface type descriptions.
@@ -62,6 +67,18 @@ public:
             contains any generated code snippets, after the vtable itself.
          */
         void * start;
+
+#ifdef USE_DOUBLE_MMAP
+    /** When seperately mmapping the block for writing and executing
+            exec points to the same memory as start, except start is used
+            exclusively for writing and exec for executing
+         */
+        void * exec;
+
+    /** File handle for the underlying anonymous file
+         */
+        int fd;
+#endif
 
         /** The size of the raw vtable block, in bytes.
          */
@@ -111,6 +128,8 @@ private:
     VtableFactory(VtableFactory &); // not implemented
     void operator =(VtableFactory); // not implemented
 
+    bool createBlock(Block &block, sal_Int32 slotCount) const;
+
     void freeBlock(Block const & block) const;
 
     void createVtables(
@@ -151,6 +170,9 @@ private:
         given type
         @param code  points to the start of the area where code snippets can be
         generated
+        @param writetoexecdiff when the same code area is mmaped twice, once for
+        writing for code-generation, and once for code-execution, then this
+        records the offset from a writable address to its executable address
         @param type  the interface type description for which to generate vtable
         slots
         @param functionOffset  the function offset of the first vtable slot
@@ -165,6 +187,9 @@ private:
      */
     static unsigned char * addLocalFunctions(
         Slot ** slots, unsigned char * code,
+#ifdef USE_DOUBLE_MMAP
+        sal_PtrDiff writetoexecdiff,
+#endif
         typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
         sal_Int32 functionCount, sal_Int32 vtableOffset);
 

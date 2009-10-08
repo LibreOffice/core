@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormulaMapGroup.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,10 @@ module com {  module sun {  module star {  module sheet {
  */
 constants FormulaMapGroup
 {
-    /** Group of op-codes without a string symbol */
+    /** Group of op-codes without a string symbol.
+
+        @see FormulaMapGroupSpecialOffset
+      */
     const long SPECIAL            = 0;
 
     /** Separators and parentheses */

@@ -200,6 +200,20 @@ inline double approxValue(double fValue)
     return rtl_math_approxValue(fValue);
 }
 
+/** A wrapper around rtl_math_expm1.
+ */
+inline double expm1(double fValue)
+{
+    return rtl_math_expm1(fValue);
+}
+
+/** A wrapper around rtl_math_log1p.
+ */
+inline double log1p(double fValue)
+{
+    return rtl_math_log1p(fValue);
+}
+
 /** Test equality of two values with an accuracy of the magnitude of the
     given values scaled by 2^-48 (4 bits roundoff stripped).
 

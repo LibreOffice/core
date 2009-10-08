@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.122.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +46,7 @@ IDLFILES=\
     ChangeDateTime.idl\
     CreateAuthor.idl\
     CreateDateTime.idl\
-    ChangeAuthor.idl\
+    Custom.idl\
     Description.idl\
     EditTime.idl\
     Info0.idl\

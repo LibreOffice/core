@@ -7,7 +7,7 @@
 #  OpenOffice.org - a multi-platform office productivity suite
 # 
 #  $RCSfile: makefile.mk,v $
-#  $Revision: 1.26 $
+#  $Revision: 1.26.8.1 $
 # 
 #  This file is part of OpenOffice.org.
 # 
@@ -100,6 +100,7 @@ LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
 
 SLOFILES = \
     $(SLO)$/native_bootstrap.obj \
+    $(SLO)$/path.obj \
     $(SLO)$/assembly_cppuhelper.obj
     
 
@@ -190,3 +191,4 @@ $(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk
     $< $@
     
 .ENDIF			# "$(BUILD_FOR_CLI)" != ""
+

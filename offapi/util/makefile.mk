@@ -142,6 +142,7 @@ UNOIDLDBFILES= \
     $(UCR)$/xsec-wrapper.db \
     $(UCR)$/cssreport.db \
     $(UCR)$/cssrptins.db \
+    $(UCR)$/cssrptmeta.db \
     $(UCR)$/cssrdf.db
 
 

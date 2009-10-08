@@ -91,10 +91,11 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
             return pDecl;
         }
         if ( (NT_service == m_nodeType) &&
-             ((pDecl->getNodeType() == NT_interface_member)
-              && (pDeclaration->getNodeType() == NT_interface)) ||
-             ((pDecl->getNodeType() == NT_service_member)
-              && (pDeclaration->getNodeType() == NT_service)))
+             ( ((pDecl->getNodeType() == NT_interface_member)
+                && (pDeclaration->getNodeType() == NT_interface)) ||
+               ((pDecl->getNodeType() == NT_service_member)
+                && (pDeclaration->getNodeType() == NT_service)) )
+            )
         {
             m_declarations.push_back(pDecl);
             return pDecl;

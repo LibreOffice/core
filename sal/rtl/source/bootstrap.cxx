@@ -71,12 +71,18 @@ struct Bootstrap_Impl;
 
 namespace {
 
+static char const VND_SUN_STAR_PATHNAME[] = "vnd.sun.star.pathname:";
+
+bool isPathnameUrl(rtl::OUString const & url) {
+    return url.matchIgnoreAsciiCaseAsciiL(
+        RTL_CONSTASCII_STRINGPARAM(VND_SUN_STAR_PATHNAME));
+}
+
 bool resolvePathnameUrl(rtl::OUString * url) {
     OSL_ASSERT(url !=  NULL);
-    static char const schema[] = "vnd.sun.star.pathname:";
-    if (!url->matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(schema)) ||
+    if (!isPathnameUrl(*url) ||
         (osl::FileBase::getFileURLFromSystemPath(
-            url->copy(RTL_CONSTASCII_LENGTH(schema)), *url) ==
+            url->copy(RTL_CONSTASCII_LENGTH(VND_SUN_STAR_PATHNAME)), *url) ==
          osl::FileBase::E_None))
     {
         return true;
@@ -86,29 +92,9 @@ bool resolvePathnameUrl(rtl::OUString * url) {
     }
 }
 
-static char const URE_BOOTSTRAP[] = "URE_BOOTSTRAP";
-
-struct FundamentalIniData {
-    rtlBootstrapHandle ini;
-
-    FundamentalIniData() {
-        OUString uri;
-        ini =
-            (rtl::Bootstrap::get(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(URE_BOOTSTRAP)), uri) &&
-             resolvePathnameUrl(&uri))
-            ? rtl_bootstrap_args_open(uri.pData) : NULL;
-    }
-
-    ~FundamentalIniData() { rtl_bootstrap_args_close(ini); }
-
-private:
-    FundamentalIniData(FundamentalIniData &); // not defined
-    void operator =(FundamentalIniData &); // not defined
-};
-
-struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
-{};
+enum LookupMode {
+    LOOKUP_MODE_NORMAL, LOOKUP_MODE_URE_BOOTSTRAP,
+    LOOKUP_MODE_URE_BOOTSTRAP_EXPANSION };
 
 struct ExpandRequestLink {
     ExpandRequestLink const * next;
@@ -117,11 +103,11 @@ struct ExpandRequestLink {
 };
 
 rtl::OUString expandMacros(
-    Bootstrap_Impl const * file, rtl::OUString const & text,
+    Bootstrap_Impl const * file, rtl::OUString const & text, LookupMode mode,
     ExpandRequestLink const * requestStack);
 
 rtl::OUString recursivelyExpandMacros(
-    Bootstrap_Impl const * file, rtl::OUString const & text,
+    Bootstrap_Impl const * file, rtl::OUString const & text, LookupMode mode,
     Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
     ExpandRequestLink const * requestStack)
 {
@@ -134,7 +120,7 @@ rtl::OUString recursivelyExpandMacros(
         }
     }
     ExpandRequestLink link = { requestStack, requestFile, requestKey };
-    return expandMacros(file, text, &link);
+    return expandMacros(file, text, mode, &link);
 }
 
 }
@@ -353,13 +339,17 @@ struct Bootstrap_Impl
 
     bool getValue(
         rtl::OUString const & key, rtl_uString ** value,
-        rtl_uString * defaultValue, bool override,
+        rtl_uString * defaultValue, LookupMode mode, bool override,
         ExpandRequestLink const * requestStack) const;
     bool getDirectValue(
-        rtl::OUString const & key, rtl_uString ** value,
+        rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
         ExpandRequestLink const * requestStack) const;
     bool getAmbienceValue(
-        rtl::OUString const & key, rtl_uString ** value,
+        rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
+        ExpandRequestLink const * requestStack) const;
+    void expandValue(
+        rtl_uString ** value, rtl::OUString const & text, LookupMode mode,
+        Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
         ExpandRequestLink const * requestStack) const;
 };
 
@@ -440,11 +430,65 @@ Bootstrap_Impl::~Bootstrap_Impl()
 
 //----------------------------------------------------------------------------
 
+namespace {
+
+Bootstrap_Impl * get_static_bootstrap_handle() SAL_THROW(())
+{
+    osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
+    static Bootstrap_Impl * s_handle = 0;
+    if (s_handle == 0)
+    {
+        OUString iniName (getIniFileName_Impl());
+        s_handle = static_cast< Bootstrap_Impl * >(
+            rtl_bootstrap_args_open( iniName.pData ) );
+        if (s_handle == 0)
+        {
+            Bootstrap_Impl * that = new Bootstrap_Impl( iniName );
+            ++that->_nRefCount;
+            s_handle = that;
+        }
+    }
+    return s_handle;
+}
+
+struct FundamentalIniData {
+    rtlBootstrapHandle ini;
+
+    FundamentalIniData() {
+        OUString uri;
+        ini =
+            ((static_cast< Bootstrap_Impl * >(get_static_bootstrap_handle())->
+              getValue(
+                  rtl::OUString(
+                      RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP")),
+                  &uri.pData, 0, LOOKUP_MODE_NORMAL, false, 0)) &&
+             resolvePathnameUrl(&uri))
+            ? rtl_bootstrap_args_open(uri.pData) : NULL;
+    }
+
+    ~FundamentalIniData() { rtl_bootstrap_args_close(ini); }
+
+private:
+    FundamentalIniData(FundamentalIniData &); // not defined
+    void operator =(FundamentalIniData &); // not defined
+};
+
+struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
+{};
+
+}
+
 bool Bootstrap_Impl::getValue(
     rtl::OUString const & key, rtl_uString ** value, rtl_uString * defaultValue,
-    bool override, ExpandRequestLink const * requestStack) const
+    LookupMode mode, bool override, ExpandRequestLink const * requestStack)
+    const
 {
-    if (override && getDirectValue(key, value, requestStack)) {
+    if (mode == LOOKUP_MODE_NORMAL &&
+        key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URE_BOOTSTRAP")))
+    {
+        mode = LOOKUP_MODE_URE_BOOTSTRAP;
+    }
+    if (override && getDirectValue(key, value, mode, requestStack)) {
         return true;
     }
     if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_OS"))) {
@@ -471,7 +515,7 @@ bool Bootstrap_Impl::getValue(
                 0, std::max<sal_Int32>(0, _iniName.lastIndexOf('/'))).pData);
         return true;
     }
-    if (getAmbienceValue(key, value, requestStack)) {
+    if (getAmbienceValue(key, value, mode, requestStack)) {
         return true;
     }
     if (key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG"))) {
@@ -493,18 +537,18 @@ bool Bootstrap_Impl::getValue(
         return true;
     }
     if (_base_ini != NULL &&
-        _base_ini->getDirectValue(key, value, requestStack))
+        _base_ini->getDirectValue(key, value, mode, requestStack))
     {
         return true;
     }
-    if (!override && getDirectValue(key, value, requestStack)) {
+    if (!override && getDirectValue(key, value, mode, requestStack)) {
         return true;
     }
-    if (!key.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URE_BOOTSTRAP))) {
+    if (mode == LOOKUP_MODE_NORMAL) {
         FundamentalIniData const & d = FundamentalIni::get();
         Bootstrap_Impl const * b = static_cast<Bootstrap_Impl const *>(d.ini);
         if (b != NULL && b != this &&
-            b->getDirectValue(key, value, requestStack))
+            b->getDirectValue(key, value, mode, requestStack))
         {
             return true;
         }
@@ -518,14 +562,12 @@ bool Bootstrap_Impl::getValue(
 }
 
 bool Bootstrap_Impl::getDirectValue(
-    rtl::OUString const & key, rtl_uString ** value,
+    rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
     ExpandRequestLink const * requestStack) const
 {
     rtl::OUString v;
     if (find(_nameValueList, key, &v)) {
-        rtl_uString_assign(
-            value,
-            recursivelyExpandMacros(this, v, this, key, requestStack).pData);
+        expandValue(value, v, mode, this, key, requestStack);
         return true;
     } else {
         return false;
@@ -533,7 +575,7 @@ bool Bootstrap_Impl::getDirectValue(
 }
 
 bool Bootstrap_Impl::getAmbienceValue(
-    rtl::OUString const & key, rtl_uString ** value,
+    rtl::OUString const & key, rtl_uString ** value, LookupMode mode,
     ExpandRequestLink const * requestStack) const
 {
     rtl::OUString v;
@@ -545,13 +587,27 @@ bool Bootstrap_Impl::getAmbienceValue(
     if (f || getFromCommandLineArgs(key, &v) ||
         osl_getEnvironment(key.pData, &v.pData) == osl_Process_E_None)
     {
-        rtl_uString_assign(
-            value,
-            recursivelyExpandMacros(this, v, NULL, key, requestStack).pData);
+        expandValue(value, v, mode, NULL, key, requestStack);
         return true;
     } else {
         return false;
     }
+}
+
+void Bootstrap_Impl::expandValue(
+    rtl_uString ** value, rtl::OUString const & text, LookupMode mode,
+    Bootstrap_Impl const * requestFile, rtl::OUString const & requestKey,
+    ExpandRequestLink const * requestStack) const
+{
+    rtl_uString_assign(
+        value,
+        (mode == LOOKUP_MODE_URE_BOOTSTRAP && isPathnameUrl(text) ?
+         text :
+         recursivelyExpandMacros(
+             this, text,
+             (mode == LOOKUP_MODE_URE_BOOTSTRAP ?
+              LOOKUP_MODE_URE_BOOTSTRAP_EXPANSION : mode),
+             requestFile, requestKey, requestStack)).pData);
 }
 
 //----------------------------------------------------------------------------
@@ -692,28 +748,7 @@ void SAL_CALL rtl_bootstrap_args_close (
 
 //----------------------------------------------------------------------------
 
-static Bootstrap_Impl * get_static_bootstrap_handle() SAL_THROW(())
-{
-    osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-    static Bootstrap_Impl * s_handle = 0;
-    if (s_handle == 0)
-    {
-        OUString iniName (getIniFileName_Impl());
-        s_handle = static_cast< Bootstrap_Impl * >(
-            rtl_bootstrap_args_open( iniName.pData ) );
-        if (s_handle == 0)
-        {
-            Bootstrap_Impl * that = new Bootstrap_Impl( iniName );
-            ++that->_nRefCount;
-            s_handle = that;
-        }
-    }
-    return s_handle;
-}
-
-//----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL rtl_bootstrap_get_from_handle (
+sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     rtlBootstrapHandle handle,
     rtl_uString      * pName,
     rtl_uString     ** ppValue,
@@ -728,7 +763,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle (
         if (handle == 0)
             handle = get_static_bootstrap_handle();
         found = static_cast< Bootstrap_Impl * >( handle )->getValue(
-            pName, ppValue, pDefault, false, NULL );
+            pName, ppValue, pDefault, LOOKUP_MODE_NORMAL, false, NULL );
     }
 
     return found;
@@ -825,7 +860,7 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
     }
     OUString expanded( expandMacros( static_cast< Bootstrap_Impl * >( handle ),
                                      * reinterpret_cast< OUString const * >( macro ),
-                                     NULL ) );
+                                     LOOKUP_MODE_NORMAL, NULL ) );
     rtl_uString_assign( macro, expanded.pData );
 }
 
@@ -888,17 +923,17 @@ sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped) {
 }
 
 rtl::OUString lookup(
-    Bootstrap_Impl const * file, bool override, rtl::OUString const & key,
-    ExpandRequestLink const * requestStack)
+    Bootstrap_Impl const * file, LookupMode mode, bool override,
+    rtl::OUString const & key, ExpandRequestLink const * requestStack)
 {
     rtl::OUString v;
     (file == NULL ? get_static_bootstrap_handle() : file)->getValue(
-        key, &v.pData, NULL, override, requestStack);
+        key, &v.pData, NULL, mode, override, requestStack);
     return v;
 }
 
 rtl::OUString expandMacros(
-    Bootstrap_Impl const * file, rtl::OUString const & text,
+    Bootstrap_Impl const * file, rtl::OUString const & text, LookupMode mode,
     ExpandRequestLink const * requestStack)
 {
     rtl::OUStringBuffer buf;
@@ -941,7 +976,7 @@ rtl::OUString expandMacros(
                 }
             done:
                 for (int j = 0; j < n; ++j) {
-                    seg[j] = expandMacros(file, seg[j], requestStack);
+                    seg[j] = expandMacros(file, seg[j], mode, requestStack);
                 }
                 if (n == 3 && seg[1].getLength() == 0) {
                     // For backward compatibility, treat ${file::key} the same
@@ -950,7 +985,7 @@ rtl::OUString expandMacros(
                     n = 2;
                 }
                 if (n == 1) {
-                    buf.append(lookup(file, false, seg[0], requestStack));
+                    buf.append(lookup(file, mode, false, seg[0], requestStack));
                 } else if (n == 2) {
                     if (seg[0].equalsAsciiL(
                             RTL_CONSTASCII_STRINGPARAM(".link")))
@@ -983,7 +1018,7 @@ rtl::OUString expandMacros(
                             lookup(
                                 static_cast< Bootstrap_Impl * >(
                                     rtl::Bootstrap(seg[0]).getHandle()),
-                                false, seg[1], requestStack));
+                                mode, false, seg[1], requestStack));
                     }
                 } else if (seg[0].equalsAsciiL(
                                RTL_CONSTASCII_STRINGPARAM(".override")))
@@ -991,7 +1026,8 @@ rtl::OUString expandMacros(
                     rtl::Bootstrap b(seg[1]);
                     Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
                         b.getHandle());
-                    buf.append(lookup(f, f != NULL, seg[2], requestStack));
+                    buf.append(
+                        lookup(f, mode, f != NULL, seg[2], requestStack));
                 } else {
                     // Going through osl::Profile, this code erroneously does
                     // not recursively expand macros in the resulting
@@ -1023,7 +1059,8 @@ rtl::OUString expandMacros(
                 }
                 buf.append(
                     lookup(
-                        file, false, kbuf.makeStringAndClear(), requestStack));
+                        file, mode, false, kbuf.makeStringAndClear(),
+                        requestStack));
             }
         }
     }

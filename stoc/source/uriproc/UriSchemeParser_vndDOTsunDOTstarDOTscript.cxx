@@ -128,7 +128,7 @@ rtl::OUString parsePart(
                     encoded |= (n & 0x3F) << shift;
                 }
                 if (!utf8 || encoded < min
-                    || encoded >= 0xD800 && encoded <= 0xDFFF
+                    || (encoded >= 0xD800 && encoded <= 0xDFFF)
                     || encoded > 0x10FFFF)
                 {
                     break;

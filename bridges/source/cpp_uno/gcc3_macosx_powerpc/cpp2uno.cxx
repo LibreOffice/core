@@ -638,16 +638,17 @@ unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex,
 
 }
 
-
-#define MIN_LINE_SIZE 32
-
 void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const * bptr, unsigned char const * eptr)
 {
-  unsigned char * eaddr = (unsigned char *) eptr + MIN_LINE_SIZE + 1;
-  for (  unsigned char * addr  = (unsigned char *) bptr; addr < eaddr; addr += MIN_LINE_SIZE) {
-      __asm__ volatile ( "dcbf 0,%0;" "icbi 0,%0;" : : "r"(addr) : "memory");
-  }
-  __asm__ volatile ( "sync;" "isync;" : : : "memory");
+    int const lineSize = 32;
+    for (unsigned char const * p = bptr; p < eptr + lineSize; p += lineSize) {
+        __asm__ volatile ("dcbst 0, %0" : : "r"(p) : "memory");
+    }
+    __asm__ volatile ("sync" : : : "memory");
+    for (unsigned char const * p = bptr; p < eptr + lineSize; p += lineSize) {
+        __asm__ volatile ("icbi 0, %0" : : "r"(p) : "memory");
+    }
+    __asm__ volatile ("isync" : : : "memory");
 }
 
 struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };

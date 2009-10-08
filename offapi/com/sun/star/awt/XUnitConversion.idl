@@ -8,7 +8,7 @@
  *
  * $RCSfile: XUnitConversion.idl,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.2.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +35,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-// #ifndef __com_sun_star_util_MeasureUnit_idl__
-// #include <com/sun/star/util/MeasureUnit.idl>
-// #endif
-
 #ifndef __com_sun_star_awt_Point_idl__
 #include <com/sun/star/awt/Point.idl>
 #endif
@@ -57,28 +53,30 @@
 
 //=============================================================================
 
-/** gives access to the value and formatting of a metric field.
+/** allows converting between different measurement units
+
+    @since OOo 3.0
  */
 interface XUnitConversion: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-
-    /**
+    /** converts the given <type>Point</type>, which is specified in pixels, into the given logical unit
      */
     com::sun::star::awt::Point convertPointToLogic( [in] com::sun::star::awt::Point aPoint, [in] short TargetUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
+    /** converts the given <type>Point</type>, which is specified in the given logical unit, into pixels
+    */
     com::sun::star::awt::Point convertPointToPixel( [in] com::sun::star::awt::Point aPoint, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
 
-    //-------------------------------------------------------------------------
-
-    /**
+    /** converts the given <type>Size</type>, which is specified in pixels, into the given logical unit
      */
     com::sun::star::awt::Size convertSizeToLogic( [in] com::sun::star::awt::Size aSize, [in] short TargetUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 
+    /** converts the given <type>Size</type>, which is specified in the given logical unit, into pixels
+    */
     com::sun::star::awt::Size convertSizeToPixel( [in] com::sun::star::awt::Size aSize, [in] short SourceUnit )
             raises ( com::sun::star::lang::IllegalArgumentException );
 

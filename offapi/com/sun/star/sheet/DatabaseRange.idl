@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DatabaseRange.idl,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +154,8 @@ published service DatabaseRange
     /** returns the index used to refer to this range in token arrays.
 
         <p>A token describing a database range shall contain the op-code
-        OPCODE_DB_AREA and this index as data part.</p>
+        obtained from the <const>FormulaMapGroupSpecialOffset::DB_AREA</const>
+        and this index as data part.</p>
 
         @see com::sun::star::sheet::FormulaToken
         @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::DB_AREA

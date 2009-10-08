@@ -56,6 +56,7 @@ CFLAGSNOOPT=-O0
 
 SLOFILES= \
     $(SLO)$/dllinit.obj		\
+    $(SLO)$/smallstruct.obj		\
     $(SLO)$/except.obj		\
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj \

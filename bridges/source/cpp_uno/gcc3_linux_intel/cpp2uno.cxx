@@ -362,7 +362,7 @@ extern "C" typedef void (*PrivateSnippetExecutor)();
 int const codeSnippetSize = 16;
 
 unsigned char * codeSnippet(
-    unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset,
+    unsigned char * code, sal_PtrDiff writetoexecdiff, sal_Int32 functionIndex, sal_Int32 vtableOffset,
     typelib_TypeClass returnTypeClass)
 {
     if (!bridges::cpp_uno::shared::isSimpleType(returnTypeClass)) {
@@ -408,7 +408,7 @@ unsigned char * codeSnippet(
     // jmp privateSnippetExecutor:
     *p++ = 0xE9;
     *reinterpret_cast< sal_Int32 * >(p)
-        = ((unsigned char *) exec) - p - sizeof (sal_Int32);
+        = ((unsigned char *) exec) - p - sizeof (sal_Int32) - writetoexecdiff;
     p += sizeof (sal_Int32);
     OSL_ASSERT(p - code <= codeSnippetSize);
     return code + codeSnippetSize;
@@ -440,7 +440,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
@@ -453,9 +453,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
-                code, functionOffset++, vtableOffset,
+                code, writetoexecdiff, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceAttributeTypeDescription * >(
                     member)->pAttributeTypeRef->eTypeClass);
             // Setter:
@@ -463,17 +463,17 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_InterfaceAttributeTypeDescription * >(
                     member)->bReadOnly)
             {
-                (s++)->fn = code;
+                (s++)->fn = code + writetoexecdiff;
                 code = codeSnippet(
-                    code, functionOffset++, vtableOffset,
+                    code, writetoexecdiff, functionOffset++, vtableOffset,
                     typelib_TypeClass_VOID);
             }
             break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
-                code, functionOffset++, vtableOffset,
+                code, writetoexecdiff, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
                     member)->pReturnTypeRef->eTypeClass);
             break;

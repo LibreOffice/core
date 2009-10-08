@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XGraphicObject.idl,v $
+ * $Revision: 1.1.2.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef com_sun_star_graphic_XGraphicObject_idl
+#define com_sun_star_graphic_XGraphicObject_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module sun { module star { module graphic
+{
+interface XGraphic;
+/** <code>XGraphicObject</code> objects represent in-memory image and graphic
+    objects.
+
+    <p>Such objects are accessable using GraphicObject scheme urls like
+    <ul>
+        <li>vnd.sun.star.GraphicObject:10000000000001940000012FB99807BD</li>
+    </ul>
+    The numeric portion of the url is formed from <member>UniqueID</member>.
+    As long as at least one instance of <code>XGraphicObject</code> with a particular UniqueID exists,
+    the associated image/graphic is available.</p>
+
+    @see XGraphicObject
+    @see GraphicProvider
+    @see MediaProperties
+*/
+
+interface XGraphicObject : ::com::sun::star::uno::XInterface
+{
+    /** is the associated image/graphic for this object.
+    */
+    [attribute ] XGraphic Graphic;
+
+    /** is the id that can be used to form the <code>vnd.sun.star.GraphicObject</code> url to address this object.
+    */
+    [attribute, readonly ] string UniqueID;
+};
+
+} ; } ; } ; } ;
+
+#endif

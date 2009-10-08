@@ -575,6 +575,12 @@ UDK_3.8 { # OOo 3.0
         rtl_math_approxValue;
 } UDK_3.7;
 
+UDK_3.9 { # OOo 3.1
+    global:
+        rtl_math_expm1;
+        rtl_math_log1p;
+} UDK_3.8;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;

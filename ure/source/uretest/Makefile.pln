@@ -30,7 +30,7 @@
 #*************************************************************************
 
 # The following variable must be set (see README):
-#SDK_HOME := /opt/OpenOffice.org2.0_SDK
+#SDK_HOME := /opt/openoffice.org/basis3.1/sdk
 
 # The following variables can be set, if necessary (see README):
 #URE_HOME := /opt/openoffice.org/ure

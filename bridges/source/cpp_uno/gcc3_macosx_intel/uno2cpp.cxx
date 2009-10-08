@@ -347,17 +347,22 @@ static void cpp_call(
 }
 
 namespace CPPU_CURRENT_NAMESPACE {
-bool isSimpleReturnType(typelib_TypeDescription * pTD)
+bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive)
 {
     if (bridges::cpp_uno::shared::isSimpleType( pTD ))
         return true;
-    if (pTD->eTypeClass == typelib_TypeClass_STRUCT && pTD->nSize <= 8) {
+    // Only structs of exactly 1, 2, 4, or 8 bytes are returned through
+    // registers, see <http://developer.apple.com/documentation/DeveloperTools/
+    // Conceptual/LowLevelABI/Articles/IA32.html>:
+    if (pTD->eTypeClass == typelib_TypeClass_STRUCT &&
+        (recursive || pTD->nSize <= 2 || pTD->nSize == 4 || pTD->nSize == 8))
+    {
         typelib_CompoundTypeDescription *const pCompTD =
             (typelib_CompoundTypeDescription *) pTD;
         for ( sal_Int32 pos = pCompTD->nMembers; pos--; ) {
             typelib_TypeDescription * pMemberTD = 0;
             TYPELIB_DANGER_GET( &pMemberTD, pCompTD->ppTypeRefs[pos] );
-            bool const b = isSimpleReturnType(pMemberTD);
+            bool const b = isSimpleReturnType(pMemberTD, true);
             TYPELIB_DANGER_RELEASE( pMemberTD );
             if (! b)
                 return false;

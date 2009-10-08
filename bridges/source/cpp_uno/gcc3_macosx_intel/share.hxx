@@ -37,7 +37,7 @@
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-bool isSimpleReturnType(typelib_TypeDescription * pTD);
+bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive = false);
 
 void dummy_can_throw_anything( char const * );
 

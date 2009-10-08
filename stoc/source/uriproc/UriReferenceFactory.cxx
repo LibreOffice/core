@@ -85,7 +85,7 @@ bool isAlpha(sal_Unicode c) { //TODO: generally available?
 }
 
 bool isHexDigit(sal_Unicode c) { //TODO: generally available?
-    return isDigit(c) || c >= 'A' && c <= 'F' || c >= 'a' && c <= 'f';
+    return isDigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
 }
 
 sal_Unicode toLowerCase(sal_Unicode c) { //TODO: generally available?
@@ -230,7 +230,7 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
     bool isAbsolute = scheme.getLength() != 0;
     bool isHierarchical
         = !isAbsolute
-        || schemeSpecificPart.getLength() > 0 && schemeSpecificPart[0] == '/';
+        || (schemeSpecificPart.getLength() > 0 && schemeSpecificPart[0] == '/');
     bool hasAuthority = false;
     rtl::OUString authority;
     rtl::OUString path;

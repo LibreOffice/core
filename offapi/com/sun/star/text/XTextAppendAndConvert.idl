@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XTextAppendAndConvert.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,8 @@
 
 //=============================================================================
 
-/** merges the functions of XTextAppend, XTextContentAppend and XTextConvert.
+/** merges the functions of <type>XTextAppend</type>,
+    <type>XTextContentAppend</type> and <type>XTextConvert</type>.
  */
      interface XTextAppendAndConvert
 {

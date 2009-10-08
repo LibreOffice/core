@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormulaToken.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@ struct FormulaToken
     //-------------------------------------------------------------------------
 
     /** is the OpCode of the token.
+
+        @see com::sun::star::sheet::XFormulaOpCodeMapper
      */
     long OpCode;
 

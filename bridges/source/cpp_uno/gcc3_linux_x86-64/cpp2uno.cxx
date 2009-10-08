@@ -489,7 +489,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 //==================================================================================================
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
     typelib_InterfaceTypeDescription const * type, sal_Int32 nFunctionOffset,
     sal_Int32 functionCount, sal_Int32 nVtableOffset )
 {
@@ -508,14 +508,14 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( pTD );
 
             // get method
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet( code, nFunctionOffset++, nVtableOffset,
                                 x86_64::return_in_hidden_param( pAttrTD->pAttributeTypeRef ) );
 
             if ( ! pAttrTD->bReadOnly )
             {
                 // set method
-                (s++)->fn = code;
+                (s++)->fn = code + writetoexecdiff;
                 code = codeSnippet( code, nFunctionOffset++, nVtableOffset, false );
             }
         }
@@ -524,7 +524,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( pTD );
 
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet( code, nFunctionOffset++, nVtableOffset,
                                 x86_64::return_in_hidden_param( pMethodTD->pReturnTypeRef ) );
         }

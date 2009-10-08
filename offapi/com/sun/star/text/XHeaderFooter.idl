@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XHeaderFooter.idl,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,8 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::text::XHeaderFooter
-/** @deprecated
+/** @deprecated     Use the properties of
+            <type scope="com::sun::star::style">PageProperties</type> instead
  */
 published interface XHeaderFooter: com::sun::star::uno::XInterface
 {

@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.30 $
+# $Revision: 1.30.78.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -71,7 +71,10 @@ IDLFILES=\
     ComplexReference.idl\
     ConditionOperator.idl\
     ConsolidationDescriptor.idl\
+    DDEItemInfo.idl\
     DDELink.idl\
+    DDELinkInfo.idl\
+    DDELinkMode.idl\
     DDELinks.idl\
     DDELinksEnumeration.idl\
     DataImportMode.idl\
@@ -121,8 +124,13 @@ IDLFILES=\
     DatabaseRange.idl\
     DatabaseRanges.idl\
     DatabaseRangesEnumeration.idl\
-    DDELinkMode.idl\
     DocumentSettings.idl\
+     ExternalDocLink.idl\
+     ExternalDocLinks.idl\
+    ExternalLinkType.idl\
+    ExternalLinkInfo.idl\
+    ExternalReference.idl\
+     ExternalSheetCache.idl\
     FillDateMode.idl\
     FillDirection.idl\
     FillMode.idl\
@@ -180,6 +188,9 @@ IDLFILES=\
     SheetSortDescriptor.idl\
     SheetSortDescriptor2.idl\
     SingleReference.idl\
+    Solver.idl\
+    SolverConstraint.idl\
+    SolverConstraintOperator.idl\
     Spreadsheet.idl\
     SpreadsheetDocument.idl\
     SpreadsheetDocumentSettings.idl\
@@ -255,6 +266,9 @@ IDLFILES=\
     XDocumentAuditing.idl\
     XDrillDownDataSupplier.idl\
     XEnhancedMouseClickBroadcaster.idl\
+    XExternalDocLink.idl\
+    XExternalDocLinks.idl\
+    XExternalSheetCache.idl\
     XExternalSheetName.idl\
     XFillAcrossSheet.idl\
     XFormulaOpCodeMapper.idl\
@@ -305,6 +319,8 @@ IDLFILES=\
     XSheetOutline.idl\
     XSheetPageBreak.idl\
     XSheetPastable.idl\
+    XSolver.idl\
+    XSolverDescription.idl\
     XSpreadsheet.idl\
     XSpreadsheetDocument.idl\
     XSpreadsheetView.idl\
@@ -319,12 +335,7 @@ IDLFILES=\
     XViewPanesSupplier.idl\
     XViewSplitable.idl\
     XVolatileResult.idl\
-    _NamedRange.idl\
-    SolverConstraintOperator.idl\
-    SolverConstraint.idl\
-    XSolver.idl\
-    XSolverDescription.idl\
-    Solver.idl
+    _NamedRange.idl
 
 # ------------------------------------------------------------------
 

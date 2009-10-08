@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextFields.idl,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,17 +45,16 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::text::TextFields
-/** This is a collection of <type scope="com::sun::star::form::component">TextField</type> instances.
+/** This is a collection of <type>TextField</type> instances.
  */
 published service TextFields
 {
-
 
     // DocMerge from xml: service com::sun::star::text::TextFields: interface com::sun::star::container::XEnumerationAccess
     /** This interface makes it possible to create an enumeration through
                 all text fields in this container.
 
-        <p>All elements are of type <type>XTextField</type>.
+        <p>All elements are of type <type>XTextField</type>.</p>
      */
     interface com::sun::star::container::XEnumerationAccess;
 

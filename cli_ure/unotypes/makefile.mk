@@ -67,6 +67,7 @@ $(OUT)$/bin$/cli_uretypes.dll : $(BIN)$/climaker.exe $(SOLARBINDIR)$/types.rdb $
         $(SOLARBINDIR)$/udkapi.rdb
 
 #do not forget to deliver cli_uretypes.config. It is NOT embedded in the policy file.
+#see i62886 for the dependency on cli_uretypes.dll
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_uretypes.config $(OUT)$/bin$/cli_uretypes.dll
     $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_URETYPES_POLICY_VERSION) \

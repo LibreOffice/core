@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XTextFieldsSupplier.idl,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@ published interface XTextFieldsSupplier: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::text::XTextFieldsSupplier::getTextFields
     /** @returns
-                the collection of <type scope="com::sun::star::form::component">TextField</type> instances
+                the collection of <type>TextField</type> instances
                 in this context (i.e. this document).
      */
     com::sun::star::container::XEnumerationAccess getTextFields();

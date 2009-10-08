@@ -959,3 +959,24 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
     return bSign ? -fValue : fValue;
 }
+
+
+double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
+{
+    double fe = exp( fValue );
+    if (fe == 1.0)
+        return fValue;
+    if (fe-1.0 == -1.0)
+        return -1.0;
+    return (fe-1.0) * fValue / log(fe);
+}
+
+
+double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
+{
+    double fp = 1.0 + fValue;
+    if (fp == 1.0)
+        return fValue;
+    else
+        return log(fp) * fValue / (fp-1.0);
+}

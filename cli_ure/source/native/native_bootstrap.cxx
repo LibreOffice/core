@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: native_bootstrap.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.12.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-// We are using the Windows UNICODE API
+// Use UNICODE Windows and C API.
 #define _UNICODE
 #define UNICODE
 
@@ -55,157 +55,271 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define OFFICE_LOCATION_REGISTRY_KEY L"Software\\OpenOffice.org\\Layer\\URE\\1"
-#define UREINSTALLLOCATION L"UREINSTALLLOCATION"
+namespace cli_ure {
+    WCHAR * resolveLink(WCHAR * path);
+}
+
+#define INSTALL_PATH L"Software\\OpenOffice.org\\UNO\\InstallPath"
+#define BASIS_LINK L"\\basis-link"
+#define URE_LINK L"\\ure-link"
 #define URE_BIN L"\\bin"
+#define UNO_PATH L"UNO_PATH"
 
 namespace
 {
 
-
-//Returns the path to the URE/bin folder.
-//The caller must free the returned string with delete[]
-wchar_t * getUnoPath()
+ /*
+ * Gets the installation path from the Windows Registry for the specified
+ * registry key.
+ *
+ * @param hroot       open handle to predefined root registry key
+ * @param subKeyName  name of the subkey to open
+ *
+ * @return the installation path or NULL, if no installation was found or
+ *         if an error occured
+ */
+WCHAR* getPathFromRegistryKey( HKEY hroot, LPCWSTR subKeyName )
 {
-    wchar_t *  theUnoPath = NULL;
-    bool failed = false;
-    HKEY    hKey = 0;
-    if (RegOpenKeyEx(HKEY_CURRENT_USER,OFFICE_LOCATION_REGISTRY_KEY,
-        0, KEY_READ, &hKey) != ERROR_SUCCESS)
+    HKEY hkey;
+    DWORD type;
+    TCHAR* data = NULL;
+    DWORD size;
+
+    /* open the specified registry key */
+    if ( RegOpenKeyEx( hroot, subKeyName, 0, KEY_READ, &hkey ) != ERROR_SUCCESS )
     {
-        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, OFFICE_LOCATION_REGISTRY_KEY,
-            0, KEY_READ, &hKey) != ERROR_SUCCESS)
-        {
-#if OSL_DEBUG_LEVEL >= 2
-            fprintf(stderr, "cli_cppuhelper: Office not properly installed. "
-                "Could not open registry keys.");
-#endif
-            failed = true;
-        }
+        return NULL;
     }
-    if (! failed)
+
+    /* find the type and size of the default value */
+    if ( RegQueryValueEx( hkey, NULL, NULL, &type, NULL, &size) != ERROR_SUCCESS )
     {
-        DWORD   dwType = 0;
-        DWORD   dwLen = 0;
-        wchar_t *arData = NULL;
-        //get the length for the path to office
-        if (RegQueryValueEx(hKey, UREINSTALLLOCATION, NULL, &dwType, NULL,
-            &dwLen) == ERROR_SUCCESS)
-        {
-            arData = new  wchar_t[dwLen];
-            arData[0] = '\0';
-            if (RegQueryValueEx(hKey, UREINSTALLLOCATION, NULL, &dwType, (LPBYTE) arData,
-                & dwLen) == ERROR_SUCCESS)
-            {
-                int test = lstrlen(URE_BIN);
-                //attach the bin directory to the URE path
-                int sizePath = lstrlen(arData) + lstrlen(URE_BIN) + 1;
-                theUnoPath = new wchar_t[sizePath];
-                 theUnoPath[0] = '\0';
-                 lstrcat(theUnoPath, arData);
-                 lstrcat(theUnoPath, URE_BIN);
-                delete[] arData;
-#if OSL_DEBUG_LEVEL >=2
-                fprintf(stdout,"[cli_cppuhelper]: Using path %S to load office libraries.", theUnoPath);
-#endif
-            }
-        }
-        RegCloseKey(hKey);
+        RegCloseKey( hkey );
+        return NULL;
     }
-    return theUnoPath;
+
+    /* get memory to hold the default value */
+    data = new WCHAR[size];
+
+    /* read the default value */
+    if ( RegQueryValueEx( hkey, NULL, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
+    {
+        RegCloseKey( hkey );
+        return NULL;
+    }
+
+    /* release registry key handle */
+    RegCloseKey( hkey );
+
+    return data;
+}
+
+/* If the path does not end with '\' the las segment will be removed.
+    path: C:\a\b
+    ->    C:\a
+    @param io_path
+        in/out parameter. The string is not reallocated. Simply a '\0'
+        will be inserted to shorten the string.
+*/
+void oneDirUp(LPTSTR io_path)
+{
+    WCHAR * pEnd = io_path + lstrlen(io_path) - 1;
+    while (pEnd > io_path //prevent crashing if provided string does not contain a backslash
+        && *pEnd != L'\\')
+        pEnd --;
+    *pEnd = L'\0';
 }
 
 
-//Returns the path to the Ure/bin directory and expands the PATH by inserting the
-// ure/bin path at the front.
-wchar_t const * getUreBinPathAndSetPath()
+/* Returns the path to the program folder of the brand layer,
+    for example c:/openoffice.org 3/program
+   This path is either obtained from the environment variable UNO_PATH
+   or the registry item
+   "Software\\OpenOffice.org\\UNO\\InstallPath"
+   either in HKEY_CURRENT_USER or HKEY_LOCAL_MACHINE
+   The return value must be freed with delete[]
+*/
+WCHAR * getInstallPath()
 {
-    static wchar_t * theBinPath = NULL;
+    WCHAR * szInstallPath = NULL;
 
-    if (theBinPath)
-        return theBinPath;
+    DWORD  cChars = GetEnvironmentVariable(UNO_PATH, NULL, 0);
+    if (cChars > 0)
+    {
+        szInstallPath = new WCHAR[cChars];
+        cChars = GetEnvironmentVariable(UNO_PATH, szInstallPath, cChars);
+        //If PATH is not set then it is no error
+        if (cChars == 0)
+        {
+            delete[] szInstallPath;
+            return NULL;
+        }
+    }
 
-    wchar_t * unoPath = getUnoPath();
-    if (!unoPath)
-        return NULL;
+    if (! szInstallPath)
+    {
+        szInstallPath = getPathFromRegistryKey( HKEY_CURRENT_USER, INSTALL_PATH );
+        if ( szInstallPath == NULL )
+        {
+            /* read the key's default value from HKEY_LOCAL_MACHINE */
+            szInstallPath = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, INSTALL_PATH );
+        }
+    }
+    return szInstallPath;
+}
 
-    //We extend the path to contain the program directory of the office,
-    //so that components can use osl_loadModule with arguments, such as
-    //"reg3.dll". That is, the arguments are only the library names.
+/* Returns the path to the URE/bin path, where cppuhelper lib resides.
+    The returned string must be freed with delete[]
+*/
+WCHAR* getUnoPath()
+{
+    WCHAR * szLinkPath = NULL;
+    WCHAR * szUrePath = NULL;
+    WCHAR * szUreBin = NULL; //the return value
 
-    wchar_t * sEnvPath = NULL;
+    WCHAR * szInstallPath = getInstallPath();
+    if (szInstallPath)
+    {
+        //build the path tho the basis-link file
+        oneDirUp(szInstallPath);
+        int sizeLinkPath = lstrlen(szInstallPath) + lstrlen(INSTALL_PATH) + 1;
+        if (sizeLinkPath < MAX_PATH)
+            sizeLinkPath = MAX_PATH;
+        szLinkPath = new WCHAR[sizeLinkPath];
+        szLinkPath[0] = L'\0';
+        lstrcat(szLinkPath, szInstallPath);
+        lstrcat(szLinkPath, BASIS_LINK);
+
+        //get the path to the actual Basis folder
+        if (cli_ure::resolveLink(szLinkPath))
+        {
+            //build the path to the ure-link file
+            int sizeUrePath = lstrlen(szLinkPath) + lstrlen(URE_LINK) + 1;
+            if (sizeUrePath < MAX_PATH)
+                sizeUrePath = MAX_PATH;
+            szUrePath = new WCHAR[sizeUrePath];
+            szUrePath[0] = L'\0';
+            lstrcat(szUrePath, szLinkPath);
+            lstrcat(szUrePath, URE_LINK);
+
+            //get the path to the actual Ure folder
+            if (cli_ure::resolveLink(szUrePath))
+            {
+                //build the path to the URE/bin directory
+                szUreBin = new WCHAR[lstrlen(szUrePath) + lstrlen(URE_BIN) + 1];
+                 szUreBin[0] = L'\0';
+                lstrcat(szUreBin, szUrePath);
+                 lstrcat(szUreBin, URE_BIN);
+            }
+        }
+    }
+#if OSL_DEBUG_LEVEL >=2
+    if (szUreBin)
+    {
+        fwprintf(stdout,L"[cli_cppuhelper]: Path to URE libraries:\n %s \n", szUreBin);
+    }
+    else
+    {
+        fwprintf(stdout,L"[cli_cppuhelper]: Failed to determine location of URE.\n");
+    }
+#endif
+    delete[] szInstallPath;
+    delete[] szLinkPath;
+    delete[] szUrePath;
+    return szUreBin;
+}
+
+
+/*We extend the path to contain the Ure/bin folder,
+  so that components can use osl_loadModule with arguments, such as
+  "reg3.dll". That is, the arguments are only the library names.
+*/
+void extendPath(LPCWSTR szUreBinPath)
+{
+    if (!szUreBinPath)
+        return;
+
+    WCHAR * sEnvPath = NULL;
     DWORD  cChars = GetEnvironmentVariable(L"PATH", sEnvPath, 0);
     if (cChars > 0)
     {
-        sEnvPath = new wchar_t[cChars];
+        sEnvPath = new WCHAR[cChars];
         cChars = GetEnvironmentVariable(L"PATH", sEnvPath, cChars);
         //If PATH is not set then it is no error
         if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
         {
             delete[] sEnvPath;
-            return NULL;
+            return;
         }
     }
-    //prepare the new PATH. Add the Ure/bin directory at the front
-    wchar_t * sNewPath = new wchar_t[lstrlen(sEnvPath) + lstrlen(unoPath) + 2];
-    sNewPath[0] = '\0';
-    lstrcat(sNewPath, unoPath);
+    //prepare the new PATH. Add the Ure/bin directory at the front.
+    //note also adding ';'
+    WCHAR * sNewPath = new WCHAR[lstrlen(sEnvPath) + lstrlen(szUreBinPath) + 2];
+    sNewPath[0] = L'\0';
+    lstrcat(sNewPath, szUreBinPath);
     if (lstrlen(sEnvPath))
     {
         lstrcat(sNewPath, L";");
         lstrcat(sNewPath, sEnvPath);
     }
-
     BOOL bSet = SetEnvironmentVariable(L"PATH", sNewPath);
 
-    theBinPath = unoPath;
     delete[] sEnvPath;
     delete[] sNewPath;
-
-    return theBinPath;
 }
 
-HMODULE loadFromPath(wchar_t const * sLibName)
+
+HMODULE loadFromPath(LPCWSTR sLibName)
 {
     if (sLibName == NULL)
         return NULL;
 
-    wchar_t const * binPath =  getUreBinPathAndSetPath();
-    if (!binPath)
+    WCHAR * szUreBinPath =  getUnoPath();
+    if (!szUreBinPath)
         return NULL;
 
+    extendPath(szUreBinPath);
 
-    wchar_t*  sFullPath = new wchar_t[lstrlen(sLibName) + lstrlen(binPath) + 2];
-    sFullPath[0] = '\0';
-    sFullPath = lstrcat(sFullPath, binPath);
-    sFullPath = lstrcat(sFullPath, L"\\");
-    sFullPath = lstrcat(sFullPath, sLibName);
-    HMODULE handle = LoadLibraryEx(sFullPath, NULL,
+    WCHAR*  szFullPath = new WCHAR[lstrlen(sLibName) + lstrlen(szUreBinPath) + 2];
+    szFullPath[0] = L'\0';
+    lstrcat(szFullPath, szUreBinPath);
+    lstrcat(szFullPath, L"\\");
+    lstrcat(szFullPath, sLibName);
+    HMODULE handle = LoadLibraryEx(szFullPath, NULL,
         LOAD_WITH_ALTERED_SEARCH_PATH);
-    delete[] sFullPath;
-    return handle;
 
+    delete[] szFullPath;
+    delete[] szUreBinPath;
+    return handle;
 }
 
-//Hook for delayed loading of libraries which this library is linked with.
-extern "C"  FARPROC WINAPI delayLoadHook(
+/*Hook for delayed loading of libraries which this library is linked with.
+    This is a failure hook. That is, it is only called when the loading of
+    a library failed. It will be called when loading of cppuhelper failed.
+    Because we extend the PATH to the URE/bin folder while this function is
+    executed (see extendPath), all other libraries are found.
+*/
+extern "C" FARPROC WINAPI delayLoadHook(
     unsigned        dliNotify,
     PDelayLoadInfo  pdli
     )
 {
     if (dliNotify == dliFailLoadLib)
     {
-        //Convert the ansi file name to wchar_t*
+        LPWSTR szLibName = NULL;
+         //Convert the ansi file name to wchar_t*
         int size = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pdli->szDll, -1, NULL, 0);
         if (size > 0)
         {
-            wchar_t * buf = new wchar_t[size];
-            if (MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pdli->szDll, -1, buf, size))
+            szLibName = new WCHAR[size];
+            if (! MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pdli->szDll, -1, szLibName, size))
             {
-                HMODULE handle = NULL;
-                return (FARPROC) loadFromPath(buf);
+                return 0;
             }
         }
+        HANDLE h = loadFromPath(szLibName);
+        delete[] szLibName;
+        return (FARPROC) h;
     }
     return 0;
 }

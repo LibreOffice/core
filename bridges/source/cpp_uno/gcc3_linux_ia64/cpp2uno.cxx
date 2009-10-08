@@ -575,7 +575,7 @@ namespace
 {
 const int codeSnippetSize = 40;
 
-bridges::cpp_uno::shared::VtableFactory::Slot codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
+bridges::cpp_uno::shared::VtableFactory::Slot codeSnippet( unsigned char * code, sal_PtrDiff writetoexecdiff, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
                               bool bHasHiddenParam )
 {
 #ifdef CMC_DEBUG
@@ -598,7 +598,7 @@ bridges::cpp_uno::shared::VtableFactory::Slot codeSnippet( unsigned char * code,
     raw[2] = nOffsetAndIndex;
     raw[3] = destination->gp_value;
 
-    return *(bridges::cpp_uno::shared::VtableFactory::Slot*)(code);
+    return *(bridges::cpp_uno::shared::VtableFactory::Slot*)(code+writetoexecdiff);
 }
 }
 
@@ -628,7 +628,7 @@ bridges::cpp_uno::shared::VtableFactory::Slot* bridges::cpp_uno::shared::VtableF
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** in_slots, unsigned char * code,
+    Slot ** in_slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
@@ -647,7 +647,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
             *slots++ = codeSnippet(
-                code, functionOffset++, vtableOffset,
+                code, writetoexecdiff, functionOffset++, vtableOffset,
                 ia64::return_in_hidden_param(
                     reinterpret_cast<
                     typelib_InterfaceAttributeTypeDescription * >(
@@ -660,14 +660,14 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_InterfaceAttributeTypeDescription * >(
                     member)->bReadOnly)
             {
-                *slots++ = codeSnippet(code, functionOffset++, vtableOffset, false);
+                *slots++ = codeSnippet(code, writetoexecdiff, functionOffset++, vtableOffset, false);
                 code += codeSnippetSize;
             }
             break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
             *slots++ = codeSnippet(
-                code, functionOffset++, vtableOffset,
+                code, writetoexecdiff, functionOffset++, vtableOffset,
                 ia64::return_in_hidden_param(
                     reinterpret_cast<
                     typelib_InterfaceMethodTypeDescription * >(

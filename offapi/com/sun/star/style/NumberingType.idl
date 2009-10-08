@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NumberingType.idl,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -396,6 +396,74 @@ published constants NumberingType
         @since OOo 2.4
      */
     const short CHARS_PERSIAN = 46;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Myanmar alphabet letters
+
+        @since OOo 3.1
+     */
+    const short CHARS_MYANMAR = 47;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Serbian Cyrillic alphabet upper case letters
+
+        @since OOo 3.1
+     */
+     /*
+        CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE ,
+            CYRILLIC CAPITAL LETTER VE , CYRILLIC CAPITAL LETTER GHE , ... ,
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER BE ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE
+      */
+    const short CHARS_CYRILLIC_UPPER_LETTER_SR = 48;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Russian Serbian alphabet lower case letters
+
+        @since OOo 3.1
+     */
+     /*
+        CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER VE , CYRILLIC SMALL LETTER GHE , ... ,
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER BE
+      */
+    const short CHARS_CYRILLIC_LOWER_LETTER_SR = 49;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Serbian Cyrillic alphabet upper case letters
+
+        @since OOo 3.1
+     */
+     /*
+        CYRILLIC CAPITAL LETTER A , CYRILLIC CAPITAL LETTER BE , ... ,
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC CAPITAL LETTER BE CYRILLIC SMALL LETTER BE ,
+            CYRILLIC CAPITAL LETTER VE CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC CAPITAL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
+      */
+    const short CHARS_CYRILLIC_UPPER_LETTER_N_SR = 50;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Serbian Cyrillic alphabet upper case letters
+
+        @since OOo 3.1
+     */
+     /*
+        CYRILLIC SMALL LETTER A , CYRILLIC SMALL LETTER BE , ... ,
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A ,
+            CYRILLIC SMALL LETTER BE CYRILLIC SMALL LETTER BE ,
+            CYRILLIC SMALL LETTER VE CYRILLIC SMALL LETTER VE , ...
+        CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
+      */
+    const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
+
 };
 
 //=============================================================================

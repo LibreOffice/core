@@ -97,7 +97,12 @@ SHL1VERSIONMAP=	$(TARGET).map
 SHL1RPATH=URELIB
 
 .IF "$(GUI)"=="WNT"
+
+.IF "$(COM)"=="GCC"
+UWINAPILIB=     -luwinapi
+.ELSE
 UWINAPILIB=     $(LB)$/uwinapi.lib
+.ENDIF
 
 SHL1STDLIBS=	\
                 $(UWINAPILIB)\
@@ -169,11 +174,7 @@ SHL1OBJS= \
 .ENDIF # UNX
 .ENDIF # lincinc
 
-.IF "$(GUI)"=="WNT"
-SHL1DEPN=   $(UWINAPILIB)
-.ELSE
 SHL1DEPN=
-.ENDIF
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)

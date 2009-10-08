@@ -58,6 +58,7 @@ IDLFILES=\
     XFastParser.idl\
     XFastDocumentHandler.idl\
     XFastContextHandler.idl\
+    XFastSerializer.idl\
     XFastShapeContextHandler.idl\
     XFastTokenHandler.idl\
     XFastAttributeList.idl\

@@ -115,11 +115,11 @@ interface XDatabaseDocumentUI
         <p>If the connection cannot be established, the respective error message is shown
         in the application window.</p>
 
-        @return
-            whether or not the connection attempt was successful, i.e. whether or not
-            a subsequent call to <member>isConnected</member> would return <TRUE/>.
+        @throws ::com::sun::star::sdbc::SQLException
+            if the connection cannot be established
     */
-    boolean connect();
+    void    connect()
+        raises ( ::com::sun::star::sdbc::SQLException );
 
     /** contains all sub components of the database document
 

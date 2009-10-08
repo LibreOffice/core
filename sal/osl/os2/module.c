@@ -70,37 +70,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 
     OSL_ENSURE(ustrModuleName,"osl_loadModule : string is not valid");
 
-    // to avoid registering dll with full path at every install inside
-    // services.rbd, the dll are registere only once with empty path
-    // then if drive is not specified, the SAL module path is used
-    // to load components.
-    if (hModSal == NULL) {
-        ULONG   ObjNum;
-        CHAR    Buff[2*_MAX_PATH];
-        ULONG   Offset;
-        char    drive[_MAX_DRIVE], dir[_MAX_DIR];
-        char    fname[_MAX_FNAME], ext[_MAX_EXT];
-        // get module handle (and name)
-        rc = DosQueryModFromEIP( &hModSal, &ObjNum, sizeof( Buff), Buff,
-                                &Offset, (ULONG)osl_loadModule);
-        if (rc) {
-            sal_Char szError[ 120 ];
-            sprintf( szError, "DosQueryModFromEIP failed (%s) rc=%d\n", Buff, rc);
-            OSL_TRACE(szError);
-            return NULL;
-        }
-        DosQueryModuleName(hModSal, sizeof(Buff), Buff);
-        // extract path info
-        _splitpath( Buff, szSalDrive, szSalDir, NULL, NULL);
-        // update BeginLIBPATH, otherwise a rc=2 can be returned if someone
-        // changes the current directory
-        CHAR    ExtLIBPATH[1024];
-        strcpy( ExtLIBPATH, szSalDrive);
-        strcat( ExtLIBPATH, szSalDir);
-        strcat( ExtLIBPATH, ";%BeginLIBPATH%");
-        rc = DosSetExtLIBPATH( (PCSZ)ExtLIBPATH, BEGIN_LIBPATH);
-    }
-
     /* ensure ustrTmp hold valid string */
     if( osl_File_E_None != osl_getSystemPathFromFileURL( ustrModuleName, &ustrTmp ) )
         rtl_uString_assign( &ustrTmp, ustrModuleName );
@@ -123,6 +92,12 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
             dot = strchr( fname, '.');
             if (dot)
                 *dot = '\0';    // truncate on dot
+            // if drive is not specified, remove starting \ from dir name
+            // so dll is loaded from LIBPATH
+            if (drive[0] == 0 && dir[0] == '\\' && dir[1] == '\\') {
+                while( dir[0] == '\\')
+                    strcpy( dir, dir+1);
+            }
             _makepath( buffer, drive, dir, fname, ext);
 
             rc = _DosLoadModule( szErrorMessage, sizeof( szErrorMessage), (PCSZ)buffer, &hModule);
@@ -130,10 +105,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
                 pModule = (oslModule)hModule;
             else
             {
-                // try again using SAL path
-                _makepath( buffer, szSalDrive, szSalDir, fname, ext);
-                rc = _DosLoadModule( szErrorMessage, sizeof( szErrorMessage), (PCSZ)buffer, &hModule);
-
                 if (rc == NO_ERROR )
                     pModule = (oslModule)hModule;
                 else

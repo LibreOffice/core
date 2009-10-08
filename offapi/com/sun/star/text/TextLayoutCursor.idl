@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextLayoutCursor.idl,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,7 @@
 
 // DocMerge from xml: service com::sun::star::text::TextLayoutCursor
 /** A <type>TextLayoutCursor</type> is a <type>TextRange</type> which can
-    travel within a layout of a <type scope="com::sun::star::drawing">Text</type> object.
+    travel within a layout of a <type>Text</type> object.
  */
 published service TextLayoutCursor
 {

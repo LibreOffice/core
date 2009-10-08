@@ -281,6 +281,20 @@ typedef void *                   sal_Handle;
 #   error("unknown platform")
 #endif
 
+/**
+   Exporting the symbols necessary for exception handling on GCC.
+
+   These macros are used for inline declarations of exception classes, as in
+   rtl/malformeduriexception.hxx.
+*/
+#if defined __GNUC__
+#define SAL_EXCEPTION_DLLPUBLIC_EXPORT SAL_DLLPUBLIC_EXPORT
+#define SAL_EXCEPTION_DLLPRIVATE SAL_DLLPRIVATE
+#else
+#define SAL_EXCEPTION_DLLPUBLIC_EXPORT
+#define SAL_EXCEPTION_DLLPRIVATE
+#endif
+
 /** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
     This hinders the compiler from setting a generic vtable stating that
     a pure virtual function was called and thus slightly reduces code size.

@@ -32,6 +32,7 @@ import sys
 
 import pyuno
 import __builtin__
+import socket # since on Windows sal3.dll no longer calls WSAStartup
 
 # all functions and variables starting with a underscore (_) must be considered private
 # and can be changed at any time. Don't use them

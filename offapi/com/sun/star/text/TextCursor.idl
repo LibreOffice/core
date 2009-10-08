@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextCursor.idl,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +79,8 @@
 
 // DocMerge from xml: service com::sun::star::text::TextCursor
 /** A <type>TextCursor</type> is a <type>TextRange</type> which can be moved
-    within a <type scope="com::sun::star::drawing">Text</type> object.@see TextRange
+    within a <type>Text</type> object.
+    @see TextRange
  */
 published service TextCursor
 {

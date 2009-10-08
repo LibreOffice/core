@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: ChartAxisLabelPosition.idl,v $
+ * $Revision: 1.1.4.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartAxisLabelPosition_idl__
+#define __com_sun_star_chart_ChartAxisLabelPosition_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** Specifies the position of the axis labels with respect to the axis on the scale of the crossing axis.
+*/
+
+published enum ChartAxisLabelPosition
+{
+    //-------------------------------------------------------------------------
+
+    /** The labels are placed adjacent to the axis. When the axis itself is placed at the minimum or maximum of the scale ( that is when the property CrossoverPosition equals ChartAxisPosition_MINIMUM or ChartAxisPosition_MAXIMUM)
+        the labels are placed outside the coordinate system. Otherwise the labels are placed adjacent to the axis on that side that belongs to the lower values on the crossing axis.
+        E.g. when the ChartAxisLabelPosition is set to NEAR_AXIS for an y axis the labels are placed adjacent to the y axis on that side that belongs to the lower x values.
+     */
+    NEAR_AXIS,
+
+    //-------------------------------------------------------------------------
+
+    /** The labels are placed adjacent to the axis on the opposite side as for NEAR_AXIS.
+     */
+    NEAR_AXIS_OTHER_SIDE,
+
+    //-------------------------------------------------------------------------
+
+    /** The labels are placed outside the coordinate region on that side where the crossing axis has its minimum value.
+        E.g. when this is set for an y axis the labels are placed outside the diagram on that side where to the x axis has its minimum value.
+     */
+    OUTSIDE_START,
+
+    //-------------------------------------------------------------------------
+
+    /** The labels are placed outside the coordinate region on that side where the crossing axis has its maximum value.
+        E.g. when this is set for an y axis the labels are placed outside the diagram on that side where to the x axis has its maximum value.
+     */
+    OUTSIDE_END
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

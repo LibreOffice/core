@@ -64,6 +64,9 @@ published service LinguProperties
     /** defines whether new German spelling rules should be used for German
          text or not when doing spellchecking or hyphenation, or using the
          thesaurus.
+
+        @deprecated
+        @since OOo 3.01
       */
     [property] boolean IsGermanPreReform;
 
@@ -139,12 +142,18 @@ published service LinguProperties
     //-------------------------------------------------------------------------
     /** indicates whether the markings for incorrectly spelled text should be
          hidden or not.
+
+        @deprecated
+        @since OOo 3.01
     */
     [property] boolean IsSpellHide;
 
     //-------------------------------------------------------------------------
     /** indicates if spellchecking should be performed in all available
          languages.
+
+        @deprecated
+        @since OOo 3.01
     */
     [property] boolean IsSpellInAllLanguages;
 

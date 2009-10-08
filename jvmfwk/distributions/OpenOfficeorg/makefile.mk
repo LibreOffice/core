@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.9.28.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,9 +43,11 @@ nojava:
 .IF "$(SOLAR_JAVA)"!=""
 $(BIN)$/javavendors.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_macosx.xml javavendors_linux.xml
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="FREEBSD"
+    -$(COPY) javavendors_freebsd.xml $(BIN)$/javavendors.xml
+.ELIF "$(OS)"=="MACOSX"
     -$(COPY) javavendors_macosx.xml $(BIN)$/javavendors.xml
-.ELIF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
+.ELIF "$(OS)"=="LINUX"
     -$(COPY) javavendors_linux.xml $(BIN)$/javavendors.xml
 .ELSE
     -$(COPY) javavendors_unx.xml $(BIN)$/javavendors.xml

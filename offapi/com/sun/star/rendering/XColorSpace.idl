@@ -208,6 +208,30 @@ interface XColorSpace
     sequence<ARGBColor>      convertToARGB( [in] sequence<ColorComponent> deviceColor )
         raises (com::sun::star::lang::IllegalArgumentException);
 
+    /** Convert color value in this color space to premultiplied sRGB
+       color values, with linear alpha.<p>
+
+        If the given input color does not carry alpha information, an
+        alpha value of 1.0 (fully opaque) is assumed. The resulting
+        individual RGB color values are premultiplied by the alpha
+        value (e.g. if alpha is 0.5, each color value has only half of
+        the original intensity).<p>
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.
+
+        @return the corresponding sequence of colors in the sRGB color
+        space.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ARGBColor>      convertToPARGB( [in] sequence<ColorComponent> deviceColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
     /** Convert sRGB color to a representation in this color space.<p>
 
         If this color space conveys alpha information, it is assumed
@@ -231,7 +255,7 @@ interface XColorSpace
         If this color space does not convey alpha information, the
         specified alpha value is silently ignored.
 
-        @param deviceColor Sequence of sRGB color components. Is
+        @param rgbColor Sequence of sRGB color components. Is
         permitted to contain more than one color element, therefore,
         batch conversion of multiple color values is possible.
 
@@ -242,6 +266,27 @@ interface XColorSpace
         if the input sequence does not match the device color format.
      */
     sequence<ColorComponent> convertFromARGB( [in] sequence<ARGBColor> rgbColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert premultiplied sRGB color with linear alpha into this
+       color space.<p>
+
+        If this color space does not convey alpha information, the
+        specified alpha value is silently ignored.
+
+        @param rgbColor Sequence of sRGB color components. Is
+        permitted to contain more than one color element, therefore,
+        batch conversion of multiple color values is possible. The
+        individual color values are assumed to be premultiplied by the
+        alpha value.
+
+        @return the corresponding sequence of device colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ColorComponent> convertFromPARGB( [in] sequence<ARGBColor> rgbColor )
         raises (com::sun::star::lang::IllegalArgumentException);
 };
 

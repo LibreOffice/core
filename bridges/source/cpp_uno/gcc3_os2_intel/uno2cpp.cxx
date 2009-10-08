@@ -49,6 +49,22 @@ namespace
 {
 
 //==================================================================================================
+// The call instruction within the asm section of callVirtualMethod may throw
+// exceptions.  So that the compiler handles this correctly, it is important
+// that (a) callVirtualMethod might call dummy_can_throw_anything (although this
+// never happens at runtime), which in turn can throw exceptions, and (b)
+// callVirtualMethod is not inlined at its call site (so that any exceptions are
+// caught which are thrown from the instruction calling callVirtualMethod):
+static void callVirtualMethod(
+    void * pAdjustedThisPtr,
+    sal_Int32 nVtableIndex,
+    void * pRegisterReturn,
+    typelib_TypeClass eReturnType,
+    sal_Int32 * pStackLongs,
+    sal_Int32 nStackLongs );
+// __attribute__((noinline));
+
+//==================================================================================================
 static void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
@@ -67,6 +83,17 @@ static void callVirtualMethod(
     // never called
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
+     /* figure out the address of the function we need to invoke */
+     unsigned long * mfunc;        // actual function to be invoked
+     int off;                      // offset used to find function
+     void (*ptr)();
+     off = nVtableIndex;
+     off = off * 4;                         // 4 bytes per slot
+     mfunc = *((unsigned long **)pAdjustedThisPtr);    // get the address of the vtable
+     mfunc = (unsigned long *)((char *)mfunc + off); // get the address from the vtable entry at offset
+     mfunc = *((unsigned long **)mfunc);                 // the function is stored at the address
+     ptr = (void (*)())mfunc;
+
     volatile long edx = 0, eax = 0; // for register returns
     void * stackptr;
     asm volatile (
@@ -82,14 +109,14 @@ static void callVirtualMethod(
         "sub   $4, %%edx\n\t"
         "dec   %%eax\n\t"
         "jne   Lcopy\n\t"
-        // do the actual call
-        "mov   %2, %%edx\n\t"
-        "mov   0(%%edx), %%edx\n\t"
-        "mov   %3, %%eax\n\t"
-        "shl   $2, %%eax\n\t"
-        "add   %%eax, %%edx\n\t"
-        "mov   0(%%edx), %%edx\n\t"
-        "call  *%%edx\n\t"
+    :
+        : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr),
+          "m"(nVtableIndex), "m"(eax), "m"(edx), "m"(stackptr)
+        : "eax", "edx" );
+
+    (*ptr)();
+
+    asm volatile (
         // save return registers
          "mov   %%eax, %4\n\t"
          "mov   %%edx, %5\n\t"

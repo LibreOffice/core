@@ -128,4 +128,10 @@
 06/26/08 (TL, JSC): TaskID=i86515
   change css.text.IllustrationIndex into css.text.IllustrationsIndex because the 
   implementation used the plural version.
+
+07/23/08 (TL, JSC): TaskID=i48676
+  change return type of css.linguistic2.XDictionary:getcount from short to long 
+  to support bigger user dictionaries.
   
+04/12/08 (JSC): TaskID=i96902
+  update reference rdb with the released version from OO.org 3.0 (ooo300m9)
