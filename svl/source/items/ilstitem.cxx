@@ -35,10 +35,10 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 TYPEINIT1_AUTOFACTORY(SfxIntegerListItem, SfxPoolItem);
 

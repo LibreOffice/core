@@ -30,10 +30,10 @@
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #define _SVTOOLS_LANGUAGEOPTIONS_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <sal/types.h>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <unotools/configitem.hxx>
 #include <i18npool/lang.h>
 

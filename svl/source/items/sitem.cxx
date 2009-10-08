@@ -38,8 +38,8 @@
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 
-#include <svtools/poolitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
 
 
 // STATIC DATA -----------------------------------------------------------

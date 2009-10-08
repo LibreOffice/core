@@ -51,7 +51,7 @@
 //=============================================================================
 namespace css = ::com::sun::star;
 
-namespace svtools{
+namespace svl{
 
 //=============================================================================
 static const ::rtl::OUString PROP_TEST                  = ::rtl::OUString::createFromAscii("Test");
@@ -196,7 +196,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL ConfigItemTest::getSupportedServi
 //=============================================================================
 ::rtl::OUString SAL_CALL ConfigItemTest::st_getImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.ConfigItemTest");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.svl.ConfigItemTest");
 }
 
 //=============================================================================
@@ -215,15 +215,15 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ConfigItemTest::st_create(c
     return xObject;
 }
 
-} // namespace svtools
+} // namespace svl
 
 //=============================================================================
 static ::cppu::ImplementationEntry const lRegEntries[] =
 {
     {
-        &::svtools::ConfigItemTest::st_create,
-        &::svtools::ConfigItemTest::st_getImplementationName,
-        &::svtools::ConfigItemTest::st_getSupportedServiceNames,
+        &::svl::ConfigItemTest::st_create,
+        &::svl::ConfigItemTest::st_getImplementationName,
+        &::svl::ConfigItemTest::st_getSupportedServiceNames,
         &::cppu::createSingleComponentFactory, 0, 0
     },
 

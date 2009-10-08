@@ -59,7 +59,7 @@
 
 #include <unotools/useroptions.hxx>
 
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 
 using namespace ::com::sun::star;
 

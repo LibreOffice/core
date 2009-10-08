@@ -38,7 +38,7 @@
 #include "listener.hxx"
 #include "listeneriter.hxx"
 #include "broadcast.hxx"
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 
 //====================================================================

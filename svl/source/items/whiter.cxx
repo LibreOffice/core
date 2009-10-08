@@ -35,7 +35,7 @@
 #endif
 
 #include "whiter.hxx"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 DBG_NAME(SfxWhichIter)
 

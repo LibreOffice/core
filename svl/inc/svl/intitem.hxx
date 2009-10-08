@@ -31,8 +31,8 @@
 #ifndef _SFXINTITEM_HXX
 #define _SFXINTITEM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/cintitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/cintitem.hxx>
 
 //============================================================================
 class SVL_DLLPUBLIC SfxByteItem: public CntByteItem

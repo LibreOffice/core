@@ -30,7 +30,7 @@
 #ifndef _SV_CONVERTER_HXX_
 #define _SV_CONVERTER_HXX_
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
 
 class SvDbaseConverter

@@ -31,9 +31,9 @@
 #ifndef _SVTOOLS_CINTITEM_HXX
 #define _SVTOOLS_CINTITEM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/debug.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 //============================================================================
 DBG_NAMEEX_VISIBILITY(CntByteItem, SVL_DLLPUBLIC)

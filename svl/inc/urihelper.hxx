@@ -31,7 +31,7 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #define SVTOOLS_URIHELPER_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include "com/sun/star/uno/Reference.hxx"
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/textenc.h>

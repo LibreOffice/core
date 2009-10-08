@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/syslocaleoptions.hxx>
+#include <svl/syslocaleoptions.hxx>
 #include <broadcast.hxx>
 #include <listener.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -445,7 +445,7 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
     MutexGuard aGuard( GetMutex() );
     if ( !pOptions )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtSysLocaleOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "svl ( ??? ) ::SvtSysLocaleOptions_Impl::ctor()");
         pOptions = new SvtSysLocaleOptions_Impl;
 
         ItemHolder2::holdConfigItem(E_SYSLOCALEOPTIONS);
@@ -475,7 +475,7 @@ Mutex& SvtSysLocaleOptions::GetMutex()
         if( !pMutex )
         {
             // #i77768# Due to a static reference in the toolkit lib
-            // we need a mutex that lives longer than the svtools library.
+            // we need a mutex that lives longer than the svl library.
             // Otherwise the dtor would use a destructed mutex!!
             pMutex = new Mutex;
         }

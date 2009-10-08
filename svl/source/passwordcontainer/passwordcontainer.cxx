@@ -1480,7 +1480,7 @@ Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedS
 
 ::rtl::OUString SAL_CALL PasswordContainer::impl_getStaticImplementationName() throw(uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("stardiv.svtools.PasswordContainer");
+    return ::rtl::OUString::createFromAscii("stardiv.svl.PasswordContainer");
 }
 
 //-------------------------------------------------------------------------
@@ -1563,7 +1563,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
         Reference< XRegistryKey > xNewKey;
 
         xNewKey = xRegistryKey->createKey(
-            ::rtl::OUString::createFromAscii( "/stardiv.svtools.PasswordContainer/UNO/SERVICES" ));
+            ::rtl::OUString::createFromAscii( "/stardiv.svl.PasswordContainer/UNO/SERVICES" ));
         xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.task.PasswordContainer"));
 
         return sal_True;

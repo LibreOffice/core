@@ -32,7 +32,7 @@
 #include "precompiled_svl.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
-#include <svtools/cintitem.hxx>
+#include <svl/cintitem.hxx>
 
 //============================================================================
 //

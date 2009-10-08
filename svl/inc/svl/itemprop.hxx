@@ -30,10 +30,10 @@
 #ifndef _SFX_ITEMPROP_HXX
 #define _SFX_ITEMPROP_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>

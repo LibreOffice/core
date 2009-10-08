@@ -49,11 +49,11 @@
 #include <com/sun/star/i18n/AmPmValue.hpp>
 
 #define _ZFORMAT_CXX
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include "zforscan.hxx"
 
 #include "zforfind.hxx"
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "numhead.hxx"
 #include <unotools/digitgroupingiterator.hxx>
 #include "nfsymbol.hxx"

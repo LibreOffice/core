@@ -30,7 +30,7 @@
 #ifndef _SVT_LISTENER_HXX
 #define _SVT_LISTENER_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
 
 class SvtBroadcaster;

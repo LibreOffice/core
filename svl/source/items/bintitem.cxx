@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
 #include <tools/bigint.hxx>
-#include <svtools/bintitem.hxx>
+#include <svl/bintitem.hxx>
 
 // STATIC DATA
 

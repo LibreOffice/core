@@ -31,7 +31,7 @@
 #ifndef SVTOOLS_FOLDER_RESTRICTION_HXX
 #define SVTOOLS_FOLDER_RESTRICTION_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/string.hxx>
 
 #ifndef INCLUDED_VECTOR

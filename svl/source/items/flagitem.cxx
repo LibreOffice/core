@@ -31,8 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/flagitem.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/flagitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 
 // STATIC DATA -----------------------------------------------------------

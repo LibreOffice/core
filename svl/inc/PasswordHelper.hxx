@@ -31,7 +31,7 @@
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #define _SVTOOLS_PASSWORDHELPER_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include "sal/types.h"
 #include "com/sun/star/uno/Sequence.hxx"
 

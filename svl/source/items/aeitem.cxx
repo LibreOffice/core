@@ -36,9 +36,9 @@
 #include <tools/string.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
-#include <svtools/svarray.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/svarray.hxx>
+#include <svl/aeitem.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

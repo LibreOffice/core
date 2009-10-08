@@ -31,12 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <tools/stream.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "memberid.hrc"
 
 using namespace ::com::sun::star;

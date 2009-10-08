@@ -38,11 +38,11 @@
 #endif
 
 #include <tools/solar.h>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include "whassert.hxx"
-#include <svtools/brdcst.hxx>
-#include <svtools/filerec.hxx>
-#include <svtools/svldata.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/filerec.hxx>
+#include <svl/svldata.hxx>
 #include "poolio.hxx"
 
 // STATIC DATA -----------------------------------------------------------

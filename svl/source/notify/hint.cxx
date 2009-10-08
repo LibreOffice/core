@@ -33,7 +33,7 @@
 #ifndef GCC
 #endif
 
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 
 //====================================================================
 

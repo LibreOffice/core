@@ -34,7 +34,7 @@
 #define UNICODE
 #include <string.h> // memset
 #include "ddeimp.hxx"
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 
 #include <osl/thread.h>
 #include <tools/debug.hxx>

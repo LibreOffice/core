@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/itemprop.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <hash_map>
 /*************************************************************************

@@ -31,8 +31,8 @@
 #ifndef SVTOOLS_RESTRICTEDPATHS_HXX
 #define SVTOOLS_RESTRICTEDPATHS_HXX
 
-#include <svtools/urlfilter.hxx>
-#include <svtools/svldllapi.h>
+#include <svl/urlfilter.hxx>
+#include <svl/svldllapi.h>
 #include <tools/string.hxx>
 
 #include <vector>

@@ -31,7 +31,7 @@
 #ifndef _OWNLIST_HXX
 #define _OWNLIST_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/stream.hxx>
 #include <tools/ownlist.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

@@ -32,7 +32,7 @@
 #ifndef _SVT_DOCUMENTLOCKFILE_HXX
 #define _SVT_DOCUMENTLOCKFILE_HXX
 
-#include <svtools/svldllapi.h>
+#include <svl/svldllapi.h>
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -41,7 +41,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <svtools/lockfilecommon.hxx>
+#include <svl/lockfilecommon.hxx>
 
 namespace svt {
 

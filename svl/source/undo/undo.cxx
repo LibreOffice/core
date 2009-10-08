@@ -35,7 +35,7 @@
 
 #include <tools/debug.hxx>
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 using ::com::sun::star::uno::Exception;
 
@@ -313,7 +313,7 @@ USHORT SfxUndoManager::GetUndoActionCount() const
 
 XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 {
-    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::GetUndoActionComment(), illegal id!" );
+    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment(), illegal id!" );
     if( nNo < pActUndoArray->nCurUndoAction )
     {
         return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetComment(); //!
@@ -329,7 +329,7 @@ XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 
 USHORT SfxUndoManager::GetUndoActionId( USHORT nNo ) const
 {
-    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::GetUndoActionId(), illegal id!" );
+    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionId(), illegal id!" );
     if( nNo < pActUndoArray->nCurUndoAction )
     {
         return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetId(); //!
@@ -344,7 +344,7 @@ USHORT SfxUndoManager::GetUndoActionId( USHORT nNo ) const
 
 SfxUndoAction* SfxUndoManager::GetUndoAction( USHORT nNo ) const
 {
-    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::GetUndoAction(), illegal id!" );
+    DBG_ASSERT( nNo < pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoAction(), illegal id!" );
     if( nNo < pActUndoArray->nCurUndoAction )
     {
         return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]; //!
@@ -360,7 +360,7 @@ SfxUndoAction* SfxUndoManager::GetUndoAction( USHORT nNo ) const
 /** clears the redo stack and removes the top undo action */
 void SfxUndoManager::RemoveLastUndoAction()
 {
-    DBG_ASSERT( pActUndoArray->nCurUndoAction, "svtools::SfxUndoManager::RemoveLastUndoAction(), no action to remove?!" );
+    DBG_ASSERT( pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::RemoveLastUndoAction(), no action to remove?!" );
     if( pActUndoArray->nCurUndoAction )
     {
         pActUndoArray->nCurUndoAction--;
@@ -387,7 +387,7 @@ BOOL SfxUndoManager::Undo( USHORT )
 
     try
     {
-        DBG_ASSERT( pActUndoArray == pUndoArray, "svtools::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
+        DBG_ASSERT( pActUndoArray == pUndoArray, "svl::SfxUndoManager::Undo(), LeaveListAction() not yet called!" );
         if ( pActUndoArray->nCurUndoAction )
         {
             Undo( *pActUndoArray->aUndoActions[ --pActUndoArray->nCurUndoAction ] );
@@ -587,11 +587,11 @@ void SfxUndoManager::LeaveListAction()
 
     if( pActUndoArray == pUndoArray )
     {
-        DBG_ERROR( "svtools::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
+        DBG_ERROR( "svl::SfxUndoManager::LeaveListAction(), called without calling EnterListAction()!" );
         return;
     }
 
-    DBG_ASSERT(pActUndoArray->pFatherUndoArray,"svtools::SfxUndoManager::LeaveListAction(), no father undo array!?");
+    DBG_ASSERT(pActUndoArray->pFatherUndoArray,"svl::SfxUndoManager::LeaveListAction(), no father undo array!?");
 
     SfxUndoArray* pTmp=pActUndoArray;
     pActUndoArray=pActUndoArray->pFatherUndoArray;

@@ -31,7 +31,7 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #define INCLUDED_SVTOOLS_SYSLOCALE_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/types.h>

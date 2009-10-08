@@ -36,7 +36,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 
-#include <svtools/cntwall.hxx>
+#include <svl/cntwall.hxx>
 
 #define CNTWALLPAPERITEM_STREAM_MAGIC   ( (UINT32)0xfefefefe )
 #define CNTWALLPAPERITEM_STREAM_SEEKREL (-( (long)( sizeof( UINT32 ) ) ) )

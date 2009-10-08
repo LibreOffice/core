@@ -30,14 +30,14 @@
 #ifndef _SFXITEMSET_HXX
 #define _SFXITEMSET_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 
 #if STLPORT_VERSION<321
 #include <stdarg.h>
 #else
 #include <cstdarg>  // std::va_list and friends
 #endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
 

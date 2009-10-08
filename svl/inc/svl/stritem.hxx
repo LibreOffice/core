@@ -31,8 +31,8 @@
 #ifndef _SFXSTRITEM_HXX
 #define _SFXSTRITEM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/custritm.hxx>
+#include "svl/svldllapi.h"
+#include <svl/custritm.hxx>
 
 //============================================================================
 class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem

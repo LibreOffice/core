@@ -43,8 +43,8 @@
 ***********************************************************************
 #endif
 
-#include "svtools/svldllapi.h"
-#include <svtools/svarray.hxx>
+#include "svl/svldllapi.h"
+#include <svl/svarray.hxx>
 
 //#ifdef _SVSTDARR_BOOLS
 #ifndef _SVSTDARR_BOOLS_DECL

@@ -32,8 +32,8 @@
 #include "precompiled_svl.hxx"
 
 #define _LCKBITEM_CXX
-#include <svtools/lckbitem.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/cachestr.hxx>

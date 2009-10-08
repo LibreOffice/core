@@ -31,7 +31,7 @@
 #ifndef SVTOOLS_PICKERHISTORY_HXX
 #define SVTOOLS_PICKERHISTORY_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <com/sun/star/uno/XInterface.hpp>
 
 //.........................................................................

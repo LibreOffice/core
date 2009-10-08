@@ -31,7 +31,7 @@
 #ifndef _ADRPARSE_HXX
 #define _ADRPARSE_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/list.hxx>
 #include <tools/string.hxx>
 

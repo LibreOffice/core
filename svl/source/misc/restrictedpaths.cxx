@@ -30,13 +30,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <svtools/restrictedpaths.hxx>
+#include <svl/restrictedpaths.hxx>
 
 #include <algorithm>
 #include <osl/process.h>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/syslocale.hxx>
 
 namespace svt
 {

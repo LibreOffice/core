@@ -50,21 +50,21 @@
 #include <comphelper/processfactory.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #define _ZFORLIST_CXX
 #include <osl/mutex.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #undef _ZFORLIST_CXX
 
 #include "zforscan.hxx"
 #include "zforfind.hxx"
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include "numhead.hxx"
 
-#include <svtools/syslocaleoptions.hxx>
+#include <svl/syslocaleoptions.hxx>
 #include "listener.hxx"
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
@@ -237,7 +237,7 @@ SvNumberFormatter::~SvNumberFormatter()
 
 void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "er93726", "SvNumberFormatter::ImpConstruct" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svl", "er93726", "SvNumberFormatter::ImpConstruct" );
 
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = UNKNOWN_SUBSTITUTE;
@@ -307,7 +307,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
         if( !pMutex )
         {
             // #i77768# Due to a static reference in the toolkit lib
-            // we need a mutex that lives longer than the svtools library.
+            // we need a mutex that lives longer than the svl library.
             // Otherwise the dtor would use a destructed mutex!!
             pMutex = new ::osl::Mutex;
         }
@@ -3547,7 +3547,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         return ;
     bInitializing = TRUE;
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "er93726", "SvNumberFormatter::ImpInitCurrencyTable" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svl", "er93726", "SvNumberFormatter::ImpInitCurrencyTable" );
 
     LanguageType eSysLang = Application::GetSettings().GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(

@@ -59,7 +59,7 @@
 #define _SVSTDARR_XUB_STRLEN
 #define _SVSTDARR_XUB_STRLENSORT
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 

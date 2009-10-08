@@ -54,7 +54,7 @@ public:
     virtual OUString SAL_CALL getImplementationName()
         throw(css::uno::RuntimeException)
         {
-            return OUString::createFromAscii("com.sun.star.comp.svtools.PathService");
+            return OUString::createFromAscii("com.sun.star.comp.svl.PathService");
         }
 
     virtual sal_Bool SAL_CALL supportsService (

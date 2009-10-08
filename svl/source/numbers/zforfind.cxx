@@ -44,9 +44,9 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <unotools/digitgroupingiterator.hxx>
 
-#include <svtools/zforlist.hxx>         // NUMBERFORMAT_XXX
+#include <svl/zforlist.hxx>         // NUMBERFORMAT_XXX
 #include "zforscan.hxx"
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 
 #define _ZFORFIND_CXX
 #include "zforfind.hxx"

@@ -31,9 +31,9 @@
 #ifndef _SFXVISIBILITYITEM_HXX
 #define _SFXVISIBILITYITEM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/debug.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
 //============================================================================

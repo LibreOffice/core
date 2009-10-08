@@ -36,10 +36,10 @@
 #ifndef GCC
 #endif
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include "whassert.hxx"
-#include <svtools/brdcst.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/smplhint.hxx>
 #include "poolio.hxx"
 #include <algorithm>
 

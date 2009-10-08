@@ -112,7 +112,7 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
 
 namespace
 {
-    // TODO: This code is actually copied from svtools/source/passwordcontainer.cxx
+    // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
     bool removeLastSegment( ::rtl::OUString & aURL )
     {
         sal_Int32 aInd = aURL.lastIndexOf( sal_Unicode( '/' ) );
@@ -134,7 +134,7 @@ namespace
 
     bool findURL( StringSet const & rContainer, rtl::OUString const & aURL, rtl::OUString & aResult )
     {
-        // TODO: This code is actually copied from svtools/source/passwordcontainer.cxx
+        // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
         if( !rContainer.empty() && aURL.getLength() )
         {
             ::rtl::OUString aUrl( aURL );

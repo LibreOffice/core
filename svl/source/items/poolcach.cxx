@@ -36,8 +36,8 @@
 #ifndef GCC
 #endif
 
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include "poolcach.hxx"
 
 // STATIC DATA -----------------------------------------------------------

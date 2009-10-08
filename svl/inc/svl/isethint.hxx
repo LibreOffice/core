@@ -30,10 +30,10 @@
 #ifndef _SFXISETHINT_HXX
 #define _SFXISETHINT_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 
 #ifndef _HINT_HXX
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 #endif
 
 class SfxItemSet;

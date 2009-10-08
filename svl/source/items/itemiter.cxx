@@ -34,9 +34,9 @@
 #ifndef GCC
 #endif
 
-#include <svtools/itemiter.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

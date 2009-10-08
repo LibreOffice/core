@@ -38,7 +38,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

@@ -30,12 +30,12 @@
 #ifndef _ZFORMAT_HXX
 #define _ZFORMAT_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/string.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/nfversi.hxx>
-#include <svtools/nfkeytab.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/nfversi.hxx>
+#include <svl/nfkeytab.hxx>
 
 // We need ImpSvNumberformatScan for the private SvNumberformat definitions.
 #ifdef _ZFORMAT_CXX

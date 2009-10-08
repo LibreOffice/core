@@ -31,7 +31,7 @@
 #ifndef INCLUDED_SVTOOLS_ONDEMAND_HXX
 #define INCLUDED_SVTOOLS_ONDEMAND_HXX
 
-#include <svtools/syslocale.hxx>
+#include <svl/syslocale.hxx>
 #include <i18npool/lang.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>

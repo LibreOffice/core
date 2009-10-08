@@ -38,16 +38,16 @@
 #include <vector>
 #include <comphelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <rsc/rscsfx.hxx>
 #include <tools/string.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/hint.hxx>
+#include <svl/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/poolitem.hxx>
 
 #ifndef _SFX_STYLE_HRC
-#include <svtools/style.hrc>
+#include <svl/style.hrc>
 #endif
 
 class SfxItemSet;

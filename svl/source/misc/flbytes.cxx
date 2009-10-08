@@ -35,15 +35,15 @@
 
 #ifndef _SVSTDARR_ULONGS_DECL
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #undef _SVSTDARR_ULONGS
 #endif
 
-namespace unnamed_svtools_flbytes {} using namespace unnamed_svtools_flbytes;
+namespace unnamed_svl_flbytes {} using namespace unnamed_svl_flbytes;
     // unnamed namespaces don't work well yet
 
 //============================================================================
-namespace unnamed_svtools_flbytes {
+namespace unnamed_svl_flbytes {
 
 inline ULONG MyMin( long a, long b )
 {

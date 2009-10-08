@@ -32,8 +32,8 @@
 
 // class SvxMacroItem ----------------------------------------------------
 
-#include "svtools/svldllapi.h"
-#include <svtools/poolitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>

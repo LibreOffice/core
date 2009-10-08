@@ -32,7 +32,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 class StylePoolImpl;
 class StylePoolIterImpl;

@@ -41,8 +41,8 @@
 #include <unotools/numberformatcodewrapper.hxx>
 #include <rtl/instance.hxx>
 
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 
 #define _ZFORSCAN_CXX

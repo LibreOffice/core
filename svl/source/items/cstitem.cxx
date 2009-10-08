@@ -38,10 +38,10 @@
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 
-#include <svtools/svldata.hxx>
-#include <svtools/cstitem.hxx>
+#include <svl/svldata.hxx>
+#include <svl/cstitem.hxx>
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <com/sun/star/lang/Locale.hpp>
 
 DBG_NAME( SfxCrawlStatusItem )

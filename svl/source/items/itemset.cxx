@@ -43,12 +43,12 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 
-#include <svtools/svstdarr.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemiter.hxx>
 #include "whiter.hxx"
-#include <svtools/nranges.hxx>
+#include <svl/nranges.hxx>
 #include "whassert.hxx"
 
 #include <tools/stream.hxx>

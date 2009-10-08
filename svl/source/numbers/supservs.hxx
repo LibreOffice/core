@@ -32,7 +32,7 @@
 #define _SVTOOLS_NUMBERS_SUPPLIERSERVICE_HXX_
 
 #include "numuno.hxx"
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>

@@ -30,9 +30,9 @@
 #ifndef _SFXBRDCST_HXX
 #define _SFXBRDCST_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SfxListener;
 class SfxHint;

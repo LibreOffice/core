@@ -30,7 +30,7 @@
 #ifndef _SFXHINT_HXX
 #define _SFXHINT_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
 
 class SVL_DLLPUBLIC SfxHint

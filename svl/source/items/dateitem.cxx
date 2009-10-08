@@ -34,7 +34,7 @@
 // include ---------------------------------------------------------------
 
 #define _DATETIMEITEM_CXX
-#include <svtools/dateitem.hxx>
+#include <svl/dateitem.hxx>
 
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -50,8 +50,8 @@
 
 #include <vcl/svapp.hxx>
 
-#include <svtools/svldata.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svldata.hxx>
+#include <svl/svtools.hrc>
 
 // STATIC DATA -----------------------------------------------------------
 

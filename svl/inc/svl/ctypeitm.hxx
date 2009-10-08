@@ -30,8 +30,8 @@
 #ifndef _SVTOOLS_CTYPEITM_HXX
 #define _SVTOOLS_CTYPEITM_HXX
 
-#include <svtools/inettype.hxx>
-#include <svtools/custritm.hxx>
+#include <svl/inettype.hxx>
+#include <svl/custritm.hxx>
 
 //=========================================================================
 

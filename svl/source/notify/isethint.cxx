@@ -34,8 +34,8 @@
 #ifndef GCC
 #endif
 
-#include <svtools/isethint.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/isethint.hxx>
+#include <svl/itemset.hxx>
 
 //====================================================================
 

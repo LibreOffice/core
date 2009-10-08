@@ -30,12 +30,12 @@
 #ifndef _INETHIST_HXX
 #define _INETHIST_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/hint.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/hint.hxx>
 
 /*========================================================================
  *

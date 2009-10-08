@@ -30,20 +30,20 @@
 #ifndef _ZFORLIST_HXX
 #define _ZFORLIST_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/string.hxx>
 #ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
 #endif
 #include <i18npool/lang.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/ondemand.hxx>
+#include <svl/ondemand.hxx>
 #include <tools/link.hxx>
-#include <svtools/nfkeytab.hxx>
+#include <svl/nfkeytab.hxx>
 
 #include <map>
 

@@ -31,7 +31,7 @@
 #ifndef SVTOOLS_FILENOTATION_HXX
 #define SVTOOLS_FILENOTATION_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <rtl/ustring.hxx>
 
 //.........................................................................

@@ -30,16 +30,16 @@
 #ifndef _SFXCANCEL_HXX
 #define _SFXCANCEL_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/string.hxx>
 #include <tools/ref.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/smplhint.hxx>
 
 class SfxCancellable;
 
 #ifdef _SFX_CANCEL_CXX
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 SV_DECL_PTRARR( SfxCancellables_Impl, SfxCancellable*, 0, 4 )
 

@@ -30,7 +30,7 @@
 #ifndef _SFX_WHITER_HXX
 #define _SFX_WHITER_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 
 #ifndef INCLUDED_LIMITS_H
 #include <limits.h>

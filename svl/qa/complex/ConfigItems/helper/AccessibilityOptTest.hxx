@@ -37,7 +37,7 @@
 #define  SVTOOLS_ACCESSIBILITYOPTTEST_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/accessibilityoptions.hxx>
+#include <svl/accessibilityoptions.hxx>
 
 namespace css = ::com::sun::star;
 

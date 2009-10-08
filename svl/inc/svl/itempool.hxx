@@ -31,7 +31,7 @@
 #ifndef _SFXITEMPOOL_HXX
 #define _SFXITEMPOOL_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 
 #ifndef INCLUDED_LIMITS_H
 #include <limits.h>
@@ -39,8 +39,8 @@
 #endif
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/svarray.hxx>
+#include <svl/poolitem.hxx>
 #include <vector>
 
 class SvStream;

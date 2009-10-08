@@ -84,7 +84,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
             OUString::createFromAscii( "com.sun.star.util.NumberFormatter" ) );
 
         xNewKey = xRegistryKey->createKey(
-            OUString::createFromAscii( "/com.sun.star.comp.svtools.PathService/UNO/SERVICES" ) );
+            OUString::createFromAscii( "/com.sun.star.comp.svl.PathService/UNO/SERVICES" ) );
         xNewKey->createKey (
             OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) );
 
@@ -129,7 +129,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory (
                 aServiceNames);
         }
         else if (rtl_str_compare (
-                     pImplementationName, "com.sun.star.comp.svtools.PathService") == 0)
+                     pImplementationName, "com.sun.star.comp.svl.PathService") == 0)
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =

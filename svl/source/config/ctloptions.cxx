@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
@@ -41,7 +41,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 

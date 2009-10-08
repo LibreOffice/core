@@ -30,8 +30,8 @@
 #ifndef _SFXPTITEM_HXX
 #define _SFXPTITEM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/poolitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/poolitem.hxx>
 #include <tools/gen.hxx>
 
 class SvStream;

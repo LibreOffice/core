@@ -101,7 +101,7 @@
 ***********************************************************************
 #endif
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 
 #ifndef INCLUDED_STRING_H
 #include <string.h>     // memmove()

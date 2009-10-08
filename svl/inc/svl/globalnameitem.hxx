@@ -30,11 +30,11 @@
 #ifndef _GLOBALNAMEITEM_HXX
 #define _GLOBALNAMEITEM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <tools/globname.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 // -----------------------------------------------------------------------
 

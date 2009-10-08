@@ -30,9 +30,9 @@
 #ifndef _SFXITEMITER_HXX
 #define _SFXITEMITER_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 class SfxPoolItem;
 class SfxItemSet;

@@ -30,10 +30,10 @@
 #ifndef _SFXFLAGITEM_HXX
 #define _SFXFLAGITEM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
 #include <tools/rtti.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SvStream;
 

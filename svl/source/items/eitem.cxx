@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 //============================================================================
 //
 //  class SfxEnumItem

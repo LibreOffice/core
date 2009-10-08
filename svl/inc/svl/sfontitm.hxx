@@ -34,7 +34,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <i18npool/lang.h>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 //============================================================================
 class SfxFontItem: public SfxPoolItem

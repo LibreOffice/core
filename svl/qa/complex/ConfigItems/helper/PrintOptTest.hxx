@@ -37,7 +37,7 @@
 #define  SVTOOLS_PRINTOPTTEST_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/printoptions.hxx>
+#include <svl/printoptions.hxx>
 
 namespace css = ::com::sun::star;
 

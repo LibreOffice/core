@@ -34,7 +34,7 @@
 #include <tools/date.hxx>
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
-#include <svtools/nfkeytab.hxx>
+#include <svl/nfkeytab.hxx>
 #include "nfsymbol.hxx"
 
 class SvNumberFormatter;

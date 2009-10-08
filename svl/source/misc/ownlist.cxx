@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 
 using namespace com::sun::star;
 

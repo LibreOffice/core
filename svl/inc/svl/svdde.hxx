@@ -31,7 +31,7 @@
 #ifndef _SVDDE_HXX
 #define _SVDDE_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <sot/exchange.hxx>
 #include <tools/string.hxx>
 #include <tools/list.hxx>

@@ -36,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 
-#include <svtools/tfrmitem.hxx>
+#include <svl/tfrmitem.hxx>
 
 DBG_NAME( SfxTargetFrameItem )
 TYPEINIT1( SfxTargetFrameItem, SfxPoolItem );

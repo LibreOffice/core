@@ -31,7 +31,7 @@
 #ifndef SVTOOLS_PICKERHISTORYACCESS_HXX
 #define SVTOOLS_PICKERHISTORYACCESS_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 
 #ifndef _COM_SUN_STAR_UNO_REFERENX_HXX_
 #include <com/sun/star/uno/Reference.hxx>

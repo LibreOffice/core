@@ -45,9 +45,9 @@
 
 #include "numfmuno.hxx"
 #include "numuno.hxx"
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/itemprop.hxx>
 
 using namespace com::sun::star;
 

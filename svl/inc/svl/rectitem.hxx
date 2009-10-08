@@ -30,10 +30,10 @@
 #ifndef _SFXRECTITEM_HXX
 #define _SFXRECTITEM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SvStream;
 

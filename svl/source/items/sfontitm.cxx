@@ -32,7 +32,7 @@
 #include "precompiled_svl.hxx"
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <svtools/sfontitm.hxx>
+#include <svl/sfontitm.hxx>
 
 //============================================================================
 //

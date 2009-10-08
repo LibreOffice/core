@@ -59,7 +59,7 @@
 
 #include <unotools/useroptions.hxx>
 
-#include <svtools/lockfilecommon.hxx>
+#include <svl/lockfilecommon.hxx>
 
 using namespace ::com::sun::star;
 

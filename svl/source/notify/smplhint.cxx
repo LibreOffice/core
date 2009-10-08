@@ -33,7 +33,7 @@
 #ifndef GCC
 #endif
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 //====================================================================
 

@@ -32,7 +32,7 @@
 #include "precompiled_svl.hxx"
 
 #include "misccfg.hxx"
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
 
 #include <rtl/logfile.hxx>
@@ -57,7 +57,7 @@ SfxMiscCfg::SfxMiscCfg() :
     bNotFound (FALSE),
     nYear2000( SvNumberFormatter::GetYear2000Default() )
 {
-    RTL_LOGFILE_CONTEXT(aLog, "svtools SfxMiscCfg::SfxMiscCfg()");
+    RTL_LOGFILE_CONTEXT(aLog, "svl SfxMiscCfg::SfxMiscCfg()");
 
     Load();
 }

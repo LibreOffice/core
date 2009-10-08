@@ -38,11 +38,11 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/misccfg.hxx>
-#include <svtools/syslocaleoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
+#include <svl/languageoptions.hxx>
+#include <misccfg.hxx>
+#include <svl/syslocaleoptions.hxx>
 #include <unotools/options.hxx>
 
 #include <tools/debug.hxx>

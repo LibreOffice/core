@@ -30,8 +30,8 @@
 #ifndef _SFXMETRICITEM_HXX
 #define _SFXMETRICITEM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/intitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/intitem.hxx>
 
 DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVL_DLLPUBLIC)
 

@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <svtools/visitem.hxx>
+#include <svl/visitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
 

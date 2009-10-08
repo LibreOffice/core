@@ -31,11 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/bigint.hxx>
 #include <tools/stream.hxx>
-#include <svtools/metitem.hxx>
+#include <svl/metitem.hxx>
 
 //============================================================================
 //

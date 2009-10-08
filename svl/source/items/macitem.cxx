@@ -35,7 +35,7 @@
 #ifndef GCC
 #endif
 
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

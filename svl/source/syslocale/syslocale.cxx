@@ -33,13 +33,13 @@
 #ifndef GCC
 #endif
 
-#include <svtools/syslocale.hxx>
+#include <svl/syslocale.hxx>
 #include <broadcast.hxx>
 #include <listener.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/string.hxx>
-#include <svtools/syslocaleoptions.hxx>
+#include <svl/syslocaleoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -143,7 +143,7 @@ Mutex& SvtSysLocale::GetMutex()
         if( !pMutex )
         {
             // #i77768# Due to a static reference in the toolkit lib
-            // we need a mutex that lives longer than the svtools library.
+            // we need a mutex that lives longer than the svl library.
             // Otherwise the dtor would use a destructed mutex!!
             pMutex = new Mutex;
         }

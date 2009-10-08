@@ -32,7 +32,7 @@
 #include "precompiled_svl.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <tools/stream.hxx>
-#include <svtools/cenumitm.hxx>
+#include <svl/cenumitm.hxx>
 #include <whassert.hxx>
 
 #ifndef _CPPUHELPER_EXTRACT_HXX_

@@ -31,13 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/szitem.hxx>
+#include <svl/szitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "memberid.hrc"
 
 // STATIC DATA -----------------------------------------------------------

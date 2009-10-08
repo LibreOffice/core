@@ -27,7 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 
 #ifndef DELETEZ

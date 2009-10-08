@@ -34,7 +34,7 @@
 
 #include <unotools/intlwrapper.hxx>
 #include <tools/stream.hxx>
-#include <svtools/ctypeitm.hxx>
+#include <svl/ctypeitm.hxx>
 
 //============================================================================
 // The following defines are copied from chaos/source/items/cstritem.cxx:

@@ -31,7 +31,7 @@
 #ifndef _SVTOOLS_FSTATHELPER_HXX
 #define _SVTOOLS_FSTATHELPER_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
 
 class UniString;

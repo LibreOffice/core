@@ -36,7 +36,7 @@
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SfxArguments;
 class SvStream;

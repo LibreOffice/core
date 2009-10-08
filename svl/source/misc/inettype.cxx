@@ -32,24 +32,24 @@
 #include "precompiled_svl.hxx"
 #include <tools/table.hxx>
 #include <tools/wldcrd.hxx>
-#include <svtools/inettype.hxx>
-#include <svtools/svldata.hxx>
+#include <svl/inettype.hxx>
+#include <svl/svldata.hxx>
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #undef _SVSTDARR_STRINGSSORT
 #endif
 
-namespace unnamed_svtools_inettype {}
-using namespace unnamed_svtools_inettype;
+namespace unnamed_svl_inettype {}
+using namespace unnamed_svl_inettype;
     // unnamed namespaces don't work well yet
 
 //============================================================================
-namespace unnamed_svtools_inettype {
+namespace unnamed_svl_inettype {
 
 //============================================================================
 struct MediaTypeEntry
@@ -804,7 +804,7 @@ INetContentType Registration::GetContentType4Extension(UniString const &
 //
 //============================================================================
 
-namespace unnamed_svtools_inettype {
+namespace unnamed_svl_inettype {
 
 MediaTypeEntry const * seekEntry(UniString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize)

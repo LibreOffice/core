@@ -35,7 +35,7 @@
 #define NUMTYPE USHORT
 #define SfxXRangeItem SfxRangeItem
 #define SfxXRangesItem SfxUShortRangesItem
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #undef NUMTYPE
 #undef SfxXRangeItem
 #undef SfxXRangesItem
@@ -44,7 +44,7 @@
 #define NUMTYPE ULONG
 #define SfxXRangeItem SfxULongRangeItem
 #define SfxXRangesItem SfxULongRangesItem
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #undef NUMTYPE
 #undef SfxXRangeItem
 #undef SfxXRangesItem
@@ -53,8 +53,8 @@
 #define _SFXRNGITEM_HXX
 
 #else
-#include "svtools/svldllapi.h"
-#include <svtools/poolitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/poolitem.hxx>
 
 class SvStream;
 

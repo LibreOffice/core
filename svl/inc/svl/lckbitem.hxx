@@ -30,11 +30,11 @@
 #ifndef _LCKBITEM_HXX
 #define _LCKBITEM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 // -----------------------------------------------------------------------
 

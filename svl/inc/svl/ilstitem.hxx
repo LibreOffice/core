@@ -31,8 +31,8 @@
 #ifndef _SFXILSTITEM_HXX
 #define _SFXILSTITEM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/poolitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 class SvULongs;

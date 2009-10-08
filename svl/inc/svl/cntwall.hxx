@@ -30,14 +30,14 @@
 #ifndef _CNTWALL_HXX
 #define _CNTWALL_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 
 #ifndef SHL_HXX
 #include <tools/shl.hxx>
 #endif
 #include <tools/rtti.hxx>
 #include <tools/color.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SvStream;
 

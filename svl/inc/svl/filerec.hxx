@@ -33,10 +33,10 @@
 
 //=========================================================================
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 SV_DECL_VARARR( SfxUINT32s, UINT32, 8, 8 )
 

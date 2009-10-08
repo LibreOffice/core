@@ -43,7 +43,7 @@
 
 #include <vcl/svapp.hxx>
 
-#include <svtools/dtritem.hxx>
+#include <svl/dtritem.hxx>
 
 
 DBG_NAME( SfxDateTimeRangeItem )

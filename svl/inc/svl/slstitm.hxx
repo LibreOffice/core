@@ -30,10 +30,10 @@
 #ifndef _SFXSLSTITM_HXX
 #define _SFXSLSTITM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
 #include <tools/list.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
 class SfxImpStringList;

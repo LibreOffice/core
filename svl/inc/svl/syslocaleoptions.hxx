@@ -31,7 +31,7 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 #define INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>

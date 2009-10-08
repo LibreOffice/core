@@ -31,7 +31,7 @@
 #ifndef _PICKERHELPER_HXX
 #define _PICKERHELPER_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include "sal/types.h"
 #include "com/sun/star/uno/Reference.hxx"
 

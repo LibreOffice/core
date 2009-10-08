@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <i18npool/lang.h>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>

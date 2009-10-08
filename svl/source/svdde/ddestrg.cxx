@@ -34,7 +34,7 @@
 #define UNICODE
 
 #include "ddeimp.hxx"
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 
 #if defined( WIN ) && defined( MSC )
 #pragma code_seg( "SVDDE_MISC_CODE" )

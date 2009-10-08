@@ -67,8 +67,8 @@
 #include <unotools/charclass.hxx>
 #include "rtl/instance.hxx"
 
-namespace unnamed_svtools_urihelper {}
-using namespace unnamed_svtools_urihelper;
+namespace unnamed_svl_urihelper {}
+using namespace unnamed_svl_urihelper;
     // unnamed namespaces don't work well yet...
 
 namespace css = com::sun::star;
@@ -80,7 +80,7 @@ using namespace com::sun::star;
 //
 //============================================================================
 
-namespace unnamed_svtools_urihelper {
+namespace unnamed_svl_urihelper {
 
 inline UniString toUniString(ByteString const & rString)
 {
@@ -425,7 +425,7 @@ rtl::OUString URIHelper::simpleNormalizedMakeRelative(
 //
 //============================================================================
 
-namespace unnamed_svtools_urihelper {
+namespace unnamed_svl_urihelper {
 
 inline xub_StrLen nextChar(UniString const & rStr, xub_StrLen nPos)
 {

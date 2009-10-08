@@ -39,7 +39,7 @@
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 
-#include <svtools/frqitem.hxx>
+#include <svl/frqitem.hxx>
 
 DBG_NAME( SfxFrequencyItem )
 

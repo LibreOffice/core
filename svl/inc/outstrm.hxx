@@ -31,7 +31,7 @@
 #ifndef SVTOOLS_OUTSTRM_HXX
 #define SVTOOLS_OUTSTRM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <com/sun/star/uno/Reference.h>
 #include <tools/stream.hxx>
 

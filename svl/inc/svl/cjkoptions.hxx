@@ -30,7 +30,7 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #define _SVTOOLS_CJKOPTIONS_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <sal/types.h>
 #include <unotools/options.hxx>
 

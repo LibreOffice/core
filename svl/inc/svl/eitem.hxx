@@ -31,8 +31,8 @@
 #ifndef _SFXENUMITEM_HXX
 #define _SFXENUMITEM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/cenumitm.hxx>
+#include "svl/svldllapi.h"
+#include <svl/cenumitm.hxx>
 
 //============================================================================
 class SVL_DLLPUBLIC SfxEnumItem: public CntEnumItem

@@ -34,7 +34,7 @@
 #include <tools/rtti.hxx>
 #include <tools/datetime.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SvStream;
 

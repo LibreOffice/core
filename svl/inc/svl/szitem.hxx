@@ -32,7 +32,7 @@
 
 #include <tools/gen.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SfxArguments;
 class SvStream;

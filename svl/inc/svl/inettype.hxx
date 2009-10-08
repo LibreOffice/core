@@ -31,7 +31,7 @@
 #ifndef _INETTYPE_HXX
 #define _INETTYPE_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/inetmime.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 

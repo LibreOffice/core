@@ -33,12 +33,12 @@
 #include <tools/inetmime.hxx>
 #include <adrparse.hxx>
 
-namespace unnamed_svtools_adrparse {}
-using namespace unnamed_svtools_adrparse;
+namespace unnamed_svl_adrparse {}
+using namespace unnamed_svl_adrparse;
     // unnamed namespaces don't work well yet
 
 //============================================================================
-namespace unnamed_svtools_adrparse {
+namespace unnamed_svl_adrparse {
 
 enum ElementType { ELEMENT_START, ELEMENT_DELIM, ELEMENT_ITEM, ELEMENT_END };
 

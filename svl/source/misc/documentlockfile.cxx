@@ -58,7 +58,7 @@
 
 #include <unotools/useroptions.hxx>
 
-#include <svtools/documentlockfile.hxx>
+#include <svl/documentlockfile.hxx>
 
 using namespace ::com::sun::star;
 

@@ -30,8 +30,8 @@
 #ifndef _SFXSMPLHINT_HXX
 #define _SFXSMPLHINT_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/hint.hxx>
+#include "svl/svldllapi.h"
+#include <svl/hint.hxx>
 #include <tools/rtti.hxx>
 
 #define SFX_HINT_DYING              0x00000001

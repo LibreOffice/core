@@ -102,7 +102,7 @@ public class CheckConfigItems extends ComplexTestCase
         // create module manager
         m_xTest = (XJob)UnoRuntime.queryInterface(
                     XJob.class,
-                    m_xSmgr.createInstance("com.sun.star.comp.svtools.ConfigItemTest"));
+                    m_xSmgr.createInstance("com.sun.star.comp.svl.ConfigItemTest"));
     }
 
     //-------------------------------------------

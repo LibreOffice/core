@@ -30,7 +30,7 @@
 #ifndef _SFX_MISCCFG_HXX
 #define _SFX_MISCCFG_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include "tools/solar.h"
 #include "unotools/configitem.hxx"
 

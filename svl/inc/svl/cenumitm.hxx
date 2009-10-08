@@ -31,9 +31,9 @@
 #ifndef _SVTOOLS_CENUMITM_HXX
 #define _SVTOOLS_CENUMITM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/debug.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 //============================================================================
 DBG_NAMEEX(SfxEnumItemInterface)

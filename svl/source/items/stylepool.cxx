@@ -36,8 +36,8 @@
 #include <map>
 
 #include "stylepool.hxx"
-#include <svtools/itemiter.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/itempool.hxx>
 
 
 using namespace boost;

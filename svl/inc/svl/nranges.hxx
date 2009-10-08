@@ -40,12 +40,12 @@
 
 #define NUMTYPE USHORT
 #define SfxNumRanges SfxUShortRanges
-#include <svtools/nranges.hxx>
+#include <svl/nranges.hxx>
 
 #undef NUMTYPE
 #define NUMTYPE ULONG
 #define SfxNumRanges SfxULongRanges
-#include <svtools/nranges.hxx>
+#include <svl/nranges.hxx>
 
 #define _SFXNRANGES_HXX
 

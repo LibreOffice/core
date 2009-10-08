@@ -31,8 +31,8 @@
 #ifndef _SVT_IMAGEITM_HXX
 #define _SVT_IMAGEITM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/intitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/intitem.hxx>
 
 class String;
 

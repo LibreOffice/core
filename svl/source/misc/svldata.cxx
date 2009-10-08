@@ -35,7 +35,7 @@
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
 #include <vos/process.hxx>
-#include <svtools/svldata.hxx>
+#include <svl/svldata.hxx>
 
 namespace unnamed_svl_svldata {}
 using namespace unnamed_svl_svldata;

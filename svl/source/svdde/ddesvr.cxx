@@ -33,8 +33,8 @@
 
 #define UNICODE
 #include "ddeimp.hxx"
-#include <svtools/svdde.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svdde.hxx>
+#include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 #include <osl/thread.h>
 

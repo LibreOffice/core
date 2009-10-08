@@ -30,8 +30,8 @@
 #ifndef _SFXCNCLHINT_HXX
 #define _SFXCNCLHINT_HXX
 
-#include <svtools/hint.hxx>
-#include <svtools/cancel.hxx>
+#include <svl/hint.hxx>
+#include <svl/cancel.hxx>
 #include <tools/rtti.hxx>
 
 #define SFXCANCELHINT_REMOVED       1

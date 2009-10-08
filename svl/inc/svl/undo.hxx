@@ -30,10 +30,10 @@
 #ifndef _UNDO_HXX
 #define _UNDO_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 //====================================================================
 

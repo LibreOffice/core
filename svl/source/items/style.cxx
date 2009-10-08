@@ -43,15 +43,15 @@
 #include <tools/tenccvt.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <poolio.hxx>
-#include <svtools/filerec.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/style.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/filerec.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/style.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/svapp.hxx>
 
 #include <algorithm>
@@ -702,11 +702,11 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
 
 SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const XubString& rName, SfxStyleFamily eFam, USHORT mask, USHORT nPos)
 {
-    DBG_ASSERT( eFam != SFX_STYLE_FAMILY_ALL, "svtools::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
+    DBG_ASSERT( eFam != SFX_STYLE_FAMILY_ALL, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
 
     SfxStyleSheetIterator aIter(this, eFam, mask);
     rtl::Reference< SfxStyleSheetBase > xStyle( aIter.Find( rName ) );
-    DBG_ASSERT( !xStyle.is(), "svtools::SfxStyleSheetBasePool::Make(), StyleSheet already exists" );
+    DBG_ASSERT( !xStyle.is(), "svl::SfxStyleSheetBasePool::Make(), StyleSheet already exists" );
     SfxStyleSheetIterator& rIter = GetIterator_Impl();
 
     if( !xStyle.is() )
@@ -820,15 +820,15 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 
 void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
 {
-    DBG_ASSERT( p, "svtools::SfxStyleSheetBasePool::Insert(), no stylesheet?" );
+    DBG_ASSERT( p, "svl::SfxStyleSheetBasePool::Insert(), no stylesheet?" );
 
     SfxStyleSheetIterator aIter(this, p->GetFamily(), p->GetMask());
     SfxStyleSheetBase* pOld = aIter.Find( p->GetName() );
-    DBG_ASSERT( !pOld, "svtools::SfxStyleSheetBasePool::Insert(), StyleSheet already inserted" );
+    DBG_ASSERT( !pOld, "svl::SfxStyleSheetBasePool::Insert(), StyleSheet already inserted" );
     if( p->GetParent().Len() )
     {
         pOld = aIter.Find( p->GetParent() );
-        DBG_ASSERT( pOld, "svtools::SfxStyleSheetBasePool::Insert(), Parent not found!" );
+        DBG_ASSERT( pOld, "svl::SfxStyleSheetBasePool::Insert(), Parent not found!" );
     }
     aStyles.push_back( rtl::Reference< SfxStyleSheetBase >( p ) );
     Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) );

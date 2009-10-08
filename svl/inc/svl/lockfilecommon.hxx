@@ -32,7 +32,7 @@
 #ifndef _SVT_LOCKFILECOMMON_HXX
 #define _SVT_LOCKFILECOMMON_HXX
 
-#include <svtools/svldllapi.h>
+#include <svl/svldllapi.h>
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

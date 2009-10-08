@@ -35,7 +35,7 @@
 
 #include <string.h>
 #include "ddeimp.hxx"
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 
 // --- DdeInternal::InfCallback() ----------------------------------
 

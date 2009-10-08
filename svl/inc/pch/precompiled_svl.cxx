@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: precompiled_svtools.cxx,v $
+ * $RCSfile: precompiled_svl.cxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.

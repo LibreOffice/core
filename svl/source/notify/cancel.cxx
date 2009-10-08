@@ -31,13 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 #define _SFX_CANCEL_CXX
-#include <svtools/cancel.hxx>
+#include <svl/cancel.hxx>
 
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 
-#include <svtools/smplhint.hxx>
-#include <svtools/cnclhint.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/cnclhint.hxx>
 #include <rtl/instance.hxx>
 
 namespace { struct lclMutex : public rtl::Static< ::vos::OMutex, lclMutex >{}; }

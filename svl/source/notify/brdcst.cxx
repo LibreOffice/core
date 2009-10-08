@@ -35,14 +35,14 @@
 #endif
 #include <tools/debug.hxx>
 
-#include <svtools/hint.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/hint.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/lstner.hxx>
 
 SV_DECL_PTRARR( SfxListenerArr_Impl, SfxListener*, 0, 2 )
 
 #define _SFX_BRDCST_CXX
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 //====================================================================
 DBG_NAME(SfxBroadcaster)

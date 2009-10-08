@@ -30,7 +30,7 @@
 #ifndef _SFXPOOLITEM_HXX
 #define _SFXPOOLITEM_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <com/sun/star/uno/Any.hxx>
 
 #define TF_POOLABLE
@@ -40,8 +40,8 @@
 #include <tools/solar.h>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
-#include <svtools/hint.hxx>
+#include <svl/svarray.hxx>
+#include <svl/hint.hxx>
 
 typedef long SfxArgumentError;
 

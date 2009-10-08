@@ -32,7 +32,7 @@
 #define SVTOOLS_TRESITEM_HXX
 
 #include <com/sun/star/ucb/TransferResult.hpp>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 //============================================================================
 class CntTransferResultItem: public SfxPoolItem

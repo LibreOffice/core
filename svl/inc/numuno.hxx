@@ -30,7 +30,7 @@
 #ifndef _NUMUNO_HXX
 #define _NUMUNO_HXX
 
-#include "svtools/svldllapi.h"
+#include "svl/svldllapi.h"
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase2.hxx>

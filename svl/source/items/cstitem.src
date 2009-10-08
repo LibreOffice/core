@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 String STR_CSTAT_NEVER_UPD
 {
     Text [ en-US ] = "No update has occurred" ;

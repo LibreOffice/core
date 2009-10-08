@@ -30,9 +30,9 @@
 #ifndef _AEITEM_HXX
 #define _AEITEM_HXX
 
-#include "svtools/svldllapi.h"
-#include <svtools/poolitem.hxx>
-#include <svtools/eitem.hxx>
+#include "svl/svldllapi.h"
+#include <svl/poolitem.hxx>
+#include <svl/eitem.hxx>
 
 class SfxAllEnumValueArr;
 class SvUShorts;
