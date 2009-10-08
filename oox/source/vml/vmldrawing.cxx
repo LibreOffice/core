@@ -28,67 +28,141 @@
  *
  ************************************************************************/
 
-#include "oox/vml/drawing.hxx"
-#include "oox/core/namespaces.hxx"
+#include "oox/vml/vmldrawing.hxx"
+#include <com/sun/star/drawing/XShapes.hpp>
 #include "tokens.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/ole/axcontrolhelper.hxx"
+#include "oox/vml/vmlshape.hxx"
+#include "oox/vml/vmlshapecontainer.hxx"
 
-namespace oox { namespace vml {
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::awt::Rectangle;
+using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::drawing::XShapes;
+using ::oox::core::XmlFilterBase;
 
-Drawing::Drawing()
+namespace oox {
+namespace vml {
+
+// ============================================================================
+
+namespace {
+
+/** Returns the textual representation of a numeric VML shape identifier. */
+OUString lclGetShapeId( sal_Int32 nShapeId )
+{
+    // identifier consists of a literal NUL character, a lowercase 's', and the id
+    return CREATE_OUSTRING( "\0s" ) + OUString::valueOf( nShapeId );
+}
+
+} // namespace
+
+// ============================================================================
+
+OleObjectInfo::OleObjectInfo( bool bDmlShape ) :
+    mbAutoLoad( false ),
+    mbDmlShape( bDmlShape )
 {
 }
+
+void OleObjectInfo::setShapeId( sal_Int32 nShapeId )
+{
+    maShapeId = lclGetShapeId( nShapeId );
+}
+
+// ============================================================================
+
+ControlInfo::ControlInfo()
+{
+}
+
+void ControlInfo::setShapeId( sal_Int32 nShapeId )
+{
+    maShapeId = lclGetShapeId( nShapeId );
+}
+
+// ============================================================================
+
+Drawing::Drawing( XmlFilterBase& rFilter, const Reference< XDrawPage >& rxDrawPage, DrawingType eType ) :
+    mrFilter( rFilter ),
+    mxDrawPage( rxDrawPage ),
+    mxShapes( new ShapeContainer( *this ) ),
+    meType( eType )
+{
+    OSL_ENSURE( mxDrawPage.is(), "Drawing::Drawing - missing UNO draw page" );
+}
+
 Drawing::~Drawing()
 {
 }
 
-ShapePtr Drawing::createShapeById( const rtl::OUString sId ) const
+::oox::ole::AxControlHelper& Drawing::getControlHelper() const
 {
-    ShapePtr pRet, pRef;
-    std::vector< ShapePtr >::const_iterator aIter( maShapes.begin() );
-    while( aIter != maShapes.end() )
+    // create the helper object on demand
+    if( !mxCtrlHelper.get() )
     {
-        if ( (*aIter)->msId == sId )
-        {
-            pRef = (*aIter);
-            break;
-        }
-        aIter++;
+        mxCtrlHelper.reset( createControlHelper() );
+        OSL_ENSURE( mxCtrlHelper.get(), "Drawing::getControlHelper - cannot create form controls helper" );
     }
-    if ( pRef )
-    {
-        pRet = ShapePtr( new Shape( pRef->msServiceName ) );
-        if ( pRef->msType.getLength() )
-        {
-            std::vector< ShapePtr >::const_iterator aShapeTypeIter( maShapeTypes.begin() );
-            while( aShapeTypeIter != maShapeTypes.end() )
-            {
-                if ( (*aShapeTypeIter)->msType == pRef->msType )
-                {
-                    pRet->applyAttributes( *(*aShapeTypeIter).get() );
-                    break;
-                }
-                aShapeTypeIter++;
-            }
-        }
-        pRet->applyAttributes( *pRef.get() );
-    }
-    return pRet;
+    return *mxCtrlHelper;
 }
 
-rtl::OUString Drawing::getGraphicUrlById( const rtl::OUString sId ) const
+void Drawing::registerOleObject( const OleObjectInfo& rOleObject )
 {
-    rtl::OUString sGraphicURL;
-    std::vector< ShapePtr >::const_iterator aIter( maShapes.begin() );
-    while( aIter != maShapes.end() )
-    {
-        if ( (*aIter)->msId == sId )
-        {
-            sGraphicURL = (*aIter)->msGraphicURL;
-            break;
-        }
-        aIter++;
-    }
-    return sGraphicURL;
+    OSL_ENSURE( rOleObject.maShapeId.getLength() > 0, "Drawing::registerOleObject - missing OLE object shape id" );
+    OSL_ENSURE( maOleObjects.count( rOleObject.maShapeId ) == 0, "Drawing::registerOleObject - OLE object already registered" );
+    maOleObjects.insert( OleObjectInfoMap::value_type( rOleObject.maShapeId, rOleObject ) );
 }
 
-} }
+void Drawing::registerControl( const ControlInfo& rControl )
+{
+    OSL_ENSURE( rControl.maShapeId.getLength() > 0, "Drawing::registerControl - missing form control shape id" );
+    OSL_ENSURE( rControl.maName.getLength() > 0, "Drawing::registerControl - missing form control name" );
+    OSL_ENSURE( maControls.count( rControl.maShapeId ) == 0, "Drawing::registerControl - form control already registered" );
+    maControls.insert( ControlInfoMap::value_type( rControl.maShapeId, rControl ) );
+}
+
+void Drawing::finalizeFragmentImport()
+{
+    mxShapes->finalizeFragmentImport();
+}
+
+void Drawing::convertAndInsert() const
+{
+    Reference< XShapes > xShapes( mxDrawPage, UNO_QUERY );
+    mxShapes->convertAndInsert( xShapes );
+}
+
+const OleObjectInfo* Drawing::getOleObjectInfo( const OUString& rShapeId ) const
+{
+    return ContainerHelper::getMapElement( maOleObjects, rShapeId );
+}
+
+const ControlInfo* Drawing::getControlInfo( const OUString& rShapeId ) const
+{
+    return ContainerHelper::getMapElement( maControls, rShapeId );
+}
+
+bool Drawing::convertShapeClientAnchor( Rectangle& /*orShapeRect*/, const OUString& /*rShapeAnchor*/ ) const
+{
+    return false;
+}
+
+void Drawing::convertControlClientData( const Reference< XControlModel >& /*rxCtrlModel*/, const ShapeClientData& /*rClientData*/ ) const
+{
+}
+
+::oox::ole::AxControlHelper* Drawing::createControlHelper() const
+{
+    return new ::oox::ole::AxEmbeddedControlHelper( mrFilter, mxDrawPage );
+}
+
+// ============================================================================
+
+} // namespace vml
+} // namespave oox
+

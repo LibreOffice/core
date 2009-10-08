@@ -75,9 +75,9 @@ bool PowerPointImport::importDocument() throw()
         file:///<path-to-oox-module>/source/dump/pptxdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
-    OUString aFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
+    OUString aFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
     FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
-    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "tableStyles" ) );
+    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "tableStyles" ) );
     return importFragment( xPresentationFragmentHandler );
 
 
@@ -132,12 +132,9 @@ sal_Int32 PowerPointImport::getSchemeClr( sal_Int32 nColorSchemeToken ) const
     return nColor;
 }
 
-const oox::vml::DrawingPtr PowerPointImport::getDrawings()
+::oox::vml::Drawing* PowerPointImport::getVmlDrawing()
 {
-    oox::vml::DrawingPtr xRet;
-    if ( mpActualSlidePersist )
-        xRet = mpActualSlidePersist->getDrawing();
-    return xRet;
+    return mpActualSlidePersist ? mpActualSlidePersist->getDrawing() : 0;
 }
 
 const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()

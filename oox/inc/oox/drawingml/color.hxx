@@ -50,15 +50,10 @@ public:
                         Color();
                         ~Color();
 
-    /** Returns a preset color, e.g. used in the a:prstClr element. */
-    static sal_Int32    getPresetColor( sal_Int32 nToken );
-    /** Returns a system color, e.g. used in the a:sysClr element. */
-    static sal_Int32    getSystemColor( sal_Int32 nToken, sal_Int32 nDefault = -1 );
-
     /** Sets the color to unused state. */
     void                setUnused();
     /** Sets an RGB value (hexadecimal RRGGBB) from the a:srgbClr element. */
-    void                setSrgbClr( sal_Int32 nRGB );
+    void                setSrgbClr( sal_Int32 nRgb );
     /** Sets the percentual RGB values from the a:scrgbClr element. */
     void                setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB );
     /** Sets the HSL values from the a:hslClr element. */
@@ -68,7 +63,7 @@ public:
     /** Sets a scheme color from the a:schemeClr element. */
     void                setSchemeClr( sal_Int32 nToken );
     /** Sets a system color from the a:sysClr element. */
-    void                setSysClr( sal_Int32 nToken, sal_Int32 nLastRGB );
+    void                setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb );
 
     /** Inserts the passed color transformation. */
     void                addTransformation( sal_Int32 nElement, sal_Int32 nValue = -1 );
@@ -109,6 +104,8 @@ private:
         COLOR_CRGB,         /// Relative RGB (r/g/b: 0...100000).
         COLOR_HSL,          /// HSL (hue: 0...21600000, sat/lum: 0...100000).
         COLOR_SCHEME,       /// Color from scheme.
+        COLOR_PH,           /// Placeholder color in theme style lists.
+        COLOR_SYSTEM,       /// Color from system palette.
         COLOR_FINAL         /// Finalized RGB color.
     };
 
@@ -123,8 +120,8 @@ private:
 
     mutable ColorMode   meMode;         /// Current color mode.
     mutable TransformVec maTransforms;  /// Color transformations.
-    mutable sal_Int32   mnC1;           /// Red, red%, hue, scheme token, or final RGB.
-    mutable sal_Int32   mnC2;           /// Green, green%, or saturation.
+    mutable sal_Int32   mnC1;           /// Red, red%, hue, scheme token, system token, or final RGB.
+    mutable sal_Int32   mnC2;           /// Green, green%, saturation, or system default RGB.
     mutable sal_Int32   mnC3;           /// Blue, blue%, or luminance.
     sal_Int32           mnAlpha;        /// Alpha value (color opacity).
 };

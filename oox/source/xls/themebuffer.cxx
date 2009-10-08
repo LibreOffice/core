@@ -32,7 +32,6 @@
 #include "oox/xls/stylesbuffer.hxx"
 
 using ::oox::drawingml::ClrScheme;
-using ::oox::drawingml::Color;
 
 namespace oox {
 namespace xls {

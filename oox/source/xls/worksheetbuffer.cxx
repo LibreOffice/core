@@ -101,7 +101,7 @@ void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
 {
     SheetInfoModel aModel;
     aModel.maRelId = rAttribs.getString( R_TOKEN( id ), OUString() );
-    aModel.maName = rAttribs.getString( XML_name, OUString() );
+    aModel.maName = rAttribs.getXString( XML_name, OUString() );
     aModel.mnSheetId = rAttribs.getInteger( XML_sheetId, -1 );
     aModel.mnState = rAttribs.getToken( XML_state, XML_visible );
     insertSheet( aModel );
@@ -128,8 +128,8 @@ void WorksheetBuffer::importSheet( BiffInputStream& rStrm )
 
     SheetInfoModel aModel;
     aModel.maName = (getBiff() == BIFF8) ?
-        rStrm.readUniString( rStrm.readuInt8() ) :
-        rStrm.readByteString( false, getTextEncoding() );
+        rStrm.readUniStringBody( rStrm.readuInt8() ) :
+        rStrm.readByteStringUC( false, getTextEncoding() );
     static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
     aModel.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
     insertSheet( aModel );

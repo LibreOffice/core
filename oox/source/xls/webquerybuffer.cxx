@@ -103,7 +103,7 @@ void WebQueryBuffer::importConnection( const AttributeList& rAttribs )
         return;
     }
 
-    sal_uInt32 nId = rAttribs.getUnsignedInteger( XML_id, 0 );
+    sal_uInt32 nId = rAttribs.getUnsigned( XML_id, 0 );
     if ( maConnections.size() < (nId + 1) )
         maConnections.resize(nId + 1);
 

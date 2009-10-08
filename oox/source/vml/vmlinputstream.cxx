@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: vmldrawing.cxx,v $
+ * $Revision: 1.5 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "oox/vml/vmlinputstream.hxx"
+#include <algorithm>
+#include <string.h>
+
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::io::XInputStream;
+
+namespace oox {
+namespace vml {
+
+// ============================================================================
+
+StreamDataContainer::StreamDataContainer( const Reference< XInputStream >& rxInStrm )
+{
+    if( rxInStrm.is() ) try
+    {
+        // read all bytes we can read
+        rxInStrm->readBytes( maDataSeq, SAL_MAX_INT32 );
+    }
+    catch( Exception& )
+    {
+    }
+
+    // parse the data and eat all parser instructions that make expat sad
+    if( maDataSeq.hasElements() )
+    {
+        sal_Char* pcBeg = reinterpret_cast< sal_Char* >( maDataSeq.getArray() );
+        sal_Char* pcEnd = pcBeg + maDataSeq.getLength();
+        sal_Char* pcCurr = pcBeg;
+        while( pcCurr < pcEnd )
+        {
+            pcCurr = ::std::find( pcCurr, pcEnd, '<' );
+            sal_Char* pcClose = ::std::find( pcCurr, pcEnd, '>' );
+            if( (pcCurr < pcEnd) && (pcClose < pcEnd) && (pcClose - pcCurr >= 5) && (pcCurr[ 1 ] == '!') && (pcCurr[ 2 ] == '[') && (pcClose[ -1 ] == ']') )
+            {
+                ++pcClose;
+                memmove( pcCurr, pcClose, pcEnd - pcClose );
+                pcEnd -= (pcClose - pcCurr);
+            }
+            else
+                pcCurr = pcClose;
+        }
+        maDataSeq.realloc( static_cast< sal_Int32 >( pcEnd - pcBeg ) );
+    }
+}
+
+// ============================================================================
+
+InputStream::InputStream( const Reference< XInputStream >& rxInStrm ) :
+    StreamDataContainer( rxInStrm ),
+    ::comphelper::SequenceInputStream( maDataSeq )
+{
+}
+
+InputStream::~InputStream()
+{
+}
+
+// ============================================================================
+
+} // namespace vml
+} // namespave oox
+

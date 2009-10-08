@@ -33,6 +33,7 @@
 
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/chart/axismodel.hxx"
+#include "oox/drawingml/chart/seriesmodel.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
 
@@ -59,9 +60,11 @@ struct View3DModel
 
 struct WallFloorModel
 {
-    typedef ModelRef< Shape > ShapeRef;
+    typedef ModelRef< Shape >               ShapeRef;
+    typedef ModelRef< PictureOptionsModel > PictureOptionsRef;
 
     ShapeRef            mxShapeProp;        /// Wall/floor frame formatting.
+    PictureOptionsRef   mxPicOptions;       /// Fill bitmap settings.
 
     explicit            WallFloorModel();
                         ~WallFloorModel();

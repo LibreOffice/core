@@ -51,7 +51,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     Id mXNoteType;
 
     uno::Reference<frame::XModel> mxModel;
-    uno::Reference<drawing::XShapes> mxShapes;
+    uno::Reference<drawing::XDrawPage> mxDrawPage;
 
 protected:
     virtual void resolveFastSubStream(Stream & rStream,
@@ -100,8 +100,8 @@ public:
 
     virtual void setModel(uno::Reference<frame::XModel> xModel);
     virtual uno::Reference<frame::XModel> getModel();
-    virtual void setShapes(uno::Reference<drawing::XShapes> xShapes);
-    virtual uno::Reference<drawing::XShapes> getShapes();
+    virtual void setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage);
+    virtual uno::Reference<drawing::XDrawPage> getDrawPage();
     virtual uno::Reference<io::XInputStream> getInputStream();
     virtual uno::Reference<io::XInputStream> getStorageStream();
     virtual uno::Reference<io::XInputStream> getInputStreamForId(const rtl::OUString & rId);

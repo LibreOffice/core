@@ -59,7 +59,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::table::XCellRange;
@@ -70,7 +69,6 @@ using ::com::sun::star::sheet::FormulaOpCodeMapEntry;
 using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::com::sun::star::sheet::XFormulaOpCodeMapper;
 using ::com::sun::star::sheet::XFormulaTokens;
-using namespace ::com::sun::star::sheet::ReferenceFlags;
 
 namespace oox {
 namespace xls {
@@ -928,8 +926,7 @@ OpCodeProvider::OpCodeProvider( const WorkbookHelper& rHelper ) :
 {
     try
     {
-        Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY_THROW );
-        Reference< XFormulaOpCodeMapper > xMapper( xFactory->createInstance(
+        Reference< XFormulaOpCodeMapper > xMapper( getDocumentFactory()->createInstance(
             CREATE_OUSTRING( "com.sun.star.sheet.FormulaOpCodeMapper" ) ), UNO_QUERY_THROW );
 
         // op-codes provided as attributes
@@ -1209,10 +1206,11 @@ bool OpCodeProvider::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const
 
 // formula contexts ===========================================================
 
-FormulaContext::FormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs ) :
+FormulaContext::FormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
     maBaseAddress( 0, 0, 0 ),
     mbRelativeAsOffset( bRelativeAsOffset ),
-    mb2dRefsAs3dRefs( b2dRefsAs3dRefs )
+    mb2dRefsAs3dRefs( b2dRefsAs3dRefs ),
+    mbAllowNulChars( bAllowNulChars )
 {
 }
 
@@ -1226,8 +1224,8 @@ void FormulaContext::setSharedFormula( const CellAddress& )
 
 // ----------------------------------------------------------------------------
 
-TokensFormulaContext::TokensFormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs ) :
-    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs )
+TokensFormulaContext::TokensFormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
+    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs, bAllowNulChars )
 {
 }
 
@@ -1239,8 +1237,8 @@ void TokensFormulaContext::setTokens( const ApiTokenSequence& rTokens )
 // ----------------------------------------------------------------------------
 
 SimpleFormulaContext::SimpleFormulaContext( const Reference< XFormulaTokens >& rxTokens,
-        bool bRelativeAsOffset, bool b2dRefsAs3dRefs ) :
-    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs ),
+        bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
+    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs, bAllowNulChars ),
     mxTokens( rxTokens )
 {
     OSL_ENSURE( mxTokens.is(), "SimpleFormulaContext::SimpleFormulaContext - missing XFormulaTokens interface" );
@@ -1255,39 +1253,42 @@ void SimpleFormulaContext::setTokens( const ApiTokenSequence& rTokens )
 
 namespace {
 
-const sal_Int32 nForbiddenFlags = COLUMN_DELETED | ROW_DELETED | SHEET_DELETED | COLUMN_RELATIVE | ROW_RELATIVE | SHEET_RELATIVE | RELATIVE_NAME;
-
-bool lclConvertToCellAddress( CellAddress& orAddress, const SingleReference& rSingleRef, sal_Int32 nFilterBySheet )
+bool lclConvertToCellAddress( CellAddress& orAddress, const SingleReference& rSingleRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
 {
     orAddress = CellAddress( static_cast< sal_Int16 >( rSingleRef.Sheet ),
         rSingleRef.Column, rSingleRef.Row );
     return
-        ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet)) &&
-        !getFlag( rSingleRef.Flags, nForbiddenFlags );
+        !getFlag( rSingleRef.Flags, nForbiddenFlags ) &&
+        ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet));
 }
 
-bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nFilterBySheet )
+bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nForbiddenFlags, sal_Int32 nFilterBySheet )
 {
     orRange = CellRangeAddress( static_cast< sal_Int16 >( rComplexRef.Reference1.Sheet ),
         rComplexRef.Reference1.Column, rComplexRef.Reference1.Row,
         rComplexRef.Reference2.Column, rComplexRef.Reference2.Row );
     return
-        (rComplexRef.Reference1.Sheet == rComplexRef.Reference2.Sheet) &&
-        ((nFilterBySheet < 0) || (nFilterBySheet == rComplexRef.Reference1.Sheet)) &&
         !getFlag( rComplexRef.Reference1.Flags, nForbiddenFlags ) &&
-        !getFlag( rComplexRef.Reference2.Flags, nForbiddenFlags );
+        !getFlag( rComplexRef.Reference2.Flags, nForbiddenFlags ) &&
+        (rComplexRef.Reference1.Sheet == rComplexRef.Reference2.Sheet) &&
+        ((nFilterBySheet < 0) || (nFilterBySheet == rComplexRef.Reference1.Sheet));
 }
 
 enum TokenToRangeListState { STATE_REF, STATE_SEP, STATE_OPEN, STATE_CLOSE, STATE_ERROR };
 
-TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rData, sal_Int32 nFilterBySheet )
+TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rData, bool bAllowRelative, sal_Int32 nFilterBySheet )
 {
+    using namespace ::com::sun::star::sheet::ReferenceFlags;
+    const sal_Int32 FORBIDDEN_FLAGS_DEL = COLUMN_DELETED | ROW_DELETED | SHEET_DELETED;
+    const sal_Int32 FORBIDDEN_FLAGS_REL = FORBIDDEN_FLAGS_DEL | COLUMN_RELATIVE | ROW_RELATIVE | SHEET_RELATIVE | RELATIVE_NAME;
+
+    sal_Int32 nForbiddenFlags = bAllowRelative ? FORBIDDEN_FLAGS_DEL : FORBIDDEN_FLAGS_REL;
     SingleReference aSingleRef;
     if( rData >>= aSingleRef )
     {
         CellAddress aAddress;
         // ignore invalid addresses (with #REF! errors), but do not stop parsing
-        if( lclConvertToCellAddress( aAddress, aSingleRef, nFilterBySheet ) )
+        if( lclConvertToCellAddress( aAddress, aSingleRef, nForbiddenFlags, nFilterBySheet ) )
             orRanges.push_back( CellRangeAddress( aAddress.Sheet, aAddress.Column, aAddress.Row, aAddress.Column, aAddress.Row ) );
         return STATE_REF;
     }
@@ -1296,7 +1297,7 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
     {
         CellRangeAddress aRange;
         // ignore invalid ranges (with #REF! errors), but do not stop parsing
-        if( lclConvertToCellRange( aRange, aComplexRef, nFilterBySheet ) )
+        if( lclConvertToCellRange( aRange, aComplexRef, nForbiddenFlags, nFilterBySheet ) )
             orRanges.push_back( aRange );
         return STATE_REF;
     }
@@ -1379,14 +1380,8 @@ OUString FormulaProcessorBase::generateRangeList2dString( const ApiCellRangeList
 OUString FormulaProcessorBase::generateApiAddressString( const CellAddress& rAddress ) const
 {
     OUString aCellName;
-    try
-    {
-        PropertySet aCellProp( getCellFromDoc( rAddress ) );
-        aCellProp.getProperty( aCellName, PROP_AbsoluteName );
-    }
-    catch( Exception& )
-    {
-    }
+    PropertySet aCellProp( getCellFromDoc( rAddress ) );
+    aCellProp.getProperty( aCellName, PROP_AbsoluteName );
     OSL_ENSURE( aCellName.getLength() > 0, "FormulaProcessorBase::generateApiAddressString - cannot create cell address string" );
     return aCellName;
 }
@@ -1394,14 +1389,8 @@ OUString FormulaProcessorBase::generateApiAddressString( const CellAddress& rAdd
 OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& rRange ) const
 {
     OUString aRangeName;
-    try
-    {
-        PropertySet aRangeProp( getCellRangeFromDoc( rRange ) );
-        aRangeProp.getProperty( aRangeName, PROP_AbsoluteName );
-    }
-    catch( Exception& )
-    {
-    }
+    PropertySet aRangeProp( getCellRangeFromDoc( rRange ) );
+    aRangeProp.getProperty( aRangeName, PROP_AbsoluteName );
     OSL_ENSURE( aRangeName.getLength() > 0, "FormulaProcessorBase::generateApiRangeString - cannot create cell range string" );
     return aRangeName;
 }
@@ -1472,10 +1461,25 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
     return Any();
 }
 
-bool FormulaProcessorBase::extractAbsoluteRange( CellRangeAddress& orRange, const ApiTokenSequence& rTokens ) const
+bool FormulaProcessorBase::extractCellAddress( CellAddress& orAddress,
+        const ApiTokenSequence& rTokens, bool bAllowRelative ) const
+{
+    CellRangeAddress aRange;
+    if( extractCellRange( aRange, rTokens, bAllowRelative ) && (aRange.StartColumn == aRange.EndColumn) && (aRange.StartRow == aRange.EndRow) )
+    {
+        orAddress.Sheet = aRange.Sheet;
+        orAddress.Column = aRange.StartColumn;
+        orAddress.Row = aRange.StartRow;
+        return true;
+    }
+    return false;
+}
+
+bool FormulaProcessorBase::extractCellRange( CellRangeAddress& orRange,
+        const ApiTokenSequence& rTokens, bool bAllowRelative ) const
 {
     ApiCellRangeList aRanges;
-    lclProcessRef( aRanges, extractReference( rTokens ), -1 );
+    lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
     if( !aRanges.empty() )
     {
         orRange = aRanges.front();
@@ -1485,7 +1489,7 @@ bool FormulaProcessorBase::extractAbsoluteRange( CellRangeAddress& orRange, cons
 }
 
 void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
-        const ApiTokenSequence& rTokens, sal_Int32 nFilterBySheet ) const
+        const ApiTokenSequence& rTokens, bool bAllowRelative, sal_Int32 nFilterBySheet ) const
 {
     orRanges.clear();
     TokenToRangeListState eState = STATE_OPEN;
@@ -1501,14 +1505,14 @@ void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
                 else                               eState = STATE_ERROR;
             break;
             case STATE_SEP:
-                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, nFilterBySheet );
+                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, bAllowRelative, nFilterBySheet );
                 else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_OPEN )  eState = lclProcessOpen( nParenLevel );
                 else if( nOpCode == OPCODE_CLOSE ) eState = lclProcessClose( nParenLevel );
                 else                               eState = STATE_ERROR;
             break;
             case STATE_OPEN:
-                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, nFilterBySheet );
+                     if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, bAllowRelative, nFilterBySheet );
                 else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_OPEN )  eState = lclProcessOpen( nParenLevel );
                 else if( nOpCode == OPCODE_CLOSE ) eState = lclProcessClose( nParenLevel );

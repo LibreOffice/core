@@ -38,7 +38,7 @@ namespace oox {
 
 // ============================================================================
 
-RecordInputStream::RecordInputStream( StreamDataSequence& rData ) :
+RecordInputStream::RecordInputStream( const StreamDataSequence& rData ) :
     SequenceInputStream( rData )
 {
 }

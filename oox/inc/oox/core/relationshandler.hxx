@@ -38,10 +38,10 @@ namespace core {
 
 // ============================================================================
 
-class RelationsFragmentHandler : public FragmentHandler
+class RelationsFragment : public FragmentHandler
 {
 public:
-    explicit            RelationsFragmentHandler(
+    explicit            RelationsFragment(
                             XmlFilterBase& rFilter,
                             RelationsRef xRelations );
 

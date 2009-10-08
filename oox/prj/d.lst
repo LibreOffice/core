@@ -20,6 +20,7 @@ mkdir: %_DEST%\inc%_EXT%\oox\drawingml\table
 ..\inc\oox\core\relations.hxx %_DEST%\inc%_EXT%\oox\core\relations.hxx
 ..\%__SRC%\inc\tokens.hxx %_DEST%\inc%_EXT%\oox\core\tokens.hxx
 ..\inc\oox\core\xmlfilterbase.hxx %_DEST%\inc%_EXT%\oox\core\xmlfilterbase.hxx
+..\inc\oox\helper\binarystreambase.hxx %_DEST%\inc%_EXT%\oox\helper\binarystreambase.hxx
 ..\inc\oox\helper\helper.hxx %_DEST%\inc%_EXT%\oox\helper\helper.hxx
 ..\inc\oox\helper\storagebase.hxx %_DEST%\inc%_EXT%\oox\helper\storagebase.hxx
 ..\inc\oox\helper\zipstorage.hxx %_DEST%\inc%_EXT%\oox\helper\zipstorage.hxx

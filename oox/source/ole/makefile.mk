@@ -45,6 +45,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/axcontrol.obj			\
+        $(SLO)$/axcontrolfragment.obj	\
+        $(SLO)$/axcontrolhelper.obj		\
+        $(SLO)$/olehelper.obj			\
+        $(SLO)$/oleobjecthelper.obj		\
         $(SLO)$/vbainputstream.obj
 
 # --- Targets -------------------------------------------------------

@@ -40,6 +40,7 @@
 #include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
@@ -91,6 +92,8 @@ using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::util::XNumberFormatTypes;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Size;
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::table::BorderLine;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
@@ -349,23 +352,6 @@ void ValidationModel::setBinErrorStyle( sal_uInt8 nErrorStyle )
     mnErrorStyle = STATIC_ARRAY_SELECT( spnErrorStyles, nErrorStyle, XML_stop );
 }
 
-// ----------------------------------------------------------------------------
-
-OleObjectModel::OleObjectModel() :
-    mnAspect( XML_DVASPECT_CONTENT ),
-    mnUpdateMode( XML_OLEUPDATE_ALWAYS ),
-    mnShapeId( 0 ),
-    mbAutoLoad( false )
-{
-}
-
-// ----------------------------------------------------------------------------
-
-FormControlModel::FormControlModel() :
-    mnShapeId( 0 )
-{
-}
-
 // ============================================================================
 // ============================================================================
 
@@ -409,6 +395,9 @@ public:
     /** Returns the XTableRows interface for a range of rows. */
     Reference< XTableRows > getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
 
+    /** Returns the XDrawPage interface of the draw page of the current sheet. */
+    Reference< XDrawPage > getDrawPage() const;
+
     /** Returns the absolute cell position in 1/100 mm. */
     Point               getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Returns the cell size in 1/100 mm. */
@@ -428,6 +417,8 @@ public:
     inline PageSettings& getPageSettings() { return maPageSett; }
     /** Returns the view settings for this sheet. */
     inline SheetViewSettings& getSheetViewSettings() { return maSheetViewSett; }
+    /** Returns the VML drawing page for this sheet (OOX only!). */
+    inline VmlDrawing&  getVmlDrawing() { return *mxVmlDrawing; }
 
     /** Changes the current sheet type. */
     inline void         setSheetType( WorksheetType eSheetType ) { meSheetType = eSheetType; }
@@ -447,10 +438,6 @@ public:
     void                setDrawingPath( const OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
     void                setVmlDrawingPath( const OUString& rVmlDrawingPath );
-    /** Sets additional data for an OLE object. */
-    void                setOleObject( const OleObjectModel& rModel );
-    /** Sets additional data for an OCX form control. */
-    void                setFormControl( const FormControlModel& rModel );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if base width has not been set with setDefaultColumnWidth(). */
@@ -486,8 +473,6 @@ private:
     typedef ::std::map< sal_Int32, RowModel >           RowModelMap;
     typedef ::std::list< HyperlinkModel >               HyperlinkModelList;
     typedef ::std::list< ValidationModel >              ValidationModelList;
-    typedef ::std::map< sal_Int32, OleObjectModel >     OleObjectModelMap;
-    typedef ::std::map< sal_Int32, FormControlModel >   FormControlModelMap;
 
     struct XfIdRowRange
     {
@@ -548,8 +533,10 @@ private:
     /** Merges the passed merged range and updates right/bottom cell borders. */
     void                finalizeMergedRange( const CellRangeAddress& rRange );
 
-    /** Imports the drawing layer of the sheet. */
+    /** Imports the drawing layer of the sheet (DrawingML part). */
     void                finalizeDrawing();
+    /** Imports the drawing layer of the sheet (VML part). */
+    void                finalizeVmlDrawing();
 
     /** Converts column properties for all columns in the sheet. */
     void                convertColumns();
@@ -567,6 +554,8 @@ private:
     void                groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLastColRow, bool bCollapsed, bool bRows );
 
 private:
+    typedef ::std::auto_ptr< VmlDrawing > VmlDrawingPtr;
+
     const OUString      maTrueFormula;      /// Replacement formula for TRUE boolean cells.
     const OUString      maFalseFormula;     /// Replacement formula for FALSE boolean cells.
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
@@ -579,8 +568,6 @@ private:
     RowModelMap         maRowModels;        /// Rows sorted by row index.
     HyperlinkModelList  maHyperlinks;       /// Cell ranges containing hyperlinks.
     ValidationModelList maValidations;      /// Cell ranges containing data validation settings.
-    OleObjectModelMap   maOleObjects;       /// OLE objects, mapped to VML shape identifier.
-    FormControlModelMap maFormControls;     /// OCX form controls, mapped to VML shape identifier.
     XfIdRowRange        maXfIdRowRange;     /// Cached XF identifier for a range of rows.
     XfIdRangeMap        maXfIdRanges;       /// Collected XF identifiers for cell ranges.
     MergedRangeList     maMergedRanges;     /// Merged cell ranges.
@@ -592,6 +579,7 @@ private:
     CommentsBuffer      maComments;         /// Buffer for all cell comments in this sheet.
     PageSettings        maPageSett;         /// Page/print settings for this sheet.
     SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
+    VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
     OUString            maDrawingPath;      /// Path to DrawingML fragment.
     OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
     ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
@@ -647,6 +635,11 @@ WorksheetData::WorksheetData( const WorkbookHelper& rHelper, ISegmentProgressBar
     maDefRowModel.mbHidden = false;
     maDefRowModel.mbCollapsed = false;
 
+    // buffers
+    if( getFilterType() == FILTER_OOX )
+        mxVmlDrawing.reset( new VmlDrawing( *this ) );
+
+    // prepare progress bars
     if( mxProgressBar.get() )
     {
         mxRowProgress = mxProgressBar->createSegment( 0.5 );
@@ -690,8 +683,7 @@ Reference< XSheetCellRanges > WorksheetData::getCellRangeList( const ApiCellRang
     Reference< XSheetCellRanges > xRanges;
     if( mxSheet.is() && !rRanges.empty() ) try
     {
-        Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY_THROW );
-        xRanges.set( xFactory->createInstance( maSheetCellRanges ), UNO_QUERY_THROW );
+        xRanges.set( getDocumentFactory()->createInstance( maSheetCellRanges ), UNO_QUERY_THROW );
         Reference< XSheetCellRangeContainer > xRangeCont( xRanges, UNO_QUERY_THROW );
         xRangeCont->addRangeAddresses( ContainerHelper::vectorToSequence( rRanges ), sal_False );
     }
@@ -755,6 +747,20 @@ Reference< XTableRows > WorksheetData::getRows( sal_Int32 nFirstRow, sal_Int32 n
             xRows = xRange->getRows();
     }
     return xRows;
+}
+
+Reference< XDrawPage > WorksheetData::getDrawPage() const
+{
+    Reference< XDrawPage > xDrawPage;
+    try
+    {
+        Reference< XDrawPageSupplier > xDrawPageSupp( mxSheet, UNO_QUERY_THROW );
+        xDrawPage = xDrawPageSupp->getDrawPage();
+    }
+    catch( Exception& )
+    {
+    }
+    return xDrawPage;
 }
 
 Point WorksheetData::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
@@ -871,27 +877,15 @@ void WorksheetData::setVmlDrawingPath( const OUString& rVmlDrawingPath )
     maVmlDrawingPath = rVmlDrawingPath;
 }
 
-void WorksheetData::setOleObject( const OleObjectModel& rModel )
-{
-    if( rModel.mnShapeId > 0 )
-        maOleObjects[ rModel.mnShapeId ] = rModel;
-}
-
-void WorksheetData::setFormControl( const FormControlModel& rModel )
-{
-    if( rModel.mnShapeId > 0 )
-        maFormControls[ rModel.mnShapeId ] = rModel;
-}
-
 void WorksheetData::setBaseColumnWidth( sal_Int32 nWidth )
 {
     // do not modify width, if setDefaultColumnWidth() has been used
     if( !mbHasDefWidth && (nWidth > 0) )
     {
-        /*  #i3006# add 5 pixels padding to the width, assuming 1 pixel =
-            1/96 inch. => 5/96 inch == 1.32 mm. */
+        // #i3006# add 5 pixels padding to the width
         const UnitConverter& rUnitConv = getUnitConverter();
-        maDefColModel.mfWidth = rUnitConv.scaleFromMm100( rUnitConv.scaleToMm100( nWidth, UNIT_DIGIT ) + 132, UNIT_DIGIT );
+        maDefColModel.mfWidth = rUnitConv.scaleFromMm100(
+            rUnitConv.scaleToMm100( nWidth, UNIT_DIGIT ) + rUnitConv.scaleToMm100( 5, UNIT_SCREENX ), UNIT_DIGIT );
     }
 }
 
@@ -1014,6 +1008,7 @@ void WorksheetData::finalizeWorksheetImport()
     lclUpdateProgressBar( mxFinalProgress, 0.75 );
     maComments.finalizeImport();
     finalizeDrawing();
+    finalizeVmlDrawing();
     lclUpdateProgressBar( mxFinalProgress, 1.0 );
 
     // reset current sheet index in global data
@@ -1217,12 +1212,11 @@ void WorksheetData::finalizeHyperlink( const CellAddress& rAddress, const OUStri
         // #i54261# restrict creation of URL field to text cells
         case ::com::sun::star::table::CellContentType_TEXT:
         {
-            Reference< XMultiServiceFactory > xFactory( getDocument(), UNO_QUERY );
             Reference< XText > xText( xCell, UNO_QUERY );
-            if( xFactory.is() && xText.is() )
+            if( xText.is() )
             {
                 // create a URL field object and set its properties
-                Reference< XTextContent > xUrlField( xFactory->createInstance( maUrlTextField ), UNO_QUERY );
+                Reference< XTextContent > xUrlField( getDocumentFactory()->createInstance( maUrlTextField ), UNO_QUERY );
                 OSL_ENSURE( xUrlField.is(), "WorksheetData::finalizeHyperlink - cannot create text field" );
                 if( xUrlField.is() )
                 {
@@ -1410,6 +1404,14 @@ void WorksheetData::finalizeDrawing()
         OOX_LOADSAVE_TIMER( FINALIZEDRAWING );
         importOoxFragment( new OoxDrawingFragment( *this, maDrawingPath ) );
     }
+}
+
+void WorksheetData::finalizeVmlDrawing()
+{
+    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (maVmlDrawingPath.getLength() == 0),
+        "WorksheetData::finalizeVmlDrawing - unexpected VML path" );
+    if( (getFilterType() == FILTER_OOX) && (maVmlDrawingPath.getLength() > 0) )
+        importOoxFragment( new OoxVmlDrawingFragment( *this, maVmlDrawingPath ) );
 }
 
 void WorksheetData::convertColumns()
@@ -1717,6 +1719,11 @@ Reference< XTableRows > WorksheetHelper::getRows( sal_Int32 nFirstRow, sal_Int32
     return mrSheetData.getRows( nFirstRow, nLastRow );
 }
 
+Reference< XDrawPage > WorksheetHelper::getDrawPage() const
+{
+    return mrSheetData.getDrawPage();
+}
+
 Point WorksheetHelper::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     return mrSheetData.getCellPosition( nCol, nRow );
@@ -1760,6 +1767,11 @@ PageSettings& WorksheetHelper::getPageSettings() const
 SheetViewSettings& WorksheetHelper::getSheetViewSettings() const
 {
     return mrSheetData.getSheetViewSettings();
+}
+
+VmlDrawing& WorksheetHelper::getVmlDrawing() const
+{
+    return mrSheetData.getVmlDrawing();
 }
 
 void WorksheetHelper::setStringCell( const Reference< XCell >& rxCell, const OUString& rText ) const
@@ -2001,16 +2013,6 @@ void WorksheetHelper::setDrawingPath( const OUString& rDrawingPath )
 void WorksheetHelper::setVmlDrawingPath( const OUString& rVmlDrawingPath )
 {
     mrSheetData.setVmlDrawingPath( rVmlDrawingPath );
-}
-
-void WorksheetHelper::setOleObject( const OleObjectModel& rModel )
-{
-    mrSheetData.setOleObject( rModel );
-}
-
-void WorksheetHelper::setFormControl( const FormControlModel& rModel )
-{
-    mrSheetData.setFormControl( rModel );
 }
 
 void WorksheetHelper::setBaseColumnWidth( sal_Int32 nWidth )
