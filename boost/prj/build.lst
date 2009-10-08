@@ -1,4 +1,4 @@
-bo      boost : SO:officenames solenv NULL
+bo      boost : SO:so_prereq solenv NULL
 bo      boost           usr1    -       all     bo_mkout NULL
 bo      boost           nmake   -       all     bo_boost NULL
 bo      boost\spirit    nmake   -       all     bo_spirit NULL

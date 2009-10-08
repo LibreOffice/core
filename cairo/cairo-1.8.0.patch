@@ -1,0 +1,251 @@
+diff -ur misc/build/cairo-1.8.0.org/build/Makefile.win32.common misc/build/cairo-1.8.0/build/Makefile.win32.common
+--- misc/build/cairo-1.8.0.org/build/Makefile.win32.common	2008-09-25 14:36:35.000000000 +0300
++++ misc/build/cairo-1.8.0/build/Makefile.win32.common	2008-11-14 22:20:08.000000000 +0200
+@@ -18,8 +18,8 @@
+ OPT := -O2
+ endif
+ 
+-PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman/pixman
+-PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
++PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman-0.12.0/pixman
++PIXMAN_LIBS := $(top_builddir)/../pixman-0.12.0/pixman/$(CFG)/pixman-1.lib
+ 
+ CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
+ ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
+@@ -27,13 +27,15 @@
+ endif
+ ifeq ($(CAIRO_HAS_PS_SURFACE)$(CAIRO_HAS_PDF_SURFACE),00)
+ else
+-CAIRO_LIBS += zdll.lib
++CAIRO_LIBS += zlib.lib
+ endif
+ 
+ DEFAULT_CFLAGS = -MD -nologo $(OPT)
+ DEFAULT_CFLAGS += -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
+ DEFAULT_CFLAGS += -I. -I$(top_srcdir)
+ DEFAULT_CFLAGS += $(PIXMAN_CFLAGS)
++DEFAULT_CFLAGS += $(SOLARINC)
++DEFAULT_CFLAGS += -I$(SOLARVER)/$(INPATH)/inc/zlib -DZLIB_FIX
+ 
+ CAIRO_CFLAGS = $(DEFAULT_CFLAGS) $(CFLAGS)
+ 
+@@ -55,7 +57,7 @@
+ 
+ $(CFG)/%.obj: %.c
+ 	@mkdir -p $(CFG)
+-	@$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
++	$(CC) $(CAIRO_CFLAGS) -c -Fo"$@" $<
+ 
+ $(CFG)/%-static.obj: %.c
+ 	@mkdir -p $(CFG)
+diff -ur misc/build/cairo-1.8.0.org/build/Makefile.win32.features misc/build/cairo-1.8.0/build/Makefile.win32.features
+--- misc/build/cairo-1.8.0.org/build/Makefile.win32.features	2008-09-25 02:15:49.000000000 +0300
++++ misc/build/cairo-1.8.0/build/Makefile.win32.features	2008-11-04 22:19:52.000000000 +0200
+@@ -10,11 +10,11 @@
+ CAIRO_HAS_WIN32_FONT=1
+ CAIRO_HAS_OS2_SURFACE=0
+ CAIRO_HAS_BEOS_SURFACE=0
+-CAIRO_HAS_PNG_FUNCTIONS=1
++CAIRO_HAS_PNG_FUNCTIONS=0
+ CAIRO_HAS_GLITZ_SURFACE=0
+ CAIRO_HAS_DIRECTFB_SURFACE=0
+ CAIRO_HAS_FT_FONT=0
+ CAIRO_HAS_PS_SURFACE=1
+ CAIRO_HAS_PDF_SURFACE=1
+-CAIRO_HAS_SVG_SURFACE=1
++CAIRO_HAS_SVG_SURFACE=0
+ CAIRO_HAS_TEST_SURFACES=0
+diff -ur misc/build/cairo-1.8.0.org/configure misc/build/cairo-1.8.0/configure
+--- misc/build/cairo-1.8.0.org/configure	2008-09-26 01:57:30.000000000 +0300
++++ misc/build/cairo-1.8.0/configure	2008-11-04 22:21:26.000000000 +0200
+@@ -4397,7 +4397,7 @@
+ 
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
+ 
+@@ -4406,7 +4406,7 @@
+   # func_win32_libid shell function, so use a weaker test based on 'objdump',
+   # unless we find 'file', for example because we are cross-compiling.
+   if ( file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'
+@@ -25304,19 +25304,39 @@
+ rm -f confcache
+ 
+ 
+-{ echo "$as_me:$LINENO: checking for compress in -lz" >&5
+-echo $ECHO_N "checking for compress in -lz... $ECHO_C" >&6; }
+-if test "${ac_cv_lib_z_compress+set}" = set; then
++save_libs="$LIBS"
++LIBS="$LIBS $ZLIB3RDLIB"
++
++for ac_func in $COMPRESS
++do
++as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
++{ echo "$as_me:$LINENO: checking for $ac_func" >&5
++echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6; }
++if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+-  ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lz  $LIBS"
+-cat >conftest.$ac_ext <<_ACEOF
++  cat >conftest.$ac_ext <<_ACEOF
+ /* confdefs.h.  */
+ _ACEOF
+ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
++/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
++   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
++#define $ac_func innocuous_$ac_func
++
++/* System header to define __stub macros and hopefully few prototypes,
++    which can conflict with char $ac_func (); below.
++    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
++    <limits.h> exists even on freestanding compilers.  */
++
++#ifdef __STDC__
++# include <limits.h>
++#else
++# include <assert.h>
++#endif
++
++#undef $ac_func
+ 
+ /* Override any GCC internal prototype to avoid an error.
+    Use char because int might match the return type of a GCC
+@@ -25324,11 +25344,18 @@
+ #ifdef __cplusplus
+ extern "C"
+ #endif
+-char compress ();
++char $ac_func ();
++/* The GNU C library defines this for functions which it implements
++    to always fail with ENOSYS.  Some functions are actually named
++    something starting with __ and the normal name is an alias.  */
++#if defined __stub_$ac_func || defined __stub___$ac_func
++choke me
++#endif
++
+ int
+ main ()
+ {
+-return compress ();
++return $ac_func ();
+   ;
+   return 0;
+ }
+@@ -25351,22 +25378,25 @@
+ 	 test ! -s conftest.err
+        } && test -s conftest$ac_exeext &&
+        $as_test_x conftest$ac_exeext; then
+-  ac_cv_lib_z_compress=yes
++  eval "$as_ac_var=yes"
+ else
+   echo "$as_me: failed program was:" >&5
+ sed 's/^/| /' conftest.$ac_ext >&5
+ 
+-	ac_cv_lib_z_compress=no
++	eval "$as_ac_var=no"
+ fi
+ 
+ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+       conftest$ac_exeext conftest.$ac_ext
+-LIBS=$ac_check_lib_save_LIBS
+ fi
+-{ echo "$as_me:$LINENO: result: $ac_cv_lib_z_compress" >&5
+-echo "${ECHO_T}$ac_cv_lib_z_compress" >&6; }
+-if test $ac_cv_lib_z_compress = yes; then
+-  if test "${ac_cv_header_zlib_h+set}" = set; then
++ac_res=`eval echo '${'$as_ac_var'}'`
++	       { echo "$as_me:$LINENO: result: $ac_res" >&5
++echo "${ECHO_T}$ac_res" >&6; }
++if test `eval echo '${'$as_ac_var'}'` = yes; then
++  cat >>confdefs.h <<_ACEOF
++#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
++_ACEOF
++ if test "${ac_cv_header_zlib_h+set}" = set; then
+   { echo "$as_me:$LINENO: checking for zlib.h" >&5
+ echo $ECHO_N "checking for zlib.h... $ECHO_C" >&6; }
+ if test "${ac_cv_header_zlib_h+set}" = set; then
+@@ -25506,7 +25536,9 @@
+ else
+   have_libz="no (requires zlib http://www.gzip.org/zlib/)"
+ fi
++done
+ 
++LIBS="$save_libs"
+ 
+ 
+ { echo "$as_me:$LINENO: checking for X" >&5
+@@ -34097,7 +34129,7 @@
+ 
+     # The ps backend requires zlib.
+     use_ps=$have_libz
+-    ps_NONPKGCONFIG_LIBS=-lz
++    ps_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 			cairo_cv_ps_use=$use_ps
+ 			cairo_cv_ps_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS"
+@@ -34444,7 +34476,7 @@
+ 
+     # The pdf backend requires zlib.
+     use_pdf=$have_libz
+-    pdf_NONPKGCONFIG_LIBS=-lz
++    pdf_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+ 
+ 			cairo_cv_pdf_use=$use_pdf
+ 			cairo_cv_pdf_cache_vars=" BASE REQUIRES CFLAGS NONPKGCONFIG_CFLAGS LIBS NONPKGCONFIG_LIBS"
+diff -ur misc/build/cairo-1.8.0.org/src/cairo-deflate-stream.c misc/build/cairo-1.8.0/src/cairo-deflate-stream.c
+--- misc/build/cairo-1.8.0.org/src/cairo-deflate-stream.c	2008-09-25 13:03:43.000000000 +0300
++++ misc/build/cairo-1.8.0/src/cairo-deflate-stream.c	2008-11-14 22:21:00.000000000 +0200
+@@ -36,7 +36,11 @@
+ 
+ #include "cairoint.h"
+ #include "cairo-output-stream-private.h"
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ 
+ #define BUFFER_SIZE 16384
+ 
+diff -ur misc/build/cairo-1.8.0.org/src/cairo-pdf-surface.c misc/build/cairo-1.8.0/src/cairo-pdf-surface.c
+--- misc/build/cairo-1.8.0.org/src/cairo-pdf-surface.c	2008-09-25 14:36:35.000000000 +0300
++++ misc/build/cairo-1.8.0/src/cairo-pdf-surface.c	2008-11-14 22:20:41.000000000 +0200
+@@ -51,7 +51,11 @@
+ #include "cairo-type3-glyph-surface-private.h"
+ 
+ #include <time.h>
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ 
+ /* Issues:
+  *
+diff -ur misc/build/cairo-1.8.0.org/src/cairo-ps-surface.c misc/build/cairo-1.8.0/src/cairo-ps-surface.c
+--- misc/build/cairo-1.8.0.org/src/cairo-ps-surface.c	2008-09-25 14:36:35.000000000 +0300
++++ misc/build/cairo-1.8.0/src/cairo-ps-surface.c	2008-11-14 22:21:33.000000000 +0200
+@@ -67,7 +67,11 @@
+ #include <stdio.h>
+ #include <ctype.h>
+ #include <time.h>
++#ifdef ZLIB_FIX
++#include <zlib/zlib.h>
++#else
+ #include <zlib.h>
++#endif
+ #include <errno.h>
+ 
+ #define DEBUG_PS 0

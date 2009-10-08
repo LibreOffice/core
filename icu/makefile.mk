@@ -65,7 +65,10 @@ icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
 .IF "$(COMNAME)"=="sunpro5"
 icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
-icu_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
+# add SYSBASE libraries and make certain that they are found *after* the 
+# icu build internal libraries - in case that icu is available in SYSBASE
+# as well
+icu_LDFLAGS+= -L../../lib -L../../stubdata  -L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
 .IF "$(OS)"=="MACOSX"
@@ -141,10 +144,11 @@ OUT2BIN= \
 .IF "$(GUI)"=="WNT"
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
+CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
 .IF "$(USE_MINGW)"=="cygwin"
-CONFIGURE_ACTION=+sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 .ELSE
-CONFIGURE_ACTION=+sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 .ENDIF
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
@@ -174,9 +178,12 @@ OUT2BIN= \
 .ELSE
 .IF "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=^
+.ELSE
+BUILD_ACTION_SEP=;
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
+
 # Activating the debug mechanism produces incompatible libraries, you'd have
 # at least to relink all modules that are directly using ICU. Note that library
 # names get a 'd' appended and you'd have to edit the solenv/inc/libs.mk

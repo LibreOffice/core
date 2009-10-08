@@ -33,6 +33,7 @@ PRJ=..
 
 PRJNAME=cairo
 TARGET=so_cairo
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -46,25 +47,17 @@ all:
 all:
     @echo "Nothing to do, using system cairo."
 
-.ELIF "$(BUILD_CAIRO)" == ""
-all:
-       @echo "Not building cairo from source, prebuilt binaries will be used."
-
 .ENDIF
 
 # --- Files --------------------------------------------------------
 
-CAIROVERSION=1.6.4
+CAIROVERSION=1.8.0
 
 TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
 PATCH_FILE_NAME=..$/$(TARFILE_NAME).patch
 
-cairo_CFLAGS=-I$(SOLARINC)
-cairo_LDFLAGS=-L$(SOLARLIB)
-
-# pixman is in this module
-pixman_CFLAGS=-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc
-pixman_LIBS=-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib -lpixman-1
+cairo_CFLAGS=$(SOLARINC)
+cairo_LDFLAGS=$(SOLARLIB)
 
 cairo_CPPFLAGS=
 .IF "$(SYSTEM_ZLIB)"!="YES"
@@ -78,11 +71,13 @@ cairo_CPPFLAGS+=$(INCLUDE)
 .IF "$(OS)"=="WNT"
 # --------- Windows -------------------------------------------------
 .IF "$(COM)"=="GCC"
+cairo_CFLAGS+=-D_MT
+cairo_LDFLAGS+=-no-undefined -L$(ILIB:s/;/ -L/)
 cairo_CPPFLAGS+=-nostdinc
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-CONFIGURE_FLAGS=--disable-xlib --disable-freetype --disable-pthread --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CFLAGS=-D_MT CPPFLAGS="$(cairo_CPPFLAGS)" LDFLAGS="$(cairo_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS=-lmingwthrd pixman_CFLAGS="$(pixman_CFLAGS)" pixman_LIBS="$(pixman_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--disable-xlib --disable-ft --disable-pthread --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config LIBS=-lmingwthrd ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -91,13 +86,8 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 .ELSE   # WNT, not GCC
-CONFIGURE_DIR=win32
-CONFIGURE_ACTION=cscript configure.js
-.IF "$(debug)"!=""
-CONFIGURE_FLAGS+=debug=yes
-.ENDIF
-BUILD_ACTION=nmake
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_ACTION=$(GNUMAKE) -f Makefile.win32 CFG=release
+BUILD_DIR=
 .ENDIF
 
 OUT2INC+=src$/cairo-win32.h
@@ -106,7 +96,7 @@ OUT2INC+=src$/cairo-win32.h
 # ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-freetype --disable-svg --disable-png --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config CFLAGS="$(cairo_CFLAGS)" CPPFLAGS="$(cairo_CPPFLAGS)" LDFLAGS="$(cairo_LDFLAGS)" pixman_CFLAGS="$(pixman_CFLAGS)" pixman_LIBS="$(pixman_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --disable-png --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -116,20 +106,19 @@ OUT2INC+=src$/cairo-quartz.h
 .ELSE
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+cairo_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
 .ELIF "$(OS)$(COM)"=="SOLARISC52"
-LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
-.ELIF "$(OS)"=="MACOSX"      # X11 on Mac OS X
-cairo_LDFLAGS+=-lfontconfig -lXrender
+cairo_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
 
 .IF "$(SYSBASE)"!=""
 cairo_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external $(EXTRA_CFLAGS)
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
-LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
+cairo_LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
 
+LDFLAGS:=$(cairo_LDFLAGS)
 .EXPORT: LDFLAGS
 
 .IF "$(COMNAME)"=="sunpro5"
@@ -138,27 +127,36 @@ cairo_CFLAGS+=-xc99=none
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-xlib --enable-freetype --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no CFLAGS="$(cairo_CFLAGS)" CPPFLAGS="$(cairo_CPPFLAGS)" LDFLAGS="$(cairo_LDFLAGS)" pixman_CFLAGS="$(pixman_CFLAGS)" pixman_LIBS="$(pixman_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
-.IF "$(OS)"=="MACOSX"      # X11 on Mac OS X
-CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-CONFIGURE_FLAGS+=--disable-quartz --disable-quartz-font PKG_CONFIG=./dummy_pkg_config
-.ENDIF
+CONFIGURE_FLAGS=--enable-xlib --enable-ft --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 
 OUT2INC+=src$/cairo-xlib.h \
-     src$/cairo-xlib-xrender.h
+     src$/cairo-xlib-xrender.h \
+     src$/cairo-ft.h
 
 .ENDIF
 
 
-
 # -------- All platforms --------------------------------------------
 
+.IF "$(OS)" != "WNT" || "$(COM)" == "GCC"
+# all other platforms except vanilla WNT, which does not use configure
 
+.IF "$(BUILD_PIXMAN)" == "YES"
+# pixman is in this module
+# We include paths to this module also in LDFLAGS/CFLAGS to guarantee search order.
+# However pixman_* vars need to be also set for configure to work properly on all platforms.
+CONFIGURE_FLAGS+=pixman_CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc" pixman_LIBS="-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib -lpixman-1"
+.ENDIF
 
-OUT2INC+=src$/cairo-deprecated.h \
+CONFIGURE_FLAGS+=CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc $(cairo_CFLAGS)" LDFLAGS="-L$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/lib $(cairo_LDFLAGS)" CPPFLAGS="$(cairo_CPPFLAGS)"
+
+.ENDIF
+
+OUT2INC+=cairo-version.h \
+     src$/cairo-deprecated.h \
      src$/cairo-features.h  \
      src$/cairo-pdf.h	\
      src$/cairo-ps.h	\
@@ -171,8 +169,8 @@ OUT2LIB+=src$/.libs$/libcairo*.dylib
 OUT2BIN+=src$/.libs$/*.a
 OUT2BIN+=src$/.libs$/*.dll
 .ELSE
-OUT2LIB+=win32$/bin.msvc$/*.lib
-OUT2BIN+=win32$/bin.msvc$/*.dll
+OUT2LIB+=src$/release$/*.lib
+OUT2BIN+=src$/release$/*.dll
 .ENDIF
 .ELSE
 OUT2LIB+=src$/.libs$/libcairo.so*

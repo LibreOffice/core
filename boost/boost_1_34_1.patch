@@ -1,235 +1,260 @@
-*** misc/boost_1_34_1/boost/config/compiler/visualc.hpp	2006-01-13 11:48:08.000000000 +0100
---- misc/build/boost_1_34_1/boost/config/compiler/visualc.hpp	2007-10-16 15:53:00.689904000 +0200
-***************
-*** 108,113 ****
---- 108,116 ----
-  #  define BOOST_DISABLE_WIN32
-  #endif
-  
-+ // disable WORKAROUND macro - gives warning for undefined macros
-+ #define BOOST_STRICT_CONFIG
-+ 
-  //
-  // all versions support __declspec:
-  //
-*** misc/boost_1_34_1/boost/spirit/core/impl/match.ipp	Wed Jul 14 16:24:02 2004
---- misc/build/boost_1_34_1/boost/spirit/core/impl/match.ipp	Wed Nov 14 18:47:30 2007
-***************
-*** 17,28 ****
-      : len(-1), val() {}
-  
-      template <typename T>
-!     inline match<T>::match(std::size_t length)
-!     : len(length), val() {}
-  
-      template <typename T>
-!     inline match<T>::match(std::size_t length, ctor_param_t val_)
-!     : len(length), val(val_) {}
-  
-      template <typename T>
-      inline bool
---- 17,28 ----
-      : len(-1), val() {}
-  
-      template <typename T>
-!     inline match<T>::match(std::size_t _length)
-!     : len(_length), val() {}
-  
-      template <typename T>
-!     inline match<T>::match(std::size_t _length, ctor_param_t val_)
-!     : len(_length), val(val_) {}
-  
-      template <typename T>
-      inline bool
-***************
-*** 64,74 ****
-      inline match<nil_t>::match()
-      : len(-1) {}
-  
-!     inline match<nil_t>::match(std::size_t length)
-!     : len(length) {}
-  
-!     inline match<nil_t>::match(std::size_t length, nil_t)
-!     : len(length) {}
-  
-      inline bool
-      match<nil_t>::operator!() const
---- 64,74 ----
-      inline match<nil_t>::match()
-      : len(-1) {}
-  
-!     inline match<nil_t>::match(std::size_t _length)
-!     : len(_length) {}
-  
-!     inline match<nil_t>::match(std::size_t _length, nil_t)
-!     : len(_length) {}
-  
-      inline bool
-      match<nil_t>::operator!() const
-*** misc/boost_1_34_1/boost/spirit/core/non_terminal/impl/rule.ipp	Fri Jul  9 10:28:02 2004
---- misc/build/boost_1_34_1/boost/spirit/core/non_terminal/impl/rule.ipp	Wed Nov 14 18:47:30 2007
-***************
-*** 224,230 ****
-          template <typename ParserT, typename ScannerT, typename AttrT>
-          struct concrete_parser : abstract_parser<ScannerT, AttrT>
-          {
-!             concrete_parser(ParserT const& p) : p(p) {}
-              virtual ~concrete_parser() {}
-  
-              virtual typename match_result<ScannerT, AttrT>::type
---- 224,230 ----
-          template <typename ParserT, typename ScannerT, typename AttrT>
-          struct concrete_parser : abstract_parser<ScannerT, AttrT>
-          {
-!             concrete_parser(ParserT const& _p) : p(_p) {}
-              virtual ~concrete_parser() {}
-  
-              virtual typename match_result<ScannerT, AttrT>::type
-*** misc/boost_1_34_1/boost/spirit/core/non_terminal/parser_id.hpp	Mon Jan 17 02:01:52 2005
---- misc/build/boost_1_34_1/boost/spirit/core/non_terminal/parser_id.hpp	Wed Nov 14 18:47:30 2007
-***************
-*** 104,110 ****
-                  : parser_id(reinterpret_cast<std::size_t>(this)); 
-          }
-  
-!         void set_id(parser_id id) { tag = id; } 
-          
-      private:
-      
---- 104,110 ----
-                  : parser_id(reinterpret_cast<std::size_t>(this)); 
-          }
-  
-!         void set_id(parser_id _id) { tag = _id; } 
-          
-      private:
-      
-*** misc/boost_1_34_1/boost/spirit/core/non_terminal/rule.hpp	Fri Jul  9 10:28:01 2004
---- misc/build/boost_1_34_1/boost/spirit/core/non_terminal/rule.hpp	Wed Nov 14 18:47:30 2007
-***************
-*** 157,164 ****
-              return ptr.get();
-          }
-  
-!         rule(abstract_parser_t const* ptr)
-!         : ptr(ptr) {}
-  
-          scoped_ptr<abstract_parser_t> ptr;
-      };
---- 157,164 ----
-              return ptr.get();
-          }
-  
-!         rule(abstract_parser_t const* _ptr)
-!         : ptr(_ptr) {}
-  
-          scoped_ptr<abstract_parser_t> ptr;
-      };
-*** misc/boost_1_34_1/boost/spirit/core/non_terminal/subrule.hpp	Thu Feb  9 00:05:38 2006
---- misc/build/boost_1_34_1/boost/spirit/core/non_terminal/subrule.hpp	Wed Nov 14 18:47:30 2007
-***************
-*** 208,214 ****
-              subrule_list<
-                  subrule_parser<ID2, DefT2, ContextT2>,
-                  nil_t> >
-!         operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs) const
-          {
-              return subrule_list<
-                  self_t,
---- 208,214 ----
-              subrule_list<
-                  subrule_parser<ID2, DefT2, ContextT2>,
-                  nil_t> >
-!         operator,(subrule_parser<ID2, DefT2, ContextT2> const& _rhs) const
-          {
-              return subrule_list<
-                  self_t,
-***************
-*** 218,224 ****
-                          *this,
-                          subrule_list<
-                              subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
-!                                 rhs, nil_t()));
-          }
-  
-          typename DefT::embed_t rhs;
---- 218,224 ----
-                          *this,
-                          subrule_list<
-                              subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
-!                                 _rhs, nil_t()));
-          }
-  
-          typename DefT::embed_t rhs;
-***************
-*** 256,265 ****
-          parse_main(ScannerT const& scan) const
-          {
-              typedef typename parser_result<self_t, ScannerT>::type result_t;
-!             result_t result;
-              impl::parse_subrule<result_t, ScannerT, ID>::
-!                 do_(result, scan);
-!             return result;
-          }
-  
-          template <typename ScannerT>
---- 256,265 ----
-          parse_main(ScannerT const& scan) const
-          {
-              typedef typename parser_result<self_t, ScannerT>::type result_t;
-!             result_t _result;
-              impl::parse_subrule<result_t, ScannerT, ID>::
-!                 do_(_result, scan);
-!             return _result;
-          }
-  
-          template <typename ScannerT>
-*** misc/boost_1_34_1/boost/spirit/core/scanner/scanner.hpp	Thu Feb  9 00:05:39 2006
---- misc/build/boost_1_34_1/boost/spirit/core/scanner/scanner.hpp	Wed Nov 14 18:47:30 2007
-***************
-*** 242,263 ****
-          bool
-          at_end() const
-          {
-!             typedef typename PoliciesT::iteration_policy_t iteration_policy_t;
-!             return iteration_policy_t::at_end(*this);
-          }
-  
-          value_t
-          operator*() const
-          {
-!             typedef typename PoliciesT::iteration_policy_t iteration_policy_t;
-!             return iteration_policy_t::filter(iteration_policy_t::get(*this));
-          }
-  
-          scanner const&
-          operator++() const
-          {
-!             typedef typename PoliciesT::iteration_policy_t iteration_policy_t;
-!             iteration_policy_t::advance(*this);
-              return *this;
-          }
-  
---- 242,263 ----
-          bool
-          at_end() const
-          {
-!             typedef typename PoliciesT::iteration_policy_t _iteration_policy_t;
-!             return _iteration_policy_t::at_end(*this);
-          }
-  
-          value_t
-          operator*() const
-          {
-!             typedef typename PoliciesT::iteration_policy_t _iteration_policy_t;
-!             return _iteration_policy_t::filter(_iteration_policy_t::get(*this));
-          }
-  
-          scanner const&
-          operator++() const
-          {
-!             typedef typename PoliciesT::iteration_policy_t _iteration_policy_t;
-!             _iteration_policy_t::advance(*this);
-              return *this;
-          }
-  
+--- misc/boost_1_34_1/boost/config/compiler/visualc.hpp	2006-01-13 10:48:08.000000000 +0000
++++ misc/build/boost_1_34_1/boost/config/compiler/visualc.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -108,6 +108,9 @@
+ #  define BOOST_DISABLE_WIN32
+ #endif
+ 
++// disable WORKAROUND macro - gives warning for undefined macros
++#define BOOST_STRICT_CONFIG
++
+ //
+ // all versions support __declspec:
+ //
+--- misc/boost_1_34_1/boost/mpl/apply.hpp	2004-09-02 16:40:41.000000000 +0100
++++ misc/build/boost_1_34_1/boost/mpl/apply.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -135,7 +135,8 @@
+ 
+ ///// iteration, depth == 1
+ 
+-#elif BOOST_PP_ITERATION_DEPTH() == 1
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 1
+ 
+ #   define i_ BOOST_PP_FRAME_ITERATION(1)
+ 
+@@ -222,4 +223,5 @@
+ 
+ #   undef i_
+ 
++#endif
+ #endif // BOOST_PP_IS_ITERATING
+--- misc/boost_1_34_1/boost/mpl/apply_wrap.hpp	2004-09-03 16:56:55.000000000 +0100
++++ misc/build/boost_1_34_1/boost/mpl/apply_wrap.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -78,7 +78,8 @@
+ 
+ ///// iteration, depth == 1
+ 
+-#elif BOOST_PP_ITERATION_DEPTH() == 1
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 1
+ 
+ #   define i_ BOOST_PP_FRAME_ITERATION(1)
+ 
+@@ -169,8 +170,8 @@
+ #   undef i_
+ 
+ ///// iteration, depth == 2
+-
+-#elif BOOST_PP_ITERATION_DEPTH() == 2
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 2
+ 
+ #   define j_ BOOST_PP_FRAME_ITERATION(2)
+ 
+@@ -197,4 +198,6 @@
+ 
+ #   undef j_
+ 
++#endif
++#endif
+ #endif // BOOST_PP_IS_ITERATING
+--- misc/boost_1_34_1/boost/mpl/aux_/full_lambda.hpp	2004-09-04 02:10:19.000000000 +0100
++++ misc/build/boost_1_34_1/boost/mpl/aux_/full_lambda.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -227,7 +227,8 @@
+ 
+ ///// iteration, depth == 1
+ 
+-#elif BOOST_PP_ITERATION_DEPTH() == 1
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 1
+ #define i_ BOOST_PP_FRAME_ITERATION(1)
+ 
+ #if i_ > 0
+@@ -347,4 +348,5 @@
+ };
+ 
+ #undef i_
++#endif
+ #endif // BOOST_PP_IS_ITERATING
+--- misc/boost_1_34_1/boost/mpl/aux_/numeric_op.hpp	2005-08-25 17:27:21.000000000 +0100
++++ misc/build/boost_1_34_1/boost/mpl/aux_/numeric_op.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -287,7 +287,8 @@
+ 
+ ///// iteration, depth == 1
+ 
+-#elif BOOST_PP_ITERATION_DEPTH() == 1
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 1
+ 
+ #   define i_ BOOST_PP_FRAME_ITERATION(1)
+ 
+@@ -308,4 +309,5 @@
+ 
+ #   undef i_
+ 
++#endif
+ #endif // BOOST_PP_IS_ITERATING
+--- misc/boost_1_34_1/boost/mpl/bind.hpp	2004-10-26 15:51:04.000000000 +0100
++++ misc/build/boost_1_34_1/boost/mpl/bind.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -361,7 +361,8 @@
+ 
+ ///// iteration, depth == 1
+ 
+-#elif BOOST_PP_ITERATION_DEPTH() == 1
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 1
+ 
+ #   define i_ BOOST_PP_FRAME_ITERATION(1)
+ 
+@@ -528,7 +529,8 @@
+ 
+ ///// iteration, depth == 2
+ 
+-#elif BOOST_PP_ITERATION_DEPTH() == 2
++#else
++#if BOOST_PP_ITERATION_DEPTH() == 2
+ 
+ #   define j_ BOOST_PP_FRAME_ITERATION(2)
+ #   if !defined(BOOST_MPL_CFG_NO_UNNAMED_PLACEHOLDER_SUPPORT)
+@@ -544,4 +546,6 @@
+ #   endif
+ #   undef j_
+ 
++#endif
++#endif
+ #endif // BOOST_PP_IS_ITERATING
+--- misc/boost_1_34_1/boost/spirit/core/impl/match.ipp	2004-07-14 15:24:02.000000000 +0100
++++ misc/build/boost_1_34_1/boost/spirit/core/impl/match.ipp	2008-12-03 13:54:01.000000000 +0000
+@@ -17,12 +17,12 @@
+     : len(-1), val() {}
+ 
+     template <typename T>
+-    inline match<T>::match(std::size_t length)
+-    : len(length), val() {}
++    inline match<T>::match(std::size_t _length)
++    : len(_length), val() {}
+ 
+     template <typename T>
+-    inline match<T>::match(std::size_t length, ctor_param_t val_)
+-    : len(length), val(val_) {}
++    inline match<T>::match(std::size_t _length, ctor_param_t val_)
++    : len(_length), val(val_) {}
+ 
+     template <typename T>
+     inline bool
+@@ -64,11 +64,11 @@
+     inline match<nil_t>::match()
+     : len(-1) {}
+ 
+-    inline match<nil_t>::match(std::size_t length)
+-    : len(length) {}
++    inline match<nil_t>::match(std::size_t _length)
++    : len(_length) {}
+ 
+-    inline match<nil_t>::match(std::size_t length, nil_t)
+-    : len(length) {}
++    inline match<nil_t>::match(std::size_t _length, nil_t)
++    : len(_length) {}
+ 
+     inline bool
+     match<nil_t>::operator!() const
+--- misc/boost_1_34_1/boost/spirit/core/non_terminal/impl/rule.ipp	2004-07-09 09:28:02.000000000 +0100
++++ misc/build/boost_1_34_1/boost/spirit/core/non_terminal/impl/rule.ipp	2008-12-03 13:54:01.000000000 +0000
+@@ -224,7 +224,7 @@
+         template <typename ParserT, typename ScannerT, typename AttrT>
+         struct concrete_parser : abstract_parser<ScannerT, AttrT>
+         {
+-            concrete_parser(ParserT const& p) : p(p) {}
++            concrete_parser(ParserT const& _p) : p(_p) {}
+             virtual ~concrete_parser() {}
+ 
+             virtual typename match_result<ScannerT, AttrT>::type
+--- misc/boost_1_34_1/boost/spirit/core/non_terminal/parser_id.hpp	2005-01-17 01:01:52.000000000 +0000
++++ misc/build/boost_1_34_1/boost/spirit/core/non_terminal/parser_id.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -104,7 +104,7 @@
+                 : parser_id(reinterpret_cast<std::size_t>(this)); 
+         }
+ 
+-        void set_id(parser_id id) { tag = id; } 
++        void set_id(parser_id _id) { tag = _id; } 
+         
+     private:
+     
+--- misc/boost_1_34_1/boost/spirit/core/non_terminal/rule.hpp	2004-07-09 09:28:01.000000000 +0100
++++ misc/build/boost_1_34_1/boost/spirit/core/non_terminal/rule.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -157,8 +157,8 @@
+             return ptr.get();
+         }
+ 
+-        rule(abstract_parser_t const* ptr)
+-        : ptr(ptr) {}
++        rule(abstract_parser_t const* _ptr)
++        : ptr(_ptr) {}
+ 
+         scoped_ptr<abstract_parser_t> ptr;
+     };
+--- misc/boost_1_34_1/boost/spirit/core/non_terminal/subrule.hpp	2006-02-08 23:05:38.000000000 +0000
++++ misc/build/boost_1_34_1/boost/spirit/core/non_terminal/subrule.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -208,7 +208,7 @@
+             subrule_list<
+                 subrule_parser<ID2, DefT2, ContextT2>,
+                 nil_t> >
+-        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs) const
++        operator,(subrule_parser<ID2, DefT2, ContextT2> const& _rhs) const
+         {
+             return subrule_list<
+                 self_t,
+@@ -218,7 +218,7 @@
+                         *this,
+                         subrule_list<
+                             subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
+-                                rhs, nil_t()));
++                                _rhs, nil_t()));
+         }
+ 
+         typename DefT::embed_t rhs;
+@@ -256,10 +256,10 @@
+         parse_main(ScannerT const& scan) const
+         {
+             typedef typename parser_result<self_t, ScannerT>::type result_t;
+-            result_t result;
++            result_t _result;
+             impl::parse_subrule<result_t, ScannerT, ID>::
+-                do_(result, scan);
+-            return result;
++                do_(_result, scan);
++            return _result;
+         }
+ 
+         template <typename ScannerT>
+--- misc/boost_1_34_1/boost/spirit/core/scanner/scanner.hpp	2006-02-08 23:05:39.000000000 +0000
++++ misc/build/boost_1_34_1/boost/spirit/core/scanner/scanner.hpp	2008-12-03 13:54:01.000000000 +0000
+@@ -242,22 +242,22 @@
+         bool
+         at_end() const
+         {
+-            typedef typename PoliciesT::iteration_policy_t iteration_policy_t;
+-            return iteration_policy_t::at_end(*this);
++            typedef typename PoliciesT::iteration_policy_t _iteration_policy_t;
++            return _iteration_policy_t::at_end(*this);
+         }
+ 
+         value_t
+         operator*() const
+         {
+-            typedef typename PoliciesT::iteration_policy_t iteration_policy_t;
+-            return iteration_policy_t::filter(iteration_policy_t::get(*this));
++            typedef typename PoliciesT::iteration_policy_t _iteration_policy_t;
++            return _iteration_policy_t::filter(_iteration_policy_t::get(*this));
+         }
+ 
+         scanner const&
+         operator++() const
+         {
+-            typedef typename PoliciesT::iteration_policy_t iteration_policy_t;
+-            iteration_policy_t::advance(*this);
++            typedef typename PoliciesT::iteration_policy_t _iteration_policy_t;
++            _iteration_policy_t::advance(*this);
+             return *this;
+         }
+ 
