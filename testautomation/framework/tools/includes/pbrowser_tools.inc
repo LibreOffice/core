@@ -69,28 +69,34 @@ function hOpenPropertyBrowser() as boolean
     const CFN = "hOpenPropertyBrowser::"
     
     '///+<li>Open the property browser (call slot)</li>
-    ContextProperties
-    
-    '///+<li>Verify that the property browser is open</li>
-    kontext "ControlPropertiesTabControl"
-    if ( ControlPropertiesTabControl.exists( 2 ) ) then
+    try
+        ContextProperties
         
-        '///+<li>Activate General-tabpage</li>
-        ControlPropertiesTabControl.setPage( TabGeneralControl )
-    
-        '///+<li>Verify that the General-tabpage is visible</li>
-        kontext "TabGeneralControl"
-        if ( TabGeneralControl.isVisible() ) then
-            printlog( CFN & "ok" )
-            hOpenPropertyBrowser() = true
+        '///+<li>Verify that the property browser is open</li>
+        kontext "ControlPropertiesTabControl"
+        if ( ControlPropertiesTabControl.exists( 2 ) ) then
+            
+            '///+<li>Activate General-tabpage</li>
+            ControlPropertiesTabControl.setPage( TabGeneralControl )
+        
+            '///+<li>Verify that the General-tabpage is visible</li>
+            kontext "TabGeneralControl"
+            if ( TabGeneralControl.isVisible() ) then
+                printlog( CFN & "ok" )
+                hOpenPropertyBrowser() = true
+            else
+                printlog( CFN & "General-tab is not visible." )
+                hOpenPropertyBrowser() = false
+            endif   
         else
-            printlog( CFN & "General-tab is not visible." )
-            hOpenPropertyBrowser() = false
-        endif   
-    else
-        printlog( CFN & "Could not open property browser" )
-        hOpenPropertyBrowser() = false    
-    endif
+            printlog( CFN & "Could not open property browser" )
+            hOpenPropertyBrowser() = false    
+        endif
+    catch
+        hOpenPropertyBrowser() = false
+        printlog( CFN & "Slot <ContextProperties> not available" )
+    endcatch
+    
     '///</ul>
     
 end function
@@ -127,7 +133,7 @@ function hClosePropertyBrowser() as boolean
 
     '///+<li>Verify that the property browser is open</li>
     kontext "ControlPropertiesTabControl"
-    if ( ControlPropertiesTabControl.exists() ) then
+    if ( ControlPropertiesTabControl.exists( 1 ) ) then
     
         '///+<li>Execute the ContextProperties slot</li>
         ContextProperties
@@ -183,9 +189,10 @@ function hPBSetControlName( cControl as string ) as boolean
         '///+<li>Set the new name</li>
         WaitSlot()
         
+        ' Name the control and append some Spaces which should be truncated.
         printlog( CFN & "Naming control: " & cControl )
         NameText.setText( cControl )
-        TabGeneralControl.typeKeys( "<RETURN>" )
+        TabGeneralControl.typeKeys( "   <RETURN>" )
         WaitSlot()
         
         printlog( CFN & "Verifying rename..." )

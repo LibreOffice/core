@@ -56,11 +56,14 @@ testcase tFormatStylistFlyer
     Dim ySize%
 
     printlog "   - Format/Stylist : using all possible things to manipulate the flyer"
+    '/// open application ///'
     Call  hNewDocument
     Kontext "Gestalter"
+    '/// Check if stylist is there. Expected: not there ///'
     if Gestalter.NotExists = false Then
         qaErrorLog "   - Expected Stylist to be closed; But is Open. Check tests."
     else
+        hTypekeys "<F11>"   '/// open stylist by pressing key [F11] ///'
         sleep 1
     end if
     Kontext "Gestalter"
@@ -68,67 +71,89 @@ testcase tFormatStylistFlyer
         Warnlog "   No stylist popped up using F11; opening now via slotID"
         FormatStylist
     end if
+    '///+ save stylist position and size ///'
     xPos% = Gestalter.GetPosX
     yPos% = Gestalter.GetPosY
     xSize% = Gestalter.GetSizeX
     ySize% = Gestalter.GetSizeY
+    '///+ if Stylist is docked; undock ///'
     if Gestalter.IsDocked then Gestalter.UnDock
-        Gestalter.Move 10, 10
-        Sleep 1
-        Gestalter.Move 300, 400
-        Sleep 1
-        Gestalter.Move 590, 790
-        Sleep 1
-        Gestalter.Move xPos%, yPos%
-        Sleep 1
+    printlog "  -   '///move stylist ///"
+    '///+ move stylist to 10,10 ///'
+    Gestalter.Move 10, 10
+    Sleep 1
+    '///+ move stylist to 300,400 ///'
+    Gestalter.Move 300, 400
+    Sleep 1
+    '///+ move stylist to 590,790 ///'
+    Gestalter.Move 590, 790
+    Sleep 1
+    '///+ move stylist back to saved start position ///'
+    Gestalter.Move xPos%, yPos%
+    Sleep 1
 
-        Gestalter.Size 200, 200
-        Sleep 1
-        Gestalter.Size 300, 400
-        Sleep 1
-        Gestalter.Size 150, 250
-        Sleep 1
-        Gestalter.Size xSize%, ySize%
-        Sleep 1
+    printlog "  -   '///size stylist ///"
+    '///+ change size to 200,200 ///'
+    Gestalter.Size 200, 200
+    Sleep 1
+    '///+ change size to 300,400 ///'
+    Gestalter.Size 300, 400
+    Sleep 1
+    '///+ change size to 150,250 ///'
+    Gestalter.Size 150, 250
+    Sleep 1
+    '///+ change size back to saved size ///'
+    Gestalter.Size xSize%, ySize%
+    Sleep 1
 
-        printlog "  -   Close stylist reopen stylist, check if appearence is same as before"
-        xPos% = Gestalter.GetPosX
-        yPos% = Gestalter.GetPosY
-        xSize% = Gestalter.GetSizeX
-        ySize% = Gestalter.GetSizeY
-        FormatStylist
-        Sleep 1
-        FormatStylist
-        sleep (1)
-        if xPos% <> Gestalter.GetPosX then Warnlog "The x-Pos. has changed : Should be -> '"+ xPos% +  "'  Is -> '"+ Gestalter.GetPosX  +"'."
-            if yPos% <> Gestalter.GetPosY then Warnlog "The y-Pos. has changed : Should be -> '"+ yPos% +  "'  Is -> '"+ Gestalter.GetPosY  +"'."
-                if xSize% <> Gestalter.GetSizeX then Warnlog "The x-Size has changed : Should be -> '"+ xSize% + "'  Is -> '"+ Gestalter.GetSizeX +"'."
-                    if ySize% <> Gestalter.GetSizeY then Warnlog "The y-Size has changed : Should be -> '"+ ySize% + "'  Is -> '"+ Gestalter.GetSizeY +"'."
+    printlog "  -   Close stylist reopen stylist, check if appearence is same as before"
+    '/// save stylist position and size ///'
+    xPos% = Gestalter.GetPosX
+    yPos% = Gestalter.GetPosY
+    xSize% = Gestalter.GetSizeX
+    ySize% = Gestalter.GetSizeY
+    '/// close stylist Format->Stylist ///'
+    FormatStylist
+    Sleep 1
+    '/// open stylist Format->Stylist ///'
+    FormatStylist
+    sleep (1)
+    if xPos% <> Gestalter.GetPosX then Warnlog "The x-Pos. has changed : Should be -> '"+ xPos% +  "'  Is -> '"+ Gestalter.GetPosX  +"'."
+    if yPos% <> Gestalter.GetPosY then Warnlog "The y-Pos. has changed : Should be -> '"+ yPos% +  "'  Is -> '"+ Gestalter.GetPosY  +"'."
+    if xSize% <> Gestalter.GetSizeX then Warnlog "The x-Size has changed : Should be -> '"+ xSize% + "'  Is -> '"+ Gestalter.GetSizeX +"'."
+    if ySize% <> Gestalter.GetSizeY then Warnlog "The y-Size has changed : Should be -> '"+ ySize% + "'  Is -> '"+ Gestalter.GetSizeY +"'."
 
-                        printlog "  -   dock stylist"
-                        Gestalter.Dock
-                        Sleep 1
-                        if (NOT Gestalter.IsDocked) then
-                            warnlog "   stylist not docked but should"
-                        endif
-                        if (Gestalter.IsDocked) Then
-                            Gestalter.UnDock
-                        endif
-                        Sleep 1
+    printlog "  -   dock stylist"
+    '/// dock stylist ///'
+    Gestalter.Dock
+    Sleep 1
+    if (NOT Gestalter.IsDocked) then
+        warnlog "   stylist not docked but should"
+    endif
+    '/// UNdock stylist ///'
+    if (Gestalter.IsDocked) Then
+        Gestalter.UnDock
+    endif
+    Sleep 1
 
-                        printlog "  -   maximize/minimize stylist"
-                        Gestalter.Minimize
-                        Sleep 1
-                        Gestalter.Maximize
-                        Sleep 1
-                        if (NOT Gestalter.IsMax) then
-                            warnlog "   The stylist did not return to maximized state"
-                        endif
-                        Gestalter.Close
-                        Call  hCloseDocument
-endcase
-
+    printlog "  -   maximize/minimize stylist"
+    '/// minimize stylist ///'
+    Gestalter.Minimize
+    Sleep 1
+    '/// maximize stylist ///'
+    Gestalter.Maximize
+    Sleep 1
+    if (NOT Gestalter.IsMax) then
+        warnlog "   The stylist did not return to maximized state"
+    endif
+    '/// close stylist ///'
+    Gestalter.Close
+    Call  hCloseDocument
+    
+endcase 'tFormatStylistFlyer
+'--------------------------------------------------------
 testcase tFormatStylistDocuments
+
     Dim xPos% as Integer
     Dim yPos% as Integer
     Dim xSize% as   Integer
@@ -188,9 +213,11 @@ testcase tFormatStylistDocuments
         Gestalter.Close
     end if
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tFormatStylistDocuments
+'--------------------------------------------------------
 testcase tFormatStylistTemplatesUse
+
     Dim i  as Integer
     Dim save as integer
 
@@ -228,9 +255,11 @@ testcase tFormatStylistTemplatesUse
 
     sleep 3
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tFormatStylistTemplatesUse
+'--------------------------------------------------------
 testcase tFormatStylistTemplateCreate
+
     goto endsub
     dim i
     dim Zaehler
@@ -269,29 +298,31 @@ testcase tFormatStylistTemplateCreate
     i=0
     do
     inc i
-loop while ((Ansicht.getItemText(i) <> "ATesttool") AND (i <= zaehler))
-if i>zaehler then
+    loop while ((Ansicht.getItemText(i) <> "ATesttool") AND (i <= zaehler))
+    if i>zaehler then
     warnlog "   error"
-endif
-Ansicht.Select i
-sleep 1
-Ansicht.TypeKeys "<SPACE>"
-sleep 1
-Loeschen.Click
-Kontext "Active"
-Active.Yes
-sleep 1
-Kontext "Vorlagenkatalog"
-Vorlagenkatalog.Close
-sleep 1
-Kontext "DocumentDraw"
-gMouseClick 90,90
-sleep 1
-Call hCloseDocument
-sleep 1
-endcase
-
+    endif
+    Ansicht.Select i
+    sleep 1
+    Ansicht.TypeKeys "<SPACE>"
+    sleep 1
+    Loeschen.Click
+    Kontext "Active"
+    Active.Yes
+    sleep 1
+    Kontext "Vorlagenkatalog"
+    Vorlagenkatalog.Close
+    sleep 1
+    Kontext "DocumentDraw"
+    gMouseClick 90,90
+    sleep 1
+    Call hCloseDocument
+    sleep 1
+    
+endcase 'tFormatStylistTemplateCreate
+'--------------------------------------------------------
 testcase tFormatStylistTemplateSelect
+
     dim i as integer
     dim sListDown(21) as string
     dim sListUp(21) as string
@@ -367,9 +398,11 @@ testcase tFormatStylistTemplateSelect
     TabArea.OK
     sleep 2
     hCloseDocument
-endcase
-
+    
+endcase 'tFormatStylistTemplateSelect
+'---------------------------------------------------------
 testcase tFormatStylistTemplateNew
+
     dim sListDown(21) as string
     dim sListUp(21) as string
     dim sTemp as string
@@ -452,22 +485,24 @@ testcase tFormatStylistTemplateNew
     inc i
     sTemp = Vorlagenliste.GetText
     Vorlagenliste.TypeKeys "<Up>"
-loop while (("Testtool" <> sTemp) AND (i<20))
-Vorlagenliste.TypeKeys "<Return>"
-Kontext "Gestalter"
-Gestalter.Close
+    loop while (("Testtool" <> sTemp) AND (i<20))
+    Vorlagenliste.TypeKeys "<Return>"
+    Kontext "Gestalter"
+    Gestalter.Close
+    
+    Printlog "   - check template"
+    FormatCharacter
+    Kontext
+    Active.SetPage TabFont
+    Kontext "TabFont"
+    TabFont.OK
+    hTypeKeys ("<escape>",2)
+    hCloseDocument
 
-Printlog "   - check template"
-FormatCharacter
-Kontext
-Active.SetPage TabFont
-Kontext "TabFont"
-TabFont.OK
-hTypeKeys ("<escape>",2)
-hCloseDocument
-endcase
-
+endcase 'tFormatStylistTemplateNew
+'--------------------------------------------------------
 testcase tiFormatStylist
+
     Dim Num1 as integer '  graphics : first line indent ; the one with 0,6cm in the summary
     Dim Num2 as integer '  presentations : background   ; just one tabpage pops up: Area
     Dim Num3 as integer '                : background objects ; Line pops up
@@ -637,8 +672,9 @@ testcase tiFormatStylist
     Kontext "Gestalter"
     if Gestalter.Exists Then Warnlog "- Stylist could not be closed pressing F11"
         Call hCloseDocument
-endcase
-
+        
+endcase 'tiFormatStylist
+'---------------------------------------------------------
 sub hWalkTheStyles (optional a as integer,optional b as integer)
     ' TODO: TBO DialogTest should go to Recource test!
     dim i as integer
@@ -752,9 +788,11 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
                 Call DialogTest (TabOptionenNumerierung)
                 sleep 1
             endif
-end sub
-
+            
+end sub 'hWalkTheStyles
+'---------------------------------------------------------
 testcase tFormatStylist
+
     Dim sTemp as String
     dim sSettings(20,3) ' control_name; control_type; value
     dim i as integer
@@ -841,9 +879,11 @@ testcase tFormatStylist
         endif
     endif
     Call hCloseDocument
-endcase
-
+    
+endcase 'tFormatStylist
+'--------------------------------------------------------
 function hSelectInList (window, sEntry as String) as Boolean
+
     Dim i as Integer
     Dim sTemp as String
     Dim sLastTemp as String
@@ -861,9 +901,11 @@ if (sEntry = sTemp) then
 else
     hSelectInList = FALSE
 endif
-end function
 
+end function 'hSelectInList
+'---------------------------------------------------------
 function hWalkTheStyles2 (atemp)
+
     'function hWalkTheStyles2 (bSet as boolean, aSettings(), atemp as variant) as string
     dim i as integer
     dim x as integer
@@ -984,6 +1026,4 @@ function hWalkTheStyles2 (atemp)
     '      sleep 1
     '      Call DialogTest (TabOptionenNumerierung)
     '      sleep 1
-end function
-
-
+end function 'hWalkTheStyles2

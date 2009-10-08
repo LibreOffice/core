@@ -43,40 +43,51 @@
 ' #1 tGetFormatCharacter
 '*
 '\*******************************************************************
-
 testcase tFormatCharacter
-    dim sTemp as string
-    dim iTemp as integer
 
-    Call hNewDocument
-    sleep 1
+   dim sTemp as string
+   dim iTemp as integer
 
-    hTextrahmenErstellen ("This is a check, a check, a check.",10,10,60,30)
-    hTypeKeys "<MOD1 HOME><shift end>"
-    sleep 1
+   '/// open application ///'
+   Call hNewDocument
+   sleep 1
 
-    FormatCharacter
-    sleep 1
-    Kontext
-    Messagebox.SetPage TabFont
-    Kontext "TabFont"
-    sleep 1
+   '/// create a textframe with content ///'
+   hTextrahmenErstellen ("This is a check, a check, a check.",10,10,60,30)
+   '/// type with keys [strg]+[home] [shift]+[end] to select the inserted text ///'
+   hTypeKeys "<MOD1 HOME><shift end>"
+   sleep 1
 
-    Kontext
-    Messagebox.SetPage TabFontEffects
-    kontext "TabFontEffects"
-    sleep 1
+   '/// Format->Character ///'
+   FormatCharacter
+      sleep 1
+      '/// switch to tabpage 'Font' ///'
+      Kontext
+      Messagebox.SetPage TabFont
+      Kontext "TabFont"
+      sleep 1
 
-    Kontext
-    Messagebox.SetPage TabFontPosition
-    Kontext "TabFontPosition"
-    sleep 1
+      '/// switch to tabpage 'Font Effects' ///'
+      Kontext
+      Messagebox.SetPage TabFontEffects
+      kontext "TabFontEffects"
+      sleep 1
 
-    TabFontPosition.OK
-    Call hCloseDocument
-endcase
+      '/// switch to tabpage 'Position' ///'
+      Kontext
+      Messagebox.SetPage TabFontPosition
+      Kontext "TabFontPosition"
+      sleep 1
 
+      '/// close dialog 'Character' with 'OK' ///'
+      TabFontPosition.OK
+   '/// close application ///'
+   Call hCloseDocument
+   
+endcase 'tFormatCharacter
+'---------------------------------------------------------
 testcase tDialogCharacter
+
     Dim i as integer
     Dim y as integer
     Dim z as integer
@@ -96,256 +107,269 @@ testcase tDialogCharacter
     ToolsOptions
     hToolsOptions ( "LanguageSettings", "Languages" )
 
-    Asiansupportsetting = TRUE
-else
-    Asiansupportsetting = FALSE
-end if
-
-Kontext "ExtrasOptionenDlg"
-ExtrasOptionenDlg.OK
-Sleep (3)
-
-Kontext
-
-Call hTextrahmenErstellen ( "Some text in a box.", 20, 20, 50, 50 )
-
-FormatCharacter
-sleep 1
-Kontext '"Active"                  ' insert this, perhaps another
-Active.SetPage TabFont            ' tabpage is active at open
-Kontext "TabFont"
-CountOfThem = FontWest.GetItemCount
-for y = 1 to CountOfThem
-    FontWest.Select y
-    Xtext = FontWest.GetSelText
-    '    printlog "This FontWest is: " & Xtext
-next y
-
-CountOfThem = StyleWest.GetItemCount
-for y = 1 to CountOfThem
-    StyleWest.Select y
-    Xtext = StyleWest.GetSelText
-    '        printlog "This StyleWest is: " & Xtext
-next y
-
-CountOfThem = SizeWest.GetItemCount
-for y = 1 to CountOfThem
-    SizeWest.Select y
-    Xtext = SizeWest.GetSelText
-    '        printlog "This SizeWest is: " & Xtext
-next y
-
-CountOfThem = LanguageWest.GetItemCount
-for y = 1 to CountOfThem
-    LanguageWest.Select y
-    Xtext = LanguageWest.GetSelText
-    '        printlog "This LanguageWest is: " & Xtext
-next y
-
-CountOfThem = FontEast.GetItemCount
-for y = 1 to CountOfThem
-    FontEast.Select y
-    Xtext = FontEast.GetSelText
-    '        printlog "This FontEast is: " & Xtext
-next y
-
-CountOfThem = StyleEast.GetItemCount
-for y = 1 to CountOfThem
-    StyleEast.Select y
-    Xtext = StyleEast.GetSelText
-    '        printlog "This StyleEast is: " & Xtext
-next y
-
-CountOfThem = SizeEast.GetItemCount
-for y = 1 to CountOfThem
-    SizeEast.Select y
-    Xtext = SizeEast.GetSelText
-    '        printlog "This SizeEast is: " & Xtext
-next y
-
-CountOfThem = LanguageEast.GetItemCount
-for y = 1 to CountOfThem
-    LanguageEast.Select y
-    Xtext = LanguageEast.GetSelText
-    '        printlog "This LanguageEast is: " & Xtext
-next y
-
-Kontext
-Active.SetPage TabFontEffects
-Kontext "TabFontEffects"
-if NOT Outline.IsChecked then
-    Outline.Check
-end if
-
-if NOT Shadow.IsChecked then
-    Shadow.Check
-end if
-
-CountOfThem = Underline.GetItemCount
-CountOfColors = Color.GetItemCount
-
-for y = 2 to CountOfThem
-    Underline.Select y
-    Xtext = Underline.GetSelText
-    '        printlog "This Underline is: " & Xtext
-
-    for i = 1 to CountOfColors
-        Color.Select i
-        TestColorString = Color.GetSelText
-        '            printlog "This Color is: " & TestColorString
-    next i
-next y
-
-CountOfThem = StrikeThrough.GetItemCount
-for y = 2 to CountOfThem
-    StrikeThrough.Select y
-    IndividualWords.UnCheck
-    Xtext = StrikeThrough.GetSelText
-    '        printlog "The StrikeThrough is: " & Xtext
-
-    for i = 1 to CountOfColors
-        Color.Select i
-        TestColorString = Color.GetSelText
-        '            printlog "And the Color is: " & TestColorString
-    next i
-next y
-
-IndividualWords.Check
-printlog "Individual Words = On"
-
-CountOfThem = StrikeThrough.GetItemCount
-for y = 2 to CountOfThem
-    StrikeThrough.Select y
-    Xtext = StrikeThrough.GetSelText
-    '        printlog "The StrikeThrough is: " & Xtext
-
-    for i = 1 to CountOfColors
-        Color.Select i
-        TestColorString = Color.GetSelText
-        '            printlog "And the Color is: " & TestColorString
-    next i
-next y
-
-CountOfThem = Emphasis.GetItemCount
-for y = 2 to CountOfThem
-    Emphasis.Select y
-    Xtext = Emphasis.GetSelText
-    '        printlog "The Emphasis is: " & Xtext
-
-    for i = 1 to CountOfColors
-        Color.Select i
-        TestColorString = Color.GetSelText
-        '            printlog "And the Color is: " & TestColorString
-    next i
-next y
-
-CountOfThem = Position.GetItemCount
-for y = 1 to CountOfThem
-    Position.Select y
-    Xtext = Position.GetSelText
-    '        printlog "The Position is: " & Xtext
-    for i = 1 to CountOfColors
-        Color.Select i
-        TestColorString = Color.GetSelText
-        '            printlog "And the Color is: " & TestColorString
-    next i
-next y
-
-CountOfThem = FontColor.GetItemCount
-for z = 1 to CountOfThem
-    FontColor.Select z
-    TestColorString = FontColor.GetSelText
-    '        printlog "The FontColor is: " & TestColorString
-next z
-
-CountOfThem = Relief.GetItemCount
-TestColorString = Color.GetSelText
-for y = 1 to CountOfThem
-    Relief.Select y
-    Xtext = Relief.GetSelText
-    TestColorString = Color.GetSelText
-    '        printlog "The Relief is: " & Xtext
-next y
-
-Kontext
-Kontext "TabFontPosition"
-printlog "TabFontPosition"
-SuperScript.Check
-Super.Check
-ThisIsMyTextFromControl = RelativeFontSize.GetText
-'    printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
-for y = 1 to 99
-    RelativeFontSize.TypeKeys "<UP>"
-    ThisIsMyTextFromControl = RelativeFontSize.GetText
-    '        printlog "The Relative Font Size is: " & ThisIsMyTextFromControl
-next y
-
-Automatic.Check
-ThisIsMyTextFromControl = ScaleWith.GetText
-printlog "ScaleWith minimum is:" & ThisIsMyTextFromControl
-' ScaleWith.TypeKeys "<TAB>"
-for y = 1 to 100
-    ScaleWith.TypeKeys "<UP>"
-    ThisIsMyTextFromControl = ScaleWith.GetText
-    '        printlog "ScaleWith is:" & ThisIsMyTextFromControl
-next y
-
-Normal.Check
-Subscript.Check
-
-printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
-for y = 1 to 99
-    RelativeFontSize.TypeKeys "<UP>"
-    ThisIsMyTextFromControl = RelativeFontSize.GetText
-    '        printlog "The Relative Font Size is: " & ThisIsMyTextFromControl
-next y
-
-Automatic.Check
-
-ThisIsMyTextFromControl = ScaleWith.GetText
-printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
-for y = 1 to 100
-    ScaleWith.TypeKeys "<UP>"
-    ThisIsMyTextFromControl = ScaleWith.GetText
-    '        printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
-next y
-
-printlog "The Spacing is first: " & ThisIsMyTextFromControl
-for y = 2 to 3
-    Spacing.Select y
-    ThisIsMyTextFromControl = Spacing.GetSelText
-    printlog "The Spacing is: " & ThisIsMyTextFromControl
-    '        printlog "The SpacingBy Size minimum is: " & ThisIsMyTextFromControl
-    SpacingBy.ToMin
-    for z = 1 to 4
-        SpacingBy.More
-        ThisIsMyTextFromControl = SpacingBy.GetText
-        '            printlog "The SpacingBy Size is: " & ThisIsMyTextFromControl
-    next z
-    PairKerning.Check
-next y
-
-Kontext "TabFontPosition"
-TabFontPosition.Ok
-
-if Asiansupportsetting = FALSE then
-    kontext
-    ToolsOptions
-    hToolsOptions ( "LanguageSettings", "Languages" )
-    Printlog "Reseted the Asiansupport-value to it's original state"
+    if Aktivieren.IsChecked then                                  '/// Check in what state Asian support is ///'
+       Asiansupportsetting = TRUE
+    else
+       Asiansupportsetting = FALSE
+       Aktivieren.Check                                           '/// Activate if not already activated ///'
+    end if
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     Sleep (3)
 
-    '          ActiveDeactivateAsianSupport = FALSE
-end if
+    Kontext
 
-Printlog "DialogCharacter Ends"
-Call hCloseDocument
-endcase
+    Call hTextrahmenErstellen ( "Some text in a box.", 20, 20, 50, 50 )
 
+    FormatCharacter
+    sleep 1
+    Kontext '"Active"                  ' insert this, perhaps another
+    Active.SetPage TabFont            ' tabpage is active at open
+    Kontext "TabFont"
+    CountOfThem = FontWest.GetItemCount
+    for y = 1 to CountOfThem
+    FontWest.Select y
+    Xtext = FontWest.GetSelText
+'    printlog "This FontWest is: " & Xtext
+    next y
+
+    CountOfThem = StyleWest.GetItemCount
+        for y = 1 to CountOfThem
+        StyleWest.Select y
+        Xtext = StyleWest.GetSelText
+'        printlog "This StyleWest is: " & Xtext
+    next y
+
+    CountOfThem = SizeWest.GetItemCount
+    for y = 1 to CountOfThem
+        SizeWest.Select y
+        Xtext = SizeWest.GetSelText
+'        printlog "This SizeWest is: " & Xtext
+    next y
+
+    CountOfThem = LanguageWest.GetItemCount
+    for y = 1 to CountOfThem
+        LanguageWest.Select y
+        Xtext = LanguageWest.GetSelText
+'        printlog "This LanguageWest is: " & Xtext
+    next y
+
+    CountOfThem = FontEast.GetItemCount
+    for y = 1 to CountOfThem
+        FontEast.Select y
+        Xtext = FontEast.GetSelText
+'        printlog "This FontEast is: " & Xtext
+    next y
+
+    CountOfThem = StyleEast.GetItemCount
+    for y = 1 to CountOfThem
+        StyleEast.Select y
+        Xtext = StyleEast.GetSelText
+'        printlog "This StyleEast is: " & Xtext
+    next y
+
+    CountOfThem = SizeEast.GetItemCount
+    for y = 1 to CountOfThem
+        SizeEast.Select y
+        Xtext = SizeEast.GetSelText
+'        printlog "This SizeEast is: " & Xtext
+    next y
+
+    CountOfThem = LanguageEast.GetItemCount
+    for y = 1 to CountOfThem
+        LanguageEast.Select y
+        Xtext = LanguageEast.GetSelText
+'        printlog "This LanguageEast is: " & Xtext
+    next y
+
+    Kontext
+    Active.SetPage TabFontEffects
+    Kontext "TabFontEffects"
+    if NOT Outline.IsChecked then
+        Outline.Check
+    end if
+
+    if NOT Shadow.IsChecked then
+        Shadow.Check
+    end if
+
+    CountOfThem = Underline.GetItemCount
+    CountOfColors = Color.GetItemCount
+
+    for y = 2 to CountOfThem
+        Underline.Select y
+        Xtext = Underline.GetSelText
+'        printlog "This Underline is: " & Xtext
+
+        for i = 1 to CountOfColors
+            Color.Select i
+            TestColorString = Color.GetSelText
+'            printlog "This Color is: " & TestColorString
+        next i
+    next y
+
+    CountOfThem = StrikeThrough.GetItemCount
+    for y = 2 to CountOfThem
+        StrikeThrough.Select y
+        IndividualWords.UnCheck
+        Xtext = StrikeThrough.GetSelText
+'        printlog "The StrikeThrough is: " & Xtext
+
+        for i = 1 to CountOfColors
+            Color.Select i
+            TestColorString = Color.GetSelText
+'            printlog "And the Color is: " & TestColorString
+        next i
+    next y
+
+    IndividualWords.Check
+    printlog "Individual Words = On"
+
+    CountOfThem = StrikeThrough.GetItemCount
+    for y = 2 to CountOfThem
+        StrikeThrough.Select y
+        Xtext = StrikeThrough.GetSelText
+'        printlog "The StrikeThrough is: " & Xtext
+
+        for i = 1 to CountOfColors
+            Color.Select i
+            TestColorString = Color.GetSelText
+'            printlog "And the Color is: " & TestColorString
+        next i
+    next y
+
+    CountOfThem = Emphasis.GetItemCount
+    for y = 2 to CountOfThem
+        Emphasis.Select y
+        Xtext = Emphasis.GetSelText
+'        printlog "The Emphasis is: " & Xtext
+
+        for i = 1 to CountOfColors
+            Color.Select i
+            TestColorString = Color.GetSelText
+'            printlog "And the Color is: " & TestColorString
+        next i
+    next y
+
+    CountOfThem = Position.GetItemCount
+    for y = 1 to CountOfThem
+        Position.Select y
+        Xtext = Position.GetSelText
+'        printlog "The Position is: " & Xtext
+        for i = 1 to CountOfColors
+            Color.Select i
+            TestColorString = Color.GetSelText
+'            printlog "And the Color is: " & TestColorString
+        next i
+    next y
+
+    CountOfThem = FontColor.GetItemCount
+     for z = 1 to CountOfThem
+        FontColor.Select z
+        TestColorString = FontColor.GetSelText
+'        printlog "The FontColor is: " & TestColorString
+     next z
+
+    CountOfThem = Relief.GetItemCount
+    TestColorString = Color.GetSelText
+    for y = 1 to CountOfThem
+        Relief.Select y
+        Xtext = Relief.GetSelText
+        TestColorString = Color.GetSelText
+'        printlog "The Relief is: " & Xtext
+    next y
+
+    Kontext
+    Active.SetPage TabFontPosition        '/// Changes the active tab to "Position"
+    Kontext "TabFontPosition"
+    printlog "TabFontPosition"
+    SuperScript.Check
+    Super.Check
+    RelativeFontSize.ToMin         '/// Testing the "Relative Font Size"-Listbox
+    ThisIsMyTextFromControl = RelativeFontSize.GetText
+'    printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
+    for y = 1 to 99
+        RelativeFontSize.TypeKeys "<UP>"
+        ThisIsMyTextFromControl = RelativeFontSize.GetText
+'        printlog "The Relative Font Size is: " & ThisIsMyTextFromControl
+    next y
+
+    Automatic.Check
+    ScaleWith.ToMin          '/// Testing the "Scale With"-Listbox
+    ThisIsMyTextFromControl = ScaleWith.GetText
+    printlog "ScaleWith minimum is:" & ThisIsMyTextFromControl
+    ' ScaleWith.TypeKeys "<TAB>"
+    for y = 1 to 100
+        ScaleWith.TypeKeys "<UP>"
+        ThisIsMyTextFromControl = ScaleWith.GetText
+'        printlog "ScaleWith is:" & ThisIsMyTextFromControl
+    next y
+
+    Normal.Check
+    Subscript.Check
+
+    RelativeFontSize.ToMin         '/// Testing the "Reliative Font Size"-Listbox again but this time
+    ThisIsMyTextFromControl = RelativeFontSize.GetText      '/// with "Subscript" and "Normal" Checked
+    printlog "The Relative Font Size minimum is: " & ThisIsMyTextFromControl
+    for y = 1 to 99
+        RelativeFontSize.TypeKeys "<UP>"
+        ThisIsMyTextFromControl = RelativeFontSize.GetText
+'        printlog "The Relative Font Size is: " & ThisIsMyTextFromControl
+    next y
+
+    Automatic.Check
+
+    ScaleWith.ToMin          '/// Testing the "ScaleWith"-Listbox
+    ThisIsMyTextFromControl = ScaleWith.GetText
+    printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
+    for y = 1 to 100
+        ScaleWith.TypeKeys "<UP>"
+        ThisIsMyTextFromControl = ScaleWith.GetText
+'        printlog "The ScaleWith Size is: " & ThisIsMyTextFromControl
+    next y
+
+    ThisIsMyTextFromControl = Spacing.GetSelText      '/// Testing the "Spacing"-ListBox
+    printlog "The Spacing is first: " & ThisIsMyTextFromControl
+    for y = 2 to 3
+        Spacing.Select y
+        ThisIsMyTextFromControl = Spacing.GetSelText
+        printlog "The Spacing is: " & ThisIsMyTextFromControl
+        ThisIsMyTextFromControl = SpacingBy.GetText      '/// Testing the "Spacing By"-Scrollbox
+'        printlog "The SpacingBy Size minimum is: " & ThisIsMyTextFromControl
+        SpacingBy.ToMin
+        for z = 1 to 4
+            SpacingBy.More
+            ThisIsMyTextFromControl = SpacingBy.GetText
+'            printlog "The SpacingBy Size is: " & ThisIsMyTextFromControl
+        next z
+        PairKerning.Check
+    next y
+
+    Kontext "TabFontPosition"
+    TabFontPosition.Ok
+
+    if Asiansupportsetting = FALSE then
+       kontext
+       ToolsOptions
+       hToolsOptions ( "LanguageSettings", "Languages" )
+       Aktivieren.UnCheck                                    '/// Deactivate if not already deactivated ///'
+       Printlog "Reseted the Asiansupport-value to it's original state"
+
+       Kontext "ExtrasOptionenDlg"
+       ExtrasOptionenDlg.OK
+       Sleep (3)
+
+'          ActiveDeactivateAsianSupport = FALSE
+    end if
+
+    Printlog "DialogCharacter Ends"
+    Call hCloseDocument
+    
+endcase 'tDialogCharacter
+'--------------------------------------------------------
 testcase tSetFormatCharacter
+
     if iSprache = 48 then
         qaerrorlog "Test not adapted to polish, 48."
         goto endsub
@@ -360,93 +384,117 @@ testcase tSetFormatCharacter
     dim sFile as string
     dim sTemp as string
 
-    if (gApplication = "IMPRESS") then
-        ExtensionString = "odp"
-    else
-        ExtensionString = "odg"
-    end if
+   if (gApplication = "IMPRESS") then 
+      ExtensionString = "odp"
+   else
+      ExtensionString = "odg"
+   end if
 
     sFile = convertPath(gTesttoolpath + "graphics\required\input\spellb_" + iSprache + "."+ExtensionString)
+    '/// create document, if it doesn't exist, else skip this case :-) ///'
     if (dir(sFile)="") then
+        '/// open application ///'
         Call  hNewDocument
 
+        '/// activate all languages in options ///'
+        '///+ Tools->Options ///'
         ToolsOptions
+        '///+ select tabpage 'Languages' from set 'Language Settings' ///'
         hToolsOptions("LANGUAGESETTINGS","Languages")
         kontext "TabSprachen"
+        '///+ save state and check checkbox 'Asian languages support' ///'
+        '/// if the language is Asian, skip this part ///'
         printlog "iSprache = " + iSprache
         if bAsianLan = FALSE then
-            bAsian = Aktivieren.isEnabled
-            Aktivieren.check
+           bAsian = Aktivieren.isEnabled
+           Aktivieren.check
         endif
+        '///+ save state and  check checkbox 'Complex text layout (CTL) support' ///'
         bComplex = ComplexScriptEnabled.isEnabled
         ComplexScriptEnabled.check
+        '///+ close dialog 'Options' with OK ///'
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
 
+        '/// get count of languages ///'
+        '///+ Format->Character ///'
         FormatCharacter
         sleep 1
         Kontext
+        '///+ switch to tabpage 'Font' ///'
         Messagebox.SetPage TabFont
         kontext "TabFont"
         sleep 1
+        '///+ get count of languages for Western/Asian/CTL fonts ///'
         iWest    = LanguageWest.getItemCount
         iAsian   = LanguageEast.getItemCount
         iComplex = LanguageCTL.getItemCount
         if bAsianLan = True then
-            if (iWest <> 144) then
-                Warnlog "Western text font languages count wrong; expected: '113' is: '" + iWest + "'"
-            else
-                Printlog "Western text font languages count: " + iWest
-            endif
-            if (iAsian <> 8) then
-                Warnlog "Asian text font languages count wrong; expected: '9' is: '" + iAsian + "'"
-            else
-                Printlog "Asian text font languages count  : " + iAsian
-            endif
-            if (iComplex <> 50) then
-                Warnlog "CTL font languages count wrong; expected: '30' is: '" + iComplex + "'"
-            else
-                Printlog "CTL font languages count         : " + iComplex
-            endif
+           if (iWest <> 144) then
+              Warnlog "Western text font languages count wrong; expected: '113' is: '" + iWest + "'"
+           else
+              Printlog "Western text font languages count: " + iWest
+           endif
+           if (iAsian <> 8) then
+              Warnlog "Asian text font languages count wrong; expected: '9' is: '" + iAsian + "'"
+           else
+              Printlog "Asian text font languages count  : " + iAsian
+           endif
+           if (iComplex <> 50) then
+              Warnlog "CTL font languages count wrong; expected: '30' is: '" + iComplex + "'"
+           else
+              Printlog "CTL font languages count         : " + iComplex
+           endif
         else
-            if (iWest <> 113) then
-                Warnlog "Western text font languages count wrong; expected: '113' is: '" + iWest + "'"
-            else
-                Printlog "Western text font languages count: " + iWest
-            endif
-            if (iAsian <> 9) then
-                Warnlog "Asian text font languages count wrong; expected: '9' is: '" + iAsian + "'"
-            else
-                Printlog "Asian text font languages count  : " + iAsian
-            endif
-            if (iComplex <> 30) then
-                Warnlog "CTL font languages count wrong; expected: '30' is: '" + iComplex + "'"
-            else
-                Printlog "CTL font languages count         : " + iComplex
-            endif
+           if (iWest <> 113) then
+              Warnlog "Western text font languages count wrong; expected: '113' is: '" + iWest + "'"
+           else
+              Printlog "Western text font languages count: " + iWest
+           endif
+           if (iAsian <> 9) then
+              Warnlog "Asian text font languages count wrong; expected: '9' is: '" + iAsian + "'"
+           else
+              Printlog "Asian text font languages count  : " + iAsian
+           endif
+           if (iComplex <> 30) then
+              Warnlog "CTL font languages count wrong; expected: '30' is: '" + iComplex + "'"
+           else
+              Printlog "CTL font languages count         : " + iComplex
+           endif
         endif
+	'///+ close dialog 'Character' with OK ///'
         TabFont.Ok
 
         WL_SD_TextEinfuegenDraw
         gMouseMove ( 1, 1, 100, 100 )
 
+        '///+ print the language counts into the first line of the document ///'
         hTypeKeys(" "+iWest+" "+iAsian+" "+iComplex+"<return>")
 
 
+        '/// set all languages to '[None]' ///'
+        '///+ Format->Character ///'
         FormatCharacter
         kontext "TabFont"
+        '///+ select '[None]' (should be the first entry in every listbox) ///'
         LanguageWest.select 1
         LanguageEast.select 1
         LanguageCTL.select 1
+        '///+ close dialog 'Character' with OK ///'
         TabFont.Ok
 
+        '/// print one line with language formated text for every language ///'
         for i = 1 to iWest
+            '///+ Format->Character ///'
             FormatCharacter
-            kontext "TabFont"
-            LanguageWest.select i
-            sTemp = LanguageWest.getItemText (i)
-            ListAppend(sLanguage(), sTemp)
+                kontext "TabFont"
+                '///+ select the next language ///'
+                LanguageWest.select i
+                sTemp = LanguageWest.getItemText (i)
+                ListAppend(sLanguage(), sTemp)
+                '///+ close dialog 'Character' with OK ///'
             TabFont.Ok
+            '///+ type [return][number of language in list][Tab][Language name][Tab] ///'
             hTypeKeys(""+i+"<tab>"+sTemp+"<tab><return>")
         next i
 
@@ -459,11 +507,11 @@ testcase tSetFormatCharacter
 
         for i = 1 to iAsian
             FormatCharacter
-            Kontext
-            kontext "TabFont"
-            LanguageEast.select i
-            sTemp = LanguageEast.getItemText (i)
-            ListAppend(sLanguage(), sTemp)
+                Kontext
+                kontext "TabFont"
+                LanguageEast.select i
+                sTemp = LanguageEast.getItemText (i)
+                ListAppend(sLanguage(), sTemp)
             TabFont.Ok
             hTypeKeys(""+i+"<tab>"+sTemp+"<tab><return>")
         next i
@@ -477,15 +525,16 @@ testcase tSetFormatCharacter
 
         for i = 1 to iComplex
             FormatCharacter
-            Kontext
-            kontext "TabFont"
-            LanguageCTL.select i
-            sTemp = LanguageCTL.getItemText (i)
-            ListAppend(sLanguage(), sTemp)
+                Kontext
+                kontext "TabFont"
+                LanguageCTL.select i
+                sTemp = LanguageCTL.getItemText (i)
+                ListAppend(sLanguage(), sTemp)
             TabFont.Ok
             hTypeKeys(""+i+"<tab>"+sTemp+"<tab><return>")
         next i
 
+        '/// save the created document & the languages list if they don't exists ///'
         hFileSaveAs (sFile)
         qaErrorLog "Created file. Please check it and then commit it! " + sTemp
         sTemp = convertPath(gTesttoolpath + "graphics\required\input\spellb_" + iSprache + ".txt")
@@ -493,26 +542,36 @@ testcase tSetFormatCharacter
             ListWrite(sLanguage(), sTemp,"utf8")
         endif
 
+        '/// restore the options ///'
+        '///+ Tools->Options ///'
         ToolsOptions
+        '///+ select tabpage 'Languages' from set 'Language Settings' ///'
         hToolsOptions("LANGUAGESETTINGS","Languages")
         kontext "TabSprachen"
 
+        '///+ restore state of checkbox 'Asian languages support' ///'
+        '/// if the language is Asian, skip this part ///'
         if bAsianLan = FALSE then
-            if (bAsian <> TRUE) then
-                Aktivieren.UNcheck
-            endif
+           if (bAsian <> TRUE) then
+               Aktivieren.UNcheck
+           endif
         endif
+        '///+ restore state of checkbox 'Complex text layout (CTL) support' ///'
         if (bComplex <> TRUE) then
             ComplexScriptEnabled.UNcheck
         endif
+        '///+ close dialog 'Options' with OK ///'
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
 
+        '/// close application ///'
         Call hCloseDocument
     endif
-endcase
-
+    
+endcase 'tSetFormatCharacter
+'--------------------------------------------------------
 testcase tGetFormatCharacter
+
     qaerrorlog "tGetFormatCharacter outcommented due to too many qaerrorlogs"
     goto endsub
     Dim i as integer
@@ -527,26 +586,35 @@ testcase tGetFormatCharacter
     dim iTemp as integer
     dim sSpellBooks(30) as string
 
-    if (gApplication = "IMPRESS") then
-        ExtensionString = "odp"
+    if (gApplication = "IMPRESS") then 
+       ExtensionString = "odp"
     else
-        ExtensionString = "odg"
+       ExtensionString = "odg"
     end if
-
+    
+    '/// open the english document with all languages ///'
     hDateiOeffnen (convertPath(gTesttoolpath + "graphics\required\input\spellb_" + iSprache + "."+ExtensionString)
     ListRead(sLanguageR(), convertPath(gTesttoolpath + "graphics\required\input\spellb_1.txt"),"utf8")
 
+    '/// activate all languages in options ///'
+    '///+ Tools->Options ///'
     ToolsOptions
+    '///+ select tabpage 'Languages' from set 'Language Settings' ///'
     hToolsOptions("LANGUAGESETTINGS","Languages")
     kontext "TabSprachen"
+    '///+ save state and check checkbox 'Asian languages support' ///'
     bAsian = Aktivieren.isEnabled
     Aktivieren.check
+    '///+ save state and  check checkbox 'Complex text layout (CTL) support' ///'
     bComplex = ComplexScriptEnabled.isEnabled
     ComplexScriptEnabled.check
+    '///+ close dialog 'Options' with OK ///'
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     sleep (1)
+    '/// get count of languages ///'
     hTypeKeys("<tab><f2>")
+    '///+ first how many are in the reference document (printed in the first line)///'
     hTypeKeys("<mod1 home><shift end>")
     sleep (1)
     editcopy
@@ -557,12 +625,15 @@ testcase tGetFormatCharacter
     iAsian(1) = mid(sTemp, iTemp+1, iTemp-i)
     iComplex(1) = right(sTemp, Len(sTemp) - i)
     sleep (1)
+    '///+ Format->Character ///'
     FormatCharacter
     sleep 1
     Kontext
+    '///+ switch to tabpage 'Font' ///'
     Messagebox.SetPage TabFont
     kontext "TabFont"
     sleep 1
+    '///+ get count of languages for Western/Asian/CTL fonts ///'
     iWest(2)    = LanguageWest.getItemCount
     iAsian(2)   = LanguageEast.getItemCount
     iComplex(2) = LanguageCTL.getItemCount
@@ -581,42 +652,46 @@ testcase tGetFormatCharacter
     else
         Printlog "CTL font languages count         : " + iComplex(2)
     endif
+    '///+ close dialog 'Character' with OK ///'
     TabFont.Ok
 
+    '/// write the language for every line in the current language ///'
     hTypeKeys("<mod1 home><down><home>")
     for i = 1 to iWest(2)
         FormatCharacter
-        Kontext
-        kontext "TabFont"
-        iTemp = LanguageWest.getSelIndex
-        sTemp = LanguageWest.getSelText
-        ListAppend(sLanguage(), sTemp)
+            Kontext
+            kontext "TabFont"
+            iTemp = LanguageWest.getSelIndex
+            sTemp = LanguageWest.getSelText
+            ListAppend(sLanguage(), sTemp)
         TabFont.Ok
+        '///+ type [end][number of language in list][Tab][Language name][down][home] ///'
         hTypeKeys("<end>"+iTemp+"<tab>"+sTemp+"<down><home>")
     next i
 
     for i = 1 to iAsian(2)
         FormatCharacter
-        Kontext
-        kontext "TabFont"
-        iTemp = LanguageEast.getSelIndex
-        sTemp = LanguageEast.getSelText
-        ListAppend(sLanguage(), sTemp)
+            Kontext
+            kontext "TabFont"
+            iTemp = LanguageEast.getSelIndex
+            sTemp = LanguageEast.getSelText
+            ListAppend(sLanguage(), sTemp)
         TabFont.Ok
         hTypeKeys("<end>"+iTemp+"<tab>"+sTemp+"<down><home>")
     next i
 
     for i = 1 to iComplex(2)
         FormatCharacter
-        Kontext
-        kontext "TabFont"
-        iTemp = LanguageCTL.getSelIndex
-        sTemp = LanguageCTL.getSelText
-        ListAppend(sLanguage(), sTemp)
+            Kontext
+            kontext "TabFont"
+            iTemp = LanguageCTL.getSelIndex
+            sTemp = LanguageCTL.getSelText
+            ListAppend(sLanguage(), sTemp)
         TabFont.Ok
         hTypeKeys("<end>"+iTemp+"<tab>"+sTemp+"<down><home>")
     next i
 
+    '/// save the created document & the languages list ///'
     sTemp = convertPath(gOfficePath + "user\work\spellb_" + iSprache)
     hFileSaveAsKill (sTemp)
     sTemp = convertPath(gOfficePath + "user\work\spellb_" + iSprache + ".txt")
@@ -627,9 +702,9 @@ testcase tGetFormatCharacter
 
     for i = 1 to ListCount(sLanguageR())
         select case i
-        case 1:printlog " * Western text font languages"
-        case iWest(2)+1:printlog " * Asian text font languages"
-        case iWest(2)+iAsian(2)+1:printlog " * CTL font languages"
+            case 1:printlog " * Western text font languages"
+            case iWest(2)+1:printlog " * Asian text font languages"
+            case iWest(2)+iAsian(2)+1:printlog " * CTL font languages"
         end select
         if (sLanguageR(i) <> sLanguage(i)) then
             if (instr(sLanguage(i), "[") > 0) then ' [None] - Entry ?
@@ -640,7 +715,6 @@ testcase tGetFormatCharacter
         endif
     next i
 
+    '/// close application ///'
     Call hCloseDocument
-endcase
-
-
+endcase 'tGetFormatCharacter

@@ -27,9 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package graphical;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -37,10 +37,11 @@ import java.util.Enumeration;
 
 /**
    Helper class to give a simple API to read/write windows like ini files
- */
+*/
 /* public */ // is only need, if we need this class outside package convwatch
 public class IniFile implements Enumeration
 {
+
     /**
      * internal representation of the ini file content.
      * Problem, if ini file changed why other write something difference, we don't realise this.
@@ -48,13 +49,13 @@ public class IniFile implements Enumeration
     private String m_sFilename;
     private ArrayList m_aList;
     boolean m_bListContainUnsavedChanges = false;
-
     private int m_aEnumerationPos = 0;
+
     /**
        open a ini file by it's name
        @param _sFilename string a filename, if the file doesn't exist, a new empty ini file will create.
        write back to disk only if there are really changes.
-     */
+    */
     public IniFile(String _sFilename)
         {
             m_sFilename = _sFilename;
@@ -66,23 +67,23 @@ public class IniFile implements Enumeration
 //            }
         }
 
-    public void insertFirstComment(String [] _aList)
-    {
-        if (m_aList.size() == 0)
+    public void insertFirstComment(String[] _aList)
         {
-            // can only insert if there is nothing else already in the ini file
-            for (int i=0; i<_aList.length;i++)
+            if (m_aList.size() == 0)
             {
-                m_aList.add(_aList[i]);
+                // can only insert if there is nothing else already in the ini file
+                for (int i = 0; i < _aList.length; i++)
+                {
+                    m_aList.add(_aList[i]);
+                }
             }
         }
-    }
 
     private ArrayList loadLines()
         {
             File aFile = new File(m_sFilename);
             ArrayList aLines = new ArrayList();
-            if (! aFile.exists())
+            if (!aFile.exists())
             {
                 GlobalLogWriter.get().println("couldn't find file '" + m_sFilename + "', will be created.");
                 // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
@@ -90,9 +91,10 @@ public class IniFile implements Enumeration
                 return aLines;
             }
             RandomAccessFile aReader = null;
+            // BufferedReader aReader;
             try
             {
-                aReader = new RandomAccessFile(aFile,"r");
+                aReader = new RandomAccessFile(aFile, "r");
                 String aLine = "";
                 while (aLine != null)
                 {
@@ -135,28 +137,29 @@ public class IniFile implements Enumeration
         {
             return m_aList.size() > 1 ? true : false;
         }
-/**
- * Check if a given Section and Key exists in the ini file
- * @param _sSectionName
- * @param _sKey
- * @return true if the given Section, Key exists, now you can get the value
- */
+
+    /**
+     * Check if a given Section and Key exists in the ini file
+     * @param _sSectionName
+     * @param _sKey
+     * @return true if the given Section, Key exists, now you can get the value
+     */
     public boolean hasValue(String _sSectionName, String _sKey)
-    {
-        int n = findKey(_sSectionName, _sKey);
-        if (n > 0)
         {
-            return true;
+            int n = findKey(_sSectionName, _sKey);
+            if (n > 0)
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
     // -----------------------------------------------------------------------------
 
     private boolean isRemark(String _sLine)
         {
-            if ( ((_sLine.length() < 2) ) ||
-                 ( _sLine.startsWith("#")) ||
-                 ( _sLine.startsWith(";")) )
+            if (((_sLine.length() < 2)) ||
+                (_sLine.startsWith("#")) ||
+                (_sLine.startsWith(";")))
             {
                 return true;
             }
@@ -165,7 +168,7 @@ public class IniFile implements Enumeration
 
     private String getItem(int i)
         {
-            return (String)m_aList.get(i);
+            return (String) m_aList.get(i);
         }
 
     private String buildSectionName(String _sSectionName)
@@ -173,16 +176,18 @@ public class IniFile implements Enumeration
             String sFindSection = "[" + _sSectionName + "]";
             return sFindSection;
         }
+
     private String sectionToString(String _sSectionName)
-    {
-        String sKeyName = _sSectionName;
-        if (sKeyName.startsWith("[") &&
-            sKeyName.endsWith("]"))
         {
-            sKeyName = sKeyName.substring(1, sKeyName.length() - 1);
+            String sKeyName = _sSectionName;
+            if (sKeyName.startsWith("[") &&
+                sKeyName.endsWith("]"))
+            {
+                sKeyName = sKeyName.substring(1, sKeyName.length() - 1);
+            }
+            return sKeyName;
         }
-        return sKeyName;
-    }
+
     private String toLowerIfNeed(String _sName)
         {
             return _sName.toLowerCase();
@@ -194,11 +199,11 @@ public class IniFile implements Enumeration
             String sFindSection = toLowerIfNeed(buildSectionName(_sSection));
             // ----------- find _sSection ---------------
             int i;
-            for (i=0; i<m_aList.size();i++)
+            for (i = 0; i < m_aList.size(); i++)
             {
                 String sLine = toLowerIfNeed(getItem(i).trim());
                 if (isRemark(sLine))
-            {
+                {
                     continue;
                 }
                 if (sFindSection.equals("[]"))
@@ -220,14 +225,14 @@ public class IniFile implements Enumeration
      * @return true if the given _sSection was found
      */
     public boolean hasSection(String _sSection)
-    {
-        int i = findSection(_sSection);
-        if (i == -1)
         {
-            return false;
+            int i = findSection(_sSection);
+            if (i == -1)
+            {
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
 
     // return the line number, where the key is found.
     private int findKey(String _sSection, String _sKey)
@@ -245,7 +250,7 @@ public class IniFile implements Enumeration
     private int findKeyFromKnownSection(int _nSectionIndex, String _sKey)
         {
             _sKey = toLowerIfNeed(_sKey);
-            for (int j=_nSectionIndex + 1; j<m_aList.size();j++)
+            for (int j = _nSectionIndex + 1; j < m_aList.size(); j++)
             {
                 String sLine = getItem(j).trim();
 
@@ -270,7 +275,7 @@ public class IniFile implements Enumeration
                     {
                         return j;
                     }
-            }
+                }
             }
             return -1;
         }
@@ -280,7 +285,7 @@ public class IniFile implements Enumeration
         {
             _sKey = toLowerIfNeed(_sKey);
             int i = _nSectionIndex + 1;
-            for (int j=i; j<m_aList.size();j++)
+            for (int j = i; j < m_aList.size(); j++)
             {
                 String sLine = getItem(j).trim();
 
@@ -318,7 +323,7 @@ public class IniFile implements Enumeration
             int nEqual = sLine.indexOf("=");
             if (nEqual >= 0)
             {
-                String sKey =   sLine.substring(0, nEqual).trim();
+                String sKey = sLine.substring(0, nEqual).trim();
                 String sValue = sLine.substring(nEqual + 1).trim();
                 return sValue;
             }
@@ -332,7 +337,6 @@ public class IniFile implements Enumeration
     */
     // private int m_nCurrentPosition;
     // private String m_sOldKey;
-
     public String getValue(String _sSection, String _sKey)
         {
             String sValue = "";
@@ -359,7 +363,6 @@ public class IniFile implements Enumeration
 //        }
 //        return "";
 //    }
-
     /**
      * Returns the value at Section, Key converted to an integer
      * Check with hasValue(Section, Key) to check before you get into trouble.
@@ -369,31 +372,32 @@ public class IniFile implements Enumeration
      * @return
      */
     public int getIntValue(String _sSection, String _sKey, int _nDefault)
-    {
-        String sValue = getValue(_sSection, _sKey);
-        int nValue = _nDefault;
-        if (sValue.length() > 0)
         {
-            try
+            String sValue = getValue(_sSection, _sKey);
+            int nValue = _nDefault;
+            if (sValue.length() > 0)
             {
-               nValue = Integer.valueOf(sValue).intValue();
+                try
+                {
+                    nValue = Integer.valueOf(sValue).intValue();
+                }
+                catch (java.lang.NumberFormatException e)
+                {
+                    GlobalLogWriter.get().println("IniFile.getIntValue(): Caught a number format exception, return the default value.");
+                }
             }
-            catch(java.lang.NumberFormatException e)
-            {
-                GlobalLogWriter.get().println("IniFile.getIntValue(): Caught a number format exception, return the default value.");
-            }
+            return nValue;
         }
-        return nValue;
-    }
 
     public void close()
-    {
-        store();
-    }
+        {
+            store();
+        }
+
     /**
        write back the ini file to the disk, only if there exist changes
-     * @deprecated use close() instead!
-    */
+       * @deprecated use close() instead!
+       */
     public void store()
         {
             if (m_bListContainUnsavedChanges == false)
@@ -423,22 +427,26 @@ public class IniFile implements Enumeration
             try
             {
                 RandomAccessFile aWriter = new RandomAccessFile(aFile, "rw");
-                for (int i=0; i<m_aList.size();i++)
+                for (int i = 0; i < m_aList.size(); i++)
                 {
                     String sLine = getItem(i);
+                    if (sLine.startsWith("["))
+                    {
+                        // write an extra empty line before next section.
+                        aWriter.writeByte((int) '\n');
+                    }
                     aWriter.writeBytes(sLine);
-                    aWriter.writeByte((int)'\n');
+                    aWriter.writeByte((int) '\n');
                 }
                 aWriter.close();
             }
-
             catch (java.io.FileNotFoundException fne)
             {
                 GlobalLogWriter.get().println("couldn't open file for writing " + m_sFilename);
                 GlobalLogWriter.get().println("Message: " + fne.getMessage());
                 // DebugHelper.exception(BasicErrorCode.SbERR_FILE_NOT_FOUND, "");
             }
-            catch(java.io.IOException ie)
+            catch (java.io.IOException ie)
             {
                 GlobalLogWriter.get().println("Exception occurs while writing to file " + m_sFilename);
                 GlobalLogWriter.get().println("Message: " + ie.getMessage());
@@ -446,12 +454,16 @@ public class IniFile implements Enumeration
             }
         }
 
-
-
     public void insertValue(String _sSection, String _sKey, int _nValue)
-    {
-        insertValue(_sSection, _sKey, String.valueOf(_nValue));
-    }
+        {
+            insertValue(_sSection, _sKey, String.valueOf(_nValue));
+        }
+
+    public void insertValue(String _sSection, String _sKey, long _nValue)
+        {
+            insertValue(_sSection, _sKey, String.valueOf(_nValue));
+        }
+
     /**
        insert a value
        there are 3 cases
@@ -551,71 +563,71 @@ public class IniFile implements Enumeration
     //
     //         return sLocalValue;
     //     }
-
-public void removeSection(String _sSectionToRemove)
-{
-        // first, search for the name
-        int i = findSection(_sSectionToRemove);
-        if (i == -1) {
-            // Section to remove not found, do nothing.
-            return;
-        }
-        // second, find the next section
-        int j = findNextSection(i + 1);
-        if (j == -1)
+    public void removeSection(String _sSectionToRemove)
         {
-            // if we are at the end, use size() as second section
-            j = m_aList.size();
+            // first, search for the name
+            int i = findSection(_sSectionToRemove);
+            if (i == -1)
+            {
+                // Section to remove not found, do nothing.
+                return;
+            }
+            // second, find the next section
+            int j = findNextSection(i + 1);
+            if (j == -1)
+            {
+                // if we are at the end, use size() as second section
+                j = m_aList.size();
+            }
+            // remove all between first and second section
+            for (int k = i; k < j; k++)
+            {
+                m_aList.remove(i);
+            }
+            // mark the list as changed
+            m_bListContainUnsavedChanges = true;
         }
-        // remove all between first and second section
-        for(int k=i; k<j; k++)
-        {
-            m_aList.remove(i);
-        }
-        // mark the list as changed
-        m_bListContainUnsavedChanges = true;
-    }
 
     /**
      * some tests for this class
      */
-    public static void main(String[] args) {
-        String sTempFile = System.getProperty("java.io.tmpdir");
-        sTempFile += "inifile";
+    public static void main(String[] args)
+        {
+            String sTempFile = System.getProperty("java.io.tmpdir");
+            sTempFile += "inifile";
 
 
-        IniFile aIniFile = new IniFile(sTempFile);
-        String sValue = aIniFile.getValue("Section", "Key");
-        // insert a new value to a already exist section
-        aIniFile.insertValue("Section", "Key2", "a new value in a existing section");
-        // replace a value
-        aIniFile.insertValue("Section", "Key", "replaced value");
-        // create a new value
-        aIniFile.insertValue("New Section", "Key", "a new key value pair");
-        aIniFile.insertValue("New Section", "Key2", "a new second key value pair");
+            IniFile aIniFile = new IniFile(sTempFile);
+            String sValue = aIniFile.getValue("Section", "Key");
+            // insert a new value to a already exist section
+            aIniFile.insertValue("Section", "Key2", "a new value in a existing section");
+            // replace a value
+            aIniFile.insertValue("Section", "Key", "replaced value");
+            // create a new value
+            aIniFile.insertValue("New Section", "Key", "a new key value pair");
+            aIniFile.insertValue("New Section", "Key2", "a new second key value pair");
 
-        String sValue2 = aIniFile.getValue("Section2", "Key");
+            String sValue2 = aIniFile.getValue("Section2", "Key");
 
-        aIniFile.removeSection("Section");
-        aIniFile.removeSection("New Section");
+            aIniFile.removeSection("Section");
+            aIniFile.removeSection("New Section");
 
-        aIniFile.close();
-    }
-
+            aIniFile.close();
+        }
 
     /**
      * Enumeration Interface
      * @return true, if there are more Key values
      */
     public boolean hasMoreElements()
-    {
-        if (m_aEnumerationPos >=0 &&
-            m_aEnumerationPos < m_aList.size())
         {
-            return true;
+            if (m_aEnumerationPos >= 0 &&
+                m_aEnumerationPos < m_aList.size())
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
     /**
      * Find the next line, which starts with '['
@@ -623,57 +635,57 @@ public void removeSection(String _sSectionToRemove)
      * @return the line where '[' found or -1
      */
     private int findNextSection(int i)
-    {
-        if (i >= 0)
         {
-            while (i < m_aList.size())
+            if (i >= 0)
             {
-                String sLine = (String)m_aList.get(i);
-                if (sLine.startsWith("["))
+                while (i < m_aList.size())
                 {
-                    return i;
+                    String sLine = (String) m_aList.get(i);
+                    if (sLine.startsWith("["))
+                    {
+                        return i;
+                    }
+                    i++;
                 }
-                i++;
             }
+            return -1;
         }
-        return -1;
-    }
 
     /**
      * Enumeration Interface
      * @return a key without the enveloped '[' ']'
      */
     public Object nextElement()
-    {
-        int nLineWithSection = findNextSection(m_aEnumerationPos);
-        if (nLineWithSection != -1)
         {
-            String sSection = (String)m_aList.get(nLineWithSection);
-            m_aEnumerationPos = findNextSection(nLineWithSection + 1);
-            sSection = sectionToString(sSection);
-            return sSection;
+            int nLineWithSection = findNextSection(m_aEnumerationPos);
+            if (nLineWithSection != -1)
+            {
+                String sSection = (String) m_aList.get(nLineWithSection);
+                m_aEnumerationPos = findNextSection(nLineWithSection + 1);
+                sSection = sectionToString(sSection);
+                return sSection;
+            }
+            else
+            {
+                m_aEnumerationPos = m_aList.size();
+            }
+            return null;
         }
-        else
-        {
-            m_aEnumerationPos = m_aList.size();
-        }
-        return null;
-    }
 
     /**
      * Helper to count the occurence of Sections
      * @return returns the count of '^['.*']$' Elements
      */
     public int getElementCount()
-    {
-        int nCount = 0;
-        int nPosition = 0;
-        while ((nPosition = findNextSection(nPosition)) != -1)
         {
-            nCount ++;
-            nPosition ++;
+            int nCount = 0;
+            int nPosition = 0;
+            while ((nPosition = findNextSection(nPosition)) != -1)
+            {
+                nCount++;
+                nPosition++;
+            }
+            return nCount;
         }
-        return nCount;
-    }
 }
 
