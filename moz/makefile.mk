@@ -57,11 +57,13 @@ DISABLE_MOZ_EXECUTABLE=TRUE
 .EXPORT : DISABLE_MOZ_EXECUTABLE
 
 .IF "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
-# hmm... rather gcc specific switches...
+## hmm... rather gcc specific switches...
 CFLAGS:=-isystem $(SYSBASE)/usr/include -B$(SYSBASE)/usr/lib
-LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -L$(SYSBASE)/usr/X11R6/lib
+LDFLAGS:= -Wl,--unresolved-symbols=ignore-in-shared-libs -L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -L$(SYSBASE)/usr/X11R6/lib
 SYSBASE_X11:=--x-includes=$(SYSBASE)/usr/include/X11 --x-libraries=$(SYSBASE)/usr/X11R6/lib
-.EXPORT : CFLAGS LDFLAGS
+MOZ_ENABLE_COREXFONTS=1
+MOZILLA_CONFIGURE_FLAGS +=--disable-xft
+.EXPORT : CFLAGS LDFLAGS MOZ_ENABLE_COREXFONTS
 .ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 
 .IF "$(SYSBASE)"!="" && "$(OS)" == "MACOSX"
@@ -124,7 +126,6 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
                 --disable-boehm \
                 --disable-jsloader \
                 --disable-canvas \
-                --disable-xft \
                 --disable-freetype2 \
                 --disable-gnomeui \
                 --disable-image-encoders \
