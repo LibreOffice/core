@@ -30,7 +30,6 @@
 
 package mod._sw;
 
-import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
@@ -42,12 +41,9 @@ import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;

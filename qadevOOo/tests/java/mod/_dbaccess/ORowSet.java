@@ -30,7 +30,6 @@
 
 package mod._dbaccess;
 
-import com.sun.star.beans.Property;
 import java.io.PrintWriter;
 import java.util.Vector;
 
@@ -44,9 +43,6 @@ import util.utils;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.frame.XStorable;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.ParametersRequest;
@@ -64,7 +60,6 @@ import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.ucb.AuthenticationRequest;
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;

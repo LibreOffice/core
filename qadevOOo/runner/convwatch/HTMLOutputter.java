@@ -32,7 +32,6 @@ package convwatch;
 
 import java.io.File;
 import java.io.FileWriter;
-import util.utils;
 import helper.OSHelper;
 
 public class HTMLOutputter

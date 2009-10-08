@@ -33,8 +33,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleEditableText;
-import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
@@ -57,7 +55,6 @@ import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
-import share.LogWriter;
 import util.AccessibilityTools;
 
 /**

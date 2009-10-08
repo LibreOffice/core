@@ -48,7 +48,6 @@ import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapeDescriptor;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;

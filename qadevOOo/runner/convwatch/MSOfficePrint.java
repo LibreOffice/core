@@ -36,8 +36,6 @@ import java.io.FileWriter;
 import java.io.RandomAccessFile;
 import convwatch.GraphicalTestArguments;
 import helper.ProcessHandler;
-import helper.StringHelper;
-import convwatch.ConvWatchException;
 import java.util.ArrayList;
 import helper.OSHelper;
 

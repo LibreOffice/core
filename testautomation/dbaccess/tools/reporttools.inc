@@ -287,7 +287,7 @@ function fExecuteReport
     Kontext "ReportDesign"     
         ReportDesign.UseMenu
         hMenuSelectNr(2)
-        hMenuSelectNr(11)
+        hMenuSelectNr(14)
         
 end function
 '--------------------------------------------------------------------

@@ -32,7 +32,6 @@ package graphical;
 
 import java.io.File;
 import helper.OSHelper;
-import java.util.Date;
 
 public class BuildID
 {

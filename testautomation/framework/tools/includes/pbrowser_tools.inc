@@ -181,12 +181,38 @@ function hPBSetControlName( cControl as string ) as boolean
     kontext "TabGeneralControl"
     if ( NameText.exists() ) then
         '///+<li>Set the new name</li>
-        wait( 100 )
+        WaitSlot()
+        
+        printlog( CFN & "Naming control: " & cControl )
         NameText.setText( cControl )
         TabGeneralControl.typeKeys( "<RETURN>" )
-        wait( 100 )
-        printlog( CFN & "Named control: " & cControl )
-        hPBSetControlName() = true
+        WaitSlot()
+        
+        printlog( CFN & "Verifying rename..." )
+        if ( NameText.getText() = cControl ) then
+            printlog( CFN & "Name is set ok: " & cControl )
+            hPBSetControlName() = true
+            exit function
+        endif
+        
+        ' If the name cannot be set this is in 99% of the cases a timing problem.
+        ' Here is a (costly) workaround.
+        qaerrorlog( CFN & "Name not set correctly, retrying" )
+        Wait( 300 )
+        NameText.setText( cControl )
+        TabGeneralControl.typeKeys( "<RETURN>" )
+        Wait( 300 )
+
+        ' Test again, leave function if good
+        if ( NameText.getText() = cControl ) then
+            printlog( CFN & "Name is set ok: " & cControl )
+            hPBSetControlName() = true
+            exit function
+        endif
+        
+        warnlog( CFN & "Unable to set control name: " & cControl )
+        hPBSetControlName() = false
+            
     else
         warnlog( "Unable to name the control." )
         hPBSetControlName() = false
@@ -234,20 +260,20 @@ function hPBGetControlName( cControl as string ) as boolean
         
             '///+<li>Verify that the name is correct</li>
             if ( cControlName = cControl ) then
-                printlog( CFN & "The correct control is open: " & cControl )
+                printlog( CFN & "The name of the control is correct: " & cControl )
                 hPBGetControlName() = true
             else
-                warnlog( CFN & "This is not the correct control." )
+                warnlog( CFN & "Unexpected control name:" )
                 printlog( CFN & "Found....: " & cControlName )
                 printlog( CFN & "Expected.: " & cControl     )
                 hPBGetControlName() = false
             endif
         else
-            warnlog( CFN & "General Tab is not visible" )
+            warnlog( CFN & "Dialog present but tabpage could not be accessed (TabGeneralControl)." )
             hPBGetControlName() = false
         endif
     else
-        warnlog( CFN & "Unable to get the name from the control." )
+        warnlog( CFN & "Unable to get the name from the control, dialog not accessible (TabGeneralControl)." )
         hPBGetControlName() = false
     endif
     '///</ul>

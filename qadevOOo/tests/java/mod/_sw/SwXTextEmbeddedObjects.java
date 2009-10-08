@@ -38,7 +38,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
-import util.utils;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextContent;

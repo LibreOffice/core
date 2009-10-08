@@ -30,7 +30,6 @@
 
 package mod._sd;
 
-import com.sun.star.text.XTextRange;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -39,16 +38,12 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.DesktopTools;
 import util.SOfficeFactory;
-import util.dbg;
 import util.utils;
 
 import com.sun.star.awt.XWindow;
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
-import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
@@ -57,8 +52,6 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;

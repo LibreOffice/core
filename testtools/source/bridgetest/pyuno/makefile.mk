@@ -55,24 +55,23 @@ REGCOMP=$(WRAPCMD) regcomp
 PYTHON=$(WRAPCMD) python
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
+.IF "$(USE_SHELL)"=="bash"
+TEST_ENV=export FOO=file://$(shell @pwd)$/$(DLLDEST) \
+    UNO_TYPES=pyuno_regcomp.rdb UNO_SERVICES=pyuno_regcomp.rdb
+.ELSE
 TEST_ENV=\
     setenv FOO file://$(shell @pwd)$/$(DLLDEST) && \
         setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
+.ENDIF
 .ELSE # "$(GUI)" != "WNT"
 # aaaaaa, how to get the current working directory on windows ???
+CWD_TMP=$(strip $(shell @echo "import os;print os.getcwd()" | $(PYTHON)))
 .IF "$(USE_SHELL)" == "tcsh"
-
-# these are temporary (should go into the global env script)
-##PYTHON=guw.pl -env $(SOLARVER)/$(UPD)/$(INPATH)/bin/python.exe
-##REGCOMP=guw.pl -env `which regcomp.exe`
-
-CWD_TMP=$(strip $(shell @$(WRAPCMD) echo `pwd`))
 TEST_ENV=setenv FOO file:///$(strip $(subst,\,/ $(CWD_TMP)/$(DLLDEST))) && \
         setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
 .ELSE
-CWD_TMP=$(strip $(shell @echo import os;print os.getcwd() | $(PYTHON)))
-TEST_ENV=set FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST))) && \
-        set UNO_TYPES=pyuno_regcomp.rdb && set UNO_SERVICES=pyuno_regcomp.rdb
+TEST_ENV=export FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST))) && \
+        export UNO_TYPES=pyuno_regcomp.rdb && export UNO_SERVICES=pyuno_regcomp.rdb
 .ENDIF "$(USE_SHELL)" == "tcsh"
 
 .ENDIF  # "$(GUI)"!="WNT"

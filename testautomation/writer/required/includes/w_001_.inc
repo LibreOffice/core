@@ -66,6 +66,19 @@ testcase tFileNewLabels
     Dim iType as integer
     Dim sTypes as integer
     Dim vTypes as integer
+    
+    ' The brands have fixed names and should not change
+    dim cBrandList( 10 ) as string
+        cBrandList(  1 ) = "Avery A4" 
+        cBrandList(  2 ) = "Avery A4/Asia"
+        cBrandList(  3 ) = "Avery Letter Size"
+        cBrandlist(  4 ) = "Avery Zweckform"
+        cBrandList(  5 ) = "Herlitz"
+        cBrandList(  6 ) = "Herma A4"
+        cBrandList(  7 ) = "Herma A5"
+        cBrandList(  8 ) = "Herma endlos"
+        cBrandList(  9 ) = "Leitz"
+        cBrandList( 10 ) = "Sigel"
 
     PrintLog "Open Labels-dialog with File / New / Labels"
     if ( hCreateLabels ) then 
@@ -89,7 +102,7 @@ testcase tFileNewLabels
             PrintLog "There should be 10 brands in list"
             For iBrandIndex = 1 to Marke.GetItemCount
             
-                Marke.Select iBrandIndex
+                Marke.Select( cBrandList( iBrandIndex ) )
                 printlog "- Brand: " & Marke.GetSelText
                 sTypes = Typ.GetItemCount
                 
@@ -115,9 +128,9 @@ testcase tFileNewLabels
                     PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
                     if ( iSheetFormat = 1 ) then vTypes = 6 else vTypes = 26
                 Case 6:
-                    PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
+                    PrintLog "Herma A4 should have 492 types in list if 'Sheet' is checked"
                     PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
-                    if ( iSheetFormat = 1 ) then vTypes = 1 else vTypes = 491
+                    if ( iSheetFormat = 1 ) then vTypes = 1 else vTypes = 492
                 Case 7:
                     PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
                     PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
@@ -244,10 +257,23 @@ testcase tFileNewBusinessCards
     Dim iWait as integer
     Dim sTypes as integer
     Dim vTypes as integer
-
-    PrintLog "Open Business Cards dialog with File / New / Business Cards"
-    if ( hCreateBusinessCards ) then 
     
+    ' The brands have fixed names and should not change
+    dim cBrandList( 10 ) as string
+        cBrandList(  1 ) = "Avery A4" 
+        cBrandList(  2 ) = "Avery A4/Asia"
+        cBrandList(  3 ) = "Avery Letter Size"
+        cBrandlist(  4 ) = "Avery Zweckform"
+        cBrandList(  5 ) = "Herlitz"
+        cBrandList(  6 ) = "Herma A4"
+        cBrandList(  7 ) = "Herma A5"
+        cBrandList(  8 ) = "Herma endlos"
+        cBrandList(  9 ) = "Leitz"
+        cBrandList( 10 ) = "Sigel"
+    
+
+	PrintLog "Open Business Cards dialog with File / New / Business Cards"
+	if ( hCreateBusinessCards ) then     
         PrintLog "Switch to Tabpage 'Medium'"
         Kontext
         Active.Setpage TabEtikettenMedium
@@ -269,7 +295,7 @@ testcase tFileNewBusinessCards
                 
                 PrintLog "There should be 10 brands in list"
                 For iBrand = 1 to Marke.GetItemCount
-                    Marke.Select iBrand
+                    Marke.Select( cBrandList( iBrand ) )
                     printlog "- Brand: " & Marke.GetSelText
                     sTypes = Typ.GetItemCount
                     Select Case iBrand
@@ -294,9 +320,9 @@ testcase tFileNewBusinessCards
                         PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
                         if ( iFormat = 1 ) then vTypes = 6 else vTypes = 26
                     Case 6:
-                        PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
+                        PrintLog "Herma A4 should have 492 types in list if 'Sheet' is checked"
                         PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
-                        if ( iFormat = 1 ) then vTypes = 1 else vTypes = 491
+                        if ( iFormat = 1 ) then vTypes = 1 else vTypes = 492
                     Case 7:
                         PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
                         PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"

@@ -48,14 +48,6 @@ sub main
             ' to prevent messages about communication errors
             printlog ResetApplication
             FileExit "SynchronMode", TRUE
-            try
-                ' It is no error, if this fails - so it gets its own try/catch
-                kontext
-                if active.exists(5) then
-                    active.no 'discard changes
-                endif
-            catch
-            endcatch
         catch
             warnlog sString + "Failed to close OOo."
         endcatch

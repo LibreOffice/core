@@ -32,13 +32,11 @@ package ifc.frame;
 
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XDispatch;
 import com.sun.star.util.URL;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 import com.sun.star.frame.XNotifyingDispatch;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.DispatchResultEvent;
 
 /**

@@ -45,10 +45,7 @@ import util.utils;
 
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
-import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertyAccess;
-import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameContainer;
@@ -71,7 +68,6 @@ import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XRowUpdate;
-import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Any;

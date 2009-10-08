@@ -305,9 +305,6 @@ testcase tiShaddow
          LineareTransparenz.Check
          shadowtransparencyvalue = MFLinTransparenz.GetText
 
-   '/// Transparency doesnt exist in powerpoint. And only one corner-style is allowed. ///'
-   '/// Therefore should transparency disappear and the cornerstyle change when we reload. ///'
-
    sleep 2
    Kontext
    active.SetPage TabSchatten
@@ -401,9 +398,9 @@ testcase tiShaddow
             end if
          endif
          if (gApplication = "IMPRESS") then
-            if LineareTransparenz.Ischecked <> FALSE then
-               warnlog "Transparency should NOT have been checked!"
-               if MFLinTransparenz.GetText <> shadowtransparencyvalue then warnlog "Transparency-value should NOT have changed"
+            if LineareTransparenz.Ischecked =TRUE then
+                printlog "Transparency contained in newer ppt files, ok.!"
+            if MFLinTransparenz.GetText <> shadowtransparencyvalue then warnlog "Transparency-value should NOT have changed"
                KeineTransparenz.Check
             end if
          endif

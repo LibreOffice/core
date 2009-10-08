@@ -884,6 +884,8 @@ testcase tActivationOrder
         endif      
         DocumentWriter.TypeKeys "<TAB>" , true
         sleep(1)
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
+        sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
         if GetClipboard = "tt_doc" then
@@ -893,6 +895,8 @@ testcase tActivationOrder
         endif
         
         DocumentWriter.TypeKeys "<TAB>" , true
+        sleep(1)
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
@@ -1023,7 +1027,7 @@ testcase tAddFields
         Liste.TypeKeys "<DOWN>" , 4, true   	    
         sControlName2 = Liste.getSelText
         if sControlName1 <> sControlName2 then
-            warnlog "#i98316# The control name is not the same as the fieldname."
+            qaerrorlog "#i98316# The control name is not the same as the fieldname."
         endif
         
     sleep (2)    

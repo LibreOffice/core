@@ -30,7 +30,6 @@
 
 package ifc.lang;
 
-import com.sun.star.beans.PropertyValue;
 import lib.MultiMethodTest;
 
 import com.sun.star.lang.XMultiComponentFactory;

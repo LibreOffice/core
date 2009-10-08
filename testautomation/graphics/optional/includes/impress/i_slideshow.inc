@@ -43,27 +43,20 @@
 ' #1 tSlideShowCustomSlideShow
 ' #1 tSlideShowSlideTransition
 ' #1 tSlideShowShowHideSlide
-' #1 fGetSlideName
-' #1 setStartCurrentPage
 '*
 '\******************************************************************
 testcase tSlideShowSlideShow
 
-   dim bLoaded as boolean
-   dim i as integer
+    dim bLoaded as boolean
+    dim i as integer
 
-   '/// open file 'graphics\\input\\diashow.odp' ///'
-   hFileOpen  ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
-   sleep 30
+    '/// open file 'graphics\\input\\diashow.odp' ///'
+    hFileOpen  ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
+    sleep 30
 
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        endif
-    endif
+    printlog "check if the document is writable"
+    sMakeReadOnlyDocumentEditable
+
    bLoaded = false
 
    Kontext "Navigator"
@@ -151,7 +144,8 @@ testcase tSlideShowSlideShow
    setStartCurrentPage(TRUE)
    '/// close the application ///'
    Call hCloseDocument
-endcase
+   
+endcase 'tSlideShowSlideShow
 
 '-------------------------------------------------------------------------------
 
@@ -227,7 +221,8 @@ testcase tSlideShowRehearseTimings
    endif
    '/// close the application ///'
    Call hCloseDocument
-endcase
+   
+endcase 'tSlideShowRehearseTimings
 
 '-------------------------------------------------------------------------------
 testcase tSlideShowSlideShowSettings
@@ -305,14 +300,9 @@ testcase tSlideShowSlideShowSettings
    '/// open file 'graphics\\input\\diashow.odp' (Slide Show with 4 Slides) ///'
    hFileOpen   ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
    sleep 10
-   ' check if the document is writable
-   if fIsDocumentWritable = false then
-      ' make the document writable and check if it's succesfull
-      if fMakeDocumentWritable = false then
-         warnlog "The document can't be make writeable. Test stopped."
-         goto endsub
-      endif
-   endif
+   printlog "check if the document is writable"
+   sMakeReadOnlyDocumentEditable
+
    try
       Kontext "DocumentImpress"
       '/// Slide Show -> Slide Show Settings ///'
@@ -710,7 +700,8 @@ testcase tSlideShowSlideShowSettings
    setStartCurrentPage(TRUE)
    '/// Close the document ///'
    call hCloseDocument
-endcase
+   
+endcase 'tSlideShowSlideShowSettings
 
 '-------------------------------------------------------------------------------
 testcase tSlideShowCustomSlideShow
@@ -870,7 +861,8 @@ testcase tSlideShowCustomSlideShow
          printlog "Navigator: NOT available"
       end if
       Call hCloseDocument
-endcase
+      
+endcase 'tSlideShowCustomSlideShow
 
 '-------------------------------------------------------------------------------
 testcase tSlideShowSlideTransition
@@ -1124,7 +1116,8 @@ testcase tSlideShowSlideTransition
    end if
    '/// Close the document ///'
    call hCloseDocument
-endcase
+   
+endcase 'tSlideShowSlideTransition
 
 '-------------------------------------------------------------------------------------
 testcase tSlideShowShowHideSlide
@@ -1239,6 +1232,7 @@ testcase tSlideShowShowHideSlide
         printlog "Navigator: NOT available"
     endif
     Call hCloseDocument
-endcase
+    
+endcase 'tSlideShowShowHideSlide
 
 '------------------------------------------------------------------------------

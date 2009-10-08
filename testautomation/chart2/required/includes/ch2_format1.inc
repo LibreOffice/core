@@ -427,87 +427,96 @@ testcase tFormatAllAxesGrids
 endcase
 '-------------------------------------------------------------
 testcase tFormatLegend
-'///<u><b>Dialog test after invoking Format::Legend</b></u>
+    '///<u><b>Dialog test after invoking Format::Legend</b></u>
 
-'///<ul>
-   '///+<li>Load simple chart document</li>
-   if fLoadVerySimpleChartAndSaveLocal() > 0 then
-       warnlog "Loading test document seems to have failed -> Check this out!"
-       goto endsub
-   endif
-   '///+<li>Select chart using navigator</li>
-   call fSelectFirstOLE
-   '///+<li>Invoke Edit::Object::Edit to enter Inplace Mode</li>
-   EditObjectEdit
-   sleep(1)
-   '///+<li>Invoke Format::Chart Type</li>
-   if fInvokeChartTypeDialog() > 0 then
-       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '///+<li>Change Chart type to PIE</li>
-   if fSetChartType( "pie" ) > 0 then
-       warnlog "Something went wrong setting chart type to PIE -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '///+<li>Close Chart Type dialog</li>
-   if fCloseChartTypeDialogOK() > 0 then
-       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
-       Call hCloseDocument
-       goto endsub
-   endif
-   '///+<li>Invoke Format::Legend</li>
-   FormatLegend
-   '///+<li>Goto tab-page Borders</li>
-   Kontext
-   active.SetPage TabFormatChartBorders
-   '///+<li>Check if tab-page Borders exists</li>
-   Kontext "TabFormatChartBorders"
-   call DialogTest ( TabFormatChartBorders )
+    '///<ul>
+    '///+<li>Load simple chart document</li>
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '///+<li>Select chart using navigator</li>
+    call fSelectFirstOLE
+    '///+<li>Invoke Edit::Object::Edit to enter Inplace Mode</li>
+    EditObjectEdit
+    sleep(1)
+    '///+<li>Invoke Format::Chart Type</li>
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '///+<li>Change Chart type to PIE</li>
+    if fSetChartType( "pie" ) > 0 then
+        warnlog "Something went wrong setting chart type to PIE -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '///+<li>Close Chart Type dialog</li>
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '///+<li>Invoke Format::Legend</li>
+    FormatLegend
+    '///+<li>Goto tab-page Borders</li>
+    Kontext
+    active.SetPage TabFormatChartBorders
+    '///+<li>Check if tab-page Borders exists</li>
+    Kontext "TabFormatChartBorders"
+    call DialogTest ( TabFormatChartBorders )
    
-   '///+<li>Goto tab-page Area</li>
-   Kontext
-   active.SetPage TabArea
-   '///+<li>Check if tab-page Area exists</li>
-   Kontext "TabArea"
-   call DialogTest ( TabArea )
+    '///+<li>Goto tab-page Area</li>
+    Kontext
+    active.SetPage TabArea
+    '///+<li>Check if tab-page Area exists</li>
+    Kontext "TabArea"
+    call DialogTest ( TabArea )
    
-   '///+<li>Goto tab-page Transparency</li>
-   Kontext
-   active.SetPage TabTransparency
-   '///+<li>Check if tab-page Transparency exists</li>
-   Kontext "TabTransparency"
-   call DialogTest ( TabTransparency )
+    '///+<li>Goto tab-page Transparency</li>
+    Kontext
+    active.SetPage TabTransparency
+    '///+<li>Check if tab-page Transparency exists</li>
+    Kontext "TabTransparency"
+    call DialogTest ( TabTransparency )
    
-   '///+<li>Goto tab-page Characters</li>
-   Kontext
-   active.SetPage TabFont
-   '///+<li>Check if tab-page Characters exists</li>
-   Kontext "TabFont"
-   call DialogTest ( TabFont )
+    '///+<li>Goto tab-page Characters</li>
+    Kontext
+    active.SetPage TabFont
+    '///+<li>Check if tab-page Characters exists</li>
+    Kontext "TabFont"
+    call DialogTest ( TabFont )
    
-   '///+<li>Goto tab-page Font Effects</li>
-   Kontext
-   active.SetPage TabFontEffects
-   '///+<li>Check if tab-page Font Effects exists</li>
-   Kontext "TabFontEffects"
-   call DialogTest ( TabFontEffects )
+    '///+<li>Goto tab-page Font Effects</li>
+    Kontext
+    active.SetPage TabFontEffects
+    '///+<li>Check if tab-page Font Effects exists</li>
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )
    
-   '///+<li>Goto tab-page Position</li>
-   Kontext
-   active.SetPage TabLegendPosition
-   '///+<li>Check if tab-page Alignment exists</li>
-   Kontext "TabLegendPosition"
-   call DialogTest ( TabLegendPosition )
-   '///+<li>Close dialog</li>
-   TabLegendPosition.Cancel
-   '///+<li>Close document</li>
-   Kontext "DocumentCalc"
-   DocumentCalc.TypeKeys "<Escape>"
-   Call hCloseDocument
-'///</ul>
+    '///+<li>Goto tab-page Position</li>
+    Kontext
+    active.SetPage TabLegendPosition
+    '///+<li>Check if tab-page Alignment exists</li>
+    Kontext "TabLegendPosition"
+    call DialogTest ( TabLegendPosition )
+   
+    if gAsianSup = true then
+        Kontext
+        Active.SetPage TabAsianTypography    
+        Kontext "TabAsianTypography"
+        call DialogTest ( TabAsianTypography )        
+        TabAsianTypography.Cancel
+    else   
+        '///+<li>Close dialog</li>
+        TabLegendPosition.Cancel
+    endif
+    '///+<li>Close document</li>
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    Call hCloseDocument
+    '///</ul>
 
 endcase
 '-------------------------------------------------------------

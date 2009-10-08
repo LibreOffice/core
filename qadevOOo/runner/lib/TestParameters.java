@@ -32,6 +32,8 @@ package lib;
 
 import java.util.Hashtable;
 import util.PropertyName;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.XComponentContext;
 
 //import com.sun.star.lang.XMultiServiceFactory;
 
@@ -290,6 +292,24 @@ public class TestParameters extends Hashtable {
         Object ret = null;
         ret = get("ServiceFactory");
         return ret;
+    }
+
+    public XComponentContext getComponentContext() {
+        Object context = get( "ComponentContext" );
+        if ( context == null )
+        {
+            XPropertySet factoryProps = (XPropertySet)com.sun.star.uno.UnoRuntime.queryInterface(
+                XPropertySet.class, getMSF() );
+            try
+            {
+                context = com.sun.star.uno.UnoRuntime.queryInterface(
+                    XComponentContext.class, factoryProps.getPropertyValue( "DefaultContext" ) );
+                put( "ComponentContext", context );
+            }
+            catch( com.sun.star.beans.UnknownPropertyException e ) { }
+            catch( com.sun.star.lang.WrappedTargetException e ) { }
+        }
+        return (XComponentContext)context;
     }
 
     /**

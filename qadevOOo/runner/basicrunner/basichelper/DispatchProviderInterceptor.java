@@ -29,12 +29,10 @@
  ************************************************************************/
 package basicrunner.basichelper;
 
-import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
-import com.sun.star.uno.Any;
 import com.sun.star.frame.XDispatchProviderInterceptor;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XDispatch;

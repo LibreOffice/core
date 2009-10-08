@@ -75,6 +75,9 @@ $common_XML = "Common.xcu";
 $setup_XML = "Setup.xcu";
 $oooimprovement_XML = "Settings.xcu";
 
+# $(INPATH)\misc\Common.xcu
+$inpath_Common_XCU = $ENV{INPATH} . $pathslash  . "misc" . $pathslash  .  $common_XML;
+
 ### main ###
 
 $idStr = ' $Revision: 1.5 $ ';
@@ -92,8 +95,8 @@ if ( ($#ARGV >= 3) ) {
     chop($ARGV[3]);
 }
 
-if ( ! ( ($#ARGV >= 3) && $ARGV[0] && $ARGV[1] && $ARGV[2] && $ARGV[3] && (-d $ARGV[3]) ) ) {
-    print "Usage: config <basispath> <brandpath> <userinstallpath> <datapath>\n" ;
+if ( ! ( ($#ARGV >= 4) && $ARGV[0] && $ARGV[1] && $ARGV[2] && $ARGV[3] && (-d $ARGV[3]) && $ARGV[4] ) ) {
+    print "Usage: config <basispath> <brandpath> <userinstallpath> <datapath> <buildid>\n" ;
     exit(1);
 }
 
@@ -101,6 +104,7 @@ $basisdir = $ARGV[0];
 $branddir = $ARGV[1];
 $userinstalldir = $ARGV[2];
 $datapath = $ARGV[3];
+$buildid  = $ARGV[4];
 
 $fullquickstart_path = $branddir . "program" . $pathslash . "quickstart.exe";
 
@@ -113,9 +117,10 @@ if (!-d "$userinstalldir$OOoImprovement_Path") {
 }
 
 # copy Common.xcu
-
-print "cp $datapath$common_XML $userinstalldir$User_Office_Path$common_XML\n" if $is_debug;
-copy ("$datapath$common_XML", "$userinstalldir$User_Office_Path$common_XML");
+print "Patching Common.xcu\n" if $is_debug;
+PatchCommonXcu($buildid);
+print "cp $inpath_Common_XCU $userinstalldir$User_Office_Path$common_XML\n" if $is_debug;
+copy ("$inpath_Common_XCU", "$userinstalldir$User_Office_Path$common_XML");
 
 # copy OOoImprovement/Settings.xcu
 
@@ -140,3 +145,27 @@ unlink ($fullsource_path);
 
 exit(0);
 
+############################################################################
+sub PatchCommonXcu      #17.04.2009 10:37
+############################################################################
+ {
+    my $buildid = shift;
+    open(INFILE, "< $datapath$common_XML") || die "Can't open $datapath$common_XML (read)\n";
+    open(OUTFILE, "> $inpath_Common_XCU") || die "Can't open $inpath_Common_XCU (write)\n";
+    my $patch_next_line = 0;
+    my $value = "<value>Patch" . $buildid . "</value>\n";
+    while ( $line = <INFILE> ) {
+        if ( $patch_next_line ) {
+            print OUTFILE "      $value";
+            $patch_next_line = 0;
+        } else
+        {
+            print OUTFILE $line;
+        }
+        if ( $line =~ /ReminderDate/ ) {
+            $patch_next_line = 1;
+        }
+    }
+    close(INFILE);
+    close(OUTFILE);
+}   ##PatchCommonXcu

@@ -29,28 +29,22 @@
  ************************************************************************/
 package mod._toolkit;
 
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.awt.Point;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
-import com.sun.star.awt.XScrollBar;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
-import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
 import java.awt.Dimension;
 import java.awt.Toolkit;

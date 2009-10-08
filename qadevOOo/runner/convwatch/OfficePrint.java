@@ -35,9 +35,6 @@ import java.util.ArrayList;
 import java.io.FileWriter;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.document.XTypeDetection;
 import com.sun.star.container.XNameAccess;

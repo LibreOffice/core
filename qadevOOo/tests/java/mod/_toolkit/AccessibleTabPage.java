@@ -48,11 +48,8 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
-import com.sun.star.util.XCloseable;
 import com.sun.star.util.XURLTransformer;
 
-import java.awt.Robot;
-import java.awt.event.InputEvent;
 
 import java.io.PrintWriter;
 

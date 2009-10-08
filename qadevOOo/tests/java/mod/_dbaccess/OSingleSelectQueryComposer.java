@@ -31,9 +31,7 @@
 package mod._dbaccess;
 
 import java.io.PrintWriter;
-import java.util.Vector;
 
-import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -41,22 +39,14 @@ import lib.TestParameters;
 import util.DBTools;
 import util.utils;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
-import com.sun.star.sdb.RowChangeEvent;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XDataSource;
-import com.sun.star.sdbc.XResultSet;
-import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.sdbc.XRow;
-import com.sun.star.sdbc.XRowSet;
-import com.sun.star.sdbc.XRowUpdate;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;

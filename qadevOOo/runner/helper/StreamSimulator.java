@@ -33,10 +33,7 @@ package helper;
 import com.sun.star.uno.UnoRuntime;
 
 
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.RuntimeException;
-import com.sun.star.uno.Exception;
 import com.sun.star.ucb.XSimpleFileAccess;
 
 /**

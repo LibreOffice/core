@@ -136,6 +136,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                         ControlPropertiesTabControl.setPage TabDataControl
                     Kontext "TabDataControl"
                         CellBound.setText(sPropertyValue)
+                        CellBound.typeKeys("<RETURN>",true)
                     Kontext "ControlPropertiesTabControl"
                         ControlPropertiesTabControl.setPage TabGeneralControl
                 elseif sPropertyName = "CellRange" then
@@ -143,6 +144,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                         ControlPropertiesTabControl.setPage TabDataControl
                     Kontext "TabDataControl"
                         CellRange.setText(sPropertyValue)
+                        CellRange.typeKeys("<RETURN>",true)
                     Kontext "ControlPropertiesTabControl"
                         ControlPropertiesTabControl.setPage TabGeneralControl
                 elseif sPropertyName = "CurrSymPosition" then
@@ -167,7 +169,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                 elseif sPropertyName = "DefaultValue" then                    
                     TabGeneralControl.MouseDown 1,1,1,true
                     sleep(1)
-                    TabGeneralControl.TypeKeys "<TAB>" , 10 , true
+                    TabGeneralControl.TypeKeys "<TAB>" , 11 , true
                     sleep(1)
                     TabGeneralControl.TypeKeys sPropertyValue , true                    
                     sleep(1)
@@ -196,6 +198,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                     HelpText.setText(sPropertyValue)
                 elseif sPropertyName = "HelpURL" then
                     HelpURL.setText(sPropertyValue)
+                    HelpURL.TypeKeys "<RETURN>",true
                 elseif sPropertyName = "HiddenValue" then
                     HiddenValue.setText(sPropertyValue)
                 elseif sPropertyName = "HideSelection" then
@@ -225,6 +228,7 @@ function fSetControlProperty(sControlType, sPropertyName, sPropertyValue as stri
                     Multiselection.select(Cint(sPropertyValue))
                 elseif sPropertyName = "NameText" then
                     NameText.setText(sPropertyValue)
+                    NameText.typeKeys("<RETURN>",true)
                 elseif sPropertyName = "Navigation" then
                     Navigation.select(Cint(sPropertyValue))
                 elseif sPropertyName = "NavigationBar" then
@@ -826,4 +830,4 @@ function fOpenMoreControlsToolBar
             MoreControls.Click
         Kontext "MoreControls"    
     endif   
-end function
+End function

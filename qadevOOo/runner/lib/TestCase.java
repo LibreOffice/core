@@ -32,10 +32,6 @@ package lib;
 
 import java.io.PrintWriter;
 
-import com.sun.star.uno.XInterface;
-
-import java.util.Hashtable;
-
 import lib.TestParameters;
 /**
  * <code>TestCase</code> represent a factory for <code>TestEnvironment</code>s

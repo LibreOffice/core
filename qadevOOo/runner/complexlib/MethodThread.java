@@ -2,7 +2,6 @@ package complexlib;
 
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
-import lib.StatusException;
 
 /**
  * Invoke a method of a class in an own thread. Provide a method to end

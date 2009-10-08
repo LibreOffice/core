@@ -29,20 +29,11 @@
  ************************************************************************/
 package ifc.form;
 
-import com.sun.star.beans.Property;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XChild;
 import com.sun.star.form.XDatabaseParameterBroadcaster;
 import com.sun.star.form.XDatabaseParameterListener;
-import com.sun.star.form.XLoadable;
-import com.sun.star.sdbc.XColumnLocate;
-import com.sun.star.sdbc.XParameters;
-import com.sun.star.sdbc.XResultSet;
-import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.uno.UnoRuntime;
 import java.io.PrintWriter;
-import java.util.Properties;
 import lib.MultiMethodTest;
 
 /**

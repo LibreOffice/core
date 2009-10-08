@@ -434,6 +434,8 @@ PercentageFormat        HID_SCH_PB_PERCENT_NUMBERFORMAT
 Separator               HID_SCH_DATALABEL_SEPARATOR
 Placement               HID_SCH_DATALABEL_PLACEMENT
 TextDirection           HID_SCH_TEXTDIRECTION
+RotateAngle             HID_SCH_DATALABEL_ROTATION_KNOB
+RotateDegrees           HID_SCH_DATALABEL_ROTATION_EDIT
 
 +TabDataPointLabels TabDataSeriesLabels
 
@@ -444,6 +446,10 @@ Gap                     chart2:MetricField:TP_OPTIONS:MT_GAP
 Overlap                 chart2:MetricField:TP_OPTIONS:MT_OVERLAP
 ConnectionLines         chart2:CheckBox:TP_OPTIONS:CB_CONNECTOR
 ShowBarsSideBySide      chart2:CheckBox:TP_OPTIONS:CB_BARS_SIDE_BY_SIDE
+LeaveGap chart2:RadioButton:TP_OPTIONS:RB_DONT_PAINT
+AssumeZero chart2:RadioButton:TP_OPTIONS:RB_ASSUME_ZERO
+ContinueLine chart2:RadioButton:TP_OPTIONS:RB_CONTINUE_LINE
+IncludeHiddenCells chart2:CheckBox:TP_OPTIONS:CB_INCLUDE_HIDDEN_CELLS
 
 *TabDataSourceName extensions:TabPage:RID_PAGE_FINAL
 SourceName extensions:Edit:RID_PAGE_FINAL:ET_DATASOURCENAME

@@ -32,7 +32,6 @@ package util;
 
 import com.sun.star.beans.PropertyValue;
 import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import com.sun.star.uno.Type;

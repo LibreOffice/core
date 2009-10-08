@@ -37,8 +37,6 @@ import com.sun.star.i18n.KParseType;
 import com.sun.star.i18n.ParseResult;
 import com.sun.star.i18n.XCharacterClassification;
 import com.sun.star.lang.Locale;
-import com.sun.star.lang.*;
-import lib.*;
 
 /**
  * Testing <code>com.sun.star.i18n.XCharacterClassification</code>
