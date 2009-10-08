@@ -42,6 +42,7 @@
 #include "FilterContainer.hxx"
 #include "VistaFilePickerEventHandler.hxx"
 #include "IVistaFilePickerInternalNotify.hxx"
+#include "..\misc\resourceprovider.hxx"
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -101,6 +102,7 @@ static const ::rtl::OUString PROP_FEATURES            = ::rtl::OUString::createF
 static const ::rtl::OUString PROP_TEMPLATE_DESCR      = ::rtl::OUString::createFromAscii("templatedescription"); // [sal_Int32]
 static const ::rtl::OUString PROP_FILTER_TITLE        = ::rtl::OUString::createFromAscii("filter_title"       ); // [OUString]
 static const ::rtl::OUString PROP_FILTER_VALUE        = ::rtl::OUString::createFromAscii("filter_value"       ); // [OUString]
+static const ::rtl::OUString PROP_FORCE               = ::rtl::OUString::createFromAscii("force"              ); // [sal_Bool]
 
 static const ::rtl::OUString PROP_CONTROL_ID          = ::rtl::OUString::createFromAscii("control_id"         ); // [sal_Int16]
 static const ::rtl::OUString PROP_CONTROL_ACTION      = ::rtl::OUString::createFromAscii("control_action"     ); // [sal_Int16]
@@ -334,6 +336,9 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 
         //
         ::rtl::OUString m_sFilename;
+
+        // Resource provider
+        CResourceProvider m_ResProvider;
 };
 
 } // namespace vista

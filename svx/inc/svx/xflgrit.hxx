@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC XFillGradientItem : public NameOrIndex
 public:
             TYPEINFO();
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}
-            XFillGradientItem(long nIndex, const XGradient& rTheGradient);
+            XFillGradientItem(INT32 nIndex, const XGradient& rTheGradient);
             XFillGradientItem(const UniString& rName, const XGradient& rTheGradient);
             XFillGradientItem(SfxItemPool* pPool, const XGradient& rTheGradient);
             XFillGradientItem(SfxItemPool* pPool );

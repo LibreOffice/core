@@ -226,6 +226,9 @@ public:
     sal_Bool IsObjectTransparent() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > getInputStream();
+
+    // #i103116# FullDrag support
+    virtual SdrObject* getFullDragClone() const;
 };
 
 #endif //_SVDOGRAF_HXX

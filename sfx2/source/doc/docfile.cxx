@@ -576,32 +576,29 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
       || pImp->m_aDateTime.Month != aInitDate.Month
       || pImp->m_aDateTime.Year != aInitDate.Year )
     {
-        if ( !IsSystemFileLockingUsed() )
+        uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+        if ( xHandler.is() )
         {
-            uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
-
-            if ( xHandler.is() )
+            try
             {
-                try
+                ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                    document::ChangedByOthersRequest() ) );
+                uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+                aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
+                aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
+                xInteractionRequestImpl->setContinuations( aContinuations );
+
+                xHandler->handle( xInteractionRequestImpl.get() );
+
+                ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
+                if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
                 {
-                    ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                        document::ChangedByOthersRequest() ) );
-                    uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
-                    aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
-                    aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
-                    xInteractionRequestImpl->setContinuations( aContinuations );
-
-                    xHandler->handle( xInteractionRequestImpl.get() );
-
-                    ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
-                    if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
-                    {
-                        SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-                    }
+                    SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 }
-                catch ( uno::Exception& )
-                {}
             }
+            catch ( uno::Exception& )
+            {}
         }
     }
 }

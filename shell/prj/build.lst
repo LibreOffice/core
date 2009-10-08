@@ -31,6 +31,7 @@ sl    shell\source\backends\wininetbe              nmake   -   w   sl_backends_w
 sl    shell\source\backends\macbe                  nmake   -   u   sl_backends_macbe sl_inc NULL
 sl    shell\source\backends\gconfbe                nmake   -   u   sl_backends_gconfbe sl_inc NULL
 sl    shell\source\backends\kdebe                  nmake   -   u   sl_backends_kdebe sl_inc NULL
+sl    shell\source\backends\kde4be                 nmake   -   u   sl_backends_kde4be sl_inc NULL
 sl    shell\source\backends\desktopbe              nmake   -   u   sl_backends_desktopbe sl_inc NULL
 sl    shell\source\win32\shlxthandler\ooofilt      nmake   -   w   sl_win32_shlxthandler_ooofilt sl_all_zipfile.w sl_all_ooofilereader.w sl_win32_shlxthandler_util.w sl_all sl_inc NULL
 sl    shell\source\win32\shlxthandler\ooofilt\proxy nmake   -   w   sl_win32_ooofiltproxy sl_inc NULL 

@@ -133,6 +133,9 @@ public:
     void    MarkWrongsInvalid();
 
     WrongList*  Clone() const;
+
+    // #i102062#
+    bool operator==(const WrongList& rCompare) const;
 };
 
 inline void WrongList::InsertWrong( const WrongRange& rWrong, USHORT nPos )

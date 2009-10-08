@@ -37,48 +37,48 @@ ModalDialog RID_SVXDLG_ZOOM
     HelpId = SID_ATTR_ZOOM ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Size = MAP_APPFONT ( 218 , 112 ) ;
+    Size = MAP_APPFONT ( 242 , 112 ) ;
     Moveable = TRUE ;
     Text [ en-US ] = "Zoom & View Layout";
     FixedLine FL_ZOOM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
         Text [ en-US ] = "Zoom factor";
     };
     RadioButton BTN_OPTIMAL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ en-US ] = "~Optimal" ;
     };
     RadioButton BTN_WHOLE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
         Text [ en-US ] = "~Fit width and height" ;
     };
     RadioButton BTN_PAGE_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Size = MAP_APPFONT ( 105, 10 ) ;
         Text [ en-US ] = "Fit ~width" ;
     };
     RadioButton BTN_100
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Size = MAP_APPFONT ( 105, 10 ) ;
         Text = "~100 %" ;
     };
     RadioButton BTN_USER
     {
         Pos = MAP_APPFONT ( 12 , 67 ) ;
-        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
         Text [ en-US ] = "~Variable" ;
     };
     MetricField ED_USER
     {
-        Pos = MAP_APPFONT ( 74 , 66 ) ;
+        Pos = MAP_APPFONT ( 86 , 66 ) ;
         Size = MAP_APPFONT ( 32 , 12 ) ;
         Border = TRUE ;
         Group = TRUE ;
@@ -91,31 +91,31 @@ ModalDialog RID_SVXDLG_ZOOM
     };
     FixedLine FL_VIEWLAYOUT
     {
-        Pos = MAP_APPFONT ( 112 , 3 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Pos = MAP_APPFONT ( 124 , 3 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
         Text [ en-US ] = "View layout";
     };
     RadioButton BTN_AUTOMATIC
     {
-        Pos = MAP_APPFONT ( 118 , 14 ) ;
-        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Size = MAP_APPFONT ( 106 , 10 ) ;
         Text [ en-US ] = "~Automatic" ;
     };
     RadioButton BTN_SINGLE
     {
-        Pos = MAP_APPFONT ( 118 , 27 ) ;
-        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Pos = MAP_APPFONT ( 130, 27 ) ;
+        Size = MAP_APPFONT ( 106, 10 ) ;
         Text [ en-US ] = "~Single page" ;
     };
     RadioButton BTN_COLUMNS
     {
-        Pos = MAP_APPFONT ( 118 , 41 ) ;
-        Size = MAP_APPFONT ( 64 , 10 ) ;
+        Pos = MAP_APPFONT ( 130, 41 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "~Columns" ;
     };
     MetricField ED_COLUMNS
     {
-        Pos = MAP_APPFONT ( 185 , 40 ) ;
+        Pos = MAP_APPFONT ( 209 , 40 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
         Group = TRUE ;
@@ -128,29 +128,29 @@ ModalDialog RID_SVXDLG_ZOOM
     };
     CheckBox CHK_BOOK
     {
-        Pos = MAP_APPFONT ( 124 , 55 ) ;
+        Pos = MAP_APPFONT ( 136 , 55 ) ;
         Size = MAP_APPFONT ( 85 , 10 ) ;
         Text [ en-US ] = "~Book mode" ;
     };
     FixedLine FL_BOTTOM
     {
         Pos = MAP_APPFONT ( 6 , 81 ) ;
-        Size = MAP_APPFONT ( 206 , 8 ) ;
+        Size = MAP_APPFONT ( 230 , 8 ) ;
     };
     OKButton BTN_ZOOM_OK
     {
-        Pos = MAP_APPFONT ( 53 , 92 ) ;
+        Pos = MAP_APPFONT ( 77 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_ZOOM_CANCEL
     {
-        Pos = MAP_APPFONT ( 106 , 92 ) ;
+        Pos = MAP_APPFONT ( 130 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_ZOOM_HELP
     {
-        Pos = MAP_APPFONT ( 162 , 92 ) ;
+        Pos = MAP_APPFONT ( 186 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };

@@ -604,6 +604,14 @@ void SvxFontPrevWindow::SetColor(const Color &rColor)
     pImpl->pColor = new Color( rColor );
     Invalidate();
 }
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::ResetColor()
+{
+    delete pImpl->pColor;
+    pImpl->pColor = 0;
+    Invalidate();
+}
 
 // -----------------------------------------------------------------------
 

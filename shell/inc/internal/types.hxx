@@ -36,6 +36,9 @@
 #include <utility>
 #include <vector>
 #include <stack>
+#include <external/zlib/zlib.h>
+#include <external/zlib/ioapi.h>
+
 
 typedef std::vector<std::wstring> StringList_t;
 

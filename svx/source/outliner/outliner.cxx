@@ -1526,7 +1526,7 @@ void Outliner::ImplCheckParagraphs( USHORT nStart, USHORT nEnd )
         if (pPara)
         {
             pPara->Invalidate();
-            ImplCalcBulletText( static_cast< USHORT >(n), FALSE, FALSE );
+            ImplCalcBulletText( n, FALSE, FALSE );
         }
     }
 }

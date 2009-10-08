@@ -74,11 +74,12 @@ class SchXMLPlotAreaContext : public SvXMLImportContext
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                            SvXMLImport& rImport, const rtl::OUString& rLocalName,
+                           const rtl::OUString& rXLinkHRefAttributeToIndicateDataProvider,
                            ::com::sun::star::uno::Sequence<
                                ::com::sun::star::chart::ChartSeriesAddress >& rSeriesAddresses,
                            ::rtl::OUString& rCategoriesAddress,
                            ::rtl::OUString& rChartAddress,
-                           sal_Bool & rHasOwnTable,
+                           bool& bHasRangeAtPlotArea,
                            sal_Bool & rAllRangeAddressesAvailable,
                            sal_Bool & rColHasLabels,
                            sal_Bool & rRowHasLabels,
@@ -119,8 +120,9 @@ private:
     bool mbPercentStacked;
     bool m_bAxisPositionAttributeImported;
     ::rtl::OUString msAutoStyleName;
+    const ::rtl::OUString& m_rXLinkHRefAttributeToIndicateDataProvider;
     ::rtl::OUString& mrChartAddress;
-    sal_Bool & mrHasOwnTable;
+    bool& m_rbHasRangeAtPlotArea;
     sal_Bool & mrColHasLabels;
     sal_Bool & mrRowHasLabels;
     ::com::sun::star::chart::ChartDataRowSource & mrDataRowSource;

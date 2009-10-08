@@ -262,6 +262,7 @@ public:
                                                   BOOL bActivate,
                                                   BOOL bForbidVisible = FALSE,
                                                   const String* pPostStr = 0);
+    void                        ResetLastDir();
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static SfxApplication* Is_Impl() { return pApp;}

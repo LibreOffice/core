@@ -596,18 +596,24 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     aBspWin.SetSize( Size( ConvertLong_Impl( aPaperSize.Width(), eUnit ),
                            ConvertLong_Impl( aPaperSize.Height(), eUnit ) ) );
 
-    // Werte in die Edits eintragen
-    SetMetricValue( aPaperHeightEdit, aPaperSize.Height(), eUnit );
-    SetMetricValue( aPaperWidthEdit, aPaperSize.Width(), eUnit );
-    aPaperSizeBox.Clear();
+    aPaperSize = OutputDevice::LogicToLogic(aPaperSize, (MapUnit)eUnit, MAP_100TH_MM);
+    if ( bLandscape )
+        Swap( aPaperSize );
 
-    // Papierformate
-    Size aTmpSize = aPaperSize;
+    // Actual Paper Format
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MAP_100TH_MM, TRUE );
+
+    if ( PAPER_USER != ePaper )
+        aPaperSize = SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM );
 
     if ( bLandscape )
-        Swap( aTmpSize );
-    // aktuelles Format
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aTmpSize, (MapUnit)eUnit, TRUE );
+        Swap( aPaperSize );
+
+    // Werte in die Edits eintragen
+    SetMetricValue( aPaperHeightEdit, aPaperSize.Height(), SFX_MAPUNIT_100TH_MM );
+    SetMetricValue( aPaperWidthEdit, aPaperSize.Width(), SFX_MAPUNIT_100TH_MM );
+    aPaperSizeBox.Clear();
+
     USHORT nActPos = LISTBOX_ENTRY_NOTFOUND;
     USHORT nAryId = RID_SVXSTRARY_PAPERSIZE_STD;
 
@@ -1044,19 +1050,19 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 
     if ( ePaper != PAPER_USER )
     {
-        Size aSize( SvxPaperInfo::GetPaperSize( ePaper ) );
+        Size aSize( SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM ) );
 
         if ( aLandscapeBtn.IsChecked() )
             Swap( aSize );
 
-        if ( aSize.Height() < aPaperHeightEdit.GetMin( FUNIT_TWIP ) )
+        if ( aSize.Height() < aPaperHeightEdit.GetMin( FUNIT_100TH_MM ) )
             aPaperHeightEdit.SetMin(
-                aPaperHeightEdit.Normalize( aSize.Height() ), FUNIT_TWIP );
-        if ( aSize.Width() < aPaperWidthEdit.GetMin( FUNIT_TWIP ) )
+                aPaperHeightEdit.Normalize( aSize.Height() ), FUNIT_100TH_MM );
+        if ( aSize.Width() < aPaperWidthEdit.GetMin( FUNIT_100TH_MM ) )
             aPaperWidthEdit.SetMin(
-                aPaperWidthEdit.Normalize( aSize.Width() ), FUNIT_TWIP );
-        SetMetricValue( aPaperHeightEdit, aSize.Height(), SFX_MAPUNIT_TWIP );
-        SetMetricValue( aPaperWidthEdit, aSize.Width(), SFX_MAPUNIT_TWIP );
+                aPaperWidthEdit.Normalize( aSize.Width() ), FUNIT_100TH_MM );
+        SetMetricValue( aPaperHeightEdit, aSize.Height(), SFX_MAPUNIT_100TH_MM );
+        SetMetricValue( aPaperWidthEdit, aSize.Width(), SFX_MAPUNIT_100TH_MM );
 
         // R"ander ggf. neu berechnen
         CalcMargin_Impl();
@@ -1145,12 +1151,12 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
     {
         bLandscape = aLandscapeBtn.IsChecked();
 
-        const long lWidth = GetCoreValue( aPaperWidthEdit, SFX_MAPUNIT_TWIP );
-        const long lHeight = GetCoreValue( aPaperHeightEdit, SFX_MAPUNIT_TWIP );
+        const long lWidth = GetCoreValue( aPaperWidthEdit, SFX_MAPUNIT_100TH_MM );
+        const long lHeight = GetCoreValue( aPaperHeightEdit, SFX_MAPUNIT_100TH_MM );
 
         // swap with and height
-        SetMetricValue( aPaperWidthEdit, lHeight, SFX_MAPUNIT_TWIP );
-        SetMetricValue( aPaperHeightEdit, lWidth, SFX_MAPUNIT_TWIP );
+        SetMetricValue( aPaperWidthEdit, lHeight, SFX_MAPUNIT_100TH_MM );
+        SetMetricValue( aPaperHeightEdit, lWidth, SFX_MAPUNIT_100TH_MM );
 
         // recalculate margins if necessary
         CalcMargin_Impl();
