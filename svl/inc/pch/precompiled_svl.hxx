@@ -421,11 +421,6 @@
 #include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/processfactory.hxx>
 
-#include <vcl/dndhelp.hxx>
-#include <vcl/fldunit.hxx>
-#include <vcl/mapunit.hxx>
-#include <vcl/unohelp.hxx>
-
 #include <vos/mutex.hxx>
 #include <vos/process.hxx>
 #include <vos/ref.hxx>

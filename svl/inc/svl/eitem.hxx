@@ -31,11 +31,11 @@
 #ifndef _SFXENUMITEM_HXX
 #define _SFXENUMITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/cenumitm.hxx>
 
 //============================================================================
-class SVT_DLLPUBLIC SfxEnumItem: public CntEnumItem
+class SVL_DLLPUBLIC SfxEnumItem: public CntEnumItem
 {
 protected:
     SfxEnumItem(USHORT which = 0, USHORT nValue = 0):
@@ -50,7 +50,7 @@ public:
 };
 
 //============================================================================
-class SVT_DLLPUBLIC SfxBoolItem: public CntBoolItem
+class SVL_DLLPUBLIC SfxBoolItem: public CntBoolItem
 {
 public:
     TYPEINFO();

@@ -34,7 +34,7 @@
 #*************************************************************************
 PRJ = ..$/..$/..
 TARGET  = CheckConfigItems
-PRJNAME = svtools
+PRJNAME = svl
 PACKAGE = complex$/ConfigItems
 
 # --- Settings -----------------------------------------------------

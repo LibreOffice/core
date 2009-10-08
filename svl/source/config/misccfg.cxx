@@ -29,12 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
-
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
+#include "precompiled_svl.hxx"
 
 #include "misccfg.hxx"
 #include <svtools/zforlist.hxx>

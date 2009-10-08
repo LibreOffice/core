@@ -30,7 +30,7 @@
 #ifndef _ZFORMAT_HXX
 #define _ZFORMAT_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/string.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/zforlist.hxx>
@@ -175,7 +175,7 @@ private:
 
 };
 
-class SVT_DLLPUBLIC SvNumberformat
+class SVL_DLLPUBLIC SvNumberformat
 {
 public:
     // Ctor for Load
@@ -461,11 +461,11 @@ private:
     BOOL bStandard;                 // If this is a default standard format
     BOOL bIsUsed;                   // Flag as used for storing
 
-    SVT_DLLPRIVATE USHORT ImpGetNumForStringElementCount( USHORT nNumFor ) const;
+    SVL_DLLPRIVATE USHORT ImpGetNumForStringElementCount( USHORT nNumFor ) const;
 
-    SVT_DLLPRIVATE BOOL ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
+    SVL_DLLPRIVATE BOOL ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
 
-    SVT_DLLPRIVATE BOOL ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
+    SVL_DLLPRIVATE BOOL ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
             double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
 
 #ifdef _ZFORMAT_CXX     // ----- private implementation methods -----
@@ -476,36 +476,36 @@ private:
     const SvNumberFormatter& GetFormatter() const   { return *rScan.GetNumberformatter(); }
 
     // divide in substrings and color conditions
-    SVT_DLLPRIVATE short ImpNextSymbol( String& rString,
+    SVL_DLLPRIVATE short ImpNextSymbol( String& rString,
                      xub_StrLen& nPos,
                      String& sSymbol );
 
     // read string until ']' and strip blanks (after condition)
-    SVT_DLLPRIVATE static xub_StrLen ImpGetNumber( String& rString,
+    SVL_DLLPRIVATE static xub_StrLen ImpGetNumber( String& rString,
                    xub_StrLen& nPos,
                    String& sSymbol );
 
     // get xxx of "[$-xxx]" as LanguageType, starting at and advancing position nPos
-    SVT_DLLPRIVATE static LanguageType ImpGetLanguageType( const String& rString, xub_StrLen& nPos );
+    SVL_DLLPRIVATE static LanguageType ImpGetLanguageType( const String& rString, xub_StrLen& nPos );
 
     // standard number output
-    SVT_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );
+    SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );
     // numbers in input line
-    SVT_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, String& OutString );
+    SVL_DLLPRIVATE void ImpGetOutputInputLine( double fNumber, String& OutString );
 
     // check subcondition
     // OP undefined => -1
     // else 0 or 1
-    SVT_DLLPRIVATE short ImpCheckCondition(double& fNumber,
+    SVL_DLLPRIVATE short ImpCheckCondition(double& fNumber,
                          double& fLimit,
                          SvNumberformatLimitOps eOp);
 
-    SVT_DLLPRIVATE ULONG ImpGGT(ULONG x, ULONG y);
-    SVT_DLLPRIVATE ULONG ImpGGTRound(ULONG x, ULONG y);
+    SVL_DLLPRIVATE ULONG ImpGGT(ULONG x, ULONG y);
+    SVL_DLLPRIVATE ULONG ImpGGTRound(ULONG x, ULONG y);
 
     // Helper function for number strings
     // append string symbols, insert leading 0 or ' ', or ...
-    SVT_DLLPRIVATE BOOL ImpNumberFill( String& sStr,
+    SVL_DLLPRIVATE BOOL ImpNumberFill( String& sStr,
                     double& rNumber,
                     xub_StrLen& k,
                     USHORT& j,
@@ -513,7 +513,7 @@ private:
                     short eSymbolType );
 
     // Helper function to fill in the integer part and the group (AKA thousand) separators
-    SVT_DLLPRIVATE BOOL ImpNumberFillWithThousands( String& sStr,
+    SVL_DLLPRIVATE BOOL ImpNumberFillWithThousands( String& sStr,
                                  double& rNumber,
                                  xub_StrLen k,
                                  USHORT j,
@@ -524,20 +524,20 @@ private:
 
     // Helper function to fill in the group (AKA thousand) separators
     // or to skip additional digits
-    SVT_DLLPRIVATE void ImpDigitFill( String& sStr,
+    SVL_DLLPRIVATE void ImpDigitFill( String& sStr,
                     xub_StrLen nStart,
                     xub_StrLen& k,
                     USHORT nIx,
                     xub_StrLen & nDigitCount,
                     utl::DigitGroupingIterator & );
 
-    SVT_DLLPRIVATE BOOL ImpGetDateOutput( double fNumber,
+    SVL_DLLPRIVATE BOOL ImpGetDateOutput( double fNumber,
                        USHORT nIx,
                        String& OutString );
-    SVT_DLLPRIVATE BOOL ImpGetTimeOutput( double fNumber,
+    SVL_DLLPRIVATE BOOL ImpGetTimeOutput( double fNumber,
                        USHORT nIx,
                        String& OutString );
-    SVT_DLLPRIVATE BOOL ImpGetDateTimeOutput( double fNumber,
+    SVL_DLLPRIVATE BOOL ImpGetDateTimeOutput( double fNumber,
                            USHORT nIx,
                            String& OutString );
 
@@ -546,23 +546,23 @@ private:
     // know a "before" era (like zh_TW ROC or ja_JP Gengou). If switched and
     // rOrgCalendar was "gregorian" the string is emptied. If rOrgCalendar was
     // empty the previous calendar name and date/time are returned.
-    SVT_DLLPRIVATE BOOL ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime );
+    SVL_DLLPRIVATE BOOL ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime );
 
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other
     // calendars the XExtendedCalendar::getDisplayString() method is called.
-    SVT_DLLPRIVATE static void ImpAppendEraG( String& OutString, const CalendarWrapper& rCal,
+    SVL_DLLPRIVATE static void ImpAppendEraG( String& OutString, const CalendarWrapper& rCal,
             sal_Int16 nNatNum );
 
-    SVT_DLLPRIVATE BOOL ImpGetNumberOutput( double fNumber,
+    SVL_DLLPRIVATE BOOL ImpGetNumberOutput( double fNumber,
                          USHORT nIx,
                          String& OutString );
 
-    SVT_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
+    SVL_DLLPRIVATE void ImpCopyNumberformat( const SvNumberformat& rFormat );
 
     // normal digits or other digits, depending on ImpSvNumFor.aNatNum,
     // [NatNum1], [NatNum2], ...
-    SVT_DLLPRIVATE String ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int32 nVal,
+    SVL_DLLPRIVATE String ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int32 nVal,
             USHORT nMinDigits = 0  ) const;
 
     String ImpIntToString( USHORT nIx, sal_Int32 nVal, USHORT nMinDigits = 0 ) const
@@ -574,7 +574,7 @@ private:
         }
 
     // transliterate according to NativeNumber
-    SVT_DLLPRIVATE void ImpTransliterateImpl( String& rStr, const SvNumberNatNum& rNum ) const;
+    SVL_DLLPRIVATE void ImpTransliterateImpl( String& rStr, const SvNumberNatNum& rNum ) const;
 
     void ImpTransliterate( String& rStr, const SvNumberNatNum& rNum ) const
         {

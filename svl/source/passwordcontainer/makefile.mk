@@ -30,7 +30,7 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=svtools
+PRJNAME=svl
 TARGET=passwordcontainer.uno
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE

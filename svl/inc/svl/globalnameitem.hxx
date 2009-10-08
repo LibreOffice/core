@@ -30,7 +30,7 @@
 #ifndef _GLOBALNAMEITEM_HXX
 #define _GLOBALNAMEITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <tools/globname.hxx>
@@ -38,7 +38,7 @@
 
 // -----------------------------------------------------------------------
 
-class SVT_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxGlobalNameItem: public SfxPoolItem
 {
     SvGlobalName            m_aName;
 

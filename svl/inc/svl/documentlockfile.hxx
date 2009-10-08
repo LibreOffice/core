@@ -32,7 +32,7 @@
 #ifndef _SVT_DOCUMENTLOCKFILE_HXX
 #define _SVT_DOCUMENTLOCKFILE_HXX
 
-#include <svtools/svtdllapi.h>
+#include <svtools/svldllapi.h>
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -45,7 +45,7 @@
 
 namespace svt {
 
-class SVT_DLLPUBLIC DocumentLockFile : public LockFileCommon
+class SVL_DLLPUBLIC DocumentLockFile : public LockFileCommon
 {
     // the workaround for automated testing!
     static sal_Bool m_bAllowInteraction;

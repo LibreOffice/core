@@ -30,7 +30,7 @@
 #*************************************************************************
 
 PRJ = ..
-PRJNAME = svtools
+PRJNAME=svl
 TARGET = qa
 
 ENABLE_EXCEPTIONS = true
@@ -49,7 +49,7 @@ SHL1STDLIBS=\
      $(CPPULIB) \
      $(CPPUHELPERLIB) \
      $(SALLIB) \
-     $(SVTOOLLIB) \
+     $(SVLLIB) \
      $(TOOLSLIB) \
      $(UNOTOOLSLIB) \
      $(TESTSHL2LIB)    \

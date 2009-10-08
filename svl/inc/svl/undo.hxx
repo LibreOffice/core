@@ -30,14 +30,14 @@
 #ifndef _UNDO_HXX
 #define _UNDO_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/rtti.hxx>
 #include <tools/string.hxx>
 #include <svtools/svarray.hxx>
 
 //====================================================================
 
-class SVT_DLLPUBLIC SfxRepeatTarget
+class SVL_DLLPUBLIC SfxRepeatTarget
 {
 public:
                         TYPEINFO();
@@ -46,7 +46,7 @@ public:
 
 //====================================================================
 
-class SVT_DLLPUBLIC SfxUndoAction
+class SVL_DLLPUBLIC SfxUndoAction
 {
     BOOL bLinked;
 public:
@@ -79,7 +79,7 @@ SV_DECL_PTRARR( SfxUndoActions, SfxUndoAction*, 20, 8 )
 
 /** do not make use of this implementation details, unless you
     really really have to! */
-struct SVT_DLLPUBLIC SfxUndoArray
+struct SVL_DLLPUBLIC SfxUndoArray
 {
     SfxUndoActions          aUndoActions;
     USHORT                  nMaxUndoActions;
@@ -95,7 +95,7 @@ struct SVT_DLLPUBLIC SfxUndoArray
 
 /** do not make use of this implementation details, unless you
     really really have to! */
-class SVT_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
+class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
 
 /*  [Beschreibung]
 
@@ -135,7 +135,7 @@ class SVT_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 
 //=========================================================================
 
-class SVT_DLLPUBLIC SfxUndoManager
+class SVL_DLLPUBLIC SfxUndoManager
 {
     friend class SfxLinkUndoAction;
 
@@ -197,7 +197,7 @@ public:
 
 //=========================================================================
 
-class SVT_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
+class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
 
 /*  [Beschreibung]
 

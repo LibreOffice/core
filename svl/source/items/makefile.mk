@@ -30,14 +30,14 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=svtools
+PRJNAME=svl
 TARGET=items
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/svt.pmk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -48,7 +48,6 @@ SLOFILES=\
     $(SLO)$/globalnameitem.obj	\
     $(SLO)$/imageitm.obj    \
     $(SLO)$/intitem.obj	\
-    $(SLO)$/itemdel.obj	\
     $(SLO)$/macitem.obj	\
     $(SLO)$/poolcach.obj	\
     $(SLO)$/ptitem.obj	\
@@ -56,8 +55,37 @@ SLOFILES=\
     $(SLO)$/rngitem.obj	\
     $(SLO)$/stritem.obj	\
     $(SLO)$/style.obj	\
-    $(SLO)$/szitem.obj	\
-    $(SLO)$/wallitem.obj
+    $(SLO)$/szitem.obj \
+    $(SLO)$/bintitem.obj	\
+    $(SLO)$/cenumitm.obj	\
+    $(SLO)$/cintitem.obj	\
+    $(SLO)$/cntwall.obj	\
+    $(SLO)$/cstitem.obj	\
+    $(SLO)$/ctypeitm.obj	\
+    $(SLO)$/custritm.obj	\
+    $(SLO)$/dateitem.obj	\
+    $(SLO)$/dtritem.obj	\
+    $(SLO)$/frqitem.obj	\
+    $(SLO)$/ilstitem.obj    \
+    $(SLO)$/itemiter.obj	\
+    $(SLO)$/itempool.obj	\
+    $(SLO)$/itemprop.obj	\
+    $(SLO)$/itemset.obj	\
+    $(SLO)$/lckbitem.obj	\
+    $(SLO)$/poolio.obj	\
+    $(SLO)$/stylepool.obj	\
+    $(SLO)$/poolitem.obj	\
+    $(SLO)$/sfontitm.obj	\
+    $(SLO)$/sitem.obj	    \
+    $(SLO)$/slstitm.obj	\
+    $(SLO)$/tfrmitem.obj	\
+    $(SLO)$/tresitem.obj	\
+    $(SLO)$/whiter.obj \
+    $(SLO)$/visitem.obj
+
+SRS1NAME=$(TARGET)
+SRC1FILES=\
+    cstitem.src
 
 # --- Targets -------------------------------------------------------
 

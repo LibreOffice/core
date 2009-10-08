@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
+#include "precompiled_svl.hxx"
 #include <com/sun/star/uno/Any.hxx>
 
 #include <unotools/intlwrapper.hxx>
@@ -38,7 +38,7 @@
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 
-#include <svtools/svtdata.hxx>
+#include <svtools/svldata.hxx>
 #include <svtools/cstitem.hxx>
 
 #include <svtools/svtools.hrc>
@@ -150,70 +150,70 @@ SfxItemPresentation SfxCrawlStatusItem::GetPresentation
     switch (eStatus)
     {
         case CSTAT_NEVER_UPD:
-            rText = String(SvtResId(STR_CSTAT_NEVER_UPD,
+            rText = String(SvtSimpleResId(STR_CSTAT_NEVER_UPD,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_IN_UPD:
-            rText = String(SvtResId(STR_CSTAT_IN_UPD,
+            rText = String(SvtSimpleResId(STR_CSTAT_IN_UPD,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_UPD_NEWER:
-            rText = String(SvtResId(STR_CSTAT_UPD_NEWER,
+            rText = String(SvtSimpleResId(STR_CSTAT_UPD_NEWER,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_UPD_NOT_NEWER:
-            rText = String(SvtResId(STR_CSTAT_UPD_NOT_NEWER,
+            rText = String(SvtSimpleResId(STR_CSTAT_UPD_NOT_NEWER,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_UPD_CANCEL:
-            rText = String(SvtResId(STR_CSTAT_UPD_CANCEL,
+            rText = String(SvtSimpleResId(STR_CSTAT_UPD_CANCEL,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_ERR_GENERAL:
-            rText = String(SvtResId(STR_CSTAT_ERR_GENERAL,
+            rText = String(SvtSimpleResId(STR_CSTAT_ERR_GENERAL,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_ERR_NOTEXISTS:
-            rText = String(SvtResId(STR_CSTAT_ERR_NOTEXISTS,
+            rText = String(SvtSimpleResId(STR_CSTAT_ERR_NOTEXISTS,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_ERR_NOTREACHED:
-            rText = String(SvtResId(STR_CSTAT_ERR_NOTREACHED,
+            rText = String(SvtSimpleResId(STR_CSTAT_ERR_NOTREACHED,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_UPD_IMMEDIATELY:
-            rText = String(SvtResId(STR_CSTAT_UPD_IMMEDIATELY,
+            rText = String(SvtSimpleResId(STR_CSTAT_UPD_IMMEDIATELY,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));
             break;
 
         case CSTAT_ERR_OFFLINE:
-            rText = String(SvtResId(STR_CSTAT_ERR_OFFLINE,
+            rText = String(SvtSimpleResId(STR_CSTAT_ERR_OFFLINE,
                                     pIntlWrapper ?
                                      pIntlWrapper->getLocale() :
                                      aLocale));

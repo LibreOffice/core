@@ -31,11 +31,11 @@
 #ifndef _SFXINTITEM_HXX
 #define _SFXINTITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/cintitem.hxx>
 
 //============================================================================
-class SVT_DLLPUBLIC SfxByteItem: public CntByteItem
+class SVL_DLLPUBLIC SfxByteItem: public CntByteItem
 {
 public:
     TYPEINFO();
@@ -53,9 +53,9 @@ public:
 };
 
 //============================================================================
-DBG_NAMEEX_VISIBILITY(SfxInt16Item, SVT_DLLPUBLIC)
+DBG_NAMEEX_VISIBILITY(SfxInt16Item, SVL_DLLPUBLIC)
 
-class SVT_DLLPUBLIC SfxInt16Item: public SfxPoolItem
+class SVL_DLLPUBLIC SfxInt16Item: public SfxPoolItem
 {
     INT16 m_nValue;
 
@@ -115,7 +115,7 @@ inline void SfxInt16Item::SetValue(INT16 nTheValue)
 }
 
 //============================================================================
-class SVT_DLLPUBLIC SfxUInt16Item: public CntUInt16Item
+class SVL_DLLPUBLIC SfxUInt16Item: public CntUInt16Item
 {
 public:
     TYPEINFO();
@@ -134,7 +134,7 @@ public:
 };
 
 //============================================================================
-class SVT_DLLPUBLIC SfxInt32Item: public CntInt32Item
+class SVL_DLLPUBLIC SfxInt32Item: public CntInt32Item
 {
 public:
     TYPEINFO();
@@ -154,7 +154,7 @@ public:
 };
 
 //============================================================================
-class SVT_DLLPUBLIC SfxUInt32Item: public CntUInt32Item
+class SVL_DLLPUBLIC SfxUInt32Item: public CntUInt32Item
 {
 public:
     TYPEINFO();

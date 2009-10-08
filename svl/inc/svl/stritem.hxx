@@ -31,11 +31,11 @@
 #ifndef _SFXSTRITEM_HXX
 #define _SFXSTRITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/custritm.hxx>
 
 //============================================================================
-class SVT_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
+class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 {
 public:
     TYPEINFO();

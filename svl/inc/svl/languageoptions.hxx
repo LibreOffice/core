@@ -30,7 +30,7 @@
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #define _SVTOOLS_LANGUAGEOPTIONS_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <sal/types.h>
 #include <svtools/brdcst.hxx>
 #include <svtools/lstner.hxx>
@@ -47,7 +47,7 @@
 class SvtCJKOptions;
 class SvtCTLOptions;
 
-class SVT_DLLPUBLIC SvtLanguageOptions : public SfxBroadcaster, public SfxListener
+class SVL_DLLPUBLIC SvtLanguageOptions : public SfxBroadcaster, public SfxListener
 {
 private:
     SvtCJKOptions*  m_pCJKOptions;
@@ -113,7 +113,7 @@ public:
 };
 /** #i42730# Gives access to the Windows 16bit system locale
  */
-class SVT_DLLPUBLIC SvtSystemLanguageOptions : public utl::ConfigItem
+class SVL_DLLPUBLIC SvtSystemLanguageOptions : public utl::ConfigItem
 {
 private:
     ::rtl::OUString m_sWin16SystemLocale;

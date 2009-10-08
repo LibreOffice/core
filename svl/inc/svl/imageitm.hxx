@@ -31,13 +31,13 @@
 #ifndef _SVT_IMAGEITM_HXX
 #define _SVT_IMAGEITM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/intitem.hxx>
 
 class String;
 
 struct SfxImageItem_Impl;
-class SVT_DLLPUBLIC SfxImageItem : public SfxInt16Item
+class SVL_DLLPUBLIC SfxImageItem : public SfxInt16Item
 {
     SfxImageItem_Impl*      pImp;
 public:

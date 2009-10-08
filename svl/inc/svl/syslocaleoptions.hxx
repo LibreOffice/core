@@ -31,7 +31,7 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 #define INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -48,12 +48,12 @@ class SvtSysLocaleOptions_Impl;
 class SvtListener;
 namespace osl { class Mutex; }
 
-class SVT_DLLPUBLIC SvtSysLocaleOptions: public utl::detail::Options
+class SVL_DLLPUBLIC SvtSysLocaleOptions: public utl::detail::Options
 {
     static  SvtSysLocaleOptions_Impl*   pOptions;
     static  sal_Int32                   nRefCount;
 
-    SVT_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
+    SVL_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
 
 public:
 

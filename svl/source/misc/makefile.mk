@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,53 +29,47 @@
 #
 #*************************************************************************
 
-PRJ=..
-PRJNAME=svtools
-TARGET=svtmisc.uno
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
-VISIBILITY_HIDDEN=TRUE
+PRJ=..$/..
+PRJNAME=svl
+TARGET=misc
 
-# --- Settings ----------------------------------
+# --- Settings -----------------------------------------------------
 
-.INCLUDE : settings.mk
-DLLPRE=
+.INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
-# --- Files -------------------------------------
+# --- Files --------------------------------------------------------
 
-SLOFILES=	\
-    $(SLO)$/addrtempuno.obj \
-    $(SLO)$/miscservices.obj \
-    $(SLO)$/pathservice.obj
+EXCEPTIONSFILES=\
+    $(SLO)$/documentlockfile.obj \
+    $(SLO)$/flbytes.obj \
+    $(SLO)$/folderrestriction.obj \
+    $(SLO)$/fstathelper.obj \
+    $(SLO)$/lockfilecommon.obj \
+    $(SLO)$/ownlist.obj \
+    $(SLO)$/restrictedpaths.obj \
+    $(SLO)$/sharecontrolfile.obj \
+    $(SLO)$/strmadpt.obj \
+    $(SLO)$/svldata.obj \
+    $(SLO)$/urihelper.obj 
 
-SHL1TARGET=	$(TARGET)
-SHL1IMPLIB=	i$(TARGET)
+SLOFILES=\
+    $(EXCEPTIONSFILES) \
+    $(SLO)$/adrparse.obj \
+    $(SLO)$/filenotation.obj \
+    $(SLO)$/inethist.obj \
+    $(SLO)$/inettype.obj \
+    $(SLO)$/lngmisc.obj \
+    $(SLO)$/PasswordHelper.obj
 
-SHL1OBJS= \
-    $(SLO)$/svtdata.obj \
-    $(SLOFILES)
+SRS1NAME=$(TARGET)
+SRC1FILES=\
+    mediatyp.src
 
-SHL1LIBS=	\
-    $(SLB)$/filter.uno.lib
+# --- Targets -------------------------------------------------------
 
-SHL1STDLIBS=\
-    $(SVTOOLLIB) \
-    $(TKLIB) \
-    $(VCLLIB) \
-    $(SVLLIB) \
-    $(UNOTOOLSLIB) \
-    $(TOOLSLIB) \
-    $(COMPHELPERLIB) \
-    $(VOSLIB) \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALLIB)
+.INCLUDE :  target.mk
 
-SHL1VERSIONMAP=exports.map
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
 
-# --- Targets ----------------------------------
 
-.INCLUDE : target.mk
 

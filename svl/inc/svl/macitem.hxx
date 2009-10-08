@@ -32,7 +32,7 @@
 
 // class SvxMacroItem ----------------------------------------------------
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/debug.hxx>
@@ -72,7 +72,7 @@ public:
 
 class SjJSbxObject;
 
-class SVT_DLLPUBLIC SvxMacro
+class SVL_DLLPUBLIC SvxMacro
 {
     String aMacName;
     String aLibName;
@@ -125,7 +125,7 @@ DECLARE_TABLE( _SvxMacroTableDtor, SvxMacro* )
 
 #define SVX_MACROTBL_AKTVERSION SVX_MACROTBL_VERSION40
 
-class SVT_DLLPUBLIC SvxMacroTableDtor : public _SvxMacroTableDtor
+class SVL_DLLPUBLIC SvxMacroTableDtor : public _SvxMacroTableDtor
 {
 public:
     inline SvxMacroTableDtor( const USHORT nInitSz = 0, const USHORT nReSz = 1 );
@@ -152,7 +152,7 @@ inline SvxMacroTableDtor::SvxMacroTableDtor( const USHORT nInitSz,
 Dieses Item beschreibt eine Makro-Tabelle.
 */
 
-class SVT_DLLPUBLIC SvxMacroItem: public SfxPoolItem
+class SVL_DLLPUBLIC SvxMacroItem: public SfxPoolItem
 {
 public:
     TYPEINFO();

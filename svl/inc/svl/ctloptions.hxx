@@ -30,7 +30,7 @@
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #define _SVTOOLS_CTLOPTIONS_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <sal/types.h>
 #include <svtools/brdcst.hxx>
 #include <svtools/lstner.hxx>
@@ -40,7 +40,7 @@ class SvtCTLOptions_Impl;
 
 // class SvtCTLOptions --------------------------------------------------------
 
-class SVT_DLLPUBLIC SvtCTLOptions:
+class SVL_DLLPUBLIC SvtCTLOptions:
     public utl::detail::Options, public SfxBroadcaster, public SfxListener
 {
 private:

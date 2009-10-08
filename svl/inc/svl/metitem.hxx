@@ -30,14 +30,14 @@
 #ifndef _SFXMETRICITEM_HXX
 #define _SFXMETRICITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/intitem.hxx>
 
-DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVT_DLLPUBLIC)
+DBG_NAMEEX_VISIBILITY(SfxMetricItem, SVL_DLLPUBLIC)
 
 // -----------------------------------------------------------------------
 
-class SVT_DLLPUBLIC SfxMetricItem: public SfxInt32Item
+class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
 {
 public:
                              TYPEINFO();

@@ -53,14 +53,14 @@
 #define _SFXRNGITEM_HXX
 
 #else
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/poolitem.hxx>
 
 class SvStream;
 
 // -----------------------------------------------------------------------
 
-class SVT_DLLPUBLIC SfxXRangeItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxXRangeItem : public SfxPoolItem
 {
 private:
     NUMTYPE                     nFrom;
@@ -89,7 +89,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-class SVT_DLLPUBLIC SfxXRangesItem : public SfxPoolItem
+class SVL_DLLPUBLIC SfxXRangesItem : public SfxPoolItem
 {
 private:
     NUMTYPE*                    _pRanges;

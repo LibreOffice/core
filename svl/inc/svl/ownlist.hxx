@@ -31,7 +31,7 @@
 #ifndef _OWNLIST_HXX
 #define _OWNLIST_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/stream.hxx>
 #include <tools/ownlist.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -79,7 +79,7 @@ public:
 };
 
 //=========================================================================
-class SVT_DLLPUBLIC SvCommandList
+class SVL_DLLPUBLIC SvCommandList
 /*  [Beschreibung]
 
     Die Liste enth"alt Objekte vom Typ SvCommand. Wird ein Objekt
@@ -95,8 +95,8 @@ class SVT_DLLPUBLIC SvCommandList
     BOOL FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
 
-    SVT_DLLPUBLIC friend SvStream& operator >> ( SvStream& rStm, SvCommandList & );
-    SVT_DLLPUBLIC friend SvStream& operator << ( SvStream&, const SvCommandList & );
+    SVL_DLLPUBLIC friend SvStream& operator >> ( SvStream& rStm, SvCommandList & );
+    SVL_DLLPUBLIC friend SvStream& operator << ( SvStream&, const SvCommandList & );
 };
 
 #endif // _OWNLIST_HXX

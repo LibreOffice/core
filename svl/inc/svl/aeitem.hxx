@@ -30,14 +30,14 @@
 #ifndef _AEITEM_HXX
 #define _AEITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/poolitem.hxx>
 #include <svtools/eitem.hxx>
 
 class SfxAllEnumValueArr;
 class SvUShorts;
 
-class SVT_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
+class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
 {
     SfxAllEnumValueArr*     pValues;
     SvUShorts*              pDisabledValues;

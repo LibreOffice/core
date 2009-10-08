@@ -31,7 +31,7 @@
 
 PRJ = ..$/..$/..
 TARGET  = PasswordContainerUnitTest
-PRJNAME = svtools
+PRJNAME=svl
 PACKAGE = complex$/passwordcontainer
 
 # --- Settings -----------------------------------------------------

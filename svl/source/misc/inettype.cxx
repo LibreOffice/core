@@ -29,11 +29,11 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
+#include "precompiled_svl.hxx"
 #include <tools/table.hxx>
 #include <tools/wldcrd.hxx>
 #include <svtools/inettype.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svldata.hxx>
 #ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
 #endif

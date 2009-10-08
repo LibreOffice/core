@@ -32,14 +32,14 @@
 #define SVTOOLS_RESTRICTEDPATHS_HXX
 
 #include <svtools/urlfilter.hxx>
-#include <svtools/svtdllapi.h>
+#include <svtools/svldllapi.h>
 #include <tools/string.hxx>
 
 #include <vector>
 
 namespace svt
 {
-    class SVT_DLLPUBLIC RestrictedPaths : public IUrlFilter
+    class SVL_DLLPUBLIC RestrictedPaths : public IUrlFilter
     {
     private:
         ::std::vector< String >     m_aUnrestrictedURLs;

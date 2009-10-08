@@ -30,7 +30,7 @@
 #ifndef _SFX_MISCCFG_HXX
 #define _SFX_MISCCFG_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include "tools/solar.h"
 #include "unotools/configitem.hxx"
 
@@ -38,7 +38,7 @@
      Beschreibung:
  --------------------------------------------------------------------*/
 
-class SVT_DLLPUBLIC SfxMiscCfg : public utl::ConfigItem
+class SVL_DLLPUBLIC SfxMiscCfg : public utl::ConfigItem
 {
     BOOL            bPaperSize;     // printer warnings
     BOOL            bPaperOrientation;

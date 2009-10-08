@@ -30,7 +30,7 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #define _SVTOOLS_CJKOPTIONS_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <sal/types.h>
 #include <unotools/options.hxx>
 
@@ -38,7 +38,7 @@ class SvtCJKOptions_Impl;
 
 // class SvtCJKOptions --------------------------------------------------
 
-class SVT_DLLPUBLIC SvtCJKOptions: public utl::detail::Options
+class SVL_DLLPUBLIC SvtCJKOptions: public utl::detail::Options
 {
 private:
     SvtCJKOptions_Impl*    pImp;

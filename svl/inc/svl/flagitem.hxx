@@ -30,7 +30,7 @@
 #ifndef _SFXFLAGITEM_HXX
 #define _SFXFLAGITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/solar.h>
 #include <tools/rtti.hxx>
 #include <svtools/poolitem.hxx>
@@ -41,9 +41,9 @@ extern USHORT nSfxFlagVal[16];
 
 // -----------------------------------------------------------------------
 
-DBG_NAMEEX_VISIBILITY(SfxFlagItem, SVT_DLLPUBLIC)
+DBG_NAMEEX_VISIBILITY(SfxFlagItem, SVL_DLLPUBLIC)
 
-class SVT_DLLPUBLIC SfxFlagItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
 {
     USHORT                   nVal;
 

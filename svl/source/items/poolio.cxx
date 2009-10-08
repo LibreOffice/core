@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
+#include "precompiled_svl.hxx"
 
 #include <string.h>
 #include <stdio.h>
@@ -42,7 +42,7 @@
 #include "whassert.hxx"
 #include <svtools/brdcst.hxx>
 #include <svtools/filerec.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svldata.hxx>
 #include "poolio.hxx"
 
 // STATIC DATA -----------------------------------------------------------
@@ -67,7 +67,7 @@ void SfxItemPool::SetStoringPool( const SfxItemPool *pStoringPool )
 */
 
 {
-    ImpSvtData::GetSvtData().pStoringPool = pStoringPool;
+    ImpSvlData::GetSvlData().pStoringPool = pStoringPool;
 }
 
 //-------------------------------------------------------------------------
@@ -84,7 +84,7 @@ const SfxItemPool* SfxItemPool::GetStoringPool()
 */
 
 {
-    return ImpSvtData::GetSvtData().pStoringPool;
+    return ImpSvlData::GetSvlData().pStoringPool;
 }
 
 //-------------------------------------------------------------------------
@@ -169,7 +169,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
 
     // jeder Pool ist als ganzes ein Record
     SfxMiniRecordWriter aPoolRec( &rStream, SFX_ITEMPOOL_REC );
-    ImpSvtData::GetSvtData().pStoringPool = this;
+    ImpSvlData::GetSvlData().pStoringPool = this;
 
     // Einzel-Header (Version des Inhalts und Name)
     {
@@ -309,7 +309,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
     }
 
     // weitere Pools rausschreiben
-    ImpSvtData::GetSvtData().pStoringPool = 0;
+    ImpSvlData::GetSvlData().pStoringPool = 0;
     aPoolRec.Close();
     if ( !rStream.GetError() && pSecondary )
         pSecondary->Store( rStream );

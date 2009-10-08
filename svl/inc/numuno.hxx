@@ -30,7 +30,7 @@
 #ifndef _NUMUNO_HXX
 #define _NUMUNO_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -57,7 +57,7 @@ com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
 //  SvNumberFormatsSupplierObj: aggregate to document,
 //  construct with SvNumberFormatter
 
-class SVT_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2<
+class SVL_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2<
                                     com::sun::star::util::XNumberFormatsSupplier,
                                     com::sun::star::lang::XUnoTunnel>
 {

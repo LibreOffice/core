@@ -31,13 +31,13 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=svtools
+PRJNAME=svl
 TARGET=svdde
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/svt.pmk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------
 

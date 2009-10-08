@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
+#include "precompiled_svl.hxx"
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
 #include <cppuhelper/factory.hxx>
@@ -49,6 +49,7 @@ using rtl::OUString;
 
 DECLARE_CREATEINSTANCE( SvNumberFormatterServiceObj )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
+DECLARE_CREATEINSTANCE( PathService )
 
 // -------------------------------------------------------------------------------------
 
@@ -81,6 +82,11 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
                 "/com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject/UNO/SERVICES" ) );
         xNewKey->createKey (
             OUString::createFromAscii( "com.sun.star.util.NumberFormatter" ) );
+
+        xNewKey = xRegistryKey->createKey(
+            OUString::createFromAscii( "/com.sun.star.comp.svtools.PathService/UNO/SERVICES" ) );
+        xNewKey->createKey (
+            OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) );
 
         return sal_True;
     }
@@ -120,6 +126,18 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory (
                 reinterpret_cast< css::lang::XMultiServiceFactory* >(_pServiceManager),
                 OUString::createFromAscii( pImplementationName ),
                 SvNumberFormatterServiceObj_CreateInstance,
+                aServiceNames);
+        }
+        else if (rtl_str_compare (
+                     pImplementationName, "com.sun.star.comp.svtools.PathService") == 0)
+        {
+            Sequence< OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] =
+                OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" );
+            xFactory = ::cppu::createSingleFactory (
+                reinterpret_cast< css::lang::XMultiServiceFactory* >( _pServiceManager ),
+                OUString::createFromAscii( pImplementationName ),
+                PathService_CreateInstance,
                 aServiceNames);
         }
         if ( xFactory.is() )

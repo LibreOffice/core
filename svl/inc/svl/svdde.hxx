@@ -31,7 +31,7 @@
 #ifndef _SVDDE_HXX
 #define _SVDDE_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <sot/exchange.hxx>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -84,7 +84,7 @@ DECLARE_LIST( StringList, String * )
 // - DdeData -
 // -----------
 
-class SVT_DLLPUBLIC DdeData
+class SVL_DLLPUBLIC DdeData
 {
     friend class    DdeInternal;
     friend class    DdeService;
@@ -93,7 +93,7 @@ class SVT_DLLPUBLIC DdeData
     DdeDataImp*     pImp;
 
 //#if 0 // _SOLAR__PRIVATE
-    SVT_DLLPRIVATE void            Lock();
+    SVL_DLLPRIVATE void            Lock();
 //#endif
     void            SetFormat( ULONG nFmt );
 
@@ -155,7 +155,7 @@ public:
 // - DdeTransaction -
 // ------------------
 
-class SVT_DLLPUBLIC DdeTransaction
+class SVL_DLLPUBLIC DdeTransaction
 {
 public:
     virtual void    Data( const DdeData* );
@@ -205,7 +205,7 @@ private:
 // - DdeLink -
 // -----------
 
-class SVT_DLLPUBLIC DdeLink : public DdeTransaction
+class SVL_DLLPUBLIC DdeLink : public DdeTransaction
 {
     Link            aNotify;
 
@@ -222,7 +222,7 @@ public:
 // - DdeWarmLink -
 // ---------------
 
-class SVT_DLLPUBLIC DdeWarmLink : public DdeLink
+class SVL_DLLPUBLIC DdeWarmLink : public DdeLink
 {
 public:
             DdeWarmLink( DdeConnection&, const String&, long = 0 );
@@ -232,7 +232,7 @@ public:
 // - DdeHotLink -
 // --------------
 
-class SVT_DLLPUBLIC DdeHotLink : public DdeLink
+class SVL_DLLPUBLIC DdeHotLink : public DdeLink
 {
 public:
             DdeHotLink( DdeConnection&, const String&, long = 0 );
@@ -242,7 +242,7 @@ public:
 // - DdeRequest -
 // --------------
 
-class SVT_DLLPUBLIC DdeRequest : public DdeTransaction
+class SVL_DLLPUBLIC DdeRequest : public DdeTransaction
 {
 public:
             DdeRequest( DdeConnection&, const String&, long = 0 );
@@ -252,7 +252,7 @@ public:
 // - DdePoke -
 // -----------
 
-class SVT_DLLPUBLIC DdePoke : public DdeTransaction
+class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
 public:
             DdePoke( DdeConnection&, const String&, const char*, long,
@@ -265,7 +265,7 @@ public:
 // - DdeExecute -
 // --------------
 
-class SVT_DLLPUBLIC DdeExecute : public DdeTransaction
+class SVL_DLLPUBLIC DdeExecute : public DdeTransaction
 {
 public:
             DdeExecute( DdeConnection&, const String&, long = 0 );
@@ -275,7 +275,7 @@ public:
 // - DdeConnection -
 // -----------------
 
-class SVT_DLLPUBLIC DdeConnection
+class SVL_DLLPUBLIC DdeConnection
 {
     friend class    DdeInternal;
     friend class    DdeTransaction;
@@ -307,7 +307,7 @@ private:
 // - DdeItem -
 // -----------
 
-class SVT_DLLPUBLIC DdeItem
+class SVL_DLLPUBLIC DdeItem
 {
     friend class    DdeInternal;
     friend class    DdeTopic;
@@ -336,7 +336,7 @@ public:
 // - DdeItem -
 // -----------
 
-class SVT_DLLPUBLIC DdeGetPutItem : public DdeItem
+class SVL_DLLPUBLIC DdeGetPutItem : public DdeItem
 {
 public:
                     DdeGetPutItem( const sal_Unicode* p );
@@ -352,9 +352,9 @@ public:
 // - DdeTopic -
 // ------------
 
-class SVT_DLLPUBLIC DdeTopic
+class SVL_DLLPUBLIC DdeTopic
 {
-    SVT_DLLPRIVATE void _Disconnect( long );
+    SVL_DLLPRIVATE void _Disconnect( long );
 
 public:
     virtual void    Connect( long );
@@ -421,7 +421,7 @@ private:
 // - DdeService -
 // --------------
 
-class SVT_DLLPUBLIC DdeService
+class SVL_DLLPUBLIC DdeService
 {
     friend class    DdeInternal;
 
@@ -448,7 +448,7 @@ private:
     ConvList*       pConv;
     short           nStatus;
 
-    SVT_DLLPRIVATE BOOL            HasCbFormat( USHORT );
+    SVL_DLLPRIVATE BOOL            HasCbFormat( USHORT );
 
 public:
                     DdeService( const String& );

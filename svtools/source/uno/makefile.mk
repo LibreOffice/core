@@ -46,18 +46,19 @@ SRS1NAME=	uno
 SRC1FILES=  unoifac2.src
 
 SLOFILES= \
-            $(SLO)$/unoiface.obj \
-            $(SLO)$/unoevent.obj \
-            $(SLO)$/unoimap.obj \
-            $(SLO)$/toolboxcontroller.obj \
+            $(SLO)$/adrtempuno.obj \
+            $(SLO)$/contextmenuhelper.obj \
             $(SLO)$/framestatuslistener.obj \
-            $(SLO)$/statusbarcontroller.obj \
-            $(SLO)$/genericunodialog.obj \
             $(SLO)$/generictoolboxcontroller.obj \
+            $(SLO)$/genericunodialog.obj \
+            $(SLO)$/miscservices.obj\
+            $(SLO)$/statusbarcontroller.obj \
+            $(SLO)$/toolboxcontroller.obj \
             $(SLO)$/treecontrolpeer.obj \
             $(SLO)$/unocontroltablemodel.obj \
-            $(SLO)$/registerservices.obj\
-            $(SLO)$/contextmenuhelper.obj
+            $(SLO)$/unoevent.obj \
+            $(SLO)$/unoiface.obj \
+            $(SLO)$/unoimap.obj 
 
 # --- Targets ------------------------------------------------------
 

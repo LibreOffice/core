@@ -32,7 +32,7 @@
 #ifndef _SVT_LOCKFILECOMMON_HXX
 #define _SVT_LOCKFILECOMMON_HXX
 
-#include <svtools/svtdllapi.h>
+#include <svtools/svldllapi.h>
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -54,7 +54,7 @@
 namespace svt {
 
 // This is a general implementation that is used in document lock file implementation and in sharing control file implementation
-class SVT_DLLPUBLIC LockFileCommon
+class SVL_DLLPUBLIC LockFileCommon
 {
 protected:
     ::osl::Mutex m_aMutex;

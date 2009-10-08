@@ -30,7 +30,7 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=svtools
+PRJNAME=svl
 TARGET=filepicker
 ENABLE_EXCEPTIONS=TRUE
 

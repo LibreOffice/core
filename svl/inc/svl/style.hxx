@@ -38,7 +38,7 @@
 #include <vector>
 #include <comphelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <rsc/rscsfx.hxx>
 #include <tools/string.hxx>
 #include <svtools/hint.hxx>
@@ -91,7 +91,7 @@ SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) from:
 
 #define VIRTUAL510 virtual
 
-class SVT_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
+class SVL_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
 {
     friend class SfxStyleSheetBasePool;
 
@@ -165,7 +165,7 @@ typedef std::vector< rtl::Reference< SfxStyleSheetBase > > SfxStyles;
 
 //=========================================================================
 
-class SVT_DLLPUBLIC SfxStyleSheetIterator
+class SVL_DLLPUBLIC SfxStyleSheetIterator
 
 /*  [Beschreibung]
 
@@ -195,8 +195,8 @@ protected:
 
 private:
     USHORT                  GetPos(){return nAktPosition;}
-    SVT_DLLPRIVATE BOOL                     IsTrivialSearch();
-    SVT_DLLPRIVATE BOOL                     DoesStyleMatch(SfxStyleSheetBase *pStyle);
+    SVL_DLLPRIVATE BOOL                     IsTrivialSearch();
+    SVL_DLLPRIVATE BOOL                     DoesStyleMatch(SfxStyleSheetBase *pStyle);
 
     void*                   pImp;
     SfxStyleSheetBase*      pAktStyle;
@@ -210,7 +210,7 @@ friend class SfxStyleSheetBasePool;
 
 class SfxStyleSheetBasePool_Impl;
 
-class SVT_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public comphelper::OWeakTypeObject
+class SVL_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public comphelper::OWeakTypeObject
 {
 friend class SfxStyleSheetIterator;
 friend class SfxStyleSheetBase;
@@ -218,8 +218,8 @@ friend class SfxStyleSheetBase;
     SfxStyleSheetBasePool_Impl *pImp;
 
 private:
-    SVT_DLLPRIVATE BOOL                         Load1_Impl( SvStream& );
-    SVT_DLLPRIVATE SfxStyleSheetIterator&      GetIterator_Impl();
+    SVL_DLLPRIVATE BOOL                         Load1_Impl( SvStream& );
+    SVL_DLLPRIVATE SfxStyleSheetIterator&      GetIterator_Impl();
 protected:
     String                      aAppName;
     SfxItemPool&                rPool;
@@ -287,7 +287,7 @@ public:
 
 //=========================================================================
 
-class SVT_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
+class SVL_DLLPUBLIC SfxStyleSheet: public SfxStyleSheetBase,
                      public SfxListener, public SfxBroadcaster
 {
 public:
@@ -306,7 +306,7 @@ protected:
 
 //=========================================================================
 
-class SVT_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
+class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 {
 protected:
     using SfxStyleSheetBasePool::Create;
@@ -334,7 +334,7 @@ public:
 
 //========================================================================
 
-class SVT_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
+class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 {
     USHORT nHint;
 
@@ -348,7 +348,7 @@ public:
 
 //=========================================================================
 
-class SVT_DLLPUBLIC SfxStyleSheetHint: public SfxHint
+class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 {
     SfxStyleSheetBase*  pStyleSh;
     USHORT              nHint;
@@ -364,7 +364,7 @@ public:
                         { return nHint; }
 };
 
-class SVT_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
+class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
 {
     String              aName;
 
@@ -379,7 +379,7 @@ public:
     const String&       GetOldName() { return aName; }
 };
 
-class SVT_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >
+class SVL_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >
 {
 public:
     SfxUnoStyleSheet( const UniString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, USHORT _nMaske );

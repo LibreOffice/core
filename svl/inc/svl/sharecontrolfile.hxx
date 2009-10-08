@@ -31,7 +31,7 @@
 #ifndef _SVT_SHARECONTROLFILE_HXX
 #define _SVT_SHARECONTROLFILE_HXX
 
-#include <svtools/svtdllapi.h>
+#include <svtools/svldllapi.h>
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -51,7 +51,7 @@
 
 namespace svt {
 
-class SVT_DLLPUBLIC ShareControlFile : public LockFileCommon
+class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;

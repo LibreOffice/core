@@ -30,7 +30,7 @@
 #ifndef _ZFORLIST_HXX
 #define _ZFORLIST_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/string.hxx>
 #ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
@@ -231,7 +231,7 @@ typedef ::std::map< sal_uInt32, sal_uInt32 > SvNumberFormatterMergeMap;
 
 /** Language/country dependent currency entries
  */
-class SVT_DLLPUBLIC NfCurrencyEntry
+class SVL_DLLPUBLIC NfCurrencyEntry
 {
     String          aSymbol;            /// currency symbol
     String          aBankSymbol;        /// currency abbreviation
@@ -251,7 +251,7 @@ private:
 //#if 0 // _SOLAR__PRIVATE
                         // nDecimalFormat := 0, 1, 2
                         // #,##0 or #,##0.00 or #,##0.-- are assigned
-    SVT_DLLPRIVATE void             Impl_BuildFormatStringNumChars( String&,
+    SVL_DLLPRIVATE void             Impl_BuildFormatStringNumChars( String&,
                             const LocaleDataWrapper&, USHORT nDecimalFormat ) const;
 //#endif    // __PRIVATE
 
@@ -328,12 +328,12 @@ public:
 typedef NfCurrencyEntry* NfCurrencyEntryPtr;
 SV_DECL_PTRARR_DEL( NfCurrencyTable, NfCurrencyEntryPtr, 128, 1 )
 typedef String* WSStringPtr;
-SV_DECL_PTRARR_DEL_VISIBILITY( NfWSStringsDtor, WSStringPtr, 8, 1, SVT_DLLPUBLIC )
+SV_DECL_PTRARR_DEL_VISIBILITY( NfWSStringsDtor, WSStringPtr, 8, 1, SVL_DLLPUBLIC )
 
 
 class SvNumberFormatterRegistry_Impl;
 
-class SVT_DLLPUBLIC SvNumberFormatter
+class SVL_DLLPUBLIC SvNumberFormatter
 {
 public:
 
@@ -813,37 +813,37 @@ private:
 
 #ifdef _ZFORLIST_CXX                // ----- private Methoden -----
 
-    SVT_DLLPRIVATE static BOOL          bCurrencyTableInitialized;
-    SVT_DLLPRIVATE static USHORT            nSystemCurrencyPosition;
-    SVT_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;
+    SVL_DLLPRIVATE static BOOL          bCurrencyTableInitialized;
+    SVL_DLLPRIVATE static USHORT            nSystemCurrencyPosition;
+    SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;
 
     // get the registry, create one if none exists
-    SVT_DLLPRIVATE static SvNumberFormatterRegistry_Impl& GetFormatterRegistry();
+    SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl& GetFormatterRegistry();
 
     // called by ctors
-    SVT_DLLPRIVATE void ImpConstruct( LanguageType eLang );
+    SVL_DLLPRIVATE void ImpConstruct( LanguageType eLang );
 
     // Changes initialized language/country, clears the entries and generates
     // new ones, may ONLY be called by the binary file format load
-    SVT_DLLPRIVATE void ImpChangeSysCL( LanguageType eLnge, BOOL bLoadingSO5 );
+    SVL_DLLPRIVATE void ImpChangeSysCL( LanguageType eLnge, BOOL bLoadingSO5 );
 
     // Generate builtin formats provided by i18n behind CLOffset,
     // if bLoadingSO5==FALSE also generate additional i18n formats.
-    SVT_DLLPRIVATE void ImpGenerateFormats( sal_uInt32 CLOffset, BOOL bLoadingSO5 );
+    SVL_DLLPRIVATE void ImpGenerateFormats( sal_uInt32 CLOffset, BOOL bLoadingSO5 );
 
     // Generate additional formats provided by i18n
-    SVT_DLLPRIVATE void ImpGenerateAdditionalFormats(
+    SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
                 sal_uInt32 CLOffset,
                 NumberFormatCodeWrapper& rNumberFormatCode,
                 BOOL bAfterLoadingSO5 );
 
-    SVT_DLLPRIVATE SvNumberformat* ImpInsertFormat(
+    SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat(
                 const ::com::sun::star::i18n::NumberFormatCode& rCode,
                 sal_uInt32 nPos,
                 BOOL bAfterLoadingSO5 = FALSE,
                 sal_Int16 nOrgIndex = 0 );
     // ImpInsertNewStandardFormat for new (since version ...) builtin formats
-    SVT_DLLPRIVATE SvNumberformat* ImpInsertNewStandardFormat(
+    SVL_DLLPRIVATE SvNumberformat* ImpInsertNewStandardFormat(
                 const ::com::sun::star::i18n::NumberFormatCode& rCode,
                 sal_uInt32 nPos,
                 USHORT nVersion,
@@ -851,41 +851,41 @@ private:
                 sal_Int16 nOrgIndex = 0 );
 
     // Return CLOffset or (MaxCLOffset + SV_COUNTRY_LANGUAGE_OFFSET) if new language/country
-    SVT_DLLPRIVATE sal_uInt32 ImpGetCLOffset(LanguageType eLnge) const;
+    SVL_DLLPRIVATE sal_uInt32 ImpGetCLOffset(LanguageType eLnge) const;
 
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND
-    SVT_DLLPRIVATE sal_uInt32 ImpIsEntry( const String& rString,
+    SVL_DLLPRIVATE sal_uInt32 ImpIsEntry( const String& rString,
                         sal_uInt32 CLOffset,
                         LanguageType eLnge );
 
     // Create builtin formats for language/country if necessary, return CLOffset
-    SVT_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, BOOL bLoadingSO5 = FALSE );
+    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, BOOL bLoadingSO5 = FALSE );
 
     // Build negative currency format, old compatibility style
-    SVT_DLLPRIVATE void ImpGetNegCurrFormat( String& sNegStr, const String& rCurrSymbol );
+    SVL_DLLPRIVATE void ImpGetNegCurrFormat( String& sNegStr, const String& rCurrSymbol );
     // Build positive currency format, old compatibility style
-    SVT_DLLPRIVATE void ImpGetPosCurrFormat( String& sPosStr, const String& rCurrSymbol );
+    SVL_DLLPRIVATE void ImpGetPosCurrFormat( String& sPosStr, const String& rCurrSymbol );
 
     // Create <type>theCurrencyTable</type> with all <type>NfCurrencyEntry</type>
-    SVT_DLLPRIVATE static void ImpInitCurrencyTable();
+    SVL_DLLPRIVATE static void ImpInitCurrencyTable();
 
     // Return the format index of the currency format of the system locale.
     // Format is created if not already present.
-    SVT_DLLPRIVATE sal_uInt32   ImpGetDefaultSystemCurrencyFormat();
+    SVL_DLLPRIVATE sal_uInt32   ImpGetDefaultSystemCurrencyFormat();
 
     // Return the format index of the currency format of the current locale.
     // Format is created if not already present.
-    SVT_DLLPRIVATE sal_uInt32   ImpGetDefaultCurrencyFormat();
+    SVL_DLLPRIVATE sal_uInt32   ImpGetDefaultCurrencyFormat();
 
     // Return the default format for a given type and current locale.
     // May ONLY be called from within GetStandardFormat().
-    SVT_DLLPRIVATE sal_uInt32   ImpGetDefaultFormat( short nType );
+    SVL_DLLPRIVATE sal_uInt32   ImpGetDefaultFormat( short nType );
 
     // Return the index in a sequence of format codes matching an enum of
     // NfIndexTableOffset. If not found 0 is returned. If the sequence doesn't
     // contain any format code elements a default element is created and inserted.
-    SVT_DLLPRIVATE sal_Int32 ImpGetFormatCodeIndex(
+    SVL_DLLPRIVATE sal_Int32 ImpGetFormatCodeIndex(
         ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >& rSeq,
         const NfIndexTableOffset nTabOff );
 
@@ -895,7 +895,7 @@ private:
     // Return the default index in the sequence.
     // Non-PRODUCT version may check locale data for matching defaults in one
     // FormatElement group.
-    SVT_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault(
+    SVL_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault(
         ::com::sun::star::i18n::NumberFormatCode * pFormatArr,
         sal_Int32 nCount, BOOL bCheckCorrectness = TRUE
         );

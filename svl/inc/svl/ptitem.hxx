@@ -30,17 +30,17 @@
 #ifndef _SFXPTITEM_HXX
 #define _SFXPTITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <svtools/poolitem.hxx>
 #include <tools/gen.hxx>
 
 class SvStream;
 
-DBG_NAMEEX_VISIBILITY(SfxPointItem, SVT_DLLPUBLIC)
+DBG_NAMEEX_VISIBILITY(SfxPointItem, SVL_DLLPUBLIC)
 
 // -----------------------------------------------------------------------
 
-class SVT_DLLPUBLIC SfxPointItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
 {
     Point                    aVal;
 

@@ -34,7 +34,7 @@
 #*************************************************************************
 PRJ=..$/..$/..$/..
 
-PRJNAME=			svtools
+PRJNAME=			svl
 TARGET=				ConfigItemTest
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
@@ -60,7 +60,7 @@ SHL1OBJS=       \
                 $(SLO)$/ConfigItemTest.obj
 
 SHL1STDLIBS=	\
-                $(SVTOOLLIB) 						\
+                $(SVLIB) 						\
                 $(SVLLIB) 						    \
                 $(UNOTOOLSLIB)						\
                 $(COMPHELPERLIB)					\

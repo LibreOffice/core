@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
+#include "precompiled_svl.hxx"
 #include "converter.hxx"
 
 INT32 SvDbaseConverter::ConvertPrecisionToDbase(INT32 _nLen, INT32 _nScale)

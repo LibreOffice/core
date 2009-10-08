@@ -29,7 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
+#include "precompiled_svl.hxx"
 
 // include ---------------------------------------------------------------
 
@@ -50,7 +50,7 @@
 
 #include <vcl/svapp.hxx>
 
-#include <svtools/svtdata.hxx>
+#include <svtools/svldata.hxx>
 #include <svtools/svtools.hrc>
 
 // STATIC DATA -----------------------------------------------------------
@@ -259,7 +259,7 @@ SfxItemPresentation SfxColumnDateTimeItem::GetPresentation
 
     ::com::sun::star::lang::Locale aLocale;
     if (GetDateTime() == DateTime(Date(1, 2, 3), Time(3, 2, 1)))
-        rText = String(SvtResId(STR_COLUM_DT_AUTO,
+        rText = String(SvtSimpleResId(STR_COLUM_DT_AUTO,
                                 pIntlWrapper ?
                                  pIntlWrapper->getLocale() :
                                  aLocale));

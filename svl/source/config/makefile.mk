@@ -30,7 +30,7 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=svtools
+PRJNAME=svl
 TARGET=config
 
 ENABLE_EXCEPTIONS := TRUE
@@ -43,21 +43,11 @@ ENABLE_EXCEPTIONS := TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=  \
-    $(SLO)$/accessibilityoptions.obj	\
-    $(SLO)$/apearcfg.obj				\
         $(SLO)$/cjkoptions.obj          \
-        $(SLO)$/colorcfg.obj            \
         $(SLO)$/ctloptions.obj          \
-        $(SLO)$/extcolorcfg.obj            \
-    $(SLO)$/fontsubstconfig.obj				\
-        $(SLO)$/helpopt.obj                 \
-    $(SLO)$/itemholder2.obj \
+        $(SLO)$/itemholder2.obj \
         $(SLO)$/languageoptions.obj     \
-    $(SLO)$/menuoptions.obj				\
-    $(SLO)$/misccfg.obj				\
-        $(SLO)$/miscopt.obj             \
-    $(SLO)$/optionsdrawinglayer.obj		\
-    $(SLO)$/printoptions.obj			\
+        $(SLO)$/misccfg.obj				\
         $(SLO)$/syslocaleoptions.obj
 
 # --- Targets ------------------------------------------------------

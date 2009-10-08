@@ -30,7 +30,7 @@
 #ifndef _SFXPOOLCACH_HXX
 #define _SFXPOOLCACH_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/solar.h>
 
 class SfxItemModifyArr_Impl;
@@ -39,7 +39,7 @@ class SfxItemSet;
 class SfxPoolItem;
 class SfxSetItem;
 
-class SVT_DLLPUBLIC SfxItemPoolCache
+class SVL_DLLPUBLIC SfxItemPoolCache
 {
     SfxItemPool             *pPool;
     SfxItemModifyArr_Impl   *pCache;

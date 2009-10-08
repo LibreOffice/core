@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svtdata.cxx,v $
+ * $RCSfile: svldata.cxx,v $
  * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
@@ -29,20 +29,20 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
+#include "precompiled_svl.hxx"
 
 #include <map>
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
 #include <vos/process.hxx>
-#include <svtools/svtdata.hxx>
+#include <svtools/svldata.hxx>
 
-namespace unnamed_svtools_svtdata {}
-using namespace unnamed_svtools_svtdata;
+namespace unnamed_svl_svldata {}
+using namespace unnamed_svl_svldata;
     // unnamed namespaces don't work well yet
 
 //============================================================================
-namespace unnamed_svtools_svtdata {
+namespace unnamed_svl_svldata {
 
 typedef std::map< rtl::OUString, SimpleResMgr * > SimpleResMgrMap;
 
@@ -50,13 +50,14 @@ typedef std::map< rtl::OUString, SimpleResMgr * > SimpleResMgrMap;
 
 //============================================================================
 //
-//  ImpSvtData
+//  ImpSvlData
 //
 //============================================================================
 
-ImpSvtData::~ImpSvtData()
+static ImpSvlData* pSvlData = 0;
+
+ImpSvlData::~ImpSvlData()
 {
-    delete pResMgr;
     for (SimpleResMgrMap::iterator t
              = static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs)->begin();
          t != static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs)->end(); ++t)
@@ -65,17 +66,7 @@ ImpSvtData::~ImpSvtData()
 }
 
 //============================================================================
-ResMgr * ImpSvtData::GetResMgr(const ::com::sun::star::lang::Locale aLocale)
-{
-    if (!pResMgr)
-    {
-        pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(svt), aLocale );
-    }
-    return pResMgr;
-}
-
-//============================================================================
-SimpleResMgr* ImpSvtData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLocale)
+SimpleResMgr* ImpSvlData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLocale)
 {
     if (!m_pThreadsafeRMs)
         m_pThreadsafeRMs = new SimpleResMgrMap;
@@ -92,22 +83,12 @@ SimpleResMgr* ImpSvtData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLoc
     return rResMgr;
 }
 
-ResMgr * ImpSvtData::GetPatchResMgr(const ::com::sun::star::lang::Locale& aLocale)
-{
-    if (!pPatchResMgr)
-    {
-        pPatchResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(svp), aLocale);
-    }
-    return pPatchResMgr;
-}
-
 //============================================================================
 // static
-ImpSvtData & ImpSvtData::GetSvtData()
+ImpSvlData & ImpSvlData::GetSvlData()
 {
-    void ** pAppData = GetAppData(SHL_SVT);
-    if (!*pAppData)
-        *pAppData= new ImpSvtData;
-    return *static_cast<ImpSvtData *>(*pAppData);
+    if (!pSvlData)
+        pSvlData= new ImpSvlData;
+    return *pSvlData;
 }
 

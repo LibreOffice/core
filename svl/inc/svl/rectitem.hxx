@@ -30,18 +30,18 @@
 #ifndef _SFXRECTITEM_HXX
 #define _SFXRECTITEM_HXX
 
-#include "svtools/svtdllapi.h"
+#include "svtools/svldllapi.h"
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <svtools/poolitem.hxx>
 
 class SvStream;
 
-DBG_NAMEEX_VISIBILITY(SfxRectangleItem, SVT_DLLPUBLIC)
+DBG_NAMEEX_VISIBILITY(SfxRectangleItem, SVL_DLLPUBLIC)
 
 // -----------------------------------------------------------------------
 
-class SVT_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
+class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
 {
     Rectangle                aVal;
 

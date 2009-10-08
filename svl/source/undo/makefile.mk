@@ -31,14 +31,14 @@
 
 PRJ=..$/..
 
-PRJNAME=svtools
+PRJNAME=svl
 TARGET=undo
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/svt.pmk
+.INCLUDE :  $(PRJ)$/util$/svl.pmk
 
 # --- Files --------------------------------------------------------
 

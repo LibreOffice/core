@@ -29,12 +29,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
-
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
+#include "precompiled_svl.hxx"
 
 #include "itemholder2.hxx"
 
@@ -43,21 +38,12 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <svtools/accessibilityoptions.hxx>
-#include <apearcfg.hxx>
 #include <svtools/cjkoptions.hxx>
-#include <svtools/menuoptions.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svtools/ctloptions.hxx>
-#include <fontsubstconfig.hxx>
-#include <svtools/helpopt.hxx>
 #include <svtools/languageoptions.hxx>
-#include <misccfg.hxx>
-#include <svtools/printoptions.hxx>
+#include <svtools/misccfg.hxx>
 #include <svtools/syslocaleoptions.hxx>
 #include <unotools/options.hxx>
-#include <svtools/miscopt.hxx>
-
 
 #include <tools/debug.hxx>
 
@@ -169,32 +155,12 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case E_ACCESSIBILITYOPTIONS :
-            rItem.pItem = new SvtAccessibilityOptions();
-            break;
-
-        case E_APEARCFG :
-// no ref count            rItem.pItem = new SvtTabAppearanceCfg();
-            break;
-
         case E_CJKOPTIONS :
             rItem.pItem = new SvtCJKOptions();
             break;
 
-        case E_COLORCFG :
-            rItem.pItem = new ::svtools::ColorConfig();
-            break;
-
         case E_CTLOPTIONS :
             rItem.pItem = new SvtCTLOptions();
-            break;
-
-        case E_FONTSUBSTCONFIG :
-// no ref count            rItem.pItem = new SvtFontSubstConfig();
-            break;
-
-        case E_HELPOPTIONS :
-            rItem.pItem = new SvtHelpOptions();
             break;
 
         case E_LANGUAGEOPTIONS :
@@ -205,24 +171,8 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 // no ref count            rItem.pItem = new SfxMiscCfg();
             break;
 
-        case E_MENUOPTIONS :
-            rItem.pItem = new SvtMenuOptions();
-            break;
-
-        case E_PRINTOPTIONS :
-            rItem.pItem = new SvtPrinterOptions();
-            break;
-
-        case E_PRINTFILEOPTIONS :
-            rItem.pItem = new SvtPrintFileOptions();
-            break;
-
         case E_SYSLOCALEOPTIONS :
             rItem.pItem = new SvtSysLocaleOptions();
-            break;
-
-        case E_MISCOPTIONS :
-            rItem.pItem = new SvtMiscOptions();
             break;
 
         default:

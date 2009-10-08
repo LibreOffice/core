@@ -31,7 +31,7 @@
 
 PRJ=..$/..
 
-PRJNAME=svtools
+PRJNAME=svl
 TARGET=filerec
 
 # --- Settings -----------------------------------------------------
