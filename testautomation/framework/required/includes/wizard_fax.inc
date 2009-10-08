@@ -39,9 +39,6 @@
 
 testcase tUpdtWizardFax
 
-    '///<h1>Update test for the Fax Wizard</h1>
-    '///<ul>
-
     dim iErr as integer
     dim brc as boolean
     
@@ -51,72 +48,54 @@ testcase tUpdtWizardFax
     ' Build the filename we want to save the template as.
     cTemplateName = "FWK-testtool-faxtemplate.ott"
     cTemplatePath = gOfficePath & "user\template\" & cTemplateName
-    cTemplatePath = convertpath( cTemplatePath )   
+    cTemplatePath = convertpath( cTemplatePath )  
     
-    '///+<li>Make sure exactly one single writer document is open</li>
-    do while( getDocumentCount > 0 ) 
-        hCloseDocument()
-    loop
-    gApplication = "CALC"
-    hNewDocument()
-    
-    '///+<li>open the faxwizard using the menu, page design opens</li>
-    iErr = hOpenWizardWithMenu( "FAX" )
-    if ( iErr = 1 ) then
-        warnlog( "#i46909# Wizard crashes/does not open" )
-        goto endsub
-    endif
-    
-    kontext "DocumentCalc"
-    hCloseDocument()
+    FileAutopilotFax
 
-    '///+<li>Page 1</li>
-    kontext "AutopilotFax"    
-    call dialogtest2( AutopilotFax, 1 )
-    hClickNextButton()
-
-    '///+<li>Page 2</li>
-    kontext "AutopilotFax"    
-    call dialogtest2( AutopilotFax, 2 )
-    hClickNextButton()
-
-    '///+<li>Page 3</li>
-    kontext "AutopilotFax"    
-    call dialogtest2( AutopilotFax, 3 )
-    hClickNextButton()
-
-    '///+<li>Page 4</li>
-    kontext "AutopilotFax"    
-    call dialogtest2( AutopilotFax, 4 )
-    hClickNextButton()
-    
-    '///+<li>Page 5</li>
     kontext "AutopilotFax"
-    call dialogtest2( AutopilotFax, 5 )
+    if ( AutopilotFax.exists( 2 ) ) then
     
-    '///+<li>Name the template for further usage</li>
-    printlog( "Name the template for further usage" )
-    TemplateName.setText( cTemplateName )
-    
-    '///+<li>Save it (Click SaveAS-button)</li>
-    hSetTemplateSavePath( cTemplatePath )
-    
-    '///+<li>click the 'finish' button</li>
-    hFinishWizard( 1 )
-    
-    kontext "StandardBar"
-    hWaitForObject( Speichern, 5000 )
-   
-    '///+<li>close the document</li>
-    brc = hDestroyDocument()
-    if ( not brc ) then
-        qaerrorlog( "#i59233# The wizard does not display the new template" )
-    endif   
-    
-    '///+<li>Delete the new template</li>
-    printlog( "Delete the user-template: " & cTemplatePath )
-    hDeleteFile( cTemplatePath )
-    
+        kontext "AutopilotFax"    
+        call dialogtest2( AutopilotFax, 1 )
+        hClickNextButton()
+
+        kontext "AutopilotFax"    
+        call dialogtest2( AutopilotFax, 2 )
+        hClickNextButton()
+
+        kontext "AutopilotFax"    
+        call dialogtest2( AutopilotFax, 3 )
+        hClickNextButton()
+
+        kontext "AutopilotFax"    
+        call dialogtest2( AutopilotFax, 4 )
+        hClickNextButton()
+        
+        kontext "AutopilotFax"
+        call dialogtest2( AutopilotFax, 5 )
+        
+        printlog( "Name the template for further usage" )
+        TemplateName.setText( cTemplateName )
+        
+        hSetTemplateSavePath( cTemplatePath )
+        
+        hFinishWizard( 1 )
+        
+        kontext "StandardBar"
+        hWaitForObject( Speichern, 5000 )
+       
+        brc = hDestroyDocument()
+        if ( not brc ) then
+            qaerrorlog( "#i59233# The wizard does not display the new template" )
+        endif   
+        
+        printlog( "Delete the user-template: " & cTemplatePath )
+        hDeleteFile( cTemplatePath )
+        
+    else
+        warnlog( "Fax wizard did not open/exceeded timeout" )
+    endif
+        
     while( getDocumentCount() > 0 ) 
         hDestroyDocument()
     wend

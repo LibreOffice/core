@@ -116,7 +116,7 @@ testcase tSaveLoadLayoutOLE
     end if
     kontext "Tasks"
         '/// select the OLE placeholder and activate it with [Return] ///'
-        LayoutsPreview.TypeKeys ("<RIGHT>",12)
+        LayoutsPreview.TypeKeys ("<RIGHT>",13)
         sleep (1)
         LayoutsPreview.TypeKeys ("<Return>")
         sleep (1)

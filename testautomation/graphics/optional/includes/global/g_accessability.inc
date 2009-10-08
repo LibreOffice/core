@@ -265,7 +265,7 @@ testcase tEis1581
       if Pagelayout_UndoDeleteWarning.exists then
          Pagelayout_UndoDeleteWarning.ok
       endif
-      for i = 1 to 8
+      for i = 1 to 9
          kontext "Tasks"
             LayoutsPreview.TypeKeys "<RIGHT>"
          kontext "Pagelayout_UndoDeleteWarning"
@@ -298,7 +298,7 @@ testcase tEis1581
          Pagelayout_UndoDeleteWarning.ok
       endif
       sleep (1)
-      for i = 1 to 16
+      for i = 1 to 17
          kontext "Tasks"
          LayoutsPreview.TypeKeys "<RIGHT>"
          kontext "Pagelayout_UndoDeleteWarning"

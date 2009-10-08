@@ -23,7 +23,11 @@
         <classpath>
             <pathelement location="${qadevOOo.class}"/>
             <fileset dir="${qadevOOo.office_jars}">
-                <include name="**/*.jar"/>
+                <include name="**/ridl.jar"/>
+                <include name="**/unoil.jar"/>
+                <include name="**/jurt.jar"/>
+                <include name="**/juh.jar"/>
+                <include name="**/java_uno.jar"/>
             </fileset>
         </classpath>
     </javac>
@@ -35,7 +39,11 @@
         <classpath>
             <pathelement location="${qadevOOo.class}"/>
             <fileset dir="${qadevOOo.office_jars}">
-                <include name="**/*.jar"/>
+                <include name="**/ridl.jar"/>
+                <include name="**/unoil.jar"/>
+                <include name="**/jurt.jar"/>
+                <include name="**/juh.jar"/>
+                <include name="**/java_uno.jar"/>
             </fileset>
         </classpath>
     </javac>

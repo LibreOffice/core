@@ -1,218 +1,125 @@
-
-function checkCheckBox( _file as string , sKey as string , control as object , optional cBugID as string ) as boolean
-function checkComboBox( _file as string , sKey as string , control as object ) as boolean
-function  checkEntryField( _file as string , sKey as string , control as object , optional cBugID as string ) as boolean
-function checkListBox( _file as string , sKey as string , control as object ) as boolean
-function checkListItem( _file as string , _iIndex as integer , sKey as string  , control as object ) as boolean
-function checkRadioButton( _file as string , sKey as string , control as object ) as boolean
-function checkRadioButtons( _file as string  , sKey as string  , control1 as object  , control2 as object  , optional control3 as object  , optional control4 as object ) as integer
-function hAccessStandardBar() as boolean
-function hAddTrustedPath( cPath as string ) as boolean
-function hAllowMacroExecution() as boolean
-function hBatchLoadJavaFiles( aFileList() , cIdent as string )
-function hCancelFilterDialog() as boolean
-function hChangeDoc() as string
-function hCheckPropertyPresence ( cSetting as string , iPos as integer ) as boolean
-function hClickCommandButton( iItemToClick as integer ) as boolean
-function hClickNextButton() as boolean
-function hCloseBasicIDE() as boolean
-function hCloseCollectionBar() as boolean
-function hCloseHelp() as boolean
-function hCloseNavigator() as boolean
-function hClosePropertyBrowser() as boolean
-function hCloseScriptOrganizer() as boolean
-function hCompareSubStrings( cRef as string, cSub as string ) as integer
-function hConvertStringToLong( cValue as string ) as long
-function hCountMatchesInList( acItemList() as string, cSearchTerm as string ) as integer
-function hCreateBasicWorkFiles() as string
-function hCreateDirectoryExpectSuccess( dirname as string ) as boolean
-function hCreateDocument() as boolean
-function hCreateFaxDevice( cName as string ) as boolean
-function hCreateModuleForDoc( optional cName as string ) as boolean
-function hCreateScriptingObject( cName as string ) as boolean
-function hDeleteFile( cFileOrig as string ) as boolean
-function hDeleteFileViaFileOpen( cFile as String ) as boolean
-function hDeleteLibrary( iLocation as integer, cLibName as string ) as boolean
-function hDeleteMacro() as boolean
-function hDeleteScript( cName as string , bSuccess as boolean ) as boolean
-function hDeleteUserTemplates() as integer
-function hDelPrinter( cPrinterName as string ) as integer
-function hDenyMacroExecution() as boolean
-function hDeselectSeparator() as integer
-function hDestroyDocument() as boolean
-function hDocumentInfoSelectTab( cTabPage as string ) as boolean
-function hDocumentTypeKeys( cString as string ) as boolean
-function hDrawControlOnDialog( iControl as integer ) as string
-function hDrawControl( xPos as integer, yPos as integer, xEnd as integer, yEnd as integer ) as boolean
-function hExpandAllNodes( oControl as object ) as integer
-function hExpandNode( oControl as object, iNode as integer ) as integer
-function hFileOpenMultiSelect( iArray() as integer ) as integer
-function hFindCopyRemoveJavaLogs( cSourcePath as string ) as boolean
-function hFindFileObjectViaFileOpen( cName as string ) as integer
-function hFindFirstDialog() as boolean
-function hFindTemplate( sTemplateName as string ) as integer
-function hFindUNOTemplateInFilterList( sFilter as string ) as integer
-function hFinishWizard( iMode as integer ) as boolean
-function hGetAccel( cCommand as string ) as string
-function hGetBasicWorkFile( cMajorID as string ) as string
-function hGetControlName( iControl as integer ) as string
-function hGetControlParams( cParam as string ) as integer
-function hGetControlPosXE( iControl as integer ) as integer
-function hGetControlPosXM( iControl as integer ) as integer
-function hGetControlPosXO( iControl as integer ) as integer
-function hGetControlPosYE( iControl as integer ) as integer
-function hGetControlPosYM( iControl as integer ) as integer
-function hGetControlPosYO( iControl as integer ) as integer
-function hGetDataPairAsString( sKey as string, sVal as long ) as string
-function hGetDirTreeLevel( cFullPath as string ) as integer
-function hGetDocTypeAPI() as string
-function hGetFileCountViaFileOpen() as integer
-function hGetFileFolderName( iFolder as integer ) as string
 function hGetFileLocationAPI() as string
-function hGetFileSizeAsLong( cFileName as string ) as long
-function hGetFilter680FromUNO( bTemplate as boolean ) as string
-function hGetHelpContentHeader( iLength as integer ) as string
-function hGetI18nData( cSection as string, cLanguage as string ) as string
-function hGetIndexForKeyAsInt( lsList() as string, sKey as string ) as integer
-function hGetInputPath( byval sBasePath as string, byval sFile as string ) as string
-function hGetKeyForPairAsString( cLine as string ) as string
-function hGetKeyForValueAsInt( lsList() as string, sVal as string ) as integer
-function hGetKeyForValueAsString( lsList() as string, sVal as string ) as string
-function hGetListItems( oControl as object, aList() as string ) as integer
-function hGetNodeCount( oControl as object ) as integer
-function hGetNodeName( oControl as object , iNode as integer ) as string
-function hGetPrinterPosition( cName as string, bWarn as boolean ) as integer
-function hGetPrivateFtpServer( _proxy as string, _port as string ) as boolean
-function hGetPrivateHttpServer( _proxy as string, _port as string ) as boolean
-function hGetPrivateInputFile( bVerbose as boolean ) as string
-function hGetPrivateInputPath( bVerbose as boolean ) as string
-function hGetPrivateSocksServer( _proxy as string, _port as string ) as boolean
-function hGetRefFilePath( cCategory as string, location as string) as string
-function hGetRelPath( cStartDir, cFileName as String ) as string
-function hGetSpadminPath() as string
-function hGetStringFromStaticTextField( oControl as object ) as string
-function hGetTabNameFromOrganizer() as string
-function hGetTwoDigitLangCode( iLanguage as integer ) as string
-function hGetValueForKeyAsInt( lsList() as string, sKey as string ) as integer
-function hGetValueForKeyAsLong( lsList() as string, sKey as string ) as long
-function hGetValueForPairAsLong( cLine as string ) as long
-function hGetValueForPairAsString( cLine as string ) as string
-function hGetVisibleNodeNames( oControl as object , lsList() as string ) as integer
-function hGetWizardParams( cType as string, cParam as string ) as integer
-function hGetWorkFile( cFileName as string ) as string
-function hGetWorkPath() as string
-function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
-function hHandleInitialDialogs() as integer
-function hHandleSaveError() as integer
-function hHelpGetAboutItemCount() as integer
-function hHelpGetSearchIndexItemCount() as integer
-function hHideModule() as boolean
-function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
-function hIDESelectTabByIndex( iIndex as integer ) as string
-function hInitBackingMode() as boolean
-function hInitBasicIde( cModule as string ) as boolean
-function hInitFormControls( cModule as string ) as boolean
-function hInitSingleDoc() as boolean
-function hInitWriteDocIdentifier( cString as string ) as boolean
-function hInsertControl( iControl as integer ) as string
-function hInsertMacroFromFile( cMacroId ) as integer
-function hInsertMacro( _id as integer ) as boolean
-function hIsEditWindowEmpty() as boolean
-function hIsMacroEditButtonEnabled() as boolean
-function hIsMacroNewButtonEnabled() as boolean
-function hIsObjectAFolder( iObjects as integer ) as boolean
-function hIsTemplateDialogClosed() as boolean
-function hListAppendList( aBaseList() as string, aListToAppend() as string ) as integer
-function hListAppend( sNewString as string, aTargetList() as string ) as integer
-function hListCompare( aListOne() as String, aListTwo() as String ) as boolean
-function hListDelete( aList() as string, iItemToDelete as integer ) as boolean
-function hListFileGetSize( sFileIn as string ) as integer
-function hListPrependString( aList() as string, cString as string ) as boolean
-function hListTestLowerBoundary( aList() as string ) as boolean
-function hListTestUpperBoundary( aList() as string ) as boolean
-function hLoadFileExpectFailure( fpath as string ) as boolean
+function hGetDocTypeAPI() as string
+function listdebug( lsList() as string , cComment as string ) as integer
+function initlistdebug( cComment as string ) as integer
+function listmoveitem( source() as string, target() as string, itemid as integer ) as integer
+function listconvertpath( lsList() as string ) as integer
+function listInsertSection( lsList() as string, cSection as string ) as integer
+function CheckAsianLanguageSupport( sSupport as String )  as String
+function fStartupNavigator(navigatorItem as String , subItemNum as Integer)
+function fCloseNavigator
+function fGetCountryName( CountryID as Integer ) as String
+function hToolsCustomizeOpen() as boolean
+function hToolsCustomizeSelectTab( cTab as string ) as boolean
+function hToolsCustomizeClose( iMode as integer  ) as boolean
+function hToolsCustomizeAddNewMenu( cName as string, bMode as boolean ) as boolean
+function hDeselectSeparator() as integer
+function hClickCommandButton( iItemToClick as integer ) as boolean
+function hFileOpenMultiSelect( iArray() as integer ) as integer
+function hSaveLoadDelSuccess( cFile as string ) as integer
 function hLoadFileExpectSuccess( fpath as string ) as boolean
-function hMacroOrganizerRunMacro( cMacroName as string ) as integer
-function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut() as string ) as integer
-function hMaximizeDocument() as boolean
-function hNameBasicModule( cName as string ) as boolean
+function hLoadFileExpectFailure( fpath as string ) as boolean
+function hSaveFileExpectSuccess( fpath as string , bReplace as boolean ) as boolean
+function hSaveFileExpectFailure( fpath as string , errortype as integer ) as boolean
+function hCreateDirectoryExpectSuccess( dirname as string ) as boolean
+function hDeleteFileViaFileOpen( cFile as String ) as boolean
+function hGetFileCountViaFileOpen() as integer
 function hNameGen_append( iDecChar as long ) as string
 function hNameGen_lead( iDecChar as long ) as string
-function hNewDialog() as boolean
-function hNewModule() as boolean
-function hNumericDocType( doctype as integer ) as string
-function hOpenBasicIDE() as boolean
-function hOpenBasicObjectOrganizer( iTabPage as integer ) as boolean
-function hOpenBasicOrganizerFromDoc() as boolean
-function hOpenDigitalSignaturesDialog() as boolean
-function hOpenHelp() as boolean
-function hOpenPropertyBrowser() as boolean
-function hOpenRunMacroDialog() as boolean
-function hOpenScriptOrganizer( iDialog as integer ) as boolean
-function hOpenSpadmin() as boolean
-function hOpenWizardWithMenu( cType as string ) as integer
-function hPBGetControlName( cControl as string ) as boolean
-function hPBSetControlName( cControl as string ) as boolean
-function hRemoveLineBreaks( cString as string ) as string
-function hRemoveTrustedPath( cPath as string ) as boolean
-function hRenameScriptingObject( cName as string ) as boolean
-function hRenameTab( cTabName as string ) as integer
-function hReOpenBasicDialog() as boolean
-function hResetStandardBar() as boolean
-function hSaveFileExpectFailure( fpath as string , errortype as integer ) as boolean
-function hSaveFileExpectSuccess( fpath as string , bReplace as boolean ) as boolean
-function hSaveLoadDelSuccess( cFile as string ) as integer
-function hSecurityEnterPasswordOnLoad( cPassword as string, bValid as boolean ) as boolean
-function hSecurityEnterPasswordOnSave( cPassword as string ) as boolean
-function hSelectBasicObjectOrganizerTab( iTabPage as integer ) as boolean
-function hSelectCategory( cCategory as string ) as boolean
+function hGetRelPath( cStartDir, cFileName as String ) as string
+function hFindFileObjectViaFileOpen( cName as string ) as integer
+function hGetControlParams( cParam as string ) as integer
+function hGetControlName( iControl as integer ) as string
+function hInsertControl( iControl as integer ) as string
+function hDrawControlOnDialog( iControl as integer ) as string
+function hDrawControl( xPos as integer, yPos as integer, xEnd as integer, yEnd as integer ) as boolean
+function hGetControlPosXO( iControl as integer ) as integer
+function hGetControlPosYO( iControl as integer ) as integer
+function hGetControlPosXE( iControl as integer ) as integer
+function hGetControlPosYE( iControl as integer ) as integer
+function hGetControlPosXM( iControl as integer ) as integer
+function hGetControlPosYM( iControl as integer ) as integer
 function hSelectControl( iControl as integer ) as boolean
-function hSelectDialogPane() as boolean
-function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
-function hSelectFileFolder( iFolder as integer , bVerbose as boolean  ) as integer
+function hOpenHelp() as boolean
+function hCloseHelp() as boolean
 function hSelectHelpTab( cTab as string ) as boolean
-function hSelectNextNode( oControl as object ) as integer
-function hSelectNodeByName( oControl as object , _name as string ) as integer
-function hSelectNode( oControl as object , _id as integer ) as string
-function hSelectTheLastModule( bEditEnabled as Boolean ) as boolean
-function hSelectTheLastNode( oControl as object ) as integer
-function hSelectTopNode( oControl as object ) as boolean
-function hSelectXMLSecTab( cTab as string ) as boolean
-function hSetControlValue( oObject as object, cValue as string ) as integer
-function hSetLabelName( sLabelName as string ) as boolean
-function hSetPasswordRecommendation( bEnable as boolean ) as boolean
+function hUseBookmarksContextMenu( cAction as string ) as boolean
+function hHelpGetAboutItemCount() as integer
+function hHelpGetSearchIndexItemCount() as integer
+function hGetHelpContentHeader( iLength as integer ) as string
+function hGetI18nData( cSection as string, cLanguage as string ) as string
+function hGetTwoDigitLangCode( iLanguage as integer ) as string
+function hTestLocale() as boolean
+function hInitSingleDoc() as boolean
+function hInitBackingMode() as boolean
+function hInitWriteDocIdentifier( cString as string ) as boolean
+function hBatchLoadJavaFiles( aFileList() , cIdent as string )
+function hFindCopyRemoveJavaLogs( cSourcePath as string ) as boolean
+sub GetPathList ( ls1 () as String, ls2 () as String, ls3 () as String )
+sub CreatePathList
+function URLGraphicCheck ( bRelativ as Boolean, sFile as String )
+sub DialogTestForViewOptions
+sub DialogTextForViewOptions_move
+sub MouseTestForViewOptions
+sub Make3D
+sub hResetAutosave()
+sub DeleteColor( cColorName as String )
+sub modifyColorRGB_PGUP( iColor as Integer )
+sub createNewColor( aColor() as String )
+sub getColorRGB( aColor() as String )
+sub compareTwoColorsRGB( aColor() as String )
+sub ModifyColorRGB( aColor() as String )
+function hOpenPropertyBrowser() as boolean
+function hClosePropertyBrowser() as boolean
+function hPBSetControlName( cControl as string ) as boolean
+function hPBGetControlName( cControl as string ) as boolean
+function hCheckPropertyPresence ( cSetting as string , iPos as integer ) as boolean
 function hSetPBTabPage( iPage as integer ) as boolean
-function hSetProxies( HTTP_Server as string, HTTP_Port as string, FTP_Server as string, FTP_Port as string, NoProxyFor as string ) as integer
-function hSetTemplateSavePath( cFile as string ) as integer
-function hShowMacroControls() as boolean
+function hSetLabelName( sLabelName as string ) as boolean
+function hWaitForObject( oControl as object, iTime as integer ) as integer
+function hGetPrivateHttpServer( _proxy as string, _port as string ) as boolean
+function hGetPrivateFtpServer( _proxy as string, _port as string ) as boolean
+function hGetPrivateSocksServer( _proxy as string, _port as string ) as boolean
+function hGetPrivateInputPath( bVerbose as boolean ) as string
+function hGetPrivateInputFile( bVerbose as boolean ) as string
+function hCreateScriptingObject( cName as string ) as boolean
+function hRenameScriptingObject( cName as string ) as boolean
+function hDeleteScript( cName as string , bSuccess as boolean ) as boolean
+function hOpenScriptOrganizer( iDialog as integer ) as boolean
+function hCloseScriptOrganizer() as boolean
+function hOpenRunMacroDialog() as boolean
+function hSelectXMLSecTab( cTab as string ) as boolean
+function hGetPrinterPosition( cName as string, bWarn as boolean ) as integer
+function hDelPrinter( cPrinterName as string ) as integer
+function hGetSpadminPath() as string
 function hShutdownOffice() as integer
+function hOpenSpadmin() as boolean
+function hWaitForSpAdmin() as boolean
+function hCreateFaxDevice( cName as string ) as boolean
+function hDocumentInfoSelectTab( cTabPage as string ) as boolean
+function hFindTemplate( sTemplateName as string ) as integer
+function hGetRefFilePath( cCategory as string, location as string) as string
+function hSelectCategory( cCategory as string ) as boolean
+function hSelectFileFolder( iFolder as integer , bVerbose as boolean  ) as integer
+function hGetFileFolderName( iFolder as integer ) as string
+function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
+function hIsTemplateDialogClosed() as boolean
+function hIsObjectAFolder( iObjects as integer ) as boolean
+function hDeleteUserTemplates() as integer
+function hAccessStandardBar() as boolean
+function hResetStandardBar() as boolean
 function hStandardbarItemGetCount() as integer
+function hToggleToolbarItem( iMenuPos as integer )
 function hStandardbarLoadUrl() as boolean
 function hStandardbarNewDialog()
 function hStandardbarSaveAs()
-function hSwitchMacroSecurityTab( cTab as string )
-function hTestLocale() as boolean
-function hTestMacro( _id as integer ) as integer
-function hToggleToolbarItem( iMenuPos as integer )
-function hToolsCustomizeAddNewMenu( cName as string, bMode as boolean ) as boolean
-function hToolsCustomizeClose( iMode as integer  ) as boolean
-function hToolsCustomizeOpen() as boolean
-function hToolsCustomizeSelectTab( cTab as string ) as boolean
-function hUseBookmarksContextMenu( cAction as string ) as boolean
-function hUseImpressAutopilot( bEnable as boolean ) as boolean
-function hVerifyNodeName( oControl as object , cName as string ) as boolean
-function hWaitForObject( oControl as object, iTime as integer ) as integer
-function hWaitForSpAdmin() as boolean
-function hWaitForTreelist( oTreeList as object, cContext as string, iItemCount as integer ) as boolean
+function hSetProxies( HTTP_Server as string, HTTP_Port as string, FTP_Server as string, FTP_Port as string, NoProxyFor as string ) as integer
+function hMaximizeDocument() as boolean
+function hOpenWizardWithMenu( cType as string ) as integer
+function hFinishWizard( iMode as integer ) as boolean
+function hGetWizardParams( cType as string, cParam as string ) as integer
 function hWaitForWizard() as integer
-function hWaitWhileLoading() as boolean
-function initlistdebug( cComment as string ) as integer
-function keycompare( found as string, expected as string, sKey as string, optional cBugID as string) as boolean
-function listconvertpath( lsList() as string ) as integer
-function listdebug( lsList() as string , cComment as string ) as integer
-function listInsertSection( lsList() as string, cSection as string ) as integer
-function listmoveitem( source() as string, target() as string, itemid as integer ) as integer
-function setCheckBox( _file as string , sKey as string , control as object , optional bverbose as boolean ) as boolean
-function setComboBox( _file as string , sKey as string , control as object , optional bverbose as boolean  ) as integer
-function  setEntryField( _file as string , sKey as string , control as object , optional bverbose as boolean ) as string
-function setListBox( _file as string , sKey as string , control as object , optional bverbose as boolean  ) as integer
+function hSetTemplateSavePath( cFile as string ) as integer
+function hHandleSaveError() as integer
+function hClickNextButton() as boolean
+

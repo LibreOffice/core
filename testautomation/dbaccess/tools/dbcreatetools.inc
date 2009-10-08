@@ -1487,6 +1487,8 @@ function getIdForDatabaseType(sType as String ) as Integer
     elseif (sType = "Mozilla") then   
         if gPlatGroup = "w95" then        
          ii = 11
+        elseif gPlatform = "osx" then        
+         ii = 9
         else      
          ii = 10
         endif

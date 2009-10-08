@@ -63,7 +63,7 @@ sub main
         Call tdFormatConnector
         Call tiFormat3D_Effekte
         Call tiFormatAufzaehlungszeichen
-        tdFormatTemplates
+        Call tdFormatTemplates
 
     Call hStatusOut
 end sub

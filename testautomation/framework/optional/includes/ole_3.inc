@@ -306,7 +306,7 @@ function isOleAvailable() as boolean
     else
         Kontext "NavigatorWriter"
         if NOT NavigatorWriter.exists( 1 ) then
-            EditNavigator
+            ViewNavigator
         endif
         Kontext "NavigatorWriter"
         if NavigatorWriter.exists( 2 ) then ' was 5 secs
@@ -364,7 +364,7 @@ function isOleAvailable() as boolean
             if NavigatorDraw.exists( 2 ) then ' was 5 secs
                 printlog CFN & "Navigator draw is available"
             else
-                EditNavigator
+                ViewNavigator
             endif
             kontext "NavigatorDraw"
             if NavigatorDraw.exists( 2 ) then ' was 5 secs

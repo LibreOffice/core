@@ -584,7 +584,7 @@ testcase tToolsOptionsHTMLGrid
     
     ' select grafik element
     Call wNavigatorAuswahl(4,1)
-    EditNavigator
+    ViewNavigator
     sleep (2)
     FormatGraphics
     Kontext
@@ -618,7 +618,7 @@ testcase tToolsOptionsHTMLGrid
     
     ' check if @ (1,1) Current-Measure-Unit :-)
     Call wNavigatorAuswahl(4,1)
-    EditNavigator
+    ViewNavigator
     sleep (2)
     FormatGraphics
     Kontext

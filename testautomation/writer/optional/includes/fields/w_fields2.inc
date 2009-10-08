@@ -89,6 +89,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_1_1
+    if iSprache <> 1 then
+        QaErrorLog "Currently no any other language than English. Aborting."
+        exit sub
+    end if
 
   Dim sFirstName  , sLastName   as String
   Dim sFirstName1 , sLastName1  as String
@@ -187,6 +191,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_1_2
+    if iSprache <> 1 then
+        QaErrorLog "Currently no any other language than English. Aborting."
+        exit sub
+    end if
 
   Dim sFirstName  , sLastName   as String
   Dim sFirstName1 , sLastName1  as String
@@ -330,7 +338,7 @@ testcase tFieldsOther_2
          Call wTypeKeys "<Shift Home>"
          Sleep 1
          if fGetFieldContent() <> sChapter(i) then
-             Warnlog i &"#i40625# Should get " & sChapter(i) & " but get " & fGetFieldContent()
+             QaErrorLog i &"#94997# Should get " & sChapter(i) & " but get " & fGetFieldContent()
          end if
          Call wTypeKeys "<Delete>"
      next i
@@ -375,6 +383,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_4
+    if bAsianLan = true then
+        QaErrorLog "No testing with Asian language. Aborting."
+        exit sub
+    end if
 
   Dim  sTestFile     as String
   Dim  sFilename(4)  as String
@@ -489,6 +501,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_6_1
+    if iSprache <> 1 then
+        QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
+        exit sub
+    end if
 
   Dim aUserData(14) , aUserData1() , aUserData2() as String
 
@@ -660,6 +676,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tFieldsOther_6_2
+    if iSprache <> 1 then
+        QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
+        exit sub
+    end if
 
   Dim aUserData(16) as String
   Dim aUserData1() as String

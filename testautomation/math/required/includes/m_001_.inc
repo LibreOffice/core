@@ -140,12 +140,12 @@ wend
 
    printlog "'/// Try wrong passwd confirmation ///'"
    Sleep 2
-   Kontext "Passwort"
+   Kontext "PasswordFileSave"
    sleep (2)
    try
-      PasswortName.SetText "12345"
-      PasswortBestaetigen.Settext "54321"
-      Passwort.OK
+      Password.SetText "12345"
+      PasswordConfirm.Settext "54321"
+      PasswordFileSave.OK
       Sleep 2
    catch
       warnlog "had to ask for passwd!!!!"
@@ -159,11 +159,11 @@ wend
    end if
 
    printlog "'/// Now do it right ///'"
-   Kontext "Passwort"
+   Kontext "PasswordFileSave"
    try
-      PasswortName.SetText "12345"
-      PasswortBestaetigen.Settext "12345"
-      Passwort.OK
+      Password.SetText "12345"
+      PasswordConfirm.Settext "12345"
+      PasswordFileSave.OK
    catch
       warnlog "had to ask for passwd!!!!"
    endcatch
@@ -221,15 +221,15 @@ wend
          Messagebox.Yes
       endif
       '/// password dialog has to show up! ///'
-   Kontext "Passwort"
-      if (Passwort.Exists(5) = FALSE)then
+   Kontext "PasswordFileSave"
+      if (PasswordFileSave.Exists(5) = FALSE)then
          Warnlog "- Password dialog Didn't popped up after pressing save"
       else
-         Kontext "Passwort"
+         Kontext "PasswordFileSave"
          '/// type password "a12345", confirm password: "a12345" -> RIGHT ///'
-         PasswortName.SetText "a12345"
-         PasswortBestaetigen.SetText "a12345"
-         Passwort.OK
+         Password.SetText "a12345"
+         PasswordConfirm.SetText "a12345"
+         PasswordFileSave.OK
          sleep 2
          '/// close document ///'
          FileClose
@@ -263,22 +263,17 @@ wend
       '/// (if messagebox comes up, say YES) ///'
       if Messagebox.Exists(2) then Messagebox.Yes
    '/// password dialog needn't to show up! ///'
-   Kontext "Passwort"
-      if (Passwort.Exists(5))then
+   Kontext "PasswordFileSave"
+      if (PasswordFileSave.Exists(5))then
          Warnlog "- Password dialog neeedn't popped up after pressing save"
-         Kontext "Passwort"
-         password.cancel
+         Kontext "PasswordFileSave"
+         passwordFileSave.cancel
          '/// close document ///'
          FileClose
       else
          '/// close document ///'
          hCloseDocument
       end if
-         hNewDocument
-         kontext "selectionmath"
-         if selectionmath.exists then
-         selectionmath.close
-         endif
 endcase
 
 testcase tmFileReload

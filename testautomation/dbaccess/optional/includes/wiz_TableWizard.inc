@@ -54,6 +54,11 @@ testcase tNewTable
         goto endsub
     endif
 
+    if (iSprache = 7) then
+        qaerrorlog "due to issue i94730 this testcase does not work under russian."
+        goto endsub
+    endif 
+    
     'hold a table name
     Dim sTableName as String 
 
@@ -190,7 +195,12 @@ testcase tCheckSampleTables
 endcase   
 '-------------------------------------------------------------------------
 testcase tChangeFieldName
-    
+
+    if (iSprache = 7) then
+        qaerrorlog "due to issue i94730 this testcase does not work under russian."
+        goto endsub
+    endif
+
     '/// open Bibliography database
     printlog "open Bibliography database"
     if not fOpenDataBase(gOfficePath + ConvertPath("user/database/biblio.odb")) then
@@ -297,6 +307,11 @@ testcase tStartFormWizardFromTableWizard
     
     if bAsianLan = true then
         qaerrorlog "#i62665# Table wizard doesn't work in CJK versions. So some test are left out."
+        goto endsub
+    endif
+    
+    if (iSprache = 7) then
+        qaerrorlog "due to issue i94730 this testcase does not work under russian."
         goto endsub
     endif
     

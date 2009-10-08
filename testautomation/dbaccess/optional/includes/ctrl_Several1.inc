@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: ctrl_Several1.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.1.68.1 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:41 $
+'* last change: $Author: msc $ $Date: 2008/10/07 09:51:29 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -68,8 +68,8 @@ testcase tCheckBox
         sleep(1)
         
 	Kontext "FormControls"
-    addControl("Label", 40, 40, 30, 30)
-    addControl("CheckBox", 60, 60, 50, 50 )
+    addControl("Label", 40, 30, 50, 40)
+    addControl("CheckBox", 55, 30, 65, 40 )
         
     call fOpenControlPropertyBrowser
     
@@ -109,6 +109,7 @@ testcase tCheckBox
     
     Kontext "DocumentWriter"
         DocumentWriter.TypeKeys "<SHIFT F4>"
+        sleep(1)
         DocumentWriter.TypeKeys "<TAB>" ' select the second control
         sleep(1)
         
@@ -223,7 +224,7 @@ testcase tFormattedField
         sleep(1)
         
         Kontext "FormControls"
-    addControl("FormattedField", 20, 20, 30, 30)    
+    addControl("FormattedField", 50, 20, 60, 30)    
         
     call fOpenControlPropertyBrowser         	
    	    
@@ -291,7 +292,7 @@ testcase tPushButton
         sleep(1)        
         
     Kontext "FormControls"
-    addControl("PushButton", 20, 20, 30, 30)    
+    addControl("PushButton", 50, 20, 60, 30)    
         
     call fOpenControlPropertyBrowser
         
@@ -375,7 +376,7 @@ testcase tOptionButton
         sleep(1)
           
     Kontext "FormControls"
-    addControl("RadioButton", 20, 20, 30, 30)    
+    addControl("RadioButton", 50, 20, 60, 30)    
         
     call fOpenControlPropertyBrowser
         
@@ -442,7 +443,7 @@ testcase tListBox
 	    sleep(1)
     
     Kontext "FormControls"
-    addControl("ListBox", 20, 20, 30, 30)    
+    addControl("ListBox", 50, 20, 60, 30)    
         
     call fOpenControlPropertyBrowser
         
@@ -526,7 +527,7 @@ testcase tComboBox
         sleep(1)
         
     Kontext "FormControls"
-    addControl("ComboBox", 20, 20, 30, 30)    
+    addControl("ComboBox", 50, 20, 60, 30)    
         
     call fOpenControlPropertyBrowser
         
@@ -601,7 +602,7 @@ testcase tLabelField
         sleep(1)
         
     Kontext "FormControls"
-    addControl("Label", 20, 20, 30, 30)    
+    addControl("Label", 50, 20, 60, 30)    
         
     call fOpenControlPropertyBrowser
         

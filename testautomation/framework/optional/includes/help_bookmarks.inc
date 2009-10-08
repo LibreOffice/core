@@ -161,7 +161,6 @@ testcase tHelpBookmarks
     '///+<li>Restart the office, open help, switch to Bookmarks tab</li>
     printlog( " Exit and restart the office" )
     call ExitRestartTheOffice()
-    sleep( 3 )
     brc = hOpenHelp()
     brc = hSelectHelpTab( "bookmarks" )
 

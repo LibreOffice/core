@@ -226,6 +226,11 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                               bFirst = FALSE
                               Kontext "TabOnlineUpdate"
                               If TabOnlineUpdate.exists(2) then bCorPage = TRUE
+                      case "IMPROVEMENT"
+                              if bFirst = TRUE then Optionsliste.Select ( startpos + 14 )
+                              bFirst = FALSE
+                              Kontext "TabOOoImprovement"
+                              If TabOOoImprovement.exists(2) then bCorPage = TRUE 
                       case else :  bCorPage = FALSE
                 end select
             case "LOADSAVE"

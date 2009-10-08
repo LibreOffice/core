@@ -130,7 +130,7 @@ public class CheckModuleAPI extends ComplexTestCase {
 
         final String[] commands = getCommands(sUnoapi);
 
-        final ProcessHandler procHdl = bet.runCommandsInEnvironmentShell(commands, fUnoapi, false);
+        final ProcessHandler procHdl = bet.runCommandsInEnvironmentShell(commands, fUnoapi, 0);
         log.println("exit code of dmake: " + procHdl.getExitCode());
         String test = procHdl.getOutputText();
         test = procHdl.getErrorText();
@@ -204,9 +204,13 @@ public class CheckModuleAPI extends ComplexTestCase {
         String[] cmdLines = null;
         final String platform = (String) param.get(PropertyName.OPERATING_SYSTEM);
         log.println("prepare command for platform " + platform);
-        if (platform.equals(PropertyName.WNTMSCI)) {
+
+        if (platform.equals(PropertyName.WNTMSCI)){
+            if (param.getBool(PropertyName.CYGWIN)){
+                cmdLines = new String[]{"cd `cygpath '" + sUnoapi.replaceAll("\\\\", "\\\\\\\\")+ "'`", "dmake"};
+            } else{
             cmdLines = new String[]{"cdd " + sUnoapi, "dmake"};
-//            cmdLines = new String[]{shell, "/C ", "\"echo Test ^ " + envcmd + " ^ cdd " + sUnoapi + "^ pwd ^ dmake\""};
+            }
         } else {
                 cmdLines = new String[]{"cd " + sUnoapi, "dmake"};
             }

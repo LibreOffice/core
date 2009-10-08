@@ -62,10 +62,7 @@ end sub
 
 testcase tGroupBoxWithDatasource
 
-    qaerrorlog "Due to issue 86263 this test doesn't work"
-    goto endsub
-
-	'/// open a new text document
+    '/// open a new text document
     printlog "open a new text document"
 	call hNewDocument
 	sleep(1)
@@ -137,7 +134,7 @@ testcase tGroupBoxWithDatasource
      printlog "insert a groupbox (the wizard appears)"    
    	 Groupbox.Click
     
-   	call hDrawingWithSelection ( 20, 20, 30, 30 )
+   	call hDrawingWithSelection ( 50, 20, 60, 30 )
    	sleep(10)
     
     Dim i as integer
@@ -413,7 +410,7 @@ testcase tGroupBoxWithoutDatasource
    	 '/// insert a groupbox (the wizard appears)
      printlog "insert a groupbox (the wizard appears)"    
    	 Groupbox.Click
-   	 call hDrawingWithSelection ( 20, 20, 30, 30 )
+   	 call hDrawingWithSelection ( 50, 20, 60, 30 )
    	 sleep(2)
 	 Dim i as integer
 	Kontext "AutopilotGroupElement"
@@ -591,7 +588,7 @@ testcase tListBox
 
     Kontext "FormControls"
     Listbox.Click
-    call hDrawingWithSelection ( 40, 20, 50, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 )
     sleep(3)
     Kontext "AutoPilotListComboBox"
     AutoPilotListComboBox.MouseDown(10,10)
@@ -733,7 +730,7 @@ testcase tComboBox
 	'/// insert a new combo box
     Kontext "FormControls"
 	 Combobox.Click
-	call hDrawingWithSelection ( 40, 20, 50, 30 )
+	call hDrawingWithSelection ( 50, 20, 60, 30 )
    	sleep(10)
 
     Kontext "AutoPilotListComboBox"
@@ -811,7 +808,7 @@ testcase tTableControl
 
   Kontext "MoreControls"
    Grid.Click
-   call hDrawingWithSelection ( 20, 20, 50, 40 )
+   call hDrawingWithSelection ( 40, 20, 60, 40 )
    sleep(10)
    '/// take as datasource table biblio, mark it & next
    '/// select some fields (in both directions) & create

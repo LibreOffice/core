@@ -75,11 +75,11 @@ sub MakeCircle
     printlog "Create Circle"
     if gApplication = "WRITER" then
         Warnlog "Cant make circle in this application"
-        exit sub
+        goto endsub
     end if
     if gApplication = "CALC" then
         Warnlog "Cant make circle in this application"
-        exit sub
+        goto endsub
     end if
     printlog "we run Circle"
     Kontext "Toolbar"
@@ -99,11 +99,11 @@ sub Make3dObject
     printlog "Create 3dObject"
     if (Ucase(gApplication) = "CALC") then
         warnlog "Cant make circle in this application"
-        exit sub
+        goto endsub
     end if
     if (Ucase(gApplication) = "WRITER") then
         warnlog "Cant make circle in this application"
-        exit sub
+        goto endsub
     end if
 
     printlog "we run 3d-Object"
@@ -180,11 +180,11 @@ sub MakeCurveObject
 
     if (Ucase(gApplication) = "WRITER") then
         warnlog "Cant make circle in this application"
-        exit sub
+        goto endsub
     end if
     if (Ucase(gApplication) = "CALC") then
         warnlog "Cant make circle in this application"
-    exit sub
+    goto endsub
     end if
 
     printlog "we run Curve-object"
@@ -220,11 +220,11 @@ sub MakeLineObject
     
     if gApplication = "WRITER" then
         warnlog "Currently no support for line-object in this application"
-        exit sub
+        goto endsub
     end if
     if gApplication = "CALC" then
         warnlog "Currently no support for line-object in this application"
-        exit sub
+        goto endsub
     end if
     printlog "we run Line-object"
     '/// Insert Line ///
@@ -251,11 +251,11 @@ sub MakeConnectorObject
     
     if gApplication = "WRITER" then
         warnlog "Cant make connector in this application"
-        exit sub
+        goto endsub
     end if
     if gApplication = "CALC" then
         warnlog "Cant make connector in this application"
-        exit sub
+        goto endsub
     end if
     printlog "we run Connector-object"
     '/// Insert Connector ///

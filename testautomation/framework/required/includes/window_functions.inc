@@ -61,6 +61,8 @@ testcase tWindowFunctions
         warnlog( "Two open documents were expected, found " & getDocumentCount )
     endif    
 
+    DocumentWriter.restore()
+
     '///+<li>Use .close()-method to close document</li>
     kontext "documentwriter"
     printlog( "Close document" )

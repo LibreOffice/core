@@ -39,21 +39,16 @@
 
 testcase tExtensionPublisher
 
-    '///<h1>Extension publisher and release notes</h1>
+    printlog( "Extension Manager and Release Notes" )
 
     if ( gISOLang <> "en-US" ) then
         qaerrorlog( "Test does not handle translated strings, aborting" )
         goto endsub
     endif
 
-    '///<u><pre>Synopsis</pre></u>With CWS jl76 extensions can bring a link to the extension 
-    '///+ publisher and the release notes which are displayed in the online update dialog
-    '///+ for extensions - if provided. Otherwise these fields are not visible.<br>
-    '///<u><pre>Specification document</pre></u>
-    '///+ <a href=http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt>
-    '///+ http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt</a><br>
-    '///<u><pre>Files used</pre></u>(gTesttoolPath)/extensions/input/publisher/*.oxt,*.info<br>
-    '///<u><pre>Test case specification</pre></u>
+    ' Specification document
+    ' http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt
+    ' http://specs.openoffice.org/appwide/packagemanager/online_update_for_extensions.odt
     
     ' This is the path where the test-extensions and the info file are located
     dim cBasePath as string
@@ -87,15 +82,10 @@ testcase tExtensionPublisher
     iExtensionCount = hGetExtensionCount()
     
     
-    '///<ul>
-    '///+<li>Read info-file about the testdocuments.</li>
     hGetDataFileSection( cInfoFile, cConfigArray(), "info", "", "" )
     iFileCount = int( hGetValueForKeyAsString( cConfigArray() , "filecount" ) )
     printlog( cInfoFile & " specifies " & iFileCount & " documents to load" )
 
-    '///+<li>Install all extensions specified in the info-file.<br>
-    '///+You may use &quot;unopkg&quot; or the Extension Manager GUI.<br>
-    '///+The test uses &quot;unopkg&quot;.</li>
     printlog( "Installing extensions" )
     for iCurrentFile = 1 to iFileCount
         
@@ -107,8 +97,7 @@ testcase tExtensionPublisher
         
     next iCurrentFile
     printlog( "Finished installing extensions" )
-       
-    '///+<li>Open the extension manager GUI (if not open yet).</li>
+
     kontext "PackageManager"
     if ( not PackageManager.exists() ) then
         ToolsPackageManager
@@ -124,7 +113,6 @@ testcase tExtensionPublisher
         goto endsub
     endif
     
-    '///+<li>Wait about 5 seconds - the &quot;Live-Deployment&quot; needs time to strike.</li>
     iExitCounter = 0
     kontext "PackageManager"
     WaitSlot()
@@ -139,20 +127,15 @@ testcase tExtensionPublisher
         endif
     loop
  
-    '///+<li>Click on  &quot;update...&quot;<br>
-    '///+The &quot;Update Extensions&quot; dialog should open.</li>
     kontext "PackageManager"
     if ( Updates.isEnabled() ) then
     
         printlog( "Updates-button is enabled" )
         Updates.click()
         
-        '///+<li>Wait max 200 seconds for the &quot;Update&quot; dialog listbox to get populated.</li>
         kontext "ExtensionUpdate"
         if ( ExtensionUpdate.exists( 2 ) ) then
         
-            
-            '///+<li>Verify that all extensions (currently 7) are present - and only those</li>
             iExitCounter = 0
             do while ( AvailableUpdatesList.getItemCount() < iFileCount ) 
                 printlog( "Waiting for Updates List to populate..." )
@@ -168,8 +151,6 @@ testcase tExtensionPublisher
                 endif
             loop
             
-            '///+<li>&quot;Show all updates&quot; checkbox must be disabled.<br> 
-            '///+There are no additional extensions installed at this time</li>
             if ( ShowAllUpdates.exists() ) then
                 if ( ShowAllUpdates.isEnabled() ) then
                     warnlog( """Show all updates"" should be disabled" )
@@ -185,30 +166,23 @@ testcase tExtensionPublisher
                 printlog( "Available updates list populated in " & iExitCounter & " seconds" )
                 
                 if ( iExitCounter < 20 ) then
-                    '///+<li>Select each listed extension and verify its attributes.</li>
-                    '///<ul>
+
                     for iCurrentFile = 1 to iFileCount
                     
-                        '///+<li>Retrieve the name of the extension from the config file.</li>
                         hGetDataFileSection( cInfoFile, cConfigArray(), iCurrentFile, "", "" )
                         cCurrentFileName = hGetValueForKeyAsString( cConfigArray() , "display_name" )
                         
-                        '///+<li>Retrieve configuration of the extension from config file: Release Notes.</li>
                         cHasReleaseNotes = hGetValueForKeyAsString( cConfigArray() , "has_release_notes" )
                         cReleaseNotes    = hGetValueForKeyAsString( cConfigArray() , "release_notes" )
                         
-                        '///+<li>Retrieve configuration of the extension from config file: Publisher.</li>
                         cHasPublisher = hGetValueForKeyAsString( cConfigArray() , "has_publisher" )
                         cPublisher    = hGetValueForKeyAsString( cConfigArray() , "publisher" )
                         
-                        '///+<li>Select the current extension by index.</li>
                         AvailableUpdatesList.select( iCurrentFile )
                         
-                        '///+<li>Verify that the extension is the one we expect.</li>
                         if ( AvailableUpdatesList.getText() = cCurrentFileName ) then
                             printlog( "Testing extension: " & cCurrentFileName )
                             
-                            '///+<li>Verify the configuration for the Release Notes.</li>
                             if ( lcase( cHasReleaseNotes ) = "yes" ) then
                                 if ( ReleaseNotesText.isVisible() ) then
                                     printlog( " - Release notes text is visible. Good." )
@@ -232,7 +206,6 @@ testcase tExtensionPublisher
                                 endif
                             endif
                             
-                            '///+<li>Verify the configuration for the Publisher.</li>
                             if ( lcase( cHasPublisher ) = "yes" ) then
                                 if ( UpdatePublisherText.isVisible() ) then
                                     printlog( " - Publisher text is visible. Good." )
@@ -270,9 +243,7 @@ testcase tExtensionPublisher
             else
                 warnlog( "No extensions available for update. Installation failed?" )
             endif
-            '///</ul>
-            
-            '///+<li>Close the extension update dialog.</li>
+
             kontext "ExtensionUpdate"
             ExtensionUpdate.cancel()
         else
@@ -283,11 +254,9 @@ testcase tExtensionPublisher
         warnlog( "Update-button on extension manager ui is disabled" )
     endif
     
-    '///+<li>Close extension manager GUI</li>
     kontext "PackageManager"
     PackageManager.close()
     
-    '///+<li>Cleanup - remove all test-extensions.</li>
     printlog( "Removing extensions" )
     for iCurrentFile = 1 to iFileCount
         hGetDataFileSection( cInfoFile, cConfigArray(), iCurrentFile, "", "" )
@@ -295,7 +264,6 @@ testcase tExtensionPublisher
         sExtensionCLI( "remove" , cCurrentFileName )
     next iCurrentFile
     printlog( "Finished removing extensions" )
-    '///</ul>
 
 endcase
 

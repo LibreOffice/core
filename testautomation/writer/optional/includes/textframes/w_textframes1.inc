@@ -430,7 +430,7 @@ testcase tTextframes_6
     FindAndReplace.Cancel
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -459,7 +459,7 @@ testcase tTextframes_6
     if GetClipboardText <> sTestText then Warnlog "The test text isn't right !"
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then Warnlog "The test text should be in second page !"
@@ -472,7 +472,7 @@ testcase tTextframes_6
     Sleep 1
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then Warnlog "The test frame should be still in first page !"
@@ -510,7 +510,7 @@ testcase tTextframes_7
     
     Check:
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -549,7 +549,7 @@ testcase tTextframes_7
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then Warnlog "The test frame should be in second page !"
@@ -587,7 +587,7 @@ testcase tTextframes_8
     
     Check1:
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -626,7 +626,7 @@ testcase tTextframes_8
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then Warnlog "The test frame should be in first page !"
@@ -643,7 +643,7 @@ testcase tTextframes_8
     
     Check2:
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -679,7 +679,7 @@ testcase tTextframes_8
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then Warnlog "The test frame should be in second page !"
@@ -716,7 +716,7 @@ testcase tTextframes_9
     
     Check1:
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -755,7 +755,7 @@ testcase tTextframes_9
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then Warnlog "The test frame should be in first page !"
@@ -769,7 +769,7 @@ testcase tTextframes_9
     
     Check2:
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -807,7 +807,7 @@ testcase tTextframes_9
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then Warnlog "The test frame should be in second page !"
@@ -856,7 +856,7 @@ testcase tTextframes_10
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then Warnlog "The test frame should be in second page -1!"
@@ -880,7 +880,7 @@ testcase tTextframes_10
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
@@ -907,7 +907,7 @@ testcase tTextframes_10
     Sleep 1
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then Warnlog "The test frame should be in first page ! -2"
@@ -965,7 +965,7 @@ Check1:
     FindAndReplace.Cancel
 
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -1005,7 +1005,7 @@ Check2:
     FindAndReplace.Close
 
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
@@ -1032,7 +1032,7 @@ Check2:
 
     '/// Check if frame is in 1st page
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then

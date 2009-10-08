@@ -146,6 +146,9 @@ endcase
 ' -----------------------------------------------------------------------------------
 
 testcase tEditUndoTOX
+    QaErrorLog "tEditUndoTOX outcommented due to makeover."
+    exit sub
+    
 	Dim CompareThis as string, Compare1 as string, Compare2 as string, Compare3 as string
 	Dim CompareWith1 as string, CompareWith2 as string, MenuEntryEnabled as boolean
 	' Strings depends on the language so this testcase has to be adapted for all languages

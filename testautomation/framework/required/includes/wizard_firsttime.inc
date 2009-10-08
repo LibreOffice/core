@@ -150,10 +150,23 @@ testcase tUpdtWizardFirsttime
         warnlog( "Could not access TabFirstStartUser" )
     endif
     
+    kontext "TabFirstStartOnlineUpdate"
+    if ( TabFirstStartOnlineUpdate.exists( 2 ) ) then
+        call dialogtest( TabFirstStartOnlineUpdate )
+        CheckForUpdates.unCheck()
+        kontext "WelcomeDialog"
+        NextBtn.click()
+    else
+        warnlog( "Online Update Page is missing" )
+    endif
+        
+    
     '///+<li>Handle the welcome Dialog - Internet Update page which should NOT appear</li>
     Kontext "TabFirstStartRegistration"
-    if ( Not TabFirstStartRegistration.exists( 3 ) ) then
-	    warnlog( "An additional page appears on rerun of wizard" )
+    if ( TabFirstStartRegistration.exists( 3 ) ) then
+        printlog( "Registration page visible." )
+    else
+	    qaerrorlog( "An additional page appears on rerun of wizard" )
         kontext "WelcomeDialog"
         NextBtn.click()
     endif

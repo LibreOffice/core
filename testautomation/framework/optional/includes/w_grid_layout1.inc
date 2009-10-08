@@ -113,7 +113,7 @@ testcase tTextGridDialog_2
 
    '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
-    EditNavigator
+    ViewNavigator
      Kontext "NavigatorWriter"
 
      Seitennummer.SetText "2"
@@ -162,7 +162,7 @@ testcase tTextGridDialog_3
 
    '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
-    EditNavigator
+    ViewNavigator
      Kontext "NavigatorWriter"
 
      Seitennummer.SetText "2"
@@ -213,7 +213,7 @@ testcase tTextGridDialog_4
 
    '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
-    EditNavigator
+    ViewNavigator
      Kontext "NavigatorWriter"
 
      Seitennummer.SetText "2"
@@ -408,7 +408,7 @@ testcase tFontSizeChanges_1
 
     '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     if NavigatorWriter.exists(5) then
         Seitennummer.SetText "2"
@@ -499,7 +499,7 @@ testcase tIndentsTest_1
 
    '/// Active navigator dialogue , check if the page number is 1
     Kontext
-    EditNavigator
+    ViewNavigator
      Kontext "NavigatorWriter"
      if Seitennummer.GetText <> sCorrectPage1 then Warnlog "First test :Something wrong in indents test!"
     fCloseNavigator
@@ -515,7 +515,7 @@ testcase tIndentsTest_1
 
    '/// Active navigator dialogue , check if the page number is 2
     Kontext
-    EditNavigator
+    ViewNavigator
      Kontext "NavigatorWriter"
      if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Second test :Something wrong in indents test!"
     fCloseNavigator
@@ -551,7 +551,7 @@ testcase tObjectsTest_1
     FormatAnchorAsCharacter
     Sleep 1
 
-    EditNavigator
+    ViewNavigator
      Kontext "NavigatorWriter"
      Seitennummer.SetText   sCorrectPage2
      Sleep 5
@@ -566,7 +566,7 @@ testcase tObjectsTest_1
     Kontext
     FormatAnchorToCharacter
 
-    EditNavigator
+    ViewNavigator
      Kontext "NavigatorWriter"
      Seitennummer.SetText   sCorrectPage2
      Sleep 5

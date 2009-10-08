@@ -41,8 +41,6 @@
 ' #1 hGetFilter               ' get the filtername for a specified build-id
 ' #0 hSelectUIFilter          ' Select a filter in the UI by API filter name
 ' #0 hFindFilterPosition      ' Find the index of the filter in the file open dialog
-' #0 hGetFilterGroup          ' Speedier approach to hGetUIFilternames()
-' #1 GetDefaultFilterNames    ' read the default filternames from a reference list
 ' #1 CreateFilterNamesList    ' write the default filternames to the reference list
 ' #1 hGetValueForKeyAsString  ' find key in list, return value as string
 ' #1 hGetValueForPairAsString ' find value in list, return key and value as string
@@ -194,91 +192,6 @@ function hFindFilterPosition( cFilter as string ) as integer
     hFindFilterPosition() = 0
     
 end function
-
-'*******************************************************************************
-
-function hGetFilterGroup( api_filters() as string, ui_filters() as string ) 
-
-    ' This is a function designed to deliver a massive speed improvement
-    ' compared to multiple calls to hGetUIFiltername() which establish a fresh 
-    ' UNO connection on each call. This function establishes only one connection
-    ' and works with a list of API filter names which are matched to UI filter
-    ' names. This function does not wrap the UNO calls in a try...catch block
-    ' which means that if the function fails, it fails hard. Extra hard, that is.
-    ' There is no errorhandling. This function is intended for internal use only.
-    ' No returnvalue is defined at this time.
-
-    const CFN = "global::tools::inc::t_filters.inc::hGetFilterGroup:"
-
-    dim oUno as object
-    dim oService as object
-    dim oFilter as object
-    
-    dim iCurrentFilter as integer
-    
-    dim iFilterCount as integer
-        iFilterCount = ubound( api_filters() )
-        
-    dim iAPIfilterList as integer
-
-    oUno = hGetUNOService( true )
-    oService = oUno.createInstance("com.sun.star.document.FilterFactory")
-    
-    for iCurrentFilter = 1 to iFilterCount
-    
-        oFilter = oService.getByName( api_filters( iCurrentFilter ) )
-
-        for iAPIFilterList = 0 to ubound( oFilter )
-        
-            if ( oFilter( iAPIFilterList ).Name = "UIName" ) then
-                ui_filters( iCurrentFilter ) = oFilter( iAPIFilterList ).Value()
-                'printlog( CFN & "DEBUG: Index (iCurrentFilter): " & iCurrentFilter )
-                'printlog( CFN & "DEBUG: API Filter: " & api_filters( iCurrentFilter ) )
-                'printlog( CFN & "DEBUG: UI Filter.: " &  ui_filters( iCurrentFilter ) )
-            endif
-            
-        next iAPIFilterList
-        
-    next iCurrentFilter
-
-end function
-
-'*******************************************************************************
-
-sub GetDefaultFilterNames()
-
-    dim sMatchingFile as string
-    dim sFilterArray( 100 ) as string
-    
-    const APPLICATION_COUNT = 7  
-    dim cUIFilters( APPLICATION_COUNT ) as string
-    dim cAPIFilters( APPLICATION_COUNT ) as string
-    
-    sMatchingFile = gTesttoolPath & "global\input\filters\"
-    sMatchingFile = sMatchingFile & "build_to_filter.txt"
-    sMatchingFile = convertpath( sMatchingFile )
-
-    hGetDataFileSection( sMatchingFile, sFilterArray(), "Current", "", "" )
-
-    cAPIFilters( 1 ) = hGetValueForKeyAsString( sFilterArray(), "WRITER"    )
-    cAPIFilters( 2 ) = hGetValueForKeyAsString( sFilterArray(), "CALC"      )
-    cAPIFilters( 3 ) = hGetValueForKeyAsString( sFilterArray(), "IMPRESS"   )
-    cAPIFilters( 4 ) = hGetValueForKeyAsString( sFilterArray(), "MASTERDOC" )
-    cAPIFilters( 5 ) = hGetValueForKeyAsString( sFilterArray(), "MATH"      )
-    cAPIFilters( 6 ) = hGetValueForKeyAsString( sFilterArray(), "DRAW"      )
-    cAPIFilters( 7 ) = hGetValueForKeyAsString( sFilterArray(), "HTML"      )
-    
-    hGetFilterGroup( cAPIFilters(), cUIFilters() )
-
-    gWriterFilter     = cUIFilters( 1 ) 
-    gCalcFilter       = cUIFilters( 2 )
-    gImpressFilter    = cUIFilters( 3 )
-    gMasterDocFilter  = cUIFilters( 4 )
-    gMathFilter       = cUIFilters( 5 )
-    gDrawFilter       = cUIFilters( 6 )
-    gHTMLFilter       = cUIFilters( 7 )
-    
-end sub
 
 '*******************************************************************************
 

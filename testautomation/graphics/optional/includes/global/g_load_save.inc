@@ -202,7 +202,7 @@ testcase tFileProperties
    Thema.SetText "Documentproperties"
    Schluesselworte.SetText "None"
 
-   'Deactivating this part because of #i95523#:
+   qaerrorlog "#i95523#"
    'Kontext
    'active.SetPage TabBenutzer
    'Kontext "TabBenutzer"
@@ -246,7 +246,7 @@ testcase tFileProperties
    if Thema.GetText <> "Documentproperties" then Warnlog "Description / Thema is wrong"
    if Schluesselworte.GetText <> "None" then Warnlog "Description / Keywords is wrong"
 
-   'Deactivating this part because of #i95523#:
+   qaerrorlog "#i95523#"
    'Kontext
    'active.SetPage TabBenutzer
    'Kontext "TabBenutzer"

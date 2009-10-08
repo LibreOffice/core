@@ -42,32 +42,34 @@ sub main
     StartTime = Now()
 
     use "writer\tools\includes\w_tools.inc"
-	use "writer\optional\includes\formatcharacter\w_format_character1.inc"
+    use "writer\optional\includes\formatcharacter\w_format_character1.inc"
 
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartTime )
     printlog Chr(13) + "******* Writer - Level 1 - Test *******"
 
     Call hStatusIn ( "writer", "w_formatcharacter.bas","Formatting of characters" )
 
-    Call tFormatCharacter
-    Call tFormatStyles1	'-> Format/Styles with contect menu
-    Call tFormatCharacter1	'-> Format/Pair Kerning
-    Call tFormatCharacter2	'-> Format/Default
-    Call tFormatCharacter3	'-> Format/Character
-    Call tFormatHyperlink	'-> Autocorrection of hyperlinks
+        Call tFormatCharacter
+        Call tFormatStyles1                        '-> Format/Styles with contect menu
+        Call tFormatCharacter1                '-> Format/Pair Kerning
+        Call tFormatCharacter2                '-> Format/Default
+        Call tFormatCharacter3                '-> Format/Character
+        Call tFormatCharacterOverline1    '-> Format/Overline
+        Call tFormatCharacterOverline2    '-> Format/Overline (with save)
+        Call tFormatHyperlink                    '-> Autocorrection of hyperlinks
 
     Call hStatusOut
 
     Printlog Chr(13) + "End of Test :"
     Printlog "Duration: "+ WieLange ( StartTime )
     Printlog "Date: " +  Date + "    Time: " + Time
-
 end sub
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_extension_manager_tools.inc"
+    use "global\tools\includes\optional\t_ui_filters.inc"
     Call GetUseFiles
     gApplication = "Writer"
 end sub

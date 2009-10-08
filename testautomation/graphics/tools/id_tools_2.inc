@@ -119,7 +119,7 @@ sub sFileExport
       end if
     catch
       Warnlog "An error at creating the export-dir, the test ends!"
-      exit sub
+      goto endsub
     endcatch
     
     '///+ open the test document qatesttool/graphics/required/input/graphicexport.od ? ] ///'
@@ -284,12 +284,12 @@ sub tClipboardFromDrawTest
     
     if gApplication = "WRITER" then
        call writertest
-       exit sub
+       goto endsub
     end if
     
     if gApplication = "CALC" then
        call calctest
-       exit sub
+       goto endsub
     end if
 end sub
 
@@ -769,7 +769,6 @@ sub id_002
     call tiEditCutPasteCopySelectall
     call tiEditPasteSpecial
     call tiEditSearchAndReplace
-    call tiEditNavigator
     call tiEditDuplicate
     call tEditPoints
     call tiEditFields
@@ -787,6 +786,7 @@ sub id_003
 
    printLog Chr(13) + "---------    id_003    ----------"
 
+   call tiViewNavigator
    call tiViewZoom
    call tiViewToolbar
    Call tToolsCustomize			     'global\required\include

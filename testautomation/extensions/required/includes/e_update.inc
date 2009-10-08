@@ -47,7 +47,10 @@ testcase tExtensionManagerResources()
     
     dim bUserIsAdmin as boolean  : bUserIsAdmin = hCheckForAdministratorPermissions()
     dim iBreakCounter as integer : iBreakCounter = 0
+    dim iFilterItems as integer 
+    
     const MAX_ITERATIONS = 50
+    const FILTER_ITEMS = 9    ' This is the number of filters/extension types we know
 
     printlog( "Ressource test for the Extension Manager UI" )
     ToolsPackageManager
@@ -74,6 +77,14 @@ testcase tExtensionManagerResources()
 
         kontext "OeffnenDlg"
         if ( OeffnenDlg.exists( 1 ) ) then
+            iFilterItems = DateiTyp.getItemCount
+            if ( iFilterItems <> FILTER_ITEMS ) then
+                warnlog( "The file type filter list is incorrect" )
+                printlog( "Expected: " & FILTER_ITEMS )
+                printlog( "Found...: " & iFilterItems )
+            else
+                printlog( "The number of filters in Add Extensions Dialog is ok" )
+            endif
             Oeffnendlg.cancel()
         else
             warnlog( "File Open dialog did not open" )
@@ -95,19 +106,24 @@ testcase tExtensionManagerResources()
         kontext "PackageManager"
         printlog( "Controls belonging to extensions" )
         
+        BrowsePackages.select( 1 )
         printlog( "Extension name.......: " & BrowsePackages.getItemText( 1 , 1 ) )
         printlog( "Extension version....: " & BrowsePackages.getItemText( 1 , 2 ) )
         printlog( "Extension description: " & BrowsePackages.getItemText( 1 , 3 ) )
         
-        if ( options.isEnabled() ) then
-            printlog( "Extension has options" )
-            options.click()
-            
-            kontext "OptionenDlg"
-            OptionenDLg.close()
-            WaitSlot()
+        if ( options.exists() ) then
+            if ( options.isEnabled() ) then
+                printlog( "Extension has options" )
+                options.click()
+                
+                kontext "OptionenDlg"
+                OptionenDLg.close()
+                WaitSlot()
+            else
+                warnlog( "Extension Options button visible but disabled" )
+            endif
         else
-            printlog( "Extension has no options" )
+            printlog( "Extension Options button does not exist, no options available" )
         endif
         
         if ( bUserIsAdmin ) then
@@ -118,6 +134,7 @@ testcase tExtensionManagerResources()
             ' these extensions.
         
             kontext "PackageManager"
+            BrowsePackages.select( 1 )
             if ( disable.exists() ) then
                 if ( disable.isEnabled() ) then
                 
@@ -136,6 +153,7 @@ testcase tExtensionManagerResources()
                     ' a few seconds to complete the "disable" action. We need to
                     ' wait for that.
                     kontext "PackageManager"
+                    BrowsePackages.select( 1 )
                     iBreakCounter = 0
                     do while( not enable.exists() ) 
                         iBreakCounter = iBreakCounter + 1

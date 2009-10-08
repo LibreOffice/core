@@ -782,7 +782,7 @@ sub Choose_Toapplication
                            gApplication = "WRITER"
                            printlog "to app: " + gApplication
                            ToApp = "WRITER"
-            case else  :   exit sub
+            case else  :   goto endsub
        End select
     next ToAppCounter
     '/// Open second application ///'

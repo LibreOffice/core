@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -29,175 +29,175 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
 '* Owner : thorsten.bosbach@sun.com
 '*
 '* short description : wrappers for accessing menues (context-, bar-, button- menues)
 '*
-'***********************************************************************************
-' #1 hMenuItemGetCount
-' #1 hMenuSelectNr
-' #1 hMenuItemCheck
-' #1 hMenuItemUnCheck
-' #1 hMenuFindSelect
-' #1 hMenuItemIsChecked
-' #1 hMenuItemIsEnabled
-' #1 hMenuItemGetText
-' #1 hMenuItemGetTextMitTilde
-' #1 hMenuGetTextList
-' #1 hMenuGetTextListMitTilden
-' #1 hMenuGetListOhneTilde
-' #1 hMenuGetTildenList
-' #1 hhEntferneTilde
-' #1 hMenuGetItemCommand
-' #1 hWindowGetCount
-' #1 hWindowGetIndex
-' #1 hWindowGetText
-' #1 hWindowSelect
-' #1 hUseMenu
-' #1 hMenuClose
-' #1 hOeffneNeuImMenue
-' #1 hOeffneEinstellungenImMenue
-' #1 hOeffneImMenue
-' #1 hGetWindowCaption
-' #1 fSplitWindowTitle
-' #1 hMenuGetItemID
-' #1 hOpenContextMenu
-'\*****************************************************************
+'\******************************************************************************
 
 function hMenuItemGetCount as Integer
-'/// OUTPUT: number of entries in the activated menu (without seperators) ///'
-'///+ menu left open ///'
- Dim i, j, Ende, nID as Integer
-   Sleep 2
 
-   j=0
-   for i=1 to MenuGetItemCount
-      if NOT MenuIsSeperator ( i ) then j=j+1
-   next i
-   hMenuItemGetCount = j
+    '/// OUTPUT: number of entries in the activated menu (without seperators) ///'
+    '///+ menu left open ///'
+    dim iCurrentMenuItem as integer
+    dim iValidMenuItems as integer
+
+    sleep( 2 )
+
+    iValidMenuItems = 0
+    for iCurrentMenuItem = 1 to MenuGetItemCount
+        if ( NOT MenuIsSeperator ( iCurrentMenuItem ) ) then
+            iValidMenuItems = iValidMenuItems + 1
+        endif
+    next iCurrentMenuItem
+    hMenuItemGetCount = iValidMenuItems
+
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hMenuSelectNr ( EintragsNr as Integer ) as String
-'/// Selects the given nr. of <b>enabled</b> menu entry.
-'/// <u>Note</u>: If there are disabled menu items are included the routine ignores them!
-'///INPUT : number of entry from the top (>=1) OR
-'///INPUT : number of entry from the bottom (<=-1)
-'///INPUT : 0 to close menu
-'///+ OUTPUT: text of the entry
- Dim i, j, RealEnd, Ende as Integer
- Dim nID as long
-   Sleep 2
 
-   Ende = EintragsNr
-   RealEnd = MenuGetItemCount
-   If (Ende > 0) then
-       if Ende > RealEnd then
-          Warnlog "hMenuSelectNr canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-          hMenuClose
-          exit function
-       end if
-       j=0
-       for i=1 to Ende
-          if MenuIsSeperator ( i+j ) then j = j+1
-       next i
-   else
-       if ((RealEnd + Ende) < 0) then
-          Warnlog "hMenuSelectNr canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-          hMenuClose
-          exit function
-       end if
-       j=1
-       for i=-1 to Ende step -1
-          if MenuIsSeperator (RealEnd +i+j) then dec(j)
-       next i
-       j = j + RealEnd
-   endif
-   if EintragsNr = 0 then
+    '/// Selects the given nr. of <b>enabled</b> menu entry.
+    '/// <u>Note</u>: If there are disabled menu items are included the routine ignores them!
+    '///INPUT : number of entry from the top (>=1) OR
+    '///INPUT : number of entry from the bottom (<=-1)
+    '///INPUT : 0 to close menu
+    '///+ OUTPUT: text of the entry
+    
+    Dim i, j, RealEnd, Ende as Integer
+    Dim nID as long
+    
+    sleep( 2 )
+
+    Ende = EintragsNr
+    RealEnd = MenuGetItemCount
+    If (Ende > 0) then
+        if Ende > RealEnd then
+            Warnlog "hMenuSelectNr canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
+            hMenuClose
+            exit function
+        endif
+        j=0
+        for i=1 to Ende
+            if MenuIsSeperator ( i+j ) then
+                j = j+1
+            endif
+        next i
+    else
+        if ((RealEnd + Ende) < 0) then
+            Warnlog "hMenuSelectNr canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
+            hMenuClose
+            exit function
+        endif
+        j=1
+        for i=-1 to Ende step -1
+            if MenuIsSeperator (RealEnd +i+j) then
+                j = j -1
+            endif
+        next i
+        j = j + RealEnd
+    endif
+    if EintragsNr = 0 then
         hMenuClose
         exit function
-   endif
-   nID = MenuGetItemID ( EintragsNr+j )
-   hMenuSelectNr = MenuGetItemText ( nID )
-   MenuSelect ( nID )
+    endif
+    nID = MenuGetItemID ( EintragsNr+j )
+    hMenuSelectNr = MenuGetItemText ( nID )
+    MenuSelect ( nID )
+
 end function
+
+'*******************************************************************************
 
 function hMenuItemCheck ( EintragsNr as Integer ) as String
-'/// check the menu item (if it is checked, it stays checked) ///'
-'///+ INPUT : number of entry from the top (>=1)///'
-'///+ OUTPUT: text of the entry ///'
- Dim i as Integer, j as Integer, RealEnd as Integer, Ende as Integer, nID as Integer
 
-   Ende = EintragsNr
-   RealEnd = hMenuItemGetCount
-   if Ende > RealEnd then
-      Warnlog "hMenuItemCheck canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-      hMenuClose
-      exit function
-   end if
-   j=0
-   for i=1 to Ende
-      if MenuIsSeperator ( i+j ) then j = j+1
-   next i
-   nID = MenuGetItemID ( EintragsNr+j )
-   hMenuItemCheck = MenuGetItemText ( nID )
-   if NOT MenuIsItemChecked ( nID ) then
-      MenuSelect ( nID )
-   else
-      hMenuClose
-   end if
+    '/// check the menu item (if it is checked, it stays checked) ///'
+    '///+ INPUT : number of entry from the top (>=1)///'
+    '///+ OUTPUT: text of the entry ///'
+    Dim i as Integer, j as Integer, RealEnd as Integer, Ende as Integer, nID as Integer
+
+    Ende = EintragsNr
+    RealEnd = hMenuItemGetCount
+        
+    if Ende > RealEnd then
+        Warnlog "hMenuItemCheck canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
+        hMenuClose
+        exit function
+    endif
+    j=0
+    for i=1 to Ende
+        if MenuIsSeperator ( i+j ) then
+            j = j+1
+        endif
+    next i
+    nID = MenuGetItemID ( EintragsNr+j )
+    hMenuItemCheck = MenuGetItemText ( nID )
+    if NOT MenuIsItemChecked ( nID ) then
+        MenuSelect ( nID )
+    else
+        hMenuClose()
+    endif
+
 end function
+
+'*******************************************************************************
 
 function hMenuItemUnCheck ( EintragsNr as Integer ) as String
-'/// UNcheck the menu item (if it is UNchecked, it stays UNchecked) ///'
-'///+ INPUT : number of entry from the top (>=1)///'
-'///+ OUTPUT: text of the entry ///'
- Dim i, j, RealEnd, Ende, nID as Integer
 
-   Ende = EintragsNr
-   RealEnd = hMenuItemGetCount
-   if Ende > RealEnd then
-      Warnlog "hMenuItemUnCheck canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-      hMenuClose
-      exit function
-   end if
-   j=0
-   for i=1 to Ende
-      if MenuIsSeperator ( i+j ) then j = j+1
-   next i
-   nID = MenuGetItemID ( EintragsNr+j )
-   hMenuItemUnCheck = MenuGetItemText ( nID )
-   if MenuIsItemChecked ( nID ) then
-      MenuSelect ( nID )
-   else
-      hMenuClose
-   end if
+    '/// UNcheck the menu item (if it is UNchecked, it stays UNchecked) ///'
+    '///+ INPUT : number of entry from the top (>=1)///'
+    '///+ OUTPUT: text of the entry ///'
+    Dim i, j, RealEnd, Ende, nID as Integer
+
+    Ende = EintragsNr
+    RealEnd = hMenuItemGetCount
+    if Ende > RealEnd then
+        Warnlog "hMenuItemUnCheck canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
+        hMenuClose
+        exit function
+    endif
+    j=0
+    for i=1 to Ende
+        if MenuIsSeperator ( i+j ) then
+            j = j+1
+        endif
+    next i
+    nID = MenuGetItemID ( EintragsNr+j )
+    hMenuItemUnCheck = MenuGetItemText ( nID )
+    if MenuIsItemChecked ( nID ) then
+        MenuSelect ( nID )
+    else
+        hMenuClose()
+    endif
+
 end function
 
-'----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+'*******************************************************************************
 
 function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as integer, optional VerboseWrongPosition as Boolean) as Boolean
-'/// Find specified MenuID in Menu, check if its found on the expected place, ///'
-'/// if not - report the correct slot, and if specified to do so - Select the correct slot. ///'
-'///+ INPUT: MenuID: the string-name of the menu-entry we are lookin for. ///'
-'///+ INPUT: TRUE, if the slot should be called, ///'
-'///+            FALSE, if the slot shouldn't be called. ///'
-'///+ INPUT: Optional: TRUE, if errors should be reported. ///'
-'///+                           FALSE, silent mode for errors. ///'
-'///+ INPUT: Optional: The Expected Number of entry from the top (>=1) ///'
-'///+ OUTPUT: If not found at the expected place - the correct Entry-number is reported ///'
- Dim i as Integer
- Dim RealId as Integer
- Dim RealPosition as Integer
- Dim MenuIDAsNumber as integer
- Dim MenuIDAsString as string
- Dim RealEnd as Integer
- Dim nID as string
- Dim found as string
- Dim StringType as Boolean
+
+    '/// Find specified MenuID in Menu, check if its found on the expected place, ///'
+    '/// if not - report the correct slot, and if specified to do so - Select the correct slot. ///'
+    '///+ INPUT: MenuID: the string-name of the menu-entry we are lookin for. ///'
+    '///+ INPUT: TRUE, if the slot should be called, ///'
+    '///+            FALSE, if the slot shouldn't be called. ///'
+    '///+ INPUT: Optional: TRUE, if errors should be reported. ///'
+    '///+                           FALSE, silent mode for errors. ///'
+    '///+ INPUT: Optional: The Expected Number of entry from the top (>=1) ///'
+    '///+ OUTPUT: If not found at the expected place - the correct Entry-number is reported ///'
+
+    Dim i as Integer
+    Dim RealId as Integer
+    Dim RealPosition as Integer
+    Dim MenuIDAsNumber as integer
+    Dim MenuIDAsString as string
+    Dim RealEnd as Integer
+    Dim nID as string
+    Dim found as string
+    Dim StringType as Boolean
 
     '/// find out if we are going to search for an ID, or a string (.uno:) ///'
     if IsNumeric(MenuID) then
@@ -206,12 +206,12 @@ function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as
     else
         MenuIDAsString = MenuID
         StringType = TRUE
-    end if
+    endif
 
     RealEnd = MenuGetItemCount
     if ExpectedNr > RealEnd then
         Warnlog "Entry number "+ ExpectedNr +" is higher than the number of entries (" + RealEnd + ") in this menu! "
-    end if
+    endif
 
     if StringType = FALSE then  'Search for the number.
 
@@ -219,7 +219,7 @@ function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as
         if nID <> MenuID then
             if VerboseWrongPosition = TRUE then
                 warnlog " the questioned ID (" + MenuID + ") were not found on position " + ExpectedNr
-            end if
+            endif
             Found = FALSE
             for i=1 to RealEnd
                 nID = MenuGetItemID (i)
@@ -230,15 +230,15 @@ function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as
                     RealPosition = i
                     if VerboseWrongPosition = TRUE then
                         warnlog "The real Position (Separators included) was: " + i
-                    end if
+                    endif
                     i = RealEnd
-                end if
+                endif
             next i
         else
             Found = TRUE
             RealPosition = ExpectedNr
             RealId = MenuGetItemID (ExpectedNr)
-        end if
+        endif
 
         if Found = TRUE then
             if SelectSlot then
@@ -248,588 +248,458 @@ function hMenuFindSelect(MenuID as variant, SelectSlot as Boolean, ExpectedNr as
                 printlog "the slot was found, but the tester had choosen NOT to open the slot"
                 hMenuFindSelect = TRUE
                 hMenuClose
-            end if
+            endif
         else
             if VerboseWrongPosition = TRUE then
                 warnlog "The slot was NOT found. Has either been removed, or it's a bug."
-            end if
+            endif
             hMenuFindSelect = FALSE
             hMenuClose
-       end if
+        endif
 
-   else 'StringType = TRUE   :   Seach for the .uno; -name.
-       nID = lCase(MenuGetItemCommand (MenuGetItemID (ExpectedNr)))
+    else 'StringType = TRUE   :   Seach for the .uno; -name.
+        nID = lCase(MenuGetItemCommand (MenuGetItemID (ExpectedNr)))
 
-       if nID <> lCase(MenuID) then
-           if VerboseWrongPosition = TRUE then
-               warnlog " the questioned ID (" + MenuID + ") were not found on position " + ExpectedNr
-           end if
-           Found = FALSE
-           for i=1 to RealEnd
-               nID = MenuGetItemCommand (MenuGetItemID (i))
-               printlog "For the position '" + i + "', the ItemCommand was: " + nID + " and the ID was: " + MenuGetItemID (i) + "."
-               if nID = MenuID then
-                   Found = TRUE
-                   RealID = MenuGetItemID (i)
-                   RealPosition = i
-                   if VerboseWrongPosition = TRUE then
-                       warnlog "The real Position (Separators included) was: " + i
-                   end if
-                   i = RealEnd
-               end if
-           next i
-       else
-           Found = TRUE
-           RealPosition = ExpectedNr
-           RealId = MenuGetItemID (ExpectedNr)
-       end if
-       if Found = TRUE then
-           if SelectSlot then
-               MenuSelect (RealID)
-               hMenuFindSelect = TRUE
-           else
-               printlog "the slot was found, but the tester had choosen NOT to open the slot"
-               hMenuFindSelect = TRUE
-               hMenuClose
-           end if
-       else
-           if VerboseWrongPosition = TRUE then
-               warnlog "The slot was NOT found. Has either been removed, or it's a bug."
-           end if
-           hMenuFindSelect = FALSE
-           hMenuClose
-       end if
-   end if 'StringType = TRUE
-   wait 200   'Wait 0,2 seconds in case we just have called a Submenu.
+        if nID <> lCase(MenuID) then
+            if VerboseWrongPosition = TRUE then
+                warnlog " the questioned ID (" + MenuID + ") were not found on position " + ExpectedNr
+            endif
+            Found = FALSE
+            for i=1 to RealEnd
+                nID = MenuGetItemCommand (MenuGetItemID (i))
+                printlog "For the position '" + i + "', the ItemCommand was: " + nID + " and the ID was: " + MenuGetItemID (i) + "."
+                if nID = MenuID then
+                    Found = TRUE
+                    RealID = MenuGetItemID (i)
+                    RealPosition = i
+                    if VerboseWrongPosition = TRUE then
+                        warnlog "The real Position (Separators included) was: " + i
+                    endif
+                    i = RealEnd
+                endif
+            next i
+        else
+            Found = TRUE
+            RealPosition = ExpectedNr
+            RealId = MenuGetItemID (ExpectedNr)
+        endif
+        if Found = TRUE then
+            if SelectSlot then
+                MenuSelect (RealID)
+                hMenuFindSelect = TRUE
+            else
+                printlog "the slot was found, but the tester had choosen NOT to open the slot"
+                hMenuFindSelect = TRUE
+                hMenuClose()
+            endif
+        else
+            if VerboseWrongPosition = TRUE then
+                warnlog "The slot was NOT found. Has either been removed, or it's a bug."
+            endif
+            hMenuFindSelect = FALSE
+            hMenuClose()
+        endif
+    endif 'StringType = TRUE
+    wait 500   'Wait 0,5 seconds in case we just have called a Submenu.
+
 end function
 
-'----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+'*******************************************************************************
 
 function hMenuItemIsChecked ( EintragsNr as Integer ) as Boolean
-'/// is the the menu item checked ? ///'
-'///+ INPUT : number of entry from the top (>=1)///'
-'///+ OUTPUT: True = yes!, False = no! ///'
- Dim i, j, Ende, RealEnd, nID as Integer
 
-   Ende = EintragsNr
-   RealEnd = hMenuItemGetCount
-   if Ende > RealEnd then
-      Warnlog "hMenuItemIsChecked canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-      hMenuClose
-      exit function
-   end if
-   j=0
-   for i=1 to Ende
-      if MenuIsSeperator ( i+j ) then j = j+1
-   next i
-   nID = MenuGetItemID ( EintragsNr + j )
-   hMenuItemIsChecked = MenuIsItemChecked ( nID )
+    '/// is the the menu item checked ? ///'
+    '///+ INPUT : number of entry from the top (>=1)///'
+    '///+ OUTPUT: True = yes!, False = no! ///'
+
+    Dim i, j, Ende, RealEnd, nID as Integer
+
+    Ende = EintragsNr
+    RealEnd = hMenuItemGetCount
+    if Ende > RealEnd then
+        Warnlog "hMenuItemIsChecked canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
+        hMenuClose
+        exit function
+    endif
+    j=0
+    for i=1 to Ende
+        if MenuIsSeperator ( i+j ) then 
+            j = j+1
+        endif
+    next i
+    nID = MenuGetItemID ( EintragsNr + j )
+    hMenuItemIsChecked = MenuIsItemChecked ( nID )
+
 end function
+
+'*******************************************************************************
 
 function hMenuItemIsEnabled ( EintragsNr as Integer ) as Boolean
-'/// is the the menu item enabled (not greyed out) ? ///'
-'///+ INPUT : number of entry from the top (>=1)///'
-'///+ OUTPUT: True = yes!, False = no! ///'
-'///+ menu left open ///'
- Dim i, j, Ende, RealEnd, nID as Integer
 
-   Ende = EintragsNr
-   RealEnd = MenuGetItemCount
-   if Ende > RealEnd then
-      Warnlog "hMenuItemIsEnabled canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-      hMenuClose
-      exit function
-   end if
-   j=0
-   for i=1 to Ende
-      if MenuIsSeperator ( i+j ) then j = j+1
-   next i
-   nID = MenuGetItemID ( EintragsNr + j )
-   hMenuItemIsEnabled = MenuIsItemEnabled ( nID )
+    '/// is the the menu item enabled (not greyed out) ? ///'
+    '///+ INPUT : number of entry from the top (>=1)///'
+    '///+ OUTPUT: True = yes!, False = no! ///'
+    '///+ menu left open ///'
+
+    Dim i, j, Ende, RealEnd, nID as Integer
+
+    Ende = EintragsNr
+    RealEnd = MenuGetItemCount
+    if Ende > RealEnd then
+        Warnlog "hMenuItemIsEnabled canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
+        hMenuClose
+        exit function
+    endif
+    j=0
+    for i=1 to Ende
+        if MenuIsSeperator ( i+j ) then
+            j = j+1
+        endif
+    next i
+    nID = MenuGetItemID ( EintragsNr + j )
+    hMenuItemIsEnabled = MenuIsItemEnabled ( nID )
+
 end function
+
+'*******************************************************************************
 
 function hMenuItemGetText ( EintragsNr as Integer ) as String
-'///+ INPUT : number of entry from the top (>=1)///'
-'///+ OUTPUT: text of item without tilde ///'
-'///+ menu left open ///'
- Dim i, j, RealEnd, Ende, nID as Integer
 
-   Ende = EintragsNr
-   RealEnd = MenuGetItemCount
-   if Ende > RealEnd then
-      Warnlog "hMenuItemGetText canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-      hMenuClose
-      exit function
-   end if
-   j=0
-   for i=1 to Ende
-      if MenuIsSeperator ( i+j ) then j = j+1
-   next i
-   nID = MenuGetItemID ( EintragsNr + j )
-   hMenuItemGetText = hhEntferneTilde ( MenuGetItemText ( nID ) )
+    '///+ INPUT : number of entry from the top (>=1)///'
+    '///+ OUTPUT: text of item without tilde ///'
+    '///+ menu left open ///'
+
+    Dim i, j, RealEnd, Ende, nID as Integer
+
+    Ende = EintragsNr
+    RealEnd = MenuGetItemCount
+    if Ende > RealEnd then
+        Warnlog "hMenuItemGetText canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
+        hMenuClose
+        exit function
+    endif
+    j=0
+    for i=1 to Ende
+        if MenuIsSeperator ( i+j ) then
+            j = j+1
+        endif
+    next i
+    nID = MenuGetItemID ( EintragsNr + j )
+    hMenuItemGetText = hhEntferneTilde ( MenuGetItemText ( nID ) )
+
 end function
 
-function hMenuItemGetTextMitTilde ( EintragsNr as Integer ) as String
-'/// INPUT : number of entry from the top (>=1)///'
-'///+ OUTPUT: text of item with tilde (which indicates the shortcurt of the entry)///'
-'///+ menu left open ///'
- Dim i, j, RealEnd, Ende, nID as Integer
-
-   Ende = EintragsNr
-   RealEnd = MenuGetItemCount
-   if Ende > RealEnd then
-      Warnlog "hMenuItemGetTextMitTilde canceled: Entry number "+ Ende +" does not exists, because there are only " + RealEnd + "  entries! "
-      hMenuClose
-      exit function
-   end if
-   j=0
-   for i=1 to Ende
-      if MenuIsSeperator ( i+j ) then j = j+1
-   next i
-   nID = MenuGetItemID ( EintragsNr + j )
-   hMenuItemGetTextMitTilde = MenuGetItemText ( nID )
-end function
-
-function hMenuGetTextList ( lsEintragsliste() as String ) as Integer
-'/// INPUT : a 'list-variable' aka string array; ///'
-'///+ OUTPUT: number of entries in the menue/list; the list-variable contains now the strings of the menu (withOUT tildes) ///'
-'///+ menu left open ///'
- Dim i, j, nID as Integer
- Dim Eintrag as String
-
-   lsEintragsListe(0) = 0
-   j=0
-   for i=1 to MenuGetItemCount
-      if NOT MenuIsSeperator ( i ) then
-         nID = MenuGetItemID ( i )
-         Eintrag = hhEntferneTilde ( MenuGetItemText ( nID ) )
-         ListAppend ( lsEintragsListe(), Eintrag )
-         j=j+1
-      end if
-   next i
-   hMenuGetTextList = j
-end function
-
-function hMenuGetTextListMitTilden ( lsEintragsliste() as String ) as Integer
-'/// INPUT : a 'list-variable' aka string array; ///'
-'///+ OUTPUT: number of entries in the menue/list; the list-variable contains now the strings of the menu (with tildes) ///'
-'///+ menu left open ///'
- Dim i, j, nID as Integer
- Dim Eintrag as String
-
-   lsEintragsListe(0) = 0
-   j=0
-   for i=1 to MenuGetItemCount
-      if NOT MenuIsSeperator ( i ) then
-         nID = MenuGetItemID ( i )
-         Eintrag = MenuGetItemText ( nID )
-         ListAppend ( lsEintragsListe(), Eintrag )
-         j=j+1
-      end if
-   next i
-   hMenuGetTextListMitTilden = j
-end function
-
-function hMenuGetListOhneTilde ( lsEintragsliste() as String ) as Integer
-'/// put the entries of the menues in a list that don't have a tilde -> BUG ///'
-'///+ INPUT : a 'list-variable' aka string array; ///'
-'///+ OUTPUT: number of entries without a tilde; the list-variable contains now the strings of the menu without tildes ///'
-'///+ menu left open ///'
- Dim i, j, nID as Integer
- Dim Eintrag as String
-
-   lsEintragsListe(0) = 0
-   j=0
-   for i=1 to MenuGetItemCount
-      if NOT MenuIsSeperator ( i ) then
-         nID = MenuGetItemID ( i )
-         Eintrag = MenuGetItemText ( nID )
-         if Eintrag = ( hhEntferneTilde ( Eintrag ) ) then
-            ListAppend ( lsEintragsListe(), Eintrag )
-            j=j+1
-         end if
-      end if
-   next i
-   hMenuGetListOhneTilde = j
-end function
-
-function hMenuGetTildenList ( lsEintragsliste() as String ) as Integer
-'/// put the entries of the menues in a list that HAVE a tilde ///'
-'///+ INPUT : a 'list-variable' aka string array; ///'
-'///+ OUTPUT: number of entries a tilde; the list-variable contains now the strings of the menu with tildes ///'
-'///+ menu left open ///'
- Dim i, j, nID, Stelle as Integer
- Dim Eintrag as String
-
-   lsEintragsListe(0) = 0
-   j=0
-   for i=1 to MenuGetItemCount
-      if NOT MenuIsSeperator ( i ) then
-         nID = MenuGetItemID ( i )
-         Eintrag = MenuGetItemText ( nID ) + " - "
-         Stelle = Instr ( 1, Eintrag, "~", 1 )
-         if Stelle <> 0 then
-            Eintrag = Eintrag + Mid ( Eintrag, Stelle, 2 )
-         end if
-         ListAppend ( lsEintragsListe(), Eintrag )
-         j=j+1
-      end if
-   next i
-   hMenuGetTildenList = j
-end function
-
+'*******************************************************************************
 
 sub hMenuClose
-'/// close menue ///'
-'///+ after a hMenuClose you have to execute Kontext.UseMenu again
-'///+ if you want to open any other menu.
+
+    '/// close menue ///'
+    '///+ after a hMenuClose you have to execute Kontext.UseMenu again
+    '///+ if you want to open any other menu.
     MenuSelect ( 0 )
+
 end sub
 
-' ***************************************************************************
-' ************                subroutines                *****************
-' ***************************************************************************
+'*******************************************************************************
 
 function hhEntferneTilde ( sEintrag as String ) as String
-'///+ INPUT : string with tilde ///'
-'///+ OUTPUT: string without tilde ///'
- Dim i
-   i = Instr ( 1, sEintrag, "~", 1 )
-   if i <> 0 then
-      hhEntferneTilde = Left ( sEintrag, i-1 ) + Right ( sEintrag, ( Len(sEintrag) - i ) )
-   else
-      hhEntferneTilde = sEintrag
-   end if
+
+    '///+ INPUT : string with tilde ///'
+    '///+ OUTPUT: string without tilde ///'
+
+    Dim i
+    i = Instr ( 1, sEintrag, "~", 1 )
+    if i <> 0 then
+        hhEntferneTilde = Left ( sEintrag, i-1 ) + Right ( sEintrag, ( Len(sEintrag) - i ) )
+    else
+        hhEntferneTilde = sEintrag
+    endif
+
 end function
 
-sub hOeffneNeuImMenue
-'/// open the entry 'new' in all languages in a menu ///'
-'///+ menue has to be opened before! ///'
- Dim SpracheNeu as string
- Dim Treffer as string
- Dim y, GrossesEnde, openID as integer
-
-   select case iSprache
-      case 01   : SpracheNeu = "New"
-      case 03   : SpracheNeu = "Novo"
-      case 31   : SpracheNeu = "Nieuw"
-      case 33   : SpracheNeu = "Nouveau"
-      case 34   : SpracheNeu = "Nuevo"
-      case 39   : SpracheNeu = "Nuovo"
-      case 46   : SpracheNeu = "Nytt"
-      case 49   : SpracheNeu = "Neu"
-      case else : warnlog "Sprache nicht aufgenommen in hOeffneImMenue!!!!"
-   end select
-   GrossesEnde = MenuGetItemCount
-
-   for y=1 to GrossesEnde-1
-      Treffer = hMenuItemGetText ( y )
-        if InStr ( Treffer , SpracheNeu ) > 0 then
-          Exit For
-        end if
-   next y
-   hMenuSelectNr ( y )
-end sub
-
-sub hOeffneEinstellungenImMenue
-'/// open the entry 'Properties' in all languages in a menu ///'
-'///+ menue has to be opened before! ///'
-   Dim SpracheEinstellungen as string
-   Dim Treffer as string
-   Dim y, GrossesEnde, openID as integer
-
-   select case iSprache
-
-      case 01   : SpracheEinstellungen = "Properties"
-      case 03   : SpracheEinstellungen = "Eigenschaften"
-      case 31   : SpracheEinstellungen = "Eigenschappen"
-      case 33   : SpracheEinstellungen = "Prop"
-      case 34   : SpracheEinstellungen = "Eigenschaften"
-      case 39   : SpracheEinstellungen = "Propriet"
-      case 46   : SpracheEinstellungen = "Egenskaper"
-      case 49   : SpracheEinstellungen = "Eigenschaften"
-      case else : warnlog "Sprache nicht aufgenommen in hOeffneEinstellungenImMenue!!!!"
-
-   end select
-   GrossesEnde = MenuGetItemCount
-
-   for y=1 to GrossesEnde-1
-      Treffer = hMenuItemGetText ( y )
-        if InStr ( Treffer , SpracheEinstellungen ) > 0 then
-          Exit For
-        end if
-   next y
-   hMenuSelectNr ( y )
-end sub
-
-sub hOeffneImMenue ( OeffneDas$ )
-'/// open an entry in in a menu ///'
-'///+ INPUT: string of emntry to open ///'
-'///+ menue has to be opened before! ///'
-Dim Treffer as string
-   Dim y, GrossesEnde, openID as integer
-   GrossesEnde = MenuGetItemCount
-
-   for y=1 to GrossesEnde-1
-      Treffer = hMenuItemGetText ( y )
-        if InStr ( Treffer , OeffneDas$ ) > 0 then
-          Exit For
-        end if
-   next y
-   hMenuSelectNr ( y )
-   sleep(2)
-end sub
-
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hMenuGetItemCommand ( EintragsNr as Integer ) as String
-'/// <u>hMenuGetItemCommand(Nr)</u> ///
-'///+ To read the slot/UNO slot which is behind a menu item. ///
-'///+ Seperators will be ignored for the input INTEGER!
-   Dim i as integer
-   Dim j as integer
-   Dim RealEnd as integer
-   Dim DasEnde as integer
-   Dim nID as Integer
-   DasEnde = EintragsNr
-   RealEnd = MenuGetItemCount
-   if DasEnde > RealEnd then
-      warnlog "Parameter (" & DasEnde & ") bigger than items in menu (" & RealEnd & ") , 'hMenuGetItemCommand' canceled."
-     else
-      j=0
-      for i=1 to DasEnde
-       if MenuIsSeperator ( i+j ) then
-        j = j+1
-       end if
-      next i
-      nID = MenuGetItemID ( EintragsNr+j )
-      hMenuGetItemCommand = MenuGetItemCommand ( nID )
-   end if
+
+    '/// <u>hMenuGetItemCommand(Nr)</u> ///
+    '///+ To read the slot/UNO slot which is behind a menu item. ///
+    '///+ Seperators will be ignored for the input INTEGER!
+
+    Dim i as integer
+    Dim j as integer
+    Dim RealEnd as integer
+    Dim DasEnde as integer
+    Dim nID as Integer
+    DasEnde = EintragsNr
+    RealEnd = MenuGetItemCount
+    if DasEnde > RealEnd then
+        warnlog "Parameter (" & DasEnde & ") bigger than items in menu (" & RealEnd & ") , 'hMenuGetItemCommand' canceled."
+    else
+        j=0
+        for i=1 to DasEnde
+            if MenuIsSeperator ( i+j ) then
+                j = j+1
+            endif
+        next i
+        nID = MenuGetItemID ( EintragsNr+j )
+        hMenuGetItemCommand = MenuGetItemCommand ( nID )
+    endif
+
 end function
+
+'*******************************************************************************
 
 function hMenuGetItemId ( EintragsNr as Integer ) as integer
-'///+ To read the Slot ID which is behind a menu item. ///
-'///+ Seperators will be ignored for the input INTEGER!
-   Dim i as integer
-   Dim j as integer
-   Dim RealEnd as integer
-   Dim DasEnde as integer
-   DasEnde = EintragsNr
-   RealEnd = MenuGetItemCount
-   if DasEnde > RealEnd then
-      warnlog "Parameter (" & DasEnde & ") bigger than items in menu (" & RealEnd & ") , 'hMenuGetItemId' canceled."
-     else
-      j=0
-      for i=1 to DasEnde
-       if MenuIsSeperator ( i+j ) then
-        j = j+1
-       end if
-      next i
-      hMenuGetItemId = MenuGetItemID ( EintragsNr+j )
-   end if
+
+    '///+ To read the Slot ID which is behind a menu item. ///
+    '///+ Seperators will be ignored for the input INTEGER!
+
+    Dim i as integer
+    Dim j as integer
+    Dim RealEnd as integer
+    Dim DasEnde as integer
+    DasEnde = EintragsNr
+    RealEnd = MenuGetItemCount
+    if DasEnde > RealEnd then
+        warnlog "Parameter (" & DasEnde & ") bigger than items in menu (" & RealEnd & ") , 'hMenuGetItemId' canceled."
+    else
+        j=0
+        for i=1 to DasEnde
+            if MenuIsSeperator ( i+j ) then
+                j = j+1
+            endif
+        next i
+        hMenuGetItemId = MenuGetItemID ( EintragsNr+j )
+    endif
+
 end function
 
-'-------------------------------------------------------------------------
-
+'*******************************************************************************
 
 '/// Functions for the lower part of the 'Window' Menu ///'
 '///+ philosophie: you can't do any actions on the first document -> it get's the number 0 and it doesn't count ///'
 '///+ so the first window you can work with gets the number 1 and counting starts with 1 ... ///'
-
 '///<b> function hUseMenu () </b>///'
 '///+ very global function: depends on 'gApplication' just activates the menu-bar ///'
-
-'///<b> function hWindowGetCount () as integer </b>///'
-'///+ returns the number of windows (all inclusive the first one!) ///'
-
 '///<b> function hWindowGetIndex () as integer </b>///'
 '///+ returns the number of the active window ///'
-
 '///<b> function hWindowGetText (optional iWindow as integer) as string </b>///'
 '///+ returns the text of the menu entry without the tilde: ///'
 '///+ w/ calling parameter: the active window ///'
 '///+ w/o calling parameter: the window i ///'
-
 '///<b> function hWindowSelect (iWindow as integer) </b>///'
 '///+ switches to the window i ///'
 '///+ calling parameter: id of the window to activate ///'
 
-'-------------------------------------------------------------------------
-
-function hWindowGetCount () as integer
-'///<b> function hWindowGetCount () as integer </b>///'
-'///+ returns the number of windows ///'
-
-   'uShort GetDocumentCount() ' testool command
-   hWindowGetCount = GetDocumentCount()
-end function
-
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hWindowGetIndex () as integer
-'///<b> function hWindowGetIndex () as integer </b>///'
-'///+ returns the number of the active window ///'
-   dim iMenues as integer      ' takes the number of entries in the windows menue
-   dim iNotWindows as integer  ' number of open windows
-   dim iKandidate as integer
-   dim i as integer
 
-   iNotWindows = hWindowGetCount ()
-   hUseMenu()
+    '///<b> function hWindowGetIndex () as integer </b>///'
+    '///+ returns the number of the active window ///'
+    
+    dim iMenues as integer      ' takes the number of entries in the windows menue
+    dim iNotWindows as integer  ' number of open windows
+    dim iKandidate as integer
+    dim i as integer
 
-   iMenues = hMenuItemGetCount
-   hMenuSelectNr(iMenues-1)    ' 'windows' ist usually the one before the last
-   wait 200
-   iKandidate = 0
-   iMenues = hMenuItemGetCount
-   for i = ((iMenues - iNotWindows) + 1) to iMenues
-      if (hMenuItemIsChecked (i)) then
-         if (iKandidate = 0) then
-            iKandidate = i
-         else
-            Warnlog "unexpected error 4711 - more than one window active??!! hWindowGetIndex () "
-         endif
-      endif
-   next i
-   iMenues = (iKandidate - (iMenues - iNotWindows) - 1)
-   hMenuClose
+    iNotWindows = GetDocumentCount()
+    hUseMenu()
 
-   hWindowGetIndex = iMenues
+    iMenues = hMenuItemGetCount
+    hMenuSelectNr(iMenues-1)    ' 'windows' ist usually the one before the last
+    waitslot() 'wait 200
+    iKandidate = 0
+    iMenues = hMenuItemGetCount
+    for i = ((iMenues - iNotWindows) + 1) to iMenues
+        if (hMenuItemIsChecked (i)) then
+            if (iKandidate = 0) then
+                iKandidate = i
+            else
+                Warnlog "unexpected error 4711 - more than one window active??!! hWindowGetIndex () "
+            endif
+        endif
+    next i
+    iMenues = (iKandidate - (iMenues - iNotWindows) - 1)
+    hMenuClose()
+
+    hWindowGetIndex = iMenues
+
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hWindowGetText (optional iWindow as integer) as string
-'///<b> function hWindowGetText (optional iWindow as integer) as string </b>///'
-'///+ returns the text of the menu entry without the tilde: ///'
-'///+ w/ calling parameter: the active window ///'
-'///+ w/o calling parameter: the window i ///'
-   dim iMenues as integer      ' takes the number of entries in the windows menue
-   dim iNotWindows as integer  ' number of open windows
-   dim iUseWindow
 
+    '///<b> function hWindowGetText (optional iWindow as integer) as string </b>///'
+    '///+ returns the text of the menu entry without the tilde: ///'
+    '///+ w/ calling parameter: the active window ///'
+    '///+ w/o calling parameter: the window i ///'
 
-   if (isMissing(iWindow) = FALSE) then
-      iUseWindow = iWindow
-   else
-      iUseWindow = hWindowGetIndex()
-   endif
+    dim iMenues as integer      ' takes the number of entries in the windows menue
+    dim iNotWindows as integer  ' number of open windows
+    dim iUseWindow
 
-   iNotWindows = hWindowGetCount ()
-   hUseMenu()
+    if (isMissing(iWindow) = FALSE) then
+        iUseWindow = iWindow
+    else
+        iUseWindow = hWindowGetIndex()
+    endif
 
-   iMenues = hMenuItemGetCount
-   hMenuSelectNr(iMenues-1)    ' 'windows' ist usually the one before the last
-   wait 200
-   iMenues = hMenuItemGetCount
-   hWindowGetText = hMenuItemGetTextMitTilde (iUseWindow + (iMenues - iNotWindows) + 1)
-   hWindowGetText = hhEntferneTilde(hWindowGetText)
-   hMenuClose
+    iNotWindows = GetDocumentCount()
+    hUseMenu()
+
+    iMenues = hMenuItemGetCount
+    hMenuSelectNr(iMenues-1)    ' 'windows' ist usually the one before the last
+    
+    waitslot() 'wait 200
+    iMenues = hMenuItemGetCount
+    hWindowGetText = hMenuItemGetTextMitTilde (iUseWindow + (iMenues - iNotWindows) + 1)
+    hWindowGetText = hhEntferneTilde(hWindowGetText)
+    hMenuClose()
+
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hWindowSelect (iWindow as integer)
-'///<b> function hWindowSelect (iWindow as integer) </b>///'
-'///+ switches to the window i ///'
-'///+ calling parameter: id of the window to activate ///'
-   dim iMenues as integer      ' takes the number of entries in the windows menue
-   dim iNotWindows as integer  ' number of open windows
 
-   iNotWindows = hWindowGetCount ()
-   hUseMenu()
+    '///<b> function hWindowSelect (iWindow as integer) </b>///'
+    '///+ switches to the window i ///'
+    '///+ calling parameter: id of the window to activate ///'
 
-   'ActivateDocument iNumber as integer ' is a testtool command, but there is no system that stays behind iNumber :-[
-   iMenues = hMenuItemGetCount
-   hMenuSelectNr(iMenues-1)    ' 'windows' ist usually the one before the last
-   wait 200
-   iMenues = hMenuItemGetCount
-   hMenuSelectNr (iWindow + 1 + (iMenues - iNotWindows))
+    dim iMenues as integer      ' takes the number of entries in the windows menue
+    dim iNotWindows as integer  ' number of open windows
+
+    iNotWindows = GetDocumentCount ()
+    hUseMenu()
+
+    'ActivateDocument iNumber as integer ' is a testtool command, but there is no system that stays behind iNumber :-[
+    iMenues = hMenuItemGetCount
+    hMenuSelectNr(iMenues-1)    ' 'windows' ist usually the one before the last
+    WaitSlot() 'wait 200
+
+    iMenues = hMenuItemGetCount
+    hMenuSelectNr (iWindow + 1 + (iMenues - iNotWindows))
+
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hUseMenu ()
-'///<b> function hUseMenu () </b>///'
-'///+ very global function: depends on 'gApplication' just activates the menu-bar ///'
-   Select Case Ucase(gApplication)
-      Case "WRITER"
-         Kontext "DocumentWriter"
-         DocumentWriter.UseMenu
 
-      Case "MASTERDOC"
-         Kontext "DocumentMasterDoc"
-         DocumentMasterDoc.UseMenu
+    '///<b> function hUseMenu () </b>///'
+    '///+ very global function: depends on 'gApplication' just activates the menu-bar ///'
 
-      Case "HTMLDOKUMENT"
-         Kontext "DocumentWriterWeb"
-         DocumentWriterWeb.UseMenu
+    Select Case Ucase(gApplication)
+    Case "WRITER"
 
-      case "CALC" ' there are 2 entries over :-( usually only one, html 0 :-((((
-         Kontext "DocumentCalc"
-         DocumentCalc.UseMenu
+        Kontext "DocumentWriter"
+        DocumentWriter.UseMenu
 
-      case "DRAW"
-         Kontext "DocumentDraw"
-         DocumentDraw.UseMenu
+    Case "MASTERDOC"
 
-      case "IMPRESS"
-         Kontext "DocumentImpress"
-         DocumentImpress.UseMenu
+        Kontext "DocumentMasterDoc"
+        DocumentMasterDoc.UseMenu
 
-      case "MATH" :
-         Kontext "DocumentMath"
-         DocumentMath.UseMenu
+    Case "HTMLDOKUMENT"
 
-      case "INSIGHT" :
-         Kontext "Insight"
-         Insight.UseMenu
+        Kontext "DocumentWriterWeb"
+        DocumentWriterWeb.UseMenu
 
-      case "BASIC" :
-         Kontext "BasicIde"
-         BasicIde.UseMenu
+    case "CALC" ' there are 2 entries over :-( usually only one, html 0 :-((((
 
-      case "NONE" :
-         Kontext "DocumentBackground"
-         DocumentBackground.UseMenu
-   end select
+        Kontext "DocumentCalc"
+        DocumentCalc.UseMenu
+
+    case "DRAW"
+
+        Kontext "DocumentDraw"
+        DocumentDraw.UseMenu
+
+    case "IMPRESS"
+
+        Kontext "DocumentImpress"
+        DocumentImpress.UseMenu
+
+    case "MATH" :
+
+        Kontext "DocumentMath"
+        DocumentMath.UseMenu
+
+    case "INSIGHT" :
+
+        Kontext "Insight"
+        Insight.UseMenu
+
+    case "BASIC" :
+
+        Kontext "BasicIde"
+        BasicIde.UseMenu
+
+    case "NONE" :
+
+        Kontext "DocumentBackground"
+        DocumentBackground.UseMenu
+
+    end select
+
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hOpenContextMenu()
-'/// very global function: depends on 'gApplication' just opens the Context Menu ///'
+
+    '/// very global function: depends on 'gApplication' just opens the Context Menu ///'
+
     Select Case Ucase(gApplication)
-        Case "WRITER"
-            Kontext "DocumentWriter"
-            DocumentWriter.openContextMenu
-        Case "MASTERDOC"
-            Kontext "DocumentMasterDoc"
-            DocumentMasterDoc.openContextMenu
-        Case "HTMLDOKUMENT"
-            Kontext "DocumentWriterWeb"
-            DocumentWriterWeb.openContextMenu
-        case "CALC"
-            Kontext "DocumentCalc"
-            DocumentCalc.openContextMenu
-        case "DRAW"
-            Kontext "DocumentDraw"
-            DocumentDraw.openContextMenu
-        case "IMPRESS"
-            Kontext "DocumentImpress"
-            DocumentImpress.openContextMenu
-        case "MATH" :
-            Kontext "DocumentMath"
-            DocumentMath.openContextMenu
+    Case "WRITER"
+
+        Kontext "DocumentWriter"
+        DocumentWriter.openContextMenu
+
+    Case "MASTERDOC"
+
+        Kontext "DocumentMasterDoc"
+        DocumentMasterDoc.openContextMenu
+
+    Case "HTMLDOKUMENT"
+
+        Kontext "DocumentWriterWeb"
+        DocumentWriterWeb.openContextMenu
+
+    case "CALC"
+
+        Kontext "DocumentCalc"
+        DocumentCalc.openContextMenu
+
+    case "DRAW"
+
+        Kontext "DocumentDraw"
+        DocumentDraw.openContextMenu
+
+    case "IMPRESS"
+
+        Kontext "DocumentImpress"
+        DocumentImpress.openContextMenu
+
+    case "MATH" :
+
+        Kontext "DocumentMath"
+        DocumentMath.openContextMenu
+
     end select
+
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function hGetWindowCaption(sApplication as string, optional bAll as boolean)
-'///<b> function hGetWindowCaption () </b>///'
-'///+ just returns the string from the application main window ///'
-'///+ If optional parameter = true, thenn go throught all applications and get caption; return array ///'
+
+    '///<b> function hGetWindowCaption () </b>///'
+    '///+ just returns the string from the application main window ///'
+    '///+ If optional parameter = true, thenn go throught all applications and get caption; return array ///'
+
     dim sTemp as string
     dim aApplication() as string
     dim aTemp(10) as string
@@ -845,63 +715,72 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
     endif
     for i=0 to iTimes
         Select Case Ucase(sApplication)
-            Case "SWRITER"
-                    Kontext "DocumentWriter"
-                    try
-                        sTemp = DocumentWriter.caption
-                    catch
-                    endcatch
-            Case "SGLOBAL"
-                    Kontext "DocumentMasterDoc"
-                    try
-                        sTemp = DocumentMasterDoc.caption
-                    catch
-                    endcatch
-            Case "SWEB"
-                    Kontext "DocumentWriterWeb"
-                    try
-                        sTemp = DocumentWriterWeb.caption
-                    catch
-                    endcatch
-            case "SCALC"
-                    Kontext "DocumentCalc"
-                    try
-                        sTemp = DocumentCalc.caption
-                    catch
-                    endcatch
-            case "SDRAW"
-                    Kontext "DocumentDraw"
-                    try
-                        sTemp = DocumentDraw.caption
-                    catch
-                    endcatch
-            case "SIMPRESS"
+        Case "SWRITER"
+
+            Kontext "DocumentWriter"
+            try
+                sTemp = DocumentWriter.caption
+            catch
+            endcatch
+        Case "SGLOBAL"
+
+            Kontext "DocumentMasterDoc"
+            try
+                sTemp = DocumentMasterDoc.caption
+            catch
+            endcatch
+        Case "SWEB"
+
+            Kontext "DocumentWriterWeb"
+            try
+                sTemp = DocumentWriterWeb.caption
+            catch
+            endcatch
+        case "SCALC"
+
+            Kontext "DocumentCalc"
+            try
+                sTemp = DocumentCalc.caption
+            catch
+            endcatch
+        case "SDRAW"
+
+            Kontext "DocumentDraw"
+            try
+                sTemp = DocumentDraw.caption
+            catch
+            endcatch
+        case "SIMPRESS"
+
             Kontext "DocumentImpress"
-                    try
-                        sTemp = DocumentImpress.caption
-                    catch
-                    endcatch
-            case "SMATH"
-                    Kontext "DocumentMath"
-                    try
-                        sTemp = DocumentMath.caption
-                    catch
-                    endcatch
-            Case "BASIC"
+            try
+                sTemp = DocumentImpress.caption
+            catch
+            endcatch
+        case "SMATH"
+
+            Kontext "DocumentMath"
+            try
+                sTemp = DocumentMath.caption
+            catch
+            endcatch
+        Case "BASIC"
+
             Kontext "BasicIDE"
-                    try
-                        sTemp = BasicIDE.caption
-                    catch
-                    endcatch
-            Case "BACK"
+            try
+                sTemp = BasicIDE.caption
+            catch
+            endcatch
+        Case "BACK"
+
             Kontext "DocumentBackground"
-                    try
-                        sTemp = DocumentBackground.caption
-                    catch
-                    endcatch
-            case else
-                    qaErrorLog "sApplication not defined: '" + sApplication + "'"
-                    sTemp = ""
+            try
+                sTemp = DocumentBackground.caption
+            catch
+            endcatch
+        case else
+            qaErrorLog "sApplication not defined: '" + sApplication + "'"
+            sTemp = ""
         end select
         aTemp(i) = sTemp
         try
@@ -914,11 +793,13 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
     else
         hGetWindowCaption = sTemp
     endif
+
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function fSplitWindowTitle(sInString as string)
+
     dim a, b, x, i as integer
     dim sTemp() as string
     dim sTempReturn(2) as string
@@ -940,9 +821,9 @@ function fSplitWindowTitle(sInString as string)
         a = instr(sInString, " - ") ' get Document file name or Untitledi
         if (a > 1) then
             if (instr(a+1,sInString, " - ") > a) then
-            qaErrorLog "Argh!"
-            bError = TRUE
-        endif
+                qaErrorLog "Argh!"
+                bError = TRUE
+            endif
             sTempReturn(0) = left(sInString, a-1)                        ' (0) Filename
         else
             sTempReturn(0) = ""
@@ -976,24 +857,34 @@ function fSplitWindowTitle(sInString as string)
 
         ' sanity checks, to warn if assumptions are not met!
         select case x
-            case 1: if ((bTestToolCommunication) OR (bDebugVersion)) then
+        case 1:
+            if ((bTestToolCommunication) OR (bDebugVersion)) then
                 qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 1"
                 bError = TRUE
-                endif
-            case 2: if ((bTestToolCommunication) OR (NOT bDebugVersion)) then
+            endif
+        case 2:
+            if ((bTestToolCommunication) OR (NOT bDebugVersion)) then
                 qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 2"
                 bError = TRUE
-                endif
-            case 3: if ((NOT bTestToolCommunication) OR (bDebugVersion)) then
+            endif
+        case 3:
+            if ((NOT bTestToolCommunication) OR (bDebugVersion)) then
                 qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 3"
                 bError = TRUE
-                endif
-            case 4: if ((NOT bTestToolCommunication) OR (NOT bDebugVersion)) then
+            endif
+
+            '***** Warning: Indention error *****
+        case 4:
+            if ((NOT bTestToolCommunication) OR (NOT bDebugVersion)) then
+
+
+                '***** Warning: Indention error *****
                 qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 4"
                 bError = TRUE
-                endif
-            case else: qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 0"
-                bError = TRUE
+            endif
+        case else:
+            qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 0"
+            bError = TRUE
         end select
 
         if bError then
@@ -1003,26 +894,32 @@ function fSplitWindowTitle(sInString as string)
         if (x > 1) then ' there is more to evaluate
             ' save the current computed values
             for i=0 to 2
+                '***** Warning: Indention error *****
                 sTempReturn2(i) = sTempReturn(i)
             next i
             ' make return array bigger
             redim sTempReturn(4) as string
             ' copy data back
             for i=0 to 2
+                '***** Warning: Indention error *****
                 sTempReturn(i) = sTempReturn2(i)
             next i
             ' set remaining values, if exist
             ' debug version string
             if bDebugVersion then
+                '***** Warning: Indention error *****
                 sTempReturn(3) = mid(sTemp(2),2,len(sTemp(2))-2) ' optional (3) Debug Version
             else
+                '***** Warning: Indention error *****
                 sTempReturn(3) = ""
             endif
             ' TestTool Communication string
             if bTestToolCommunication then
+                '***** Warning: Indention error *****
                 ' if true, then always the two last strings
                 sTempReturn(4) = sTemp(x-1) + " " + sTemp(x)        ' optional (4) TestTool Communication
             else
+                '***** Warning: Indention error *****
                 sTempReturn(4) = ""
             endif
         endif
@@ -1032,5 +929,6 @@ function fSplitWindowTitle(sInString as string)
     endif
 
     fSplitWindowTitle = sTempReturn()
+
 end function
 

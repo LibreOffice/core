@@ -74,6 +74,7 @@ AnalyzeSQLCommand           HID_PROP_ESCAPE_PROCESSING
 Filter                      HID_PROP_FILTER_CRITERIA
 FilterDLGButton             UID_PROP_DLG_FILTER
 DataField                   HID_RPT_PROP_DATAFIELD
+OpenFormularWizard           UID_RPT_PROP_FORMULA
 
 *ReportPropertiesTabControl  HID_FM_PROPDLG_TABCTR
 ReportGeneralProperties      HID_RPT_PROPDLG_TAB_GENERAL

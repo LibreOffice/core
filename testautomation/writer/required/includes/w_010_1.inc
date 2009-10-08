@@ -39,6 +39,7 @@
 
 sub w_010_1
     printLog Chr(13) + "--------- Objectbars . Part two. (w_010_1.inc) ----------"
+    gApplication = "WRITER"
 
 '   ** Objectbar Table
     Call tInsertFormula
@@ -62,17 +63,24 @@ sub w_010_1
     Call tFormulaCancel
     Call tFormulaApply
 
+    'Writer Web
+    gApplication = "HTMLDOKUMENT"
+    Call tHtmlDocGraphicWrap
+    Call tHtmlDocGraphicAlign
+    Call tHtmlDocGraphicProperties
+    gApplication = "WRITER"
+
 end sub
 '-----------------------------------------------------------
 
 testcase tInsertFormula
     printlog "- Table-Objectbar: Formula border in Writer"
-    Call hNewDocument
     printlog " Open new document"
-    Call hTabelleEinfuegen
+    Call hNewDocument
     printlog " Insert a table"
-	Call hToolbarSelect ( "Table", true )
+    Call hTabelleEinfuegen
     printlog " Click 'Sum' in object bar"
+	Call hToolbarSelect ( "Table", true )
     if TableObjectbar.IsVisible = true then
 		try
 			FormelEingeben.Click
@@ -96,21 +104,22 @@ testcase tInsertFormula
         Verwerfen.Click
     end if
 
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tMergeCells
     printlog "- Table-Objectbar: Merge Cells"
-    Call hNewDocument
     printlog " Open new document"
-    Call hTabelleEinfuegen
+    Call hNewDocument
     printlog " Insert a table"
-    Call wTypeKeys ("<Shift Right>", 2)
+    Call hTabelleEinfuegen
     printlog " Hit <Shift Right> 2 times"
+    Call wTypeKeys ("<Shift Right>", 2)
     Sleep 2
+    printlog " Click 'Merge cells' in object bar"
 	Call hToolbarSelect ( "Table", true )
     if TableObjectbar.IsVisible = true then
     	ZellenVerbinden.Click
@@ -119,20 +128,19 @@ testcase tMergeCells
 		Call hCloseDocument
 		goto endsub
 	end if
-        
-    printlog " Click 'Merge cells' in object bar"
-    Call hCloseDocument
+
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tSplitCells
     printlog "- Table-Objectbar: Split Cells"
-    Call hNewDocument
     printlog " Open new document"
-    Call hTabelleEinfuegen
+    Call hNewDocument
     printlog " Insert a table"
+    Call hTabelleEinfuegen
 	Call hToolbarSelect ( "Table", true )
     printlog " Click 'Split Cells' in object bar"
     if TableObjectbar.IsVisible = true then
@@ -145,18 +153,19 @@ testcase tSplitCells
     printlog " Cancel upcoming dialog"
     Kontext "ZellenTeilen"
     ZellenTeilen.Cancel
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tOptimize
     printlog "- Table-Objectbar: Optimize Table"
-    Call hNewDocument
     printlog " Open new document"
-    Call hTabelleEinfuegen
+    Call hNewDocument
+
     printlog " Insert a table and select all in document"
+    Call hTabelleEinfuegen
     Call wTypeKeys ("<Mod1 A>")
 	Call hToolbarSelect ( "Table", true )
     wait 500
@@ -190,18 +199,18 @@ testcase tOptimize
     Sleep 1
     printlog " Close toolbar 'Optimize'"
     OptimizeTablebar.Close
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tInsertCellRow
     printlog "- Table-Objectbar: Insert Cell"
-    Call hNewDocument
     printlog " Open new document"
-    Call hTabelleEinfuegen
+    Call hNewDocument
     printlog " Insert Table"
+    Call hTabelleEinfuegen
 	Call hToolbarSelect ( "Table", true )
     if TableObjectbar.IsVisible = true then
     		ZeileEinfuegen.Click
@@ -214,21 +223,21 @@ testcase tInsertCellRow
     printlog " Click 'Insert Column' in object bar"
     Sleep 1
     printlog "- Table-Objectbar: Insert Row"
-    SpalteEinfuegen.Click
     printlog " Click 'Insert Row' in object bar"
-    Call hCloseDocument
+    SpalteEinfuegen.Click
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tDeleteRow
     printlog "- Table-Objectbar: Delete Row"
-    Call hNewDocument
     printlog " Open new document"
-    Call hTabelleEinfuegen
+    Call hNewDocument
     printlog " Insert a table"
-    Call hToolbarSelect ( "Table", true )	
+    Call hTabelleEinfuegen
+    Call hToolbarSelect ( "Table", true )
     printlog " Click 'Delete Row'"
     if TableObjectbar.IsVisible = true then
     		ZeileLoeschen.Click
@@ -239,10 +248,10 @@ testcase tDeleteRow
 	end if
 
     Sleep 1
-    ZeileLoeschen.Click
     printlog " Click 'Delete Row'"
-    Call hCloseDocument
+    ZeileLoeschen.Click
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -250,10 +259,10 @@ endcase
 testcase tDeleteColumn
     dim i as Integer
     printlog "- Table-Objectbar: Delete Column"
-    Call hNewDocument
     printlog " Open new document"
-    Call hTabelleEinfuegen
+    Call hNewDocument
     printlog " Insert a table"
+    Call hTabelleEinfuegen
     printlog " Click 'Delete Column' 2 times"
     for i=1 to 2
         Call hToolbarSelect ( "Table", true )
@@ -263,21 +272,21 @@ testcase tDeleteColumn
             Warnlog "TableObjectbar is not visible!"
             Call hCloseDocument
             goto endsub
-        end if        
+        end if
         Sleep 1
     next i
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tGraphicWrap
     printlog "- Grafik-(Rahmen)-Objectbar: Wrap"
-    Call hNewDocument
     printlog " Open new document"
-    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hNewDocument
     printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     Call hToolbarSelect("Frame", true)
     try
         printlog " Check 'Wrap Off' in object bar"
@@ -289,25 +298,25 @@ testcase tGraphicWrap
 
     if gApplication <> "HTMLDOKUMENT" then
         try
-            Durchlauf.Click
             printlog " Check 'Wrap through' in object bar"
+            Durchlauf.Click
             Sleep 1
         catch
             Warnlog "'Wrap through' in Objectbar couldn't be checked"
         endcatch
 
         try
-            Wrap.Click
             printlog " Check 'Wrap On' in object bar"
+            Wrap.Click
             Sleep 1
         catch
             Warnlog "'Wrap on' in Objectbar couldn't be checked"
         endcatch
     else
-        Call hToolbarSelect("Picture", true)    
+        Call hToolbarSelect("Picture", true)
         try
-            WrapLeft.Click
             printlog " Check 'Wrap Left' in object bar"
+            WrapLeft.Click
             Sleep 1
         catch
             Warnlog "'Wrap Left' in Objectbar couldn't be checked"
@@ -322,31 +331,31 @@ testcase tGraphicWrap
         endcatch
     end if
 
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tGraphicAlign
     printlog "- Graphic-(Frame)-Objectbar: Align"
-    Call hNewDocument
     printlog " Open new document"
-    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hNewDocument
     printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
 
     Call hToolbarSelect("Frame", true)
     try
-        Links.Click
         printlog " Click 'Left' in object bar"
+        Links.Click
         Sleep 1
     catch
         Warnlog "'Left' in Objectbar couldn't be checked"
     endcatch
 
     try
-        Rechts.Click
         printlog " Click 'Right' in object bar"
+        Rechts.Click
         Sleep 1
     catch
         Warnlog "'Right' in Objectbar couldn't be checked"
@@ -354,8 +363,8 @@ testcase tGraphicAlign
 
     ' Only Left and Right in WriterWeb
     if gApplication = "HTMLDOKUMENT" then
-        Call hCloseDocument
         printlog " Close active document"
+        Call hCloseDocument
         goto endsub
     end if
 
@@ -368,31 +377,31 @@ testcase tGraphicAlign
     endcatch
 
     try
-        Mitte.Click
         printlog " Click 'Center' in object bar (Not WriterWeb)"
+        Mitte.Click
         Sleep 1
     catch
         Warnlog "'Center' in Objectbar couldn't be checked"
     endcatch
 
     try
-        Oben.Click
         printlog " Click 'Top' in object bar (Not WriterWeb)"
+        Oben.Click
         Sleep 1
     catch
         Warnlog "'Top' in Objectbar couldn't be checked"
     endcatch
 
     try
-        Unten.Click
         printlog " Click 'Bottom' in object bar (Not WriterWeb)"
+        Unten.Click
         Sleep 1
     catch
         Warnlog "'Bottom' auf Objectbar couldn't be checked"
     endcatch
 
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -404,23 +413,23 @@ testcase tGraphicFlip
         goto endsub
     end if
 
-    Call hNewDocument
     printlog " Open new document"
-    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hNewDocument
     printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
 
     Call hToolbarSelect("Picture", true)
     try
-        HorizontalSpiegeln.Click
         printlog " Click 'Flip Horizontal' in object bar"
+        HorizontalSpiegeln.Click
         Sleep 1
     catch
         Warnlog "'Flip Horizontal' in Objectbar couldn't be checked"
     endcatch
 
     try
-        VertikalSpiegeln.Click
         printlog " Click 'Flip Vertical' in object bar"
+        VertikalSpiegeln.Click
         Sleep 1
     catch
         Warnlog "'Flip vertical' in Objectbar couldn't be checked"
@@ -436,49 +445,48 @@ testcase tGraphicFlip
     catch
     endcatch
 
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tGraphicArrange
     printlog "- Graphic-(Frame)-Objectbar: Arrange"
-    Call hNewDocument
     printlog " Open new document"
-    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hNewDocument
     printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
 
     Call hToolbarSelect("Frame", true)
     try
-        GanzNachHinten.Click
         printlog " Click 'Send to back' in object bar"
+        GanzNachHinten.Click
         Sleep 1
     catch
         Warnlog "'Send to back' in Objectbar couldn't be checked"
     endcatch
 
     try
-        GanzNachVorn.Click
         printlog " Click 'Bring to front' in object bar"
+        GanzNachVorn.Click
         Sleep 1
     catch
         Warnlog "'Bring to front' in Objectbar couldn't be checked"
     endcatch
 
-    Call hCloseDocument
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tGraphicBorders
     printlog "- Graphic-(Frame)-Objectbar: Border"
-    Call hNewDocument
     printlog " Open new document"
-    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hNewDocument
     printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     Call hToolbarSelect("Frame", true)
     try
         printlog " Tear off Toolbox Border"
@@ -521,9 +529,8 @@ testcase tGraphicBorders
 		warnlog "Error in Toolbox Colour"
     endcatch
 
-    Call hCloseDocument
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -531,19 +538,19 @@ endcase
 testcase tGraphicProperties
     printlog "- Graphic-(Frame)-Objectbar: Properties"
     Dim j as integer
-    
-    Call hNewDocument
+
     printlog " Open new document"
-    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hNewDocument
     printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     Call hToolbarSelect("Picture", true)
     try
-        InsertGraphic.Click
         printlog " Click 'Graphic Properties' in object bar"
+        InsertGraphic.Click
     catch
         Warnlog "Error in Objectproperties in Objectbar"
-        Call hCloseDocument
         printlog " Close active document"
+        Call hCloseDocument
         goto endsub
     endcatch
 
@@ -586,11 +593,11 @@ testcase tGraphicProperties
         Kontext "Active"
         if Active.Exists then
             if Active.GetRT = 304 then
-                if j = 1 then Warnlog Active.Gettext    
+                if j = 1 then Warnlog Active.Gettext
                 Active.Ok
             else
                 exit do
-            end if                    
+            end if
         else
             exit do
         end if
@@ -598,6 +605,7 @@ testcase tGraphicProperties
     Kontext "TabMakro"
     Call DialogTest ( TabMakro )
 
+    printlog " Close 'Graphic' dialog"
     if gApplication <> "HTMLDOKUMENT" then
         Kontext
         active.SetPage TabHintergrund
@@ -612,22 +620,22 @@ testcase tGraphicProperties
     else
         TabMakro.Cancel
     end if
-    printlog " Close 'Graphic' dialog"
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tGraphicAnchor
     printlog "- Graphic-(Frame)-Objectbar: Anchor"
-    Call hNewDocument
     printlog " Open new document"
-    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hNewDocument
     printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
 
     Call hToolbarSelect("Frame", true)
     Sleep 2
+    printlog " Select Anchor 'to page'"
     try
         VerankerungWechseln.Click
         printlog " Click 'Change Anchor' in object bar"
@@ -638,45 +646,44 @@ testcase tGraphicAnchor
         goto endsub
     endcatch
     Sleep 1
-    printlog " Select Anchor 'to page'"
     MenuSelect ( MenuGetItemID (1) )
     Sleep 1
+    printlog " Select Anchor 'Paragraph'"
     Kontext "FrameObjectbar"
     VerankerungWechseln.Click
-    printlog " Select Anchor 'Paragraph'"
     MenuSelect ( MenuGetItemID (2) )
     Sleep 1
+    printlog " Select Anchor 'To Character'"
     Kontext "FrameObjectbar"
     VerankerungWechseln.Click
-    printlog " Select Anchor 'To Character'"
     MenuSelect ( MenuGetItemID (3) )
     Sleep 1
+    printlog " Select Anchor 'As Character'"
     Kontext "FrameObjectbar"
     VerankerungWechseln.Click
-    printlog " Select Anchor 'As Character'"
     MenuSelect ( MenuGetItemID (4) )
     Sleep 1
 
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tFormulaCancel
     printlog "- Formula Writer: Cancel"
-    Call hNewDocument
     printlog " Open new document"
-    Call wTypeKeys ("<F2>")
+    Call hNewDocument
     printlog " Press <F2>"
+    Call wTypeKeys ("<F2>")
 
+    printlog " enter a formula"
     Kontext "OL_SW_Rechenleiste"
     Eingabefeld.TypeKeys "=summe(a+b)"
-    printlog " enter a formula"
-    Verwerfen.Click
     printlog " Click 'Cancel' in formula bar"
-    Call hCloseDocument
+    Verwerfen.Click
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -711,6 +718,165 @@ testcase tFormulaApply
     if GetClipboardText <> "25" then 
         warnlog "Not possible to calculate in tables anymore. Result isn't 25, is: " + GetClipboardText
     end if
+    printlog " Close active document"
+    Call hCloseDocument
+endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocGraphicWrap
+    printlog "- Grafik-(Rahmen)-Objectbar: Wrap"
+    gApplication = "HTMLDOKUMENT"
+
+    printlog " Open new document"
+    Call hNewDocument
+
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hToolbarSelect("Frame", true)
+    try
+        printlog " Check 'Wrap Off' in object bar"
+        NoWrap.Click
+        Sleep 1
+    catch
+        Warnlog "'Wrap Off' in Objectbar couldn't be checked"
+    endcatch
+
+    Call hToolbarSelect("Picture", true)
+    try
+        WrapLeft.Click
+        printlog " Check 'Wrap Left' in object bar"
+        Sleep 1
+    catch
+        Warnlog "'Wrap Left' in Objectbar couldn't be checked"
+    endcatch
+
+    try
+        printlog " Check 'Wrap Right' in object bar"
+        WrapRight.Click
+        Sleep 1
+    catch
+        Warnlog "'Wrap Right' in Objectbar couldn't be checked"
+    endcatch
+
     Call hCloseDocument
     printlog " Close active document"
+    gApplication = "WRITER"
 endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocGraphicAlign
+    printlog "- Graphic-(Frame)-Objectbar: Align"
+    gApplication = "HTMLDOKUMENT"
+
+    printlog " Open new document"
+    Call hNewDocument
+    printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+
+    Call hToolbarSelect("Frame", true)
+    try
+        Links.Click
+        printlog " Click 'Left' in object bar"
+        Sleep 1
+    catch
+        Warnlog "'Left' in Objectbar couldn't be checked"
+    endcatch
+
+    try
+        Rechts.Click
+        printlog " Click 'Right' in object bar"
+        Sleep 1
+    catch
+        Warnlog "'Right' in Objectbar couldn't be checked"
+    endcatch
+
+    ' Only Left and Right in WriterWeb
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tHtmlDocGraphicProperties
+    printlog "- Graphic-(Frame)-Objectbar: Properties"
+    Dim j as integer
+
+    gApplication = "HTMLDOKUMENT"
+    printlog " Open new document"
+    Call hNewDocument
+
+    printlog " Insert graphic 'writer/input/grafik/jolink.jpg'"
+    Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
+    Call hToolbarSelect("Picture", true)
+    try
+        printlog " Click 'Graphic Properties' in object bar"
+        InsertGraphic.Click
+    catch
+        Warnlog "Error in Objectproperties in Objectbar"
+        printlog " Close active document"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+
+    printlog " In 'Graphic' dialog step through all tabpages"
+    Kontext
+    active.SetPage TabType
+    Kontext "TabType"
+    Call DialogTest ( TabType )
+
+    Kontext
+    active.SetPage TabZusaetze
+    Kontext "TabZusaetze"
+    Call DialogTest ( TabZusaetze )
+
+    Kontext
+    active.SetPage TabUmlauf
+    Kontext "TabUmlauf"
+    Call DialogTest ( TabUmlauf )
+
+    Kontext
+    active.SetPage TabHyperlinkRahmen
+    Kontext "TabHyperlinkRahmen"
+    Call DialogTest ( TabHyperlinkRahmen )
+
+    Kontext
+    active.SetPage TabGrafik
+    Kontext "TabGrafik"
+    Call DialogTest ( TabGrafik )
+
+    Kontext
+    active.SetPage TabUmrandung
+    Kontext "TabUmrandung"
+    Call DialogTest ( TabUmrandung )
+
+    Kontext
+    active.SetPage TabMakro
+    ' if no JRE is installed a messagebox appears
+    Do
+        j = j + 1
+        Kontext "Active"
+        if Active.Exists then
+            if Active.GetRT = 304 then
+                if j = 1 then Warnlog Active.Gettext
+                Active.Ok
+            else
+                exit do
+            end if
+        else
+            exit do
+        end if
+    Loop
+    Kontext "TabMakro"
+    Call DialogTest ( TabMakro )
+    printlog " Close dialog"
+    TabMakro.Cancel
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------

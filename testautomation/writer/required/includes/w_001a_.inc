@@ -38,6 +38,7 @@
 
 sub w_001a_
     printLog Chr(13) + "--------- File Menu (w_001a_.inc) ----------"
+    gApplication = "WRITER"
 
     Call tFileProperties
 
@@ -49,6 +50,11 @@ sub w_001a_
     Call tFilePagePreview
     Call tFilePrint
     Call tFilePrinterSetup
+
+    'Writer Master Document
+    gApplication = "MASTERDOC"
+    Call tMasterDocFilePagePreview
+    gApplication = "WRITER"
 
 end sub
 
@@ -112,10 +118,9 @@ WarnLog "#i95523# - FileProperties - Tabpage 'User Defined' has changed. - Adapt
     Call DialogTest (TabStatistik)
     TabStatistik.Close
 
-    printlog " Close active document"
     Sleep 1
+    printlog " Close active document"
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------
@@ -206,7 +211,6 @@ testcase tFileTemplatesOrganize
 
     PrintLog " Close active document."
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------
@@ -225,32 +229,25 @@ testcase tFileTemplatesAddressbookSource
     Kontext "AddressbookSource"
     if AddressbookSource.Exists then
         Call DialogTest (AddressbookSource)
-        if (gPlatform <> "x86") AND (gPlatForm <> "sol") then 
-            Administrate.Click
-            Sleep 2
-            PrintLog " Close 'Data Source Administration' with 'Cancel'"
-            Kontext "DatabaseProperties"
-            if Not DatabaseProperties.Exists then
-                Kontext "AddressSourceAutopilot"
-                if AddressSourceAutopilot.Exists then
-                    AddressSourceAutopilot.Cancel
-                end if
-                Kontext "AddressbookSource"
-                AddressbookSource.Cancel
-            else
-                PrintLog " DatabaseProperties.SetPage TabConnection"
-                Kontext "TabConnection"        
-                Call DialogTest ( TabConnection )
-                Kontext "DatabaseProperties"
-                DatabaseProperties.Close
-                Kontext "AddressbookSource"
-                PrintLog " Close dialog"
-                AddressbookSource.Cancel
+        Administrate.Click
+        Sleep 2
+        PrintLog " Close 'Data Source Administration' with 'Cancel'"
+        Kontext "DatabaseProperties"
+        if Not DatabaseProperties.Exists then
+            Kontext "AddressSourceAutopilot"
+            if AddressSourceAutopilot.Exists then
+                AddressSourceAutopilot.Cancel
             end if
-        else
-            QAErrorlog "#i62423#Adress Source Autopilot crashes"
-            PrintLog " Close dialog"
             Kontext "AddressbookSource"
+            AddressbookSource.Cancel
+        else
+            PrintLog " DatabaseProperties.SetPage TabConnection"
+            Kontext "TabConnection"
+            Call DialogTest ( TabConnection )
+            Kontext "DatabaseProperties"
+            DatabaseProperties.Close
+            Kontext "AddressbookSource"
+            PrintLog " Close dialog"
             AddressbookSource.Cancel
         end if
     end if
@@ -287,6 +284,7 @@ testcase tFileTemplatesSave
 
     printlog " Close active document" 
     Call hCloseDocument
+    gApplication = "WRITER"
 endcase
 
 '-----------------------------------------------------------
@@ -490,7 +488,7 @@ testcase tFilePrinterSetup
     Kontext "Active"
     WaitSlot(1000)
     if Active.Exists then
-        if Active.GetRT = 304 then        
+        if Active.GetRT = 304 then
             QAErrorLog "No Default Printer!"
 			Active.Ok
 			Sleep 2
@@ -498,7 +496,7 @@ testcase tFilePrinterSetup
 			if DruckerEinrichten.Exists then
 				Call DialogTest ( DruckerEinrichten )
 				DruckerEinrichten.Cancel
-			end if			
+			end if
 		end if
     else
         Kontext "DruckerEinrichten"
@@ -509,3 +507,77 @@ testcase tFilePrinterSetup
     PrintLog " Close active document"
     Call hCloseDocument
 endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFilePagePreview
+    PrintLog "- File / Page Preview"
+    Dim gehtnicht as boolean
+    gehtnicht = FALSE
+    gApplication   = "MASTERDOC"
+    printlog " Open new document"
+    Call hNewDocument
+
+    printlog " Enter some text in document"
+    Call wTypeKeys("Just a small change!")
+    printlog " File / Page Preview"
+    FilePageView
+    WaitSlot (1000)
+    Kontext "DocPageViewWriter"
+    if DocPageViewWriter.NotExists then
+        Warnlog "Page Preview is not coming up!"
+        Kontext "Active"
+        if Active.Exists then
+            if Active.GetRT = 304 then
+                Active.No
+            end if
+        end if
+    else
+        if gehtnicht=FALSE then
+            Kontext "PreviewObjectbar"
+            if PreviewObjectbar.Exists = False then Call hToolbarSelect("PagePreview", true)
+            printlog " Select 'Zoom 100%' in toolbar"
+            try
+                Massstab.Select 4
+            catch
+                Warnlog "Unable to change Zoom factor in toolbar! (Bug#110498)"
+            endcatch
+
+            printlog " Click 'Print Page Preview' in toolbar"
+            Kontext "PreviewObjectbar"
+            DruckenSeitenansicht.Click
+            Kontext "Active"
+            if Active.Exists then
+                QAErrorlog "No default printer!"
+                Active.ok
+                Sleep 1
+                Kontext "DruckenDlg"
+                if DruckenDlg.Exists then DruckenDlg.Cancel
+            else
+                printlog " Close 'Print' dialog with cancel"
+                Kontext "DruckenDlg"
+                DruckenDlg.Cancel
+            end if
+
+            printlog " Click 'Print options page preview' in toolbar"
+            Kontext "PreviewObjectbar"
+            Skalierung.Click
+            printlog " Close 'Print Options' dialog with cancel"
+            Kontext "DruckOptionen"
+            Call DialogTest ( DruckOptionen )
+            DruckOptionen.Cancel
+
+            printlog " Close Page Preview with button 'Close Preview' in toolbar"
+            Kontext "PreviewObjectbar"
+            SeitenansichtSchliessen.Click
+        else
+            Warnlog "Objectbar not addressable!"
+        end if
+    end if
+
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------

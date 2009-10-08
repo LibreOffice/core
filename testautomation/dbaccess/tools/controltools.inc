@@ -8,9 +8,9 @@
 '*
 '* $RCSfile: controltools.inc,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.1.68.1 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 07:43:45 $
+'* last change: $Author: msc $ $Date: 2008/10/28 07:52:48 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -637,14 +637,14 @@ function fOpenControlPropertyBrowser
     
 end function
 '--------------------------------------------------------------------------------------
-function addControl(sControl as String, ix as integer , iy as integer , iwidth as integer , iheight as integer)
+function addControl(sControl as String, isx as integer , isy as integer , iex as integer , iey as integer)
     '/// add the specified control and the specified position      
     '/// <u>parameter:</u>
     '/// <b>sControl</b> the control name
-    '/// <b>ix</b> the x coordinate
-    '/// <b>iy</b> the y coordinate
-    '/// <b>iwidth</b> the width of the control
-    '/// <b>iheight</b> the height of the control
+    '/// <b>isx</b> the start x coordinate
+    '/// <b>isy</b> the start y coordinate
+    '/// <b>iex</b> the end x coordinate
+    '/// <b>iey</b> the end y coordinate
     '/// <u>return:</u>
 
     dim oControl as Object
@@ -780,7 +780,7 @@ function addControl(sControl as String, ix as integer , iy as integer , iwidth a
     endif
     sleep(1)
     
-    call hDrawingWithSelection ( ix, iy, iheight, iwidth )
+    call hDrawingWithSelection ( isx, isy, iex, iey )
     
     sleep(2)
    	

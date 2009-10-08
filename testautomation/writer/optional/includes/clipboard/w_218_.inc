@@ -87,8 +87,18 @@ testcase HTMLToDRAWText
    Call hCloseDocument
    printlog " + Close saved document "
    wait 500
-   Call hFileOpen (gOfficepath + "user\work\html_to_draw_text.odg",false)
    printlog " + Reopen saved document "
+   if hFileOpen (gOfficepath + "user\work\html_to_draw_text.odg",false) = false then
+        Kontext "Active"
+        if Active.Exists then
+            try
+                Active.Yes
+            catch
+                Warnlog "Unable to remove checkbox: " + Active.Gettext
+                Active.ok
+            endcatch
+        endif
+   endif      
    Wait 500
    Call hCloseDocument
    printlog " + Close saved document "

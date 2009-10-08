@@ -969,15 +969,15 @@ function fGetSlideNumber (optional sCompare as integer) as integer
     Kontext "NavigatorDraw"
     printlog "Checking if navigator is open, closing and opening for updating.."
     if NavigatorDraw.exists (5) then
-        EditNavigator ' to Workaround not updated navi :-(
+        ViewNavigator ' to Workaround not updated navi :-(
         sleep 3
-        EditNavigator
+        ViewNavigator
         sleep 3
         '/// check in list, if the page changed ///'
         
     else
         printlog "If Navigator is not open, opening it now."
-        EditNavigator
+        ViewNavigator
     endif
     printlog "Getting current slide number from navigator."
     fGetSlideNumber = val (right (Liste.GetSelText, 1))
@@ -1006,7 +1006,7 @@ function fGetSlideCount (optional iCount as integer) as integer
       Printlog "Navigator: open :-)"
    else
       Printlog "Navigator: NOT available :-( will be opened now!"
-      EditNavigator
+      ViewNavigator
    endif
    Sleep 1
    '/// count rows in list of navigator: usually number of slides ///'
@@ -1020,7 +1020,7 @@ function fGetSlideCount (optional iCount as integer) as integer
       endif
    endif
    '/// close navigator ///'
-   EditNavigator
+   ViewNavigator
    fGetSlideCount = i
 end function
 

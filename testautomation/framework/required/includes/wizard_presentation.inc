@@ -48,33 +48,34 @@ testcase tUpdtWizardPresentation
     hInitSingleDoc()
     
     '///+<li>Open the presentation wizard</li>
-    irc = hOpenWizardWithMenu( "PRESENTATION" )
-    if ( irc <> 0 ) then
-        warnlog( "Could not open wizard, aborting test" )
-        goto endsub
-    endif
-    
-    '///+<li>Look at page 1</li>
-    printlog( "Page 1" )
+    FileAutopilotPresentation
     kontext "AutopilotPraesentation1"
-    call Dialogtest( AutopilotPraesentation1 )
+    if ( AutopilotPraesentation1.exists( 2 ) ) then
     
-    hClickNextButton()
-    
-    '///+<li>Look at page 2</li>
-    printlog( "Page 2" )
-    kontext "AutopilotPraesentation2"
-    call DialogTest( AutopilotPraesentation2 )
-    
-    hClickNextButton()
-    
-    '///+<li>Look at page 3</li>
-    printlog( "Page 3" )
-    kontext "AutopilotPraesentation3" 
-    call DialogTest( AutopilotPraesentation3 )
-    
-    '///+<li>Finish the wizard</li>
-    hFinishWizard( 1 )
+        
+        '///+<li>Look at page 1</li>
+        printlog( "Page 1" )
+        call Dialogtest( AutopilotPraesentation1 )
+        
+        hClickNextButton()
+        
+        '///+<li>Look at page 2</li>
+        printlog( "Page 2" )
+        kontext "AutopilotPraesentation2"
+        call DialogTest( AutopilotPraesentation2 )
+        
+        hClickNextButton()
+        
+        '///+<li>Look at page 3</li>
+        printlog( "Page 3" )
+        kontext "AutopilotPraesentation3" 
+        call DialogTest( AutopilotPraesentation3 )
+        
+        '///+<li>Finish the wizard</li>
+        hFinishWizard( 1 )
+    else
+        warnlog( "Presentation wizard not open/exceeded timeout" )
+    endif
     
     '///+<li>Close the document(s)</li>
     do while( getDocumentCount() > 0 )

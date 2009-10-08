@@ -198,7 +198,7 @@ testcase tCallDialog
    Call hNewDocument
    '/// Open new document ///
    Kontext "Navigator"
-   If Navigator.Exists then EditNavigator
+   If Navigator.Exists then ViewNavigator
   printlog "- Check, if dialog is not present in a new document"
    '/// Check, if dialog is not present in a new document ///
    kontext "FindAndReplace"

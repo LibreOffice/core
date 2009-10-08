@@ -50,6 +50,7 @@
 ' #1 tCTLDependency_6        'Test 'left to right' and 'right to left' button - HTML(Microsoft Internet Bxplorer)
 ' #1 tCTLDependency_7        'Test 'left to right' and 'right to left' button - HTML(Netscape Navigator)
 ' #1 tCTLDependency_8        'Test 'left to right' and 'right to left' button - HTML(StarOffice Writer)
+' #1 tCTLKashidaCheck        'Check for additional numerals if CTL support is enabled
 '*
 '\***********************************************************************
 
@@ -935,4 +936,51 @@ testcase tCTLDependency_8
   printlog " Close active document"
    Call hCloseDocument
 endcase
+
+'----------------------------------------------------------------------------------------------------
+
+testcase tCTLKashidaCheck
+
+    Dim bCTLLanguage as Boolean
+    Dim bAsianLanguage as boolean
+    Dim iListCounter as Integer
+
+    printlog " Open a new document"
+    Call hNewDocument
+
+    printlog " Set 'Asian support' to ON"
+    bAsianLanguage = ActiveDeactivateAsianSupport(True)
+    printlog " Set 'CTL Language support' to ON" 
+    bCTLLanguage = ActiveDeactivateCTLSupport(True)         
+    Sleep 2
+
+    ToolsOptions
+    Call hToolsOptions ("LanguageSettings","ComplexTextLayout")        
+    Kontext "TabComplexTextLayout"     
+
+    iListCounter = Numerals.GetItemCount
+    
+    if iListCounter <> 4 then
+        Warnlog "There are not 4 items in list 'Numerlas' but " + iListCounter
+    endif  
+
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
+
+    if bAsianLanguage = FALSE then
+        printlog " Set the 'Asian Language support' to default"    
+        Call ActiveDeactivateAsianSupport(bAsianLanguage)
+    end if
+    
+    if bCTLLanguage = FALSE then
+        printlog " Set the 'CTL Language support' to default"    
+        Call ActiveDeactivateCTLSupport(FALSE)
+    end if
+
+   printlog " Close active document"
+   Call hCloseDocument
+endcase
+
+'----------------------------------------------------------------------------------------------------
+
 

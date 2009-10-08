@@ -416,8 +416,8 @@ public class ReportDesignerTest extends ComplexTestCase {
 //                     log.println("3");
 
                 XDatabaseDocumentUI aDBDocUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
-                boolean isConnect = aDBDocUI.connect();
-//                     if (isConnect)
+                aDBDocUI.connect();
+//                     if (aDBDocUI.isConnected())
 //                     {
 //                         System.out.println("true");
 //                     }

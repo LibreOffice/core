@@ -86,8 +86,18 @@ testcase CalcToWriterText1
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_textformat_wholecell.odt",true)
     printlog "  Reopen saved document "
+    if hFileOpen (gOfficepath + "user\work\writer_to_writer_textformat_wholecell.odt",true) = false then
+        Kontext "Active"
+        if Active.Exists then
+            try
+                Active.Yes
+            catch
+                Warnlog "Unable to remove checkbox: " + Active.Gettext
+                Active.ok
+            endcatch
+        endif
+    endif    
     Wait 500
     Call hCloseDocument
     printlog "  Close saved document "
@@ -195,8 +205,18 @@ testcase CalcToWriterCalculation
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_calculation_cellformat.odt",true)
     printlog "  Reopen saved document "
+    if hFileOpen (gOfficepath + "user\work\writer_to_writer_calculation_cellformat.odt",true) = false then
+        Kontext "Active"
+        if Active.Exists then
+            try
+                Active.Yes
+            catch
+                Warnlog "Unable to remove checkbox: " + Active.Gettext
+                Active.ok
+            endcatch
+        endif
+    endif        
     Wait 500
     Call hCloseDocument
     printlog "  Close saved document "
@@ -248,8 +268,18 @@ testcase CalcToWriterHyperlink1
     Call hCloseDocument
     printlog "  Close saved document "
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_hyperlink_wholecell.odt",true)
     printlog "  Reopen saved document "
+    if hFileOpen (gOfficepath + "user\work\writer_to_writer_hyperlink_wholecell.odt",true) = false then
+        Kontext "Active"
+        if Active.Exists then
+            try
+                Active.Yes
+            catch
+                Warnlog "Unable to remove checkbox: " + Active.Gettext
+                Active.ok
+            endcatch
+        endif
+    endif            
     Wait 500
     Call hCloseDocument
     printlog "  Close saved document "

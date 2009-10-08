@@ -267,7 +267,7 @@ testcase tiFileVersion
       FileVersions
    catch
       Warnlog "- File / Versions not accessible!"
-      exit sub
+      goto endsub
    endcatch
 
    Kontext "Versionen"
@@ -583,7 +583,7 @@ testcase tmFileNewFromTemplate
   '/// Check if dialog has been opened ///
   if TemplateAndDocuments.NotExists then
      Warnlog "Dialog Templates and Documents are not up!"
-     exit sub
+     goto endsub
   end if
    Call DialogTest (TemplateAndDocuments)
    WaitSlot (5000)

@@ -60,12 +60,12 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
     }
 
     public ArrayList getModules() {
-        // the cwsquery command send its version information to StdErr.
+        // the cwstouched command send its version information to StdErr.
         // A piping from StdErr to SdtOut the tcsh does not support.
         // To find the output easily the echo command is used
-        final String[] commands = {"echo cwsquery starts here", "cwsquery modules", "echo cwsquery ends here"};
+        final String[] commands = {"echo cwstouched starts here", "cwstouched", "echo cwstouched ends here"};
 
-        final ProcessHandler procHdl = bet.runCommandsInEnvironmentShell(commands, null, true);
+        final ProcessHandler procHdl = bet.runCommandsInEnvironmentShell(commands, null, 20000);
 
         if (mDebug) {
             log.println("---> Output of getModules:");
@@ -78,17 +78,17 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
 
         final String[] outs = procHdl.getOutputText().split("\n");
 
-        final ArrayList moduleNames = new ArrayList();
+        final ArrayList<String> moduleNames = new ArrayList<String>();
         boolean start = false;
         for (int i = 0; i < outs.length; i++) {
             final String line = outs[i];
-            if (line.startsWith("cwsquery ends here")) {
+            if (line.startsWith("cwstouched ends here")) {
                 start = false;
             }
-            if (start && !line.equals("")) {
+            if (start && line.length() > 1) {
                 moduleNames.add(line);
             }
-            if (line.startsWith("cwsquery starts here")) {
+            if (line.startsWith("cwstouched starts here")) {
                 start = true;
             }
         }
@@ -115,7 +115,7 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
 
             final String[] commands = {"cwsattach " + statusFile};
 
-            bet.runCommandsInEnvironmentShell(commands, null, true);
+            bet.runCommandsInEnvironmentShell(commands, null, 5000);
 
         } catch (IOException ex) {
             System.out.println("ERROR: could not attach file '" + statusFile + "' to cws\n" + ex.toString());

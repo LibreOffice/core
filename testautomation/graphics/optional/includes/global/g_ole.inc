@@ -276,8 +276,9 @@ testcase tOLE_SaveLoad
     else
         printlog "Right number of context menu entries for OLE."
     end if
-    printlog "Save the File."
+    printlog "Closing Context Menu"
     MenuSelect (0)
+    printlog "Save the File."
     FileSaveAs
     sleep 1
     Kontext "SpeichernDlg"

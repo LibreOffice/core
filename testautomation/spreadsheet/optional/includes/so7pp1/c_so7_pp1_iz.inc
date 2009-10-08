@@ -206,7 +206,7 @@ Kontext "Active"
 
 '/// check for crash
 try
-   printlog "OK, there are still " & hWindowGetCount & " documents open"
+   printlog "OK, there are still " & GetDocumentCount & " documents open"
 catch 
    warnlog "Probably the office did crash -> #I21036#"
    goto endsub

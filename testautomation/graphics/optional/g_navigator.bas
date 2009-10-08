@@ -46,17 +46,17 @@ sub main
     Call hStatusIn ( "Graphics","g_navigator.bas")
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-       Call tEditNavigatorZOrder
-       Call tdEditNavigator
-       Call tEditNavigatorGroupedObjects
-       Call tEditNavigatorNameActivated
+       Call tViewNavigatorZOrder
+       Call tdViewNavigator
+       Call tViewNavigatorGroupedObjects
+       Call tViewNavigatorNameActivated
 
     gApplication = "Draw"
     PrintLog "-------------------------" + gApplication + "-------------------"
-       Call tEditNavigatorZOrder
-       Call tdEditNavigator
-       Call tEditNavigatorGroupedObjects
-       Call tEditNavigatorNameActivated
+       Call tViewNavigatorZOrder
+       Call tdViewNavigator
+       Call tViewNavigatorGroupedObjects
+       Call tViewNavigatorNameActivated
 
     Call hStatusOut
 end sub

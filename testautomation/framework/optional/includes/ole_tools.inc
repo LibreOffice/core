@@ -143,11 +143,11 @@ sub DisableNavigator()
     select case gApplication
     case "GLOBALDOC" : Kontext "NavigatorGlobalDoc"
         if NavigatorGlobalDoc.Exists() then
-            EditNavigator
+            ViewNavigator
         endif
     case "WRITER"    : Kontext "NavigatorWriter"
         if NavigatorWriter.Exists() then
-            EditNavigator
+            ViewNavigator
         endif
     end select
     sleep( 1)

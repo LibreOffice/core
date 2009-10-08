@@ -334,7 +334,7 @@ testcase tInsertSection_4
     TabBereiche.OK
     sleep(1)
     Kontext
-    EditNavigator
+    ViewNavigator
     sleep(1)
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"

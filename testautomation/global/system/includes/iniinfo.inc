@@ -169,9 +169,9 @@ sub GetOfficeInformation
     Dim sPlatformProgramPath as string
     Dim sPlatformBinExt as string      
    
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
         sPlatformProgramPath = "MacOS"
-        sPlatformBinExt = ".bin"
+        sPlatformBinExt = ""
     else
         sPlatformProgramPath = "program"
         if gPlatGroup <> "unx" then
@@ -328,38 +328,48 @@ sub GetLanguageInformation
 '/// Extracts the language information from <i>Setup.xcu</i>.
 '/// <u>note</u>: It uses the <b>fgetL10Nvalue</b>.
    Dim i as integer
+   Dim iTimeOut as integer
    Dim sLanOutIni as string
    Dim SetupXML as String
    Dim ChildsOfSetupNodes as integer
    Dim ArtOfInst as string
    Dim SetupXMLNet as string
    Dim SetupXMLDefault as string
-
+   dim SetupXcuPath as string
+        
+    SetupXcuPath = ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
+    SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
+    
     if gNetzInst = TRUE then
-        SetupXMLNet = gNetzOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-        SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
+        SetupXMLNet = gNetzOfficePath & SetupXcuPath
         ArtOfInst = "NET- / Workstation Inst."
     else
-        SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
-        SetupXMLDefault = gOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
+        SetupXMLDefault = gOfficePath & SetupXcuPath
         ArtOfInst = "FAT Inst."
     end if
 
-    if app.Dir (SetupXML) = "" then
-        warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
-        iSprache = 01
-        Exit sub
-    else
-        ' function 'fgetL10Nvalue' is also in this library
-        sLanOutIni = fgetL10Nvalue(SetupXML)
-        ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
-        if sLanOutIni = "" and gNetzInst = TRUE then
-            sLanOutIni = fgetL10Nvalue(SetupXMLNet)
-        end if
-        ' It is an English FAT version 645m9s2 or higher.
-        if sLanOutIni = "" and gNetzInst = FALSE then
-            sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
-        end if
+    ' Issue #i97875 (JSK) experimental delay
+    ' If we're too fast we might encounter that the Setup.xcu is not created yet.
+    ' So we retry a couple of times    
+    while( IsMissing( SetupXML ) ) 
+        iTimeOut = iTimeOut + 1
+        if ( iTimeOut = 10 ) then
+            warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
+            iSprache = 01
+            Exit sub
+        endif
+        wait( 100 )
+    wend
+
+    ' function 'fgetL10Nvalue' is also in this library
+    sLanOutIni = fgetL10Nvalue(SetupXML)
+    ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
+    if sLanOutIni = "" and gNetzInst = TRUE then
+        sLanOutIni = fgetL10Nvalue(SetupXMLNet)
+    end if
+    ' It is an English FAT version 645m9s2 or higher.
+    if sLanOutIni = "" and gNetzInst = FALSE then
+        sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
     end if
 
     if sLanOutIni = "" then
@@ -616,7 +626,7 @@ sub GetTheInstallationType
     dim i,x as integer
     dim sPlatformProgramPath as string
     
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
     	sPlatformProgramPath = "MacOS"
     else
     	sPlatformProgramPath = "program"
@@ -808,29 +818,35 @@ sub sGetCrashreporterValues as boolean
             gConnectionType = "MANUALPROXY"
         end if
     
-        '/// <i>gProxyServer</i> should be the proxy server which is needed to send
-        '///+ the crashreporter data via the net.
-        gProxyServer = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyServer" )
-        'Verifying that a proxy server has been entered if
-        'gUseProxy has been set to TRUE.
-        if gUseProxy = TRUE AND gProxyServer = "" then 
-            warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
-                    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyServer=' (empty). Please correct it!"
-            sGetCrashreporterValues = FALSE
-        else
-            sGetCrashreporterValues = TRUE
-        end if
+	if gUseProxy then
+		'/// <i>gProxyServer</i> should be the proxy server which is needed to send
+		'///+ the crashreporter data via the net.
+		gProxyServer = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyServer" )
+		'Verifying that a proxy server has been entered if
+		'gUseProxy has been set to TRUE.
+		if gUseProxy = TRUE AND gProxyServer = "" then 
+		    warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
+			    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyServer=' (empty). Please correct it!"
+		    sGetCrashreporterValues = FALSE
+		else
+		    sGetCrashreporterValues = TRUE
+		end if
 
-        '/// <i>gProxyPort</i> should be the proxy server port which is needed to send
-        '///+ the crashreporter data via the net.
-        gProxyPort = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyPort" )
-        'Verifying that a proxy server port has been entered if
-        'gUseProxy has been set to TRUE.
-        if gUseProxy = TRUE AND gProxyPort = "" then 
-            sGetCrashreporterValues = FALSE
-            warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
-                    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyPort=' (empty). Please correct it!"       
-        end if
+		'/// <i>gProxyPort</i> should be the proxy server port which is needed to send
+		'///+ the crashreporter data via the net.
+		gProxyPort = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyPort" )
+		'Verifying that a proxy server port has been entered if
+		'gUseProxy has been set to TRUE.
+		if gUseProxy = TRUE AND gProxyPort = "" then 
+		    sGetCrashreporterValues = FALSE
+		    warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
+			    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyPort=' (empty). Please correct it!"       
+		end if
+	else
+	   ' to workaround issue i94779 set server and port to empty in case of direkt access
+	   gProxyServer = ""
+	   gProxyPort = ""
+	endif
         
         '/// <i>gAllowContact</i> should be TRUE or FALSE
         gAllowContact = GetIniValue ( gTesttoolIni, "Crashreporter" , "AllowContact" )
@@ -922,7 +938,7 @@ function getSofficeNative() as string
                 if fileExists(sCandidates(i)) then
                     '/// cut off program//soffice from link destination ///'
                     y = instr(sCandidates(i), "program/soffice")
-                    if gPlatform = lcase("osx") AND y < 1 then
+                    if ( lcase( gPlatform ) = "osx" AND y < 1 ) then
                         ' Accept also MacOS in link to soffice binary
                         y = instr(sCandidates(i), "MacOS/soffice")
                     end if 
@@ -1118,7 +1134,7 @@ function getSofficeTesttool() as string
         end if
         ' be tolerant to the chosen path
         ' we just need the base directory, cut of possible "program" at end
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             ' to get all possibile directories:
             ' path could be: ...app/Contents/MacOS
             if (right(sTemp,6) = "MacOS"+gPathSigne) then
@@ -1230,7 +1246,7 @@ function getOfficeBasisPath as string
     sFile = gNetzOfficePath + "basis-link"
 
     if fileExists(sFile) then
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             'MacOS X
             sTemp = sFile + gPathSigne
         else

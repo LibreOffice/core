@@ -180,3 +180,29 @@ Sub Main
 End Sub
 
 # ---------------------------------------------------------------------------- #
+
+[i92329]
+Option VBASupport 1
+Sub Main()
+
+    Dim mTmp() As String  
+    mTmp() = Test(False) '<-- generates an 'unexpected ')' compiler error
+    MsgBox mTmp(0) & " " & mTmp(1)
+    
+End Sub
+
+Function Test(ByVal bFlag As Boolean) As Variant
+
+    Dim mRanges(100) As String
+
+    If (bFlag = True) Then
+        Test = "return a String"
+    Else
+        mRanges(0) = "Return an"
+        mRanges(1) = "Array"
+        Test = mRanges()
+    End If
+
+End Function
+
+# ---------------------------------------------------------------------------- #

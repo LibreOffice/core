@@ -116,12 +116,12 @@ testcase tFiledlgPasswords()
                 
 
                 '///+<li>Enter the filename as password and confirm</li>
-                Kontext "PasswordDlg"
+                Kontext "PasswordFileSave"
                 printlog( "Enter the name of the file as password and confirm" )
-                if ( passwordDlg.exists() ) then
+                if ( passwordFileSave.exists() ) then
                     Password.settext( workfile )
                     PasswordConfirm.settext( workfile )
-                    PasswordDlg.ok()
+                    PasswordFileSave.ok()
                 else
                     warnlog( "No password dialog is displayed" )
                 endif

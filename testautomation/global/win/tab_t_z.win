@@ -257,7 +257,6 @@ VerzeichnisGeschuetzt sw:CheckBox:TP_TOX_SELECT:CB_READONLY
 ErstellenFuer sw:ListBox:TP_TOX_SELECT:LB_AREA
 AuswertenBis sw:NumericField:TP_TOX_SELECT:NF_LEVEL
 ErzeugenAusGliederung sw:CheckBox:TP_TOX_SELECT:CB_FROMHEADINGS
-Gliederung sw:PushButton:TP_TOX_SELECT:PB_CHAPTERDLG
 ErzeugenAusVorlagen sw:CheckBox:TP_TOX_SELECT:CB_ADDSTYLES
 VorlagenAuswahl sw:PushButton:TP_TOX_SELECT:PB_ADDSTYLES
 ErzeugenAusMarkierungen sw:CheckBox:TP_TOX_SELECT:CB_TOXMARKS

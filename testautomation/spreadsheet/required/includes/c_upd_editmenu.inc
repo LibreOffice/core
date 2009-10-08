@@ -47,7 +47,6 @@
 ' #1 tEditChanges
 ' #1 tEditCompareDocuments
 ' #1 tEditFindAndReplace
-' #1 tEditNavigator
 ' #1 tEditHeadersAndFooters
 '*
 '\***********************************************************************
@@ -66,7 +65,6 @@ sub c_upd_editmenu1
     call tEditChanges
     call tEditCompareDocuments
     call tEditFindAndReplace
-    call tEditNavigator
     call tEditHeadersAndFooters
 
 end sub
@@ -599,58 +597,6 @@ testcase tEditFindAndReplace
     printlog " Set the 'Asian Language support' to default"
     if bAsianLanguage = FALSE then
         Call ActiveDeactivateAsianSupport(FALSE)
-    end if
-    '/// Close document
-    printlog " Close document"
-    hCloseDocument
-
-endcase
-
-'-----------------------------------------------------------
-
-testcase tEditNavigator
-'///<u><b>Edit - Navigator</b></u>
-
-    '/// Open new Spreadsheet document
-    printlog " Open new Spreadsheet document"
-    call hNewDocument
-    '/// Check if Navigator already exists. If not open Navigator by Edit-Navigator.
-    printlog " Check if Navigator already exists. If not open Navigator by Edit-Navigator."
-    Kontext "NavigatorCalc"
-    if NavigatorCalc.exists then
-        warnlog "Navigator is already enabled"
-    else
-        EditNavigator
-    end if
-    Kontext "NavigatorCalc"
-    call DialogTest ( NavigatorCalc )
-    '/// Check functionality of button for content by clicking it twice
-    printlog " Check functionality of button for content by clicking it twice"
-    Inhalte.Click
-    Inhalte.Click
-    '/// Check functionality of toggle button by clicking it twice
-    printlog " Check functionality of toggle button by clicking it twice"
-    Umschalten.Click
-    Umschalten.Click
-    '/// Check functionality of button for scenarios by clicking it twice
-    printlog " Check functionality of button for scenarios by clicking it twice"
-    Szenarien.Click
-    Szenarien.Click
-    '/// Check that the dragmodus has 3 modes
-    printlog " Check that the dragmodus has 3 modes"
-    Dragmodus.OpenMenu
-    if MenuGetItemCount <> 3 then
-        warnlog "Not enough modes for dragmodus"
-    end if
-    MenuSelect (0)
-    '/// Close Navigator
-    printlog " Close Navigator"
-    Kontext "Navigator"
-    Navigator.Close    'Because of #i78307 the navigatorwindow has to be closed by Navigator.close
-    Kontext "NavigatorCalc"
-    if NavigatorCalc.exists then
-        EditNavigator
-        Warnlog "NavigatorCalc.Close doesn't close the navigator"
     end if
     '/// Close document
     printlog " Close document"

@@ -87,8 +87,18 @@ testcase HTMLToCALCText
    Call hCloseDocument
    printlog "  Close saved document " 
    wait 500
-   Call hFileOpen (gOfficepath + "user\work\html_to_calc_text.ods",true)
-   printlog "  Reopen saved document " 
+   printlog "  Reopen saved document "   
+   if hFileOpen (gOfficepath + "user\work\html_to_calc_text.ods",true) = false then
+        Kontext "Active"
+        if Active.Exists then
+            try
+                Active.Yes
+            catch
+                Warnlog "Unable to remove checkbox: " + Active.Gettext
+                Active.ok
+            endcatch
+        endif
+   endif   
    Wait 500
    Call hCloseDocument
    printlog "  Close saved document " 

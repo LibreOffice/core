@@ -308,7 +308,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
             Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
             sleep (1)
             Auswaehlen.Click
-            sleep (2)
+            sleep (10)
             '/// +Click on <i>Add</i> for some graphics
             printlog "     - 'add' one by one"
         Kontext "TabDateien"
@@ -421,7 +421,7 @@ testcase tGallery_CreateAndWorkWithANewGalleryThemes
                             Kontext "OeffnenDlg"
                                 Pfad.SetText ( convertPath ( gTesttoolPath + "global\input\graf_inp" ) )
                                 Auswaehlen.Click
-                                sleep (3)
+                                sleep (10)
                         Kontext "TabDateien"
                             DateiListe.Select 1
                             Hinzufuegen.Click

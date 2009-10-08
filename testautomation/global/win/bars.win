@@ -943,6 +943,7 @@ Massstab SID_ATTR_ZOOM
 MassstabVergroessern .uno:ZoomIn
 MassstabVerkleinern .uno:ZoomOut
 NaechsteSeite .uno:NextPage
+ScalingFactor .uno:ScalingFactor
 Schliessen SID_CLOSEWIN
 Seitenansicht .uno:ClosePreview
 Seitenlayout .uno:PageFormatDialog

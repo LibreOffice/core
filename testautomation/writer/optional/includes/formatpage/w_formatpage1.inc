@@ -747,7 +747,7 @@ testcase tFormatPage_13
     Call wTypeKeys "<Tab>"
 
 	Kontext "Navigator"
-	if Not Navigator.Exists then EditNavigator
+	if Not Navigator.Exists then ViewNavigator
 	Kontext "NavigatorWriter"
 	Sleep 1
 	if Seitennummer.GetText <> sPage1 then Warnlog "1st pic isn't in page 1 !"
@@ -758,7 +758,7 @@ testcase tFormatPage_13
      Call wTypeKeys "<Tab>"
 
      Kontext "Navigator"
-     if Not Navigator.Exists then EditNavigator
+     if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
      if Seitennummer.GetText <> sPage2 then Warnlog "#i40333# 2nd pic isn't in page 3 !"
@@ -804,7 +804,7 @@ testcase tFormatPage_14
     Call wTypeKeys "<Tab>"
 
      Kontext "Navigator"
-     if Not Navigator.Exists then EditNavigator
+     if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
      if Seitennummer.GetText <> sPage1 then Warnlog "1st pic isn't in page 2 !"
@@ -815,7 +815,7 @@ testcase tFormatPage_14
      Call wTypeKeys "<Tab>"
 
      Kontext "Navigator"
-     if Not Navigator.Exists then EditNavigator
+     if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
      if Seitennummer.GetText <> sPage2 then Warnlog "#i40333# 2nd pic isn't in page 4 !"

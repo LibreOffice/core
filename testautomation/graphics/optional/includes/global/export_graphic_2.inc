@@ -230,7 +230,7 @@ testcase tSVM
       if Filterauswahl.exists then
          Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
          Filterauswahl.Cancel
-         exit sub
+         goto endsub
       endif
       kontext "DocumentDraw"
       DocumentDraw.TypeKeys ("<escape><tab>")
@@ -782,7 +782,7 @@ qaerrorlog
    'if Filterauswahl.exists(10) then
    '   Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
    '   Filterauswahl.Cancel
-   '   exit sub
+   '   goto endsub
    'endif
 
     '' check if the document is writable
@@ -850,7 +850,7 @@ qaerrorlog
       if Filterauswahl.exists then
          Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
          Filterauswahl.Cancel
-         exit sub
+         goto endsub
       endif
       kontext "DocumentDraw"
       DocumentDraw.TypeKeys ("<escape><tab>")
@@ -971,7 +971,7 @@ testcase tEMF
    if Filterauswahl.Exists(10) then
       Warnlog "Error when loading the file. The Filter-dialogue came up. Test aborted."
       Filterauswahl.Cancel
-      exit sub
+      goto endsub
    endif
     ' check if the document is writable
     if fIsDocumentWritable = false then

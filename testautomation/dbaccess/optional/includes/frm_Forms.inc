@@ -79,7 +79,7 @@ testcase tDatabaseFormsMain
     printlog "insert a textfield"
     Kontext "FormControls"   	        
         Edit.Click
-        call hDrawingWithSelection ( 20, 20, 30, 30 )
+        call hDrawingWithSelection ( 50, 20, 60, 30 )
         sleep(1)
 
     Kontext "FormControls"
@@ -179,7 +179,7 @@ testcase tCreateForm
    	'/// insert a textfield
     printlog "insert a textfield"        
     Edit.Click
-   	call hDrawingWithSelection ( 20, 20, 30, 30 )
+   	call hDrawingWithSelection ( 50, 20, 60, 30 )
    	sleep(1)
     
     Kontext "FormControls"
@@ -532,7 +532,8 @@ testcase tCreateSubForms
      '/// set the table TT_Forms
      printlog "set the table TT_Forms"              
 	 Content.setText("TT_Forms")
-     TabDataForm.TypeKeys("<RETURN>")        
+     TabDataForm.TypeKeys("<RETURN>")
+     sleep(1)
   	Kontext "FormPropertiesDialog"
    	 FormPropertiesDialog.Close
    	sleep(3)
@@ -546,7 +547,7 @@ testcase tCreateSubForms
    	'/// insert a textfield
     printlog "insert a textfield"        
     Edit.Click
-   	call hDrawingWithSelection ( 20, 20, 30, 30 )
+   	call hDrawingWithSelection ( 50, 20, 60, 30 )
    	sleep(1)
     
     Kontext "FormControls"
@@ -637,7 +638,7 @@ testcase tCreateSubForms
        '/// insert a textfield
        printlog "insert a textfield"
        'Edit.Click
-   	 call hDrawingWithSelection ( 70, 70, 80, 80 )
+   	 call hDrawingWithSelection ( 50, 40, 60, 50 )
    	 sleep(1)
     
     Kontext "FormControls"
@@ -748,7 +749,7 @@ testcase tCreateSubFormsNewMethod
         '/// insert a textfield
         printlog "insert a textfield"        
         Edit.Click
-        call hDrawingWithSelection ( 20, 20, 30, 30 )
+        call hDrawingWithSelection ( 50, 20, 60, 30 )
         sleep(1)
     
     Kontext "FormControls"
@@ -845,7 +846,7 @@ testcase tCreateSubFormsNewMethod
        '/// insert a textfield
        printlog "insert a textfield"
        'Edit.Click
-       call hDrawingWithSelection ( 70, 70, 80, 80 )
+       call hDrawingWithSelection ( 50, 40, 60, 50 )
        sleep(1)
     
     Kontext "FormControls"

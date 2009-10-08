@@ -67,7 +67,7 @@ testcase tPushButton
    	sleep(1)      
 	'/// insert a Push Button
     printlog "insert a Push Button"    
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 )
 	sleep(2)
 	Kontext "FormControls"
 	ControlProperties.Click
@@ -126,7 +126,7 @@ testcase tTextBox
    	sleep(1)      
 	'/// insert a text box
     printlog "insert a text box"                    
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 
 	sleep(2)
 	Kontext "FormControls"
 	ControlProperties.Click
@@ -188,7 +188,7 @@ testcase tListBox
    	sleep(1)
 	'/// insert a list box
     printlog "insert a list box"                        
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 
 	sleep(2)
 	Kontext "FormControls"
 	ControlProperties.Click
@@ -244,7 +244,7 @@ testcase tComboBox
    	sleep(1)
 	'/// insert a list box
     printlog "insert a list box"                        
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 
 	sleep(2)
 	Kontext "FormControls"
 	ControlProperties.Click
@@ -298,7 +298,7 @@ testcase tImageButton
    	sleep(1)      
 	'/// insert an image control
     printlog "insert an image control"                        
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 
 	sleep(2)
     call hToolbarSelect("FormControls",true)
 	Kontext "FormControls"
@@ -356,7 +356,7 @@ testcase tImageControl
    	sleep(1)      
 	'/// insert an image control
     printlog "insert an image control"                        
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 
 	sleep(2)
     call hToolbarSelect("FormControls",true)
 	Kontext "FormControls"
@@ -396,7 +396,7 @@ testcase tForms
    	sleep(1)      
 	'/// insert a Push Button
     printlog "insert a Push Button"    
-    call hDrawingWithSelection ( 20, 20, 30, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 30 
 	sleep(2)
 	Kontext "FormControls"
 	FormProperties.Click

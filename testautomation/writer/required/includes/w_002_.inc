@@ -39,6 +39,7 @@
 
 sub w_002_
     printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
+    gApplication = "WRITER"
 
     Call tEditUndoRedo
     Call tEditRepeat
@@ -50,7 +51,7 @@ sub w_002_
     Call tEditChanges
     Call tEditCompareDocument
     Call tEditFindAndReplace
-    Call tEditNavigator
+    Call tViewNavigator
     Call tEditAutoText
     Call tEditHyperlink
 
@@ -63,6 +64,16 @@ sub w_002_
     Call tEditPlugIn
     Call tEditImageMap
     Call tEditObjectEdit
+
+    'Writer Web
+    gApplication = "HTMLDOKUMENT"
+    Call tHtmlDocEditFields
+    gApplication = "WRITER"
+
+    'Writer Master Document
+    gApplication = "MASTERDOC"
+    Call tMasterDocEditNavigator
+    gApplication = "WRITER"
 
 end sub
 
@@ -115,7 +126,6 @@ testcase tEditRepeat
 
     PrintLog "Close active document"
     Call hCloseDocument
-
 endcase
 
 '----------------------------------------------------
@@ -165,7 +175,7 @@ testcase tEditPasteSpecial
 
         PrintLog "Paste from external clipboard with Edit / Paste in Office"
         EditPaste
-WaitSlot(1000)
+        WaitSlot(1000)
         Call wTypeKeys("<Mod1 A>")
         Wait(200)
         EditCopy
@@ -241,7 +251,6 @@ endcase
 '----------------------------------------------------
 
 testcase tEditSelectionMode
-
     PrintLog "    - Edit - Selection Mode"
     PrintLog "    Open new writer document"
     Call hNewDocument
@@ -492,7 +501,7 @@ endcase
 
 '----------------------------------------------------
 
-testcase tEditNavigator
+testcase tViewNavigator
     printlog "- Edit/Navigator"
     Dim ToolboxOk as boolean
 
@@ -501,7 +510,7 @@ testcase tEditNavigator
 
     if gApplication = "MASTERDOC" then
         Kontext "NavigatorGlobalDoc"
-        if Not NavigatorGlobalDoc.Exists then EditNavigator
+        if Not NavigatorGlobalDoc.Exists then ViewNavigator
         Kontext "NavigatorGlobalDoc"
         Call DialogTest ( NavigatorGlobalDoc )
 
@@ -521,11 +530,21 @@ testcase tEditNavigator
         Kontext "NavigatorWriter"
         Umschalten.Click
         Kontext "NavigatorGlobalDoc"
-        Sleep 1
+        Sleep (1)
 
         printlog "  - Bearbeiten"
-        Bearbeiten.Click
-        wait 300
+        try
+            Bearbeiten.Click
+        catch
+            Sleep (2)
+            try
+                Bearbeiten.Click
+            catch
+                Warnlog " Either taking more than three seconds to switch Navigator-modes, or something has gone wrong."
+            endcatch
+        endcatch
+        wait (300)
+
         Kontext "Navigator"
         Navigator.Close
         Call hCloseDocument
@@ -534,7 +553,7 @@ testcase tEditNavigator
     end if
 
     Kontext "NavigatorWriter"
-    if Not NavigatorWriter.Exists then EditNavigator
+    if Not NavigatorWriter.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     PrintLog "Open Navigator"
     Call DialogTest ( NavigatorWriter )
@@ -629,11 +648,11 @@ testcase tEditNavigator
         Navigator.Close
     catch
         Errorlog
-        EditNavigator
+        ViewNavigator
     endcatch
 
-    Call hCloseDocument
     PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------
@@ -902,6 +921,7 @@ testcase tEditAutotext
         if Autotext.Exists then Autotext.Close            
     endcatch
 
+    PrintLog "Close active document"
     Call hCloseDocument
 endcase
 
@@ -1103,16 +1123,16 @@ testcase tEditFieldsInputList
     PrintLog "- Edit / Fields / Functions"
     If gApplication = "HTMLDOKUMENT" then goto endsub
 
-    Call hNewDocument
     PrintLog "Open new document"
+    Call hNewDocument
 
-    InsertFieldsOther
     PrintLog "Select Insert / Fields Other"
+    InsertFieldsOther
+    PrintLog "Goto Tabpage Functions and select 2nd entry (Input list)"
     Kontext
     Active.Setpage TabFunktionen
     Kontext "TabFunktionen"
     Sleep 1
-    PrintLog "Goto Tabpage Functions and select 2nd entry (Input list)"
     Feldtyp.Select 2
     if NewListEntry.IsVisible and NewListEntry.IsEnabled then
         PrintLog "Add 1 entry to list"
@@ -1147,8 +1167,9 @@ testcase tEditFieldsInputList
     else
         Warnlog "'Input list' probably not found!"
     end if
-    Call hCloseDocument
 
+    PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '----------------------------------------------------------------
@@ -1277,24 +1298,23 @@ testcase tEditLinks
     else
         Warnlog "Dialog Edit / Links not opened!"
     end if
-    Call hCloseDocument
     PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------
 
 testcase tEditPlugIn
     PrintLog "- Edit/PlugIn"
-
-    Call hNewDocument
     PrintLog "Open new document"
-    EditPlugIn
+    Call hNewDocument
     PrintLog "Edit / Plugin"
+    EditPlugIn
     WaitSlot (2000)
-    EditPlugIn
     PrintLog "Edit / Plugin"
-    Call hCloseDocument
+    EditPlugIn
     PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------
@@ -1302,8 +1322,8 @@ endcase
 testcase tEditImageMap
     PrintLog "- Edit / ImageMap"
 
-    Call hNewDocument
     PrintLog "Open new document"
+    Call hNewDocument
 
     if hGrafikEinfuegen ( gTesttoolPath & "writer\required\input\graphics\jolink.jpg" )=true then
 		Kontext "ImageMapEditor"
@@ -1319,8 +1339,8 @@ testcase tEditImageMap
 		endcatch
     end if
 
-    Call hCloseDocument
     PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '------------------------------------------------------
@@ -1328,8 +1348,8 @@ endcase
 testcase tEditObjectEdit
     PrintLog "Edit / Object / Edit"
 
-    Call hNewDocument
     PrintLog "Open new document"
+    Call hNewDocument
 
     InsertObjectChart
     Call gMouseClick (99,1)
@@ -1343,9 +1363,155 @@ testcase tEditObjectEdit
         warnlog "Edit/Object/Edit is disabled with chart added"
     endcatch
 
-    Call hCloseDocument
     PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '----------------------------------------------------------------
 
+testcase tHtmlDocEditFields
+    PrintLog "- Edit/Fields"
+
+    gApplication = "HTMLDOKUMENT"
+    PrintLog "Open new document"
+    Call hNewDocument
+
+    PrintLog "Select Insert / Fields Other"
+    InsertFieldsOther
+    Kontext
+    Active.Setpage TabDokumentFeldbefehle
+    Kontext "TabDokumentFeldbefehle"
+    Sleep 1
+    PrintLog "Insert Field 'Sender -> Company'"
+    Select case iSprache
+        case 01 : Feldtyp.Select 5  'Sender
+                        Auswahl.Select 1  'Company
+        case 03 : Feldtyp.Select 8
+                        Auswahl.Select 1
+        case 07 : Feldtyp.Select 5
+                        Auswahl.Select 1
+        case 31 : Feldtyp.Select 1
+                        Auswahl.Select 1
+        case 33 : Feldtyp.Select 2
+                        Auswahl.Select 1
+        case 34 : Feldtyp.Select 6
+                        Auswahl.Select 1
+        case 36 : Feldtyp.Select 3
+                        Auswahl.Select 1
+        case 39 : Feldtyp.Select 3
+                        Auswahl.Select 1
+        case 45 : Feldtyp.Select 1
+                        Auswahl.Select 1
+        case 46 : Feldtyp.Select 2
+                        Auswahl.Select 1
+        case 48 : Feldtyp.Select 3
+                        Auswahl.Select 1
+        case 49 : Feldtyp.Select 1
+                        Auswahl.Select 1
+        case 55 : Feldtyp.Select 7
+                        Auswahl.Select 1
+        case 81 : Feldtyp.Select 4
+                        Auswahl.Select 1
+        case 82 : Feldtyp.Select 2
+                        Auswahl.Select 1
+        case 84 : Feldtyp.Select 3
+                        Auswahl.Select 1
+        case 86 : Feldtyp.Select 1
+                        Auswahl.Select 1
+        case 88 : Feldtyp.Select 2
+                        Auswahl.Select 1
+
+        case else :  Warnlog "Missing language support!"
+                        TabDokumentFeldbefehle.Cancel
+                        PrintLog "Close active document"
+                        Call hCloseDocument
+                        goto endsub
+        end select
+
+        Einfuegen.Click
+        Wait (400)
+        PrintLog "Close Fields dialog"
+        Schliessen.Click
+
+        PrintLog "Put cursor in front of field"
+        Call wTypeKeys("<Home>")
+
+        PrintLog "Edit / Fields"
+        EditFields
+        WaitSlot (2000)
+
+        Kontext "FeldbefehlBearbeitenDokument"
+        Call DialogTest ( FeldbefehlBearbeitenDokument )
+
+        PrintLog "In 'Edit Fields' dialog select 'Edit'"
+        if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
+            Bearbeiten.Click
+            Kontext "TabBenutzerdaten"
+            TabBenutzerdaten.Cancel
+            Kontext "FeldbefehlBearbeitenDokument"
+        else
+            Warnlog "Button 'Edit' in Dialog disabled!"
+        end if
+
+        PrintLog "Close dialog"
+        FeldbefehlBearbeitenDokument.Cancel
+        PrintLog "Close active document"
+        Call hCloseDocument
+        gApplication = "WRITER"
+endcase
+
+'----------------------------------------------------------------
+
+testcase tMasterDocEditNavigator
+    printlog "- Edit/Navigator"
+    Dim ToolboxOk as boolean
+    
+    gApplication = "MASTERDOC"
+    Call hNewDocument
+    PrintLog "Open new document"
+
+    Kontext "NavigatorGlobalDoc"
+    if Not NavigatorGlobalDoc.Exists then EditNavigator
+    Kontext "NavigatorGlobalDoc"
+    Call DialogTest ( NavigatorGlobalDoc )
+
+    printlog " - Umschalten"
+    GlobaldokumentToolbox.Click Umschalten
+    Sleep 5
+    kontext "NavigatorWriter"
+
+    try
+        Toolbox.TearOff Navigation
+        Kontext "NavigationsFenster"
+        NavigationsFenster.Close
+    catch
+        Warnlog "Unable to Tear off Navigation Toolbox!"
+    endcatch
+
+    Kontext "NavigatorWriter"
+    Umschalten.Click
+    Kontext "NavigatorGlobalDoc"
+    Sleep (1)
+
+    printlog "  - Bearbeiten"
+    try
+        Bearbeiten.Click
+    catch
+        Sleep (2)
+        try
+            Bearbeiten.Click
+        catch
+            Warnlog " Either taking more than three seconds to switch Navigator-modes, or something has gone wrong."
+        endcatch
+    endcatch
+    wait (300)
+
+    Kontext "Navigator"
+    Navigator.Close
+
+    PrintLog "Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'---------------------------------------------------

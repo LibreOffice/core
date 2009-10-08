@@ -68,6 +68,7 @@ sub LoadIncludeFiles
     
     use "global\required\includes\g_option.inc"
     
+    use "global\tools\includes\optional\t_ui_filters.inc"
     use "global\tools\includes\optional\t_filetools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_listfuncs.inc"

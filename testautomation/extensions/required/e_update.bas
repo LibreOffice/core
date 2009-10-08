@@ -40,9 +40,11 @@
 sub main
 
     use "extensions\required\includes\e_update.inc"
+    use "extensions\required\includes\e_update_oooimprovement.inc"
 
     call hStatusIn( "extensions" , "e_update.bas" )
     call tExtensionManagerResources()
+    call tUpdtOOoImprovement()
     call hStatusOut()
 
 end sub
@@ -55,6 +57,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     
     use "global\tools\includes\optional\t_user_info.inc"
+    use "global\tools\includes\optional\t_filetools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

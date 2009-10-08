@@ -39,8 +39,8 @@
 
 sub w_006_
     printLog Chr(13) + "--------- Table Menu (w_006_.inc) ----------"
+    gApplication = "WRITER"
 
-   '   Table
     Call tFormatTable
     Call tFormatSplitTables
     Call tFormatJoinTables
@@ -48,8 +48,10 @@ sub w_006_
     Call tTableCell
     Call tTableRow
     Call tFormatAutoformatTable
-    
+
 end sub
+
+'---------------------------------------------------------------------------------------------------------
 
 testcase tFormatTable
     PrintLog "- Format / Table"
@@ -191,7 +193,9 @@ testcase tTableCell
     printlog " Select 'Cell->Unprotect"
     Kontext "DocumentWriter"
     Call wTypeKeys "<Shift F10>"
+    wait (500)
     Call hMenuFindSelect (".uno:CellMenu", true, 9, false)   'Find "CellMenu" and call the slot.
+    wait (500)
     try
         Call hMenuFindSelect (20519, true, 1, false)   'Find "UnProtect" and call the slot.
     catch

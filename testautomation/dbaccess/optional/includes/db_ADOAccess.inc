@@ -38,7 +38,7 @@
 '\***********************************************************************
 testcase db_ADOAccess
 
-    if gtSYSName = "MAC" or gtSYSName = "Solaris SPARC" or gtSYSName = "Solaris x86" or gtSYSName = "Linux" then
+    if gtSYSName = "Mac OS X" or gtSYSName = "Solaris SPARC" or gtSYSName = "Solaris x86" or gtSYSName = "Linux" then
         printlog "This is an ADO test and works only on Windosen"
         printlog "You have a: " + gtSYSName + " OS - Test Stopped !"
 	else 

@@ -120,6 +120,15 @@ testcase tToolsOptionsStarOffice
     Kontext "ExtrasOptionenDlg"
     EchteAnzahl = Optionsliste.GetItemCount - iSectionNumber
     iMenuShould = 13
+
+    
+    if ( gExtensionOOoImprovementIsInstalled ) then
+        iMenuShould = iMenuShould + 1
+        printlog( "The OOoImprovementExtension is installed" )
+    else
+        qaerrorlog( "The OOoImprovementExtension is not installed" )
+    endif 
+
     if EchteAnzahl <> iMenuShould then
         if ((gtplatform = "sol") OR (gtplatform = "x86") OR gOOO) AND EchteAnzahl = 12 then
             printLog "One Tabpage is missing. This is ok for a patched Solaris (sparc and x86) or OOo installation." 
@@ -302,6 +311,14 @@ testcase tToolsOptionsStarOffice
                    Call DialogTest( TabOnlineUpdate )
                 endif
                 'CheckNow.click
+        case 14: Kontext "TabOOoImprovement"
+                 if ( gExtensionOOoImprovementIsInstalled ) then
+                     printlog( "  - OpenOffice.org Improvement Program" )
+                     if ( TabOOoImprovement.isVisible() ) then
+                         gefunden = TRUE
+                         Call DialogTest( TabOOoImprovement )
+                     endif
+                 endif 
         end select
         if gefunden=FALSE then
             Warnlog "Error with the " + i + ".page, perhaps this page is deleted or change the place!"
@@ -487,7 +504,7 @@ testcase tToolsOptionsLanguageSettings
                    Kontext "TabLinguistik"
                    Optionen.TypeKeys "<PageUp>", 3
                    Sleep 1
-                   Optionen.TypeKeys "<Down>", 8
+                   Optionen.TypeKeys "<Down>", 6
                    Sleep 1
                    OptionenBearbeiten.Click
                     Kontext "SilbentrennungOptionen"

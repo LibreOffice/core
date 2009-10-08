@@ -537,19 +537,19 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
     Select Case Ucase(gApplication)
         Case "CALC"
             Kontext "NavigatorCalc"
-            if NavigatorCalc.NotExists then EditNavigator
+            if NavigatorCalc.NotExists then ViewNavigator
             wait 500
             Kontext "NavigatorCalc"
             MinEntrys = 8
         Case "WRITER", "HTMLDOKUMENT", "HTML"
             Kontext "NavigatorWriter"
-            if NavigatorWriter.NotExists then EditNavigator
+            if NavigatorWriter.NotExists then ViewNavigator
             wait 500
             Kontext "NavigatorWriter"
             MinEntrys = 11
         Case "MASTERDOC"
             Kontext "NavigatorGlobalDoc"
-            if NavigatorGlobalDoc.NotExists then EditNavigator
+            if NavigatorGlobalDoc.NotExists then ViewNavigator
             wait 500
             Kontext "NavigatorGlobalDoc"
             if Liste.IsVisible then
@@ -668,7 +668,7 @@ sub wClearDocument
     Sleep 3
 
     Kontext "NavigatorWriter"
-    if Not NavigatorWriter.Exists then EditNavigator
+    if Not NavigatorWriter.Exists then ViewNavigator
     wait 500
 
     Kontext "NavigatorWriter"
@@ -700,7 +700,7 @@ sub wClearDocument
         Navigator.Close
     catch
         Errorlog
-        EditNavigator
+        ViewNavigator
     endcatch
 
     try

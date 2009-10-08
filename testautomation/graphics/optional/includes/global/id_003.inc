@@ -36,6 +36,7 @@
 '* short description :
 '*
 '***********************************************************************************
+' #1 tiViewNavigator
 ' #1 tiViewZoom
 ' #1 tiViewToolbar
 ' #1 tiViewDisplayQuality
@@ -43,6 +44,32 @@
 ' #1 tViewSnapLines
 ' #1 tViewGrid
 '\**********************************************************************************
+
+testcase tiViewNavigator
+    '/// open application ///'
+    Call hNewDocument
+
+    Kontext "NavigatorDraw"
+        '/// if 'Navigator' isn't already open, open it (View->Navigator)///'
+        if Not NavigatorDraw.Exists Then
+            ViewNavigator
+        end if
+    Kontext "NavigatorDraw"
+        Call DialogTest ( NavigatorDraw )
+
+        try
+            Kontext "Navigator"
+                '/// close 'Navigator' ///'
+                Navigator.Close
+        catch
+            Errorlog "  Navigator wasn't closed, second try with Menu"
+            ViewNavigator
+        endcatch
+    '/// close application ///'
+    Call hCloseDocument
+endcase
+
+'-------------------------------------------------------------------------
 
 testcase tiViewZoom
 '/// open application ///'

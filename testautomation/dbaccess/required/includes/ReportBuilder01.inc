@@ -51,7 +51,8 @@ sub rpt_Main
         call tGroupingSorting
         call tReportNavigator
         call tReportHeaderFooter
-        call tPageHeaderFooter        
+        call tPageHeaderFooter   
+        call tFunctionWizard
     else
         warnlog "report extension could not installed"    
     endif
@@ -88,9 +89,15 @@ testcase tMainMenuBar
         printlog "check if there are 10 items in the file menu."                
         hMenuSelectNr(1) ' the file menu        
         iCount = hMenuItemGetCount()        
-        if (iCount <> 10 ) then
-            warnlog "There should be 10 items in the file menu but there are " + iCount + " items."
-        end if
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 9 ) then
+                warnlog( "File menu: 9 Items expected, found " & iCount )
+            endif
+        else
+            if (iCount <> 10 ) then
+                warnlog "There should be 10 items in the file menu but there are " + iCount + " items."
+            end if
+        endif
 
         '/// check if there are 12 items in the FILE/NEW menu.
         printlog "check if there are 12 items in the FILE/NEW menu."
@@ -114,13 +121,13 @@ testcase tMainMenuBar
 
  'edit menu        
         
-        '/// check if there are 12 items in the edit menu.
-        printlog "check if there are 12 items in the edit menu."
+        '/// check if there are 11 items in the edit menu.
+        printlog "check if there are 11 items in the edit menu."
         ReportDesign.UseMenu 
         hMenuSelectNr(2)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 12) then
-            warnlog "There should 12 items in the edit menu but there are " + iCount + " items."
+        if (iCount <> 11) then
+            warnlog "There should 11 items in the edit menu but there are " + iCount + " items."
         end if
         call hMenuClose()
 
@@ -201,9 +208,15 @@ testcase tMainMenuBar
         ReportDesign.UseMenu 
         hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 4) then
-            warnlog "There should 4 items in the tools menu but there are " + iCount + " items."
-        end if
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 3 ) then
+		warnlog( "Tools menu: 3 items expected, found " & iCount )
+            endif
+        else
+            if (iCount <> 4) then
+                warnlog "There should 4 items in the tools menu but there are " + iCount + " items."
+            end if
+        endif
         call hMenuClose()
 
  'help menu        
@@ -213,6 +226,7 @@ testcase tMainMenuBar
         ReportDesign.UseMenu 
         hMenuSelectNr(8)        
         iCount = hMenuItemGetCount()
+        if ( lcase( gPlatform ) = "osx" ) then iCount = iCount + 1 ' dirty, but check is fuzzy anyway.
         if (gOOO) then
             if (iCount <> 9) then
                 warnlog "There should 9 items in the help menu but there are " + iCount + " items."
@@ -323,7 +337,7 @@ testcase tExecuteReport
     Kontext "ReportDesign"
         ReportDesign.UseMenu            
         hMenuSelectNr(2)
-        hMenuSelectNr(12)
+        hMenuSelectNr(11)
        
     sleep(10)
     
@@ -475,7 +489,7 @@ testcase tGroupingSorting
     Kontext "ReportDesign"
         ReportDesign.UseMenu
         hMenuSelectNr(3)
-        hMenuSelectNr(5) 
+        hMenuSelectNr(4) 
         
     '/// check if the sorting and grouping dialog appear
     printlog "check if the sorting and grouping dialog appear"    
@@ -526,7 +540,7 @@ testcase tReportNavigator
     Kontext "ReportDesign"
         ReportDesign.UseMenu
         hMenuSelectNr(3)
-        hMenuSelectNr(6) 
+        hMenuSelectNr(5) 
         
     '/// check if the report navigator appear
     printlog "check if the report navigator appear"    
@@ -805,6 +819,59 @@ testcase tFormatPage
     '/// close the report designer
     call fCloseReportDesign
     '/// close the database
+    call fCloseDatabase
+
+endcase
+'-------------------------------------------------------------------------
+testcase tFunctionWizard
+    
+    printlog "open Bibliography database"    
+    call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
+        
+    printlog "open the report designer"
+    call fOpenNewReportDesign
+
+    printlog "select the first table in the content list box"
+    Kontext "ReportDataProperties"   
+        Content.select 1
+        Content.typeKeys("<RETURN>",true) ' important to leave the listbox
+    
+    Kontext "ReportDesign"
+        ReportDesign.TypeKeys("<MOD1 TAB>",true)
+        ReportDesign.TypeKeys("<MOD1 TAB>",true)
+        
+    Kontext "ReportAddField"
+        ReportAddFieldList.select 1    
+        ReportAddField.TypeKeys("<RETURN>",true)        
+        
+    'close the Add Field dialog to get the focus back to the design
+    call fCloseAddFieldDialog()
+    
+    'press 2 time tab to select the edit field
+    Kontext "ReportDesign"
+        ReportDesign.TypeKeys("<TAB>",true)
+        ReportDesign.TypeKeys("<TAB>",true)
+    
+    sleep(1)
+    
+    printlog "click on the ... button behind the datafield property in the property browser"    
+    Kontext "ReportDataProperties"
+        OpenFormularWizard.Click
+    
+    printlog "check if the function wizard appear"    
+    Kontext "FunctionWizard"
+        if(FunctionWizard.exists(5)) then
+            printloig "The function wizard appear -> OK"
+            FunctionWizard.close
+        else
+            warnlog "The function wizard does not appear -> FAILED"
+        endif
+    
+    sleep(1)        
+        
+    printlog "close the report designer"
+    call fCloseReportDesign
+    printlog "close the database"
     call fCloseDatabase
 
 endcase

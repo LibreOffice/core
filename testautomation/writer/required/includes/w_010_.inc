@@ -39,6 +39,7 @@
 
 sub w_010_
     printLog Chr(13) + "--------- Objectbars (w_010_.inc) ----------"
+    gApplication = "WRITER"
 
 '   ** Objectbar
     Call tFormatting
@@ -65,6 +66,13 @@ sub w_010_
     Call tUpRestartNumbering
     Call tUpNumberingOff
     Call tUpNumberingEnumerating
+
+    'Writer Web
+    gApplication = "HTMLDOKUMENT"
+    Call tHtmlDocFormatting
+    gApplication = "MASTERDOC"
+    Call tMasterDocFormatting
+    gApplication = "WRITER"
 
 end sub
 
@@ -316,7 +324,7 @@ testcase tNumLevelUpDown
     Call hNewDocument
     printlog " Open new document"
     Kontext "TextObjectbar"
-    if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
+    if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
     printlog " Select 'Numbering' in object bar"
     Numerierung.Click
     Sleep 1
@@ -333,14 +341,14 @@ testcase tNumLevelUpDown
 		Call hCloseDocument
 		goto endsub
     endcatch
-
-    for i=1 to 9        
+    sleep (2)
+    for i=1 to 9
 		if Hinunterstufen.IsEnabled = True then
             Hinunterstufen.Click
         else
             if i = 1 then Warnlog "Level down is disabled!"
         end if
-        wait 500
+        sleep (2)
     next i
 
     printlog "   - 11 times level up"
@@ -351,7 +359,7 @@ testcase tNumLevelUpDown
         else
             if i = 1 then Warnlog "Level up is disabled! (#i28550)"
         end if
-        wait 500
+        sleep (2)
     next i
 
     Call hCloseDocument
@@ -367,7 +375,7 @@ testcase tNumSubpointsUpDown
     Call hNewDocument
     printlog " Open new document"
     Kontext "TextObjectbar"
-    if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )    
+    if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
     Numerierung.Click
     printlog " Click 'Numbering' in Object bar"
     Call wTypeKeys ("Numbering <Return><Tab>", 2)
@@ -394,12 +402,12 @@ testcase tNumSubpointsUpDown
         end if
         Sleep (1)
     next i
-
+    
     if HinunterstufenMitUnterpunkten.IsEnabled then
         Warnlog "Move down with subpoints is enabled though on Level 10"
     end if
     Sleep (1)
-        
+    
     printlog "   - 6 times subpoints up"
     printlog " click 6 times subpoints up in object bar"
     for i=1 to 6
@@ -410,11 +418,10 @@ testcase tNumSubpointsUpDown
         end if
         Sleep (1)
     next i
-
+    
     if HochstufenMitUnterpunkten.IsEnabled then
         Warnlog "Move up with subpoints is enabled!"
     end if
-    
     
     Call hCloseDocument
     printlog " Close active document"
@@ -739,7 +746,7 @@ testcase tUpLevelUpDown
 		Call hCloseDocument
 		goto endsub
     endcatch
-		
+    sleep (2)
     for i=1 to 9
         printlog " Click 'Down One Level' in object bar 11 times"
         if Hinunterstufen.IsEnabled then
@@ -747,7 +754,7 @@ testcase tUpLevelUpDown
         else
             if i = 1 then Warnlog "Level down is disabled !"
         end if
-        wait 500
+        sleep (2)
     next i
 
     printlog "   - 11 times level up"
@@ -758,7 +765,7 @@ testcase tUpLevelUpDown
         else
             if i = 1 then Warnlog "Level up is disabled ! (#i28550)"
         end if
-        wait 500
+        sleep (2)
     next i
 
     Call hCloseDocument
@@ -1065,3 +1072,158 @@ testcase tUpNumberingEnumerating
     printlog " Close active document"
 endcase
 
+'-----------------------------------------------------------
+
+testcase tHtmlDocFormatting
+    printlog "- Objectbar ( normal ) : Formatting"
+    gApplication = "HTMLDOKUMENT"
+
+    printlog " Open new document"
+    Call hNewDocument
+    Call wTypeKeys ("Formatting <Shift Home>")
+    Kontext "TextObjectbar"
+    if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
+
+    printlog "  - Style"
+    try
+        Vorlage.Select 1
+    catch
+        Warnlog "Style could not be changed in TextObjectbar"
+    endcatch
+    printlog " Choose first 'style' in object bar"
+    Sleep 5
+    printlog "  - Font"
+    printlog " Select 5th 'Font' in object bar"
+    try
+        Schriftart.Select 5
+    catch
+        Warnlog "Unable to select font in object bar"
+    endcatch
+    Schriftart.TypeKeys "<Return>"
+    Sleep 1
+    printlog "  - Font Size"
+    printlog " Select 10th 'Font Size' in object bar"
+    try
+        Schriftgroesse.Select 10
+        Schriftgroesse.TypeKeys "<Return>"
+    catch
+        Warnlog "Uanble to change font size in toolbar"
+    endcatch
+    Sleep 1
+    printlog "  - Bold"
+    printlog " Select 'Bold' in object bar"
+    Fett.Click
+    Sleep 1
+    printlog "  - Italic"
+    printlog " Select 'Italic' in object bar"
+    Kursiv.Click
+    Sleep 1
+    printlog "  - Underline"
+    printlog " Select 'Underline' in object bar"
+    Unterstrichen.Click
+    Sleep 1
+    printlog "  - Align Left"
+    printlog " Select 'Align Left' in object bar"
+    Linksbuendig.Click
+    Sleep 1
+    printlog "  - Align Right"
+    printlog " Select 'Align Right' in object bar"
+    Rechtsbuendig.Click
+    Sleep 1
+    printlog "  - Centered"
+    printlog " Select 'Centered' in object bar"
+    Zentriert.Click
+    Sleep 1
+    printlog "  - Font color"
+    printlog " Select 'Font color' in object bar"
+    Schriftfarbe.Click
+    Sleep 1
+    printlog "  - Highlighting"
+    printlog " Select 'Highlighting' in object bar"
+    Zeichenhintergrund.Click
+    Sleep 1
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFormatting
+    printlog "- Objectbar ( normal ) : Formatting"
+    gApplication = "MASTERDOC"
+
+    printlog " Open new document"
+    Call hNewDocument
+    Call wTypeKeys ("Formatting <Shift Home>")
+    Kontext "TextObjectbar"
+    if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
+
+    printlog "  - Style"
+    try
+        Vorlage.Select 1
+    catch
+        Warnlog "Style could not be changed in TextObjectbar"
+    endcatch
+    printlog " Choose first 'style' in object bar"
+    Sleep 5
+    printlog "  - Font"
+    printlog " Select 5th 'Font' in object bar"
+    try
+        Schriftart.Select 5
+    catch
+        Warnlog "Unable to select font in object bar"
+    endcatch
+    Schriftart.TypeKeys "<Return>"
+    Sleep 1
+    printlog "  - Font Size"
+    printlog " Select 10th 'Font Size' in object bar"
+    try
+        Schriftgroesse.Select 10
+        Schriftgroesse.TypeKeys "<Return>"
+    catch
+        Warnlog "Uanble to change font size in toolbar"
+    endcatch
+    Sleep 1
+    printlog "  - Bold"
+    printlog " Select 'Bold' in object bar"
+    Fett.Click
+    Sleep 1
+    printlog "  - Italic"
+    printlog " Select 'Italic' in object bar"
+    Kursiv.Click
+    Sleep 1
+    printlog "  - Underline"
+    printlog " Select 'Underline' in object bar"
+    Unterstrichen.Click
+    Sleep 1
+    printlog "  - Align Left"
+    printlog " Select 'Align Left' in object bar"
+    Linksbuendig.Click
+    Sleep 1
+    printlog "  - Align Right"
+    printlog " Select 'Align Right' in object bar"
+    Rechtsbuendig.Click
+    Sleep 1
+    printlog "  - Centered"
+    printlog " Select 'Centered' in object bar"
+    Zentriert.Click
+    Sleep 1
+    printlog "  - Justify"
+    printlog " Select 'Justify' in object bar (not in HTML)"
+    Blocksatz.Click
+    Sleep 1
+    printlog "  - Font color"
+    printlog " Select 'Font color' in object bar"
+    Schriftfarbe.Click
+    Sleep 1
+    printlog "  - Highlighting"
+    printlog " Select 'Highlighting' in object bar"
+    Zeichenhintergrund.Click
+    Sleep 1
+    printlog " Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------

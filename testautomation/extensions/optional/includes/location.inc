@@ -39,11 +39,7 @@
 
 testcase tExtensionLocation
 
-    '///<h3>Test the extension locator service</h3>
-    '///<p>This test installs a dummy extension and loads a document afterwards
-    '///+ which comes with a macro to trigger the locator service. By running the
-    '///+ macro a messagebox should pop open to display the installation path of 
-    '///+ the extension.</b><br><br>
+    printlog( "Test the extension locator service" )
 
      ' The location of the sample extension and helper document
     dim cWorkPath as string
@@ -61,20 +57,16 @@ testcase tExtensionLocation
     printlog( "Using extension: " & cWorkPath & EXTENSION_NAME )
     printlog( "Using document.: " & cWorkPath & DOCUMENT_NAME )
 
-    '///<ul>
-    '///+<li>Load the testdocument</li>
     brc = hFileOpen( cWorkPath & DOCUMENT_NAME )
     if ( not brc ) then
-        warnlog( "Error while loading document" )
-    endif
-
-    '///+<li>Allow macro execution</li>
-    brc = hAllowMacroExecution()
-    if ( not brc ) then
+        brc = hAllowMacroExecution()
+        if ( not brc ) then
+            warnlog( "This is not the macro execution warning" )
+        endif
+    else
         warnlog( "Macro execution warning is missing" )
     endif
 
-    '///+<li>Run the macro</li>
     irc = hMacroOrganizerRunMacro( MACRO_NAME )
     if ( irc = 0 ) then
         warnlog( "No macro with the given name could be found, aborting" )
@@ -85,7 +77,6 @@ testcase tExtensionLocation
         goto endsub
     endif
 
-    '///+<li>Test that the messagebox is open and verify that it contains an empty string</li>
     kontext "active"
     if ( active.exists( 2 ) ) then
         cMsg = active.getText()
@@ -99,44 +90,34 @@ testcase tExtensionLocation
         warnlog( "No messagebox displayed, please check that the macro is executed" )
     endif
 
-    '///+<li>Add the extension</li>
     irc = hExtensionAddGUI( cWorkPath & EXTENSION_NAME , "verbose,InstallForUser" )
-
-    '///+<li>Run the macro</li>
     irc = hMacroOrganizerRunMacro( MACRO_NAME )
     if ( irc = 0 ) then
         warnlog( "No macro with the given name could be found" )
     endif
 
-    '///+<li>Test that the messagebox is open and verify that it contains an empty string</li>
-    '///<ul>
     kontext "active"
     if ( active.exists( 2 ) ) then
         cMsg = active.getText()
 
-        '///+<li>Verify that the messagebox is not empty</li>
         if ( cMsg = "" ) then
             warnlog( "The messagebox is empty, please check." )
         else
 
-
             printlog( "Content of messagebox: " & cMsg )
 
-            '///+<li>Verify that it is a file-URL</li>
             if ( instr( cMsg , "file:///" ) > 0 ) then
                 printlog( "Found File-URL" )
             else
                 warnlog( "This does not appear to be a File-URL, please check!" )
             endif
 
-            '///+<li>Verify that the string contains the extension name</li>
             if ( instr( cMsg , EXTENSION_NAME ) > 0 ) then
                 printlog( "Extension string is present" )
             else
                 warnlog( "Extension name seems to be missing" )
             endif
 
-            '///+<li>Test file presence on filesystem level</li>
             if ( dir( cMsg ) = "" ) then
                 warnlog( "The extension could not be found at the expected location" )
             else
@@ -148,17 +129,13 @@ testcase tExtensionLocation
     else
         warnlog( "No messagebox displayed, please check that the macro is executed" )
     endif
-    '///</ul>
-    '///+<li>Cleanup: Remove the extension</li>
+
     irc = hExtensionRemoveGUI( EXTENSION_NAME )
     if ( irc <> 0 ) then
         warnlog( "the extension was NOT cleanly removed" )
     endif
 
-    '///+<li>Cleanup: Close document</li>
     hDestroyDocument()
-
-    '///</ul>
 
 endcase
 

@@ -253,8 +253,8 @@ function fOpenReportNavigator
     Kontext "ReportDesign"     
         ReportDesign.UseMenu
         hMenuSelectNr(3)
-        if (hMenuItemIsChecked(6) = false) then
-            hMenuSelectNr(6)
+        if (hMenuItemIsChecked(5) = false) then
+            hMenuSelectNr(5)
         else
             'nothing
         endif
@@ -287,7 +287,7 @@ function fExecuteReport
     Kontext "ReportDesign"     
         ReportDesign.UseMenu
         hMenuSelectNr(2)
-        hMenuSelectNr(12)
+        hMenuSelectNr(11)
         
 end function
 '--------------------------------------------------------------------
@@ -315,8 +315,8 @@ function fCloseAddFieldDialog
             Kontext "ReportDesign"
                 ReportDesign.UseMenu
                 hMenuSelectNr(3)
-                if (hMenuItemIsChecked(4)) then
-                    hMenuSelectNr(4)
+                if (hMenuItemIsChecked(3)) then
+                    hMenuSelectNr(3)
                 else
                     warnlog "there should be the Add field dialog. But there is none."
                 endif
@@ -334,11 +334,11 @@ function fOpenAddFieldDialog
             Kontext "ReportDesign"
                 ReportDesign.UseMenu
                 hMenuSelectNr(3)
-                if (hMenuItemIsChecked(4)) then
-                    hMenuSelectNr(4)
+                if (hMenuItemIsChecked(3)) then
+                    hMenuSelectNr(3)
                     ReportDesign.UseMenu
 	                hMenuSelectNr(3)    
-                    hMenuSelectNr(4)
+                    hMenuSelectNr(3)
                     printlog "1"
                 else
                     hMenuSelectNr(4)
@@ -386,5 +386,8 @@ function tools_reporttools_InstallExtension
     else
         tools_reporttools_InstallExtension = 0    
     endif
+    
+    ' restart the office
+    call ExitRestartTheOffice
     
 end function

@@ -873,7 +873,7 @@ testcase tToolsOptionsWriterGrid4
 
     ' check if @ (0,0) Pineapples ;-)
     wait 500
-    EditNavigator
+    ViewNavigator
     wait 500
     FormatGraphics
     wait 500
@@ -906,7 +906,7 @@ testcase tToolsOptionsWriterGrid4
 
     ' check if @ (1,1) Current-Measure-Unit :-)
     Call wNavigatorAuswahl(4,1)
-    EditNavigator
+    ViewNavigator
     sleep (3)
     try
         FormatGraphics

@@ -38,18 +38,17 @@
 
 sub w_011_
    printLog Chr(13) + "---------   Toolbar ( w_011_.inc )   ----------"
+    gApplication = "WRITER"
+    'Objektleiste Grafik
+    Call tGraphicFilters
 
-'** Objektleiste Grafik
-   Call tGraphicFilters
-
-'** Objektleiste Zeichenobjekt
-   Call tZOEditPoints
-   Call tZOLine
-   Call tZOArea
-   Call tZORest
-   Call tZOText
-   Call tZOVerticalText
-
+    'Objektleiste Zeichenobjekt
+    Call tZOEditPoints
+    Call tZOLine
+    Call tZOArea
+    Call tZORest
+    Call tZOText
+    Call tZOVerticalText
 
 end sub
 
@@ -58,24 +57,24 @@ end sub
 testcase tGraphicFilters
     printlog "- Objectbar Graphic (Filters)"
     if gApplication = "HTMLDOKUMENT" then
-        '/// This test applies not to HTML-Document ///
+        printlog "This test applies not to HTML-Document"
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
     
+    printlog "Open new document"
     Call hNewDocument
-    '/// Open new document ///
+    printlog "Insert graphic '/writer/required/input/grafik/jolink.jpg'"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-    '/// Insert graphic "/writer/input/grafik/jolink.jpg" ///
     
     printlog "- Select all Filters"
     Kontext "GraphicObjectbar"
-    '/// In graphic toolbox taer off 'Filter' Toolbox ///
+    printlog "In graphic toolbox taer off 'Filter' Toolbox"
     if Not GraphicObjectbar.Exists then hToolbarSelect ( "Picture", true )
     try
         Filter.TearOff
-    catch        
-        Warnlog "Unable to tear off 'Filter'-Toolbar" 
+    catch
+        Warnlog "Unable to tear off 'Filter'-Toolbar"
         Call hCloseDocument
         goto endsub
     endcatch
@@ -88,7 +87,7 @@ testcase tGraphicFilters
     endcatch
     
     printlog "-  Invert"
-    '/// Select 'Invert' ///
+    printlog "Select 'Invert'"
     if Invert.IsEnabled then
         Invert.Click
     else
@@ -96,11 +95,11 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
-    '/// Click 'Smooth' ///
+    printlog "Click 'Smooth'"
     printlog "-  Smooth"
     if Smooth.IsEnabled then
         Smooth.Click
@@ -109,12 +108,12 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Sharpen"
-    '/// Click 'Sharpen' ///
+    printlog "Click 'Sharpen'"
     if Sharpen.IsEnabled then
         Sharpen.Click
     else
@@ -123,12 +122,12 @@ testcase tGraphicFilters
     
     UseBindings
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Remove Noise"
-    '/// Click 'Remove Noise' ///
+    printlog "Click 'Remove Noise'"
     if Remove.IsEnabled then
         Remove.Click
     else
@@ -137,16 +136,16 @@ testcase tGraphicFilters
     sleep (1)
 
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Solarization"
-    '/// Click 'Solarization' ///
+    printlog "Click 'Solarization'"
     if Solarization.IsEnabled then
         Solarization.Click
         Kontext "Solarization"
-        '/// Cancel upcoming 'Solarization' dialog ///
+        printlog "Cancel upcoming 'Solarization' dialog"
         if Solarization.Exists then
             Call Dialogtest( Solarization )
             Solarization.Cancel
@@ -169,15 +168,15 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Aging"
-    '/// Click 'Aging' ///
+    printlog "Click 'Aging'"
     if Aging.IsEnabled then
         Aging.Click
-        '/// Cancel upcoming 'Aging' dialog ///
+        printlog "Cancel upcoming 'Aging' dialog"
         Kontext "Aging"
         if Aging.Exists then
             Call Dialogtest( Aging )
@@ -201,15 +200,15 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Posterize"
-    '/// Click 'Posterize' ///
+    printlog "Click 'Posterize'"
     if Posterize.IsEnabled then
         Posterize.Click
-        '/// Cancel upcoming 'Posterize' dialog ///
+        printlog "Cancel upcoming 'Posterize' dialog"
         Kontext "Posterize"
         if Posterize.Exists then
             Call Dialogtest( Posterize )
@@ -233,11 +232,11 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
-    '/// Click 'Pop Art' ///
+    printlog "Click 'Pop Art'"
     printlog "-  Pop Art"
     if Art.IsEnabled then
         Art.Click
@@ -246,12 +245,12 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Charcoal Sketch"
-    '/// Click 'Charcoal Sketch' ///
+    printlog "Click 'Charcoal Sketch'"
     if CharcoalSketch.IsEnabled then
         CharcoalSketch.Click
     else
@@ -259,12 +258,12 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Relief"
-    '/// Click 'Relief' ///
+    printlog "Click 'Relief'"
     if Relief.IsEnabled then
         Relief.Click
         Kontext "Relief"
@@ -272,7 +271,7 @@ testcase tGraphicFilters
             Call Dialogtest( Relief )
             Relief.Cancel
         else
-            '/// Cancel upcoming 'relief' dialog ///
+            printlog "Cancel upcoming 'relief' dialog"
             Warnlog "-  Dialog 'Relief' has not been opened! Try a second time!"
             Kontext "GraphicFilterBar"
             if Relief.IsEnabled then
@@ -291,16 +290,16 @@ testcase tGraphicFilters
     end if
     
     if CheckForFilters=False then
+        Printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     end if
     printlog "-  Mosaic"
-    '/// Clock 'Mosaic' ///
+    Printlog "Clock 'Mosaic'"
     if Mosaic.IsEnabled then
         Mosaic.Click
         Kontext "Mosaic"
-        '/// Cancel upcoming 'Mosaic' dialog ///
+        Printlog "Cancel upcoming 'Mosaic' dialog"
         if Mosaic.Exists then
             Call Dialogtest( Mosaic )
             Mosaic.Cancel
@@ -311,8 +310,8 @@ testcase tGraphicFilters
         Warnlog "-  'Mosaic' is disabled!"
     end if
     
+    Printlog "Close active document"
     Call hCloseDocument
-    '/// Close active document ///
 endcase
 
 '-----------------------------------------------------------
@@ -320,35 +319,35 @@ endcase
 testcase tZOEditPoints
     printlog "- Draw Functions-Objectbar: Edit Points"
     if gApplication = "HTMLDOKUMENT" then
-        '/// This applies not to HTML document  ///
+        Printlog "This test does not apply to HTML documents"
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
+    Printlog "Open new document"
     Call hNewDocument
-    '/// Open new document ///
+    Printlog "Insert a drawing object (rectangle)"
     Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 50, 60 )
+    Printlog "Select drawing object with shortcut 'Shift F4'"
     Call wTypeKeys ( "<Shift F4>" )
-    '/// Insert a drawing object (rectangle) ///
-    '/// Select drawing object with shortcut 'Shift F4'
     
     Kontext "Drawbar"
     if Not Drawbar.Exists then Call hToolbarSelect("Drawing", true)
 
     Sleep 1
-    '/// In Toolbox click 'Edit Points' ///
+    Printlog "In Toolbox click 'Edit Points'"
     try
         Points.Click
     catch
         Warnlog "#i56594#Shortcut selecting objects doesn't work"
+        Printlog "Close active document"
         Call hCloseDocument
-        '/// Close active document ///
         goto endsub
     endcatch
     Sleep 1
-    '/// Click 'Edit Points' in toolbox again ///
+    Printlog "Click 'Edit Points' in toolbox again"
     Points.Click
+    Printlog "Close active document"
     Call hCloseDocument
-    '/// Close active document ///
 endcase
 
 '-----------------------------------------------------------
@@ -356,33 +355,34 @@ endcase
 testcase tZOLine
     printlog "- Draw Functions-Objectbar: all within Line"
     if gApplication = "HTMLDOKUMENT" then
-        '/// This test applies not to HTML document ///
+        Printlog "This test does not apply to HTML documents"
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
+    printlog "Open new document"
     Call hNewDocument
-    '/// Open new document ///
+
+    printlog "Insert a drawing object ( rectangle )"
     Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 50, 60 )
-    '/// Insert a drawing object ( rectangle ) ///
     Call gMouseClick ( 25, 25 )
-    '/// Select drawing object with shortcut 'Shift F4'
+    printlog "Select drawing object with shortcut 'Shift F4'"
     Call wTypeKeys ( "<Shift F4>" )
     
     Kontext "DrawingObjectbar"
-	if Not DrawingObjectbar.Exists then hToolbarSelect("GRAPHIC", true)   
+	if Not DrawingObjectbar.Exists then hToolbarSelect("GRAPHIC", true)
     
     printlog "  - Line-Tabdialog"
     wait 500
     try
         Linie.Click
-        '/// In Toolbox click 'Line' ///
+        printlog "In Toolbox click 'Line'"
     catch
         Warnlog "#i56594#Shortcut selecting objects doesn't work"
         Call hCloseDocument
         goto endsub
     endcatch
     Kontext
-    '/// Step through all tabpages in upcoming dialog ///
+    printlog "Step through all tabpages in upcoming dialog"
     wait 500
     Active.SetPage TabLinie
     Kontext "TabLinie"
@@ -394,12 +394,12 @@ testcase tZOLine
     Linienendenstil.TearOff
     Kontext "Linienenden"
     Call Dialogtest(Linienenden)
+    printlog "Close dialog"
     Linienenden.Close
     
     Sleep 1
-    '/// Close dialog ///
+    printlog "Close active document"
     Call hCloseDocument
-    '/// Close active document ///
 endcase
 
 '-----------------------------------------------------------
@@ -407,17 +407,17 @@ endcase
 testcase tZOArea
     printlog "- Draw Functions-Objectbar: all within rectangle"
     if gApplication = "HTMLDOKUMENT" then
-        '/// This test applies not to HTML document ///
+        printlog "This test applies not to HTML document"
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
     
+    printlog "Open new document"
     Call hNewDocument
-    '/// Open new document ///
+    printlog "Insert a draw object ( rectangle )"
     Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 50, 60 )
-    '/// Insert a draw object ( rectangle ) ///
     Call gMouseClick ( 25, 25 )
-    '/// Select drawing object with shortcut 'Shift F4'
+    printlog "Select drawing object with shortcut 'Shift F4'"
     Call wTypeKeys ( "<Shift F4>" )
     
     Kontext "DrawingObjectbar"
@@ -425,21 +425,21 @@ testcase tZOArea
     printlog "  - Rectangle-Tabdialog"
     wait 500
     try
-        '/// In toolbox click 'Area' ///
+        printlog "In toolbox click 'Area'"
         Flaeche.Click
     catch
         Warnlog "#i56594#Shortcut selecting objects doesn't work"
         Call hCloseDocument
         goto endsub
     endcatch
+    printlog "Close upcoming dialog"
     Kontext
     Active.SetPage TabArea
     Kontext "TabArea"
     TabArea.OK
-    '/// Close upcoming dialog ///
     
+    printlog "Close active document"
     Call hCloseDocument
-    '/// Close active document ///
 endcase
 
 '-----------------------------------------------------------
@@ -447,23 +447,23 @@ endcase
 testcase tZORest
     printlog "- Draw Functions-Objectbar: Rest"
     if gApplication = "HTMLDOKUMENT" then
-    '/// This test applies not to HTML document ///
-    Printlog "Not in WriterWeb!"
-    goto endsub
+        printlog "This test does not apply to HTML documents"
+        Printlog "Not in WriterWeb!"
+        goto endsub
     end if
     
+    printlog "Open new document"
     Call hNewDocument
-    '/// Open new document ///
+    printlog "Insert a draw object ( rectangle )"
     Call wZeichenobjektEinfuegen ( "Rechteck", 30, 30, 50, 60 )
-    '/// Insert a draw object ( rectangle ) ///
     Call gMouseClick ( 25, 25 )
-    '/// Select drawing object with shortcut 'Shift F4'
+    printlog "Select drawing object with shortcut 'Shift F4'"
     Call wTypeKeys ( "<Shift F4>" )
     
     printlog "  - Object rotation mode"
     Sleep 2
     try
-        '/// Intoolbox click 'Object rotation mode' ///
+        printlog "Intoolbox click 'Object rotation mode'"
 		Kontext "DrawingObjectbar"
         Drehen.Click
         wait 500
@@ -474,42 +474,42 @@ testcase tZORest
     endcatch
 
     printlog "  - Change Anchor"
-    '/// Click 'Change Anchor' in Toolbox and select 1st entry in anchor list ///
+    printlog "Click 'Change Anchor' in Toolbox and select 1st entry in anchor list"
     VerankerungWechseln.Click
     Sleep 1
     Call hMenuSelectNr (1)
     wait 500
     
     VerankerungWechseln.Click
-    '/// Click 'Change Anchor' in Toolbox and select 2nd entry in anchor list ///
+    printlog "Click 'Change Anchor' in Toolbox and select 2nd entry in anchor list"
     Sleep 1
     Call hMenuSelectNr (2)
     wait 500
     
     VerankerungWechseln.Click
     Sleep 1
-    '/// Click 'Change Anchor' in Toolbox and select 3rd entry in anchor list ///
+    printlog "Click 'Change Anchor' in Toolbox and select 3rd entry in anchor list"
     Call hMenuSelectNr (3)
     wait 500
     
     printlog "  - To Background"
-    '/// Click 'To Background' in toolbox ///
+    printlog "Click 'To Background' in toolbox"
     InDenHintergrund.Click
     Sleep 2
     printlog "  - To Foreground"
-    '/// Click 'To Foreground' in toolbox ///
+    printlog "Click 'To Foreground' in toolbox"
     InDenVordergrund.Click
     
     printlog "  - Send to back"
-    '/// Click 'Send To back' in toolbox ///
+    printlog "Click 'Send To back' in toolbox"
     GanzNachHinten.Click
     
     printlog "  - Bring to Front"
-    '/// Click 'To Background' in toolbox ///
+    printlog "Click 'To Background' in toolbox"
     GanzNachVorn.Click
     
+    printlog "Close active document"
     Call hCloseDocument
-    '/// Close active document ///
 endcase
 
 '-----------------------------------------------------------
@@ -517,20 +517,20 @@ endcase
 testcase tZOText
     printlog "- Draw Functions-Objectbar: Text"
     if gApplication = "HTMLDOKUMENT" then
-        '/// This test applies not to HTML document ///
+        printlog "This test does not apply to HTML documents"
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
 
+    printlog "Open new document"
     Call hNewDocument
-    '/// Open new document ///
     
     Call wZeichenobjektEinfuegen ( "Text", 30, 30, 50, 60 )
-    '/// Insert draw object ( Text )///
+    printlog "Insert draw object ( Text )"
+    printlog "Insert some text to textbox"
     Call wTypeKeys ("Draw Functions-Objectbar: Text")
-    '/// Insert some text to textbox ///
+    printlog "Select the text in textbox with <Strg A>"
     Call wTypeKeys ("<Mod1 A>", 3)
-    '/// Select the text in textbox with <Strg A> ///
     Sleep 4
     
     Kontext "DrawTextObjectBar"
@@ -539,7 +539,7 @@ testcase tZOText
     end if
     
     printlog "  - Font Size"
-    '/// For font size select 9th entry ///
+    printlog "For font size select 9th entry"
     try
         Schriftgroesse.Select 9
         Schriftgroesse.TypeKeys "<Return>"
@@ -549,7 +549,7 @@ testcase tZOText
     Wait 500
     
     printlog "  - Font"
-    '/// In object bar select 6th entry in combobox 'Font' ///
+    printlog "In object bar select 6th entry in combobox 'Font'"
     try
         Schriftart.Select 6
     catch
@@ -559,42 +559,42 @@ testcase tZOText
     Wait 500
     
     printlog "  - Bold"
-    '/// Click 'Bold' in object bar ///
+    printlog "Click 'Bold' in object bar"
     Fett.Click
     Wait 500
     
     printlog "  - Italic"
-    '/// Click 'Italic' in object bar  ///
+    printlog "Click 'Italic' in object bar"
     Kursiv.Click
     Wait 500
     
     printlog "  - Underline"
-    '/// Click 'Underline' in object bar  ///
+    printlog "Click 'Underline' in object bar"
     Unterstrichen.Click
     Wait 500
     
     printlog "  - Align Left"
-    '/// Click Align left in object bar ///
+    printlog "Click Align left in object bar"
     Linksbuendig.Click
     Wait 500
     
     printlog "  - Align Right"
-    '/// Click 'Align right' in object bar ///
+    printlog "Click 'Align right' in object bar"
     Rechtsbuendig.Click
     Wait 500
     
     printlog "  - Centered"
-    '/// Click 'Centered' in object bar ///
+    printlog "Click 'Centered' in object bar"
     Zentriert.Click
     Wait 500
     
     printlog "  - Justify"
-    '/// Click 'Justify' in object bar ///
+    printlog "Click 'Justify' in object bar"
     Blocksatz.Click
     Wait 500
     
     printlog "  - Superscript"
-    '/// Click 'Superscript' in object bar ///
+    printlog "Click 'Superscript' in object bar"
     try
         Hochgestellt.Click
         Wait 500
@@ -604,7 +604,7 @@ testcase tZOText
     
     printlog "  - Subscript"
     try
-        '/// Click 'Subscript' in object bar ///
+        printlog "Click 'Subscript' in object bar"
         Tiefgestellt.Click
         Wait 500
     catch
@@ -613,14 +613,14 @@ testcase tZOText
     
     printlog "  - Font attributes"
     try
-        '/// Click 'Font attributes' in object bar ///
+        printlog "Click 'Font attributes' in object bar"
         Zeichenformat.Click
         wait 500
+        printlog "Close upcoming dialog"
         Kontext
         Active.Setpage TabFont
         Kontext "TabFont"
         TabFont.OK
-        '/// Close upcoming dialog ///
         Sleep 2
         Kontext "TextObjectbar"
     catch
@@ -630,21 +630,21 @@ testcase tZOText
     printlog "  - Format:Paragraph"
     Sleep 3
     try
-        '/// Click Format:Paragraph in object bar ///
+        printlog "Click Format:Paragraph in object bar"
         Absatzformat.Click
         wait 500
+        printlog "Close upcoming dialog"
         Kontext
         Active.Setpage TabEinzuegeUndAbstaende
         Kontext "TabEinzuegeUndAbstaende"
         TabEinzuegeUndAbstaende.OK
         Sleep 2
-        '/// Close upcoming dialog ///
     catch
         Warnlog "- Format:Paragraph is probably faded out!"
     endcatch
     
+    printlog "Close active document"
     Call hCloseDocument
-    '/// Close active document ///
 endcase
 
 '-----------------------------------------------------------
@@ -653,72 +653,72 @@ testcase tZOVerticalText
     printlog "- Draw Functions-Objectbar: Vertical Text"
     if gAsianSup = False then goto endsub
     if gApplication = "HTMLDOKUMENT" then
-        '/// This test applies not to HTML document and only if Asian Support is enabled ///
+        printlog "This test applies not to HTML document and only if Asian Support is enabled"
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
     
+    printlog "Open new document"
     Call hNewDocument
-    '/// Open new document ///
     
+    printlog "Insert Draw object ( 'vertical Text' )"
     Call wZeichenobjektEinfuegen ( "VText", 30, 30, 50, 60 )
-    '/// Insert Draw object ( 'vertical Text' ) ///
+    printlog "Insert some text in textbox and select it"
     Call wTypeKeys ("Checking vertical text")
-    '/// Insert some text in textbox and select it ///
     Call wTypeKeys ("<Shift Home>")
     Sleep 4
     
+    printlog "In object bar select 6th entry in combobox 'Font'"
     Call hToolbarSelect ( "Textobject", true  )
     printlog "  - Font"
-    '/// In object bar select 6th entry in combobox 'Font' ///
     Schriftart.Select 6
     Schriftart.TypeKeys "<Return>"
     Wait 500
     
     printlog "  - Font Size"
-    '/// For font size select 9th entry ///
+    printlog "For font size select 9th entry"
     Schriftgroesse.Select 9
     Schriftgroesse.TypeKeys "<Return>"
     Wait 500
     
     printlog "  - Bold"
-    '/// Click 'Bold' in object bar ///
+    printlog "Click 'Bold' in object bar"
     Fett.Click
     Wait 500
     
     printlog "  - Italic"
-    '/// Click 'Italic' in object bar ///
+    printlog "Click 'Italic' in object bar"
     Kursiv.Click
     Wait 500
     
     printlog "  - Underline"
-    '/// Click 'Underline' in object bar ///
+    printlog "Click 'Underline' in object bar"
     Unterstrichen.Click
     Wait 500
     
     printlog "  - Align Left"
-    '/// Click 'Align left' in object bar ///
+    printlog "Click 'Align left' in object bar"
     Linksbuendig.Click
     Wait 500
     
     printlog "  - Align Right"
-    '/// Click 'Align Right' in object bar ///
+    printlog "Click 'Align Right' in object bar"
     Rechtsbuendig.Click
     Wait 500
     
     printlog "  - Centered"
-    '/// Click 'Centered' in object bar ///
+    printlog "Click 'Centered' in object bar"
     Zentriert.Click
     Wait 500
     
     printlog "  - Justify"
-    '/// Click 'Justify' in object bar ///
+    printlog "Click 'Justify' in object bar"
     Blocksatz.Click
     Wait 500
     
     printlog "  - Superscript"
     try
-        '/// Click 'Superscript' in object bar ///
+        printlog "Click 'Superscript' in object bar"
         Hochgestellt.Click
         Wait 500
     catch
@@ -727,7 +727,7 @@ testcase tZOVerticalText
     
     printlog "  - Subscript"
     try
-        '/// Click 'Subscript' in object bar ///
+        printlog "Click 'Subscript' in object bar"
         Tiefgestellt.Click
         Wait 500
     catch
@@ -736,7 +736,7 @@ testcase tZOVerticalText
     
     printlog "  - Font attributes"
     try
-        '/// Click 'Font attributes' in object bar ///
+        printlog "Click 'Font attributes' in object bar"
         Zeichenformat.Click
         wait 500
         Kontext
@@ -753,7 +753,7 @@ testcase tZOVerticalText
     Sleep 3
     
     try
-        '/// Click 'Textdirection:Left To Right' in Objectbar ///
+        printlog "Click 'Textdirection:Left To Right' in Objectbar"
         TextdirectionLeftToRight.Click
         wait 500
     catch
@@ -761,7 +761,7 @@ testcase tZOVerticalText
     endcatch
     
     try
-        '/// Click 'Textdirection:Top to Bottom' in Objectbar ///
+        printlog "Click 'Textdirection:Top to Bottom' in Objectbar"
         TextdirectionTopToBottom.Click
         wait 500
     catch
@@ -769,19 +769,19 @@ testcase tZOVerticalText
     endcatch
     
     try
-        '/// Click 'Format: Paragraph' in object bar ///
+        printlog "Click 'Format: Paragraph' in object bar."
         Absatzformat.Click
         wait 500
+        printlog "Close upcoming dialog"
         Kontext
         Active.Setpage TabEinzuegeUndAbstaende
         Kontext "TabEinzuegeUndAbstaende"
         TabEinzuegeUndAbstaende.OK
-        '/// Close upcoming dialog ///
         Sleep 2
     catch
         Warnlog "- Format:Paragraph is probably faded out!"
     endcatch
-    
+
+    printlog "Close active document"
     Call hCloseDocument
-    '/// Close active document ///
 endcase

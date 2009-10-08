@@ -67,7 +67,7 @@ end sub
 '-------------------------------------------------------------------------
 testcase tTableFilters
     
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
     Kontext "Insight"
     
@@ -88,7 +88,7 @@ endcase
 '-------------------------------------------------------------------------
 testcase tTableView
    
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
     Kontext "Insight"
 
@@ -122,7 +122,7 @@ testcase tMainApp
     
     dim iCount as integer ' the numbers of the items in the creation list.
     
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
 
     Kontext "Insight"
     
@@ -225,7 +225,7 @@ endcase
 '-------------------------------------------------------------------------
 testcase tPreview
 
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
 
     Kontext "Insight"
     
@@ -280,7 +280,7 @@ testcase tMainMenuBar
 
     dim iCount as integer ' the numbers of the items in the menu.    
     
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
     
     Kontext "Insight"
         Insight.UseMenu        
@@ -290,10 +290,15 @@ testcase tMainMenuBar
         printlog "+ there different count related to the file pick list."        
         hMenuSelectNr(1) ' the file menu        
         iCount = getMenuItemCount()        
-        if (iCount <> 11 ) then
-            warnlog "There should be 11 items in the file menu but there are " + iCount + " items."
-        end if
-        
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 10 ) then
+                warnlog( "File menu: 10 items expected, found " & iCount )
+            endif
+        else
+            if (iCount <> 11 ) then
+               warnlog "There should be 11 items in the file menu but there are " + iCount + " items."
+            end if
+        endif
 
         '/// check if there are 12 items in the FILE/NEW menu.
         printlog "check if there are 12 items in the FILE/NEW menu."
@@ -378,21 +383,27 @@ testcase tMainMenuBar
         end if
         call hMenuClose()
 
-        '/// check if there are 9 items in the tools menu.
-        printlog "check if there are 9 items in the tools menu."        
+        '/// check if there are 10 items in the tools menu.
+        printlog "check if there are 10 items in the tools menu."        
         Insight.UseMenu 
         hMenuSelectNr(5)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 9) then
-            warnlog "There should 9 items in the tools menu but there are " + iCount + " items."
-        end if
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 9 ) then
+                warnlog( "Tools menu: 9 items expected, found " & iCount ) 
+            endif
+        else
+            if (iCount <> 10) then
+                warnlog "There should 10 items in the tools menu but there are " + iCount + " items."
+            end if
+        endif
         call hMenuClose()
         
         '/// check if there are 4 items in the TOOLS/MACRO menu.
         printlog "check if there are 4 items in the TOOLS/MACRO menu."        
         Insight.UseMenu 
         hMenuSelectNr(5)
-        hMenuSelectNr(5)        
+        hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
         if (iCount <> 4) then
             warnlog "There should 4 items in the TOOLS/MACRO menu but there are " + iCount + " items."
@@ -407,7 +418,7 @@ testcase tDatabaseProperties
     
     dim sValue as string
     
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
     
     Kontext "Insight"        
         Insight.MouseDown(50,50)
@@ -600,26 +611,6 @@ testcase tDatabaseBeamer
 endcase
 '-------------------------------------------------------------------------
 '-------------------------------------------------------------------------
-'-------------------------------------------------------------------------
-function fDateiOeffnen ( DocName$ )
-    
-    'Dim DieDatei as String
-    
-    'DieDatei = ConvertPath ( DocName$ )
-    
-    'FileOpen
-    'sleep (1)
-    'Kontext "OeffnenDlg"
-    'Dateiname.SetText DieDatei
-    'sleep (3)
-    'Oeffnen.Click
-    'sleep (3)
-
-    'fDateiOeffnen = true
-    
-    fDateiOeffnen = hFileOpen(DocName$)
-    
-end function
 '-------------------------------------------------------------------------
 function getMenuItemCount as Integer
 'use this function becasue this doesn't count the pick list

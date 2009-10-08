@@ -130,6 +130,12 @@ public interface PropertyName {
      */
     final public static String SHELL = "Shell";
     /**
+     * parameter name "Cygwin"<p>
+     * If Cygwin is set to TRUE it indicates if the runner runs in a Cygwin
+     * environment
+     */
+    final public static String CYGWIN = "Cygwin";
+    /**
      * parameter name: "NoCwsAttach"<p>
      * If this paraeter is set to "true" , a status of CWS-UnoAPI-Tests was not attached to EIS<p>
      * @see tests.complex.unoapi.CheckModuleAPI

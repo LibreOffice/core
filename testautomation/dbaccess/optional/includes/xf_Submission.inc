@@ -132,7 +132,7 @@ testcase tDataNavigatorSubmission
     Kontext "FormControls"
 	    Pushbutton.Click
         
-    call hDrawingWithSelection(20,20,40,40)
+    call hDrawingWithSelection(50,20,60,30)
 
     sleep(1)
 

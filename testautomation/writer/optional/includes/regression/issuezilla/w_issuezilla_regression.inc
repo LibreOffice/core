@@ -53,7 +53,7 @@ end sub
 
 testcase i64991
     Dim PrevMacroSetting as integer
-    Dim sDocName as string, i as integer, j as integer    
+    Dim sDocName as string, i as integer, j as integer
 
     sDocName = ConvertPath(gtesttoolpath & "writer\optional\input\regression\issuezilla\i64991.odt")
     '/// New writer document
@@ -62,13 +62,7 @@ testcase i64991
     PrevMacroSetting = hSetMacroSecurity(1)
     '/// Open file \\writer\\optional\\input\\regression\\issuezilla\\i64991.odt
     printlog "- Open file: " & sDocName 
-    FileOpen
-    sleep (1)
-    Kontext "OeffnenDlg"
-    Dateiname.SetText sDocName
-    sleep (3)
-    Oeffnen.Click
-    sleep(2)
+    call hFileOpen (sDocName,false)
     Kontext "SecurityWarning"
     if SecurityWarning.Exists(2) then
         SecurityWarning.OK
@@ -77,6 +71,7 @@ testcase i64991
         Call hCloseDocument
         goto endsub
     end if
+    Call sMakeReadOnlyDocumentEditable
     '/// Now Execute Macro 'Main' in Node 'i64991'->'check_page_style'
     printlog "- execute macro"
     ToolsMacrosRunMacro
@@ -92,7 +87,7 @@ testcase i64991
         LibraryTreeList.Select i
         if InStr(LibraryTreeList.GetSelText,"i64991") then
             printlog " - open node 'i64991' in Library list"
-            i = LibraryTreeList.GetItemCount + 1     
+            i = LibraryTreeList.GetItemCount + 1
             LibraryTreeList.TypeKeys "+"
             wait 500
             printlog " - select 'Standard' in Library list"

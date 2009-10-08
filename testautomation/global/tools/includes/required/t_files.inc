@@ -37,55 +37,7 @@
 '*
 '\******************************************************************************
 
-private const C_INFO = TRUE ' Set this to TRUE to increase verbosity of some functions
-
-function hHandleAlienWarning( sFilterName as string ) as boolean
-    
-    dim bAlienNotAllowed as boolean
-    bAlienNotAllowed = false
-    
-    const CFN = "global::toolls::inc:t_files.inc::hHandleAlienWarning()"
-    
-    
-    if ( C_INFO ) then printlog( CFN & "Testing for Alien Warning" )
-    
-    Kontext "AlienWarning"
-    if AlienWarning.Exists() then
-        
-        ' Verifying the default filter with the used filter and if it is the same and
-        ' the Alien Warning dialog occured return a warning.
-        
-        select case lcase(gApplication)
-        case "writer",  "textdokument" : 
-            if sFilterName = gWriterFilter then bAlienNotAllowed = TRUE
-        case "calc", "tabellendokument" :
-            if sFilterName = gCalcFilter then bAlienNotAllowed = TRUE
-        case "impress", "praesentation" :
-            if sFilterName = gImpressFilter then bAlienNotAllowed = TRUE
-        case "draw", "zeichnung" :
-            if sFilterName = gDrawFilter then bAlienNotAllowed = TRUE
-        case "masterdoc", "globaldokument", "globaldoc" :
-            if sFilterName = gMasterDocFilter then bAlienNotAllowed = TRUE
-        case "math", "formel" :
-            if sFilterName = gMathFilter then bAlienNotAllowed = TRUE
-        case "html", "htmldokument" :
-            if sFilterName = gHTMLFilter then bAlienNotAllowed = TRUE
-        end select
-        
-        if ( bAlienNotAllowed ) then
-            warnlog( CFN & "No alien warning expected for this documenttype" )
-        endif
-        
-        AlienWarning.OK
-        
-    endif
-    
-    hHandleAlienWarning() = bAlienNotAllowed
-    
-end function
-'
-'-------------------------------------------------------------------------------
-'
+private const C_INFO = FALSE ' Set this to TRUE to increase verbosity of some functions
 
 function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// hGrafikEinfuegen hGraphicInsert

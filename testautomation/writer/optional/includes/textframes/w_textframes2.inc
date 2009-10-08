@@ -83,7 +83,7 @@ goto endsub
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
-    Call gMouseClick(32,55)
+    Call gMouseClick(25,15)
     Wait 500
     
     '/// check if contents can be inserted into frame
@@ -129,7 +129,7 @@ goto endsub
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
-    Call gMouseClick(55,50)
+    Call gMouseClick(30,15)
     Sleep 2
     
     '/// check if the frame is moved
@@ -236,7 +236,7 @@ testcase tTextframes_20
     
     '/// Check if frame is in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -257,7 +257,7 @@ testcase tTextframes_20
     endcatch
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
@@ -302,7 +302,7 @@ testcase tTextframes_21
     
     '/// Check if frame are in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -323,7 +323,7 @@ testcase tTextframes_21
     endcatch
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -371,7 +371,7 @@ testcase tTextframes_22
     
     '/// Check if frame are in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -393,7 +393,7 @@ testcase tTextframes_22
     endcatch
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -416,7 +416,7 @@ testcase tTextframes_22
     
     '/// Check if frame are in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -438,7 +438,7 @@ testcase tTextframes_22
     endcatch
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
@@ -486,7 +486,7 @@ testcase tTextframes_23
     
     '/// Check if frame are in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -508,7 +508,7 @@ testcase tTextframes_23
     endcatch
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
@@ -531,7 +531,7 @@ testcase tTextframes_23
     
     '/// Check if frame are in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -553,7 +553,7 @@ testcase tTextframes_23
     endcatch
     
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -852,6 +852,9 @@ testcase tTextframes_28
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sFrameName1 as String
     Dim sFrameName2 as String
     
@@ -881,6 +884,10 @@ goto endsub
     
     '/// Insert another frame
     Call fInsertFrame(50, 35, 30, 55)
+    
+    printlog "Move second frame away from the first frame."
+    Call wTypeKeys "<RIGHT>", 10
+    Call wTypeKeys "<DOWN>", 7
     
     '/// + Naming the frame
     Call fFormatFrame("TabZusaetze")
@@ -1131,7 +1138,7 @@ goto endsub
     '/// Check if the text can be inputed into frame
     Call hFileOpen(sTestFile,false)
     
-    Call gMouseClick(35,40)
+    Call gMouseClick(25,20)
     Wait 500
     
     try

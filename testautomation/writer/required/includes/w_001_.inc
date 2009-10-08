@@ -39,6 +39,7 @@
 
 sub w_001_
     printLog Chr(13) + "--------- File Menu (w_001_.inc) ----------"
+    gApplication = "WRITER"
 
     Call tFileNewLabels
     Call tFileNewBusinessCards
@@ -57,13 +58,25 @@ sub w_001_
         Call tToolsXMLFilterSettings
     end if
     Call tFileExportAsPDF
-    Call tExportAsPDFButton    
+    Call tExportAsPDFButton
     Call tFileSendCreateMasterDocument
     Call tFileSendCreateHTMLDocument
     Call tFileSendOutlineToPresentation
     Call tFileSendOutlineToClipboard
     Call tFileSendCreateAutoabstract
     Call tFileSendAutoabstractToPresentation
+
+    'Writer Master Document
+    gApplication = "MASTERDOC"
+    Call tMasterDocFileSaveWithPassword
+    Call tMasterDocFileReload
+    Call tMasterDocFileVersions
+    Call tMasterDocFileSendCreateHTMLDocument
+    Call tMasterDocFileSendOutlineToPresentation
+    Call tMasterDocFileSendOutlineToClipboard
+    Call tMasterDocFileSendCreateAutoabstract
+    Call tMasterDocFileSendAutoabstractToPresentation
+    gApplication = "WRITER"
 
 end sub
 
@@ -111,7 +124,7 @@ testcase tFileNewLabels
                 Case 2:
                     PrintLog "Avery A4/Asia should have 88 types in list if 'Sheet' is checked"
                     PrintLog "Avery A4/Asia should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 88    
+                    if i = 1 then vTypes = 1 else vTypes = 88
                 Case 3:
                     PrintLog "Avery Lettersize should have 251 types in list if 'Sheet' is checked"
                     PrintLog "Avery Lettersize should have 45 types in list if 'Continous' is checked"
@@ -119,11 +132,11 @@ testcase tFileNewLabels
                 Case 4:
                     PrintLog "Avery Zweckform should have 333 types in list if 'Sheet' is checked"
                     PrintLog "Avery Zweckform should have 67 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 67 else vTypes = 333    
+                    if i = 1 then vTypes = 67 else vTypes = 333
                 Case 5:
                     PrintLog "Herlitz should have 26 types in list if 'Sheet' is checked"
                     PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 6 else vTypes = 26    
+                    if i = 1 then vTypes = 6 else vTypes = 26
                 Case 6:
                     PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
                     PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
@@ -131,7 +144,7 @@ testcase tFileNewLabels
                 Case 7:
                     PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
                     PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 18    
+                    if i = 1 then vTypes = 1 else vTypes = 18
                 Case 8:
                     PrintLog "Herma endlos should have 1 type in list if 'Sheet' is checked"
                     PrintLog "Herma endlos should have 119 types in list if 'Continous' is checked"
@@ -143,9 +156,9 @@ testcase tFileNewLabels
                 Case 10:
                     PrintLog "Sigel should have 20 types in list if 'Sheet' is checked"
                     PrintLog "Sigel should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 20    
+                    if i = 1 then vTypes = 1 else vTypes = 20
                 Case else: Warnlog "- There are more than 10 brands in list"
-            end select            
+            end select
             if sTypes <> vTypes then Warnlog "-  Not " & sTypes & " types in list but " & vTypes
             For y = 1 to Typ.GetItemCount
                 Typ.Select y
@@ -154,7 +167,7 @@ testcase tFileNewLabels
         next x
     next i
     Sleep 1
-    
+
     PrintLog "Switch to Tabpage 'Format'"
     Kontext
     active.SetPage TabFormatEtiketten
@@ -221,7 +234,7 @@ testcase tFileNewLabels
     else
         Warnlog " Dialog to synchronize labels not up!"
     end if
-    Sleep 3
+
     PrintLog "Close active document"
     Call hCloseDocument
 endcase
@@ -272,7 +285,7 @@ testcase tFileNewBusinessCards
                 Case 2:
                     PrintLog "Avery A4/Asia should have 88 types in list if 'Sheet' is checked"
                     PrintLog "Avery A4/Asia should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 88    
+                    if i = 1 then vTypes = 1 else vTypes = 88
                 Case 3:
                     PrintLog "Avery Lettersize should have 251 types in list if 'Sheet' is checked"
                     PrintLog "Avery Lettersize should have 45 types in list if 'Continous' is checked"
@@ -280,11 +293,11 @@ testcase tFileNewBusinessCards
                 Case 4:
                     PrintLog "Avery Zweckform should have 333 types in list if 'Sheet' is checked"
                     PrintLog "Avery Zweckform should have 67 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 67 else vTypes = 333    
+                    if i = 1 then vTypes = 67 else vTypes = 333
                 Case 5:
                     PrintLog "Herlitz should have 26 types in list if 'Sheet' is checked"
                     PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 6 else vTypes = 26    
+                    if i = 1 then vTypes = 6 else vTypes = 26
                 Case 6:
                     PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
                     PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
@@ -292,7 +305,7 @@ testcase tFileNewBusinessCards
                 Case 7:
                     PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
                     PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 18    
+                    if i = 1 then vTypes = 1 else vTypes = 18
                 Case 8:
                     PrintLog "Herma endlos should have 1 type in list if 'Sheet' is checked"
                     PrintLog "Herma endlos should have 119 types in list if 'Continous' is checked"
@@ -304,9 +317,9 @@ testcase tFileNewBusinessCards
                 Case 10:
                     PrintLog "Sigel should have 20 types in list if 'Sheet' is checked"
                     PrintLog "Sigel should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 20    
+                    if i = 1 then vTypes = 1 else vTypes = 20
                 Case else: Warnlog "- There are more than 10 brands in list"
-            end select            
+            end select
             if sTypes <> vTypes then Warnlog "-  Not " & sTypes & " types in list but " & vTypes
             For y = 1 to Typ.GetItemCount
                 Typ.Select y
@@ -315,10 +328,10 @@ testcase tFileNewBusinessCards
         next x
     next i
     Sleep 1
+    PrintLog "Switch to Tabpage 'Business Cards'"
 	Kontext
 	Active.Setpage TabVisitenkarten
 	Sleep 2
-    PrintLog "Switch to Tabpage 'Business Cards'"
 
 	Kontext "Active"
 	if Active.GetRT = 304 then
@@ -336,12 +349,12 @@ testcase tFileNewBusinessCards
 		end if
 	next i
 
+    PrintLog "Switch to Tabpage 'Private'"
     Kontext
     Active.Setpage TabPrivat
     wait 250
     Kontext "TabPrivat"
     Call DialogTest (TabPrivat)
-    PrintLog "Switch to Tabpage 'Private'"
 
     PrintLog "Switch to Tabpage 'Business'"
     Kontext
@@ -357,8 +370,8 @@ testcase tFileNewBusinessCards
     Call DialogTest (TabFormatEtiketten)
     PrintLog "Switch to Tabpage 'Format'"
     wait 250
-    FormatSpeichern.Click
     PrintLog "Click pushbutton 'Save'"
+    FormatSpeichern.Click
 
     PrintLog "Close upcoming dialog 'Save Label Format'"
     Kontext "SaveLabelFormat"
@@ -411,9 +424,9 @@ testcase tFileNewBusinessCards
     else
         Warnlog "Dialog to synchronize Business Cards not up!"
     end if
-    Sleep 2
-    Call hCloseDocument
+
     PrintLog "Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -503,7 +516,6 @@ testcase tFileClose
     WaitSlot(500)
     Active.No
     Sleep 1
-
 endcase
 
 '-----------------------------------------------------------
@@ -554,7 +566,6 @@ testcase tFileSave
 
     PrintLog "Close active document"
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------
@@ -591,12 +602,11 @@ testcase tFileSaveAll
     end if
 
     Sleep 1
-    PrintLog "Close 1. active document"
-    Call hCloseDocument
 
-    PrintLog "Close 2. active document"
-    Call hCloseDocument
-
+    PrintLog "Close documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-----------------------------------------------------------
@@ -643,7 +653,6 @@ testcase tFileSaveAs
 
     PrintLog "Close active document"
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------
@@ -696,7 +705,7 @@ testcase tFileSaveWithPassword
     Dim Datei$
     Dim sFile$
     Dim sFile2$
-	
+
     Printlog "- File / Save with Password"
     Select Case gApplication
         Case "WRITER"
@@ -715,11 +724,10 @@ testcase tFileSaveWithPassword
     PrintLog "Enter some text into document"
     Call wTypeKeys("This document will be saved with a password!")
 
-
     if gUseSysDlg = True then goto endsub
     Datei$ = ConvertPath ( gOfficePath + "user\work\" + sFile$ )
     if Dir (Datei$) <> "" then kill Datei$
-	
+
     PrintLog "Choose File / Save as."
     FileSaveAs
     PrintLog "enter destination and check 'Password'"
@@ -734,8 +742,8 @@ testcase tFileSaveWithPassword
       goto endsub
     end if
 
+    PrintLog "Save the document"
     Dateiname.SetText Datei$
-    PrintLog "Save your document"
     Speichern.Click
     Sleep 1
     Kontext "Active"
@@ -743,13 +751,13 @@ testcase tFileSaveWithPassword
 
     Sleep 1
     PrintLog "Password dialog has to come up"
-    Kontext "Passwort"
-    if Passwort.Exists then
+    Kontext "PasswordFileSave"
+    if PasswordFileSave.Exists then
         PrintLog "Enter your password"
-        PasswortName.SetText "12345"
+        Password.SetText "12345"
         PrintLog "Re-Enter a wrong passwort"
-        PasswortBestaetigen.Settext "54321"
-        Passwort.OK
+        PasswordConfirm.Settext "54321"
+        PasswordFileSave.OK
         Sleep 2
     else
         Warnlog "- Password-Dialog not up !"
@@ -764,12 +772,12 @@ testcase tFileSaveWithPassword
         Warnlog "Able to save document with wrong password"
     end if
 
-    Kontext "Passwort"
-    if Passwort.Exists then
+    Kontext "PasswordFileSave"
+    if PasswordFileSave.Exists then
         PrintLog "Enter new password, and re-enter the same password"
-        PasswortName.SetText "12345"
-        PasswortBestaetigen.SetText "12345"
-        Passwort.OK
+        Password.SetText "12345"
+        PasswordConfirm.SetText "12345"
+        PasswordFileSave.OK
     else
         Warnlog "- Password-Dialog not up !"
     end if
@@ -816,7 +824,6 @@ testcase tFileSaveWithPassword
     else
         Warnlog "- Password-Dialog not up!"
     end if
-
     Sleep 1
 
     Datei$ = ConvertPath ( gOfficePath + "user\work\" + sFile2$ )
@@ -838,13 +845,13 @@ testcase tFileSaveWithPassword
         Kontext "Active"
         if Active.Exists(2) then Active.Yes
         PrintLog "Click on 'Save' in file open dialog"
-        Kontext "Passwort"
-        if Not Passwort.Exists(1) then
+        Kontext "PasswordFileSave"
+        if Not PasswordFileSave.Exists(1) then
             Warnlog "Passworddialog is not coming up on saving document"
         else
-            PasswortName.SetText "54321"
-            PasswortBestaetigen.SetText "54321"
-            Passwort.OK
+            Password.SetText "54321"
+            PasswordConfirm.SetText "54321"
+            PasswordFileSave.OK
             PrintLog "The password dialog should come up"
             Sleep 1
             FileClose
@@ -873,7 +880,7 @@ testcase tFileReload
     Dim sFile$
 	Dim WriterFilterExtension(10) as string
     Dim MasterDocFilterExtension(10) as string
-	
+
 	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
 	MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
 
@@ -923,7 +930,6 @@ testcase tFileReload
     Wait (500)
     PrintLog "Close active document"
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------
@@ -962,21 +968,23 @@ testcase tFileVersions
         goto endsub
     endcatch
 
+    PrintLog "In Version-dialog click 'Save New Version'"
     Kontext "Versionen"
     Call DialogTest ( Versionen )
     Speichern.Click
-    PrintLog "In Version-dialog click 'Save New Version'"
+    PrintLog "Cancel dialog 'Insert version comment'"
     Kontext "VersionskommentarEingeben"
     Call DialogTest ( VersionskommentarEingeben )
     VersionskommentarEingeben.Cancel
-    PrintLog "Cancel dialog 'Insert version comment'"
 
+    PrintLog "Close dialog"
     Kontext "Versionen"
     Versionen.Close
-    PrintLog "Close dialog"
-    Call hCloseDocument
-    PrintLog "Close active document"
 
+    PrintLog "Close documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-----------------------------------------------------------
@@ -988,34 +996,31 @@ testcase tFileSendCreateMasterDocument
         goto endsub
     end if
 
-    Call hNewDocument
     PrintLog "Open new document"
+    Call hNewDocument
     Call wTypeKeys("File -> Send -> Create Master Document")
-    FileSendCreateMasterdocument
     PrintLog "Choose File / Send /Create Master Document"
+    FileSendCreateMasterdocument
     Kontext "SendMasterDocument"
 
-    SendMasterdocument.Cancel
     PrintLog "Cancel File-Save-dialog"
+    SendMasterdocument.Cancel
     Kontext "Active"
     if Active.Exists then Active.OK
-    Call hCloseDocument
     PrintLog "Close active document"
-
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
 
 testcase tFileSendCreateHTMLDocument
     PrintLog "- File / Send / Create HTML-Dokument"
+    PrintLog "Open new document"
     Select Case gApplication
         Case "WRITER"
             Call hNewDocument
-
         Case "MASTERDOC"
             Call hNewDocument
-            PrintLog "Open new document"
-
         Case "HTMLDOKUMENT"
             printlog "Not in WriterWeb!"
             goto endsub
@@ -1028,15 +1033,16 @@ testcase tFileSendCreateHTMLDocument
     SendHTMLDocument.Cancel
     Kontext "Active"
     if Active.Exists then Active.OK
-    PrintLog "Close active document"
-    Call hCloseDocument
 
+    PrintLog "Close documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-----------------------------------------------------------
 
 testcase tFileSendOutlineToPresentation
-
     Dim sFile$
     PrintLog "- File / Send / Outline to Presentation"
     Select Case gApplication
@@ -1082,9 +1088,9 @@ testcase tFileSendOutlineToPresentation
     Kontext "Navigator"
     if Navigator.Exists then Navigator.Close
     PrintLog "Close documents"
-    Call hCloseDocument
-    Call hCloseDocument
-
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-----------------------------------------------------------
@@ -1182,18 +1188,16 @@ testcase tFileSendCreateAutoabstract
     Kontext "Navigator"
     if Navigator.Exists then Navigator.Close
     Sleep 1
-    PrintLog "Close active document"
-    Call hCloseDocument
-
-    Sleep 1
-    PrintLog "Close active document"
-    Call hCloseDocument
+    
+    PrintLog "Close active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-----------------------------------------------------------
 
 testcase tFileSendAutoabstractToPresentation
-
     Dim sFile$
     PrintLog "- File / Send / Autoabstract to Presentation"
     Select Case gApplication
@@ -1251,5 +1255,478 @@ testcase tFileSendAutoabstractToPresentation
 
     Call wDocSetContext
     FileClose
+endcase
+'--------------------------------------------------------------------------------------------------------------------------------------------
+
+testcase tMasterDocFileSaveWithPassword
+    Dim DokumentPfad$
+    Dim Datei$
+    Dim sFile$
+    Dim sFile2$
+
+    Printlog "- File / Save with Password"
+    sFile$ = "password.odm"
+    sFile2$ = "password2.odm"
+
+    gApplication = "MASTERDOC"
+    PrintLog "Open new document"
+    Call hNewDocument
+    PrintLog "Enter some text into document"
+    Call wTypeKeys("This document will be saved with a password!")
+
+    if gUseSysDlg = True then goto endsub
+    Datei$ = ConvertPath ( gOfficePath + "user\work\" + sFile$ )
+    if Dir (Datei$) <> "" then kill Datei$
+
+    PrintLog "Choose File / Save as."
+    FileSaveAs
+    PrintLog "enter destination and check 'Password'"
+    Kontext "SpeichernDlg"
+    if Passwort.IsEnabled then
+        Passwort.Check
+    else
+        Warnlog "- Not able to save with Password -> Checkbox is disabled! Maybe default-filter wrong!?"
+        SpeichernDlg.Cancel
+        PrintLog "if Checkbox is disabled the test stops here!"
+        Call hCloseDocument
+        goto endsub
+    end if
+
+    Dateiname.SetText Datei$
+    PrintLog "Save your document"
+    Speichern.Click
+    Sleep 1
+    Kontext "Active"
+    if Active.Exists (1) then Active.Yes
+
+    Sleep 1
+    PrintLog "Password dialog has to come up"
+    Kontext "Passwort"
+    if Passwort.Exists then
+        PrintLog "Enter your password"
+        PasswortName.SetText "12345"
+        PrintLog "Re-Enter a wrong passwort"
+        PasswortBestaetigen.Settext "54321"
+        Passwort.OK
+        Sleep 2
+    else
+        Warnlog "- Password-Dialog not up !"
+    end if
+
+    Kontext "Active"
+    Sleep 1
+    PrintLog "A messagebox has to come up, warns of wrong confirmation"
+    if Active.Exists(1) then
+        Active.OK
+    else
+        Warnlog "Able to save document with wrong password"
+    end if
+
+    Kontext "Passwort"
+    if Passwort.Exists then
+        PrintLog "Enter new password, and re-enter the same password"
+        PasswortName.SetText "12345"
+        PasswortBestaetigen.SetText "12345"
+        Passwort.OK
+    else
+        Warnlog "- Password-Dialog not up !"
+    end if
+
+    Sleep 1
+    PrintLog "Close the document"
+    FileClose
+    WaitSlot(2000)
+    PrintLog "Open previous saved document"
+    Call hFileOpen(Datei$)
+
+    Kontext "PasswordFileOpen"
+    PrintLog "Enter a wrong password."
+    if PasswordFileOpen.Exists then
+        PasswortName.SetText "34567"
+        PasswordFileOpen.OK
+    else
+        Warnlog "- Password-Dialog not up or Document couldn't be loaded!"
+    end if
+
+    PrintLog "A messagebox has to come up, warns of wrong password"
+    Kontext "Active"
+    Sleep 1
+    if Not Active.Exists(1) then
+        Warnlog "Able to load document with wrong password"
+    else
+        Active.OK
+    end if
+
+    Kontext "PasswordFileOpen"
+    PrintLog "Close password dialog"
+    if PasswordFileOpen.Exists then
+        PasswordFileOpen.Cancel
+    end if
+    
+    Sleep 1
+    PrintLog "File / Open again your previous saved document"
+    Call hFileOpen(Datei$)
+    PrintLog "Enter your password in password dialog"
+    Kontext "PasswordFileOpen"
+    if PasswordFileOpen.Exists then
+        PasswortName.SetText "12345"
+        PasswordFileOpen.OK
+    else
+        Warnlog "- Password-Dialog not up!"
+    end if
+    Sleep 1
+
+    Datei$ = ConvertPath ( gOfficePath + "user\work\" + sFile2$ )
+    if Dir (Datei$) <> "" then kill Datei$
+    PrintLog "File / Save as ..."
+    FileSaveAs
+    Kontext "SpeichernDlg"
+    if Not Passwort.IsChecked = True then
+        if gPlatgroup = "unx" then
+            QAErrorlog "#i73968#Opening a password protected file looses focus after loading"
+        else
+            Warnlog "#i36015#Checkbox 'Save with password' is not checked in file-dialog !"
+        end if
+        Passwort.Check
+        SpeichernDlg.Cancel
+    else
+        Dateiname.SetText Datei$
+        Speichern.Click
+        Kontext "Active"
+        if Active.Exists(2) then Active.Yes
+        PrintLog "Click on 'Save' in file open dialog"
+        Kontext "Passwort"
+        if Not Passwort.Exists(1) then
+            Warnlog "Passworddialog is not coming up on saving document"
+        else
+            PasswortName.SetText "54321"
+            PasswortBestaetigen.SetText "54321"
+            Passwort.OK
+            PrintLog "The password dialog should come up"
+            Sleep 1
+            FileClose
+            PrintLog "File / Close and open your document again"
+            Call hFileOpen(Datei$)
+            Sleep 1
+            Kontext "PasswordFileOpen"
+            PrintLog "Now the passwort dialog should come up"
+            if Not PasswordFileOpen.Exists(2) then
+                Warnlog "Passworddialog is not coming up on reload"
+            else
+                PasswortName.SetText "54321"
+                PasswordFileOpen.OK
+            end if
+        end if
+    end if
+    PrintLog "Close active document"
+    Call hCloseDocument
+endcase
+
+'-----------------------------------------------------------
+
+    testcase tMasterDocFileReload
+    Dim DokumentPfad$
+    Dim Datei$
+    Dim sFile$
+	Dim WriterFilterExtension(10) as string
+    Dim MasterDocFilterExtension(10) as string
+
+	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+	MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
+
+    PrintLog "- File / Reload"
+    sFile$ = "reload." & MasterDocFilterExtension(0)
+
+    gApplication = "MASTERDOC"
+    PrintLog "Open new document"
+    Call hNewDocument
+
+    PrintLog "Enter some text, save and close document"
+    Call wTypeKeys("File -> Reload!")
+    Call hFileSaveAsKill ( gOfficePath + "user\work\" + sFile$ )
+    FileClose
+    Kontext
+    if MessageBox.Exists (1) then
+        WarnLog "Messagebox after saving and closing : " + MessageBox.GetText
+        MessageBox.Yes
+    end if
+    Wait (500)
+
+    PrintLog "Open previous saved document"
+    Call hFileOpen ( gOfficePath + "user\work\" + sFile$ )
+    PrintLog "Insert a table in document"
+    Call hTabelleEinfuegen
+    PrintLog "File / Reload"
+    FileReload
+    WaitSlot(1000)
+    PrintLog "Quit messagebox with 'No'"
+    Kontext "Active"
+    Active.No
+    Wait (500)
+
+    PrintLog "File / Reload again and quit messagebox with yes"
+    FileReload
+
+    WaitSlot(2000)
+    Kontext "Active"
+    Active.Yes
+    Wait (500)
+    PrintLog "Close active document"
+    Call hCloseDocument
+endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFileVersions
+    Dim sFile$
+    Dim WriterFilterExtension(10) as string
+    Dim MasterDocFilterExtension(10) as string
+
+	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+	MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
+
+    gApplication = "MASTERDOC"
+    PrintLog "- File / Versions"
+    sFile$ = "kann_weg." & MasterDocFilterExtension(0)
+
+    PrintLog "Open new document"
+    Call hNewDocument
+    Call wTypeKeys ("File version")
+    PrintLog "enter some text in documet and save it"
+    Call hFileSaveAsKill(gOfficePath + "user\work\" + sFile$)
+
+    try
+        PrintLog "Choose File / Versions"
+        FileVersions
+    catch
+        Warnlog "- File / Versions not accessible!"
+        goto endsub
+    endcatch
+
+    Kontext "Versionen"
+    Call DialogTest ( Versionen )
+    Speichern.Click
+    PrintLog "In Version-dialog click 'Save New Version'"
+    Kontext "VersionskommentarEingeben"
+    Call DialogTest ( VersionskommentarEingeben )
+    VersionskommentarEingeben.Cancel
+    PrintLog "Cancel dialog 'Insert version comment'"
+
+    Kontext "Versionen"
+    PrintLog "Close dialog"
+    Versionen.Close
+    PrintLog "Close active document"
+    Call hCloseDocument
+endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFileSendCreateHTMLDocument
+    PrintLog "- File / Send / Create HTML-Dokument"
+    gApplication = "MASTERDOC"
+    PrintLog "Open new document"
+    Call hNewDocument
+
+    PrintLog "Choose File / Send / Create HTML-Document"
+    FileSendCreateHTMLDocument
+
+    PrintLog "Cancel Filedialog"
+    Kontext "SendHTMLDocument"
+    SendHTMLDocument.Cancel
+    Kontext "Active"
+    if Active.Exists then Active.OK
+    PrintLog "Close active document"
+    Call hCloseDocument
+endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFileSendOutlineToPresentation
+    Dim sFile$
+    PrintLog "- File / Send / Outline to Presentation"
+    gApplication = "MASTERDOC"
+    sFile$ = "htmltest.sxg"
+
+    PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
+    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    Kontext "Navigator"
+    if Navigator.Exists then Navigator.Close
+    Sleep 1
+    Kontext "DocumentWriter"
+    PrintLog "File / Send / Outline to presentation"
+    try
+        FileSendOutlineToPresentation
+    catch
+        Warnlog "#i38723#Unable to execute 'File -> Send -> Outline to Presentation'"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    Wait(500)
+
+    Kontext "DocumentImpressOutlineView"
+    if DocumentImpressOutlineView.Exists then
+        DocumentImpressOutlineView.TypeKeys "<Mod1 Home>"
+        DocumentImpressOutlineView.TypeKeys "<Shift End>"
+        Wait(500)
+        try
+            EditCopy
+            if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
+        catch
+            QAErrorlog "Send outline to presentation doesn't work correct."
+        endcatch
+    else
+        WarnLog "Outlinemode comes not up!"
+    end if
+
+    Kontext "Navigator"
+    if Navigator.Exists then Navigator.Close
+    PrintLog "Close documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFileSendOutlineToClipboard
+    gApplication = "MASTERDOC"
+    Dim sFile$
+    PrintLog "- File / Send / Outline to Clipboard"
+    sFile$ = "htmltest.sxg"
+
+    PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
+    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    Sleep 1
+    PrintLog "File / Send / Outline to Clipboard"
+    try
+        FileSendOutlineToClipboard
+    catch
+        Warnlog "#i38723#Unable to execute 'File -> Send -> Outline to Clipboard'"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    
+    Sleep 1
+    PrintLog "Close active document"
+    Call hCloseDocument
+    WaitSlot(1000)
+    PrintLog "Open new document"
+    Call hNewDocument
+    WaitSlot(1000)
+    PrintLog "Paste outline in new document"
+    EditPaste
+    Call wTypeKeys("<Up>", 6)
+    Call wTypeKeys("<Home><Shift End>")
+    EditCopy
+    if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
+    WaitSlot(1000)
+    PrintLog "Close active document"
+    Call hCloseDocument
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFileSendCreateAutoabstract
+    gApplication = "MASTERDOC"
+    Dim sFile$
+    PrintLog "- File / Send / Create Autoabstract"
+    sFile$ = "htmltest.sxg"
+
+    PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
+    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    Kontext "Navigator"
+    if Navigator.Exists then Navigator.Close
+    Sleep 1
+    Kontext "DocumentWriter"
+    PrintLog "File / Send / Create Autoabstract"
+    try
+        FileSendCreateAutoabstract
+    catch
+        Warnlog "#i38723#Unable to execute 'File -> Send -> Create Autoabstract'"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    WaitSlot(2000)
+
+    PrintLog "Close upcoming dialog with 'Ok"
+    Kontext "AutoAbstractErzeugen"
+    AutoAbstractErzeugen.OK
+    Sleep 1
+    Call wTypeKeys("<Home><Up>", 10)
+    Call wTypeKeys("<Shift End>")
+    try
+        EditCopy
+        WaitSlot(1000)
+        if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
+    catch
+        QAErrorlog "Empty autoabstract created"
+    endcatch
+
+    Kontext "Navigator"
+    if Navigator.Exists then Navigator.Close
+    Sleep 1
+
+    PrintLog "Close documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    gApplication = "WRITER"
+endcase
+
+'-----------------------------------------------------------
+
+testcase tMasterDocFileSendAutoabstractToPresentation
+    gApplication = "MASTERDOC"
+    Dim sFile$
+    PrintLog "- File / Send / Autoabstract to Presentation"
+    sFile$ = "htmltest.sxg"
+
+    PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
+    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    Kontext "Navigator"
+    if Navigator.Exists then Navigator.Close
+    Sleep 1
+    Kontext "DocumentWriter"
+    PrintLog "File / Send / Create Autoabstract To Presentation"
+    try
+        FileSendAutoabstractToPresentation
+    catch
+        Warnlog "#i38723#Unable to execute 'File -> Send -> Autoabstract to Presentation'"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+
+    Sleep 1
+    Kontext "AutoAbstractErzeugen"
+    PrintLog "Close upcoming dialog with 'Ok'"
+    AutoAbstractErzeugen.OK
+
+    Sleep 2
+    Kontext "DocumentImpressOutlineView"
+    if DocumentImpressOutlineView.Exists then
+        PrintLog "Point cursor to beginning of document"
+        DocumentImpressOutlineView.TypeKeys "<Mod1 Home>"
+        PrintLog "Mark text"
+        DocumentImpressOutlineView.TypeKeys "<Shift End>"
+        try
+            EditCopy
+            WaitSlot(1000)
+            if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
+        catch
+            QAErrorlog "Edit / copy disabled. Maybe data could not be pasted correctly!"
+        endcatch
+    else
+        Warnlog "- Outline in Impress not created!"
+    end if
+    Kontext "Navigator"
+    if Navigator.Exists then Navigator.Close
+    Sleep 1
+    Call hCloseDocument
+    PrintLog "Close active document"
+
+    Call wDocSetContext
+    FileClose
+    gApplication = "WRITER"
 endcase
 '--------------------------------------------------------------------------------------------------------------------------------------------

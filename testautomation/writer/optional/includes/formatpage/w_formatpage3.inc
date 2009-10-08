@@ -197,7 +197,7 @@ testcase tFormatPage_30
      FindAndReplace.Close
 
      Kontext "Navigator"
-     if Not Navigator.Exists then EditNavigator
+     if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
      if Seitennummer.GetText <> "1" then warnlog "Something wrong in Header in 1st page!"
@@ -348,7 +348,7 @@ testcase tFormatPage_32
      FindAndReplace.Close
 
      Kontext "Navigator"
-     if Not Navigator.Exists then EditNavigator
+     if Not Navigator.Exists then ViewNavigator
      Kontext "NavigatorWriter"
      Sleep 1
      if Seitennummer.GetText <> "1" then warnlog "Something wrong in Footer in 1st page!"
@@ -774,7 +774,7 @@ testcase tFormatPage_39
      FindAndReplace.Close
 
      Kontext "Navigator"
-       if Not Navigator.Exists then EditNavigator
+       if Not Navigator.Exists then ViewNavigator
        Kontext "NavigatorWriter"
        Sleep 1
        if Seitennummer.GetText <> "1" then warnlog "the second column isn't right!"
@@ -841,7 +841,7 @@ testcase tFormatPage_40
      FindAndReplace.Close
 
      Kontext "Navigator"
-       if Not Navigator.Exists then EditNavigator
+       if Not Navigator.Exists then ViewNavigator
        Kontext "NavigatorWriter"
        Sleep 1
        if Seitennummer.GetText <> "1" then warnlog "the second column isn't right!"
