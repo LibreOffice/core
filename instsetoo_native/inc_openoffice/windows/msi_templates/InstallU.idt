@@ -15,6 +15,7 @@ LaunchConditions		50
 MaintenanceWelcome	Installed And Not RESUME And Not Preselected And Not PATCH	750
 MigrateFeatureStates		600
 NewProductFound	NEWPRODUCTS	160
+OldProductFound	OLDPRODUCTSSAMEMAJOR And (VersionNT > 599)	165
 PatchWelcome	Installed And PATCH And Not IS_MAJOR_UPGRADE	625
 ResolveSource	Not Installed And Not PATCH	525
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	300

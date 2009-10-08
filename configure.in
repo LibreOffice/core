@@ -28,7 +28,7 @@ AC_ARG_WITH(gnu-cp,
 AC_ARG_WITH(gpc,
 [  --without-gpc           Use the internal polygon clipping code instead of
                           the external GPC polygon clipping library.
-],,if test ! -e ../external/gpc/gpc.c && test ! -e ../external/gpc/gpc.h; then without_gpc=yes; fi)
+],,if test ! -e ./external/gpc/gpc.c && test ! -e ./external/gpc/gpc.h; then without_gpc=yes; fi)
 AC_ARG_ENABLE(ldap,
 [  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
@@ -90,6 +90,12 @@ AC_ARG_ENABLE(epm,
                           epm, however epm is useless for large scale
                           package building.
 ],,enable_epm="yes")
+AC_ARG_WITH(epm,
+[  --with-epm		  Decides which epm to use. Default is to use
+			  the one from the system if one is built. When
+			  either this is not there or you say =internal
+			  epm will be built.
+],,)
 AC_ARG_WITH(package-format,
 [  --with-package-format   specify package format(s) for OOo installsets.
                           Default is "normal" one of the OS/Distribution.
@@ -197,11 +203,11 @@ AC_ARG_ENABLE(systray,
 [  --disable-systray       Determines whether to build the systray quickstarter.
 ],,enable_systray=yes)
 AC_ARG_ENABLE(cairo,
-[  --enable-cairo          Determines whether to use Cairo canvas backend on
+[  --enable-cairo          Determines whether to use Cairo library on
                           platforms where Cairo is available.
 ],,enable_cairo=no)
 AC_ARG_WITH(system-cairo,
-[  --with-system-cairo      Use cairo libraries already on system
+[  --with-system-cairo      Use Cairo libraries already on system
 ],,)
 AC_ARG_ENABLE(opengl,
 [  --enable-opengl         Determines whether to use OpenGL (for 3D transitions)
@@ -253,7 +259,7 @@ AC_ARG_ENABLE(kdeab,
 ],,if test "$enable_kde" = "yes"; then enable_kdeab=yes; fi)
 AC_ARG_ENABLE(binfilter,
 [  --disable-binfilter     Disable legacy binary file formats filters
-],,if ! test -d ../binfilter; then enable_binfilter=no; fi)
+],,if ! test -d ./binfilter; then enable_binfilter=no; fi)
 AC_ARG_ENABLE(rpath,
 [  --disable-rpath         Disable the use of relative paths in shared libraries
 ],,)
@@ -379,14 +385,14 @@ AC_ARG_WITH(beanshell-jar,
 AC_ARG_ENABLE(minimizer,
 [  --enable-minimizer          enables the build of the Presentation Minimizer extension
 ],,)
-AC_ARG_ENABLE(presenter-screen,
-[  --enable-presenter-screen          enables the build of the Presenter Screen extension
+AC_ARG_ENABLE(presenter-console,
+[  --enable-presenter-console          enables the build of the Presenter Console extension
 ],,)
 AC_ARG_ENABLE(pdfimport,
-[  --disable-pdfimport         disables the build of the PDF Import extension and xpdf
+[  --enable-pdfimport          enables the build of the PDF Import extension and xpdf
 ],,)
-AC_ARG_ENABLE(mediawiki,
-[  --disable-mediawiki     disables the build of the MediaWiki Editor extension
+AC_ARG_ENABLE(wiki-publisher,
+[  --enable-wiki-publisher      enables the build of the Wiki Publisher extension
 ],,)
 AC_ARG_WITH(commons-codec-jar,
 [  --with-commons-codec-jar=JARFILE   Specify path to jarfile manually ],
@@ -411,12 +417,9 @@ AC_ARG_WITH(servlet-api-jar,
 AC_ARG_ENABLE(ogltrans,
 [  --enable-ogltrans       enables the build of the OGLTrans extension
 ],,)
-AC_ARG_ENABLE(reportdesign,
-[  --disable-reportdesign  disables the build of the Report Builder extension
+AC_ARG_ENABLE(report-builder,
+[  --enable-report-builder  disables the build of the Report Builder extension
 ],,)
-AC_ARG_ENABLE(minimizer,
-[  --disable-minimizer          disables the build of the Presentation Minimizer extension
-],,enable_minimizer=yes)
 AC_ARG_WITH(system-jfreereport,
 [  --with-system-jfreereport      Use JFreeReport already on system
 ],,)
@@ -444,6 +447,14 @@ AC_ARG_WITH(liblayout-jar,
 [  --with-liblayout-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBLAYOUT_JAR="$withval"
 ])
+AC_ARG_WITH(libloader-jar,
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLOADER_JAR="$withval"
+])
+AC_ARG_WITH(libloader-jar,
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLOADER_JAR="$withval"
+])
 AC_ARG_WITH(libformula-jar,
 [  --with-libformula-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBFORMULA_JAR="$withval"
@@ -452,7 +463,7 @@ AC_ARG_WITH(librepository-jar,
 [  --with-librepository-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBREPOSITORY_JAR="$withval"
 ])
-AC_ARG_WITH(libfonts-java-jar,
+AC_ARG_WITH(libfonts-jar,
 [  --with-libfonts-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBFONTS_JAR="$withval"
 ])
@@ -637,13 +648,13 @@ AC_ARG_WITH(directx-home,
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
 ],,)
 AC_ARG_WITH(local-solenv,
-[  --with-local-solenv     If you have solenv in a location other than ../solenv,
+[  --with-local-solenv     If you have solenv in a location other than ./solenv,
                           please supply the path here.
  
                           Usage: --with-local-solenv=<absolute path to solenv>
 ],,)
 AC_ARG_WITH(local-solver,
-[  --with-local-solver     if you have solver in a location other than ../solver,
+[  --with-local-solver     if you have solver in a location other than ./solver,
                           please supply the path here.
  
                           Usage: --with-local-solver=<absolute path to solver>
@@ -823,16 +834,17 @@ fi
 AC_SUBST(LOCAL_SOLENV)
 
 if test "$LOCAL_SOLENV" = "DEFAULT"; then 
-  _solenv="../solenv"
+  _solenv="./solenv"
 else
   _solenv="$LOCAL_SOLENV"
 fi
+AC_SUBST(_solenv)
 
 if test -e $_solenv/inc/minor.mk; then
-   # Get UPD number from ../solenv/inc/minor.mk
-   UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   # Get UPD number from ./solenv/inc/minor.mk
+   UPD="`grep RSCVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
    AC_SUBST(UPD)
-   SOURCEVERSION="`grep SOURCEVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   SOURCEVERSION="`grep SOURCEVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
    AC_SUBST(SOURCEVERSION)
 else
    AC_MSG_ERROR([$_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
@@ -841,7 +853,6 @@ fi
 dnl ===================================================================
 dnl Checks for the operating system and processor.
 dnl ===================================================================
-AC_CONFIG_AUX_DIRS([$_solenv/bin])
 AC_CANONICAL_SYSTEM
 if test "$build" != "$host" -o "$build" != "$target" \
   -o "$host" != "$target"; then
@@ -868,7 +879,7 @@ dnl ===================================================================
 case "$build_os" in
 	solaris*)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -896,7 +907,7 @@ case "$build_os" in
 		;;
 	linux-gnu*)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -912,14 +923,14 @@ case "$build_os" in
 		;;
 	cygwin*) # Windows
 		test_cups=no
-		build_cairo=yes
+		test_cairo=yes
 		test_freetype=no
 		_os=WINNT
 		;;
 	darwin*) # Mac OS X
 		test_cups=yes
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
         test_randr=no
 		test_freetype=no
 		_os=Darwin
@@ -939,7 +950,7 @@ case "$build_os" in
 		;;
 	freebsd*)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -972,7 +983,7 @@ case "$build_os" in
 		;;
 	netbsd)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=no
         test_randr=yes
@@ -1284,6 +1295,13 @@ dnl The following sets the with_use_shell variable.
 dnl ===================================================================
 AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
+   dnl Sanity check! expand.exe in cygwin could cause build error.
+   dnl ===================================================================
+      if test -x "/usr/bin/expand.exe" ; then
+         AC_MSG_ERROR([cygwin has expand.exe!
+The expand.exe in cygwin could cause build error. Please remove or rename it.])
+      fi
+   dnl ===================================================================
    if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
       AC_MSG_ERROR([only "tcsh","bash" or "4nt" are supported options])
    fi
@@ -1476,28 +1494,25 @@ for a in "$MAKE" $GNUMAKE make gmake gnumake; do
       fi
 done
 AC_MSG_RESULT($GNUMAKE)
+if test -z "$GNUMAKE"; then
+    AC_MSG_ERROR([not found. install GNU make.])
+fi
 
 AC_MSG_CHECKING([the GNU make version])
-dnl Change empty GNUMAKE from warning to error, pending testing.
-if test -z "$GNUMAKE"; then
-    AC_MSG_WARN([not found build may fail])
-    echo "GNU make not found build may fail" >> warn
+_make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+_make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+if test "$_make_longver" -ge "037901" ; then
+   AC_MSG_RESULT([$GNUMAKE $_make_version])
 else
-    _make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
-    _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-    if test "$_make_longver" -ge "037901" ; then
-       AC_MSG_RESULT([$GNUMAKE $_make_version])
-    else
-       if test "$_os" = "Darwin"; then
-           if test "$_make_longver" -ge "037900" ; then
-			   AC_MSG_RESULT([$GNUMAKE $_make_version])
-           else
-               AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.0+)])
-           fi
+   if test "$_os" = "Darwin"; then
+       if test "$_make_longver" -ge "037900" ; then
+		   AC_MSG_RESULT([$GNUMAKE $_make_version])
        else
-           AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
+           AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.0+)])
        fi
-    fi
+   else
+       AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
+   fi
 fi
 AC_SUBST(GNUMAKE)
 
@@ -2288,23 +2303,29 @@ dnl ===================================================================
 dnl Checks for what the default STL should be
 dnl ===================================================================
    AC_MSG_CHECKING([what the default STL should be])
-   DEFAULT_TO_STLPORT="yes"
+   DEFAULT_TO_STLPORT="no"
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
-       i?86|powerpc|sparc)
+       i?86)
          DEFAULT_TO_STLPORT="yes"
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
          ;;
      esac
-   elif test "$_os" = "Darwin"; then
-      DEFAULT_TO_STLPORT="no"
+   elif test "$_os" = "SunOS"; then
+      DEFAULT_TO_STLPORT="yes"
+   elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+      DEFAULT_TO_STLPORT="yes"
+   elif test "$_os" = "OS2"; then
+      DEFAULT_TO_STLPORT="yes" 
+   elif test "$_os" = "FreeBSD"; then
+      DEFAULT_TO_STLPORT="yes"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       AC_MSG_RESULT([stlport])
    else
-      AC_MSG_RESULT([gcc])
+      AC_MSG_RESULT([system])
    fi
    if test "$WITH_STLPORT" = "auto"; then
       WITH_STLPORT=$DEFAULT_TO_STLPORT
@@ -2482,12 +2503,13 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\\$stub' visibility.s; then
+         if $EGREP -q '@PLT|\$stub' visibility.s; then
              gccvisbroken=no;
          else 
              gccvisbroken=yes; 
          fi
       fi
+      rm -f visibility.s
 
       AC_MSG_RESULT([$gccvisbroken])
       if test "$gccvisbroken" = "yes"; then
@@ -2655,25 +2677,24 @@ if test "$SOLAR_JAVA" != ""; then
 #        JAVA_HOME=$with_jdk_home
 #
       elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "IBM"` -gt 0; then
-         AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.in])
-#        JDK=ibm
-#
-#        dnl IBM JDK specific tests
-#        _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
-#        _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
-#   
-#        if test "$_jdk_ver" -lt 10301; then
-#             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.3.1])
-#        fi
-#
-#        AC_MSG_RESULT([checked (IBM JDK $_jdk)])
-#
-#        if test "$with_jdk_home" = ""; then
-#             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,
-#you must use the "--with-jdk-home" configure option explicitly])
-#        fi
-#
-#        JAVA_HOME=$with_jdk_home
+        JDK=ibm
+
+        dnl IBM JDK specific tests
+        _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
+        _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
+   
+        if test "$_jdk_ver" -lt 10600; then
+             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.6])
+        fi
+
+        AC_MSG_RESULT([checked (IBM JDK $_jdk)])
+
+        if test "$with_jdk_home" = ""; then
+             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,
+you must use the "--with-jdk-home" configure option explicitly])
+        fi
+
+        JAVA_HOME=$with_jdk_home
 	
       else	
         JDK=sun
@@ -3258,7 +3279,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
    if test "$WITH_JAVA" != "no"; then
    AC_MSG_CHECKING([for external/unowinreg/unowinreg.dll])
-   if ! test -f "../external/unowinreg/unowinreg.dll"; then
+   if ! test -f "./external/unowinreg/unowinreg.dll"; then
       HAVE_UNOWINREG_DLL=no
    else
       HAVE_UNOWINREG_DLL=yes
@@ -3657,15 +3678,34 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
         AC_MSG_RESULT([external])
         SYSTEM_LUCENE=YES
         if test -z $LUCENE_CORE_JAR; then
-               LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar
-        fi
-        AC_CHECK_FILE($LUCENE_CORE_JAR, [],
+          AC_CHECK_FILE(/usr/share/java/lucene-core-2.3.jar, 
+            [ LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar ],
+            [
+              AC_CHECK_FILE(/usr/share/java/lucene.jar, 
+                [ LUCENE_CORE_JAR=/usr/share/java/lucene.jar ],
+                [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($LUCENE_CORE_JAR, [],
                [AC_MSG_ERROR(lucene-core.jar not found.)], [])
-        if test -z $LUCENE_ANALYZERS_JAR; then
-               LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers-2.3.jar
         fi
-        AC_CHECK_FILE($LUCENE_ANALYZERS_JAR, [],
-               [AC_MSG_ERROR(lucene-analyzers.jar not found.)], [])
+
+        if test -z $LUCENE_ANALYZERS_JAR; then
+          AC_CHECK_FILE(/usr/share/java/lucene-analyzers-2.3.jar, 
+            [ LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers-2.3.jar ],
+            [
+              AC_CHECK_FILE(/usr/share/java/lucene-contrib/lucene-analyzers.jar, 
+                [ LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-contrib/lucene-analyzers.jar ],
+                [ AC_MSG_ERROR(lucene-analyzers.jar replacement not found.)]
+              )
+            ]
+          )
+        else
+          AC_CHECK_FILE($LUCENE_CORE_JAR, [],
+               [ AC_MSG_ERROR(lucene-analyzers.jar not found.)], [])
+        fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LUCENE=NO
@@ -4066,11 +4106,11 @@ else
    enable_build_mozilla=1
    AC_MSG_RESULT([$MOZILLA_TOOLKIT])
 fi
-if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
-   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
-   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
-   AC_MSG_ERROR([Only gtk2 toolkit supported on Mac, sorry.])
-fi
+#if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
+#   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
+#   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
+#   AC_MSG_ERROR([Only gtk2 toolkit supported on Mac, sorry.])
+#fi
 
 AC_SUBST(MOZILLA_TOOLKIT)
 
@@ -4101,7 +4141,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    fi
    for e in gz bz2; do
       AC_MSG_CHECKING([for $MOZILLA_SOURCE_VERSION.tar.$e])
-      if test ! -e "../moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+      if test ! -e "./moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
          AC_MSG_RESULT([not found])
          HAVE_MOZILLA_TARBALL=n
       else
@@ -4117,9 +4157,9 @@ http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for glib and libIDL binaries])
-      if test ! -e "../moz/download/vc71-glib-1.2.10-bin.zip" \
-           -o ! -e "../moz/download/vc71-libIDL-0.6.8-bin.zip" \
-           -o ! -e "../moz/download/wintools.zip" ; then
+      if test ! -e "./moz/download/vc71-glib-1.2.10-bin.zip" \
+           -o ! -e "./moz/download/vc71-libIDL-0.6.8-bin.zip" \
+           -o ! -e "./moz/download/wintools.zip" ; then
 AC_MSG_ERROR([One or more of the following archives is missing in moz/download/
   vc71-glib-1.2.10-bin.zip
   vc71-libIDL-0.6.8-bin.zip
@@ -4130,9 +4170,15 @@ AC_MSG_ERROR([One or more of the following archives is missing in moz/download/
          AC_MSG_RESULT([ok])
       fi
    elif test "$_os" = "Darwin"; then
-      # only gtk2 supported - see above
-      AC_MSG_NOTICE([checking whether mozilla can be built...])
-      PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
+      if test "$MOZILLA_TOOLKIT" = "gtk2"; then
+         AC_MSG_NOTICE([checking whether mozilla can be built...])
+         PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
+      else
+         PKG_CHECK_MODULES(MOZLIBREQ, libIDL >= 0.6.3 libIDL <= 0.6.8, MOZIDL="TRUE", MOZIDL="")
+         if test -z "$MOZIDL"; then
+            AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla.])
+         fi
+      fi
    else
       # Generic Unix/Linux section
       if test "$MOZILLA_TOOLKIT" = "gtk2"; then
@@ -4248,6 +4294,11 @@ if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNON
       AC_MSG_RESULT([yes])
       x_includes="no_x_includes"
       x_libraries="no_x_libraries"
+      dnl disable some things used on other Unix versions but not on the aqua build
+      enable_gtk=no
+      enable_cups=no
+      ENABLE_CUPS=""
+      AC_SUBST(ENABLE_CUPS)
    else
       AC_MSG_RESULT([no])
       dnl Probably a pure Darwin system. Check for X11 below.
@@ -4282,6 +4333,8 @@ elif test "$_os" != "WINNT" ; then
    else
        AC_MSG_RESULT([yes])
        AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])])
+       AC_CHECK_LIB(Xaw, main, [],
+           [AC_MSG_ERROR(Xaw library not found or functional)], [])
    fi
    dnl ===================================================================
 
@@ -4320,7 +4373,10 @@ else
 fi
 AC_SUBST(XINC)
 if test "$x_libraries" = "default_x_libraries"; then
-   XLIB="/usr/lib"
+   XLIB=`$PKG_CONFIG --variable=libdir x11`
+   if test "x$XLIB" = x; then
+         XLIB="/usr/lib"
+   fi
 else
    XLIB="$x_libraries"
 fi
@@ -4909,7 +4965,7 @@ AC_SUBST(CYGWIN_PATH)
 dnl ***************************************
 dnl testing ml.exe assembler path
 dnl ***************************************
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
   AC_MSG_CHECKING([ml.exe assembler path])
   if test -n "$with_asm_home"; then
     with_asm_home=`cygpath -u "$with_asm_home"`
@@ -4986,7 +5042,7 @@ dnl Windows builds need unicows.dll in external/unicows/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for unicows.dll])
-   if test -x ../external/unicows/unicows.dll; then
+   if test -x ./external/unicows/unicows.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([The Microsoft Layer for Unicode (unicows.dll) is missing in external/unicows/.
@@ -5002,7 +5058,7 @@ dnl Windows builds need dbghelp.dll in external/dbghelp/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for dbghelp.dll])
-   if test -x ../external/dbghelp/dbghelp.dll; then
+   if test -x ./external/dbghelp/dbghelp.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([dbghelp.dll is missing in external/dbghelp/.
@@ -5017,7 +5073,7 @@ dnl ===================================================================
 dnl Windows builds - use oowintool to copy CRT dlls and manifest
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-       if ./oowintool --msvc-copy-dlls ../external/msvcp ; then
+       if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
           :
        else
           AC_MSG_ERROR([oowintool failed to copy CRT])
@@ -5029,7 +5085,7 @@ dnl Windows builds need gdiplus.dll in external/gdiplus/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for gdiplus.dll])
-   if test -x ../external/gdiplus/gdiplus.dll; then
+   if test -x ./external/gdiplus/gdiplus.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([gdiplus.dll is missing in external/gdiplus/.
@@ -5043,7 +5099,7 @@ dnl ===================================================================
 dnl Windows builds - attempt to auto-copy required instmsiX.exe into external/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-       ./oowintool --msvc-copy-instmsi ../external/msi
+       ./oowintool --msvc-copy-instmsi ./external/msi
 fi
 
 dnl ===================================================================
@@ -5052,14 +5108,14 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
    if test "$COMEX" -ge "10"; then
    AC_MSG_CHECKING([for instmsia.exe/instmsiw.exe])
-   if test -x ../external/msi/instmsia.exe -a -x ../external/msi/instmsiw.exe; then
+   if test -x ./external/msi/instmsia.exe -a -x ./external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
    else
       MSIAPATH=`/bin/find "$COMPATH/../.." -iname instmsia.exe | head -n 1`
       MSIWPATH=`/bin/find "$COMPATH/../.." -iname instmsiw.exe | head -n 1`
       if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
-         cp "$MSIAPATH" ../external/msi/ && chmod +x ../external/msi/instmsia.exe && MSIACOPY="OK"
-         cp "$MSIWPATH" ../external/msi/ && chmod +x ../external/msi/instmsiw.exe && MSIWCOPY="OK"
+         cp "$MSIAPATH" ./external/msi/ && chmod +x ./external/msi/instmsia.exe && MSIACOPY="OK"
+         cp "$MSIWPATH" ./external/msi/ && chmod +x ./external/msi/instmsiw.exe && MSIWCOPY="OK"
       fi
       if test -z "$MSIACOPY" -o -z "$MSIWCOPY"; then
          AC_MSG_ERROR([instmsia.exe and/or instmsiw.exe are/is missing in the default location.
@@ -5085,12 +5141,12 @@ if test "$with_gpc" != "no" && test "$without_gpc" != "yes"; then
   AC_MSG_RESULT([GPC])
 
   AC_MSG_CHECKING([for GPC files])
-  if test -f ../external/gpc/gpc.h; then
+  if test -f ./external/gpc/gpc.h; then
 	HAVE_GPC_H="yes"
   else
 	HAVE_GPC_H="no"
   fi
-  if test -f ../external/gpc/gpc.c; then
+  if test -f ./external/gpc/gpc.c; then
 	HAVE_GPC_C="yes"
   else
 	HAVE_GPC_C="no"
@@ -5138,7 +5194,7 @@ dnl ===================================================================
 
 ENABLE_GCONF=""
 AC_MSG_CHECKING([whether to enable GConf support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "OS2" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GCONF, gconf-2.0 )
@@ -5195,6 +5251,9 @@ if test  "$test_gtk" = "yes"; then
 
       AC_MSG_CHECKING([whether to enable GIO support])
       if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
+          if test "$ENABLE_GNOMEVFS" = "TRUE" ; then
+             AC_MSG_ERROR([please use --enable-gio only together with --disable-gnome-vfs.])
+          fi
           ENABLE_GIO="TRUE"
           AC_MSG_RESULT([yes])
           PKG_CHECK_MODULES( GIO, gio-2.0 )
@@ -5212,21 +5271,32 @@ AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
 dnl ===================================================================
-dnl dnl Check whether to enable the cairo canvas backend.
+dnl Check whether the Cairo libraries are available.
 dnl ===================================================================
 
 ENABLE_CAIRO=""
+BUILD_PIXMAN=""
+SYSTEM_CAIRO=""
 
-if test  "$build_cairo" = "yes"; then
+if test  "$test_cairo" = "yes"; then
 
-    AC_MSG_CHECKING([whether to enable the cairo canvas backend])
+    AC_MSG_CHECKING([whether to use cairo])
     if test "x$enable_cairo" != "xno" ; then
-       AC_MSG_RESULT([yes])
-       ENABLE_CAIRO="TRUE"
-       if test "$_os" != "WINNT"; then
-	if test "$with_system_xrender_headers" = "yes"; then
-             AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
-             AC_TRY_RUN([
+        ENABLE_CAIRO="TRUE"
+	AC_MSG_RESULT([yes])
+        AC_MSG_CHECKING([which cairo to use])
+        if test -n "$with_system_cairo" -o -n "$with_system_libs" && \
+           test "$with_system_cairo" != "no"; then
+           AC_MSG_RESULT([external])
+           SYSTEM_CAIRO=YES
+	   
+           PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+	   if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$ENABLE_FONTCONFIG" != "TRUE" ; then
+	      AC_MSG_ERROR([Cairo library requires fontconfig.])
+	   fi
+           if test "$with_system_xrender_headers" = "yes"; then
+              AC_MSG_CHECKING([whether Xrender.h defines PictStandardA8])
+              AC_TRY_RUN([
 #include <X11/extensions/Xrender.h>
 
 int main(int argc, char **argv) {
@@ -5237,36 +5307,22 @@ int main(int argc, char **argv) {
 #endif
 }
                ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, X headers too old.])])
-          fi
-	fi
-     else
- 	     AC_MSG_RESULT([no])
-     fi
-fi
-
-dnl ===================================================================
-dnl Check for system cairo
-dnl ===================================================================
-
-dnl === Linux has no "internal cairo" (prebuilt or in OOo source). Default to system cairo on Linux. ===
-if test -z "$with_system_cairo" -a "$_os" = "Linux"; then
-   with_system_cairo="yes"
-fi
-
-if test "$ENABLE_CAIRO" = "TRUE"; then
-    AC_MSG_CHECKING([which cairo to use])
-    if test "$with_system_cairo" != "yes" && test "$_os" = "Linux"; then
-        BUILD_TYPE="$BUILD_TYPE CAIRO"
-        AC_MSG_RESULT([internal])
-        SYSTEM_CAIRO=NO
+           fi
+        else
+           BUILD_TYPE="$BUILD_TYPE CAIRO"
+	   dnl === compiler fails on pixman with 64bit architectures...===
+	   if test "$build_cpu" != "x86_64"; then
+	      BUILD_PIXMAN=YES
+	   fi
+           AC_MSG_RESULT([internal])	   
+        fi
     else
-        AC_MSG_RESULT([external])
-        SYSTEM_CAIRO=YES
-        PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+	   AC_MSG_RESULT([no])
     fi
 fi
 
 AC_SUBST(ENABLE_CAIRO)
+AC_SUBST(BUILD_PIXMAN)
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
@@ -5304,7 +5360,7 @@ fi
 AC_SUBST(ENABLE_MINIMIZER)
 
 AC_MSG_CHECKING([whether to build the Presenter Screen extension])
-if test -n "$enable_presenter_screen" -a "$enable_presenter_screen" != "no"; then
+if test -n "$enable_presenter_console" -a "$enable_presenter_screen" != "no"; then
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
 else
@@ -5312,10 +5368,6 @@ else
    ENABLE_PRESENTER_SCREEN=NO
 fi
 AC_SUBST(ENABLE_PRESENTER_SCREEN)
-
-if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES"; then
-   BUILD_TYPE="$BUILD_TYPE SDEXT"
-fi
 
 AC_MSG_CHECKING([whether to build the PDF Import extension])
 if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
@@ -5327,7 +5379,7 @@ if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   dnl ===================================================================
   AC_MSG_CHECKING([which pdf backend to use])
   if test -n "$with_system_poppler" -o -n "$with_system_libs" && \
-  	test "$with_system_poppler" != "no"; then
+       test "$with_system_poppler" != "no"; then
       AC_MSG_RESULT([external])
       SYSTEM_POPPLER=YES
       PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
@@ -5335,20 +5387,41 @@ if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
       BUILD_TYPE="$BUILD_TYPE XPDF"
+      AC_MSG_CHECKING([for xpdf module])
+      if test -d ./xpdf; then
+       AC_MSG_RESULT([OK])
+      else
+        AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+      fi
   fi
-
 else
-  AC_MSG_RESULT([no])
-  ENABLE_PDFIMPORT=NO
+   AC_MSG_RESULT([no])
+   ENABLE_PDFIMPORT=NO
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
 
-AC_MSG_CHECKING([whether to build the MediaWiki Editor extension])
-if test -n "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAVA" != "no"; then
+if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
+  AC_MSG_CHECKING([for sdext module])
+  if test -d ./sdext; then
+   AC_MSG_RESULT([OK])
+  else
+   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+  fi
+  BUILD_TYPE="$BUILD_TYPE SDEXT"
+fi
+
+AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
+if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test  "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
+  AC_MSG_CHECKING([for swext module])
+  if test -d ./swext; then
+   AC_MSG_RESULT([OK])
+  else
+   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+  fi
   ENABLE_MEDIAWIKI=YES
   AC_MSG_CHECKING([which Apache commons-* libs to use])
   if test "$with_system_apache_commons" == "yes"; then
@@ -5357,23 +5430,33 @@ if test -n "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAV
 	if test -z "$COMMONS_CODEC_JAR"; then
 		COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar
 	fi
-        AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
-               [AC_MSG_ERROR(commons-codec.jar not found.)], [])
+   AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
+        [AC_MSG_ERROR(commons-codec.jar not found.)], [])
 	if test -z "$COMMONS_LANG_JAR"; then
 		COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar
 	fi
-        AC_CHECK_FILE($COMMONS_LANG_JAR, [],
-               [AC_MSG_ERROR(commons-lang.jar not found.)], [])
+   AC_CHECK_FILE($COMMONS_LANG_JAR, [],
+        [AC_MSG_ERROR(commons-lang.jar not found.)], [])
 	if test -z "$COMMONS_HTTPCLIENT_JAR"; then
 		COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar
 	fi
-        AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
-               [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
-	if test -z "$COMMONS_LOGGING_JAR"; then
-		COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
-	fi
-        AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
-               [AC_MSG_ERROR(commons-logging.jar not found.)], [])
+   AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
+        [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
+
+   if test -z $COMMONS_LOGGING_JAR; then
+     AC_CHECK_FILE(/usr/share/java/commons-logging-1.1.1.jar, 
+       [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar ],
+       [
+         AC_CHECK_FILE(/usr/share/java/commons-logging.jar, 
+           [ COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar ],
+           [AC_MSG_ERROR(commons-logging.jar replacement not found.)]
+         )
+       ]
+     )
+   else
+     AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
+          [AC_MSG_ERROR(commons-logging.jar not found.)], [])
+   fi
   else
 	AC_MSG_RESULT([internal])
   	SYSTEM_APACHE_COMMONS=NO
@@ -5411,80 +5494,187 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -n "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
-  ENABLE_REPORTDESIGN=YES
+  ENABLE_REPORTBUILDER=YES
   AC_MSG_CHECKING([which jfreereport libs to use])
   if test "$with_system_jfreereport" == "yes"; then
    	SYSTEM_JFREEREPORT=YES
-  	AC_MSG_RESULT([external])
-        if test -z $JCOMMON_JAR; then
-               JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar
-        fi
+  	   AC_MSG_RESULT([external])
+      if test -z $JCOMMON_JAR; then
+        AC_CHECK_FILE(/usr/share/java/jcommon-1.0.10.jar, 
+          [ JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/jcommon.jar, 
+              [ JCOMMON_JAR=/usr/share/java/jcommon.jar ],
+              [AC_MSG_ERROR(jcommon.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($JCOMMON_JAR, [],
-               [AC_MSG_ERROR(jcommon.jar not found.)], [])
-        if test -z $SAC_JAR; then
-               SAC_JAR=/usr/share/java/sac.jar
-        fi
-        AC_CHECK_FILE($SAC_JAR, [],
-               [AC_MSG_ERROR(sac.jar not found.)], [])
-        if test -z $LIBXML_JAR; then
-               LIBXML_JAR=/usr/share/java/libxml-0.9.9.jar
-        fi
+             [AC_MSG_ERROR(jcommon.jar not found.)], [])
+      fi
+
+      if test -z $SAC_JAR; then
+             SAC_JAR=/usr/share/java/sac.jar
+      fi
+      AC_CHECK_FILE($SAC_JAR, [],
+             [AC_MSG_ERROR(sac.jar not found.)], [])
+
+      if test -z $LIBXML_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libxml-0.9.9.jar, 
+          [ LIBXML_JAR=/usr/share/java/libxml-0.9.9.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libxml.jar, 
+              [ LIBXML_JAR=/usr/share/java/libxml.jar ],
+              [AC_MSG_ERROR(libxml.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBXML_JAR, [],
-               [AC_MSG_ERROR(libxml.jar not found.)], [])
-        if test -z $FLUTE_JAR; then
-               FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar
-        fi
+             [AC_MSG_ERROR(libxml.jar not found.)], [])
+      fi
+
+      if test -z $FLUTE_JAR; then
+        AC_CHECK_FILE(/usr/share/java/flute-1.3-jfree-20061107.jar, 
+          [ FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/flute.jar, 
+              [ FLUTE_JAR=/usr/share/java/flute.jar ],
+              [ AC_MSG_ERROR(flute-1.3-jfree.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($FLUTE_JAR, [],
-               [AC_MSG_ERROR(flute-1.3-jfree.jar not found.)], [])
-        if test -z $JFREEREPORT_JAR; then
-               JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar
-        fi
+             [AC_MSG_ERROR(flute-1.3-jfree.jar not found.)], [])
+      fi
+
+      if test -z $JFREEREPORT_JAR; then
+        AC_CHECK_FILE(/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar, 
+          [ JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/pentaho-reporting-flow-engine.jar, 
+              [ JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine.jar ],
+              [AC_MSG_ERROR(jfreereport.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($JFREEREPORT_JAR, [],
-               [AC_MSG_ERROR(jfreereport.jar not found.)], [])
-        if test -z $LIBLAYOUT_JAR; then
-               LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.8.jar
-        fi
+             [AC_MSG_ERROR(jfreereport.jar not found.)], [])
+      fi
+
+      if test -z $LIBLAYOUT_JAR; then
+        AC_CHECK_FILE(/usr/share/java/liblayout-0.2.8.jar, 
+          [ LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.8.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/liblayout.jar, 
+              [ LIBLAYOUT_JAR=/usr/share/java/liblayout.jar ],
+              [AC_MSG_ERROR(liblayout.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBLAYOUT_JAR, [],
-               [AC_MSG_ERROR(liblayout.jar not found.)], [])
-        if test -z $LIBLOADER_JAR; then
-               LIBLOADER_JAR=/usr/share/java/libloader-0.3.6.jar
-        fi
+             [AC_MSG_ERROR(liblayout.jar not found.)], [])
+      fi
+
+      if test -z $LIBLOADER_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libloader-0.3.6.jar, 
+          [ LIBLOADER_JAR=/usr/share/java/libloader-0.3.6.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libloader.jar, 
+              [ LIBLOADER_JAR=/usr/share/java/libloader.jar ],
+              [AC_MSG_ERROR(libloader.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBLOADER_JAR, [],
-               [AC_MSG_ERROR(libloader.jar not found.)], [])
-        if test -z $LIBFORMULA_JAR; then
-               LIBFORMULA_JAR=/usr/share/java/libformula-0.1.14.jar
-        fi
+             [AC_MSG_ERROR(libloader.jar not found.)], [])
+      fi
+
+      if test -z $LIBFORMULA_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libformula-0.1.14.jar, 
+          [ LIBFORMULA_JAR=/usr/share/java/libformula-0.1.14.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libformula.jar, 
+              [ LIBFORMULA_JAR=/usr/share/java/libformula.jar ],
+              [AC_MSG_ERROR(libformula.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBFORMULA_JAR, [],
-               [AC_MSG_ERROR(libformula.jar not found.)], [])
-        if test -z $LIBREPOSITORY_JAR; then
-               LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.4.jar
-        fi
+             [AC_MSG_ERROR(libformula.jar not found.)], [])
+      fi
+
+      if test -z $LIBREPOSITORY_JAR; then
+        AC_CHECK_FILE(/usr/share/java/librepository-0.1.4.jar, 
+          [ LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.4.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/librepository.jar, 
+              [ LIBREPOSITORY_JAR=/usr/share/java/librepository.jar ],
+              [AC_MSG_ERROR(librepository.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBREPOSITORY_JAR, [],
-               [AC_MSG_ERROR(librepository.jar not found.)], [])
-        if test -z $LIBFONTS_JAR; then
-               LIBFONTS_JAR=/usr/share/java/libfonts-0.3.3.jar
-        fi
+             [AC_MSG_ERROR(librepository.jar not found.)], [])
+      fi
+
+      if test -z $LIBFONTS_JAR; then
+        AC_CHECK_FILE(/usr/share/java/libfonts-0.3.3.jar, 
+          [ LIBFONTS_JAR=/usr/share/java/libfonts-0.3.3.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/libfonts.jar, 
+              [ LIBFONTS_JAR=/usr/share/java/libfonts.jar ],
+              [AC_MSG_ERROR(libfonts.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($LIBFONTS_JAR, [],
-               [AC_MSG_ERROR(libfonts.jar not found.)], [])
-        if test -z $JCOMMON_SERIALIZER_JAR; then
-               JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.2.0.jar
-        fi
+             [AC_MSG_ERROR(libfonts.jar not found.)], [])
+      fi
+
+      if test -z $JCOMMON_SERIALIZER_JAR; then
+        AC_CHECK_FILE(/usr/share/java/jcommon-serializer-0.2.0.jar, 
+          [ JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.2.0.jar ],
+          [
+            AC_CHECK_FILE(/usr/share/java/jcommon-serializer.jar, 
+              [ JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer.jar ],
+              [AC_MSG_ERROR(jcommon-serializer.jar replacement not found.)]
+            )
+          ]
+        )
+      else
         AC_CHECK_FILE($JCOMMON_SERIALIZER_JAR, [],
-               [AC_MSG_ERROR(jcommon-serializer.jar not found.)], [])
+             [AC_MSG_ERROR(jcommon-serializer.jar not found.)], [])
+      fi
+
   else
      AC_MSG_RESULT([internal])
+     AC_MSG_CHECKING([for jfreereport module])
+     if test -d ./jfreereport; then
+      AC_MSG_RESULT([OK]) 
+     else
+      AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+     fi
      SYSTEM_JFREEREPORT=NO
      BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
   fi
   BUILD_TYPE="$BUILD_TYPE REPORTDESIGN"
 else
   AC_MSG_RESULT([no])
-  ENABLE_REPORTDESIGN=NO
+  ENABLE_REPORTBUILDER=NO
   SYSTEM_JFREEREPORT=NO
 fi
-AC_SUBST(ENABLE_REPORTDESIGN)
+AC_SUBST(ENABLE_REPORTBUILDER)
 AC_SUBST(SYSTEM_JFREEREPORT)
 AC_SUBST(JCOMMON_JAR)
 AC_SUBST(SAC_JAR)
@@ -5780,6 +5970,7 @@ AC_MSG_CHECKING([whether to include writer2latex])
 if test "$with_writer2latex" != "no" ; then
   AC_MSG_RESULT([yes])
   WITH_WRITER2LATEX=YES
+  BUILD_TYPE="$BUILD_TYPE WRITER2LATEX"
 else
   AC_MSG_RESULT([no])
   WITH_WRITER2LATEX=NO
@@ -6180,9 +6371,9 @@ AC_SUBST(LOCAL_SOLVER)
 AC_SUBST(BUILD_TYPE)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so; 
-chmod +x $_solenv/bin/config.guess
+chmod +x ./config.guess
 
-AC_OUTPUT([set_soenv])
+AC_OUTPUT([set_soenv Makefile])
 
 dnl Executing the set_soenv script to setup the environment variables.
 chmod a+x set_soenv

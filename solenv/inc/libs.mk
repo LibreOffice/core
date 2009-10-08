@@ -46,7 +46,7 @@ AVMEDIALIB=-lavmedia$(DLLPOSTFIX)
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
 ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
 ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
-ICUDATALIB=-licudata$(ICU_MAJOR)$(ICU_MINOR)
+ICUDATALIB=-licudt$(ICU_MAJOR)$(ICU_MINOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 ICUINLIB=-licui18n
 ICULELIB=-licule
@@ -135,11 +135,14 @@ LDAPSDKLIB=-lldap50
 
 ICOLIB=-lico$(DLLPOSTFIX)
 VCLLIB=-lvcl$(DLLPOSTFIX)
+OOXLIB=-loox$(DLLPOSTFIX)
 BASEGFXLIB=-lbasegfx$(DLLPOSTFIX)
 DRAWINGLAYERLIB=-ldrawinglayer$(DLLPOSTFIX)
 BASEBMPLIB=-lbasebmp$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(DLLPOSTFIX)
 CPPCANVASLIB=-lcppcanvas$(DLLPOSTFIX)
+FORLIB=-lfor$(DLLPOSTFIX)
+FORUILIB=-lforui$(DLLPOSTFIX)
 
 .IF "$(SYSTEM_AGG)" == "YES"
 AGGLIB=-lagg
@@ -464,11 +467,14 @@ ISWLIB=_sw.lib
 ISCLIB=sci.lib
 ISDLIB=sdi.lib
 VCLLIB=ivcl.lib
+OOXLIB=ioox.lib
 BASEGFXLIB=ibasegfx.lib
 DRAWINGLAYERLIB=idrawinglayer.lib
 BASEBMPLIB=ibasebmp.lib
 CANVASTOOLSLIB=icanvastools.lib
 CPPCANVASLIB=icppcanvas.lib
+FORLIB=ifor.lib
+FORUILIB=iforui.lib
 AGGLIB=iagg.lib
 PSPLIB=apsp.lib
 TKLIB=itk.lib
@@ -481,7 +487,11 @@ SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
 XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)
+.IF "$(GUI)"=="OS2"
+REDLANDLIB = raptor.a rasqal.a rdf.a $(LIBXML2LIB) $(OPENSSLLIB) pthread.lib
+.ELSE
 REDLANDLIB = librdf.lib
+.ENDIF
 
 JVMFWKLIB = ijvmfwk.lib
 

@@ -33,7 +33,12 @@
 
 #ifdef GCC
 
-#include <ext/../vector>
+#ifdef __MINGW32__
+#  define _SYSTEM_STL_MAKE_HEADER(path,header) <path/header>
+#  include _SYSTEM_STL_MAKE_HEADER(GXX_INCLUDE_PATH,vector)
+#else
+#  include <ext/../vector>
+#endif
 
 namespace std
 {

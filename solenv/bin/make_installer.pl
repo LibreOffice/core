@@ -1278,6 +1278,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # installer::packagelist::add_defaultpathes_into_filescollector($filesinproductlanguageresolvedarrayref);
         # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
+        ####################################################
+        # Reading for Solaris all package descriptions
+        # from file defined in property PACKAGEMAP
+        ####################################################
+
+        if (  $installer::globals::issolarisbuild ) { installer::epmfile::read_packagemap($allvariableshashref, $includepatharrayref, $languagesarrayref); }
+
         my $epmexecutable = "";
         my $found_epm = 0;
 
@@ -2201,7 +2208,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Temp path for administrative installations: $installer::globals::temppath
             # Path of new installation set: $finalinstalldir
             # Path of old installation set: $installer::globals::updatedatabasepath
-            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref);
+            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $filesinproductlanguageresolvedarrayref);
             ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
             installer::worker::clean_output_tree(); # removing directories created in the output tree
         }

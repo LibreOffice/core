@@ -85,6 +85,61 @@ sub unpack_cabinet_file
 }
 
 #################################################################################
+# Include tables into a msi database
+#################################################################################
+
+sub include_tables_into_pcpfile
+{
+    my ($fullmsidatabasepath, $workdir, $tables) = @_;
+
+    my $msidb = "msidb.exe";    # Has to be in the path
+    my $infoline = "";
+    my $systemcall = "";
+    my $returnvalue = "";
+
+    # Make all table 8+3 conform
+    my $alltables = installer::converter::convert_stringlist_into_array(\$tables, " ");
+
+    for ( my $i = 0; $i <= $#{$alltables}; $i++ )
+    {
+        my $tablename = ${$alltables}[$i];
+        $tablename =~ s/\s*$//;
+        my $namelength = length($tablename);
+        if ( $namelength > 8 )
+        {
+            my $newtablename = substr($tablename, 0, 8);    # name, offset, length
+            my $oldfile = $workdir . $installer::globals::separator . $tablename . ".idt";
+            my $newfile = $workdir . $installer::globals::separator . $newtablename . ".idt";
+            if ( -f $newfile ) { unlink $newfile; }
+            installer::systemactions::copy_one_file($oldfile, $newfile);
+            my $savfile = $oldfile . ".orig";
+            installer::systemactions::copy_one_file($oldfile, $savfile);
+        }
+    }
+
+    # Import of tables
+
+    $systemcall = $msidb . " -d " . $fullmsidatabasepath . " -f " . $workdir . " -i " . $tables;
+
+    $returnvalue = system($systemcall);
+
+    $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute $systemcall !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program("ERROR: Could not include tables into msi database: $fullmsidatabasepath !", "include_tables_into_pcpfile");
+    }
+    else
+    {
+        $infoline = "Success: Executed $systemcall successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+#################################################################################
 # Extracting tables from msi database
 #################################################################################
 
@@ -109,7 +164,7 @@ sub extract_tables_from_pcpfile
     {
         $infoline = "ERROR: Could not execute $systemcall !\n";
         push( @installer::globals::logfileinfo, $infoline);
-        installer::exiter::exit_program("ERROR: Could not exclude tables from pcp file: $fullpcpfilepath !", "extract_all_tables_from_msidatabase");
+        installer::exiter::exit_program("ERROR: Could not exclude tables from pcp file: $fullmsidatabasepath !", "extract_tables_from_pcpfile");
     }
     else
     {
@@ -171,6 +226,71 @@ sub analyze_component_file
             my $dir = $3;
 
             $table{$component} = $dir;
+        }
+    }
+
+    return \%table;
+}
+
+#################################################################################
+# Analyzing the full content of Component.idt
+#################################################################################
+
+sub analyze_keypath_component_file
+{
+    my ($filecontent) = @_;
+
+    my %keypathtable = ();
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if (( $i == 0 ) || ( $i == 1 ) || ( $i == 2 )) { next; }
+
+        if ( ${$filecontent}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my $component = $1;
+            my $keypath = $6;
+
+            $keypathtable{$keypath} = $component;
+        }
+    }
+
+    return (\%keypathtable);
+
+}
+
+#################################################################################
+# Analyzing the content of Registry.idt
+#################################################################################
+
+sub analyze_registry_file
+{
+    my ($filecontent) = @_;
+
+    my %table = ();
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if (( $i == 0 ) || ( $i == 1 ) || ( $i == 2 )) { next; }
+
+        if ( ${$filecontent}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my $registry = $1;
+            my $root = $2;
+            my $key = $3;
+            my $name = $4;
+            my $value = $5;
+            my $component = $6;
+
+            my %helphash = ();
+            # $helphash{'Registry'} = $registry;
+            $helphash{'Root'} = $root;
+            $helphash{'Key'} = $key;
+            $helphash{'Name'} = $name;
+            $helphash{'Value'} = $value;
+            $helphash{'Component'} = $component;
+
+            $table{$registry} = \%helphash;
         }
     }
 
@@ -311,7 +431,7 @@ sub copy_files_into_directory_structure
 
             if ( ! $copyreturn) # only logging problems
             {
-                my $infoline = "ERROR: Could not copy $source to $dest\n";
+                my $infoline = "ERROR: Could not copy $sourcefile to $destfile (insufficient disc space for $destfile ?)\n";
                 $returnvalue = 0;
                 push(@installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program($infoline, "copy_files_into_directory_structure");
@@ -343,6 +463,8 @@ sub get_sis_time_string
     my $month = (localtime())[4];
     my $year = 1900 + (localtime())[5];
 
+    $month++; # zero based month
+
     if ( $second < 10 ) { $second = "0" . $second; }
     if ( $minute < 10 ) { $minute = "0" . $minute; }
     if ( $hour < 10 ) { $hour = "0" . $hour; }
@@ -352,6 +474,175 @@ sub get_sis_time_string
     my $timestring = $year . "/" . $month . "/" . $day . " " . $hour . ":" . $minute . ":" . $second;
 
     return $timestring;
+}
+
+###############################################################
+# Windows registry entries containing properties are not set
+# correctly during msp patch process. The properties are
+# empty or do get their default values. This destroys the
+# values of many entries in Windows registry.
+# This can be fixed by removing all entries in Registry table,
+# containing a property before starting msimsp.exe.
+###############################################################
+
+sub remove_properties_from_registry_table
+{
+    my ($registryhash, $componentkeypathhash, $registryfilecontent) = @_;
+
+    installer::logger::include_timestamp_into_logfile("\nPerformance Info: Start remove_properties_from_registry_table");
+
+    my @registrytable = ();
+
+    # Registry hash
+    # Collecting all RegistryItems with values containing a property: [...]
+    # To which component do they belong
+    # Is this after removal an empty component? Create a replacement, so that
+    # no Component has to be removed.
+    # Is this RegistryItem a KeyPath of a component. Then it cannot be removed.
+
+    my %problemitems = ();
+    my %problemcomponents = ();
+    my %securecomponents = ();
+    my $changevalue = "";
+    my $changeroot = "";
+    my $infoline = "";
+
+    my $newitemcounter = 0;
+    my $olditemcounter = 0;
+
+    foreach my $regitem ( keys %{$registryhash} )
+    {
+        my $value = "";
+        if ( exists($registryhash->{$regitem}->{'Value'}) ) { $value = $registryhash->{$regitem}->{'Value'}; }
+
+        if ( $value =~ /^.*(\[.*?\]).*$/ )
+        {
+            my $property = $1;
+
+            # Collecting registry item
+            $problemitems{$regitem} = 1;    # "1" -> can be removed
+            if ( exists($componentkeypathhash->{$regitem}) ) { $problemitems{$regitem} = 2; }   # "2" -> cannot be removed, KeyPath
+
+            # Collecting component (and number of problematic registry items
+            # my $component = $registryhash->{$regitem}->{'Component'};
+            # if ( exists($problemcomponents{$regitem}) ) { $problemcomponents{$regitem} = $problemcomponents{$regitem} + 1; }
+            # else { $problemcomponents{$regitem} = 1; }
+        }
+        else
+        {
+            # Collecting all components with secure regisry items
+            my $component = "";
+            if ( exists($registryhash->{$regitem}->{'Component'}) ) { $component = $registryhash->{$regitem}->{'Component'}; }
+            if ( $component eq "" ) { installer::exiter::exit_program("ERROR: Did not find component for registry item \"$regitem\".", "remove_properties_from_registry_table"); }
+            $securecomponents{$component} = 1;
+        }
+
+        # Searching for change value
+        my $localkey = "";
+        if ( exists($registryhash->{$regitem}->{'Key'}) ) { $localkey = $registryhash->{$regitem}->{'Key'}; }
+        if (( $localkey =~ /^\s*(Software\\.*\\)StartMenu\s*$/ ) && ( $changevalue eq "" ))
+        {
+            $changevalue = $1;
+            $changeroot = $registryhash->{$regitem}->{'Root'};
+        }
+
+        $olditemcounter++;
+    }
+
+    my $removecounter = 0;
+    my $renamecounter = 0;
+
+    foreach my $regitem ( keys %{$registryhash} )
+    {
+        my $value = "";
+        if ( exists($registryhash->{$regitem}->{'Value'}) ) { $value = $registryhash->{$regitem}->{'Value'}; }
+
+        if ( $value =~ /^.*(\[.*?\]).*$/ )
+        {
+            # Removing registry items, that are no KeyPath and that belong to components,
+            # that have other secure registry items.
+
+            my $component = "";
+            if ( exists($registryhash->{$regitem}->{'Component'}) ) { $component = $registryhash->{$regitem}->{'Component'}; }
+            if ( $component eq "" ) { installer::exiter::exit_program("ERROR: Did not find component for registry item (2) \"$regitem\".", "remove_properties_from_registry_table"); }
+
+            if (( $problemitems{$regitem} == 1 ) && ( exists($securecomponents{$component}) ))
+            {
+                # remove complete registry item
+                delete($registryhash->{$regitem});
+                $removecounter++;
+                $infoline = "Removing registry item: $regitem : $value\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+            else
+            {
+                # Changing values of registry items, that are KeyPath or that contain to
+                # components with only unsecure registry items.
+
+                if (( $problemitems{$regitem} == 2 ) || ( ! exists($securecomponents{$component}) ))
+                {
+                    # change value of registry item
+                    if ( $changevalue eq "" ) { installer::exiter::exit_program("ERROR: Did not find good change value for registry items", "remove_properties_from_registry_table"); }
+
+                    my $oldkey = "";
+                    if ( exists($registryhash->{$regitem}->{'Key'}) ) { $oldkey = $registryhash->{$regitem}->{'Key'}; };
+                    my $oldname = "";
+                    if ( exists($registryhash->{$regitem}->{'Name'}) ) { $oldname = $registryhash->{$regitem}->{'Name'}; }
+                    my $oldvalue = "";
+                    if ( exists($registryhash->{$regitem}->{'Value'}) ) { $oldvalue = $registryhash->{$regitem}->{'Value'}; }
+
+                    $registryhash->{$regitem}->{'Key'} = $changevalue . "RegistryItem";
+                    $registryhash->{$regitem}->{'Root'} = $changeroot;
+                    $registryhash->{$regitem}->{'Name'} = $regitem;
+                    $registryhash->{$regitem}->{'Value'} = 1;
+                    $renamecounter++;
+
+                    $infoline = "Changing registry item: $regitem\n";
+                    $infoline = "Old: $oldkey : $oldname : $oldvalue\n";
+                    $infoline = "New: $registryhash->{$regitem}->{'Key'} : $registryhash->{$regitem}->{'Name'} : $registryhash->{$regitem}->{'Value'}\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+            }
+        }
+    }
+
+    $infoline = "Number of removed registry items: $removecounter\n";
+    push( @installer::globals::logfileinfo, $infoline);
+    $infoline = "Number of changed registry items: $renamecounter\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    # Creating the new content of Registry table
+    # First three lines from $registryfilecontent
+    # All further files from changed $registryhash
+
+    for ( my $i = 0; $i <= 2; $i++ ) { push(@registrytable, ${$registryfilecontent}[$i]); }
+
+    foreach my $regitem ( keys %{$registryhash} )
+    {
+        my $root = "";
+        if ( exists($registryhash->{$regitem}->{'Root'}) ) { $root = $registryhash->{$regitem}->{'Root'}; }
+        else { installer::exiter::exit_program("ERROR: Did not find root in registry table for item: \"$regitem\".", "remove_properties_from_registry_table"); }
+        my $localkey = "";
+        if ( exists($registryhash->{$regitem}->{'Key'}) ) { $localkey = $registryhash->{$regitem}->{'Key'}; }
+        my $name = "";
+        if ( exists($registryhash->{$regitem}->{'Name'}) ) { $name = $registryhash->{$regitem}->{'Name'}; }
+        my $value = "";
+        if ( exists($registryhash->{$regitem}->{'Value'}) ) { $value = $registryhash->{$regitem}->{'Value'}; }
+        my $comp = "";
+        if ( exists($registryhash->{$regitem}->{'Component'}) ) { $comp = $registryhash->{$regitem}->{'Component'}; }
+
+        my $oneline = $regitem . "\t" . $root . "\t" . $localkey . "\t" . $name . "\t" . $value . "\t" . $comp . "\n";
+        push(@registrytable, $oneline);
+
+        $newitemcounter++;
+    }
+
+    $infoline = "Number of registry items: $newitemcounter. Old value: $olditemcounter.\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    installer::logger::include_timestamp_into_logfile("\nPerformance Info: End remove_properties_from_registry_table");
+
+    return (\@registrytable);
 }
 
 ###############################################################
@@ -410,7 +701,7 @@ sub make_admin_install
 
     # Get File.idt, Component.idt and Directory.idt from database
 
-    my $tablelist = "File Directory Component";
+    my $tablelist = "File Directory Component Registry";
     extract_tables_from_pcpfile($databasepath, $helperdir, $tablelist);
 
     # Unpack all cab files into $helperdir, cab files must be located next to msi database
@@ -439,8 +730,8 @@ sub make_admin_install
     my $dirhash = analyze_directory_file($filecontent);
 
     $filename = $helperdir . $installer::globals::separator . "Component.idt";
-    $filecontent = installer::files::read_file($filename);
-    my $componenthash = analyze_component_file($filecontent);
+    my $componentfilecontent = installer::files::read_file($filename);
+    my $componenthash = analyze_component_file($componentfilecontent);
 
     $filename = $helperdir . $installer::globals::separator . "File.idt";
     $filecontent = installer::files::read_file($filename);
@@ -454,6 +745,20 @@ sub make_admin_install
 
     my $msidatabase = $targetdir . $installer::globals::separator . $databasefilename;
     installer::systemactions::copy_one_file($databasepath, $msidatabase);
+
+    # Editing registry table because of wrong Property value
+    #   my $registryfilename = $helperdir . $installer::globals::separator . "Registry.idt";
+    #   my $componentfilename = $helperdir . $installer::globals::separator . "Component.idt";
+    #   my $componentkeypathhash = analyze_keypath_component_file($componentfilecontent);
+
+    #   my $registryfilecontent = installer::files::read_file($registryfilename);
+    #   my $registryhash = analyze_registry_file($registryfilecontent);
+
+    #   $registryfilecontent = remove_properties_from_registry_table($registryhash, $componentkeypathhash, $registryfilecontent);
+
+    #   installer::files::save_file($registryfilename, $registryfilecontent);
+    #   $tablelist = "Registry";
+    #   include_tables_into_pcpfile($msidatabase, $helperdir, $tablelist);
 
     # Saving info in Summary Information Stream of msi database (required for following patches)
     write_sis_info($msidatabase);

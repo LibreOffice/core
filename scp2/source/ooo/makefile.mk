@@ -99,6 +99,10 @@ SCPDEFS+=-DSYSTEM_FREETYPE
 SCPDEFS+=-DSYSTEM_CAIRO
 .ENDIF
 
+.IF "$(ENABLE_CAIRO)" == "YES"
+SCPDEFS+=-DENABLE_CAIRO
+.ENDIF
+
 .IF "$(SYSTEM_LIBXML)" == "YES"
 SCPDEFS+=-DSYSTEM_LIBXML
 .ENDIF
@@ -251,6 +255,7 @@ PARFILES=                          \
         installation_ooo.par       \
         scpaction_ooo.par          \
         directory_ooo.par          \
+        directory_ooo_macosx.par   \
         datacarrier_ooo.par        \
         file_ooo.par               \
         file_extra_ooo.par         \

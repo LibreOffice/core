@@ -60,8 +60,8 @@ bootstrap .PHONY :
 
 
 distclean .PHONY: clean
-	-rm config_office/config.cache
-	-rm config_office/config.log
+	-rm config.cache
+	-rm config.log
 .IF "$(BUILD_DMAKE)"!="NO"
 	-$(GNUMAKE) -C dmake distclean
 .ENDIF
@@ -79,7 +79,7 @@ clean .PHONY:
 # configure target
 # 
 
-configure .PHONY SETDIR=config_office :
+configure .PHONY SETDIR=. :
 	@configure
 
 

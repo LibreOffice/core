@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.257.2.3 $
+ * $Revision: 1.257.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,13 +160,20 @@ End
 
 #endif
 
+File gid_File_Profile_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, PATCH);
+    Name = PROFILENAME(gengal);
+End
+
 #if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -352,7 +359,7 @@ End
 
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE( gid_File_Filter_Emp, emp)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Emp, emp)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -536,7 +543,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE);
+    Styles = (PACKED,DONT_OVERWRITE,PATCH);
 End
 
 #endif
@@ -1351,11 +1358,18 @@ File gid_File_Oo_Office_Common_Xcs
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
 End
 
-File gid_File_Oo_Office_Common_Xcu
+File gid_File_Oo_Office_Histories_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Histories.xcs";
+End
+
+File gid_File_Oo_Office_Ui_WindowContentFactories_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/WindowContentFactories.xcs";
 End
 
 File gid_File_Oo_Office_Extendedcolorscheme_Xcs
@@ -1392,6 +1406,34 @@ File gid_File_Oo_Office_Recovery_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Recovery.xcs";
+End
+
+File gid_File_Oo_Office_Histories_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Histories.xcu";
+End
+
+File gid_File_Oo_Office_Common_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+End
+
+File gid_File_Oo_Office_Accelerators_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Accelerators.xcs";
+End
+
+File gid_File_Oo_Office_Accelerators_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Accelerators.xcu";
 End
 
 File gid_File_Oo_Office_Paths_Xcu
@@ -1615,7 +1657,7 @@ End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
 End
@@ -1678,7 +1720,7 @@ End
 
 File gid_File_Oo_Office_Linguistic_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Linguistic.xcs";
 End
@@ -2067,7 +2109,7 @@ End
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "offapi.rdb";
 End
 
@@ -2177,16 +2219,6 @@ File gid_File_Registry_Spool_Oo_Common_System_Xcu
 #endif
 End
 
-File gid_File_Registry_Spool_Oo_Common_Cjk_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name (ja) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (ko) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-End
-
 File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
@@ -2205,23 +2237,7 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (ne) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (fa) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
-    Name (ja) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (ko) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
+    Name (my) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu
@@ -2669,7 +2685,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
+    Styles = (PACKED, STARREGISTRY, PATCH);
     NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
     JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
 End
@@ -2843,7 +2859,7 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_ImagesCrystal_Zip
@@ -3119,3 +3135,12 @@ File gid_File_Extension_Dictionary_Zu
 	UnixRights = 444;
 End
 #endif
+
+// #ifdef BUILD_SPECIAL
+// File gid_File_Extension_Oxt_Oooimprovement
+//    Name = "OOoImprovement.oxt";
+//    Dir = gid_Brand_Dir_Share_Extension_Install;
+//    Styles = (PACKED);
+//    UnixRights = 444;
+// End
+// #endif

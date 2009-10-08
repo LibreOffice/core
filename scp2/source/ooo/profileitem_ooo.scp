@@ -610,14 +610,6 @@ ProfileItem gid_Basis_Profileitem_Version_Buildid
     Value = "<buildid>";
 End
 
-ProfileItem gid_Basis_Profileitem_Version_Productpatch
-    ProfileID = gid_Profile_Version_Ini_Basis;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Key = "ProductPatch";
-    Value = "<productupdate>";
-End
-
 ProfileItem gid_Basis_Profileitem_Version_Productsource
     ProfileID = gid_Profile_Version_Ini_Basis;
     ModuleID = gid_Module_Root;
@@ -657,3 +649,12 @@ ProfileItem gid_Basis_Profileitem_Version_Ooobaseversion
     Key = "OOOBaseVersion";
     Value = "${OOOBASEVERSION}";
 End
+
+ProfileItem gid_Basis_Profileitem_Version_Ooopackageversion
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "OOOPackageVersion";
+    Value = "${OOOPACKAGEVERSION}";
+End
+

@@ -136,7 +136,7 @@ void* HashTable::GetObjectAt(ULONG lPos) const
 
 void HashTable::OnDeleteObject(void*)
 {
-    DBG_ERROR("HashTable::OnDeleteObject(void*) nicht überladen")
+    DBG_ERROR("HashTable::OnDeleteObject(void*) nicht überladen");
 }
 
 ULONG HashTable::Hash(ByteString const& Key) const

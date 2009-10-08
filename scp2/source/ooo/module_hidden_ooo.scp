@@ -49,6 +49,7 @@ Module gid_Module_Root_Files_2
 	gid_File_Bin_Senddoc,
 	gid_File_Bin_Gengal,
 	gid_File_Script_Gengal,
+ 	gid_File_Profile_Gengal,
 	gid_File_Bin_Spadmin_Bin,
 	gid_File_Bin_Uri_Encode,
 	gid_File_Exe_Msfontextract,
@@ -178,6 +179,8 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Dbfile,
 	gid_File_Lib_Drawinglayer,
 	gid_File_Lib_Flat,
+	gid_File_Lib_For,
+	gid_File_Lib_Forui,
 	gid_File_Lib_Frm,
 	gid_File_Lib_Fwe,
 	gid_File_Lib_Fwi,
@@ -376,6 +379,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Dnd,
 	gid_File_Lib_Dtrans,
 	gid_File_Lib_Emser,
+	gid_File_Lib_Inprocserv,
 	gid_File_Lib_Fop,
 	gid_File_Lib_Fps,
 	gid_File_Lib_Ftransl,
@@ -928,6 +932,18 @@ Module gid_Module_Root_Userland
     PackageName = "${USERLANDPACKAGENAME}";
 End
 #endif
+
+// #ifdef BUILD_SPECIAL
+// Module gid_Module_Root_Extension_Oooimprovement
+//    Name = "gid_Module_Root_Extension_Oooimprovement";
+//    Description = "gid_Module_Root_Extension_Oooimprovement";
+//    Files = (gid_File_Extension_Oxt_Oooimprovement);
+//    InstallOrder = "1990";
+//    PackageInfo = "packinfo_office.txt";
+//    ParentID = gid_Module_Root;
+//    Styles = (HIDDEN_ROOT);
+// End
+// #endif
 
 Module gid_Module_Root_Extension_Dictionary_Af
 	Name = "gid_Module_Root_Extension_Dictionary_Af";

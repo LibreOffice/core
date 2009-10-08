@@ -149,6 +149,9 @@ Module gid_Module_Langpack_Brand_Template
              gid_Brand_File_License_License_Html,
              gid_Brand_File_Readme_Readme,
              gid_Brand_File_Readme_Readme_Html,
+             gid_Brand_File_Registry_Spool_Oo_Office_Common_Cjk_Xcu,
+             gid_Brand_File_Registry_Spool_Oo_Office_Common_Korea_Xcu,
+             gid_Brand_File_Registry_Spool_Oo_Office_Writer_Cjk_Xcu,
              gid_Brand_File_Txt_License,
              gid_Brand_File_Txt_License_Html,
              gid_Brand_File_Txt_Readme,
@@ -547,11 +550,38 @@ File gid_Brand_File_Registry_Spool_Oo_Office_Common_Brand_Xcu
     Name = "/registry/spool/org/openoffice/Office/Common-brand.xcu";
 End
 
+File gid_Brand_File_Registry_Spool_Oo_Office_Common_Cjk_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
+    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name (ja) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
+    Name (ko) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
+    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
+    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
+End
+
+File gid_Brand_File_Registry_Spool_Oo_Office_Common_Korea_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
+End
+
 File gid_Brand_File_Registry_Spool_Oo_Office_Ui_Brand_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Ui;
     Name = "/registry/spool/org/openoffice/Office/UI-brand.xcu";
+End
+
+File gid_Brand_File_Registry_Spool_Oo_Office_Writer_Cjk_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
+    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer;
+    Name (ja) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
+    Name (ko) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
+    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
+    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
 End
 
 File gid_Brand_File_Registry_Spool_Oo_Setup_Brand_Xcu
@@ -594,6 +624,15 @@ File gid_Brand_File_Share_Xdg_Impress
 	Dir = gid_Brand_Dir_Share_Xdg;
 	Name = "impress.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_Math
+	TXT_FILE_BODY;
+	Dir = gid_Brand_Dir_Share_Xdg;
+	Name = "math.desktop";
+	Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
 
@@ -897,15 +936,6 @@ ProfileItem gid_Brand_Profileitem_Version_Buildid
     Order = 4;
     Key = "buildid";
     Value = "<buildid>";
-End
-
-ProfileItem gid_Brand_Profileitem_Version_Productpatch
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 6;
-    Key = "ProductPatch";
-    Value = "<productupdate>";
 End
 
 ProfileItem gid_Brand_Profileitem_Version_Productsource

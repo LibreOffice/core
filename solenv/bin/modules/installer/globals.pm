@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.106 $
+# $Revision: 1.103.16.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,7 +39,45 @@ BEGIN
 {
     $prog="make_installer.pl";
 
-    @noMSLocaleLangs = ( "br", "bs", "dz", "gu", "km", "nr", "ns", "rw", "ss", "st", "tg", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn", "bn-BD", "bn-IN", "lo", "cy" , "ku" , "as-IN" , "te-IN" , "ml-IN" , "mr-IN", "ur-IN", "ta-IN", "or-IN" , "ti-ER" , "eo" , "ka" ,"ga" , "uk", "gd" );
+    @noMSLocaleLangs = (
+        "br",
+        "bs",
+        "dz",
+        "gu",
+        "km",
+        "nr",
+        "ns",
+        "rw",
+        "ss",
+        "st",
+        "tg",
+        "ts",
+        "tn",
+        "ve",
+        "xh",
+        "zu",
+        "ne",
+        "bn",
+        "bn-BD",
+        "bn-IN",
+        "lo",
+        "cy",
+        "ku",
+        "as-IN",
+        "te-IN",
+        "ml-IN",
+        "mr-IN",
+        "ur-IN",
+        "ta-IN",
+        "or-IN",
+        "ti-ER",
+        "eo",
+        "ka",
+        "ga",
+        "uk",
+        "gd",
+        "my"
+    );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
 
@@ -161,6 +199,7 @@ BEGIN
     @linuxlinks = ();
     @linkrpms = ();
     $archiveformat = "";
+    $minorupgradekey = "";
     $updatelastsequence = 0;
     $updatesequencecounter = 0;
     $updatedatabase = 0;
@@ -173,6 +212,7 @@ BEGIN
     %allusedupdatesequences = ();
     %mergemodulefiles = ();
     $mergefiles_added_into_collector = 0;
+    $creating_windows_installer_patch = 0;
 
     $strip = 1;
     $solarjava = 0;

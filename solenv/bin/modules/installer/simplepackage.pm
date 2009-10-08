@@ -206,7 +206,7 @@ sub create_package
      elsif ( $archive =~ /dmg$/ )
     {
         installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
-        my $folder = ( -l "$tempdir/$packagename/Applications" ) ? $packagename : "\.";
+        my $folder = (( -l "$tempdir/$packagename/Applications" ) or ( -l "$tempdir/$packagename/opt" )) ? $packagename : "\.";
 
         if ( $allvariables->{'PACK_INSTALLED'} ) {
             $folder = $packagename;

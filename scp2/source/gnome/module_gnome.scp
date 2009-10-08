@@ -44,7 +44,11 @@ Module gid_Module_Optional_Gnome
     Default = YES;
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_GNOME);
+#ifdef LINUX
+    Styles = ();
+#else
     Styles = (DONTSHOWINUSERINSTALL);
+#endif
 #ifdef ENABLE_GNOMEVFS
     XpdCheckSolaris = "SUNWgnome-vfs";
 #endif

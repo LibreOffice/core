@@ -3,7 +3,14 @@ rem @echo off
 setlocal
 
 SET JARFOLDER=%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%
-SET APICLASSPATH=%JARFOLDER%\OOoRunner.jar;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar;\\unoapi\export\unoapi\bin\mysql.jar
+
+IFF "%RUNNERJAR%" != "" THEN
+    SET APICLASSPATH=%RUNNERJAR%
+ELSE
+    SET APICLASSPATH=%JARFOLDER%\OOoRunner.jar
+ENDIFF
+
+SET APICLASSPATH=%APICLASSPATH%;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar;\\unoapi\export\unoapi\bin\mysql.jar
 
 IFF "%JAVAI%" != "" THEN
     SET JAVABIN=%JAVAI%
@@ -17,10 +24,16 @@ ENDIFF
 SET PARAM=-cs pipe,name=%USERNAME% -SRC_ROOT %SRC_ROOT%
 
 IFF "%RUNNERPROPS%" != "" THEN
-    SET PARAM=%PARAM% -ini %RUNNERPROPS%
+    SET PARAM=%PARAM% -runnerini %RUNNERPROPS%
 ENDIFF
 
-set COMMAND=%JAVABIN% -Xmx120m -cp %APICLASSPATH% org.openoffice.Runner %PARAM% %&
+SET MYXDEBUG=""
+IFF "%XDEBUG%" != "" THEN
+    REM SET XDEBUG=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001 
+    SET MYXDEBUG=%XDEBUG
+ENDIFF
+
+set COMMAND=%JAVABIN% -Xmx120m %MYXDEBUG -cp %APICLASSPATH% org.openoffice.Runner %PARAM% %&
 
 
 echo %COMMAND

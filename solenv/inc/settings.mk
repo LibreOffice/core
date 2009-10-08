@@ -577,7 +577,7 @@ ROUT=$(OUTPATH).tlk
 .ENDIF
 
 .IF "$(PRJ)"!="."
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(USE_SHELL)"!="4nt"
 PATH_IN_MODULE:=\
     $(subst,$(normpath $(shell @+cd $(PRJ) && pwd $(PWDFLAGS)))$/, $(PWD))
@@ -1065,11 +1065,11 @@ CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
 CDEFS+= -DSUPD=$(UPD)
 
 # flags to enable build with symbols; required for crashdump feature
-.IF "$(ENABLE_CRASHDUMP)"!="" || "$(ENABLE_SYMBOLS)"!=""
+.IF ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
 CFLAGSENABLESYMBOLS_CC_ONLY*=$(CFLAGSENABLESYMBOLS)
 CFLAGSCXX+=$(CFLAGSENABLESYMBOLS)
 CFLAGSCC+=$(CFLAGSENABLESYMBOLS_CC_ONLY)
-.ENDIF          # "$(ENABLE_CRASHDUMP)"!="" || "$(ENABLE_SYMBOLS)"!=""
+.ENDIF          # ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
 
 .IF "$(profile)"!=""
 CDEFS+= $(CDEFSPROF)

@@ -1246,11 +1246,14 @@ sub change_file_table
             my $completedest = $unpackdir . $installer::globals::separator . $newfilename;
             installer::systemactions::copy_one_file($completesource, $completedest);
 
+            my $locallastcabfilename = $installer::globals::lastcabfilename;
+            if ( $locallastcabfilename =~ /^\s*\#/ ) { $locallastcabfilename =~ s/^\s*\#//; }  # removing beginning hashes
+
             # Create new file hash for file collector
             my %newfile = ();
             $newfile{'sequencenumber'} = $filehash->{'Sequence'};
             $newfile{'assignedsequencenumber'} = $filehash->{'Sequence'};
-            $newfile{'cabinet'} = $installer::globals::lastcabfilename;
+            $newfile{'cabinet'} = $locallastcabfilename;
             $newfile{'sourcepath'} = $completedest;
             $newfile{'componentname'} = $filehash->{'Component'};
             $newfile{'uniquename'} = $filehash->{'File'};

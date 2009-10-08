@@ -47,6 +47,100 @@ use installer::worker;
 use POSIX;
 
 ############################################################################
+# Reading the package map to find Solaris package names for
+# the corresponding abbreviations
+############################################################################
+
+sub read_packagemap
+{
+    my ($allvariables, $includepatharrayref, $languagesarrayref) = @_;
+
+    my $packagemapname = "";
+    if ( $allvariables->{'PACKAGEMAP'} ) { $packagemapname = $allvariables->{'PACKAGEMAP'}; }
+    if ( $packagemapname eq "" ) { installer::exiter::exit_program("ERROR: Property PACKAGEMAP must be defined!", "read_packagemap"); }
+
+    my $infoline = "\n\nCollected abbreviations and package names:\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    # Can be a comma separated list. All files have to be found in include pathes
+    my $allpackagemapnames = installer::converter::convert_stringlist_into_hash(\$packagemapname, ",");
+    foreach my $onepackagemapname ( keys %{$allpackagemapnames} )
+    {
+        my $packagemapref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onepackagemapname, $includepatharrayref, 0);
+
+        if ( $$packagemapref eq "" ) { installer::exiter::exit_program("ERROR: Could not find package map file \"$onepackagemapname\" (propery PACKAGEMAP)!", "read_packagemap"); }
+
+        my $packagemapcontent = installer::files::read_file($$packagemapref);
+
+        for ( my $i = 0; $i <= $#{$packagemapcontent}; $i++ )
+        {
+            my $line = ${$packagemapcontent}[$i];
+
+            if ( $line =~ /^\s*\#/ ) { next; }  # comment line
+            if ( $line =~ /^\s*$/ ) { next; }  # empty line
+
+            if ( $line =~ /^\s*(.*?)\t(.*?)\s*$/ )
+            {
+                my $abbreviation = $1;
+                my $packagename = $2;
+                installer::packagelist::resolve_packagevariables(\$abbreviation, $allvariables, 0);
+                installer::packagelist::resolve_packagevariables(\$packagename, $allvariables, 0);
+
+                # Special handling for language strings %LANGUAGESTRING
+
+                if (( $abbreviation =~ /\%LANGUAGESTRING/ ) || ( $packagename =~ /\%LANGUAGESTRING/ ))
+                {
+                    foreach my $onelang ( @{$languagesarrayref} )
+                    {
+                        my $local_abbreviation = $abbreviation;
+                        my $local_packagename = $packagename;
+                        $local_abbreviation =~ s/\%LANGUAGESTRING/$onelang/g;
+                        $local_packagename =~ s/\%LANGUAGESTRING/$onelang/g;
+
+                        # Logging all abbreviations and packagenames
+                        $infoline = "$onelang : $local_abbreviation : $local_packagename\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+
+                        if ( exists($installer::globals::dependfilenames{$local_abbreviation}) )
+                        {
+                            installer::exiter::exit_program("ERROR: Packagename for  Solaris package $local_abbreviation already defined ($installer::globals::dependfilenames{$local_abbreviation})!", "read_packagemap");
+                        }
+                        else
+                        {
+                            $installer::globals::dependfilenames{$local_abbreviation} = $local_packagename;
+                        }
+                    }
+                }
+                else
+                {
+                    # Logging all abbreviations and packagenames
+                    $infoline = "$abbreviation : $packagename\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+
+                    if ( exists($installer::globals::dependfilenames{$abbreviation}) )
+                    {
+                        installer::exiter::exit_program("ERROR: Packagename for  Solaris package $abbreviation already defined ($installer::globals::dependfilenames{$abbreviation})!", "read_packagemap");
+                    }
+                    else
+                    {
+                        $installer::globals::dependfilenames{$abbreviation} = $packagename;
+                    }
+                }
+            }
+            else
+            {
+                my $errorline = $i + 1;
+                installer::exiter::exit_program("ERROR: Wrong syntax in file \"$onepackagemapname\" (line $errorline)!", "read_packagemap");
+            }
+        }
+    }
+
+    $infoline = "\n\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+}
+
+############################################################################
 # The header file contains the strings for the epm header in all languages
 ############################################################################
 
@@ -523,15 +617,15 @@ sub create_epm_header
             # Special handling for Solaris. In depend files, the names of the packages are required, not
             # only the abbreviation. Therefore there is a special syntax for names in packagelist:
             # solarisrequires = "SUNWcar (Name="Package name of SUNWcar"),SUNWkvm (Name="Package name of SUNWcar"), ...
-            if ( $installer::globals::issolarispkgbuild )
-            {
-                if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
-                {
-                    $onerequires = $1;
-                    $packagename = $2;
-                    $installer::globals::dependfilenames{$onerequires} = $packagename;
-                }
-            }
+            # if ( $installer::globals::issolarispkgbuild )
+            # {
+            #   if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
+            #   {
+            #       $onerequires = $1;
+            #       $packagename = $2;
+            #       $installer::globals::dependfilenames{$onerequires} = $packagename;
+            #   }
+            # }
 
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
@@ -557,15 +651,15 @@ sub create_epm_header
                 # Special handling for Solaris. In depend files, the names of the packages are required, not
                 # only the abbreviation. Therefore there is a special syntax for names in packagelist:
                 # solarisrequires = "SUNWcar (Name="Package name of SUNWcar"),SUNWkvm (Name="Package name of SUNWcar"), ...
-                if ( $installer::globals::issolarispkgbuild )
-                {
-                    if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
-                    {
-                        $onerequires = $1;
-                        $packagename = $2;
-                        $installer::globals::dependfilenames{$onerequires} = $packagename;
-                    }
-                }
+                # if ( $installer::globals::issolarispkgbuild )
+                # {
+                #   if ( $onerequires =~ /^\s*(.*?)\s+\(\s*Name\s*=\s*\"(.*?)\"\s*\)\s*$/ )
+                #   {
+                #       $onerequires = $1;
+                #       $packagename = $2;
+                #       $installer::globals::dependfilenames{$onerequires} = $packagename;
+                #   }
+                # }
 
                 $line = "%requires" . " " . $onerequires . "\n";
                 push(@epmheader, $line);
@@ -1153,6 +1247,11 @@ sub set_solaris_parameter_in_pkginfo
     if ( $allvariables->{'SUNW_PKGTYPE'} )
     {
         $newline = "SUNW_PKGTYPE=$allvariables->{'SUNW_PKGTYPE'}\n";
+        add_one_line_into_file($changefile, $newline, $filename);
+    }
+    else
+    {
+        $newline = "SUNW_PKGTYPE=\n";
         add_one_line_into_file($changefile, $newline, $filename);
     }
 
@@ -1838,14 +1937,24 @@ sub include_languageinfos_into_pkginfo
     # SUNWPKG_LIST=core01
     # SUNW_LOC=de
 
-    my $solarislanguage = get_solaris_language_for_langpack($$languagestringref);
+    my $locallang = $onepackage->{'language'};
+    my $solarislanguage = get_solaris_language_for_langpack($locallang);
 
     my $newline = "SUNW_LOC=" . $solarislanguage . "\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
+    # SUNW_PKGLIST is required, if SUNW_LOC is defined.
     if ( $onepackage->{'pkg_list_entry'} )
     {
         my $packagelistentry = $onepackage->{'pkg_list_entry'};
+        installer::packagelist::resolve_packagevariables(\$packagelistentry, $variableshashref, 1);
+        $newline = "SUNW_PKGLIST=" . $packagelistentry . "\n";
+        add_one_line_into_file($changefile, $newline, $filename);
+    }
+    else
+    {
+        # Using default package ooobasis30-core01.
+        my $packagelistentry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01";
         installer::packagelist::resolve_packagevariables(\$packagelistentry, $variableshashref, 1);
         $newline = "SUNW_PKGLIST=" . $packagelistentry . "\n";
         add_one_line_into_file($changefile, $newline, $filename);
@@ -1916,10 +2025,20 @@ sub put_packagenames_into_dependfile
         if ( $line =~ /^\s*\w\s+(.*?)\s*$/ )
         {
             my $abbreviation = $1;
+
+            if ( $abbreviation =~ /\%/ ) { installer::exiter::exit_program("ERROR: Could not resolve all properties in Solaris package abbreviation \"$abbreviation\"!", "read_packagemap"); }
+
             if ( exists($installer::globals::dependfilenames{$abbreviation}) )
             {
+                my $packagename = $installer::globals::dependfilenames{$abbreviation};
+                if ( $packagename =~ /\%/ ) { installer::exiter::exit_program("ERROR: Could not resolve all properties in Solaris package name \"$packagename\"!", "read_packagemap"); }
+
                 $line =~ s/\s*$//;
-                ${$file}[$i] = $line . "\t" . $installer::globals::dependfilenames{$abbreviation} . "\n";
+                ${$file}[$i] = $line . "\t" . $packagename . "\n";
+            }
+            else
+            {
+                installer::exiter::exit_program("ERROR: Missing packagename for Solaris package \"$abbreviation\"!", "put_packagenames_into_dependfile");
             }
         }
     }
@@ -1996,7 +2115,7 @@ sub prepare_packages
         if ( $installer::globals::issolarisx86build ) { fix_architecture_setting($changefile); }
         if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref, $packagename); }
         if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
-        if ( $installer::globals::languagepack ) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
+        if (( $onepackage->{'language'} ) && ( $onepackage->{'language'} ne "" )) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
         installer::files::save_file($completefilename, $changefile);
 
         my $prototypefilename = $packagename . ".prototype";
@@ -2139,7 +2258,7 @@ sub create_packages_without_epm
         $destinationdir =~ s/\/\s*$//;  # removing ending slashes
 
         # my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
-        my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir 2\>\&1 |";
+        my $systemcall = "pkgmk -l 1073741824 -o -f $prototypefile -d $destinationdir 2\>\&1 |";
         installer::logger::print_message( "... $systemcall ...\n" );
 
         my $maxpkgmkcalls = 3;
@@ -2564,6 +2683,7 @@ sub create_new_directory_structure
         {
             installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/$machine");
         }
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/x86_64");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS");

@@ -184,6 +184,8 @@ sub execute_msimsp
 
     # r:\msvc9p\PlatformSDK\v6.1\bin\msimsp.exe -s c:\patch\hotfix_qfe1.pcp -p c:\patch\patch_ooo3_m2_m3.msp -l c:\patch\patch_ooo3_m2_m3.log
 
+    if ( -f $logfilename ) { unlink $logfilename; }
+
     $systemcall = $msimsp . " -s " . $fullpcpfilename . " -p " . $mspfilename . " -l " . $logfilename;
     installer::logger::print_message( "... $systemcall ...\n" );
 
@@ -203,6 +205,8 @@ sub execute_msimsp
         $infoline = "Success: Executed $systemcall successfully!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
+
+    return $logfilename;
 }
 
 ####################################################################
@@ -243,12 +247,29 @@ sub set_mspfilename
     $databasename =~ s/\s//g;
 
     # possibility to overwrite the name with variable DATABASENAME
-    if ( $allvariables->{'DATABASENAME'} ) { $databasename = $allvariables->{'DATABASENAME'}; }
+    # if ( $allvariables->{'DATABASENAME'} ) { $databasename = $allvariables->{'DATABASENAME'}; }
 
     # Adding patch info to database name
-    if ( $installer::globals::buildid ) { $databasename = $databasename . "_" . $installer::globals::buildid; }
+    # if ( $installer::globals::buildid ) { $databasename = $databasename . "_" . $installer::globals::buildid; }
 
-    if ( $allvariables->{'VENDORPATCHVERSION'} ) { $databasename = $databasename . "_" . $allvariables->{'VENDORPATCHVERSION'}; }
+    # if ( $allvariables->{'VENDORPATCHVERSION'} ) { $databasename = $databasename . "_" . $allvariables->{'VENDORPATCHVERSION'}; }
+
+
+    if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
+    {
+        my $windowspatchlevel = 0;
+        if ( $allvariables->{'WINDOWSPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'WINDOWSPATCHLEVEL'}; }
+        $databasename = $databasename . "_servicepack_" . $windowspatchlevel;
+    }
+    else
+    {
+        my $hotfixaddon = "hotfix_";
+        $hotfixaddon = $hotfixaddon . $installer::globals::buildid;
+        my $cwsname = "";
+        if ( $ENV{'CWS_WORK_STAMP'} ) { $hotfixaddon = $ENV{'CWS_WORK_STAMP'}; }
+        if ( $allvariables->{'OVERWRITE_CWSNAME'} ) { $hotfixaddon = $allvariables->{'OVERWRITE_CWSNAME'}; }
+        $databasename = $databasename . "_" . $hotfixaddon;
+    }
 
     $databasename = $databasename . ".msp";
 
@@ -472,9 +493,91 @@ sub get_patchtime_value
     my $month = (localtime())[4];
     my $year = 1900 + (localtime())[5];
 
+    $month++; # zero based month
+    if ( $minute  < 10 ) { $minute = "0" . $minute; }
+    if ( $hour  < 10 ) { $hour = "0" . $hour; }
+
     my $timestring = $month . "/" . $day . "/" . $year . " " . $hour . ":" . $minute;
 
     return $timestring;
+}
+
+#################################################################################
+# Checking, if this is the correct database.
+#################################################################################
+
+sub correct_langs
+{
+    my ($langs, $languagestringref) = @_;
+
+    my $correct_langs = 0;
+
+    # Comparing $langs with $languagestringref
+
+    my $langlisthash = installer::converter::convert_stringlist_into_hash(\$langs, ",");
+    my $langstringhash = installer::converter::convert_stringlist_into_hash($languagestringref, "_");
+
+    my $not_included = 0;
+    foreach my $onelang ( keys %{$langlisthash} )
+    {
+        if ( ! exists($langstringhash->{$onelang}) )
+        {
+            $not_included = 1;
+            last;
+        }
+    }
+
+    if ( ! $not_included )
+    {
+        foreach my $onelanguage ( keys %{$langstringhash} )
+        {
+            if ( ! exists($langlisthash->{$onelanguage}) )
+            {
+                $not_included = 1;
+                last;
+            }
+        }
+
+        if ( ! $not_included ) { $correct_langs = 1; }
+    }
+
+    return $correct_langs;
+}
+
+#################################################################################
+# Searching for the path to the reference database for this special product.
+#################################################################################
+
+sub get_patchid_from_list
+{
+    my ($filecontent, $languagestringref, $filename) = @_;
+
+    my $patchid = "";
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        my $line = ${$filecontent}[$i];
+        if ( $line =~ /^\s*$/ ) { next; } # empty line
+        if ( $line =~ /^\s*\#/ ) { next; } # comment line
+
+        if ( $line =~ /^\s*(.+?)\s*=\s*(.+?)\s*$/ )
+        {
+            my $langs = $1;
+            my $localpatchid = $2;
+
+            if ( correct_langs($langs, $languagestringref) )
+            {
+                $patchid = $localpatchid;
+                last;
+            }
+        }
+        else
+        {
+            installer::exiter::exit_program("ERROR: Wrong syntax in file: $filename! Line: \"$line\"", "get_patchid_from_list");
+        }
+    }
+
+    return $patchid;
 }
 
 ####################################################################
@@ -483,7 +586,7 @@ sub get_patchtime_value
 
 sub change_patchmetadata_table
 {
-    my ($localmspdir, $allvariables) = @_;
+    my ($localmspdir, $allvariables, $languagestringref) = @_;
 
     my $infoline = "Changing content of table \"PatchMetadata\"\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -503,12 +606,17 @@ sub change_patchmetadata_table
     my $manufacturer_set = 0;
     my $displayname_set = 0;
     my $description_set = 0;
+    my $allowremoval_set = 0;
 
     my $defaultcompany = "";
 
     my $classificationstring = "Classification";
     my $classificationvalue = "Hotfix";
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 )) { $classificationvalue = "ServicePack"; }
+
+    my $allowremovalstring = "AllowRemoval";
+    my $allowremovalvalue = "1";
+    if (( exists($allvariables->{'MSPALLOWREMOVAL'}) ) && ( $allvariables->{'MSPALLOWREMOVAL'} == 0 )) { $allowremovalvalue = 0; }
 
     my $timestring = "CreationTimeUTC";
     # Syntax: 8/8/2008 11:55
@@ -533,15 +641,45 @@ sub change_patchmetadata_table
     my $windowspatchlevel = 0;
     if ( $allvariables->{'WINDOWSPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'WINDOWSPATCHLEVEL'}; }
 
+    my $displayaddon = "";
+    if ( $allvariables->{'PATCHDISPLAYADDON'} ) { $displayaddon = $allvariables->{'PATCHDISPLAYADDON'}; }
+
+    my $cwsname = "";
+    if ( $ENV{'CWS_WORK_STAMP'} ) { $cwsname = $ENV{'CWS_WORK_STAMP'}; }
+    if (( $cwsname ne "" ) && ( $allvariables->{'OVERWRITE_CWSNAME'} )) { $cwsname = $allvariables->{'OVERWRITE_CWSNAME'}; }
+
+    my $patchsequence = get_patchsequence($allvariables);
+
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
     {
-        $displaynamevalue = $base . " Product Update " . $windowspatchlevel;
-        $descriptionvalue = $base . " Product Update " . $windowspatchlevel . " Build: " . $installer::globals::buildid;
+        $displaynamevalue = $base . " ServicePack " . $windowspatchlevel . " " . $patchsequence . " Build: " . $installer::globals::buildid;
+        $descriptionvalue = $base . " ServicePack " . $windowspatchlevel . " " . $patchsequence . " Build: " . $installer::globals::buildid;
     }
     else
     {
-        $displaynamevalue = $base . " Hotfix " . " Build: " . $installer::globals::buildid;
-        $descriptionvalue = $base . " Hotfix " . " Build: " . $installer::globals::buildid;
+        $displaynamevalue = $base . " Hotfix " . $cwsname . " " . $displayaddon . " " . $patchsequence . " Build: " . $installer::globals::buildid;
+        $descriptionvalue = $base . " Hotfix " . $cwsname . " " . $displayaddon . " " . $patchsequence . " Build: " . $installer::globals::buildid;
+        $displaynamevalue =~ s/    / /g;
+        $descriptionvalue =~ s/    / /g;
+        $displaynamevalue =~ s/   / /g;
+        $descriptionvalue =~ s/   / /g;
+        $displaynamevalue =~ s/  / /g;
+        $descriptionvalue =~ s/  / /g;
+    }
+
+    if ( $allvariables->{'MSPPATCHNAMELIST'} )
+    {
+        my $patchnamelistfile = $allvariables->{'MSPPATCHNAMELIST'};
+        $patchnamelistfile = $installer::globals::idttemplatepath  . $installer::globals::separator . $patchnamelistfile;
+        if ( ! -f $patchnamelistfile ) { installer::exiter::exit_program("ERROR: Could not find file \"$patchnamelistfile\".", "change_patchmetadata_table"); }
+        my $filecontent = installer::files::read_file($patchnamelistfile);
+
+        # Get name and path of reference database
+        my $patchid = get_patchid_from_list($filecontent, $languagestringref, $patchnamelistfile);
+
+        if ( $patchid eq "" ) { installer::exiter::exit_program("ERROR: Could not find file patchid in file \"$patchnamelistfile\" for language(s) \"$$languagestringref\".", "change_patchmetadata_table"); }
+
+        # Setting language specific patch id
     }
 
     for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
@@ -556,6 +694,12 @@ sub change_patchmetadata_table
             {
                 ${$filecontent}[$i] = "$company\t$property\t$classificationvalue\n";
                 $classification_set = 1;
+            }
+
+            if ( $property eq $allowremovalstring )
+            {
+                ${$filecontent}[$i] = "$company\t$property\t$allowremovalvalue\n";
+                $allowremoval_set = 1;
             }
 
             if ( $property eq $timestring )
@@ -595,6 +739,18 @@ sub change_patchmetadata_table
     if ( ! $classification_set )
     {
         my $line = "$defaultcompany\t$classificationstring\t$classificationvalue\n";
+        push(@newcontent, $line);
+    }
+
+    if ( ! $allowremoval_set )
+    {
+        my $line = "$defaultcompany\t$classificationstring\t$allowremovalvalue\n";
+        push(@newcontent, $line);
+    }
+
+    if ( ! $allowremoval_set )
+    {
+        my $line = "$defaultcompany\t$classificationstring\t$allowremovalvalue\n";
         push(@newcontent, $line);
     }
 
@@ -718,6 +874,8 @@ sub get_patchsequence
     if ( $allvariables->{'VENDORPATCHVERSION'} ) { $vendornumber = $allvariables->{'VENDORPATCHVERSION'}; }
     $patchsequence = $packageversion . "\." . $installer::globals::buildid . "\." . $vendornumber;
 
+    if ( $allvariables->{'PATCHSEQUENCE'} ) { $patchsequence = $allvariables->{'PATCHSEQUENCE'}; }
+
     return $patchsequence;
 }
 
@@ -727,7 +885,7 @@ sub get_patchsequence
 
 sub edit_tables
 {
-    my ($tablelist, $localmspdir, $olddatabase, $newdatabase, $mspfilename, $allvariables) = @_;
+    my ($tablelist, $localmspdir, $olddatabase, $newdatabase, $mspfilename, $allvariables, $languagestringref) = @_;
 
     # table list contains:  my $tablelist = "Properties TargetImages UpgradedImages ImageFamilies PatchMetadata PatchSequence";
 
@@ -735,8 +893,188 @@ sub edit_tables
     change_targetimages_table($localmspdir, $olddatabase);
     change_upgradedimages_table($localmspdir, $newdatabase);
     change_imagefamilies_table($localmspdir);
-    change_patchmetadata_table($localmspdir, $allvariables);
+    change_patchmetadata_table($localmspdir, $allvariables, $languagestringref);
     change_patchsequence_table($localmspdir, $allvariables);
+}
+
+#################################################################################
+# Checking, if this is the correct database.
+#################################################################################
+
+sub correct_patch
+{
+    my ($product, $pro, $langs, $languagestringref) = @_;
+
+    my $correct_patch = 0;
+
+    # Comparing $product with $installer::globals::product and
+    # $pro with $installer::globals::pro and
+    # $langs with $languagestringref
+
+    my $product_is_good = 0;
+
+    my $localproduct = $installer::globals::product;
+    if ( $installer::globals::languagepack ) { $localproduct = $localproduct . "LanguagePack"; }
+
+    if ( $product eq $localproduct ) { $product_is_good = 1; }
+
+    if ( $product_is_good )
+    {
+        my $pro_is_good = 0;
+
+        if ((( $pro eq "pro" ) && ( $installer::globals::pro )) || (( $pro eq "nonpro" ) && ( ! $installer::globals::pro ))) { $pro_is_good = 1; }
+
+        if ( $pro_is_good )
+        {
+            my $langlisthash = installer::converter::convert_stringlist_into_hash(\$langs, ",");
+            my $langstringhash = installer::converter::convert_stringlist_into_hash($languagestringref, "_");
+
+            my $not_included = 0;
+            foreach my $onelang ( keys %{$langlisthash} )
+            {
+                if ( ! exists($langstringhash->{$onelang}) )
+                {
+                    $not_included = 1;
+                    last;
+                }
+            }
+
+            if ( ! $not_included )
+            {
+                foreach my $onelanguage ( keys %{$langstringhash} )
+                {
+                    if ( ! exists($langlisthash->{$onelanguage}) )
+                    {
+                        $not_included = 1;
+                        last;
+                    }
+                }
+
+                if ( ! $not_included ) { $correct_patch = 1; }
+            }
+        }
+    }
+
+    return $correct_patch;
+}
+
+#################################################################################
+# Searching for the path to the required patch for this special product.
+#################################################################################
+
+sub get_requiredpatchfile_from_list
+{
+    my ($filecontent, $languagestringref, $filename) = @_;
+
+    my $patchpath = "";
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        my $line = ${$filecontent}[$i];
+        if ( $line =~ /^\s*$/ ) { next; } # empty line
+        if ( $line =~ /^\s*\#/ ) { next; } # comment line
+
+        if ( $line =~ /^\s*(.+?)\s*\t+\s*(.+?)\s*\t+\s*(.+?)\s*\t+\s*(.+?)\s*$/ )
+        {
+            my $product = $1;
+            my $pro = $2;
+            my $langs = $3;
+            my $path = $4;
+
+            if (( $pro ne "pro" ) && ( $pro ne "nonpro" )) { installer::exiter::exit_program("ERROR: Wrong syntax in file: $filename. Only \"pro\" or \"nonpro\" allowed in column 1! Line: \"$line\"", "get_databasename_from_list"); }
+
+            if ( correct_patch($product, $pro, $langs, $languagestringref) )
+            {
+                $patchpath = $path;
+                last;
+            }
+        }
+        else
+        {
+            installer::exiter::exit_program("ERROR: Wrong syntax in file: $filename! Line: \"$line\"", "get_requiredpatchfile_from_list");
+        }
+    }
+
+    return $patchpath;
+}
+
+##################################################################
+# Converting unicode file to ascii
+# to be more precise: uft-16 little endian to ascii
+##################################################################
+
+sub convert_unicode_to_ascii
+{
+    my ( $filename ) = @_;
+
+    my @localfile = ();
+
+    my $savfilename = $filename . "_before.unicode";
+    installer::systemactions::copy_one_file($filename, $savfilename);
+
+#   open( IN, "<:utf16", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+#   open( IN, "<:para:crlf:uni", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+    open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+#   open( IN, "<:encoding(UTF-8)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+    while ( $line = <IN> ) {
+        push @localfile, $line;
+    }
+    close( IN );
+
+    if ( open( OUT, ">", $filename ) )
+    {
+        print OUT @localfile;
+        close(OUT);
+    }
+}
+
+####################################################################
+# Analyzing the log file created by msimsp.exe to find all
+# files included into the patch.
+####################################################################
+
+sub analyze_msimsp_logfile
+{
+    my ($logfile, $filesarray) = @_;
+
+    # Reading log file after converting from utf-16 (LE) to ascii
+    convert_unicode_to_ascii($logfile);
+    my $logfilecontent = installer::files::read_file($logfile);
+
+    # Creating hash from $filesarray: unique file name -> destination of file
+    my %filehash = ();
+    my %destinationcollector = ();
+
+    for ( my $i = 0; $i <= $#{$filesarray}; $i++ )
+    {
+        my $onefile = ${$filesarray}[$i];
+
+        # Only collecting files with "uniquename" and "destination"
+        if (( exists($onefile->{'uniquename'}) ) && ( exists($onefile->{'uniquename'}) ))
+        {
+            my $uniquefilename = $onefile->{'uniquename'};
+            my $destpath = $onefile->{'destination'};
+            $filehash{$uniquefilename} = $destpath;
+        }
+    }
+
+    # Analyzing log file of msimsp.exe, finding all changed files
+    # and searching all destinations of unique file names.
+    # Content in log file: "INFO File Key: <file key> is modified"
+    # Collecting content in @installer::globals::patchfilecollector
+
+    for ( my $i = 0; $i <= $#{$logfilecontent}; $i++ )
+    {
+        if ( ${$logfilecontent}[$i] =~ /Key\:\s*(.*?) is modified\s*$/ )
+        {
+            my $filekey = $1;
+            if ( exists($filehash{$filekey}) ) { $destinationcollector{$filehash{$filekey}} = 1; }
+            else { installer::exiter::exit_program("ERROR: Could not find file key \"$filekey\" in file collector.", "analyze_msimsp_logfile"); }
+        }
+    }
+
+    foreach my $onedest ( sort keys %destinationcollector ) { push(@installer::globals::patchfilecollector, "$onedest\n"); }
+
 }
 
 ####################################################################
@@ -745,12 +1083,14 @@ sub edit_tables
 
 sub create_msp_patch
 {
-    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref) = @_;
+    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref, $filesarray) = @_;
 
     my $force = 1; # print this message even in 'quiet' mode
     installer::logger::print_message( "\n******************************************\n" );
     installer::logger::print_message( "... creating msp installation set ...\n", $force );
     installer::logger::print_message( "******************************************\n" );
+
+    $installer::globals::creating_windows_installer_patch = 1;
 
     my @needed_files = ("msimsp.exe");  # only required for patch creation process
     installer::control::check_needed_files_in_path(\@needed_files);
@@ -828,14 +1168,14 @@ sub create_msp_patch
     my $mspfilename = set_mspfilename($allvariables, $mspdir);
 
     # Editing tables
-    edit_tables($tablelist, $localmspdir, $olddatabase, $newdatabase, $mspfilename, $allvariables);
+    edit_tables($tablelist, $localmspdir, $olddatabase, $newdatabase, $mspfilename, $allvariables, $languagestringref);
 
     # Adding edited tables into pcp file
     include_tables_into_pcpfile($fullpcpfilename, $localmspdir, $tablelist);
 
     # Start msimsp.exe
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting msimsp.exe");
-    execute_msimsp($fullpcpfilename, $mspfilename, $localmspdir);
+    my $msimsplogfile = execute_msimsp($fullpcpfilename, $mspfilename, $localmspdir);
 
     # Copy final installation set next to msp file
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: Copying installation set");
@@ -844,6 +1184,32 @@ sub create_msp_patch
     my $oldinstallationsetpath = $installer::globals::updatedatabasepath;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$oldinstallationsetpath);
     installer::systemactions::copy_complete_directory($oldinstallationsetpath, $mspdir);
+
+    # Copying additional patches into the installation set, if required
+    if (( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ) && ( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ne "" ) && ( ! $installer::globals::languagepack ))
+    {
+        my $filename = $allvariables->{'ADDITIONALREQUIREDPATCHES'};
+
+        my $fullfilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
+        if ( $$fullfilenameref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file with required patches, although it is defined: $filename !", "create_msp_patch"); }
+        my $fullfilename = $$fullfilenameref;
+
+        # Reading list file
+        my $listfile = installer::files::read_file($fullfilename);
+
+        # Get name and path of reference database
+        my $requiredpatchfile = get_requiredpatchfile_from_list($listfile, $languagestringref, $fullfilename);
+        if ( $requiredpatchfile eq "" ) { installer::exiter::exit_program("ERROR: Could not find path to required patch in file $fullfilename for language(s) $$languagestringref!", "create_msp_patch"); }
+
+        # Copying patch file
+        installer::systemactions::copy_one_file($requiredpatchfile, $mspdir);
+        # my $infoline = "Copy $requiredpatchfile to $mspdir\n";
+        # push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    # Find all files included into the patch
+    # Analyzing the msimsp log file $msimsplogfile
+    analyze_msimsp_logfile($msimsplogfile, $filesarray);
 
     # Done
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: msp creation done");

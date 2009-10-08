@@ -971,7 +971,7 @@ sub make_string_licensetext
         my $oneline = ${$licensefile}[$i];
         $oneline =~ s/\s*$//g;      # no whitespace at line end
 
-        $rtf_licensetext = $rtf_licensetext .  $oneline;
+        $rtf_licensetext = $rtf_licensetext .  $oneline . " ";
     }
 
     return $rtf_licensetext;

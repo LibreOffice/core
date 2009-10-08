@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: canvascommons.scp,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,7 @@ File gid_File_Oo_Office_Canvas_Xcu
     Name = "/registry/data/org/openoffice/Office/Canvas.xcu";
 End 
 
-STD_LIB_FILE(gid_File_Lib_CppCanvas, cppcanvas)
+STD_LIB_FILE_PATCH(gid_File_Lib_CppCanvas, cppcanvas)
 STD_LIB_FILE(gid_File_Lib_CanvasTools, canvastools)
 
 #ifdef ENABLE_AGG

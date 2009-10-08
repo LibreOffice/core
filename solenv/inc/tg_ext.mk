@@ -235,7 +235,11 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     $(TOUCH) $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 .ELSE			# "$(CONFIGURE_ACTION)"=="none" || "$(CONFIGURE_ACTION)"==""
     -$(MKDIR) $(P_CONFIGURE_DIR)
+.IF "$(OS)"=="OS2"
+    cd $(P_CONFIGURE_DIR) && sh -c "$(CONFIGURE_ACTION:s!\!/!) $(CONFIGURE_FLAGS:s!\!/!)" && $(TOUCH) $(CONFIGURE_FLAG_FILE)
+.ELSE
     cd $(P_CONFIGURE_DIR) && $(CONFIGURE_ACTION) $(CONFIGURE_FLAGS) && $(TOUCH) $(CONFIGURE_FLAG_FILE)
+.ENDIF
     mv $(P_CONFIGURE_DIR)$/$(CONFIGURE_FLAG_FILE) $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 .ENDIF			# "$(CONFIGURE_ACTION)"=="none" ||	"$(CONFIGURE_ACTION)"==""
 
@@ -311,12 +315,14 @@ $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).unpack
 
 .IF "$(P_ADDITIONAL_FILES)"!=""
 $(P_ADDITIONAL_FILES) :
+    @-$(MKDIRHIER) $(@:d)
     -echo dummy > $@
     -$(TOUCH) $@
 .ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+    @-$(MKDIRHIER) $(@:d)
     -echo dummy > $@
     -$(TOUCH) $@
     -echo dummy > $(@:d)$(@:b)

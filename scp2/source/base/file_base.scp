@@ -52,7 +52,7 @@ STD_RES_FILE( gid_File_Res_Abp, abp)
 STD_UNO_LIB_FILE( gid_File_Lib_Dbp, dbp)
 STD_RES_FILE( gid_File_Res_Dbp, dbp)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbu, dbu )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbu, dbu )
 STD_RES_FILE( gid_File_Res_Dbu, dbu)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Adabasui, adabasui )
@@ -62,9 +62,9 @@ STD_RES_FILE( gid_File_Res_Cnr, cnr)
 STD_RES_FILE( gid_File_Res_Sdbcl, sdbcl)
 STD_RES_FILE( gid_File_Res_Sdberr, sdberr)
 
-#ifdef ENABLE_REPORTDESIGN
+#ifdef ENABLE_REPORTBUILDER
 
-STD_UNO_LIB_FILE( gid_File_Lib_Rpt, rpt )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rpt, rpt )
 STD_RES_FILE( gid_File_Res_Rpt, rpt)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Rptui, rptui )

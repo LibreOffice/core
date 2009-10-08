@@ -49,10 +49,7 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Registry_Filter_Zip,
              gid_File_Registry_Lang,
              gid_File_Registry_Spool_Langpack_Lang,
-             gid_File_Registry_Spool_Oo_Common_Cjk_Xcu,
              gid_File_Registry_Spool_Oo_Common_Ctl_Xcu,
-             gid_File_Registry_Spool_Oo_Common_Korean_Xcu,
-             gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu,
              gid_File_InfoPlist_Lang);
     Dirs = (gid_Dir_Samples_Language);
 End
@@ -75,6 +72,8 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Epg,
              gid_File_Res_Epp,
              gid_File_Res_Eur,
+             gid_File_Res_For,
+             gid_File_Res_Forui,
              gid_File_Res_Fps_Office,
              gid_File_Res_Frm,
              gid_File_Res_Fwe,

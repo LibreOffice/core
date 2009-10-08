@@ -192,13 +192,13 @@ File gid_File_Lib_Comphelper2
     Name = STRING(CONCAT3(comphelp4,COMID,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Ctl , ctl)
 
-STD_LIB_FILE( gid_File_Lib_Cui, cui)
+STD_LIB_FILE_PATCH( gid_File_Lib_Cui, cui)
 
 #ifndef SYSTEM_CURL
 
@@ -258,7 +258,7 @@ End
 #endif
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dba, dba)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dba, dba)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Sdbt, sdbt)
 
@@ -266,7 +266,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbmm, dbmm)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
 
@@ -285,9 +285,9 @@ File gid_File_Lib_Dbpool
   #endif
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbt, dbtools )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbt, dbtools )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Dbaxml, dbaxml )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbaxml, dbaxml )
 
 File gid_File_Lib_Dict_Ja
     TXT_FILE_BODY;
@@ -346,7 +346,7 @@ End
 
 File gid_File_Lib_Dlgprov
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -421,12 +421,21 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Emboleobj,emboleobj)
 
 #if defined(WNT) && !defined(DISABLE_ATL)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Emser , emser)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Emser, emser )
+
+File gid_File_Lib_Inprocserv
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+    Name = "inprocserv.dll";
+End
 
 #endif
 
 #ifdef UNX
+#ifndef ENABLE_EVOAB2
 STD_UNO_LIB_FILE( gid_File_Lib_Evoab_1 , evoab)
+#endif
 
 #ifdef ENABLE_KAB
 
@@ -490,7 +499,7 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Fileacc,fileacc)
 
 File gid_File_Lib_Filterconfig1
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = SPECIAL_NAME(filterconfig1);
@@ -579,6 +588,26 @@ End
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
+
+#if (defined(ENABLE_CAIRO) && ! defined (SYSTEM_CAIRO))
+
+File gid_File_Lib_Cairo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT3(libcairo,.2,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT3(libcairo,UNXSUFFIX,.2));
+    #endif
+  #elif defined(WNT)
+    Name = "cairo.dll";
+  #endif
+End
+
+#endif
+
 STD_UNO_LIB_FILE( gid_File_Lib_Frm , frm)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Fsstorage, fsstorage.uno )
@@ -595,14 +624,14 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Fwe , fwe)
+STD_LIB_FILE_PATCH( gid_File_Lib_Fwe , fwe)
 
 STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 
 File gid_File_Lib_Fwk
     Name = LIBNAME(fwk);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -623,7 +652,7 @@ End
 File gid_File_Lib_Go
     Name = LIBNAME(go);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -634,7 +663,7 @@ STD_LIB_FILE( gid_File_Lib_Helplinker, helplinker)
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -812,7 +841,7 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Lng, lng)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
     TXT_FILE_BODY;
@@ -1048,7 +1077,7 @@ End
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 
 #ifndef WITHOUT_MOZILLA
-STD_UNO_LIB_FILE( gid_File_Lib_Pl , pl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pl , pl)
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Preload, preload)
@@ -1164,7 +1193,7 @@ End
 File gid_File_Lib_Res
     Name = LIBNAME(res);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1195,9 +1224,9 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sax , sax)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Oox , oox)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oox , oox)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sb , sb)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sb , sb)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Scn, scn)
 
@@ -1214,15 +1243,15 @@ File gid_File_Lib_Scriptframe
   #endif
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, UNO_COMPONENT);
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sd , sd)
-STD_LIB_FILE( gid_File_Lib_Sdui, sdui)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sd , sd)
+STD_LIB_FILE_PATCH( gid_File_Lib_Sdui, sdui)
 
 File gid_File_Lib_Slideshow
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -1251,7 +1280,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 File gid_File_Lib_Sfx
     Name = LIBNAME(sfx);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1293,7 +1322,7 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sot, sot )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sot, sot )
 
 #if defined(UNX) && !defined(QUARTZ)
 
@@ -1308,7 +1337,7 @@ End
 
 File gid_File_Lib_Spell
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(spell);
     Dir = gid_Dir_Program;
@@ -1332,19 +1361,21 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Sts , sts)
 
-STD_LIB_FILE( gid_File_Lib_Svl, svl )
-STD_UNO_LIB_FILE( gid_File_Lib_Svtools, svt )
+STD_LIB_FILE_PATCH( gid_File_Lib_Svl, svl )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svtools, svt )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Svtmisc, svtmisc.uno )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Svx, svx)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Svx, svx)
 STD_UNO_LIB_FILE( gid_File_Lib_TextConversionDlgs, textconversiondlgs)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sw , sw)
-STD_LIB_FILE( gid_File_Lib_Swui, swui)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sw , sw)
+STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
+
+STD_LIB_FILE( gid_File_Lib_Msword, msword )
 
 File gid_File_Lib_Sysdtrans
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,PATCH,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -1425,7 +1456,7 @@ End
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
 #endif
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpfile1,ucpfile1)
+SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpfile1,ucpfile1)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpftp1,ucpftp1)
 
@@ -1439,7 +1470,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(lnth);
     Dir = gid_Dir_Program;
@@ -1447,22 +1478,22 @@ End
 
 File gid_File_Lib_Hyph
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Name = LIBNAME(hyphen);
     Dir = gid_Dir_Program;
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Utl , utl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Utl , utl)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Uui, uui )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Uui, uui )
 
 STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
 
 File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1487,7 +1518,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xof , xof)
 File gid_File_Lib_Xo
     Name = LIBNAME(xo);
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     Dir = gid_Dir_Program;
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -1550,7 +1581,7 @@ File gid_File_Lib_XSec_Framework
         Name = "xsec_fw.dll";
     #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -1562,7 +1593,7 @@ File gid_File_Lib_XSec_XmlSec
         Name = "xsec_xmlsec.dll";
     #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -1630,9 +1661,9 @@ End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Updchkui , updchk )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Updchkui , updchk )
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Updatefeed , updatefeed.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updatefeed , updatefeed.uno )
 
 #ifdef WNT
 File gid_File_Lib_Onlinecheck
@@ -1680,7 +1711,7 @@ File gid_File_Lib_Unopkgapp
     Styles = (PACKED);
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
 #if defined WNT && \
     (defined M1310 || \
@@ -1760,4 +1791,7 @@ End
 #endif // SYSTEM_REDLAND
 
 STD_UNO_LIB_FILE(gid_File_Lib_Unordf, unordf)
+
+STD_UNO_LIB_FILE( gid_File_Lib_For, for)
+STD_LIB_FILE( gid_File_Lib_Forui, forui)
 

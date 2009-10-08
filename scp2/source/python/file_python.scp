@@ -134,6 +134,14 @@ File gid_File_Lib_Python_So
     Name = STRING(PY_FULL_DLL_NAME);
     Styles = (PACKED);
 End
+#ifdef WNT
+File gid_File_Lib_Python_So_Brand // Fix for system-python-problem on windows
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = STRING(PY_FULL_DLL_NAME);
+    Styles = (PACKED);
+End
+#endif
 #endif
 
 #ifdef UNX

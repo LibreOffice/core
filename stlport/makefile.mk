@@ -198,8 +198,7 @@ OUT2BIN= \
 
 .ELIF "$(GUI)"=="OS2"
 
-OUT2LIB= lib$/*.a lib$/*.lib
-
+OUT2LIB= lib$/*.lib
 OUT2BIN= lib$/*.dll
 
 .ELSE          # "$(GUI)"=="WNT"

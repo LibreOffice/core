@@ -237,6 +237,16 @@ WindowsCustomAction gid_Customaction_CopyEditionData
     Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
+WindowsCustomAction gid_Customaction_CopyExtensionData
+    Name = "CopyExtensionData";
+    Typ = "1";
+    Source = "shlxtmsi.dll";
+    Target = "copyExtensionData";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "RegisterExtensions");
+    Assignment2 = ("AdminExecuteSequence", "", "RegisterExtensions");
+End
+
 WindowsCustomAction gid_Customaction_RegCleanOld
 	Name = "RegCleanOld";
 	Typ = "65";
@@ -330,6 +340,33 @@ WindowsCustomAction gid_Customaction_Patch_Isofficerunning
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
 	Assignment2 = ("InstallExecuteSequence", "", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_Full_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_CheckPatchList
+	Name = "CheckPatchList";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckPatchList";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "Patch1NotInstalled");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode

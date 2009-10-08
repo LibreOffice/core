@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: deliver.pl,v $
 #
-# $Revision: 1.130 $
+# $Revision$
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +47,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.130 $ ';
+$id_str = ' $Revision$ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -827,8 +827,18 @@ sub copy_if_newer
         {
             $rc = unlink($to); # YD OS/2 can't rename if $to exists!
         }
-        $rc = rename($temp_file, $to);
-        if ( $rc ) {
+        # Ugly hack: on windows file locking(?) sometimes prevents renaming.
+        # Until we've found and fixed the real reason try it repeatedly :-(
+        my $try = 0;
+        my $maxtries = 1;
+        $maxtries = 5 if ( $^O eq 'MSWin32' );
+        my $success = 0;
+        while ( $try < $maxtries && ! $success ) {
+            sleep $try;
+            $try ++;
+            $success = rename($temp_file, $to);
+        }
+        if ( $success ) {
             # handle special packaging of *.dylib files for Mac OS X
             if ( $^O eq 'darwin' )
             {
@@ -847,6 +857,9 @@ sub copy_if_newer
                 }
                 system("macosx-create-bundle", "$to=$from.app") if ( -d "$from.app" );
                 system("ranlib", "$to" ) if ( $to =~ /\.a/ );
+            }
+            if ( $try > 1 ) {
+                print_warning("File '$to' temporarily locked. Dependency bug?");
             }
             return 1;
         }
@@ -1012,15 +1025,15 @@ sub push_default_actions
         foreach $subdir (@subdirs) {
             push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
         }
-        push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
         if ( $common_build ) {
             foreach $subdir (@common_subdirs) {
                 push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
             }
-            push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         }
     }
+    push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
     if ( $common_build ) {
+        push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
     } else {
         push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
@@ -1205,6 +1218,13 @@ sub zip_files
             $work_file = get_tempfilename() . ".zip";
             die "Error: temp file $work_file already exists" if ( -e $work_file);
             zipped_path_extension($zip_file, $work_file, $ext, 1) if ( -e $zip_file );
+        } elsif ( $zip_file eq $common_zip_file) {
+            # Zip file in common tree: work on uniq copy to avoid collisions
+            $work_file = $zip_file;
+            $work_file =~ s/\.zip$//;
+            $work_file .= (sprintf('.%d-%d', $$, time())) . ".zip";
+            die "Error: temp file $work_file already exists" if ( -e $work_file);
+            copy($zip_file, $work_file) if ( -e $zip_file );
         } else {
             # No pre processing necessary, working directly on solver.
             $work_file = $zip_file;
@@ -1242,6 +1262,14 @@ sub zip_files
             zipped_path_extension($work_file, $zip_file, $ext, 0);
             if (( -e $work_file ) && ($work_file ne $zip_file)) {
                 unlink $work_file;
+            }
+        } elsif ( $zip_file eq $common_zip_file) {
+            # rename work file back
+            if ( -e $work_file ) {
+                if (! rename($work_file, $zip_file)) {
+                    print_error("can't rename temporary file to $zip_file: $!",0);
+                    unlink $work_file;
+                }
             }
         }
     }

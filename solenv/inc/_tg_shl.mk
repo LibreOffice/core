@@ -233,7 +233,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL1TARGET8=$(shell @fix_shl $(SHL1TARGET))
+SHL1TARGET8=$(shell @fix_shl.cmd $(SHL1TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -773,7 +773,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL2TARGET8=$(shell @fix_shl $(SHL2TARGET))
+SHL2TARGET8=$(shell @fix_shl.cmd $(SHL2TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -1313,7 +1313,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL3TARGET8=$(shell @fix_shl $(SHL3TARGET))
+SHL3TARGET8=$(shell @fix_shl.cmd $(SHL3TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -1853,7 +1853,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL4TARGET8=$(shell @fix_shl $(SHL4TARGET))
+SHL4TARGET8=$(shell @fix_shl.cmd $(SHL4TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -2393,7 +2393,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL5TARGET8=$(shell @fix_shl $(SHL5TARGET))
+SHL5TARGET8=$(shell @fix_shl.cmd $(SHL5TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -2933,7 +2933,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL6TARGET8=$(shell @fix_shl $(SHL6TARGET))
+SHL6TARGET8=$(shell @fix_shl.cmd $(SHL6TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -3473,7 +3473,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL7TARGET8=$(shell @fix_shl $(SHL7TARGET))
+SHL7TARGET8=$(shell @fix_shl.cmd $(SHL7TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -4013,7 +4013,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL8TARGET8=$(shell @fix_shl $(SHL8TARGET))
+SHL8TARGET8=$(shell @fix_shl.cmd $(SHL8TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -4553,7 +4553,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL9TARGET8=$(shell @fix_shl $(SHL9TARGET))
+SHL9TARGET8=$(shell @fix_shl.cmd $(SHL9TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
@@ -5093,7 +5093,7 @@ $(MISC)$/%linkinc.ls:
 .IF "$(GUI)" == "OS2"
 #21/02/2006 YD dll names must be 8.3, invoke fix script
 #check osl/os2/module.c/osl_loadModule()
-SHL10TARGET8=$(shell @fix_shl $(SHL10TARGET))
+SHL10TARGET8=$(shell @fix_shl.cmd $(SHL10TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"

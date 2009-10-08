@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_writer.scp,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,7 +84,8 @@ RegistryItem gid_Regitem_Clsid__30a2652a_Ddf7_45e7_Aca6_3eab26fc8a4e__Inprochand
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "CLSID\{30A2652A-DDF7-45e7-ACA6-3EAB26FC8A4E}\InprocHandler32";
-    Value = "ole32.dll";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Clsid__30a2652a_Ddf7_45e7_Aca6_3eab26fc8a4e__Insertable
@@ -202,7 +203,8 @@ RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Inprochand
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "CLSID\{F616B81F-7BB8-4F22-B8A5-47428D59F8AD}\InprocHandler32";
-    Value = "ole32.dll";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = (PATCH);
 End
 
 RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Insertable
@@ -1276,33 +1278,6 @@ RegistryItem gid_Regitem_OpenOffice_WPD_OpenWith_Writer
     Value = " ";
 End
 
-// .WPS
-RegistryItem gid_Regitem_OpenOffice_WPS_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".wps\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .JTD
-RegistryItem gid_Regitem_OpenOffice_JTD_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".jtd\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .JTT
-RegistryItem gid_Regitem_OpenOffice_JTT_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".jtt\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
 // .HWP
 RegistryItem gid_Regitem_OpenOffice_HWP_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1425,33 +1400,6 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Root;
     Name = ".wpd";
-    Value = "opendocument.WriterDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wps
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".Wps";
-    Value = "opendocument.WriterDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Jtd
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".jtd";
-    Value = "opendocument.WriterDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Jtt
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".jtt";
     Value = "opendocument.WriterDocument.1";
     Styles = ();
 End

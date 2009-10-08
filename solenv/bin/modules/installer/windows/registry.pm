@@ -314,6 +314,9 @@ sub create_registry_table
             if ( $oneregistry->{'Styles'} ) { $style = $oneregistry->{'Styles'}; }
             if ( $style =~ /\bDONT_DELETE\b/ ) { $installer::globals::dontdeletecomponents{$registry{'Component_'}} = 1; }
 
+            # Saving upgradekey to write this into setup.ini for minor upgrades
+            if ( $style =~ /\bUPGRADEKEY\b/ ) { $installer::globals::minorupgradekey = $registry{'Key'}; }
+
             # Collecting all registry components with ALWAYS_REQUIRED style
             if ( ! ( $style =~ /\bALWAYS_REQUIRED\b/ ))
             {

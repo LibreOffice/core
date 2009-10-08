@@ -52,9 +52,11 @@
         $in_so_env++;
     };
     if (defined $ENV{CWS_WORK_STAMP}) {
-        require Cws; import Cws;
-        require CwsConfig; import CwsConfig;
-        require CvsModule; import CvsModule;
+        eval {
+            require Cws; import Cws;
+            require CwsConfig; import CwsConfig;
+            require CvsModule; import CvsModule;
+        };
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
     };
@@ -193,7 +195,7 @@
                             # the server considered as an error/client crash
     my %lost_client_jobs = (); # hash containing lost jobs
     my %job_jobdir = (); # hash containing job-dir pairs
-
+    my $is_svn = 0;
 ### main ###
 
     get_options();
@@ -216,6 +218,7 @@
     };
 
     $StandDir = get_stand_dir();   # This also sets $CurrentPrj
+    $is_svn++ if (-e $StandDir.$CurrentPrj.'/.svn');
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
     $deliver_command = $ENV{DELIVER};
@@ -900,7 +903,6 @@ sub get_stand_dir {
     } else {
         $StandDir = cwd();
     };
-        print "curr dir: $StandDir\n";
     my $previous_dir = '';
     do {
         foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
@@ -919,7 +921,7 @@ sub get_stand_dir {
         my @dirlist = split(/\//,Cwd::realpath($StandDir));
         pop @dirlist; # discard last dirname;
         $StandDir = join('/', @dirlist);
-        print "next dir: $StandDir\n";
+        print_error('Found no project to build') if (!$StandDir);
     }
 #    while (chdir '..');
     while (chdir "$StandDir");
@@ -1304,7 +1306,7 @@ sub get_options {
     $incompatible = scalar keys %incompatibles;
     if ($prepare) {
         print_error("--prepare is for use with --from switch only!\n") if (!$incompatible);
-        if ( $^O eq 'MSWin32' ) {
+        if ( $^O eq 'MSWin32' && !$is_svn) {
             print "\nATTENTION: Using Windows OS to prepare the CWS is highly unrecommended! It is unsequre and veeeery slooooow. The links will not be broken, the delivered files from the linked modules will not be undelivered, moreover file removal can fail. Use UNIX if possible. Proceed only if you exactly know what you do, otherwise break the build with Ctrl+C\n\n";
             sleep(10);
         };
@@ -2069,6 +2071,11 @@ sub ensure_clear_module {
         };
     };
     if ($module_type eq 'lnk') {
+        if ($is_svn) {
+            if(!rename("$StandDir$lnk_name", "$StandDir$module")) {
+                $action = 'rename';
+            };
+        } else {
             if ( $^O eq 'MSWin32' ) {
                 my $message = "The link $lnk_name will not be broken. This can cause inconsistent build";
                 print STDERR "\nWarning: $message\n";
@@ -2080,14 +2087,15 @@ sub ensure_clear_module {
                 checkout_module($module);
                 my $action = '';
             };
-        if ( $^O eq 'MSWin32' ) {
-            if(!rename("$StandDir$lnk_name", "$StandDir$module.backup.lnk")) {
-                $action = 'rename';
+            if ( $^O eq 'MSWin32' ) {
+                if(!rename("$StandDir$lnk_name", "$StandDir$module.backup.lnk")) {
+                    $action = 'rename';
+                };
+            } else {
+                if(!unlink $StandDir.$lnk_name) {
+                    $action = 'remove';
+                }
             };
-        } else {
-            if(!unlink $StandDir.$lnk_name) {
-                $action = 'remove';
-            }
         };
         print_error("Cannot $action $StandDir$lnk_name. Please $action it manually") if ($action);
     } else {
@@ -2160,7 +2168,7 @@ sub get_tmp_dir {
     } else {
        $tmp_dir = '/tmp/';
     }
-    $tmp_dir .= $$ while (-d $tmp_dir);
+    $tmp_dir .= $$ while (-e $tmp_dir);
     $tmp_dir = CorrectPath($tmp_dir);
     eval {mkpath($tmp_dir)};
     print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);

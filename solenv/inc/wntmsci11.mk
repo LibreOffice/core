@@ -199,7 +199,6 @@ CFLAGSWERRCC=-WX
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    extensions \
     fpicker \
     soldep
 

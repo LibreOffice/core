@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_calc.scp,v $
- * $Revision: 1.43 $
+ * $Revision: 1.43.204.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +45,11 @@ STD_UNO_LIB_FILE( gid_File_Lib_Calc, calc)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Date, date)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sc, sc)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sc, sc)
 
-STD_LIB_FILE( gid_File_Lib_Scui, scui)
+STD_LIB_FILE_PATCH( gid_File_Lib_Scui, scui)
+
+STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Scd, scd)
 

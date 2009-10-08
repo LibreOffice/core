@@ -298,9 +298,9 @@
 +#	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
 +
 + 
---- misc/STLport-4.5/src/gcc-3.0-os2.def	2008-07-18 14:14:27.000000000 +0200
-+++ misc/build/STLport-4.5/src/gcc-3.0-os2.def	2008-07-18 14:14:05.000000000 +0200
-@@ -1 +1,36 @@
+--- misc/STLport-4.5/src/gcc-3.0-os2.def	2008-11-26 12:40:40.000000000 +0100
++++ misc/build/STLport-4.5/src/gcc-3.0-os2.def	2008-10-10 15:05:36.000000000 +0200
+@@ -1 +1,40 @@
 -dummy
 +LIBRARY stlp45 INITINSTANCE TERMINSTANCE
 +DATA MULTIPLE
@@ -327,6 +327,7 @@
 +__ZN4_STL15basic_streambufIcNS_11char_traitsIcEEE13_M_snextc_auxEv
 +__ZNK4_STL5ctypeIcE7scan_isENS_10ctype_base4maskEPKcS5_
 +__ZN4_STL10_UnderflowIcNS_11char_traitsIcEEE7_M_doitEPNS_13basic_filebufIcS2_EE
++__ZN4_STL13_Filebuf_base12_M_page_sizeE
 +
 +;cppu
 +__ZN4_STL12__node_allocILb1ELi0EE11_M_allocateEj
@@ -338,9 +339,12 @@
 +
 +;vcl
 +__ZN4_STL12_List_globalIbE9_TransferEPNS_15_List_node_baseES3_S3_
---- misc/STLport-4.5/src/gcc-3.0-os2.mak	2008-07-18 14:14:27.000000000 +0200
-+++ misc/build/STLport-4.5/src/gcc-3.0-os2.mak	2008-07-18 14:14:05.000000000 +0200
-@@ -1 +1,77 @@
++
++;comphelper
++__ZTVN4_STL13runtime_errorE
+--- misc/STLport-4.5/src/gcc-3.0-os2.mak	2008-11-26 12:40:40.000000000 +0100
++++ misc/build/STLport-4.5/src/gcc-3.0-os2.mak	2008-11-03 15:56:24.000000000 +0100
+@@ -1 +1,79 @@
 -dummy
 +#
 +# Note : this makefile is for gcc-3 !
@@ -375,6 +379,8 @@
 +COMP=GCC$(ARCH)
 +INSTALL_STEP = install_unix 
 +LN_S = cp
++LDLIBS_RELEASE_dynamic = -lgcc_eh
++LDLIBS_RELEASE_static = -lgcc_eh
 +
 +#all_static symbolic_links 
 +all: all_dynamic all_import
@@ -387,8 +393,8 @@
 +CXXFLAGS_COMMON = -Zomf -D_REENTRANT -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -fexceptions -I${STLPORT_DIR} ${WARNING_FLAGS} ${ARCH_FLAGS}
 +CFLAGS_COMMON = -Zomf -D_REENTRANT -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -fexceptions -I${STLPORT_DIR} ${WARNING_FLAGS} ${ARCH_FLAGS}
 +
-+CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mcpu=pentium4
-+CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mcpu=pentium4
++CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
++CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
 +
 +CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
 +CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g
@@ -396,8 +402,8 @@
 +CXXFLAGS_STLDEBUG_static = $(CXXFLAGS_DEBUG_static) -D_STLP_DEBUG
 +CXXFLAGS_STLDEBUG_dynamic = $(CXXFLAGS_DEBUG_dynamic) -D_STLP_DEBUG
 +
-+CFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mcpu=pentium4
-+CFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mcpu=pentium4
++CFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
++CFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -DSTL_OS2_BUILDING -O3 -march=pentium -mtune=pentium4
 +
 +CFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
 +CFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g
@@ -529,7 +535,7 @@
  CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
  CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
 --- misc/STLport-4.5/stlport/config/stl_gcc.h	2001-09-04 19:10:16.000000000 +0200
-+++ misc/build/STLport-4.5/stlport/config/stl_gcc.h	2008-07-18 14:14:05.000000000 +0200
++++ misc/build/STLport-4.5/stlport/config/stl_gcc.h	2008-11-14 17:23:02.000000000 +0100
 @@ -7,7 +7,9 @@
  # define _STLP_USE_GLIBC
  #endif
@@ -587,7 +593,7 @@
  #if (defined(__linux__) /* && ! defined (_GNU_SOURCE) */ ) || \
      defined (__CYGWIN__) || defined (__MINGW32__) || !(defined (_STLP_USE_GLIBC) || defined (__sun)) 
  #   define _STLP_NO_NATIVE_MBSTATE_T      1
-@@ -226,8 +275,45 @@
+@@ -226,8 +257,45 @@
  
  # if (__GNUC__ >= 3)
  
@@ -635,7 +641,7 @@
  
  # elif (__GNUC_MINOR__ < 8)
  
-@@ -312,6 +398,7 @@
+@@ -312,6 +380,7 @@
  #   define _STLP_STATIC_TEMPLATE_DATA 1
  # endif
  
@@ -990,6 +996,21 @@
    }
    inline void _M_release_lock() { DosReleaseMutexSem(*(HMTX*)_M_lock); }
  # else /* No threads */
+--- misc/STLport-4.5/stlport/stl/_tree.c	2001-08-25 03:14:30.000000000 +0200
++++ misc/build/STLport-4.5/stlport/stl/_tree.c	2008-12-02 17:14:29.035425872 +0100
+@@ -404,10 +404,12 @@
+   }
+   iterator __j = iterator(__y);   
+   if (__comp)
++  {
+     if (__j == begin())     
+       return pair<iterator,bool>(_M_insert(__x, __y, __v), true);
+     else
+       --__j;
++  }
+   if (_M_key_compare(_S_key(__j._M_node), _KeyOfValue()(__v)))
+     return pair<iterator,bool>(_M_insert(__x, __y, __v), true);
+   return pair<iterator,bool>(__j, false);
 --- misc/STLport-4.5/stlport/stl/_valarray.h	2001-05-30 05:45:42.000000000 +0200
 +++ misc/build/STLport-4.5/stlport/stl/_valarray.h	2008-07-18 14:13:49.000000000 +0200
 @@ -19,6 +19,10 @@

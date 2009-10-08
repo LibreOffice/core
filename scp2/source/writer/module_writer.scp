@@ -50,6 +50,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Lib_Hwpreader,
     gid_File_Lib_Swd,
     gid_File_Lib_Swui,
+    gid_File_Lib_Msword,
     gid_File_Lib_Wpft,
     gid_File_Lib_Writerfilter,
     gid_File_Lib_T602Filter,
@@ -59,7 +60,6 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Jar_Email, 
     gid_File_Jar_Mail, 
     gid_File_Jar_Activation,
-    gid_File_Jar_Writer2latex,
     gid_File_Oo_Office_Ui_Writercommands_Xcs,
     gid_File_Oo_Office_Ui_Writercommands_Xcu,
     gid_File_Registry_Spool_Oo_Common_Writer_Xcu,
@@ -109,6 +109,14 @@ Module gid_Module_Langpack_Writer_Template
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Help_Swriter_Zip,
              gid_File_Res_T602Filter);
+End
+
+Module gid_Module_Optional_Writer2latex
+    MOD_NAME_DESC(MODULE_PRG_WRT_WRITER2LATEX);
+    ParentID = gid_Module_Optional;
+    Default = YES;
+    PackageInfo = "packinfo_office.txt";
+    Files = (gid_File_Oxt_Writer2latex);
 End
 
 #include "alllangmodules_writer.inc"

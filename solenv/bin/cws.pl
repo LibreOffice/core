@@ -56,13 +56,6 @@ use Cws;
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-my $script_rev;
-my $id_str = ' $Revision: 1.1.2.14 $ ';
-$id_str =~ /Revision:\s+(\S+)\s+\$/
-  ? ($script_rev = $1) : ($script_rev = "-");
-
-print "$script_name -- version: $script_rev\n";
-
 #### globals ####
 
 # valid command with possible abbreviations
@@ -75,6 +68,7 @@ my @valid_commands = (
                         'query', 'q',
                         'task', 't',
                         'integrate',
+                        'cdiff', 'cd',
                         'eisclone'
                      );
 
@@ -89,6 +83,7 @@ my %valid_options_hash = (
                             'query'     => ['help', 'milestone','masterworkspace','childworkspace'],
                             'task'      => ['help'],
                             'integrate' => ['help', 'childworkspace'],
+                            'cdiff'     => ['help', 'childworkspace', 'masterworkspace', 'files', 'modules'],
                             'eisclone'  => ['help']
                          );
 
@@ -128,6 +123,8 @@ sub parse_command_line
                                              'platforms|p=s',
                                              'onlysolver|o',
                                              'quiet|q',
+                                             'files',
+                                             'modules',
                                              'help|h'
                             );
 
@@ -156,6 +153,9 @@ sub parse_command_line
     }
     elsif ($command eq 't') {
         $command = 'task';
+    }
+    elsif ($command eq 'cd') {
+        $command = 'cdiff';
     }
 
     # An unkown option might be accompanied with a valid command.
@@ -316,6 +316,14 @@ sub get_cws_from_environment
     my $child  = $ENV{CWS_WORK_STAMP};
     my $master = $ENV{WORK_STAMP};
 
+    if ( !$child ) {
+        print_error("Environment variable CWS_WORK_STAMP is not set. Please set it to your CWS name.", 2);
+    }
+
+    if ( !$master ) {
+        print_error("Environment variable WORK_STAMP is not set. Please set it to the MWS name.", 2);
+    }
+
     my $cws = get_this_cws();
     $cws->child($child);
     $cws->master($master);
@@ -416,7 +424,7 @@ sub query_cws
     my $query_mode = shift;
     my $options_ref = shift;
     # get master and child workspace
-    my $masterws  = exists $options_ref->{'master'} ? uc($options_ref->{'master'}) : $ENV{WORK_STAMP};
+    my $masterws  = exists $options_ref->{'masterworkspace'} ? uc($options_ref->{'masterworkspace'}) : $ENV{WORK_STAMP};
     my $childws   = exists $options_ref->{'childworkspace'} ? $options_ref->{'childworkspace'} : $ENV{CWS_WORK_STAMP};
     my $milestone = exists $options_ref->{'milestone'} ? $options_ref->{'milestone'} : 'latest';
 
@@ -424,7 +432,7 @@ sub query_cws
         print_error("Can't determine master workspace environment.\n", 30);
     }
 
-    if ( ($query_mode eq 'modules' || $query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'state' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
+    if ( ($query_mode eq 'incompatible' || $query_mode eq 'taskids' || $query_mode eq 'state' || $query_mode eq 'current' || $query_mode eq 'owner' || $query_mode eq 'qarep' || $query_mode eq 'issubversion' || $query_mode eq 'ispublic' || $query_mode eq 'build') && !defined($childws) ) {
         print_error("Can't determine child workspace environment.\n", 30);
     }
 
@@ -438,22 +446,6 @@ sub query_cws
 
     no strict;
     &{"query_".$query_mode}($cws, $milestone);
-    return;
-}
-
-sub query_modules
-{
-    my $cws = shift;
-
-    if ( is_valid_cws($cws) ) {
-        my @modules = $cws->modules();
-        print_message("Modules:");
-        foreach (@modules) {
-            if ( defined($_) ) {
-                print "$_\n";
-            }
-        }
-    }
     return;
 }
 
@@ -887,7 +879,7 @@ sub is_valid_cws
     if ( !$id ) {
         print_error("Child workspace '$childws' for master workspace '$masterws' not found in EIS database.", 2);
     }
-    print_message("Master workspace '$masterws', child workspace '$childws':");
+    print STDERR "Master workspace '$masterws', child workspace '$childws'\n";
     return 1;
 }
 
@@ -1003,6 +995,16 @@ sub verify_milestone
 
 sub relink_workspace {
     my $linkdir = shift;
+    my $restore = shift;
+
+    # The list of obligatorily added modules, build will not work
+    # if these are not present.
+    my %added_modules_hash;
+    if (defined $ENV{ADDED_MODULES}) {
+        for ( split /\s/, $ENV{ADDED_MODULES} ) {
+            $added_modules_hash{$_}++;
+        }
+    }
 
     # clean out pre-existing linkdir
     my $bd = dirname($linkdir);
@@ -1017,8 +1019,27 @@ sub relink_workspace {
         foreach (@old_link_dirs) {
             print STDERR "@old_link_dirs\n";
         }
+        if ( $restore ) {
+            print_error("Please remove all old link directories but the last one", 67);
+        }
     }
+
     my $old_link_dir = "$bd/" . $old_link_dirs[0];
+    if ( $restore ) {
+        if ( !opendir(DIR, $old_link_dir) ) {
+            print_error("Can't open directory '$old_link_dir': $!.", 44);
+        }
+        my @links = grep { !/\.lnk/ } readdir(DIR);
+        close(DIR);
+        # everything which is not a link to a directory can't be an "added" module
+        foreach (@links) {
+            next if /^\./;
+            my $link = "$old_link_dir/$_";
+            if ( -s $link && -d $link ) {
+                $added_modules_hash{$_} = 1;
+            }
+        }
+    }
     print_message("... removing '$old_link_dir'");
     rmtree([$old_link_dir], 0);
 
@@ -1040,13 +1061,15 @@ sub relink_workspace {
     if ( !chdir($linkdir) ) {
         print_error("Can't chdir() to directory '$linkdir': $!.", 44);
     }
+    my $suffix = 'lnk';
     foreach(@ooo_top_level_dirs) {
         # skip non directory files like REBASE.LOG and REBASE.CONFIG_DONT_DELETE
         if ( ! -d "../ooo/$_" ) {
             next;
         }
-        if ( !symlink("../ooo/$_", $_) ) {
-            print_error("Can't symlink directory '../ooo/$_ -> '$_': $!.", 44);
+        my $target = exists $added_modules_hash{$_} ? $_ : "$_.$suffix";
+        if ( !symlink("../ooo/$_", $target) ) {
+            print_error("Can't symlink directory '../ooo/$_ -> $target': $!.", 44);
         }
     }
     foreach(@so_top_level_dirs) {
@@ -1054,8 +1077,9 @@ sub relink_workspace {
         if ( ! -d "../sun/$_" ) {
             next;
         }
-        if ( !symlink("../sun/$_", $_) ) {
-            print_error("Can't symlink directory '../sun/$_ -> '$_': $!.", 44);
+        my $target = exists $added_modules_hash{$_} ? $_ : "$_.$suffix";
+        if ( !symlink("../sun/$_", $target) ) {
+            print_error("Can't symlink directory '../sun/$_ -> $target': $!.", 44);
         }
     }
     if ( !chdir($savedir) ) {
@@ -1070,7 +1094,7 @@ sub update_solver
     my $solver     = shift;
     my $milestone  = shift;
 
-    my @zip_sub_dirs = ('bin', 'doc', 'inc', 'lib', 'par', 'pck', 'pdb', 'rdb', 'res', 'xml');
+    my @zip_sub_dirs = ('bin', 'doc', 'idl', 'inc', 'lib', 'par', 'pck', 'pdb', 'pus', 'rdb', 'res', 'xml');
 
     use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 
@@ -1155,7 +1179,32 @@ sub read_rebase_configuration
     return ($master, $milestone);
 }
 
+sub diff_print_files
+{
+    my $files_ref = shift;
+    my $diff_options = shift;
 
+    my @files = sort(@{$files_ref});
+
+    if ( $diff_options eq 'files') {
+        foreach(@files) {
+            print "$_\n";
+        }
+    }
+    else {
+        my @modules;
+        foreach(@files) {
+            my ($module) = split(/\//, $_);
+            push(@modules, $module);
+        }
+        # remove adjacent uniques
+        my $prev = 'nosuchmodule';
+        my @unique_modules = grep($_ ne $prev && (($prev) = $_), @modules);
+        foreach(@unique_modules) {
+            print "$_\n";
+        }
+    }
+}
 
 # Executes the help command.
 sub do_help
@@ -1175,6 +1224,7 @@ sub do_help
         print STDERR "\tanalyze (an)\n";
         print STDERR "\tquery (q)\n";
         print STDERR "\ttask (t)\n";
+        print STDERR "\tcdiff (cd)\n";
         print STDERR "\tintegrate *** release engineers only ***\n";
         print STDERR "\teisclone *** release engineers only ***\n";
     }
@@ -1200,7 +1250,7 @@ sub do_help
     }
     elsif ($arg eq 'query') {
         print STDERR "query: Query child workspace for miscellaneous information\n";
-        print STDERR "usage: query [-M master] [-c child] <current|modules|incompatible|owner|qarep|status|taskids>\n";
+        print STDERR "usage: query [-M master] [-c child] <current|incompatible|owner|qarep|status|taskids>\n";
         print STDERR "       query [-M master] [-c child] <release|due|due_qa|help|ui|ispublic|vcs|build>\n";
         print STDERR "       query [-M master] <latest|milestones|ispublicmaster>\n";
         print STDERR "       query  <masters>\n";
@@ -1214,7 +1264,6 @@ sub do_help
         print STDERR "\t--milestone milestone:\tSame as -m milestone\n";
         print STDERR "Modes:\n";
         print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
-        print STDERR "\tmodules\t\tquery modules added to the CWS\n";
         print STDERR "\tincompatible\tquery modules which should be build incompatible\n";
         print STDERR "\towner\t\tquery CWS owner\n";
         print STDERR "\tqarep\t\tquery CWS QA Representative\n";
@@ -1273,7 +1322,7 @@ sub do_help
         print STDERR "\t                       For cross master rebases use the form <MWS>:<milestone>\n";
         print STDERR "\t--milestone milestone: Same as -m milestone\n";
         print STDERR "\t-C:                    Commit changes made by merge step and update current milestone in database\n";
-        print STDERR "\t--commit:              Same as -C.\n"
+        print STDERR "\t--commit:              Same as -C\n"
     }
     elsif ($arg eq 'integrate') {
         print STDERR "integrate: Integrate a child workspace into a master workspace\n";
@@ -1282,7 +1331,17 @@ sub do_help
         print STDERR "\t-c childworkspace:      Merge changes on CWS <childworkspace> into MWS\n";
         print STDERR "\t--child childworkspace: Same as -c childworkspace\n";
         print STDERR "\t-C:                     Commit changes made by merge step and update CWS status in database\n";
-        print STDERR "\t--commit:               Same as -C.\n"
+        print STDERR "\t--commit:               Same as -C\n"
+    }
+    elsif ($arg eq 'cdiff') {
+        print STDERR "cdiff: Show changes on CWS relative to current milestone\n";
+        print STDERR "usage: cdiff [-M master] [-c child] [--files] [--modules]\n";
+        print STDERR "\t-M master:\t\toverride MWS specified in environment\n";
+        print STDERR "\t-c child:\t\toverride CWS specified in environment\n";
+        print STDERR "\t--master master:\tSame as -M master\t\n";
+        print STDERR "\t--child child:\t\tSame -c child\n";
+        print STDERR "\t--files:                Print only file names\n";
+        print STDERR "\t--modules:              Print only top level directories aka modules\n"
     }
     else {
         print STDERR "'$arg': unknown subcommand\n";
@@ -1306,7 +1365,7 @@ sub do_create
         $is_migration = 1;
     }
 
-    my $master   = $args_ref->[0];
+    my $master   = uc $args_ref->[0];
     my $cws_name = $args_ref->[1];
 
     if (!is_master($master)) {
@@ -1480,8 +1539,7 @@ sub do_rebase
     my $commit_phase = 0;
     my $milestone;
 
-    # TODO: Switching to a new master dooes not correctly yet
-
+    # TODO: Switching to a new master dooes work not correctly yet
 
     if (exists $options_ref->{'help'} || @{$args_ref} != 1) {
         do_help(['rebase']);
@@ -1493,6 +1551,10 @@ sub do_rebase
     if ( !exists($options_ref->{'commit'}) && !exists($options_ref->{'milestone'}) ) {
         print_error("At least one of the options -m (--milestone) or -C (--commit) are required.", 0 );
         do_help(['rebase']);
+    }
+
+    if ( !svn_version_check() ) {
+        print_error("cws rebase requires svn-1.5.4 or later (merge tracking and bug fixes). Please upgrade your svn client.", 1);
     }
 
     my $new_masterws;
@@ -1623,7 +1685,7 @@ sub do_rebase
         }
         if ( $so_setup) {
             print_message("... relinking workspace\n");
-            relink_workspace("$workspace/$new_masterws/src.$new_milestone");
+            relink_workspace("$workspace/$new_masterws/src.$new_milestone", 1);
             if ( !unlink("$workspace/REBASE.CONFIG_DONT_DELETE") ) {
                 print_error("Can't unlink '$workspace/REBASE.CONFIG_DONT_DELETE': $!", 0);
             }
@@ -1631,7 +1693,13 @@ sub do_rebase
         }
 
         print_message("... updating EIS database\n");
-        $cws->set_master_and_milestone($new_masterws, $new_milestone);
+        my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
+        if ( $$push_return[0] ne $new_masterws) {
+            print_error("Couldn't push new master '$new_masterws' to database", 0);
+        }
+        if ( $$push_return[1] ne $new_milestone) {
+            print_error("Couldn't push new milestone '$new_milestone' to database", 0);
+        }
     }
     else {
         # merge
@@ -1750,11 +1818,41 @@ sub do_fetch
 
         @platforms = split(/,/, $platforms);
 
+        my $added_product = 0;
+        my $added_nonproduct = 0;
+        foreach(@platforms) {
+            if ( $_ eq 'common.pro' ) {
+                $added_product = 1;
+                print_warning("'$_' is added automatically to the platform list, don't specify it explicit");
+            }
+            if ( $_ eq 'common' ) {
+                $added_nonproduct = 1;
+                print_warning("'$_' is added automatically to the platform list, don't specify it explicit");
+            }
+        }
+
+        # add common.pro/common to platform list
+        if ( $so_svn_server ) {
+            my $product = 0;
+            my $nonproduct = 0;
+            foreach(@platforms) {
+                if ( /\.pro$/ ) {
+                    $product = 1;
+                }
+                else {
+                    $nonproduct = 1;
+                }
+            }
+            push(@platforms, 'common.pro') if ($product && !$added_product);
+            push(@platforms, 'common') if ($nonproduct && !$added_nonproduct);
+        }
+
         foreach(@platforms) {
             if ( ! -d "$prebuild_dir/$_") {
                 print_error("Can't find prebuild binaries for platform '$_'.", 22);
             }
         }
+
     }
 
     my $cwsname = $cws->child();
@@ -1801,7 +1899,7 @@ sub do_fetch
             }
 
             if ( $so_setup ) {
-                relink_workspace("$workspace/$masterws/$linkdir");
+                relink_workspace("$workspace/$masterws/$linkdir", 0);
             }
         }
         else {
@@ -1867,7 +1965,7 @@ sub do_query
     my $options_ref = shift;
 
     # list of available query modes
-    my @query_modes = qw(modules incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
+    my @query_modes = qw(incompatible taskids status latest current owner qarep build buildid integrated approved nominated ready new planned release due due_qa help ui milestones masters vcs ispublic ispublicmaster);
     my %query_modes_hash = ();
     foreach (@query_modes) {
         $query_modes_hash{$_}++;
@@ -1970,6 +2068,88 @@ sub do_task
     return;
 }
 
+sub do_cdiff
+{
+    my $args_ref    = shift;
+    my $options_ref = shift;
+
+    if ( exists $options_ref->{'help'} || @{$args_ref} != 0) {
+        do_help(['cdiff']);
+    }
+
+    my $files   = exists $options_ref->{'files'}   ? 1 : 0;
+    my $modules = exists $options_ref->{'modules'} ? 1 : 0;
+
+    if ( $files && $modules ) {
+        print_error("Options --files and --modules are mutally exclusive", 0);
+        do_help(['cdiff']);
+    }
+
+    my $diff_option;
+    if ( $files ) {
+        $diff_option = 'files';
+    }
+    elsif ( $modules ) {
+        $diff_option = 'modules';
+    }
+    else {
+        $diff_option = 0;
+    }
+
+
+    my $masterws  = exists $options_ref->{'masterworkspace'} ? uc($options_ref->{'masterworkspace'}) : $ENV{WORK_STAMP};
+    my $childws   = exists $options_ref->{'childworkspace'} ? $options_ref->{'childworkspace'} : $ENV{CWS_WORK_STAMP};
+
+    if ( !defined($masterws) ) {
+        print_error("Can't determine master workspace environment.\n", 30);
+    }
+
+    if ( !defined($childws) ) {
+        print_error("Can't determine child workspace environment.\n", 30);
+    }
+
+    my $cws = Cws->new();
+    $cws->child($childws);
+    $cws->master($masterws);
+
+    if ( !is_valid_cws($cws) ) {
+        print_error("'$childws' is not a valid CWS name.\n", 30);
+    }
+
+    my $milestone = $cws->milestone();
+
+    my $config = CwsConfig->new();
+    my $ooo_svn_server = $config->get_ooo_svn_server();
+    my $so_svn_server = $config->get_so_svn_server();
+
+    my $ooo_milestone_url = get_milestone_url($ooo_svn_server, $masterws, $milestone);
+    my $ooo_cws_url = get_cws_url($ooo_svn_server, $childws);
+    my $ooo_files;
+    if ( $diff_option  ) {
+        $ooo_files = svn_diff($ooo_milestone_url, $ooo_cws_url, $diff_option);
+        diff_print_files($ooo_files, $diff_option);
+    }
+    else {
+        svn_diff($ooo_milestone_url, $ooo_cws_url, 0);
+    }
+
+    my $so_files;
+    if ( $so_svn_server ) {
+        my $so_milestone_url = get_milestone_url($so_svn_server, $masterws, $milestone);
+        my $so_cws_url = get_cws_url($so_svn_server, $childws);
+        if  ( svn_path_exists($so_cws_url) ) {
+            if ( $diff_option ) {
+                $so_files = svn_diff($so_milestone_url, $so_cws_url, $diff_option);
+                diff_print_files($so_files, $diff_option);
+            }
+            else {
+                svn_diff($so_milestone_url, $so_cws_url, 0);
+            }
+        }
+    }
+
+}
+
 sub do_eisclone
 {
     my $args_ref    = shift;
@@ -2020,9 +2200,44 @@ sub usage
 # pro:
 #       - SVN make guarantees about API stability but no about the command line
 #       - finer access to the SVN functionality, better error reporting
+#       - prevents parsing errors due to localized SVN messages
 # con:
 #       - the bindings are difficult to install, mostly due to subtle install bugs
 #       - we do not really use much of the SVN functionality here
+
+sub svn_version_check
+{
+    my $major_required = 1;
+    my $minor_required = 5;
+    my $patchlevel_required = 4;
+
+    my $version_required = $major_required*1000000 + $minor_required*1000 + $patchlevel_required;
+
+    if ( $debug ) {
+        print STDERR "\nCWS-DEBUG: ... svn version\n";
+    }
+
+    my @result = execute_svn_command(0, '--version --quiet', " ");
+    # svn --version --quiet returns the version in major.minor.patchlevel scheme
+    # for example: 1.5.4 or 1.6.0-dev (for developer codelines)
+    # hopefully they don't change the versioning scheme
+    my ($major, $minor, $patchlevel);
+    if ( $result[0] =~ /^(\d+)\.(\d+)\.(\d+)/ ) {
+        $major       = $1;
+        $minor       = $2;
+        $patchlevel  = $3;
+    }
+    else {
+        print_error("Can't determine svn version. Please file an issue with the output of 'svn --version --quiet'. CWS tooling requires svn-1.5.4 or later\n", 1)
+    }
+
+    my $version =  $major*1000000 + $minor*1000 + $patchlevel;
+
+    if ( $version < $version_required ) {
+        return 0;
+    }
+    return 1;
+}
 
 sub svn_copy
 {
@@ -2182,6 +2397,39 @@ sub svn_commit
     return @result;
 }
 
+sub svn_diff
+{
+    my $url1 = shift;
+    my $url2 = shift;
+    my $diff_option = shift;
+
+    my $summarize = '';
+    if ( $diff_option ) {
+        $summarize = '--summarize';
+    }
+
+    if ( $debug ) {
+        print STDERR "\nCWS-DEBUG: ... preparing diff $summarize: '$url1' vs. '$url2'\n";
+    }
+
+    if ( $summarize ) {
+        my $result = execute_svn_command(0, 'diff', $summarize, $url1, $url2);
+        my $nlen = length($url1);
+        my @files;
+        foreach( @{$result} ) {
+            my ($dummy, $url) = split();
+            next if length($url) <= $nlen;   # skip short URLs (like $url1)
+            my $file = substr($url, $nlen+1);
+            next if index($file, '/') == -1; # skip 'modified' top level dirs
+            push (@files, $file);
+        }
+        return \@files;
+    }
+    else {
+        execute_svn_command('print', 'diff', $url1, $url2);
+    }
+}
+
 sub execute_svn_command
 {
     my $log     = shift;
@@ -2190,6 +2438,9 @@ sub execute_svn_command
     my @args    = @_;
 
     my $args_str = join(" ", @args);
+
+    # we can only parse english strings, hopefully a C locale is available everywhere
+    $ENV{LC_ALL}='C';
     $command = "svn $command $options $args_str";
 
     if ( $debug ) {

@@ -61,9 +61,12 @@ sub exit_program
     $infoline = "***************************************************************\n";
     push(@packager::globals::logfileinfo, $infoline);
 
-    packager::files::save_file($packager::globals::logfilename ,\@packager::globals::logfileinfo);
+    if ( $packager::globals::logging )
+    {
+        packager::files::save_file($packager::globals::logfilename ,\@packager::globals::logfileinfo);
+        print("Saved logfile: $packager::globals::logfilename\n");
+    }
 
-    print("Saved logfile: $packager::globals::logfilename\n");
     print("$infoline");
 
     exit(-1);

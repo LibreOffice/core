@@ -61,9 +61,9 @@ for %LW in (e:\,d:\,c:\) DO (
     iff NOT ISDIR %tmppath% then
         iff ISDIR %LW  then
             iff ISDIR %LW%temp then
-                set temppath=%LW%temp
+                set tmppath=%LW%temp
             elseiff ISDIR %LW%tmp then
-                set temppath=%LW%tmp
+                set tmppath=%LW%tmp
             else
                 mkdir %LW%temp
                 set tmppath=%LW%temp
@@ -72,7 +72,7 @@ for %LW in (e:\,d:\,c:\) DO (
     endiff
 )
 
-SET CWSCHECKAPIPATH=%temppath%\%USERNAME%\cwscheckapi
+SET CWSCHECKAPIPATH=%tmppath%\%USERNAME%\cwscheckapi
 SET LOCALINSTALLDIR=%CWSCHECKAPIPATH%\office
 SET LOCALUNPACKDIR=%CWSCHECKAPIPATH%\unpack
 
@@ -130,10 +130,9 @@ ENDIFF
 
 SET KILLCOMMAND="%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.bin^%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%\kill.exe -9 soffice.exe"
 
-SET PARAM=%PARAM% -cmd '\"%OFFICEBIN%\"  -nofirststartwizard -norestore -nocrashreport -nolockcheck -accept=pipe,name=%USERNAME%;urp;'
+SET PARAM=%PARAM% -cmd '\"%OFFICEBIN%\"  -nofirststartwizard -norestore -nocrashreport -nolockcheck -enableautomation -accept=pipe,name=%USERNAME%;urp;'
 SET PARAM=%PARAM% -cs pipe,name=%USERNAME%
 SET PARAM=%PARAM% -NoOffice true
-SET PARAM=%PARAM% -OOO_EnvSet setsolar
 SET PARAM=%PARAM% -SRC_ROOT %SRC_ROOT%
 SET PARAM=%PARAM% -COMP_ENV %OUTPATH%
 SET PARAM=%PARAM% -Shell %COMSPEC%

@@ -65,11 +65,11 @@ fi
 if test "$GUI" = "WNT" -a ! -x "$SOLARENV/$OUTPATH/bin/guw$EXEEXT"; then
   echo ""
   echo "Calling $GNUMAKE in guw"
-  cd "$SRC_ROOT/config_office/guw" || exit
+  cd "$SRC_ROOT/guw" || exit
   $GNUMAKE || exit
   echo ""
   echo "guw has been successfully made"
-  cp -f "$SRC_ROOT/config_office/guw/guw$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
+  cp -f "$SRC_ROOT/guw/guw$EXEEXT" "$SOLARENV/$OUTPATH/bin" || exit
   echo ""
   echo "guw copied to $SOLARENV/$OUTPATH/bin/guw$EXEEXT"
 fi

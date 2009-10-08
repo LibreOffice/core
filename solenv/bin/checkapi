@@ -1,9 +1,21 @@
 #!/bin/sh
+PS=":"
+# cygwin:
+if [ "$GUI" = "WNT" ]; then
+    PS=";"
+fi
 
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
 SOLVER_LIB=$SOLARVERSION/$INPATH/lib$UPDMINOREXT
-myCLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
-myCLASSPATH=$myCLASSPATH:$SOLVER_LIB:/net/unoapi/export/unoapi/bin/mysql.jar
+
+if [ -n "$RUNNERJAR" ]; then
+    myCLASSPATH=$RUNNERJAR
+else 
+    myCLASSPATH=$JARFOLDER/OOoRunner.jar
+fi
+
+myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/ridl.jar${PS}${JARFOLDER}/unoil.jar${PS}${JARFOLDER}/jurt.jar${PS}${JARFOLDER}/juh.jar${PS}${JARFOLDER}/java_uno.jar
+myCLASSPATH=$myCLASSPATH${PS}/net/unoapi/export/unoapi/bin/mysql.jar${PS}$SOLVER_LIB
 
 if [ -n "$JAVAI" ]; then
 	JAVABIN=$JAVAI
@@ -31,9 +43,15 @@ fi
 PARAM="-cs pipe,name=$USER -SRC_ROOT $SRC_ROOT"
 
 if [ -n "$RUNNERPROPS" ]; then
-    PARAM="$PARAM -ini $RUNNERPROPS"
+    PARAM="$PARAM -runnerini $RUNNERPROPS"
 fi
 
-COMMAND="$JAVABIN -Xmx120m -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
+MYXDEBUG=""
+if [ -n "$XDEBUG" ]; then
+    # export XDEBUG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001" 
+    MYXDEBUG=$XDEBUG
+fi
+
+COMMAND="$JAVABIN -Xmx120m $MYXDEBUG -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
 echo $COMMAND
 $COMMAND

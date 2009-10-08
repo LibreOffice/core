@@ -161,22 +161,45 @@ if [ $INSTALL = true ]; then
 	echo "`date` installation successfull, start testing...." 
 fi
 
-if [ $DEBUG_T = true ]; then
-    echo find $LOCALINSTALLDIR -name soffice
+SOFFICE="soffice"
+PS=":"
+CYGWIN=""
+
+SHELL="/bin/bash"
+# cygwin:
+if [ "$GUI" = "WNT" ]; then
+    SOFFICE="soffice.exe"
+    PS=";"
+    CYGWIN="-Cygwin true"
+    SHELL=`which bash`
+    SHELL=`cygpath -w $SHELL`
+    if [ ! -f $SHELL ]; then
+        echo "could not determine bash shell" 
+        exit 1
+    fi
 fi
 
-OFFICEBIN=`find $LOCALINSTALLDIR -name soffice`
+if [ $DEBUG_T = true ]; then
+    echo find $LOCALINSTALLDIR -name $SOFFICE
+fi
+
+OFFICEBIN=`find $LOCALINSTALLDIR -name $SOFFICE`
 
 if [ ! -f "$OFFICEBIN" ]; then
-    echo "could not find 'soffice' in subfolders of $LOCALINSTALLDIR";
+    echo "could not find 'soffice' in subfolders of $LOCALINSTALLDIR"
     exit 1
+fi
+
+if [ "$GUI" = "WNT" ]; then
+    # transform /tmp/... -> c:\tmp\...
+    OFFICEBIN=`cygpath -w $OFFICEBIN`
 fi
 
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
 SOLVER_LIB=$SOLARVERSION/$INPATH/lib$UPDMINOREXT
-myCLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
-myCLASSPATH=$myCLASSPATH:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
-myCLASSPATH=$myCLASSPATH:/net/unoapi/export/unoapi/bin/mysql.jar:$SOLVER_LIB
+myCLASSPATH=${PS}${JARFOLDER}/ridl.jar${PS}${JARFOLDER}/unoil.jar${PS}${JARFOLDER}/jurt.jar${PS}${JARFOLDER}/juh.jar${PS}${JARFOLDER}/java_uno.jar
+myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/OOoRunner.jar
+myCLASSPATH=$myCLASSPATH${PS}/net/unoapi/export/unoapi/bin/mysql.jar${PS}$SOLVER_LIB
 PARAM=""
 if [ -n "$JAVAI" ]; then
         JAVABIN=$JAVAI
@@ -202,13 +225,13 @@ if [ -n "$WORK_STAMP" ]; then
 	fi
 fi
 
-PARAM="$PARAM -cmd '$OFFICEBIN  -nofirststartwizard -norestore -nocrashreport -nolockcheck -accept=pipe,name=$USER;urp;'"
+PARAM="$PARAM -cmd '$OFFICEBIN -nofirststartwizard -accept=pipe,name=$USER;urp; -norestore -nocrashreport -nolockcheck -enableautomation'"
 PARAM="$PARAM -cs pipe,name=$USER"
 PARAM="$PARAM -NoOffice true"
-PARAM="$PARAM -OOO_EnvSet setsolar"
 PARAM="$PARAM -SRC_ROOT $SRC_ROOT"
 PARAM="$PARAM -COMP_ENV $OUTPATH"
-PARAM="$PARAM -Shell /bin/tcsh"
+PARAM="$PARAM -Shell $SHELL"
+PARAM="$PARAM $CYGWIN"
 PARAM="$PARAM -tb java_complex"
 PARAM="$PARAM -TimeOut 90000"
 PARAM="$PARAM -o complex.unoapi.CheckModuleAPI::module($MODULES)"

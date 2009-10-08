@@ -655,6 +655,7 @@ EGREP
 AWK
 SED
 LOCAL_SOLENV
+_solenv
 UPD
 SOURCEVERSION
 build
@@ -919,6 +920,7 @@ ENABLE_SYSTRAY_GTK
 CAIRO_CFLAGS
 CAIRO_LIBS
 ENABLE_CAIRO
+BUILD_PIXMAN
 SYSTEM_CAIRO
 ENABLE_OPENGL
 ENABLE_MINIMIZER
@@ -935,7 +937,7 @@ COMMONS_HTTPCLIENT_JAR
 COMMONS_LOGGING_JAR
 SYSTEM_SERVLETAPI
 SERVLETAPI_JAR
-ENABLE_REPORTDESIGN
+ENABLE_REPORTBUILDER
 SYSTEM_JFREEREPORT
 JCOMMON_JAR
 SAC_JAR
@@ -1664,7 +1666,7 @@ Optional Features:
 
   --disable-systray       Determines whether to build the systray quickstarter.
 
-  --enable-cairo          Determines whether to use Cairo canvas backend on
+  --enable-cairo          Determines whether to use Cairo library on
                           platforms where Cairo is available.
 
   --enable-opengl         Determines whether to use OpenGL (for 3D transitions)
@@ -1717,17 +1719,15 @@ Optional Features:
 
   --enable-minimizer          enables the build of the Presentation Minimizer extension
 
-  --enable-presenter-screen          enables the build of the Presenter Screen extension
+  --enable-presenter-console          enables the build of the Presenter Console extension
 
-  --disable-pdfimport         disables the build of the PDF Import extension and xpdf
+  --enable-pdfimport          enables the build of the PDF Import extension and xpdf
 
-  --disable-mediawiki     disables the build of the MediaWiki Editor extension
+  --enable-wiki-publisher      enables the build of the Wiki Publisher extension
 
   --enable-ogltrans       enables the build of the OGLTrans extension
 
-  --disable-reportdesign  disables the build of the Report Builder extension
-
-  --disable-minimizer          disables the build of the Presentation Minimizer extension
+  --enable-report-builder  disables the build of the Report Builder extension
 
   --disable-neon          Disable neon and the compilation of webdav binding
 
@@ -1801,6 +1801,11 @@ Optional Packages:
                           distributions where AFM files or TrueType Fonts
                           are known to be available.
 
+  --with-epm		  Decides which epm to use. Default is to use
+			  the one from the system if one is built. When
+			  either this is not there or you say =internal
+			  epm will be built.
+
   --with-package-format   specify package format(s) for OOo installsets.
                           Default is "normal" one of the OS/Distribution.
 
@@ -1810,7 +1815,7 @@ Optional Packages:
 
   --with-system-mspack    use libmspack already installed on system
 
-  --with-system-cairo      Use cairo libraries already on system
+  --with-system-cairo      Use Cairo libraries already on system
 
   --with-mozilla-version  Choose which version of mozilla to use while building
                           mozilla. Default: 1.7.5.
@@ -1896,6 +1901,7 @@ Optional Packages:
   --with-flute-jar=JARFILE   Specify path to jarfile manually
   --with-jfreereport-jar=JARFILE   Specify path to jarfile manually
   --with-liblayout-jar=JARFILE   Specify path to jarfile manually
+  --with-libloader-jar=JARFILE   Specify path to jarfile manually
   --with-libformula-jar=JARFILE   Specify path to jarfile manually
   --with-librepository-jar=JARFILE   Specify path to jarfile manually
   --with-libfonts-jar=JARFILE   Specify path to jarfile manually
@@ -2030,12 +2036,12 @@ Optional Packages:
 
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
 
-  --with-local-solenv     If you have solenv in a location other than ../solenv,
+  --with-local-solenv     If you have solenv in a location other than ./solenv,
                           please supply the path here.
 
                           Usage: --with-local-solenv=<absolute path to solenv>
 
-  --with-local-solver     if you have solver in a location other than ../solver,
+  --with-local-solver     if you have solver in a location other than ./solver,
                           please supply the path here.
 
                           Usage: --with-local-solver=<absolute path to solver>
@@ -2592,7 +2598,7 @@ fi
 if test "${with_gpc+set}" = set; then
   withval=$with_gpc;
 else
-  if test ! -e ../external/gpc/gpc.c && test ! -e ../external/gpc/gpc.h; then without_gpc=yes; fi
+  if test ! -e ./external/gpc/gpc.c && test ! -e ./external/gpc/gpc.h; then without_gpc=yes; fi
 fi
 
 # Check whether --enable-ldap was given.
@@ -2657,6 +2663,12 @@ if test "${enable_epm+set}" = set; then
   enableval=$enable_epm;
 else
   enable_epm="yes"
+fi
+
+
+# Check whether --with-epm was given.
+if test "${with_epm+set}" = set; then
+  withval=$with_epm;
 fi
 
 
@@ -2887,7 +2899,7 @@ fi
 if test "${enable_binfilter+set}" = set; then
   enableval=$enable_binfilter;
 else
-  if ! test -d ../binfilter; then enable_binfilter=no; fi
+  if ! test -d ./binfilter; then enable_binfilter=no; fi
 fi
 
 # Check whether --enable-rpath was given.
@@ -3096,9 +3108,9 @@ if test "${enable_minimizer+set}" = set; then
   enableval=$enable_minimizer;
 fi
 
-# Check whether --enable-presenter-screen was given.
-if test "${enable_presenter_screen+set}" = set; then
-  enableval=$enable_presenter_screen;
+# Check whether --enable-presenter-console was given.
+if test "${enable_presenter_console+set}" = set; then
+  enableval=$enable_presenter_console;
 fi
 
 # Check whether --enable-pdfimport was given.
@@ -3106,9 +3118,9 @@ if test "${enable_pdfimport+set}" = set; then
   enableval=$enable_pdfimport;
 fi
 
-# Check whether --enable-mediawiki was given.
-if test "${enable_mediawiki+set}" = set; then
-  enableval=$enable_mediawiki;
+# Check whether --enable-wiki-publisher was given.
+if test "${enable_wiki_publisher+set}" = set; then
+  enableval=$enable_wiki_publisher;
 fi
 
 
@@ -3151,16 +3163,9 @@ if test "${enable_ogltrans+set}" = set; then
   enableval=$enable_ogltrans;
 fi
 
-# Check whether --enable-reportdesign was given.
-if test "${enable_reportdesign+set}" = set; then
-  enableval=$enable_reportdesign;
-fi
-
-# Check whether --enable-minimizer was given.
-if test "${enable_minimizer+set}" = set; then
-  enableval=$enable_minimizer;
-else
-  enable_minimizer=yes
+# Check whether --enable-report-builder was given.
+if test "${enable_report_builder+set}" = set; then
+  enableval=$enable_report_builder;
 fi
 
 
@@ -3212,6 +3217,20 @@ if test "${with_liblayout_jar+set}" = set; then
 fi
 
 
+# Check whether --with-libloader-jar was given.
+if test "${with_libloader_jar+set}" = set; then
+  withval=$with_libloader_jar;  LIBLOADER_JAR="$withval"
+
+fi
+
+
+# Check whether --with-libloader-jar was given.
+if test "${with_libloader_jar+set}" = set; then
+  withval=$with_libloader_jar;  LIBLOADER_JAR="$withval"
+
+fi
+
+
 # Check whether --with-libformula-jar was given.
 if test "${with_libformula_jar+set}" = set; then
   withval=$with_libformula_jar;  LIBFORMULA_JAR="$withval"
@@ -3226,9 +3245,9 @@ if test "${with_librepository_jar+set}" = set; then
 fi
 
 
-# Check whether --with-libfonts-java-jar was given.
-if test "${with_libfonts_java_jar+set}" = set; then
-  withval=$with_libfonts_java_jar;  LIBFONTS_JAR="$withval"
+# Check whether --with-libfonts-jar was given.
+if test "${with_libfonts_jar+set}" = set; then
+  withval=$with_libfonts_jar;  LIBFONTS_JAR="$withval"
 
 fi
 
@@ -3903,16 +3922,17 @@ fi
 
 
 if test "$LOCAL_SOLENV" = "DEFAULT"; then
-  _solenv="../solenv"
+  _solenv="./solenv"
 else
   _solenv="$LOCAL_SOLENV"
 fi
 
-if test -e $_solenv/inc/minor.mk; then
-   # Get UPD number from ../solenv/inc/minor.mk
-   UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
 
-   SOURCEVERSION="`grep SOURCEVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+if test -e $_solenv/inc/minor.mk; then
+   # Get UPD number from ./solenv/inc/minor.mk
+   UPD="`grep RSCVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+
+   SOURCEVERSION="`grep SOURCEVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
 
 else
    { { echo "$as_me:$LINENO: error: $_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation..." >&5
@@ -3921,7 +3941,7 @@ echo "$as_me: error: $_solenv/inc/minor.mk missing but needed for architecture/o
 fi
 
 ac_aux_dir=
-for ac_dir in $_solenv/bin; do
+for ac_dir in "$srcdir" "$srcdir/.." "$srcdir/../.."; do
   if test -f "$ac_dir/install-sh"; then
     ac_aux_dir=$ac_dir
     ac_install_sh="$ac_aux_dir/install-sh -c"
@@ -3937,8 +3957,8 @@ for ac_dir in $_solenv/bin; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $_solenv/bin" >&5
-echo "$as_me: error: cannot find install-sh or install.sh in $_solenv/bin" >&2;}
+  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in \"$srcdir\" \"$srcdir/..\" \"$srcdir/../..\"" >&5
+echo "$as_me: error: cannot find install-sh or install.sh in \"$srcdir\" \"$srcdir/..\" \"$srcdir/../..\"" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -4102,7 +4122,7 @@ fi
 case "$build_os" in
 	solaris*)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -4134,7 +4154,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		;;
 	linux-gnu*)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -4150,14 +4170,14 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		;;
 	cygwin*) # Windows
 		test_cups=no
-		build_cairo=yes
+		test_cairo=yes
 		test_freetype=no
 		_os=WINNT
 		;;
 	darwin*) # Mac OS X
 		test_cups=yes
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
         test_randr=no
 		test_freetype=no
 		_os=Darwin
@@ -4178,7 +4198,7 @@ echo "$as_me: WARNING: Disabling gtk-quickstarter - not supported on Mac. Use --
 		;;
 	freebsd*)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -4215,7 +4235,7 @@ echo "${ECHO_T}$PTHREAD_LIBS" >&6; }
 		;;
 	netbsd)
 		test_gtk=yes
-		build_cairo=yes
+		test_cairo=yes
 		test_kde=yes
 		test_cups=no
         test_randr=yes
@@ -4555,7 +4575,14 @@ fi
 { echo "$as_me:$LINENO: checking which shell to use" >&5
 echo $ECHO_N "checking which shell to use... $ECHO_C" >&6; }
 if test $_os = "WINNT"; then
-   if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
+            if test -x "/usr/bin/expand.exe" ; then
+         { { echo "$as_me:$LINENO: error: cygwin has expand.exe!
+The expand.exe in cygwin could cause build error. Please remove or rename it." >&5
+echo "$as_me: error: cygwin has expand.exe!
+The expand.exe in cygwin could cause build error. Please remove or rename it." >&2;}
+   { (exit 1); exit 1; }; }
+      fi
+      if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
       { { echo "$as_me:$LINENO: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&5
 echo "$as_me: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&2;}
    { (exit 1); exit 1; }; }
@@ -5782,34 +5809,33 @@ for a in "$MAKE" $GNUMAKE make gmake gnumake; do
 done
 { echo "$as_me:$LINENO: result: $GNUMAKE" >&5
 echo "${ECHO_T}$GNUMAKE" >&6; }
+if test -z "$GNUMAKE"; then
+    { { echo "$as_me:$LINENO: error: not found. install GNU make." >&5
+echo "$as_me: error: not found. install GNU make." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 { echo "$as_me:$LINENO: checking the GNU make version" >&5
 echo $ECHO_N "checking the GNU make version... $ECHO_C" >&6; }
-if test -z "$GNUMAKE"; then
-    { echo "$as_me:$LINENO: WARNING: not found build may fail" >&5
-echo "$as_me: WARNING: not found build may fail" >&2;}
-    echo "GNU make not found build may fail" >> warn
+_make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[^0-9]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+_make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+if test "$_make_longver" -ge "037901" ; then
+   { echo "$as_me:$LINENO: result: $GNUMAKE $_make_version" >&5
+echo "${ECHO_T}$GNUMAKE $_make_version" >&6; }
 else
-    _make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[^0-9]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
-    _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-    if test "$_make_longver" -ge "037901" ; then
-       { echo "$as_me:$LINENO: result: $GNUMAKE $_make_version" >&5
+   if test "$_os" = "Darwin"; then
+       if test "$_make_longver" -ge "037900" ; then
+		   { echo "$as_me:$LINENO: result: $GNUMAKE $_make_version" >&5
 echo "${ECHO_T}$GNUMAKE $_make_version" >&6; }
-    else
-       if test "$_os" = "Darwin"; then
-           if test "$_make_longver" -ge "037900" ; then
-			   { echo "$as_me:$LINENO: result: $GNUMAKE $_make_version" >&5
-echo "${ECHO_T}$GNUMAKE $_make_version" >&6; }
-           else
-               { echo "$as_me:$LINENO: WARNING: failed ($GNUMAKE $_make_version need 3.79.0+)" >&5
-echo "$as_me: WARNING: failed ($GNUMAKE $_make_version need 3.79.0+)" >&2;}
-           fi
        else
-           { { echo "$as_me:$LINENO: error: failed ($GNUMAKE $_make_version need 3.79.1+)" >&5
+           { echo "$as_me:$LINENO: WARNING: failed ($GNUMAKE $_make_version need 3.79.0+)" >&5
+echo "$as_me: WARNING: failed ($GNUMAKE $_make_version need 3.79.0+)" >&2;}
+       fi
+   else
+       { { echo "$as_me:$LINENO: error: failed ($GNUMAKE $_make_version need 3.79.1+)" >&5
 echo "$as_me: error: failed ($GNUMAKE $_make_version need 3.79.1+)" >&2;}
    { (exit 1); exit 1; }; }
-       fi
-    fi
+   fi
 fi
 
 
@@ -10337,25 +10363,31 @@ else
 
    { echo "$as_me:$LINENO: checking what the default STL should be" >&5
 echo $ECHO_N "checking what the default STL should be... $ECHO_C" >&6; }
-   DEFAULT_TO_STLPORT="yes"
+   DEFAULT_TO_STLPORT="no"
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
-       i?86|powerpc|sparc)
+       i?86)
          DEFAULT_TO_STLPORT="yes"
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
          ;;
      esac
-   elif test "$_os" = "Darwin"; then
-      DEFAULT_TO_STLPORT="no"
+   elif test "$_os" = "SunOS"; then
+      DEFAULT_TO_STLPORT="yes"
+   elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+      DEFAULT_TO_STLPORT="yes"
+   elif test "$_os" = "OS2"; then
+      DEFAULT_TO_STLPORT="yes"
+   elif test "$_os" = "FreeBSD"; then
+      DEFAULT_TO_STLPORT="yes"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       { echo "$as_me:$LINENO: result: stlport" >&5
 echo "${ECHO_T}stlport" >&6; }
    else
-      { echo "$as_me:$LINENO: result: gcc" >&5
-echo "${ECHO_T}gcc" >&6; }
+      { echo "$as_me:$LINENO: result: system" >&5
+echo "${ECHO_T}system" >&6; }
    fi
    if test "$WITH_STLPORT" = "auto"; then
       WITH_STLPORT=$DEFAULT_TO_STLPORT
@@ -10743,12 +10775,13 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\\$stub' visibility.s; then
+         if $EGREP -q '@PLT|\$stub' visibility.s; then
              gccvisbroken=no;
          else
              gccvisbroken=yes;
          fi
       fi
+      rm -f visibility.s
 
       { echo "$as_me:$LINENO: result: $gccvisbroken" >&5
 echo "${ECHO_T}$gccvisbroken" >&6; }
@@ -11135,27 +11168,29 @@ echo "$as_me: error: No valid check available. Please check the block for your d
 #        JAVA_HOME=$with_jdk_home
 #
       elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "IBM"` -gt 0; then
-         { { echo "$as_me:$LINENO: error: No valid check available. Please check the block for your desired java in configure.in" >&5
-echo "$as_me: error: No valid check available. Please check the block for your desired java in configure.in" >&2;}
+        JDK=ibm
+
+                _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[-A-Za-z]*//`
+        _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
+
+        if test "$_jdk_ver" -lt 10600; then
+             { { echo "$as_me:$LINENO: error: IBM JDK is too old, you need at least 1.6" >&5
+echo "$as_me: error: IBM JDK is too old, you need at least 1.6" >&2;}
    { (exit 1); exit 1; }; }
-#        JDK=ibm
-#
-#        dnl IBM JDK specific tests
-#        _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
-#        _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
-#
-#        if test "$_jdk_ver" -lt 10301; then
-#             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.3.1])
-#        fi
-#
-#        AC_MSG_RESULT([checked (IBM JDK $_jdk)])
-#
-#        if test "$with_jdk_home" = ""; then
-#             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,
-#you must use the "--with-jdk-home" configure option explicitly])
-#        fi
-#
-#        JAVA_HOME=$with_jdk_home
+        fi
+
+        { echo "$as_me:$LINENO: result: checked (IBM JDK $_jdk)" >&5
+echo "${ECHO_T}checked (IBM JDK $_jdk)" >&6; }
+
+        if test "$with_jdk_home" = ""; then
+             { { echo "$as_me:$LINENO: error: In order to successfully build OpenOffice.org using the IBM JDK,
+you must use the \"--with-jdk-home\" configure option explicitly" >&5
+echo "$as_me: error: In order to successfully build OpenOffice.org using the IBM JDK,
+you must use the \"--with-jdk-home\" configure option explicitly" >&2;}
+   { (exit 1); exit 1; }; }
+        fi
+
+        JAVA_HOME=$with_jdk_home
 
       else
         JDK=sun
@@ -12619,7 +12654,7 @@ echo "${ECHO_T}yes" >&6; }
    if test "$WITH_JAVA" != "no"; then
    { echo "$as_me:$LINENO: checking for external/unowinreg/unowinreg.dll" >&5
 echo $ECHO_N "checking for external/unowinreg/unowinreg.dll... $ECHO_C" >&6; }
-   if ! test -f "../external/unowinreg/unowinreg.dll"; then
+   if ! test -f "./external/unowinreg/unowinreg.dll"; then
       HAVE_UNOWINREG_DLL=no
    else
       HAVE_UNOWINREG_DLL=yes
@@ -15193,9 +15228,59 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
 echo "${ECHO_T}external" >&6; }
         SYSTEM_LUCENE=YES
         if test -z $LUCENE_CORE_JAR; then
-               LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar
-        fi
-        as_ac_File=`echo "ac_cv_file_$LUCENE_CORE_JAR" | $as_tr_sh`
+          { echo "$as_me:$LINENO: checking for /usr/share/java/lucene-core-2.3.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/lucene-core-2.3.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_lucene_core_2_3_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/lucene-core-2.3.jar"; then
+  ac_cv_file__usr_share_java_lucene_core_2_3_jar=yes
+else
+  ac_cv_file__usr_share_java_lucene_core_2_3_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_lucene_core_2_3_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_core_2_3_jar" >&6; }
+if test $ac_cv_file__usr_share_java_lucene_core_2_3_jar = yes; then
+   LUCENE_CORE_JAR=/usr/share/java/lucene-core-2.3.jar
+else
+
+              { echo "$as_me:$LINENO: checking for /usr/share/java/lucene.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/lucene.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_lucene_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/lucene.jar"; then
+  ac_cv_file__usr_share_java_lucene_jar=yes
+else
+  ac_cv_file__usr_share_java_lucene_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_lucene_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_jar" >&6; }
+if test $ac_cv_file__usr_share_java_lucene_jar = yes; then
+   LUCENE_CORE_JAR=/usr/share/java/lucene.jar
+else
+   { { echo "$as_me:$LINENO: error: lucene-core.jar replacement not found" >&5
+echo "$as_me: error: lucene-core.jar replacement not found" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+        else
+          as_ac_File=`echo "ac_cv_file_$LUCENE_CORE_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $LUCENE_CORE_JAR" >&5
 echo $ECHO_N "checking for $LUCENE_CORE_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -15222,12 +15307,64 @@ echo "$as_me: error: lucene-core.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $LUCENE_ANALYZERS_JAR; then
-               LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers-2.3.jar
         fi
-        as_ac_File=`echo "ac_cv_file_$LUCENE_ANALYZERS_JAR" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $LUCENE_ANALYZERS_JAR" >&5
-echo $ECHO_N "checking for $LUCENE_ANALYZERS_JAR... $ECHO_C" >&6; }
+
+        if test -z $LUCENE_ANALYZERS_JAR; then
+          { echo "$as_me:$LINENO: checking for /usr/share/java/lucene-analyzers-2.3.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/lucene-analyzers-2.3.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_lucene_analyzers_2_3_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/lucene-analyzers-2.3.jar"; then
+  ac_cv_file__usr_share_java_lucene_analyzers_2_3_jar=yes
+else
+  ac_cv_file__usr_share_java_lucene_analyzers_2_3_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_lucene_analyzers_2_3_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_analyzers_2_3_jar" >&6; }
+if test $ac_cv_file__usr_share_java_lucene_analyzers_2_3_jar = yes; then
+   LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-analyzers-2.3.jar
+else
+
+              { echo "$as_me:$LINENO: checking for /usr/share/java/lucene-contrib/lucene-analyzers.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/lucene-contrib/lucene-analyzers.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_lucene_contrib_lucene_analyzers_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/lucene-contrib/lucene-analyzers.jar"; then
+  ac_cv_file__usr_share_java_lucene_contrib_lucene_analyzers_jar=yes
+else
+  ac_cv_file__usr_share_java_lucene_contrib_lucene_analyzers_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_lucene_contrib_lucene_analyzers_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_contrib_lucene_analyzers_jar" >&6; }
+if test $ac_cv_file__usr_share_java_lucene_contrib_lucene_analyzers_jar = yes; then
+   LUCENE_ANALYZERS_JAR=/usr/share/java/lucene-contrib/lucene-analyzers.jar
+else
+   { { echo "$as_me:$LINENO: error: lucene-analyzers.jar replacement not found." >&5
+echo "$as_me: error: lucene-analyzers.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+        else
+          as_ac_File=`echo "ac_cv_file_$LUCENE_CORE_JAR" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $LUCENE_CORE_JAR" >&5
+echo $ECHO_N "checking for $LUCENE_CORE_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -15235,7 +15372,7 @@ else
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "$LUCENE_ANALYZERS_JAR"; then
+if test -r "$LUCENE_CORE_JAR"; then
   eval "$as_ac_File=yes"
 else
   eval "$as_ac_File=no"
@@ -15247,11 +15384,12 @@ echo "${ECHO_T}$ac_res" >&6; }
 if test `eval echo '${'$as_ac_File'}'` = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: lucene-analyzers.jar not found." >&5
+   { { echo "$as_me:$LINENO: error: lucene-analyzers.jar not found." >&5
 echo "$as_me: error: lucene-analyzers.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
+        fi
 else
     { echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6; }
@@ -17389,13 +17527,11 @@ else
    { echo "$as_me:$LINENO: result: $MOZILLA_TOOLKIT" >&5
 echo "${ECHO_T}$MOZILLA_TOOLKIT" >&6; }
 fi
-if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
-   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
-   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
-   { { echo "$as_me:$LINENO: error: Only gtk2 toolkit supported on Mac, sorry." >&5
-echo "$as_me: error: Only gtk2 toolkit supported on Mac, sorry." >&2;}
-   { (exit 1); exit 1; }; }
-fi
+#if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
+#   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
+#   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
+#   AC_MSG_ERROR([Only gtk2 toolkit supported on Mac, sorry.])
+#fi
 
 
 
@@ -17430,7 +17566,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    for e in gz bz2; do
       { echo "$as_me:$LINENO: checking for $MOZILLA_SOURCE_VERSION.tar.$e" >&5
 echo $ECHO_N "checking for $MOZILLA_SOURCE_VERSION.tar.$e... $ECHO_C" >&6; }
-      if test ! -e "../moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+      if test ! -e "./moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
          { echo "$as_me:$LINENO: result: not found" >&5
 echo "${ECHO_T}not found" >&6; }
          HAVE_MOZILLA_TARBALL=n
@@ -17454,9 +17590,9 @@ http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/
    if test "$_os" = "WINNT"; then
       { echo "$as_me:$LINENO: checking for glib and libIDL binaries" >&5
 echo $ECHO_N "checking for glib and libIDL binaries... $ECHO_C" >&6; }
-      if test ! -e "../moz/download/vc71-glib-1.2.10-bin.zip" \
-           -o ! -e "../moz/download/vc71-libIDL-0.6.8-bin.zip" \
-           -o ! -e "../moz/download/wintools.zip" ; then
+      if test ! -e "./moz/download/vc71-glib-1.2.10-bin.zip" \
+           -o ! -e "./moz/download/vc71-libIDL-0.6.8-bin.zip" \
+           -o ! -e "./moz/download/wintools.zip" ; then
 { { echo "$as_me:$LINENO: error: One or more of the following archives is missing in moz/download/
   vc71-glib-1.2.10-bin.zip
   vc71-libIDL-0.6.8-bin.zip
@@ -17475,8 +17611,8 @@ echo "$as_me: error: One or more of the following archives is missing in moz/dow
 echo "${ECHO_T}ok" >&6; }
       fi
    elif test "$_os" = "Darwin"; then
-      # only gtk2 supported - see above
-      { echo "$as_me:$LINENO: checking whether mozilla can be built..." >&5
+      if test "$MOZILLA_TOOLKIT" = "gtk2"; then
+         { echo "$as_me:$LINENO: checking whether mozilla can be built..." >&5
 echo "$as_me: checking whether mozilla can be built..." >&6;}
 
   succeeded=no
@@ -17578,6 +17714,110 @@ echo "$as_me: error: Prerequisites to build mozilla not met. Either use the prec
    { (exit 1); exit 1; }; }
   fi
 
+      else
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        { echo "$as_me:$LINENO: checking for libIDL >= 0.6.3 libIDL <= 0.6.8" >&5
+echo $ECHO_N "checking for libIDL >= 0.6.3 libIDL <= 0.6.8... $ECHO_C" >&6; }
+
+        if $PKG_CONFIG --exists "libIDL >= 0.6.3 libIDL <= 0.6.8" ; then
+            { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+            succeeded=yes
+
+            { echo "$as_me:$LINENO: checking MOZLIBREQ_CFLAGS" >&5
+echo $ECHO_N "checking MOZLIBREQ_CFLAGS... $ECHO_C" >&6; }
+            MOZLIBREQ_CFLAGS=`$PKG_CONFIG --cflags "libIDL >= 0.6.3 libIDL <= 0.6.8"`
+            { echo "$as_me:$LINENO: result: $MOZLIBREQ_CFLAGS" >&5
+echo "${ECHO_T}$MOZLIBREQ_CFLAGS" >&6; }
+
+            { echo "$as_me:$LINENO: checking MOZLIBREQ_LIBS" >&5
+echo $ECHO_N "checking MOZLIBREQ_LIBS... $ECHO_C" >&6; }
+            MOZLIBREQ_LIBS=`$PKG_CONFIG --libs "libIDL >= 0.6.3 libIDL <= 0.6.8"`
+            { echo "$as_me:$LINENO: result: $MOZLIBREQ_LIBS" >&5
+echo "${ECHO_T}$MOZLIBREQ_LIBS" >&6; }
+        else
+            MOZLIBREQ_CFLAGS=""
+            MOZLIBREQ_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            MOZLIBREQ_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libIDL >= 0.6.3 libIDL <= 0.6.8"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     MOZIDL="TRUE"
+  else
+     MOZIDL=""
+  fi
+
+         if test -z "$MOZIDL"; then
+            { { echo "$as_me:$LINENO: error: libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla." >&5
+echo "$as_me: error: libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla." >&2;}
+   { (exit 1); exit 1; }; }
+         fi
+      fi
    else
       # Generic Unix/Linux section
       if test "$MOZILLA_TOOLKIT" = "gtk2"; then
@@ -18434,6 +18674,10 @@ echo $ECHO_N "checking for /System/Library/Frameworks/AppKit.framework... $ECHO_
 echo "${ECHO_T}yes" >&6; }
       x_includes="no_x_includes"
       x_libraries="no_x_libraries"
+            enable_gtk=no
+      enable_cups=no
+      ENABLE_CUPS=""
+
    else
       { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
@@ -19978,6 +20222,75 @@ fi
 
 done
 
+
+{ echo "$as_me:$LINENO: checking for main in -lXaw" >&5
+echo $ECHO_N "checking for main in -lXaw... $ECHO_C" >&6; }
+if test "${ac_cv_lib_Xaw_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lXaw  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_Xaw_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_Xaw_main=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_Xaw_main" >&5
+echo "${ECHO_T}$ac_cv_lib_Xaw_main" >&6; }
+if test $ac_cv_lib_Xaw_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBXAW 1
+_ACEOF
+
+  LIBS="-lXaw $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: Xaw library not found or functional" >&5
+echo "$as_me: error: Xaw library not found or functional" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
    fi
 
    if test "x$x_includes" = "x"; then
@@ -20149,7 +20462,10 @@ else
 fi
 
 if test "$x_libraries" = "default_x_libraries"; then
-   XLIB="/usr/lib"
+   XLIB=`$PKG_CONFIG --variable=libdir x11`
+   if test "x$XLIB" = x; then
+         XLIB="/usr/lib"
+   fi
 else
    XLIB="$x_libraries"
 fi
@@ -23421,7 +23737,7 @@ if test -z "$CYGWIN_PATH"; then
 fi
 
 
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
   { echo "$as_me:$LINENO: checking ml.exe assembler path" >&5
 echo $ECHO_N "checking ml.exe assembler path... $ECHO_C" >&6; }
   if test -n "$with_asm_home"; then
@@ -23613,7 +23929,7 @@ fi
 if test "$_os" = "WINNT"; then
    { echo "$as_me:$LINENO: checking for unicows.dll" >&5
 echo $ECHO_N "checking for unicows.dll... $ECHO_C" >&6; }
-   if test -x ../external/unicows/unicows.dll; then
+   if test -x ./external/unicows/unicows.dll; then
       { echo "$as_me:$LINENO: result: found" >&5
 echo "${ECHO_T}found" >&6; }
    else
@@ -23634,7 +23950,7 @@ fi
 if test "$_os" = "WINNT"; then
    { echo "$as_me:$LINENO: checking for dbghelp.dll" >&5
 echo $ECHO_N "checking for dbghelp.dll... $ECHO_C" >&6; }
-   if test -x ../external/dbghelp/dbghelp.dll; then
+   if test -x ./external/dbghelp/dbghelp.dll; then
       { echo "$as_me:$LINENO: result: found" >&5
 echo "${ECHO_T}found" >&6; }
    else
@@ -23653,7 +23969,7 @@ may have to search Microsoft's website.) Last time it was seen at:
 fi
 
 if test "$_os" = "WINNT"; then
-       if ./oowintool --msvc-copy-dlls ../external/msvcp ; then
+       if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
           :
        else
           { { echo "$as_me:$LINENO: error: oowintool failed to copy CRT" >&5
@@ -23665,7 +23981,7 @@ fi
 if test "$_os" = "WINNT"; then
    { echo "$as_me:$LINENO: checking for gdiplus.dll" >&5
 echo $ECHO_N "checking for gdiplus.dll... $ECHO_C" >&6; }
-   if test -x ../external/gdiplus/gdiplus.dll; then
+   if test -x ./external/gdiplus/gdiplus.dll; then
       { echo "$as_me:$LINENO: result: found" >&5
 echo "${ECHO_T}found" >&6; }
    else
@@ -23682,22 +23998,22 @@ You may have to search Microsoft's website. Last time it was seen at:
 fi
 
 if test "$_os" = "WINNT"; then
-       ./oowintool --msvc-copy-instmsi ../external/msi
+       ./oowintool --msvc-copy-instmsi ./external/msi
 fi
 
 if test "$_os" = "WINNT"; then
    if test "$COMEX" -ge "10"; then
    { echo "$as_me:$LINENO: checking for instmsia.exe/instmsiw.exe" >&5
 echo $ECHO_N "checking for instmsia.exe/instmsiw.exe... $ECHO_C" >&6; }
-   if test -x ../external/msi/instmsia.exe -a -x ../external/msi/instmsiw.exe; then
+   if test -x ./external/msi/instmsia.exe -a -x ./external/msi/instmsiw.exe; then
       { echo "$as_me:$LINENO: result: found" >&5
 echo "${ECHO_T}found" >&6; }
    else
       MSIAPATH=`/bin/find "$COMPATH/../.." -iname instmsia.exe | head -n 1`
       MSIWPATH=`/bin/find "$COMPATH/../.." -iname instmsiw.exe | head -n 1`
       if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
-         cp "$MSIAPATH" ../external/msi/ && chmod +x ../external/msi/instmsia.exe && MSIACOPY="OK"
-         cp "$MSIWPATH" ../external/msi/ && chmod +x ../external/msi/instmsiw.exe && MSIWCOPY="OK"
+         cp "$MSIAPATH" ./external/msi/ && chmod +x ./external/msi/instmsia.exe && MSIACOPY="OK"
+         cp "$MSIWPATH" ./external/msi/ && chmod +x ./external/msi/instmsiw.exe && MSIWCOPY="OK"
       fi
       if test -z "$MSIACOPY" -o -z "$MSIWCOPY"; then
          { { echo "$as_me:$LINENO: error: instmsia.exe and/or instmsiw.exe are/is missing in the default location.
@@ -23730,12 +24046,12 @@ echo "${ECHO_T}GPC" >&6; }
 
   { echo "$as_me:$LINENO: checking for GPC files" >&5
 echo $ECHO_N "checking for GPC files... $ECHO_C" >&6; }
-  if test -f ../external/gpc/gpc.h; then
+  if test -f ./external/gpc/gpc.h; then
 	HAVE_GPC_H="yes"
   else
 	HAVE_GPC_H="no"
   fi
-  if test -f ../external/gpc/gpc.c; then
+  if test -f ./external/gpc/gpc.c; then
 	HAVE_GPC_C="yes"
   else
 	HAVE_GPC_C="no"
@@ -23787,7 +24103,7 @@ fi
 ENABLE_GCONF=""
 { echo "$as_me:$LINENO: checking whether to enable GConf support" >&5
 echo $ECHO_N "checking whether to enable GConf support... $ECHO_C" >&6; }
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gconf" = "yes"; then
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "OS2" -a "$enable_gconf" = "yes"; then
     ENABLE_GCONF="TRUE"
     { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
@@ -24337,6 +24653,11 @@ echo "${ECHO_T}no" >&6; }
       { echo "$as_me:$LINENO: checking whether to enable GIO support" >&5
 echo $ECHO_N "checking whether to enable GIO support... $ECHO_C" >&6; }
       if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
+          if test "$ENABLE_GNOMEVFS" = "TRUE" ; then
+             { { echo "$as_me:$LINENO: error: please use --enable-gio only together with --disable-gnome-vfs." >&5
+echo "$as_me: error: please use --enable-gio only together with --disable-gnome-vfs." >&2;}
+   { (exit 1); exit 1; }; }
+          fi
           ENABLE_GIO="TRUE"
           { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
@@ -24455,105 +24776,25 @@ fi
 
 
 ENABLE_CAIRO=""
+BUILD_PIXMAN=""
+SYSTEM_CAIRO=""
 
-if test  "$build_cairo" = "yes"; then
+if test  "$test_cairo" = "yes"; then
 
-    { echo "$as_me:$LINENO: checking whether to enable the cairo canvas backend" >&5
-echo $ECHO_N "checking whether to enable the cairo canvas backend... $ECHO_C" >&6; }
+    { echo "$as_me:$LINENO: checking whether to use cairo" >&5
+echo $ECHO_N "checking whether to use cairo... $ECHO_C" >&6; }
     if test "x$enable_cairo" != "xno" ; then
-       { echo "$as_me:$LINENO: result: yes" >&5
+        ENABLE_CAIRO="TRUE"
+	{ echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-       ENABLE_CAIRO="TRUE"
-       if test "$_os" != "WINNT"; then
-	if test "$with_system_xrender_headers" = "yes"; then
-             { echo "$as_me:$LINENO: checking whether Xrender.h defines PictStandardA8" >&5
-echo $ECHO_N "checking whether Xrender.h defines PictStandardA8... $ECHO_C" >&6; }
-             if test "$cross_compiling" = yes; then
-  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
-See \`config.log' for more details." >&5
-echo "$as_me: error: cannot run test program while cross compiling
-See \`config.log' for more details." >&2;}
-   { (exit 1); exit 1; }; }
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#include <X11/extensions/Xrender.h>
-
-int main(int argc, char **argv) {
-#ifdef PictStandardA8
-      return 0;
-#else
-      return 1;
-#endif
-}
-
-_ACEOF
-rm -f conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-else
-  echo "$as_me: program exited with status $ac_status" >&5
-echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-( exit $ac_status )
-{ { echo "$as_me:$LINENO: error: no, X headers too old." >&5
-echo "$as_me: error: no, X headers too old." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
-fi
-
-
-          fi
-	fi
-     else
- 	     { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-     fi
-fi
-
-
-if test -z "$with_system_cairo" -a "$_os" = "Linux"; then
-   with_system_cairo="yes"
-fi
-
-if test "$ENABLE_CAIRO" = "TRUE"; then
-    { echo "$as_me:$LINENO: checking which cairo to use" >&5
+        { echo "$as_me:$LINENO: checking which cairo to use" >&5
 echo $ECHO_N "checking which cairo to use... $ECHO_C" >&6; }
-    if test "$with_system_cairo" != "yes" && test "$_os" = "Linux"; then
-        BUILD_TYPE="$BUILD_TYPE CAIRO"
-        { echo "$as_me:$LINENO: result: internal" >&5
-echo "${ECHO_T}internal" >&6; }
-        SYSTEM_CAIRO=NO
-    else
-        { echo "$as_me:$LINENO: result: external" >&5
+        if test -n "$with_system_cairo" -o -n "$with_system_libs" && \
+           test "$with_system_cairo" != "no"; then
+           { echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6; }
-        SYSTEM_CAIRO=YES
+           SYSTEM_CAIRO=YES
+
 
   succeeded=no
 
@@ -24653,8 +24894,90 @@ echo "$as_me: error: Library requirements (cairo >= 1.0.2 ) not met; consider ad
    { (exit 1); exit 1; }; }
   fi
 
+	   if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$ENABLE_FONTCONFIG" != "TRUE" ; then
+	      { { echo "$as_me:$LINENO: error: Cairo library requires fontconfig." >&5
+echo "$as_me: error: Cairo library requires fontconfig." >&2;}
+   { (exit 1); exit 1; }; }
+	   fi
+           if test "$with_system_xrender_headers" = "yes"; then
+              { echo "$as_me:$LINENO: checking whether Xrender.h defines PictStandardA8" >&5
+echo $ECHO_N "checking whether Xrender.h defines PictStandardA8... $ECHO_C" >&6; }
+              if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <X11/extensions/Xrender.h>
+
+int main(int argc, char **argv) {
+#ifdef PictStandardA8
+      return 0;
+#else
+      return 1;
+#endif
+}
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+{ { echo "$as_me:$LINENO: error: no, X headers too old." >&5
+echo "$as_me: error: no, X headers too old." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+           fi
+        else
+           BUILD_TYPE="$BUILD_TYPE CAIRO"
+	   	   if test "$build_cpu" != "x86_64"; then
+	      BUILD_PIXMAN=YES
+	   fi
+           { echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6; }
+        fi
+    else
+	   { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
     fi
 fi
+
 
 
 
@@ -24964,7 +25287,7 @@ fi
 
 { echo "$as_me:$LINENO: checking whether to build the Presenter Screen extension" >&5
 echo $ECHO_N "checking whether to build the Presenter Screen extension... $ECHO_C" >&6; }
-if test -n "$enable_presenter_screen" -a "$enable_presenter_screen" != "no"; then
+if test -n "$enable_presenter_console" -a "$enable_presenter_screen" != "no"; then
    { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
    ENABLE_PRESENTER_SCREEN=YES
@@ -24974,10 +25297,6 @@ echo "${ECHO_T}no" >&6; }
    ENABLE_PRESENTER_SCREEN=NO
 fi
 
-
-if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES"; then
-   BUILD_TYPE="$BUILD_TYPE SDEXT"
-fi
 
 { echo "$as_me:$LINENO: checking whether to build the PDF Import extension" >&5
 echo $ECHO_N "checking whether to build the PDF Import extension... $ECHO_C" >&6; }
@@ -24989,7 +25308,7 @@ echo "${ECHO_T}yes" >&6; }
         { echo "$as_me:$LINENO: checking which pdf backend to use" >&5
 echo $ECHO_N "checking which pdf backend to use... $ECHO_C" >&6; }
   if test -n "$with_system_poppler" -o -n "$with_system_libs" && \
-  	test "$with_system_poppler" != "no"; then
+       test "$with_system_poppler" != "no"; then
       { echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6; }
       SYSTEM_POPPLER=YES
@@ -25097,23 +25416,56 @@ echo "$as_me: error: Library requirements (poppler >= 0.8.0 ) not met; consider 
 echo "${ECHO_T}internal" >&6; }
       SYSTEM_POPPLER=NO
       BUILD_TYPE="$BUILD_TYPE XPDF"
+      { echo "$as_me:$LINENO: checking for xpdf module" >&5
+echo $ECHO_N "checking for xpdf module... $ECHO_C" >&6; }
+      if test -d ./xpdf; then
+       { echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6; }
+      else
+        { { echo "$as_me:$LINENO: error: not existing. get it (did you get the -extensions tarball?)" >&5
+echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)" >&2;}
+   { (exit 1); exit 1; }; }
+      fi
   fi
-
 else
-  { echo "$as_me:$LINENO: result: no" >&5
+   { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
-  ENABLE_PDFIMPORT=NO
+   ENABLE_PDFIMPORT=NO
 fi
 
 
 
 
 
-{ echo "$as_me:$LINENO: checking whether to build the MediaWiki Editor extension" >&5
-echo $ECHO_N "checking whether to build the MediaWiki Editor extension... $ECHO_C" >&6; }
-if test -n "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAVA" != "no"; then
+if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
+  { echo "$as_me:$LINENO: checking for sdext module" >&5
+echo $ECHO_N "checking for sdext module... $ECHO_C" >&6; }
+  if test -d ./sdext; then
+   { echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6; }
+  else
+   { { echo "$as_me:$LINENO: error: not existing. get it (did you get the -extensions tarball?)" >&5
+echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+  BUILD_TYPE="$BUILD_TYPE SDEXT"
+fi
+
+{ echo "$as_me:$LINENO: checking whether to build the Wiki Publisher extension" >&5
+echo $ECHO_N "checking whether to build the Wiki Publisher extension... $ECHO_C" >&6; }
+if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test  "$WITH_JAVA" != "no"; then
   { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
+  { echo "$as_me:$LINENO: checking for swext module" >&5
+echo $ECHO_N "checking for swext module... $ECHO_C" >&6; }
+  if test -d ./swext; then
+   { echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6; }
+  else
+   { { echo "$as_me:$LINENO: error: not existing. get it (did you get the -extensions tarball?)" >&5
+echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
   ENABLE_MEDIAWIKI=YES
   { echo "$as_me:$LINENO: checking which Apache commons-* libs to use" >&5
 echo $ECHO_N "checking which Apache commons-* libs to use... $ECHO_C" >&6; }
@@ -25124,7 +25476,7 @@ echo "${ECHO_T}external" >&6; }
 	if test -z "$COMMONS_CODEC_JAR"; then
 		COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar
 	fi
-        as_ac_File=`echo "ac_cv_file_$COMMONS_CODEC_JAR" | $as_tr_sh`
+   as_ac_File=`echo "ac_cv_file_$COMMONS_CODEC_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $COMMONS_CODEC_JAR" >&5
 echo $ECHO_N "checking for $COMMONS_CODEC_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -25154,7 +25506,7 @@ fi
 	if test -z "$COMMONS_LANG_JAR"; then
 		COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar
 	fi
-        as_ac_File=`echo "ac_cv_file_$COMMONS_LANG_JAR" | $as_tr_sh`
+   as_ac_File=`echo "ac_cv_file_$COMMONS_LANG_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $COMMONS_LANG_JAR" >&5
 echo $ECHO_N "checking for $COMMONS_LANG_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -25184,7 +25536,7 @@ fi
 	if test -z "$COMMONS_HTTPCLIENT_JAR"; then
 		COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar
 	fi
-        as_ac_File=`echo "ac_cv_file_$COMMONS_HTTPCLIENT_JAR" | $as_tr_sh`
+   as_ac_File=`echo "ac_cv_file_$COMMONS_HTTPCLIENT_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $COMMONS_HTTPCLIENT_JAR" >&5
 echo $ECHO_N "checking for $COMMONS_HTTPCLIENT_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -25211,10 +25563,61 @@ echo "$as_me: error: commons-httpclient.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-	if test -z "$COMMONS_LOGGING_JAR"; then
-		COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
-	fi
-        as_ac_File=`echo "ac_cv_file_$COMMONS_LOGGING_JAR" | $as_tr_sh`
+
+   if test -z $COMMONS_LOGGING_JAR; then
+     { echo "$as_me:$LINENO: checking for /usr/share/java/commons-logging-1.1.1.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/commons-logging-1.1.1.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_commons_logging_1_1_1_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/commons-logging-1.1.1.jar"; then
+  ac_cv_file__usr_share_java_commons_logging_1_1_1_jar=yes
+else
+  ac_cv_file__usr_share_java_commons_logging_1_1_1_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_commons_logging_1_1_1_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_commons_logging_1_1_1_jar" >&6; }
+if test $ac_cv_file__usr_share_java_commons_logging_1_1_1_jar = yes; then
+   COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
+else
+
+         { echo "$as_me:$LINENO: checking for /usr/share/java/commons-logging.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/commons-logging.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_commons_logging_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/commons-logging.jar"; then
+  ac_cv_file__usr_share_java_commons_logging_jar=yes
+else
+  ac_cv_file__usr_share_java_commons_logging_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_commons_logging_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_commons_logging_jar" >&6; }
+if test $ac_cv_file__usr_share_java_commons_logging_jar = yes; then
+   COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar
+else
+  { { echo "$as_me:$LINENO: error: commons-logging.jar replacement not found." >&5
+echo "$as_me: error: commons-logging.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+   else
+     as_ac_File=`echo "ac_cv_file_$COMMONS_LOGGING_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $COMMONS_LOGGING_JAR" >&5
 echo $ECHO_N "checking for $COMMONS_LOGGING_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -25241,6 +25644,7 @@ echo "$as_me: error: commons-logging.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
+   fi
   else
 	{ echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6; }
@@ -25309,19 +25713,69 @@ fi
 
 { echo "$as_me:$LINENO: checking whether to build the Report Builder extension" >&5
 echo $ECHO_N "checking whether to build the Report Builder extension... $ECHO_C" >&6; }
-if test -n "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
   { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-  ENABLE_REPORTDESIGN=YES
+  ENABLE_REPORTBUILDER=YES
   { echo "$as_me:$LINENO: checking which jfreereport libs to use" >&5
 echo $ECHO_N "checking which jfreereport libs to use... $ECHO_C" >&6; }
   if test "$with_system_jfreereport" == "yes"; then
    	SYSTEM_JFREEREPORT=YES
-  	{ echo "$as_me:$LINENO: result: external" >&5
+  	   { echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6; }
-        if test -z $JCOMMON_JAR; then
-               JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar
-        fi
+      if test -z $JCOMMON_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon-1.0.10.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/jcommon-1.0.10.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_jcommon_1_0_10_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/jcommon-1.0.10.jar"; then
+  ac_cv_file__usr_share_java_jcommon_1_0_10_jar=yes
+else
+  ac_cv_file__usr_share_java_jcommon_1_0_10_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_1_0_10_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_1_0_10_jar" >&6; }
+if test $ac_cv_file__usr_share_java_jcommon_1_0_10_jar = yes; then
+   JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/jcommon.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_jcommon_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/jcommon.jar"; then
+  ac_cv_file__usr_share_java_jcommon_jar=yes
+else
+  ac_cv_file__usr_share_java_jcommon_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_jar" >&6; }
+if test $ac_cv_file__usr_share_java_jcommon_jar = yes; then
+   JCOMMON_JAR=/usr/share/java/jcommon.jar
+else
+  { { echo "$as_me:$LINENO: error: jcommon.jar replacement not found." >&5
+echo "$as_me: error: jcommon.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$JCOMMON_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $JCOMMON_JAR" >&5
 echo $ECHO_N "checking for $JCOMMON_JAR... $ECHO_C" >&6; }
@@ -25349,10 +25803,12 @@ echo "$as_me: error: jcommon.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $SAC_JAR; then
-               SAC_JAR=/usr/share/java/sac.jar
-        fi
-        as_ac_File=`echo "ac_cv_file_$SAC_JAR" | $as_tr_sh`
+      fi
+
+      if test -z $SAC_JAR; then
+             SAC_JAR=/usr/share/java/sac.jar
+      fi
+      as_ac_File=`echo "ac_cv_file_$SAC_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $SAC_JAR" >&5
 echo $ECHO_N "checking for $SAC_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -25379,9 +25835,60 @@ echo "$as_me: error: sac.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $LIBXML_JAR; then
-               LIBXML_JAR=/usr/share/java/libxml-0.9.9.jar
-        fi
+
+      if test -z $LIBXML_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libxml-0.9.9.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libxml-0.9.9.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libxml_0_9_9_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libxml-0.9.9.jar"; then
+  ac_cv_file__usr_share_java_libxml_0_9_9_jar=yes
+else
+  ac_cv_file__usr_share_java_libxml_0_9_9_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libxml_0_9_9_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libxml_0_9_9_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libxml_0_9_9_jar = yes; then
+   LIBXML_JAR=/usr/share/java/libxml-0.9.9.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/libxml.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libxml.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libxml_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libxml.jar"; then
+  ac_cv_file__usr_share_java_libxml_jar=yes
+else
+  ac_cv_file__usr_share_java_libxml_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libxml_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libxml_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libxml_jar = yes; then
+   LIBXML_JAR=/usr/share/java/libxml.jar
+else
+  { { echo "$as_me:$LINENO: error: libxml.jar replacement not found." >&5
+echo "$as_me: error: libxml.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$LIBXML_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $LIBXML_JAR" >&5
 echo $ECHO_N "checking for $LIBXML_JAR... $ECHO_C" >&6; }
@@ -25409,9 +25916,61 @@ echo "$as_me: error: libxml.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $FLUTE_JAR; then
-               FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar
-        fi
+      fi
+
+      if test -z $FLUTE_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/flute-1.3-jfree-20061107.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/flute-1.3-jfree-20061107.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/flute-1.3-jfree-20061107.jar"; then
+  ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar=yes
+else
+  ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar" >&6; }
+if test $ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar = yes; then
+   FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/flute.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/flute.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_flute_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/flute.jar"; then
+  ac_cv_file__usr_share_java_flute_jar=yes
+else
+  ac_cv_file__usr_share_java_flute_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_flute_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_flute_jar" >&6; }
+if test $ac_cv_file__usr_share_java_flute_jar = yes; then
+   FLUTE_JAR=/usr/share/java/flute.jar
+else
+   { { echo "$as_me:$LINENO: error: flute-1.3-jfree.jar replacement not found." >&5
+echo "$as_me: error: flute-1.3-jfree.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$FLUTE_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $FLUTE_JAR" >&5
 echo $ECHO_N "checking for $FLUTE_JAR... $ECHO_C" >&6; }
@@ -25439,9 +25998,61 @@ echo "$as_me: error: flute-1.3-jfree.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $JFREEREPORT_JAR; then
-               JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar
-        fi
+      fi
+
+      if test -z $JFREEREPORT_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar"; then
+  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar=yes
+else
+  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar" >&6; }
+if test $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar = yes; then
+   JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/pentaho-reporting-flow-engine.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/pentaho-reporting-flow-engine.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/pentaho-reporting-flow-engine.jar"; then
+  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar=yes
+else
+  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar" >&6; }
+if test $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar = yes; then
+   JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine.jar
+else
+  { { echo "$as_me:$LINENO: error: jfreereport.jar replacement not found." >&5
+echo "$as_me: error: jfreereport.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$JFREEREPORT_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $JFREEREPORT_JAR" >&5
 echo $ECHO_N "checking for $JFREEREPORT_JAR... $ECHO_C" >&6; }
@@ -25469,9 +26080,61 @@ echo "$as_me: error: jfreereport.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $LIBLAYOUT_JAR; then
-               LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.8.jar
-        fi
+      fi
+
+      if test -z $LIBLAYOUT_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/liblayout-0.2.8.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/liblayout-0.2.8.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_liblayout_0_2_8_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/liblayout-0.2.8.jar"; then
+  ac_cv_file__usr_share_java_liblayout_0_2_8_jar=yes
+else
+  ac_cv_file__usr_share_java_liblayout_0_2_8_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_liblayout_0_2_8_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_liblayout_0_2_8_jar" >&6; }
+if test $ac_cv_file__usr_share_java_liblayout_0_2_8_jar = yes; then
+   LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.8.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/liblayout.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/liblayout.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_liblayout_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/liblayout.jar"; then
+  ac_cv_file__usr_share_java_liblayout_jar=yes
+else
+  ac_cv_file__usr_share_java_liblayout_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_liblayout_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_liblayout_jar" >&6; }
+if test $ac_cv_file__usr_share_java_liblayout_jar = yes; then
+   LIBLAYOUT_JAR=/usr/share/java/liblayout.jar
+else
+  { { echo "$as_me:$LINENO: error: liblayout.jar replacement not found." >&5
+echo "$as_me: error: liblayout.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$LIBLAYOUT_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $LIBLAYOUT_JAR" >&5
 echo $ECHO_N "checking for $LIBLAYOUT_JAR... $ECHO_C" >&6; }
@@ -25499,9 +26162,61 @@ echo "$as_me: error: liblayout.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $LIBLOADER_JAR; then
-               LIBLOADER_JAR=/usr/share/java/libloader-0.3.6.jar
-        fi
+      fi
+
+      if test -z $LIBLOADER_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libloader-0.3.6.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libloader-0.3.6.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libloader_0_3_6_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libloader-0.3.6.jar"; then
+  ac_cv_file__usr_share_java_libloader_0_3_6_jar=yes
+else
+  ac_cv_file__usr_share_java_libloader_0_3_6_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libloader_0_3_6_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libloader_0_3_6_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libloader_0_3_6_jar = yes; then
+   LIBLOADER_JAR=/usr/share/java/libloader-0.3.6.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/libloader.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libloader.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libloader_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libloader.jar"; then
+  ac_cv_file__usr_share_java_libloader_jar=yes
+else
+  ac_cv_file__usr_share_java_libloader_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libloader_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libloader_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libloader_jar = yes; then
+   LIBLOADER_JAR=/usr/share/java/libloader.jar
+else
+  { { echo "$as_me:$LINENO: error: libloader.jar replacement not found." >&5
+echo "$as_me: error: libloader.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$LIBLOADER_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $LIBLOADER_JAR" >&5
 echo $ECHO_N "checking for $LIBLOADER_JAR... $ECHO_C" >&6; }
@@ -25529,9 +26244,61 @@ echo "$as_me: error: libloader.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $LIBFORMULA_JAR; then
-               LIBFORMULA_JAR=/usr/share/java/libformula-0.1.14.jar
-        fi
+      fi
+
+      if test -z $LIBFORMULA_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libformula-0.1.14.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libformula-0.1.14.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libformula_0_1_14_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libformula-0.1.14.jar"; then
+  ac_cv_file__usr_share_java_libformula_0_1_14_jar=yes
+else
+  ac_cv_file__usr_share_java_libformula_0_1_14_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libformula_0_1_14_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libformula_0_1_14_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libformula_0_1_14_jar = yes; then
+   LIBFORMULA_JAR=/usr/share/java/libformula-0.1.14.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/libformula.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libformula.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libformula_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libformula.jar"; then
+  ac_cv_file__usr_share_java_libformula_jar=yes
+else
+  ac_cv_file__usr_share_java_libformula_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libformula_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libformula_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libformula_jar = yes; then
+   LIBFORMULA_JAR=/usr/share/java/libformula.jar
+else
+  { { echo "$as_me:$LINENO: error: libformula.jar replacement not found." >&5
+echo "$as_me: error: libformula.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$LIBFORMULA_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $LIBFORMULA_JAR" >&5
 echo $ECHO_N "checking for $LIBFORMULA_JAR... $ECHO_C" >&6; }
@@ -25559,9 +26326,61 @@ echo "$as_me: error: libformula.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $LIBREPOSITORY_JAR; then
-               LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.4.jar
-        fi
+      fi
+
+      if test -z $LIBREPOSITORY_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/librepository-0.1.4.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/librepository-0.1.4.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_librepository_0_1_4_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/librepository-0.1.4.jar"; then
+  ac_cv_file__usr_share_java_librepository_0_1_4_jar=yes
+else
+  ac_cv_file__usr_share_java_librepository_0_1_4_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_librepository_0_1_4_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_librepository_0_1_4_jar" >&6; }
+if test $ac_cv_file__usr_share_java_librepository_0_1_4_jar = yes; then
+   LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.4.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/librepository.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/librepository.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_librepository_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/librepository.jar"; then
+  ac_cv_file__usr_share_java_librepository_jar=yes
+else
+  ac_cv_file__usr_share_java_librepository_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_librepository_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_librepository_jar" >&6; }
+if test $ac_cv_file__usr_share_java_librepository_jar = yes; then
+   LIBREPOSITORY_JAR=/usr/share/java/librepository.jar
+else
+  { { echo "$as_me:$LINENO: error: librepository.jar replacement not found." >&5
+echo "$as_me: error: librepository.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$LIBREPOSITORY_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $LIBREPOSITORY_JAR" >&5
 echo $ECHO_N "checking for $LIBREPOSITORY_JAR... $ECHO_C" >&6; }
@@ -25589,9 +26408,61 @@ echo "$as_me: error: librepository.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $LIBFONTS_JAR; then
-               LIBFONTS_JAR=/usr/share/java/libfonts-0.3.3.jar
-        fi
+      fi
+
+      if test -z $LIBFONTS_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libfonts-0.3.3.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libfonts-0.3.3.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libfonts_0_3_3_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libfonts-0.3.3.jar"; then
+  ac_cv_file__usr_share_java_libfonts_0_3_3_jar=yes
+else
+  ac_cv_file__usr_share_java_libfonts_0_3_3_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libfonts_0_3_3_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libfonts_0_3_3_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libfonts_0_3_3_jar = yes; then
+   LIBFONTS_JAR=/usr/share/java/libfonts-0.3.3.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/libfonts.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libfonts.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libfonts_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libfonts.jar"; then
+  ac_cv_file__usr_share_java_libfonts_jar=yes
+else
+  ac_cv_file__usr_share_java_libfonts_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libfonts_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libfonts_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libfonts_jar = yes; then
+   LIBFONTS_JAR=/usr/share/java/libfonts.jar
+else
+  { { echo "$as_me:$LINENO: error: libfonts.jar replacement not found." >&5
+echo "$as_me: error: libfonts.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$LIBFONTS_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $LIBFONTS_JAR" >&5
 echo $ECHO_N "checking for $LIBFONTS_JAR... $ECHO_C" >&6; }
@@ -25619,9 +26490,61 @@ echo "$as_me: error: libfonts.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-        if test -z $JCOMMON_SERIALIZER_JAR; then
-               JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.2.0.jar
-        fi
+      fi
+
+      if test -z $JCOMMON_SERIALIZER_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon-serializer-0.2.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/jcommon-serializer-0.2.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/jcommon-serializer-0.2.0.jar"; then
+  ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar=yes
+else
+  ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar = yes; then
+   JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.2.0.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon-serializer.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/jcommon-serializer.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_jcommon_serializer_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/jcommon-serializer.jar"; then
+  ac_cv_file__usr_share_java_jcommon_serializer_jar=yes
+else
+  ac_cv_file__usr_share_java_jcommon_serializer_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_serializer_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_serializer_jar" >&6; }
+if test $ac_cv_file__usr_share_java_jcommon_serializer_jar = yes; then
+   JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer.jar
+else
+  { { echo "$as_me:$LINENO: error: jcommon-serializer.jar replacement not found." >&5
+echo "$as_me: error: jcommon-serializer.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
         as_ac_File=`echo "ac_cv_file_$JCOMMON_SERIALIZER_JAR" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for $JCOMMON_SERIALIZER_JAR" >&5
 echo $ECHO_N "checking for $JCOMMON_SERIALIZER_JAR... $ECHO_C" >&6; }
@@ -25649,9 +26572,21 @@ echo "$as_me: error: jcommon-serializer.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
+      fi
+
   else
      { echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6; }
+     { echo "$as_me:$LINENO: checking for jfreereport module" >&5
+echo $ECHO_N "checking for jfreereport module... $ECHO_C" >&6; }
+     if test -d ./jfreereport; then
+      { echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6; }
+     else
+      { { echo "$as_me:$LINENO: error: not existing. get it (did you get the -extensions tarball?)" >&5
+echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)" >&2;}
+   { (exit 1); exit 1; }; }
+     fi
      SYSTEM_JFREEREPORT=NO
      BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
   fi
@@ -25659,7 +26594,7 @@ echo "${ECHO_T}internal" >&6; }
 else
   { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
-  ENABLE_REPORTDESIGN=NO
+  ENABLE_REPORTBUILDER=NO
   SYSTEM_JFREEREPORT=NO
 fi
 
@@ -26377,6 +27312,7 @@ if test "$with_writer2latex" != "no" ; then
   { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
   WITH_WRITER2LATEX=YES
+  BUILD_TYPE="$BUILD_TYPE WRITER2LATEX"
 else
   { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
@@ -27134,9 +28070,9 @@ fi
 
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so;
-chmod +x $_solenv/bin/config.guess
+chmod +x ./config.guess
 
-ac_config_files="$ac_config_files set_soenv"
+ac_config_files="$ac_config_files set_soenv Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -27706,6 +28642,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "set_soenv") CONFIG_FILES="$CONFIG_FILES set_soenv" ;;
+    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -27808,6 +28745,7 @@ EGREP!$EGREP$ac_delim
 AWK!$AWK$ac_delim
 SED!$SED$ac_delim
 LOCAL_SOLENV!$LOCAL_SOLENV$ac_delim
+_solenv!$_solenv$ac_delim
 UPD!$UPD$ac_delim
 SOURCEVERSION!$SOURCEVERSION$ac_delim
 build!$build$ac_delim
@@ -27862,7 +28800,6 @@ GCCVER!$GCCVER$ac_delim
 ENABLE_PCH!$ENABLE_PCH$ac_delim
 GNUMAKE!$GNUMAKE$ac_delim
 _cc!$_cc$ac_delim
-HAVE_LD_HASH_STYLE!$HAVE_LD_HASH_STYLE$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -27904,6 +28841,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+HAVE_LD_HASH_STYLE!$HAVE_LD_HASH_STYLE$ac_delim
 PERL!$PERL$ac_delim
 MSPDB_PATH!$MSPDB_PATH$ac_delim
 COMEX!$COMEX$ac_delim
@@ -28000,7 +28938,6 @@ HSQLDB_JAR!$HSQLDB_JAR$ac_delim
 SYSTEM_BSH!$SYSTEM_BSH$ac_delim
 BSH_JAR!$BSH_JAR$ac_delim
 SERIALIZER_JAR!$SERIALIZER_JAR$ac_delim
-SYSTEM_SAXON!$SYSTEM_SAXON$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -28042,6 +28979,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+SYSTEM_SAXON!$SYSTEM_SAXON$ac_delim
 SAXON_JAR!$SAXON_JAR$ac_delim
 CURLCONFIG!$CURLCONFIG$ac_delim
 SYSTEM_CURL!$SYSTEM_CURL$ac_delim
@@ -28138,7 +29076,6 @@ ENABLE_GTK!$ENABLE_GTK$ac_delim
 ENABLE_KDE!$ENABLE_KDE$ac_delim
 GCONF_CFLAGS!$GCONF_CFLAGS$ac_delim
 GCONF_LIBS!$GCONF_LIBS$ac_delim
-ENABLE_GCONF!$ENABLE_GCONF$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -28180,6 +29117,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+ENABLE_GCONF!$ENABLE_GCONF$ac_delim
 GNOMEVFS_CFLAGS!$GNOMEVFS_CFLAGS$ac_delim
 GNOMEVFS_LIBS!$GNOMEVFS_LIBS$ac_delim
 ENABLE_GNOMEVFS!$ENABLE_GNOMEVFS$ac_delim
@@ -28195,6 +29133,7 @@ ENABLE_SYSTRAY_GTK!$ENABLE_SYSTRAY_GTK$ac_delim
 CAIRO_CFLAGS!$CAIRO_CFLAGS$ac_delim
 CAIRO_LIBS!$CAIRO_LIBS$ac_delim
 ENABLE_CAIRO!$ENABLE_CAIRO$ac_delim
+BUILD_PIXMAN!$BUILD_PIXMAN$ac_delim
 SYSTEM_CAIRO!$SYSTEM_CAIRO$ac_delim
 ENABLE_OPENGL!$ENABLE_OPENGL$ac_delim
 ENABLE_MINIMIZER!$ENABLE_MINIMIZER$ac_delim
@@ -28211,7 +29150,7 @@ COMMONS_HTTPCLIENT_JAR!$COMMONS_HTTPCLIENT_JAR$ac_delim
 COMMONS_LOGGING_JAR!$COMMONS_LOGGING_JAR$ac_delim
 SYSTEM_SERVLETAPI!$SYSTEM_SERVLETAPI$ac_delim
 SERVLETAPI_JAR!$SERVLETAPI_JAR$ac_delim
-ENABLE_REPORTDESIGN!$ENABLE_REPORTDESIGN$ac_delim
+ENABLE_REPORTBUILDER!$ENABLE_REPORTBUILDER$ac_delim
 SYSTEM_JFREEREPORT!$SYSTEM_JFREEREPORT$ac_delim
 JCOMMON_JAR!$JCOMMON_JAR$ac_delim
 SAC_JAR!$SAC_JAR$ac_delim
@@ -28260,7 +29199,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 78; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 80; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
