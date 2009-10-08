@@ -30,6 +30,10 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#ifdef DEBUG_ELEMENT
+#include "ooxmlLoggers.hxx"
+#include <resourcemodel/Protocol.hxx>
+#endif
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFastTokens.hxx"
@@ -213,7 +217,12 @@ void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
 
 void OOXMLFastDocumentHandler::setStream(Stream * pStream)
 {
+#ifdef DEBUG_ELEMENT
+    mpTmpStream.reset(new StreamProtocol(pStream, debug_logger));
+    mpStream = mpTmpStream.get();
+#else
     mpStream = pStream;
+#endif
 }
 
 void OOXMLFastDocumentHandler::setDocument(OOXMLDocument * pDocument)
