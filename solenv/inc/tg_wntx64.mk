@@ -515,6 +515,4 @@ $(SLO_X64)/%.obj : %.c
 
 .ENDIF			# "$(BUILD_X64)"!=""
 
-
-
-
+BUILD64=1

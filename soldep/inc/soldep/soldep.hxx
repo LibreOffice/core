@@ -55,7 +55,6 @@ class SolDep : public Depper
     ByteString  msProject;
     ObjectWin*  mpFocusWin;
     BOOL        mbIsHide;
-    XmlBuildList*   mpXmlBuildList;
 
     GenericInformationList *mpStandLst;
 
