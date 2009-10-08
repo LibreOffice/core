@@ -40,6 +40,7 @@
 #include "modulepcr.hxx"
 #include "pcrcommon.hxx"
 #include "pcrstrings.hxx"
+#include "propertycontrolextender.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XTabControllerModel.hpp>
@@ -59,6 +60,8 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
@@ -136,6 +139,10 @@ namespace pcr
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::uno::UNO_SET_THROW;
+    using com::sun::star::uri::UriReferenceFactory;
+    using com::sun::star::uri::XUriReferenceFactory;
+    using com::sun::star::uri::XVndSunStarScriptUrlReference;
+    using ::com::sun::star::lang::XEventListener;
     /** === end UNO using === **/
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
@@ -676,9 +683,8 @@ namespace pcr
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        OSL_ENSURE( false, "EventHandler::convertToPropertyValue: why calling this for read-only controls?" );
-            // since currently, the controls to display the script events are readonly, this method should normally
-            // not be called.
+        ::rtl::OUString sNewScriptCode;
+        OSL_VERIFY( _rControlValue >>= sNewScriptCode );
 
         Sequence< ScriptEventDescriptor > aAllAssignedEvents;
         impl_getComponentScriptEvents_nothrow( aAllAssignedEvents );
@@ -686,14 +692,17 @@ namespace pcr
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         ScriptEventDescriptor aAssignedScript = lcl_getAssignedScriptEvent( rEvent, aAllAssignedEvents );
 
-#if OSL_DEBUG_LEVEL > 0
-        ::rtl::OUString sControlValue;
-        OSL_VERIFY( _rControlValue >>= sControlValue );
-        OSL_ENSURE( sControlValue == aAssignedScript.ScriptCode, "EventHandler::convertToPropertyValue: somebody really managed to enter a new value in the control?" );
-#else
-        (void)_rControlValue;
-#endif
+        OSL_ENSURE( !sNewScriptCode.getLength(), "EventHandler::convertToPropertyValue: cannot convert a non-empty display name!" );
+        // Usually, there is no possibility for the user to change the content of an event binding directly in the
+        // input field, this instead is done with the macro assignment dialog.
+        // The only exception is the user pressing "DEL" while the control has the focus, in this case, we reset the
+        // control content to an empty string. So this is the only scenario where this method is allowed to be called.
 
+        // Striclty, we would be able to convert the display value to a property value,
+        // using the "name (location, language)" format we used in convertToControlValue. However,
+        // there is no need for this code ...
+
+        aAssignedScript.ScriptCode = sNewScriptCode;
         return makeAny( aAssignedScript );
     }
 
@@ -708,7 +717,58 @@ namespace pcr
         OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,
             "EventHandler::convertToControlValue: unexpected ControlValue type class!" );
         (void)_rControlValueType;
-        return makeAny( aScriptEvent.ScriptCode );
+
+        ::rtl::OUString sScript( aScriptEvent.ScriptCode );
+        if ( sScript.getLength() )
+        {
+            // format is: "name (location, language)"
+            try
+            {
+                // parse
+                Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_aContext.getUNOContext() );
+                Reference< XVndSunStarScriptUrlReference > xScriptUri( xUriRefFac->parse( sScript ), UNO_QUERY_THROW );
+
+                ::rtl::OUStringBuffer aComposeBuffer;
+
+                // name
+                aComposeBuffer.append( xScriptUri->getName() );
+
+                // location
+                const ::rtl::OUString sLocationParamName( RTL_CONSTASCII_USTRINGPARAM( "location" ) );
+                const ::rtl::OUString sLocation = xScriptUri->getParameter( sLocationParamName );
+                const ::rtl::OUString sLangParamName( RTL_CONSTASCII_USTRINGPARAM( "language" ) );
+                const ::rtl::OUString sLanguage = xScriptUri->getParameter( sLangParamName );
+
+                if ( sLocation.getLength() || sLanguage.getLength() )
+                {
+                    aComposeBuffer.appendAscii( " (" );
+
+                    // location
+                    OSL_ENSURE( sLocation.getLength(), "EventHandler::convertToControlValue: unexpected: no location!" );
+                    if ( sLocation.getLength() )
+                    {
+                        aComposeBuffer.append( sLocation );
+                        aComposeBuffer.appendAscii( ", " );
+                    }
+
+                    // language
+                    if ( sLanguage.getLength() )
+                    {
+                        aComposeBuffer.append( sLanguage );
+                    }
+
+                    aComposeBuffer.append( sal_Unicode( ')' ) );
+                }
+
+                sScript = aComposeBuffer.makeStringAndClear();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+
+        return makeAny( sScript );
     }
 
     //--------------------------------------------------------------------
@@ -829,7 +889,10 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         LineDescriptor aDescriptor;
+
         aDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::TextField, sal_True );
+        Reference< XEventListener > xControlExtender = new PropertyControlExtender( aDescriptor.Control );
+
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         aDescriptor.DisplayName = rEvent.sDisplayName;
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.nHelpId );

@@ -58,9 +58,41 @@
 #include <rtl/digest.h>
 #include <rtl/logfile.hxx>
 
+// since the copying uses 32000 blocks usually, it makes sense to have a smaller size
+#define MAX_STORCACHE_SIZE 30000
+
 
 using namespace ::com::sun::star;
 
+//-----------------------------------------------
+uno::Sequence< sal_Int8 > MakeKeyFromPass( ::rtl::OUString aPass, sal_Bool bUseUTF )
+{
+    // MS_1252 encoding was used for SO60 document format password encoding,
+    // this encoding supports only a minor subset of nonascii characters,
+    // but for compatibility reasons it has to be used for old document formats
+
+    ::rtl::OString aByteStrPass;
+    if ( bUseUTF )
+        aByteStrPass = ::rtl::OUStringToOString( aPass, RTL_TEXTENCODING_UTF8 );
+    else
+        aByteStrPass = ::rtl::OUStringToOString( aPass, RTL_TEXTENCODING_MS_1252 );
+
+    sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_SHA1];
+    rtlDigestError nError = rtl_digest_SHA1( aByteStrPass.getStr(),
+                                            aByteStrPass.getLength(),
+                                            pBuffer,
+                                            RTL_DIGEST_LENGTH_SHA1 );
+
+    if ( nError != rtl_Digest_E_None )
+        throw uno::RuntimeException();
+
+    return uno::Sequence< sal_Int8 >( (sal_Int8*)pBuffer, RTL_DIGEST_LENGTH_SHA1 );
+
+}
+
+// ================================================================
+namespace
+{
 //-----------------------------------------------
 void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet,
                                     const uno::Sequence< sal_Int8 >& aKey )
@@ -142,7 +174,6 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< lang::XMul
 const sal_Int32 n_ConstBufferSize = 32000;
 
 //-----------------------------------------------
-
 ::rtl::OUString GetNewTempFileURL( const uno::Reference< lang::XMultiServiceFactory > xFactory )
 {
     ::rtl::OUString aTempURL;
@@ -169,31 +200,16 @@ const sal_Int32 n_ConstBufferSize = 32000;
     return aTempURL;
 }
 
-uno::Sequence< sal_Int8 > MakeKeyFromPass( ::rtl::OUString aPass, sal_Bool bUseUTF )
+//-----------------------------------------------
+uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
-    // MS_1252 encoding was used for SO60 document format password encoding,
-    // this encoding supports only a minor subset of nonascii characters,
-    // but for compatibility reasons it has to be used for old document formats
-
-    ::rtl::OString aByteStrPass;
-    if ( bUseUTF )
-        aByteStrPass = ::rtl::OUStringToOString( aPass, RTL_TEXTENCODING_UTF8 );
-    else
-        aByteStrPass = ::rtl::OUStringToOString( aPass, RTL_TEXTENCODING_MS_1252 );
-
-    sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_SHA1];
-    rtlDigestError nError = rtl_digest_SHA1( aByteStrPass.getStr(),
-                                            aByteStrPass.getLength(),
-                                            pBuffer,
-                                            RTL_DIGEST_LENGTH_SHA1 );
-
-    if ( nError != rtl_Digest_E_None )
+    if ( !xFactory.is() )
         throw uno::RuntimeException();
 
-    return uno::Sequence< sal_Int8 >( (sal_Int8*)pBuffer, RTL_DIGEST_LENGTH_SHA1 );
-
+    return uno::Reference< io::XStream >( xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.comp.MemoryStream" ) ), uno::UNO_QUERY_THROW );
 }
 
+} // anonymous namespace
 // ================================================================
 
 //-----------------------------------------------
@@ -203,6 +219,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                       sal_Bool bForceEncrypted,
                                       sal_Int16 nStorageType,
+                                      sal_Bool bDefaultCompress,
                                       const uno::Reference< io::XInputStream >& xRelInfoStream )
 : m_pAntiImpl( NULL )
 , m_bHasDataToFlush( sal_False )
@@ -213,6 +230,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_bForceEncrypted( bForceEncrypted )
 , m_bUseCommonPass( !bForceEncrypted && nStorageType == PACKAGE_STORAGE )
 , m_bHasCachedPassword( sal_False )
+, m_bCompressedSetExplicit( !bDefaultCompress )
 , m_xPackage( xPackage )
 , m_bHasInsertedStreamOptimization( sal_False )
 , m_nStorageType( nStorageType )
@@ -237,6 +255,36 @@ OWriteStream_Impl::~OWriteStream_Impl()
     {
         KillFile( m_aTempURL, GetServiceFactory() );
         m_aTempURL = ::rtl::OUString();
+    }
+
+    CleanCacheStream();
+}
+
+//-----------------------------------------------
+void OWriteStream_Impl::CleanCacheStream()
+{
+    if ( m_xCacheStream.is() )
+    {
+        try
+        {
+            uno::Reference< io::XInputStream > xInputCache = m_xCacheStream->getInputStream();
+            if ( xInputCache.is() )
+                xInputCache->closeInput();
+        }
+        catch( uno::Exception& )
+        {}
+
+        try
+        {
+            uno::Reference< io::XOutputStream > xOutputCache = m_xCacheStream->getOutputStream();
+            if ( xOutputCache.is() )
+                xOutputCache->closeOutput();
+        }
+        catch( uno::Exception& )
+        {}
+
+        m_xCacheStream = uno::Reference< io::XStream >();
+        m_xCacheSeek = uno::Reference< io::XSeekable >();
     }
 }
 
@@ -269,7 +317,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     if ( m_bForceEncrypted || m_bHasCachedPassword )
         return sal_True;
 
-    if ( m_aTempURL.getLength() )
+    if ( m_aTempURL.getLength() || m_xCacheStream.is() )
         return sal_False;
 
     GetStreamProperties();
@@ -330,7 +378,7 @@ void OWriteStream_Impl::SetDecrypted()
     GetStreamProperties();
 
     // let the stream be modified
-    GetFilledTempFile();
+    FillTempGetFileName();
     m_bHasDataToFlush = sal_True;
 
     // remove encryption
@@ -355,7 +403,7 @@ void OWriteStream_Impl::SetEncryptedWithPass( const ::rtl::OUString& aPass )
     GetStreamProperties();
 
     // let the stream be modified
-    GetFilledTempFile();
+    FillTempGetFileName();
     m_bHasDataToFlush = sal_True;
 
     // introduce encryption info
@@ -412,14 +460,14 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
 }
 
 //-----------------------------------------------
-::rtl::OUString OWriteStream_Impl::GetFilledTempFile()
+::rtl::OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
 {
     if ( !m_aTempURL.getLength() )
     {
-        m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
+        ::rtl::OUString aTempURL = GetNewTempFileURL( GetServiceFactory() );
 
         try {
-            if ( m_aTempURL )
+            if ( aTempURL && xStream.is() )
             {
                 uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
                                 GetServiceFactory()->createInstance (
@@ -430,34 +478,115 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                     throw uno::RuntimeException(); // TODO:
 
 
-                // in case of new inserted package stream it is possible that input stream still was not set
-                uno::Reference< io::XInputStream > xOrigStream = m_xPackageStream->getDataStream();
-                if ( xOrigStream.is() )
+                uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aTempURL );
+                if ( xTempOutStream.is() )
                 {
-                    uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
-                    if ( xTempOutStream.is() )
-                    {
-                        // copy stream contents to the file
-                        ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
-                        xTempOutStream->closeOutput();
-                        xTempOutStream = uno::Reference< io::XOutputStream >();
-                    }
-                    else
-                        throw io::IOException(); // TODO:
+                    // the current position of the original stream should be still OK, copy further
+                    ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
+                    xTempOutStream->closeOutput();
+                    xTempOutStream = uno::Reference< io::XOutputStream >();
                 }
+                else
+                    throw io::IOException(); // TODO:
             }
         }
         catch( packages::WrongPasswordException& )
         {
-            KillFile( m_aTempURL, GetServiceFactory() );
-            m_aTempURL = ::rtl::OUString();
-
+            KillFile( aTempURL, GetServiceFactory() );
             throw;
         }
         catch( uno::Exception& )
         {
-            KillFile( m_aTempURL, GetServiceFactory() );
-            m_aTempURL = ::rtl::OUString();
+            KillFile( aTempURL, GetServiceFactory() );
+        }
+
+        if ( aTempURL.getLength() )
+            CleanCacheStream();
+
+        m_aTempURL = aTempURL;
+    }
+
+    return m_aTempURL;
+}
+
+//-----------------------------------------------
+::rtl::OUString OWriteStream_Impl::FillTempGetFileName()
+{
+    // should try to create cache first, if the amount of contents is too big, the temp file should be taken
+    if ( !m_xCacheStream.is() && !m_aTempURL.getLength() )
+    {
+        uno::Reference< io::XInputStream > xOrigStream = m_xPackageStream->getDataStream();
+        if ( !xOrigStream.is() )
+        {
+            // in case of new inserted package stream it is possible that input stream still was not set
+            uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
+            OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
+            m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
+            m_xCacheStream = xCacheStream;
+        }
+        else
+        {
+            sal_Int32 nRead = 0;
+            uno::Sequence< sal_Int8 > aData( MAX_STORCACHE_SIZE + 1 );
+            nRead = xOrigStream->readBytes( aData, MAX_STORCACHE_SIZE + 1 );
+            if ( aData.getLength() > nRead )
+                aData.realloc( nRead );
+
+            if ( nRead && nRead <= MAX_STORCACHE_SIZE )
+            {
+                uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( GetServiceFactory() );
+                OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
+
+                uno::Reference< io::XOutputStream > xOutStream( xCacheStream->getOutputStream(), uno::UNO_SET_THROW );
+                xOutStream->writeBytes( aData );
+                m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
+                m_xCacheStream = xCacheStream;
+                m_xCacheSeek->seek( 0 );
+            }
+            else if ( nRead && !m_aTempURL.getLength() )
+            {
+                m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
+
+                try {
+                    if ( m_aTempURL.getLength() )
+                    {
+                        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                                        GetServiceFactory()->createInstance (
+                                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                                        uno::UNO_QUERY );
+
+                        if ( !xTempAccess.is() )
+                            throw uno::RuntimeException(); // TODO:
+
+
+                        uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
+                        if ( xTempOutStream.is() )
+                        {
+                            // copy stream contents to the file
+                            xTempOutStream->writeBytes( aData );
+
+                            // the current position of the original stream should be still OK, copy further
+                            ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
+                            xTempOutStream->closeOutput();
+                            xTempOutStream = uno::Reference< io::XOutputStream >();
+                        }
+                        else
+                            throw io::IOException(); // TODO:
+                    }
+                }
+                catch( packages::WrongPasswordException& )
+                {
+                    KillFile( m_aTempURL, GetServiceFactory() );
+                    m_aTempURL = ::rtl::OUString();
+
+                    throw;
+                }
+                catch( uno::Exception& )
+                {
+                    KillFile( m_aTempURL, GetServiceFactory() );
+                    m_aTempURL = ::rtl::OUString();
+                }
+            }
         }
     }
 
@@ -469,24 +598,34 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
 {
     uno::Reference< io::XStream > xTempStream;
 
-    if ( !m_aTempURL.getLength() )
-        m_aTempURL = GetFilledTempFile();
-
-    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                    GetServiceFactory()->createInstance (
-                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                    uno::UNO_QUERY );
-
-    if ( !xTempAccess.is() )
-        throw uno::RuntimeException(); // TODO:
-
-    try
+    if ( !m_xCacheStream.is() )
     {
-        xTempStream = xTempAccess->openFileReadWrite( m_aTempURL );
+        if ( !m_aTempURL.getLength() )
+            m_aTempURL = FillTempGetFileName();
+
+        if ( m_aTempURL.getLength() )
+        {
+            // the temporary file is not used if the cache is used
+            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                            GetServiceFactory()->createInstance (
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                            uno::UNO_QUERY );
+
+            if ( !xTempAccess.is() )
+                throw uno::RuntimeException(); // TODO:
+
+            try
+            {
+                xTempStream = xTempAccess->openFileReadWrite( m_aTempURL );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
     }
-    catch( uno::Exception& )
-    {
-    }
+
+    if ( m_xCacheStream.is() )
+        xTempStream = m_xCacheStream;
 
     // the method must always return a stream
     // in case the stream can not be open
@@ -502,24 +641,34 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
 {
     uno::Reference< io::XInputStream > xInputStream;
 
-    if ( !m_aTempURL.getLength() )
-        m_aTempURL = GetFilledTempFile();
-
-    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                    GetServiceFactory()->createInstance (
-                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                    uno::UNO_QUERY );
-
-    if ( !xTempAccess.is() )
-        throw uno::RuntimeException(); // TODO:
-
-    try
+    if ( !m_xCacheStream.is() )
     {
-        xInputStream = xTempAccess->openFileRead( m_aTempURL );
+        if ( !m_aTempURL.getLength() )
+            m_aTempURL = FillTempGetFileName();
+
+        if ( m_aTempURL.getLength() )
+        {
+            // the temporary file is not used if the cache is used
+            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                            GetServiceFactory()->createInstance (
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                            uno::UNO_QUERY );
+
+            if ( !xTempAccess.is() )
+                throw uno::RuntimeException(); // TODO:
+
+            try
+            {
+                xInputStream = xTempAccess->openFileRead( m_aTempURL );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
     }
-    catch( uno::Exception& )
-    {
-    }
+
+    if ( m_xCacheStream.is() )
+        xInputStream = m_xCacheStream->getInputStream();
 
     // the method must always return a stream
     // in case the stream can not be open
@@ -534,29 +683,54 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
 void OWriteStream_Impl::CopyTempFileToOutput( uno::Reference< io::XOutputStream > xOutStream )
 {
     OSL_ENSURE( xOutStream.is(), "The stream must be specified!\n" );
-    OSL_ENSURE( m_aTempURL.getLength(), "The temporary must exist!\n" );
-
-    uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                    GetServiceFactory()->createInstance (
-                            ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                    uno::UNO_QUERY );
-
-    if ( !xTempAccess.is() )
-        throw uno::RuntimeException(); // TODO:
+    OSL_ENSURE( m_aTempURL.getLength() || m_xCacheStream.is(), "The temporary must exist!\n" );
 
     uno::Reference< io::XInputStream > xTempInStream;
-    try
-    {
-        xTempInStream = xTempAccess->openFileRead( m_aTempURL );
-    }
-    catch( uno::Exception& )
-    {
-    }
 
-    if ( !xTempInStream.is() )
-        throw io::IOException(); //TODO:
+    if ( m_xCacheStream.is() )
+    {
+        if ( !m_xCacheSeek.is() )
+            throw uno::RuntimeException();
+        sal_Int64 nPos = m_xCacheSeek->getPosition();
 
-    ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
+        try
+        {
+            m_xCacheSeek->seek( 0 );
+            uno::Reference< io::XInputStream > xTempInp = m_xCacheStream->getInputStream();
+            if ( xTempInp.is() )
+                ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
+        }
+        catch( uno::Exception& )
+        {
+            m_xCacheSeek->seek( nPos );
+            throw io::IOException(); //TODO:
+        }
+
+        m_xCacheSeek->seek( nPos );
+    }
+    else if ( m_aTempURL.getLength() )
+    {
+        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                        GetServiceFactory()->createInstance (
+                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                        uno::UNO_QUERY );
+
+        if ( !xTempAccess.is() )
+            throw uno::RuntimeException(); // TODO:
+
+        try
+        {
+            xTempInStream = xTempAccess->openFileRead( m_aTempURL );
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        if ( !xTempInStream.is() )
+            throw io::IOException(); //TODO:
+
+        ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
+    }
 }
 
 // =================================================================================================
@@ -576,7 +750,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     if ( m_bHasDataToFlush )
         throw io::IOException();
 
-    OSL_ENSURE( !m_aTempURL.getLength(), "The temporary must not exist!\n" );
+    OSL_ENSURE( !m_aTempURL.getLength() && !m_xCacheStream.is(), "The temporary must not exist!\n" );
 
     // use new file as current persistent representation
     // the new file will be removed after it's stream is closed
@@ -624,7 +798,10 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     }
 
     if ( bCompressedIsSet )
-            xPropertySet->setPropertyValue( aComprPropName, uno::makeAny( (sal_Bool)bCompressed ) );
+    {
+        xPropertySet->setPropertyValue( aComprPropName, uno::makeAny( (sal_Bool)bCompressed ) );
+        m_bCompressedSetExplicit = sal_True;
+    }
 
     if ( m_bUseCommonPass )
     {
@@ -655,34 +832,57 @@ void OWriteStream_Impl::Commit()
         return;
 
     uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream;
+    uno::Sequence< uno::Any > aSeq( 1 );
+    aSeq[0] <<= sal_False;
 
-    OSL_ENSURE( m_bHasInsertedStreamOptimization || m_aTempURL.getLength(), "The temporary must exist!\n" );
-    if ( m_aTempURL.getLength() )
+    if ( m_xCacheStream.is() )
     {
-        uno::Reference < io::XOutputStream > xTempOut(
-                            GetServiceFactory()->createInstance (
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-                            uno::UNO_QUERY );
-        uno::Reference < io::XInputStream > xTempIn( xTempOut, uno::UNO_QUERY );
+        uno::Reference< io::XInputStream > xInStream( m_xCacheStream->getInputStream(), uno::UNO_SET_THROW );
 
-        if ( !xTempOut.is() || !xTempIn.is() )
-            throw io::IOException();
-
-        // Copy temporary file to a new one
-        CopyTempFileToOutput( xTempOut );
-        xTempOut->closeOutput();
-
-        uno::Sequence< uno::Any > aSeq( 1 );
-        aSeq[0] <<= sal_False;
         xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
                                                         m_xPackage->createInstanceWithArguments( aSeq ),
-                                                        uno::UNO_QUERY );
-        if ( !xNewPackageStream.is() )
-            throw uno::RuntimeException();
+                                                        uno::UNO_QUERY_THROW );
 
-        // use new file as current persistent representation
-        // the new file will be removed after it's stream is closed
-        xNewPackageStream->setDataStream( xTempIn );
+        xNewPackageStream->setDataStream( xInStream );
+
+        m_xCacheStream = uno::Reference< io::XStream >();
+        m_xCacheSeek = uno::Reference< io::XSeekable >();
+
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
+    }
+    else if ( m_aTempURL.getLength() )
+    {
+        uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
+                        GetServiceFactory()->createInstance (
+                                ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                        uno::UNO_QUERY );
+
+        if ( !xTempAccess.is() )
+            throw uno::RuntimeException(); // TODO:
+
+        uno::Reference< io::XInputStream > xInStream;
+        try
+        {
+            xInStream = xTempAccess->openFileRead( m_aTempURL );
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        if ( !xInStream.is() )
+            throw io::IOException();
+
+        xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
+                                                        m_xPackage->createInstanceWithArguments( aSeq ),
+                                                        uno::UNO_QUERY_THROW );
+
+        // TODO/NEW: Let the temporary file be removed after commit
+        xNewPackageStream->setDataStream( xInStream );
+        m_aTempURL = ::rtl::OUString();
+
+        if ( m_pAntiImpl )
+            m_pAntiImpl->DeInit();
     }
     else // if ( m_bHasInsertedStreamOptimization )
     {
@@ -746,7 +946,13 @@ void OWriteStream_Impl::Revert()
     if ( !m_bHasDataToFlush )
         return; // nothing to do
 
-    OSL_ENSURE( m_aTempURL.getLength(), "The temporary must exist!\n" );
+    OSL_ENSURE( m_aTempURL.getLength() || m_xCacheStream.is(), "The temporary must exist!\n" );
+
+    if ( m_xCacheStream.is() )
+    {
+        m_xCacheStream = uno::Reference< io::XStream >();
+        m_xCacheSeek = uno::Reference< io::XSeekable >();
+    }
 
     if ( m_aTempURL.getLength() )
     {
@@ -1071,7 +1277,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
                 // the stream must be resaved with new password encryption
                 if ( nStreamMode & embed::ElementModes::WRITE )
                 {
-                    GetFilledTempFile();
+                    FillTempGetFileName();
                     m_bHasDataToFlush = sal_True;
 
                     // TODO/LATER: should the notification be done?
@@ -1149,7 +1355,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::READ )
     {
         uno::Reference< io::XInputStream > xInStream;
-        if ( m_aTempURL.getLength() )
+        if ( m_xCacheStream.is() || m_aTempURL.getLength() )
             xInStream = GetTempFileAsInputStream(); //TODO:
         else
             xInStream = m_xPackageStream->getDataStream();
@@ -1170,7 +1376,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
     }
     else if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::SEEKABLEREAD )
     {
-        if ( !m_aTempURL.getLength() && !( m_xPackageStream->getDataStream().is() ) )
+        if ( !m_xCacheStream.is() && !m_aTempURL.getLength() && !( m_xPackageStream->getDataStream().is() ) )
         {
             // The stream does not exist in the storage
             throw io::IOException();
@@ -1202,10 +1408,12 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         if ( ( nStreamMode & embed::ElementModes::TRUNCATE ) == embed::ElementModes::TRUNCATE )
         {
             if ( m_aTempURL.getLength() )
+            {
                 KillFile( m_aTempURL, GetServiceFactory() );
-
-            // open new empty temp file
-            m_aTempURL = GetNewTempFileURL( GetServiceFactory() );
+                m_aTempURL = ::rtl::OUString();
+            }
+            if ( m_xCacheStream.is() )
+                CleanCacheStream();
 
             m_bHasDataToFlush = sal_True;
 
@@ -1213,11 +1421,13 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             if ( m_pParent )
                 m_pParent->m_bIsModified = sal_True;
 
-            xStream = GetTempFileAsStream();
+            xStream = CreateMemoryStream( GetServiceFactory() );
+            m_xCacheSeek.set( xStream, uno::UNO_QUERY_THROW );
+            m_xCacheStream = xStream;
         }
         else if ( !m_bHasInsertedStreamOptimization )
         {
-            if ( !m_aTempURL.getLength() && !( m_xPackageStream->getDataStream().is() ) )
+            if ( !m_aTempURL.getLength() && !m_xCacheStream.is() && !( m_xPackageStream->getDataStream().is() ) )
             {
                 // The stream does not exist in the storage
                 m_bHasDataToFlush = sal_True;
@@ -1572,6 +1782,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, sal_Bool bTransacted )
 : m_pImpl( pImpl )
 , m_bInStreamDisconnected( sal_False )
 , m_bInitOnDemand( sal_True )
+, m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
     OSL_ENSURE( pImpl, "No base implementation!\n" );
@@ -1588,6 +1799,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
 : m_pImpl( pImpl )
 , m_bInStreamDisconnected( sal_False )
 , m_bInitOnDemand( sal_False )
+, m_nInitPosition( 0 )
 , m_bTransacted( bTransacted )
 {
     OSL_ENSURE( pImpl && xStream.is(), "No base implementation!\n" );
@@ -1631,6 +1843,21 @@ OWriteStream::~OWriteStream()
 }
 
 //-----------------------------------------------
+void OWriteStream::DeInit()
+{
+    if ( !m_pImpl )
+        return; // do nothing
+
+    if ( m_xSeekable.is() )
+        m_nInitPosition = m_xSeekable->getPosition();
+
+    m_xInStream = uno::Reference< io::XInputStream >();
+    m_xOutStream = uno::Reference< io::XOutputStream >();
+    m_xSeekable = uno::Reference< io::XSeekable >();
+    m_bInitOnDemand = sal_True;
+}
+
+//-----------------------------------------------
 void OWriteStream::CheckInitOnDemand()
 {
     if ( !m_pImpl )
@@ -1642,11 +1869,12 @@ void OWriteStream::CheckInitOnDemand()
         uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
         if ( xStream.is() )
         {
-            m_xInStream = xStream->getInputStream();
-            m_xOutStream = xStream->getOutputStream();
-            m_xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
-            OSL_ENSURE( m_xInStream.is() && m_xOutStream.is() && m_xSeekable.is(), "Stream implementation is incomplete!\n" );
+            m_xInStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
+            m_xOutStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
+            m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
+            m_xSeekable->seek( m_nInitPosition );
 
+            m_nInitPosition = 0;
             m_bInitOnDemand = sal_False;
         }
     }
@@ -2072,10 +2300,53 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
-    CheckInitOnDemand();
+    // the write method makes initialization itself, since it depends from the aData length
+    // NO CheckInitOnDemand()!
 
     if ( !m_pImpl )
         throw lang::DisposedException();
+
+    if ( !m_bInitOnDemand )
+    {
+        if ( !m_xOutStream.is() || !m_xSeekable.is())
+            throw io::NotConnectedException();
+
+        if ( m_pImpl->m_xCacheStream.is() )
+        {
+            // check whether the cache should be turned off
+            sal_Int64 nPos = m_xSeekable->getPosition();
+            if ( nPos + aData.getLength() > MAX_STORCACHE_SIZE )
+            {
+                // disconnect the cache and copy the data to the temporary file
+                m_xSeekable->seek( 0 );
+
+                // it is enough to copy the cached stream, the cache should already contain everything
+                if ( m_pImpl->GetFilledTempFileIfNo( m_xInStream ).getLength() )
+                {
+                    DeInit();
+                    // the last position is known and it is differs from the current stream position
+                    m_nInitPosition = nPos;
+                }
+            }
+        }
+    }
+
+    if ( m_bInitOnDemand )
+    {
+        RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
+        uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
+        if ( xStream.is() )
+        {
+            m_xInStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
+            m_xOutStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
+            m_xSeekable.set( xStream, uno::UNO_QUERY_THROW );
+            m_xSeekable->seek( m_nInitPosition );
+
+            m_nInitPosition = 0;
+            m_bInitOnDemand = sal_False;
+        }
+    }
+
 
     if ( !m_xOutStream.is() )
         throw io::NotConnectedException();
@@ -2735,11 +3006,35 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         throw lang::DisposedException();
 
     m_pImpl->GetStreamProperties();
-
-    if ( ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
-            && aPropertyName.equalsAscii( "MediaType" )
-      || aPropertyName.equalsAscii( "Compressed" ) )
+    ::rtl::OUString aCompressedString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
+    ::rtl::OUString aMediaTypeString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+    if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equals( aMediaTypeString ) )
     {
+        // if the "Compressed" property is not set explicitly, the MediaType can change the default value
+        sal_Bool bCompressedValueFromType = sal_True;
+        ::rtl::OUString aType;
+        aValue >>= aType;
+
+        if ( !m_pImpl->m_bCompressedSetExplicit )
+        {
+            if ( aType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/jpeg" ) ) )
+              || aType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/png" ) ) )
+              || aType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/gif" ) ) ) )
+                bCompressedValueFromType = sal_False;
+        }
+
+        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        {
+            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
+                m_pImpl->m_aProps[nInd].Value = aValue;
+            else if ( !m_pImpl->m_bCompressedSetExplicit && aCompressedString.equals( m_pImpl->m_aProps[nInd].Name ) )
+                m_pImpl->m_aProps[nInd].Value <<= bCompressedValueFromType;
+        }
+    }
+    else if ( m_pData->m_nStorageType == PACKAGE_STORAGE && aPropertyName.equalsAscii( "Compressed" ) )
+    {
+        // if the "Compressed" property is not set explicitly, the MediaType can change the default value
+        m_pImpl->m_bCompressedSetExplicit = sal_True;
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
             if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
@@ -2770,6 +3065,15 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         }
         else
             throw lang::IllegalArgumentException(); //TODO
+    }
+    else if ( m_pData->m_nStorageType == OFOPXML_STORAGE
+          && ( aPropertyName.equalsAscii( "MediaType" ) || aPropertyName.equalsAscii( "Compressed" ) ) )
+    {
+        for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
+        {
+            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
+                m_pImpl->m_aProps[nInd].Value = aValue;
+        }
     }
     else if ( m_pData->m_nStorageType == OFOPXML_STORAGE && aPropertyName.equalsAscii( "RelationsInfoStream" ) )
     {

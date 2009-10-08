@@ -77,7 +77,7 @@ String RID_STR_SHOWTHOUSANDSEP
 };
 String RID_STR_PRINTABLE
 {
-    Text [ en-US ] = "Print" ;
+    Text [ en-US ] = "Printable" ;
 };
 String RID_STR_TARGET_URL
 {
@@ -426,7 +426,7 @@ String RID_STR_SUBMIT_METHOD
 {
     Text [ en-US ] = "Type of submission" ;
 };
-String RID_STR_DEFAULT_CHECKED
+String RID_STR_DEFAULT_STATE
 {
     Text [ en-US ] = "Default status" ;
 };
@@ -744,7 +744,7 @@ String RID_STR_EVT_APPROVEPARAMETER
 };
 String RID_STR_EVT_ACTIONPERFORMED
 {
-    Text [ en-US ] = "When initiating" ;
+    Text [ en-US ] = "Execute action" ;
 };
 String RID_STR_EVT_AFTERUPDATE
 {
@@ -844,7 +844,7 @@ String RID_STR_EVT_APPROVERESETTED
 };
 String RID_STR_EVT_APPROVEACTIONPERFORMED
 {
-    Text [ en-US ] = "Before commencing" ;
+    Text [ en-US ] = "Approve action" ;
 };
 String RID_STR_EVT_SUBMITTED
 {
@@ -1429,4 +1429,74 @@ Resource RID_RSC_ENUM_WRITING_MODE
     {
         Text [ en-US ] = "Use superordinate object settings";
     };
+};
+
+String RID_STR_ANCHOR_TYPE
+{
+    Text [ en-US ] = "Anchor";
+};
+
+Resource RID_RSC_ENUM_TEXT_ANCHOR_TYPE
+{
+    String 1
+    {
+        Text [ en-US ] = "To Paragraph";
+    };
+    String 2
+    {
+        Text [ en-US ] = "As Character";
+    };
+    String 3
+    {
+        Text [ en-US ] = "To Page";
+    };
+    String 4
+    {
+        Text [ en-US ] = "To Frame";
+    };
+    String 5
+    {
+        Text [ en-US ] = "To Character";
+    };
+};
+
+Resource RID_RSC_ENUM_SHEET_ANCHOR_TYPE
+{
+    String 1
+    {
+        Text [ en-US ] = "To Page";
+    };
+    String 2
+    {
+        Text [ en-US ] = "To Cell";
+    };
+};
+
+String RID_STR_FONTSTYLE_REGULAR
+{
+    Text [ en-US ] = "Regular";
+    Text [ x-comment ] = "That's the 'Regular' as used for a font style (as opposed to 'italic' and 'bold'), so please use a consistent translation.";
+};
+
+String RID_STR_FONTSTYLE_BOLD_ITALIC
+{
+    Text [ en-US ] = "Bold Italic";
+    Text [ x-comment ] = "That's the 'Bold Italic' as used for a font style, so please use a consistent translation.";
+};
+
+String RID_STR_FONTSTYLE_ITALIC
+{
+    Text [ en-US ] = "Italic";
+    Text [ x-comment ] = "That's the 'Italic' as used for a font style, so please use a consistent translation.";
+};
+
+String RID_STR_FONTSTYLE_BOLD
+{
+    Text [ en-US ] = "Bold";
+    Text [ x-comment ] = "That's the 'Bold' as used for a font style, so please use a consistent translation.";
+};
+
+String RID_STR_FONT_DEFAULT
+{
+    Text [ en-US ] = "(Default)";
 };

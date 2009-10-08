@@ -74,7 +74,6 @@ OBJFILES=\
 APP1TARGET=pluginapp.bin
 APP1OBJS=$(OBJFILES)
 APP1STDLIBS=\
-    $(TOOLSLIB) 				\
     $(VOSLIB)					\
     $(SALLIB)
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="SCO" || "$(OS)"=="HPUX"

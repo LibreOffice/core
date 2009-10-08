@@ -36,6 +36,7 @@
 #include <EncryptionData.hxx>
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
+#include <ZipFile.hxx>
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
 #endif
@@ -103,15 +104,9 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     if (bEncrypt)
     {
         bEncryptCurrentEntry = sal_True;
-        rtlCipherError aResult;
 
-        aCipher = rtl_cipher_create ( rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-        aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionEncode,
-                            reinterpret_cast < const sal_uInt8 * > (xEncryptData->aKey.getConstArray() ),
-                            xEncryptData->aKey.getLength(),
-                            reinterpret_cast < const sal_uInt8 * > ( xEncryptData->aInitVector.getConstArray() ),
-                            xEncryptData->aInitVector.getLength());
-        OSL_ASSERT( aResult == rtl_Cipher_E_None );
+        ZipFile::StaticGetCipher( xEncryptData, aCipher, sal_False );
+
         aDigest = rtl_digest_createSHA1();
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;

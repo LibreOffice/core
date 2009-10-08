@@ -44,6 +44,9 @@ public class Test13 implements StorageTest {
             String aSubStream1Path = aStreamPrefix + "SubStream1";
             String aSubStream2Path = aStreamPrefix + "SubStream2";
             String aSubStream3Path = aStreamPrefix + "SubStream3";
+            String aBigSubStream1Path = aStreamPrefix + "BigSubStream1";
+            String aBigSubStream2Path = aStreamPrefix + "BigSubStream2";
+            String aBigSubStream3Path = aStreamPrefix + "BigSubStream3";
 
             String sTempFileURL = m_aTestHelper.CreateTempFile( m_xMSF );
             if ( sTempFileURL == null || sTempFileURL == "" )
@@ -65,11 +68,17 @@ public class Test13 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream hierarchically, set "MediaType" and "Compressed" properties to it, write some bytes
             // and commit
             if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aSubStream1Path, "MediaType1", true, pBytes1, true ) )
+                return false;
+            if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aBigSubStream1Path, "MediaType1", true, pBigBytes, true ) )
                 return false;
 
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
@@ -78,10 +87,14 @@ public class Test13 implements StorageTest {
             // and commit
             if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aSubStream2Path, "MediaType2", false, pBytes2, true ) )
                 return false;
+            if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aBigSubStream2Path, "MediaType2", false, pBigBytes, true ) )
+                return false;
 
             // open a new substream hierarchically, set "MediaType" and "Compressed" properties to it, write some bytes
             // and don't commit
             if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aSubStream3Path, "MediaType2", false, pBytes2, false ) )
+                return false;
+            if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aBigSubStream3Path, "MediaType2", false, pBigBytes, false ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
@@ -120,20 +133,34 @@ public class Test13 implements StorageTest {
             if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream1Path, "MediaType1", true, pBytes1 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aBigSubStream1Path, "MediaType1", true, pBigBytes ) )
+                return false;
+
             if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream2Path, "MediaType2", false, pBytes2 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aBigSubStream2Path, "MediaType2", false, pBigBytes ) )
+                return false;
+
             if ( !m_aTestHelper.cantOpenStreamH( xTempFileStorage, aSubStream3Path, ElementModes.READ ) )
+                return false;
+
+            if ( !m_aTestHelper.cantOpenStreamH( xTempFileStorage, aBigSubStream3Path, ElementModes.READ ) )
                 return false;
 
             // open existing substream hierarchically, set "MediaType" and "Compressed" properties to it, write some bytes
             // and commit
             if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aSubStream1Path, "MediaType3", true, pBytes2, true ) )
                 return false;
+            if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aBigSubStream1Path, "MediaType3", true, pBigBytes, true ) )
+                return false;
+
 
             // open existing substream hierarchically, set "MediaType" and "Compressed" properties to it, write some bytes
             // and don't commit
             if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aSubStream2Path, "MediaType3", true, pBytes1, false ) )
+                return false;
+            if ( !m_aTestHelper.WriteBytesToStreamH( xTempFileStorage, aBigSubStream2Path, "MediaType3", true, pBigBytes, false ) )
                 return false;
 
             // commit the root storage so the contents must be stored now
@@ -164,9 +191,11 @@ public class Test13 implements StorageTest {
 
             if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream1Path, "MediaType3", true, pBytes2 ) )
                 return false;
+            if ( !m_aTestHelper.checkStreamH( xResultStorage, aBigSubStream1Path, "MediaType3", true, pBigBytes ) )
+                return false;
 
             // the following stream was not commited last time, so the last change must be lost
-            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream2Path, "MediaType2", false, pBytes2 ) )
+            if ( !m_aTestHelper.checkStreamH( xResultStorage, aBigSubStream2Path, "MediaType2", false, pBigBytes ) )
                 return false;
 
             // dispose used storages to free resources

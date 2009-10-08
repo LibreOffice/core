@@ -55,7 +55,6 @@ using namespace std;
 
 CSubmissionGet::CSubmissionGet(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
-    , m_aFactory(utl::getProcessServiceFactory())
 {
 }
 

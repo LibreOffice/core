@@ -39,7 +39,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
-import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Properties;
 
 /**

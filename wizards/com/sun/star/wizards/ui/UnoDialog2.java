@@ -51,6 +51,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
 
     /**
      * Override this method to return another listener.
+     * @return
      */
     protected AbstractListener createListener()
     {
@@ -83,6 +84,23 @@ public class UnoDialog2 extends UnoDialog implements EventNames
     public XButton insertButton(String sName, String actionPerformed, String[] sPropNames, Object[] oPropValues)
     {
         return insertButton(sName, actionPerformed, this, sPropNames, oPropValues);
+    }
+
+    public XButton insertImageButton(String sName, com.sun.star.awt.XActionListener actionPerformed, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    {
+
+        XButton xButton = (XButton) insertControlModel2("com.sun.star.awt.UnoControlButtonModel", sName, sPropNames, oPropValues, XButton.class);
+
+        if (actionPerformed != null)
+        {
+            xButton.addActionListener(actionPerformed);
+        }
+        return xButton;
+    }
+
+    public XButton insertImageButton(String sName, com.sun.star.awt.XActionListener actionPerformed, String[] sPropNames, Object[] oPropValues)
+    {
+        return insertImageButton(sName, actionPerformed, this, sPropNames, oPropValues);
     }
 
     public XCheckBox insertCheckBox(String sName, String itemChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
@@ -190,7 +208,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
 
     public XControl insertInfoImage(int _posx, int _posy, int _iStep)
     {
-        XControl xImgControl = insertImage(Desktop.getUniqueName(xDlgNameAccess, "imgHint"),
+        XControl xImgControl = insertImage(Desktop.getUniqueName(getDlgNameAccess(), "imgHint"),
                 new String[]
                 {
                     "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"
@@ -199,7 +217,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
                 {
                     new Short((short) 0), new Integer(10), UIConsts.INFOIMAGEURL, new Integer(_posx), new Integer(_posy), Boolean.FALSE, new Integer(_iStep), new Integer(10)
                 });
-        super.getPeerConfiguration().setImageUrl(super.getModel(xImgControl), UIConsts.INFOIMAGEURL, UIConsts.INFOIMAGEURL_HC);
+        super.getPeerConfiguration().setImageUrl(getModel(xImgControl), UIConsts.INFOIMAGEURL, UIConsts.INFOIMAGEURL_HC);
         return xImgControl;
     }
 
@@ -331,8 +349,8 @@ public class UnoDialog2 extends UnoDialog implements EventNames
         {
             ex.printStackTrace();
         }
-
-        return xDlgContainer.getControl(componentName);
+        final Object aObj = xDlgContainer.getControl(componentName);
+        return aObj;
     }
 
     private void setControlPropertiesDebug(Object model, String[] names, Object[] values)

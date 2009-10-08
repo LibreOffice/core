@@ -46,14 +46,13 @@
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
 /** === end UNO includes === **/
 
-#include <vcl/timer.hxx>
-
 #include <comphelper/asyncnotification.hxx>
-
+#include <connectivity/FValue.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/timer.hxx>
 
-#include <memory>
+#include <vector>
 
 namespace dbtools
 {
@@ -67,21 +66,21 @@ namespace frm
 //==================================================================
 //= OListBoxModel
 //==================================================================
+typedef ::std::vector< ::connectivity::ORowSetValue >   ValueList;
+
 class OListBoxModel :public OBoundControlModel
                     ,public OEntryListHelper
                     ,public OErrorBroadcaster
 {
-    CachedRowSet                                m_aListRowSet;          // the row set to fill the list
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
-                                                m_pBoundFieldFormatter;
 
-    ::com::sun::star::uno::Any                  m_aSaveValue;
+    CachedRowSet                                m_aListRowSet;          // the row set to fill the list
+    ::connectivity::ORowSetValue                m_aSaveValue;
 
     // <properties>
     ::com::sun::star::form::ListSourceType      m_eListSourceType;      // type der list source
     ::com::sun::star::uno::Any                  m_aBoundColumn;
-    StringSequence                              m_aListSourceSeq;       //
-    StringSequence                              m_aValueSeq;            // alle Werte, readonly
+    ValueList                                   m_aListSourceValues;
+    ValueList                                   m_aBoundValues;
     ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
 
@@ -89,8 +88,7 @@ class OListBoxModel :public OBoundControlModel
     sal_Bool                                    m_bBoundComponent : 1;
 
 private:
-    // Helper functions
-    StringSequence GetCurValueSeq() const;
+    ::connectivity::ORowSetValue getFirstSelectedValue() const;
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
@@ -164,7 +162,7 @@ protected:
                             getCurrentFormComponentValue() const;
 
     // OEntryListHelper overriables
-    virtual void    stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock );
+    virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock );
     virtual void    connectedExternalListSource( );
     virtual void    disconnectedExternalListSource( );
     virtual void    refreshInternalEntryList();
@@ -180,8 +178,7 @@ private:
     */
     void        impl_refreshDbEntryList( bool _bForce );
 
-    StringSequence
-                impl_getValues() const { return m_aValueSeq.getLength() ? m_aValueSeq : getStringItemList(); }
+    ValueList   impl_getValues() const;
 };
 
 //==================================================================

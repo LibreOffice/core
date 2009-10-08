@@ -30,7 +30,6 @@
 package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.common.ConfigGroup;
-import com.sun.star.wizards.common.JavaTools;
 
 /**
  *

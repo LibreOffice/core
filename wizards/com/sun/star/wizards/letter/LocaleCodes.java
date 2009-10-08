@@ -61,8 +61,9 @@ public class LocaleCodes extends Resource
         return LS;
     }
 
-    public String[] getIDs() {
-        String []Ids = new String [135];
+    public String[] getIDs()
+    {
+        String[] Ids = new String[135];
 
         Ids[0] = "Afrikaans;af;1078";
         Ids[1] = "Albanian;sq;1052";

@@ -91,7 +91,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
         aRectLabels.Y = 0;
         aRectLabels.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
 
-        aRectFields.Y = 500;
+        aRectFields.Y = LayoutConstants.LabelHeight;
         aRectFields.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
 
         // first run only calculates the width.
@@ -129,10 +129,11 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
         aSOLabel.setFontToBold();
         final SectionObject aSOTextField = getDesignTemplate().getDetailTextField();
 
-        aRectFields.Y = aSOLabel.getHeight(500);
+        aRectFields.Y = aSOLabel.getHeight(LayoutConstants.LabelHeight);
         aRectFields.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
         i = 0;
         nCount = aFieldTitleNames.length;
+        int nLastHeight = 0;
         while (nCount > 0)
         {
             final String sLabel = aFieldTitleNames[i];
@@ -141,21 +142,23 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
             final String sFieldName = convertToFieldName(aFieldNames[i]);
             nFieldWidth = 3000 + nDelta;
             aRectFields = insertFormattedField(xSection, sFieldName, aRectFields, nFieldWidth, aSOTextField);
-
+            nLastHeight = Math.max(nLastHeight, aRectFields.Height);
             int nNextX = aRectFields.X + nFieldWidth;
             if (nNextX > (getPageWidth() - getRightPageIndent()) & nCount > 1)
             {
-                aRectLabels.Y += (2 * aSOLabel.getHeight(500)); // 2 * label height
+                int nHeight = (aSOLabel.getHeight(LayoutConstants.LabelHeight) + Math.max(aSOTextField.getHeight(LayoutConstants.FormattedFieldHeight), nLastHeight));
+                nLastHeight = 0;
+                aRectLabels.Y += nHeight; // 2 * label height
                 aRectLabels.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
 
-                aRectFields.Y += (2 * aSOTextField.getHeight(500));
+                aRectFields.Y += nHeight;
                 aRectFields.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
             }
             ++i;
             --nCount;
         }
-        aRectFields.Y += aSOTextField.getHeight(500);
-        aRectFields.Y += aSOTextField.getHeight(500); // one empty line
+        aRectFields.Y += Math.max(aSOTextField.getHeight(LayoutConstants.FormattedFieldHeight), nLastHeight);
+        aRectFields.Y += aSOTextField.getHeight(LayoutConstants.EmptyLineHeight); // one empty line
         xSection.setHeight(aRectFields.Y);
         doNotBreakInTable(xSection);
     }

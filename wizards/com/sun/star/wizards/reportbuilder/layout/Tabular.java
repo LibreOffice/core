@@ -85,13 +85,14 @@ public class Tabular extends ReportBuilderLayouter
 
         final int nWidth = calculateFieldWidth(getLeftGroupIndent(getCountOfGroups()), aFieldNames.length);
         final SectionObject aSO = getDesignTemplate().getDetailTextField();
-
+        int nHeight = LayoutConstants.FormattedFieldHeight;
         for (int i = 0; i < aFieldNames.length; i++)
         {
             final String sFieldName = convertToFieldName(aFieldNames[i]);
             aRect = insertFormattedField(xSection, sFieldName, aRect, nWidth, aSO);
+            nHeight = Math.max(aRect.Height, nHeight);
         }
-        int nHeight = aSO.getHeight(500);
+        nHeight = Math.max(aSO.getHeight(nHeight), nHeight);
         xSection.setHeight(nHeight);
     }
 
@@ -141,14 +142,14 @@ public class Tabular extends ReportBuilderLayouter
 // TODO: getCountOfGroups() == nGroups???
             aRect.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
             // TODO: group line is fix
-            aRect.Y = aSO.getHeight(500) + 250;  // group height + a little empty line
+            aRect.Y = aSO.getHeight(LayoutConstants.LabelHeight) + LayoutConstants.LineHeight;  // group height + a little empty line
             final int nWidth = calculateFieldWidth(getLeftGroupIndent(getCountOfGroups()), aFieldTitleNames.length);
 
             for (int i = 0; i < aFieldTitleNames.length; i++)
             {
                 aRect = insertLabel(xSection, aFieldTitleNames[i], aRect, nWidth, aSO);
             }
-            xSection.setHeight(aSO.getHeight(500) + 250 + aSO.getHeight(500));
+            xSection.setHeight(aSO.getHeight(LayoutConstants.LabelHeight) + LayoutConstants.LineHeight + aSO.getHeight(LayoutConstants.LabelHeight));
         }
         catch (com.sun.star.uno.Exception e)
         {

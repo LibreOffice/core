@@ -31,72 +31,72 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#include <stdio.h>
-#include <ctype.h>
-#include <hash_map>
-
+#include "componenttools.hxx"
 #include "DatabaseForm.hxx"
 #include "EventThread.hxx"
-#include "frm_resource.hxx"
+#include "frm_module.hxx"
 #include "frm_resource.hrc"
+#include "frm_resource.hxx"
 #include "GroupManager.hxx"
 #include "property.hrc"
 #include "property.hxx"
 #include "services.hxx"
-#include "frm_module.hxx"
-#include "componenttools.hxx"
-#include <com/sun/star/sdb/XColumnUpdate.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/form/DataSelectionType.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/RowSetVetoException.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/form/TabulatorCycle.hpp>
+
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/form/DataSelectionType.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/form/TabulatorCycle.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/io/XObjectInputStream.hpp>
+#include <com/sun/star/io/XObjectOutputStream.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/RowSetVetoException.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XColumnUpdate.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/XModifiable2.hpp>
 
-#include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
-#include <vcl/timer.hxx>
-#include <tools/fsys.hxx>
-#include <tools/inetmsg.hxx>
-#ifndef _INETSTRM_HXX //autogen
-#include <svtools/inetstrm.hxx>
-#endif
-#include <cppuhelper/implbase2.hxx>
-#include <comphelper/stl_types.hxx>
+#include <comphelper/basicio.hxx>
+#include <comphelper/container.hxx>
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/seqstream.hxx>
-#include <comphelper/enumhelper.hxx>
-#include <comphelper/container.hxx>
-#include <comphelper/basicio.hxx>
 #include <connectivity/dbtools.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
-#include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
-#include <svtools/inettype.hxx>
-#include <comphelper/extract.hxx>
-#include <vos/mutex.hxx>
-#include <vcl/svapp.hxx>
 #include <rtl/tencinfo.h>
+#include <svtools/inetstrm.hxx>
+#include <svtools/inettype.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/fsys.hxx>
+#include <tools/inetmsg.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
+#include <vos/mutex.hxx>
+
+#include <ctype.h>
+#include <hash_map>
+//#include <stdio.h>
 
 // compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
 namespace com {
@@ -114,8 +114,6 @@ enum DatabaseCursorType
 };
 
 } } } }
-
-#define DATABASEFORM_IMPLEMENTATION_NAME    ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.ODatabaseForm")
 
 using namespace ::dbtools;
 using namespace ::comphelper;
@@ -144,6 +142,41 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseForm()
 namespace frm
 {
 //.........................................................................
+
+//==================================================================
+//= DocumentModifyGuard
+//==================================================================
+class DocumentModifyGuard
+{
+public:
+    DocumentModifyGuard( const Reference< XInterface >& _rxFormComponent )
+        :m_xDocumentModify( getXModel( _rxFormComponent ), UNO_QUERY )
+    {
+        OSL_ENSURE( m_xDocumentModify.is(), "DocumentModifyGuard::DocumentModifyGuard: no document, or no XModifiable2!" );
+        impl_changeModifiableFlag_nothrow( false );
+    }
+    ~DocumentModifyGuard()
+    {
+        impl_changeModifiableFlag_nothrow( true );
+    }
+
+private:
+    void    impl_changeModifiableFlag_nothrow( const bool _enable )
+    {
+        try
+        {
+            if ( m_xDocumentModify.is() )
+                _enable ? m_xDocumentModify->enableSetModified() : m_xDocumentModify->disableSetModified();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+private:
+    Reference< XModifiable2 >   m_xDocumentModify;
+};
 
 //==================================================================
 //= OFormSubmitResetThread
@@ -261,51 +294,152 @@ Any SAL_CALL ODatabaseForm::queryAggregation(const Type& _rType) throw(RuntimeEx
 DBG_NAME(ODatabaseForm);
 //------------------------------------------------------------------
 ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
-        :OFormComponents(_rxFactory)
-        ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
-        ,OPropertyChangeListener(m_aMutex)
-        ,m_aLoadListeners(m_aMutex)
-        ,m_aRowSetApproveListeners(m_aMutex)
-        ,m_aRowSetListeners(m_aMutex)
-        ,m_aSubmitListeners(m_aMutex)
-        ,m_aErrorListeners(m_aMutex)
-        ,m_aResetListeners( *this, m_aMutex )
-        ,m_aPropertyBagHelper( *this )
-        ,m_pAggregatePropertyMultiplexer(NULL)
-        ,m_pGroupManager( NULL )
-        ,m_aParameterManager( m_aMutex, _rxFactory )
-        ,m_aFilterManager( _rxFactory )
-        ,m_pLoadTimer(NULL)
-        ,m_pThread(NULL)
-        ,m_nResetsPending(0)
-        ,m_nPrivileges(0)
-        ,m_bInsertOnly( sal_False )
-        ,m_eSubmitMethod(FormSubmitMethod_GET)
-        ,m_eSubmitEncoding(FormSubmitEncoding_URL)
-        ,m_eNavigation(NavigationBarMode_CURRENT)
-        ,m_bAllowInsert(sal_True)
-        ,m_bAllowUpdate(sal_True)
-        ,m_bAllowDelete(sal_True)
-        ,m_bLoaded(sal_False)
-        ,m_bSubForm(sal_False)
-        ,m_bForwardingConnection(sal_False)
-        ,m_bSharingConnection( sal_False )
+    :OFormComponents(_rxFactory)
+    ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
+    ,OPropertyChangeListener(m_aMutex)
+    ,m_aLoadListeners(m_aMutex)
+    ,m_aRowSetApproveListeners(m_aMutex)
+    ,m_aRowSetListeners(m_aMutex)
+    ,m_aSubmitListeners(m_aMutex)
+    ,m_aErrorListeners(m_aMutex)
+    ,m_aResetListeners( *this, m_aMutex )
+    ,m_aPropertyBagHelper( *this )
+    ,m_pAggregatePropertyMultiplexer(NULL)
+    ,m_pGroupManager( NULL )
+    ,m_aParameterManager( m_aMutex, _rxFactory )
+    ,m_aFilterManager( _rxFactory )
+    ,m_pLoadTimer(NULL)
+    ,m_pThread(NULL)
+    ,m_nResetsPending(0)
+    ,m_nPrivileges(0)
+    ,m_bInsertOnly( sal_False )
+    ,m_eSubmitMethod(FormSubmitMethod_GET)
+    ,m_eSubmitEncoding(FormSubmitEncoding_URL)
+    ,m_eNavigation(NavigationBarMode_CURRENT)
+    ,m_bAllowInsert(sal_True)
+    ,m_bAllowUpdate(sal_True)
+    ,m_bAllowDelete(sal_True)
+    ,m_bLoaded(sal_False)
+    ,m_bSubForm(sal_False)
+    ,m_bForwardingConnection(sal_False)
+    ,m_bSharingConnection( sal_False )
 {
-    DBG_CTOR(ODatabaseForm,NULL);
+    DBG_CTOR( ODatabaseForm, NULL );
+    impl_construct();
+}
 
+//------------------------------------------------------------------
+ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
+    :OFormComponents( _cloneSource )
+    ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
+    ,OPropertyChangeListener( m_aMutex )
+    ,ODatabaseForm_BASE1()
+    ,ODatabaseForm_BASE2()
+    ,ODatabaseForm_BASE3()
+    ,IPropertyBagHelperContext()
+    ,m_aLoadListeners( m_aMutex )
+    ,m_aRowSetApproveListeners( m_aMutex )
+    ,m_aRowSetListeners( m_aMutex )
+    ,m_aSubmitListeners( m_aMutex )
+    ,m_aErrorListeners( m_aMutex )
+    ,m_aResetListeners( *this, m_aMutex )
+    ,m_aPropertyBagHelper( *this )
+    ,m_pAggregatePropertyMultiplexer( NULL )
+    ,m_pGroupManager( NULL )
+    ,m_aParameterManager( m_aMutex, _cloneSource.m_xServiceFactory )
+    ,m_aFilterManager( _cloneSource.m_xServiceFactory )
+    ,m_pLoadTimer( NULL )
+    ,m_pThread( NULL )
+    ,m_nResetsPending( 0 )
+    ,m_nPrivileges( 0 )
+    ,m_bInsertOnly( _cloneSource.m_bInsertOnly )
+    ,m_aControlBorderColorFocus( _cloneSource.m_aControlBorderColorFocus )
+    ,m_aControlBorderColorMouse( _cloneSource.m_aControlBorderColorMouse )
+    ,m_aControlBorderColorInvalid( _cloneSource.m_aControlBorderColorInvalid )
+    ,m_aDynamicControlBorder( _cloneSource.m_aDynamicControlBorder )
+    ,m_sName( _cloneSource.m_sName )
+    ,m_aTargetURL( _cloneSource.m_aTargetURL )
+    ,m_aTargetFrame( _cloneSource.m_aTargetFrame )
+    ,m_eSubmitMethod( _cloneSource.m_eSubmitMethod )
+    ,m_eSubmitEncoding( _cloneSource.m_eSubmitEncoding )
+    ,m_eNavigation( _cloneSource.m_eNavigation )
+    ,m_bAllowInsert( _cloneSource.m_bAllowInsert )
+    ,m_bAllowUpdate( _cloneSource.m_bAllowUpdate )
+    ,m_bAllowDelete( _cloneSource.m_bAllowDelete )
+    ,m_bLoaded( sal_False )
+    ,m_bSubForm( sal_False )
+    ,m_bForwardingConnection( sal_False )
+    ,m_bSharingConnection( sal_False )
+{
+    DBG_CTOR( ODatabaseForm, NULL );
+
+    impl_construct();
+
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        // our aggregated rowset itself is not cloneable, so simply copy the properties
+        ::comphelper::copyProperties( _cloneSource.m_xAggregateSet, m_xAggregateSet );
+
+        // also care for the dynamic properties: If the clone source has properties which we do not have,
+        // then add them
+        try
+        {
+            Reference< XPropertySet > xSourceProps( const_cast< ODatabaseForm& >( _cloneSource ).queryAggregation(
+                XPropertySet::static_type() ), UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xSourcePSI( xSourceProps->getPropertySetInfo(), UNO_SET_THROW );
+            Reference< XPropertyState > xSourcePropState( xSourceProps, UNO_QUERY );
+
+            Reference< XPropertySetInfo > xDestPSI( getPropertySetInfo(), UNO_QUERY_THROW );
+
+            Sequence< Property > aSourceProperties( xSourcePSI->getProperties() );
+            for (   const Property* pSourceProperty = aSourceProperties.getConstArray();
+                    pSourceProperty != aSourceProperties.getConstArray() + aSourceProperties.getLength();
+                    ++pSourceProperty
+                )
+            {
+                if ( xDestPSI->hasPropertyByName( pSourceProperty->Name ) )
+                    continue;
+
+                // the initial value passed to XPropertyContainer is also used as default, usually. So, try
+                // to retrieve the default of the source property
+                Any aInitialValue;
+                if ( xSourcePropState.is() )
+                {
+                    aInitialValue = xSourcePropState->getPropertyDefault( pSourceProperty->Name );
+                }
+                else
+                {
+                    aInitialValue = xSourceProps->getPropertyValue( pSourceProperty->Name );
+                }
+                addProperty( pSourceProperty->Name, pSourceProperty->Attributes, aInitialValue );
+                setPropertyValue( pSourceProperty->Name, xSourceProps->getPropertyValue( pSourceProperty->Name ) );
+            }
+        }
+        catch( const Exception& )
+        {
+            throw WrappedTargetException(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not clone the given database form." ) ),
+                *const_cast< ODatabaseForm* >( &_cloneSource ),
+                ::cppu::getCaughtException()
+            );
+        }
+    }
+    osl_decrementInterlockedCount( &m_refCount );
+}
+
+//------------------------------------------------------------------
+void ODatabaseForm::impl_construct()
+{
     // aggregate a row set
     increment(m_refCount);
-
     {
-        m_xAggregate = Reference<XAggregation>(m_xServiceFactory->createInstance(SRV_SDB_ROWSET), UNO_QUERY);
-        //  m_xAggregate = Reference<XAggregation>(m_xServiceFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.sdb.dbaccess.ORowSet")), UNO_QUERY);
-        DBG_ASSERT(m_xAggregate.is(), "ODatabaseForm::ODatabaseForm : could not instantiate an SDB rowset !");
-        m_xAggregateAsRowSet = Reference<XRowSet> (m_xAggregate,UNO_QUERY);
-        setAggregation(m_xAggregate);
+        m_xAggregate = Reference< XAggregation >( m_xServiceFactory->createInstance( SRV_SDB_ROWSET ), UNO_QUERY_THROW );
+        m_xAggregateAsRowSet.set( m_xAggregate, UNO_QUERY_THROW );
+        setAggregation( m_xAggregate );
     }
 
     // listen for the properties, important for Parameters
-    if (m_xAggregateSet.is())
+    if ( m_xAggregateSet.is() )
     {
         m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
         m_pAggregatePropertyMultiplexer->acquire();
@@ -313,9 +447,14 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
     }
 
-    if (m_xAggregate.is())
     {
-        m_xAggregate->setDelegator(static_cast<XWeak*>(this));
+        Reference< XWarningsSupplier > xRowSetWarnings( m_xAggregate, UNO_QUERY );
+        m_aWarnings.setExternalWarnings( xRowSetWarnings );
+    }
+
+    if ( m_xAggregate.is() )
+    {
+        m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
     }
 
     {
@@ -324,10 +463,9 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
 
         declareForwardedProperty( PROPERTY_ID_ACTIVE_CONNECTION );
     }
+    decrement( m_refCount );
 
-    decrement(m_refCount);
-
-    m_pGroupManager = new OGroupManager(this);
+    m_pGroupManager = new OGroupManager( this );
     m_pGroupManager->acquire();
 }
 
@@ -337,9 +475,12 @@ ODatabaseForm::~ODatabaseForm()
     DBG_DTOR(ODatabaseForm,NULL);
 
     m_pGroupManager->release();
+    m_pGroupManager = NULL;
 
     if (m_xAggregate.is())
-        m_xAggregate->setDelegator(InterfaceRef());
+        m_xAggregate->setDelegator( NULL );
+
+    m_aWarnings.setExternalWarnings( NULL );
 
     if (m_pAggregatePropertyMultiplexer)
     {
@@ -354,14 +495,18 @@ ODatabaseForm::~ODatabaseForm()
 //------------------------------------------------------------------------
 ::rtl::OUString ODatabaseForm::GetDataURLEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
-
+    return GetDataEncoded(true,SubmitButton,MouseEvt);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
+{
     // Liste von successful Controls fuellen
     HtmlSuccessfulObjList aSuccObjList;
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
     // Liste zu ::rtl::OUString zusammensetzen
-    ::rtl::OUString aResult;
+    ::rtl::OUStringBuffer aResult;
     ::rtl::OUString aName;
     ::rtl::OUString aValue;
 
@@ -384,17 +529,24 @@ ODatabaseForm::~ODatabaseForm()
         }
         Encode( aName );
         Encode( aValue );
-        aResult += aName;
-        aResult += UniString('=');
-        aResult += aValue;
+
+        aResult.append(aName);
+        aResult.append(sal_Unicode('='));
+        aResult.append(aValue);
+
         if (pSuccObj < aSuccObjList.end() - 1)
-            aResult += UniString('&');
+        {
+            if ( _bURLEncoded )
+                aResult.append(sal_Unicode('&'));
+            else
+                aResult.appendAscii("\r\n");
+        }
     }
 
 
     aSuccObjList.clear();
 
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 //==============================================================================
@@ -402,46 +554,7 @@ ODatabaseForm::~ODatabaseForm()
 //------------------------------------------------------------------------
 ::rtl::OUString ODatabaseForm::GetDataTextEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
-
-    // Liste von successful Controls fuellen
-    HtmlSuccessfulObjList aSuccObjList;
-    FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
-    // Liste zu ::rtl::OUString zusammensetzen
-    ::rtl::OUString aResult;
-    ::rtl::OUString aName;
-    ::rtl::OUString aValue;
-
-    for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
-            pSuccObj < aSuccObjList.end();
-            ++pSuccObj
-        )
-    {
-        aName = pSuccObj->aName;
-        aValue = pSuccObj->aValue;
-        if (pSuccObj->nRepresentation == SUCCESSFUL_REPRESENT_FILE && aValue.getLength())
-        {
-            // Bei File-URLs wird der Dateiname und keine URL uebertragen,
-            // weil Netscape dies so macht.
-            INetURLObject aURL;
-            aURL.SetSmartProtocol(INET_PROT_FILE);
-            aURL.SetSmartURL(aValue);
-            if( INET_PROT_FILE == aURL.GetProtocol() )
-                aValue = INetURLObject::decode(aURL.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
-        }
-        Encode( aName );
-        Encode( aValue );
-        aResult += pSuccObj->aName;
-        aResult += UniString('=');
-        aResult += pSuccObj->aValue;
-        if (pSuccObj < aSuccObjList.end() - 1)
-            aResult += ::rtl::OUString::createFromAscii("\r\n");
-    }
-
-
-    // Liste loeschen
-    aSuccObjList.clear();
-
-    return aResult;
+    return GetDataEncoded(false,SubmitButton,MouseEvt);
 }
 
 //------------------------------------------------------------------------
@@ -1368,6 +1481,28 @@ void SAL_CALL ODatabaseForm::setPropertyValues( const Sequence< PropertyValue >&
 }
 
 //------------------------------------------------------------------------------
+Any SAL_CALL ODatabaseForm::getWarnings(  ) throw (SQLException, RuntimeException)
+{
+    return m_aWarnings.getWarnings();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::clearWarnings(  ) throw (SQLException, RuntimeException)
+{
+    m_aWarnings.clearWarnings();
+}
+
+//------------------------------------------------------------------------------
+Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  ) throw (RuntimeException)
+{
+    ODatabaseForm* pClone = new ODatabaseForm( *this );
+    osl_incrementInterlockedCount( &pClone->m_refCount );
+    pClone->clonedFrom( *this );
+    osl_decrementInterlockedCount( &pClone->m_refCount );
+    return pClone;
+}
+
+//------------------------------------------------------------------------------
 void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any* pOldValues, sal_Int32 nCount, sal_Bool bVetoable )
 {
     // same as in getFastPropertyValue(INT32) : if we're resetting currently don't fire any changes of the
@@ -2040,7 +2175,36 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
         submit_impl( Control, MouseEvt, true );
     }
 }
+// -----------------------------------------------------------------------------
+void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransformer>& xTransformer,const ::rtl::OUString& aURLStr,const ::rtl::OUString& aReferer,const ::rtl::OUString& aTargetName
+                  ,const ::rtl::OUString& aData,rtl_TextEncoding _eEncoding)
+{
+    URL aURL;
+    aURL.Complete = aURLStr;
+    xTransformer->parseStrict(aURL);
 
+    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
+        FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
+        FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
+
+    if (xDisp.is())
+    {
+        Sequence<PropertyValue> aArgs(2);
+        aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
+        aArgs.getArray()[0].Value <<= aReferer;
+
+        // build a sequence from the to-be-submitted string
+        ByteString a8BitData(aData.getStr(), (sal_uInt16)aData.getLength(), _eEncoding);
+            // always ANSI #58641
+        Sequence< sal_Int8 > aPostData((sal_Int8*)a8BitData.GetBuffer(), a8BitData.Len());
+        Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
+
+        aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
+        aArgs.getArray()[1].Value <<= xPostData;
+
+        xDisp->dispatch(aURL, aArgs);
+    } // if (xDisp.is())
+}
 //------------------------------------------------------------------------------
 void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt, bool _bAproveByListeners)
 {
@@ -2088,6 +2252,9 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
 
     if (!xModel.is())
         return;
+    Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
+    if (!xFrame.is())
+        return;
 
     Reference<XURLTransformer>
         xTransformer(m_xServiceFactory->createInstance(
@@ -2102,10 +2269,6 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
             aData = GetDataURLEncoded( Control, MouseEvt );
         }
-
-        Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
-        if (!xFrame.is())
-            return;
 
         URL aURL;
         // FormMethod GET
@@ -2132,38 +2295,11 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
         // FormMethod POST
         else if( eSubmitMethod == FormSubmitMethod_POST )
         {
-            aURL.Complete = aURLStr;
-            xTransformer->parseStrict(aURL);
-
-            Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
-                FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
-                FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
-
-            if (xDisp.is())
-            {
-                Sequence<PropertyValue> aArgs(2);
-                aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
-                aArgs.getArray()[0].Value <<= aReferer;
-
-                // build a sequence from the to-be-submitted string
-                ByteString a8BitData(aData.getStr(), (sal_uInt16)aData.getLength(), RTL_TEXTENCODING_MS_1252);
-                    // always ANSI #58641
-                Sequence< sal_Int8 > aPostData((sal_Int8*)a8BitData.GetBuffer(), a8BitData.Len());
-                Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
-
-                aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
-                aArgs.getArray()[1].Value <<= xPostData;
-
-                xDisp->dispatch(aURL, aArgs);
-            }
+            lcl_dispatch(xFrame,xTransformer,aURLStr,aReferer,aTargetName,aData,RTL_TEXTENCODING_MS_1252);
         }
     }
     else if( eSubmitEncoding == FormSubmitEncoding_MULTIPART )
     {
-        Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
-        if (!xFrame.is())
-            return;
-
         URL aURL;
         aURL.Complete = aURLStr;
         xTransformer->parseStrict(aURL);
@@ -2206,35 +2342,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             aData = GetDataTextEncoded( Reference<XControl> (), MouseEvt );
         }
 
-        Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
-        if (!xFrame.is())
-            return;
-
-        URL aURL;
-
-        aURL.Complete = aURLStr;
-        xTransformer->parseStrict(aURL);
-
-        Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
-            FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
-            FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
-
-        if (xDisp.is())
-        {
-            Sequence<PropertyValue> aArgs(2);
-            aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
-            aArgs.getArray()[0].Value <<= aReferer;
-
-            // build a sequence from the to-be-submitted string
-            ByteString aSystemEncodedData(aData.getStr(), (sal_uInt16)aData.getLength(), osl_getThreadTextEncoding());
-            Sequence< sal_Int8 > aPostData((sal_Int8*)aSystemEncodedData.GetBuffer(), aSystemEncodedData.Len());
-            Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
-
-            aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
-            aArgs.getArray()[1].Value <<= xPostData;
-
-            xDisp->dispatch(aURL, aArgs);
-        }
+        lcl_dispatch(xFrame,xTransformer,aURLStr,aReferer,aTargetName,aData,osl_getThreadTextEncoding());
     }
     else {
         DBG_ERROR("ODatabaseForm::submit_Impl : wrong encoding !");
@@ -2887,6 +2995,10 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     if (!isLoaded())
         return;
+
+    DocumentModifyGuard aModifyGuard( *this );
+        // ensures the document is not marked as "modified" just because we change some control's content during
+        // reloading ...
 
     EventObject aEvent(static_cast<XWeak*>(this));
     {
@@ -3694,7 +3806,7 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt ) th
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
 {
-    return DATABASEFORM_IMPLEMENTATION_NAME;
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.forms.ODatabaseForm" ) );
 }
 
 //------------------------------------------------------------------------------

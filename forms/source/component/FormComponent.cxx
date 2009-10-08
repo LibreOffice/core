@@ -30,35 +30,39 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
+
+#include "componenttools.hxx"
 #include "FormComponent.hxx"
+#include "frm_resource.hrc"
+#include "frm_resource.hxx"
+#include "property.hrc"
+#include "services.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/sdb/XRowSetChangeBroadcaster.hpp>
+#include <com/sun/star/sdb/XRowSetSupplier.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/basicio.hxx>
+#include <comphelper/guarding.hxx>
+#include <comphelper/listenernotification.hxx>
+#include <comphelper/property.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <rtl/logfile.hxx>
+#include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <cppuhelper/queryinterface.hxx>
-#include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/io/XMarkableStream.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <comphelper/property.hxx>
-#include <comphelper/guarding.hxx>
-#include <connectivity/dbtools.hxx>
-#ifndef _FRM_PROPERTY_HRC_
-#include "property.hrc"
-#endif
-#include "services.hxx"
-#include "componenttools.hxx"
-#include <rtl/logfile.hxx>
-#include <comphelper/basicio.hxx>
-#include <comphelper/listenernotification.hxx>
-#include <toolkit/helper/emptyfontdescriptor.hxx>
-
-#include "frm_resource.hxx"
-#include "frm_resource.hrc"
 
 #include <functional>
 #include <algorithm>
@@ -88,15 +92,67 @@ namespace frm
     using namespace ::dbtools;
     using namespace ::comphelper;
 
-//=========================================================================
+    //=========================================================================
+    //= FieldChangeNotifier
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    void ControlModelLock::impl_notifyAll_nothrow()
+    {
+        m_rModel.firePropertyChanges( m_aHandles, m_aOldValues, m_aNewValues, OControlModel::LockAccess() );
+    }
+
+    //-------------------------------------------------------------------------
+    void ControlModelLock::addPropertyNotification( const sal_Int32 _nHandle, const Any& _rOldValue, const Any& _rNewValue )
+    {
+        sal_Int32 nOldLength = m_aHandles.getLength();
+        if  (   ( nOldLength != m_aOldValues.getLength() )
+            ||  ( nOldLength != m_aNewValues.getLength() )
+            )
+            throw RuntimeException( ::rtl::OUString(), m_rModel );
+
+        m_aHandles.realloc( nOldLength + 1 );
+        m_aHandles[ nOldLength ] = _nHandle;
+        m_aOldValues.realloc( nOldLength + 1 );
+        m_aOldValues[ nOldLength ] = _rOldValue;
+        m_aNewValues.realloc( nOldLength + 1 );
+        m_aNewValues[ nOldLength ] = _rNewValue;
+    }
+
+    //=========================================================================
+    //= FieldChangeNotifier
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    class FieldChangeNotifier
+    {
+    public:
+        FieldChangeNotifier( ControlModelLock& _rLock )
+            :m_rLock( _rLock )
+            ,m_rModel( dynamic_cast< OBoundControlModel& >( _rLock.getModel() ) )
+        {
+            m_xOldField = m_rModel.getField();
+        }
+
+        ~FieldChangeNotifier()
+        {
+            Reference< XPropertySet > xNewField( m_rModel.getField() );
+            if ( m_xOldField != xNewField )
+                m_rLock.addPropertyNotification( PROPERTY_ID_BOUNDFIELD, makeAny( m_xOldField ), makeAny( xNewField ) );
+        }
+
+    private:
+        ControlModelLock&           m_rLock;
+        OBoundControlModel&         m_rModel;
+        Reference< XPropertySet >   m_xOldField;
+    };
+
+//=============================================================================
 //= base class for form layer controls
-//=========================================================================
+//=============================================================================
 DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
 OControl::OControl( const Reference< XMultiServiceFactory >& _rxFactory, const rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
             ,m_aContext( _rxFactory )
-            ,m_xServiceFactory(_rxFactory)
 {
     DBG_CTOR(frm_OControl, NULL);
     // VCL-Control aggregieren
@@ -467,12 +523,14 @@ DBG_NAME(OControlModel)
 //------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId() throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getImplementationId" );
     return OImplementationIds::getImplementationId(getTypes());
 }
 
 //------------------------------------------------------------------
 Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getTypes" );
     TypeBag aTypes( _getTypes() );
 
     Reference< XTypeProvider > xProv;
@@ -485,6 +543,7 @@ Sequence<Type> SAL_CALL OControlModel::getTypes() throw(RuntimeException)
 //------------------------------------------------------------------------------
 Sequence<Type> OControlModel::_getTypes()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::_getTypes" );
     return TypeBag( OComponentHelper::getTypes(),
         OPropertySetAggregationHelper::getTypes(),
         OControlModel_BASE::getTypes()
@@ -494,6 +553,7 @@ Sequence<Type> OControlModel::_getTypes()
 //------------------------------------------------------------------
 Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::queryAggregation" );
     // base class 1
     Any aReturn(OComponentHelper::queryAggregation(_rType));
 
@@ -517,6 +577,7 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
 //------------------------------------------------------------------------------
 void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XObjectInputStream >& _rxInStream)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::readHelpTextCompatibly" );
     ::rtl::OUString sHelpText;
     ::comphelper::operator>>( _rxInStream, sHelpText);
     try
@@ -533,6 +594,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
 //------------------------------------------------------------------------------
 void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XObjectOutputStream >& _rxOutStream)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::writeHelpTextCompatibly" );
     ::rtl::OUString sHelpText;
     try
     {
@@ -554,7 +616,7 @@ OControlModel::OControlModel(
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
     ,m_aContext( _rxFactory )
-    ,m_xServiceFactory(_rxFactory)
+    ,m_lockCount( 0 )
     ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
@@ -563,6 +625,7 @@ OControlModel::OControlModel(
         // the native look is ugly ....
         // #i37342# / 2004-11-19 / frank.schoenheit@sun.com
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::OControlModel" );
     DBG_CTOR(OControlModel, NULL);
     if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
     {
@@ -599,11 +662,12 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     :OComponentHelper( m_aMutex )
     ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
     ,m_aContext( _rxFactory )
-    ,m_xServiceFactory( _rxFactory )
+    ,m_lockCount( 0 )
     ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
     ,m_nClassId( FormComponentType::CONTROL )
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::OControlModel(copy)" );
     DBG_CTOR( OControlModel, NULL );
     DBG_ASSERT( _pOriginal, "OControlModel::OControlModel: invalid original!" );
 
@@ -648,12 +712,14 @@ OControlModel::~OControlModel()
 //------------------------------------------------------------------
 void OControlModel::clonedFrom( const OControlModel* /*_pOriginal*/ )
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::clonedFrom" );
     // nothing to do in this base class
 }
 
 //------------------------------------------------------------------------------
 void OControlModel::doResetDelegator()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::doResetDelegator" );
     if (m_xAggregate.is())
         m_xAggregate->setDelegator(NULL);
 }
@@ -661,6 +727,7 @@ void OControlModel::doResetDelegator()
 //------------------------------------------------------------------------------
 void OControlModel::doSetDelegator()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::doSetDelegator" );
     increment(m_refCount);
     if (m_xAggregate.is())
     {
@@ -673,32 +740,32 @@ void OControlModel::doSetDelegator()
 //------------------------------------------------------------------------------
 InterfaceRef SAL_CALL OControlModel::getParent() throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getParent" );
     return m_xParent;
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setParent" );
     osl::MutexGuard aGuard(m_aMutex);
 
     Reference<XComponent> xComp(m_xParent, UNO_QUERY);
     if (xComp.is())
         xComp->removeEventListener(static_cast<XPropertiesChangeListener*>(this));
 
-    {
-        xComp = xComp.query( _rxParent );
-        RTL_LOGFILE_CONTEXT( aLogger, "OControlModel::setParent::logOnEventListener" );
-        if ( xComp.is() )
-            xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
-    }
-
     m_xParent = _rxParent;
+    xComp = xComp.query( m_xParent );
+
+    if ( xComp.is() )
+        xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
 }
 
 // XNamed
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OControlModel::getName() throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getName" );
     ::rtl::OUString aReturn;
     OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= aReturn;
     return aReturn;
@@ -707,6 +774,7 @@ void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com:
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setName" );
         setFastPropertyValue(PROPERTY_ID_NAME, makeAny(_rName));
 }
 
@@ -714,6 +782,7 @@ void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(Runtim
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName) throw ( RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::supportsService" );
     Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
     const rtl::OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
@@ -725,6 +794,7 @@ sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceN
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OControlModel::getAggregateServiceNames()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getAggregateServiceNames" );
     Sequence< ::rtl::OUString > aAggServices;
     Reference< XServiceInfo > xInfo;
     if ( query_aggregation( m_xAggregate, xInfo ) )
@@ -735,6 +805,7 @@ Sequence< ::rtl::OUString > OControlModel::getAggregateServiceNames()
 //------------------------------------------------------------------------------
 Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getSupportedServiceNames" );
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
         getSupportedServiceNames_Static()
@@ -744,6 +815,7 @@ Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getSupportedServiceNames_Static" );
     Sequence< ::rtl::OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
     aServiceNames[ 1 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.FormControlModel" );
@@ -754,6 +826,7 @@ Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Sta
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& _rSource) throw (RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::disposing" );
     // release the parent
     if (_rSource.Source == m_xParent)
     {
@@ -775,6 +848,7 @@ void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& 
 //-----------------------------------------------------------------------------
 void OControlModel::disposing()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::disposing" );
     OPropertySetAggregationHelper::disposing();
 
     Reference<com::sun::star::lang::XComponent> xComp;
@@ -789,6 +863,7 @@ void OControlModel::disposing()
 //------------------------------------------------------------------------------
 void OControlModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutStream ) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::writeAggregate" );
     Reference< XPersistObject > xPersist;
     if ( query_aggregation( m_xAggregate, xPersist ) )
         xPersist->write( _rxOutStream );
@@ -797,6 +872,7 @@ void OControlModel::writeAggregate( const Reference< XObjectOutputStream >& _rxO
 //------------------------------------------------------------------------------
 void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInStream )
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::readAggregate" );
     Reference< XPersistObject > xPersist;
     if ( query_aggregation( m_xAggregate, xPersist ) )
         xPersist->read( _rxInStream );
@@ -806,6 +882,7 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
 void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
                         throw(stario::IOException, RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::write" );
     osl::MutexGuard aGuard(m_aMutex);
 
     // 1. Schreiben des UnoControls
@@ -851,6 +928,7 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
 //------------------------------------------------------------------------------
 void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::read" );
     osl::MutexGuard aGuard(m_aMutex);
 
     Reference<stario::XMarkableStream> xMark(InStream, UNO_QUERY);
@@ -904,6 +982,7 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
 //------------------------------------------------------------------------------
 PropertyState OControlModel::getPropertyStateByHandle( sal_Int32 _nHandle )
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertyStateByHandle" );
     // simply compare the current and the default value
     Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
     Any aDefaultValue;  getFastPropertyValue( aDefaultValue, _nHandle );
@@ -920,6 +999,7 @@ PropertyState OControlModel::getPropertyStateByHandle( sal_Int32 _nHandle )
 //------------------------------------------------------------------------------
 void OControlModel::setPropertyToDefaultByHandle( sal_Int32 _nHandle)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setPropertyToDefaultByHandle" );
     Any aDefault = getPropertyDefaultByHandle( _nHandle );
 
     Any aConvertedValue, aOldValue;
@@ -933,6 +1013,7 @@ void OControlModel::setPropertyToDefaultByHandle( sal_Int32 _nHandle)
 //------------------------------------------------------------------------------
 Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertyDefaultByHandle" );
     Any aReturn;
     switch ( _nHandle )
     {
@@ -965,6 +1046,7 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 //------------------------------------------------------------------------------
 void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getFastPropertyValue" );
     switch ( _nHandle )
     {
         case PROPERTY_ID_NAME:
@@ -996,6 +1078,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
                         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
                         throw (com::sun::star::lang::IllegalArgumentException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::convertFastPropertyValue" );
     sal_Bool bModified(sal_False);
     switch (_nHandle)
     {
@@ -1025,6 +1108,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
 void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
                         throw (Exception)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setFastPropertyValue_NoBroadcast" );
     switch (_nHandle)
     {
         case PROPERTY_ID_NAME:
@@ -1057,6 +1141,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 //------------------------------------------------------------------------------
 void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::describeFixedProperties" );
     BEGIN_DESCRIBE_BASE_PROPERTIES( 4 )
         DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
         DECL_PROP1      (NAME,        ::rtl::OUString,  BOUND);
@@ -1068,6 +1153,7 @@ void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 //------------------------------------------------------------------------------
 void OControlModel::describeAggregateProperties( Sequence< Property >& /* [out] */ _rAggregateProps ) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::describeAggregateProperties" );
     if ( m_xAggregateSet.is() )
     {
         Reference< XPropertySetInfo > xPSI( m_xAggregateSet->getPropertySetInfo() );
@@ -1079,12 +1165,14 @@ void OControlModel::describeAggregateProperties( Sequence< Property >& /* [out] 
 //------------------------------------------------------------------------------
 ::osl::Mutex& OControlModel::getMutex()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getMutex" );
     return m_aMutex;
 }
 
 //------------------------------------------------------------------------------
 void OControlModel::describeFixedAndAggregateProperties( Sequence< Property >& _out_rFixedProperties, Sequence< Property >& _out_rAggregateProperties ) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::describeFixedAndAggregateProperties" );
     describeFixedProperties( _out_rFixedProperties );
     describeAggregateProperties( _out_rAggregateProperties );
 }
@@ -1092,43 +1180,79 @@ void OControlModel::describeFixedAndAggregateProperties( Sequence< Property >& _
 //------------------------------------------------------------------------------
 Reference< XMultiPropertySet > OControlModel::getPropertiesInterface()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertiesInterface" );
     return Reference< XMultiPropertySet >( *this, UNO_QUERY );
 }
 
 //------------------------------------------------------------------------------
 Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw( RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() );
 }
 
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OControlModel::getInfoHelper()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getInfoHelper" );
     return m_aPropertyBagHelper.getInfoHelper();
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::addProperty" );
     m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::removeProperty" );
     m_aPropertyBagHelper.removeProperty( _rName );
 }
 
 //--------------------------------------------------------------------
 Sequence< PropertyValue > SAL_CALL OControlModel::getPropertyValues() throw (RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getPropertyValues" );
     return m_aPropertyBagHelper.getPropertyValues();
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL OControlModel::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setPropertyValues" );
     m_aPropertyBagHelper.setPropertyValues( _rProps );
+}
+
+//--------------------------------------------------------------------
+void OControlModel::lockInstance( LockAccess )
+{
+    m_aMutex.acquire();
+    osl_incrementInterlockedCount( &m_lockCount );
+}
+
+//--------------------------------------------------------------------
+oslInterlockedCount OControlModel::unlockInstance( LockAccess )
+{
+    OSL_ENSURE( m_lockCount > 0, "OControlModel::unlockInstance: not locked!" );
+    oslInterlockedCount lockCount = osl_decrementInterlockedCount( &m_lockCount );
+    m_aMutex.release();
+    return lockCount;
+}
+
+//--------------------------------------------------------------------
+void OControlModel::firePropertyChanges( const Sequence< sal_Int32 >& _rHandles, const Sequence< Any >& _rOldValues,
+                                        const Sequence< Any >& _rNewValues, LockAccess )
+{
+    OPropertySetHelper::fire(
+        const_cast< Sequence< sal_Int32 >& >( _rHandles ).getArray(),
+        _rNewValues.getConstArray(),
+        _rOldValues.getConstArray(),
+        _rHandles.getLength(),
+        sal_False
+    );
 }
 
 //==================================================================
@@ -1141,6 +1265,7 @@ Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (R
     Any aReturn( OControlModel::queryAggregation(_rType) );
     if (!aReturn.hasValue())
     {
+        // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::queryAggregation" );
         aReturn = OBoundControlModel_BASE1::queryInterface(_rType);
 
         if ( !aReturn.hasValue() && m_bCommitable )
@@ -1163,15 +1288,17 @@ OBoundControlModel::OBoundControlModel(
         const sal_Bool _bCommitable, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
     ,OPropertyChangeListener( m_aMutex )
+    ,m_xField()
+    ,m_xAmbientForm()
     ,m_nValuePropertyAggregateHandle( -1 )
     ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( false )
+    ,m_aResetHelper( *this, m_aMutex )
     ,m_aUpdateListeners(m_aMutex)
-    ,m_aResetListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
     ,m_bInputRequired( sal_True )
     ,m_pAggPropMultiplexer( NULL )
-    ,m_bLoadListening( sal_False )
+    ,m_bFormListening( false )
     ,m_bLoaded(sal_False)
     ,m_bRequired(sal_False)
     ,m_bCommitable(_bCommitable)
@@ -1196,16 +1323,18 @@ OBoundControlModel::OBoundControlModel(
         const OBoundControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory, sal_True, sal_False )
     ,OPropertyChangeListener( m_aMutex )
+    ,m_xField()
+    ,m_xAmbientForm()
     ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
     ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( _pOriginal->m_bValuePropertyMayBeVoid )
+    ,m_aResetHelper( *this, m_aMutex )
     ,m_aUpdateListeners( m_aMutex )
-    ,m_aResetListeners( m_aMutex )
     ,m_aFormComponentListeners( m_aMutex )
     ,m_xValidator( _pOriginal->m_xValidator )
     ,m_bInputRequired( sal_True )
     ,m_pAggPropMultiplexer( NULL )
-    ,m_bLoadListening( sal_False )
+    ,m_bFormListening( false )
     ,m_bLoaded( sal_False )
     ,m_bRequired( sal_False )
     ,m_bCommitable( _pOriginal->m_bCommitable )
@@ -1382,6 +1511,7 @@ Sequence< Type > OBoundControlModel::_getTypes()
 //-----------------------------------------------------------------------------
 void OBoundControlModel::disposing()
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::_getTypes" );
     OControlModel::disposing();
 
     ::osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -1391,11 +1521,11 @@ void OBoundControlModel::disposing()
 
     // notify all our listeners
     com::sun::star::lang::EventObject aEvt( static_cast< XWeak* >( this ) );
-    m_aResetListeners.disposeAndClear( aEvt );
     m_aUpdateListeners.disposeAndClear( aEvt );
+    m_aResetHelper.disposing();
 
     // disconnect from our database column
-    // TODO: could we replace the following 5 lines with a call to disconnectDatabaseColumn?
+    // TODO: could we replace the following 5 lines with a call to impl_disconnectDatabaseColumn_noNotify?
     // The only more thing which it does is calling onDisconnectedDbColumn - could this
     // cause trouble? At least when we continue to call OControlModel::disposing before, it *may*.
     if ( hasField() )
@@ -1421,7 +1551,7 @@ void OBoundControlModel::disposing()
 //------------------------------------------------------------------------------
 void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) throw ( RuntimeException )
 {
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    ControlModelLock aLock( *this );
 
     OSL_ENSURE( _rEvt.PropertyName == m_sValuePropertyName,
         "OBoundControlModel::_propertyChanged: where did this come from (1)?" );
@@ -1435,7 +1565,7 @@ void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) th
         {   // the control value changed, while we have an external value binding
             // -> forward the value to it
             if ( m_eControlValueChangeInstigator != eExternalBinding )
-                transferControlValueToExternal( aGuard );
+                transferControlValueToExternal( aLock );
         }
         else if ( !m_bCommitable && m_xColumnUpdate.is() )
         {   // the control value changed, while we are  bound to a database column,
@@ -1465,56 +1595,71 @@ void OBoundControlModel::startAggregatePropertyListening( const ::rtl::OUString&
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::startLoadListening( )
+void OBoundControlModel::doFormListening( const bool _bStart )
 {
-    OSL_PRECOND( !isLoadListening(), "OBoundControlModel::startLoadListening: already listening!" );
-    OSL_PRECOND( m_xParent.is(), "OBoundControlModel::startLoadListening: no parent to listen at!" );
-    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::startLoadListening: external value binding should overrule the database binding!" );
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::doFormListening: external value binding should overrule the database binding!" );
 
-    Reference< XLoadable > xLoadable( m_xParent, UNO_QUERY );
-    if ( xLoadable.is() )
+    if ( isFormListening() == _bStart )
+        return;
+
+    if ( m_xAmbientForm.is() )
+        _bStart ? m_xAmbientForm->addLoadListener( this ) : m_xAmbientForm->removeLoadListener( this );
+
+    Reference< XLoadable > xParentLoadable( getParent(), UNO_QUERY );
+    if ( getParent().is() && !xParentLoadable.is() )
     {
-        RTL_LOGFILE_CONTEXT( aLogger, "forms::OBoundControlModel::startLoadListening" );
-        xLoadable->addLoadListener( this );
-        m_bLoadListening = sal_True;
+        // if our parent does not directly support the XLoadable interface, then it might support the
+        // XRowSetSupplier/XRowSetChangeBroadcaster interfaces. In this case we have to listen for changes
+        // broadcasted by the latter.
+        Reference< XRowSetChangeBroadcaster > xRowSetBroadcaster( getParent(), UNO_QUERY );
+        if ( xRowSetBroadcaster.is() )
+            _bStart ? xRowSetBroadcaster->addRowSetChangeListener( this ) : xRowSetBroadcaster->removeRowSetChangeListener( this );
     }
-}
 
-//------------------------------------------------------------------------------
-void OBoundControlModel::stopLoadListening( )
-{
-    OSL_PRECOND( isLoadListening(), "OBoundControlModel::stopLoadListening: not listening!" );
-
-    Reference< XLoadable > xLoadable( m_xParent, UNO_QUERY );
-    if ( xLoadable.is() && isLoadListening() )
-    {
-        xLoadable->removeLoadListener( this );
-        m_bLoadListening = sal_False;
-    }
+    m_bFormListening = _bStart && m_xAmbientForm.is();
 }
 
 // XChild
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::setParent(const Reference<XInterface>& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ControlModelLock aLock( *this );
+    FieldChangeNotifier aBoundFieldNotifier( aLock );
+
+    if ( getParent() == _rxParent )
+        return;
+
+    // disconnect from database column (which is controlled by parent, directly or indirectly)
+    if ( hasField() )
+        impl_disconnectDatabaseColumn_noNotify();
 
     // log off old listeners
-    if ( isLoadListening() )
-        stopLoadListening( );
+    if ( isFormListening() )
+        doFormListening( false );
 
-    OControlModel::setParent(_rxParent);
+    // actually set the new parent
+    OControlModel::setParent( _rxParent );
 
-    // log on new listeners - only in case we do not have an external value binding
-    if ( m_xParent.is() && !hasExternalValueBinding() )
-        startLoadListening( );
+    // a new parent means a new ambient form
+    impl_determineAmbientForm_nothrow();
+
+    if ( !hasExternalValueBinding() )
+    {
+        // log on new listeners
+        doFormListening( true );
+
+        // re-connect to database column of the new parent
+        if ( m_xAmbientForm.is() && m_xAmbientForm->isLoaded() )
+            impl_connectDatabaseColumn_noNotify( false );
+    }
 }
 
 // XEventListener
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException)
 {
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    ControlModelLock aLock( *this );
+
     if ( _rEvent.Source == getField() )
     {
         resetField();
@@ -1524,11 +1669,8 @@ void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObj
         Reference<XPropertySet> xOldValue = m_xLabelControl;
         m_xLabelControl = NULL;
 
-        // fire a property change event
-        Any aOldValue; aOldValue <<= xOldValue;
-        Any aNewValue; aNewValue <<= m_xLabelControl;
-        sal_Int32 nHandle = PROPERTY_ID_CONTROLLABEL;
-        OPropertySetHelper::fire( &nHandle, &aNewValue, &aOldValue, 1, sal_False );
+        // fire a propertyChanged (when we leave aLock's scope)
+        aLock.addPropertyNotification( PROPERTY_ID_CONTROLLABEL, makeAny( xOldValue ), makeAny( m_xLabelControl ) );
     }
     else if ( _rEvent.Source == m_xExternalBinding )
     {   // *first* check for the external binding
@@ -1547,6 +1689,7 @@ void SAL_CALL OBoundControlModel::disposing(const com::sun::star::lang::EventObj
 //------------------------------------------------------------------------------
 StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::disposing" );
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
         getSupportedServiceNames_Static()
@@ -1569,6 +1712,7 @@ Sequence< ::rtl::OUString > SAL_CALL OBoundControlModel::getSupportedServiceName
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputStream>& _rxOutStream ) throw(stario::IOException, RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::getSupportedServiceNames_Static" );
     OControlModel::write(_rxOutStream);
 
     osl::MutexGuard aGuard(m_aMutex);
@@ -1669,6 +1813,7 @@ void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStr
 //------------------------------------------------------------------------------
 void OBoundControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OBoundControlModel::getFastPropertyValue" );
     switch (nHandle)
     {
         case PROPERTY_ID_INPUT_REQUIRED:
@@ -1737,6 +1882,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
 //------------------------------------------------------------------------------
 Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::convertFastPropertyValue" );
     Any aDefault;
     switch ( _nHandle )
     {
@@ -1844,6 +1990,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
 {
+    // RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "forms", "dev@dba.openoffice.org", "OControlModel::setFastPropertyValue_NoBroadcast" );
     // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
@@ -1884,6 +2031,31 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
     }
 }
 
+//------------------------------------------------------------------------------
+void SAL_CALL OBoundControlModel::onRowSetChanged( const EventObject& /*i_Event*/ ) throw (RuntimeException)
+{
+    ControlModelLock aLock( *this );
+    FieldChangeNotifier aBoundFieldNotifier( aLock );
+
+    // disconnect from database column (which is controlled by parent, directly or indirectly)
+    if ( hasField() )
+        impl_disconnectDatabaseColumn_noNotify();
+
+    // log off old listeners
+    if ( isFormListening() )
+        doFormListening( false );
+
+    // determine the new ambient form
+    impl_determineAmbientForm_nothrow();
+
+    // log on new listeners
+    doFormListening( true );
+
+    // re-connect to database column if needed and possible
+    if ( m_xAmbientForm.is() && m_xAmbientForm->isLoaded() )
+        impl_connectDatabaseColumn_noNotify( false );
+}
+
 // XBoundComponent
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::addUpdateListener(const Reference<XUpdateListener>& _rxListener) throw(RuntimeException)
@@ -1900,7 +2072,7 @@ void SAL_CALL OBoundControlModel::removeUpdateListener(const Reference< XUpdateL
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
 {
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    ControlModelLock aLock( *this );
 
     OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not commitable !) " );
     if ( hasExternalValueBinding() )
@@ -1911,7 +2083,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
         if ( !m_sValuePropertyName.getLength() )
             // but for those derivees which did not use this feature, we need an
             // explicit transfer
-            transferControlValueToExternal( aGuard );
+            transferControlValueToExternal( aLock );
         return sal_True;
     }
 
@@ -1926,12 +2098,12 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
     aEvent.Source = static_cast< XWeak* >( this );
     sal_Bool bSuccess = sal_True;
 
-    aGuard.clear();
+    aLock.release();
     // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
     while (aIter.hasMoreElements() && bSuccess)
         bSuccess = static_cast< XUpdateListener* >( aIter.next() )->approveUpdate( aEvent );
     // <<<<<<<< ----- UNSAFE ----- <<<<<<<<
-    aGuard.reset();
+    aLock.acquire();
 
     if ( bSuccess )
     {
@@ -1948,7 +2120,7 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException)
 
     if ( bSuccess )
     {
-        aGuard.clear();
+        aLock.release();
         m_aUpdateListeners.notifyEach( &XUpdateListener::updated, aEvent );
     }
 
@@ -1997,24 +2169,31 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 sal_Int32 nFieldType = 0;
                 xFieldCandidate->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType;
                 if ( approveDbColumnType( nFieldType ) )
-                {
-                    m_xField = xFieldCandidate;
-                    m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
-                    m_nFieldType = nFieldType;
+                    impl_setField_noNotify( xFieldCandidate );
+            }
+            else
+                impl_setField_noNotify( NULL );
 
-                    // listen to value changes
+            if ( m_xField.is() )
+            {
+                if( m_xField->getPropertySetInfo()->hasPropertyByName( PROPERTY_VALUE ) )
+                {
+                    // an wertaenderungen horchen
+                    m_xField->addPropertyChangeListener( PROPERTY_VALUE, this );
                     m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
                     m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
 
                     INT32 nNullableFlag = ColumnValue::NO_NULLS;
-                    m_xField->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullableFlag;
-                    m_bRequired = ( ColumnValue::NO_NULLS == nNullableFlag );
+                    m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
+                    m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
                         // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....
                 }
+                else
+                {
+                    OSL_ENSURE(sal_False, "OBoundControlModel::connectToField: property NAME not supported!");
+                    impl_setField_noNotify( NULL );
+                }
             }
-            else
-                resetField();
-
         }
         catch( const Exception& )
         {
@@ -2056,25 +2235,39 @@ sal_Bool OBoundControlModel::approveDbColumnType(sal_Int32 _nColumnType)
     return sal_True;
 }
 
-//==============================================================================
-// value binding handling
+//------------------------------------------------------------------------------
+void OBoundControlModel::impl_determineAmbientForm_nothrow()
+{
+    Reference< XInterface > xParent( const_cast< OBoundControlModel* >( this )->getParent() );
+
+    m_xAmbientForm.set( xParent, UNO_QUERY );
+    if ( !m_xAmbientForm.is() )
+    {
+        Reference< XRowSetSupplier > xSupRowSet( xParent, UNO_QUERY );
+        if ( xSupRowSet.is() )
+            m_xAmbientForm.set( xSupRowSet->getRowSet(), UNO_QUERY );
+    }
+}
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxRowSet, bool _bFromReload )
+void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload )
 {
-    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::connectDatabaseColumn: not to be called with an external value binding!" );
-    ::osl::MutexGuard aGuard( m_aMutex );
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::impl_connectDatabaseColumn_noNotify: not to be called with an external value binding!" );
 
     // consistency checks
     DBG_ASSERT( !( hasField() && !_bFromReload ),
-        "OBoundControlModel::connectDatabaseColumn: the form is just *loaded*, but we already have a field!" );
+        "OBoundControlModel::impl_connectDatabaseColumn_noNotify: the form is just *loaded*, but we already have a field!" );
     (void)_bFromReload;
 
-    Reference< XPropertySet > xOldField = getField();
+    Reference< XRowSet > xRowSet( m_xAmbientForm, UNO_QUERY );
+    OSL_ENSURE( xRowSet.is(), "OBoundControlModel::impl_connectDatabaseColumn_noNotify: no row set!" );
+    if ( !xRowSet.is() )
+        return;
+
     if ( !hasField() )
     {
         // connect to the column
-        connectToField( _rxRowSet );
+        connectToField( xRowSet );
     }
 
     // now that we're connected (more or less, even if we did not find a column),
@@ -2083,26 +2276,17 @@ void OBoundControlModel::connectDatabaseColumn( const Reference< XRowSet >& _rxR
 
     // let derived classes react on this new connection
     m_bLoaded = sal_True;
-    onConnectedDbColumn( _rxRowSet );
+    onConnectedDbColumn( xRowSet );
 
     // initially transfer the db column value to the control, if we successfully connected to a database column
     if ( hasField() )
-        initFromField( _rxRowSet );
-
-    if ( xOldField != getField() )
-    {
-        Any aNewValue; aNewValue <<= getField();
-        Any aOldValue; aOldValue <<= xOldField;
-        sal_Int32 nHandle = PROPERTY_ID_BOUNDFIELD;
-        OPropertySetHelper::fire(&nHandle, &aNewValue, &aOldValue, 1, sal_False);
-    }
+        initFromField( xRowSet );
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::disconnectDatabaseColumn( )
+void OBoundControlModel::impl_disconnectDatabaseColumn_noNotify()
 {
-    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::disconnectDatabaseColumn: not to be called with an external value binding!" );
-    ::osl::MutexGuard aGuard( m_aMutex );
+    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::impl_disconnectDatabaseColumn_noNotify: not to be called with an external value binding!" );
 
     // let derived classes react on this
     onDisconnectedDbColumn();
@@ -2122,14 +2306,17 @@ void OBoundControlModel::disconnectDatabaseColumn( )
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::loaded( const EventObject& _rEvent ) throw(RuntimeException)
 {
+    ControlModelLock aLock( *this );
+    FieldChangeNotifier aBoundFieldNotifier( aLock );
+
+    OSL_ENSURE( _rEvent.Source == m_xAmbientForm, "OBoundControlModel::loaded: where does this come from?" );
+    (void)_rEvent;
+
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::loaded: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
         return;
 
-    // connect to the database column described by our SQL-binding-related properties
-    Reference< XRowSet > xRowSet( _rEvent.Source, UNO_QUERY );
-    DBG_ASSERT( xRowSet.is(), "OBoundControlModel::loaded: event source is no RowSet?!" );
-    connectDatabaseColumn( xRowSet, false );
+    impl_connectDatabaseColumn_noNotify( false );
 }
 
 
@@ -2153,24 +2340,30 @@ void SAL_CALL OBoundControlModel::reloading( const com::sun::star::lang::EventOb
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::unloading(const com::sun::star::lang::EventObject& /*aEvent*/) throw(RuntimeException)
 {
+    ControlModelLock aLock( *this );
+    FieldChangeNotifier aBoundFieldNotifier( aLock );
+
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::unloading: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
         return;
 
-    // disconnect from the database column described by our SQL-binding-related properties
-    disconnectDatabaseColumn();
+    impl_disconnectDatabaseColumn_noNotify();
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent ) throw(RuntimeException)
 {
+    ControlModelLock aLock( *this );
+    FieldChangeNotifier aBoundFieldNotifier( aLock );
+
+    OSL_ENSURE( _rEvent.Source == m_xAmbientForm, "OBoundControlModel::reloaded: where does this come from?" );
+    (void)_rEvent;
+
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::reloaded: we should never reach this with an external value binding!" );
     if ( hasExternalValueBinding() )
         return;
 
-    Reference< XRowSet > xRowSet( _rEvent.Source, UNO_QUERY );
-    DBG_ASSERT( xRowSet.is(), "OBoundControlModel::reloaded: event source is no RowSet?!" );
-    connectDatabaseColumn( xRowSet, true );
+    impl_connectDatabaseColumn_noNotify( true );
 }
 
 //------------------------------------------------------------------------------
@@ -2289,28 +2482,22 @@ void OBoundControlModel::resetNoBroadcast()
 //-----------------------------------------------------------------------------
 void OBoundControlModel::addResetListener(const Reference<XResetListener>& l) throw (RuntimeException)
 {
-    m_aResetListeners.addInterface(l);
+    m_aResetHelper.addResetListener( l );
 }
 
 //-----------------------------------------------------------------------------
 void OBoundControlModel::removeResetListener(const Reference<XResetListener>& l) throw (RuntimeException)
 {
-    m_aResetListeners.removeInterface(l);
+    m_aResetHelper.removeResetListener( l );
 }
 
 //-----------------------------------------------------------------------------
 void OBoundControlModel::reset() throw (RuntimeException)
 {
-    cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
-    EventObject aResetEvent(static_cast<XWeak*>(this));
-    sal_Bool bContinue = sal_True;
-    while ( aIter.hasMoreElements() && bContinue )
-        bContinue = static_cast< XResetListener* >( aIter.next() )->approveReset( aResetEvent );
+    if ( !m_aResetHelper.approveReset() )
+       return;
 
-    if (!bContinue)
-        return;
-
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    ControlModelLock aLock( *this );
 
     // on a new record?
     sal_Bool bIsNewRecord = sal_False;
@@ -2414,17 +2601,25 @@ void OBoundControlModel::reset() throw (RuntimeException)
 
         // transfer to the external binding, if necessary
         if ( hasExternalValueBinding() )
-            transferControlValueToExternal( aGuard );
+            transferControlValueToExternal( aLock );
     }
 
     // revalidate, if necessary
     if ( hasValidator() )
         recheckValidity( true );
 
-    aGuard.clear();
+    aLock.release();
 
-    m_aResetListeners.notifyEach( &XResetListener::resetted, aResetEvent );
+    m_aResetHelper.notifyResetted();
 }
+
+// -----------------------------------------------------------------------------
+void OBoundControlModel::impl_setField_noNotify( const Reference< XPropertySet>& _rxField )
+{
+    DBG_ASSERT( !hasExternalValueBinding(), "OBoundControlModel::impl_setField_noNotify: We have an external value binding!" );
+    m_xField = _rxField;
+}
+
 //--------------------------------------------------------------------
 sal_Bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValueBinding >& _rxBinding )
 {
@@ -2433,10 +2628,10 @@ sal_Bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< X
 
     Sequence< Type > aTypeCandidates;
     {
-        // >>>>>>>> ----- SAFE ----- >>>>>>>>
+        // SYNCHRONIZED -->
         ::osl::MutexGuard aGuard( m_aMutex );
         aTypeCandidates = getSupportedBindingTypes();
-        // <<<<<<<< ----- SAFE ----- <<<<<<<<
+        // <-- SYNCHRONIZED
     }
 
     for (   const Type* pType = aTypeCandidates.getConstArray();
@@ -2453,18 +2648,19 @@ sal_Bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< X
 
 //--------------------------------------------------------------------
 void OBoundControlModel::connectExternalValueBinding(
-        const Reference< XValueBinding >& _rxBinding, ::osl::ResettableMutexGuard& _rInstanceLock )
+        const Reference< XValueBinding >& _rxBinding, ControlModelLock& _rInstanceLock )
 {
     OSL_PRECOND( _rxBinding.is(), "OBoundControlModel::connectExternalValueBinding: invalid binding instance!" );
     OSL_PRECOND( !hasExternalValueBinding( ), "OBoundControlModel::connectExternalValueBinding: precond not met (currently have a binding)!" );
 
-    // Suspend being a load listener at our parent form. This is because
-    // an external value binding overrules a possible database binding
-    if ( isLoadListening() )
-        stopLoadListening( );
+    // if we're connected to a database column, suspend this
+    if ( hasField() )
+        impl_disconnectDatabaseColumn_noNotify();
 
-    // TODO: if we're already connected to a db column, we should disconnect from it here,
-    // shouldn't we?
+    // suspend listening for load-related events at out ambient form.
+    // This is because an external value binding overrules a possible database binding.
+    if ( isFormListening() )
+        doFormListening( false );
 
     // remember this new binding
     m_xExternalBinding = _rxBinding;
@@ -2551,13 +2747,13 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     // no binding anymore
     m_xExternalBinding.clear();
 
-    // be a load listener at our parent, again. This was suspended while we had
+    // be a load listener at our form, again. This was suspended while we had
     // an external value binding in place.
-    if ( m_xParent.is() )
-        startLoadListening( );
+    doFormListening( true );
 
-    // TODO: anything to care for here? Changing values? Falling back to a
-    // database binding if appropriate?
+    // re-connect to database column of the new parent
+    if ( m_xAmbientForm.is() && m_xAmbientForm->isLoaded() )
+        impl_connectDatabaseColumn_noNotify( false );
 
     // tell the derivee
     onDisconnectedExternalValue();
@@ -2578,7 +2774,11 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
         );
     }
 
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    ControlModelLock aLock( *this );
+
+    // since a ValueBinding overrules any potentially active database binding, the change in a ValueBinding
+    // might trigger a change in our BoundField.
+    FieldChangeNotifier aBoundFieldNotifier( aLock );
 
     // disconnect from the old binding
     if ( hasExternalValueBinding() )
@@ -2586,7 +2786,7 @@ void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBindin
 
     // connect to the new binding
     if ( _rxBinding.is() )
-        connectExternalValueBinding( _rxBinding, aGuard );
+        connectExternalValueBinding( _rxBinding, aLock );
 }
 
 //--------------------------------------------------------------------
@@ -2603,12 +2803,12 @@ Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  ) thro
 //--------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::modified( const EventObject& _rEvent ) throw ( RuntimeException )
 {
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    ControlModelLock aLock( *this );
 
     OSL_PRECOND( hasExternalValueBinding(), "OBoundControlModel::modified: Where did this come from?" );
     if ( !m_bTransferingValue && ( m_xExternalBinding == _rEvent.Source ) && m_xExternalBinding.is() )
     {
-        transferExternalValueToControl( aGuard );
+        transferExternalValueToControl( aLock );
     }
 }
 
@@ -2619,12 +2819,12 @@ void OBoundControlModel::transferDbValueToControl( )
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::transferExternalValueToControl( ::osl::ResettableMutexGuard& _rInstanceLock )
+void OBoundControlModel::transferExternalValueToControl( ControlModelLock& _rInstanceLock )
 {
         Reference< XValueBinding > xExternalBinding( m_xExternalBinding );
         Type aValueExchangeType( getExternalValueType() );
 
-        _rInstanceLock.clear();
+        _rInstanceLock.release();
         // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
         Any aExternalValue;
         try
@@ -2636,13 +2836,13 @@ void OBoundControlModel::transferExternalValueToControl( ::osl::ResettableMutexG
             DBG_UNHANDLED_EXCEPTION();
         }
         // <<<<<<<< ----- UNSAFE ----- <<<<<<<<
-        _rInstanceLock.reset();
+        _rInstanceLock.acquire();
 
         setControlValue( translateExternalValueToControlValue( aExternalValue ), eExternalBinding );
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::transferControlValueToExternal( ::osl::ResettableMutexGuard& _rInstanceLock )
+void OBoundControlModel::transferControlValueToExternal( ControlModelLock& _rInstanceLock )
 {
     OSL_PRECOND( m_bSupportsExternalBinding && hasExternalValueBinding(),
         "OBoundControlModel::transferControlValueToExternal: precondition not met!" );
@@ -2652,7 +2852,7 @@ void OBoundControlModel::transferControlValueToExternal( ::osl::ResettableMutexG
         Any aExternalValue( translateControlValueToExternalValue() );
         m_bTransferingValue = sal_True;
 
-        _rInstanceLock.clear();
+        _rInstanceLock.release();
          // >>>>>>>> ----- UNSAFE ----- >>>>>>>>
         try
         {
@@ -2663,7 +2863,7 @@ void OBoundControlModel::transferControlValueToExternal( ::osl::ResettableMutexG
             DBG_UNHANDLED_EXCEPTION();
         }
         // <<<<<<<< ----- UNSAFE ----- <<<<<<<<
-        _rInstanceLock.reset();
+        _rInstanceLock.acquire();
 
         m_bTransferingValue = sal_False;
     }

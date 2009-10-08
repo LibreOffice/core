@@ -31,14 +31,7 @@
  ************************************************************************/
 package com.sun.star.wizards.reportbuilder;
 
-// import com.sun.star.deployment.XPackageInformationProvider;
-// import com.sun.star.lang.Locale;
-// import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModeSelector;
-// import com.sun.star.wizards.common.PropertySetHelper;
-// import com.sun.star.wizards.report.IReportDefinitionReadAccess;
-// import com.sun.star.wizards.report.IReportBuilderLayouter;
-// import com.sun.star.wizards.report.IReportDocument;
 
 import com.sun.star.wizards.report.*;
 import com.sun.star.awt.XWindowPeer;
@@ -59,17 +52,14 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.FieldColumn;
-// import java.io.File;
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Vector;
-// import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.common.FileAccess;
-// import com.sun.star.wizards.common.Configuration;
+
 /**
  * This class use the IReportDocument Interface to communicate between the UI
  * and the ReportBuilderLayouter which communicates to the new Sun Report Builder.
@@ -182,6 +172,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         aConnection.Value = _xConnection;
         args[1] = aConnection;
 
+
         XReportDefinition xReportDefinition = null;
         final XMultiServiceFactory xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, /* getRecordParser().getReportDocuments() */ _aDoc);
         try
@@ -195,7 +186,20 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             aCommand.Name = "openDesign";
             final com.sun.star.ucb.OpenCommandArgument2 aOpenCommand = new com.sun.star.ucb.OpenCommandArgument2();
             aOpenCommand.Mode = com.sun.star.ucb.OpenMode.DOCUMENT;
-            aCommand.Argument = aOpenCommand;
+
+            PropertyValue args2[] = new PropertyValue[2];
+
+            PropertyValue aPropOpenCommand = new PropertyValue();
+            aPropOpenCommand.Name = "";
+            aPropOpenCommand.Value = aOpenCommand;
+            args2[0] = aPropOpenCommand;
+
+            PropertyValue aAddField = new PropertyValue();
+            aAddField.Name = "Mode";
+            aAddField.Value = "remote";
+            args2[1] = aAddField;
+
+            aCommand.Argument = args2;
             // com.sun.star.usb.XCommandEnvironment xEnv = new com.sun.star.ucb.XCommandEnvironment();
             final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
             xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj2);
@@ -378,7 +382,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         {
             // removeGroupNamesofRecordTable(iSelCount);
             final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-            GroupFieldVector.addElement(CurFieldColumn.m_sFieldName);
+            GroupFieldVector.addElement(CurFieldColumn.getFieldName());
         }
         return true;
     }
@@ -396,7 +400,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         // throw new UnsupportedOperationException("Not supported yet.");
         final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
-        GroupFieldVector.removeElement(CurFieldColumn.m_sFieldName);
+        GroupFieldVector.removeElement(CurFieldColumn.getFieldName());
     }
 
     private void setPageOrientation(int nOrientation, boolean bDoLayout)
@@ -602,8 +606,8 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         int[] FieldWidths = new int[FieldNames.length];
         for (int i = 0; i < FieldNames.length; i++)
         {
-            FieldTypes[i] = a.FieldColumns[i].FieldType;
-            FieldWidths[i] = a.FieldColumns[i].FieldWidth;
+            FieldTypes[i] = a.FieldColumns[i].getFieldType();
+            FieldWidths[i] = a.FieldColumns[i].getFieldWidth();
         }
         getReportBuilderLayouter().setTableName(_nType, TableName);
 //        getReportBuilderLayouter().insertFields(getRecordParser().getRecordFieldNames());

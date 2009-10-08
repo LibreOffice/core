@@ -31,31 +31,17 @@ package com.sun.star.wizards.table;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.ItemEvent;
-import com.sun.star.awt.TextEvent;
-import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XTextComponent;
-import com.sun.star.awt.XTextListener;
-import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.sdbc.DataType;
-import com.sun.star.sdbc.SQLException;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.db.TableDescriptor;
-import com.sun.star.wizards.ui.PeerConfig;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 
@@ -241,7 +227,7 @@ public class FieldFormatter implements XItemListener
         boolean benableShiftUpButton = false;
         boolean benableShiftDownButton = false;
         boolean bfieldnameisselected = Helper.getUnoArrayPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems") != null;
-        int ilistcount = UnoDialog.getListBoxItemCount(xlstFieldNames);
+        int ilistcount = /* xlstFieldNames.getItemCount();*/ UnoDialog.getListBoxItemCount(xlstFieldNames);
         boolean blistispopulated = (ilistcount > 0);
         if (bfieldnameisselected)
         {
@@ -283,7 +269,7 @@ public class FieldFormatter implements XItemListener
         String fieldname = fieldnames[ipos];
         xlstFieldNames.removeItems(ipos, (short) 1);
         CurUnoDialog.fielditems.remove(fieldname);
-        int ilistcount = UnoDialog.getListBoxItemCount(xlstFieldNames);
+        int ilistcount = /* xlstFieldNames.getItemCount();*/ UnoDialog.getListBoxItemCount(xlstFieldNames);
         if ((ipos) < ilistcount)
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[]

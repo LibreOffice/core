@@ -63,13 +63,15 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 
 
 #include <tools/link.hxx>
 #include "InterfaceContainer.hxx"
 
-#include "connectivity/parameters.hxx"
-#include "connectivity/filtermanager.hxx"
+#include <connectivity/parameters.hxx>
+#include <connectivity/filtermanager.hxx>
+#include <connectivity/warningscontainer.hxx>
 
 #ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
@@ -79,7 +81,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase12.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase7.hxx>
 
 namespace com { namespace sun { namespace star { namespace sdbc {
@@ -143,9 +145,10 @@ typedef ::cppu::ImplHelper12    <   ::com::sun::star::form::XForm
                                 >   ODatabaseForm_BASE1;
 
 
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::ImplHelper4 <   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::beans::XPropertyContainer
                             ,   ::com::sun::star::beans::XPropertyAccess
+                            ,   ::com::sun::star::sdbc::XWarningsSupplier
                             >   ODatabaseForm_BASE2;
 
 typedef ::cppu::ImplHelper7<    ::com::sun::star::sdbc::XCloseable,
@@ -188,6 +191,7 @@ class ODatabaseForm :public OFormComponents
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>          m_xAggregateAsRowSet;
 
     PropertyBagHelper           m_aPropertyBagHelper;
+    ::dbtools::WarningsContainer    m_aWarnings;
     OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
     // Verwaltung der ControlGruppen
     OGroupManager*              m_pGroupManager;
@@ -228,6 +232,7 @@ class ODatabaseForm :public OFormComponents
 
 public:
     ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ODatabaseForm( const ODatabaseForm& _cloneSource );
     ~ODatabaseForm();
 
     // UNO binding
@@ -440,6 +445,13 @@ public:
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     using OPropertySetAggregationHelper::setPropertyValues;
 
+    // XWarningsSupplier
+    virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clearWarnings(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
+
     inline void submitNBC( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt );
 
 protected:
@@ -520,6 +532,7 @@ private:
     void    onError(const ::com::sun::star::sdbc::SQLException&, const ::rtl::OUString& _rContextDescription);
 
     // html tools
+    ::rtl::OUString         GetDataEncoded(bool _bURLEncoded,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
     ::rtl::OUString         GetDataURLEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
     ::rtl::OUString         GetDataTextEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
     ::com::sun::star::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt,
@@ -537,6 +550,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection();
 
     void    impl_createLoadTimer();
+
+    void    impl_construct();
 
     DECL_LINK( OnTimeout, void* );
 protected:

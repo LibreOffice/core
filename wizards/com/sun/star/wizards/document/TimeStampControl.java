@@ -36,14 +36,12 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.ui.*;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.*;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapeGroup;
 import com.sun.star.drawing.XShapes;
 
 public class TimeStampControl extends DatabaseControl
@@ -69,7 +67,7 @@ public class TimeStampControl extends DatabaseControl
         oResource = _oResource;
 //      xGroupShape = xShape;
         oDateControl = new DatabaseControl(oFormHandler, _xFormName, _curFieldName, DataType.DATE, aPoint);
-        int nDBHeight = oDateControl.getDBHeight();
+        int nDBHeight = oDateControl.getControlHeight();
         nDateWidth = oDateControl.getPreferredWidth();
         oDateControl.setSize(new Size(nDateWidth, nDBHeight));
         Point aTimePoint = new Point(aPoint.X + 10 + nDateWidth, aPoint.Y);
