@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgsnap.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,9 @@
 /************************************************************************/
 
 class SfxItemSet;
-class ::sd::View;
+namespace sd {
+    class View;
+}
 
 /*************************************************************************
 |*

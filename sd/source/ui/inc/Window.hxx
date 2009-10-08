@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Window.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.7.70.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,6 +104,9 @@ public:
             The new zoom factor is returned as integral percent value.
     */
     long SetZoomRect (const Rectangle& rZoomRect);
+
+    long GetZoomForRect( const Rectangle& rZoomRect );
+
 
     void SetMinZoomAutoCalc (bool bAuto);
     void SetCalcMinZoomByMinSide (bool bMin);

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fumorph.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.19.114.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <goodies/b3dcolor.hxx>
 
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -58,6 +57,8 @@
 
 // #i48168#
 #include <svx/svditer.hxx>
+
+#include <basegfx/color/bcolor.hxx>
 
 namespace sd {
 
@@ -229,7 +230,7 @@ void FuMorph::DoExecute( SfxRequest& )
             const double fLenA((fDestPos - fSrcPos) / fNextSrcLen);
             const ::basegfx::B2DPoint aOld1(rCandidate.getB2DPoint(nSrcPos));
             const ::basegfx::B2DPoint aOld2(rCandidate.getB2DPoint(nSrcPosNext));
-            ::basegfx::B2DPoint aNewPoint(::basegfx::interpolate(aOld1, aOld2, fLenA));
+            ::basegfx::B2DPoint aNewPoint(basegfx::interpolate(aOld1, aOld2, fLenA));
             aRetval.append(aNewPoint);
 
             // next step
@@ -407,19 +408,22 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         {
             const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *(::basegfx::B2DPolyPolygon*)rPolyPolyList3D.GetObject(i);
             SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
-            B3dColor aLineCol, aFillCol;
-            aLineCol.CalcInBetween(aStartLineCol, aEndLineCol, fFactor);
-            aFillCol.CalcInBetween(aStartFillCol, aEndFillCol, fFactor);
 
             // Linienfarbe
             if ( bLineColor )
-                aSet.Put( XLineColorItem( aEmptyStr, aLineCol));
+            {
+                const basegfx::BColor aLineColor(basegfx::interpolate(aStartLineCol.getBColor(), aEndLineCol.getBColor(), fFactor));
+                aSet.Put( XLineColorItem( aEmptyStr, Color(aLineColor)));
+            }
             else if ( bIgnoreLine )
                 aSet.Put( XLineStyleItem( XLINE_NONE ) );
 
             // Fuellfarbe
             if ( bFillColor )
-                aSet.Put( XFillColorItem( aEmptyStr, aFillCol));
+            {
+                const basegfx::BColor aFillColor(basegfx::interpolate(aStartFillCol.getBColor(), aEndFillCol.getBColor(), fFactor));
+                aSet.Put( XFillColorItem( aEmptyStr, Color(aFillColor)));
+            }
             else if ( bIgnoreFill )
                 aSet.Put( XFillStyleItem( XFILL_NONE ) );
 

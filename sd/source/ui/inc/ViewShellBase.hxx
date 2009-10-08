@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewShellBase.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,10 +262,7 @@ public:
 protected:
     osl::Mutex maMutex;
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC,
-        const TypeId& rBCType,
-        const SfxHint& rHint,
-        const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
     virtual void InitializeFramework (void);
 

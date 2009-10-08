@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: epptso.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.107.6.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,7 +228,7 @@ GroupTable::GroupTable() :
 
 GroupTable::~GroupTable()
 {
-    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; delete mpGroupEntry[ i++ ] );
+    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; delete mpGroupEntry[ i++ ] ) ;
     delete[] mpGroupEntry;
 }
 
@@ -282,7 +282,7 @@ sal_uInt32 GroupTable::GetGroupsClosed()
 
 void GroupTable::ClearGroupTable()
 {
-    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry[ i ] );
+    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry[ i ] ) ;
     mnCurrentGroupEntry = 0;
 }
 
@@ -4102,7 +4102,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
     rSt << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0x1f ) << (sal_uInt32)24   // Mouse Over Action
         << (sal_uInt32)( EPP_InteractiveInfo << 16 ) << (sal_uInt32)16;
-    for ( int i = 0; i < 4; i++, rSt << (sal_uInt32)0 );
+    for ( int i = 0; i < 4; i++, rSt << (sal_uInt32)0 ) ;
 }
 
 //  -----------------------------------------------------------------------
@@ -4254,7 +4254,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
         }
         nGroups = GetGroupsClosed();
-        for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() );
+        for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() ) ;
 
         if ( ImplGetShapeByIndex( GetCurrentGroupIndex(), TRUE ) )
         {
@@ -5488,7 +5488,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     }
     ClearGroupTable();                              // gruppierungen wegschreiben, sofern noch irgendwelche offen sind, was eigendlich nicht sein sollte
     nGroups = GetGroupsClosed();
-    for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() );
+    for ( sal_uInt32 i = 0; i < nGroups; i++, mpPptEscherEx->LeaveGroup() ) ;
     mnPagesWritten++;
 }
 
@@ -5537,29 +5537,34 @@ struct CellBorder
 
 void PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 )
 {
-    mnAngle = 0;
-    mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-    EscherPropertyContainer aPropOptSp;
-
-    sal_uInt32 nId = mpPptEscherEx->GetShapeID();
-    mpPptEscherEx->AddShape( ESCHER_ShpInst_Line, 0xa02, nId );
-    aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-
     sal_Int32 nLineWidth = pCellBorder->maCellBorder.OuterLineWidth + pCellBorder->maCellBorder.InnerLineWidth;
-    if ( !nLineWidth )
-        aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );  // no line
-    else
-        aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80008 );
+    if ( nLineWidth )
+    {
+        mnAngle = 0;
+        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+        EscherPropertyContainer aPropOptSp;
 
-    aPropOptSp.AddOpt( ESCHER_Prop_lineColor, pCellBorder->maCellBorder.Color );
-    aPropOptSp.AddOpt( ESCHER_Prop_lineWidth, nLineWidth * 360 );
-    aPropOptSp.Commit( *mpStrm );
-    mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-    *mpStrm     << nX1
-                << nY1
-                << nX2
-                << nY2;
-    mpPptEscherEx->CloseContainer();
+        sal_uInt32 nId = mpPptEscherEx->GetShapeID();
+        mpPptEscherEx->AddShape( ESCHER_ShpInst_Line, 0xa02, nId );
+        aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+        aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0xa0008 );
+        aPropOptSp.AddOpt( ESCHER_Prop_fshadowObscured, 0x20000 );
+
+        sal_uInt32 nBorderColor = pCellBorder->maCellBorder.Color & 0xff00;                 // green
+        nBorderColor |= static_cast< sal_uInt8 >( pCellBorder->maCellBorder.Color ) << 16;  // red
+        nBorderColor |= static_cast< sal_uInt8 >( pCellBorder->maCellBorder.Color >> 16 );  // blue
+        aPropOptSp.AddOpt( ESCHER_Prop_lineColor, nBorderColor );
+
+        aPropOptSp.AddOpt( ESCHER_Prop_lineWidth, nLineWidth * 360 );
+        aPropOptSp.AddOpt( ESCHER_Prop_fc3DLightFace, 0x80000 );
+        aPropOptSp.Commit( *mpStrm );
+        mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+        *mpStrm     << nX1
+                    << nY1
+                    << nX2
+                    << nY2;
+        mpPptEscherEx->CloseContainer();
+    }
 }
 
 void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
@@ -5686,8 +5691,10 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
                             aPropOptSp.CreateFillProperties( mXPropSet, sal_True );
+                            aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
                             if ( mnTextSize )
-                                aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                                aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
 
                             if ( mnTextSize )
                             {

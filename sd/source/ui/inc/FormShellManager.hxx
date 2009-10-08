@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormShellManager.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,11 +138,7 @@ private:
         the factory working properly this method should not be necessary
         (and may be removed in the future.)
     */
-    virtual void SFX_NOTIFY(
-        SfxBroadcaster& rBC,
-        const TypeId& rBCType,
-        const SfxHint& rHint,
-        const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 };
 
 } // end of namespace sd

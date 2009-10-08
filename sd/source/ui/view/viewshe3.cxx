@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewshe3.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.59.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,6 @@
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
-#include "goodies/base3d.hxx"
 #include <sfx2/request.hxx>
 #include <svtools/aeitem.hxx>
 #include <basic/sbstar.hxx>

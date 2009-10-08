@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmview.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1194,7 +1194,7 @@ void FrameView::SetSelectedPage(USHORT nPage)
 
 
 
-const USHORT FrameView::GetSelectedPage (void) const
+USHORT FrameView::GetSelectedPage (void) const
 {
     return mnSelectedPage;
 }

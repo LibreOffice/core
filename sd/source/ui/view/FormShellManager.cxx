@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormShellManager.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,11 +323,7 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
 
 
 
-void FormShellManager::SFX_NOTIFY(
-        SfxBroadcaster&,
-        const TypeId& rBCType,
-        const SfxHint& rHint,
-        const TypeId& rHintType)
+void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if (pSimpleHint!=NULL && pSimpleHint->GetId()==SFX_HINT_DYING)

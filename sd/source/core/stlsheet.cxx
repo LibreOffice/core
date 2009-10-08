@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlsheet.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.23.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,7 @@ class ModifyListenerForewarder : public SfxListener
 public:
     ModifyListenerForewarder( SdStyleSheet* pStyleSheet );
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 private:
     SdStyleSheet* mpStyleSheet;
@@ -129,7 +129,7 @@ ModifyListenerForewarder::ModifyListenerForewarder( SdStyleSheet* pStyleSheet )
     }
 }
 
-void ModifyListenerForewarder::SFX_NOTIFY(SfxBroadcaster& /*rBC*/, const TypeId& /*rBCType*/, const SfxHint& /*rHint*/, const TypeId& /*rHintType*/)
+void ModifyListenerForewarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     if( mpStyleSheet )
         mpStyleSheet->notifyModifyListener();
@@ -559,8 +559,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
 |*
 \************************************************************************/
 
-void SdStyleSheet::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
-                              const SfxHint& rHint, const TypeId& rHintType)
+void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     // erstmal die Basisklassenfunktionalitaet
     SfxStyleSheet::Notify(rBC, rHint);

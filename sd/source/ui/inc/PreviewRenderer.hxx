@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PreviewRenderer.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,10 +116,7 @@ public:
         int nWidth);
 
 protected:
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC,
-        const TypeId& rBCType,
-        const SfxHint& rHint,
-        const TypeId& rHintType);
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 private:
     ::std::auto_ptr<VirtualDevice> mpPreviewDevice;

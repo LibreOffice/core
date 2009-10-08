@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futransf.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,25 +134,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
             mpView->SetGeoAttrToMarked( *pArgs );
             mpView->SetAttributes( *pArgs );
-
-            /**********************************************************************
-            * An der E3dView muss demnaechst SetGeoAttrToMarked() mit folgendem
-            * Code ueberladen werden:
-            **********************************************************************/
-            const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-            ULONG nCount = rMarkList.GetMarkCount();
-
-            for (ULONG nMark = 0; nMark < nCount; nMark++)
-            {
-                SdrObject* pObj = rMarkList.GetMark(nMark)->GetMarkedSdrObj();
-
-                if (pObj->ISA(E3dPolyScene))
-                {
-                    ((E3dPolyScene*) pObj)->FitSnapRectToBoundVol();
-                }
-            }
-            //********************************************************************
-
             mpView->EndUndo();
         }
     }

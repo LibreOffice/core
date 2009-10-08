@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviews2.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.55.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -409,7 +409,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
                 USHORT nPage = maTabControl.GetCurPageId() - 1;
                 mpActualPage = GetDoc()->GetSdPage(nPage, mePageKind);
-                mpImpl->ProcessModifyPageSlot (
+                ::sd::ViewShell::mpImpl->ProcessModifyPageSlot (
                     rReq,
                     mpActualPage,
                     mePageKind);
@@ -431,7 +431,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SFX_REQUEST_ARG (rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
                 SFX_REQUEST_ARG (rReq, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-                mpImpl->AssignLayout (
+                ::sd::ViewShell::mpImpl->AssignLayout (
                     GetDoc()->GetSdPage((USHORT)pWhatPage->GetValue(), mePageKind),
                     (AutoLayout)pWhatLayout->GetValue());
             }
@@ -555,6 +555,30 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             break;
         }
 
+        case SID_ATTR_ZOOMSLIDER:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+
+            if (pArgs && pArgs->Count () == 1 )
+            {
+                SFX_REQUEST_ARG (rReq, pScale, SfxUInt16Item, SID_ATTR_ZOOMSLIDER, FALSE);
+                if (CHECK_RANGE (5, pScale->GetValue (), 3000))
+                {
+                    SetZoom (pScale->GetValue ());
+
+                    SfxBindings& rBindings = GetViewFrame()->GetBindings();
+                    rBindings.Invalidate( SID_ATTR_ZOOM );
+                    rBindings.Invalidate( SID_ZOOM_IN );
+                    rBindings.Invalidate( SID_ZOOM_OUT );
+                    rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
+
+                }
+            }
+
+            Cancel();
+            rReq.Done ();
+            break;
+        }
         case SID_ZOOMING :  // kein Menueintrag, sondern aus dem Zoomdialog generiert
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -571,6 +595,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         rBindings.Invalidate( SID_ATTR_ZOOM );
                         rBindings.Invalidate( SID_ZOOM_IN );
                         rBindings.Invalidate( SID_ZOOM_OUT );
+                        rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
                     }
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docshell.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.48.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,6 @@
 #ifndef _SFX_DOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#include "goodies/base3d.hxx"
 #include <svx/drawitem.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/drawitem.hxx>

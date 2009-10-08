@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewshel.cxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.71.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,6 @@
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
-#include "goodies/base3d.hxx"
 #include <svx/fmshell.hxx>
 #ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
@@ -517,14 +516,6 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         if (aKeyCode.IsMod1() && aKeyCode.IsShift()
             && aKeyCode.GetCode() == KEY_R)
         {
-            // 3D-Kontext wieder zerstoeren
-            Base3D* pBase3D = (Base3D*) GetActiveWindow()->Get3DContext();
-
-            if (pBase3D)
-            {
-                pBase3D->Destroy(GetActiveWindow());
-            }
-
             InvalidateWindows();
             bReturn = TRUE;
         }
@@ -744,6 +735,8 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
                         SetZoom( nNewZoom );
                         Invalidate( SID_ATTR_ZOOM );
+                        Invalidate( SID_ATTR_ZOOMSLIDER );
+
                         bDone = TRUE;
                     }
                 }

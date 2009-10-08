@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsSlotManager.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.34.52.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -858,6 +858,11 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 
     rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
+
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
+    {
+        rSet.Put( SfxVoidItem( SID_ATTR_ZOOMSLIDER ) );
+    }
 }
 
 void SlotManager::ShowSlideShow( SfxRequest& rReq)

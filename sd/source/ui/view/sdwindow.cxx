@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdwindow.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.38.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #include "precompiled_sd.hxx"
 
 #include "Window.hxx"
-#include "goodies/base3d.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 
@@ -285,6 +284,9 @@ void Window::Resize()
 {
     ::Window::Resize();
     CalcMinZoom();
+
+    if( mpViewShell && mpViewShell->GetViewFrame() )
+        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
 /*************************************************************************
@@ -539,8 +541,60 @@ void Window::SetZoomIntegral(long nZoom)
     SetZoomFactor(nZoom);
 }
 
+long Window::GetZoomForRect( const Rectangle& rZoomRect )
+{
+    long nRetZoom = 100;
 
+    if( (rZoomRect.GetWidth() != 0) && (rZoomRect.GetHeight() != 0))
+    {
+        // Calculate the scale factors which will lead to the given
+        // rectangle being fully visible (when translated accordingly) as
+        // large as possible in the output area independently in both
+        // coordinate directions .
+        ULONG nX(0L);
+        ULONG nY(0L);
 
+        const Size aWinSize( PixelToLogic(GetOutputSizePixel()) );
+        if(rZoomRect.GetHeight())
+        {
+            nX = (ULONG) ((double) aWinSize.Height()
+               * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetHeight());
+        }
+
+        if(rZoomRect.GetWidth())
+        {
+            nY = (ULONG) ((double) aWinSize.Width()
+                * (double) ZOOM_MULTIPLICATOR / (double) rZoomRect.GetWidth());
+        }
+
+        // Use the smaller one of both so that the zoom rectangle will be
+        // fully visible with respect to both coordinate directions.
+        ULONG nFact = Min(nX, nY);
+
+        // Transform the current zoom factor so that it leads to the desired
+        // scaling.
+        nRetZoom = nFact * GetZoom() / ZOOM_MULTIPLICATOR;
+
+        // Calculate the new origin.
+        if ( nFact == 0 )
+        {
+            // Don't change anything if the scale factor is degenrate.
+            nRetZoom = GetZoom();
+        }
+        else
+        {
+            // Clip the zoom factor to the valid range marked by nMinZoom as
+            // previously calculated by <member>CalcMinZoom()</member> and the
+            // MAX_ZOOM constant.
+            if ( nRetZoom > MAX_ZOOM )
+                nRetZoom = MAX_ZOOM;
+            if ( nRetZoom < (long) mnMinZoom )
+                nRetZoom = mnMinZoom;
+       }
+    }
+
+    return nRetZoom;
+}
 
 /** Recalculate the zoom factor and translation so that the given rectangle
     is displayed centered and as large as possible while still being fully

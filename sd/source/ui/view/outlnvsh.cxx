@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlnvsh.cxx,v $
- * $Revision: 1.91 $
+ * $Revision: 1.90.36.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "app.hrc"
 #include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
+#include <svx/zoomslideritem.hxx>
 
 #include <sfx2/objface.hxx>
 #include <sot/exchange.hxx>
@@ -1235,6 +1236,7 @@ void OutlineViewShell::SetZoom(long nZoom)
 
     // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
 /*************************************************************************
@@ -1259,8 +1261,8 @@ void OutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
 
     // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
-
 
 /*************************************************************************
 |*
@@ -1402,6 +1404,22 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         rSet.Put( *pZoomItem );
         delete pZoomItem;
     }
+
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
+    {
+        if (GetDocSh()->IsUIActive() || !GetActiveWindow() )
+        {
+            rSet.DisableItem( SID_ATTR_ZOOMSLIDER );
+        }
+        else
+        {
+            sd::Window * pActiveWindow = GetActiveWindow();
+            SvxZoomSliderItem aZoomItem( (UINT16) pActiveWindow->GetZoom(), (USHORT)pActiveWindow->GetMinZoom(), (USHORT)pActiveWindow->GetMaxZoom() ) ;
+            aZoomItem.AddSnappingPoint(100);
+            rSet.Put( aZoomItem );
+        }
+    }
+
 
     // Seitenanzeige und Layout
     /*

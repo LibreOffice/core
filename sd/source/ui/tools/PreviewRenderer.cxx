@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PreviewRenderer.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -477,11 +477,7 @@ Image PreviewRenderer::ScaleBitmap (
 
 
 
-void PreviewRenderer::SFX_NOTIFY(
-    SfxBroadcaster&,
-    const TypeId& rBCType,
-    const SfxHint& rHint,
-    const TypeId& rHintType)
+void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if (rHint.IsA(TYPE(SfxSimpleHint))
         && mpDocShellOfView != NULL)

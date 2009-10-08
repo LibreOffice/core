@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlnvsh.sdi,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,11 @@ interface OutlineView
         StateMethod = GetStatusBarState ;
     ]
     SID_ATTR_ZOOM // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SID_ATTR_ZOOMSLIDER // status()
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetStatusBarState ;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.64.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -816,7 +816,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         *mpStrm << (sal_uInt16)( pCustomShow[ i ] );
                     }
                 }
-                for ( i = nCustomShowNameLen; i < 32; i++, *mpStrm << (sal_uInt16)0 );
+                for ( i = nCustomShowNameLen; i < 32; i++, *mpStrm << (sal_uInt16)0 ) ;
 
                 *mpStrm << nFlags;
                 ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XCustomPresentationSupplier >
@@ -845,7 +845,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                         nNamedShowLen = 31;
                                     mpPptEscherEx->AddAtom( nNamedShowLen << 1, EPP_CString );
                                     const sal_Unicode* pCustomShowName = pUString[ i ].getStr();
-                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; *mpStrm << (sal_uInt16)( pCustomShowName[ k++ ] ) );
+                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; *mpStrm << (sal_uInt16)( pCustomShowName[ k++ ] ) ) ;
                                     mAny = aXCont->getByName( pUString[ i ] );
                                     if ( mAny.getValue() )
                                     {

@@ -8,7 +8,7 @@
  *
  * $RCSfile: TaskPanelFactory.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.3.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,18 +91,18 @@ public:
     TaskPanelResource (
         const Reference<XResourceId>& rxResourceId,
         const TaskPaneViewShell::PanelId ePaneId);
-    virtual ~TaskPanelResource (void);
+    virtual ~TaskPanelResource ();
 
-    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing ();
 
-    const TaskPaneViewShell::PanelId GetPaneId (void) const;
+    TaskPaneViewShell::PanelId GetPaneId () const;
 
     // XResource
 
     virtual Reference<XResourceId> SAL_CALL getResourceId (void)
         throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL isAnchorOnly (void) throw (RuntimeException)
+    virtual sal_Bool SAL_CALL isAnchorOnly () throw (RuntimeException)
     { return false; }
 
 private:
@@ -306,14 +306,14 @@ TaskPanelResource::~TaskPanelResource (void)
 
 
 
-void SAL_CALL TaskPanelResource::disposing (void)
+void SAL_CALL TaskPanelResource::disposing ()
 {
 }
 
 
 
 
-const TaskPaneViewShell::PanelId TaskPanelResource::GetPaneId (void) const
+TaskPaneViewShell::PanelId TaskPanelResource::GetPaneId () const
 {
     return mePaneId;
 }
@@ -321,7 +321,7 @@ const TaskPaneViewShell::PanelId TaskPanelResource::GetPaneId (void) const
 
 
 
-Reference<XResourceId> SAL_CALL TaskPanelResource::getResourceId (void)
+Reference<XResourceId> SAL_CALL TaskPanelResource::getResourceId ()
     throw (css::uno::RuntimeException)
 {
     return mxResourceId;

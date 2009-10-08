@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterViewShell.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.32.70.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -626,9 +626,6 @@ void SlideSorterViewShell::SetZoom (long int )
     // the window.
 }
 
-
-
-
 void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
@@ -669,6 +666,7 @@ void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 
     // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
 
 

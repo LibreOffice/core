@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: precompiled_sd.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -410,7 +410,6 @@
 #include "cppuhelper/weakref.hxx"
 
 
-#include "goodies/base3d.hxx"
 #include "goodies/grfmgr.hxx"
 
 #include "helper/simplereferencecomponent.hxx"

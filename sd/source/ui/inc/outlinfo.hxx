@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlinfo.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +109,7 @@ public:
     const Rectangle&    GetTextRect() const { return aParaBound; }
     const Point&        GetTextOffset() const { return aTextOffset; }
 
-    const ULONG         GetParaCount() const { return nParaCount; }
+    ULONG           GetParaCount() const { return nParaCount; }
 
     const Rectangle&    GetParaRect( const ULONG nPara ) const;
     BOOL                GetParaCharCount( const ULONG nPara ) const;
@@ -120,7 +120,7 @@ public:
     OutlinerCharacter*  GetNextCharacter() { return (OutlinerCharacter*) aCharacterList.Next(); }
 
     void                SetExtraData( const long _nExtraData = 0L ) { nExtraData = _nExtraData; }
-    const long          GetExtraData() const { return nExtraData; }
+    long            GetExtraData() const { return nExtraData; }
 
     BOOL IsVertical() const { return mbVertical; }
 };

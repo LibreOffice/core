@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navigatr.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.40.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,6 @@ SdNavigatorWin::SdNavigatorWin(
     maToolbox.SetItemBits( TBI_DRAGTYPE, maToolbox.GetItemBits( TBI_DRAGTYPE ) | TIB_DROPDOWNONLY );
 
     // Shape filter drop down menu.
-    maToolbox.SetItemImage(TBI_SHAPE_FILTER, BitmapEx(SdResId(BMP_GRAPHIC_H)));
     maToolbox.SetItemBits(TBI_SHAPE_FILTER,
         maToolbox.GetItemBits(TBI_SHAPE_FILTER) | TIB_DROPDOWNONLY);
 
@@ -867,6 +866,8 @@ void SdNavigatorWin::ApplyImageList()
     const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
 
     maToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
+
+    maToolbox.SetItemImage(TBI_SHAPE_FILTER, BitmapEx(SdResId( bHighContrast ? BMP_GRAPHIC_H : BMP_GRAPHIC)));
 
     SetDragImage();
 }

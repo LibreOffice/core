@@ -403,8 +403,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
 |*
 \************************************************************************/
 
-void DrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
-                                 const SfxHint& rHint, const TypeId& rHintType)
+void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     if ( mpDrawViewShell && rHint.ISA(SdrHint) )
     {
@@ -435,7 +434,7 @@ void DrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
         }
     }
 
-    ::sd::View::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    ::sd::View::Notify(rBC, rHint);
 }
 
 /*************************************************************************

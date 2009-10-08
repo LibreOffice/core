@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptin.cxx,v $
- * $Revision: 1.92 $
+ * $Revision: 1.92.78.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -596,6 +596,7 @@ sal_Bool ImplSdPPTImport::Import()
                     ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
                 if ( nMasterNum )
                 {
+                    boost::optional< sal_Int16 > oStartNumbering;
                     SfxStyleSheet* pSheet;
                     if ( nMasterNum == 1 )
                     {
@@ -609,7 +610,7 @@ sal_Bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                         }
                     }
@@ -622,7 +623,7 @@ sal_Bool ImplSdPPTImport::Import()
                         PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
                         PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
                         aParagraph.AppendPortion( aPortion );
-                        aParagraph.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
+                        aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
                         aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                     }
 
@@ -670,7 +671,7 @@ sal_Bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, nTitleInstance, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, nTitleInstance, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                         }
                         ////////////////////////
@@ -693,14 +694,14 @@ sal_Bool ImplSdPPTImport::Import()
                                 SfxItemSet& rItemSet = pOutlineSheet->GetItemSet();
                                 PPTPortionObj aPortion( *pPPTStyleSheet, nOutlinerInstance, nLevel );
                                 pParagraphs[ nLevel ]->AppendPortion( aPortion );
-                                pParagraphs[ nLevel ]->ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, pPreviousPara );
+                                pParagraphs[ nLevel ]->ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, pPreviousPara );
                                 aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                                 pPreviousPara = pParagraphs[ nLevel ];
                             }
                             else
                                 pParagraphs[ nLevel ] = NULL;
                         }
-                        for ( nLevel = 0; nLevel < 9; delete pParagraphs[ nLevel++ ] );
+                        for ( nLevel = 0; nLevel < 9; delete pParagraphs[ nLevel++ ] ) ;
                         /////////////////////////
                         // subtitle stylesheet //
                         /////////////////////////
@@ -711,7 +712,7 @@ sal_Bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_SUBTITLE, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_SUBTITLE, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                         }
                     }
@@ -724,7 +725,7 @@ sal_Bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_NOTES, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_NOTES, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, NULL );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
                         }
                     }
@@ -2338,7 +2339,18 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     pOutl = GetDrawOutliner( pText );
                 if ( aPresentationText.Len() )
                     pPage->SetObjText( (SdrTextObj*)pText, pOutl, ePresKind, aPresentationText );
-                pText->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresKind ), TRUE );
+
+                pSheet = pPage->GetStyleSheetForPresObj( ePresKind );
+                if ( pSheet )
+                {
+                    SfxItemSet& rItemSet = pSheet->GetItemSet();
+                    rItemSet.Put( (SdrTextLeftDistItem&)pText->GetMergedItem( SDRATTR_TEXT_LEFTDIST ) );
+                    rItemSet.Put( (SdrTextRightDistItem&)pText->GetMergedItem( SDRATTR_TEXT_RIGHTDIST ) );
+                    rItemSet.Put( (SdrTextUpperDistItem&)pText->GetMergedItem( SDRATTR_TEXT_UPPERDIST ) );
+                    rItemSet.Put( (SdrTextLowerDistItem&)pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST ) );
+                }
+                pText->NbcSetStyleSheet( pSheet, TRUE );
+
                 SfxItemSet aTempAttr( mpDoc->GetPool() );
                 SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );
                 aTempAttr.Put( aMinHeight );

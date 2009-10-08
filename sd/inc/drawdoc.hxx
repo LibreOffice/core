@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc.hxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.49.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -371,7 +371,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 >& getPresentation() const;
 
        void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { mbSummationOfParagraphs = bOn; }
-    const BOOL          IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
+    BOOL            IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
 
     /** Set the mode that controls whether (and later how) the formatting of the document
         depends on the current printer metrics.

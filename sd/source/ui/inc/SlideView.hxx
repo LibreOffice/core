@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideView.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,8 +107,7 @@ public:
     void                    AddToCache( SdPage* pPage, const Bitmap& rBitmap, long nZoom );
     const GraphicObject*    GetFromCache( SdPage* pPage, long& rZoom, long nZoomTolerance ) const;
 
-    virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                    const SfxHint& rHint, const TypeId& rHintType );
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual void        DoCut( ::Window* pWindow = NULL );
     virtual void        DoCopy( ::Window* pWindow = NULL );
