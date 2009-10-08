@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regimpl.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1198,42 +1198,6 @@ RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
 
 
 //*********************************************************************
-//  isKeyOpen()
-//
-sal_Bool ORegistry::isKeyOpen(const OUString& keyName) const
-{
-    return(m_openKeyTable.count(keyName) > 0);
-}
-
-
-
-//*********************************************************************
-//  countSubKeys()
-//
-sal_uInt32 ORegistry::countSubKeys(ORegKey* pKey)
-{
-    REG_GUARD(m_mutex);
-
-    OStoreDirectory::iterator   iter;
-    sal_uInt32                  count = 0;
-    OStoreDirectory             rStoreDir(pKey->getStoreDir());
-    storeError                  _err = rStoreDir.first(iter);
-
-    while ( _err == store_E_None)
-    {
-        if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
-        {
-            count++;
-        }
-
-        _err = rStoreDir.next(iter);
-    }
-
-    return count;
-}
-
-
-//*********************************************************************
 //  loadValue()
 //
 RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
@@ -2034,60 +1998,6 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
 
         _err = rStoreDir.next(iter);
     }
-
-    return REG_NO_ERROR;
-}
-
-//*********************************************************************
-//  createLink()
-//
-RegError ORegistry::createLink(RegKeyHandle hKey,
-                               const OUString& linkName,
-                               const OUString& linkTarget)
-{
-    ORegKey*    pKey;
-
-    if ( !linkName.getLength() )
-    {
-        return REG_INVALID_LINKNAME;
-    }
-
-    REG_GUARD(m_mutex);
-
-    if (hKey)
-        pKey = (ORegKey*)hKey;
-    else
-        pKey = m_openKeyTable[ROOT];
-
-    OUString sFullLinkName = resolveLinks(pKey, linkName);
-
-    if (sFullLinkName.getLength() == 0)
-        return REG_DETECT_RECURSION;
-
-    OStoreDirectory rStoreDir;
-    OUString        sFullPath(ROOT);
-
-    sal_Int32   nIndex = 0;
-    OUString    token;
-
-    do
-    {
-        token = sFullLinkName.getToken(0, '/', nIndex);
-
-        if( token.getLength() > 0 )
-        {
-            if (rStoreDir.create(pKey->getStoreFile(), sFullPath, token, KEY_MODE_CREATE))
-            {
-                return REG_CREATE_KEY_FAILED;
-            }
-
-            sFullPath += token;
-            sFullPath += ROOT;
-        }
-    } while( nIndex != -1 && token.getLength() > 0 );
-
-    pKey = new ORegKey(sFullLinkName, linkTarget, this);
-    delete pKey;
 
     return REG_NO_ERROR;
 }

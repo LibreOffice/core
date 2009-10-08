@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: PolicyLayerBackend.idl,v $
- * $Revision: 1.4 $
+ * $RCSfile: regdiagnose.h,v $
+ * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,37 +27,21 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_configuration_backend_PolicyLayerBackend_idl__
-#define __com_sun_star_configuration_backend_PolicyLayerBackend_idl__
-
-#ifndef __com_sun_star_configuration_backend_XBackend_idl__
-#include <com/sun/star/configuration/backend/XBackend.idl>
-#endif
 
 
-//=============================================================================
+#ifndef REG_DIAGNOSE_H
+#define REG_DIAGNOSE_H
 
-module com { module sun { module star { module configuration { module backend {
+#include <osl/diagnose.h>
 
-//=============================================================================
+#define REG_ENSURE(c, m)   _REG_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
 
-/**
-     provides access to multi layers of configuration data
-*/
-service PolicyLayerBackend
-{
-    //-------------------------------------------------------------------------
-     /**
-      provides access to the layer data.
-      */
-     interface XBackend ;
+#define _REG_ENSURE(c, f, l, m) \
+    do \
+    {  \
+        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, m)) \
+            _OSL_GLOBAL osl_breakDebug(); \
+    } while (0)
 
-    //-------------------------------------------------------------------------
 
-} ;
-
-//=============================================================================
-
-} ; } ; } ; } ; } ;
-
-#endif
+#endif // REG_DIAGNOSE_H

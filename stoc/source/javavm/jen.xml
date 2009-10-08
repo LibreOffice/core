@@ -16,6 +16,10 @@ the existing vm given back.
         <status value="final"/>
         <supported-service> com.sun.star.java.JavaVirtualMachine    </supported-service>
         <service-dependency> ... </service-dependency>
+        <type>com.sun.star.beans.NamedValue</type>
+        <type>com.sun.star.java.XJavaThreadRegister_11</type>
+        <type>com.sun.star.uri/ExternalUriReferenceTranslator</type>
+        <type>com.sun.star.util.XMacroExpander</type>
         <type>  com.sun.star.java.XJavaVM                       </type>
         <type>  com.sun.star.java.XJavaVM                       </type>
         <type>  com.sun.star.container.XNameAccess              </type>

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registry.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,63 +52,6 @@
 #if defined ( GCC ) && ( defined ( SCO ) )
 ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
 #endif
-
-OString getTempName()
-{
-    static OUString TMP(RTL_CONSTASCII_USTRINGPARAM("TMP"));
-    static OUString TEMP(RTL_CONSTASCII_USTRINGPARAM("TEMP"));
-
-    OUString    uTmpPattern;
-    sal_Char    tmpPattern[512] = "";
-    sal_Char    *pTmpName = NULL;
-
-    if ( osl_getEnvironment(TMP.pData, &uTmpPattern.pData) != osl_Process_E_None )
-    {
-        if ( osl_getEnvironment(TEMP.pData, &uTmpPattern.pData) != osl_Process_E_None )
-        {
-#if defined(SAL_W32) || defined(SAL_OS2)
-            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "." ) );
-            strncpy(tmpPattern, ".", sizeof(tmpPattern)-1);
-#else
-            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "." ) );
-            strncpy(tmpPattern, ".", sizeof(tmpPattern)-1);
-#endif
-        }
-    }
-
-    if ( uTmpPattern.getLength() )
-    {
-        OString aOStr( OUStringToOString(uTmpPattern, RTL_TEXTENCODING_UTF8) );
-        OSL_ASSERT(
-            sizeof(tmpPattern)
-            > sal::static_int_cast< sal_uInt32 >(aOStr.getLength()) );
-        strncpy(tmpPattern, aOStr.getStr(), sizeof(tmpPattern)-1);
-    }
-
-#if defined(WIN32) || defined(WNT) || defined(OS2)
-    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
-                                       + RTL_CONSTASCII_LENGTH("\\reg_XXXXXX") ) );
-    strncat(tmpPattern, "\\reg_XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    pTmpName = mktemp(tmpPattern);
-#endif
-
-#ifdef OS2__YD
-    char* tmpname = tempnam(NULL, "reg_");
-    OSL_ASSERT( sizeof(tmpPattern) > strlen(tmpname) );
-    strncpy(tmpPattern, tmpname, sizeof(tmpPattern)-1);
-    pTmpName = tmpPattern;
-#endif
-
-#ifdef UNX
-    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
-                                       + RTL_CONSTASCII_LENGTH("/reg_XXXXXX") ) );
-    strncat(tmpPattern, "/reg_XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
-
-    pTmpName = mktemp(tmpPattern);
-#endif
-
-    return OString(pTmpName);
-}
 
 extern "C" {
 
@@ -456,10 +399,6 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
         pNewKey = pKey;
     }
 
-    /*
-    OString tmpName = getTempName();
-    pReg->saveKey(pNewKey, tmpName, sal_False, sal_False);
-    */
     _ret = pKey->getRegistry()->loadKey(pNewKey, regFileName, bWarnings, bReport);
 
     if (_ret == REG_MERGE_ERROR ||
@@ -666,7 +605,7 @@ RegError REGISTRY_CALLTYPE reg_openRootKey(RegHandle hRegistry,
 //*********************************************************************
 //  reg_getName
 //
-const RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
+RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
 {
     return getName(hRegistry, pName);
 }

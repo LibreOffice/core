@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astscope.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@ public:
     AstScope(NodeType nodeType);
     virtual ~AstScope();
 
-    const NodeType getScopeNodeType()
+    NodeType getScopeNodeType() const
         { return m_nodeType; }
 
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);

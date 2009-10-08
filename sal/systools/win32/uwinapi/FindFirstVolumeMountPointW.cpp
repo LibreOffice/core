@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FindFirstVolumeMountPointW.cpp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.38.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,4 +28,8 @@
  *
  ************************************************************************/
 #include "macros.h"
+#ifdef __MINGW32__
+DEFINE_DEFAULT_THUNK( kernel32, TRYLOAD, HANDLE, WINAPI, FindFirstVolumeMountPointW, (LPWSTR lpszRootPathName, LPWSTR lpszVolumeMountPoint, DWORD cchBufferLength) )
+#else
 DEFINE_DEFAULT_THUNK( kernel32, TRYLOAD, HANDLE, WINAPI, FindFirstVolumeMountPointW, (LPCWSTR lpszRootPathName, LPWSTR lpszVolumeMountPoint, DWORD cchBufferLength) )
+#endif

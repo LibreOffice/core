@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astattribute.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,27 +80,27 @@ public:
 
     AstType const * getType() const
         { return m_pType; }
-    const sal_Bool isReadonly()
+    sal_Bool isReadonly() const
         { return ((m_flags & AF_READONLY) == AF_READONLY); }
-    const sal_Bool isOptional()
+    sal_Bool isOptional() const
         { return ((m_flags & AF_OPTIONAL) == AF_OPTIONAL); }
-    const sal_Bool isAttribute()
+    sal_Bool isAttribute() const
         { return ((m_flags & AF_ATTRIBUTE) == AF_ATTRIBUTE); }
-    const sal_Bool isProperty()
+    sal_Bool isProperty() const
         { return ((m_flags & AF_PROPERTY) == AF_PROPERTY); }
-    const sal_Bool isBound()
+    sal_Bool isBound() const
         { return ((m_flags & AF_BOUND) == AF_BOUND); }
-    const sal_Bool isMayBeVoid()
+    sal_Bool isMayBeVoid() const
         { return ((m_flags & AF_MAYBEVOID) == AF_MAYBEVOID); }
-    const sal_Bool isConstrained()
+    sal_Bool isConstrained() const
         { return ((m_flags & AF_CONSTRAINED) == AF_CONSTRAINED); }
-    const sal_Bool isTransient()
+    sal_Bool isTransient() const
         { return ((m_flags & AF_TRANSIENT) == AF_TRANSIENT); }
-    const sal_Bool isMayBeAmbiguous()
+    sal_Bool isMayBeAmbiguous() const
         { return ((m_flags & AF_MAYBEAMBIGUOUS) == AF_MAYBEAMBIGUOUS); }
-    const sal_Bool isMayBeDefault()
+    sal_Bool isMayBeDefault() const
         { return ((m_flags & AF_MAYBEDEFAULT) == AF_MAYBEDEFAULT); }
-    const sal_Bool isRemoveable()
+    sal_Bool isRemoveable() const
         { return ((m_flags & AF_REMOVEABLE) == AF_REMOVEABLE); }
 
     sal_Bool dumpBlob(

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: test_security.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,8 @@ static OUString localhost( OUString const & addition ) SAL_THROW( () )
         SocketAddr addr;
         SocketAddr::resolveHostname( OUSTR("localhost"), addr );
         ::oslSocketResult rc = ::osl_getDottedInetAddrOfSocketAddr( addr.getHandle(), &ip.pData );
-        OSL_ENSURE( ::osl_Socket_E_None == rc, "### cannot resolve localhost!" );
+        if (::osl_Socket_Ok != rc)
+            fprintf(stdout, "### cannot resolve localhost!" );
     }
     OUStringBuffer buf( 48 );
     buf.append( ip );
@@ -190,7 +191,7 @@ Any user_CurrentContext::getValueByName( OUString const & name )
 /*
 grant
 {
-permission com.sun.star.io.FilePermission "file:///usr/bin/*", "read";
+permission com.sun.star.io.FilePermission "file:///usr/bin/ *", "read";
 permission com.sun.star.io.FilePermission "file:///tmp/-", "read,write";
 permission com.sun.star.io.FilePermission "file:///etc/profile", "read";
 
@@ -248,7 +249,7 @@ grant user "dbo"
 {
 permission com.sun.star.io.FilePermission "file:///home/dbo/-", "read,write";
 permission com.sun.star.io.FilePermission "-", "read,write";
-permission com.sun.star.io.FilePermission "file:///usr/local/dbo/*", "read";
+permission com.sun.star.io.FilePermission "file:///usr/local/dbo/ *", "read";
 
 permission com.sun.star.security.RuntimePermission "DBO";
 
@@ -423,13 +424,13 @@ Any Action::run()
 }
 
 //==================================================================================================
-static void restr_file_permissions( AccessControl & ac )
-{
-    // running in dbo's domain
-    /* permission com.sun.star.io.FilePermission "file:///home/dbo/-", ",,read , write "; */
-    CHECK( ac.checkFilePermission( OUSTR("file:///home/dbo/bla"), OUSTR("read,write,execute") ), true );
-    CHECK( ac.checkFilePermission( OUSTR("file:///home/dbo/bla"), OUSTR("read,write") ), false );
-}
+// static void restr_file_permissions( AccessControl & ac )
+// {
+//     // running in dbo's domain
+//     /* permission com.sun.star.io.FilePermission "file:///home/dbo/-", ",,read , write "; */
+//     CHECK( ac.checkFilePermission( OUSTR("file:///home/dbo/bla"), OUSTR("read,write,execute") ), true );
+//     CHECK( ac.checkFilePermission( OUSTR("file:///home/dbo/bla"), OUSTR("read,write") ), false );
+// }
 //==================================================================================================
 static void all_dbo_permissions( AccessControl & ac, Any const & )
 {

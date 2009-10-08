@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: astbasetype.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,7 @@ public:
         }
     }
 
-    const ExprType getExprType() const
+    ExprType getExprType() const
         { return m_exprType; }
 private:
     const ExprType m_exprType;

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: system.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -379,10 +379,7 @@ extern char *strdup(const char *);
 #   define  NO_PTHREAD_RTL
 /* for NSGetArgc/Argv/Environ */
 #       include <crt_externs.h>
-int  readdir_r( DIR *dirp, struct dirent *entry, struct dirent **result );
-char *asctime_r( const struct tm *tm, char *buffer );
 char *macxp_tempnam( const char *tmpdir, const char *prefix );
-void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion, unsigned int *minorVersion, unsigned int *minorMinorVersion );
 #endif
 
 #ifdef OS2

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: flushcode.cxx,v $
- * $Revision: 1.5 $
+ * $RCSfile: test_recursion.cxx,v $
+ * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,25 +28,33 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_bridges.hxx"
-
+#include "precompiled_cppu.hxx"
 #include "sal/config.h"
 
-#include "flushcode.hxx"
+#include "cppunit/simpleheader.hxx"
+#include "sal/types.h"
 
-extern "C" void doFlushCode(unsigned long address, unsigned long count);
+#include "Rec.hpp"
 
-namespace bridges { namespace cpp_uno { namespace cc50_solaris_sparc {
+namespace
+{
 
-void flushCode(void const * begin, void const * end) {
-    unsigned long n =
-        static_cast< char const * >(end) - static_cast< char const * >(begin);
-    if (n != 0) {
-        unsigned long adr = reinterpret_cast< unsigned long >(begin);
-        unsigned long off = adr & 7;
-        doFlushCode(adr - off, (n + off + 7) >> 3);
-    }
+class Test: public CppUnit::TestFixture {
+
+public:
+    void testRecursion();
+
+    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST(testRecursion);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void Test::testRecursion() {
+    CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(0), Rec().x.getLength());
 }
 
-} } }
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "tests");
+
+}
+
+NOADDITIONAL;

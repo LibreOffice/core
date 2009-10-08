@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScriptFrameworkErrorType.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +45,18 @@ constants ScriptFrameworkErrorType
     /** Unknown
      */
     const long UNKNOWN = 0;
+
     /** ProviderNotSupported
      */
     const long NOTSUPPORTED = 1;
+
+    /** the requested method, and/or with the requested signature, does not exist
+    */
+    const long NO_SUCH_SCRIPT = 2;
+
+    /** the requested method, with the requested signature, does not exist
+    */
+    const long MALFORMED_URL = 3;
 };
 
 //===========================================================================

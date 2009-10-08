@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.17.38.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +47,10 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+CDEFS+=-UWINVER -DWINVER=0x0500
+CFLAGSCXX+=-Wno-unused-parameter -Wno-return-type
+.ENDIF
 
 .IF "$(COMEX)"=="9"
 .IF "$(PSDK_HOME)"!=""

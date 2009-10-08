@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.17.12.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,8 +58,7 @@ SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
     $(SLO)$/except.obj		\
-    $(SLO)$/call.obj \
-    $(SLO)$/flushcode.obj
+    $(SLO)$/call.obj
 
 SHL1TARGET= $(TARGET)
 

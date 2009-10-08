@@ -439,7 +439,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
         return osl_File_E_NOENT;
 
 
-#if defined(MACOSX) && (BUILD_OS_MAJOR==10) && (BUILD_OS_MINOR>=2)
+#if defined(MACOSX)
 
     // convert decomposed filename to precomposed unicode
     char composed_name[BUFSIZ];
@@ -1438,7 +1438,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
    of the target platforms fix it!!!! */
 #   define __OSL_STATFS_IS_CASE_SENSITIVE_FS(a)  (1)
 #   define __OSL_STATFS_IS_CASE_PRESERVING_FS(a) (1)
-#endif /* FREEBSD || NETBSD */
+#endif /* FREEBSD || NETBSD || MACOSX */
 
 #if defined(LINUX)
 #   define __OSL_NFS_SUPER_MAGIC                 0x6969

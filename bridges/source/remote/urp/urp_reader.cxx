@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_reader.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,7 +298,6 @@ inline sal_Bool OReaderThread::readBlock( sal_Int32 *pnMessageCount )
         s.append( sal_Unicode( ')' ) );
         m_pBridgeImpl->addError( s.makeStringAndClear() );
         OSL_ENSURE( 0 , "urp bridge: Packet-size too big" );
-        disposeEnvironment();
         return sal_False;
     }
 

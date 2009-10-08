@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: keyimpl.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,8 +43,6 @@ class ORegKey
 public:
 
     ORegKey(const OUString& keyName, ORegistry* pReg);
-    ORegKey(const OUString& keyName, const OUString& linkName,
-            ORegistry* pReg);
 
       sal_uInt32    acquire()
         { return ++m_refCount; }
@@ -64,8 +62,6 @@ public:
     RegError    getKeyNames(const OUString& keyName,
                             rtl_uString*** pSubKeyNames,
                             sal_uInt32* pnSubKeys);
-
-    RegError    closeSubKeys(RegKeyHandle* phSubKeys, sal_uInt32 len);
 
     RegError    closeKey(RegKeyHandle hKey);
 
@@ -120,7 +116,6 @@ public:
                                    OUString& resolvedName);
 
 public:
-    ORegKey();
     virtual ~ORegKey();
 
 

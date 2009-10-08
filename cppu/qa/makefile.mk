@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.6.14.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,7 +62,14 @@ SHL3VERSIONMAP = version.map
 SHL3IMPLIB = i$(SHL3TARGET)
 DEF3NAME = $(SHL3TARGET)
 
-SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS)
+SHL4TARGET = $(TARGET)_recursion
+SHL4OBJS = $(SLO)$/test_recursion.obj
+SHL4STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL4VERSIONMAP = version.map
+SHL4IMPLIB = i$(SHL4TARGET)
+DEF4NAME = $(SHL4TARGET)
+
+SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
 
 .INCLUDE: target.mk
 
@@ -84,7 +91,8 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
-test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN)
+test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN) $(SHL4TARGETN)
     testshl2 $(SHL1TARGETN)
     testshl2 $(SHL2TARGETN)
     testshl2 $(SHL3TARGETN)
+    testshl2 $(SHL4TARGETN)

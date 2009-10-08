@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: permissions.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -544,6 +544,7 @@ PermissionCollection::PermissionCollection(
         }
     }
 }
+#ifdef __DIAGNOSE
 //__________________________________________________________________________________________________
 Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW( () )
 {
@@ -556,6 +557,7 @@ Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW( () )
     return Sequence< OUString >(
         strings.empty() ? 0 : &strings[ 0 ], strings.size() );
 }
+#endif
 //__________________________________________________________________________________________________
 inline static bool __implies(
     ::rtl::Reference< Permission > const & head, Permission const & demanded ) SAL_THROW( () )
@@ -566,11 +568,6 @@ inline static bool __implies(
             return true;
     }
     return false;
-}
-//__________________________________________________________________________________________________
-bool PermissionCollection::implies( Permission const & perm ) const SAL_THROW( () )
-{
-    return __implies( m_head, perm );
 }
 
 #ifdef __DIAGNOSE

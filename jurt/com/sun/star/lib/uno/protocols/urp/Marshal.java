@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Marshal.java,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,6 +286,10 @@ final class Marshal {
                 throw new RuntimeException(e.toString());
             }
             value = any.getObject();
+        } else if (value.getClass() == Object.class) {
+            // Avoid StackOverflowError:
+            throw new IllegalArgumentException(
+                "Object instance does not represent UNO value");
         } else {
             type = TypeDescription.getTypeDescription(value.getClass());
         }

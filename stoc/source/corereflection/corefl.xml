@@ -15,6 +15,7 @@ The service provides reflection and access to all uno types
         <status value="final"/>
         <supported-service> com.sun.star.reflection.CoreReflection  </supported-service>
         <service-dependency> ... </service-dependency>
+        <type>com.sun.star.lang.DisposedException</type>
         <type>  com.sun.star.reflection.XTypeDescription        </type>
         <type>  com.sun.star.reflection.XIdlReflection          </type>
         <type>  com.sun.star.reflection.XIdlClass               </type>

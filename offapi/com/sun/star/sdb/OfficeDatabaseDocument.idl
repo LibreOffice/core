@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeDatabaseDocument.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +30,20 @@
 #ifndef __com_sun_star_sdb_OfficeDatabaseDocument_idl__
 #define __com_sun_star_sdb_OfficeDatabaseDocument_idl__
 
-#ifndef __com_sun_star_script_provider_XScriptProviderSupplier_idl__
-#include <com/sun/star/script/provider/XScriptProviderSupplier.idl>
+#ifndef __com_sun_star_document_OfficeDocument_idl__
+#include <com/sun/star/document/OfficeDocument.idl>
 #endif
 #ifndef __com_sun_star_sdb_XOfficeDatabaseDocument_idl__
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.idl>
+#endif
+#ifndef __com_sun_star_document_XDocumentEventBroadcaster_idl__
+#include <com/sun/star/document/XDocumentEventBroadcaster.idl>
+#endif
+#ifndef __com_sun_star_script_provider_XScriptProviderSupplier_idl__
+#include <com/sun/star/script/provider/XScriptProviderSupplier.idl>
+#endif
+#ifndef __com_sun_star_frame_XLoadable_idl__
+#include <com/sun/star/frame/XLoadable.idl>
 #endif
 #ifndef __com_sun_star_util_XCloseable_idl__
 #include <com/sun/star/util/XCloseable.idl>
@@ -55,30 +64,160 @@ module com {  module sun {  module star {  module sdb {
         <li>All properties of the service <type>DataSource</type></li>
     </ul></p>
 
-    <p>The component does not support the <type scope="com::sun::star::view">XPrintable</type> interface. This
-    interface is required by the base service (<type scope="com::sun::star::document">OfficeDocument</type>),
-    but that's considered a documentation error.</p>
-
     @see com::sun::star::sdb::XOfficeDatabaseDocument
     @see com::sun::star::document::OfficeDocument
     @since OOo 2.0.0
  */
 service OfficeDatabaseDocument
 {
+    /** specifies basic functionality of a document in OpenOffice.org
+
+        <p>Note that a database document actually does not support the <type scope="com::sun::star::view">XPrintable</type> interface.
+        The non-optional requirement of this interface in the <type scope="com::sun::star::document">OfficeDocument</type>
+        service is considered a documentation error.</p>
+    */
     service com::sun::star::document::OfficeDocument;
 
     interface XOfficeDatabaseDocument;
 
     /** allows access to the Basic macros and dialogs possibly embedded in the document
-        @since OOo 3.0
+        @since OOo 3.1
     */
     interface ::com::sun::star::document::XEmbeddedScripts;
 
     /** supplies a script provider which can be used to execute macros and scripts
         embedded in the document
-        @since OOo 3.0
+        @since OOo 3.1
     */
     interface ::com::sun::star::script::provider::XScriptProviderSupplier;
+
+    /** allows to initialize the the document, either from scratch, or from a stored
+        database document.
+
+        <p>A newly instantiated database document cannot be operated until it is fully
+        initialized. There are three possible means to do this initialization:
+        <ul><li>calling <code>XLoadable::initNew</code></li>
+            <li>calling <code>XLoadable::load</code></li>
+            <li>calling <code>XStorable::storeAsURL</code></li>
+        </ul>
+        The third option was added for compatibility reasons, since a <type>DatabaseDocument</type>
+        in earlier versions of OpenOffice.org did not support the <code>XLoadable</code> interface,
+        so the usual way of creating a document from scratch was to create it, set properties as
+        needed, and store it.</p>
+
+        @since OOo 3.1
+    */
+    interface ::com::sun::star::frame::XLoadable;
+
+    /** allows to register for notifications happening in the document
+
+        <p>The following events are broadcasted by a database document
+        <table border="1" frame="all">
+            <thead>
+                <tr><td><strong>Event Name</strong></td>
+                    <td><strong>broadcasted when</strong></td>
+                    <td align="center"><strong>broadcasted synchronously</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td valign="top"><em>OnCreate</em></td>
+                    <td>the document has been newly created. This does not imply that the document has
+                        been loaded into a frame, it just means the initialization has been finished.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnLoadFinished</em></td>
+                    <td>the document has been completely loaded. This does not  imply that the document
+                    has been loaded into a frame, it just means the load process has been finished.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnNew</em></td>
+                    <td>the document has been initialized from scratch, including plugging it into a frame.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnLoad</em></td>
+                    <td>the document has been completely loaded, including plugging it into a frame.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnSave</em></td>
+                    <td>the document is about to be saved.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveDone</em></td>
+                    <td>saving the document succeeeded.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveFailed</em></td>
+                    <td>saving the document failed.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveAs</em></td>
+                    <td>the document is about to be saved under a new name.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveAsDone</em></td>
+                    <td>saving the document under a new name succeeeded.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveAsFailed</em></td>
+                    <td>saving the document under a new name failed.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveTo</em></td>
+                    <td>the document is about to be saved to a location different from its
+                        current location, but without adjusting the current location.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveToDone</em></td>
+                    <td>saving the document to a different location succeeeded.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnSaveToFailed</em></td>
+                    <td>saving the document to a different location failed.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnPrepareUnload</em></td>
+                    <td>the document is about to be closed.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnUnload</em></td>
+                    <td>the document is being closed.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnFocus</em></td>
+                    <td>a view to the document obtained the focus.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnUnfocus</em></td>
+                    <td>a view to the document lost the focus.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnModifyChanged</em></td>
+                    <td>the <quot>modified</quot> state of the document changed.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnViewCreated</em></td>
+                    <td>a view to the document has been created, and attached to the document.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnPrepareViewClosing</em></td>
+                    <td>a view to the document is about to be closed.</td>
+                    <td align="center">yes</td>
+                </tr>
+                <tr><td valign="top"><em>OnViewClosed</em></td>
+                    <td>a view to the document has been closed.</td>
+                    <td align="center">no</td>
+                </tr>
+                <tr><td valign="top"><em>OnTitleChanged</em></td>
+                    <td>the title of the document changed.</td>
+                    <td align="center">no</td>
+                </tr>
+            </tbody>
+        </table>
+        </p>
+
+        @since OOo 3.1
+    */
+    interface ::com::sun::star::document::XDocumentEventBroadcaster;
 
     /** implements life time control
 

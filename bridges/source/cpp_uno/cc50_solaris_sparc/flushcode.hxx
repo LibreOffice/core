@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flushcode.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +33,18 @@
 
 #include "sal/config.h"
 
+extern "C" void sync_instruction_memory(caddr_t addr, int len); // from libc
+
 namespace bridges { namespace cpp_uno { namespace cc50_solaris_sparc {
 
 /**
  * Flush a region of memory into which code has been written dynamically.
  */
-void flushCode(void const * begin, void const * end);
+inline void flushCode(void const * begin, void const * end) {
+    sync_instruction_memory(
+        static_cast< caddr_t >(const_cast< void * >(begin)),
+        static_cast< char const * >(end) - static_cast< char const * >(begin));
+}
 
 } } }
 

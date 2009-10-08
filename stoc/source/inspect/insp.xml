@@ -16,6 +16,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.beans.Introspection    </supported-service>
         <service-dependency>    com.sun.star.reflection.CoreReflection  </service-dependency>
+        <type>com.sun.star.lang.DisposedException</type>
         <type>  com.sun.star.beans.XIntrospection               </type>
         <type>  com.sun.star.beans.XIntrospectionAccess         </type>
         <type>  com.sun.star.beans.XPropertySet                 </type>

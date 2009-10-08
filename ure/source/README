@@ -8,7 +8,7 @@
 #
 # $RCSfile: README,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.17.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,8 +53,6 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/lib/libuno_salhelperC52.so.3  [Solaris only]
 /opt/openoffice.org/ure/lib/libstlport_gcc.so  [Linux x86 only]
 /opt/openoffice.org/ure/lib/libstlport_sunpro.so  [Solaris only]
-/opt/openoffice.org/ure/lib/libuno_purpenvhelpergcc3.so.3  [Linux x86 only]
-/opt/openoffice.org/ure/lib/libuno_purpenvhelperC52.so.3  [Solaris only]
 /opt/openoffice.org/ure/share/java/unoloader.jar
 /opt/openoffice.org/ure/share/java/juh.jar
 /opt/openoffice.org/ure/share/java/jurt.jar
@@ -106,8 +104,6 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/lib/uuresolver.uno.so  [private]
 /opt/openoffice.org/ure/share/java/java_uno.jar  [private]
 /opt/openoffice.org/ure/share/misc/javavendors.xml  [private]
-/opt/openoffice.org/ure/lib/libunsafe_uno_uno.so  [private]
-/opt/openoffice.org/ure/lib/libaffine_uno_uno.so  [private]
 
 Windows:
 
@@ -124,7 +120,6 @@ Program Files\URE\bin\purpenvhelper3MSC.dll
 Program Files\URE\bin\sal3.dll
 Program Files\URE\bin\salhelper3MSC.dll
 Program Files\URE\bin\stlport_vc7145.dll
-Program Files\URE\bin\purpenvhelper3MSC.dll
 Program Files\URE\java\unoloader.jar
 Program Files\URE\java\juh.jar
 Program Files\URE\java\jurt.jar
@@ -132,7 +127,6 @@ Program Files\URE\java\ridl.jar
 Program Files\URE\misc\types.rdb
 Program Files\URE\misc\services.rdb
 Program Files\URE\bin\libxml2.dll  [external]
-Program Files\URE\bin\msvcr71.dll  [external]
 Program Files\URE\bin\uno.ini  [private]
 Program Files\URE\bin\reg3.dll  [private]
 Program Files\URE\bin\rmcxt3.dll  [private]
@@ -169,13 +163,10 @@ Program Files\URE\bin\textinstream.uno.dll  [private]
 Program Files\URE\bin\textoutstream.uno.dll  [private]
 Program Files\URE\bin\stocservices.uno.dll  [private]
 Program Files\URE\bin\uuresolver.uno.dll  [private]
-Program Files\URE\bin\msvcp71.dll  [private]
 Program Files\URE\bin\unicows.dll  [private]
 Program Files\URE\bin\uwinapi.dll  [private]
 Program Files\URE\java\java_uno.jar  [private]
 Program Files\URE\misc\javavendors.xml  [private]
-Program Files\URE\bin\unsafe_uno_uno.dll  [private]
-Program Files\URE\bin\affine_uno_uno.dll  [private]
 
 %windir%\assembly\cli_basetypes.dll [GAC]
 %windir%\assembly\cli_ure.dll [GAC]

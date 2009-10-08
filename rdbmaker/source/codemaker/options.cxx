@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: options.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,23 +60,6 @@ const OString Options::getOption(const OString& option)
     } else
     {
         throw IllegalArgument("Option is not valid or currently not set.");
-    }
-}
-
-const OptionMap& Options::getOptions()
-{
-    return m_options;
-}
-
-const OString Options::getInputFile(sal_uInt16 index)
-    throw( IllegalArgument )
-{
-    if (index < m_inputFiles.size())
-    {
-        return m_inputFiles[index];
-    } else
-    {
-        throw IllegalArgument("index is out of bound.");
     }
 }
 

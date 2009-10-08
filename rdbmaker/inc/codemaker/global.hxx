@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,15 +74,6 @@ typedef ::std::set< ::rtl::OString, LessString >    StringSet;
 
 ::rtl::OString makeTempName();
 
-::rtl::OString createFileNameFromType(const ::rtl::OString& destination,
-                                      const ::rtl::OString type,
-                                      const ::rtl::OString postfix,
-                                      sal_Bool bLowerCase=sal_False,
-                                      const ::rtl::OString prefix="");
-
-sal_Bool fileExists(const ::rtl::OString& fileName);
-sal_Bool checkFileContent(const ::rtl::OString& targetFileName, const ::rtl::OString& tmpFileName);
-
 const ::rtl::OString inGlobalSet(const ::rtl::OUString & r);
 inline const ::rtl::OString inGlobalSet(sal_Char* p)
 {
@@ -108,7 +99,6 @@ class FileStream //: public ofstream
 {
 public:
     FileStream();
-    FileStream(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);
     virtual ~FileStream();
 
     sal_Bool isValid();
@@ -116,7 +106,6 @@ public:
     void open(const ::rtl::OString& name, FileAccessMode nMode = FAM_READWRITE);
     void close();
 
-    sal_Int32       getSize();
     ::rtl::OString  getName() { return m_name; }
 
     // friend functions

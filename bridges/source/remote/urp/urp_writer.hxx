@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_writer.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,7 @@ namespace bridges_urp
         void touch( sal_Bool bImmediately );
         void sendEmptyMessage();
 
-        void abort();
+        void abortThread();
 
         void SAL_CALL insertReleaseRemoteCall (
             rtl_uString *pOid,typelib_TypeDescriptionReference *pTypeRef);

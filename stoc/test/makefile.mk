@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.29 $
+# $Revision: 1.29.6.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -86,6 +86,7 @@ APP2STDLIBS= \
         $(CPPULIB)	\
         $(CPPUHELPERLIB) 	\
         $(SALHELPERLIB) 	\
+        $(REGLIB) 	\
         $(SALLIB)
 
 # --- Application 3 - testsmgr main ------------------------------------
@@ -95,6 +96,7 @@ APP3STDLIBS= \
         $(CPPULIB)	\
         $(CPPUHELPERLIB) 	\
         $(SALHELPERLIB) 	\
+        $(REGLIB) 	\
         $(SALLIB) 	
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
@@ -199,6 +201,9 @@ TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
 TESTSECURITY:=com.sun.star.security.AllPermission;com.sun.star.security.XPolicy;com.sun.star.security.XAccessController;com.sun.star.io.FilePermission;com.sun.star.connection.SocketPermission;com.sun.star.uno.XCurrentContext
 
 $(BIN)$/test1.rdb: $(SHL1TARGETN)
+.IF "$(GUI)"=="UNX"
+    cp $(SHL1TARGETN) $(BIN)
+.ENDIF
     cd $(BIN) && regcomp -register -r test1.rdb -c $(SHL1TARGET)
 
 $(BIN)$/test2.rdb:

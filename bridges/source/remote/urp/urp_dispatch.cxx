@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_dispatch.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,8 +74,6 @@ void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote )
         }
 
         pImpl->m_pWriter->sendEmptyMessage();
-        // no more data via this connection !
-        pImpl->m_pWriter->abort();
     }
 }
 extern "C" void SAL_CALL urp_sendRequest(

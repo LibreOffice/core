@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.43.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -891,9 +891,9 @@ rtl::OUString lookup(
     Bootstrap_Impl const * file, bool override, rtl::OUString const & key,
     ExpandRequestLink const * requestStack)
 {
-    OSL_ASSERT(file != NULL);
     rtl::OUString v;
-    file->getValue(key, &v.pData, NULL, override, requestStack);
+    (file == NULL ? get_static_bootstrap_handle() : file)->getValue(
+        key, &v.pData, NULL, override, requestStack);
     return v;
 }
 
@@ -979,14 +979,11 @@ rtl::OUString expandMacros(
                             } catch (rtl::MalformedUriException &) {}
                         }
                     } else {
-                        rtl::Bootstrap b(seg[0]);
-                        Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
-                            b.getHandle());
-                        // Silently ignore bootstrap files that cannot be opened
-                        // (is that good?):
-                        if (f != NULL) {
-                            buf.append(lookup(f, false, seg[1], requestStack));
-                        }
+                        buf.append(
+                            lookup(
+                                static_cast< Bootstrap_Impl * >(
+                                    rtl::Bootstrap(seg[0]).getHandle()),
+                                false, seg[1], requestStack));
                     }
                 } else if (seg[0].equalsAsciiL(
                                RTL_CONSTASCII_STRINGPARAM(".override")))
@@ -994,10 +991,7 @@ rtl::OUString expandMacros(
                     rtl::Bootstrap b(seg[1]);
                     Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
                         b.getHandle());
-                    buf.append(
-                        lookup(
-                            f == NULL ? get_static_bootstrap_handle() : f,
-                            f != NULL, seg[2], requestStack));
+                    buf.append(lookup(f, f != NULL, seg[2], requestStack));
                 } else {
                     // Going through osl::Profile, this code erroneously does
                     // not recursively expand macros in the resulting

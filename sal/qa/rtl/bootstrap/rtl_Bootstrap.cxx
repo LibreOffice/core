@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtl_Bootstrap.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.10.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -785,6 +785,16 @@ namespace rtl_Bootstrap
                 t2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("src680_test")));
         }
 
+        void testNonexisting() {
+            rtl::OUString t(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${$ORIGIN/" SAL_CONFIGFILE("none") ":MYVAR}"));
+            Bootstrap::expandMacros(t);
+            CPPUNIT_ASSERT_MESSAGE(
+                "nonexisting",
+                t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("src680_test")));
+        }
+
         void testSection() {
             rtl::OUStringBuffer b;
             b.appendAscii(RTL_CONSTASCII_STRINGPARAM("${"));
@@ -817,6 +827,7 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(testRecursion);
         CPPUNIT_TEST(testLink);
         CPPUNIT_TEST(testOverride);
+        CPPUNIT_TEST(testNonexisting);
         CPPUNIT_TEST(testSection);
         CPPUNIT_TEST_SUITE_END();
     }; // class expandMacrosFrom

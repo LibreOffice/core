@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testsmgr.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,16 +77,7 @@ OUString getExePath()
 
 void setStarUserRegistry()
 {
-    RegistryLoader* pLoader = new RegistryLoader();
-
-    if (!pLoader->isLoaded())
-    {
-        delete pLoader;
-        return;
-    }
-
-    Registry *myRegistry = new Registry(*pLoader);
-    delete pLoader;
+    Registry *myRegistry = new Registry();
 
     RegistryKey rootKey, rKey, rKey2;
 

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.4.12.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,9 +42,7 @@ SHL1TARGET = $(TARGET)
 SHL1OBJS = \
     $(SLO)$/callvirtualmethod.obj \
     $(SLO)$/cpp2uno.obj \
-    $(SLO)$/doflushcode.obj \
     $(SLO)$/exceptions.obj \
-    $(SLO)$/flushcode.obj \
     $(SLO)$/fp.obj \
     $(SLO)$/isdirectreturntype.obj \
     $(SLO)$/uno2cpp.obj \

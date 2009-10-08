@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regtest.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.10.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +42,9 @@ using namespace std;
 using namespace rtl;
 
 #if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
+int main()
 #else
-int _cdecl main( int argc, char * argv[] )
+int _cdecl main()
 #endif
 {
     RegHandle       hReg;
@@ -103,7 +103,7 @@ int _cdecl main( int argc, char * argv[] )
         cout << "8. close " << nSubKeys << "subkeys of \"myfirstKey\"\n\n";
 
 
-    char* Value="Mein erster Value";
+    char* Value=(char*)"Mein erster Value";
     if (reg_setValue(hRootKey, OUString::createFromAscii("mySecondKey").pData, RG_VALUETYPE_STRING, Value, 18))
         cout << "\t9. setValue of key \"mySecondKey\" failed\n";
     else

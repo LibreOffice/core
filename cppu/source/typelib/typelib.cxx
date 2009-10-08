@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typelib.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.35.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -875,13 +875,25 @@ void newTypeDescription(
                             = pStructMembers[i].aBase.pMemberName );
                     }
                     // write offset
-                    typelib_TypeDescription * pTD = 0;
-                    TYPELIB_DANGER_GET( &pTD, pTmp->ppTypeRefs[i] );
-                    OSL_ENSURE( pTD->nSize, "### void member?" );
-                    nOffset = newAlignedSize(
-                        nOffset, pTD->nSize, pTD->nAlignment );
-                    pTmp->pMemberOffsets[i] = nOffset - pTD->nSize;
-                    TYPELIB_DANGER_RELEASE( pTD );
+                    sal_Int32 size;
+                    sal_Int32 alignment;
+                    if (pTmp->ppTypeRefs[i]->eTypeClass ==
+                        typelib_TypeClass_SEQUENCE)
+                    {
+                        // Take care of recursion like
+                        // struct S { sequence<S> x; };
+                        size = sizeof(void *);
+                        alignment = adjustAlignment(size);
+                    } else {
+                        typelib_TypeDescription * pTD = 0;
+                        TYPELIB_DANGER_GET( &pTD, pTmp->ppTypeRefs[i] );
+                        OSL_ENSURE( pTD->nSize, "### void member?" );
+                        size = pTD->nSize;
+                        alignment = pTD->nAlignment;
+                        TYPELIB_DANGER_RELEASE( pTD );
+                    }
+                    nOffset = newAlignedSize( nOffset, size, alignment );
+                    pTmp->pMemberOffsets[i] = nOffset - size;
 
                     if (polymorphic) {
                         reinterpret_cast< typelib_StructTypeDescription * >(

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: reflwrit.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,25 +170,6 @@ sal_uInt32 writeFloat(sal_uInt8* buffer, float v)
     return sizeof(sal_uInt32);
 }
 
-sal_uInt32 readFloat(const sal_uInt8* buffer, float& v)
-{
-    union
-    {
-        float   v;
-        sal_uInt32  b;
-    } x;
-
-#ifdef REGTYPE_IEEE_NATIVE
-    readUINT32(buffer, x.b);
-#else
-#   error no IEEE
-#endif
-
-    v = x.v;
-
-    return sizeof(sal_uInt32);
-}
-
 sal_uInt32 writeDouble(sal_uInt8* buffer, double v)
 {
     union
@@ -214,35 +195,6 @@ sal_uInt32 writeDouble(sal_uInt8* buffer, double v)
 #else
 #   error no IEEE
 #endif
-
-    return (sizeof(sal_uInt32) + sizeof(sal_uInt32));
-}
-
-sal_uInt32 readDouble(const sal_uInt8* buffer, double& v)
-{
-    union
-    {
-        double v;
-        struct
-        {
-            sal_uInt32  b1;
-            sal_uInt32  b2;
-        } b;
-    } x;
-
-#ifdef REGTYPE_IEEE_NATIVE
-#   ifdef OSL_BIGENDIAN
-    readUINT32(buffer, x.b.b1);
-    readUINT32(buffer + sizeof(sal_uInt32), x.b.b2);
-#   else
-    readUINT32(buffer, x.b.b2);
-    readUINT32(buffer + sizeof(sal_uInt32), x.b.b1);
-#   endif
-#else
-#   error no IEEE
-#endif
-
-    v = x.v;
 
     return (sizeof(sal_uInt32) + sizeof(sal_uInt32));
 }

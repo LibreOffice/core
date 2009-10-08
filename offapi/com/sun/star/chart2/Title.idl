@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Title.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 #include <com/sun/star/style/ParagraphProperties.idl>
 #include <com/sun/star/layout/LayoutElement.idl>
 
-#include <com/sun/star/chart2/ReferenceSizeProperties.idl>
 #include <com/sun/star/chart2/XTitle.idl>
 
 #include <com/sun/star/beans/PropertySet.idl>

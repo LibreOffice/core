@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_environment.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -212,8 +212,6 @@ void SAL_CALL allThreadsAreGone( uno_Environment * pEnvRemote )
     }
     else
     {
-        ::osl::MutexGuard guard( pImpl->m_disposingMutex );
-
         pImpl->m_cndWaitForThreads.set();
     }
 
@@ -278,7 +276,9 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
 
 
         // close the connection
-        urp_sendCloseConnection( pEnvRemote );
+        uno_threadpool_dispose( pImpl->m_hThreadPool );
+        pImpl->m_pWriter->abortThread();
+          pContext->m_pConnection->close( pContext->m_pConnection );
 
         if( osl_getThreadIdentifier(0) ==
             (oslThreadIdentifier) pImpl->m_pReader->getIdentifier() )
@@ -286,6 +286,7 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
             // This is the reader thread. Let the thread destroy itself
             // the reader thread object must also release the connection at this stage !
             pImpl->m_pReader->destroyYourself();
+            pImpl->m_pReader = 0;
         }
         else
         {
@@ -294,11 +295,6 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
             // when terminating !!!!
             pImpl->m_pReader->join();
         }
-
-        // from now on, no calls can be delivered via the bridge
-        uno_threadpool_dispose( pImpl->m_hThreadPool );
-
-          pContext->m_pConnection->close( pContext->m_pConnection );
 
         // wait for the writer thread
         pImpl->m_pWriter->join();
@@ -309,7 +305,6 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
           if( 0 != pImpl->m_nRemoteThreads )
           {
               // Wait for all threads
-              pImpl->m_cndWaitForThreads.reset();
             guard.clear();
               pImpl->m_cndWaitForThreads.wait();
               OSL_ASSERT( ! pImpl->m_nRemoteThreads );
@@ -333,13 +328,12 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
         delete pImpl->m_pWriter;
         pImpl->m_pWriter = 0;
 
-        if( osl_getThreadIdentifier(0) !=
-            (oslThreadIdentifier) pImpl->m_pReader->getIdentifier() )
+        if( pImpl->m_pReader != 0 )
         {
             // This is not the reader thread, so the thread object is deleted
             delete pImpl->m_pReader;
+            pImpl->m_pReader = 0;
         }
-        pImpl->m_pReader = 0;
 
         // delete the stubs
         releaseStubs( pEnvRemote );
@@ -358,6 +352,7 @@ static void SAL_CALL RemoteEnvironment_thisDisposing(
         if( ! pImpl->m_bDisposed )
         {
             guard.clear();
+            urp_sendCloseConnection( pEnvRemote );
             RemoteEnvironment_thisDispose( pEnvRemote );
         }
     }
@@ -417,7 +412,6 @@ void SAL_CALL uno_initEnvironment( uno_Environment * pEnvRemote )
     // take the bridgepointer as id
     pImpl->m_properties.seqBridgeID = ByteSequence( (sal_Int8*)&pEnvRemote , sizeof( pEnvRemote ) );
 
-    pImpl->m_cndWaitForThreads.reset();
     pImpl->m_allThreadsAreGone = allThreadsAreGone;
     pImpl->m_sendRequest = urp_sendRequest;
     pImpl->m_nRemoteThreads = 0;

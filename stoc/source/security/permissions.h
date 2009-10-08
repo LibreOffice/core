@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: permissions.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,10 +93,9 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & permissions,
         PermissionCollection const & addition = PermissionCollection() )
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
-
+#ifdef __DIAGNOSE
     ::com::sun::star::uno::Sequence< ::rtl::OUString > toStrings() const SAL_THROW( () );
-
-    bool implies( Permission const & ) const SAL_THROW( () );
+#endif
     void checkPermission( ::com::sun::star::uno::Any const & perm ) const
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 };

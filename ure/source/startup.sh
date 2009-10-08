@@ -9,7 +9,7 @@
 #
 # $RCSfile: startup.sh,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.4.10.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,10 +40,12 @@ done
 
 # Extend the LD_LIBRARY_PATH for Java:
 epath=`dirname "$0"`
-jpath=`"${epath}/javaldx" $my_envargs`
-if [ -n "${jpath}" ]; then
-    LD_LIBRARY_PATH=${jpath}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
-    export LD_LIBRARY_PATH
+if [ -x "${epath}/javaldx" ] ; then
+    jpath=`"${epath}/javaldx" $my_envargs`
+    if [ -n "${jpath}" ]; then
+        LD_LIBRARY_PATH=${jpath}${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
+        export LD_LIBRARY_PATH
+    fi
 fi
 
 exec "$0.bin" "$@"

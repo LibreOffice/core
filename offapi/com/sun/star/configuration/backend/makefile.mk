@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.9.102.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -66,7 +66,6 @@ IDLFILES = \
     LdapMultiLayerStratum.idl \
     SchemaSupplier.idl	    \
     LocalSchemaSupplier.idl \
-    PolicyLayerBackend.idl  \
     PlatformBackend.idl		\
     SystemIntegration.idl	\
     LayerDescriber.idl		\

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTitle.idl,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,16 @@
 published service ChartTitle
 {
     service com::sun::star::drawing::Shape;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/> the position is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        to set a concrete position.
+     */
+    [optional, property] boolean AutomaticPosition;
+
+    //-------------------------------------------------------------------------
 
     /** If a <type>ChartTitle</type> may be stored as XML element,
         this service should be supported in order to preserve unparsed

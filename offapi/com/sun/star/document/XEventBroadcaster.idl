@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XEventBroadcaster.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,9 @@ module com {   module sun {   module star {   module document {
 //=============================================================================
 /** makes it possible to register listeners which are called whenever
     a document event (see <type>EventObject</type>) occurs
+
+    @deprecated
+    @see XDocumentEventBroadcaster
  */
 published interface XEventBroadcaster: com::sun::star::uno::XInterface
 {

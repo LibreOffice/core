@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testjavavm.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,7 +144,8 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     jmethodID id = p_env->GetStaticMethodID( cls, "getInt", "()I");
     if( id)
     {
-        jint _i= p_env->CallStaticIntMethod(cls, id);
+//      jint _i= p_env->CallStaticIntMethod(cls, id);
+        p_env->CallStaticIntMethod(cls, id);
     }
 
     if( p_env->ExceptionOccurred()){

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: errorhandler.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.10.10.2 $
  *
  * This file is part of OpenOffice.org.
  *

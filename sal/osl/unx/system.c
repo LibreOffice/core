@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: system.c,v $
- * $Revision: 1.16 $
+ * $Revision: 1.16.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,44 +30,13 @@
 
 #include "system.h"
 
-#ifdef MACOSX
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/errno.h>
-#include <string.h>
-#endif
-
 #ifdef NO_PTHREAD_RTL
 
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* struct passwd differs on some platforms */
-#if defined NETBSD || defined MACOSX
-#include <pwd.h>
-#include <sys/types.h>
-
-/* [ed] 9/1/02 On OS 10.2 and higher, the OS headers define this function slightly differently.
-   A fourth argument is expected, a struct passwd **.  We still want to make our own definition,
-   however, so when we run on 10.1 we can still locate the symbol in our own libraries.  So
-   if we're building on 10.2, simply change the prototype to match the expected system
-   prototype and provide the duplicate symbol.
-   */
-#ifdef MACOSX
-#ifdef BUILD_OS_APPLEOSX
-#if (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 2)
-int getpwnam_r(const char* name, struct passwd* s, char* buffer, size_t size, struct passwd **ignore )
-#else /* BUILD_OS_MAJOR && BUILD_OS_MINOR */
-/* previous versions of MacOS X...10.0/1.  Use old prototype */
+#if defined NETBSD
 struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int size )
-#endif /* BUILD_OS_MAJOR && BUILD_OS_MINOR */
-#else /* BUILD_OS_APPLE_OSX */
-/* configure didn't take, or we're building on darwin.  Fallback on old prototype */
-struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int size )
-#endif /* BUILD_OS_APPLEOSX */
-#else /* MACOSX */
-struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int size )
-#endif /* MACOSX */
 {
       struct passwd* res;
 
@@ -119,22 +88,9 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
 
     pthread_mutex_unlock(&getrtl_mutex);
 
-#ifdef MACOSX
-#ifdef BUILD_OS_APPLEOSX
-#if (BUILD_OS_MAJOR >= 10) && (BUILD_OS_MINOR >= 2)
-    return((int)res);
-#else
-    return(res);
-#endif /* BUILD_OS_MAJOR && BUILD_OS_MINOR */
-#else /* BUILD_OS_APPLEOSX */
         return(res);
-#endif /* BUILD_OS_APPLEOSX */
-#else /* MACOSX */
-        return(res);
-#endif /* MACOSX */
 }
 
-#if defined(NETBSD) || defined(MACOSX)
 int getpwuid_r(uid_t uid, struct passwd *pwd, char *buffer,
            size_t buflen, struct passwd **result)
 {
@@ -197,7 +153,6 @@ int getpwuid_r(uid_t uid, struct passwd *pwd, char *buffer,
 
   return retval;
 }
-#endif
 
 struct tm *localtime_r(const time_t *timep, struct tm *buffer)
 {
@@ -232,7 +187,7 @@ struct tm *gmtime_r(const time_t *timep, struct tm *buffer)
 
     return res;
 }
-#endif  /* defined NETBSD || defined MACOSX */
+#endif  /* defined NETBSD */
 
 #ifdef SCO
 #include <pwd.h>
@@ -428,92 +383,6 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 #endif /* !defined(FREEBSD) || (__FreeBSD_version < 601103) */
 
 #if defined(MACOSX)
-/*
- * This section works around calls that are missing or broken
- * in MacOS X 10.1.x and earlier.
- */
-
-/* MacOS X doesn't have readdir_r() standard, plus readdir() isn't threadsafe. */
-
-/*******************************************************************************/
-int readdir_r( DIR *dirp, struct dirent *entry, struct dirent **result )
-{
-    struct dirent* pDirEntry;
-    int nRet;
-    int nSavedErrno;
-
-    pthread_mutex_lock(&getrtl_mutex);
-
-    nSavedErrno = errno;
-    errno = 0;
-    pDirEntry = readdir(dirp);
-
-    if ( pDirEntry ) {
-        memcpy(entry, pDirEntry, sizeof(struct dirent));
-        *result = entry;
-        errno = nSavedErrno;
-        nRet = 0;
-    }
-    else {
-        if ( errno ) {
-            nRet = errno; /* can be EBADF */
-        }
-        else {
-            *result = NULL;
-            nRet = 0;
-            /* errno must not be changed if reaching end of dir */
-            errno = nSavedErrno;
-        }
-    }
-
-    pthread_mutex_unlock(&getrtl_mutex);
-
-    return nRet;
-}
-
-/* No reentrant asctime() either... */
-
-/*******************************************************************************/
-char *asctime_r( const struct tm *tm, char *buffer )
-{
-    char        *asctimeBuffer;
-
-    pthread_mutex_lock(&getrtl_mutex);
-
-    asctimeBuffer = asctime( tm );
-    /* Simply hope we don't have a buffer overflow... */
-    if ( asctimeBuffer )
-        strcpy( buffer, asctimeBuffer );
-    else
-        buffer = NULL;
-
-    pthread_mutex_unlock(&getrtl_mutex);
-    return( buffer );
-}
-
-/*
- * Return the system version.  Currently, we only differentiate between
- * Darwin and OS X.
- */
-void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion, unsigned int *minorVersion, unsigned int *minorMinorVersion )
-{
-    int         err;
-    struct stat status;
-
-    /* Check for the presence of /usr/bin/osascript, which is
-     * believed to be OS X only.
-     */
-     err = stat( "/usr/bin/osascript", &status );
-     if ( err == 0 )
-        *isDarwin = 0;      /* OS X system detected */
-    else
-        *isDarwin = 1;      /* Darwin system detected */
-
-    *majorVersion = 0;
-    *minorVersion = 0;
-    *minorMinorVersion = 0;
-}
-
 /*
  * Add support for resolving Mac native alias files (not the same as unix alias files)
  * returns 0 on success.

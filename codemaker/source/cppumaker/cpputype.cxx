@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cpputype.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.46.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2805,8 +2805,10 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
                            type, static_cast< sal_uInt32 >(types.size()))).
                    second)
         {
-            if (codemaker::UnoType::getSort(type)
-                == codemaker::UnoType::SORT_COMPLEX)
+            if ((codemaker::UnoType::getSort(type) ==
+                 codemaker::UnoType::SORT_COMPLEX) &&
+                codemaker::UnoType::decompose(type) != m_typeName)
+                    // take care of recursion like struct S { sequence<S> x; };
             {
                 out << indent() << "::cppu::UnoType< ";
                 dumpType(out, type, false, false, false, true);

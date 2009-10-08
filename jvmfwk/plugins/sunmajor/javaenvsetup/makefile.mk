@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.7.26.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,16 +44,9 @@ ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="MACOSX"
-STDLIBCUIMT+=-lstdc++
-.ENDIF
-
-.IF "$(SOLAR_JAVA)"==""
-nojava:
-    @echo "Not building jvmfwk/plugins/javaenvsetup/ because Java is disabled"
-.ENDIF
-
 # --- Files --------------------------------------------------------
+
+.IF "$(OS)" != "MACOSX" && "$(SOLAR_JAVA)" != ""
 
 OBJFILES=$(OBJ)$/javaldx.obj
 
@@ -61,6 +54,8 @@ APP1TARGET=javaldx
 APP1OBJS=$(OBJFILES)
 APP1STDLIBS=$(SALLIB) $(CPPULIB) $(CPPUHELPERLIB) $(JVMFWKLIB)
 APP1RPATH=UREBIN
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XOfficeDatabaseDocument.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +39,10 @@
 #ifndef __com_sun_star_sdbc_XDataSource_idl__
 #include <com/sun/star/sdbc/XDataSource.idl>
 #endif
-#ifndef __com_sun_star_document_OfficeDocument_idl__
-#include <com/sun/star/document/OfficeDocument.idl>
-#endif
 #ifndef __com_sun_star_document_XDocumentSubStorageSupplier_idl__
 #include <com/sun/star/document/XDocumentSubStorageSupplier.idl>
 #endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sdb {

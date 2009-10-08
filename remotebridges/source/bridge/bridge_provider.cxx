@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bridge_provider.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include "remote_bridge.hxx"
 
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <uno/mapping.hxx>
 #include <uno/environment.h>
@@ -125,18 +126,18 @@ namespace remotebridges_bridge
             *ppRemoteI = 0;
         }
 
+        OUString sCppuName( RTL_CONSTASCII_USTRINGPARAM( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
+
+        uno_Environment *pEnvThis = 0;
+        uno_getEnvironment( &pEnvThis ,
+                            sCppuName.pData ,
+                            0 );
+        Mapping map( pEnvThis , pEnvRemote );
+        pEnvThis->release( pEnvThis );
+
         if( OUString( pType->aBase.pTypeName ) ==
             getCppuType( (Reference<XInterface>*)0).getTypeName() )
         {
-            OUString sCppuName( RTL_CONSTASCII_USTRINGPARAM( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
-
-            uno_Environment *pEnvThis = 0;
-            uno_getEnvironment( &pEnvThis ,
-                                sCppuName.pData ,
-                                0 );
-            Mapping map( pEnvThis , pEnvRemote );
-            pEnvThis->release( pEnvThis );
-
             try
             {
                 Reference< XInterface > r = m->m_rProvider->getInstance(
@@ -166,6 +167,16 @@ namespace remotebridges_bridge
                     ppException , e.Message.pData , e.Context.get(), map );
             }
 
+        }
+        else
+        {
+            OUStringBuffer msg;
+            msg.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "getInstance expected XInterface but got "));
+            msg.append(pType->aBase.pTypeName);
+            convertToRemoteRuntimeException(
+                ppException, msg.getStr(), Reference< XInterface >(), map);
         }
     }
 }
