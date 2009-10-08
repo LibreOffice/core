@@ -45,6 +45,7 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XNamedRanges; }
     namespace sheet { class XNamedRange; }
     namespace sheet { class XDatabaseRanges; }
+    namespace sheet { class XExternalDocLinks; }
     namespace style { class XStyle; }
 } } }
 
@@ -166,6 +167,9 @@ public:
     /** Returns the container for database ranges from the Calc document. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRanges >
                         getDatabaseRanges() const;
+    /** Returns the container for external documents from the Calc document. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLinks >
+                        getExternalDocLinks() const;
     /** Returns the container for DDE links from the Calc document. */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         getDdeLinks() const;

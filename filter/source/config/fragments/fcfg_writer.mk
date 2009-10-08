@@ -29,9 +29,7 @@ T4_WRITER = \
     writer_MS_Word_2003_XML \
     writer_MS_Word_2007_XML \
     writer_MS_Word_2007_XML_Template \
-    MediaWiki_File \
-    LaTeX \
-    BibTeX
+    MediaWiki_File
 
 # -----------------------------------------------
 # count = 39
@@ -63,9 +61,7 @@ F4_WRITER = \
     writer_web_MediaWiki_File \
     MS_Word_2003_XML \
     MS_Word_2007_XML \
-    MS_Word_2007_XML_Template \
-    LaTeX_Writer \
-    BibTeX_Writer
+    MS_Word_2007_XML_Template
 
 # -----------------------------------------------
 # count = 14

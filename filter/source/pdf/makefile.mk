@@ -35,6 +35,7 @@ TARGET=pdffilter
 GEN_HID=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 

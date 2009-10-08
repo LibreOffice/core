@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,14 +29,42 @@
 #
 #*************************************************************************
 
-TARGET=writer2latex
-PRJ=../..
-PRJNAME=xmerge
+PRJ=.
+
+PRJNAME=writer2latex
+TARGET=so_writer2latex
+
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :	settings.mk
+.INCLUDE : antsettings.mk
 
 .IF "$(WITH_WRITER2LATEX)" == "NO"
 @all:
-        @echo "building without writer2latex"
+    echo "building without writer2latex"
+.ELSE
+.IF "$(SOLAR_JAVA)" != ""
+# --- Files --------------------------------------------------------
+
+TARFILE_NAME=writer2latex0502
+
+TARFILE_ROOTDIR=writer2latex05
+
+PATCH_FILE_NAME=writer2latex05.patch
+
+CONVERTFILES=build.xml
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
+BUILD_ACTION=$(ANT) $(ANT_FLAGS) -DSOLVER=$(SOLARVER)/$(INPATH)  -Dsolarbindir=$(SOLARBINDIR) oxt
+
+.ENDIF # $(SOLAR_JAVA)!= ""
 .ENDIF
 
-.INCLUDE : ant.mk
-ALLTAR: ANTBUILD
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+
+.IF "$(SOLAR_JAVA)" != ""
+.INCLUDE : tg_ext.mk
+.ENDIF
+

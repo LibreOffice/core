@@ -4555,6 +4555,9 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     case NS_rtf::LN_endnote:
         m_pImpl->PushFootOrEndnote( NS_rtf::LN_footnote == rName );
     break;
+    case NS_rtf::LN_annotation :
+        m_pImpl->PushAnnotation();
+    break;
     }
     ref->resolve(*this);
     switch( rName )
@@ -4570,6 +4573,9 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     case NS_rtf::LN_footnote:
     case NS_rtf::LN_endnote:
         m_pImpl->PopFootOrEndnote();
+    break;
+    case NS_rtf::LN_annotation :
+        m_pImpl->PopAnnotation();
     break;
     }
 

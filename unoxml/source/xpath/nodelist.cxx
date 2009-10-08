@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodelist.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +33,13 @@
 
 namespace XPath
 {
-    CNodeList::CNodeList(const xmlXPathObjectPtr xpathObj)
+    CNodeList::CNodeList(boost::shared_ptr<xmlXPathObject>& rxpathObj)
         : m_pNodeSet(0)
     {
-        if (xpathObj != NULL && xpathObj->type == XPATH_NODESET)
+        if (rxpathObj != NULL && rxpathObj->type == XPATH_NODESET)
         {
-            m_pNodeSet = xpathObj->nodesetval;
+            m_pNodeSet = rxpathObj->nodesetval;
+            m_pXPathObj = rxpathObj;
         }
     }
 

@@ -34,6 +34,7 @@ PRJNAME=filter
 TARGET=svgfilter
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 

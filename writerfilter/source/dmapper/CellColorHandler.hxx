@@ -46,7 +46,6 @@ public:
     sal_Int32 m_nShadowType;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
-    bool      m_bOOXMLColor;
     bool      m_bParagraph;
 private:
 

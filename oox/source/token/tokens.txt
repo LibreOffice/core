@@ -5530,6 +5530,7 @@ xmlCellPr
 xmlColumnPr
 xmlDataType
 xmlPr
+xmlns
 xpath
 xrange
 xscale

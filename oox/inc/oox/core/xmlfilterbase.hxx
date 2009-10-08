@@ -32,10 +32,13 @@
 #define OOX_CORE_XMLFILTERBASE_HXX
 
 #include <rtl/ref.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include "oox/vml/drawing.hxx"
 #include "oox/drawingml/table/tablestylelist.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -45,6 +48,12 @@ namespace com { namespace sun { namespace star {
 
 namespace oox { namespace drawingml { class Theme; } }
 namespace oox { namespace drawingml { namespace chart { class ChartConverter; } } }
+
+namespace sax_fastparser {
+    class FastSerializerHelper;
+
+    typedef boost::shared_ptr< FastSerializerHelper > FSHelperPtr;
+}
 
 namespace oox {
 namespace core {
@@ -56,7 +65,7 @@ class ModelObjectContainer;
 
 struct XmlFilterBaseImpl;
 
-class XmlFilterBase : public FilterBase
+class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {
 public:
     explicit            XmlFilterBase(
@@ -102,6 +111,33 @@ public:
      */
     RelationsRef        importRelations( const ::rtl::OUString& rFragmentPath );
 
+    /** Adds new relation.
+
+        @param rType
+            Relation type.
+
+        @param rTarget
+            Relation target.
+
+        @return  Added relation Id.
+     */
+    ::rtl::OUString addRelation( const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, const ::rtl::OUString& rTargetMode = ::rtl::OUString() );
+
+    /** Adds new relation to part's relations.
+
+        @param rPartName
+            Part name the relations are related to. The relations will be stored in <rPartName::path>/_rels/<rPartName::name>.rels.
+
+        @param rType
+            Relation type.
+
+        @param rTarget
+            Relation target.
+
+        @return  Added relation Id.
+     */
+    ::rtl::OUString addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream, const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, const ::rtl::OUString& rTargetMode = ::rtl::OUString() );
+
     /** Copies the picture element specified with rPicturePath from the source
         document to the target models picture substorage.
 
@@ -112,13 +148,59 @@ public:
     /** Returns object containers for various named drawing objects for the imported document. */
     ModelObjectContainer& getModelObjectContainer() const;
 
+    /** Opens and returns the specified output stream from the base storage with specified media type.
+
+        @param rStreamName
+            The name of the embedded storage stream. The name may contain
+            slashes to open streams from embedded substorages. If base stream
+            access has been enabled in the storage, the base stream can be
+            accessed by passing an empty string as stream name.
+
+        @param rMediaType
+            The media type string, used in [Content_Types].xml stream in base storage.
+
+        @return The opened output stream.
+     */
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
+                        openOutputStream( const ::rtl::OUString& rStreamName,
+                                          const ::rtl::OUString& rMediaType );
+    using FilterBase::openOutputStream;
+
+    /** Opens specified output stream from the base storage with specified media type and returns new fast serializer for that stream.
+
+        @param rStreamName
+            The name of the embedded storage stream. The name may contain
+            slashes to open streams from embedded substorages. If base stream
+            access has been enabled in the storage, the base stream can be
+            accessed by passing an empty string as stream name.
+
+        @param rMediaType
+            The media type string, used in [Content_Types].xml stream in base storage.
+
+        @return newly created serializer helper.
+     */
+    ::sax_fastparser::FSHelperPtr
+                        openOutputStreamWithSerializer( const ::rtl::OUString& rStreamName,
+                                                        const ::rtl::OUString& rMediaType );
+
+    /** Returns new unique ID for exported document.
+
+        @return newly created ID.
+     */
+    inline sal_Int32 GetUniqueId() { return mnMaxDocId++; }
+    inline ::rtl::OString GetUniqueIdOString() { return ::rtl::OString::valueOf( mnMaxDocId++ ); }
+    inline ::rtl::OUString GetUniqueIdOUString() { return ::rtl::OUString::valueOf( mnMaxDocId++ ); }
+
 private:
     virtual StorageRef  implCreateStorage(
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStream ) const;
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream ) const;
 
 private:
+
     ::std::auto_ptr< XmlFilterBaseImpl > mxImpl;
+    sal_Int32 mnRelId;
+    sal_Int32 mnMaxDocId;
 };
 
 typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;

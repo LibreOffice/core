@@ -1,0 +1,220 @@
+How to install this
+-------------------
+
+> cd instsetoo_native/util
+> LOCALINSTALLDIR=/where/you/want dmake openoffice_en-US PKGFORMAT=installed
+
+OOXML generally
+---------------
+
+- http://www.ecma-international.org/publications/standards/Ecma-376.htm
+- http://www.asahi-net.or.jp/~eb2m-mrt/ooxml/dependencies.html
+
+Related modules
+---------------
+
+- oox
+  - .xlsx and .pptx import
+
+- writerfilter
+  - import of .docx, uses also oox for the graphics etc.
+  - can also parse .doc; but used for ooxml only for now
+
+- filter
+  - the configuration stuff (so that the filters appear in the filepicker)
+
+Old binary filters (export)
+---------------------------
+
+- doc export
+  - sw/source/filter/ww8/wrtww8*
+    - wrtww8.cxx:2191 [SwWW8Writer::StoreDoc()] is the entry point
+
+  - eg.
+    #0  SwWW8Writer::WriteText (this=0x2aaab3dfb7c0) at /local/ooxml/ooxml/sw/source/filter/ww8/wrtww8.cxx:1846
+    #1  0x00002aaaae75a545 in SwWW8Writer::WriteMainText (this=0x2aaab3d6a870)
+        at /local/ooxml/ooxml/sw/source/filter/ww8/wrtww8.cxx:1925
+    #2  0x00002aaaae75e357 in SwWW8Writer::StoreDoc1 (this=0x2aaab3d6a870)
+        at /local/ooxml/ooxml/sw/source/filter/ww8/wrtww8.cxx:2076
+    #3  0x00002aaaae7605ec in SwWW8Writer::StoreDoc (this=0x2aaab3d6a870)
+        at /local/ooxml/ooxml/sw/source/filter/ww8/wrtww8.cxx:2383
+    #4  0x00002aaaae760fd5 in SwWW8Writer::WriteStorage (this=0x2aaab3d6a870)
+        at /local/ooxml/ooxml/sw/source/filter/ww8/wrtww8.cxx:2547
+    #5  0x00002aaaae70b793 in StgWriter::Write (this=0x2aaab3d6a870, rPaM=@0x2b3802a2b640, rStg=@0x2aaab3d621c0,
+        pFName=0x7fffb1b285c0) at /local/ooxml/ooxml/sw/source/filter/writer/writer.cxx:653
+    #6  0x00002aaaae70b84d in Writer::Write (this=0x2aaab3d6a870, rPaM=@0x2b3802a2b640, rStrm=@0x2aaaad979d20,
+        pFName=0x7fffb1b285c0) at /local/ooxml/ooxml/sw/source/filter/writer/writer.cxx:358
+    #7  0x00002aaaae70b993 in Writer::Write (this=0x2aaab3d6a870, rPam=@0x2b3802a2b640, rMed=@0x2aaaad999f30,
+        pFileName=0x7fffb1b285c0) at /local/ooxml/ooxml/sw/source/filter/writer/writer.cxx:385
+    #8  0x00002aaaae6375d7 in SwWriter::Write (this=0x7fffb1b28410, rxWriter=@0x7fffb1b285d0,
+        pRealFileName=0x7fffb1b285c0) at /local/ooxml/ooxml/sw/source/filter/basflt/shellio.cxx:963
+    #9  0x00002aaaae87cc1e in SwDocShell::ConvertTo (this=0xcc27f0, rMedium=@0x2aaaad999f30)
+        at /local/ooxml/ooxml/sw/source/ui/app/docsh.cxx:924
+    #10 0x00002b37faae6b58 in SfxObjectShell::DoLoad ()
+        from /local/ooxml/inst/openoffice.org3.0/program/../basis-link/program//libsfxlx.so
+
+- xls export
+  - sc/source/filter/excel/xe*
+
+  - eg.
+    #0  XclExpRecord::Save (this=0x11ae4c0, rStrm=@0x7fff5e6335d0)
+        at /local/ooxml/ooxml/sc/source/filter/excel/xerecord.cxx:88
+    #1  0x00002aaaae562c4a in ExcRecord::Save (this=0x11ae4c0, rStrm=@0x7fff5e6335d0)
+        at /local/ooxml/ooxml/sc/source/filter/excel/excrecds.cxx:168
+    #2  0x00002aaaae54b0fa in XclExpRecordList<XclExpRecordBase>::Save (this=0x11c5d18, rStrm=@0x7fff5e6335d0)
+        at ../inc/xerecord.hxx:281
+    #3  0x00002aaaae547541 in ExcTable::Write (this=0x11c5cf8, rStr=@0x7fff5e6335d0)
+        at /local/ooxml/ooxml/sc/source/filter/excel/excdoc.cxx:455
+    #4  0x00002aaaae5475fb in ExcDocument::Write (this=0x11c5ce0, rSvStrm=@0x2aaab3dcd070)
+        at /local/ooxml/ooxml/sc/source/filter/excel/excdoc.cxx:525
+    #5  0x00002aaaae568add in ExportBiff5::Write (this=0x7fff5e6339c0)
+        at /local/ooxml/ooxml/sc/source/filter/excel/expop2.cxx:119
+    #6  0x00002aaaae54f4af in ScExportExcel5 (rMedium=@0x2aaab3d87410, pDocument=0xce6a00, bBiff8=1 '\001', eNach=1)
+        at /local/ooxml/ooxml/sc/source/filter/excel/excel.cxx:252
+    #7  0x00002aaaadf1b70a in ScDocShell::ConvertTo (this=0xce6990, rMed=@0x2aaab3d87410)
+        at /local/ooxml/ooxml/sc/source/ui/docshell/docsh.cxx:2080
+    #8  0x00002b354dfd8b58 in SfxObjectShell::DoLoad ()
+        from /local/ooxml/inst/openoffice.org3.0/program/../basis-link/program//libsfxlx.so
+
+  - Current approach is to add a XclExpRecordBase::SaveXml() method, which
+    would be used to write the XML content (while Save() would continue
+    writing the BIFF format).
+  - Q: How do we get to the Save()/SaveXml() methods (e.g. the SST export code)
+    #0  XclExpSstImpl::Save (this=0x1b170b0, rStrm=@0x7fffd4d5c4a0)
+        at /home/jon/Development/OpenOffice.org/ooxml/sc/source/filter/excel/xecontent.cxx:224
+    #1  0x00007f68b7e46ff7 in XclExpSst::Save (this=0x1abc300, 
+        rStrm=@0x7fffd4d5c4a0)
+        at /home/jon/Development/OpenOffice.org/ooxml/sc/source/filter/excel/xecontent.cxx:351
+    #2  0x00007f68b7de5090 in XclExpRecordList<XclExpRecordBase>::Save (
+        this=0x1b2d168, rStrm=@0x7fffd4d5c4a0) at ../inc/xerecord.hxx:282
+    // as above, starting at frame 2
+
+  - Thus, to get to the SaveXml() method, we need to add a slew of WriteXml()
+    methods that will (eventually) invoke the SaveXml() methods.
+
+  - ZipStorage for XML handling and StorageRef (XStorage interface)
+		- To construct ZipStorage, need XMultiServiceFactory (!), and
+			XInputStream.
+		- Have an SvStream; need to wrap SvStream with XInputStream
+			- OInputStreamWrapper in <unotools/streamwrap.hxx>
+		- Where do I get XMultiServiceFactory?
+			- Lots of places -- just grep
+			- perhaps XmlFilterBase _does_ make sense here.
+				- Do it anyway.
+	- Looking into having XclExpXmlStream inherit from ZipFilterBase
+		- problem: exception during construction, because ZipStorage hates me:
+		#0  OStorageFactory::createInstanceWithArguments (this=0x10612a0, 
+				aArguments=@0x7fffe2ef76d0)
+				at /home/jon/Development/OpenOffice.org/ooxml/package/source/xstor/xfactory.cxx:275
+		#1  0x00007f12d93f0d5c in comphelper::OStorageHelper::GetStorageOfFormatFromStream (aFormat=@0x7fffe2ef7780, xStream=@0x1a502d8, nStorageMode=15, 
+				xFactory=@0x1a502c0)
+				at /home/jon/Development/OpenOffice.org/ooxml/comphelper/source/misc/storagehelper.cxx:342
+		#2  0x00007f12c33d1a6d in ZipStorage (this=0x1a92550, rxFactory=@0x1a502c0, 
+				rxStream=@0x1a502d8)
+				at /home/jon/Development/OpenOffice.org/ooxml/oox/source/helper/zipstorage.cxx:87
+		#3  0x00007f12c33f089e in oox::core::XmlFilterBase::implCreateStorage (
+				this=0x7fffe2ef7930, rxInStream=@0x1a502d0, rxStream=@0x1a502d8)
+				at /home/jon/Development/OpenOffice.org/ooxml/oox/source/core/xmlfilterbase.cxx:298
+		#4  0x00007f12c33dd204 in oox::core::FilterBase::filter (this=0x7fffe2ef7930, 
+				rDescriptor=@0x7fffe2ef78d0)
+				at /home/jon/Development/OpenOffice.org/ooxml/oox/source/core/filterbase.cxx:284
+		#5  0x00007f12c68097a2 in XclExpXmlStream (this=0x7fffe2ef7930, 
+				rSMgr=@0x7fffe2ef79a0, rStrm=@0x18d6f90)
+				at /home/jon/Development/OpenOffice.org/ooxml/sc/source/filter/excel/xestream.cxx:659
+		#6  0x00007f12c674c8c1 in ExcDocument::WriteXml (this=0x15911f0, 
+				rStrm=@0x18d6f90)
+				at /home/jon/Development/OpenOffice.org/ooxml/sc/source/filter/excel/excdoc.cxx:575
+		...
+		- Actual problem: xfactory.cxx:274, the CheckPackageSignature_Impl() call.
+			- fails because the empty file has content (!), thus fails the "package
+				signature check" (which tries to ensure the file format is correct).
+		- Underlying file is an SvFileStream, created in
+			SfxMedium::GetOutStream().
+		- So why's CheckPackageSignature_Impl() fail?  Because
+			lcl_ExportExcel2007Xml() had the code:
+
+				SotStorageRef xRootStrg = new SotStorage( pMedStrm, FALSE );
+
+			That is, it was creating an OLE Structured Storage document over the
+			SvStream, and then (later) used the *same* SvStream and passed it to
+			ZipStorage.  This caused ZipStorage to complain because OLESS data was
+			already present in the file, with a different file signature than what
+			ZipPackage was expecting (go figure).
+
+- ppt export
+  - sd/source/filter/eppt/*
+  - svx/source/msfilter
+    - for eg. Escher export
+    - Escher: http://chicago.sourceforge.net/devel/docs/escher/index.html
+
+  - eg.
+    #0  PPTWriter (this=0x15807d0, rSvStorage=@0x7fff894f5340, rXModel=@0x142a2e8, rXStatInd=@0x142a2f0, pVBA=0x0,
+        nCnvrtFlags=15) at /local/ooxml/ooxml/sd/source/filter/eppt/eppt.cxx:268
+    #1  0x00002aaab3895719 in ExportPPT (rSvStorage=@0x7fff894f5340, rXModel=@0x142a2e8, rXStatInd=@0x142a2f0,
+        pVBA=0x0, nCnvrtFlags=15) at /local/ooxml/ooxml/sd/source/filter/eppt/eppt.cxx:2503
+    #2  0x00002aaaadef85b7 in SdPage::onParagraphRemoving ()
+       from /local/ooxml/inst/openoffice.org3.0/program/../basis-link/program/libsdlx.so
+    #3  0x00002aaaade202e3 in sd::DrawDocShell::ConvertTo ()
+       from /local/ooxml/inst/openoffice.org3.0/program/../basis-link/program/libsdlx.so
+    #4  0x00002aec23119b58 in SfxObjectShell::DoLoad ()
+       from /local/ooxml/inst/openoffice.org3.0/program/../basis-link/program//libsfxlx.so
+
+- odp export
+    #0  ZipPackage (this=0x1805e80, xNewFactory=@0x7fffe284e990) at /home/rodo/git/ooxml/package/source/zippackage/ZipPackage.cxx:279
+    #1  0x00002aaaadd3dc94 in ZipPackage_createInstance (xMgr=@0x7fffe284e990) at /home/rodo/git/ooxml/package/source/zippackage/ZipPackage.cxx:1546
+    #2  0x00002b0fca7ab6b3 in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #3  0x00002b0fca7a7fda in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #4  0x00002b0fca7a811e in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #5  0x00002b0fca7aa7cc in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #6  0x00002b0fca7aacbe in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #7  0x00002b0fca7aa035 in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #8  0x00002aaaaadae1b3 in ?? () from /opt/openoffice.org/ure/lib/bootstrap.uno.so
+    #9  0x00002aaaaadaa84c in ?? () from /opt/openoffice.org/ure/lib/bootstrap.uno.so
+    #10 0x00002aaab5c7a7e5 in OStorage_Impl::OpenOwnPackage (this=0x185cac0) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:549
+    #11 0x00002aaab5c7ab3e in OStorage_Impl::ReadContents (this=0x185cac0) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:649
+    #12 0x00002aaab5c7d32f in OStorage_Impl::FindElement (this=0x185cac0, rName=@0x7fffe284f280) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:1387
+    #13 0x00002aaab5c7dc45 in OStorage::hasByName (this=0x1808880, aName=@0x7fffe284f280) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:4045
+    #14 0x00002aaab1fde8c5 in XMLVersionListPersistence::load () from /opt/openoffice.org3.0/program/../basis-link/program/libxolx.so
+    #15 0x00002b0fcb058bb2 in SfxMedium::GetVersionList (this=0x1750050, _bNoReload=false) at /home/rodo/git/ooxml/sfx2/source/doc/docfile.cxx:3247
+    #16 0x00002b0fcb0571b5 in SfxMedium::GetStorage (this=0x1750050) at /home/rodo/git/ooxml/sfx2/source/doc/docfile.cxx:1328
+    #17 0x00002b0fcb05d0d7 in SfxMedium::GetOutputStorage (this=0x1750050) at /home/rodo/git/ooxml/sfx2/source/doc/docfile.cxx:1068
+    #18 0x00002b0fcb091227 in SfxObjectShell::SaveTo_Impl (this=0xf44d60, rMedium=@0x1750050, pSet=0x0) at /home/rodo/git/ooxml/sfx2/source/doc/objstor.cxx:1557
+    #19 0x00002b0fcb09443c in SfxObjectShell::PreDoSaveAs_Impl (this=0xf44d60, rFileName=@0x7fffe2850700, aFilterName=@0x7fffe28507f0, pParams=0xf10c10)
+        at /home/rodo/git/ooxml/sfx2/source/doc/objstor.cxx:2984
+    #20 0x00002b0fcb094ea5 in SfxObjectShell::CommonSaveAs_Impl (this=0xf44d60, aURL=@0x7fffe2850870, aFilterName=@0x7fffe28507f0, aParams=0x1740310)
+        at /home/rodo/git/ooxml/sfx2/source/doc/objstor.cxx:2855
+    #21 0x00002b0fcb0a1da2 in SfxObjectShell::APISaveAs_Impl (this=0xf44d60, aFileName=@0x7fffe2850b70, aParams=0x1740310)
+        at /home/rodo/git/ooxml/sfx2/source/doc/objserv.cxx:432
+    #22 0x00002b0fcb0e74c8 in SfxBaseModel::impl_store (this=0xf96a00, sURL=@0x7fffe28516b0, seqArguments=@0x7fffe2851ae0, bSaveTo=0 '\0')
+        at /home/rodo/git/ooxml/sfx2/source/doc/sfxbasemodel.cxx:2591
+    #23 0x00002b0fcb0f124b in SfxBaseModel::storeAsURL (this=0xf96a00, rURL=@0x7fffe28516b0, rArgs=@0x7fffe2851ae0)
+        at /home/rodo/git/ooxml/sfx2/source/doc/sfxbasemodel.cxx:1568
+    #24 0x00002b0fcb101d3d in SfxStoringHelper::GUIStoreModel (this=0x7fffe28519f0, xModel=@0xf18798, aSlotName=@0x7fffe2852200, aArgsSequence=@0x7fffe2851ae0, 
+        bPreselectPassword=0 '\0') at /home/rodo/git/ooxml/sfx2/source/doc/guisaveas.cxx:1529
+    #25 0x00002b0fcb0a4051 in SfxObjectShell::ExecFile_Impl (this=0xf44d60, rReq=@0x1484f20) at /home/rodo/git/ooxml/sfx2/source/doc/objserv.cxx:744
+    #26 0x00002b0fcb0a5c73 in SfxStubSfxObjectShellExecFile_Impl (pShell=0xf44d60, rReq=@0x1484f20) at ../../unxlngx6.pro/inc/sfxslots.hxx:161
+    #27 0x00002b0fcb17f398 in SfxShell::CallExec (this=0xf44d60, pFunc=0x2b0fcb0a5c56 <SfxStubSfxObjectShellExecFile_Impl(SfxShell*, SfxRequest&)>, rReq=@0x1484f20)
+        at ../../inc/sfx2/shell.hxx:226
+    #28 0x00002b0fcb17cec3 in SfxDispatcher::Call_Impl (this=0x110fde0, rShell=@0xf44d60, rSlot=@0x2b0fcb576368, rReq=@0x1484f20, bRecord=1 '\001')
+        at /home/rodo/git/ooxml/sfx2/source/control/dispatch.cxx:338
+    #29 0x00002b0fcb17d3f2 in SfxDispatcher::PostMsgHandler (this=0x110fde0, pReq=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/control/dispatch.cxx:1643
+    #30 0x00002b0fcb17d51d in SfxDispatcher::LinkStubPostMsgHandler (pThis=0x110fde0, pCaller=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/control/dispatch.cxx:1610
+    #31 0x00002b0fcafb3e70 in Link::Call (this=0x11488f8, pCaller=0x1484f20) at /home/rodo/git/ooxml/solver/300/unxlngx6.pro/inc/tools/link.hxx:158
+    #32 0x00002b0fcb1a9952 in GenLink::Call (this=0x11488f8, pCaller=0x1484f20) at ../../inc/sfx2/genlink.hxx:63
+    #33 0x00002b0fcb1a9773 in SfxHintPoster::Event (this=0x11488e0, pPostedHint=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/notify/hintpost.cxx:98
+    #34 0x00002b0fcb1a9984 in SfxHintPoster::DoEvent_Impl (this=0x11488e0, pPostedHint=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/notify/hintpost.cxx:88
+    #35 0x00002b0fcb1a974f in SfxHintPoster::LinkStubDoEvent_Impl (pThis=0x11488e0, pCaller=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/notify/hintpost.cxx:92
+    #36 0x00002b0fccef69f8 in ImplWindowFrameProc () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
+    #37 0x00002b0fd3f91f8f in SalDisplay::DispatchInternalEvent () from /opt/openoffice.org/basis3.0/program/libvclplug_genlx.so
+    #38 0x00002b0fd0fa4a84 in GtkXLib::userEventFn () from /opt/openoffice.org/basis3.0/program/libvclplug_gtklx.so
+    #39 0x00002b0fd3cb0204 in g_main_context_dispatch () from /usr/lib64/libglib-2.0.so.0
+    #40 0x00002b0fd3cb34fd in ?? () from /usr/lib64/libglib-2.0.so.0
+    #41 0x00002b0fd3cb39ce in g_main_context_iteration () from /usr/lib64/libglib-2.0.so.0
+    #42 0x00002b0fd0fa4fd9 in GtkXLib::Yield () from /opt/openoffice.org/basis3.0/program/libvclplug_gtklx.so
+    #43 0x00002b0fccd1859e in Application::Yield () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
+    #44 0x00002b0fccd18677 in Application::Execute () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
+    #45 0x00002b0fc86fd803 in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/libsoffice.so
+    #46 0x00002b0fccd1da24 in ImplSVMain () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
+    #47 0x00002b0fccd1db15 in SVMain () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
+    #48 0x00002b0fc872fe6c in soffice_main () from /opt/openoffice.org3.0/program/../basis-link/program/libsoffice.so
+    #49 0x000000000040114b in main ()

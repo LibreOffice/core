@@ -264,7 +264,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
                     pProperties->resolve(*pBorderHandler);
-                    TablePropertyMapPtr pTablePropMap( new TablePropertyMap() );
+                    TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     pTablePropMap->insert( pBorderHandler->getProperties() );
                     insertTableProps( pTablePropMap );
                 }
@@ -283,6 +283,18 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     TablePropertyMapPtr pCellPropMap( new TablePropertyMap );
                     pTDefTableHandler->fillCellProperties( 0, pCellPropMap );
                     cellProps( pCellPropMap );
+                }
+            }
+            break;
+            case NS_ooxml::LN_CT_TblPrBase_shd:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                {
+                    CellColorHandlerPtr pCellColorHandler( new CellColorHandler);
+                    pProperties->resolve( *pCellColorHandler );
+                    TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
+                    insertTableProps( pCellColorHandler->getProperties() );
                 }
             }
             break;

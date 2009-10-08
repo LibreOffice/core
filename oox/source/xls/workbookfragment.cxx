@@ -235,7 +235,7 @@ void OoxWorkbookFragment::finalizeImport()
     typedef ::std::map< sal_Int32, FragmentHandlerRef > SheetFragmentMap;
     SheetFragmentMap aSheetFragments;
     WorksheetBuffer& rWorksheets = getWorksheets();
-    sal_Int32 nSheetCount = rWorksheets.getInternalSheetCount();
+    sal_Int32 nSheetCount = rWorksheets.getSheetCount();
     for( sal_Int32 nSheet = 0; nSheet < nSheetCount; ++nSheet )
     {
         if( const Relation* pRelation = getRelations().getRelationFromRelId( rWorksheets.getSheetRelId( nSheet ) ) )
@@ -258,8 +258,8 @@ void OoxWorkbookFragment::finalizeImport()
                 {
                     xFragment.set( new OoxChartsheetFragment( *this, aFragmentPath, xSheetSegment, nSheet ) );
                 }
-                else if( (pRelation->maType == CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/xlMacrosheet" )) ||
-                         (pRelation->maType == CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/xlIntlMacrosheet" )) )
+                else if( (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlMacrosheet" )) ||
+                         (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlIntlMacrosheet" )) )
                 {
                     xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_MACROSHEET, nSheet ) );
                 }
@@ -437,7 +437,7 @@ bool BiffWorkbookFragment::importFragment()
             // load sheet fragments (do not return false in bRet on missing/broken sheets)
             WorksheetBuffer& rWorksheets = getWorksheets();
             bool bNextSheet = bRet;
-            for( sal_Int32 nSheet = 0, nSheetCount = rWorksheets.getInternalSheetCount(); bNextSheet && (nSheet < nSheetCount); ++nSheet )
+            for( sal_Int32 nSheet = 0, nSheetCount = rWorksheets.getSheetCount(); bNextSheet && (nSheet < nSheetCount); ++nSheet )
             {
                 // try to start a new sheet fragment
                 double fSegmentLength = getProgressBar().getFreeLength() / (nSheetCount - nSheet);
@@ -503,7 +503,7 @@ bool BiffWorkbookFragment::importWorkspaceFragment()
 
     // load sheet fragments (do not return false in bRet on missing/broken sheets)
     bool bNextSheet = bRet;
-    for( sal_Int32 nSheet = 0, nSheetCount = rWorksheets.getInternalSheetCount(); bNextSheet && (nSheet < nSheetCount); ++nSheet )
+    for( sal_Int32 nSheet = 0, nSheetCount = rWorksheets.getSheetCount(); bNextSheet && (nSheet < nSheetCount); ++nSheet )
     {
         // try to start a new sheet fragment (with leading SHEETHEADER record)
         bNextSheet = mrStrm.startNextRecord() && (mrStrm.getRecId() == BIFF_ID_SHEETHEADER);

@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/table/tablestylelist.hxx"
+#include "oox/drawingml/table/tablestyle.hxx"
 
 namespace oox { namespace drawingml { namespace table {
 

@@ -39,9 +39,11 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <cppuhelper/implbase5.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/storagebase.hxx"
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
@@ -50,6 +52,7 @@ namespace com { namespace sun { namespace star {
     namespace task { class XInteractionHandler; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
+    namespace io { class XStream; }
 } } }
 
 namespace oox {
@@ -59,7 +62,7 @@ namespace core {
 
 struct FilterBaseImpl;
 
-class FilterBase : public ::cppu::WeakImplHelper5<
+class OOX_DLLPUBLIC FilterBase : public ::cppu::WeakImplHelper5<
                             ::com::sun::star::lang::XServiceInfo,
                             ::com::sun::star::lang::XInitialization,
                             ::com::sun::star::document::XImporter,
@@ -148,6 +151,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         openOutputStream( const ::rtl::OUString& rStreamName ) const;
 
+    /** Commits changes to base storage (and substorages) */
+    void commit() { getStorage()->commit(); }
+
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
     virtual ::rtl::OUString SAL_CALL
@@ -198,7 +204,7 @@ private:
 
     virtual StorageRef  implCreateStorage(
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStream ) const = 0;
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream ) const = 0;
 
 private:
     ::std::auto_ptr< FilterBaseImpl > mxImpl;

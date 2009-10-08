@@ -110,6 +110,16 @@ OUString FastTokenHandler::getIdentifier( sal_Int32 nToken ) throw( RuntimeExcep
     return aTokens[nToken];
 }
 
+Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken ) throw( RuntimeException )
+{
+    MutexGuard aGuard( lclGetTokenMutex() );
+
+    if( nToken >= XML_TOKEN_COUNT )
+        return Sequence< sal_Int8 >();
+
+    return Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8 *>(tokentowordlist[nToken]), strlen(tokentowordlist[nToken]));
+}
+
 sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdentifier ) throw( RuntimeException )
 {
     MutexGuard aGuard( lclGetTokenMutex() );

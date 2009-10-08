@@ -298,9 +298,28 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             aLock.clear();
             // <- SAFE
 
-            if (lFilters.size() > 0)
+            for (  OUStringList::const_iterator pIt  = lFilters.begin();
+                   pIt != lFilters.end() && sFilter.getLength() == 0 ;
+                 ++pIt                    )
             {
-                sFilter = *(lFilters.begin());
+                // SAFE ->
+                aLock.reset();
+                try
+                {
+                    CacheItem aFilter = m_rCache->getItem(FilterCache::E_FILTER, *pIt);
+                    sal_Int32 nFlags  = 0;
+                    aFilter[PROPNAME_FLAGS] >>= nFlags;
+
+                    if ((nFlags & FLAGVAL_IMPORT) == FLAGVAL_IMPORT)
+                        sFilter = *pIt;
+                }
+                catch(const css::uno::Exception&) {}
+                aLock.clear();
+                // <- SAFE
+            }
+
+            if (sFilter.getLength() > 0)
+            {
                 rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= sRealType;
                 rDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
                 sType = sRealType;
@@ -1121,19 +1140,28 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
 void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
     throw (css::uno::Exception)
 {
-    // the current approach for local file system case is to lock
-    // a local file only in case it is OOo format
-    // so until the type detection is done the file stays unlocked
-
     sal_Bool bSuccess = sal_False;
     ::rtl::OUString sURL = rDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString() );
+    sal_Bool bRequestedReadOnly = rDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_READONLY(), sal_False );
     if ( sURL.getLength() && ::utl::LocalFileHelper::IsLocalFile( INetURLObject( sURL ).GetMainURL( INetURLObject::NO_DECODE ) ) )
-        bSuccess = rDescriptor.addInputStreamNoLock();
+    {
+        // OOo uses own file locking mechanics in case of local file
+        bSuccess = rDescriptor.addInputStreamOwnLock();
+    }
     else
         bSuccess = rDescriptor.addInputStream();
 
     if ( !bSuccess )
         throw css::uno::Exception(_FILTER_CONFIG_FROM_ASCII_("Could not open stream."), static_cast< css::document::XTypeDetection* >(this));
+
+    if ( !bRequestedReadOnly )
+    {
+        // The MediaDescriptor implementation adds ReadOnly argument if the file can not be opened for writing
+        // this argument should be either removed or an additional argument should be added so that application
+        // can separate the case when the user explicitly requests readonly document.
+        // The current solution is to remove it here.
+        rDescriptor.erase( ::comphelper::MediaDescriptor::PROP_READONLY() );
+    }
 }
 
 /*-----------------------------------------------

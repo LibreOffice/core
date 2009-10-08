@@ -41,6 +41,7 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <vector>
+
 namespace com{namespace sun{namespace star{
     namespace beans{
     struct PropertyValue;

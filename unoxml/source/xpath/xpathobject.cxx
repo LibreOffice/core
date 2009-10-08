@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xpathobject.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,8 @@
 
 namespace XPath
 {
-    CXPathObject::CXPathObject(const xmlXPathObjectPtr xpathObj)
-        : m_pXPathObj(xpathObj)
+    CXPathObject::CXPathObject(xmlXPathObjectPtr xpathObj)
+        : m_pXPathObj(xpathObj, xmlXPathFreeObject)
     {
         switch (m_pXPathObj->type)
         {
@@ -96,7 +96,7 @@ namespace XPath
      */
     sal_Bool SAL_CALL CXPathObject::getBoolean() throw (RuntimeException)
     {
-        return (sal_Bool) xmlXPathCastToBoolean(m_pXPathObj);
+        return (sal_Bool) xmlXPathCastToBoolean(m_pXPathObj.get());
     }
 
     /**
@@ -104,7 +104,7 @@ namespace XPath
     */
     sal_Int8 SAL_CALL CXPathObject::getByte() throw (RuntimeException)
     {
-        return (sal_Int8) xmlXPathCastToNumber(m_pXPathObj);
+        return (sal_Int8) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
     /**
@@ -112,15 +112,15 @@ namespace XPath
     */
     sal_Int16 SAL_CALL CXPathObject::getShort() throw (RuntimeException)
     {
-        return (sal_Int16) xmlXPathCastToNumber(m_pXPathObj);
-   }
+        return (sal_Int16) xmlXPathCastToNumber(m_pXPathObj.get());
+    }
 
     /**
         get number as long
     */
     sal_Int32 SAL_CALL CXPathObject::getLong() throw (RuntimeException)
     {
-        return (sal_Int32) xmlXPathCastToNumber(m_pXPathObj);
+        return (sal_Int32) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
     /**
@@ -128,7 +128,7 @@ namespace XPath
     */
     sal_Int64 SAL_CALL CXPathObject::getHyper() throw (RuntimeException)
     {
-        return (sal_Int64) xmlXPathCastToNumber(m_pXPathObj);
+        return (sal_Int64) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
     /**
@@ -136,7 +136,7 @@ namespace XPath
     */
     float SAL_CALL CXPathObject::getFloat() throw (RuntimeException)
     {
-        return (float) xmlXPathCastToNumber(m_pXPathObj);
+        return (float) xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
     /**
@@ -144,7 +144,7 @@ namespace XPath
     */
     double SAL_CALL CXPathObject::getDouble() throw (RuntimeException)
     {
-        return  xmlXPathCastToNumber(m_pXPathObj);
+        return  xmlXPathCastToNumber(m_pXPathObj.get());
     }
 
     /**
@@ -152,7 +152,7 @@ namespace XPath
     */
     OUString SAL_CALL CXPathObject::getString() throw (RuntimeException)
     {
-        const sal_Char* x1 = (sal_Char*) xmlXPathCastToString(m_pXPathObj);
+        const sal_Char* x1 = (sal_Char*) xmlXPathCastToString(m_pXPathObj.get());
         return OUString(x1, strlen(x1), RTL_TEXTENCODING_UTF8);
     }
 

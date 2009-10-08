@@ -98,6 +98,8 @@ public:
     /** Returns the 0-based sheet index for local names, or -1 for global names. */
     inline sal_Int32    getSheetIndex() const { return maOoxData.mnSheet; }
 
+    /** Returns the original name as imported from or exported to the file. */
+    const ::rtl::OUString& getUpcaseOoxName() const;
     /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
     ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddress ) const;
 
@@ -114,6 +116,7 @@ protected:
 
 protected:
     OoxDefinedNameData  maOoxData;          /// OOX data for this defined name.
+    mutable ::rtl::OUString maUpOoxName;    /// OOX name converted to uppercase ASCII.
     ::rtl::OUString     maFinalName;        /// Final name used in the Calc document.
 
 private:

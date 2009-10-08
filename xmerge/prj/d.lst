@@ -2,7 +2,6 @@
 ..\%__SRC%\class\pexcel.jar %_DEST%\bin%_EXT%\pexcel.jar
 ..\%__SRC%\class\htmlsoff.jar %_DEST%\bin%_EXT%\htmlsoff.jar
 ..\%__SRC%\class\aportisdoc.jar  %_DEST%\bin%_EXT%\aportisdoc.jar
-..\%__SRC%\class\writer2latex.jar  %_DEST%\bin%_EXT%\writer2latex.jar
 ..\%__SRC%\class\XMergeBridge.jar %_DEST%\bin%_EXT%\XMergeBridge.jar
 ..\%__SRC%\class\pocketword.jar  %_DEST%\bin%_EXT%\pocketword.jar
 ..\%__SRC%\bin\xmergesync.dll  %_DEST%\bin%_EXT%\xmergesync.dll

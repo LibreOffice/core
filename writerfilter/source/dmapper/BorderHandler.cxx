@@ -158,7 +158,7 @@ PropertyMapPtr  BorderHandler::getProperties()
     };
     PropertyMapPtr pPropertyMap(new PropertyMap);
     // don't fill in default properties
-    if( m_nCurrentBorderPosition )
+    if( m_bOOXML || m_nCurrentBorderPosition )
     {
         for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
             pPropertyMap->Insert( aPropNames[nProp], false, uno::makeAny( m_aBorderLines[nProp] ) );
@@ -174,5 +174,6 @@ table::BorderLine BorderHandler::getBorderLine()
     ConversionHelper::MakeBorderLine( m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, m_bOOXML );
     return aBorderLine;
 }
+
 } //namespace dmapper
 } //namespace writerfilter

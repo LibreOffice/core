@@ -41,6 +41,55 @@ class ExternalLink;
 
 // ============================================================================
 
+/** This class implements importing the sheetData element in external sheets.
+
+    The sheetData element embedded in the externalBook element contains cached
+    cells from externally linked sheets.
+ */
+class OoxExternalSheetDataContext : public OoxWorkbookContextBase
+{
+public:
+    explicit            OoxExternalSheetDataContext(
+                            OoxWorkbookFragmentBase& rFragment,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >& rxSheetCache );
+
+protected:
+    // oox.core.ContextHandler2Helper interface -------------------------------
+
+    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+
+    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
+
+private:
+    /** Imports cell settings from a c element. */
+    void                importCell( const AttributeList& rAttribs );
+
+    /** Imports the EXTCELL_BLANK from the passed stream. */
+    void                importExtCellBlank( RecordInputStream& rStrm );
+    /** Imports the EXTCELL_BOOL from the passed stream. */
+    void                importExtCellBool( RecordInputStream& rStrm );
+    /** Imports the EXTCELL_DOUBLE from the passed stream. */
+    void                importExtCellDouble( RecordInputStream& rStrm );
+    /** Imports the EXTCELL_ERROR from the passed stream. */
+    void                importExtCellError( RecordInputStream& rStrm );
+    /** Imports the EXTCELL_STRING from the passed stream. */
+    void                importExtCellString( RecordInputStream& rStrm );
+
+    /** Sets the passed cell value to the current position in the sheet cache. */
+    void                setCellValue( const ::com::sun::star::uno::Any& rValue );
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
+                        mxSheetCache;               /// The sheet cache used to store external cell values.
+    ::com::sun::star::table::CellAddress maCurrPos; /// Position of current cell.
+    sal_Int32           mnCurrType;                 /// Data type of current cell.
+};
+
+// ============================================================================
+
 class OoxExternalLinkFragment : public OoxWorkbookFragmentBase
 {
 public:
@@ -75,8 +124,6 @@ private:
 
 // ============================================================================
 
-class BiffExternalSheetDataContext;
-
 class BiffExternalLinkFragment : public BiffWorkbookFragmentBase
 {
 public:
@@ -100,11 +147,13 @@ private:
     void                importCrn();
     void                importDefinedName();
 
-private:
-    typedef ::boost::shared_ptr< BiffWorksheetContextBase > SheetContextRef;
+    /** Sets the passed cell value to the passed position in the sheet cache. */
+    void                setCellValue( const BinAddress& rBinAddr, const ::com::sun::star::uno::Any& rValue );
 
-    SheetContextRef     mxContext;
-    ExternalLinkRef     mxExtLink;
+private:
+    ExternalLinkRef     mxExtLink;              /// Current external link.
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
+                        mxSheetCache;           /// The sheet cache used to store external cell values.
     bool                mbImportDefNames;
 };
 

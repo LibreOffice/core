@@ -50,7 +50,7 @@ public:
 private:
     virtual StorageRef  implCreateStorage(
                             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStream ) const;
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream ) const;
 };
 
 typedef ::rtl::Reference< BinaryFilterBase > BinaryFilterRef;

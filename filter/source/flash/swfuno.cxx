@@ -59,7 +59,7 @@ using namespace ::swf;
 extern "C"
 {
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -73,7 +73,7 @@ void singlecomponent_writeInfo( Reference< XRegistryKey >& xNewKey, const Sequen
         xNewKey->createKey( pArray[nPos] );
 }
 
-sal_Bool SAL_CALL component_writeInfo(
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     void * /* pServiceManager */, void * pRegistryKey )
 {
     if (pRegistryKey)
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL component_writeInfo(
     return sal_False;
 }
 //==================================================================================================
-void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;

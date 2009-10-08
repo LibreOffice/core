@@ -31,8 +31,4 @@
 
 # Reduction of exported symbols:
 CDEFS += -DOOX_DLLIMPLEMENTATION
-.IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-CFLAGS += -fvisibility=hidden
-.ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
-CFLAGS += -xldscope=hidden
-.ENDIF
+VISIBILITY_HIDDEN=TRUE

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pivottablebuffer.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -253,7 +253,7 @@ void PivotTableBuffer::writePivotTable( const OUString& aName, const PivotTableD
 bool PivotTableBuffer::getSourceRange( const OUString& aSheetName, const OUString& aRefName,
                                        CellRangeAddress& rRange ) const
 {
-    sal_Int32 nCount = getWorksheets().getInternalSheetCount();
+    sal_Int32 nCount = getWorksheets().getSheetCount();
     for ( sal_Int32 nSheet = 0; nSheet < nCount; ++nSheet )
     {
         Reference< XNamed > xNamed( getSheet( nSheet ), UNO_QUERY );

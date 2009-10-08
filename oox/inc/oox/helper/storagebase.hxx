@@ -36,11 +36,13 @@
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace embed { class XStorage; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
+    namespace io { class XStream; }
 } } }
 
 namespace oox {
@@ -56,7 +58,7 @@ typedef ::boost::shared_ptr< StorageBase > StorageRef;
     for ZIP storages containing XML streams, and OLE storages containing binary
     data streams.
  */
-class StorageBase
+class OOX_DLLPUBLIC StorageBase
 {
 public:
     explicit            StorageBase(
@@ -64,7 +66,7 @@ public:
                             bool bBaseStreamAccess );
 
     explicit            StorageBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxOutStream,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream,
                             bool bBaseStreamAccess );
 
     virtual             ~StorageBase();
@@ -117,6 +119,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         openOutputStream( const ::rtl::OUString& rStreamName );
 
+    /** Commits the changes to the storage and all the substorages. (in case it is transacted object)
+     */
+    void commit();
+
 protected:
     /** Special constructor for sub storage objects. */
     explicit            StorageBase( const StorageBase& rParentStorage, const ::rtl::OUString& rStorageName );
@@ -151,11 +157,11 @@ private:
 private:
     typedef ::std::map< ::rtl::OUString, StorageRef >                               SubStorageMap;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  XInputStreamRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > XOutputStreamRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > XStreamRef;
 
     SubStorageMap       maSubStorages;      /// Map of direct sub storages.
     XInputStreamRef     mxInStream;         /// Cached base input stream (to keep it alive).
-    XOutputStreamRef    mxOutStream;        /// Cached base output stream (to keep it alive).
+    XStreamRef          mxStream;           /// Cached base output stream (to keep it alive).
     ::rtl::OUString     maStorageName;      /// Name of this storage, if it is a substorage.
     const StorageBase*  mpParentStorage;    /// Parent storage if this is a sub storage.
     bool                mbBaseStreamAccess; /// True = access base streams with empty stream name.

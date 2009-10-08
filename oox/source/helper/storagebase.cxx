@@ -29,14 +29,19 @@
  ************************************************************************/
 
 #include "oox/helper/storagebase.hxx"
+#include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <rtl/ustrbuf.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::embed::XStorage;
+using ::com::sun::star::embed::XTransactedObject;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XStream;
 
 namespace oox {
 
@@ -70,12 +75,12 @@ StorageBase::StorageBase( const Reference< XInputStream >& rxInStream, bool bBas
     OSL_ENSURE( mxInStream.is(), "StorageBase::StorageBase - missing base input stream" );
 }
 
-StorageBase::StorageBase( const Reference< XOutputStream >& rxOutStream, bool bBaseStreamAccess ) :
-    mxOutStream( rxOutStream ),
+StorageBase::StorageBase( const Reference< XStream >& rxStream, bool bBaseStreamAccess ) :
+    mxStream( rxStream ),
     mpParentStorage( 0 ),
     mbBaseStreamAccess( bBaseStreamAccess )
 {
-    OSL_ENSURE( mxOutStream.is(), "StorageBase::StorageBase - missing base output stream" );
+    OSL_ENSURE( mxStream.is(), "StorageBase::StorageBase - missing base output stream" );
 }
 
 StorageBase::StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName ) :
@@ -178,7 +183,7 @@ Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStrea
     }
     else if( mbBaseStreamAccess )
     {
-        xOutStream = mxOutStream;
+        xOutStream = mxStream->getOutputStream();
     }
     return xOutStream;
 }
@@ -188,6 +193,17 @@ StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreat
     SubStorageMap::iterator aIt = maSubStorages.find( rElementName );
     return (aIt == maSubStorages.end()) ?
         (maSubStorages[ rElementName ] = implOpenSubStorage( rElementName, bCreate )) : aIt->second;
+}
+
+void StorageBase::commit()
+{
+    for( SubStorageMap::iterator aIt = maSubStorages.begin(); aIt != maSubStorages.end(); aIt ++ )
+        aIt->second->commit();
+
+    Reference< XTransactedObject > xTransactedObj( getXStorage(), UNO_QUERY );
+
+    if( xTransactedObj.is() )
+        xTransactedObj->commit();
 }
 
 // ============================================================================

@@ -35,7 +35,7 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XStream;
 
 namespace oox {
 namespace core {
@@ -52,7 +52,7 @@ BinaryFilterBase::~BinaryFilterBase()
 }
 
 StorageRef BinaryFilterBase::implCreateStorage(
-        Reference< XInputStream >& rxInStream, Reference< XOutputStream >& rxOutStream ) const
+        Reference< XInputStream >& rxInStream, Reference< XStream >& rxOutStream ) const
 {
     StorageRef xStorage;
     if( rxInStream.is() )

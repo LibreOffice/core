@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xpathobject.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.20.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
+#include <boost/shared_ptr.hpp>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -53,11 +54,11 @@ namespace XPath
     class CXPathObject : public cppu::WeakImplHelper1< XXPathObject >
     {
     private:
-    const xmlXPathObjectPtr m_pXPathObj;
+    boost::shared_ptr<xmlXPathObject> m_pXPathObj;
     XPathObjectType m_xPathObjectType;
 
     public:
-    CXPathObject(const xmlXPathObjectPtr xpathObj);
+    CXPathObject(xmlXPathObjectPtr xpathObj);
 
     /**
         get object type

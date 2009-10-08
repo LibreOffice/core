@@ -359,6 +359,16 @@ struct ApiOpCodes
 
 // function data ==============================================================
 
+/** This enumeration contains constants for all known external libraries
+    containing supported sheet functions. */
+enum FunctionLibraryType
+{
+    FUNCLIB_EUROTOOL,           /// EuroTool add-in with EUROCONVERT function.
+    FUNCLIB_UNKNOWN             /// Unknown library.
+};
+
+// ----------------------------------------------------------------------------
+
 const sal_uInt8 FUNCINFO_MAXPARAM           = 30;       /// Maximum parameter count.
 
 const sal_uInt8 FUNCINFO_PARAM_EXCELONLY    = 0x01;     /// Flag for a parameter existing in Excel, but not in Calc.
@@ -383,6 +393,7 @@ struct FunctionInfo
     ::rtl::OUString     maOoxFuncName;      /// OOXML function name.
     ::rtl::OUString     maBiffMacroName;    /// Expected macro name in EXTERN.CALL function.
     ::rtl::OUString     maExtProgName;      /// Programmatic function name for external functions.
+    FunctionLibraryType meFuncLibType;      /// The external library this function is part of.
     sal_Int32           mnApiOpCode;        /// API function opcode.
     sal_uInt16          mnOobFuncId;        /// OOBIN function identifier.
     sal_uInt16          mnBiffFuncId;       /// BIFF function identifier.

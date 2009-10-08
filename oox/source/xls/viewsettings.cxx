@@ -752,7 +752,7 @@ void ViewSettings::setSheetViewSettings( sal_Int32 nSheet, const OoxSheetViewDat
 void ViewSettings::finalizeImport()
 {
     const WorksheetBuffer& rWorksheets = getWorksheets();
-    if( rWorksheets.getInternalSheetCount() <= 0 ) return;
+    if( rWorksheets.getSheetCount() <= 0 ) return;
 
     // force creation of workbook view data to get the Excel defaults
     const OoxWorkbookViewData& rData = maBookDatas.empty() ? createWorkbookViewData() : *maBookDatas.front();
@@ -806,7 +806,7 @@ void ViewSettings::finalizeImport()
 
 sal_Int32 ViewSettings::getActiveSheetIndex() const
 {
-    sal_Int32 nSheetCount = getLimitedValue< sal_Int32, sal_Int32 >( getWorksheets().getInternalSheetCount(), 1, SAL_MAX_INT32 );
+    sal_Int32 nSheetCount = getLimitedValue< sal_Int32, sal_Int32 >( getWorksheets().getSheetCount(), 1, SAL_MAX_INT32 );
     return maBookDatas.empty() ? 0 : getLimitedValue< sal_Int32, sal_Int32 >( maBookDatas.front()->mnActiveSheet, 0, nSheetCount - 1 );
 }
 

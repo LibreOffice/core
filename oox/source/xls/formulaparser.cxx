@@ -30,12 +30,13 @@
 
 #include "oox/xls/formulaparser.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sheet/AddressConvention.hpp>
+#include <com/sun/star/sheet/ComplexReference.hpp>
+#include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
-#include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/sheet/AddressConvention.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
@@ -56,8 +57,9 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::sheet::SingleReference;
 using ::com::sun::star::sheet::ComplexReference;
+using ::com::sun::star::sheet::ExternalReference;
+using ::com::sun::star::sheet::SingleReference;
 using ::com::sun::star::sheet::XFormulaParser;
 using namespace ::com::sun::star::sheet::ReferenceFlags;
 
@@ -160,13 +162,16 @@ protected:
     bool                pushParenthesesOperand();
     bool                pushReferenceOperand( const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset );
     bool                pushReferenceOperand( const BinComplexRef2d& rRef, bool bDeleted, bool bRelativeAsOffset );
+    template< typename Type >
+    bool                pushReferenceOperand( const LinkSheetRange& rSheetRange, const Type& rApiRef );
     bool                pushReferenceOperand( const LinkSheetRange& rSheetRange, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset );
     bool                pushReferenceOperand( const LinkSheetRange& rSheetRange, const BinComplexRef2d& rRef, bool bDeleted, bool bRelativeAsOffset );
     bool                pushNlrOperand( const BinSingleRef2d& rRef );
     bool                pushEmbeddedRefOperand( const DefinedNameBase& rName, bool bPushBadToken );
     bool                pushDefinedNameOperand( const DefinedNameRef& rxDefName );
+    bool                pushExternalFuncOperand( const FunctionInfo& rFuncInfo );
     bool                pushDdeLinkOperand( const OUString& rDdeServer, const OUString& rDdeTopic, const OUString& rDdeItem );
-    bool                pushExternalNameOperand( const ExternalNameRef& rxExtName, ExternalLinkType eLinkType );
+    bool                pushExternalNameOperand( const ExternalNameRef& rxExtName, const ExternalLink& rExtLink );
 
     bool                pushUnaryPreOperator( sal_Int32 nOpCode );
     bool                pushUnaryPostOperator( sal_Int32 nOpCode );
@@ -179,13 +184,13 @@ private:
     // reference conversion ---------------------------------------------------
 
     void                initReference2d( SingleReference& orApiRef ) const;
-    void                initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet ) const;
+    void                initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet ) const;
     void                convertColRow( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bRelativeAsOffset ) const;
     void                convertReference( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference( ComplexReference& orApiRef, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference2d( SingleReference& orApiRef, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference2d( ComplexReference& orApiRef, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
-    void                convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
+    void                convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const;
     void                convertReference3d( ComplexReference& orApiRef, const LinkSheetRange& rSheetRange, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const;
 
     // finalize token sequence ------------------------------------------------
@@ -195,6 +200,7 @@ private:
     void                processTokens( const ApiToken* pToken, const ApiToken* pTokenEnd );
     const ApiToken*     processParameters( const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd );
 
+    const FunctionInfo* getFuncInfoFromLibFuncName( const ApiToken& rToken ) const;
     bool                isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const ApiToken*     getExternCallToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const FunctionInfo* convertExternCallParam( ApiToken& orFuncToken, const ApiToken& rECToken ) const;
@@ -603,6 +609,19 @@ bool FormulaParserImpl::pushReferenceOperand( const BinComplexRef2d& rRef, bool 
     return pushValueOperand( aApiRef );
 }
 
+template< typename Type >
+bool FormulaParserImpl::pushReferenceOperand( const LinkSheetRange& rSheetRange, const Type& rApiRef )
+{
+    if( rSheetRange.isExternal() )
+    {
+        ExternalReference aApiExtRef;
+        aApiExtRef.Index = rSheetRange.getDocLinkIndex();
+        aApiExtRef.Reference <<= rApiRef;
+        return pushValueOperand( aApiExtRef );
+    }
+    return pushValueOperand( rApiRef );
+}
+
 bool FormulaParserImpl::pushReferenceOperand( const LinkSheetRange& rSheetRange, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset )
 {
     if( rSheetRange.is3dRange() )
@@ -610,18 +629,18 @@ bool FormulaParserImpl::pushReferenceOperand( const LinkSheetRange& rSheetRange,
         // single-cell-range over several sheets, needs to create a ComplexReference
         ComplexReference aApiRef;
         convertReference3d( aApiRef, rSheetRange, rRef, rRef, bDeleted, bRelativeAsOffset );
-        return pushValueOperand( aApiRef );
+        return pushReferenceOperand( rSheetRange, aApiRef );
     }
     SingleReference aApiRef;
-    convertReference3d( aApiRef, rSheetRange.mnFirst, rSheetRange.mbRel, rRef, bDeleted, bRelativeAsOffset );
-    return pushValueOperand( aApiRef );
+    convertReference3d( aApiRef, rSheetRange.getFirstSheet(), rSheetRange.isSameSheet(), rRef, bDeleted, bRelativeAsOffset );
+    return pushReferenceOperand( rSheetRange, aApiRef );
 }
 
 bool FormulaParserImpl::pushReferenceOperand( const LinkSheetRange& rSheetRange, const BinComplexRef2d& rRef, bool bDeleted, bool bRelativeAsOffset )
 {
     ComplexReference aApiRef;
     convertReference3d( aApiRef, rSheetRange, rRef.maRef1, rRef.maRef2, bDeleted, bRelativeAsOffset );
-    return pushValueOperand( aApiRef );
+    return pushReferenceOperand( rSheetRange, aApiRef );
 }
 
 bool FormulaParserImpl::pushNlrOperand( const BinSingleRef2d& rRef )
@@ -652,6 +671,13 @@ bool FormulaParserImpl::pushDefinedNameOperand( const DefinedNameRef& rxDefName 
     return pushEmbeddedRefOperand( *rxDefName, true );
 }
 
+bool FormulaParserImpl::pushExternalFuncOperand( const FunctionInfo& rFuncInfo )
+{
+    return (rFuncInfo.mnApiOpCode == OPCODE_EXTERNAL) ?
+        pushValueOperand( rFuncInfo.maExtProgName, OPCODE_EXTERNAL ) :
+        pushOperand( rFuncInfo.mnApiOpCode );
+}
+
 bool FormulaParserImpl::pushDdeLinkOperand( const OUString& rDdeServer, const OUString& rDdeTopic, const OUString& rDdeItem )
 {
     // create the function call DDE("server";"topic";"item")
@@ -662,9 +688,9 @@ bool FormulaParserImpl::pushDdeLinkOperand( const OUString& rDdeServer, const OU
         pushFunctionOperator( OPCODE_DDE, 3 );
 }
 
-bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtName, ExternalLinkType eLinkType )
+bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtName, const ExternalLink& rExtLink )
 {
-    if( rxExtName.get() ) switch( eLinkType )
+    if( rxExtName.get() ) switch( rExtLink.getLinkType() )
     {
         case LINKTYPE_INTERNAL:
         case LINKTYPE_EXTERNAL:
@@ -672,8 +698,14 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
 
         case LINKTYPE_ANALYSIS:
             // TODO: need support for localized addin function names
-            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getOoxName() ) )
-                return pushValueOperand( pFuncInfo->maExtProgName, OPCODE_EXTERNAL );
+            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseOoxName() ) )
+                return pushExternalFuncOperand( *pFuncInfo );
+        break;
+
+        case LINKTYPE_LIBRARY:
+            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseOoxName() ) )
+                if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == rExtLink.getFuncLibraryType()) )
+                    return pushExternalFuncOperand( *pFuncInfo );
         break;
 
         case LINKTYPE_DDE:
@@ -685,7 +717,7 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
         break;
 
         default:
-            OSL_ENSURE( eLinkType != LINKTYPE_SELF, "FormulaParserImpl::pushExternalNameOperand - invalid call" );
+            OSL_ENSURE( rExtLink.getLinkType() != LINKTYPE_SELF, "FormulaParserImpl::pushExternalNameOperand - invalid call" );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
@@ -737,7 +769,7 @@ void FormulaParserImpl::initReference2d( SingleReference& orApiRef ) const
     }
 }
 
-void FormulaParserImpl::initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet ) const
+void FormulaParserImpl::initReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet ) const
 {
     orApiRef.Flags = SHEET_3D;
     if( nSheet < 0 )
@@ -745,7 +777,7 @@ void FormulaParserImpl::initReference3d( SingleReference& orApiRef, sal_Int32 nS
         orApiRef.Sheet = 0;
         orApiRef.Flags |= SHEET_DELETED;
     }
-    else if( bRelSheet )
+    else if( bSameSheet )
     {
         OSL_ENSURE( nSheet == 0, "FormulaParserImpl::initReference3d - invalid sheet index" );
         orApiRef.Flags |= SHEET_RELATIVE;
@@ -811,16 +843,17 @@ void FormulaParserImpl::convertReference2d( ComplexReference& orApiRef, const Bi
     setFlag( orApiRef.Reference2.Flags, SHEET_3D, false );
 }
 
-void FormulaParserImpl::convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bRelSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const
+void FormulaParserImpl::convertReference3d( SingleReference& orApiRef, sal_Int32 nSheet, bool bSameSheet, const BinSingleRef2d& rRef, bool bDeleted, bool bRelativeAsOffset ) const
 {
-    initReference3d( orApiRef, nSheet, bRelSheet );
+    initReference3d( orApiRef, nSheet, bSameSheet );
     convertReference( orApiRef, rRef, bDeleted, bRelativeAsOffset );
 }
 
 void FormulaParserImpl::convertReference3d( ComplexReference& orApiRef, const LinkSheetRange& rSheetRange, const BinSingleRef2d& rRef1, const BinSingleRef2d& rRef2, bool bDeleted, bool bRelativeAsOffset ) const
 {
-    initReference3d( orApiRef.Reference1, rSheetRange.mnFirst, rSheetRange.mbRel );
-    initReference3d( orApiRef.Reference2, rSheetRange.mnLast, rSheetRange.mbRel );
+    bool bSameSheet = rSheetRange.isSameSheet();
+    initReference3d( orApiRef.Reference1, rSheetRange.getFirstSheet(), bSameSheet );
+    initReference3d( orApiRef.Reference2, rSheetRange.getLastSheet(), bSameSheet );
     convertReference( orApiRef, rRef1, rRef2, bDeleted, bRelativeAsOffset );
     // remove sheet name from second part of reference
     setFlag( orApiRef.Reference2.Flags, SHEET_3D, rSheetRange.is3dRange() );
@@ -834,17 +867,65 @@ void FormulaParserImpl::processTokens( const ApiToken* pToken, const ApiToken* p
     {
         // push the current token into the vector
         appendFinalToken( *pToken );
-        // try to process a function, otherwise go to next token
-        if( const FunctionInfo* pFuncInfo = getFuncInfoFromApiToken( *pToken ) )
+        const FunctionInfo* pFuncInfo;
+        // try to process a function
+        if( (pFuncInfo = getFuncInfoFromApiToken( *pToken )) != 0 )
+        {
             pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
+        }
+        // try to process a function from an external library
+        else if( (pFuncInfo = getFuncInfoFromLibFuncName( *pToken )) != 0 )
+        {
+            ApiToken& rFuncToken = maTokenStorage.back();
+            rFuncToken.OpCode = pFuncInfo->mnApiOpCode;
+            if( (rFuncToken.OpCode == OPCODE_EXTERNAL) && (pFuncInfo->maExtProgName.getLength() > 0) )
+                rFuncToken.Data <<= pFuncInfo->maExtProgName;
+            else
+                rFuncToken.Data.clear();    // clear string from OPCODE_BAD
+            pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
+        }
+        // otherwise, go to next token
         else
+        {
             ++pToken;
+        }
     }
 }
+
+namespace {
+
+bool lclTokenHasChar( const ApiToken& rToken, sal_Int32 nOpCode, sal_Unicode cChar )
+{
+    return (rToken.OpCode == nOpCode) && rToken.Data.has< OUString >() && (rToken.Data.get< OUString >() == OUString( cChar ));
+}
+
+bool lclTokenHasDouble( const ApiToken& rToken, sal_Int32 nOpCode )
+{
+    return (rToken.OpCode == nOpCode) && rToken.Data.has< double >();
+}
+
+} // namespace
 
 const ApiToken* FormulaParserImpl::processParameters(
         const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd )
 {
+    /*  OOXML import of library functions pushes the external reference "[n]!"
+        as BAD/PUSH/BAD/BAD tokens in front of the function name. Try to find
+        and remove them here. TODO: This will change with CWS mooxlsc, there,
+        the reference ID and function name are passed together in a BAD token,
+        see getFuncInfoFromLibFuncName(). */
+    if( (rFuncInfo.meFuncLibType != FUNCLIB_UNKNOWN) && (maTokenStorage.size() >= 5) )
+    {
+        sal_Size nSize = maTokenStorage.size();
+        if( lclTokenHasChar(   maTokenStorage[ nSize - 5 ], OPCODE_BAD, '[' ) &&
+            lclTokenHasDouble( maTokenStorage[ nSize - 4 ], OPCODE_PUSH     ) &&
+            lclTokenHasChar(   maTokenStorage[ nSize - 3 ], OPCODE_BAD, ']' ) &&
+            lclTokenHasChar(   maTokenStorage[ nSize - 2 ], OPCODE_BAD, '!' ) )
+        {
+            maTokenStorage.erase( maTokenStorage.end() - 5, maTokenStorage.end() - 1 );
+        }
+    }
+
     // remember position of the token containing the function op-code
     size_t nFuncNameIdx = maTokenStorage.size() - 1;
 
@@ -960,6 +1041,29 @@ const ApiToken* FormulaParserImpl::processParameters(
         rFuncNameToken.OpCode = OPCODE_NONAME;
 
     return pToken;
+}
+
+const FunctionInfo* FormulaParserImpl::getFuncInfoFromLibFuncName( const ApiToken& rToken ) const
+{
+    // try to parse calls to library functions
+    if( (rToken.OpCode == OPCODE_BAD) && rToken.Data.has< OUString >() )
+    {
+        // format of the function call is "[n]!funcname", n being the link to the library
+        OUString aString = rToken.Data.get< OUString >();
+        sal_Int32 nBracketOpen = aString.indexOf( '[' );
+        sal_Int32 nBracketClose = aString.indexOf( ']' );
+        sal_Int32 nExclamation = aString.indexOf( '!' );
+        if( (0 == nBracketOpen) && (nBracketOpen + 1 < nBracketClose) && (nBracketClose + 1 == nExclamation) && (nExclamation + 1 < aString.getLength()) )
+        {
+            sal_Int32 nRefId = aString.copy( nBracketOpen + 1, nBracketClose - nBracketOpen - 1 ).toInt32();
+            const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
+            if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_LIBRARY) )
+                if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( aString.copy( nExclamation + 1 ).toAsciiUpperCase() ) )
+                    if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == pExtLink->getFuncLibraryType()) )
+                        return pFuncInfo;
+        }
+    }
+    return 0;
 }
 
 bool FormulaParserImpl::isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
@@ -1146,6 +1250,7 @@ private:
     PropertySet         maParserProps;
     const OUString      maRefPosProp;
     sal_Int64           mnAddDataPos;       /// Current stream position for additional data (tExp, tArray, tMemArea).
+    bool                mbNeedExtRefs;      /// True = parser needs initialization of external reference info.
 };
 
 // ----------------------------------------------------------------------------
@@ -1153,7 +1258,8 @@ private:
 OoxFormulaParserImpl::OoxFormulaParserImpl( const OpCodeProvider& rOpCodeProv ) :
     FormulaParserImpl( rOpCodeProv ),
     maRefPosProp( CREATE_OUSTRING( "ReferencePosition" ) ),
-    mnAddDataPos( 0 )
+    mnAddDataPos( 0 ),
+    mbNeedExtRefs( true )
 {
     try
     {
@@ -1166,7 +1272,7 @@ OoxFormulaParserImpl::OoxFormulaParserImpl( const OpCodeProvider& rOpCodeProv ) 
     OSL_ENSURE( mxParser.is(), "OoxFormulaParserImpl::OoxFormulaParserImpl - cannot create formula parser" );
     maParserProps.set( mxParser );
     maParserProps.setProperty( CREATE_OUSTRING( "CompileEnglish" ), true );
-    maParserProps.setProperty( CREATE_OUSTRING( "FormulaConvention" ), ::com::sun::star::sheet::AddressConvention::XL_A1 );
+    maParserProps.setProperty( CREATE_OUSTRING( "FormulaConvention" ), ::com::sun::star::sheet::AddressConvention::XL_OOX );
     maParserProps.setProperty( CREATE_OUSTRING( "IgnoreLeadingSpaces" ), false );
     maParserProps.setProperty( CREATE_OUSTRING( "OpCodeMap" ), getOoxParserMap() );
 }
@@ -1176,8 +1282,13 @@ void OoxFormulaParserImpl::importOoxFormula(
 {
     if( mxParser.is() )
     {
+        if( mbNeedExtRefs )
+        {
+            maParserProps.setProperty( CREATE_OUSTRING( "ExternalLinks" ), getExternalLinks().getLinkInfos() );
+            mbNeedExtRefs = false;
+        }
+        maParserProps.setProperty( maRefPosProp, rContext.getBaseAddress() );
         initializeImport( rContext );
-        maParserProps.setProperty( maRefPosProp, getFormulaContext().getBaseAddress() );
         finalizeImport( mxParser->parseFormula( rFormulaString ) );
     }
 }
@@ -1641,7 +1752,7 @@ bool OoxFormulaParserImpl::pushOobExtName( sal_Int32 nRefId, sal_Int32 nNameId )
             return pushOobName( nNameId );
         // external name indexes are one-based in OOBIN
         ExternalNameRef xExtName = pExtLink->getNameByIndex( nNameId - 1 );
-        return pushExternalNameOperand( xExtName, pExtLink->getLinkType() );
+        return pushExternalNameOperand( xExtName, *pExtLink );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
@@ -2578,7 +2689,7 @@ bool BiffFormulaParserImpl::pushBiffExtName( sal_Int32 nRefId, sal_uInt16 nNameI
             return pushBiffName( nNameId );
         // external name indexes are one-based in BIFF
         ExternalNameRef xExtName = pExtLink->getNameByIndex( static_cast< sal_Int32 >( nNameId ) - 1 );
-        return pushExternalNameOperand( xExtName, pExtLink->getLinkType() );
+        return pushExternalNameOperand( xExtName, *pExtLink );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }

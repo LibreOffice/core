@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: externallinkbuffer.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.26.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,15 @@
 #ifndef OOX_XLS_EXTERNALLINKBUFFER_HXX
 #define OOX_XLS_EXTERNALLINKBUFFER_HXX
 
+#include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace sheet { struct DDEItemInfo; }
     namespace sheet { class XDDELink; }
+    namespace sheet { class XExternalDocLink; }
+    namespace sheet { class XExternalSheetCache; }
 } } }
 
 namespace oox { namespace core {
@@ -44,30 +48,6 @@ namespace oox { namespace core {
 
 namespace oox {
 namespace xls {
-
-// ============================================================================
-
-/** Contains indexes for a range of sheets in the spreadsheet document. */
-struct LinkSheetRange
-{
-    sal_Int32           mnFirst;        /// Index of the first sheet.
-    sal_Int32           mnLast;         /// Index of the last sheet.
-    bool                mbRel;          /// True = relative indexes.
-
-    inline explicit     LinkSheetRange() { setDeleted(); }
-    inline explicit     LinkSheetRange( sal_Int32 nFirst, sal_Int32 nLast ) { setRange( nFirst, nLast ); }
-
-    /** Sets this struct to deleted state. */
-    inline void         setDeleted() { mnFirst = mnLast = -1; mbRel = false; }
-    /** Sets this struct to use current sheet state. */
-    inline void         setRelative() { mnFirst = mnLast = 0; mbRel = true; }
-    /** Sets the passed absolute sheet range to the memebers of this struct. */
-    inline void         setRange( sal_Int32 nFirst, sal_Int32 nLast )
-                            { mnFirst = ::std::min( nFirst, nLast ); mnLast = ::std::max( nFirst, nLast ); mbRel = false; }
-
-    /** Returns true, if the sheet indexes are valid and different. */
-    inline bool         is3dRange() const { return (0 <= mnFirst) && (mnFirst < mnLast); }
-};
 
 // ============================================================================
 
@@ -129,6 +109,13 @@ public:
     /** Returns true, if the name refers to an OLE object. */
     inline bool         isOleObject() const { return maOoxExtNameData.mbOleObj; }
 
+    /** Returns the sheet cache index if this is a sheet-local external name. */
+    sal_Int32           getSheetCacheIndex() const;
+
+    /** Returns the DDE item info needed by the XML formula parser. */
+    bool                getDdeItemInfo(
+                            ::com::sun::star::sheet::DDEItemInfo& orItemInfo ) const;
+
     /** Returns the complete DDE link data of this DDE item. */
     bool                getDdeLinkData(
                             ::rtl::OUString& orDdeServer,
@@ -146,7 +133,7 @@ private:
     OoxExternalNameData maOoxExtNameData;   /// Additional name data.
     ResultMatrix        maResults;          /// DDE/OLE link results.
     ResultMatrix::iterator maCurrIt;        /// Current position in result matrix.
-    sal_uInt32          mnStorageId;        /// OLE storage identifier.
+    sal_uInt32          mnStorageId;        /// OLE storage identifier (BIFF).
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDDELink >
                         mxDdeLink;          /// Interface of a DDE link.
     bool                mbDdeLinkCreated;   /// True = already tried to create the DDE link.
@@ -156,20 +143,67 @@ typedef ::boost::shared_ptr< ExternalName > ExternalNameRef;
 
 // ============================================================================
 
+/** Contains indexes for a range of sheets in the spreadsheet document. */
+class LinkSheetRange
+{
+public:
+    inline explicit     LinkSheetRange() { setDeleted(); }
+    inline explicit     LinkSheetRange( sal_Int32 nFirst, sal_Int32 nLast ) { setRange( nFirst, nLast ); }
+    inline explicit     LinkSheetRange( sal_Int32 nDocLink, sal_Int32 nFirst, sal_Int32 nLast ) { setExternalRange( nDocLink, nFirst, nLast ); }
+
+    /** Sets this struct to deleted state. */
+    void                setDeleted();
+    /** Sets this struct to "use current sheet" state. */
+    void                setSameSheet();
+    /** Sets the passed absolute sheet range to the members of this struct. */
+    void                setRange( sal_Int32 nFirst, sal_Int32 nLast );
+    /** Sets the passed external sheet cache range to the members of this struct. */
+    void                setExternalRange( sal_Int32 nDocLink, sal_Int32 nFirst, sal_Int32 nLast );
+
+    /** Returns true, if the sheet indexes are valid and different. */
+    inline bool         isDeleted() const { return mnFirst < 0; }
+    /** Returns true, if the sheet range points to an external document. */
+    inline bool         isExternal() const { return !isDeleted() && (meType == LINKSHEETRANGE_EXTERNAL); }
+    /** Returns true, if the sheet indexes are valid and different. */
+    inline bool         isSameSheet() const { return meType == LINKSHEETRANGE_SAMESHEET; }
+    /** Returns true, if the sheet indexes are valid and different. */
+    inline bool         is3dRange() const { return (0 <= mnFirst) && (mnFirst < mnLast); }
+
+    inline sal_Int32    getDocLinkIndex() const { return mnDocLink; }
+    inline sal_Int32    getFirstSheet() const { return mnFirst; }
+    inline sal_Int32    getLastSheet() const { return mnLast; }
+
+private:
+    enum LinkSheetRangeType
+    {
+        LINKSHEETRANGE_INTERNAL,    /// Sheet range in the own document.
+        LINKSHEETRANGE_EXTERNAL,    /// Sheet range in an external document.
+        LINKSHEETRANGE_SAMESHEET    /// Current sheet depending on context.
+    };
+
+    LinkSheetRangeType  meType;         /// Link sheet range type.
+    sal_Int32           mnDocLink;      /// Document link token index for external links.
+    sal_Int32           mnFirst;        /// Index of the first sheet or index of first external sheet cache.
+    sal_Int32           mnLast;         /// Index of the last sheet or index of last external sheet cache.
+};
+
+// ============================================================================
+
 enum ExternalLinkType
 {
     LINKTYPE_SELF,          /// Link refers to the current workbook.
     LINKTYPE_SAME,          /// Link refers to the current sheet.
     LINKTYPE_INTERNAL,      /// Link refers to a sheet in the own workbook.
     LINKTYPE_EXTERNAL,      /// Link refers to an external spreadsheet document.
-    LINKTYPE_ANALYSIS,      /// Link refers to Analysis add-in.
+    LINKTYPE_ANALYSIS,      /// Link refers to the Analysis add-in.
+    LINKTYPE_LIBRARY,       /// Link refers to an external add-in.
     LINKTYPE_DDE,           /// DDE link.
     LINKTYPE_OLE,           /// OLE link.
     LINKTYPE_MAYBE_DDE_OLE, /// Could be DDE or OLE link (BIFF only).
     LINKTYPE_UNKNOWN        /// Unknown or unsupported link type.
 };
 
-// ============================================================================
+// ----------------------------------------------------------------------------
 
 class ExternalLink : public WorkbookHelper
 {
@@ -219,37 +253,54 @@ public:
     inline ExternalLinkType getLinkType() const { return meLinkType; }
     /** Returns true, if the link refers to the current workbook. */
     inline bool         isInternalLink() const { return (meLinkType == LINKTYPE_SELF) || (meLinkType == LINKTYPE_INTERNAL); }
+
     /** Returns the relation identifier for the external link fragment. */
     inline const ::rtl::OUString& getRelId() const { return maRelId; }
     /** Returns the class name of this external link. */
     inline const ::rtl::OUString& getClassName() const { return maClassName; }
     /** Returns the target URL of this external link. */
     inline const ::rtl::OUString& getTargetUrl() const { return maTargetUrl; }
+    /** Returns the link info needed by the XML formula parser. */
+    ::com::sun::star::sheet::ExternalLinkInfo getLinkInfo() const;
 
-    /** Returns the internal sheet index for the specified external sheet index. */
+    /** Returns the type of the external library if this is a library link. */
+    FunctionLibraryType getFuncLibraryType() const;
+    /** Returns the internal sheet index or external sheet cache index for the passed sheet. */
     sal_Int32           getSheetIndex( sal_Int32 nTabId = 0 ) const;
-    /** Returns the sheet range for the specified sheets (BIFF only). */
+    /** Returns the internal sheet range or range of external sheet caches for the passed sheet range (BIFF only). */
     void                getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId1, sal_Int32 nTabId2 ) const;
+
+    /** Returns the sheet cache of the external sheet with the passed index. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
+                        getExternalSheetCache( sal_Int32 nTabId );
+
     /** Returns the external name with the passed zero-based index. */
     ExternalNameRef     getNameByIndex( sal_Int32 nIndex ) const;
 
 private:
-    void                setExternalTargetUrl( const ::rtl::OUString& rTargetUrl );
+    void                setExternalTargetUrl( const ::rtl::OUString& rTargetUrl, const ::rtl::OUString& rTargetType );
     void                setDdeOleTargetUrl( const ::rtl::OUString& rClassName, const ::rtl::OUString& rTargetUrl, ExternalLinkType eLinkType );
+    void                parseExternalReference( const ::oox::core::Relations& rRelations, const ::rtl::OUString& rRelId );
     ::rtl::OUString     parseBiffTargetUrl( const ::rtl::OUString& rBiffTargetUrl );
+
+    /** Creates an external locument link and the sheet cache for the passed sheet name. */
+    void                insertExternalSheet( const ::rtl::OUString& rSheetName );
 
     ExternalNameRef     createExternalName();
 
 private:
-    typedef ::std::vector< sal_Int32 >  SheetIndexVec;
-    typedef RefVector< ExternalName >   ExternalNameVec;
+    typedef ::std::vector< sal_Int32 >  IndexVector;
+    typedef RefVector< ExternalName >   ExternalNameVector;
 
-    ExternalLinkType    meLinkType;
-    ::rtl::OUString     maRelId;
-    ::rtl::OUString     maClassName;
-    ::rtl::OUString     maTargetUrl;
-    SheetIndexVec       maSheetIndexes;
-    ExternalNameVec     maExtNames;
+    ExternalLinkType    meLinkType;         /// Type of this link object.
+    FunctionLibraryType meFuncLibType;      /// Type of the function library, if link type is LINKTYPE_LIBRARY.
+    ::rtl::OUString     maRelId;            /// Relation identifier for the external link fragment.
+    ::rtl::OUString     maClassName;        /// DDE service, OLE class name.
+    ::rtl::OUString     maTargetUrl;        /// Target link, DDE topic, OLE target.
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLink >
+                        mxDocLink;          /// Interface for an external document.
+    IndexVector         maIndexes;          /// Internal sheet indexes or external sheet cache indexes.
+    ExternalNameVector  maExtNames;         /// Defined names in external document.
 };
 
 typedef ::boost::shared_ptr< ExternalLink > ExternalLinkRef;
@@ -305,6 +356,10 @@ public:
     /** Imports the BIFF8 EXTERNSHEET record from the passed stream. */
     void                importExternSheet8( BiffInputStream& rStrm );
 
+    /** Returns the sequence of link infos needed by the XML formula parser. */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::ExternalLinkInfo >
+                        getLinkInfos() const;
+
     /** Returns the external link for the passed reference identifier. */
     ExternalLinkRef     getExternalLink( sal_Int32 nRefId ) const;
 
@@ -324,7 +379,8 @@ private:
     typedef RefVector< ExternalLink >       ExternalLinkVec;
     typedef ::std::vector< OoxRefSheets >   OoxRefSheetsVec;
 
-    ExternalLinkVec     maExtLinks;         /// List of external documents.
+    ExternalLinkVec     maLinks;            /// List of link structures for all kinds of links.
+    ExternalLinkVec     maExtLinks;         /// Real external links needed for formula parser.
     OoxRefSheetsVec     maRefSheets;        /// Sheet indexes for reference ids.
     bool                mbUseRefSheets;     /// True = use maRefSheets list (OOBIN only).
 };

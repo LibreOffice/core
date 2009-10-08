@@ -38,11 +38,15 @@
 namespace oox {
 namespace core {
 
-/** Expands to an OUString containing a relation type created from the passed
-    literal(!) ASCII(!) character array.
- */
+/** Expands to an OUString containing an officeDocument relation type created
+    from the passed literal(!) ASCII(!) character array. */
 #define CREATE_OFFICEDOC_RELATIONSTYPE( ascii ) \
     CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/" ascii )
+
+/** Expands to an OUString containing an MS Office specific relation type
+    created from the passed literal(!) ASCII(!) character array. */
+#define CREATE_MSOFFICE_RELATIONSTYPE( ascii ) \
+    CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/" ascii )
 
 // ============================================================================
 

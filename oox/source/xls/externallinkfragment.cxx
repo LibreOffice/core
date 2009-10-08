@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "oox/xls/externallinkfragment.hxx"
+#include <com/sun/star/sheet/XExternalSheetCache.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
@@ -36,12 +37,156 @@
 #include "oox/xls/unitconverter.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::sheet::XExternalSheetCache;
 using ::oox::core::RecordInfo;
 using ::oox::core::Relation;
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+OoxExternalSheetDataContext::OoxExternalSheetDataContext(
+        OoxWorkbookFragmentBase& rFragment, const Reference< XExternalSheetCache >& rxSheetCache ) :
+    OoxWorkbookContextBase( rFragment ),
+    mxSheetCache( rxSheetCache )
+{
+    OSL_ENSURE( mxSheetCache.is(), "OoxExternalSheetDataContext::OoxExternalSheetDataContext - missing sheet cache" );
+}
+
+// oox.core.ContextHandler2Helper interface -----------------------------------
+
+ContextWrapper OoxExternalSheetDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( sheetData ):
+            return  (nElement == XLS_TOKEN( row ));
+        case XLS_TOKEN( row ):
+            return  (nElement == XLS_TOKEN( cell ));
+        case XLS_TOKEN( cell ):
+            return  (nElement == XLS_TOKEN( v ));
+    }
+    return false;
+}
+
+void OoxExternalSheetDataContext::onStartElement( const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( cell ):
+            importCell( rAttribs );
+        break;
+    }
+}
+
+void OoxExternalSheetDataContext::onEndElement( const OUString& rChars )
+{
+    switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( v ):
+            switch( mnCurrType )
+            {
+                case XML_b:
+                case XML_n:
+                    setCellValue( Any( rChars.toDouble() ) );
+                break;
+                case XML_e:
+                    setCellValue( Any( BiffHelper::calcDoubleFromError( getUnitConverter().calcBiffErrorCode( rChars ) ) ) );
+                break;
+                case XML_str:
+                    setCellValue( Any( rChars ) );
+                break;
+            }
+            mnCurrType = XML_TOKEN_INVALID;
+        break;
+    }
+}
+
+ContextWrapper OoxExternalSheetDataContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+{
+    switch( getCurrentElement() )
+    {
+        case OOBIN_ID_EXTSHEETDATA:
+            return  (nRecId == OOBIN_ID_EXTROW);
+        case OOBIN_ID_EXTROW:
+            return  (nRecId == OOBIN_ID_EXTCELL_BLANK) ||
+                    (nRecId == OOBIN_ID_EXTCELL_BOOL) ||
+                    (nRecId == OOBIN_ID_EXTCELL_DOUBLE) ||
+                    (nRecId == OOBIN_ID_EXTCELL_ERROR) ||
+                    (nRecId == OOBIN_ID_EXTCELL_STRING);
+    }
+    return false;
+}
+
+void OoxExternalSheetDataContext::onStartRecord( RecordInputStream& rStrm )
+{
+    switch( getCurrentElement() )
+    {
+        case OOBIN_ID_EXTCELL_BLANK:    importExtCellBlank( rStrm );        break;
+        case OOBIN_ID_EXTCELL_BOOL:     importExtCellBool( rStrm );         break;
+        case OOBIN_ID_EXTCELL_DOUBLE:   importExtCellDouble( rStrm );       break;
+        case OOBIN_ID_EXTCELL_ERROR:    importExtCellError( rStrm );        break;
+        case OOBIN_ID_EXTCELL_STRING:   importExtCellString( rStrm );       break;
+        case OOBIN_ID_EXTROW:           maCurrPos.Row = rStrm.readInt32();  break;
+    }
+}
+
+// private --------------------------------------------------------------------
+
+void OoxExternalSheetDataContext::importCell( const AttributeList& rAttribs )
+{
+    if( getAddressConverter().convertToCellAddress( maCurrPos, rAttribs.getString( XML_r, OUString() ), 0, false ) )
+        mnCurrType = rAttribs.getToken( XML_t, XML_n );
+    else
+        mnCurrType = XML_TOKEN_INVALID;
+}
+
+void OoxExternalSheetDataContext::importExtCellBlank( RecordInputStream& rStrm )
+{
+    maCurrPos.Column = rStrm.readInt32();
+    setCellValue( Any( OUString() ) );
+}
+
+void OoxExternalSheetDataContext::importExtCellBool( RecordInputStream& rStrm )
+{
+    maCurrPos.Column = rStrm.readInt32();
+    double fValue = (rStrm.readuInt8() == 0) ? 0.0 : 1.0;
+    setCellValue( Any( fValue ) );
+}
+
+void OoxExternalSheetDataContext::importExtCellDouble( RecordInputStream& rStrm )
+{
+    maCurrPos.Column = rStrm.readInt32();
+    setCellValue( Any( rStrm.readDouble() ) );
+}
+
+void OoxExternalSheetDataContext::importExtCellError( RecordInputStream& rStrm )
+{
+    maCurrPos.Column = rStrm.readInt32();
+    setCellValue( Any( BiffHelper::calcDoubleFromError( rStrm.readuInt8() ) ) );
+}
+
+void OoxExternalSheetDataContext::importExtCellString( RecordInputStream& rStrm )
+{
+    maCurrPos.Column = rStrm.readInt32();
+    setCellValue( Any( rStrm.readString() ) );
+}
+
+void OoxExternalSheetDataContext::setCellValue( const Any& rValue )
+{
+    if( mxSheetCache.is() && getAddressConverter().checkCellAddress( maCurrPos, false ) ) try
+    {
+        mxSheetCache->setCellValue( maCurrPos.Column, maCurrPos.Row, rValue );
+    }
+    catch( Exception& )
+    {
+    }
+}
 
 // ============================================================================
 
@@ -181,11 +326,7 @@ void OoxExternalLinkFragment::onStartRecord( RecordInputStream& rStrm )
 
 ContextWrapper OoxExternalLinkFragment::createSheetDataContext( sal_Int32 nSheetId )
 {
-    sal_Int32 nSheet = mrExtLink.getSheetIndex( nSheetId );
-    ::rtl::Reference< OoxWorksheetContextBase > xContext( new OoxExternalSheetDataContext( *this, nSheet ) );
-    if( xContext->isValidSheet() )
-        return xContext.get();
-    return false;
+    return new OoxExternalSheetDataContext( *this, mrExtLink.getExternalSheetCache( nSheetId ) );
 }
 
 // oox.core.FragmentHandler2 interface ----------------------------------------
@@ -291,7 +432,7 @@ void BiffExternalLinkFragment::finalizeImport()
 
 void BiffExternalLinkFragment::importExternSheet()
 {
-    mxContext.reset();
+    mxSheetCache.clear();
     if( getBiff() == BIFF8 )
         getExternalLinks().importExternSheet8( mrStrm );
     else
@@ -300,7 +441,7 @@ void BiffExternalLinkFragment::importExternSheet()
 
 void BiffExternalLinkFragment::importExternalBook()
 {
-    mxContext.reset();
+    mxSheetCache.clear();
     mxExtLink = getExternalLinks().importExternalBook( mrStrm );
 }
 
@@ -312,10 +453,9 @@ void BiffExternalLinkFragment::importExternalName()
 
 void BiffExternalLinkFragment::importXct()
 {
-    mxContext.reset();
+    mxSheetCache.clear();
     if( mxExtLink.get() && (mxExtLink->getLinkType() == LINKTYPE_EXTERNAL) )
     {
-        sal_Int32 nSheet = -1;
         switch( getBiff() )
         {
             case BIFF2:
@@ -323,32 +463,76 @@ void BiffExternalLinkFragment::importXct()
             case BIFF3:
             case BIFF4:
             case BIFF5:
-                nSheet = mxExtLink->getSheetIndex();
+                mxSheetCache = mxExtLink->getExternalSheetCache( 0 );
             break;
             case BIFF8:
                 mrStrm.skip( 2 );
-                nSheet = mxExtLink->getSheetIndex( mrStrm.readInt16() );
+                mxSheetCache = mxExtLink->getExternalSheetCache( mrStrm.readInt16() );
             break;
             case BIFF_UNKNOWN: break;
         }
-
-        // create a sheet data context to import the CRN records and set the cached cell values
-        mxContext.reset( new BiffExternalSheetDataContext( *this, nSheet ) );
-        if( !mxContext->isValidSheet() )
-            mxContext.reset();
     }
 }
 
 void BiffExternalLinkFragment::importCrn()
 {
-    if( mxContext.get() )
-        mxContext->importRecord();
+    if( !mxSheetCache.is() ) return;
+
+    sal_uInt8 nCol2, nCol1;
+    sal_uInt16 nRow;
+    mrStrm >> nCol2 >> nCol1 >> nRow;
+    bool bLoop = true;
+    for( BinAddress aBinAddr( nCol1, nRow ); bLoop && !mrStrm.isEof() && (aBinAddr.mnCol <= nCol2); ++aBinAddr.mnCol )
+    {
+        switch( mrStrm.readuInt8() )
+        {
+            case BIFF_DATATYPE_EMPTY:
+                mrStrm.skip( 8 );
+                setCellValue( aBinAddr, Any( OUString() ) );
+            break;
+            case BIFF_DATATYPE_DOUBLE:
+                setCellValue( aBinAddr, Any( mrStrm.readDouble() ) );
+            break;
+            case BIFF_DATATYPE_STRING:
+            {
+                OUString aText = (getBiff() == BIFF8) ? mrStrm.readUniString() : mrStrm.readByteString( false, getTextEncoding() );
+                setCellValue( aBinAddr, Any( aText ) );
+            }
+            break;
+            case BIFF_DATATYPE_BOOL:
+            {
+                double fValue = (mrStrm.readuInt8() == 0) ? 0.0 : 1.0;
+                setCellValue( aBinAddr, Any( fValue ) );
+                mrStrm.skip( 7 );
+            }
+            break;
+            case BIFF_DATATYPE_ERROR:
+                setCellValue( aBinAddr, Any( BiffHelper::calcDoubleFromError( mrStrm.readuInt8() ) ) );
+                mrStrm.skip( 7 );
+            break;
+            default:
+                OSL_ENSURE( false, "BiffExternalLinkFragment::importCrn - unknown data type" );
+                bLoop = false;
+        }
+    }
 }
 
 void BiffExternalLinkFragment::importDefinedName()
 {
     if( mbImportDefNames )
         getDefinedNames().importDefinedName( mrStrm );
+}
+
+void BiffExternalLinkFragment::setCellValue( const BinAddress& rBinAddr, const Any& rValue )
+{
+    CellAddress aCellPos;
+    if( mxSheetCache.is() && getAddressConverter().convertToCellAddress( aCellPos, rBinAddr, 0, false ) ) try
+    {
+        mxSheetCache->setCellValue( aCellPos.Column, aCellPos.Row, rValue );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 // ============================================================================

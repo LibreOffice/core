@@ -30,12 +30,17 @@
 
 #include "oox/core/xmlfilterbase.hxx"
 #include <set>
+#include <stdio.h>
+#include <rtl/ustrbuf.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
+#include <sax/fshelper.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
@@ -46,16 +51,23 @@
 #include "oox/core/relationshandler.hxx"
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::StringPair;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::embed::XRelationshipAccess;
 using ::com::sun::star::embed::XStorage;
 using ::com::sun::star::embed::XTransactedObject;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XStream;
 using ::com::sun::star::container::XNameContainer;
 using ::com::sun::star::document::XDocumentSubStorageSupplier;
 using ::com::sun::star::xml::sax::XFastParser;
@@ -63,6 +75,8 @@ using ::com::sun::star::xml::sax::XFastTokenHandler;
 using ::com::sun::star::xml::sax::XFastDocumentHandler;
 using ::com::sun::star::xml::sax::InputSource;
 using ::com::sun::star::xml::sax::SAXException;
+using ::sax_fastparser::FastSerializerHelper;
+using ::sax_fastparser::FSHelperPtr;
 
 namespace oox {
 namespace core {
@@ -97,7 +111,9 @@ XmlFilterBaseImpl::XmlFilterBaseImpl() :
 
 XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxFactory ) :
     FilterBase( rxFactory ),
-    mxImpl( new XmlFilterBaseImpl )
+    mxImpl( new XmlFilterBaseImpl ),
+    mnRelId( 1 ),
+    mnMaxDocId( 0 )
 {
 }
 
@@ -274,14 +290,77 @@ ModelObjectContainer& XmlFilterBase::getModelObjectContainer() const
 }
 
 StorageRef XmlFilterBase::implCreateStorage(
-        Reference< XInputStream >& rxInStream, Reference< XOutputStream >& rxOutStream ) const
+        Reference< XInputStream >& rxInStream, Reference< XStream >& rxStream ) const
 {
     StorageRef xStorage;
     if( rxInStream.is() )
         xStorage.reset( new ZipStorage( getGlobalFactory(), rxInStream ) );
-    else if( rxOutStream.is() )
-        xStorage.reset( new ZipStorage( getGlobalFactory(), rxOutStream ) );
+    else if( rxStream.is() )
+        xStorage.reset( new ZipStorage( getGlobalFactory(), rxStream ) );
+
     return xStorage;
+}
+
+Reference< XOutputStream > XmlFilterBase::openOutputStream( const OUString& rStreamName, const OUString& rMediaType )
+{
+    Reference< XOutputStream > xOutputStream = FilterBase::openOutputStream( rStreamName );
+    Reference< XPropertySet > xPropSet( xOutputStream, UNO_QUERY_THROW );
+
+    if( xPropSet.is() )
+        xPropSet->setPropertyValue( CREATE_OUSTRING( "MediaType" ),
+                                    makeAny( rMediaType ) );
+
+    return xOutputStream;
+}
+
+FSHelperPtr XmlFilterBase::openOutputStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
+{
+    return FSHelperPtr( new FastSerializerHelper ( openOutputStream( rStreamName, rMediaType ) ) );
+}
+
+static OUString addRelation_impl( const Reference< XRelationshipAccess > xRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, const OUString& rTargetMode )
+{
+    OUString sId = OUStringBuffer().appendAscii( "rId" ).append( nId ).makeStringAndClear();
+
+    Sequence< StringPair > aEntry( rTargetMode.getLength() > 0 ? 3 : 2 );
+    aEntry[0].First = CREATE_OUSTRING( "Type" );
+    aEntry[0].Second = rType;
+    aEntry[1].First = CREATE_OUSTRING( "Target" );
+    aEntry[1].Second = rTarget;
+    if( rTargetMode.getLength() > 0 )
+    {
+        aEntry[2].First = CREATE_OUSTRING( "TargetMode" );
+        aEntry[2].Second = rTargetMode;
+    }
+    xRelations->insertRelationshipByID( sId, aEntry, true );
+
+    return sId;
+}
+
+OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTarget, const OUString& rTargetMode )
+{
+    Reference< XRelationshipAccess > xRelations( getStorage()->getXStorage(), UNO_QUERY );
+    if( xRelations.is() )
+        return addRelation_impl( xRelations, mnRelId ++, rType, rTarget, rTargetMode );
+
+    return OUString();
+}
+
+OUString XmlFilterBase::addRelation( const Reference< XOutputStream > xOutputStream, const OUString& rType, const OUString& rTarget, const OUString& rTargetMode )
+{
+    sal_Int32 nId = 0;
+
+    Reference< XPropertySet > xPropertySet( xOutputStream, UNO_QUERY );
+    if( xPropertySet.is() )
+        xPropertySet->getPropertyValue( CREATE_OUSTRING( "RelId" ) ) >>= nId;
+    else
+        nId = mnRelId ++;
+
+    Reference< XRelationshipAccess > xRelations( xOutputStream, UNO_QUERY );
+    if( xRelations.is() )
+        return addRelation_impl( xRelations, nId, rType, rTarget, rTargetMode );
+
+    return OUString();
 }
 
 // ============================================================================
