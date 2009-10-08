@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the insert graphic function - 4
 '*
@@ -50,11 +50,19 @@
 '\***********************************************************************
 
 testcase tInsertGraphic_41
+QaErrorLog "#i102477# - tInsertGraphic_41 crashes testtool. Therefore outcommented."
+goto endsub
 
-  Dim sLeft , sRight , sUp ,  sBottom   as String
-  Dim sScaleWidth    , sScaleHeight     as String
-  Dim sImageWidth    , sImageHeight     as String
-  Dim dDummy1        , dDummy2          as double
+  Dim sLeft as String
+  Dim sRight as String
+  Dim sUp as String
+  Dim sBottom as String
+  Dim sScaleWidth as String
+  Dim sScaleHeight as String
+  Dim sImageWidth as String
+  Dim sImageHeight as String
+  Dim dDummy1 as double
+  Dim dDummy2 as double
 
   sLeft    = "1"+ gSeperator + "00" + gMeasurementUnit
   sRight   = "1"+ gSeperator + "00" + gMeasurementUnit
@@ -188,10 +196,16 @@ endcase
 
 testcase tInsertGraphic_42
 
-  Dim sLeft , sRight , sUp ,  sBottom   as String
-  Dim sScaleWidth    , sScaleHeight     as String
-  Dim sImageWidth    , sImageHeight     as String
-  Dim dDummy1        , dDummy2          as double
+  Dim sLeft as String
+  Dim sRight as String
+  Dim sUp as String
+  Dim sBottom as String
+  Dim sScaleWidth as String
+  Dim sScaleHeight as String
+  Dim sImageWidth as String
+  Dim sImageHeight as String
+  Dim dDummy1 as double
+  Dim dDummy2 as double
 
   sLeft    = "1"+ gSeperator + "00" + gMeasurementUnit
   sRight   = "1"+ gSeperator + "00" + gMeasurementUnit
@@ -325,7 +339,10 @@ endcase
 
 testcase tInsertGraphic_43
 
-  Dim sLeft , sRight , sUp ,  sBottom   as String
+  Dim sLeft as String
+  Dim sRight as String
+  Dim sUp as String
+  Dim sBottom as String
 
   sLeft    = "1"+ gSeperator + "00" + gMeasurementUnit
   sRight   = "2"+ gSeperator + "00" + gMeasurementUnit
@@ -475,8 +492,10 @@ endcase
 
 testcase tInsertGraphic_45
 
-  Dim sScaleWidth  , sScaleHeight     as String
-  Dim sImageWidth  , sImageHeight     as String
+  Dim sScaleWidth as String
+  Dim sScaleHeight as String
+  Dim sImageWidth as String
+  Dim sImageHeight as String
 
   sScaleWidth  = "100%"
   sScaleHeight = "100%"
@@ -531,8 +550,10 @@ endcase
 
 testcase tInsertGraphic_46
 
-  Dim sScaleWidth  , sScaleHeight     as String
-  Dim sImageWidth  , sImageHeight     as String
+  Dim sScaleWidth as String
+  Dim sScaleHeight as String
+  Dim sImageWidth as String
+  Dim sImageHeight as String
 
   sImageWidth  = "4"+ gSeperator + "00" + gMeasurementUnit
   sImageHeight = "2"+ gSeperator + "80" + gMeasurementUnit
@@ -584,9 +605,12 @@ endcase
 
 testcase tInsertGraphic_47
 
-  Dim sScaleWidth     , sScaleHeight     as String
-  Dim sImageWidth     , sImageHeight     as String
-  Dim sNewImageWidth  , sNewImageHeight  as String
+  Dim sScaleWidth as String
+  Dim sScaleHeight as String
+  Dim sImageWidth as String
+  Dim sImageHeight as String
+  Dim sNewImageWidth as String
+  Dim sNewImageHeight as String
 
   sNewImageWidth  = "8"+ gSeperator + "00" + gMeasurementUnit
   sNewImageHeight = "5"+ gSeperator + "60" + gMeasurementUnit
@@ -715,8 +739,10 @@ function fCalculateTolerance( sNumber1 , sNumber2 )
 
 '/// change 2 parameters to number , then Compare them and return the result.
 
-   Dim dNumber1        , dNumber2         as Single
-   Dim iCommaLocation1 , iCommaLocation2  as Integer
+   Dim dNumber1 as Single
+   dim dNumber2 as Single
+   Dim iCommaLocation1 as integer
+   Dim iCommaLocation2 as Integer
 
   'the code below 4 lines is set "2,00cm" to "2.00"cm if needed
    iCommaLocation1 = InStr(sNumber1 , ",")

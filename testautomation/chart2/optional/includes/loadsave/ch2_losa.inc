@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Load file of one Spreadsheet format and save to another
 '*

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -48,12 +48,11 @@ sub main
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_autocorrection.inc"
 
-    GetOLEDefaultNames
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
     gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
-'qaErrorLog "#i76832# - tToolsAutocorrectCustomQuotes (x4) outcommented due to Bug."
+    'qaErrorLog "#i76832# - tToolsAutocorrectCustomQuotes (x4) outcommented due to Bug."
     Call tToolsAutocorrectCustomQuotes (TRUE)
     Call tToolsAutocorrectCustomQuotes (FALSE)
     Call tToolsAutocorrectOption

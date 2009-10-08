@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Doc Information Test
 '*
@@ -53,10 +53,12 @@ sub w_fields4
 
 end sub
 
+'-----------------------------------------------------------------
+
 testcase tDocInformation_1
 
-  Dim sTitle as String
-  Dim sTestFile as String
+  Dim sTitle     as String
+  Dim sTestFile  as String
   Dim sVarResult as String
   Dim sFixResult as String
 
@@ -107,8 +109,8 @@ endcase
 
 testcase tDocInformation_2
 
-  Dim sSubject as String
-  Dim sTestFile as String
+  Dim sSubject   as String
+  Dim sTestFile  as String
   Dim sVarResult as String
   Dim sFixResult as String
 
@@ -159,9 +161,10 @@ endcase
 
 testcase tDocInformation_3
 
-  Dim sKeywords               as String
-  Dim sTestFile               as String
-  Dim sVarResult , sFixResult as String
+  Dim sKeywords  as String
+  Dim sTestFile  as String
+  Dim sVarResult as String
+  Dim sFixResult as String
 
   sKeywords  = "Keywords Test"
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
@@ -211,9 +214,9 @@ endcase
 testcase tDocInformation_4
 
   Dim sDescription as String
-  Dim sTestFile as String
-  Dim sVarResult as String
-  Dim sFixResult as String
+  Dim sTestFile    as String
+  Dim sVarResult   as String
+  Dim sFixResult   as String
 
   sDescription = "Description Test"
   sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
@@ -300,7 +303,7 @@ goto endsub
 
   '/// File / Properties / Description , input some
   '/// + text in Description
-   Call fFileProperties("TabBenutzer")
+   Call fFileProperties("TabDokument")
      Info0.Settext sVarResult(0)
      Info1.Settext sVarResult(1)
      Info2.Settext sVarResult(2)
@@ -339,11 +342,11 @@ endcase
 
 testcase tDocInformation_6
 
-  Dim sTestFile as String
-  Dim sFirstName as String
-  Dim sLastName as String
-  Dim sFirstName1 as String
-  Dim sLastName1 as String
+  Dim sTestFile     as String
+  Dim sFirstName    as String
+  Dim sLastName     as String
+  Dim sFirstName1   as String
+  Dim sLastName1    as String
   Dim sVarResult(3) as String
   Dim sFixResult(3) as String
   Dim i as Integer
@@ -443,15 +446,15 @@ endcase
 
 testcase tDocInformation_7_1
 
-  Dim sTestFile as String
-  Dim sSaveasFile as String
-  Dim sFirstName as String
-  Dim sLastName  as String
-  Dim sFirstName1 as String
-  Dim sLastName1 as String
+  Dim sTestFile     as String
+  Dim sSaveasFile   as String
+  Dim sFirstName    as String
+  Dim sLastName     as String
+  Dim sFirstName1   as String
+  Dim sLastName1    as String
   Dim sVarResult(3) as String
   Dim sFixResult(3) as String
-  Dim i as Integer
+  Dim i             as Integer
 
   sFirstName1 = "Test1" : sLastName1 = "Test2"
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
@@ -569,16 +572,18 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tDocInformation_7_2
+    QaErrorLog "#i102792# - tDocInformation_7_2 outcommented due to issue."
+    goto endsub
 
-  Dim sTestFile as String
-  Dim sSaveasFile as String
-  Dim sFirstName as String
-  Dim sLastName as String
-  Dim sFirstName1 as String
-  Dim sLastName1 as String
+  Dim sTestFile     as String
+  Dim sSaveasFile   as String
+  Dim sFirstName    as String
+  Dim sLastName     as String
+  Dim sFirstName1   as String
+  Dim sLastName1    as String
   Dim sVarResult(3) as String
   Dim sFixResult(3) as String
-  Dim i as Integer
+  Dim i             as Integer
 
   sFirstName1 = "Test1" : sLastName1 = "Test2"
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
@@ -682,14 +687,14 @@ endcase
 
 testcase tDocInformation_8
 
-  Dim sTestFile as String
-  Dim sFirstName as String
-  Dim sLastName as String
-  Dim sFirstName1 as String
-  Dim sLastName1 as String
+  Dim sTestFile     as String
+  Dim sFirstName    as String
+  Dim sLastName     as String
+  Dim sFirstName1   as String
+  Dim sLastName1    as String
   Dim sVarResult(3) as String
   Dim sFixResult(3) as String
-  Dim i as Integer
+  Dim i             as Integer
 
   sFirstName1 = "Test1" : sLastName1 = "Test2"
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
@@ -800,14 +805,14 @@ endcase
 
 testcase tDocInformation_9
 
-  Dim sTestFile as String
+  Dim sTestFile   as String
   Dim sSaveasFile as String
-  Dim sFirstName as String
-  Dim sLastName as String
+  Dim sFirstName  as String
+  Dim sLastName   as String
   Dim sFirstName1 as String
-  Dim sLastName1 as String
-  Dim sVarResult as String
-  Dim sFixResult as String
+  Dim sLastName1  as String
+  Dim sVarResult  as String
+  Dim sFixResult  as String
 
   sFirstName1 = "Test1" : sLastName1 = "Test2"
   sVarResult  = "17"    : sFixResult = "4"
@@ -896,10 +901,10 @@ endcase
 
 testcase tDocInformation_10
 
-  Dim sTestFile as String
+  Dim sTestFile   as String
   Dim sSaveasFile as String
-  Dim sVarResult as String
-  Dim sFixResult as String
+  Dim sVarResult  as String
+  Dim sFixResult  as String
 
   sFixResult  = "00:29:05"
   sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\fields\fields_docinfos.sxw")
@@ -973,4 +978,3 @@ testcase tDocInformation_10
 endcase
 
 '-----------------------------------------------------------------
-

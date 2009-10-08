@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,14 @@ sub main
     use "graphics\optional\includes\impress\i_slidecopy.inc"
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-if gOOo = false then
-   call tiSlideCopyNewPresentation
-else
-   qaErrorLog "#i76226# - The test tiSlideCopyNewPresentation was outcommented since a button does not remain pressed in OpenOffice.org"
-endif
-     call tiSlideCopyDuplicate
-     call tiSlideCopyInSlideSorter
-     call tiSlideCopyPasteSpecial
+    if gOOo = false then
+        call tiSlideCopyNewPresentation
+    else
+        qaErrorLog "#i76226# - The test tiSlideCopyNewPresentation was outcommented since a button does not remain pressed in OpenOffice.org"
+    endif
+    call tiSlideCopyDuplicate
+    call tiSlideCopyInSlideSorter
+    call tiSlideCopyPasteSpecial
 
     Call hStatusOut
 end sub

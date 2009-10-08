@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -56,12 +56,9 @@ testcase tiToolsSpellcheckCorrect
 
     lFiles(0)=0
     Printlog "- Checking Dictionary-Files" ' borrowed from w_106.inc
-    '/// check if dictionary exists for this EUROPEAN language as file  ///'
-    '///+  share/dict/$iSprache-hyph.dat ///'
-    '///+ print all dictionaries from share/dict/*.dat ///'
     select case iSprache
-        case 01 : DieDatei = "01-44-hyph.dat"
-        case else : DieDatei =  "" & iSprache & "-hyph.dat"
+    case 01 : DieDatei = "01-44-hyph.dat"
+    case else : DieDatei =  "" & iSprache & "-hyph.dat"
     end select
     DieDatei = Convertpath(gNetzOfficePath + "share\dict\" + DieDatei)
     if gPlatGroup <> "unx" then
@@ -71,9 +68,9 @@ testcase tiToolsSpellcheckCorrect
             else
                 if gNetzInst then
                     printlog "Dictionary not found : " + DieDatei
-                 else
+                else
                     warnlog "Dictionary not found : " + DieDatei
-                 end if
+                end if
             end if
         else
             Printlog "    Dictionary has been installed : " + DieDatei
@@ -84,14 +81,10 @@ testcase tiToolsSpellcheckCorrect
         printlog " " + i + ": " + DateiExtract(lFiles(i))
     next i
 
-    PrintLog "'/// Spellcheck without text ///'"
-    '///+ Open new document ///'
     Call hNewDocument
-'    sleep 2
-    '///+ call 'Tools->Spellcheck->Check' ///'
+    '    sleep 2
     ToolsSpellcheck
     Kontext "Active"
-    '///+ There has to come up only one active: 'Spellcehck of entire document has been completed [OK]' ///'
     if Active.Exists(5) then
         try
             printlog "Message: Finished: Want to continue at the beginning? '" + active.gettext + "'"
@@ -106,35 +99,32 @@ testcase tiToolsSpellcheckCorrect
     sleep 2
 
     PrintLog "- Spellcheck with correct text"
-    '/// create textbox without a spelling error ///'
     select case iSprache
-        case 01   : hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-        case 33   : hTextrahmenErstellen ("Il nous faut donc un de temps pour examiner avec soin tous les dossiers.<Return>",10,10,70,20)
-        case 34   : hTextrahmenErstellen ("Este es un chico muy importante.",10,10,50,20)
-        case 36   : hTextrahmenErstellen ("akit a b�r�s�g vagy a szab�lys�rt�si hat�s�g a eltiltott",10,10,70,20)
-        case 39   : hTextrahmenErstellen ("La ringraziamo per l'interesse mostrato a collaborare con la firma.<Return>",10,10,70,20)
-        case 46   : hTextrahmenErstellen ("Det varierar vad som behandlas och ur vilket perspektiv.<Return>",10,10,50,20)
-        case 49   : hTextrahmenErstellen ("Dies ist ein Text ohne Fehler.<Return>",10,10,50,20)
-        case 55   : hTextrahmenErstellen ("Esta poderia ser a resposta para suas preces?<Return>",10,10,50,20)
-        case else :
-            if bAsianLan then
-                printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-) will use english instaed"
-                ' there was smth wrong, try to find out :
-                kontext
-                if active.exists then
-                    printlog "ERROR: active: '"+active.gettext+"'"
-                    active.ok
-                end if
-                hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
-            else
-                Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-                hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
+    case 01   : hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
+    case 33   : hTextrahmenErstellen ("Il nous faut donc un de temps pour examiner avec soin tous les dossiers.<Return>",10,10,70,20)
+    case 34   : hTextrahmenErstellen ("Este es un chico muy importante.",10,10,50,20)
+    case 36   : hTextrahmenErstellen ("akit a b�r�s�g vagy a szab�lys�rt�si hat�s�g a eltiltott",10,10,70,20)
+    case 39   : hTextrahmenErstellen ("La ringraziamo per l'interesse mostrato a collaborare con la firma.<Return>",10,10,70,20)
+    case 46   : hTextrahmenErstellen ("Det varierar vad som behandlas och ur vilket perspektiv.<Return>",10,10,50,20)
+    case 49   : hTextrahmenErstellen ("Dies ist ein Text ohne Fehler.<Return>",10,10,50,20)
+    case 55   : hTextrahmenErstellen ("Esta poderia ser a resposta para suas preces?<Return>",10,10,50,20)
+    case else :
+        if bAsianLan then
+            printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-) will use english instaed"
+            ' there was smth wrong, try to find out :
+            kontext
+            if active.exists then
+                printlog "ERROR: active: '"+active.gettext+"'"
+                active.ok
             end if
+            hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
+        else
+            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
+            hTextrahmenErstellen ("This is a text without any error.<Return>",10,10,50,20)
+        end if
     end select
-    '///+ call 'Tools->Spellcheck->Check' ///'
     ToolsSpellcheck
     WaitSlot (2000)
-    '///+ There has to come up only one active: 'Spellcheck of entire document has been completed [OK]' ///'
     Kontext "Active"
     if active.exists(5) then
         printlog "Message: spellchecking has finished?: '" + active.gettext + "'"
@@ -150,7 +140,6 @@ testcase tiToolsSpellcheckCorrect
         end if
     end if
     WaitSlot (2000)
-    '/// close document ///'
     Call hCloseDocument
 endcase 'tiToolsSpellcheckCorrect
 
@@ -170,24 +159,24 @@ testcase tiToolsSpellcheckError
     Call hNewDocument
     printlog "Selecting language case: " & iSprache
     select case iSprache
-        case 01 : FehlerText$ = "Thatt is a failure test."                      : Fehler$ = "Thatt" : Sprachenname$ = "English (US)"
-        case 34 : FehlerText$ = "Ezte es un chico muy importante."              : Fehler$ = "Ezte"  : Sprachenname$ = "Niederlaendisch"
-        case 33 : FehlerText$ = "Ler nous faut donc un de temps pour examiner." : Fehler$ = "Ler"   : Sprachenname$ = "Franzoesisch"
-        case 36 : FehlerText$ = "Boszniai americkai kontingens háromnegyedesek – mintegy négyezer katona – magyarországi telepítése egy éven belül megtörténhet" : Fehler$ = "tellepítésel"   : Sprachenname$ = "Ungarisch"
-        case 39 : FehlerText$ = "Ringrarziamo per l'interessa mostrato a collaborare con la firma." : Fehler$ = "Ringrarziamo" : Sprachenname$ = "Italienisch"
-        case 46 : FehlerText$ = "Detd varierar vad som behandlas och ur vilket perspektiv."         : Fehler$ = "Detd"         : Sprachenname$ = "Schwedisch"
-        case 49 : FehlerText$ = "Diees ist ein Fehler."                         : Fehler$ = "Diees" : Sprachenname$ = "Deutsch"
-        case 55 : FehlerText$ = "Eesta poderia ser a resposta para suas preces?": Fehler$ = "Eesta" : Sprachenname$ = "Portugiesisch"
-        case else :
-            if bAsianLan then
-                printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-) using english"
-                FehlerText$ = "Thatt is a failure test."
-                Fehler$ = "Thatt"
-                Sprachenname$ = "English (US)"
-                call hSetSpellHypLanguage
-            else
-                Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
-            end if
+    case 01 : FehlerText$ = "Thatt is a failure test."                      : Fehler$ = "Thatt" : Sprachenname$ = "English (US)"
+    case 34 : FehlerText$ = "Ezte es un chico muy importante."              : Fehler$ = "Ezte"  : Sprachenname$ = "Niederlaendisch"
+    case 33 : FehlerText$ = "Ler nous faut donc un de temps pour examiner." : Fehler$ = "Ler"   : Sprachenname$ = "Franzoesisch"
+    case 36 : FehlerText$ = "Boszniai americkai kontingens háromnegyedesek – mintegy négyezer katona – magyarországi telepítése egy éven belül megtörténhet" : Fehler$ = "tellepítésel"   : Sprachenname$ = "Ungarisch"
+    case 39 : FehlerText$ = "Ringrarziamo per l'interessa mostrato a collaborare con la firma." : Fehler$ = "Ringrarziamo" : Sprachenname$ = "Italienisch"
+    case 46 : FehlerText$ = "Detd varierar vad som behandlas och ur vilket perspektiv."         : Fehler$ = "Detd"         : Sprachenname$ = "Schwedisch"
+    case 49 : FehlerText$ = "Diees ist ein Fehler."                         : Fehler$ = "Diees" : Sprachenname$ = "Deutsch"
+    case 55 : FehlerText$ = "Eesta poderia ser a resposta para suas preces?": Fehler$ = "Eesta" : Sprachenname$ = "Portugiesisch"
+    case else :
+        if bAsianLan then
+            printlog "For the language  " + iSprache +" nothing is prepared yet, but is AsianLan, so OK :-) using english"
+            FehlerText$ = "Thatt is a failure test."
+            Fehler$ = "Thatt"
+            Sprachenname$ = "English (US)"
+            call hSetSpellHypLanguage
+        else
+            Warnlog "For the language  " + iSprache +" nothing is prepared yet: insert text here"
+        end if
     end select
     printlog "Error Text taken for testing is: " & FehlerText$
     sleep 2
@@ -206,7 +195,7 @@ testcase tiToolsSpellcheckError
     ExtrasOptionenDlg.OK
     printlog "Create 1 textbox with 1 spelling error (test replace always)"
     hTextrahmenErstellen (FehlerText$,30,30,90,40)
-    
+
     hTypeKeys "<HOME>"
     printlog "Call 'Tools->Spellcheck->Check'"
     ToolsSpellcheck
@@ -250,18 +239,18 @@ testcase tiToolsSpellcheckError
             Spellcheck.Close
             Kontext "Active"
             if active.exists(5) then
-               Printlog "Spellcheck dialog closed'" + active.gettext + "'"
-               Active.OK
+                Printlog "Spellcheck dialog closed'" + active.gettext + "'"
+                Active.OK
             else
-               Printlog "Spellcheck dialog closed'"
+                Printlog "Spellcheck dialog closed'"
             end if
         end if
     else
         Warnlog "  Error not recognized by the Spellchecker"
         if active.exists(5) then
-           Kontext "Active"
-           printlog "Message: spellchecking has finished?: '" + active.gettext + "'"
-           Active.OK
+            Kontext "Active"
+            printlog "Message: spellchecking has finished?: '" + active.gettext + "'"
+            Active.OK
         end if
     end if
 
@@ -274,7 +263,7 @@ testcase tiToolsSpellcheckError
     Printlog "Check function Ignore"
     hTextrahmenErstellen (FehlerText$,30,30,80,40)
     printlog "All 'Tools->Spellcheck->Check'."
-    
+
     'printlog "Setting Text to english"
     'sleep 1
     'EditSelectAll
@@ -285,7 +274,7 @@ testcase tiToolsSpellcheckError
     'Kontext "TabFont"
     'Language.Select 41
     'TabFont.OK
-    
+
     ToolsSpellcheck
     Kontext "Spellcheck"
     printlog "press button 'Ignore'"
@@ -302,10 +291,10 @@ testcase tiToolsSpellcheckError
         Spellcheck.Close
         Kontext "Active"
         if active.exists(5) then
-           Printlog " Spellcheck dialog closed'" + active.gettext + "'"
-           Active.OK
+            Printlog " Spellcheck dialog closed'" + active.gettext + "'"
+            Active.OK
         else
-           Printlog " Spellcheck dialog closed'"
+            Printlog " Spellcheck dialog closed'"
         end if
     end if
 
@@ -317,10 +306,10 @@ testcase tiToolsSpellcheckError
         Spellcheck.Close
         Kontext "Active"
         if active.exists(5) then
-           Printlog " " + active.gettext + "'"
-           Active.OK
+            Printlog " " + active.gettext + "'"
+            Active.OK
         else
-           Printlog " Spellcheck dialog closed'"
+            Printlog " Spellcheck dialog closed'"
         end if
     else
         Warnlog "  Spellcheck ended even we only ignored the error"
@@ -333,7 +322,7 @@ testcase tiToolsSpellcheckError
 
     printlog "create same textbox again (test ALWAYS IGNORE function)."
     hTextrahmenErstellen (FehlerText$,30,30,60,40)
-    
+
     'printlog "Setting Text to english"
     'sleep 1
     'EditSelectAll
@@ -344,7 +333,7 @@ testcase tiToolsSpellcheckError
     'Kontext "TabFont"
     'Language.Select 41
     'TabFont.OK
-    
+
     printlog "Call 'Tools->Spellcheck->Check'."
     ToolsSpellcheck
     Kontext "Spellcheck"
@@ -362,10 +351,10 @@ testcase tiToolsSpellcheckError
         Spellcheck.Close
         Kontext "Active"
         if active.exists(5) then
-           Printlog " Spellcheck dialog closed'" + active.gettext + "'"
-           Active.OK
+            Printlog " Spellcheck dialog closed'" + active.gettext + "'"
+            Active.OK
         else
-           Printlog " Spellcheck dialog closed'"
+            Printlog " Spellcheck dialog closed'"
         end if
     end if
 
@@ -401,8 +390,8 @@ testcase tiToolsSpellcheckCheck
     Dim bFound as boolean
 
     Select Case Ucase(gApplication)
-        case "DRAW"         : sExt = ".odg"
-        case "IMPRESS"      : sExt = ".odp"
+    case "DRAW"         : sExt = ".odg"
+    case "IMPRESS"      : sExt = ".odp"
     end select
 
     printlog "Load prepared document containing 4 errors : graphics\\required\\input\\recht_" & iSprache & sExt
@@ -420,14 +409,14 @@ testcase tiToolsSpellcheckCheck
         end if
     end if
     select case iSprache  ' sWord(1)=red     : sWord(2)=turquoise
-        case 01 : sWord(1) = "documente"     : sWord(2) = "expriss"
-        case 33 : sWord(1) = "intercu"       : sWord(2) = "Lees"
-        case 34 : sWord(1) = "afekto"        : sWord(2) = "fratternal"
-        case 36 : sWord(1) = "szeerint"       : sWord(2) = "tervvezi"
-        case 39 : sWord(1) = "Millano"       : sWord(2) = "tarrget"
-        case 46 : sWord(1) = "desa"          : sWord(2) = "occh"
-        case 49 : sWord(1) = "Texxt"         : sWord(2) = "reichtt"
-        case 55 : sWord(1) = "esktava"         : sWord(2) = "noitee"
+    case 01 : sWord(1) = "documente"     : sWord(2) = "expriss"
+    case 33 : sWord(1) = "intercu"       : sWord(2) = "Lees"
+    case 34 : sWord(1) = "afekto"        : sWord(2) = "fratternal"
+    case 36 : sWord(1) = "szeerint"       : sWord(2) = "tervvezi"
+    case 39 : sWord(1) = "Millano"       : sWord(2) = "tarrget"
+    case 46 : sWord(1) = "desa"          : sWord(2) = "occh"
+    case 49 : sWord(1) = "Texxt"         : sWord(2) = "reichtt"
+    case 55 : sWord(1) = "esktava"         : sWord(2) = "noitee"
     case else :
         if bAsianLan then
             sWord(1) = "documente"     : sWord(2) = "expriss"
@@ -459,16 +448,16 @@ testcase tiToolsSpellcheckCheck
     for i = 1 to iBooks
         Buch.select(i)
         printlog "Items in Booklist: " & WordList.getItemCount
-            for j = 1 to 2
-                Wort.setText sWord(j)
-                sleep 1
-                if ((not neu.isEnabled) and Loeschen.isEnabled) then
-                    printlog "If it contains the word, press button 'delete'."
-                    Loeschen.click
-                    bWordFound(j) = true
-                    printlog "Added word WAS in dictionary: '" + Buch.getSelText + "' - '" + sWord(j) + "'"
-                end if
-            next j
+        for j = 1 to 2
+            Wort.setText sWord(j)
+            sleep 1
+            if ((not neu.isEnabled) and Loeschen.isEnabled) then
+                printlog "If it contains the word, press button 'delete'."
+                Loeschen.click
+                bWordFound(j) = true
+                printlog "Added word WAS in dictionary: '" + Buch.getSelText + "' - '" + sWord(j) + "'"
+            end if
+        next j
     next i
     if (bWordFound(1) OR bWordFound(2))then
         qaErrorLog "Word was found in dictionary - check why it was there. '" + sWord(1) + "': " + bWordFound(1) + "  '" + sWord(2) + "': " + bWordFound(2)
@@ -514,10 +503,10 @@ testcase tiToolsSpellcheckCheck
     Spellcheck.Close
     Kontext "Active"
     if active.exists(5) then
-       Warnlog " Should not be any message here: " + active.gettext + "'"
-       Active.OK
+        Warnlog " Should not be any message here: " + active.gettext + "'"
+        Active.OK
     else
-       printlog "Spellcheck ended, dialog closed"
+        printlog "Spellcheck ended, dialog closed"
     end if
     printlog "Select all."
     hTypeKeys "<MOD1 A>"
@@ -598,7 +587,7 @@ testcase tiToolsSpellcheckCheck
         warnlog "Ignore didn't work? Spellcheck didn't go on"
     end if
     if (sWord(iWord(1)) <> sWordTwo) then
-       Printlog "The errornous word '" + sWord(iWord(1)) + "' would be replaced with: '" + sWordTwo + "'"
+        Printlog "The errornous word '" + sWord(iWord(1)) + "' would be replaced with: '" + sWordTwo + "'"
     end if
     printlog "********* word found: '" + sWordTwo + "'"
     printlog "##### suggestions: "+Suggestions.GetItemCount+"; Language: "+DictionaryLanguage.getSelText ' +" ; dictionary: "+woerterbuch.getSelText
@@ -671,14 +660,14 @@ testcase tiToolsSpellcheckCheck
         warnlog "Add didn't work? Spellcheck didn't go on."
     end if
     if (sWord(iWord(2)) <> sWordTwo) then
-       Printlog "The erroneous word '" + sWord(iWord(2)) + "' would be replaced with: '" + sWordTwo + "'"
+        Printlog "The erroneous word '" + sWord(iWord(2)) + "' would be replaced with: '" + sWordTwo + "'"
     else
-       warnlog "ERROR: SAME WORD in the dictionary as in the text??? Must be wrong."
+        warnlog "ERROR: SAME WORD in the dictionary as in the text??? Must be wrong."
     end if
     printlog "********* word found: '" + sWordTwo + "'"
     printlog "##### suggestions: "+Suggestions.GetItemCount+"; Language: "+DictionaryLanguage.getSelText  ' +" ; dictionary: "+DictionaryLanguage.getSelText   'Wort.GetItemCount  'Woerterbuch.GetSelText
     if (Suggestions.GetItemCount > 0) then  'Wort.GetItemCount > 0) then
-    printlog "----- "+i+": "+Suggestions.GetItemText (1)  'Wort.GetItemText (1)
+        printlog "----- "+i+": "+Suggestions.GetItemText (1)  'Wort.GetItemText (1)
     end if
     Sleep 1
     printlog "Click button 'Always ignore' on dialog."
@@ -771,7 +760,7 @@ testcase tiToolsSpellcheckCheck
     Sleep 1
     printlog "click button 'Always Replace'."
     if (iSuggestions > 0) then
-       ChangeAll.click
+        ChangeAll.click
     else
         qaErrorLog "Please change the text in the file, so the spellchecker can make a suggestion for the word: '" + sWordTwo + "'"
         IgnoreOnce.Click
@@ -884,15 +873,11 @@ testcase tToolsSpellcheckAutoSpellcheck
     dim iError as long
     dim sError as string
 
-    '/// open new document ///'
     call hNewDocument
 
-    '/// insert text 'Ein Tipp: Schiffahrt schreibt man nun mit 3f' ///'
     call hTextrahmenErstellen ("Ein Tipp: Schiffahrt schreibt man nun mit 3f Tunfisch Amboss a", 10, 10, 90, 50)
 
-    '/// select the whole text ///'
     EditSelectAll
-    '/// on dialog 'format-character' set language to english ///'
     setCharacterLanguage(glLocale(4))
     sleep 10
     printlog "## check ENGLISH auto spellchecking"
@@ -916,7 +901,7 @@ testcase tToolsSpellcheckAutoSpellcheck
     end if
 
     sleep 1
-'    call hTypeKeys "<F2>"
+    '    call hTypeKeys "<F2>"
     call hTypeKeys "<mod1 end> <Shift mod1 home>"
     setCharacterLanguage(glLocale(6))
     sleep 10
@@ -939,7 +924,6 @@ testcase tToolsSpellcheckAutoSpellcheck
     end if
     printlog "-----------------------------------"
 
-    '/// close application ///'
     hCloseDocument()
 endcase 'tToolsSpellcheckAutoSpellcheck
 

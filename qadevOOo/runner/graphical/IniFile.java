@@ -39,7 +39,7 @@ import java.util.Enumeration;
    Helper class to give a simple API to read/write windows like ini files
  */
 /* public */ // is only need, if we need this class outside package convwatch
-class IniFile implements Enumeration
+public class IniFile implements Enumeration
 {
     /**
      * internal representation of the ini file content.
@@ -659,4 +659,21 @@ public void removeSection(String _sSectionToRemove)
         }
         return null;
     }
+
+    /**
+     * Helper to count the occurence of Sections
+     * @return returns the count of '^['.*']$' Elements
+     */
+    public int getElementCount()
+    {
+        int nCount = 0;
+        int nPosition = 0;
+        while ((nPosition = findNextSection(nPosition)) != -1)
+        {
+            nCount ++;
+            nPosition ++;
+        }
+        return nCount;
+    }
 }
+

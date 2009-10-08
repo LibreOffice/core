@@ -42,7 +42,6 @@ import java.util.StringTokenizer;
 import share.DescEntry;
 import share.DescGetter;
 
-
 /**
  * This is the Office-API specific DescGetter<br>
  * <br>
@@ -68,10 +67,10 @@ import share.DescGetter;
  * -sce sw.SwXBodyText,sw.SwXBookmark<br>
  * runs the module test of <B>Sw.SwXBodyText</B> and <B>sw.SwXBookmark</B><br>
  */
+public class APIDescGetter extends DescGetter
+{
 
-public class APIDescGetter extends DescGetter {
     private static String fullJob = null;
-
 
     /*
      * gets the needed information about a StarOffice component
@@ -80,102 +79,136 @@ public class APIDescGetter extends DescGetter {
      * @param debug if true some debug information is displayed on standard out
      */
     public DescEntry[] getDescriptionFor(String job, String descPath,
-                                         boolean debug) {
+            boolean debug)
+    {
 
-        if (job.startsWith("-o")) {
+        if (job.startsWith("-o"))
+        {
             job = job.substring(3, job.length()).trim();
 
-            if (job.indexOf(".") < 0) {
+            if (job.indexOf(".") < 0)
+            {
                 return null;
             }
 
             // special in case several Interfaces are given comma separated
-            if (job.indexOf(",") < 0) {
+            if (job.indexOf(",") < 0)
+            {
                 DescEntry entry = getDescriptionForSingleJob(job, descPath,
-                                                             debug);
+                        debug);
 
-                if (entry != null) {
-                    return new DescEntry[] { entry };
-                } else {
+                if (entry != null)
+                {
+                    return new DescEntry[]
+                            {
+                                entry
+                            };
+                }
+                else
+                {
                     return null;
                 }
-            } else {
+            }
+            else
+            {
                 ArrayList subs = getSubInterfaces(job);
                 String partjob = job.substring(0, job.indexOf(",")).trim();
                 DescEntry entry = getDescriptionForSingleJob(partjob, descPath,
-                                                             debug);
+                        debug);
 
-                if (entry != null) {
-                    for (int i = 0; i < entry.SubEntryCount; i++) {
+                if (entry != null)
+                {
+                    for (int i = 0; i < entry.SubEntryCount; i++)
+                    {
                         String subEntry = entry.SubEntries[i].longName;
                         int cpLength = entry.longName.length();
                         subEntry = subEntry.substring(cpLength + 2,
-                                                      subEntry.length());
+                                subEntry.length());
 
-                        if (subs.contains(subEntry)) {
+                        if (subs.contains(subEntry))
+                        {
                             entry.SubEntries[i].isToTest = true;
                         }
                     }
 
-                    return new DescEntry[] { entry };
-                } else {
+                    return new DescEntry[]
+                            {
+                                entry
+                            };
+                }
+                else
+                {
                     return null;
                 }
             }
         }
 
-        if (job.startsWith("-p")) {
+        if (job.startsWith("-p"))
+        {
             job = job.substring(3, job.length()).trim();
 
             String[] scenario = createScenario(descPath, job, debug);
-            if (scenario == null) {
+            if (scenario == null)
+            {
                 return null;
             }
             DescEntry[] entries = new DescEntry[scenario.length];
-            for (int i=0;i<scenario.length;i++) {
+            for (int i = 0; i < scenario.length; i++)
+            {
                 entries[i] = getDescriptionForSingleJob(
-                                    scenario[i].substring(3).trim(), descPath, debug);
+                        scenario[i].substring(3).trim(), descPath, debug);
             }
-            if (job.equals("listall")) {
+            if (job.equals("listall"))
+            {
                 util.dbg.printArray(scenario);
                 System.exit(0);
             }
             return entries;
         }
 
-        if (job.startsWith("-sce")) {
+        if (job.startsWith("-sce"))
+        {
             job = job.substring(5, job.length()).trim();
 
             File sceFile = new File(job);
             if (sceFile.exists())
+            {
                 return getScenario(job, descPath, debug);
-            else {
+            }
+            else
+            {
                 //look the scenarion like this? :
                 // sw.SwXBodyText,sw.SwXTextCursor
                 ArrayList subs = getSubObjects(job);
                 DescEntry[] entries = new DescEntry[subs.size()];
 
-                for (int i=0; i<subs.size(); i++){
+                for (int i = 0; i < subs.size(); i++)
+                {
                     entries[i] = getDescriptionForSingleJob(
-                                          (String)subs.get(i), descPath, debug);
+                            (String) subs.get(i), descPath, debug);
                 }
                 return entries;
             }
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
 
     protected DescEntry getDescriptionForSingleJob(String job, String descPath,
-                                                   boolean debug) {
+            boolean debug)
+    {
         boolean isSingleInterface = job.indexOf("::") > 0;
         fullJob = job;
 
-        if (isSingleInterface) {
+        if (isSingleInterface)
+        {
             job = job.substring(0, job.indexOf("::"));
         }
 
-        if (job.startsWith("bugs")) {
+        if (job.startsWith("bugs"))
+        {
             DescEntry Entry = new DescEntry();
             Entry.entryName = job;
             Entry.longName = job;
@@ -191,14 +224,19 @@ public class APIDescGetter extends DescGetter {
 
         DescEntry entry = null;
 
-        if (descPath != null) {
-            if (debug) {
+        if (descPath != null)
+        {
+            if (debug)
+            {
                 System.out.println("## reading from File " + descPath);
             }
 
             entry = getFromDirectory(descPath, job, debug);
-        } else {
-            if (debug) {
+        }
+        else
+        {
+            if (debug)
+            {
                 System.out.println("## reading from jar");
             }
 
@@ -207,139 +245,161 @@ public class APIDescGetter extends DescGetter {
 
         boolean foundInterface = false;
 
-        if (isSingleInterface && (entry != null)) {
-            for (int i = 0; i < entry.SubEntryCount; i++) {
-                if (!(entry.SubEntries[i].longName).equals(fullJob)) {
+        if (isSingleInterface && (entry != null))
+        {
+            for (int i = 0; i < entry.SubEntryCount; i++)
+            {
+                if (!(entry.SubEntries[i].longName).equals(fullJob))
+                {
                     entry.SubEntries[i].isToTest = false;
-                } else {
+                }
+                else
+                {
                     foundInterface = true;
                     entry.SubEntries[i].isToTest = true;
                 }
             }
         }
 
-        if (isSingleInterface && !foundInterface || entry == null) {
+        if (isSingleInterface && !foundInterface || entry == null)
+        {
             return setErrorDescription(entry,
-                "couldn't find a description for test '" + fullJob+ "'");
+                    "couldn't find a description for test '" + fullJob + "'");
         }
 
         return entry;
     }
 
     protected static DescEntry[] getSubEntries(BufferedReader cvsFile,
-                                               DescEntry parent, boolean debug) {
+            DescEntry parent, boolean debug)
+    {
         String line = "";
         String old_ifc_name = "";
         ArrayList ifc_names = new ArrayList();
         ArrayList meth_names = new ArrayList();
         DescEntry ifcDesc = null;
-        DescEntry methDesc = null;
-        String entryType = "service";
 
-        while (line != null) {
-            try {
+        while (line != null)
+        {
+            try
+            {
                 line = cvsFile.readLine();
-
-                if ((line != null) && (line.length() > 0)) {
-                    String ifc_name = line.substring(line.indexOf(";") + 2,
-                                                     line.lastIndexOf(";") - 1);
-                    String meth_name = line.substring(line.lastIndexOf(";") + 2,
-                                                      line.length() - 1);
-
-                    methDesc = new DescEntry();
-
-                    if (meth_name.indexOf("#optional") > 0) {
-                        methDesc.isOptional = true;
-                        meth_name = meth_name.substring(0,
-                                                        meth_name.indexOf("#"));
-                    }
-
-                    if (meth_name.endsWith("()")) {
-                        methDesc.EntryType = "method";
-                        entryType = "interface";
-                    } else {
-                        methDesc.EntryType = "property";
-                        entryType = "service";
-                    }
-
-                    methDesc.entryName = meth_name;
-                    methDesc.isToTest = true;
-
-                    String withoutHash = ifc_name;
-
-                    if (ifc_name.indexOf("#optional") > 0) {
-                        withoutHash = ifc_name.substring(0,
-                                                         ifc_name.indexOf("#"));
-                    }
-
-                    methDesc.longName = parent.entryName + "::" +
-                                        withoutHash + "::" + meth_name;
-
-                    if (!ifc_name.equals(old_ifc_name)) {
-                        if (ifcDesc != null) {
-                            ifcDesc.SubEntries = getDescArray(
-                                                         meth_names.toArray());
-                            ifcDesc.SubEntryCount = meth_names.size();
-
-                            //mark service/interface as optional if all methods/properties are optional
-                            boolean allOptional = true;
-
-                            for (int k = 0; k < ifcDesc.SubEntryCount; k++) {
-                                if (!ifcDesc.SubEntries[k].isOptional) {
-                                    allOptional = false;
-                                }
-                            }
-
-                            if (!ifcDesc.isOptional && allOptional) {
-                                ifcDesc.isOptional = allOptional;
-                            }
-
-                            meth_names.clear();
-                            ifc_names.add(ifcDesc);
-                        }
-
-                        ifcDesc = new DescEntry();
-                        ifcDesc.isToTest = true;
-                        old_ifc_name = ifc_name;
-
-                        if (ifc_name.indexOf("#optional") > 0) {
-                            ifcDesc.isOptional = true;
-                            ifc_name = ifc_name.substring(0,
-                                                          ifc_name.indexOf("#"));
-                        }
-
-                        StringTokenizer st = new StringTokenizer(ifc_name, ":");
-                        String className = "";
-
-                        int count = 3;
-
-                        if (ifc_name.startsWith("drafts")) {
-                            count = 4;
-                        }
-
-                        for (int i = 0; st.hasMoreTokens(); i++) {
-                            String token = st.nextToken();
-
-                            // skipping (drafts.)com.sun.star
-                            if (i >= count) {
-                                if (!st.hasMoreTokens()) {
-                                    // inserting '_' before the last token
-                                    token = "_" + token;
-                                }
-
-                                className += ("." + token);
-                            }
-                        }
-
-                        ifcDesc.EntryType = entryType;
-                        ifcDesc.entryName = "ifc" + className;
-                        ifcDesc.longName = parent.entryName + "::" +
-                                           ifc_name;
-                    }
-
-                    meth_names.add(methDesc);
+                if (line == null)
+                {
+                    continue;
                 }
-            } catch (java.io.IOException ioe) {
+                if (line.startsWith("#"))
+                {
+                    continue;
+                }
+                if (line.length() <= 0)
+                {
+                    continue;
+                }
+// TODO Probleme here
+                // int nFirstSemicolon = line.indexOf(";");
+                // int nLastSemicolon = line.lastIndexOf(";");
+
+                String unknown;
+                String ifc_name = ""; //  = line.substring(line.indexOf(";") + 2, line.lastIndexOf(";") - 1);
+                String meth_name = ""; //  = line.substring(line.lastIndexOf(";") + 2, line.length() - 1);
+                StringTokenizer aToken = new StringTokenizer(line, ";");
+                if (aToken.countTokens() < 3)
+                {
+                    System.out.println("Wrong format: Line '" + line + "' is not supported.");
+                    continue;
+                }
+                if (aToken.hasMoreTokens())
+                {
+                    unknown = StringHelper.removeQuoteIfExists(aToken.nextToken());
+                }
+                if (aToken.hasMoreTokens())
+                {
+                    ifc_name = StringHelper.removeQuoteIfExists(aToken.nextToken());
+                }
+                if (aToken.hasMoreTokens())
+                {
+                    meth_name = StringHelper.removeQuoteIfExists(aToken.nextToken());
+                }
+
+                // String ifc_name = line.substring(line.indexOf(";") + 2, line.lastIndexOf(";") - 1);
+                // String meth_name = line.substring(line.lastIndexOf(";") + 2, line.length() - 1);
+
+                DescEntry methDesc = createDescEntry(meth_name, ifc_name, parent);
+                meth_names.add(methDesc);
+
+                if (!ifc_name.equals(old_ifc_name))
+                {
+                    if (ifcDesc != null)
+                    {
+                        ifcDesc.SubEntries = getDescArray(meth_names.toArray());
+                        ifcDesc.SubEntryCount = meth_names.size();
+
+                        //mark service/interface as optional if all methods/properties are optional
+                        boolean allOptional = true;
+
+                        for (int k = 0; k < ifcDesc.SubEntryCount; k++)
+                        {
+                            if (!ifcDesc.SubEntries[k].isOptional)
+                            {
+                                allOptional = false;
+                            }
+                        }
+
+                        if (!ifcDesc.isOptional && allOptional)
+                        {
+                            ifcDesc.isOptional = allOptional;
+                        }
+
+                        meth_names.clear();
+                        ifc_names.add(ifcDesc);
+                    }
+
+                    ifcDesc = new DescEntry();
+                    ifcDesc.isToTest = true;
+                    old_ifc_name = ifc_name;
+
+                    if (ifc_name.indexOf("#optional") > 0)
+                    {
+                        ifcDesc.isOptional = true;
+                        ifc_name = ifc_name.substring(0, ifc_name.indexOf("#"));
+                    }
+
+                    StringTokenizer st = new StringTokenizer(ifc_name, ":");
+                    String className = "";
+
+                    int count = 3;
+
+                    if (ifc_name.startsWith("drafts"))
+                    {
+                        count = 4;
+                    }
+
+                    for (int i = 0; st.hasMoreTokens(); i++)
+                    {
+                        String token = st.nextToken();
+
+                        // skipping (drafts.)com.sun.star
+                        if (i >= count)
+                        {
+                            if (!st.hasMoreTokens())
+                            {
+                                // inserting '_' before the last token
+                                token = "_" + token;
+                            }
+
+                            className += ("." + token);
+                        }
+                    }
+
+                    ifcDesc.EntryType = entryType;
+                    ifcDesc.entryName = "ifc" + className;
+                    ifcDesc.longName = parent.entryName + "::" + ifc_name;
+                }
+
+            }
+            catch (java.io.IOException ioe)
+            {
                 parent.hasErrorMsg = true;
                 parent.ErrorMsg = "IOException while reading the description";
 
@@ -353,13 +413,16 @@ public class APIDescGetter extends DescGetter {
         //mark service/interface as optional if all methods/properties are optional
         boolean allOptional = true;
 
-        for (int k = 0; k < ifcDesc.SubEntryCount; k++) {
-            if (!ifcDesc.SubEntries[k].isOptional) {
+        for (int k = 0; k < ifcDesc.SubEntryCount; k++)
+        {
+            if (!ifcDesc.SubEntries[k].isOptional)
+            {
                 allOptional = false;
             }
         }
 
-        if (!ifcDesc.isOptional && allOptional) {
+        if (!ifcDesc.isOptional && allOptional)
+        {
             ifcDesc.isOptional = allOptional;
         }
 
@@ -368,25 +431,74 @@ public class APIDescGetter extends DescGetter {
         return getDescArray(makeArray(ifc_names));
     }
 
+    private static String entryType;
+    private static DescEntry createDescEntry(String meth_name, String ifc_name, DescEntry parent)
+    {
+        entryType = "service";
+        DescEntry methDesc = new DescEntry();
+
+        if (meth_name.indexOf("#optional") > 0)
+        {
+            methDesc.isOptional = true;
+            meth_name = meth_name.substring(0, meth_name.indexOf("#"));
+        }
+
+        if (meth_name.endsWith("()"))
+        {
+            methDesc.EntryType = "method";
+            entryType = "interface";
+        }
+        else
+        {
+            methDesc.EntryType = "property";
+            entryType = "service";
+        }
+
+        methDesc.entryName = meth_name;
+        methDesc.isToTest = true;
+
+
+        String withoutHash = ifc_name;
+
+        if (ifc_name.indexOf("#optional") > 0)
+        {
+            withoutHash = ifc_name.substring(0, ifc_name.indexOf("#"));
+        }
+
+        methDesc.longName = parent.entryName + "::" + withoutHash + "::" + meth_name;
+
+        return methDesc;
+    }
+
+    private static void createIfcName(String ifc_name, ArrayList meth_names, DescEntry ifcDesc)
+    {
+
+    }
     /**
      * This method ensures that XComponent will be the last in the list of interfaces
      */
-    protected static Object[] makeArray(ArrayList entries) {
+    protected static Object[] makeArray(ArrayList entries)
+    {
         Object[] entriesArray = entries.toArray();
         ArrayList returnArray = new ArrayList();
         Object addAtEnd = null;
 
-        for (int k = 0; k < entriesArray.length; k++) {
+        for (int k = 0; k < entriesArray.length; k++)
+        {
             DescEntry entry = (DescEntry) entriesArray[k];
 
-            if (entry.entryName.equals("ifc.lang._XComponent")) {
+            if (entry.entryName.equals("ifc.lang._XComponent"))
+            {
                 addAtEnd = entry;
-            } else {
+            }
+            else
+            {
                 returnArray.add(entry);
             }
         }
 
-        if (addAtEnd != null) {
+        if (addAtEnd != null)
+        {
             returnArray.add(addAtEnd);
         }
 
@@ -394,40 +506,50 @@ public class APIDescGetter extends DescGetter {
     }
 
     protected static DescEntry setErrorDescription(DescEntry entry,
-                                                   String ErrorMsg) {
+            String ErrorMsg)
+    {
         if (entry == null)
+        {
             entry = new DescEntry();
+        }
         entry.hasErrorMsg = true;
         entry.ErrorMsg = "Error while getting description for test '" +
-            fullJob + "' as an API test: " + ErrorMsg;
+                fullJob + "' as an API test: " + ErrorMsg;
 
         return entry;
     }
 
-    protected static DescEntry[] getDescArray(Object[] list) {
+    protected static DescEntry[] getDescArray(Object[] list)
+    {
         DescEntry[] entries = new DescEntry[list.length];
 
-        for (int i = 0; i < list.length; i++) {
+        for (int i = 0; i < list.length; i++)
+        {
             entries[i] = (DescEntry) list[i];
         }
 
         return entries;
     }
 
-    protected DescEntry getFromClassPath(String aEntry, boolean debug) {
+    protected DescEntry getFromClassPath(String aEntry, boolean debug)
+    {
         int dotindex = aEntry.indexOf('.');
 
-        if (dotindex == -1) {
+        if (dotindex == -1)
+        {
             return null;
         }
 
         String module = null;
         String shortName = null;
 
-        if (aEntry.indexOf(".uno") == -1) {
+        if (aEntry.indexOf(".uno") == -1)
+        {
             module = aEntry.substring(0, aEntry.indexOf('.'));
             shortName = aEntry.substring(aEntry.indexOf('.') + 1);
-        } else {
+        }
+        else
+        {
             module = aEntry.substring(0, aEntry.lastIndexOf('.'));
             shortName = aEntry.substring(aEntry.lastIndexOf('.') + 1);
         }
@@ -443,22 +565,28 @@ public class APIDescGetter extends DescGetter {
 
         java.net.URL url = this.getClass().getResource("/objdsc/" + module);
 
-        if (url == null) {
+        if (url == null)
+        {
             return setErrorDescription(theEntry,
-                                       "couldn't find module '" + module + "'");
+                    "couldn't find module '" + module + "'");
         }
 
-        try {
+        try
+        {
             java.net.URLConnection con = url.openConnection();
 
-            if (con instanceof java.net.JarURLConnection) {
+            String sEndsWithCSVName = "." + shortName.trim() + ".csv";
+            if (con instanceof java.net.JarURLConnection)
+            {
                 // get Jar file from connection
                 java.util.jar.JarFile f = ((java.net.JarURLConnection) con).getJarFile();
 
                 // Enumerate over all entries
                 java.util.Enumeration e = f.entries();
 
-                while (e.hasMoreElements()) {
+                String sStartModule = "/" + module + "/";
+                while (e.hasMoreElements())
+                {
 
                     String entry = e.nextElement().toString();
 
@@ -466,49 +594,51 @@ public class APIDescGetter extends DescGetter {
 //                        System.out.println("### Read from connetion: " + entry);
 //                    }
 
-                    if ((entry.lastIndexOf("/" + module + "/") != -1) &&
-                        entry.endsWith("." + shortName.trim() + ".csv")) {
-                        InputStream input = this.getClass()
-                                                .getResourceAsStream("/" +
-                                                                     entry);
-                        csvFile = new BufferedReader(
-                                          new InputStreamReader(input));
-
+                    if ((entry.lastIndexOf(sStartModule) != -1) &&
+                            entry.endsWith(sEndsWithCSVName))
+                    {
+                        InputStream input = this.getClass().getResourceAsStream("/" + entry);
+                        csvFile = new BufferedReader(new InputStreamReader(input));
                         break;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 InputStream in = con.getInputStream();
-                java.io.BufferedReader buf = new java.io.BufferedReader(
-                                                     new InputStreamReader(in));
+                java.io.BufferedReader buf = new java.io.BufferedReader(new InputStreamReader(in));
                 boolean found = false;
 
-                while (buf.ready() && !found) {
+                while (buf.ready() && !found)
+                {
                     String entry = buf.readLine();
 
-                    if (entry.endsWith(shortName.trim() + ".csv")) {
+                    if (entry.endsWith(sEndsWithCSVName))
+                    {
                         System.out.println("FOUND  ####");
-                        InputStream input = this.getClass()
-                                                .getResourceAsStream("/objdsc/" +
-                                                                     module +
-                                                                     "/" +
-                                                                     entry);
+                        InputStream input = this.getClass().getResourceAsStream("/objdsc/" +
+                                module +
+                                "/" +
+                                entry);
                         csvFile = new BufferedReader(
-                                          new InputStreamReader(input));
+                                new InputStreamReader(input));
                         found = true;
                     }
                 }
 
                 buf.close();
             }
-        } catch (java.io.IOException e) {
+        }
+        catch (java.io.IOException e)
+        {
             e.printStackTrace();
         }
 
-        if (csvFile == null) {
+        if (csvFile == null)
+        {
             return setErrorDescription(theEntry,
-                                       "couldn't find component '" +
-                                       theEntry.entryName + "'");
+                    "couldn't find component '" +
+                    theEntry.entryName + "'");
         }
 
         DescEntry[] subEntries = getSubEntries(csvFile, theEntry, debug);
@@ -520,10 +650,12 @@ public class APIDescGetter extends DescGetter {
     }
 
     protected static DescEntry getFromDirectory(String descPath, String entry,
-                                                boolean debug) {
+            boolean debug)
+    {
         int dotindex = entry.indexOf('.');
 
-        if (dotindex == -1) {
+        if (dotindex == -1)
+        {
             return null;
         }
 
@@ -531,10 +663,13 @@ public class APIDescGetter extends DescGetter {
         String module = null;
         String shortName = null;
 
-        if (entry.indexOf(".uno") == -1) {
+        if (entry.indexOf(".uno") == -1)
+        {
             module = entry.substring(0, entry.indexOf('.'));
             shortName = entry.substring(entry.indexOf('.') + 1);
-        } else {
+        }
+        else
+        {
             module = entry.substring(0, entry.lastIndexOf('.'));
             shortName = entry.substring(entry.lastIndexOf('.') + 1);
         }
@@ -546,7 +681,8 @@ public class APIDescGetter extends DescGetter {
         aEntry.EntryType = "component";
         aEntry.isToTest = true;
 
-        if (debug) {
+        if (debug)
+        {
             System.out.println("Parsing Description Path: " + descPath);
             System.out.println("Searching module: " + module);
             System.out.println("For the Component " + shortName);
@@ -554,34 +690,41 @@ public class APIDescGetter extends DescGetter {
 
         File modPath = new File(descPath + fs + module);
 
-        if (!modPath.exists()) {
+        if (!modPath.exists())
+        {
             return setErrorDescription(aEntry,
-                                       "couldn't find module '" + module + "'");
+                    "couldn't find module '" + module + "'");
         }
 
         String[] files = modPath.list();
         String found = "none";
 
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].endsWith("." + shortName + ".csv")) {
+        for (int i = 0; i < files.length; i++)
+        {
+            if (files[i].endsWith("." + shortName + ".csv"))
+            {
                 found = files[i];
                 System.out.println("found " + found);
                 break;
             }
         }
 
-        if (found.equals("none")) {
+        if (found.equals("none"))
+        {
             return setErrorDescription(aEntry,
-                                       "couldn't find component '" + entry + "'");
+                    "couldn't find component '" + entry + "'");
         }
 
         String aUrl = descPath + fs + module + fs + found;
 
         BufferedReader csvFile = null;
 
-        try {
+        try
+        {
             csvFile = new BufferedReader(new FileReader(aUrl));
-        } catch (java.io.FileNotFoundException fnfe) {
+        }
+        catch (java.io.FileNotFoundException fnfe)
+        {
             return setErrorDescription(aEntry, "couldn't find file '" + aUrl + "'");
         }
 
@@ -593,14 +736,17 @@ public class APIDescGetter extends DescGetter {
         return aEntry;
     }
 
-    protected ArrayList getSubInterfaces(String job) {
+    protected ArrayList getSubInterfaces(String job)
+    {
         ArrayList namesList = new ArrayList();
         StringTokenizer st = new StringTokenizer(job, ",");
 
-        for (int i = 0; st.hasMoreTokens(); i++) {
+        for (int i = 0; st.hasMoreTokens(); i++)
+        {
             String token = st.nextToken();
 
-            if (token.indexOf(".") < 0) {
+            if (token.indexOf(".") < 0)
+            {
                 namesList.add(token);
             }
         }
@@ -608,11 +754,13 @@ public class APIDescGetter extends DescGetter {
         return namesList;
     }
 
-    protected ArrayList getSubObjects(String job) {
+    protected ArrayList getSubObjects(String job)
+    {
         ArrayList namesList = new ArrayList();
         StringTokenizer st = new StringTokenizer(job, ",");
 
-        for (int i = 0; st.hasMoreTokens(); i++) {
+        for (int i = 0; st.hasMoreTokens(); i++)
+        {
             namesList.add(st.nextToken());
         }
 
@@ -620,17 +768,23 @@ public class APIDescGetter extends DescGetter {
     }
 
     protected String[] createScenario(String descPath, String job,
-                                      boolean debug) {
+            boolean debug)
+    {
         String[] scenario = null;
 
-        if (descPath != null) {
-            if (debug) {
+        if (descPath != null)
+        {
+            if (debug)
+            {
                 System.out.println("## reading from File " + descPath);
             }
 
             scenario = getScenarioFromDirectory(descPath, job, debug);
-        } else {
-            if (debug) {
+        }
+        else
+        {
+            if (debug)
+            {
                 System.out.println("## reading from jar");
             }
 
@@ -641,31 +795,46 @@ public class APIDescGetter extends DescGetter {
     }
 
     protected String[] getScenarioFromDirectory(String descPath, String job,
-                                                boolean debug) {
+            boolean debug)
+    {
         String[] modules = null;
         ArrayList componentList = new ArrayList();
 
-        if (!job.equals("unknown") && !job.equals("listall")) {
-            modules = new String[] { job };
-        } else {
+        if (!job.equals("unknown") && !job.equals("listall"))
+        {
+            modules = new String[]
+                    {
+                        job
+                    };
+        }
+        else
+        {
             File dirs = new File(descPath);
 
-            if (!dirs.exists()) {
+            if (!dirs.exists())
+            {
                 modules = null;
-            } else {
+            }
+            else
+            {
                 modules = dirs.list();
             }
         }
 
-        for (int i=0;i<modules.length;i++) {
-            if (! isUnusedModule(modules[i])) {
-                File moduleDir = new File(descPath+System.getProperty("file.separator")+modules[i]);
-                if (moduleDir.exists()) {
+        for (int i = 0; i < modules.length; i++)
+        {
+            if (!isUnusedModule(modules[i]))
+            {
+                File moduleDir = new File(descPath + System.getProperty("file.separator") + modules[i]);
+                if (moduleDir.exists())
+                {
                     String[] components = moduleDir.list();
-                    for (int j=0;j<components.length;j++) {
-                        if (components[j].endsWith(".csv")) {
+                    for (int j = 0; j < components.length; j++)
+                    {
+                        if (components[j].endsWith(".csv"))
+                        {
                             String toAdd = getComponentForString(components[j], modules[i]);
-                            toAdd = "-o "+modules[i]+"."+toAdd;
+                            toAdd = "-o " + modules[i] + "." + toAdd;
                             componentList.add(toAdd);
                         }
                     }
@@ -676,7 +845,8 @@ public class APIDescGetter extends DescGetter {
         String[] scenario = new String[componentList.size()];
         Collections.sort(componentList);
 
-        for (int i = 0; i < componentList.size(); i++) {
+        for (int i = 0; i < componentList.size(); i++)
+        {
             scenario[i] = (String) componentList.get(i);
         }
 
@@ -684,67 +854,79 @@ public class APIDescGetter extends DescGetter {
 
     }
 
-    protected String[] getScenarioFromClassPath(String job, boolean debug) {
+    protected String[] getScenarioFromClassPath(String job, boolean debug)
+    {
         String subdir = "/";
 
-        if (!job.equals("unknown") && !job.equals("listall")) {
+        if (!job.equals("unknown") && !job.equals("listall"))
+        {
             subdir += job;
         }
 
         java.net.URL url = this.getClass().getResource("/objdsc" + subdir);
 
-        if (url == null) {
+        if (url == null)
+        {
             return null;
         }
 
         ArrayList scenarioList = new ArrayList();
 
-        try {
+        try
+        {
             java.net.URLConnection con = url.openConnection();
 
-            if (con instanceof java.net.JarURLConnection) {
+            if (con instanceof java.net.JarURLConnection)
+            {
                 // get Jar file from connection
                 java.util.jar.JarFile f = ((java.net.JarURLConnection) con).getJarFile();
 
                 // Enumerate over all entries
                 java.util.Enumeration e = f.entries();
 
-                while (e.hasMoreElements()) {
+                while (e.hasMoreElements())
+                {
                     String entry = e.nextElement().toString();
 
                     if (entry.startsWith("objdsc" + subdir) &&
                             (entry.indexOf("CVS") < 0) &&
-                            !entry.endsWith("/")) {
+                            !entry.endsWith("/"))
+                    {
                         int startMod = entry.indexOf("/");
                         int endMod = entry.lastIndexOf("/");
                         String module = entry.substring(startMod + 1, endMod);
                         String component = getComponentForString(
-                                                   entry.substring(endMod + 1,
-                                                                   entry.length()),
-                                                   module);
+                                entry.substring(endMod + 1,
+                                entry.length()),
+                                module);
 
-                        if (!isUnusedModule(module)) {
+                        if (!isUnusedModule(module))
+                        {
                             scenarioList.add("-o " + module + "." +
-                                             component);
+                                    component);
                         }
                     }
                 }
             }
-        } catch (java.io.IOException e) {
+        }
+        catch (java.io.IOException e)
+        {
             e.printStackTrace();
         }
 
         String[] scenario = new String[scenarioList.size()];
         Collections.sort(scenarioList);
 
-        for (int i = 0; i < scenarioList.size(); i++) {
+        for (int i = 0; i < scenarioList.size(); i++)
+        {
             scenario[i] = (String) scenarioList.get(i);
         }
 
         return scenario;
     }
 
-    protected String getComponentForString(String full, String module) {
+    protected String getComponentForString(String full, String module)
+    {
         String component = "";
 
 
@@ -755,18 +937,20 @@ public class APIDescGetter extends DescGetter {
         int lastdot = full.lastIndexOf(".");
         component = full.substring(lastdot + 1, full.length());
 
-        if (module.equals("file") || module.equals("xmloff")) {
+        if (module.equals("file") || module.equals("xmloff"))
+        {
             String withoutComponent = full.substring(0, lastdot);
             int preLastDot = withoutComponent.lastIndexOf(".");
             component = withoutComponent.substring(preLastDot + 1,
-                                                   withoutComponent.length()) +
-                        "." + component;
+                    withoutComponent.length()) +
+                    "." + component;
         }
 
         return component;
     }
 
-    protected boolean isUnusedModule(String moduleName) {
+    protected boolean isUnusedModule(String moduleName)
+    {
         ArrayList removed = new ArrayList();
         removed.add("acceptor");
         removed.add("brdgfctr");

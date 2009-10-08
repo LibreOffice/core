@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test the functionality of Page Formatting / Page Styles - 4
 '*
@@ -415,9 +415,10 @@ testcase tFormatPage_53
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
     
-    
-    Call hCloseDocument
-    
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -783,6 +784,10 @@ testcase tFormatPage_60
     if SchattenFarbe.GetSelindex <> iShadowColor then Warnlog "shadow color is wrong !"
     TabUmrandung.Cancel
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
+
+'--------------------------------------------------

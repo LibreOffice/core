@@ -27,15 +27,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package org.openoffice;
 
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.StringTokenizer;
 import lib.TestParameters;
 import util.DynamicClassLoader;
 import base.TestBase;
 import helper.ClParser;
 import helper.CfgParser;
-
 
 /**
  * The main class, will call ClParser and CfgParser to <br>
@@ -44,6 +45,7 @@ import helper.CfgParser;
  */
 public class Runner
 {
+
     private static long m_nStartTime;
 
     private static long getStartTime()
@@ -51,30 +53,32 @@ public class Runner
         return m_nStartTime;
     }
     /*
-      simple helper functions to start/stop a timer, to know how long a process need in milliseconds
+    simple helper functions to start/stop a timer, to know how long a process need in milliseconds
      */
+
     private static long getTime()
-        {
-            return System.currentTimeMillis();
-        }
+    {
+        return System.currentTimeMillis();
+    }
+
     private static void setStartTime(long _nStartTime)
-        {
-            m_nStartTime = _nStartTime;
-        }
+    {
+        m_nStartTime = _nStartTime;
+    }
 
     /*
-      return the time, which is done until last startTime()
+    return the time, which is done until last startTime()
      */
     private static long meanTime(long _nCurrentTimer)
+    {
+        if (_nCurrentTimer == 0)
         {
-            if (_nCurrentTimer == 0)
-            {
-                System.out.println("Forgotten to initialise a start timer?");
-                return 0;
-            }
-            long nMeanTime = getTime();
-            return nMeanTime - _nCurrentTimer;
+            System.out.println("Forgotten to initialise a start timer?");
+            return 0;
         }
+        long nMeanTime = getTime();
+        return nMeanTime - _nCurrentTimer;
+    }
 
     private static String beautifyTime(long _nTime)
     {
@@ -82,15 +86,107 @@ public class Runner
         long min = (_nTime / (60 * 1000)) % 60;
         long hour = _nTime / (60 * 60 * 1000);
         StringBuffer aTime = new StringBuffer();
-        aTime.append(helper.StringHelper.createValueString((int)hour, 2)).
-              append(':').
-              append(helper.StringHelper.createValueString((int)min, 2)).
-              append(':').
-              append(helper.StringHelper.createValueString((int)sec, 2));
+        aTime.append(helper.StringHelper.createValueString((int) hour, 2)).
+                append(':').
+                append(helper.StringHelper.createValueString((int) min, 2)).
+                append(':').
+                append(helper.StringHelper.createValueString((int) sec, 2));
         return aTime.toString();
     }
 
-    public static void main(String[] args) {
+    /**
+     Helper to check if there are problems with Cygwin Path variables.
+     */
+    private static boolean checkVariableForCygwin(String _sVariable)
+    {
+        if (_sVariable == null)
+        {
+            return false;
+        }
+        if (_sVariable.startsWith("/cygdrive"))
+        {
+            return true;
+        }
+        return false;
+    }
+    private static boolean checkPathVariable(String _sPath, String delim)
+    {
+        String sPath = System.getProperty(_sPath);
+        if (sPath != null)
+        {
+            StringTokenizer aTokenEnum = new StringTokenizer(sPath, delim);
+            while (aTokenEnum.hasMoreElements())
+            {
+                String sToken = (String)aTokenEnum.nextElement();
+                if (checkVariableForCygwin(sToken))
+                {
+                    System.err.println("ERROR: OOoRunner detect cygwin path in '" + _sPath + "'");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static void checkAllVariablesForCygwinPath(TestParameters _aParams)
+    {
+        // ----- check all System.getProperty(key) variables -----
+        String sOsName = System.getProperty("os.name");
+        if (! sOsName.toLowerCase().startsWith("windows"))
+        {
+            // we need to check only on windows
+            return;
+        }
+
+        Properties aProps = System.getProperties();
+        Enumeration aEnum = aProps.propertyNames();
+        // Enumeration aEnum = aProps.elements();        // these are only the values
+        boolean bEmergencyStop = false;
+
+        while (aEnum.hasMoreElements())
+        {
+            String sKey = (String)aEnum.nextElement();
+            String sValue = System.getProperty(sKey);
+
+            if (checkVariableForCygwin(sValue))
+            {
+                System.err.println("ERROR: OOoRunner detect cygwin path in '" + sKey + ":=" + sValue + "'");
+                bEmergencyStop = true;
+            }
+        }
+
+        // ----- check path variables separatly -----
+        String sDelim = System.getProperty("path.separator");
+        bEmergencyStop |= checkPathVariable("java.library.path", sDelim);
+        bEmergencyStop |= checkPathVariable("java.class.path", sDelim);
+        bEmergencyStop |= checkPathVariable("sun.boot.class.path", sDelim);
+
+        // ----- check all TestParameters -----
+        aEnum = _aParams.keys();
+        while (aEnum.hasMoreElements())
+        {
+            String sKey = (String)aEnum.nextElement();
+            if (_aParams.get(sKey) instanceof String)
+            {
+                String sValue = (String)_aParams.get(sKey);
+
+                if (checkVariableForCygwin(sValue))
+                {
+                    System.err.println("ERROR: OOoRunner detect cygwin path in '" + sKey + ":=" + sValue + "'");
+                    bEmergencyStop = true;
+                }
+            }
+        }
+
+        if (bEmergencyStop)
+        {
+            System.exit(-1);
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        System.out.println("OOoRunner Main()");
 
         setStartTime(getTime());
 
@@ -122,11 +218,12 @@ public class Runner
 
         //parse the commandline arguments
         // TODO: no right error message, if no parameter given!
-        cli.getCommandLineParameter(param,args);
+        cli.getCommandLineParameter(param, args);
 
         Object tj = param.get("TestJob");
 
-        if (tj==null) {
+        if (tj == null)
+        {
             System.out.println("==========================================================================");
             System.out.println("No TestJob given, please make sure that you ");
             System.out.println("a.) called the OOoRunner with the paramter -o <job> or -sce <scenarioFile>");
@@ -136,10 +233,11 @@ public class Runner
             System.exit(-1);
         }
 
-        System.out.println("TestJob: "+tj);
+        System.out.println("TestJob: " + tj);
+        String sName = "base." + (String) param.get("TestBase");
+        TestBase toExecute = (TestBase) dcl.getInstance(sName);
 
-        TestBase toExecute = (TestBase) dcl.getInstance("base."+
-                                            (String)param.get("TestBase"));
+        checkAllVariablesForCygwinPath(param);
 
         boolean worked = toExecute.executeTest(param);
         long nTime = meanTime(getStartTime());
@@ -149,12 +247,12 @@ public class Runner
 
         if (!worked)
         {
-            System.out.println("Job "+param.get("TestJob")+" failed");
+            System.out.println("Job " + param.get("TestJob") + " failed");
             System.exit(-1);
         }
         else
         {
-            System.out.println("Job "+param.get("TestJob")+" done");
+            System.out.println("Job " + param.get("TestJob") + " done");
             System.exit(0);
         }
     }

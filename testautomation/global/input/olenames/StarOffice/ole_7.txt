@@ -1,7 +1,0 @@
-CALC=StarOffice 9 Spreadsheet
-CHART=StarOffice 9 Chart
-DRAW=StarOffice 9 Drawing
-IMPRESS=Презентация StarOffice 9
-MATH=StarOffice 9 Formula
-WRITER=Текст StarOffice 9
-OTHER=Дополнительные объекты
