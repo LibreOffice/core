@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,3 +28,37 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
+PRJ=..$/..
+
+PRJNAME=svtools
+TARGET=unoiface
+ENABLE_EXCEPTIONS=TRUE
+
+# --- Settings -----------------------------------------------------
+
+.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/svt.pmk
+
+# --- Files --------------------------------------------------------
+
+SRS1NAME=	uno
+SRC1FILES=  unoifac2.src
+
+SLOFILES= \
+            $(SLO)$/unoiface.obj \
+            $(SLO)$/unoevent.obj \
+            $(SLO)$/unoimap.obj \
+            $(SLO)$/toolboxcontroller.obj \
+            $(SLO)$/framestatuslistener.obj \
+            $(SLO)$/statusbarcontroller.obj \
+            $(SLO)$/genericunodialog.obj \
+            $(SLO)$/generictoolboxcontroller.obj \
+            $(SLO)$/treecontrolpeer.obj \
+            $(SLO)$/unocontroltablemodel.obj \
+            $(SLO)$/registerservices.obj\
+            $(SLO)$/contextmenuhelper.obj
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : target.mk

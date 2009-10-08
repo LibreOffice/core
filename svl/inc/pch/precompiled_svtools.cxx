@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: iniprop.cxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: precompiled_svtools.cxx,v $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,20 +28,5 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-
-
-#include "iniprop.hxx"
-
-//-------------------------------------------------------------------------
-
-TYPEINIT1(SfxAppIniManagerProperty, ApplicationProperty);
-
-//-------------------------------------------------------------------------
-
-SfxAppIniManagerProperty::~SfxAppIniManagerProperty()
-{
-}
-
 

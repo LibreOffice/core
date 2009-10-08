@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.61 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,10 +28,12 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-
 PRJ=..$/..
+
 PRJNAME=svtools
-TARGET=misc1
+TARGET=config
+
+ENABLE_EXCEPTIONS := TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -40,30 +42,25 @@ TARGET=misc1
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES=\
-    $(SLO)$/fstathelper.obj \
-    $(SLO)$/folderrestriction.obj \
-    $(SLO)$/strmadpt.obj \
-    $(SLO)$/svtdata.obj
+SLOFILES=  \
+    $(SLO)$/accessibilityoptions.obj	\
+    $(SLO)$/apearcfg.obj				\
+        $(SLO)$/cjkoptions.obj          \
+        $(SLO)$/colorcfg.obj            \
+        $(SLO)$/ctloptions.obj          \
+        $(SLO)$/extcolorcfg.obj            \
+    $(SLO)$/fontsubstconfig.obj				\
+        $(SLO)$/helpopt.obj                 \
+    $(SLO)$/itemholder2.obj \
+        $(SLO)$/languageoptions.obj     \
+    $(SLO)$/menuoptions.obj				\
+    $(SLO)$/misccfg.obj				\
+        $(SLO)$/miscopt.obj             \
+    $(SLO)$/optionsdrawinglayer.obj		\
+    $(SLO)$/printoptions.obj			\
+        $(SLO)$/syslocaleoptions.obj
 
-SLOFILES=\
-    $(EXCEPTIONSFILES) \
-    $(SLO)$/adrparse.obj \
-    $(SLO)$/filenotation.obj \
-    $(SLO)$/inethist.obj \
-    $(SLO)$/inettype.obj \
-    $(SLO)$/iniadrtk.obj \
-    $(SLO)$/lngmisc.obj \
-    $(SLO)$/PasswordHelper.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES=\
-    mediatyp.src
-
-# --- Targets -------------------------------------------------------
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
-
 

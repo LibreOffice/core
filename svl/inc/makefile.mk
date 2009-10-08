@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,52 +28,25 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+PRJ=..
 
-PRJ=..$/..
 PRJNAME=svtools
-TARGET=items1
-ENABLE_EXCEPTIONS=TRUE
+TARGET=inc
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/svl.pmk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
-
-SLOFILES=\
-    $(SLO)$/bintitem.obj	\
-    $(SLO)$/cenumitm.obj	\
-    $(SLO)$/cintitem.obj	\
-    $(SLO)$/cntwall.obj	\
-    $(SLO)$/cstitem.obj	\
-    $(SLO)$/ctypeitm.obj	\
-    $(SLO)$/custritm.obj	\
-    $(SLO)$/dateitem.obj	\
-    $(SLO)$/dtritem.obj	\
-    $(SLO)$/frqitem.obj	\
-    $(SLO)$/ilstitem.obj    \
-    $(SLO)$/itemiter.obj	\
-    $(SLO)$/itempool.obj	\
-    $(SLO)$/itemprop.obj	\
-    $(SLO)$/itemset.obj	\
-    $(SLO)$/lckbitem.obj	\
-    $(SLO)$/poolio.obj	\
-    $(SLO)$/stylepool.obj	\
-    $(SLO)$/poolitem.obj	\
-    $(SLO)$/sfontitm.obj	\
-    $(SLO)$/sitem.obj	    \
-    $(SLO)$/slstitm.obj	\
-    $(SLO)$/tfrmitem.obj	\
-    $(SLO)$/tresitem.obj	\
-    $(SLO)$/whiter.obj \
-    $(SLO)$/visitem.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES=\
-    cstitem.src
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+.IF "$(ENABLE_PCH)"!=""
+ALLTAR : \
+    $(SLO)$/precompiled.pch \
+    $(SLO)$/precompiled_ex.pch
+    
+.ENDIF			# "$(ENABLE_PCH)"!=""
 

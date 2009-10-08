@@ -1,0 +1,55 @@
+st	svtools	:	l10n offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper sal sot jvmfwk NULL
+st	svtools						usr1	-	all	st_mkout NULL
+st	svtools\inc					nmake	-	all	st_inc NULL
+st	svtools\inc\sane				get	-	all	st_incsa NULL
+st	svtools\prj					get	-	all	st_prj NULL
+st	svtools\res					get	-	all	st_res NULL
+st	svtools\win\inc					get	-	all	st_winc NULL
+st	svtools\win\res					get	-	all	st_wres NULL
+st	svtools\os2\inc					get	-	all	st_oinc NULL
+st	svtools\mac\inc					get	-	all	st_minc NULL
+st	svtools\unx\inc					get	-	all	st_uinc NULL
+st	svtools\bmpmaker				nmake	-	all	st_bmp st_inc NULL
+st	svtools\source\memtools				nmake	-	all	st_mem st_inc NULL
+st	svtools\source\numbers				nmake	-	all	st_num st_inc NULL
+st	svtools\source\notify				nmake	-	all	st_not st_inc NULL
+st	svtools\source\config				nmake	-	all	st_conf st_inc NULL
+st	svtools\unx\source\svdde			nmake	-	u	st_usdde st_inc NULL
+st	svtools\unx\source\svdde			nmake	-	p	st_psdde st_inc NULL
+st	svtools\mac\source\svdde			nmake	-	m	st_msdde st_inc NULL
+st	svtools\mac\source\misc				nmake	-	m	st_msc st_inc NULL
+st	svtools\source\control				nmake	-	all	st_ctl st_inc NULL
+st	svtools\source\filerec				nmake	-	all	st_file st_inc NULL
+st	svtools\source\filter.vcl\filter		nmake	-	all	st_vfilt st_inc NULL
+st	svtools\source\filter.vcl\wmf			nmake	-	all	st_vwmf st_inc NULL
+st	svtools\source\filter.vcl\igif			nmake	-	all	st_vigif st_inc NULL
+st	svtools\source\filter.vcl\jpeg			nmake	-	all	st_vjpeg st_inc NULL
+st	svtools\source\filter.vcl\ixbm			nmake	-	all	st_vixbm st_inc NULL
+st	svtools\source\filter.vcl\ixpm			nmake	-	all	st_vixpm st_inc NULL
+st	svtools\source\brwbox				nmake	-	all	st__brw st_bmp st_inc NULL
+st	svtools\source\urlobj				nmake	-	all	st__url st_inc NULL
+st	svtools\source\misc				nmake	-	all	st__misc st_bmp st_inc NULL
+st	svtools\source\misc1			nmake	-	all	st__misc1 st_inc NULL
+st	svtools\source\contnr				nmake	-	all	st__ctr st_inc NULL
+st	svtools\source\svdde				nmake	-	all	st__dde st_inc NULL
+st	svtools\source\items				nmake	-	all	st__item st_inc NULL
+st	svtools\source\items1				nmake	-	all	st__item1 st_inc NULL
+st	svtools\source\undo				nmake	-	all	st_undo st_inc NULL
+st	svtools\source\plugapp				nmake	-	all	st_papp st_inc NULL
+st	svtools\source\dialogs				nmake	-	all	st_dial st_inc NULL
+st	svtools\source\edit				nmake	-	all	st_edit st_inc NULL
+st	svtools\source\table               nmake	-	all	st_table st_inc NULL
+st	svtools\source\uno				nmake	-	all	st_uno st_inc NULL
+st	svtools\source\svrtf				nmake	-	all	st_rtf st_inc NULL
+st	svtools\source\svsql				nmake	-	all	st_sql st_inc NULL
+st	svtools\source\svhtml				nmake	-	all	st_html st_inc NULL
+st  svtools\source\syslocale                nmake   -   all st_sysloc st_inc NULL
+st	svtools\source\filepicker               nmake	-	all	st_filepick st_inc NULL
+st  svtools\util                            nmake   -   all st_util st__brw st__ctr st__dde st__item st__item1 st__misc st__misc1 st__url  st_ctl st_dial st_edit st_file st_html st_papp st_rtf st_sql st_usdde.u st_psdde.p st_msdde.m st_msc.m st_undo st_table st_uno st_vfilt st_vigif st_vixbm st_vixpm st_vjpeg st_vwmf st_sysloc st_filepick st_not st_conf st_mem st_num st_svtjava NULL
+st	svtools\source\fsstor				nmake	-	all	st_fsstor st_inc NULL
+st	svtools\source\hatchwindow			nmake	-	all	st_hatchwin st_inc NULL
+st	svtools\source\passwordcontainer	nmake	-	all	st_passcont st_inc NULL
+st	svtools\source\productregistration	nmake	-	all	st_prodreg st_util st_inc NULL
+st	svtools\uno							nmake	-	all	st_svtuno st_util st_inc NULL
+st	svtools\source\java				nmake	-	all	st_svtjava  st_inc NULL
+st  svtools\workben\unodialog           nmake   -   all st_workben_udlg st_util NULL
