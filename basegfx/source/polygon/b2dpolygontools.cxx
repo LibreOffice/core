@@ -44,6 +44,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <osl/mutex.hxx>
 
 #include <numeric>
 #include <limits>
@@ -55,6 +56,7 @@
 #ifdef DBG_UTIL
 static double fAngleBoundStartValue = ANGLE_BOUND_START_VALUE;
 #endif
+#define STEPSPERQUARTER     (3)
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1832,57 +1834,94 @@ namespace basegfx
             return createPolygonFromEllipse( rCenter, fRadius, fRadius );
         }
 
-        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant)
+        B2DPolygon impCreateUnitCircle(sal_uInt32 nStartQuadrant)
         {
-            const double fZero(0.0);
-            const double fOne(1.0);
+            B2DPolygon aUnitCircle;
             const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
+            const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
+            const B2DHomMatrix aRotateMatrix(createRotateB2DHomMatrix(F_PI2 / STEPSPERQUARTER));
 
-            // create closed unit-circle with 4 segments
-            switch(nQuadrant)
+            B2DPoint aPoint(1.0, 0.0);
+            B2DPoint aForward(1.0, fScaledKappa);
+            B2DPoint aBackward(1.0, -fScaledKappa);
+
+            if(0 != nStartQuadrant)
             {
-                case 0 : // first quadrant
-                {
-                    rPolygon.append(B2DPoint(fOne, fZero));
-                    rPolygon.appendBezierSegment(B2DPoint(fOne, fKappa), B2DPoint(fKappa, fOne), B2DPoint(fZero, fOne));
-                    break;
-                }
-                case 1 : // second quadrant
-                {
-                    rPolygon.append(B2DPoint(fZero, fOne));
-                    rPolygon.appendBezierSegment(B2DPoint(-fKappa, fOne), B2DPoint(-fOne, fKappa), B2DPoint(-fOne, fZero));
-                    break;
-                }
-                case 2 : // third quadrant
-                {
-                    rPolygon.append(B2DPoint(-fOne, fZero));
-                    rPolygon.appendBezierSegment(B2DPoint(-fOne, -fKappa), B2DPoint(-fKappa, -fOne), B2DPoint(fZero, -fOne));
-                    break;
-                }
-                default : // last quadrant
-                {
-                    rPolygon.append(B2DPoint(fZero, -fOne));
-                    rPolygon.appendBezierSegment(B2DPoint(fKappa, -fOne), B2DPoint(fOne, -fKappa), B2DPoint(fOne, fZero));
-                    break;
-                }
+                const B2DHomMatrix aQuadrantMatrix(createRotateB2DHomMatrix(F_PI2 * (nStartQuadrant % 4)));
+                aPoint *= aQuadrantMatrix;
+                aBackward *= aQuadrantMatrix;
+                aForward *= aQuadrantMatrix;
             }
+
+            aUnitCircle.append(aPoint);
+
+            for(sal_uInt32 a(0); a < STEPSPERQUARTER * 4; a++)
+            {
+                aPoint *= aRotateMatrix;
+                aBackward *= aRotateMatrix;
+                aUnitCircle.appendBezierSegment(aForward, aBackward, aPoint);
+                aForward *= aRotateMatrix;
+            }
+
+            aUnitCircle.setClosed(true);
+            aUnitCircle.removeDoublePoints();
+
+            return aUnitCircle;
         }
 
         B2DPolygon createPolygonFromUnitCircle(sal_uInt32 nStartQuadrant)
         {
-            B2DPolygon aRetval;
+            switch(nStartQuadrant % 4)
+            {
+                case 1 :
+                {
+                    static B2DPolygon aUnitCircleStartQuadrantOne;
 
-            // create unit-circle with all 4 segments, close it
-            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
-            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
-            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
-            appendUnitCircleQuadrant(aRetval, nStartQuadrant % 4); nStartQuadrant++;
-            aRetval.setClosed(true);
+                    if(!aUnitCircleStartQuadrantOne.count())
+                    {
+                        ::osl::Mutex m_mutex;
+                        aUnitCircleStartQuadrantOne = impCreateUnitCircle(1);
+                    }
 
-            // remove double points between segments created by segmented creation
-            aRetval.removeDoublePoints();
+                    return aUnitCircleStartQuadrantOne;
+                }
+                case 2 :
+                {
+                    static B2DPolygon aUnitCircleStartQuadrantTwo;
 
-            return aRetval;
+                    if(!aUnitCircleStartQuadrantTwo.count())
+                    {
+                        ::osl::Mutex m_mutex;
+                        aUnitCircleStartQuadrantTwo = impCreateUnitCircle(2);
+                    }
+
+                    return aUnitCircleStartQuadrantTwo;
+                }
+                case 3 :
+                {
+                    static B2DPolygon aUnitCircleStartQuadrantThree;
+
+                    if(!aUnitCircleStartQuadrantThree.count())
+                    {
+                        ::osl::Mutex m_mutex;
+                        aUnitCircleStartQuadrantThree = impCreateUnitCircle(3);
+                    }
+
+                    return aUnitCircleStartQuadrantThree;
+                }
+                default : // case 0 :
+                {
+                    static B2DPolygon aUnitCircleStartQuadrantZero;
+
+                    if(!aUnitCircleStartQuadrantZero.count())
+                    {
+                        ::osl::Mutex m_mutex;
+                        aUnitCircleStartQuadrantZero = impCreateUnitCircle(0);
+                    }
+
+                    return aUnitCircleStartQuadrantZero;
+                }
+            }
         }
 
         B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY )
@@ -1893,63 +1932,6 @@ namespace basegfx
             aRetval.transform(aMatrix);
 
             return aRetval;
-        }
-
-        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd)
-        {
-            OSL_ENSURE(fStart >= 0.0 && fStart <= 1.0, "appendUnitCircleQuadrantSegment: Access out of range (!)");
-            OSL_ENSURE(fEnd >= 0.0 && fEnd <= 1.0, "appendUnitCircleQuadrantSegment: Access out of range (!)");
-            OSL_ENSURE(fEnd >= fStart, "appendUnitCircleQuadrantSegment: Access out of range (!)");
-            const double fOne(1.0);
-            const bool bStartIsZero(fTools::equalZero(fStart));
-            const bool bEndIsOne(fTools::equal(fEnd, fOne));
-
-            if(bStartIsZero && bEndIsOne)
-            {
-                // add completely
-                appendUnitCircleQuadrant(rPolygon, nQuadrant);
-            }
-            else
-            {
-                // split and add
-                B2DPolygon aQuadrant;
-                appendUnitCircleQuadrant(aQuadrant, nQuadrant);
-                const bool bStartEndEqual(fTools::equal(fStart, fEnd));
-
-                if(bStartEndEqual)
-                {
-                    if(bStartIsZero)
-                    {
-                        // both zero, add start point
-                        rPolygon.append(aQuadrant.getB2DPoint(0L));
-                    }
-                    else if(bEndIsOne)
-                    {
-                        // both one, add end point
-                        rPolygon.append(aQuadrant.getB2DPoint(1L));
-                    }
-                    else
-                    {
-                        // both equal but not zero, add split point
-                        B2DCubicBezier aCubicBezier(
-                            aQuadrant.getB2DPoint(0L), aQuadrant.getNextControlPoint(0L),
-                            aQuadrant.getPrevControlPoint(1L), aQuadrant.getB2DPoint(1L));
-
-                        aCubicBezier.split(fStart, &aCubicBezier, 0);
-                        rPolygon.append(aCubicBezier.getEndPoint());
-                    }
-                }
-                else
-                {
-                    B2DCubicBezier aCubicBezier(
-                        aQuadrant.getB2DPoint(0L), aQuadrant.getNextControlPoint(0L),
-                        aQuadrant.getPrevControlPoint(1L), aQuadrant.getB2DPoint(1L));
-
-                    aCubicBezier = aCubicBezier.snippet(fStart, fEnd);
-                    rPolygon.append(aCubicBezier.getStartPoint());
-                    rPolygon.appendBezierSegment(aCubicBezier.getControlPointA(), aCubicBezier.getControlPointB(), aCubicBezier.getEndPoint());
-                }
-            }
         }
 
         B2DPolygon createPolygonFromUnitEllipseSegment( double fStart, double fEnd )
@@ -1978,49 +1960,74 @@ namespace basegfx
                 fEnd = 0.0;
             }
 
-            const sal_uInt32 nQuadrantStart(sal_uInt32(fStart / F_PI2) % 4L);
-            const sal_uInt32 nQuadrantEnd(sal_uInt32(fEnd / F_PI2) % 4L);
-            sal_uInt32 nCurrentQuadrant(nQuadrantStart);
-            bool bStartDone(false);
-            bool bEndDone(false);
-
-            do
+            if(fTools::equal(fStart, fEnd))
             {
-                if(!bStartDone && nQuadrantStart == nCurrentQuadrant)
+                // same start and end angle, add single point
+                aRetval.append(B2DPoint(cos(fStart), sin(fStart)));
+            }
+            else
+            {
+                const sal_uInt32 nSegments(STEPSPERQUARTER * 4);
+                const double fAnglePerSegment(F_PI2 / STEPSPERQUARTER);
+                const sal_uInt32 nStartSegment(sal_uInt32(fStart / fAnglePerSegment) % nSegments);
+                const sal_uInt32 nEndSegment(sal_uInt32(fEnd / fAnglePerSegment) % nSegments);
+                const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);
+                const double fScaledKappa(fKappa * (1.0 / STEPSPERQUARTER));
+
+                B2DPoint aSegStart(cos(fStart), sin(fStart));
+                aRetval.append(aSegStart);
+
+                if(nStartSegment == nEndSegment && fTools::more(fEnd, fStart))
                 {
-                    if(nQuadrantStart == nQuadrantEnd && fTools::moreOrEqual(fEnd, fStart))
-                    {
-                        // both in one quadrant and defining the complete segment, create start to end
-                        double fSplitOffsetStart((fStart - (nCurrentQuadrant * F_PI2)) / F_PI2);
-                        double fSplitOffsetEnd((fEnd - (nCurrentQuadrant * F_PI2)) / F_PI2);
-                        appendUnitCircleQuadrantSegment(aRetval, nCurrentQuadrant, fSplitOffsetStart, fSplitOffsetEnd);
-                        bStartDone = bEndDone = true;
-                    }
-                    else
-                    {
-                        // create start to quadrant end
-                        const double fSplitOffsetStart((fStart - (nCurrentQuadrant * F_PI2)) / F_PI2);
-                        appendUnitCircleQuadrantSegment(aRetval, nCurrentQuadrant, fSplitOffsetStart, 1.0);
-                        bStartDone = true;
-                    }
-                }
-                else if(!bEndDone && nQuadrantEnd == nCurrentQuadrant)
-                {
-                    // create quadrant start to end
-                    const double fSplitOffsetEnd((fEnd - (nCurrentQuadrant * F_PI2)) / F_PI2);
-                    appendUnitCircleQuadrantSegment(aRetval, nCurrentQuadrant, 0.0, fSplitOffsetEnd);
-                    bEndDone = true;
+                    // start and end in one sector and in the right order, create in one segment
+                    const B2DPoint aSegEnd(cos(fEnd), sin(fEnd));
+                    const double fFactor(fScaledKappa * ((fEnd - fStart) / fAnglePerSegment));
+
+                    aRetval.appendBezierSegment(
+                        aSegStart + (B2DPoint(-aSegStart.getY(), aSegStart.getX()) * fFactor),
+                        aSegEnd - (B2DPoint(-aSegEnd.getY(), aSegEnd.getX()) * fFactor),
+                        aSegEnd);
                 }
                 else
                 {
-                    // add quadrant completely
-                    appendUnitCircleQuadrant(aRetval, nCurrentQuadrant);
-                }
+                    double fSegEndRad((nStartSegment + 1) * fAnglePerSegment);
+                    double fFactor(fScaledKappa * ((fSegEndRad - fStart) / fAnglePerSegment));
+                    B2DPoint aSegEnd(cos(fSegEndRad), sin(fSegEndRad));
 
-                // next step
-                nCurrentQuadrant = (nCurrentQuadrant + 1L) % 4L;
+                    aRetval.appendBezierSegment(
+                        aSegStart + (B2DPoint(-aSegStart.getY(), aSegStart.getX()) * fFactor),
+                        aSegEnd - (B2DPoint(-aSegEnd.getY(), aSegEnd.getX()) * fFactor),
+                        aSegEnd);
+
+                    sal_uInt32 nSegment((nStartSegment + 1) % nSegments);
+                    aSegStart = aSegEnd;
+
+                    while(nSegment != nEndSegment)
+                    {
+                        // No end in this sector, add full sector.
+                        fSegEndRad = (nSegment + 1) * fAnglePerSegment;
+                        aSegEnd = B2DPoint(cos(fSegEndRad), sin(fSegEndRad));
+
+                        aRetval.appendBezierSegment(
+                            aSegStart + (B2DPoint(-aSegStart.getY(), aSegStart.getX()) * fScaledKappa),
+                            aSegEnd - (B2DPoint(-aSegEnd.getY(), aSegEnd.getX()) * fScaledKappa),
+                            aSegEnd);
+
+                        nSegment = (nSegment + 1) % nSegments;
+                        aSegStart = aSegEnd;
+                    }
+
+                    // End in this sector
+                    const double fSegStartRad(nSegment * fAnglePerSegment);
+                    fFactor = fScaledKappa * ((fEnd - fSegStartRad) / fAnglePerSegment);
+                    aSegEnd = B2DPoint(cos(fEnd), sin(fEnd));
+
+                    aRetval.appendBezierSegment(
+                        aSegStart + (B2DPoint(-aSegStart.getY(), aSegStart.getX()) * fFactor),
+                        aSegEnd - (B2DPoint(-aSegEnd.getY(), aSegEnd.getX()) * fFactor),
+                        aSegEnd);
+                }
             }
-            while(!(bStartDone && bEndDone));
 
             // remove double points between segments created by segmented creation
             aRetval.removeDoublePoints();
