@@ -74,6 +74,7 @@ TYPEINIT1(ScUndoAutoFormat,         SfxUndoAction);
 TYPEINIT1(ScUndoReplace,            SfxUndoAction);
 TYPEINIT1(ScUndoTabOp,              SfxUndoAction);
 TYPEINIT1(ScUndoConversion,         SfxUndoAction);
+TYPEINIT1(ScUndoRefConversion,      SfxUndoAction);
 TYPEINIT1(ScUndoRefreshLink,        SfxUndoAction);
 TYPEINIT1(ScUndoInsertAreaLink,     SfxUndoAction);
 TYPEINIT1(ScUndoRemoveAreaLink,     SfxUndoAction);
@@ -1526,6 +1527,98 @@ BOOL ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
+//============================================================================
+//  class ScUndoRefConversion
+//
+//  cell reference conversion
+
+//----------------------------------------------------------------------------
+
+ScUndoRefConversion::ScUndoRefConversion( ScDocShell* pNewDocShell,
+                                         const ScRange& aMarkRange, const ScMarkData& rMark,
+                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, BOOL bNewMulti, USHORT nNewFlag) :
+ScSimpleUndo( pNewDocShell ),
+aMarkData   ( rMark ),
+pUndoDoc    ( pNewUndoDoc ),
+pRedoDoc    ( pNewRedoDoc ),
+aRange      ( aMarkRange ),
+bMulti      ( bNewMulti ),
+nFlags      ( nNewFlag )
+{
+    SetChangeTrack();
+}
+
+__EXPORT ScUndoRefConversion::~ScUndoRefConversion()
+{
+    delete pUndoDoc;
+    delete pRedoDoc;
+}
+
+String __EXPORT ScUndoRefConversion::GetComment() const
+{
+    return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Eingabe"
+}
+
+void ScUndoRefConversion::SetChangeTrack()
+{
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    if ( pChangeTrack && (nFlags & IDF_FORMULA) )
+        pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
+            nStartChangeAction, nEndChangeAction );
+    else
+        nStartChangeAction = nEndChangeAction = 0;
+}
+
+void ScUndoRefConversion::DoChange( ScDocument* pRefDoc)
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    ShowTable(aRange);
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+        pViewShell->SetMarkData( aMarkData );
+
+    ScRange aCopyRange = aRange;
+    SCTAB nTabCount = pDoc->GetTableCount();
+    aCopyRange.aStart.SetTab(0);
+    aCopyRange.aEnd.SetTab(nTabCount-1);
+    pRefDoc->CopyToDocument( aCopyRange, nFlags, bMulti, pDoc, &aMarkData );
+    pDocShell->PostPaint( aRange, PAINT_GRID);
+    pDocShell->PostDataChanged();
+    if (pViewShell)
+        pViewShell->CellContentChanged();
+}
+void __EXPORT ScUndoRefConversion::Undo()
+{
+    BeginUndo();
+    if (pUndoDoc)
+        DoChange(pUndoDoc);
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    if ( pChangeTrack )
+        pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
+    EndUndo();
+}
+
+void __EXPORT ScUndoRefConversion::Redo()
+{
+    BeginRedo();
+    if (pRedoDoc)
+        DoChange(pRedoDoc);
+    SetChangeTrack();
+    EndRedo();
+}
+
+void __EXPORT ScUndoRefConversion::Repeat(SfxRepeatTarget& rTarget)
+{
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->DoRefConversion();
+}
+
+BOOL __EXPORT ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+    return (rTarget.ISA(ScTabViewTarget));
+}
 //============================================================================
 //  class ScUndoRefreshLink
 //

@@ -52,11 +52,12 @@ struct ScXMLAnnotationData;
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
 {
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > FormulaWithNamespace;
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell;
     com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable;
     ::boost::optional< rtl::OUString > pOUTextValue;
     ::boost::optional< rtl::OUString > pOUTextContent;
-    ::boost::optional< rtl::OUString > pOUFormula;
+    ::boost::optional< FormulaWithNamespace > pOUFormula;
     rtl::OUString* pContentValidationName;
     ::std::auto_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;

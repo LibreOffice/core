@@ -303,6 +303,7 @@ public:
 
     void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
     void            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate );
+    void            DoRefConversion( BOOL bRecord = TRUE );
 
 //UNUSED2008-05  void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );

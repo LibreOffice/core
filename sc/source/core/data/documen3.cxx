@@ -40,6 +40,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
@@ -77,8 +78,8 @@
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
-#include "svtools/PasswordHelper.hxx"
 #include "tabprotection.hxx"
+#include "formulaparserpool.hxx"
 
 #include <memory>
 
@@ -507,6 +508,13 @@ void ScDocument::MarkUsedExternalReferences()
     }
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
+}
+
+ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
+{
+    if( !mxFormulaParserPool.get() )
+        mxFormulaParserPool.reset( new ScFormulaParserPool( *this ) );
+    return *mxFormulaParserPool;
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )

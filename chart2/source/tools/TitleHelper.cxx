@@ -36,6 +36,7 @@
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <rtl/ustrbuf.hxx>
 
 //.............................................................................
 namespace chart
@@ -269,13 +270,44 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
     if(!xTitle.is())
         return;
 
+    rtl::OUString aNewText = rNewText;
+
+    bool bStacked = false;
+    uno::Reference< beans::XPropertySet > xTitleProperties( xTitle, uno::UNO_QUERY );
+    if( xTitleProperties.is() )
+        xTitleProperties->getPropertyValue( C2U( "StackCharacters" ) ) >>= bStacked;
+
+    if( bStacked )
+    {
+        //#i99841# remove linebreaks that were added for vertical stacking
+        rtl::OUStringBuffer aUnstackedStr;
+        rtl::OUStringBuffer aSource(rNewText);
+
+        bool bBreakIgnored = false;
+        sal_Int32 nLen = rNewText.getLength();
+        for( sal_Int32 nPos = 0; nPos < nLen; ++nPos )
+        {
+            sal_Unicode aChar = aSource.charAt( nPos );
+            if( aChar != '\n' )
+            {
+                aUnstackedStr.append( aChar );
+                bBreakIgnored = false;
+            }
+            else if( aChar == '\n' && bBreakIgnored )
+                aUnstackedStr.append( aChar );
+            else
+                bBreakIgnored = true;
+        }
+        aNewText = aUnstackedStr.makeStringAndClear();
+    }
+
     uno::Sequence< uno::Reference< XFormattedString > > aNewStringList(1);
 
     uno::Sequence< uno::Reference< XFormattedString > >  aOldStringList = xTitle->getText();
     if( aOldStringList.getLength() )
     {
         aNewStringList[0].set( aOldStringList[0] );
-        aNewStringList[0]->setString( rNewText );
+        aNewStringList[0]->setString( aNewText );
     }
     else
     {
@@ -286,7 +318,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
 
         if(xFormattedString.is())
         {
-            xFormattedString->setString( rNewText );
+            xFormattedString->setString( aNewText );
             aNewStringList[0].set( xFormattedString );
             if( pDefaultCharHeight != 0 )
             {

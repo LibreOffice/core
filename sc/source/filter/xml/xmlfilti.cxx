@@ -335,48 +335,60 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( USHORT nPrefix,
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
-void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sheet::FilterOperator& aFilterOperator, sal_Bool& bUseRegularExpressions) const
+void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sal_Int32& aFilterOperator, sal_Bool& bUseRegularExpressions) const
 {
     bUseRegularExpressions = sal_False;
     if (IsXMLToken(sTempOperator, XML_MATCH))
     {
         bUseRegularExpressions = sal_True;
-        aFilterOperator = sheet::FilterOperator_EQUAL;
+        aFilterOperator = sheet::FilterOperator2::EQUAL;
     }
     else if (IsXMLToken(sTempOperator, XML_NOMATCH))
     {
         bUseRegularExpressions = sal_True;
-        aFilterOperator = sheet::FilterOperator_NOT_EQUAL;
+        aFilterOperator = sheet::FilterOperator2::NOT_EQUAL;
     }
     else if (sTempOperator.compareToAscii("=") == 0)
-        aFilterOperator = sheet::FilterOperator_EQUAL;
+        aFilterOperator = sheet::FilterOperator2::EQUAL;
     else if (sTempOperator.compareToAscii("!=") == 0)
-        aFilterOperator = sheet::FilterOperator_NOT_EQUAL;
+        aFilterOperator = sheet::FilterOperator2::NOT_EQUAL;
     else if (IsXMLToken(sTempOperator, XML_BOTTOM_PERCENT))
-        aFilterOperator = sheet::FilterOperator_BOTTOM_PERCENT;
+        aFilterOperator = sheet::FilterOperator2::BOTTOM_PERCENT;
     else if (IsXMLToken(sTempOperator, XML_BOTTOM_VALUES))
-        aFilterOperator = sheet::FilterOperator_BOTTOM_VALUES;
+        aFilterOperator = sheet::FilterOperator2::BOTTOM_VALUES;
     else if (IsXMLToken(sTempOperator, XML_EMPTY))
-        aFilterOperator = sheet::FilterOperator_EMPTY;
+        aFilterOperator = sheet::FilterOperator2::EMPTY;
     else if (sTempOperator.compareToAscii(">") == 0)
-        aFilterOperator = sheet::FilterOperator_GREATER;
+        aFilterOperator = sheet::FilterOperator2::GREATER;
     else if (sTempOperator.compareToAscii(">=") == 0)
-        aFilterOperator = sheet::FilterOperator_GREATER_EQUAL;
+        aFilterOperator = sheet::FilterOperator2::GREATER_EQUAL;
     else if (sTempOperator.compareToAscii("<") == 0)
-        aFilterOperator = sheet::FilterOperator_LESS;
+        aFilterOperator = sheet::FilterOperator2::LESS;
     else if (sTempOperator.compareToAscii("<=") == 0)
-        aFilterOperator = sheet::FilterOperator_LESS_EQUAL;
+        aFilterOperator = sheet::FilterOperator2::LESS_EQUAL;
     else if (IsXMLToken(sTempOperator, XML_NOEMPTY))
-        aFilterOperator = sheet::FilterOperator_NOT_EMPTY;
+        aFilterOperator = sheet::FilterOperator2::NOT_EMPTY;
     else if (IsXMLToken(sTempOperator, XML_TOP_PERCENT))
-        aFilterOperator = sheet::FilterOperator_TOP_PERCENT;
+        aFilterOperator = sheet::FilterOperator2::TOP_PERCENT;
     else if (IsXMLToken(sTempOperator, XML_TOP_VALUES))
-        aFilterOperator = sheet::FilterOperator_TOP_VALUES;
+        aFilterOperator = sheet::FilterOperator2::TOP_VALUES;
+    else if (IsXMLToken(sTempOperator, XML_CONTAINS))
+        aFilterOperator = sheet::FilterOperator2::CONTAINS;
+    else if (IsXMLToken(sTempOperator, XML_DOES_NOT_CONTAIN))
+        aFilterOperator = sheet::FilterOperator2::DOES_NOT_CONTAIN;
+    else if (IsXMLToken(sTempOperator, XML_BEGINS_WITH))
+        aFilterOperator = sheet::FilterOperator2::BEGINS_WITH;
+    else if (IsXMLToken(sTempOperator, XML_DOES_NOT_BEGIN_WITH))
+        aFilterOperator = sheet::FilterOperator2::DOES_NOT_BEGIN_WITH;
+    else if (IsXMLToken(sTempOperator, XML_ENDS_WITH))
+        aFilterOperator = sheet::FilterOperator2::ENDS_WITH;
+    else if (IsXMLToken(sTempOperator, XML_DOES_NOT_END_WITH))
+        aFilterOperator = sheet::FilterOperator2::DOES_NOT_END_WITH;
 }
 
 void ScXMLConditionContext::EndElement()
 {
-    sheet::TableFilterField aFilterField;
+    sheet::TableFilterField2 aFilterField;
     if (pFilterContext->GetConnection())
         aFilterField.Connection = sheet::FilterConnection_OR;
     else
