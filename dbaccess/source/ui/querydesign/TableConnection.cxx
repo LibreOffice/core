@@ -156,12 +156,24 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetSourceWin() const
     {
-        return m_pParent->GetTabWindow( GetData()->getReferencingTable()->GetWinName() );
+        TTableWindowData::value_type pRef = GetData()->getReferencingTable();
+        OTableWindow* pRet = m_pParent->GetTabWindow( pRef->GetWinName() );
+        if ( !pRet )
+        {
+            pRet = m_pParent->GetTabWindow( pRef->GetComposedName() );
+        }
+        return pRet;
     }
     //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetDestWin() const
     {
-        return m_pParent->GetTabWindow( GetData()->getReferencedTable()->GetWinName() );
+        TTableWindowData::value_type pRef = GetData()->getReferencedTable();
+        OTableWindow* pRet = m_pParent->GetTabWindow( pRef->GetWinName() );
+        if ( !pRet )
+        {
+            pRet = m_pParent->GetTabWindow( pRef->GetComposedName() );
+        }
+        return pRet;
     }
 
     //------------------------------------------------------------------------

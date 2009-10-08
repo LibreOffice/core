@@ -30,8 +30,6 @@
 #ifndef DBACCESS_DOCUMENTEVENTS_HXX
 #define DBACCESS_DOCUMENTEVENTS_HXX
 
-#include "dbaccessdllapi.h"
-
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XNameReplace.hpp>
 /** === end UNO includes === **/
@@ -54,7 +52,7 @@ namespace dbaccess
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
                                     >   DocumentEvents_Base;
 
-    class DBACCESS_DLLPRIVATE DocumentEvents
+    class DocumentEvents
                                     :public DocumentEvents_Base
                                     ,public ::boost::noncopyable
     {

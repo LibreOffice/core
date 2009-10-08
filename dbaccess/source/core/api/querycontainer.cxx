@@ -387,6 +387,13 @@ void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObj
         ODefinitionContainer::disposing(_rSource);
     }
 }
+
+// -----------------------------------------------------------------------------
+::rtl::OUString OQueryContainer::determineContentType() const
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseQueryContainer" ) );
+}
+
 // -----------------------------------------------------------------------------
 Reference< XContent > OQueryContainer::implCreateWrapper(const ::rtl::OUString& _rName)
 {

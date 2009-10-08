@@ -36,6 +36,7 @@ TARGET=dbmm
 USE_DEFFILE=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ----------------------------------
 

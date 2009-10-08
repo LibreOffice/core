@@ -139,21 +139,33 @@ namespace dbaui
         ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
         ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
-        SqlParseError InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
+        SqlParseError   InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
+        bool            HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
         // save the position of the table window and the pos of the splitters
         // called when fields are deleted
         void DeleteFields( const ::rtl::OUString& rAliasName );
         // called when a table from tabeview was deleted
         void TableDeleted(const ::rtl::OUString& rAliasName);
 
-        BOOL getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, sal_uInt32& nWidth );
+        sal_Int32 getColWidth( sal_uInt16 _nColPos) const;
         void fillValidFields(const ::rtl::OUString& strTableName, ComboBox* pFieldList);
 
         void SaveUIConfig();
         void stopTimer();
         void startTimer();
         void reset();
-        sal_Bool InitFromParseNode();
+
+        /** initializes the view from the current parser / parse iterator of the controller
+
+            @param _pErrorInfo
+                When not <NULL/>, the instance pointed to by this parameter takes the error
+                which happened during the initialization.
+                If it is not <NULL/>, then any such error will be displayed, using the controller's
+                showError method.
+
+            @return <TRUE/> if and only if the initialization was successful
+        */
+        bool    initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo );
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,

@@ -34,5 +34,5 @@
 
 namespace sdbtools
 {
-    #include "stringconstants.cxx"
+    #include "stringconstants.inc"
 }

@@ -444,7 +444,7 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
         return sal_True;
 
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
     sal_Bool bCheck = sal_True;

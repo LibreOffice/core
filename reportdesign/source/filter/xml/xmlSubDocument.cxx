@@ -29,6 +29,7 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include "xmlSubDocument.hxx"
+#include "xmlCell.hxx"
 #include "xmlfilter.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -52,9 +53,11 @@ OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
                 sal_uInt16 nPrfx
                 ,const ::rtl::OUString& rLName
                 ,const Reference< XReportComponent > & _xComponent
-                ,OXMLTable* _pContainer) :
+                ,OXMLTable* _pContainer
+                ,OXMLCell* _pCellParent) :
     OXMLReportElementBase( rImport, nPrfx, rLName,_xComponent.get(),_pContainer)
 ,m_xFake(_xComponent)
+,m_pCellParent(_pCellParent)
 ,m_nCurrentCount(0)
 ,m_bContainsShape(false)
 {
@@ -95,6 +98,11 @@ SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
                 uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
                 pContext = xShapeImportHelper->CreateGroupChildContext(GetImport(),_nPrefix,_rLocalName,xAttrList,xShapes);
                 m_bContainsShape = true;
+                if (m_pCellParent)
+                {
+                    // #i94115 say to the parent Cell it contains shapes
+                    m_pCellParent->setContainsShape(true);
+                }
             }
             break;
         default:
@@ -114,7 +122,8 @@ void OXMLSubDocument::EndElement()
         m_xComponent.set(m_pContainer->getSection()->getByIndex(m_nCurrentCount),uno::UNO_QUERY);
         if ( m_xComponent.is() )
         {
-            m_pContainer->addCell(m_xComponent.get());
+            // #i94115# this is no longer need.
+            // m_pContainer->addCell(m_xComponent.get());
 
             if ( !m_aMasterFields.empty() )
                 m_xComponent->setMasterFields(Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));

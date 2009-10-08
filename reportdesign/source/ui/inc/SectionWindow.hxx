@@ -79,8 +79,19 @@ namespace rptui
         * \param _nResId
         * \param _pGetSection
         * \param _pIsSectionOn
+        * @return TRUE when title was set otherwise FALSE
         */
-        void setGroupSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool, OGroupHelper> _pIsSectionOn);
+        bool setGroupSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool, OGroupHelper> _pIsSectionOn);
+
+        /** set the title of the (report/page) header or footer
+        *
+        * \param _xGroup
+        * \param _nResId
+        * \param _pGetSection
+        * \param _pIsSectionOn
+        * @return TRUE when title was set otherwise FALSE
+        */
+        bool setReportSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,USHORT _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool, OReportHelper> _pIsSectionOn);
         void ImplInitSettings();
 
         DECL_LINK(Collapsed,OStartMarker*);
@@ -121,9 +132,9 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const sal_Int16 _nZoom);
+        void zoom(const Fraction& _aZoom);
 
-        void scrollChildren(long _nDeltaX);
+        void scrollChildren(long _nThumbPosX);
     };
 //==============================================================================
 } // rptui

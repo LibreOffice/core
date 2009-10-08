@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportCommands.xcu,v $
- * $Revision: 1.2 $
+ * $Revision: 1.2.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,14 +88,12 @@
             </node>
             <node oor:name=".uno:InsertDateTimeField" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Datum und Zeit...</value>
                     <value xml:lang="en-US">~Date and Time...</value>
                 </prop>
             </node>
             <node oor:name=".uno:SelectReport" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Bericht markieren...</value>
-                    <value xml:lang="en-US">~Select Report...</value>
+                    <value xml:lang="en-US">~Select Report</value>
                 </prop>
             </node>
             <node oor:name=".uno:SubReportInNewWindow" oor:op="replace">
@@ -149,13 +147,13 @@
             <node oor:name=".uno:TextDocument" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Text Dokument</value>
-                    <value xml:lang="en-US">Text Document</value>
+                    <value xml:lang="en-US">ODF Text Document</value>
                 </prop>
             </node>
             <node oor:name=".uno:Spreadsheet" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Tabellen Dokument</value>
-                    <value xml:lang="en-US">Spreadsheet Document</value>
+                    <value xml:lang="en-US">ODF Spreadsheet</value>
                 </prop>
             </node>
             <node oor:name=".uno:ReportNavigator" oor:op="replace">
@@ -253,7 +251,6 @@
             </node>
             <node oor:name=".uno:SectionAlignBottom" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Unten am Bereich</value>
                     <value xml:lang="en-US">Bottom Align on Section</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -262,19 +259,27 @@
             </node>
             <node oor:name=".uno:SectionAlignCenter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zentriert am Bereich</value>
                     <value xml:lang="en-US">Centered on Section</value>
                 </prop>
             </node>
             <node oor:name=".uno:SectionAlignMiddle" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Mittig am Bereich</value>
                     <value xml:lang="en-US">Middle on Section</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
                 </prop>
             </node>
+      <node oor:name=".uno:SelectAllLabels" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select all Labels</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SelectAllEdits" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select all Formatted Fields</value>
+        </prop>
+      </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:ExportReportTo" oor:op="replace">

@@ -339,7 +339,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
 
         ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "FileName", _sURL );
+        aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
         aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ) );
 

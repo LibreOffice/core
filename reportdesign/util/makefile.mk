@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.21.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,6 +36,13 @@ TARGET2=$(TARGET)ui
 # USE_DEFFILE=TRUE
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
+
+EXTENSION_VERSION_BASE=1.0.9
+.IF "$(PRODUCT)" != ""
+    EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
+.ELSE
+    EXTENSION_VERSION=$(EXTENSION_VERSION_BASE).$(BUILD)
+.ENDIF
 
 # --- Settings ----------------------------------
 .INCLUDE :  makefile.pmk
@@ -124,6 +131,7 @@ SHL2STDLIBS= \
         $(COMPHELPERLIB)		\
         $(CPPUHELPERLIB)		\
         $(CPPULIB)				\
+        $(FWELIB)				\
         $(SO2LIB)				\
         $(I18NISOLANGLIB)		\
         $(SALLIB)
@@ -136,6 +144,17 @@ SHL2STDLIBS+= \
         idbu.lib				\
         i$(TARGET).lib
 .ENDIF
+
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+SHL2STDLIBS+= \
+        -lfor$(DLLPOSTFIX) \
+        -lforui$(DLLPOSTFIX)
+.ELSE
+SHL2STDLIBS+= \
+        ifor.lib \
+        iforui.lib
+.ENDIF
+
 
 SHL2DEPN=$(SHL1TARGETN)
 SHL2LIBS=$(LIB2TARGET)
@@ -202,8 +221,12 @@ DEF3NAME=$(SHL3TARGET)
 
 .IF "$(SOLAR_JAVA)"!=""
 
-XMLFILES = $(EXTENSIONDIR)$/description.xml \
-            $(EXTENSIONDIR)$/META-INF$/manifest.xml
+XMLFILES =  $(EXTENSIONDIR)$/META-INF$/manifest.xml
+
+# DESCRIPTION_SRC is the source file which is copied into the extension
+# It is defaulted to "description.xml", but we want to pre-process it, so we use an intermediate
+# file
+DESCRIPTION_SRC = $(MISC)$/description.xml
 
 COMPONENT_MERGED_XCU= \
             $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Setup.xcu \
@@ -223,6 +246,10 @@ COMPONENT_MERGED_XCU= \
 
 COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
+    
+COMPONENT_IMAGES= \
+    $(EXTENSIONDIR)$/images$/em42.png \
+    $(EXTENSIONDIR)$/images$/em42_hc.png
 
 COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
             $(EXTENSIONDIR)$/readme_en-US.html \
@@ -236,25 +263,28 @@ COMPONENT_HELP= \
 
 # .jar files from solver
 COMPONENT_EXTJARFILES = \
-    $(EXTENSIONDIR)$/flute-1.3-jfree-20061107.jar							\
-    $(EXTENSIONDIR)$/jcommon-1.0.10.jar										\
-    $(EXTENSIONDIR)$/jcommon-serializer-0.2.0.jar							\
-    $(EXTENSIONDIR)$/libfonts-0.3.3.jar										\
-    $(EXTENSIONDIR)$/libformula-0.1.14.jar									\
-    $(EXTENSIONDIR)$/liblayout-0.2.8.jar										\
-    $(EXTENSIONDIR)$/libloader-0.3.6.jar										\
-    $(EXTENSIONDIR)$/librepository-0.1.4.jar									\
-    $(EXTENSIONDIR)$/libxml-0.9.9.jar										\
-    $(EXTENSIONDIR)$/pentaho-reporting-flow-engine-0.9.2.jar					\
-    $(EXTENSIONDIR)$/sac.jar                                                \
-    $(EXTENSIONDIR)$/sun-report-builder.jar \
+    $(EXTENSIONDIR)$/sun-report-builder.jar 					\
     $(EXTENSIONDIR)$/reportbuilderwizard.jar
+.IF "$(SYSTEM_JFREEREPORT)" != "YES"
+COMPONENT_EXTJARFILES += \
+    $(EXTENSIONDIR)$/flute-1.3-jfree-20061107.jar				\
+    $(EXTENSIONDIR)$/jcommon-1.0.10.jar							\
+    $(EXTENSIONDIR)$/jcommon-serializer-0.2.0.jar				\
+    $(EXTENSIONDIR)$/libfonts-0.3.3.jar							\
+    $(EXTENSIONDIR)$/libformula-0.1.14.jar						\
+    $(EXTENSIONDIR)$/liblayout-0.2.8.jar						\
+    $(EXTENSIONDIR)$/libloader-0.3.6.jar						\
+    $(EXTENSIONDIR)$/librepository-0.1.4.jar					\
+    $(EXTENSIONDIR)$/libxml-0.9.9.jar							\
+    $(EXTENSIONDIR)$/pentaho-reporting-flow-engine-0.9.2.jar 	\
+    $(EXTENSIONDIR)$/sac.jar
+.ENDIF
 
 COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP)
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_OTR_FILES) $(COMPONENT_HELP) $(COMPONENT_IMAGES)
 
 # --- Targets ----------------------------------
 
@@ -262,17 +292,15 @@ EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_O
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
-.IF "$(SYSTEM_JFREEREPORT)" == "YES"
-$(EXTENSIONDIR)$/%.jar : $(JFREEREPORT_JAR:d:d)$/%.jar
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-.ELSE
 $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
-.ENDIF
 
 $(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(EXTENSIONDIR)$/images$/%.png : $(PRJ)$/images$/%.png
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
@@ -284,7 +312,11 @@ $(COMPONENT_HELP) : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
+$(DESCRIPTION_SRC): description.xml
+    +-$(RM) $@
+    $(TYPE) description.xml | $(SED) "s/#VERSION#/$(EXTENSION_VERSION)/" > $@
+
 .ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk
 .ENDIF			# "$(SOLAR_JAVA)"!=""
-#
+

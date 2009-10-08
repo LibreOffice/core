@@ -51,16 +51,20 @@ namespace rptui
     public:
         OStatusbarController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
+        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+            create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+
+    private:
+        void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
         // XInterface
         DECLARE_XINTERFACE( )
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-            create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+
         virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization

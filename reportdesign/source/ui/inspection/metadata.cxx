@@ -176,6 +176,7 @@ namespace rptui
             ,DEF_INFO_2( MASTERFIELDS,                  MASTERFIELDS,               MASTERFIELDS,               COMPOSEABLE,DATA_PROPERTY )
             ,DEF_INFO_2( DETAILFIELDS,                  DETAILFIELDS,               DETAILFIELDS,               COMPOSEABLE,DATA_PROPERTY)
             ,DEF_INFO_1( AREA,                          AREA,                       AREA,                       COMPOSEABLE )
+            ,DEF_INFO_2( MIMETYPE,                      MIMETYPE,                   MIMETYPE,                   COMPOSEABLE,DATA_PROPERTY )
         };
 
         s_pPropertyInfos = aPropertyInfos;
@@ -296,6 +297,7 @@ namespace rptui
                 PROPERTY_EFFECTIVEMIN,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HideInactiveSelection")),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SubmitAction")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputRequired")),
                 PROPERTY_EMPTY_IS_NULL,
                 PROPERTY_FILTERPROPOSAL
                 ,PROPERTY_POSITIONX

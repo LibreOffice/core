@@ -147,7 +147,7 @@
 #define RID_STR_PROPPAGE_DATA               ( RID_STRING_START +  75 )
 
 #define RID_STR_FILTER                      ( RID_STRING_START +  76 )
-#define RID_STR_BOOL                        ( RID_STRING_START +  77 )
+// free
 
 #define RID_STR_FORCENEWPAGE                (RID_STRING_START + 78)
 #define RID_STR_NEWROWORCOL                 (RID_STRING_START + 79)
@@ -179,14 +179,14 @@
 #define RID_STR_REPORTHEADERFOOTER_DELETE   (RID_STRING_START + 104)
 #define RID_STR_VISIBLE                     (RID_STRING_START + 105)
 
-#define RID_STR_FORCENEWPAGE_CONST          (RID_STRING_START + 106)
-#define RID_STR_KEEPTOGETHER_CONST          (RID_STRING_START + 107)
+#define RID_STR_DETAIL                      (RID_STRING_START + 106)
+#define RID_STR_PAGE_HEADER                 (RID_STRING_START + 107)
 #define RID_STR_GROUPKEEPTOGETHER           (RID_STRING_START + 108)
-#define RID_STR_GROUPKEEPTOGETHER_CONST     (RID_STRING_START + 109)
+#define RID_STR_PAGE_FOOTER                 (RID_STRING_START + 109)
 #define RID_STR_PAGEHEADEROPTION            (RID_STRING_START + 110)
 #define RID_STR_PAGEFOOTEROPTION            (RID_STRING_START + 111)
-#define RID_STR_REPORTPRINTOPTION_CONST     (RID_STRING_START + 112)
-#define RID_STR_SECTIONPAGEBREAK_CONST      (RID_STRING_START + 113)
+#define RID_STR_REPORT_HEADER               (RID_STRING_START + 112)
+#define RID_STR_REPORT_FOOTER               (RID_STRING_START + 113)
 #define RID_STR_SCOPE_GROUP                 (RID_STRING_START + 114)
 #define RID_APP_TITLE                       (RID_STRING_START + 115)
 #define RID_APP_NEW_DOC                     (RID_STRING_START + 116)
@@ -216,7 +216,7 @@
 #define RID_STR_FORMULALIST                 (RID_STRING_START + 140)
 #define RID_STR_SCOPE                       (RID_STRING_START + 141)
 #define RID_STR_TYPE                        (RID_STRING_START + 142)
-#define RID_STR_TYPE_CONST                  (RID_STRING_START + 143)
+#define RID_STR_MIMETYPE                    (RID_STRING_START + 143)
 #define RID_STR_CHARTTYPE                   (RID_STRING_START + 144)
 #define RID_STR_MASTERFIELDS                (RID_STRING_START + 145)
 #define RID_STR_DETAILFIELDS                (RID_STRING_START + 146)
@@ -227,6 +227,8 @@
 #define RID_ERR_NO_COMMAND                  (RID_STRING_START + 151)
 #define RID_ERR_NO_OBJECTS                  (RID_STRING_START + 152)
 #define RID_STR_AREA                        (RID_STRING_START + 153)
+#define RID_STR_INSERT                      (RID_STRING_START + 154)
+
 
 // #define RID_STR_                     (RID_STRING_START + 130)
 // -----------------------------------------------------------------------
@@ -252,6 +254,7 @@
 #define RID_MENU_REPORT                     ( RID_MENU_START + 0 )
 #define RID_GROUPSROWPOPUPMENU              ( RID_MENU_START + 1 )
 #define RID_MENU_NAVIGATOR                  ( RID_MENU_START + 2 )
+#define RID_TB_SORTING                      ( RID_MENU_START + 3 )
 
 // image lists -----------------------------------------------------------------------
 #define IMG_CONDFORMAT_DLG_SC               (RID_IMAGELIST_START + 0)
@@ -260,5 +263,18 @@
 #define IMG_CONDFORMAT_DLG_LCH              (RID_IMAGELIST_START + 3)
 #define RID_SVXIMGLIST_RPTEXPL              (RID_IMAGELIST_START + 4)
 #define RID_SVXIMGLIST_RPTEXPL_HC           (RID_IMAGELIST_START + 5)
+#define IMG_ADDFIELD_DLG_SC                 (RID_IMAGELIST_START + 6)
+#define IMG_ADDFIELD_DLG_SCH                (RID_IMAGELIST_START + 7)
+#define IMG_ADDFIELD_DLG_LC                 (RID_IMAGELIST_START + 8)
+#define IMG_ADDFIELD_DLG_LCH                (RID_IMAGELIST_START + 9)
+
+// untyped
+#define RID_STR_BOOL                        (RID_UNTYPED_START +  0 )
+#define RID_STR_FORCENEWPAGE_CONST          (RID_UNTYPED_START +  1 )
+#define RID_STR_KEEPTOGETHER_CONST          (RID_UNTYPED_START +  2)
+#define RID_STR_GROUPKEEPTOGETHER_CONST     (RID_UNTYPED_START +  3)
+#define RID_STR_REPORTPRINTOPTION_CONST     (RID_UNTYPED_START +  4)
+#define RID_STR_SECTIONPAGEBREAK_CONST      (RID_UNTYPED_START +  5)
+#define RID_STR_TYPE_CONST                  (RID_UNTYPED_START +  6)
 
 #endif          // _RPTUI_DLGRESID_HRC

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sqledit.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.16.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,31 +30,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_SQLEDIT_HXX
 #include "sqledit.hxx"
-#endif
-#ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include "dbaccess_helpid.hrc"
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_UNDOSQLEDIT_HXX
 #include "undosqledit.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
+
+#include <svtools/smplhint.hxx>
+
 //////////////////////////////////////////////////////////////////////////
 // OSqlEdit
 //------------------------------------------------------------------------------
@@ -62,7 +49,7 @@ using namespace dbaui;
 
 DBG_NAME(OSqlEdit)
 OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
-    MultiLineEdit( pParent, nWinStyle )
+    MultiLineEditSyntaxHighlight( pParent, nWinStyle )
     ,m_pView(pParent)
     ,m_bAccelAction( sal_False )
     ,m_bStopTimer(sal_False )
@@ -77,6 +64,11 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     m_timerInvalidate.SetTimeout(200);
     m_timerInvalidate.SetTimeoutHdl(LINK(this, OSqlEdit, OnInvalidateTimer));
     m_timerInvalidate.Start();
+
+    ImplSetFont();
+    // listen for change of Font Setting
+    StartListening(m_SourceViewConfig);
+    StartListening(m_ColorConfig);
 }
 
 //------------------------------------------------------------------------------
@@ -85,6 +77,8 @@ OSqlEdit::~OSqlEdit()
     DBG_DTOR(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
+    EndListening(m_SourceViewConfig);
+    EndListening(m_ColorConfig);
 }
 //------------------------------------------------------------------------------
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
@@ -98,7 +92,7 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
     if( (aKeyFunc==KEYFUNC_CUT)||(aKeyFunc==KEYFUNC_COPY)||(aKeyFunc==KEYFUNC_PASTE) )
         m_bAccelAction = sal_True;
 
-    MultiLineEdit::KeyInput( rKEvt );
+    MultiLineEditSyntaxHighlight::KeyInput( rKEvt );
 
     if( m_bAccelAction )
         m_bAccelAction = sal_False;
@@ -121,7 +115,7 @@ void OSqlEdit::GetFocus()
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
     m_strOrigText  =GetText();
-    MultiLineEdit::GetFocus();
+    MultiLineEditSyntaxHighlight::GetFocus();
 }
 
 //------------------------------------------------------------------------------
@@ -181,7 +175,7 @@ void OSqlEdit::SetText(const String& rNewText)
         LINK(this, OSqlEdit, OnUndoActionTimer).Call(NULL);
     }
 
-    MultiLineEdit::SetText(rNewText);
+    MultiLineEditSyntaxHighlight::SetText(rNewText);
     m_strOrigText  =rNewText;
 }
 // -----------------------------------------------------------------------------
@@ -199,4 +193,28 @@ void OSqlEdit::startTimer()
         m_timerInvalidate.Start();
 }
 
+void OSqlEdit::Notify( SfxBroadcaster& rBC, const SfxHint& /*rHint*/ )
+{
+    if (&rBC == &m_SourceViewConfig)
+        ImplSetFont();
+    else if (&rBC == &m_ColorConfig)
+        MultiLineEditSyntaxHighlight::UpdateData();
+}
+
+void OSqlEdit::ImplSetFont()
+{
+    AllSettings aSettings = GetSettings();
+    StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+    String sFontName = m_SourceViewConfig.GetFontName();
+    if ( !sFontName.Len() )
+    {
+        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0 , this ) );
+        sFontName = aTmpFont.GetName();
+    }
+    Size aFontSize( 0, m_SourceViewConfig.GetFontHeight() );
+    Font aFont( sFontName, aFontSize );
+    aStyleSettings.SetFieldFont(aFont);
+    aSettings.SetStyleSettings(aStyleSettings);
+    SetSettings(aSettings);
+}
 //==============================================================================

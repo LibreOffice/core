@@ -125,8 +125,10 @@ void SAL_CALL OGroup::dispose() throw(uno::RuntimeException)
 //
 void SAL_CALL OGroup::disposing()
 {
-    ::comphelper::disposeComponent(m_xHeader);
-    ::comphelper::disposeComponent(m_xFooter);
+    m_xHeader.clear();
+    m_xFooter.clear();
+    //::comphelper::disposeComponent(m_xHeader);
+    //::comphelper::disposeComponent(m_xFooter);
     ::comphelper::disposeComponent(m_xFunctions);
     m_xContext.clear();
 }

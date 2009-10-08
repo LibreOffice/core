@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -73,6 +73,7 @@
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <comphelper/sharedmutex.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -116,47 +117,6 @@ class ODatabaseContext;
 class OSharedConnectionManager;
 
 //============================================================
-//= SharedMutex
-//============================================================
-/** a shared mutex, which deletes itself as soon as the last reference
-    to it dies.
-*/
-class SharedMutex
-{
-private:
-    oslInterlockedCount     m_refCount;
-    mutable ::osl::Mutex    m_aMutex;
-
-public:
-    SharedMutex();
-
-    void SAL_CALL acquire();
-    void SAL_CALL release();
-
-    inline ::osl::Mutex&   getMutex() const { return m_aMutex; }
-
-private:
-    ~SharedMutex();
-};
-
-//============================================================
-//= SharedMutexHolder
-//============================================================
-/** a base class merely holding a SharedMutex instance. Useful if you
-    need to ensure the SharedMutex is to be initialized before other
-    of your members, in this case just derive from SharedMutexHolder.
-*/
-class SharedMutexHolder
-{
-protected:
-    SharedMutexHolder() : m_xMutex( new SharedMutex ) { }
-    ~SharedMutexHolder() { }
-
-protected:
-    ::rtl::Reference< SharedMutex > m_xMutex;
-};
-
-//============================================================
 //= VosMutexFacade
 //============================================================
 /** a class which provides an IMutex interface to an OSL-based mutex
@@ -170,13 +130,14 @@ public:
     VosMutexFacade( ::osl::Mutex& _rMutex );
 
     // IMutex
-    virtual void SAL_CALL acquire();
+    virtual void SAL_CALL acquire();    
     virtual sal_Bool SAL_CALL tryToAcquire();
     virtual void SAL_CALL release();
 
 private:
     ::osl::Mutex&   m_rMutex;
 };
+
 
 //============================================================
 //= ODatabaseModelImpl
@@ -188,8 +149,7 @@ typedef ::utl::SharedUNOComponent< ::com::sun::star::embed::XStorage >  SharedSt
 class ODatabaseContext;
 class DocumentStorageAccess;
 class OSharedConnectionManager;
-class ODatabaseModelImpl    :public SharedMutexHolder
-                            ,public ::rtl::IReference
+class ODatabaseModelImpl    :public ::rtl::IReference
                             ,public ::sfx2::IMacroDocumentAccess
                             ,public ::sfx2::IModifiableDocument
 {
@@ -208,6 +168,7 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
 
     DocumentStorageAccess*                                                      m_pStorageAccess;
+    ::comphelper::SharedMutex                                                   m_aMutex;
     VosMutexFacade                                                              m_aMutexFacade;
     ::std::vector< TContentPtr >                                                m_aContainer;   // one for each ObjectType
     TStorages                                                                   m_aStorages;
@@ -412,7 +373,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentSubStorageSupplier >
             getDocumentSubStorageSupplier();
 
-    inline ::rtl::Reference< SharedMutex > getSharedMutex() const { return m_xMutex; }
+    inline const ::comphelper::SharedMutex& getSharedMutex() const { return m_aMutex; }
 
     /** @see osl_incrementInterlockedCount.
      */
@@ -510,7 +471,7 @@ public:
             if any of the invoked operations does so
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-            switchToStorage(
+            switchToStorage( 
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxNewRootStorage
             );
 
@@ -569,7 +530,7 @@ class ModelDependentComponent
 {
 protected:
     ::rtl::Reference< ODatabaseModelImpl >  m_pImpl;
-    ::rtl::Reference< SharedMutex >         m_xMutex;
+    mutable ::comphelper::SharedMutex       m_aMutex;
 
 protected:
     ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model );
@@ -581,7 +542,7 @@ protected:
 
     inline ::osl::Mutex& getMutex() const
     {
-        return m_xMutex->getMutex();
+        return m_aMutex;
     }
 
 public:

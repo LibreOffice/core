@@ -136,7 +136,7 @@ public class FormatValueUtility
     {
         if (dateFormat == null)
         {
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'.'S'Z'");
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.'S'Z'");
         }
         return dateFormat.format(date);
     }

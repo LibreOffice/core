@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowAccess.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.34.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +90,17 @@ namespace dbaui
     {
         m_pTable = NULL;
         VCLXAccessibleComponent::disposing();
+    }
+    // -----------------------------------------------------------------------------
+    void OTableWindowAccess::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+    {
+        if ( rVclWindowEvent.GetId() == VCLEVENT_OBJECT_DYING )
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            m_pTable = NULL;
+        }
+
+        VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
     }
     // -----------------------------------------------------------------------------
     Any SAL_CALL OTableWindowAccess::queryInterface( const Type& aType ) throw (RuntimeException)
@@ -255,7 +266,7 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         return      AccessibleRelationType::CONTROLLER_FOR == aRelationType
-                &&  m_pTable->getTableView()->ExistsAConn(m_pTable);
+                &&  m_pTable && m_pTable->getTableView()->ExistsAConn(m_pTable);
     }
     // -----------------------------------------------------------------------------
     AccessibleRelation SAL_CALL OTableWindowAccess::getRelationByType( sal_Int16 aRelationType ) throw (RuntimeException)

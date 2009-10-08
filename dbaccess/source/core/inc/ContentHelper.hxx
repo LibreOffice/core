@@ -103,7 +103,8 @@ namespace dbaccess
     struct ContentProperties
     {
         ::rtl::OUString aTitle;         // Title
-        ::rtl::OUString aContentType;   // ContentType
+        ::boost::optional< ::rtl::OUString >
+                        aContentType;   // ContentType (aka MediaType aka MimeType)
         sal_Bool        bIsDocument;    // IsDocument
         sal_Bool        bIsFolder;      // IsFolder
         sal_Bool        bAsTemplate;    // AsTemplate
@@ -132,7 +133,7 @@ namespace dbaccess
                                                             ::comphelper::UStringHash,
                                                             ::comphelper::UStringEqual
                                                         > PropertyChangeListenerContainer;
-    typedef ::comphelper::OMutexAndBroadcastHelper  OContentHelper_MBASE;
+    typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
     typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::ucb::XContent
                                                 ,   ::com::sun::star::ucb::XCommandProcessor
                                                 ,   ::com::sun::star::lang::XServiceInfo
@@ -156,6 +157,8 @@ namespace dbaccess
             getProperties( const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
+        void impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify = true);
+
     protected:
         ::cppu::OInterfaceContainerHelper       m_aContentListeners;
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
@@ -165,7 +168,6 @@ namespace dbaccess
         const ::connectivity::SQLError          m_aErrorHelper;
         TContentPtr                             m_pImpl;
         sal_uInt32                              m_nCommandId;
-
 
         // helper
         virtual void SAL_CALL disposing();
@@ -232,6 +234,9 @@ namespace dbaccess
                             ::com::sun::star::beans::Property >& rProperties );
 
         inline TContentPtr getImpl() const { return m_pImpl; }
+
+    protected:
+        virtual ::rtl::OUString determineContentType() const = 0;
     };
 
 //........................................................................

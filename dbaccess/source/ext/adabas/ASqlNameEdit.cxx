@@ -36,11 +36,12 @@ namespace adabasui
     //------------------------------------------------------------------
     sal_Bool isCharOk(sal_Unicode _cChar)
     {
-        return  (_cChar >= 'A' && _cChar <= 'Z'     ||
-                 _cChar == '_'                      ||
-                 (_cChar >= '0' && _cChar <= '9')   ||
-                 (_cChar >= 'a' && _cChar <= 'z'));
-
+        return (
+                (_cChar >= 'A' && _cChar <= 'Z') ||
+                _cChar == '_' ||
+                ((_cChar >= '0' && _cChar <= '9')) ||
+                ((_cChar >= 'a' && _cChar <= 'z'))
+               );
     }
     //------------------------------------------------------------------
     sal_Bool OSQLNameChecker::checkString(  const ::rtl::OUString& _sOldValue,

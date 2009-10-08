@@ -50,6 +50,7 @@
 #include "ReportDefinition.hxx"
 #include "CondFormat.hxx"
 #include "UITools.hxx"
+#include "AddField.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include "DateTime.hxx"
 #include <svtools/syslocale.hxx>
@@ -84,6 +85,8 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/streamsection.hxx>
@@ -115,6 +118,9 @@
 #include <svx/brshitem.hxx>
 #include <svx/flagsdef.hxx> //CHINA001
 #include <svx/svdpagv.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/zoom_def.hxx>
+#include <svx/dialogs.hrc>
 
 #include "DesignView.hxx"
 #include "ModuleHelper.hxx"
@@ -280,14 +286,16 @@ DBG_NAME( rpt_OReportController )
 OReportController::OReportController(Reference< XComponentContext > const & xContext)
 : OReportController_BASE(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY))
 ,OPropertyStateContainer(OGenericUnoController_Base::rBHelper)
-,m_aSelectionListeners( m_aMutex )
+,m_aSelectionListeners( getMutex() )
 ,m_pMyOwnView(NULL)
 ,m_pClipbordNotifier(NULL)
 ,m_pGroupsFloater(NULL)
 ,m_xContext(xContext)
 ,m_nSplitPos(-1)
 ,m_nPageNum(-1)
+,m_nSelectionCount(0)
 ,m_nZoomValue(100)
+,m_eZoomType(SVX_ZOOM_PERCENT)
 ,m_bShowRuler(sal_True)
 ,m_bGridVisible(sal_True)
 ,m_bGridUse(sal_True)
@@ -299,7 +307,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 {
     m_sMode =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal"));
     DBG_CTOR( rpt_OReportController,NULL);
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZoomValue")),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,      &m_nZoomValue,      ::getCppuType(reinterpret_cast< sal_Int16*>(NULL)));
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZoomValue")),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,&m_nZoomValue,::getCppuType(reinterpret_cast< sal_Int16*>(NULL)));
 }
 // -----------------------------------------------------------------------------
 OReportController::~OReportController()
@@ -423,7 +431,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isEditable();
             break;
         case SID_ADD_CONTROL_PAIR:
-            aReturn.bEnabled = isEditable() && m_pMyOwnView->getMarkedSection().get() != NULL;
+            aReturn.bEnabled = isEditable();
             break;
         case SID_REDO:
         case SID_UNDO:
@@ -435,9 +443,9 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_OBJECT_SMALLESTHEIGHT:
         case SID_OBJECT_GREATESTWIDTH:
         case SID_OBJECT_GREATESTHEIGHT:
-            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && m_pMyOwnView->isAlignPossible();
+            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection();// && m_pMyOwnView->isAlignPossible();
             if ( aReturn.bEnabled )
-                aReturn.bEnabled = m_pMyOwnView->getMarkedObjectCount() > 1;
+                aReturn.bEnabled = m_nSelectionCount > 1;
             break;
 
         case SID_DISTRIBUTION:
@@ -497,7 +505,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_SECTION_ALIGN_UP:
         case SID_SECTION_ALIGN_MIDDLE:
         case SID_SECTION_ALIGN_DOWN:
-            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && m_pMyOwnView->isAlignPossible();
+            aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection();// && m_pMyOwnView->isAlignPossible();
             break;
         case SID_CUT:
             aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && !m_pMyOwnView->isHandleEvent(_nId);
@@ -894,8 +902,8 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_ATTR_ZOOM:
             aReturn.bEnabled = sal_True;
             {
-                SvxZoomItem aZoom(SVX_ZOOM_PERCENT,m_nZoomValue);
-                aZoom.SetValueSet(SVX_ZOOM_ENABLE_50|SVX_ZOOM_ENABLE_75|SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_150|SVX_ZOOM_ENABLE_200);
+                SvxZoomItem aZoom(m_eZoomType,m_nZoomValue);
+                aZoom.SetValueSet(SVX_ZOOM_ENABLE_50|SVX_ZOOM_ENABLE_75|SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_200);
                 aZoom.QueryValue(aReturn.aValue);
                 //aReturn.sTitle = ::rtl::OUString::valueOf((sal_Int32)m_nZoomValue);
             }
@@ -903,11 +911,10 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_ATTR_ZOOMSLIDER:
             aReturn.bEnabled = sal_True;
             {
-                SvxZoomSliderItem aZoomSlider(m_nZoomValue);
+                SvxZoomSliderItem aZoomSlider(m_nZoomValue,20,400);
                 aZoomSlider.AddSnappingPoint(50);
                 aZoomSlider.AddSnappingPoint(75);
                 aZoomSlider.AddSnappingPoint(100);
-                aZoomSlider.AddSnappingPoint(150);
                 aZoomSlider.AddSnappingPoint(200);
                 aZoomSlider.QueryValue(aReturn.aValue);
                 //aReturn.sTitle = ::rtl::OUString::valueOf((sal_Int32)m_nZoomValue);
@@ -947,7 +954,7 @@ namespace
 void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( !getView() )
     {
         switch(_nId)
@@ -1594,11 +1601,16 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_GROUP:
             break;
         case SID_ATTR_ZOOM:
-            if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
+            if ( aArgs.getLength() == 0 )
+            {
+                openZoomDialog();
+            }
+            else if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
             {
                 SvxZoomItem aZoomItem;
                 aZoomItem.PutValue(aArgs[0].Value);
                 m_nZoomValue = aZoomItem.GetValue();
+                m_eZoomType = aZoomItem.GetType();
                 impl_zoom_nothrow();
             } // if ( aArgs.getLength() == 1 && aArgs[0].Name.equalsAscii("Zoom") )
             break;
@@ -1608,6 +1620,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 SvxZoomSliderItem aZoomSlider;
                 aZoomSlider.PutValue(aArgs[0].Value);
                 m_nZoomValue = aZoomSlider.GetValue();
+                m_eZoomType = SVX_ZOOM_PERCENT;
                 impl_zoom_nothrow();
             }
             break;
@@ -1648,6 +1661,18 @@ void OReportController::impl_initialize( )
             m_xFormatter.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
+            if ( !m_xReportDefinition->getCommand().getLength() && getConnection().is())
+            {
+                uno::Reference<sdbcx::XTablesSupplier> xTablesSup(getConnection(),uno::UNO_QUERY_THROW);
+                uno::Reference<container::XNameAccess> xTables = xTablesSup->getTables();
+                const uno::Sequence< ::rtl::OUString > aNames( xTables->getElementNames() );
+
+                if ( aNames.hasElements() )
+                {
+                    m_xReportDefinition->setCommand(aNames[0]);
+                    m_xReportDefinition->setCommandType(sdb::CommandType::TABLE);
+                }
+            }
 
         } // if ( m_xReportDefinition.is() )
 
@@ -1687,7 +1712,7 @@ void OReportController::impl_initialize( )
             m_pMyOwnView->setCurrentPage(m_sLastActivePage);
             uno::Sequence< beans::PropertyValue> aArgs;
             executeUnChecked(SID_SELECT_REPORT,aArgs);
-        }
+        } // if ( m_bShowProperties && m_nPageNum == -1 )
 
         setModified(sal_False);     // and we are not modified yet
 
@@ -1705,6 +1730,18 @@ IMPL_LINK( OReportController, OnOpenHelpAgent, void* ,/*_pMemfun*/)
 {
     //m_nExecuteReportEvent = 0;
     doOpenHelpAgent();
+    return 0L;
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow* ,_pAddFieldDlg)
+{
+    WaitObject aObj(m_pMyOwnView);
+    uno::Sequence< beans::PropertyValue > aArgs = _pAddFieldDlg->getSelectedFieldDescriptors();
+    // we use this way to create undo actions
+    if ( aArgs.getLength() )
+    {
+        executeChecked(SID_ADD_CONTROL_PAIR,aArgs);
+    }
     return 0L;
 }
 // -----------------------------------------------------------------------------
@@ -1749,7 +1786,7 @@ sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( Runt
         return sal_True;
 
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
@@ -2023,7 +2060,7 @@ SfxUndoManager* OReportController::getUndoMgr()
 // -----------------------------------------------------------------------------
 void OReportController::setModified(sal_Bool _bModified)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     try
     {
         if ( m_xReportDefinition.is() )
@@ -2069,7 +2106,7 @@ void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _
     if ( xGroup.is() )
     {
         ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-        ::osl::MutexGuard aGuard(m_aMutex);
+        ::osl::MutexGuard aGuard( getMutex() );
         sal_Int32 nGroupPos = 0;
         _rEvent.Accessor >>= nGroupPos;
 
@@ -2109,14 +2146,14 @@ void SAL_CALL OReportController::elementRemoved( const ContainerEvent& _rEvent )
 void SAL_CALL OReportController::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
 {
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     OSL_ENSURE(0,"Not yet implemented!");
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     try
     {
         sal_Bool bShow = sal_False;
@@ -2374,6 +2411,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                         uno::Any aValue;
                         static_cast<const SvxSizeItem*>(pItem)->QueryValue(aValue,MID_SIZE_SIZE);
                         xProp->setPropertyValue(PROPERTY_PAPERSIZE,aValue);
+                        resetZoomType();
                     }
 
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_LRSPACE,sal_True,&pItem))
@@ -2394,6 +2432,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                         uno::Any aValue;
                         pPageItem->QueryValue(aValue,MID_PAGE_LAYOUT);
                         xProp->setPropertyValue(PROPERTY_PAGESTYLELAYOUT,aValue);
+                        resetZoomType();
                     }
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_BRUSH,sal_True,&pItem))
                     {
@@ -2417,7 +2456,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XModel > & xModel) throw( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     m_xReportDefinition.set(xModel,uno::UNO_QUERY);
     return m_xReportDefinition.is();
 }
@@ -2458,7 +2497,12 @@ void OReportController::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
         && (static_cast< DlgEdHint const & >(rHint).GetKind()
             == RPTUI_HINT_SELECTIONCHANGED))
     {
-        InvalidateAll();
+        const sal_Int32 nSelectionCount = m_pMyOwnView->getMarkedObjectCount();
+        if ( m_nSelectionCount != nSelectionCount )
+        {
+            m_nSelectionCount = nSelectionCount;
+            InvalidateAll();
+        }
         lang::EventObject aEvent(*this);
         m_aSelectionListeners.forEach<view::XSelectionChangeListener>(
             ::boost::bind(&view::XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
@@ -2486,7 +2530,7 @@ void OReportController::alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nCon
 // -----------------------------------------------------------------------------
 uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     typedef ::std::pair< ::rtl::OUString,sal_uInt16> TStringIntPair;
     const TStringIntPair pViewDataList[] =
     {
@@ -2556,7 +2600,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportController::restoreViewData(const uno::Any& Data) throw( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     uno::Sequence<beans::PropertyValue> aProps;
     if ( Data >>= aProps )
     {
@@ -2817,7 +2861,7 @@ void OReportController::insertGraphic()
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     ::sal_Bool bRet = sal_True;
     if ( m_pMyOwnView )
     {
@@ -2857,7 +2901,7 @@ void OReportController::insertGraphic()
 // -----------------------------------------------------------------------------
 Any SAL_CALL OReportController::getSelection(  ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     Any aRet;
     if ( m_pMyOwnView )
     {
@@ -2934,13 +2978,13 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     }
     else
     {
-        SdrUnoObj* pLabel,*pControl;
-        FmFormView::createControlLabelPair(NULL,m_pMyOwnView
+        SdrUnoObj* pLabel( NULL );
+        SdrUnoObj* pControl( NULL );
+        FmFormView::createControlLabelPair(m_pMyOwnView
                             ,nLeftMargin,0
                             ,NULL,NULL,_nObjectId,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
                          NULL,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
                          pLabel,pControl);
-
         delete pLabel;
 
         pNewControl = pControl;
@@ -2963,7 +3007,11 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         {
             if ( xInfo->hasPropertyByName(sProps[i]) && xShapeInfo->hasPropertyByName(sProps[i]) )
                 xUnoProp->setPropertyValue(sProps[i],xShapeProp->getPropertyValue(sProps[i]));
-        }
+        } // for(size_t i = 0; i < sizeof(sProps)/sizeof(sProps[0]);++i)
+
+        if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
+            xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
+
 
         if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && _sFunction.getLength() )
         {
@@ -3071,7 +3119,12 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
     pSectionWindow[0] = m_pMyOwnView->getMarkedSection();
 
     if ( !pSectionWindow[0] )
-        return;
+    {
+        select(uno::makeAny(m_xReportDefinition->getDetail()));
+        pSectionWindow[0] = m_pMyOwnView->getMarkedSection();
+        if ( !pSectionWindow[0] )
+            return;
+    }
 
     uno::Reference<report::XSection> xCurrentSection = m_pMyOwnView->getCurrentSection();
     UndoManagerListAction aUndo( *getUndoMgr(), String( ModuleRes( RID_STR_UNDO_INSERT_CONTROL ) ) );
@@ -3222,7 +3275,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             pSectionViews[0] = &pSectionWindow[1]->getReportSection().getSectionView();
             pSectionViews[1] = &pSectionWindow[0]->getReportSection().getSectionView();
             // find this in svx
-            FmFormView::createControlLabelPair(pSectionViews[0],m_pMyOwnView
+            FmFormView::createControlLabelPair(m_pMyOwnView
                 ,nLeftMargin,0
                 ,xField,xNumberFormats,nOBJID,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
                 pSectionWindow[1]->getReportSection().getPage(),pSectionWindow[0]->getReportSection().getPage(),m_aReportModel.get(),
@@ -3267,7 +3320,10 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                             ReportFormula aFormula( ReportFormula::Field, sName );
                             xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFormula.getCompleteFormula() ) );
-                        }
+                        } // if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) )
+
+                        if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
+                            xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
 
                         pObjs[i]->CreateMediator(sal_True);
                         // need SectionView from the above or follow Section
@@ -3737,7 +3793,7 @@ void OReportController::checkChartEnabled()
     throw (uno::RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     uno::Reference< frame::XTitle> xTitle(m_xReportDefinition,uno::UNO_QUERY_THROW);
 
@@ -3775,12 +3831,12 @@ void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHa
 }
 void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     m_sMode = aMode;
 }
 ::rtl::OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_sMode;
 }
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -3846,15 +3902,12 @@ void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty
 void OReportController::impl_zoom_nothrow()
 {
     Fraction aZoom(m_nZoomValue,100);
-    MapMode aMapMode = m_pMyOwnView->GetMapMode();
-    aMapMode.SetScaleX(aZoom);
-    aMapMode.SetScaleY(aZoom);
-    m_pMyOwnView->SetMapMode(aMapMode);
-    m_pMyOwnView->zoom(m_nZoomValue);
+    setZoomFactor(aZoom,*m_pMyOwnView);
+    m_pMyOwnView->zoom(aZoom);
     // TRY
     /*m_pMyOwnView->Invalidate(INVALIDATE_NOCHILDREN);*/
-    InvalidateFeature(SID_ATTR_ZOOM);
-    InvalidateFeature(SID_ATTR_ZOOMSLIDER);
+    InvalidateFeature(SID_ATTR_ZOOM,Reference< XStatusListener >(),sal_True);
+    InvalidateFeature(SID_ATTR_ZOOMSLIDER,Reference< XStatusListener >(),sal_True);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const
@@ -3913,7 +3966,61 @@ bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndo
 void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const
 {
     _rState.bEnabled = isEditable();
-    const rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
-    _rState.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE && sShapeType.compareToAscii(_pCustomShapeType) == 0;
+    _rState.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE && m_pMyOwnView->GetInsertObjString().compareToAscii(_pCustomShapeType) == 0;
+}
+// -----------------------------------------------------------------------------
+void OReportController::openZoomDialog()
+{
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if ( pFact )
+    {
+        static SfxItemInfo aItemInfos[] =
+        {
+            { SID_ATTR_ZOOM, SFX_ITEM_POOLABLE }
+        };
+        SfxPoolItem* pDefaults[] =
+        {
+            new SvxZoomItem()
+        };
+        static USHORT pRanges[] =
+        {
+            SID_ATTR_ZOOM,SID_ATTR_ZOOM,
+            0
+        };
+        try
+        {
+            ::std::auto_ptr<SfxItemPool> pPool( new SfxItemPool(String::CreateFromAscii("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
+            pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
+            pPool->FreezeIdRanges();                        // the same
+
+            ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
+            // fill it
+            SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
+            aZoomItem.SetValueSet(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_WHOLEPAGE|SVX_ZOOM_ENABLE_PAGEWIDTH);
+            pDescriptor->Put(aZoomItem);
+
+            ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, *pDescriptor.get(), RID_SVXDLG_ZOOM) );
+            pDlg->SetLimits( 20, 400 );
+            bool bCancel = ( RET_CANCEL == pDlg->Execute() );
+
+            if ( !bCancel )
+            {
+                const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM );
+                m_eZoomType = rZoomItem.GetType();
+                m_nZoomValue = rZoomItem.GetValue();
+                if ( m_eZoomType != SVX_ZOOM_PERCENT )
+                    m_nZoomValue = m_pMyOwnView->getZoomFactor( m_eZoomType );
+
+                impl_zoom_nothrow();
+            } // if ( !bCancel )
+        }
+        catch(uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+        delete pDefaults[i];
+    } // if(pFact)
 }
 // -----------------------------------------------------------------------------

@@ -358,11 +358,6 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         {
             m_xBrowserController->inspect(uno::Sequence< Reference<uno::XInterface> >());
             m_xBrowserController->inspect(_aObjects);
-
-            if ( m_sLastActivePage.getLength() )
-            {
-                m_xBrowserController->restoreViewData( makeAny( m_sLastActivePage ) );
-            } // if ( m_sLastActivePage.getLength() )
         }
         catch( const Exception& )
         {

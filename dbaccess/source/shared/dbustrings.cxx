@@ -35,7 +35,7 @@
 namespace dbaui
 {
 
-#include "stringconstants.cxx"
+#include "stringconstants.inc"
 
     //============================================================
     //= URLs

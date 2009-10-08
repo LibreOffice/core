@@ -284,7 +284,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory 
     sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
     sal_Int32 nBT   = PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
-    m_aPrematureParamValues.resize( 0 );
+    m_aPrematureParamValues.get().resize( 0 );
 
     // sdb.RowSet Properties
     registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   ::getCppuType(reinterpret_cast< Reference< XConnection >* >(NULL)));
@@ -790,10 +790,10 @@ void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
     checkUpdateConditions(columnIndex);
     checkUpdateIterator();
 
-    ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
+    ::connectivity::ORowSetValue aOldValue(((*m_aCurrentRow)->get())[columnIndex]);
     m_pCache->updateValue(columnIndex,x);
     // we have to notify all listeners
-    (*(*m_aCurrentRow))[columnIndex] = x;
+    ((*m_aCurrentRow)->get())[columnIndex] = x;
     firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
@@ -874,20 +874,20 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
 
     checkUpdateIterator();
     ::connectivity::ORowSetValue aOldValue;
-    if((*(*m_aCurrentRow))[columnIndex].getTypeKind() == DataType::BLOB)
+    if(((*m_aCurrentRow)->get())[columnIndex].getTypeKind() == DataType::BLOB)
     {
         m_pCache->updateBinaryStream(columnIndex,x,length);
-        aOldValue = (*(*m_aCurrentRow))[columnIndex];
-        (*(*m_aCurrentRow))[columnIndex] = makeAny(x);
+        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
+        ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
     }
     else
     {
         Sequence<sal_Int8> aSeq;
         if(x.is())
-            x->readSomeBytes(aSeq,length);
+            x->readBytes(aSeq,length);
         updateValue(columnIndex,aSeq);
-        aOldValue = (*(*m_aCurrentRow))[columnIndex];
-        (*(*m_aCurrentRow))[columnIndex] = aSeq;
+        aOldValue = ((*m_aCurrentRow)->get())[columnIndex];
+        ((*m_aCurrentRow)->get())[columnIndex] = aSeq;
     }
 
     firePropertyChange(columnIndex-1 ,aOldValue);
@@ -904,8 +904,8 @@ void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Refer
     checkUpdateIterator();
     m_pCache->updateCharacterStream(columnIndex,x,length);
 
-    ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
-    (*(*m_aCurrentRow))[columnIndex] = makeAny(x);
+    ::connectivity::ORowSetValue aOldValue(((*m_aCurrentRow)->get())[columnIndex]);
+    ((*m_aCurrentRow)->get())[columnIndex] = makeAny(x);
     firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
@@ -949,10 +949,10 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
 
     if (!::dbtools::implUpdateObject(this, columnIndex, aNewValue))
     {   // there is no other updateXXX call which can handle the value in x
-        ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
+        ::connectivity::ORowSetValue aOldValue(((*m_aCurrentRow)->get())[columnIndex]);
         m_pCache->updateObject(columnIndex,aNewValue);
         // we have to notify all listeners
-        (*(*m_aCurrentRow))[columnIndex] = aNewValue;
+        ((*m_aCurrentRow)->get())[columnIndex] = aNewValue;
         firePropertyChange(columnIndex-1 ,aOldValue);
         fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
     }
@@ -966,10 +966,10 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     checkUpdateConditions(columnIndex);
 
     checkUpdateIterator();
-    ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
+    ::connectivity::ORowSetValue aOldValue(((*m_aCurrentRow)->get())[columnIndex]);
     m_pCache->updateNumericObject(columnIndex,x,scale);
     // we have to notify all listeners
-    (*(*m_aCurrentRow))[columnIndex] = x;
+    ((*m_aCurrentRow)->get())[columnIndex] = x;
     firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
@@ -1348,7 +1348,7 @@ sal_Bool SAL_CALL ORowSet::wasNull(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    return ( m_pCache && isInsertRow() ) ? (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex].isNull() : ORowSetBase::wasNull();
+    return ( m_pCache && isInsertRow() ) ? ((*m_pCache->m_aInsertRow)->get())[m_nLastColumnIndex].isNull() : ORowSetBase::wasNull();
 }
 // -----------------------------------------------------------------------------
 const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
@@ -1356,7 +1356,7 @@ const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
     checkCache();
 
     if ( m_pCache && isInsertRow() )
-        return  (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex];
+        return  ((*m_pCache->m_aInsertRow)->get())[m_nLastColumnIndex = columnIndex];
 
     return getValue(columnIndex);
 }
@@ -1439,7 +1439,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getBinaryStrea
     if ( m_pCache && isInsertRow() )
     {
         checkCache();
-        return new ::comphelper::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream(((*m_pCache->m_aInsertRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
     }
 
     return ORowSetBase::getBinaryStream(columnIndex);
@@ -1451,7 +1451,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getCharacterSt
     if(m_pCache && isInsertRow() )
     {
         checkCache();
-        return new ::comphelper::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream(((*m_pCache->m_aInsertRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
     }
 
     return ORowSetBase::getCharacterStream(columnIndex);
@@ -1698,7 +1698,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
         }
 
         Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
-        size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.size() );
+        size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
         for ( size_t i=1; i<=nParamCount; ++i )
         {
             ORowSetValue& rParamValue( getParameterStorage( (sal_Int32)i ) );
@@ -1877,7 +1877,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                 {
                     sal_Int32 nCount = xMetaData->getColumnCount();
                     m_aDataColumns.reserve(nCount+1);
-                    aColumns->reserve(nCount+1);
+                    aColumns->get().reserve(nCount+1);
                     DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
                     StringMap aColumnMap;
                     for (sal_Int32 i = 0 ; i < nCount; ++i)
@@ -1903,7 +1903,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                             aDescription,
                                                                             m_aCurrentRow);
                         aColumnMap.insert(StringMap::value_type(sName,0));
-                        aColumns->push_back(pColumn);
+                        aColumns->get().push_back(pColumn);
                         pColumn->setName(sName);
                         aNames.push_back(sName);
                         m_aDataColumns.push_back(pColumn);
@@ -1937,7 +1937,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             Reference< XResultSetMetaData > xMeta( getMetaData(), UNO_QUERY_THROW );
             sal_Int32 nCount = xMeta->getColumnCount();
             m_aDataColumns.reserve(nCount+1);
-            aColumns->reserve(nCount+1);
+            aColumns->get().reserve(nCount+1);
             ::std::set< Reference< XPropertySet > > aAllColumns;
 
             for(sal_Int32 i=1; i <= nCount ;++i)
@@ -1991,7 +1991,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                         m_xActiveConnection->getMetaData(),
                                                                         aDescription,
                                                                         m_aCurrentRow);
-                    aColumns->push_back(pColumn);
+                    aColumns->get().push_back(pColumn);
                     if(!sName.getLength())
                     {
                         if(xColumn.is())
@@ -2423,10 +2423,10 @@ void ORowSet::impl_initParametersContainer_nothrow()
 
     m_pParameters = new param::ParameterWrapperContainer( m_xComposer.get() );
     // copy the premature parameters into the final ones
-    size_t nParamCount( ::std::min( m_pParameters->size(), m_aPrematureParamValues.size() ) );
+    size_t nParamCount( ::std::min( m_pParameters->size(), m_aPrematureParamValues.get().size() ) );
     for ( size_t i=0; i<nParamCount; ++i )
     {
-        (*m_pParameters)[i] = m_aPrematureParamValues[i];
+        (*m_pParameters)[i] = m_aPrematureParamValues.get()[i];
     }
 }
 
@@ -2438,10 +2438,10 @@ void ORowSet::impl_disposeParametersContainer_nothrow()
 
     // copy the actual values to our "premature" ones, to preserve them for later use
     size_t nParamCount( m_pParameters->size() );
-    m_aPrematureParamValues.resize( nParamCount );
+    m_aPrematureParamValues.get().resize( nParamCount );
     for ( size_t i=0; i<nParamCount; ++i )
     {
-        m_aPrematureParamValues[i] = (*m_pParameters)[i];
+        m_aPrematureParamValues.get()[i] = (*m_pParameters)[i];
     }
 
     m_pParameters->dispose();
@@ -2469,9 +2469,9 @@ ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
         }
     }
 
-    if ( m_aPrematureParamValues.size() < (size_t)parameterIndex )
-        m_aPrematureParamValues.resize( parameterIndex );
-    return m_aPrematureParamValues[ parameterIndex - 1 ];
+    if ( m_aPrematureParamValues.get().size() < (size_t)parameterIndex )
+        m_aPrematureParamValues.get().resize( parameterIndex );
+    return m_aPrematureParamValues.get()[ parameterIndex - 1 ];
 }
 // -------------------------------------------------------------------------
 // XParameters
@@ -2637,7 +2637,7 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
-    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.size() );
+    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
     for ( size_t i=1; i<=nParamCount; ++i )
         getParameterStorage( (sal_Int32)i ).setNull();
 }
@@ -2700,7 +2700,7 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
     if ( m_aCurrentRow.isNull() )
         throwSQLException( "Invalid cursor state", SQL_INVALID_CURSOR_STATE, *this );
 
-    if ( sal_Int32((*m_aCurrentRow)->size()) <= columnIndex )
+    if ( sal_Int32((*m_aCurrentRow)->get().size()) <= columnIndex )
         throwSQLException( "Invalid column index", SQL_INVALID_DESCRIPTOR_INDEX, *this );
         // TODO: resource
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
@@ -2765,7 +2765,7 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
     Sequence< ::rtl::OUString> aSeq = rParent.m_pColumns->getElementNames();
     const ::rtl::OUString* pBegin   = aSeq.getConstArray();
     const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
-    aColumns->reserve(aSeq.getLength()+1);
+    aColumns->get().reserve(aSeq.getLength()+1);
     for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
     {
         Reference<XPropertySet> xColumn;
@@ -2779,7 +2779,7 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
                                                             rParent.m_xActiveConnection->getMetaData(),
                                                             aDescription,
                                                             m_aCurrentRow);
-        aColumns->push_back(pColumn);
+        aColumns->get().push_back(pColumn);
         pColumn->setName(*pBegin);
         aNames.push_back(*pBegin);
         m_aDataColumns.push_back(pColumn);

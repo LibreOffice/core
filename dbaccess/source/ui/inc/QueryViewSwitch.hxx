@@ -30,9 +30,12 @@
 #ifndef DBAUI_QUERYVIEWSWITCH_HXX
 #define DBAUI_QUERYVIEWSWITCH_HXX
 
-#ifndef DBAUI_QUERYVIEW_HXX
 #include "queryview.hxx"
-#endif
+
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
 
 namespace dbaui
 {
@@ -70,18 +73,20 @@ namespace dbaui
         virtual void initialize();
         /** show the text or the design view
             @return
-                <TRUE/> when all went right otherwise <FALSE/> which implies an aditional
-                call of switchView from the controller to restore the old state
+                <TRUE/> if and only if the view could be successfully, switched, <FALSE/> otherwise
+                (In the latter case, the controller will issue another switchView call to restore the
+                old state)
         */
-        sal_Bool switchView();
+        bool     switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void     setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
         void     setNoneVisbleRow(sal_Int32 _nRows);
+        void     SaveUIConfig();
+        bool     reset( ::dbtools::SQLExceptionInfo* _pErrorInfo );
+        void     GrabFocus();
+
         // returs the add table dialog from the design view
         OAddTableDlg* getAddTableDialog();
-        void SaveUIConfig();
-        void reset();
-        void GrabFocus();
 
         OQueryDesignView*       getDesignView() const { return m_pDesignView; }
         OQueryContainerWindow*  getContainer() const;

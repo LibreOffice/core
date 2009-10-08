@@ -147,7 +147,7 @@ OComponentDefinition::OComponentDefinition(const Reference< XMultiServiceFactory
                                            ,const TContentPtr& _pImpl
                                            ,sal_Bool _bTable)
     :OContentHelper(_xORB,_xParentContainer,_pImpl)
-    ,ODataSettings(m_aBHelper,!_bTable)
+    ,ODataSettings(OContentHelper::rBHelper,!_bTable)
     ,m_bTable(_bTable)
 {
     DBG_CTOR(OComponentDefinition, NULL);
@@ -166,7 +166,7 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
                                        ,const TContentPtr& _pImpl
                                        ,sal_Bool _bTable)
     :OContentHelper(_xORB,_rxContainer,_pImpl)
-    ,ODataSettings(m_aBHelper,!_bTable)
+    ,ODataSettings(OContentHelper::rBHelper,!_bTable)
     ,m_bTable(_bTable)
 {
     DBG_CTOR(OComponentDefinition, NULL);
@@ -240,6 +240,15 @@ Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
+
+// -----------------------------------------------------------------------------
+::rtl::OUString OComponentDefinition::determineContentType() const
+{
+    return m_bTable
+        ?   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseTable" ) )
+        :   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinition" ) );
+}
+
 // -----------------------------------------------------------------------------
 Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeException)
 {

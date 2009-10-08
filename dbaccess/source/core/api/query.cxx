@@ -138,7 +138,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XMultiServiceFactory >& _xORB)
     :OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
     ,OQueryDescriptor_Base(m_aMutex,*this)
-    ,ODataSettings(m_aBHelper,sal_True)
+    ,ODataSettings(OContentHelper::rBHelper,sal_True)
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_xConnection(_rxConn)
     ,m_pColumnMediator( NULL )
@@ -427,6 +427,12 @@ void OQuery::registerProperties()
 
     registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, PropertyAttribute::BOUND,
                     &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString OQuery::determineContentType() const
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseQuery" ) );
 }
 
 // -----------------------------------------------------------------------------

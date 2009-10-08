@@ -172,6 +172,7 @@ uno::Any SAL_CALL OSection::queryInterface( const uno::Type& _rType ) throw (uno
 // -----------------------------------------------------------------------------
 void SAL_CALL OSection::dispose() throw(uno::RuntimeException)
 {
+    OSL_ENSURE(!rBHelper.bDisposed,"Already disposed!");
     SectionPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
 

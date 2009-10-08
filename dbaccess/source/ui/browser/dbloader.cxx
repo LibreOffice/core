@@ -288,7 +288,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
         else if ( sDataSourceName.getLength() )
         {
-            xDatabaseDocument.set( getDataSourceOrModel( getDataSourceByName_displayError( sDataSourceName, NULL, m_xServiceFactory, sal_False ) ), UNO_QUERY );
+            ::dbtools::SQLExceptionInfo aError;
+            xDataSource.set( getDataSourceByName( sDataSourceName, NULL, m_xServiceFactory, &aError ) );
+            xDatabaseDocument.set( getDataSourceOrModel( xDataSource ), UNO_QUERY );
         }
         else if ( xConnection.is() )
         {

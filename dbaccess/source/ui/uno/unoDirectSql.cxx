@@ -120,7 +120,7 @@ DBG_NAME(ODirectSQLDialog)
             {
                 // the connection the row set is working with
                 ODatasourceConnector aDSConnector(m_aContext.getLegacyServiceFactory(),_pParent);
-                xConnection = aDSConnector.connect(m_sInitialSelection);
+                xConnection = aDSConnector.connect( m_sInitialSelection, NULL );
             }
             catch( const Exception& )
             {

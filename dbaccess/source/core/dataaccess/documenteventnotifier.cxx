@@ -167,8 +167,9 @@ namespace dbaccess
     //--------------------------------------------------------------------
     void DocumentEventNotifier_Impl::disposing()
     {
+        // SYNCHRONIZED ->
         // cancel any pending asynchronous events
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::osl::ResettableMutexGuard aGuard( m_rMutex );
         if ( m_pEventBroadcaster.is() )
         {
             m_pEventBroadcaster->removeEventsForProcessor( this );
@@ -177,10 +178,16 @@ namespace dbaccess
         }
 
         lang::EventObject aEvent( m_rDocument );
+        aGuard.clear();
+        // <-- SYNCHRONIZED
+
         m_aLegacyEventListeners.disposeAndClear( aEvent );
         m_aDocumentEventListeners.disposeAndClear( aEvent );
 
+        // SYNCHRONIZED ->
+        aGuard.reset();
         m_bDisposed = true;
+        // <-- SYNCHRONIZED
     }
 
     //--------------------------------------------------------------------

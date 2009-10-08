@@ -159,9 +159,16 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     //  return Reference< XContentIdentifier >();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OContentHelper::getContentType(  ) throw (RuntimeException)
+::rtl::OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
 {
-    return getImplementationName();
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    if ( !m_pImpl->m_aProps.aContentType )
+    {   // content type not yet retrieved
+        m_pImpl->m_aProps.aContentType.reset( determineContentType() );
+    }
+
+    return *m_pImpl->m_aProps.aContentType;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OContentHelper::addContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException)
@@ -415,7 +422,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
 
                     try
                     {
-                        rename( aNewValue );
+                        impl_rename_throw( aNewValue ,false);
                         OSL_ENSURE( m_pImpl->m_aProps.aTitle == aNewValue, "OContentHelper::setPropertyValues('Title'): rename did not work!" );
 
                         aEvent.NewValue     = makeAny( aNewValue );
@@ -491,7 +498,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 
             if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
             {
-                xRow->appendString ( rProp, m_pImpl->m_aProps.aContentType );
+                xRow->appendString ( rProp, getContentType() );
             }
             else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
             {
@@ -526,7 +533,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
-            m_pImpl->m_aProps.aContentType );
+            getContentType() );
         xRow->appendString (
             Property( rtl::OUString::createFromAscii( "Title" ),
                       -1,
@@ -667,43 +674,71 @@ void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParentContainer = _xParent;
 }
+
+// -----------------------------------------------------------------------------
+void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify )
+{
+    osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
+    if ( _sNewName.equals( m_pImpl->m_aProps.aTitle ) )
+        return;
+    try
+    {
+        Sequence< PropertyChangeEvent > aChanges( 1 );
+
+        aChanges[0].Source          = static_cast< cppu::OWeakObject * >( this );
+        aChanges[0].Further         = sal_False;
+        aChanges[0].PropertyName    = PROPERTY_NAME;
+        aChanges[0].PropertyHandle  = PROPERTY_ID_NAME;
+        aChanges[0].OldValue        <<= m_pImpl->m_aProps.aTitle;
+        aChanges[0].NewValue        <<= _sNewName;
+
+        aGuard.clear();
+
+        m_pImpl->m_aProps.aTitle = _sNewName;
+        if ( _bNotify )
+            notifyPropertiesChange( aChanges );
+        notifyDataSourceModified();
+    }
+    catch(const PropertyVetoException&)
+    {
+        throw ElementExistException(_sNewName,*this);
+    }
+}
 // -----------------------------------------------------------------------------
 void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
-    ::osl::MutexGuard  aGuard(m_aMutex);
-    if ( newName.equals( m_pImpl->m_aProps.aTitle ) )
-        return;
 
-    Reference<XNameContainer> xNameCont(m_xParentContainer,UNO_QUERY);
-    if ( xNameCont.is() )
-    {
-        if ( xNameCont->hasByName(newName) )
-            throw ElementExistException(newName,*this);
+    impl_rename_throw(newName);
+    //Reference<XNameContainer> xNameCont(m_xParentContainer,UNO_QUERY);
+    //if ( xNameCont.is() )
+    //{
+    //  if ( xNameCont->hasByName(newName) )
+    //      throw ElementExistException(newName,*this);
 
-        try
-        {
-            if ( xNameCont->hasByName(m_pImpl->m_aProps.aTitle) )
-                xNameCont->removeByName(m_pImpl->m_aProps.aTitle);
+    //  try
+    //  {
+    //      if ( xNameCont->hasByName(m_pImpl->m_aProps.aTitle) )
+    //          xNameCont->removeByName(m_pImpl->m_aProps.aTitle);
 
-            m_pImpl->m_aProps.aTitle = newName;
-            xNameCont->insertByName(m_pImpl->m_aProps.aTitle,makeAny(Reference<XContent>(*this,UNO_QUERY)));
-            notifyDataSourceModified();
-        }
-        catch(IllegalArgumentException)
-        {
-            throw SQLException();
-        }
-        catch(NoSuchElementException)
-        {
-            throw SQLException();
-        }
-        catch(WrappedTargetException)
-        {
-            throw SQLException();
-        }
-    }
-    else
-        m_pImpl->m_aProps.aTitle = newName;
+    //      m_pImpl->m_aProps.aTitle = newName;
+    //      xNameCont->insertByName(m_pImpl->m_aProps.aTitle,makeAny(Reference<XContent>(*this,UNO_QUERY)));
+    //      notifyDataSourceModified();
+    //  }
+    //  catch(IllegalArgumentException)
+    //  {
+    //      throw SQLException();
+    //  }
+    //  catch(NoSuchElementException)
+    //  {
+    //      throw SQLException();
+    //  }
+    //  catch(WrappedTargetException)
+    //  {
+    //      throw SQLException();
+    //  }
+    //}
+    //else
+    //  m_pImpl->m_aProps.aTitle = newName;
 
 }
 // -----------------------------------------------------------------------------

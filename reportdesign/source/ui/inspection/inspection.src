@@ -46,18 +46,39 @@ String RID_STR_PROPPAGE_DATA
     Text [ en-US ] = "Data" ;
     Text [ x-comment ] = " ";
 };
-String RID_STR_BOOL
+Resource RID_STR_BOOL
 {
-    Text [ en-US ] = "No;Yes" ;
-    Text [ x-comment ] = " ";
+    String 1
+    {
+        Text [ en-US ] = "No" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Yes" ;
+    };
 };
 String RID_STR_FORCENEWPAGE
 {
     Text [ en-US ] = "Force New Page" ;
 };
-String RID_STR_FORCENEWPAGE_CONST
+Resource RID_STR_FORCENEWPAGE_CONST
 {
-    Text [ en-US ] = "None;Before Section;After Section;Before & After Section" ;
+    String 1
+    {
+        Text [ en-US ] = "None" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Before Section" ;
+    };
+    String 3
+    {
+        Text [ en-US ] = "After Section" ;
+    };
+    String 4
+    {
+        Text [ en-US ] = "Before & After Section" ;
+    };
 };
 String RID_STR_NEWROWORCOL
 {
@@ -67,9 +88,20 @@ String RID_STR_KEEPTOGETHER
 {
     Text [ en-US ] = "Keep Together" ;
 };
-String RID_STR_KEEPTOGETHER_CONST
+Resource RID_STR_KEEPTOGETHER_CONST
 {
-    Text [ en-US ] = "No;Whole Group;With First Detail" ;
+    String 1
+    {
+        Text [ en-US ] = "No" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Whole Group" ;
+    };
+    String 3
+    {
+        Text [ en-US ] = "With First Detail" ;
+    };
 };
 String RID_STR_CANGROW
 {
@@ -119,13 +151,31 @@ String RID_STR_GROUPKEEPTOGETHER
 {
     Text [ en-US ] = "Group keep together" ;
 };
-String RID_STR_GROUPKEEPTOGETHER_CONST
+Resource RID_STR_GROUPKEEPTOGETHER_CONST
 {
-    Text [ en-US ] = "Per Page;Per Column" ;
+    String 1
+    {
+        Text [ en-US ] = "Per Page" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Per Column" ;
+    };
 };
-String RID_STR_SECTIONPAGEBREAK_CONST
+Resource RID_STR_SECTIONPAGEBREAK_CONST
 {
-    Text [ en-US ] = "None;Section;Automatic" ;
+    String 1
+    {
+        Text [ en-US ] = "None" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Section" ;
+    };
+    String 3
+    {
+        Text [ en-US ] = "Automatic" ;
+    };
 };
 String RID_STR_PAGEHEADEROPTION
 {
@@ -135,9 +185,24 @@ String RID_STR_PAGEFOOTEROPTION
 {
     Text [ en-US ] = "Page footer" ;
 };
-String RID_STR_REPORTPRINTOPTION_CONST
+Resource RID_STR_REPORTPRINTOPTION_CONST
 {
-    Text [ en-US ] = "All Pages;Not With Report Header;Not With Report Footer;Not With Report Header/Footer" ;
+    String 1
+    {
+        Text [ en-US ] = "All Pages" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Not With Report Header" ;
+    };
+    String 3
+    {
+        Text [ en-US ] = "Not With Report Footer" ;
+    };
+    String 4
+    {
+        Text [ en-US ] = "Not With Report Header/Footer" ;
+    };
 };
 String RID_STR_DEEPTRAVERSING
 {
@@ -219,9 +284,24 @@ String RID_STR_TYPE
 {
     Text [ en-US ] = "Data Field Type";
 };
-String RID_STR_TYPE_CONST
+Resource RID_STR_TYPE_CONST
 {
-    Text [ en-US ] = "Field or Formula;Function;Counter;User defined Function";
+    String 1
+    {
+        Text [ en-US ] = "Field or Formula";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Function";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Counter";
+    };
+    String 4
+    {
+        Text [ en-US ] = "User defined Function";
+    };
 };
 String RID_STR_MASTERFIELDS
 {
@@ -251,4 +331,8 @@ String RID_STR_PREVIEW_COUNT
 String RID_STR_AREA
 {
     Text [ en-US ] = "Area" ;
+};
+String RID_STR_MIMETYPE
+{
+    Text [ en-US ] = "Report Output Format" ;
 };

@@ -132,8 +132,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xMainToolbar;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xCurrentDatabaseDocument;
 
-        ::osl::Mutex            m_aEntryMutex;
-
         // ---------------------------
         struct ExternalFeature
         {
@@ -398,10 +396,10 @@ namespace dbaui
         String      GetEntryText( SvLBoxEntry* _pEntry ) const;
 
         // is called when a table or a query was selected
-        DECL_LINK( OnSelectEntry, SvLBoxEntry* );
+        DECL_LINK( OnSelectionChange, void* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
 
-        DECL_LINK( OnCopyEntry, SvLBoxEntry* );
+        DECL_LINK( OnCopyEntry, void* );
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
 
@@ -410,6 +408,7 @@ namespace dbaui
         void implRemoveStatusListeners();
 
         sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect = sal_False);
+        bool implSelect( SvLBoxEntry* _pEntry );
 
         /// selects the entry given and loads the grid control with the object's data
         sal_Bool implSelect(

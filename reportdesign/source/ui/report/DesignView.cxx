@@ -34,6 +34,7 @@
 #include "ReportController.hxx"
 #include <comphelper/types.hxx>
 #include <svtools/syslocale.hxx>
+#include <svtools/viewoptions.hxx>
 #include "RptDef.hxx"
 #include "UITools.hxx"
 #include "RptObject.hxx"
@@ -48,6 +49,7 @@
 #include "ScrollHelper.hxx"
 #include "Navigator.hxx"
 #include "SectionWindow.hxx"
+#include "RptResId.hrc"
 #include <vcl/svapp.hxx>
 
 namespace rptui
@@ -157,7 +159,8 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_nCurrentPosition(USHRT_MAX)
     ,m_eActObj( OBJ_NONE )
     ,m_bFirstDraw(FALSE)
-    ,m_aGridSize( 250, 250 )    // 100TH_MM
+    ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
+    ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
     ,m_bGridVisible(TRUE)
     ,m_bGridSnap(TRUE)
     ,m_bDeleted( FALSE )
@@ -203,12 +206,16 @@ ODesignView::~ODesignView()
     }
     if ( m_pAddField )
     {
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( UID_RPT_RPT_APP_VIEW ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
     }
     if ( m_pReportExplorer )
     {
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
+        aDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( m_pReportExplorer->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         ::std::auto_ptr<Window> aTemp2(m_pReportExplorer);
         m_pReportExplorer = NULL;
@@ -559,6 +566,9 @@ void ODesignView::toggleReportExplorer()
     {
         OReportController& rReportController = getController();
         m_pReportExplorer = new ONavigator(this,rReportController);
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( RID_NAVIGATOR ) );
+        if ( aDlgOpt.Exists() )
+            m_pReportExplorer->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
@@ -590,10 +600,16 @@ void ODesignView::toggleAddField()
             uno::Reference< report::XSection > xSection = m_pCurrentView->getReportSection()->getSection();
             xReport = xSection->getReportDefinition();
         }
-        m_pAddField = new OAddFieldWindow(rReportController,this);
+        uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
+        m_pAddField = new OAddFieldWindow(this,xSet);
+        m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, String::CreateFromInt32( UID_RPT_RPT_APP_VIEW ) );
+        if ( aDlgOpt.Exists() )
+            m_pAddField->SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         m_pAddField->Update();
         m_pAddField->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+        m_pAddField->Show();
     }
     else
         m_pAddField->Show(!m_pAddField->IsVisible());
@@ -749,9 +765,14 @@ sal_uInt32 ODesignView::getMarkedObjectCount() const
     return m_aScrollWindow.getMarkedObjectCount();
 }
 // -----------------------------------------------------------------------------
-void ODesignView::zoom(const sal_Int16 _nZoom)
+void ODesignView::zoom(const Fraction& _aZoom)
 {
-    m_aScrollWindow.zoom(_nZoom);
+    m_aScrollWindow.zoom(_aZoom);
+}
+// -----------------------------------------------------------------------------
+sal_uInt16 ODesignView::getZoomFactor(SvxZoomType _eType) const
+{
+    return m_aScrollWindow.getZoomFactor(_eType);
 }
 //============================================================================
 } // rptui

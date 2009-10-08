@@ -271,9 +271,9 @@ using namespace ::comphelper;
 
 namespace
 {
-    void ensureToolbars( OQueryController* _pController, sal_Bool _bDesign )
+    void ensureToolbars( OQueryController& _rController, sal_Bool _bDesign )
     {
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = _pController->getLayoutManager(_pController->getFrame());
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = _rController.getLayoutManager( _rController.getFrame() );
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
@@ -292,23 +292,6 @@ namespace
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
         }
-    }
-
-    void switchDesignModeImpl(OQueryController* _pController,OQueryContainerWindow* _pWindow,sal_Bool& _rbDesign)
-    {
-        bool isModified = _pController->isModified();
-
-        if ( !_pWindow->switchView() )
-        {
-            _rbDesign = !_rbDesign;
-            _pWindow->switchView();
-        }
-        else
-        {
-            ensureToolbars( _pController, _rbDesign );
-        }
-
-        _pController->setModified( isModified );
     }
 }
 
@@ -555,8 +538,10 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             getContainer()->paste();
             break;
         case ID_BROWSER_SQL:
+        {
             if ( !getContainer()->checkStatement() )
                 break;
+            SQLExceptionInfo aError;
             try
             {
                 ::rtl::OUString aErrorMsg;
@@ -567,30 +552,33 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     delete m_pSqlIterator->getParseTree();
                     m_pSqlIterator->setParseTree(NULL);
                     m_bGraphicalDesign = !m_bGraphicalDesign;
-                    switchDesignModeImpl(this,getContainer(),m_bGraphicalDesign);
+                    impl_setViewMode( &aError );
                 }
                 else
                 {
                     ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree(aErrorMsg,m_sStatement,m_bGraphicalDesign);
-                    //  m_pParseNode = pNode;
-                    if(pNode)
+                    if ( pNode )
                     {
                         delete m_pSqlIterator->getParseTree();
                         m_pSqlIterator->setParseTree(pNode);
                         m_pSqlIterator->traverseAll();
+
                         if ( m_pSqlIterator->hasErrors() )
                         {
-                            showError( SQLExceptionInfo( m_pSqlIterator->getErrors() ) );
+                            aError = m_pSqlIterator->getErrors();
                         }
                         else
                         {
                             const OSQLTables& xTabs = m_pSqlIterator->getTables();
-                            if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT || xTabs.begin() == xTabs.end())
+                            if ( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT || xTabs.begin() == xTabs.end() )
                             {
-                                ModuleRes aModuleRes(STR_QRY_NOSELECT);
-                                String sTmpStr(aModuleRes);
-                                ::rtl::OUString sError(sTmpStr);
-                                showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),1000,Any()));
+                                aError = SQLException(
+                                    String( ModuleRes( STR_QRY_NOSELECT ) ),
+                                    NULL,
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) ),
+                                    1000,
+                                    Any()
+                                );
                             }
                             else
                             {
@@ -601,33 +589,41 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 setStatement_fireEvent( sNewStatement );
                                 getContainer()->SaveUIConfig();
                                 m_vTableConnectionData.clear();
-                                switchDesignModeImpl(this,getContainer(),m_bGraphicalDesign);
+                                impl_setViewMode( &aError );
                             }
                         }
                     }
                     else
                     {
-                        ModuleRes aModuleRes(STR_QRY_SYNTAX);
-                        String sTmpStr(aModuleRes);
-                        ::rtl::OUString sError(sTmpStr);
-                        showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
+                        aError = SQLException(
+                            String( ModuleRes( STR_QRY_SYNTAX ) ),
+                            NULL,
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) ),
+                            1000,
+                            Any()
+                        );
                     }
                 }
             }
-            catch(SQLException& e)
+            catch(const SQLException& e)
             {
-                ::dbtools::SQLExceptionInfo aInfo(e);
-                showError(aInfo);
+                aError = ::cppu::getCaughtException();
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
+
+            if ( aError.isValid() )
+                showError( aError );
+
             if(m_bGraphicalDesign)
             {
                 InvalidateFeature(ID_BROWSER_ADDTABLE);
                 InvalidateFeature(SID_RELATION_ADD_RELATION);
             }
-            break;
+        }
+        break;
         case SID_BROWSER_CLEAR_QUERY:
             {
                 getUndoMgr()->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
@@ -721,7 +717,11 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 pNodeTmp = pTemp->getChild(1);
                                 ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
                                 pNodeTmp = pTemp->getChild(1);
-                            }
+                            } // if ( pCondition ) // no where clause
+                            ::rtl::OUString sTemp;
+                            pNode->parseNodeToStr(sTemp,getConnection());
+                            getContainer()->setStatement(sTemp);
+
                         }
                     }
 
@@ -743,6 +743,48 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
     }
     InvalidateFeature(_nId);
 }
+
+// -----------------------------------------------------------------------------
+void OQueryController::impl_showAutoSQLViewError( const ::com::sun::star::uno::Any& _rErrorDetails )
+{
+    SQLContext aErrorContext;
+    aErrorContext.Message = lcl_getObjectResourceString( STR_ERROR_PARSING_STATEMENT, m_nCommandType );
+    aErrorContext.Context = *this;
+    aErrorContext.Details = lcl_getObjectResourceString( STR_INFO_OPENING_IN_SQL_VIEW, m_nCommandType );
+    aErrorContext.NextException = _rErrorDetails;
+    showError( aErrorContext );
+}
+
+// -----------------------------------------------------------------------------
+bool OQueryController::impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo )
+{
+    OSL_PRECOND( getContainer(), "OQueryController::impl_setViewMode: illegal call!" );
+
+    bool wasModified = isModified();
+
+    SQLExceptionInfo aError;
+    bool bSuccess = getContainer()->switchView( &aError );
+    if ( !bSuccess )
+    {
+        m_bGraphicalDesign = !m_bGraphicalDesign;
+        // restore old state
+        getContainer()->switchView( NULL );
+            // don't pass &aError here, this would overwrite the error which the first switchView call
+            // returned in this location.
+        if ( _pErrorInfo )
+            *_pErrorInfo = aError;
+        else
+            showError( aError );
+    }
+    else
+    {
+        ensureToolbars( *this, m_bGraphicalDesign );
+    }
+
+    setModified( wasModified );
+    return bSuccess;
+}
+
 // -----------------------------------------------------------------------------
 void OQueryController::impl_initialize()
 {
@@ -876,8 +918,20 @@ void OQueryController::impl_initialize()
     try
     {
         getContainer()->initialize();
-        resetImpl();
-        switchDesignModeImpl(this,getContainer(),m_bGraphicalDesign);
+        impl_reset();
+
+        bool bAttemptedGraphicalDesign = m_bGraphicalDesign;
+        SQLExceptionInfo aError;
+        impl_setViewMode( &aError );
+        if ( aError.isValid() && bAttemptedGraphicalDesign && !m_bGraphicalDesign )
+        {
+            if ( !editingView() )
+            {
+                impl_showAutoSQLViewError( aError.get() );
+            }
+        }
+
+
         getUndoMgr()->Clear();
 
         if  (  ( m_bGraphicalDesign )
@@ -908,7 +962,7 @@ void OQueryController::impl_initialize()
 // -----------------------------------------------------------------------------
 void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& /*_xLayoutManager*/)
 {
-    ensureToolbars( this, m_bGraphicalDesign );
+    ensureToolbars( *this, m_bGraphicalDesign );
 }
 
 // -----------------------------------------------------------------------------
@@ -920,7 +974,7 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
         if ( !editingCommand() )
         {
             ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-            ::osl::MutexGuard aGuard(m_aMutex);
+            ::osl::MutexGuard aGuard( getMutex() );
             String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             sName = aDefaultName.GetToken(0,' ');
             sName += ::rtl::OUString::valueOf(getCurrentStartNumber());
@@ -1035,7 +1089,7 @@ void OQueryController::reconnect(sal_Bool _bUI)
         {
             m_bGraphicalDesign = sal_False;
             // don't call Execute(SQL) because this changes the sql statement
-            switchDesignModeImpl(this,getContainer(),m_bGraphicalDesign);
+            impl_setViewMode( NULL );
         }
         InvalidateAll();
     }
@@ -1085,37 +1139,34 @@ void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
 // -----------------------------------------------------------------------------
 void OQueryController::loadViewSettings(const Sequence<PropertyValue>& _rViewProps)
 {
-    //////////////////////////////////////////////////////////////////////
-    // Liste loeschen
-    OTableFields().swap(m_vTableFieldDesc);
-
     const PropertyValue *pIter = _rViewProps.getConstArray();
     const PropertyValue *pEnd = pIter + _rViewProps.getLength();
     for (; pIter != pEnd; ++pIter)
     {
-        if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitterPosition")) )
+        if ( pIter->Name.equalsAscii("SplitterPosition") )
         {
             pIter->Value >>= m_nSplitPos;
         }
-        else if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleRows")) )
+        else if ( pIter->Name.equalsAscii("VisibleRows") )
         {
             pIter->Value >>= m_nVisibleRows;
         }
-        else if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields")) )
+        else if ( pIter->Name.equalsAscii("Fields") )
         {
-            Sequence<PropertyValue> aFields;
-            pIter->Value >>= aFields;
-            m_vTableFieldDesc.reserve(aFields.getLength() + 1);
-            const PropertyValue *pFieldIter = aFields.getConstArray();
-            const PropertyValue *pFieldEnd = pFieldIter + aFields.getLength();
-            for (; pFieldIter != pFieldEnd; ++pFieldIter)
-            {
-                OTableFieldDescRef pData = new OTableFieldDesc();
-                pData->Load(*pFieldIter);
-                m_vTableFieldDesc.push_back(pData);
-            }
+            pIter->Value >>= m_aFieldInformation;
         }
     }
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
+{
+    if ( _nColPos < m_aFieldInformation.getLength() )
+    {
+        ::std::auto_ptr<OTableFieldDesc> pField( new OTableFieldDesc());
+        pField->Load(m_aFieldInformation[_nColPos]);
+        return pField->GetColWidth();
+    }
+    return 0;
 }
 // -----------------------------------------------------------------------------
 Reference<XNameAccess> OQueryController::getObjectContainer()  const
@@ -1514,7 +1565,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 short OQueryController::saveModified()
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     short nRet = RET_YES;
     if ( !isConnected() || !isModified() )
         return nRet;
@@ -1539,11 +1590,11 @@ short OQueryController::saveModified()
     return nRet;
 }
 // -----------------------------------------------------------------------------
-void OQueryController::resetImpl()
+void OQueryController::impl_reset()
 {
     bool bValid = false;
-    Sequence< PropertyValue > aLayoutInformation;
 
+    Sequence< PropertyValue > aLayoutInformation;
     // get command from the query if a query name was supplied
     if ( !editingCommand() )
     {
@@ -1576,7 +1627,7 @@ void OQueryController::resetImpl()
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "OQueryController::resetImpl: could not retrieve the layout information from the query!" );
+                        OSL_ENSURE( sal_False, "OQueryController::impl_reset: could not retrieve the layout information from the query!" );
                     }
                 }
             }
@@ -1604,7 +1655,6 @@ void OQueryController::resetImpl()
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-
         if ( m_sStatement.getLength() )
         {
             setQueryComposer();
@@ -1630,12 +1680,7 @@ void OQueryController::resetImpl()
                     {
                         if ( !editingView() )
                         {
-                            SQLContext aErrorContext;
-                            aErrorContext.Message = lcl_getObjectResourceString( STR_ERROR_PARSING_STATEMENT, m_nCommandType );
-                            aErrorContext.Context = *this;
-                            aErrorContext.Details = lcl_getObjectResourceString( STR_INFO_OPENING_IN_SQL_VIEW, m_nCommandType );
-                            aErrorContext.NextException <<= m_pSqlIterator->getErrors();
-                            showError( aErrorContext );
+                            impl_showAutoSQLViewError( makeAny( m_pSqlIterator->getErrors() ) );
                         }
                         bError = true;
                     }
@@ -1672,8 +1717,8 @@ void OQueryController::resetImpl()
 // -----------------------------------------------------------------------------
 void OQueryController::reset()
 {
-    resetImpl();
-    getContainer()->reset();
+    impl_reset();
+    getContainer()->reset( NULL );
     getUndoMgr()->Clear();
 }
 

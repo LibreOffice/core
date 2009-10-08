@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+.INCLUDE : $(PRJ)$/util$/dba.pmk
 
 # --- Files -------------------------------------
 
@@ -55,7 +55,9 @@ SLOFILES=	\
         $(SLO)$/DatabaseDataProvider.obj \
         $(SLO)$/module_dba.obj          \
         $(SLO)$/dsntypes.obj            \
-        $(SLO)$/veto.obj
+        $(SLO)$/veto.obj                \
+        $(SLO)$/apitools.obj            \
+        $(SLO)$/dbastrings.obj
 
 # --- Targets ----------------------------------
 

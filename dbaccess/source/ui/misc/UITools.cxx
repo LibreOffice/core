@@ -408,8 +408,8 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     return aInfo;
 }
 // -----------------------------------------------------------------------------
-Reference< XDataSource > getDataSourceByName_displayError( const ::rtl::OUString& _rDataSourceName,
-    Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB, bool _bDisplayError)
+Reference< XDataSource > getDataSourceByName( const ::rtl::OUString& _rDataSourceName,
+    Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     ::comphelper::ComponentContext aContext( _rxORB );
     Reference< XNameAccess > xDatabaseContext( aContext.createComponent( "com.sun.star.sdb.DatabaseContext" ), UNO_QUERY_THROW );
@@ -450,16 +450,18 @@ Reference< XDataSource > getDataSourceByName_displayError( const ::rtl::OUString
     if ( xDatasource.is() )
         return xDatasource;
 
-    if ( _bDisplayError )
+    if ( aSQLError.isValid() )
     {
-        if ( aSQLError.isValid() )
-            showError( aSQLError, _pErrorMessageParent, _rxORB );
+        if ( _pErrorInfo )
+        {
+            *_pErrorInfo = aSQLError;
+        }
         else
         {
-            DBG_ERROR( "getDataSourceByName_displayError: not yet implemented!" );
-            // by spec, we must pass this to an interaction handler ...
+            showError( aSQLError, _pErrorMessageParent, _rxORB );
         }
     }
+
     return Reference<XDataSource>();
 }
 // -----------------------------------------------------------------------------
@@ -1299,8 +1301,8 @@ void adjustToolBoxSize(ToolBox* _pToolBox)
         aSize.Height() = aOldSize.Height();
 
     Size aTbSize = _pToolBox->GetSizePixel();
-    if (aSize.Width() && aSize.Width() != aTbSize.Width() ||
-            aSize.Height() && aSize.Height() != aTbSize.Height())
+    if ( (aSize.Width() && aSize.Width() != aTbSize.Width()) ||
+            (aSize.Height() && aSize.Height() != aTbSize.Height()) )
     {
         _pToolBox->SetPosSizePixel( _pToolBox->GetPosPixel(), aSize );
         _pToolBox->Invalidate();
@@ -1414,14 +1416,15 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
         {
             _xDataSource->getPropertyValue(PROPERTY_NAME) >>= _rsDatabaseName;
         }
-        catch(Exception)
+        catch(const Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     ::rtl::OUString sName = _rsDatabaseName;
     INetURLObject aURL(sName);
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-        sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
+        sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
     return sName;
 }
 // -----------------------------------------------------------------------------

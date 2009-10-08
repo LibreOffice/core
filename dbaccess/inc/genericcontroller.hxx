@@ -59,6 +59,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/sharedmutex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/dbexception.hxx>
@@ -67,6 +68,11 @@
 
 #include <boost/optional.hpp>
 #include <sfx2/userinputinterception.hxx>
+
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
 
 class Window;
 class VCLXWindow;
@@ -179,7 +185,7 @@ namespace dbaui
     };
 
     // ....................................................................
-    typedef ::comphelper::OBaseMutex    OGenericUnoController_MBASE;
+    typedef ::comphelper::SharedMutexBase   OGenericUnoController_MBASE;
 
     typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::frame::XDispatch
                                                 ,   ::com::sun::star::frame::XDispatchProviderInterceptor
@@ -255,8 +261,8 @@ namespace dbaui
 
         // ----------------------------------------------------------------
         // attribute access
-        ::osl::Mutex&               getMutex( )             { return OGenericUnoController_MBASE::m_aMutex; }
-        ::cppu::OBroadcastHelper&   getBroadcastHelper()    { return OGenericUnoController_Base::rBHelper; }
+        ::osl::Mutex&               getMutex() const            { return OGenericUnoController_MBASE::getMutex(); }
+        ::cppu::OBroadcastHelper&   getBroadcastHelper()        { return OGenericUnoController_Base::rBHelper; }
 
         // ----------------------------------------------------------------
         // methods
@@ -347,21 +353,15 @@ namespace dbaui
 
         // connect to a datasource
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& _xDataSource
-            ,sal_Bool _bStartListening = sal_False
-        );
-
-        // connect to a datasource
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
-            const ::rtl::OUString& _rDataSourceName,
-            sal_Bool _bStartListening = sal_False
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& _xDataSource,
+            ::dbtools::SQLExceptionInfo* _pErrorInfo
         );
 
         // connect to a datasource
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
             const ::rtl::OUString& _rsDataSourceName,
             const ::rtl::OUString& _rContextInformation,
-            sal_Bool _bStartListening = sal_False
+            ::dbtools::SQLExceptionInfo* _pErrorInfo
         );
 
         void startConnectionListening(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection);

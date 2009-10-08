@@ -34,11 +34,10 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 LIBTARGET=NO
 TARGET=shared
-LIB1TARGET=$(SLB)$/dbashared.lib
-LIB2TARGET=$(SLB)$/dbushared.lib
-LIB3TARGET=$(SLB)$/fltshared.lib
-LIB4TARGET=$(SLB)$/cfgshared.lib
-LIB5TARGET=$(SLB)$/sdbtshared.lib
+LIB1TARGET=$(SLB)$/dbushared.lib
+LIB2TARGET=$(SLB)$/fltshared.lib
+LIB3TARGET=$(SLB)$/cfgshared.lib
+LIB4TARGET=$(SLB)$/sdbtshared.lib
 
 #ENABLE_EXCEPTIONS=TRUE
 
@@ -50,7 +49,6 @@ LIB5TARGET=$(SLB)$/sdbtshared.lib
 
 # --- Files -------------------------------------
 EXCEPTIONSFILES=	\
-        $(SLO)$/apitools.obj	\
         $(SLO)$/dbu_reghelper.obj	\
         $(SLO)$/cfg_reghelper.obj	\
         $(SLO)$/flt_reghelper.obj
@@ -59,27 +57,21 @@ SLOFILES=	\
         $(EXCEPTIONSFILES)			\
         $(SLO)$/cfgstrings.obj		\
         $(SLO)$/xmlstrings.obj		\
-        $(SLO)$/dbastrings.obj		\
         $(SLO)$/dbustrings.obj
 
-
 LIB1OBJFILES=	\
-        $(SLO)$/dbastrings.obj	\
-        $(SLO)$/apitools.obj
-        
-LIB2OBJFILES=	\
         $(SLO)$/dbu_reghelper.obj	\
         $(SLO)$/dbustrings.obj
         
-LIB3OBJFILES=	\
+LIB2OBJFILES=	\
         $(SLO)$/flt_reghelper.obj	\
         $(SLO)$/xmlstrings.obj
         
-LIB4OBJFILES=	\
+LIB3OBJFILES=	\
         $(SLO)$/cfg_reghelper.obj	\
         $(SLO)$/cfgstrings.obj
 
-LIB5OBJFILES=	\
+LIB4OBJFILES=	\
         $(SLO)$/sdbtstrings.obj
 
 # --- Targets ----------------------------------

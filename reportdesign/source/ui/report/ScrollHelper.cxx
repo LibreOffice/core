@@ -46,13 +46,11 @@ namespace rptui
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------------
-void lcl_setScrollBar(sal_Int32 _nNewValue,sal_Int32 _nOffSet,const Point& _aPos,const Size& _aSize,ScrollBar& _rScrollBar)
+void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size& _aSize,ScrollBar& _rScrollBar)
 {
     _rScrollBar.SetPosSizePixel(_aPos,_aSize);
     _rScrollBar.SetPageSize( _nNewValue );
     _rScrollBar.SetVisibleSize( _nNewValue );
-    (void)_nOffSet;
-    //_rScrollBar.SetThumbPos( -_nOffSet );
 }
 
 // -----------------------------------------------------------------------------
@@ -97,6 +95,7 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
     aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DRAGFULL_OPTION_SCROLL ); // live scrolling
     aSettings.SetStyleSettings( aStyle );
     _rScrollBar.SetSettings( aSettings );
+    //_rScrollBar.SetMapMode( MapMode( MAP_100TH_MM ) );
 
     _rScrollBar.SetScrollHdl( LINK( this, OScrollWindowHelper, ScrollHdl ) );
     _rScrollBar.SetLineSize( SCR_LINE_SIZE );
@@ -115,16 +114,12 @@ void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
 {
     m_aTotalPixelSize.Width() = _nWidth;
     m_aTotalPixelSize.Height() = _nHeight;
-    m_aHScroll.SetRangeMax( m_aTotalPixelSize.Width() );
+
+    // now set the ranges without start marker
+    Fraction aStartWidth(REPORT_STARTMARKER_WIDTH * m_pParent->getController().getZoomValue(),100);
+    long nWidth = long(_nWidth - (double)aStartWidth);
+    m_aHScroll.SetRangeMax( nWidth );
     m_aVScroll.SetRangeMax( m_aTotalPixelSize.Height() );
-    /*Point aNewPixOffset(-m_aHScroll.GetThumbPos(),-m_aVScroll.GetThumbPos());
-    if ( m_aPixOffset != aNewPixOffset )
-    {
-        const long nX = aNewPixOffset.X() - m_aPixOffset.X();
-        const long nY = aNewPixOffset.Y() - m_aPixOffset.Y();
-        impl_scrollContent( -nX, -nY );
-        m_aPixOffset = aNewPixOffset;
-    }*/
 
     Resize();
 }
@@ -136,6 +131,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     if ( aOutPixSz.Width() == 0 || aOutPixSz.Height() == 0 )
         return aOutPixSz;
 
+    aOutPixSz.Height() -= m_aReportWindow.getRulerHeight();
     // determine the size of the output-area and if we need scrollbars
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     bool bVVisible = false; // by default no vertical-ScrollBar
@@ -164,7 +160,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     }
     while ( bChanged );   // until no visibility has changed
 
-    const Point aOldPixOffset( m_aPixOffset );
+    aOutPixSz.Height() += m_aReportWindow.getRulerHeight();
 
     // show or hide scrollbars
     m_aVScroll.Show( bVVisible );
@@ -182,66 +178,29 @@ Size OScrollWindowHelper::ResizeScrollBars()
     const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
     // resize scrollbars and set their ranges
     {
-        Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
-        const Fraction aZoom(m_pParent->getController().getZoomValue(),100);
-        aStartWith *= aZoom;
-
-        const sal_Int32 nOldThumbPos = m_aHScroll.GetThumbPos();
-        const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X();
-        lcl_setScrollBar(nNewWidth,m_aPixOffset.X(),Point( (long)aStartWith + aOffset.X(), aOutPixSz.Height() ),Size( aOutPixSz.Width() - long(aStartWith), nScrSize ),m_aHScroll);
-        m_aPixOffset.X() += nOldThumbPos - m_aHScroll.GetThumbPos();
+        Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH*m_pParent->getController().getZoomValue()),100);
+        const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X() - (long)aStartWidth;
+        lcl_setScrollBar(nNewWidth,Point( (long)aStartWidth + aOffset.X(), aOutPixSz.Height() ),Size( nNewWidth, nScrSize ),m_aHScroll);
     }
     {
-        const sal_Int32 nOldThumbPos = m_aVScroll.GetThumbPos();
         const sal_Int32 nNewHeight = aOutPixSz.Height() - m_aReportWindow.getRulerHeight();
-        lcl_setScrollBar(nNewHeight,m_aPixOffset.Y(),Point( aOutPixSz.Width(), m_aReportWindow.getRulerHeight() ),Size( nScrSize,nNewHeight),m_aVScroll);
-        m_aPixOffset.Y() += nOldThumbPos - m_aVScroll.GetThumbPos();
+        lcl_setScrollBar(nNewHeight,Point( aOutPixSz.Width(), m_aReportWindow.getRulerHeight() ),Size( nScrSize,nNewHeight),m_aVScroll);
     }
 
-    // select the shifted map-mode
-    if ( m_aPixOffset != aOldPixOffset )
-    {
-        const long nX = m_aPixOffset.X() - aOldPixOffset.X();
-        const long nY = m_aPixOffset.Y() - aOldPixOffset.Y();
-        impl_scrollContent( -nX, -nY );
-    }
     return aOutPixSz;
-}
-//------------------------------------------------------------------------------
-void OScrollWindowHelper::impl_scrollContent( long nDeltaX, long nDeltaY )
-{
-    m_aReportWindow.ScrollChildren(nDeltaX,nDeltaY);
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::Resize()
 {
     OScrollWindowHelper_BASE::Resize();
- //   Size aSize = GetOutputSizePixel();
- //   const Size aMinSize(getMaxMarkerWidth(sal_False),0);
- //   bool bResize = false;
-    //if( aSize.Width() < aMinSize.Width() )
-    //{
-    //  aSize.setWidth( aMinSize.Width() );
-    //  bResize = true;
-    //}
-    //if( aSize.Height() < aMinSize.Height() )
-    //{
-    //  aSize.setHeight( aMinSize.Height() );
-    //  bResize = true;
-    //}
-    //if( bResize )
- //   {
- //       //static_cast<SplitWindow*>(GetParent())->SetItemSize(2,aSize.getWidth());
-    //  SetOutputSizePixel( aSize );
- //   }
     const Size aTotalOutputSize = ResizeScrollBars();
 
-    m_aReportWindow.SetPosSizePixel(Point( 0, 0 ),Size( aTotalOutputSize.Width(), aTotalOutputSize.Height()));
+    m_aReportWindow.SetPosSizePixel(Point( 0, 0 ),aTotalOutputSize);
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
 {
-    impl_scrollContent( m_aHScroll.GetDelta(), m_aVScroll.GetDelta() );
+    m_aReportWindow.ScrollChildren( getThumbPos() );
     return 0;
 }
 //------------------------------------------------------------------------------
@@ -416,7 +375,7 @@ void OScrollWindowHelper::DataChanged( const DataChangedEvent& rDCEvt )
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::_propertyChanged(const beans::PropertyChangeEvent& /*_rEvent*/) throw( uno::RuntimeException)
 {
-    m_aReportWindow.notifyHeightChanged();
+    m_aReportWindow.notifySizeChanged();
 }
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::setGridSnap(BOOL bOn)
@@ -439,9 +398,10 @@ sal_uInt32 OScrollWindowHelper::getMarkedObjectCount() const
     return m_aReportWindow.getMarkedObjectCount();
 }
 // -----------------------------------------------------------------------------
-void OScrollWindowHelper::zoom(const sal_Int16 _nZoom)
+void OScrollWindowHelper::zoom(const Fraction& _aZoom)
 {
-    m_aReportWindow.zoom(_nZoom);
+    m_aReportWindow.zoom(_aZoom);
+    Resize();
     Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
 }
 // -----------------------------------------------------------------------------
@@ -449,7 +409,11 @@ void OScrollWindowHelper::fillControlModelSelection(::std::vector< uno::Referenc
 {
     m_aReportWindow.fillControlModelSelection(_rSelection);
 }
-
+// -----------------------------------------------------------------------------
+sal_uInt16 OScrollWindowHelper::getZoomFactor(SvxZoomType _eType) const
+{
+    return m_aReportWindow.getZoomFactor(_eType);
+}
 //==============================================================================
 } // rptui
 //==============================================================================

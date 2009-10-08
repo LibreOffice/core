@@ -740,7 +740,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
         }
 
-        if ( aSelectColumns->empty() )
+        if ( aSelectColumns->get().empty() )
         {
             // This is a valid casse. If we can syntactically parse the query, but not semantically
             // (e.g. because it is based on a table we do not know), then there will be no SelectColumns
@@ -754,28 +754,28 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         SizeTSet aUsedSelectColumns;
 
         sal_Int32 nCount = xResultSetMeta->getColumnCount();
-        OSL_ENSURE( (size_t) nCount == aSelectColumns->size(), "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
+        OSL_ENSURE( (size_t) nCount == aSelectColumns->get().size(), "OSingleSelectQueryComposer::getColumns: inconsistent column counts, this might result in wrong columns!" );
         for(sal_Int32 i=1;i<=nCount;++i)
         {
             ::rtl::OUString sName = xResultSetMeta->getColumnName(i);
             sal_Bool bFound = sal_False;
-            OSQLColumns::const_iterator aFind = ::connectivity::find(aSelectColumns->begin(),aSelectColumns->end(),sName,aCaseCompare);
-            size_t nFoundSelectColumnPos = aFind - aSelectColumns->begin();
-            if ( aFind != aSelectColumns->end() )
+            OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),sName,aCaseCompare);
+            size_t nFoundSelectColumnPos = aFind - aSelectColumns->get().begin();
+            if ( aFind != aSelectColumns->get().end() )
             {
                 if ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
                 {   // we found a column name which exists twice
                     // so we start after the first found
                     do
                     {
-                        aFind = ::connectivity::findRealName(++aFind,aSelectColumns->end(),sName,aCaseCompare);
-                        nFoundSelectColumnPos = aFind - aSelectColumns->begin();
+                        aFind = ::connectivity::findRealName(++aFind,aSelectColumns->get().end(),sName,aCaseCompare);
+                        nFoundSelectColumnPos = aFind - aSelectColumns->get().begin();
                     }
                     while   (   ( aUsedSelectColumns.find( nFoundSelectColumnPos ) != aUsedSelectColumns.end() )
-                            &&  ( aFind != aSelectColumns->end() )
+                                &&  ( aFind != aSelectColumns->get().end() )
                             );
                 }
-                if ( aFind != aSelectColumns->end() )
+                if ( aFind != aSelectColumns->get().end() )
                 {
                     (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sName;
                     aUsedSelectColumns.insert( nFoundSelectColumnPos );
@@ -787,21 +787,21 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
             if ( bFound )
                 continue;
 
-            OSQLColumns::const_iterator aRealFind = ::connectivity::findRealName(
-                aSelectColumns->begin(), aSelectColumns->end(), sName, aCaseCompare );
+            OSQLColumns::Vector::const_iterator aRealFind = ::connectivity::findRealName(
+                aSelectColumns->get().begin(), aSelectColumns->get().end(), sName, aCaseCompare );
 
-            if ( i > static_cast< sal_Int32>( aSelectColumns->size() ) )
+            if ( i > static_cast< sal_Int32>( aSelectColumns->get().size() ) )
             {
-                aSelectColumns->push_back(
+                aSelectColumns->get().push_back(
                     ::connectivity::parse::OParseColumn::createColumnForResultSet( xResultSetMeta, m_xMetaData, i )
                 );
-                OSL_ENSURE( aSelectColumns->size() == (size_t)i, "OSingleSelectQueryComposer::getColumns: inconsistency!" );
+                OSL_ENSURE( aSelectColumns->get().size() == (size_t)i, "OSingleSelectQueryComposer::getColumns: inconsistency!" );
             }
-            else if ( aRealFind == aSelectColumns->end() )
+            else if ( aRealFind == aSelectColumns->get().end() )
             {
                 // we can now only look if we found it under the realname propertery
                 // here we have to make the assumption that the position is correct
-                OSQLColumns::iterator aFind2 = aSelectColumns->begin() + i-1;
+                OSQLColumns::Vector::iterator aFind2 = aSelectColumns->get().begin() + i-1;
                 Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
                 if ( !xProp.is() || !xProp->getPropertySetInfo()->hasPropertyByName( PROPERTY_REALNAME ) )
                     continue;
@@ -829,7 +829,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 pColumn->setRealName(sRealName);
                 pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
 
-                (*aSelectColumns)[i-1] = pColumn;
+                (aSelectColumns->get())[i-1] = pColumn;
             }
             else
                 continue;
@@ -1252,7 +1252,7 @@ Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
     {
         ::vos::ORef< OSQLColumns> aCols = m_aSqlIterator.getParameters();
         ::std::vector< ::rtl::OUString> aNames;
-        for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
+        for(OSQLColumns::Vector::const_iterator aIter = aCols->get().begin(); aIter != aCols->get().end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
         m_aCurrentColumns[ParameterColumns] = new OPrivateColumns(aCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
@@ -1302,7 +1302,7 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
     if ( !m_aCurrentColumns[_eType] )
     {
         ::std::vector< ::rtl::OUString> aNames;
-        for(OSQLColumns::const_iterator aIter = _rCols->begin(); aIter != _rCols->end();++aIter)
+        for(OSQLColumns::Vector::const_iterator aIter = _rCols->get().begin(); aIter != _rCols->get().end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
         m_aCurrentColumns[_eType] = new OPrivateColumns(_rCols,m_xMetaData->supportsMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames,sal_True);
     }
@@ -1548,6 +1548,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     ::rtl::OUString sColumnExp = aSQL.makeStringAndClear();
                     getBoleanComparisonPredicate( sColumnExp, bValue, m_nBoolCompareMode, aSQL );
                 }
+                break;
             default:
                 aSQL.append( STR_EQUAL );
                 aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );

@@ -82,6 +82,7 @@
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -223,8 +224,8 @@ DBG_NAME(SbaTableQueryBrowser);
 //------------------------------------------------------------------------------
 SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory >& _rM)
     :SbaXDataBrowserController(_rM)
-    ,m_aSelectionListeners(m_aMutex)
-    ,m_aContextMenuInterceptors(m_aMutex)
+    ,m_aSelectionListeners( getMutex() )
+    ,m_aContextMenuInterceptors( getMutex() )
     ,m_aTableCopyHelper(this)
     ,m_pTreeView(NULL)
     ,m_pSplitter(NULL)
@@ -402,7 +403,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeModel->SetSortMode(SortAscending);
         m_pTreeModel->SetCompareHdl(LINK(this, SbaTableQueryBrowser, OnTreeEntryCompare));
         m_pTreeView->setModel(m_pTreeModel);
-        m_pTreeView->setSelectHdl(LINK(this, SbaTableQueryBrowser, OnSelectEntry));
+        m_pTreeView->setSelChangeHdl( LINK( this, SbaTableQueryBrowser, OnSelectionChange ) );
 
         // TODO
         getBrowserView()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
@@ -600,10 +601,19 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 {
                     case DataType::BIT:
                     case DataType::BOOLEAN:
+                    {
                         aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
                         aInitialValues.push_back( NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualEffect" ) ), makeAny( VisualEffect::FLAT ) ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
-                        break;
+
+                        sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
+                        OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullable );
+                        aInitialValues.push_back( NamedValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TriState" ) ),
+                            makeAny( sal_Bool( ColumnValue::NO_NULLS != nNullable ) )
+                        ) );
+                    }
+                    break;
 
                     case DataType::LONGVARCHAR:
                         aInitialValues.push_back( NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MultiLine" ) ), makeAny( (sal_Bool)sal_True ) ) );
@@ -835,7 +845,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
 sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
     sal_Bool bRet = sal_False;
@@ -1773,8 +1783,10 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             unloadAndCleanup( sal_False );
 
             // reselect the entry
-            if(pSelected)
-                OnSelectEntry( pSelected );
+            if ( pSelected )
+            {
+                implSelect( pSelected );
+            }
             else
             {
                 Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
@@ -2021,8 +2033,6 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
     if (_pParent->HasChilds())
         // nothing to to ...
         return 1L;
-
-    ::osl::MutexGuard aGuard(m_aEntryMutex);
 
     SvLBoxEntry* pFirstParent = m_pTreeView->getListBox().GetRootLevelParent(_pParent);
     OSL_ENSURE(pFirstParent,"SbaTableQueryBrowser::OnExpandEntry: No rootlevelparent!");
@@ -2289,7 +2299,7 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
             {
                 if ( _bSelectDirect )
                 {
-                    OnSelectEntry(pCommand);
+                    implSelect( pCommand );
                 }
                 else
                     m_pTreeView->getListBox().Select(pCommand);
@@ -2314,11 +2324,18 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
+IMPL_LINK(SbaTableQueryBrowser, OnSelectionChange, void*, /*NOINTERESTEDIN*/)
 {
-    ::osl::MutexGuard aGuard(m_aEntryMutex);
+    return implSelect( m_pTreeView->getListBox().FirstSelected() ) ? 1L : 0L;
+}
 
-    DBTreeListUserData* pEntryData = static_cast<DBTreeListUserData*>(_pEntry->GetUserData());
+//------------------------------------------------------------------------------
+bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
+{
+    if ( !_pEntry )
+        return false;
+
+    DBTreeListUserData* pEntryData = static_cast< DBTreeListUserData* >( _pEntry->GetUserData() );
     switch (pEntryData->eType)
     {
         case etTableOrView:
@@ -2326,11 +2343,11 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             break;
         default:
             // nothing to do
-            return 0L;
+            return false;
     }
 
-    OSL_ENSURE(m_pTreeModel->HasParent(_pEntry), "SbaTableQueryBrowser::OnSelectEntry: invalid entry (1)!");
-    OSL_ENSURE(m_pTreeModel->HasParent(m_pTreeModel->GetParent(_pEntry)), "SbaTableQueryBrowser::OnSelectEntry: invalid entry (2)!");
+    OSL_ENSURE(m_pTreeModel->HasParent(_pEntry), "SbaTableQueryBrowser::implSelect: invalid entry (1)!");
+    OSL_ENSURE(m_pTreeModel->HasParent(m_pTreeModel->GetParent(_pEntry)), "SbaTableQueryBrowser::implSelect: invalid entry (2)!");
 
     // get the entry for the tables or queries
     SvLBoxEntry* pContainer = m_pTreeModel->GetParent(_pEntry);
@@ -2490,7 +2507,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             if(e.TargetException >>= aSql)
                 showError(SQLExceptionInfo(aSql));
             else
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnSelectEntry: something strange happended!");
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implSelect: something strange happended!");
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
@@ -2502,7 +2519,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
         }
     }
-    return 0L;
+    return true;
 }
 
 // -----------------------------------------------------------------------------
@@ -2533,7 +2550,6 @@ SvLBoxEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNameAc
 void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aEntryMutex);
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // first search for a definition container where we can insert this element
@@ -2590,8 +2606,6 @@ sal_Bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const String& _sName,
 void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-    ::osl::MutexGuard aGuard(m_aEntryMutex);
-
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // get the top-level representing the removed data source
@@ -2700,7 +2714,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aEntryMutex);
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
@@ -3218,7 +3232,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection( SvLBoxEntry* _pDSEntry, void* p
 
             // connect
             _rConnection.reset(
-                connect( getDataSourceAcessor( _pDSEntry ), sConnectingContext, sal_True ),
+                connect( getDataSourceAcessor( _pDSEntry ), sConnectingContext, NULL ),
                 SharedConnection::TakeOwnership
             );
 
@@ -3318,8 +3332,8 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
             if (pTopLevelSelected)
                 sInitialSelection = getDataSourceAcessor( pTopLevelSelected );
 
-            Reference< XModel > xDocumentModel(
-                getDataSourceOrModel(getDataSourceByName_displayError( sInitialSelection, getView(), getORB(), true )),UNO_QUERY);
+            Reference< XDataSource > xDataSource( getDataSourceByName( sInitialSelection, getView(), getORB(), NULL ) );
+            Reference< XModel > xDocumentModel( getDataSourceOrModel( xDataSource ), UNO_QUERY );
 
             if ( xDocumentModel.is() )
             {

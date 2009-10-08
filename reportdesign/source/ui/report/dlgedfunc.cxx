@@ -91,17 +91,17 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     OScrollWindowHelper* pScrollWindow = pReportWindow->getScrollWindow();
 
     Size aOut = pReportWindow->GetOutputSizePixel();
-    Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
-    aStartWith *= m_pParent->GetMapMode().GetScaleX();
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    aStartWidth *= m_pParent->GetMapMode().GetScaleX();
 
-    aOut.Width() -= (long)aStartWith;
+    aOut.Width() -= (long)aStartWidth;
 
-    Rectangle aOutRect( pScrollWindow->getScrollOffset(), aOut );
+    Rectangle aOutRect( pScrollWindow->getThumbPos(), aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
     //Rectangle aWorkArea = m_pParent->getView()->GetWorkArea();
     Point aGcc3WorkaroundTemporary;
     Rectangle aWorkArea(aGcc3WorkaroundTemporary,pScrollWindow->getTotalSize());
-    aWorkArea.Right() -= (long)aStartWith;
+    aWorkArea.Right() -= (long)aStartWidth;
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
     {
@@ -388,6 +388,13 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     }
                 }
                 break;
+            case KEY_DELETE:
+                if ( !rCode.IsMod1() && !rCode.IsMod2() )
+                {
+                    bReturn = TRUE;
+                    break;
+                } // if ( !rCode.IsMod1() && !rCode.IsMod2() )
+                // run through
             default:
             {
                 bReturn = m_rView.KeyInput(_rEvent, m_pParent);
@@ -612,9 +619,8 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
                         nDx = -aNewRect.Left();
                     if ( (nDy + aNewRect.Top()) < 0 )
                         nDy = -aNewRect.Top();
-                    Point aTest;
-                    rDragStat.GetDragMethod()->MovPoint(aTest);
-                    if ( rDragStat.GetDragMethod()->IsMoveOnly() )
+
+                    if ( rDragStat.GetDragMethod()->getMoveOnly() )
                         aNewRect.Move(nDx,nDy);
                     else
                         ::ResizeRect(aNewRect,rDragStat.GetRef1(),rDragStat.GetXFact(),rDragStat.GetYFact());

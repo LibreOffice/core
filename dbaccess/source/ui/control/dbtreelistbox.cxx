@@ -104,11 +104,9 @@ DBG_NAME(DBTreeListBox)
 //------------------------------------------------------------------------
 DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
-    ,m_pSelectedEntry(NULL)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
     ,m_pContextMenuProvider( NULL )
-    ,m_nSelectLock(0)
     ,m_bHandleEnterKey(_bHandleEnterKey)
     ,m_xORB(_rxORB)
 {
@@ -118,11 +116,9 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
 // -----------------------------------------------------------------------------
 DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,rResId)
-    ,m_pSelectedEntry(NULL)
     ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
     ,m_pContextMenuProvider( NULL )
-    ,m_nSelectLock(0)
     ,m_bHandleEnterKey(_bHandleEnterKey)
     ,m_xORB(_rxORB)
 {
@@ -149,8 +145,7 @@ void DBTreeListBox::init()
 DBTreeListBox::~DBTreeListBox()
 {
     DBG_DTOR(DBTreeListBox,NULL);
-    if(m_aTimer.IsActive())
-        m_aTimer.Stop();
+    implStopSelectionTimer();
 }
 //------------------------------------------------------------------------
 SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry* pStart, const IEntryFilter* _pFilter ) const
@@ -200,20 +195,6 @@ void DBTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
 }
 
 // -------------------------------------------------------------------------
-void DBTreeListBox::SelectEntry(SvLBoxEntry* _pEntry)
-{
-    OSL_ENSURE(_pEntry,"Who called me with NULL!");
-    if ( _pEntry )
-    {
-        if ( GetCurEntry() )
-            Select(GetCurEntry(), sal_False);
-        Select(_pEntry, sal_True);
-        SetCurEntry(_pEntry);
-        implSelected(_pEntry);
-    }
-}
-
-// -------------------------------------------------------------------------
 void DBTreeListBox::InitEntry( SvLBoxEntry* _pEntry, const XubString& aStr, const Image& _rCollEntryBmp, const Image& _rExpEntryBmp, SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry( _pEntry, aStr, _rCollEntryBmp,_rExpEntryBmp, eButtonKind);
@@ -223,40 +204,33 @@ void DBTreeListBox::InitEntry( SvLBoxEntry* _pEntry, const XubString& aStr, cons
 }
 
 // -------------------------------------------------------------------------
-void DBTreeListBox::implSelected(SvLBoxEntry* _pSelected)
+void DBTreeListBox::implStopSelectionTimer()
 {
-    if(!m_nSelectLock && _pSelected && m_pSelectedEntry != _pSelected)
-    {
-        // re-start the timer
-        if(m_aTimer.IsActive())
-            m_aTimer.Stop();
-        m_pSelectedEntry = _pSelected;
-        m_aTimer.Start();
-    }
+    if ( m_aTimer.IsActive() )
+        m_aTimer.Stop();
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 DBTreeListBox::lockAutoSelect()
+void DBTreeListBox::implStartSelectionTimer()
 {
-    return ++m_nSelectLock;
+    implStopSelectionTimer();
+    m_aTimer.Start();
 }
 
-// -------------------------------------------------------------------------
-sal_Int32 DBTreeListBox::unlockAutoSelect()
-{
-    DBG_ASSERT(m_nSelectLock, "DBTreeListBox::unlockAutoSelect: not locked!");
-    return --m_nSelectLock;
-}
 // -----------------------------------------------------------------------------
 
 void DBTreeListBox::DeselectHdl()
 {
+    m_aSelectedEntries.erase( GetHdlEntry() );
     SvTreeListBox::DeselectHdl();
+    implStartSelectionTimer();
 }
 // -------------------------------------------------------------------------
 void DBTreeListBox::SelectHdl()
 {
-    implSelected(GetHdlEntry());
+    m_aSelectedEntries.insert( GetHdlEntry() );
+    SvTreeListBox::SelectHdl();
+    implStartSelectionTimer();
 }
 
 // -------------------------------------------------------------------------
@@ -281,15 +255,16 @@ IMPL_LINK(DBTreeListBox, OnResetEntry, SvLBoxEntry*, pEntry)
 // -----------------------------------------------------------------------------
 void DBTreeListBox::ModelHasEntryInvalidated( SvListEntry* _pEntry )
 {
-    SvTreeListBox::ModelHasEntryInvalidated(_pEntry);
-    if ( _pEntry == m_pSelectedEntry && m_pSelectedEntry )
+    SvTreeListBox::ModelHasEntryInvalidated( _pEntry );
+
+    if ( m_aSelectedEntries.find( _pEntry ) != m_aSelectedEntries.end() )
     {
-        SvLBoxItem* pTextItem = m_pSelectedEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-        if ( pTextItem && !static_cast<OBoldListboxString*>(pTextItem)->isEmphasized() )
+        SvLBoxItem* pTextItem = static_cast< SvLBoxEntry* >( _pEntry )->GetFirstItem( SV_ITEM_ID_BOLDLBSTRING );
+        if ( pTextItem && !static_cast< OBoldListboxString* >( pTextItem )->isEmphasized() )
         {
-            if(m_aTimer.IsActive())
-                m_aTimer.Stop();
-            m_pSelectedEntry = NULL;
+            implStopSelectionTimer();
+            m_aSelectedEntries.erase( _pEntry );
+                // ehm - why?
         }
     }
 }
@@ -297,11 +272,10 @@ void DBTreeListBox::ModelHasEntryInvalidated( SvListEntry* _pEntry )
 void DBTreeListBox::ModelHasRemoved( SvListEntry* _pEntry )
 {
     SvTreeListBox::ModelHasRemoved(_pEntry);
-    if (_pEntry == m_pSelectedEntry)
+    if ( m_aSelectedEntries.find( _pEntry ) != m_aSelectedEntries.end() )
     {
-        if(m_aTimer.IsActive())
-            m_aTimer.Stop();
-        m_pSelectedEntry = NULL;
+        implStopSelectionTimer();
+        m_aSelectedEntries.erase( _pEntry );
     }
 }
 
@@ -364,7 +338,7 @@ void DBTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         if ( m_pDragedEntry && m_pActionListener->requestDrag( _nAction, _rPosPixel ) )
         {
             // if the (asynchronous) drag started, stop the selection timer
-            m_aTimer.Stop();
+            implStopSelectionTimer();
             // and stop selecting entries by simply moving the mouse
             EndSelection();
         }
@@ -414,24 +388,24 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         switch(eFunc)
         {
             case KEYFUNC_CUT:
-                bHandled = (m_aCutHandler.IsSet() && m_pSelectedEntry);
+                bHandled = ( m_aCutHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
-                    m_aCutHandler.Call(m_pSelectedEntry);
+                    m_aCutHandler.Call( NULL );
                 break;
             case KEYFUNC_COPY:
-                bHandled = (m_aCopyHandler.IsSet() && m_pSelectedEntry);
+                bHandled = ( m_aCopyHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
-                    m_aCopyHandler.Call(m_pSelectedEntry);
+                    m_aCopyHandler.Call( NULL );
                 break;
             case KEYFUNC_PASTE:
-                bHandled = (m_aPasteHandler.IsSet() && m_pSelectedEntry);
+                bHandled = ( m_aPasteHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
-                    m_aPasteHandler.Call(m_pSelectedEntry);
+                    m_aPasteHandler.Call( NULL );
                 break;
             case KEYFUNC_DELETE:
-                bHandled = (m_aDeleteHandler.IsSet() && m_pSelectedEntry);
+                bHandled = ( m_aDeleteHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
-                    m_aDeleteHandler.Call(m_pSelectedEntry);
+                    m_aDeleteHandler.Call( NULL );
                 break;
             default:
                 break;
@@ -480,9 +454,8 @@ BOOL DBTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText 
     aEntry.aNewText  =rNewText;
     if(m_aEditedHandler.Call(&aEntry) != 0)
     {
-        if(m_aTimer.IsActive())
-            m_aTimer.Stop();
-        m_pSelectedEntry = NULL; // to force that the renamed selection will be reselected
+        implStopSelectionTimer();
+        m_aSelectedEntries.erase( pEntry );
     }
     SetEntryText(pEntry,aEntry.aNewText);
 
@@ -666,7 +639,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
     aEvent.ExecutePosition.X = -1;
     aEvent.ExecutePosition.Y = -1;
     aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-        m_xORB, pContextMenu.get() );
+        m_xORB, pContextMenu.get(), 0 );
     aEvent.Selection = new SelectionSupplier( m_pContextMenuProvider->getCurrentSelection( *this ) );
 
     ::cppu::OInterfaceIteratorHelper aIter( *pInterceptors );
@@ -730,24 +703,23 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
 // -----------------------------------------------------------------------------
 void DBTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
 {
-    if ( m_pContextMenuProvider )
+    if ( m_pContextMenuProvider && _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
 }
 
 // -----------------------------------------------------------------------------
 IMPL_LINK(DBTreeListBox, OnTimeOut, void*, /*EMPTY_ARG*/)
 {
-    if(m_aTimer.IsActive())
-        m_aTimer.Stop();
-    if (m_pSelectedEntry)
-        aSelectHdl.Call( m_pSelectedEntry );
+    implStopSelectionTimer();
+
+    m_aSelChangeHdl.Call( NULL );
     return 0L;
 }
 // -----------------------------------------------------------------------------
 void DBTreeListBox::StateChanged( StateChangedType nStateChange )
 {
-    if ( nStateChange == STATE_CHANGE_VISIBLE && m_aTimer.IsActive() )
-        m_aTimer.Stop();
+    if ( nStateChange == STATE_CHANGE_VISIBLE )
+        implStopSelectionTimer();
 }
 // .........................................................................
 }   // namespace dbaui

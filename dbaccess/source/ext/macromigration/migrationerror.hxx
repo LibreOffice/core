@@ -65,7 +65,8 @@ namespace dbmm
         ERR_DOCUMENT_BACKUP_FAILED,
         ERR_UNKNOWN_SCRIPT_FOLDER,
         ERR_EXAMINING_SCRIPTS_FOLDER_FAILED,
-        ERR_PASSWORD_VERIFICATION_FAILED
+        ERR_PASSWORD_VERIFICATION_FAILED,
+        ERR_NEW_STYLE_REPORT
     };
 
     //====================================================================

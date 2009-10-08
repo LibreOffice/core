@@ -40,10 +40,15 @@
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
 
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/numberedcollection.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/property.hxx>
-
 #include <svtools/saveopt.hxx>
+
+#include <framework/titlehelper.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/XExporter.hpp>
@@ -65,6 +70,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/interaction.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -72,6 +78,9 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>
+#include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
+#include <com/sun/star/task/InteractionClassification.hpp>
+#include <com/sun/star/task/XInteractionAskLater.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errcode.hxx>
@@ -81,6 +90,9 @@
 
 #include <algorithm>
 #include <functional>
+#include <list>
+
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -370,9 +382,24 @@ void ODatabaseDocument::impl_import_throw( const ::comphelper::NamedValueCollect
     Reference< XStatusIndicator > xStatusIndicator;
     lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterArgs );
 
+    /** property map for import info set */
+    comphelper::PropertyMapEntry aExportInfoMap[] =
+     {
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+          { NULL, 0, 0, NULL, 0, 0 }
+     };
+     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rResource.getOrDefault("URL",::rtl::OUString())));
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
+
+    const sal_Int32 nCount = aFilterArgs.getLength();
+    aFilterArgs.realloc(nCount + 1);
+    aFilterArgs[nCount] <<= xInfoSet;
+
     Reference< XImporter > xImporter(
-        m_pImpl->m_aContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
-        UNO_QUERY_THROW );
+    m_pImpl->m_aContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
+     UNO_QUERY_THROW );
 
     Reference< XComponent > xComponent( *this, UNO_QUERY_THROW );
     xImporter->setTargetDocument( xComponent );
@@ -425,6 +452,14 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
     impl_reset_nothrow();
 
     ::comphelper::NamedValueCollection aResource( _Arguments );
+    if ( aResource.has( "FileName" ) && !aResource.has( "URL" ) )
+        // FileName is the compatibility name for URL, so we might have clients passing
+        // a FileName only. However, some of our code works with the URL only, so ensure
+        // we have one.
+        aResource.put( "URL", aResource.get( "FileName" ) );
+    if ( aResource.has( "URL" ) && !aResource.has( "FileName" ) )
+        // similar ... just in case there is legacy code which expects a FileName only
+        aResource.put( "FileName", aResource.get( "URL" ) );
 
     // now that somebody (perhaps) told us an macro execution mode, remember it as
     // ImposedMacroExecMode
@@ -510,6 +545,36 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
 
     // check/adjust our macro mode.
     m_pImpl->checkMacrosOnLoading();
+
+    // If we encounter a document which already contains macros in the document storage (instead of
+    // macros in the form's/report's storages), then this has been written by a newer version of OOo (>=3.1).
+    // In this case, warn the user, too.
+    if ( m_pImpl->hasMacroStorages() )
+    {
+        ::comphelper::NamedValueCollection aArgs( m_pImpl->getResource() );
+        Reference< XInteractionHandler > xInteraction;
+        xInteraction = aArgs.getOrDefault( "InteractionHandler", xInteraction );
+        if ( xInteraction.is() )
+        {
+            FutureDocumentVersionProductUpdateRequest aUpdateRequest;
+            aUpdateRequest.Classification = InteractionClassification_QUERY;
+            aUpdateRequest.DocumentURL = getURL();
+
+            ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest = new ::comphelper::OInteractionRequest( makeAny( aUpdateRequest ) );
+            pRequest->addContinuation( new ::comphelper::OInteractionApprove );
+            pRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
+            pRequest->addContinuation( new ::comphelper::OInteraction< XInteractionAskLater >() );
+
+            try
+            {
+                xInteraction->handle( pRequest.get() );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1095,13 +1160,13 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
     }
     catch ( const Exception& )
     {
-        ::osl::MutexGuard aGuard( m_xMutex->getMutex() );
+        ::osl::MutexGuard aGuard( m_aMutex );
         m_bClosing = false;
         throw;
     }
 
     // SYNCHRONIZED ->
-    ::osl::MutexGuard aGuard( m_xMutex->getMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
     m_bClosing = false;
     // <- SYNCHRONIZED
 }
@@ -1210,14 +1275,18 @@ void ODatabaseDocument::writeStorage( const Reference< XStorage >& _rxTargetStor
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
-        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
     SvtSaveOptions aSaveOpt;
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(aSaveOpt.IsPrettyPrinting()));
+    if ( aSaveOpt.IsSaveRelFSys() )
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rMediaDescriptor.getOrDefault("URL",::rtl::OUString())));
+
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
@@ -1328,13 +1397,21 @@ void ODatabaseDocument::disposing()
     m_aCloseListener.disposeAndClear( aDisposeEvent );
     m_aStorageListeners.disposeAndClear( aDisposeEvent );
 
+    // this is the list of objects which we currently hold as member. Upon resetting
+    // those members, we can (potentially) release the last reference to them, in which
+    // case they will be deleted - if they're C++ implementations, that is :).
+    // Some of those implementations are offending enough to require the SolarMutex, which
+    // means we should not release the last reference while our own mutex is locked ...
+    ::std::list< Reference< XInterface > > aKeepAlive;
+
     // SYNCHRONIZED ->
-    ::osl::MutexGuard aGuard( m_xMutex->getMutex() );
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
         // closing, our controllers are closed, too
 
+    aKeepAlive.push_back( m_xUIConfigurationManager );
     m_xUIConfigurationManager = NULL;
 
     clearObjectContainer( m_xForms );
@@ -1356,11 +1433,18 @@ void ODatabaseDocument::disposing()
     DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     impl_disposeControllerFrames_nothrow();
 
+    aKeepAlive.push_back( m_xModuleManager );
     m_xModuleManager.clear();
+
+    aKeepAlive.push_back( m_xTitleHelper );
     m_xTitleHelper.clear();
 
     m_pImpl.clear();
+
+    aGuard.clear();
     // <- SYNCHRONIZED
+
+    aKeepAlive.clear();
 }
 // -----------------------------------------------------------------------------
 // XComponent

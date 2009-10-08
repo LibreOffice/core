@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowAccess.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,8 @@ namespace dbaui
             @return true if it is editable otherwise false
         */
         virtual sal_Bool isEditable() const;
+
+        virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     public:
         OTableWindowAccess( OTableWindow* _pTable);
 

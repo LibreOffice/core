@@ -481,16 +481,16 @@ Any ORowSetCache::getBookmark(  )
         return Any(); // this is allowed here because the rowset knowns what it is doing
     }
 
-    switch((*(*m_aMatrixIter))[0].getTypeKind())
+    switch(((*m_aMatrixIter)->get())[0].getTypeKind())
     {
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
-            return makeAny((sal_Int32)(*(*m_aMatrixIter))[0]);
+            return makeAny((sal_Int32)((*m_aMatrixIter)->get())[0]);
         default:
-            if((*(*m_aMatrixIter))[0].isNull())
-                (*(*m_aMatrixIter))[0] = m_pCacheSet->getBookmark();
-            return (*(*m_aMatrixIter))[0].getAny();
+            if(((*m_aMatrixIter)->get())[0].isNull())
+                ((*m_aMatrixIter)->get())[0] = m_pCacheSet->getBookmark();
+            return ((*m_aMatrixIter)->get())[0].getAny();
     }
 }
 // -------------------------------------------------------------------------
@@ -563,9 +563,9 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
     checkUpdateConditions(columnIndex);
 
 
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
+    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
+    ((*m_aInsertRow)->get())[columnIndex] = x;
+    ((*m_aInsertRow)->get())[columnIndex].setModified();
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length )
@@ -575,7 +575,7 @@ void ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< :
 
     Sequence<sal_Int8> aSeq;
     if(x.is())
-        x->readSomeBytes(aSeq,length);
+        x->readBytes(aSeq,length);
     updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
@@ -586,7 +586,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
 
     Sequence<sal_Int8> aSeq;
     if(x.is())
-        x->readSomeBytes(aSeq,length);
+        x->readBytes(aSeq,length);
 
     updateValue(columnIndex,aSeq);
 }
@@ -596,9 +596,9 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x )
     checkUpdateConditions(columnIndex);
 
 
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
+    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
+    ((*m_aInsertRow)->get())[columnIndex] = x;
+    ((*m_aInsertRow)->get())[columnIndex].setModified();
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ )
@@ -606,9 +606,9 @@ void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal
     checkUpdateConditions(columnIndex);
 
 
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
+    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
+    ((*m_aInsertRow)->get())[columnIndex] = x;
+    ((*m_aInsertRow)->get())[columnIndex].setModified();
 }
 // -------------------------------------------------------------------------
 // XResultSet
@@ -1223,7 +1223,7 @@ sal_Bool ORowSetCache::insertRow(  )
     if ( bRet )
     {
         ++m_nRowCount;
-        Any aBookmark = (*(*m_aInsertRow))[0].makeAny();
+        Any aBookmark = ((*m_aInsertRow)->get())[0].makeAny();
         m_bAfterLast = m_bBeforeFirst = sal_False;
         if(aBookmark.hasValue())
             moveToBookmark(aBookmark);
@@ -1261,7 +1261,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
     if(isAfterLast() || isBeforeFirst())
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
 
-    Any aBookmark = (*(*_rUpdateRow))[0].makeAny();
+    Any aBookmark = ((*_rUpdateRow)->get())[0].makeAny();
     OSL_ENSURE(aBookmark.hasValue(),"Bookmark must have a value!");
     // here we don't have to reposition our CacheSet, when we try to update a row,
     // the row was already fetched
@@ -1335,8 +1335,8 @@ void ORowSetCache::moveToInsertRow(  )
         *m_aInsertRow = new ORowSetValueVector(m_xMetaData->getColumnCount());
 
     // we don't unbound the bookmark column
-    ORowSetValueVector::iterator aIter = (*m_aInsertRow)->begin()+1;
-    for(;aIter != (*m_aInsertRow)->end();++aIter)
+    ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin()+1;
+    for(;aIter != (*m_aInsertRow)->get().end();++aIter)
     {
         aIter->setBound(sal_False);
         aIter->setModified(sal_False);
@@ -1389,8 +1389,8 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 
     (*(*m_aInsertRow)) = (*(*_rOriginalRow));
     // we don't unbound the bookmark column
-    ORowSetValueVector::iterator aIter = (*m_aInsertRow)->begin();
-    for(;aIter != (*m_aInsertRow)->end();++aIter)
+    ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin();
+    for(;aIter != (*m_aInsertRow)->get().end();++aIter)
         aIter->setModified(sal_False);
 }
 // -----------------------------------------------------------------------------
@@ -1406,7 +1406,7 @@ void ORowSetCache::checkPositionFlags()
 // -----------------------------------------------------------------------------
 void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 {
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
+    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->get().size())
         throwFunctionSequenceException(m_xSet.get());
 }
 //------------------------------------------------------------------------------
@@ -1514,8 +1514,8 @@ void ORowSetCache::clearInsertRow()
     // we don't unbound the bookmark column
     if ( m_aInsertRow != m_pInsertMatrix->end() && m_aInsertRow->isValid() )
     {
-        ORowSetValueVector::iterator aIter = (*m_aInsertRow)->begin()+1;
-        ORowSetValueVector::iterator aEnd = (*m_aInsertRow)->end();
+        ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin()+1;
+        ORowSetValueVector::Vector::iterator aEnd = (*m_aInsertRow)->get().end();
         for(;aIter != aEnd;++aIter)
         {
             aIter->setBound(sal_False);

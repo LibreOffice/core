@@ -51,8 +51,7 @@ LIB1FILES=\
         $(SLB)$/api.lib	\
         $(SLB)$/dataaccess.lib	\
         $(SLB)$/misc.lib	\
-        $(SLB)$/core_resource.lib	\
-        $(SLB)$/dbashared.lib	
+        $(SLB)$/core_resource.lib
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
@@ -134,7 +133,10 @@ SHL2STDLIBS= \
         $(VOSLIB)				\
         $(SALLIB)
         
-.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="OS2"
+SHL2STDLIBS+=	$(LB)$/i$(TARGET).lib
+SHL2DEPN=$(LB)$/i$(TARGET).lib
+.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL2STDLIBS+= \
         -l$(TARGET)$(DLLPOSTFIX)
 SHL2DEPN=$(SHL1TARGETN)

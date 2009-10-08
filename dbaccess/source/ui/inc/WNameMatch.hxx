@@ -95,8 +95,8 @@ namespace dbaui
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( RightButtonClickHdl, Button * );
         DECL_LINK( AllNoneClickHdl, Button * );
-        DECL_LINK( TableListClickHdl, SvTreeListBox* );
-        DECL_LINK( TableListRightSelectHdl, SvTreeListBox* );
+        DECL_LINK( TableListClickHdl, void* );
+        DECL_LINK( TableListRightSelectHdl, void* );
 
     public:
         virtual void            Reset ( );

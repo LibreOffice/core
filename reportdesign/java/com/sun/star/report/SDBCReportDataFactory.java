@@ -75,6 +75,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
     public static final String ESCAPE_PROCESSING = "escape-processing";
     public static final String GROUP_EXPRESSIONS = "group-expressions";
     public static final String MASTER_VALUES = "master-values";
+    public static final String MASTER_COLUMNS = "master-columns";
     public static final String DETAIL_COLUMNS = "detail-columns";
     public static final String UNO_FILTER = "Filter";
     private static final String APPLY_FILTER = "ApplyFilter";
@@ -102,19 +103,19 @@ public class SDBCReportDataFactory implements DataSourceFactory
     {
         try
         {
-            if (command == null)
+            if ( command == null )
             {
                 return new SDBCReportData(null);
             }
             int commandType = CommandType.COMMAND;
             final String commandTypeValue = (String) parameters.get(COMMAND_TYPE);
-            if (commandTypeValue != null)
+            if ( commandTypeValue != null )
             {
-                if (commandTypeValue.equals("query"))
+                if ( commandTypeValue.equals("query") )
                 {
                     commandType = CommandType.QUERY;
                 }
-                else if (commandTypeValue.equals("table"))
+                else if ( commandTypeValue.equals("table") )
                 {
                     commandType = CommandType.TABLE;
                 }
@@ -129,12 +130,12 @@ public class SDBCReportDataFactory implements DataSourceFactory
             final XConnectionTools tools = (XConnectionTools) UnoRuntime.queryInterface(XConnectionTools.class, connection);
             fillOrderStatement(command, commandType, parameters, tools, rowSetProp);
 
-            if (command.length() != 0)
+            if ( command.length() != 0 )
             {
                 final int oldParameterCount = fillParameter(parameters, tools, command, commandType, rowSet);
 
                 final XCompletedExecution execute = (XCompletedExecution) UnoRuntime.queryInterface(XCompletedExecution.class, rowSet);
-                if (execute != null && oldParameterCount > 0)
+                if ( execute != null && oldParameterCount > 0 )
                 {
                     final XInteractionHandler handler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.sdb.InteractionHandler", m_cmpCtx));
                     execute.executeWithCompletion(handler);
@@ -145,8 +146,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 }
             }
             return new SDBCReportData(rowSet);
-        }
-        catch (Exception ex)
+        } catch ( Exception ex )
         {
             throw new DataSourceException(ex.getMessage(), ex);
         }
@@ -156,7 +156,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
     {
         final StringBuffer order = new StringBuffer();
         final int count = groupExpressions.size();
-        if (count != 0)
+        if ( count != 0 )
         {
             try
             {
@@ -169,36 +169,34 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     final Object[] pair = (Object[]) groupExpressions.get(i);
                     String expression = (String) pair[0];
 
-                    if (columns.hasByName(expression))
+                    if ( columns.hasByName(expression) )
                     {
                         expression = quote + expression + quote;
                     }
                     expression = expression.trim(); // Trim away white spaces
 
-                    if (expression.length() > 0)
+                    if ( expression.length() > 0 )
                     {
                         order.append(expression);
-                        if (order.length() > 0)
+                        if ( order.length() > 0 )
                         {
                             order.append(' ');
                         }
                         final String sorting = (String) pair[1];
-                        if (sorting == null || sorting.equals(OfficeToken.FALSE))
+                        if ( sorting == null || sorting.equals(OfficeToken.FALSE) )
                         {
                             order.append("DESC");
                         }
-                        if ((i + 1) < count)
+                        if ( (i + 1) < count )
                         {
                             order.append(' ');
                         }
                     }
                 }
-            }
-            catch (IndexOutOfBoundsException ex)
+            } catch ( IndexOutOfBoundsException ex )
             {
                 Log.error("ReportProcessing failed", ex);
-            }
-            catch (SQLException ex)
+            } catch ( SQLException ex )
             {
                 Log.error("ReportProcessing failed", ex);
             }
@@ -217,15 +215,14 @@ public class SDBCReportDataFactory implements DataSourceFactory
         {
             tools.getClass().getMethod("getFieldsByCommandDescriptor", parameter);
             return tools.getFieldsByCommandDescriptor(commandType, command, out);
-        }
-        catch (NoSuchMethodException ex)
+        } catch ( NoSuchMethodException ex )
         {
         }
 
         XNameAccess xFields = null;
         // some kind of state machine to ease the sharing of code
         int eState = FAILED;
-        switch (commandType)
+        switch ( commandType )
         {
             case CommandType.TABLE:
                 eState = HANDLE_TABLE;
@@ -247,7 +244,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             // go!
             while ((DONE != eState) && (FAILED != eState))
             {
-                switch (eState)
+                switch ( eState )
                 {
                     case HANDLE_TABLE:
                         {
@@ -255,7 +252,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
 
                             // get the table objects
                             final XTablesSupplier xSupplyTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, connection);
-                            if (xSupplyTables != null)
+                            if ( xSupplyTables != null )
                             {
                                 xObjectCollection = xSupplyTables.getTables();
                             // if something went wrong 'til here, then this will be handled in the next state
@@ -272,7 +269,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
 
                             // get the table objects
                             final XQueriesSupplier xSupplyQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, connection);
-                            if (xSupplyQueries != null)
+                            if ( xSupplyQueries != null )
                             {
                                 xObjectCollection = xSupplyQueries.getQueries();
                             // if something went wrong 'til here, then this will be handled in the next state
@@ -290,7 +287,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         // next state: default to FAILED
                         eState = FAILED;
 
-                        if (xObjectCollection != null && xObjectCollection.hasByName(command))
+                        if ( xObjectCollection != null && xObjectCollection.hasByName(command) )
                         {
                             xSupplyColumns = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xObjectCollection.getByName(command));
 
@@ -303,7 +300,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         // next state: default to FAILED
                         eState = FAILED;
 
-                        if (xSupplyColumns != null)
+                        if ( xSupplyColumns != null )
                         {
                             xFields = xSupplyColumns.getColumns();
                             // that's it
@@ -327,10 +324,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
                             {
                                 final XMultiServiceFactory xComposerFac = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, connection);
 
-                                if (xComposerFac != null)
+                                if ( xComposerFac != null )
                                 {
                                     final XSingleSelectQueryComposer xComposer = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, xComposerFac.createInstance("com.sun.star.sdb.SingleSelectQueryComposer"));
-                                    if (xComposer != null)
+                                    if ( xComposer != null )
                                     {
                                         xComposer.setQuery(sStatementToExecute);
 
@@ -341,15 +338,14 @@ public class SDBCReportDataFactory implements DataSourceFactory
                                         sStatementToExecute = xComposer.getQuery();
                                     }
                                 }
-                            }
-                            catch (com.sun.star.uno.Exception ex)
+                            } catch ( com.sun.star.uno.Exception ex )
                             {
                                 // silent this error, this was just a try. If we're here, we did not change sStatementToExecute,
                                 // so it will still be _rCommand, which then will be executed without being touched
                             }
 
                             // now execute
-                            XPreparedStatement xStatement = connection.prepareStatement(sStatementToExecute);
+                            final XPreparedStatement xStatement = connection.prepareStatement(sStatementToExecute);
                             // transfer ownership of this temporary object to the caller
                             out[0] = (XComponent) UnoRuntime.queryInterface(XComponent.class, xStatement);
 
@@ -359,12 +355,11 @@ public class SDBCReportDataFactory implements DataSourceFactory
                             final XPropertySet xStatementProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xStatement);
                             try
                             {
-                                if (xStatementProps != null)
+                                if ( xStatementProps != null )
                                 {
                                     xStatementProps.setPropertyValue("MaxRows", new Integer(0));
                                 }
-                            }
-                            catch (com.sun.star.uno.Exception ex)
+                            } catch ( com.sun.star.uno.Exception ex )
                             {
                                 // oh damn. Not much of a chance to recover, we will no retrieve the complete
                                 // full blown result set
@@ -382,8 +377,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         eState = FAILED;
                 }
             }
-        }
-        catch (com.sun.star.uno.Exception ex)
+        } catch ( com.sun.star.uno.Exception ex )
         {
         }
         return xFields;
@@ -394,7 +388,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             final int commandType)
     {
         final Class[] parameter = new Class[2];
-        parameter[0] = Integer.class;
+        parameter[0] = int.class;
         parameter[1] = String.class;
         try
         {
@@ -402,16 +396,13 @@ public class SDBCReportDataFactory implements DataSourceFactory
             param[0] = new Integer(commandType);
             param[1] = command;
             return (XSingleSelectQueryComposer) tools.getClass().getMethod("getComposer", parameter).invoke(tools, param);
-        }
-        catch (NoSuchMethodException ex)
+        } catch ( NoSuchMethodException ex )
         {
-        }
-        catch (IllegalAccessException ex)
+        } catch ( IllegalAccessException ex )
         {
             // should not happen
             // assert False
-        }
-        catch (java.lang.reflect.InvocationTargetException ex)
+        } catch ( java.lang.reflect.InvocationTargetException ex )
         {
             // should not happen
             // assert False
@@ -422,7 +413,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             final XSingleSelectQueryComposer out = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, factory.createInstance("com.sun.star.sdb.SingleSelectQueryAnalyzer"));
             final String quote = connection.getMetaData().getIdentifierQuoteString();
             String statement = command;
-            switch (commandType)
+            switch ( commandType )
             {
                 case CommandType.TABLE:
                     statement = "SELECT * FROM " + quote + command + quote;
@@ -431,7 +422,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     {
                         final XQueriesSupplier xSupplyQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, connection);
                         final XNameAccess queries = xSupplyQueries.getQueries();
-                        if (queries.hasByName(command))
+                        if ( queries.hasByName(command) )
                         {
                             final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
                             final Boolean escape = (Boolean) prop.getPropertyValue("EscapeProcessing");
@@ -467,8 +458,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             }
             out.setElementaryQuery(statement);
             return out;
-        }
-        catch (Exception e)
+        } catch ( Exception e )
         {
         }
         return null;
@@ -487,56 +477,64 @@ public class SDBCReportDataFactory implements DataSourceFactory
         int oldParameterCount = 0;
 
         final XSingleSelectQueryComposer composer = getComposer(tools, command, commandType);
-        if (composer != null)
+        if ( composer != null )
         {
+            final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
+            if ( ((Boolean)rowSetProp.getPropertyValue(APPLY_FILTER)).booleanValue() )
+            {
+                composer.setFilter((String)rowSetProp.getPropertyValue("Filter"));
+            }
             // get old parameter count
             final XParametersSupplier paraSup = (XParametersSupplier) UnoRuntime.queryInterface(XParametersSupplier.class, composer);
-            if (paraSup != null)
+            if ( paraSup != null )
             {
                 final XIndexAccess params = paraSup.getParameters();
-                if (params != null)
+                if ( params != null )
                 {
                     oldParameterCount = params.getCount();
                 }
             }
             final ArrayList masterValues = (ArrayList) parameters.get(MASTER_VALUES);
-            if (masterValues != null && !masterValues.isEmpty())
+            if ( masterValues != null && !masterValues.isEmpty() )
             {
                 // Vector masterColumns = (Vector) parameters.get("master-columns");
                 final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
-
-                // create the new filter
-                final String quote = connection.getMetaData().getIdentifierQuoteString();
-                final StringBuffer oldFilter = new StringBuffer();
-                oldFilter.append(composer.getFilter());
-                if (oldFilter.length() != 0)
+                if ( oldParameterCount < detailColumns.size() )
                 {
-                    oldFilter.append(" AND ");
-                }
-                int newParamterCounter = 1;
-                for (final Iterator it = detailColumns.iterator(); it.hasNext();
-                        ++newParamterCounter)
-                {
-                    final String detail = (String) it.next();
-                    //String master = (String) masterIt.next();
-                    oldFilter.append(quote);
-                    oldFilter.append(detail);
-                    oldFilter.append(quote);
-                    oldFilter.append(" = :link_");
-                    oldFilter.append(newParamterCounter);
-                    if (it.hasNext())
+                    // create the new filter
+                    final String quote = connection.getMetaData().getIdentifierQuoteString();
+                    final StringBuffer oldFilter = new StringBuffer();
+                    oldFilter.append(composer.getFilter());
+                    if ( oldFilter.length() != 0 )
                     {
                         oldFilter.append(" AND ");
                     }
-                }
+                    int newParamterCounter = 1;
+                    for (final Iterator it = detailColumns.iterator(); it.hasNext();
+                            ++newParamterCounter)
+                    {
+                        final String detail = (String) it.next();
+                        //String master = (String) masterIt.next();
+                        oldFilter.append(quote);
+                        oldFilter.append(detail);
+                        oldFilter.append(quote);
+                        oldFilter.append(" = :link_");
+                        oldFilter.append(newParamterCounter);
+                        if ( it.hasNext() )
+                        {
+                            oldFilter.append(" AND ");
+                        }
+                    }
 
-                composer.setFilter(oldFilter.toString());
+                    composer.setFilter(oldFilter.toString());
+                }
+                else
+                    oldParameterCount = 0;
 
                 final String sQuery = composer.getQuery();
-                final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
                 rowSetProp.setPropertyValue(UNO_COMMAND, sQuery);
                 rowSetProp.setPropertyValue(UNO_COMMAND_TYPE,
-                        new Integer(CommandType.COMMAND));
+                                            new Integer(CommandType.COMMAND));
 
                 final XParameters para = (XParameters) UnoRuntime.queryInterface(XParameters.class, rowSet);
 
@@ -545,7 +543,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         i++)
                 {
                     Object object = masterValues.get(i);
-                    if (object instanceof BigDecimal)
+                    if ( object instanceof BigDecimal )
                     {
                         object = ((BigDecimal) object).toString();
                     }
@@ -557,7 +555,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         return oldParameterCount;
     }
 
-    final XRowSet createRowSet(final String command,
+    private final XRowSet createRowSet(final String command,
             final int commandType, final Map parameters)
             throws Exception
     {
@@ -571,7 +569,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         rowSetProp.setPropertyValue(UNO_COMMAND, command);
 
         final String filter = (String) parameters.get(UNO_FILTER);
-        if (filter != null)
+        if ( filter != null )
         {
             rowSetProp.setPropertyValue("Filter", filter);
             rowSetProp.setPropertyValue(APPLY_FILTER, Boolean.valueOf(filter.length() != 0));
@@ -595,16 +593,16 @@ public class SDBCReportDataFactory implements DataSourceFactory
             NoSuchElementException
     {
         final StringBuffer order = new StringBuffer(getOrderStatement(commandType, command, (ArrayList) parameters.get(GROUP_EXPRESSIONS)));
-        if (order.length() > 0 && commandType != CommandType.TABLE)
+        if ( order.length() > 0 && commandType != CommandType.TABLE )
         {
             String statement = command;
             final XSingleSelectQueryComposer composer = getComposer(tools, command, commandType);
-            if (composer != null)
+            if ( composer != null )
             {
                 statement = composer.getQuery();
                 composer.setQuery(statement);
                 final String sOldOrder = composer.getOrder();
-                if (sOldOrder.length() > 0)
+                if ( sOldOrder.length() > 0 )
                 {
                     order.append(',');
                     order.append(sOldOrder);
@@ -614,11 +612,11 @@ public class SDBCReportDataFactory implements DataSourceFactory
             }
             else
             {
-                if (commandType == CommandType.QUERY)
+                if ( commandType == CommandType.QUERY )
                 {
                     final XQueriesSupplier xSupplyQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, connection);
                     final XNameAccess queries = xSupplyQueries.getQueries();
-                    if (queries.hasByName(command))
+                    if ( queries.hasByName(command) )
                     {
                         final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
                         final String queryCommand = (String) prop.getPropertyValue(UNO_COMMAND);

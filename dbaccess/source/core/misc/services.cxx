@@ -36,7 +36,7 @@
 #include "module_dba.hxx"
 #include <osl/diagnose.h>
 #include "DatabaseDataProvider.hxx"
-#include "dbaccessdllapi.h"
+#include "dbadllapi.hxx"
 
 /********************************************************************************************/
 
@@ -87,7 +87,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
+extern "C" OOO_DLLPUBLIC_DBA void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **
             )
@@ -97,7 +97,7 @@ extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironme
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" DBACCESS_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
+extern "C" OOO_DLLPUBLIC_DBA sal_Bool SAL_CALL component_writeInfo(
                 void* pServiceManager,
                 void* pRegistryKey
             )
@@ -119,7 +119,7 @@ extern "C" DBACCESS_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" DBACCESS_DLLPUBLIC void* SAL_CALL component_getFactory(
+extern "C" OOO_DLLPUBLIC_DBA void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* pRegistryKey)

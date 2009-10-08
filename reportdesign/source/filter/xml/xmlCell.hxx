@@ -68,6 +68,7 @@ namespace rptxml
         virtual void EndElement();
 
         void setComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent);
+        void setContainsShape(bool _bContainsShapes);
     };
 // -----------------------------------------------------------------------------
 } // namespace rptxml

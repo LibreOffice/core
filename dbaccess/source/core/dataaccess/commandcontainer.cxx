@@ -69,7 +69,7 @@ OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::lang::X
                                      ,const TContentPtr& _pImpl
                                      ,sal_Bool _bTables
                                      )
-    :ODefinitionContainer(_xORB,_xParentContainer,_pImpl)
+    :ODefinitionContainer(_xORB,_xParentContainer,_pImpl,!_bTables)
     ,m_bTables(_bTables)
 {
     DBG_CTOR(OCommandContainer, NULL);
@@ -104,6 +104,12 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(
 Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
 {
     return m_aContext.createComponent( (::rtl::OUString)( m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION ) );
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString OCommandContainer::determineContentType() const
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseCommandDefinitionContainer" ) );
 }
 
 //........................................................................

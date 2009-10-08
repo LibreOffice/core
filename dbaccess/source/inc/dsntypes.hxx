@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/stl_types.hxx>
-#include "dbaccessdllapi.h"
+#include "dbadllapi.hxx"
 #include <tools/string.hxx>
 
 //.........................................................................
@@ -92,7 +92,7 @@ enum DATASOURCE_TYPE
 //=========================================================================
 //= ODsnTypeCollection
 //=========================================================================
-class DBACCESS_DLLPUBLIC ODsnTypeCollection
+class OOO_DLLPUBLIC_DBA ODsnTypeCollection
 {
 protected:
     DECLARE_STL_VECTOR(String, StringVector);
@@ -179,12 +179,12 @@ protected:
 //-------------------------------------------------------------------------
 //- ODsnTypeCollection::TypeIterator
 //-------------------------------------------------------------------------
-class DBACCESS_DLLPUBLIC ODsnTypeCollection::TypeIterator
+class OOO_DLLPUBLIC_DBA ODsnTypeCollection::TypeIterator
 {
     friend class ODsnTypeCollection;
 
-    friend bool DBACCESS_DLLPUBLIC operator==(const TypeIterator& lhs, const TypeIterator& rhs);
-    friend bool DBACCESS_DLLPUBLIC operator!=(const TypeIterator& lhs, const TypeIterator& rhs) { return !(lhs == rhs); }
+    friend bool OOO_DLLPUBLIC_DBA operator==(const TypeIterator& lhs, const TypeIterator& rhs);
+    friend bool OOO_DLLPUBLIC_DBA operator!=(const TypeIterator& lhs, const TypeIterator& rhs) { return !(lhs == rhs); }
 
 protected:
     const ODsnTypeCollection*   m_pContainer;

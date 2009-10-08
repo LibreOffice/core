@@ -30,37 +30,45 @@
 #ifndef DBAUI_IENVIRONMENT_HXX
 #define DBAUI_IENVIRONMENT_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
-#endif
+
+#include <connectivity/standardsqlstate.hxx>
+
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
 
 namespace dbaui
 {
     // interface class for a generell environment
     class IEnvironment
     {
-    protected:
     public:
         /** appends an error in the current environment.
-            @param  _aException
-                contains a description of the error or the error directly
         */
-        virtual void appendError(const ::com::sun::star::sdbc::SQLException& _aException) = 0;
+        virtual void appendError(
+                        const ::rtl::OUString& _rErrorMessage,
+                        const ::dbtools::StandardSQLState _eSQLState = ::dbtools::SQL_GENERAL_ERROR,
+                        const sal_Int32 _nErrorCode = 1000
+                     ) = 0;
 
         /** clears the error state.
         */
         virtual void clearError() = 0;
 
-        /** set the current error in the given parameter.
-            @param  _rException
-                will contain the current error
-        */
-        virtual void getError(::com::sun::star::sdbc::SQLException& _rException ) const = 0;
-
         /** @retrun
             returns <TRUE/> when an error was set otherwise <FALSE/>
         */
         virtual sal_Bool hasError() const = 0;
+
+        /** returns the current error
+        */
+        virtual const ::dbtools::SQLExceptionInfo& getError() const = 0;
+
+        /** displays the current error, or does nothing if there is no current error
+        */
+        virtual void displayError() = 0;
 
         /** gives access to the currently used connection
             @return

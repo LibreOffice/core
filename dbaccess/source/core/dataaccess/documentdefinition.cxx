@@ -283,12 +283,37 @@ namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 
 #define DEFAULT_WIDTH  10000
 #define DEFAULT_HEIGHT  7500
-//........................................................................
+//.............................................................................
 namespace dbaccess
 {
-//........................................................................
+//.............................................................................
 
     typedef ::boost::optional< bool > optional_bool;
+
+    //=========================================================================
+    //= helper
+    //=========================================================================
+    namespace
+    {
+        // --------------------------------------------------------------------
+        ::rtl::OUString lcl_determineContentType_nothrow( const Reference< XStorage >& _rxContainerStorage,
+            const ::rtl::OUString& _rEntityName )
+        {
+            ::rtl::OUString sContentType;
+            try
+            {
+                Reference< XStorage > xContainerStorage( _rxContainerStorage, UNO_QUERY_THROW );
+                ::utl::SharedUNOComponent< XPropertySet > xStorageProps(
+                    xContainerStorage->openStorageElement( _rEntityName, ElementModes::READ ), UNO_QUERY_THROW );
+                OSL_VERIFY( xStorageProps->getPropertyValue( INFO_MEDIATYPE ) >>= sContentType );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return sContentType;
+        }
+    }
 
     //==================================================================
     // OEmbedObjectHolder
@@ -467,61 +492,47 @@ namespace dbaccess
         m_xParentContainer = _xParent;
     }
 
-::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const Reference< XStorage >& xStorage
-                                                    ,const ::rtl::OUString& sEntName
-                                                    ,const Reference< XMultiServiceFactory >& _xORB
-                                                    ,Sequence< sal_Int8 >& _rClassId
-                                                    )
+// -----------------------------------------------------------------------------
+::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const Reference< XStorage >& _rxContainerStorage,
+    const ::rtl::OUString& _rEntityName, const ::comphelper::ComponentContext& _rContext,
+    Sequence< sal_Int8 >& _rClassId )
+{
+    return GetDocumentServiceFromMediaType(
+        lcl_determineContentType_nothrow( _rxContainerStorage, _rEntityName ),
+        _rContext, _rClassId );
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const ::rtl::OUString& _rMediaType,
+    const ::comphelper::ComponentContext& _rContext, Sequence< sal_Int8 >& _rClassId )
 {
     ::rtl::OUString sResult;
     try
     {
-        if ( xStorage->isStorageElement( sEntName ) )
+        ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext.getLegacyServiceFactory() );
+        sResult = aConfigHelper.GetDocServiceNameFromMediaType( _rMediaType );
+        _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID( _rMediaType ));
+        if ( !_rClassId.getLength() && sResult.getLength() )
         {
-            // the object must be based on storage
-
-            Reference< XPropertySet > xPropSet( xStorage->openStorageElement( sEntName, ElementModes::READ ), UNO_QUERY_THROW );
-
-            ::rtl::OUString aMediaType;
-            try {
-                Any aAny = xPropSet->getPropertyValue( INFO_MEDIATYPE );
-                aAny >>= aMediaType;
-            }
-            catch ( Exception& )
+            Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
+            if ( xObjConfig.is() )
             {
-            }
-            ::comphelper::MimeConfigurationHelper aConfigHelper(_xORB);
-            sResult = aConfigHelper.GetDocServiceNameFromMediaType(aMediaType);
-            _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID(aMediaType));
-            if ( !_rClassId.getLength() && sResult.getLength() )
-            {
-                Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
-                if ( xObjConfig.is() )
+                Sequence< ::rtl::OUString > aClassIDs = xObjConfig->getElementNames();
+                for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
                 {
-                    try
-                    {
-                        Sequence< ::rtl::OUString > aClassIDs = xObjConfig->getElementNames();
-                        for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
-                        {
-                            Reference< XNameAccess > xObjectProps;
-                            ::rtl::OUString aEntryDocName;
+                    Reference< XNameAccess > xObjectProps;
+                    ::rtl::OUString aEntryDocName;
 
-                            if (    ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
-                                 && ( xObjectProps->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectDocumentServiceName"))
-                                              ) >>= aEntryDocName )
-                                 && aEntryDocName.equals( sResult ) )
-                            {
-                                _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aClassIDs[nInd]);
-                                break;
-                            }
-                        }
+                    if (    ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
+                         && ( xObjectProps->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectDocumentServiceName"))
+                                      ) >>= aEntryDocName )
+                         && aEntryDocName.equals( sResult ) )
+                    {
+                        _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aClassIDs[nInd]);
+                        break;
                     }
-                    catch( Exception& )
-                    {}
                 }
             }
-
-            ::comphelper::disposeComponent( xPropSet );
         }
     }
     catch ( Exception& )
@@ -545,7 +556,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
                                          ,const Reference<XConnection>& _xConnection
                                          )
                                          :OContentHelper(_xORB,_rxContainer,_pImpl)
-    ,OPropertyStateContainer(m_aBHelper)
+    ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_pInterceptor(NULL)
     ,m_bForm(_bForm)
     ,m_bOpenInDesign(sal_False)
@@ -562,7 +573,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
 ODocumentDefinition::~ODocumentDefinition()
 {
     DBG_DTOR(ODocumentDefinition, NULL);
-    if ( !m_aBHelper.bInDispose && !m_aBHelper.bDisposed )
+    if ( !OContentHelper::rBHelper.bInDispose && !OContentHelper::rBHelper.bDisposed )
     {
         acquire();
         dispose();
@@ -1030,8 +1041,8 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         impl_onActivateEmbeddedObject();
     }
 
-    // LLA: Alle fillReportData() calls pr¸fen, sollte es welche geben, die danach noch viel machen
-    // LLA: sollten wir einen _aGuard Pointer ¸bergeben, sonst erstmal als Referenz
+    // LLA: Alle fillReportData() calls prÅfen, sollte es welche geben, die danach noch viel machen
+    // LLA: sollten wir einen _aGuard Pointer Åbergeben, sonst erstmal als Referenz
     fillReportData(_aGuard);
     _out_rComponent <<= xModel;
 }
@@ -1094,10 +1105,13 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                     Environment );
                 // Unreachable
             }
-            Reference< XStorage> xStorage(aIni[0],UNO_QUERY);
+            Reference< XStorage> xDest(aIni[0],UNO_QUERY);
             ::rtl::OUString sPersistentName;
             aIni[1] >>= sPersistentName;
-            loadEmbeddedObject( true );
+            Reference< XStorage> xStorage = getContainerStorage();
+            // -----------------------------------------------------------------------------
+            xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xDest,sPersistentName);
+            /*loadEmbeddedObject( true );
             Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
             if ( xPersist.is() )
             {
@@ -1106,7 +1120,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 m_xEmbeddedObject->changeState(EmbedStates::LOADED);
             }
             else
-                throw CommandAbortedException();
+                throw CommandAbortedException();*/
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
         {
@@ -1529,7 +1543,15 @@ namespace
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 {
-    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
+//    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
+    // TODO: revert to the disabled code. The current version is just to be able
+    // to integrate an intermediate version of the CWS, which should behave as
+    // if no macros in DB docs are allowed
+    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource->hasMacroStorages();
+        // even if the current version is not able to create documents which contain macros,
+        // later versions will be. Such documents contain macro/script storages in the
+        // document root storage, in which case we need to disable the per-form/report
+        // scripting.
 
     // if *any* of the objects of the database document already has macros, we continue to allow it
     // to have them, until the user did a migration.
@@ -1537,6 +1559,13 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 
     return bAllowDocumentMacros;
 }
+
+// -----------------------------------------------------------------------------
+::rtl::OUString ODocumentDefinition::determineContentType() const
+{
+    return lcl_determineContentType_nothrow( getContainerStorage(), m_pImpl->m_aProps.sPersistentName );
+}
+
 // -----------------------------------------------------------------------------
 Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XConnection>& _xConnection, const bool _bSuppressMacros, const bool _bReadOnly,
         const Sequence< PropertyValue >& _rAdditionalArgs, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
@@ -1629,7 +1658,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                 }
                 else
                 {
-                    sDocumentService = GetDocumentServiceFromMediaType( xStorage, m_pImpl->m_aProps.sPersistentName, m_aContext.getLegacyServiceFactory(), aClassID );
+                    sDocumentService = GetDocumentServiceFromMediaType( getContentType(), m_aContext, aClassID );
                     // check if we are not a form and
                     // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
                     if ( !m_bForm && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
@@ -1642,6 +1671,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                         {
                             com::sun::star::io::WrongFormatException aWFE;
                             aWFE.Message = ::rtl::OUString::createFromAscii("Extension not present.");
+                                // TODO: resource
                             throw aWFE;
                         }
                     }

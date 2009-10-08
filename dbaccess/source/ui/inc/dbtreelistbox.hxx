@@ -30,21 +30,15 @@
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #define DBAUI_DBTREELISTBOX_HXX
 
-#ifndef _SVTREEBOX_HXX
-#include <svtools/svtreebx.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef DBAUI_SCROLLHELPER_HXX
 #include "ScrollHelper.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <svtools/svtreebx.hxx>
+#include <vcl/timer.hxx>
+
+#include <set>
 
 
 namespace dbaui
@@ -70,13 +64,14 @@ namespace dbaui
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;
-        SvLBoxEntry*                m_pSelectedEntry;
+        ::std::set< SvListEntry* >  m_aSelectedEntries;
         SvLBoxEntry*                m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
         IContextMenuProvider*
                                     m_pContextMenuProvider;
 
         Link                        m_aPreExpandHandler;    // handler to be called before a node is expanded
+        Link                        m_aSelChangeHdl;        // handlet to be called (asynchronously) when the selection changes in any way
         Link                        m_aCutHandler;          // called when someone press CTRL+X
         Link                        m_aCopyHandler;         // called when someone press CTRL+C
         Link                        m_aPasteHandler;        // called when someone press CTRL+V
@@ -86,7 +81,6 @@ namespace dbaui
         Link                        m_aEnterKeyHdl;
 
 
-        sal_Int32                   m_nSelectLock;
         sal_Bool                    m_bHandleEnterKey;
 
     protected:
@@ -116,28 +110,15 @@ namespace dbaui
         inline void setORB(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB) { m_xORB = _xORB; }
 
 
-        void    SetPreExpandHandler(const Link& _rHdl) { m_aPreExpandHandler = _rHdl; }
-        Link    GetPreExpandHandler() const         { return m_aPreExpandHandler; }
+        void    SetPreExpandHandler(const Link& _rHdl)  { m_aPreExpandHandler = _rHdl; }
+        void    SetSelChangeHdl( const Link& _rHdl )    { m_aSelChangeHdl = _rHdl; }
+        void    setCutHandler(const Link& _rHdl)        { m_aCutHandler = _rHdl; }
+        void    setCopyHandler(const Link& _rHdl)       { m_aCopyHandler = _rHdl; }
+        void    setPasteHandler(const Link& _rHdl)      { m_aPasteHandler = _rHdl; }
+        void    setDeleteHandler(const Link& _rHdl)     { m_aDeleteHandler = _rHdl; }
+        void    setEditingHandler(const Link& _rHdl)    { m_aEditingHandler = _rHdl; }
+        void    setEditedHandler(const Link& _rHdl)     { m_aEditedHandler = _rHdl; }
 
-        void    setCutHandler(const Link& _rHdl)    { m_aCutHandler = _rHdl; }
-        Link    getCutHandler() const               { return m_aCutHandler; }
-
-        void    setCopyHandler(const Link& _rHdl)   { m_aCopyHandler = _rHdl; }
-        Link    getCopyHandler() const              { return m_aCopyHandler; }
-
-        void    setPasteHandler(const Link& _rHdl)  { m_aPasteHandler = _rHdl; }
-        Link    getPasteHandler() const             { return m_aPasteHandler; }
-
-        void    setDeleteHandler(const Link& _rHdl) { m_aDeleteHandler = _rHdl; }
-        Link    getDeleteHandler() const            { return m_aDeleteHandler; }
-
-        void    setEditingHandler(const Link& _rHdl){ m_aEditingHandler = _rHdl; }
-        Link    getEditingHandler() const           { return m_aEditingHandler; }
-
-        void    setEditedHandler(const Link& _rHdl) { m_aEditedHandler = _rHdl; }
-        Link    getEditedHandler() const            { return m_aEditedHandler; }
-
-        inline SvLBoxEntry* GetSelectedEntry() const { return m_pSelectedEntry; }
         // modified the given entry so that the expand handler is called whenever the entry is expanded
         // (normally, the expand handler is called only once)
         void            EnableExpandHandler(SvLBoxEntry* _pEntry);
@@ -152,7 +133,6 @@ namespace dbaui
         virtual void    StateChanged( StateChangedType nStateChange );
         virtual void    InitEntry( SvLBoxEntry* pEntry, const XubString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind);
 
-        virtual void    SelectEntry(SvLBoxEntry* _pEntry);
         // enable editing for tables/views and queries
         virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& );
         virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
@@ -162,13 +142,9 @@ namespace dbaui
         virtual PopupMenu* CreateContextMenu( void );
         virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
 
-        sal_Int32       lockAutoSelect();
-        sal_Int32       unlockAutoSelect();
-        sal_Int32       locked() const { return m_nSelectLock; }
-
         void            SetEnterKeyHdl(const Link& rNewHdl) {m_aEnterKeyHdl = rNewHdl;}
 
-        inline void     clearCurrentSelectionEntry() { m_pSelectedEntry = NULL; }
+        void            clearCurrentSelection() { m_aSelectedEntries.clear(); }
 
     protected:
         virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -183,7 +159,8 @@ namespace dbaui
         virtual void        ModelHasRemoved( SvListEntry* pEntry );
         virtual void        ModelHasEntryInvalidated( SvListEntry* pEntry );
 
-        void                implSelected(SvLBoxEntry* _pSelected);
+        void                implStopSelectionTimer();
+        void                implStartSelectionTimer();
 
     protected:
         using SvTreeListBox::ExecuteDrop;

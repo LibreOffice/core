@@ -123,6 +123,8 @@ namespace dbaui
         void                        InsertColumn( OTableFieldDescRef pEntry, USHORT& _nColumnPostion );
         void                        RemoveColumn( USHORT _nColumnId );
         void                        DeleteFields( const String& rAliasName );
+
+        bool                        HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
         // AddGroupBy:: F"ugt ein Feld mit Funktion == Grupierung. Falls das Feld schon vorhanden ist und ein Aggregate Funktion
         // benutzt, wird das Flag nicht gesetzt
         void                        AddGroupBy( const OTableFieldDescRef& rInfo,sal_uInt32 _nCurrentPos);

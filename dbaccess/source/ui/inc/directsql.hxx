@@ -35,7 +35,7 @@
 #include <vcl/dialog.hxx>
 #endif
 #ifndef _SVEDIT_HXX
-#include <svtools/svmedit.hxx>
+#include <svtools/editsyntaxhighlighter.hxx>
 #endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
@@ -82,7 +82,7 @@ namespace dbaui
 
         FixedLine       m_aFrame;
         FixedText       m_aSQLLabel;
-        MultiLineEdit   m_aSQL;
+        MultiLineEditSyntaxHighlight    m_aSQL;
         PushButton      m_aExecute;
         FixedText       m_aHistoryLabel;
         ListBox*        m_pSQLHistory;

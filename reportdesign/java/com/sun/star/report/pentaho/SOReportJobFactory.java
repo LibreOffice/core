@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -95,7 +95,7 @@ public class SOReportJobFactory
         private XConnection activeConnection;
         private XReportDefinition report;
 
-        public _SOReportJobFactory(final XComponentContext xCompContext)
+        public _SOReportJobFactory( XComponentContext xCompContext)
         {
             m_cmpCtx = xCompContext;
             m_prophlp = new PropertySetMixin(m_cmpCtx, this,
@@ -244,7 +244,7 @@ public class SOReportJobFactory
             }
             else
             {
-                XPropertySet set = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
+                final XPropertySet set = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
                 if ( set == null )
                 {
                     throw new com.sun.star.lang.IllegalArgumentException();
@@ -341,8 +341,15 @@ public class SOReportJobFactory
         {
             if (sImplName.equals(_SOReportJobFactory.class.getName()))
             {
-                xFactory = Factory.createComponentFactory(_SOReportJobFactory.class,
-                        _SOReportJobFactory.getServiceNames());
+                xFactory = Factory.createComponentFactory(_SOReportJobFactory.class,_SOReportJobFactory.getServiceNames());
+            }
+            else if (sImplName.equals(SOFunctionManager.class.getName()))
+            {
+                xFactory = Factory.createComponentFactory(SOFunctionManager.class,SOFunctionManager.getServiceNames());
+            }
+            else if (sImplName.equals(SOFormulaParser.class.getName()))
+            {
+                xFactory = Factory.createComponentFactory(SOFormulaParser.class,SOFormulaParser.getServiceNames());
             }
         }
         catch (java.lang.IncompatibleClassChangeError e2)
@@ -362,8 +369,17 @@ public class SOReportJobFactory
      */
     public static boolean __writeRegistryServiceInfo(final XRegistryKey regKey)
     {
-        return Factory.writeRegistryServiceInfo(_SOReportJobFactory.class.getName(),
+        return Factory.writeRegistryServiceInfo(SOFunctionManager.class.getName(),
+                SOFunctionManager.getServiceNames(),
+                regKey)
+                && 
+            Factory.writeRegistryServiceInfo(_SOReportJobFactory.class.getName(),
                 _SOReportJobFactory.getServiceNames(),
-                regKey);
+                regKey)
+                 && 
+               Factory.writeRegistryServiceInfo(SOFormulaParser.class.getName(),
+                    SOFormulaParser.getServiceNames(),
+                    regKey)
+            ;
     }
 }

@@ -81,9 +81,10 @@ OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
                    :OStatementBase(_xConn, _xStatement)
 {
     DBG_CTOR(OPreparedStatement, NULL);
+    m_xAggregateAsParameters = Reference< XParameters >( m_xAggregateAsSet, UNO_QUERY_THROW );
+
     Reference<XDatabaseMetaData> xMeta = _xConn->getMetaData();
     m_pColumns = new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL,NULL);
-    m_xAggregateAsParameters = Reference< XParameters > (m_xAggregateAsSet, UNO_QUERY);
 }
 
 //--------------------------------------------------------------------------

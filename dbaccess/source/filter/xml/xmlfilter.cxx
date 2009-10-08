@@ -128,6 +128,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <tools/diagnose_ex.h>
+#include <comphelper/namedvaluecollection.hxx>
 
 using namespace ::com::sun::star;
 
@@ -182,11 +183,6 @@ sal_Int32 ReadThroughComponent(
     xImporter->setTargetDocument( xModelComponent );
 
 
-#ifdef TIMELOG
-    // if we do profiling, we want to know the stream
-    RTL_LOGFILE_TRACE_AUTHOR1( "dbaxml", "oj",
-                               "ReadThroughComponent : parsing \"%s\"", pStreamName );
-#endif
 
     // finally, parser the stream
     try
@@ -280,6 +276,12 @@ sal_Int32 ReadThroughComponent(
             return 1; // TODO/LATER: error handling
         }
 
+#ifdef TIMELOG
+        // if we do profiling, we want to know the stream
+        RTL_LOGFILE_TRACE_AUTHOR1( "dbaxml", "oj",
+                               "ReadThroughComponent : parsing \"%s\"", pStreamName );
+#endif
+
         uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
         // read from the stream
         return ReadThroughComponent( xInputStream
@@ -355,18 +357,16 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-::rtl::OUString                         sFileName;
+    ::rtl::OUString sFileName;
+    ::comphelper::NamedValueCollection aMediaDescriptor( rDescriptor );
+    if ( aMediaDescriptor.has( "URL" ) )
+        sFileName = aMediaDescriptor.getOrDefault( "URL", ::rtl::OUString() );
+    if ( !sFileName.getLength() && aMediaDescriptor.has( "FileName" ) )
+        sFileName = aMediaDescriptor.getOrDefault( "FileName", sFileName );
 
-    const PropertyValue* pIter = rDescriptor.getConstArray();
-    const PropertyValue* pEnd   = pIter + rDescriptor.getLength();
-    for(;pIter != pEnd;++pIter)
-    {
-        if( pIter->Name.equalsAscii( "FileName" ) )
-            pIter->Value >>= sFileName;
-    }
+    OSL_ENSURE( sFileName.getLength(), "ODBFilter::implImport: no URL given!" );
+    sal_Bool bRet = ( sFileName.getLength() != 0 );
 
-
-    sal_Bool bRet = (sFileName.getLength() != 0);
     if ( bRet )
     {
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);

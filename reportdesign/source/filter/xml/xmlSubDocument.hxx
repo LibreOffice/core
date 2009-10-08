@@ -37,12 +37,14 @@
 namespace rptxml
 {
     class ORptFilter;
+    class OXMLCell;
     class OXMLSubDocument : public OXMLReportElementBase, public IMasterDetailFieds
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xComponent;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xFake;
         ::std::vector< ::rtl::OUString> m_aMasterFields;
         ::std::vector< ::rtl::OUString> m_aDetailFields;
+        OXMLCell*       m_pCellParent;
         sal_Int32       m_nCurrentCount;
         bool            m_bContainsShape;
 
@@ -58,7 +60,8 @@ namespace rptxml
                     ,sal_uInt16 nPrfx
                     ,const ::rtl::OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent
-                    ,OXMLTable* _pContainer);
+                    ,OXMLTable* _pContainer
+                    ,OXMLCell* _pCellParent);
         virtual ~OXMLSubDocument();
 
         virtual void EndElement();

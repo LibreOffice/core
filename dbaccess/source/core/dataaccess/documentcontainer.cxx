@@ -148,7 +148,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
                                     , sal_Bool _bFormsContainer
                                     )
     :ODefinitionContainer(_xORB,_xParentContainer,_pImpl)
-    ,OPropertyStateContainer(m_aBHelper)
+    ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_bFormsContainer(_bFormsContainer)
 {
     DBG_CTOR(ODocumentContainer, NULL);
@@ -162,7 +162,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
 ODocumentContainer::~ODocumentContainer()
 {
     DBG_DTOR(ODocumentContainer, NULL);
-    if ( !m_aBHelper.bInDispose && !m_aBHelper.bDisposed )
+    if ( !OContentHelper::rBHelper.bInDispose && !OContentHelper::rBHelper.bDisposed )
     {
         acquire();
         dispose();
@@ -181,7 +181,12 @@ Sequence< ::rtl::OUString > SAL_CALL ODocumentContainer::getSupportedServiceName
     aSupported[0] = m_bFormsContainer ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION;
     return aSupported;
 }
+
 // -----------------------------------------------------------------------------
+::rtl::OUString ODocumentContainer::determineContentType() const
+{
+    return ::rtl::OUString();
+}
 
 //--------------------------------------------------------------------------
 Reference< XContent > ODocumentContainer::createObject( const ::rtl::OUString& _rName)
@@ -288,7 +293,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
 
             if ( ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() ) )
-                ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext.getLegacyServiceFactory(), aClassID );
+                ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext, aClassID );
         }
 
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );

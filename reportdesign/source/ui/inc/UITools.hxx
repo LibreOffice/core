@@ -104,6 +104,20 @@ namespace rptui
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
             );
 
+    /** opens the formula dialog
+        @param _out_rFormula
+                the formula chosen by the user
+        @precond
+            we're really inspecting a database report (well, a RowSet at least)
+        @return
+            <TRUE/> if and only if the user successfully chose a clause
+    */
+    bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
+                               , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext
+                               , const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
+                               , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+                               );
+
     /** applies the character settings previously obtained via openCharDialog
     */
     void    applyCharacterSettings(
@@ -166,10 +180,10 @@ namespace rptui
     Rectangle getRectangleFromControl(SdrObject* pControl);
 
     /** sets the map mode at the window
-        @param  _nZoom      in percentage
+        @param  _aZoom      the zoom scale
         @param  _rWindow    where to set the map mode
     */
-    void setZoomFactor(const sal_Int16 _nZoom,Window& _rWindow);
+    void setZoomFactor(const Fraction& _aZoom,Window& _rWindow);
 }
 #endif //RPTUI_UITOOLS_HXX
 

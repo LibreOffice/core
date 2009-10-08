@@ -552,7 +552,7 @@ public class StyleUtilities
                         final String prop = (String) propertyName.get(j);
                         final Object obj = section.getAttribute(ns, prop);
                         final Object value = propertyValues.get(j);
-                        if (obj == null && value == null)
+                        if (obj == null || value == null)
                         {
                             continue;
                         }

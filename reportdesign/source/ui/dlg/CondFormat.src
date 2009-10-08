@@ -33,9 +33,7 @@
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
 #endif
-#ifndef _SBASLTID_HRC
-#include <svx/svxids.hrc>
-#endif
+#include "rptui_slotid.hrc"
 
 Control WIN_CONDITION
 {
@@ -346,4 +344,80 @@ ImageList 31000
     IdList = {05500;};
     IdCount = 1;
 
+};
+ToolBox RID_TB_SORTING
+{
+    Pos = MAP_APPFONT ( 0,0 ) ;
+    ButtonType = BUTTON_SYMBOL;
+    Align = BOXALIGN_TOP;
+    Customize = FALSE;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTUP;
+            Text [ en-US ] = "Sort Ascending" ;
+            Checkable = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTDOWN;
+            Text [ en-US ] = "Sort Descending" ;
+            Checkable = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_REMOVE_FILTER_SORT;
+            Text [ en-US ] = "Remove sorting" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ADD_CONTROL_PAIR;
+            Text [ en-US ] = "Insert" ;
+        };
+    };
+};
+ImageList IMG_ADDFIELD_DLG_SC
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "res/commandimagelist/sc_sortup.png" ; SID_FM_SORTUP ; > ;
+        < "res/commandimagelist/sc_sortdown.png" ; SID_FM_SORTDOWN ; > ;
+        < "res/commandimagelist/sc_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
+    };
+};
+ImageList IMG_ADDFIELD_DLG_SCH
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "res/commandimagelist/sch_sortup.png" ; SID_FM_SORTUP ; > ;
+        < "res/commandimagelist/sch_sortdown.png" ; SID_FM_SORTDOWN ; > ;
+        < "res/commandimagelist/sch_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
+    };
+};
+ImageList IMG_ADDFIELD_DLG_LC
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "res/commandimagelist/lc_sortup.png" ; SID_FM_SORTUP ; > ;
+        < "res/commandimagelist/lc_sortdown.png" ; SID_FM_SORTDOWN ; > ;
+        < "res/commandimagelist/lc_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
+    };
+};
+ImageList IMG_ADDFIELD_DLG_LCH
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "res/commandimagelist/lch_sortup.png" ; SID_FM_SORTUP ; > ;
+        < "res/commandimagelist/lch_sortdown.png" ; SID_FM_SORTDOWN ; > ;
+        < "res/commandimagelist/lch_removefiltersort.png" ; SID_FM_REMOVE_FILTER_SORT ; > ;
+    };
 };

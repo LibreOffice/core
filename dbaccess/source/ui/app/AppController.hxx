@@ -76,6 +76,9 @@ FORWARD_DECLARE_INTERFACE(ucb,XContent)
 namespace dbaui
 {
 //........................................................................
+
+    class SubComponentManager;
+
     //====================================================================
     //= OApplicationController
     //====================================================================
@@ -101,13 +104,6 @@ namespace dbaui
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > TContainer;
         typedef ::std::vector< TContainer >                                                 TContainerVector;
 
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >      TComponent;
-        typedef ::std::map< TComponent, TComponent >                                        TDocuments;
-
-        typedef ::std::pair< sal_Int32, ElementOpenMode >                                   TTypeOpenMode;
-        typedef ::std::pair< TTypeOpenMode , TComponent >                                   TTypeFrame;
-        typedef ::std::multimap< ::rtl::OUString, TTypeFrame >                              TFrames;
-
     private:
 
         OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
@@ -130,14 +126,13 @@ namespace dbaui
         ModelControllerConnector
                                 m_aModelConnector;
         TContainerVector        m_aCurrentContainers;       // the containers where we are listener on
-        TDocuments              m_aDocuments;
-        TFrames                 m_aSpecialSubFrames;        // contains the query, table and relation frame
+        ::rtl::Reference< SubComponentManager >
+                                m_pSubComponentManager;
         ::dbaccess::ODsnTypeCollection
                                 m_aTypeCollection;
         OTableCopyHelper        m_aTableCopyHelper;
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
-        mutable ::rtl::OUString m_sDatabaseName;
         ULONG                   m_nAsyncDrop;
         OAsyncronousLink        m_aControllerConnectedEvent;
         OAsyncronousLink        m_aSelectContainerEvent;
@@ -156,23 +151,11 @@ namespace dbaui
         OApplicationView*       getContainer() const;
 
 
-        /** activates the current table, query or relation design frame when existing
-            @param  _sName  the name of the component
-            @param  _nKind  the kind of the component
-        */
-        bool impl_activateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind,const ElementOpenMode _eOpenMode) const;
-
-        /** deactivates the current table or query  frame when existing
-            @param  _sName  the name of the component
-            @param  _nKind  the kind of the component
-        */
-        void impl_deActivateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind);
-
         /** returns the database name
             @return
                 the database name
         */
-        inline ::rtl::OUString getDatabaseName() const { return m_sDatabaseName; }
+        ::rtl::OUString getDatabaseName() const;
 
         /** returns the stripped database name.
             @return
@@ -359,14 +342,15 @@ namespace dbaui
         */
         void askToReconnect();
 
-        /** add event listener and remember the document
-            @param  _xDocument
-                the new document, may be <NULL/>
-            @param  _xDefinition
-                The defintion object.
+        /** remember a newly opened sub document for later access
         */
-        void addDocumentListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDocument,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition);
+        void onDocumentOpened(
+            const ::rtl::OUString&  _rName,
+            const sal_Int32         _nType,
+            const ElementOpenMode   _eMode,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDocument,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition
+        );
 
         /** Inserts a new object into the hierachy given be the type.
             @param  _eType
@@ -408,9 +392,9 @@ namespace dbaui
         */
         ::rtl::OUString getCurrentlySelectedName(sal_Int32& _rnCommandType) const;
 
-        /** select the give entry
+        /** shows the preview for the given entry
         */
-        void selectEntry(const ElementType _eType,const ::rtl::OUString& _sName);
+        void showPreviewFor( const ElementType _eType,const ::rtl::OUString& _sName );
 
         /** called when we just connected to a new, non-NULL model
 
@@ -489,7 +473,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getActiveConnection() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > SAL_CALL getSubComponents() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL connect(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL connect(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -505,8 +489,11 @@ namespace dbaui
         virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         /** retrieves the current connection, creates it if necessary
+
+            If an error occurs, then this is either stored in the location pointed to by <arg>_pErrorInfo</arg>,
+            or, if <code>_pErrorInfo</code> is <NULL/>, then the error is displayed to the user.
         */
-        const SharedConnection& ensureConnection();
+        const SharedConnection& ensureConnection( ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL );
 
         /** retrieves the current connection
         */
@@ -525,12 +512,11 @@ namespace dbaui
         // IApplicationController
         virtual bool onEntryDoubleClick(SvTreeListBox& _rTree);
         virtual sal_Bool onContainerSelect(ElementType _eType);
-        virtual void onEntrySelect(SvLBoxEntry* _pEntry);
-        virtual void onEntryDeSelect(SvTreeListBox& _rTree);
-        virtual void onCutEntry(SvLBoxEntry* _pEntry);
-        virtual void onCopyEntry(SvLBoxEntry* _pEntry);
-        virtual void onPasteEntry(SvLBoxEntry* _pEntry);
-        virtual void onDeleteEntry(SvLBoxEntry* _pEntry);
+        virtual void onSelectionChanged();
+        virtual void onCutEntry();
+        virtual void onCopyEntry();
+        virtual void onPasteEntry();
+        virtual void onDeleteEntry();
         virtual void previewChanged( sal_Int32 _nMode);
         virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer);
 

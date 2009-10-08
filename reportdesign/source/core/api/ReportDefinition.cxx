@@ -582,7 +582,11 @@ struct OReportDefinitionImpl
     ,m_bModified(_aCopy.m_bModified)
     ,m_bEscapeProcessing(_aCopy.m_bEscapeProcessing)
     {}
+    ~OReportDefinitionImpl();
 };
+OReportDefinitionImpl::~OReportDefinitionImpl()
+{
+}
 
 DBG_NAME( rpt_OReportDefinition )
 // -----------------------------------------------------------------------------
@@ -718,11 +722,16 @@ void SAL_CALL OReportDefinition::disposing()
         m_pImpl->m_aStorageChangeListeners.disposeAndClear( aDisposeEvent );
 
         ::comphelper::disposeComponent(m_pImpl->m_xGroups);
-        ::comphelper::disposeComponent(m_pImpl->m_xReportHeader);
-        ::comphelper::disposeComponent(m_pImpl->m_xReportFooter);
-        ::comphelper::disposeComponent(m_pImpl->m_xPageHeader);
-        ::comphelper::disposeComponent(m_pImpl->m_xPageFooter);
-        ::comphelper::disposeComponent(m_pImpl->m_xDetail);
+        m_pImpl->m_xReportHeader.clear();
+        m_pImpl->m_xReportFooter.clear();
+        m_pImpl->m_xPageHeader.clear();
+        m_pImpl->m_xPageFooter.clear();
+        m_pImpl->m_xDetail.clear();
+        //::comphelper::disposeComponent(m_pImpl->m_xReportHeader);
+        //::comphelper::disposeComponent(m_pImpl->m_xReportFooter);
+        //::comphelper::disposeComponent(m_pImpl->m_xPageHeader);
+        //::comphelper::disposeComponent(m_pImpl->m_xPageFooter);
+        //::comphelper::disposeComponent(m_pImpl->m_xDetail);
         ::comphelper::disposeComponent(m_pImpl->m_xFunctions);
 
         //::comphelper::disposeComponent(m_pImpl->m_xStorage);
@@ -1496,9 +1505,9 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             OSL_ENSURE(0,"Exception Caught: Could not commit report storage!");
             throw io::IOException();
         }
-        if ( xStatusIndicator.is() )
-            setModified(sal_False);
 
+        if ( _xStorageToSaveTo == m_pImpl->m_xStorage )
+            setModified(sal_False);
     }
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();

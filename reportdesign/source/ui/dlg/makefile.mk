@@ -64,7 +64,8 @@ EXCEPTIONSFILES=	\
         $(SLO)$/DateTime.obj				\
         $(SLO)$/AddField.obj				\
         $(SLO)$/Navigator.obj				\
-        $(SLO)$/GroupsSorting.obj
+        $(SLO)$/GroupsSorting.obj           \
+        $(SLO)$/Formula.obj
         
 SLOFILES=	\
         $(EXCEPTIONSFILES)					\

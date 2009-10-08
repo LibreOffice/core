@@ -44,6 +44,11 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
+
 class Window;
 //.........................................................................
 namespace dbaui
@@ -75,14 +80,21 @@ namespace dbaui
         /// returns <TRUE/> if the object is able to create data source connections
         sal_Bool    isValid() const { return m_xORB.is(); }
 
-        /// create a data source connection
+        /** creates a connection to the data source, displays the possible error to the user, or returns it
+        */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                    connect(const ::rtl::OUString& _rDataSourceName, sal_Bool _bShowError = sal_True) const;
+                    connect(
+                        const ::rtl::OUString& _rDataSourceName,
+                        ::dbtools::SQLExceptionInfo* _pErrorInfo
+                    ) const;
 
-        /// create a data source connection
+        /** creates a connection to the data source, displays the possible error to the user, or returns it
+        */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                    connect(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& _xDataSource
-                            , sal_Bool _bShowError = sal_True) const;
+                    connect(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& _xDataSource,
+                        ::dbtools::SQLExceptionInfo* _pErrorInfo
+                    ) const;
     };
 
 //.........................................................................

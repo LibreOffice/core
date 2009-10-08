@@ -7,11 +7,11 @@
     <!-- <name lang="en-US">Sun(TM) Report Builder</name> -->
   </display-name>
   <registration>
-    <simple-license accept-by="admin" default-license-id="en-US" >
+    <simple-license accept-by="admin" default-license-id="lic-en-US" >
             <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
     </simple-license>
   </registration>
-  <version value="1.0.6"/>
+  <version value="1.0.9"/>
   <identifier value="com.sun.reportdesigner"/>
   <dependencies>
     <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0"/>

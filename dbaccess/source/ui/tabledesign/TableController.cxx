@@ -674,9 +674,11 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
         return sal_True;
 
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
+    if ( getView() )
+        static_cast<OTableDesignView*>(getView())->GrabFocus();
     sal_Bool bCheck = sal_True;
     if ( isModified() )
     {

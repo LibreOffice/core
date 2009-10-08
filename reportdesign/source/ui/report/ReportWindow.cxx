@@ -134,7 +134,6 @@ void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSecti
 
     m_aViewsWindow.addSection(_xSection,_sColorEntry,_nPosition);
 
-    Resize();
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 //------------------------------------------------------------------------------
@@ -152,11 +151,11 @@ void OReportWindow::showRuler(sal_Bool _bShow)
 //------------------------------------------------------------------------------
 sal_Int32 OReportWindow::getMaxMarkerWidth(sal_Bool _bWithEnd) const
 {
-    Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
-    aStartWith *= m_aViewsWindow.GetMapMode().GetScaleX();
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    aStartWidth *= m_aViewsWindow.GetMapMode().GetScaleX();
     if ( _bWithEnd )
-        aStartWith += Fraction(long(REPORT_ENDMARKER_WIDTH));
-    return sal_Int32((long)aStartWith);
+        aStartWidth += Fraction(long(REPORT_ENDMARKER_WIDTH));
+    return sal_Int32((long)aStartWidth);
 }
 //------------------------------------------------------------------------------
 sal_Int32 OReportWindow::GetTotalWidth() const
@@ -164,11 +163,14 @@ sal_Int32 OReportWindow::GetTotalWidth() const
     sal_Int32 nWidth = 0;
     if ( !m_aViewsWindow.empty() )
     {
-        Fraction aStartWith(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH));
-        aStartWith *= m_aViewsWindow.GetMapMode().GetScaleX();
+        Fraction aStartWidth(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
+        const Fraction aZoom(m_pView->getController().getZoomValue(),100);
+        aStartWidth *= aZoom; // m_aViewsWindow.GetMapMode().GetScaleX();;
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
-        const Size aPageSize = m_aViewsWindow.LogicToPixel(Size(nPaperWidth,0));
-        nWidth = aPageSize.Width() + long(aStartWith);
+        Fraction aPaperWidth(nPaperWidth,1);
+        aPaperWidth *= aZoom;
+        const Size aPageSize = LogicToPixel(Size(aPaperWidth,0));
+        nWidth = aPageSize.Width() + long(aStartWidth);
     }
     return nWidth;
 }
@@ -179,16 +181,15 @@ void OReportWindow::Resize()
     if ( !m_aViewsWindow.empty() )
     {
         const Size aTotalOutputSize = GetOutputSizePixel();
-        Fraction aStartWith(long(REPORT_STARTMARKER_WIDTH));
-        aStartWith *= m_aViewsWindow.GetMapMode().GetScaleX();
+        Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
 
-        const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
-        Point aStartPoint((long)aStartWith + aOffset.X(),0);
+        const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, 0 ), MAP_APPFONT );
+        Point aStartPoint((long)aStartWidth + aOffset.X(),0);
         uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController().getReportDefinition();
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
         sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
         sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-        Size aPageSize  = m_aViewsWindow.LogicToPixel(Size(nPaperWidth,0));
+        Size aPageSize  = m_aViewsWindow.LogicToPixel(Size(nPaperWidth ,0));
         nLeftMargin     = m_aViewsWindow.LogicToPixel(Size(nLeftMargin,0)).Width();
         nRightMargin    = m_aViewsWindow.LogicToPixel(Size(nRightMargin,0)).Width();
 
@@ -211,9 +212,9 @@ void OReportWindow::Resize()
     }
 }
 //------------------------------------------------------------------------------
-Point OReportWindow::getScrollOffset() const
+Point OReportWindow::getThumbPos() const
 {
-    return m_pParent->getScrollOffset();
+    return m_pParent->getThumbPos();
 }
 //------------------------------------------------------------------------------
 void OReportWindow::ImplInitSettings()
@@ -235,22 +236,22 @@ void OReportWindow::DataChanged( const DataChangedEvent& rDCEvt )
 //------------------------------------------------------------------------------
 sal_Int32 OReportWindow::GetTotalHeight() const
 {
-    return m_aHRuler.GetSizePixel().Height() + m_aViewsWindow.getTotalHeight();
+    return m_aViewsWindow.getTotalHeight();
 }
 //------------------------------------------------------------------------------
-void OReportWindow::ScrollChildren(long nDeltaX, long nDeltaY)
+void OReportWindow::ScrollChildren(const Point& _aThumbPos)
 {
-    if ( nDeltaX )
+    MapMode aMap = m_aHRuler.GetMapMode();
+    Point aOrg( aMap.GetOrigin() );
+    if ( aOrg.X() != (-_aThumbPos.X()) )
     {
-        MapMode aMap = m_aHRuler.GetMapMode();
-        Point aOrg( aMap.GetOrigin() );
-        aMap.SetOrigin( Point(aOrg.X() - nDeltaX, aOrg.Y()));
+        aMap.SetOrigin( Point(- _aThumbPos.X(), aOrg.Y()));
         m_aHRuler.SetMapMode( aMap );
-        m_aHRuler.Scroll(-nDeltaX,0);
+        m_aHRuler.Scroll(-(aOrg.X() + _aThumbPos.X()),0);
     }
 
-
-    m_aViewsWindow.scrollChildren(nDeltaX,nDeltaY);
+    /*const Point aPos(PixelToLogic(_aThumbPos));*/
+    m_aViewsWindow.scrollChildren(_aThumbPos);
 }
 //----------------------------------------------------------------------------
 USHORT OReportWindow::getSectionCount() const
@@ -258,11 +259,9 @@ USHORT OReportWindow::getSectionCount() const
     return m_aViewsWindow.getSectionCount();
 }
 //----------------------------------------------------------------------------
-void OReportWindow::notifyHeightChanged()
+void OReportWindow::notifySizeChanged()
 {
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
-    //Resize();
-    //Invalidate(INVALIDATE_TRANSPARENT);
 }
 //----------------------------------------------------------------------------
 BOOL OReportWindow::HasSelection()
@@ -371,7 +370,6 @@ void OReportWindow::setGridSnap(BOOL bOn)
 // -----------------------------------------------------------------------------
 void OReportWindow::setDragStripes(BOOL bOn)
 {
-
     m_aViewsWindow.setDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
@@ -385,13 +383,18 @@ sal_uInt32 OReportWindow::getMarkedObjectCount() const
     return m_aViewsWindow.getMarkedObjectCount();
 }
 // -----------------------------------------------------------------------------
-void OReportWindow::zoom(const sal_Int16 _nZoom)
+void OReportWindow::zoom(const Fraction& _aZoom)
 {
-    m_aHRuler.SetZoom(Fraction(_nZoom,100));
+    m_aHRuler.SetZoom(_aZoom);
     m_aHRuler.Invalidate();
 
-    m_aViewsWindow.zoom(_nZoom);
-    notifyHeightChanged();
+    //setZoomFactor(_aZoom,*this); // if this will be include the H - ruler has the wrong size
+    m_aViewsWindow.zoom(_aZoom);
+
+    notifySizeChanged();
+    const Point aNewThumbPos( m_pParent->getThumbPos() );
+
+    ScrollChildren( aNewThumbPos );
     Resize();
 
     Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
@@ -401,7 +404,43 @@ void OReportWindow::fillControlModelSelection(::std::vector< uno::Reference< uno
 {
     m_aViewsWindow.fillControlModelSelection(_rSelection);
 }
+// -----------------------------------------------------------------------------
+sal_Int32 OReportWindow::impl_getRealPixelWidth() const
+{
+    const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
+    MapMode aMap( MAP_100TH_MM );
+    const Size aPageSize = LogicToPixel(Size(nPaperWidth,0),aMap);
+    return aPageSize.Width() + REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH + SECTION_OFFSET;
+}
+// -----------------------------------------------------------------------------
+sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
+{
+    sal_uInt16 nZoom(100);
+    const Size aSize( GetSizePixel() );
+    switch( _eType)
+    {
+        case SVX_ZOOM_PERCENT:
+            nZoom = m_pView->getController().getZoomValue();
+            break;
+        case SVX_ZOOM_OPTIMAL:
+            break;
+        case SVX_ZOOM_WHOLEPAGE:
+            {
+                nZoom = (USHORT)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+                MapMode aMap( MAP_100TH_MM );
+                const Size aHeight = m_aViewsWindow.LogicToPixel(m_aViewsWindow.PixelToLogic(Size(0,GetTotalHeight() + m_aHRuler.GetSizePixel().Height())),aMap);
+                nZoom = ::std::min(nZoom,(USHORT)(long)Fraction(aSize.Height()*100,aHeight.Height()));
+            }
+            break;
+        case SVX_ZOOM_PAGEWIDTH:
+            nZoom = (USHORT)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
+            break;
+        default:
+            break;
+    }
 
+    return nZoom;
+}
 //==================================================================
 }   //rptui
 //==================================================================

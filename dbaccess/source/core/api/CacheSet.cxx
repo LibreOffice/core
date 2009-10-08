@@ -204,8 +204,8 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     ::rtl::OUString aQuote = getIdentifierQuoteString();
     static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
     sal_Int32 i = 1;
-    ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1;
-    for(; aIter != _rInsertRow->end();++aIter)
+    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
+    for(; aIter != _rInsertRow->get().end();++aIter)
     {
         aSql += ::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++));
         aSql += aComma;
@@ -221,7 +221,7 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
         Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
         Reference< XParameters > xParameter(xPrep,UNO_QUERY);
         i = 1;
-        for(aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter,++i)
+        for(aIter = _rInsertRow->get().begin()+1; aIter != _rInsertRow->get().end();++aIter,++i)
         {
             if(aIter->isNull())
                 xParameter->setNull(i,aIter->getTypeKind());
@@ -316,8 +316,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     sal_Int32 nCheckCount = 1; // index for the orginal values
     sal_Int32 i = 1;
-    ORowVector< ORowSetValue >::const_iterator aIter = _rRow->begin()+1;
-    ORowVector< ORowSetValue >::const_iterator aEnd = _rRow->begin()+1;
+    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
+    ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end()+1;
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
     {
         aColumnName = m_xSetMetaData->getColumnName(i);
@@ -384,7 +384,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
-    for(ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter)
+    for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != _rInsertRow->get().end();++aIter)
     {
         if(aIter->isModified())
         {
@@ -394,7 +394,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     }
     for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValues.end();++aOrgValue,++i)
     {
-        setParameter(i,xParameter,(*_rOrginalRow)[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        setParameter(i,xParameter,(_rOrginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
@@ -476,7 +476,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     sal_Int32 i = 1;
     for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValues.end();++j,++i)
     {
-        setParameter(i,xParameter,(*_rDeleteRow)[*j],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+        setParameter(i,xParameter,(_rDeleteRow->get())[*j],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
 
     m_bDeleted = xPrep->executeUpdate() > 0;
@@ -579,10 +579,10 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     if(!aBookmark.hasValue())
         aBookmark = makeAny(_nPosition);
 
-    connectivity::ORowVector< ORowSetValue >::iterator aIter = _rRow->begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rRow->get().begin();
     (*aIter) = aBookmark;
     ++aIter;
-    for(sal_Int32 i=1;aIter != _rRow->end();++aIter,++i)
+    for(sal_Int32 i=1;aIter != _rRow->get().end();++aIter,++i)
     {
         sal_Int32 nType = m_xSetMetaData->getColumnType(i);
         aIter->setSigned(m_aSignedFlags[i-1]);

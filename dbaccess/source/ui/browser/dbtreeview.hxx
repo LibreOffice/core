@@ -73,7 +73,7 @@ namespace dbaui
 
 
         void                setModel(SvLBoxTreeList* _pTreeModel);
-        void                setSelectHdl(const Link& _rHdl);
+        void                setSelChangeHdl(const Link& _rHdl);
 
         DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }
 

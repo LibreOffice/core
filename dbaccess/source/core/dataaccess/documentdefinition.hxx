@@ -168,11 +168,17 @@ public:
 
     static ::com::sun::star::uno::Sequence< sal_Int8 > getDefaultDocumentTypeClassId();
 
-    static ::rtl::OUString GetDocumentServiceFromMediaType( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage
-                                                    ,const ::rtl::OUString& sEntName
-                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
-                                                    ,::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
-                                                    );
+    static ::rtl::OUString GetDocumentServiceFromMediaType(
+        const ::rtl::OUString& _rMediaType,
+        const ::comphelper::ComponentContext& _rContext,
+        ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
+    );
+    static ::rtl::OUString GetDocumentServiceFromMediaType(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxContainerStorage,
+        const ::rtl::OUString& _rEntityName,
+        const ::comphelper::ComponentContext& _rContext,
+        ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
+    );
 
 private:
     /** does necessary initializations after our embedded object has been switched to ACTIVE
@@ -211,13 +217,17 @@ private:
     bool
         impl_close_throw();
 
-protected:
+private:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
+
     // helper
     virtual void SAL_CALL disposing();
+
+    // OContentHelper overridables
+    virtual ::rtl::OUString determineContentType() const;
 
 private:
     /** fills the load arguments

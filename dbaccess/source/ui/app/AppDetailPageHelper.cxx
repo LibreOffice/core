@@ -351,10 +351,10 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
     {
         if ( m_pLists[i] )
         {
-            m_pLists[i]->clearCurrentSelectionEntry();
+            m_pLists[i]->clearCurrentSelection();
             m_pLists[i]->Hide();
             ::std::auto_ptr<DBTreeListBox> aTemp(m_pLists[i]);
-            m_pLists[i]->clearCurrentSelectionEntry();
+            m_pLists[i]->clearCurrentSelection();   // why a second time?
             m_pLists[i] = NULL;
         }
 
@@ -379,9 +379,7 @@ void OAppDetailPageHelper::selectAll()
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        m_pLists[nPos]->lockAutoSelect();
         m_pLists[nPos]->SelectAll(TRUE);
-        m_pLists[nPos]->unlockAutoSelect();
     }
 }
 // -----------------------------------------------------------------------------
@@ -907,8 +905,7 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
 
     _pTreeView->SetDoubleClickHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
     _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
-    _pTreeView->SetSelectHdl(LINK(this, OAppDetailPageHelper, OnEntrySelectHdl));
-    _pTreeView->SetDeselectHdl(LINK(this, OAppDetailPageHelper, OnDeSelectHdl));
+    _pTreeView->SetSelChangeHdl(LINK(this, OAppDetailPageHelper, OnEntrySelChange));
 
     _pTreeView->setCutHandler(LINK(this, OAppDetailPageHelper, OnCutEntry));
     _pTreeView->setCopyHandler(LINK(this, OAppDetailPageHelper, OnCopyEntry));
@@ -1066,48 +1063,33 @@ IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree)
     return bHandled ? 1L : 0L;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(OAppDetailPageHelper, OnDeSelectHdl, SvTreeListBox*, _pTree)
+IMPL_LINK(OAppDetailPageHelper, OnEntrySelChange, void*, /*NOINTERESTEDIN*/)
 {
-    OSL_ENSURE( _pTree, "OAppDetailPageHelper, OnDeSelectHdl: invalid callback!" );
-    if ( _pTree != NULL )
-        getBorderWin().getView()->getAppController().onEntryDeSelect( *_pTree );
+    getBorderWin().getView()->getAppController().onSelectionChanged();
     return 1L;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(OAppDetailPageHelper, OnEntrySelectHdl, SvLBoxEntry*, _pEntry)
+IMPL_LINK( OAppDetailPageHelper, OnCutEntry, void*, /*NOINTERESTEDIN*/ )
 {
-    if ( 1 == getSelectionCount() )
-    {
-        getBorderWin().getView()->getAppController().onEntrySelect(_pEntry);
-    }
-    else
-    {
-        showPreview(NULL);
-    }
+    getBorderWin().getView()->getAppController().onCutEntry();
     return 1L;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OAppDetailPageHelper, OnCutEntry, SvLBoxEntry*, _pEntry )
+IMPL_LINK( OAppDetailPageHelper, OnCopyEntry, void*, /*NOINTERESTEDIN*/ )
 {
-    getBorderWin().getView()->getAppController().onCutEntry(_pEntry);
+    getBorderWin().getView()->getAppController().onCopyEntry();
     return 1L;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OAppDetailPageHelper, OnCopyEntry, SvLBoxEntry*, _pEntry )
+IMPL_LINK( OAppDetailPageHelper, OnPasteEntry, void*, /*NOINTERESTEDIN*/ )
 {
-    getBorderWin().getView()->getAppController().onCopyEntry(_pEntry);
+    getBorderWin().getView()->getAppController().onPasteEntry();
     return 1L;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OAppDetailPageHelper, OnPasteEntry, SvLBoxEntry*, _pEntry )
+IMPL_LINK( OAppDetailPageHelper, OnDeleteEntry, void*, /*NOINTERESTEDIN*/ )
 {
-    getBorderWin().getView()->getAppController().onPasteEntry(_pEntry);
-    return 1L;
-}
-// -----------------------------------------------------------------------------
-IMPL_LINK( OAppDetailPageHelper, OnDeleteEntry, SvLBoxEntry*, _pEntry )
-{
-    getBorderWin().getView()->getAppController().onDeleteEntry(_pEntry);
+    getBorderWin().getView()->getAppController().onDeleteEntry();
     return 1L;
 }
 // -----------------------------------------------------------------------------
@@ -1182,16 +1164,12 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
         m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, m_aMenu->GetItemText(nSelectedAction));
         Resize();
 
+        // simulate a selectionChanged event at the controller, to force the preview to be updated
         if ( isPreviewEnabled() )
         {
-            DBTreeListBox* pTree = getCurrentView();
-            if ( pTree )
+            if ( getCurrentView() && getCurrentView()->FirstSelected() )
             {
-                SvLBoxEntry* pEntry = pTree->GetSelectedEntry();
-                if ( pEntry )
-                {
-                    getBorderWin().getView()->getAppController().onEntrySelect(pEntry);
-                }
+                getBorderWin().getView()->getAppController().onSelectionChanged();
             }
         }
         else
@@ -1255,9 +1233,12 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
             {
                 m_aPreview.Hide();
                 m_aDocumentInfo.Hide();
-                DBTreeListBox* pTreeView = getCurrentView();
-                if ( pTreeView )
-                    pTreeView->clearCurrentSelectionEntry();
+
+                // Why the below code? It might have side effects, as the tree view needs to know
+                // its current selection for other purposes than the preview, too.
+//              DBTreeListBox* pTreeView = getCurrentView();
+//              if ( pTreeView )
+//                  pTreeView->clearCurrentSelection();
             }
         }
         catch( const Exception& )

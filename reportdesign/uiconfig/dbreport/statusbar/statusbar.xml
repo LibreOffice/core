@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE statusbar:statusbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "statusbar.dtd">
 <statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <statusbar:statusbaritem xlink:href=".uno:ReportStatusDummy" statusbar:align="center" statusbar:ownerdraw="true" statusbar:autosize="true"/>
+  <statusbar:statusbaritem xlink:href=".uno:ZoomSlider" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="130" statusbar:helpid="helpid:11065"/>
+  <statusbar:statusbaritem xlink:href=".uno:Zoom" statusbar:align="center" statusbar:width="35" statusbar:helpid="helpid:10000"/>
 </statusbar:statusbar>

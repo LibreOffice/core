@@ -50,7 +50,8 @@ EXCEPTIONSFILES=	\
         $(SLO)$/UITools.obj					\
         $(SLO)$/rptuiservices.obj			\
         $(SLO)$/toolboxcontroller.obj		\
-        $(SLO)$/statusbarcontroller.obj		
+        $(SLO)$/statusbarcontroller.obj		\
+        $(SLO)$/FunctionHelper.obj
 
 
 SLOFILES=	\

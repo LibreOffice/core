@@ -250,10 +250,17 @@ namespace dbaui
     {
         DatabaseObjectView::fillDispatchArgs( _rDispatchArguments, _aDataSource, _rObjectName );
 
-        sal_Bool bIncludeQueryName = 0 != _rObjectName.getLength();
+        bool bIncludeQueryName = 0 != _rObjectName.getLength();
+        bool bEditViewAsSQLCommand = ( m_nCommandType == CommandType::TABLE ) && m_bPreferSQLView;
 
         sal_Int32 nPos = _rDispatchArguments.getLength();
-        _rDispatchArguments.realloc(_rDispatchArguments.getLength() + 2 + ( bIncludeQueryName ? 1 : 0 ) );
+
+        sal_Int32 nNewLen = _rDispatchArguments.getLength() + 2;
+        if ( bIncludeQueryName )
+            ++nNewLen;
+        if ( bEditViewAsSQLCommand )
+            ++nNewLen;
+        _rDispatchArguments.realloc( nNewLen );
 
         _rDispatchArguments[nPos  ].Name = PROPERTY_GRAPHICAL_DESIGN;
         _rDispatchArguments[nPos++].Value <<= ::cppu::bool2any( !m_bPreferSQLView );
@@ -265,6 +272,12 @@ namespace dbaui
         {
             _rDispatchArguments[nPos  ].Name = PROPERTY_COMMAND;
             _rDispatchArguments[nPos++].Value <<= _rObjectName;
+        }
+
+        if ( bEditViewAsSQLCommand )
+        {
+            _rDispatchArguments[nPos  ].Name = PROPERTY_ESCAPE_PROCESSING;
+            _rDispatchArguments[nPos++].Value <<= sal_Bool( sal_False );
         }
     }
 

@@ -250,7 +250,7 @@ struct OGenericUnoController_Data
 DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
-    :OGenericUnoController_Base(m_aMutex)
+    :OGenericUnoController_Base( getMutex() )
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -266,7 +266,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 {
     osl_incrementInterlockedCount( &m_refCount );
     {
-        m_pData.reset( new OGenericUnoController_Data( *this, m_aMutex ) );
+        m_pData.reset( new OGenericUnoController_Data( *this, getMutex() ) );
     }
     osl_decrementInterlockedCount( &m_refCount );
 
@@ -284,7 +284,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 
 // -----------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController()
-    :OGenericUnoController_Base(m_aMutex)
+    :OGenericUnoController_Base( getMutex() )
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -356,7 +356,7 @@ void OGenericUnoController::impl_initialize()
 void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XWindow >        xParent;
     Reference< XFrame > xFrame;
@@ -453,7 +453,7 @@ void OGenericUnoController::disposing(const EventObject& Source) throw( RuntimeE
 //------------------------------------------------------------------------
 void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( !isDataSourceReadOnly() )
     {
         Reference<XModifiable> xModi(aEvent.Source,UNO_QUERY);
@@ -481,7 +481,7 @@ Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw 
 void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) throw( RuntimeException )
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     stopFrameListening( m_aCurrentFrame.getFrame() );
     Reference< XFrame > xFrame = m_aCurrentFrame.attachFrame( _rxFrame );
@@ -965,7 +965,7 @@ void SAL_CALL OGenericUnoController::removeEventListener( const Reference< XEven
 //------------------------------------------------------------------------------
 void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( aEvent.Frame == m_aCurrentFrame.getFrame() )
         m_aCurrentFrame.frameAction( aEvent.Action );
 }
@@ -1101,35 +1101,26 @@ void OGenericUnoController::stopConnectionListening(const Reference< XConnection
         xComponent->removeEventListener(static_cast<XFrameActionListener*>(this));
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection > OGenericUnoController::connect(
-            const Reference< XDataSource>& _xDataSource
-            ,sal_Bool _bStartListening
-        )
+Reference< XConnection > OGenericUnoController::connect( const Reference< XDataSource>& _xDataSource,
+    ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
-    WaitObject aWaitCursor(getView());
+    WaitObject aWaitCursor( getView() );
 
     ODatasourceConnector aConnector( getORB(), getView(), ::rtl::OUString() );
-    Reference<XConnection> xConnection = aConnector.connect(_xDataSource);
-
-    // be notified when connection is in disposing
-    if (_bStartListening)
-        startConnectionListening(xConnection);
+    Reference< XConnection > xConnection = aConnector.connect( _xDataSource, _pErrorInfo );
+    startConnectionListening( xConnection );
 
     return xConnection;
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection > OGenericUnoController::connect(
-    const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rContextInformation,
-    sal_Bool _bStartListening )
+Reference< XConnection > OGenericUnoController::connect( const ::rtl::OUString& _rDataSourceName,
+    const ::rtl::OUString& _rContextInformation, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
-    WaitObject aWaitCursor(getView());
+    WaitObject aWaitCursor( getView() );
 
     ODatasourceConnector aConnector( getORB(), getView(), _rContextInformation );
-    Reference<XConnection> xConnection = aConnector.connect(_rDataSourceName);
-
-    // be notified when connection is in disposing
-    if (_bStartListening)
-        startConnectionListening(xConnection);
+    Reference<XConnection> xConnection = aConnector.connect( _rDataSourceName, _pErrorInfo );
+    startConnectionListening( xConnection );
 
     return xConnection;
 }
@@ -1219,7 +1210,7 @@ Reference< XModel > SAL_CALL OGenericUnoController::getModel(void) throw( Runtim
 // -----------------------------------------------------------------------------
 Reference< XFrame > SAL_CALL OGenericUnoController::getFrame(void) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_aCurrentFrame.getFrame();
 }
 
@@ -1442,7 +1433,7 @@ Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() cons
 Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
 
     if ( ! m_xTitleHelper.is ())
     {
@@ -1464,7 +1455,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
 ::rtl::OUString SAL_CALL OGenericUnoController::getTitle()
     throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     if ( m_bExternalTitle )
         return impl_getTitleHelper_throw()->getTitle ();
     return getPrivateTitle() + impl_getTitleHelper_throw()->getTitle ();
@@ -1476,7 +1467,7 @@ void SAL_CALL OGenericUnoController::setTitle(const ::rtl::OUString& sTitle)
     throw (RuntimeException)
 {
     vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard( getMutex() );
     m_bExternalTitle = sal_True;
     impl_getTitleHelper_throw()->setTitle (sTitle);
 }

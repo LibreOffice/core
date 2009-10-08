@@ -58,7 +58,6 @@ namespace dbaui
         friend bool operator!=(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs) { return !(lhs == rhs); }
 
         ::osl::Mutex    m_aMutex;
-        ::rtl::OUString m_sDatabaseName;
 
         // @see com.sun.star.sdbc.KeyRule
         sal_Int32 m_nUpdateRules;
@@ -84,8 +83,6 @@ namespace dbaui
 
         virtual void CopyFrom(const OTableConnectionData& rSource);
         virtual OTableConnectionData* NewInstance() const { return new ORelationTableConnectionData(); }
-
-        inline ::rtl::OUString GetDatabaseName() const { return m_sDatabaseName; }
 
         /** Update create a new relation
 

@@ -68,6 +68,56 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
+ConditionField::ConditionField( Condition* _pParent, const ResId& _rResId ) : Edit(_pParent,_rResId)
+,m_pParent(_pParent)
+,m_aFormula(this)
+{
+    m_pSubEdit = new Edit(this,0);
+    SetSubEdit(m_pSubEdit);
+    m_pSubEdit->EnableRTL( FALSE );
+    m_pSubEdit->SetPosPixel( Point() );
+
+    m_aFormula.SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("...")));
+    m_aFormula.SetClickHdl( LINK( this, ConditionField, OnFormula ) );
+    m_aFormula.Show();
+    m_pSubEdit->Show();
+    Resize();
+}
+// -----------------------------------------------------------------------------
+ConditionField::~ConditionField()
+{
+    SetSubEdit(NULL);
+    delete m_pSubEdit;
+}
+// -----------------------------------------------------------------------------
+void ConditionField::Resize()
+{
+    Edit::Resize();
+    const Size aSize = GetOutputSizePixel();
+    const Size aButtonSize( LogicToPixel( Size( 12, 0 ), MAP_APPFONT ).Width(),aSize.Height());
+    const Point aButtonPos(aSize.Width() - aButtonSize.Width(), 0);
+    m_aFormula.SetPosSizePixel(aButtonPos,aButtonSize);
+    m_pSubEdit->SetPosSizePixel(Point(0,0),Size(aButtonPos.X() ,aSize.Height()));
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
+{
+    ::rtl::OUString sFormula(m_pSubEdit->GetText());
+    const sal_Int32 nLen = sFormula.getLength();
+    if ( nLen )
+    {
+        ReportFormula aFormula( sFormula );
+        sFormula = aFormula.getCompleteFormula();
+    } // if ( nLen )
+    uno::Reference< awt::XWindow> xInspectorWindow = VCLUnoHelper::GetInterface(this);
+    uno::Reference< beans::XPropertySet> xProp(m_pParent->getController().getRowSet(),uno::UNO_QUERY);
+    if ( rptui::openDialogFormula_nothrow( sFormula, m_pParent->getController().getContext(),xInspectorWindow,xProp ) )
+    {
+        ReportFormula aFormula( sFormula );
+        m_pSubEdit->SetText(aFormula.getUndecoratedContent());
+    }
+    return 0L;
+}
 //========================================================================
 // class SvxColorWindow_Impl --------------------------------------------------
 //========================================================================
@@ -509,11 +559,10 @@ void Condition::impl_layoutOperands()
     const Rectangle aPreviewRect( m_aPreview.GetPosPixel(), m_aPreview.GetSizePixel() );
 
     // the "condition type" list box
-    Rectangle aCondTypeRect( m_aConditionType.GetPosPixel(), m_aConditionType.GetSizePixel() );
-    Point aOpListPos( aCondTypeRect.Right() + aRelatedControls.Width(), aCondTypeRect.Top() );
-    Size aOpListSize( LogicToPixel( Size( COND_OP_WIDTH, 60 ), MAP_APPFONT ) );
-    m_aOperationList.SetPosSizePixel( aOpListPos.X(), aOpListPos.Y(),
-        aOpListSize.Width(), aOpListSize.Height() );
+    const Rectangle aCondTypeRect( m_aConditionType.GetPosPixel(), m_aConditionType.GetSizePixel() );
+    const Point aOpListPos( aCondTypeRect.Right() + aRelatedControls.Width(), aCondTypeRect.Top() );
+    const Size aOpListSize( LogicToPixel( Size( COND_OP_WIDTH, 60 ), MAP_APPFONT ) );
+    m_aOperationList.SetPosSizePixel( aOpListPos.X(), aOpListPos.Y(),aOpListSize.Width(), aOpListSize.Height() );
     m_aOperationList.Show( !bIsExpression );
 
     // the LHS input field
@@ -528,13 +577,13 @@ void Condition::impl_layoutOperands()
     if ( bHaveRHS )
     {
         // the "and" text being the glue between LHS and RHS
-        Point aOpGluePos( aLHSPos.X() + aLHSSize.Width() + aRelatedControls.Width(), aLHSPos.Y() );
-        Size aOpGlueSize( m_aOperandGlue.GetTextWidth( m_aOperandGlue.GetText() ) + aRelatedControls.Width(), aLHSSize.Height() );
+        const Point aOpGluePos( aLHSPos.X() + aLHSSize.Width() + aRelatedControls.Width(), aLHSPos.Y() );
+        const Size aOpGlueSize( m_aOperandGlue.GetTextWidth( m_aOperandGlue.GetText() ) + aRelatedControls.Width(), aLHSSize.Height() );
         m_aOperandGlue.SetPosSizePixel( aOpGluePos.X(), aOpGluePos.Y(), aOpGlueSize.Width(), aOpGlueSize.Height() );
 
         // the RHS input field
-        Point aRHSPos( aOpGluePos.X() + aOpGlueSize.Width() + aRelatedControls.Width(), aOpGluePos.Y() );
-        Size aRHSSize( aPreviewRect.Right() - aRHSPos.X(), aLHSSize.Height() );
+        const Point aRHSPos( aOpGluePos.X() + aOpGlueSize.Width() + aRelatedControls.Width(), aOpGluePos.Y() );
+        const Size aRHSSize( aPreviewRect.Right() - aRHSPos.X(), aLHSSize.Height() );
         m_aCondRHS.SetPosSizePixel( aRHSPos.X(), aRHSPos.Y(), aRHSSize.Width(), aRHSSize.Height() );
     }
 

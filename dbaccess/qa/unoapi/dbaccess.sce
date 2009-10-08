@@ -11,5 +11,5 @@
 -o dbaccess.ORowSet
 -o dbaccess.OSQLMessageDialog
 -o dbaccess.OSingleSelectQueryComposer
--o dbaccess.SbaXGridControl
+#i95611 -o dbaccess.SbaXGridControl
 #i84128 -o dbaccess.TableWindowAccessibility

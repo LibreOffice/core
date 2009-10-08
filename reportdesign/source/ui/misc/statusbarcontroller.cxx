@@ -137,24 +137,27 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
+    if ( m_pController.is() )
     {
-        Sequence< PropertyValue > aSeq;
-        if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
+        if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
         {
-            SvxZoomSliderItem aZoomSlider(100);
-            aZoomSlider.PutValue(_aEvent.State);
-            static_cast<SvxZoomSliderControl*>(m_pController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoomSlider);
-        }
-    } // if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
-    else if ( m_aCommandURL.equalsAscii(".uno:Zoom") )
-    {
-        Sequence< PropertyValue > aSeq;
-        if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
+            Sequence< PropertyValue > aSeq;
+            if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
+            {
+                SvxZoomSliderItem aZoomSlider(100,20,400);
+                aZoomSlider.PutValue(_aEvent.State);
+                static_cast<SvxZoomSliderControl*>(m_pController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoomSlider);
+            }
+        } // if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
+        else if ( m_aCommandURL.equalsAscii(".uno:Zoom") )
         {
-            SvxZoomItem aZoom;
-            aZoom.PutValue(_aEvent.State);
-            static_cast<SvxZoomStatusBarControl*>(m_pController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoom);
+            Sequence< PropertyValue > aSeq;
+            if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
+            {
+                SvxZoomItem aZoom;
+                aZoom.PutValue(_aEvent.State);
+                static_cast<SvxZoomStatusBarControl*>(m_pController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoom);
+            }
         }
     }
 }
@@ -162,17 +165,17 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
 // XStatusbarController
 ::sal_Bool SAL_CALL OStatusbarController::mouseButtonDown(const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException)
 {
-    return m_pController.getRef()->mouseButtonDown(_aEvent);
+    return m_pController.is() && m_pController.getRef()->mouseButtonDown(_aEvent);
 }
 
 ::sal_Bool SAL_CALL OStatusbarController::mouseMove(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException)
 {
-    return m_pController.getRef()->mouseMove(_aEvent);
+    return m_pController.is() && m_pController.getRef()->mouseMove(_aEvent);
 }
 
 ::sal_Bool SAL_CALL OStatusbarController::mouseButtonUp(    const ::com::sun::star::awt::MouseEvent& _aEvent)throw (::com::sun::star::uno::RuntimeException)
 {
-    return m_pController.getRef()->mouseButtonUp(_aEvent);
+    return m_pController.is() && m_pController.getRef()->mouseButtonUp(_aEvent);
 }
 
 void SAL_CALL OStatusbarController::command(
@@ -182,7 +185,8 @@ void SAL_CALL OStatusbarController::command(
     const ::com::sun::star::uno::Any& aData )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    m_pController.getRef()->command( aPos, nCommand, bMouseEvent, aData );
+    if ( m_pController.is() )
+        m_pController.getRef()->command( aPos, nCommand, bMouseEvent, aData );
 }
 
 void SAL_CALL OStatusbarController::paint(
@@ -192,17 +196,20 @@ void SAL_CALL OStatusbarController::paint(
     ::sal_Int32 nStyle )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    return m_pController.getRef()->paint( xGraphics, rOutputRectangle, nItemId, nStyle );
+    if ( m_pController.is() )
+        m_pController.getRef()->paint( xGraphics, rOutputRectangle, nItemId, nStyle );
 }
 
 void SAL_CALL OStatusbarController::click() throw (::com::sun::star::uno::RuntimeException)
 {
-    m_pController.getRef()->click();
+    if ( m_pController.is() )
+        m_pController.getRef()->click();
 }
 
 void SAL_CALL OStatusbarController::doubleClick() throw (::com::sun::star::uno::RuntimeException)
 {
-    m_pController.getRef()->doubleClick();
+    if ( m_pController.is() )
+        m_pController.getRef()->doubleClick();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatusbarController::update() throw ( RuntimeException )
@@ -213,7 +220,12 @@ void SAL_CALL OStatusbarController::update() throw ( RuntimeException )
         xUp->update();
 }
 // -----------------------------------------------------------------------------
-
+// XComponent
+void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::RuntimeException)
+{
+    m_pController.dispose();
+    svt::StatusbarController::dispose();
+}
 // =============================================================================
 } // rptui
 // =============================================================================

@@ -35,6 +35,7 @@
 #include "StartMarker.hxx"
 #include <svtools/ruler.hxx>
 #include <svx/svdedtv.hxx>
+#include <svx/zoomitem.hxx>
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -68,6 +69,7 @@ namespace rptui
         void ImplInitSettings();
 
         sal_Int32 GetTotalHeight() const;
+        sal_Int32 impl_getRealPixelWidth() const;
 
         OReportWindow(OReportWindow&);
         void operator =(OReportWindow&);
@@ -120,7 +122,7 @@ namespace rptui
         */
         BOOL HasSelection();
 
-        Point           getScrollOffset() const;
+        Point           getThumbPos() const;
 
         /** removes the section at the given position.
         *
@@ -162,9 +164,9 @@ namespace rptui
         */
         sal_Int32       getMaxMarkerWidth(sal_Bool _bWithEnd) const;
 
-        void            ScrollChildren(long nDeltaX, long nDeltaY);
+        void            ScrollChildren(const Point& _aThumbPos);
 
-        void            notifyHeightChanged();
+        void            notifySizeChanged();
 
         /** unmark all objects on the views without the given one.
         *
@@ -220,12 +222,17 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const sal_Int16 _nZoom);
+        void zoom(const Fraction& _aZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
         void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
+
+        /** calculates the zoom factor.
+            @param  _eType  which kind of zoom is needed
+        */
+        sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
 //==================================================================
 }   //rptui

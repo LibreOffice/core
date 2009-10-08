@@ -132,6 +132,7 @@ public:
 
     // OPropertySetHelper
     DECLARE_PROPERTYCONTAINER_DEFAULTS( );
+
 private:
     // helper
     void registerProperties();

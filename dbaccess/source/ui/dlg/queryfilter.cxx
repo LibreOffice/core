@@ -372,23 +372,38 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
     sal_Bool bHaving = sal_False;
     try
     {
+        ::rtl::OUString sTableName;
         sal_Bool bFunction = sal_False;
         _rFilter.Name = _rField.GetSelectEntry();
         Reference< XPropertySet > xColumn = getQueryColumn(_rFilter.Name);
-        if ( xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
+        if ( xColumn.is() )
         {
-            xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
-            static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
-            if ( xColumn->getPropertySetInfo()->hasPropertyByName(sAgg) )
-                xColumn->getPropertyValue(sAgg) >>= bHaving;
-            static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));
-            if ( xColumn->getPropertySetInfo()->hasPropertyByName(sFunction) )
-                xColumn->getPropertyValue(sFunction) >>= bFunction;
-        }
-        if ( !bFunction )
-        {
-            ::rtl::OUString aQuote  = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
-            _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
+            Reference< XPropertySetInfo > xInfo = xColumn->getPropertySetInfo();
+            if ( xInfo->hasPropertyByName(PROPERTY_REALNAME) )
+            {
+                if ( xInfo->hasPropertyByName(PROPERTY_TABLENAME) )
+                    xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+                xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
+                static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
+                if ( xInfo->hasPropertyByName(sAgg) )
+                    xColumn->getPropertyValue(sAgg) >>= bHaving;
+                static ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("Function"));
+                if ( xInfo->hasPropertyByName(sFunction) )
+                    xColumn->getPropertyValue(sFunction) >>= bFunction;
+            }
+            if ( !bFunction )
+            {
+                const ::rtl::OUString aQuote    = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+                _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
+                if ( sTableName.getLength() )
+                {
+                    static ::rtl::OUString sSep(RTL_CONSTASCII_USTRINGPARAM("."));
+                    sTableName = ::dbtools::quoteName(aQuote,sTableName);
+                    sTableName += sSep;
+                    sTableName += _rFilter.Name;
+                    _rFilter.Name = sTableName;
+                }
+            } // if ( !bFunction )
         }
     }
     catch(Exception)

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: DatabaseDataProvider.cxx,v $
- * $Revision: 1.5 $
+ * $RCSfile$
+ * $Revision$
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,14 +35,14 @@
 #include "cppuhelper/implbase1.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/FValue.hxx>
+#include <connectivity/dbtools.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
@@ -71,7 +71,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     m_aParameterManager( m_aMutex, uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
     m_aFilterManager( uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
     m_xContext(context),
-    m_CommandType(0),
+    m_CommandType(sdb::CommandType::COMMAND), // #i94114
     m_RowLimit(0),
     m_EscapeProcessing(sal_True),
     m_ApplyFilter(sal_False)
@@ -85,7 +85,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
         m_xAggregate.set(m_xRowSet,uno::UNO_QUERY);
         m_xAggregateSet.set(m_xRowSet,uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xProp(static_cast< ::cppu::OWeakObject* >( this ),uno::UNO_QUERY);
-        m_aFilterManager.initialize( xProp, m_xAggregateSet );
+        m_aFilterManager.initialize( m_xAggregateSet );
         m_aParameterManager.initialize( xProp, m_xAggregate );
         m_xAggregateSet->setPropertyValue(PROPERTY_COMMAND_TYPE,uno::makeAny(m_CommandType));
         m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,uno::makeAny(m_EscapeProcessing));
@@ -157,12 +157,14 @@ uno::Reference< uno::XInterface > DatabaseDataProvider::Create(uno::Reference< u
 void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > & aArguments) throw (uno::RuntimeException, uno::Exception)
 {
     osl::MutexGuard g(m_aMutex);
-    const uno::Any* pIter = aArguments.getConstArray();
-    const uno::Any* pEnd      = pIter + aArguments.getLength();
+    const uno::Any* pIter   = aArguments.getConstArray();
+    const uno::Any* pEnd    = pIter + aArguments.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if ( !m_xActiveConnection.is() && ((*pIter) >>= m_xActiveConnection) )
-            break;
+        if ( !m_xActiveConnection.is() )
+            (*pIter) >>= m_xActiveConnection;
+        else if ( !m_xHandler.is() )
+            (*pIter) >>= m_xHandler;
     }
     m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, uno::makeAny( m_xActiveConnection ) );
 }
@@ -178,14 +180,12 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
         try
         {
             impl_fillRowSet_throw();
-            bRet = impl_executeRowSet_throw(aClearForNotifies);
-            if ( bRet )
-                impl_fillInternalDataProvider_throw();
+            impl_executeRowSet_nothrow(aClearForNotifies);
+            impl_fillInternalDataProvider_throw();
+            bRet = true;
         }
-        catch(const uno::Exception& e)
+        catch(const uno::Exception& /*e*/)
         {
-            (void)e;
-            OSL_ENSURE(0,"Exception caught!");
         }
     }
     if ( !bRet ) // no command set or an error occured, use Internal data handler
@@ -499,18 +499,16 @@ void SAL_CALL DatabaseDataProvider::setDataSourceName(const ::rtl::OUString& the
     set(PROPERTY_DATASOURCENAME,the_value,m_DataSourceName);
 }
 // -----------------------------------------------------------------------------
-bool DatabaseDataProvider::impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies)
+void DatabaseDataProvider::impl_executeRowSet_nothrow(::osl::ResettableMutexGuard& _rClearForNotifies)
 {
-    uno::Reference<task::XInteractionHandler> xHandler(
-                    m_xContext->getServiceManager()->createInstanceWithContext(
-                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.InteractionHandler"))
-                                ,m_xContext),
-                    uno::UNO_QUERY);
-    if (!fillParameters(_rClearForNotifies, xHandler))
-        return false;
-
-    m_xRowSet->execute();
-    return true;
+    try
+    {
+        if ( impl_fillParameters_nothrow(_rClearForNotifies) )
+            m_xRowSet->execute();
+    }
+    catch(const uno::Exception&)
+    {
+    }
 }
 // -----------------------------------------------------------------------------
 void DatabaseDataProvider::impl_fillInternalDataProvider_throw()
@@ -518,19 +516,25 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw()
     // clear the data before fill the new one
     uno::Reference< chart::XChartDataArray> xChartData(m_xInternal,uno::UNO_QUERY);
     if ( xChartData.is() )
+    {
         xChartData->setData(uno::Sequence< uno::Sequence<double> >());
+        xChartData->setColumnDescriptions(uno::Sequence< ::rtl::OUString >());
+        m_xInternal->deleteSequence(0);
+    }
+
+    uno::Sequence< ::rtl::OUString > aColumns = ::dbtools::getFieldNamesByCommandDescriptor(getActiveConnection()
+                ,getCommandType()
+                ,m_Command);
 
     // fill the data
-    uno::Reference< sdbc::XResultSet> xRes(m_xRowSet,uno::UNO_QUERY);
-    uno::Reference< sdbc::XRow> xRow(m_xRowSet,uno::UNO_QUERY);
-    uno::Reference< sdbc::XResultSetMetaDataSupplier> xResMDSup(m_xRowSet,uno::UNO_QUERY);
-    uno::Reference< sdbc::XResultSetMetaData> xResultSetMetaData = xResMDSup->getMetaData();
+    uno::Reference< sdbc::XResultSet> xRes(m_xRowSet,uno::UNO_QUERY_THROW);
+    uno::Reference< sdbc::XRow> xRow(m_xRowSet,uno::UNO_QUERY_THROW);
 
     uno::Sequence< uno::Any > aLabelArgs(1);
-    const sal_Int32 nCount = xResultSetMetaData->getColumnCount();
-    for (sal_Int32 i = 2; i <= nCount; ++i)
+    const sal_Int32 nCount = aColumns.getLength();
+    for (sal_Int32 i = 1; i < nCount; ++i)
     {
-        aLabelArgs[0] <<= xResultSetMetaData->getColumnName(i);
+        aLabelArgs[0] <<= aColumns[i]; // i == 0 is the category
         const ::rtl::OUString sLabelRange = lcl_getLabel() + ::rtl::OUString::valueOf(i - 1);
         m_xInternal->setDataByRangeRepresentation(sLabelRange,aLabelArgs);
     }
@@ -542,6 +546,22 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw()
         ++nRowCount;
         for (sal_Int32 j = 1; j <= nCount; ++j)
             aDataValues[j-1].push_back(uno::makeAny(xRow->getString(j)));
+    } // while( xRes->next() && (!m_RowLimit || nRowCount < m_RowLimit) )
+    if ( !nRowCount )
+    {
+        nRowCount = 3;
+        const double fDefaultData[ ] =
+            { 9.10, 3.20, 4.54,
+              2.40, 8.80, 9.65,
+              3.10, 1.50, 3.70,
+              4.30, 9.02, 6.20 };
+        for (sal_Int32 j = 1,k = 0; j <= nCount; ++j,++k)
+        {
+            sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
+            if ( k >= nSize )
+                k = 0;
+            aDataValues[j-1].push_back(uno::makeAny(fDefaultData[k]));
+        }
     }
     ::std::vector< ::std::vector< uno::Any > >::iterator aDataValuesIter = aDataValues.begin();
     const ::std::vector< ::std::vector< uno::Any > >::iterator aDataValuesEnd = aDataValues.end();
@@ -558,7 +578,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw()
             else
                 m_xInternal->setDataByRangeRepresentation(::rtl::OUString::valueOf(nPos-1),uno::Sequence< uno::Any >(&(*aDataValuesIter->begin()),aDataValuesIter->size()));
         }
-    }
+    } // for (sal_Int32 nPos = 0;nRowCount && aDataValuesIter != aDataValuesEnd ; ++aDataValuesIter,++nPos)
 }
 // -----------------------------------------------------------------------------
 void DatabaseDataProvider::impl_fillRowSet_throw()
@@ -568,14 +588,14 @@ void DatabaseDataProvider::impl_fillRowSet_throw()
     xParam->clearParameters( );
 }
 // -----------------------------------------------------------------------------
-bool DatabaseDataProvider::fillParameters( ::osl::ResettableMutexGuard& _rClearForNotifies, const uno::Reference< task::XInteractionHandler >& _rxCompletionHandler )
+bool DatabaseDataProvider::impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies)
 {
     // do we have to fill the parameters again?
     if ( !m_aParameterManager.isUpToDate() )
         m_aParameterManager.updateParameterInfo( m_aFilterManager );
 
     if ( m_aParameterManager.isUpToDate() )
-        return m_aParameterManager.fillParameterValues( _rxCompletionHandler, _rClearForNotifies );
+        return m_aParameterManager.fillParameterValues( m_xHandler, _rClearForNotifies );
 
     return true;
 }
@@ -722,11 +742,8 @@ void SAL_CALL DatabaseDataProvider::clearParameters() throw( SQLException, Runti
 //------------------------------------------------------------------------------
 void SAL_CALL DatabaseDataProvider::execute() throw( SQLException, RuntimeException )
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
-    impl_fillRowSet_throw();
-    bool bRet = impl_executeRowSet_throw(aGuard);
-    if ( bRet )
-        impl_fillInternalDataProvider_throw();
+    uno::Sequence< beans::PropertyValue > aEmpty;
+    createDataSourcePossible(aEmpty);
 }
 //------------------------------------------------------------------------------
 void SAL_CALL DatabaseDataProvider::addRowSetListener(const uno::Reference<sdbc::XRowSetListener>& _rListener) throw( RuntimeException )

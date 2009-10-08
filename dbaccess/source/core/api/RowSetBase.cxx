@@ -245,7 +245,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     checkCache();
 
 
-    return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
+    return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid()) ? ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull() : sal_True;
 }
 // -----------------------------------------------------------------------------
 
@@ -298,9 +298,9 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
 #if OSL_DEBUG_LEVEL > 0
         ORowSetRow rRow = (*m_aCurrentRow);
-        OSL_ENSURE(rRow.isValid() && static_cast<sal_uInt16>(columnIndex) < (*rRow).size(),"Invalid size of vector!");
+        OSL_ENSURE(rRow.isValid() && static_cast<sal_uInt16>(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
 #endif
-        return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
+        return ((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex];
     }
 
     // we should normally never reach this
@@ -407,7 +407,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     }
 
     if ( bValidCurrentRow )
-        return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
+        return new ::comphelper::SequenceInputStream(((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex].getSequence());
 
     // we should normally never reach this
     return Reference< ::com::sun::star::io::XInputStream >();
@@ -739,10 +739,12 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
         return sal_False;
 
     if ( rowDeleted() )
+    {
         if ( !m_pCache->m_bRowCountFinal )
             return sal_False;
         else
             return ( m_nDeletedPosition == impl_getRowCount() );
+    }
 
     positionCache( MOVE_NONE_REFRESH_ONLY );
     sal_Bool bIsLast = m_pCache->isLast();
@@ -1246,7 +1248,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     try
     {
         for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.end();++aIter,++i) // #104278# OJ ++i inserted
-            (*aIter)->fireValueChange(_rOldRow.isValid() ? (*_rOldRow)[i+1] : ::connectivity::ORowSetValue());
+            (*aIter)->fireValueChange(_rOldRow.isValid() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)
     {
