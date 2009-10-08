@@ -56,16 +56,16 @@ void OTools::getValue(  OConnection* _pConnection,
                         sal_Bool &_bWasNull,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                         void* _pValue,
-                        SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+                        SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getValue" );
-    SQLINTEGER pcbValue = SQL_NULL_DATA;
+    SQLLEN pcbValue = SQL_NULL_DATA;
     OTools::ThrowException(_pConnection,
                             (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         _nType,
                                         _pValue,
-                                        (SQLINTEGER)_rSize,
+                                        _nSize,
                                         &pcbValue),
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface,sal_False);
     _bWasNull = pcbValue == SQL_NULL_DATA;
@@ -86,12 +86,12 @@ void OTools::bindParameter( OConnection* _pConnection,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindParameter" );
     SQLRETURN nRetcode;
-    SWORD   fSqlType;
-    SWORD   fCType;
-    SDWORD  nMaxLen = 0;
+    SQLSMALLINT fSqlType;
+    SQLSMALLINT fCType;
+    SQLLEN  nMaxLen = 0;
     //  void*&   pData   = pDataBuffer;
-    SQLINTEGER* pLen    = (SQLINTEGER*)pLenBuffer;
-    SQLUINTEGER nColumnSize=0;
+    SQLLEN* pLen    = (SQLLEN*)pLenBuffer;
+    SQLULEN nColumnSize=0;
     SQLSMALLINT nDecimalDigits=0;
 
     OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nODBCtype,fCType,fSqlType);
@@ -123,10 +123,10 @@ void OTools::bindParameter( OConnection* _pConnection,
 void OTools::bindData(  SQLSMALLINT _nOdbcType,
                         sal_Bool _bUseWChar,
                         sal_Int8 *&_pData,
-                        SQLINTEGER*& pLen,
+                        SQLLEN*& pLen,
                         const void* _pValue,
                         rtl_TextEncoding _nTextEncoding,
-                        SQLUINTEGER& _nColumnSize)
+                        SQLULEN& _nColumnSize)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindData" );
     _nColumnSize = 0;
@@ -222,7 +222,7 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
             {
                 sal_Int32 nLen = 0;
                 nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
-                *pLen = (SDWORD)SQL_LEN_DATA_AT_EXEC(nLen);
+                *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
             }
             break;
         case SQL_LONGVARCHAR:
@@ -235,21 +235,21 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
                 ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                 nLen = aString.getLength();
             }
-            *pLen = (SDWORD)SQL_LEN_DATA_AT_EXEC(nLen);
+            *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
         }   break;
         case SQL_DATE:
             *(DATE_STRUCT*)_pData = *(DATE_STRUCT*)_pValue;
-            *pLen = (SDWORD)sizeof(DATE_STRUCT);
+            *pLen = (SQLLEN)sizeof(DATE_STRUCT);
             _nColumnSize = 10;
             break;
         case SQL_TIME:
             *(TIME_STRUCT*)_pData = *(TIME_STRUCT*)_pValue;
-            *pLen = (SDWORD)sizeof(TIME_STRUCT);
+            *pLen = (SQLLEN)sizeof(TIME_STRUCT);
             _nColumnSize = 8;
             break;
         case SQL_TIMESTAMP:
             *(TIMESTAMP_STRUCT*)_pData = *(TIMESTAMP_STRUCT*)_pValue;
-            *pLen = (SDWORD)sizeof(TIMESTAMP_STRUCT);
+            *pLen = (SQLLEN)sizeof(TIMESTAMP_STRUCT);
             _nColumnSize = 19;
             break;
     }
@@ -262,7 +262,7 @@ void OTools::bindValue( OConnection* _pConnection,
                         SQLSMALLINT _nMaxLen,
                         const void* _pValue,
                         void* _pData,
-                        SQLINTEGER *pLen,
+                        SQLLEN *pLen,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                         rtl_TextEncoding _nTextEncoding,
                         sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -271,7 +271,7 @@ void OTools::bindValue( OConnection* _pConnection,
     SQLRETURN nRetcode;
     SQLSMALLINT   fSqlType;
     SQLSMALLINT   fCType;
-    SQLSMALLINT   nMaxLen = _nMaxLen;
+    SQLLEN nMaxLen = _nMaxLen;
 
     OTools::getBindTypes(   sal_False,
                             _bUseOldTimeDate,
@@ -375,7 +375,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     _pData = (void*)(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
-                    *pLen = (SDWORD)SQL_LEN_DATA_AT_EXEC(nLen);
+                    *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
                 }
                     break;
                 case SQL_LONGVARCHAR:
@@ -383,7 +383,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     _pData = (void*)(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((::rtl::OUString*)_pValue)->getLength();
-                    *pLen = (SDWORD)SQL_LEN_DATA_AT_EXEC(nLen);
+                    *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
                 }   break;
                 case SQL_DATE:
                     *pLen = sizeof(DATE_STRUCT);
@@ -446,10 +446,10 @@ void OTools::ThrowException(OConnection* _pConnection,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::ThrowException" );
 
     SDB_ODBC_CHAR szSqlState[5];
-    SDWORD pfNativeError;
+    SQLINTEGER pfNativeError;
     SDB_ODBC_CHAR szErrorMessage[SQL_MAX_MESSAGE_LENGTH];
     szErrorMessage[0] = '\0';
-    SWORD pcbErrorMsg = 0;
+    SQLSMALLINT pcbErrorMsg = 0;
 
     // Informationen zur letzten Operation:
     // wenn hstmt != SQL_NULL_HSTMT ist (Benutzung von SetStatus in SdbCursor, SdbTable, ...),
@@ -478,7 +478,7 @@ void OTools::ThrowException(OConnection* _pConnection,
 Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                          SQLHANDLE _aStatementHandle,
                                          sal_Int32 columnIndex,
-                                         SWORD  _fSqlType,
+                                         SQLSMALLINT _fSqlType,
                                          sal_Bool &_bWasNull,
                                          const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
@@ -486,14 +486,14 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
     char aCharArray[2048];
     // Erstmal versuchen, die Daten mit dem kleinen Puffer
     // abzuholen:
-    SQLINTEGER nMaxLen = sizeof aCharArray - 1;
+    SQLLEN nMaxLen = sizeof aCharArray - 1;
     //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
-    SQLINTEGER pcbValue = 0;
+    SQLLEN pcbValue = 0;
     OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
                                         _fSqlType,
                                         (SQLPOINTER)aCharArray,
-                                        (SQLINTEGER)nMaxLen,
+                                        nMaxLen,
                                         &pcbValue),
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
 
@@ -540,7 +540,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
 ::rtl::OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
-                                       SWORD  _fSqlType,
+                                       SQLSMALLINT _fSqlType,
                                        sal_Bool &_bWasNull,
                                        const Reference< XInterface >& _xInterface,
                                        rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
@@ -555,15 +555,15 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
         {
             sal_Unicode waCharArray[2048];
             // read the unicode data
-            sal_Int32 nMaxLen = (sizeof(waCharArray) / sizeof(sal_Unicode)) - 1;
+            SQLLEN nMaxLen = (sizeof(waCharArray) / sizeof(sal_Unicode)) - 1;
             //  GETDATA(SQL_C_WCHAR, waCharArray, nMaxLen + sizeof(sal_Unicode));
 
-            SQLINTEGER pcbValue=0;
+            SQLLEN pcbValue=0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_WCHAR,
                                                 &waCharArray,
-                                                (SQLINTEGER)nMaxLen*sizeof(sal_Unicode),
+                                                (SQLLEN)nMaxLen*sizeof(sal_Unicode),
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
             _bWasNull = pcbValue == SQL_NULL_DATA;
@@ -571,10 +571,10 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                 return ::rtl::OUString();
             // Bei Fehler bricht der GETDATA-Makro mit return ab,
             // bei NULL mit break!
-            SQLINTEGER nRealSize = 0;
+            SQLLEN nRealSize = 0;
             if ( pcbValue > -1 )
                 nRealSize = pcbValue / sizeof(sal_Unicode);
-            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(nRealSize, nMaxLen) : (nMaxLen-1);
+            SQLLEN nLen = pcbValue != SQL_NO_TOTAL ? std::min(nRealSize, nMaxLen) : (nMaxLen-1);
             waCharArray[nLen] = 0;
             aData.append(waCharArray,nLen);
 
@@ -598,7 +598,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_WCHAR,
                                                 &waCharArray,
-                                                (SQLINTEGER)nLen+1,
+                                                (SQLLEN)nLen+1,
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
                 nRealSize = 0;
@@ -616,21 +616,21 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
             char aCharArray[2048];
             // Erstmal versuchen, die Daten mit dem kleinen Puffer
             // abzuholen:
-            SDWORD nMaxLen = sizeof aCharArray - 1;
+            SQLLEN nMaxLen = sizeof aCharArray - 1;
             //  GETDATA(SQL_C_CHAR,aCharArray,nMaxLen);
-            SQLINTEGER pcbValue = 0;
+            SQLLEN pcbValue = 0;
             OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                                 (SQLUSMALLINT)columnIndex,
                                                 SQL_C_CHAR,
                                                 &aCharArray,
-                                                (SQLINTEGER)nMaxLen,
+                                                nMaxLen,
                                                 &pcbValue),
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
             _bWasNull = pcbValue == SQL_NULL_DATA;
             if(_bWasNull)
                 return ::rtl::OUString();
 
-            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
+            SQLLEN nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : (nMaxLen-1);
             aCharArray[nLen] = 0;
             if ( ((pcbValue == SQL_NO_TOTAL) || pcbValue > nMaxLen) && aCharArray[nLen-1] == 0 && nLen > 0 )
                 --nLen;

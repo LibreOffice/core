@@ -1281,7 +1281,7 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
                 bInsertData   = true;
             }
         }
-        if ( !pDataSettings )
+        if ( !pDataSettings || bInsertData )
         {
             aUIElementData.bDefault     = false;
             if ( !m_bUseDefault )

@@ -260,13 +260,13 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     m_xResultSet = Reference< XResultSet >();
 }
 //--------------------------------------------------------------------
-sal_Int32 OStatement_Base::getRowCount () throw( SQLException)
+SQLLEN OStatement_Base::getRowCount () throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32   numRows = 0;
+    SQLLEN numRows = 0;
 
     try {
         THROW_SQL(N3SQLRowCount(m_aStatementHandle,&numRows));
@@ -533,7 +533,9 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
         SQLRETURN nError = N3SQLMoreResults(m_aStatementHandle);
         if(nError == SQL_SUCCESS)
         {
-            N3SQLRowCount(m_aStatementHandle,&pArray[j]);
+            SQLLEN nRowCount=0;
+            N3SQLRowCount(m_aStatementHandle,&nRowCount);
+            pArray[j] = nRowCount;
         }
     }
     return aRet;
