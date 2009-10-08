@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notemark.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@ private:
     ScDocument* pDoc;
     ScAddress   aDocPos;
     String      aUserText;
+    Rectangle   aVisRect;
     Timer       aTimer;
     MapMode     aMapMode;
     BOOL        bLeft;
@@ -64,11 +65,9 @@ private:
     DECL_LINK( TimeHdl, Timer* );
 
 public:
-                ScNoteMarker( Window* pWin,
-                                Window* pRight, Window* pBottom, Window* pDiagonal,
-                                ScDocument* pD, ScAddress aPos,
-                                const String& rUser, const MapMode& rMap,
-                                BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard );
+                ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
+                                ScDocument* pD, ScAddress aPos, const String& rUser,
+                                const MapMode& rMap, BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard );
                 ~ScNoteMarker();
 
     void        Draw();

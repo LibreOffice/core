@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fumark.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------
-
-#include <svx/svdview.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -46,6 +41,7 @@
 #include "reffact.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
+#include "drawview.hxx"
 
 //------------------------------------------------------------------
 
@@ -55,7 +51,7 @@
 |*
 \************************************************************************/
 
-FuMarkRect::FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuMarkRect::FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq),
     bVisible(FALSE),

@@ -208,7 +208,7 @@ DrawModelWrapper::~DrawModelWrapper()
             }
             pPool = pSecondary;
         }
-        delete m_pChartItemPool;
+        SfxItemPool::Free(m_pChartItemPool);
     }
 }
 

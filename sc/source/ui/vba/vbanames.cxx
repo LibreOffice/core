@@ -42,16 +42,16 @@
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 class NamesEnumeration : public EnumerationHelperImpl
 {
     uno::Reference< frame::XModel > m_xModel;
-    uno::WeakReference< vba::XHelperInterface > m_xParent;
+    uno::WeakReference< XHelperInterface > m_xParent;
     uno::Reference< sheet::XNamedRanges > m_xNames;
 public:
-    NamesEnumeration( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel , const uno::Reference< sheet::XNamedRanges >& xNames ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ), m_xModel( xModel ), m_xParent( xParent ), m_xNames( xNames ) {}
+    NamesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel , const uno::Reference< sheet::XNamedRanges >& xNames ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ), m_xModel( xModel ), m_xParent( xParent ), m_xNames( xNames ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
@@ -62,7 +62,7 @@ public:
 };
 
 
-ScVbaNames::ScVbaNames(const css::uno::Reference< oo::vba::XHelperInterface >& xParent,
+ScVbaNames::ScVbaNames(const css::uno::Reference< ov::XHelperInterface >& xParent,
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Reference< css::sheet::XNamedRanges >& xNames,
             const css::uno::Reference< css::frame::XModel >& xModel ):
@@ -70,6 +70,7 @@ ScVbaNames::ScVbaNames(const css::uno::Reference< oo::vba::XHelperInterface >& x
             mxModel( xModel ),
             mxNames( xNames )
 {
+    m_xNameAccess.set( xNames, uno::UNO_QUERY_THROW );
 }
 
 ScVbaNames::~ScVbaNames()
@@ -169,7 +170,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
 css::uno::Type
 ScVbaNames::getElementType() throw( css::uno::RuntimeException )
 {
-    return oo::excel::XName::static_type(0);
+    return ov::excel::XName::static_type(0);
 }
 
 uno::Reference< container::XEnumeration >
@@ -205,7 +206,7 @@ ScVbaNames::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.NamedRanges" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.NamedRanges" ) );
     }
     return aServiceNames;
 }

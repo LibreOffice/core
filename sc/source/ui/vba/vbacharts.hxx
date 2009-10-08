@@ -29,30 +29,30 @@
  ************************************************************************/
 #ifndef SC_VBA_CHARTS_HXX
 #define SC_VBA_CHARTS_HXX
-#include <org/openoffice/excel/XCharts.hpp>
+#include <ooo/vba/excel/XCharts.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include"vbacollectionimpl.hxx"
 #include "vbahelper.hxx"
 #include <hash_map>
 
-typedef CollTestImplHelper< oo::excel::XCharts > Charts_BASE;
+typedef CollTestImplHelper< ov::excel::XCharts > Charts_BASE;
 
 class ScVbaCharts : public Charts_BASE
 {
-    css::uno::Reference< oo::excel::XChart > xActiveChart;
+    css::uno::Reference< ov::excel::XChart > xActiveChart;
     css::uno::Reference< css::sheet::XSpreadsheetDocument > xSpreadsheetDocument;
     css::uno::Reference< css::lang::XComponent > xComponent;
 public:
-    ScVbaCharts( const css::uno::Reference< oo::vba::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext );
+    ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext );
     // XCharts
     virtual css::uno::Any SAL_CALL Add() throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XChart > SAL_CALL getActiveChart(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getActiveChart(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XCollection
     ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) { return oo::excel::XChart::static_type(0); }
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) { return ov::excel::XChart::static_type(0); }
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
     // Charts_BASE or HelperInterface

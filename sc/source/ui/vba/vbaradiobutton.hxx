@@ -29,24 +29,27 @@
  ************************************************************************/
 #ifndef SC_VBA_RADIOBUTTON_HXX
 #define SC_VBA_RADIOBUTTON_HXX
-#include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/msforms/XRadioButton.hpp>
-
+#include <ooo/vba/msforms/XRadioButton.hpp>
 #include "vbacontrol.hxx"
 #include "vbahelper.hxx"
+#include <cppuhelper/implbase2.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, oo::msforms::XRadioButton > RadioButtonImpl_BASE;
+typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XRadioButton, css::script::XDefaultProperty > RadioButtonImpl_BASE;
 
 class ScVbaRadioButton : public RadioButtonImpl_BASE
 {
 public:
-    ScVbaRadioButton( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::drawing::XControlShape >& xControlShape );
+    ScVbaRadioButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper );
    // Attributes
     virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getValue() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setValue( sal_Bool _value ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setValue(const com::sun::star::uno::Any&) throw (css::uno::RuntimeException);
+    //XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    // XDefaultProperty
+    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
 
 };
 #endif //SC_VBA_RADIOBUTTON_HXX

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: userdat.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,14 +60,15 @@ public:
 
 class ScDrawObjData : public SdrObjUserData
 {
-    virtual SdrObjUserData* Clone(SdrObject* pObj) const;
-
 public:
-    ScAddress aStt, aEnd;
-    BOOL bValidStart, bValidEnd;
-    ScDrawObjData();
-    ScDrawObjData( const ScDrawObjData& );
-    virtual ~ScDrawObjData();
+    ScAddress           maStart;
+    ScAddress           maEnd;
+    bool                mbNote;
+
+    explicit            ScDrawObjData();
+
+private:
+    virtual ScDrawObjData* Clone( SdrObject* pObj ) const;
 };
 
 //-------------------------------------------------------------------------

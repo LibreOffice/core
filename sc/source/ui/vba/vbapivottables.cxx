@@ -30,11 +30,11 @@
 #include "vbapivottables.hxx"
 #include "vbapivottable.hxx"
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
-#include <org/openoffice/excel/XPivotTable.hpp>
+#include <ooo/vba/excel/XPivotTable.hpp>
 
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 uno::Any DataPilotToPivotTable( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext )
 {
@@ -54,7 +54,7 @@ public:
 
 };
 
-ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess )
+ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess )
 {
 }
 
@@ -91,7 +91,7 @@ ScVbaPivotTables::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.PivotTables") );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.PivotTables") );
     }
     return sNames;
 }

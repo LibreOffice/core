@@ -30,24 +30,28 @@
 #ifndef SC_VBA_TEXTBOX_HXX
 #define SC_VBA_TEXTBOX_HXX
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/msforms/XTextBox.hpp>
+#include <ooo/vba/msforms/XTextBox.hpp>
 #include "vbacontrol.hxx"
 #include "vbahelper.hxx"
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, oo::msforms::XTextBox > TextBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XTextBox > TextBoxImpl_BASE;
 
 class ScVbaTextBox : public TextBoxImpl_BASE
 {
+    bool mbDialog;
 public:
-    ScVbaTextBox( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::drawing::XControlShape >& xControlShape );
+    ScVbaTextBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper, bool bDialog = false );
    // Attributes
+    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setText( const rtl::OUString& _text ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getMaxLength() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getMultiline() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeException);
-
+    //XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif //SC_VBA_TEXTBOX_HXX

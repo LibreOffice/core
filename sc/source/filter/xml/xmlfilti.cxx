@@ -84,7 +84,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     ScUnoConversion::FillApiAddress( aOutputPosition, aScRange.aStart );
                     bCopyOutputData = sal_True;
@@ -94,7 +94,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                     bConditionSourceRange = sal_True;
             }
             break;
@@ -436,7 +436,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             {
                 ScRange aScRange;
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     aOutputPosition = aScRange.aStart;
                     bCopyOutputData = sal_True;
@@ -446,7 +446,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
                 sal_Int32 nOffset(0);
-                if(ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, nOffset ))
+                if(ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                     bConditionSourceRange = sal_True;
             }
             break;

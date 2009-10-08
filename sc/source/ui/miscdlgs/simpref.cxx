@@ -73,7 +73,7 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_SIMPLEREF ),
         //
         aFtAssign       ( this, ScResId( FT_ASSIGN ) ),
-        aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
+        aEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),

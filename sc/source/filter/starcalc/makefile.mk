@@ -40,6 +40,8 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 AUTOSEG=true
 
+VISIBILITY_HIDDEN=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  scpre.mk

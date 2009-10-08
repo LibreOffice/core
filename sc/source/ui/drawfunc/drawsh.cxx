@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawsh.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,7 +193,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                     pView->SetAttrToMarked( *rReq.GetArgs(), FALSE );
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), FALSE);
-                pView->StoreCaptionAttribs();
                 pView->InvalidateAttribs();
             }
             break;
@@ -278,7 +277,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                         rReq.Done(*(pDlg->GetOutputItemSet()));
                                         pView->SetAttributes(*pDlg->GetOutputItemSet());
                                         pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
-                                        pView->StoreCaptionDimensions();
                                     }
 
                                     delete pDlg;
@@ -405,7 +403,6 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
         else
             pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
 
-        pView->StoreCaptionAttribs();
         pView->InvalidateAttribs();
         rReq.Done();
     }
@@ -454,7 +451,6 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
         else
             pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
 
-        pView->StoreCaptionAttribs();
         pView->InvalidateAttribs();
         rReq.Done();
     }
@@ -483,7 +479,6 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
         else
             pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
 
-        pView->StoreCaptionAttribs();
         pView->InvalidateAttribs();
         rReq.Done();
     }

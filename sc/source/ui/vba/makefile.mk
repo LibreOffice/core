@@ -84,13 +84,16 @@ SLOFILES= \
         $(SLO)$/vbacombobox.obj \
         $(SLO)$/vbavalidation.obj \
                 $(SLO)$/vbacontrol.obj \
+                $(SLO)$/vbacontrols.obj \
                 $(SLO)$/vbaoleobject.obj \
                 $(SLO)$/vbaoleobjects.obj \
                 $(SLO)$/vbabutton.obj \
                 $(SLO)$/vbalabel.obj \
                 $(SLO)$/vbatextbox.obj \
+                $(SLO)$/vbatextboxshape.obj \
                 $(SLO)$/vbaradiobutton.obj \
                 $(SLO)$/vbalistbox.obj \
+        $(SLO)$/vbalistcontrolhelper.obj \
                 $(SLO)$/vbapropvalue.obj \
                 $(SLO)$/vbapane.obj \
                 $(SLO)$/vbashape.obj \
@@ -112,8 +115,26 @@ SLOFILES= \
                 $(SLO)$/vbaformatconditions.obj \
                 $(SLO)$/vbastyle.obj \
                 $(SLO)$/vbastyles.obj \
-        $(SLO)$/service.obj \
- 
+                $(SLO)$/vbaassistant.obj \
+                $(SLO)$/vbauserform.obj \
+                $(SLO)$/vbacheckbox.obj \
+                $(SLO)$/vbatogglebutton.obj \
+                $(SLO)$/vbaframe.obj \
+                $(SLO)$/vbascrollbar.obj \
+                $(SLO)$/vbaprogressbar.obj \
+                $(SLO)$/vbamultipage.obj \
+                $(SLO)$/vbapages.obj \
+                $(SLO)$/vbacommandbarcontrol.obj \
+                $(SLO)$/vbacommandbarcontrols.obj \
+                $(SLO)$/vbacommandbar.obj \
+                $(SLO)$/vbacommandbars.obj \
+                $(SLO)$/vbahyperlink.obj \
+                $(SLO)$/vbapagesetup.obj \
+                $(SLO)$/vbapagebreak.obj \
+                $(SLO)$/vbapagebreaks.obj \
+                $(SLO)$/vbaspinbutton.obj \
+                $(SLO)$/vbaimage.obj \
+                $(SLO)$/service.obj
 
 # --- Targets ------------------------------------------------------
 

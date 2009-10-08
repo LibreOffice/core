@@ -36,6 +36,12 @@
 #include <svtools/listener.hxx>
 #include "collect.hxx"
 #include "rangelst.hxx"
+#include "token.hxx"
+#include "externalrefmgr.hxx"
+
+#include <memory>
+#include <vector>
+#include <hash_set>
 
 class ScDocument;
 class ScChartUnoData;
@@ -44,8 +50,31 @@ class ScChartUnoData;
 
 class ScChartListener : public StrData, public SvtListener
 {
+public:
+    class ExternalRefListener : public ScExternalRefManager::LinkListener
+    {
+    public:
+        ExternalRefListener(ScChartListener& rParent, ScDocument* pDoc);
+        virtual ~ExternalRefListener();
+        virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
+        void addFileId(sal_uInt16 nFileId);
+        void removeFileId(sal_uInt16 nFileId);
+        ::std::hash_set<sal_uInt16>& getAllFileIds();
+
+    private:
+        ExternalRefListener();
+        ExternalRefListener(const ExternalRefListener& r);
+
+        ScChartListener& mrParent;
+        ::std::hash_set<sal_uInt16> maFileIds;
+        ScDocument*                 mpDoc;
+    };
+
 private:
-    ScRangeListRef  aRangeListRef;
+
+    ::std::auto_ptr<ExternalRefListener>                mpExtRefListener;
+    ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  mpTokens;
+
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
     BOOL            bUsed;  // fuer ScChartListenerCollection::FreeUnused
@@ -57,9 +86,11 @@ private:
 
 public:
                     ScChartListener( const String& rName, ScDocument* pDoc,
-                                    const ScRange& rRange );
+                                     const ScRange& rRange );
                     ScChartListener( const String& rName, ScDocument* pDoc,
-                                    const ScRangeListRef& rRangeListRef );
+                                     const ScRangeListRef& rRangeListRef );
+                    ScChartListener( const String& rName, ScDocument* pDoc,
+                                     ::std::vector<ScSharedTokenRef>* pTokens );
                     ScChartListener( const ScChartListener& );
     virtual         ~ScChartListener();
     virtual ScDataObject*   Clone() const;
@@ -77,8 +108,8 @@ public:
     void            ChangeListening( const ScRangeListRef& rRangeListRef,
                                     BOOL bDirty = FALSE );
     void            Update();
-    const ScRangeListRef&   GetRangeList() const { return aRangeListRef; }
-    void            SetRangeList( const ScRangeListRef& rNew ) { aRangeListRef = rNew; }
+    ScRangeListRef  GetRangeList() const;
+    void            SetRangeList( const ScRangeListRef& rNew );
     void            SetRangeList( const ScRange& rNew );
     BOOL            IsUsed() const { return bUsed; }
     void            SetUsed( BOOL bFlg ) { bUsed = bFlg; }
@@ -91,6 +122,9 @@ public:
     void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = TRUE; }
     void            UpdateScheduledSeriesRanges();
     void            UpdateSeriesRanges();
+
+    ExternalRefListener* GetExtRefListener();
+    void            SetUpdateQueue();
 
     BOOL            operator==( const ScChartListener& );
     BOOL            operator!=( const ScChartListener& r )

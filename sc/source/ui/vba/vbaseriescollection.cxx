@@ -28,14 +28,14 @@
  *
  ************************************************************************/
 #include "vbaseriescollection.hxx"
-#include <org/openoffice/excel/XSeries.hpp>
+#include <ooo/vba/excel/XSeries.hpp>
 
 #include "vbaglobals.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
-ScVbaSeriesCollection::ScVbaSeriesCollection( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SeriesCollection_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() )
+ScVbaSeriesCollection::ScVbaSeriesCollection( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SeriesCollection_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() )
 {
 }
 
@@ -76,7 +76,7 @@ ScVbaSeriesCollection::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.SeriesCollection") );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.SeriesCollection") );
     }
     return sNames;
 }

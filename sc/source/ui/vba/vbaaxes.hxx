@@ -29,17 +29,17 @@
  ************************************************************************/
 #ifndef SC_VBA_AXES_HXX
 #define SC_VBA_AXES_HXX
-#include <org/openoffice/excel/XAxes.hpp>
-#include <org/openoffice/excel/XAxis.hpp>
-#include <org/openoffice/excel/XChart.hpp>
+#include <ooo/vba/excel/XAxes.hpp>
+#include <ooo/vba/excel/XAxis.hpp>
+#include <ooo/vba/excel/XChart.hpp>
 #include "vbacollectionimpl.hxx"
 
-typedef CollTestImplHelper< oo::excel::XAxes > ScVbaAxes_BASE;
+typedef CollTestImplHelper< ov::excel::XAxes > ScVbaAxes_BASE;
 class ScVbaAxes : public ScVbaAxes_BASE
 {
-    css::uno::Reference< oo::excel::XChart > moChartParent; // not the true parent I guess
+    css::uno::Reference< ov::excel::XChart > moChartParent; // not the true parent I guess
 public:
-    ScVbaAxes( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< oo::excel::XChart >& xChart );
+    ScVbaAxes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< ov::excel::XChart >& xChart );
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
@@ -48,7 +48,7 @@ public:
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
-    static css::uno::Reference< oo::excel::XAxis > createAxis( const css::uno::Reference< oo::excel::XChart >& xChart, const css::uno::Reference< css::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup ) throw ( css::uno::RuntimeException );
+    static css::uno::Reference< ov::excel::XAxis > createAxis( const css::uno::Reference< ov::excel::XChart >& xChart, const css::uno::Reference< css::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup ) throw ( css::uno::RuntimeException );
 };
 
 #endif //SC_VBA_AXES_HXX

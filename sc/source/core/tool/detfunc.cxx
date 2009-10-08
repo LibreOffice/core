@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detfunc.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.20.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,14 +123,14 @@ public:
 
 class ScCommentData
 {
-private:
-    SfxItemSet  aCaptionSet;
-
 public:
-                ScCommentData( ScDocument* pDoc, SdrModel* pModel );
+                        ScCommentData( ScDocument& rDoc, SdrModel* pModel );
 
-    SfxItemSet& GetCaptionSet() { return aCaptionSet; }
-    void    UpdateCaptionSet(const SfxItemSet& UpdateSet);
+    SfxItemSet&         GetCaptionSet() { return aCaptionSet; }
+    void                UpdateCaptionSet( const SfxItemSet& rItemSet );
+
+private:
+    SfxItemSet          aCaptionSet;
 };
 
 //------------------------------------------------------------------------
@@ -211,9 +211,8 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aCircleSet.Put( XLineWidthItem( nWidth ) );
 }
 
-ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
-    aCaptionSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END,
-                                        EE_ITEMS_START, EE_ITEMS_END, 0,0 )
+ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
+    aCaptionSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END, 0, 0 )
 {
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
@@ -244,9 +243,12 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     aCaptionSet.Put( SdrTextUpperDistItem( 100 ) );
     aCaptionSet.Put( SdrTextLowerDistItem( 100 ) );
 
+    aCaptionSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+    aCaptionSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+
     //  #78943# do use the default cell style, so the user has a chance to
     //  modify the font for the annotations
-    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+    ((const ScPatternAttr&)rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN)).
         FillEditItemSet( &aCaptionSet );
 
     // support the best position for the tail connector now that
@@ -254,15 +256,14 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     aCaptionSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT) );
 }
 
-void ScCommentData::UpdateCaptionSet( const SfxItemSet& rSet)
+void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
 {
-    SfxWhichIter aWhichIter(rSet);
-    sal_uInt16 nWhich(aWhichIter.FirstWhich());
-    const SfxPoolItem* pPoolItem = NULL;
+    SfxWhichIter aWhichIter( rItemSet );
+    const SfxPoolItem* pPoolItem = 0;
 
-    while(nWhich)
+    for( USHORT nWhich = aWhichIter.FirstWhich(); nWhich > 0; nWhich = aWhichIter.NextWhich() )
     {
-        if(rSet.GetItemState(nWhich, FALSE, &pPoolItem) == SFX_ITEM_SET)
+        if(rItemSet.GetItemState(nWhich, FALSE, &pPoolItem) == SFX_ITEM_SET)
         {
             switch(nWhich)
             {
@@ -270,22 +271,20 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rSet)
                     // use existing Caption default - appears that setting this
                     // to true screws up the tail appearance. See also comment
                     // for default setting above.
-                    break;
+                break;
                 case SDRATTR_SHADOWXDIST:
                     // use existing Caption default - svx sets a value of 35
                     // but default 100 gives a better appearance.
-                    break;
+                break;
                 case SDRATTR_SHADOWYDIST:
                     // use existing Caption default - svx sets a value of 35
                     // but default 100 gives a better appearance.
-                    break;
+                break;
 
                 default:
-            aCaptionSet.Put(*pPoolItem);
-                    break;
+                    aCaptionSet.Put(*pPoolItem);
            }
         }
-        nWhich = aWhichIter.NextWhich();
     }
 }
 
@@ -319,43 +318,67 @@ BOOL ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
     return (nError != 0);
 }
 
-Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, BOOL bArrow )
+Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const
 {
-    //  MAXCOL/ROW+1 ist erlaubt fuer Ende von Rahmen
-    if (nCol > MAXCOL+1)
-    {
-        DBG_ERROR("falsche Col in ScDetectiveFunc::GetDrawPos");
-        nCol = MAXCOL+1;
-    }
-    if (nRow > MAXROW+1)
-    {
-        DBG_ERROR("falsche Row in ScDetectiveFunc::GetDrawPos");
-        nRow = MAXROW+1;
-    }
+    DBG_ASSERT( ValidColRow( nCol, nRow ), "ScDetectiveFunc::GetDrawPos - invalid cell address" );
+    SanitizeCol( nCol );
+    SanitizeRow( nRow );
 
     Point aPos;
-    SCTAB nLocalTab = nTab;     // nicht ueber this
 
-    for (SCCOL i=0; i<nCol; i++)
-        aPos.X() += pDoc->GetColWidth( i,nLocalTab );
-    aPos.Y() += pDoc->FastGetRowHeight( 0, nRow-1, nLocalTab );
-
-    if (bArrow)
+    switch( eMode )
     {
-        if (ValidCol(nCol))
-            aPos.X() += pDoc->GetColWidth( nCol, nLocalTab ) / 4;
-        if (ValidRow(nRow))
-            aPos.Y() += pDoc->GetRowHeight( nRow, nLocalTab ) / 2;
+        case DRAWPOS_TOPLEFT:
+        break;
+        case DRAWPOS_BOTTOMRIGHT:
+            ++nCol;
+            ++nRow;
+        break;
+        case DRAWPOS_DETARROW:
+            aPos.X() += pDoc->GetColWidth( nCol, nTab ) / 4;
+            aPos.Y() += pDoc->GetRowHeight( nRow, nTab ) / 2;
+        break;
+        case DRAWPOS_CAPTIONLEFT:
+            aPos.X() += 6;
+        break;
+        case DRAWPOS_CAPTIONRIGHT:
+        {
+            // find right end of passed cell position
+            const ScMergeAttr* pMerge = static_cast< const ScMergeAttr* >( pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE ) );
+            if ( pMerge->GetColMerge() > 1 )
+                nCol = nCol + pMerge->GetColMerge();
+            else
+                ++nCol;
+            aPos.X() -= 6;
+        }
+        break;
     }
 
-    aPos.X() = (long) ( aPos.X() * HMM_PER_TWIPS );
-    aPos.Y() = (long) ( aPos.Y() * HMM_PER_TWIPS );
+    for ( SCCOL i = 0; i < nCol; ++i )
+        aPos.X() += pDoc->GetColWidth( i, nTab );
+    aPos.Y() += pDoc->FastGetRowHeight( 0, nRow - 1, nTab );
 
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
-    if ( bNegativePage )
-        aPos.X() = -aPos.X();
+    aPos.X() = static_cast< long >( aPos.X() * HMM_PER_TWIPS );
+    aPos.Y() = static_cast< long >( aPos.Y() * HMM_PER_TWIPS );
+
+    if ( pDoc->IsNegativePage( nTab ) )
+        aPos.X() *= -1;
 
     return aPos;
+}
+
+Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+{
+    Rectangle aRect(
+        GetDrawPos( ::std::min( nCol1, nCol2 ), ::std::min( nRow1, nRow2 ), DRAWPOS_TOPLEFT ),
+        GetDrawPos( ::std::max( nCol1, nCol2 ), ::std::max( nRow1, nRow2 ), DRAWPOS_BOTTOMRIGHT ) );
+    aRect.Justify();    // reorder left/right in RTL sheets
+    return aRect;
+}
+
+Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol, SCROW nRow ) const
+{
+    return GetDrawRect( nCol, nRow, nCol, nRow );
 }
 
 BOOL lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
@@ -388,30 +411,12 @@ BOOL ScDetectiveFunc::HasArrow( const ScAddress& rStart,
         return TRUE;
     }
 
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
-
     Rectangle aStartRect;
     Rectangle aEndRect;
     if (!bStartAlien)
-    {
-        Point aStartPos = GetDrawPos( rStart.Col(), rStart.Row(), FALSE );
-        Size aStartSize = Size(
-                            (long) ( pDoc->GetColWidth( rStart.Col(), nTab) * HMM_PER_TWIPS ),
-                            (long) ( pDoc->GetRowHeight( rStart.Row(), nTab) * HMM_PER_TWIPS ) );
-        if ( bNegativePage )
-            aStartPos.X() -= aStartSize.Width();
-        aStartRect = Rectangle( aStartPos, aStartSize );
-    }
+        aStartRect = GetDrawRect( rStart.Col(), rStart.Row() );
     if (!bEndAlien)
-    {
-        Point aEndPos = GetDrawPos( nEndCol, nEndRow, FALSE );
-        Size aEndSize = Size(
-                            (long) ( pDoc->GetColWidth( nEndCol, nTab) * HMM_PER_TWIPS ),
-                            (long) ( pDoc->GetRowHeight( nEndRow, nTab) * HMM_PER_TWIPS ) );
-        if ( bNegativePage )
-            aEndPos.X() -= aEndSize.Width();
-        aEndRect = Rectangle( aEndPos, aEndSize );
-    }
+        aEndRect = GetDrawRect( nEndCol, nEndRow );
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
@@ -482,10 +487,8 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     {
         // insert the rectangle before the arrow - this is relied on in FindFrameForObject
 
-        Point aStartCorner = GetDrawPos( nRefStartCol, nRefStartRow, FALSE );
-        Point aEndCorner = GetDrawPos( nRefEndCol+1, nRefEndRow+1, FALSE );
-
-        SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
+        Rectangle aRect = GetDrawRect( nRefStartCol, nRefStartRow, nRefEndCol, nRefEndRow );
+        SdrRectObj* pBox = new SdrRectObj( aRect );
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
@@ -495,14 +498,12 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
 
         ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
-        pData->aStt.Set( nRefStartCol, nRefStartRow, nTab);
-        pData->aEnd.Set( nRefEndCol, nRefEndRow, nTab);
-        pData->bValidStart = TRUE;
-        pData->bValidEnd = TRUE;
+        pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
+        pData->maEnd.Set( nRefEndCol, nRefEndRow, nTab);
     }
 
-    Point aStartPos = GetDrawPos( nRefStartCol, nRefStartRow, TRUE );
-    Point aEndPos   = GetDrawPos( nCol, nRow, TRUE );
+    Point aStartPos = GetDrawPos( nRefStartCol, nRefStartRow, DRAWPOS_DETARROW );
+    Point aEndPos = GetDrawPos( nCol, nRow, DRAWPOS_DETARROW );
 
     if (bFromOtherTab)
     {
@@ -540,15 +541,11 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
     if (bFromOtherTab)
-        pData->bValidStart = FALSE;
+        pData->maStart.SetInvalid();
     else
-    {
-        pData->aStt.Set( nRefStartCol, nRefStartRow, nTab);
-        pData->bValidStart = TRUE;
-    }
+        pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
 
-    pData->aEnd.Set( nCol, nRow, nTab);
-    pData->bValidEnd = TRUE;
+    pData->maEnd.Set( nCol, nRow, nTab);
 
     return TRUE;
 }
@@ -563,10 +560,8 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     BOOL bArea = ( nStartCol != nEndCol || nStartRow != nEndRow );
     if (bArea)
     {
-        Point aStartCorner = GetDrawPos( nStartCol, nStartRow, FALSE );
-        Point aEndCorner = GetDrawPos( nEndCol+1, nEndRow+1, FALSE );
-
-        SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
+        Rectangle aRect = GetDrawRect( nStartCol, nStartRow, nEndCol, nEndRow );
+        SdrRectObj* pBox = new SdrRectObj( aRect );
 
         pBox->SetMergedItemSetAndBroadcast(rData.GetBoxSet());
 
@@ -576,16 +571,14 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
 
         ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
-        pData->aStt.Set( nStartCol, nStartRow, nTab);
-        pData->aEnd.Set( nEndCol, nEndRow, nTab);
-        pData->bValidStart = TRUE;
-        pData->bValidEnd = TRUE;
+        pData->maStart.Set( nStartCol, nStartRow, nTab);
+        pData->maEnd.Set( nEndCol, nEndRow, nTab);
     }
 
     BOOL bNegativePage = pDoc->IsNegativePage( nTab );
     long nPageSign = bNegativePage ? -1 : 1;
 
-    Point aStartPos = GetDrawPos( nStartCol, nStartRow, TRUE );
+    Point aStartPos = GetDrawPos( nStartCol, nStartRow, DRAWPOS_DETARROW );
     Point aEndPos   = Point( aStartPos.X() + 1000 * nPageSign, aStartPos.Y() - 1000 );
     if (aEndPos.Y() < 0)
         aEndPos.Y() += 2000;
@@ -613,9 +606,8 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
-    pData->aStt.Set( nStartCol, nStartRow, nTab);
-    pData->bValidStart = TRUE;
-    pData->bValidEnd = FALSE;
+    pData->maStart.Set( nStartCol, nStartRow, nTab);
+    pData->maEnd.SetInvalid();
 
     return TRUE;
 }
@@ -665,15 +657,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
 
-    Point aStartPos = GetDrawPos( nCol, nRow, FALSE );
-    Size aSize( (long) ( pDoc->GetColWidth(nCol, nTab) * HMM_PER_TWIPS ),
-                (long) ( pDoc->GetRowHeight(nRow, nTab) * HMM_PER_TWIPS ) );
-
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
-    if ( bNegativePage )
-        aStartPos.X() -= aSize.Width();
-
-    Rectangle aRect( aStartPos, aSize );
+    Rectangle aRect = GetDrawRect( nCol, nRow );
     aRect.Left()    -= 250;
     aRect.Right()   += 250;
     aRect.Top()     -= 70;
@@ -690,241 +674,13 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     pModel->AddCalcUndo( new SdrUndoInsertObj( *pCircle ) );
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, TRUE );
-    pData->aStt.Set( nCol, nRow, nTab);
-    pData->bValidStart = TRUE;
-    pData->bValidEnd = FALSE;
-}
-
-BOOL lcl_MirrorCheckNoteRectangle(Rectangle& rRect, BOOL bNegativePage)
-{
-    BOOL bMirrorChange = false;
-
-    if ( bNegativePage )
-    {
-        if(rRect.Left() >= 0 && rRect.Right() > 0)
-            bMirrorChange = true;
-    }
-    else
-    {
-        if(rRect.Left() < 0 && rRect.Right() <= 0)
-            bMirrorChange = true;
-    }
-
-    if(bMirrorChange)
-    {
-        long nTemp = rRect.Left();
-        rRect.Left() = -rRect.Right();
-        rRect.Right() = -nTemp;
-    }
-    return bMirrorChange;
-}
-
-SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& rText,
-                                            ScCommentData& rData, SdrPage* pDestPage,
-                                            BOOL bHasUserText, BOOL bLeft,
-                                            const Rectangle& rVisible )
-{
-    ScDrawLayer* pModel = NULL;     // muss ScDrawLayer* sein wegen AddCalcUndo !!!
-    SdrPage* pPage = pDestPage;
-    if (!pPage)                     // keine angegeben?
-    {
-        pModel = pDoc->GetDrawLayer();
-        pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    }
-
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
-    long nPageSign = bNegativePage ? -1 : 1;
-
-    SCCOL nNextCol = nCol+1;
-    const ScMergeAttr* pMerge = (const ScMergeAttr*) pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE );
-    if ( pMerge->GetColMerge() > 1 )
-        nNextCol = nCol + pMerge->GetColMerge();
-
-    Point aTailPos = GetDrawPos( nNextCol, nRow, FALSE );
-    Point aRectPos = aTailPos;
-    if ( bLeft )
-    {
-        aTailPos = GetDrawPos( nCol, nRow, FALSE );
-        aTailPos.X() += 10 * nPageSign;             // left, just inside the cell
-    }
-    else
-        aTailPos.X() -= 10 * nPageSign;             // point just before the next cell
-
-    //  arrow head should be visible (if visible rectangle is set)
-    if ( bNegativePage )
-    {
-        if ( aTailPos.X() < rVisible.Left() && rVisible.Left() )
-            aTailPos.X() = rVisible.Left();
-    }
-    else
-    {
-        if ( aTailPos.X() > rVisible.Right() && rVisible.Right() )
-            aTailPos.X() = rVisible.Right();
-    }
-
-    aRectPos.X() += 600 * nPageSign;
-    aRectPos.Y() -= 1500;
-    if ( aRectPos.Y() < rVisible.Top() ) aRectPos.Y() = rVisible.Top();
-
-    //  links wird spaeter getestet
-
-    //  bei Textlaenge > SC_NOTE_SMALLTEXT wird die Breite verdoppelt...
-    long nDefWidth = ( rText.Len() > SC_NOTE_SMALLTEXT ) ? 5800 : 2900;
-    Size aRectSize( nDefWidth, 1800 );
-
-    long nMaxWidth = 10000;             //! oder wie?
-    if ( !bHasUserText )
-        nMaxWidth = aRectSize.Width();  // Notiz nicht zu gross
-
-    if ( bNegativePage )
-    {
-        if ( rVisible.Left() )
-        {
-            nMaxWidth = aRectPos.X() - rVisible.Left() - 100;
-            if (nMaxWidth < nDefWidth)
-            {
-                aRectPos.X() += nDefWidth - nMaxWidth;
-                nMaxWidth = nDefWidth;
-            }
-        }
-        if ( aRectPos.X() > rVisible.Right() )
-            aRectPos.X() = rVisible.Right();
-
-        aRectPos.X() -= aRectSize.Width();
-    }
-    else
-    {
-        if ( rVisible.Right() )
-        {
-            nMaxWidth = rVisible.Right() - aRectPos.X() - 100;
-            if (nMaxWidth < nDefWidth)
-            {
-                aRectPos.X() -= nDefWidth - nMaxWidth;
-                nMaxWidth = nDefWidth;
-            }
-        }
-        if ( aRectPos.X() < rVisible.Left() )
-            aRectPos.X() = rVisible.Left();
-    }
-
-    bool bNewNote = true;
-    Rectangle aTextRect;
-    ScPostIt aCellNote(pDoc);
-    if(pDoc->GetNote( nCol, nRow, nTab, aCellNote ))
-    {
-        aTextRect = aCellNote.GetRectangle();
-        if(lcl_MirrorCheckNoteRectangle(aTextRect,bNegativePage))
-        {
-            aCellNote.SetRectangle(aTextRect);
-            pDoc->SetNote( nCol, nRow, nTab, aCellNote );
-        }
-        bNewNote = false;
-    }
-    SdrCaptionObj* pCaption;
-    //if no rectangle dimensions stored then default to our calculated dimensions.
-    if(aTextRect.IsEmpty())
-    {
-        pCaption = new SdrCaptionObj( Rectangle( aRectPos,aRectSize ), aTailPos );
-        aTextRect = pCaption->GetLogicRect();
-        aCellNote.SetRectangle(aTextRect);
-        pDoc->SetNote( nCol, nRow, nTab, aCellNote );
-    }
-    else
-        pCaption = new SdrCaptionObj( aTextRect, aTailPos );
-
-    if(!bNewNote)
-    {
-        rData.UpdateCaptionSet(aCellNote.GetItemSet());
-    }
-    SfxItemSet& rAttrSet = rData.GetCaptionSet();
-
-
-    if (bHasUserText)
-    {
-        rAttrSet.Put(SdrTextAutoGrowWidthItem(TRUE));
-        rAttrSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT));
-        rAttrSet.Put(SdrTextMaxFrameWidthItem(nMaxWidth));
-    }
-
-    ScDrawLayer::SetAnchor( pCaption, SCA_PAGE );
-    pCaption->SetLayer( SC_LAYER_INTERN );
-    pCaption->SetSpecialTextBoxShadow();
-    pCaption->SetFixedTail();
-
-
-    if(bHasUserText)
-    {
-        pPage->InsertObject( pCaption );
-        // #78611# for SetText, the object must already be inserted
-        pCaption->SetText( rText );
-        //  SetAttributes must be after SetText, because the font attributes
-        //  are applied to the text.
-        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
-    }
-    else
-    {
-        pPage->InsertObject( pCaption );
-
-        // To support different paragraph alignments using the
-        // ScNoteEditEngine(), it is necessary to apply the
-        // ItemSet of the container before the creation of the
-        // EditTextObject(). But to support Vertical text, the opposite
-        // is true.
-        BOOL bVertical = static_cast<const SvxWritingModeItem&> (rAttrSet.Get (SDRATTR_TEXTDIRECTION)).GetValue() == com::sun::star::text::WritingMode_TB_RL;
-        if(!bVertical)
-            pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
-
-        // Keep the existing rectangle size.
-        if(!bNewNote)
-            pCaption->SetLogicRect(aTextRect);
-
-        ScPostIt aNote(pDoc);
-        if(pDoc->GetNote( nCol, nRow, nTab, aNote ))
-        {
-            if(const EditTextObject* pEditText = aNote.GetEditTextObject())
-            {
-                OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditText );
-                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-                pCaption->NbcSetOutlinerParaObject( pOPO );
-            }
-        }
-        if(bVertical)
-            pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
-     }
-
-    if (bHasUserText)
-    {
-        pCaption->AdjustTextFrameWidthAndHeight( aTextRect, TRUE, TRUE );
-        aTextRect = pCaption->GetLogicRect();
-    }
-
-    aCellNote.SetRectangle(aTextRect);
-    pDoc->SetNote( nCol, nRow, nTab, aCellNote );
-
-    //  Undo und UserData nur, wenn's im Dokument ist, also keine Page angegeben war
-    if ( !pDestPage )
-    {
-        pModel->AddCalcUndo( new SdrUndoInsertObj( *pCaption ) );
-
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pCaption, TRUE );
-        pData->aStt.Set( nCol, nRow, nTab);
-        pData->bValidStart = TRUE;
-        pData->bValidEnd = FALSE;
-    }
-
-    return pCaption;
+    pData->maStart.Set( nCol, nRow, nTab);
+    pData->maEnd.SetInvalid();
 }
 
 void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
 {
-    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
-
-    Point aPos = GetDrawPos( nCol, nRow, FALSE );
-    Size aSize = Size(  (long) ( pDoc->GetColWidth( nCol, nTab) * HMM_PER_TWIPS ),
-                        (long) ( pDoc->GetRowHeight( nRow, nTab) * HMM_PER_TWIPS ) );
-    if ( bNegativePage )
-        aPos.X() -= aSize.Width();
-    Rectangle aRect( aPos, aSize );
+    Rectangle aRect = GetDrawRect( nCol, nRow );
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
@@ -994,12 +750,9 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
     InfoBox(0,aStr).Execute();
 */
 
-    Point aStartCorner = GetDrawPos( nCol1, nRow1, FALSE );
-    Point aEndCorner = GetDrawPos( nCol2+1, nRow2+1, FALSE );
-    Rectangle aCornerRect( aStartCorner, aEndCorner );
-    aCornerRect.Justify();
-    aStartCorner = aCornerRect.TopLeft();
-    aEndCorner = aCornerRect.BottomRight();
+    Rectangle aCornerRect = GetDrawRect( nCol1, nRow1, nCol2, nRow2 );
+    Point aStartCorner = aCornerRect.TopLeft();
+    Point aEndCorner = aCornerRect.BottomRight();
     Rectangle aObjRect;
 
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
@@ -1553,13 +1306,11 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
                 if ( eWhat != SC_DET_ALL )
                 {
                     BOOL bCircle = ( pObject->ISA(SdrCircObj) );
-                    BOOL bCaption = ( pObject->ISA(SdrCaptionObj) );
+                    BOOL bCaption = ScDrawLayer::IsNoteCaption( pObject );
                     if ( eWhat == SC_DET_DETECTIVE )        // Detektiv, aus Menue
                         bDoThis = !bCaption;                // auch Kreise
                     else if ( eWhat == SC_DET_CIRCLES )     // Kreise, wenn neue erzeugt werden
                         bDoThis = bCircle;
-                    else if ( eWhat == SC_DET_COMMENTS )
-                        bDoThis = bCaption;
                     else if ( eWhat == SC_DET_ARROWS )      // DetectiveRefresh
                         bDoThis = !bCaption && !bCircle;    // don't include circles
                     else
@@ -1656,125 +1407,44 @@ BOOL ScDetectiveFunc::MarkInvalid(BOOL& rOverflow)
     return ( bDeleted || nInsCount != 0 );
 }
 
-SdrObject* ScDetectiveFunc::ShowCommentUser( SCCOL nCol, SCROW nRow, const String& rUserText,
-                                            const Rectangle& rVisible, BOOL bLeft, BOOL bForce,
-                                            SdrPage* pDestPage )
-{
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    if (!pModel && !pDestPage)
-        return NULL;
-
-    SdrObject* pObject = NULL;
-    ScPostIt aNote(pDoc);
-    BOOL bFound = pDoc->GetNote( nCol, nRow, nTab, aNote );
-    if ( bFound || bForce || rUserText.Len() )
-    {
-        SdrModel* pDestModel = pModel;
-        if ( pDestPage )
-            pDestModel = pDestPage->GetModel();
-        ScCommentData aData( pDoc, pDestModel );    // richtigen Pool benutzen
-
-        String aNoteText = aNote.GetText();     //! Author etc. of this Note?
-
-        String aDisplay;
-        BOOL bHasUser = ( rUserText.Len() != 0 );
-        if ( bHasUser )
-        {
-            aDisplay += rUserText;
-            if ( aNoteText.Len() )
-                aDisplay.AppendAscii( RTL_CONSTASCII_STRINGPARAM("\n--------\n") );
-        }
-        aDisplay += aNoteText;
-
-        pObject = DrawCaption( nCol, nRow, aDisplay, aData, pDestPage, bHasUser, bLeft, rVisible );
-    }
-
-    return pObject;
-}
-
-SdrObject* ScDetectiveFunc::ShowComment( SCCOL nCol, SCROW nRow, BOOL bForce, SdrPage* pDestPage )
-{
-    return ShowCommentUser( nCol, nRow, String(), Rectangle(0,0,0,0), FALSE, bForce, pDestPage );
-}
-
-BOOL ScDetectiveFunc::HideComment( SCCOL nCol, SCROW nRow )
-{
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    if (!pModel)
-        return FALSE;
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
-
-    pPage->RecalcObjOrdNums();
-    BOOL bDone = FALSE;
-
-    SdrObjListIter aIter( *pPage, IM_FLAT );
-    SdrObject* pObject = aIter.Next();
-    while (pObject && !bDone)
-    {
-        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
-        {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-            if ( pData && nCol == pData->aStt.Col() && nRow == pData->aStt.Row() )
-            {
-                pModel->AddCalcUndo( new SdrUndoRemoveObj( *pObject ) );
-                pPage->RemoveObject( pObject->GetOrdNum() );
-                bDone = TRUE;
-            }
-        }
-
-        pObject = aIter.Next();
-    }
-
-    return bDone;
-}
-
-void ScDetectiveFunc::UpdateAllComments()
+void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
 {
     //  for all caption objects, update attributes and SpecialTextBoxShadow flag
     //  (on all tables - nTab is ignored!)
 
     //  no undo actions, this is refreshed after undo
 
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    ScDrawLayer* pModel = rDoc.GetDrawLayer();
     if (!pModel)
         return;
 
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nObjTab=0; nObjTab<nTabCount; nObjTab++)
+    for( SCTAB nObjTab = 0, nTabCount = rDoc.GetTableCount(); nObjTab < nTabCount; ++nObjTab )
     {
-        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nObjTab));
-        DBG_ASSERT(pPage,"Page ?");
-        if (pPage)
+        SdrPage* pPage = pModel->GetPage( static_cast< sal_uInt16 >( nObjTab ) );
+        DBG_ASSERT( pPage, "Page ?" );
+        if( pPage )
         {
             SdrObjListIter aIter( *pPage, IM_FLAT );
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
+            for( SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next() )
             {
-                if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
+                if ( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, nObjTab ) )
                 {
-                    SdrCaptionObj* pCaption = (SdrCaptionObj*)pObject;
-
-                    ScDrawObjData* pData = ScDrawLayer::GetObjData( pCaption, TRUE );
-
-                    ScPostIt aCellNote(pDoc);
-                    if(pDoc->GetNote( pData->aStt.Col(), pData->aStt.Row(), nObjTab, aCellNote ))
+                    ScPostIt* pNote = rDoc.GetNote( pData->maStart );
+                    DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
+                    if( pNote )
                     {
-                        ScCommentData aData( pDoc, pModel );
-                        SfxItemSet rAttrColorSet(aCellNote.GetItemSet());
-                        Color aCommentColor( ScDetectiveFunc::GetCommentColor() );
-                        rAttrColorSet.Put( XFillColorItem( String(), aCommentColor ) );
-                        aData.UpdateCaptionSet(rAttrColorSet);
-                        SfxItemSet& rAttrSet = aData.GetCaptionSet();
-                        pCaption->SetMergedItemSetAndBroadcast(rAttrSet);
-                        pCaption->SetSpecialTextBoxShadow();
-                        pCaption->SetFixedTail();
-                        aCellNote.SetItemSet(rAttrSet);
-                        pDoc->SetNote( pData->aStt.Col(), pData->aStt.Row(), nObjTab, aCellNote );
+                        ScCommentData aData( rDoc, pModel );
+                        SfxItemSet aAttrColorSet = pObject->GetMergedItemSet();
+                        aAttrColorSet.Put( XFillColorItem( String(), GetCommentColor() ) );
+                        aData.UpdateCaptionSet( aAttrColorSet );
+                        pObject->SetMergedItemSetAndBroadcast( aData.GetCaptionSet() );
+                        if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
+                        {
+                            pCaption->SetSpecialTextBoxShadow();
+                            pCaption->SetFixedTail();
+                        }
                     }
                 }
-
-                pObject = aIter.Next();
             }
         }
     }
@@ -1788,16 +1458,14 @@ void ScDetectiveFunc::UpdateAllArrowColors()
     if (!pModel)
         return;
 
-    SCTAB nTabCount = pDoc->GetTableCount();
-    for (SCTAB nObjTab=0; nObjTab<nTabCount; nObjTab++)
+    for( SCTAB nObjTab = 0, nTabCount = pDoc->GetTableCount(); nObjTab < nTabCount; ++nObjTab )
     {
-        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nObjTab));
-        DBG_ASSERT(pPage,"Page ?");
-        if (pPage)
+        SdrPage* pPage = pModel->GetPage( static_cast< sal_uInt16 >( nObjTab ) );
+        DBG_ASSERT( pPage, "Page ?" );
+        if( pPage )
         {
             SdrObjListIter aIter( *pPage, IM_FLAT );
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
+            for( SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next() )
             {
                 if ( pObject->GetLayer() == SC_LAYER_INTERN )
                 {
@@ -1857,8 +1525,6 @@ void ScDetectiveFunc::UpdateAllArrowColors()
                         // pObject->SendRepaintBroadcast(pObject->GetBoundRect());
                     }
                 }
-
-                pObject = aIter.Next();
             }
         }
     }
@@ -1877,56 +1543,26 @@ BOOL ScDetectiveFunc::FindFrameForObject( SdrObject* pObject, ScRange& rRange )
     if (!pPage) return FALSE;
 
     // test if the object is a direct page member
-    if(pObject
-        && pObject->GetPage()
-        && pObject->GetObjList()
-        && pObject->GetPage() == pObject->GetObjList())
+    if( pObject && pObject->GetPage() && (pObject->GetPage() == pObject->GetObjList()) )
     {
         // Is there a previous object?
         const sal_uInt32 nOrdNum(pObject->GetOrdNum());
 
-        if(nOrdNum > 0L)
+        if(nOrdNum > 0)
         {
-            SdrObject* pPrevObj = pPage->GetObj(nOrdNum - 1L);
+            SdrObject* pPrevObj = pPage->GetObj(nOrdNum - 1);
 
             if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
             {
                 ScDrawObjData* pPrevData = ScDrawLayer::GetObjDataTab( pPrevObj, rRange.aStart.Tab() );
-                if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
+                if ( pPrevData && pPrevData->maStart.IsValid() && pPrevData->maEnd.IsValid() && (pPrevData->maStart == rRange.aStart) )
                 {
-                    if ( pPrevData->aStt == rRange.aStart )
-                    {
-                        rRange.aEnd = pPrevData->aEnd;
-                        return TRUE;
-                    }
+                    rRange.aEnd = pPrevData->maEnd;
+                    return TRUE;
                 }
             }
         }
     }
-
-    // GetContainer() no longer allowed, baaad style (!)
-    //ULONG nPos = pPage->GetContainer().GetPos( pObject );
-    //if ( nPos != CONTAINER_ENTRY_NOTFOUND && nPos > 0 )
-    //{
-    //  SdrObject* pPrevObj = pPage->GetObj( nPos - 1 );
-    //  if ( pPrevObj && pPrevObj->GetLayer() == SC_LAYER_INTERN && pPrevObj->ISA(SdrRectObj) )
-    //  {
-    //      ScDrawObjData* pPrevData = ScDrawLayer::GetObjDataTab( pPrevObj, rRange.aStart.Tab() );
-    //      if ( pPrevData && pPrevData->bValidStart && pPrevData->bValidEnd )
-    //      {
-    //          if ( pPrevData->aStt.nCol == rRange.aStart.Col() &&
-    //               pPrevData->aStt.nRow == rRange.aStart.Row() &&
-    //               pPrevData->aStt.nTab == rRange.aStart.Tab() )
-    //          {
-    //              rRange.aEnd.Set( pPrevData->aEnd.nCol,
-    //                               pPrevData->aEnd.nRow,
-    //                               pPrevData->aEnd.nTab );
-    //              return TRUE;
-    //          }
-    //      }
-    //  }
-    //}
-
     return FALSE;
 }
 
@@ -1940,21 +1576,24 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
     {
         if ( ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, nObjTab ) )
         {
+            bool bValidStart = pData->maStart.IsValid();
+            bool bValidEnd = pData->maEnd.IsValid();
+
             if ( pObject->IsPolyObj() && pObject->GetPointCount() == 2 )
             {
                 // line object -> arrow
 
-                if ( pData->bValidStart )
-                    eType = ( pData->bValidEnd ) ? SC_DETOBJ_ARROW : SC_DETOBJ_TOOTHERTAB;
-                else if ( pData->bValidEnd )
+                if ( bValidStart )
+                    eType = bValidEnd ? SC_DETOBJ_ARROW : SC_DETOBJ_TOOTHERTAB;
+                else if ( bValidEnd )
                     eType = SC_DETOBJ_FROMOTHERTAB;
 
-                if ( pData->bValidStart )
-                    rSource = pData->aStt;
-                if ( pData->bValidEnd )
-                    rPosition = pData->aEnd;
+                if ( bValidStart )
+                    rSource = pData->maStart;
+                if ( bValidEnd )
+                    rPosition = pData->maEnd;
 
-                if ( pData->bValidStart && lcl_HasThickLine( *pObject ) )
+                if ( bValidStart && lcl_HasThickLine( *pObject ) )
                 {
                     // thick line -> look for frame before this object
 
@@ -1967,11 +1606,11 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
             }
             else if ( pObject->ISA(SdrCircObj) )
             {
-                if ( pData->bValidStart )
+                if ( bValidStart )
                 {
                     // cell position is returned in rPosition
 
-                    rPosition = pData->aStt;
+                    rPosition = pData->maStart;
                     eType = SC_DETOBJ_CIRCLE;
                 }
             }

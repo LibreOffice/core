@@ -33,10 +33,10 @@
 #include "vbafont.hxx"
 
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaCharacters::ScVbaCharacters( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, const uno::Reference< text::XSimpleText>& xRange,const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool Replace  ) throw ( css::lang::IllegalArgumentException ) : ScVbaCharacters_BASE( xParent, xContext ), m_xSimpleText(xRange), m_aPalette( dPalette),  nLength(-1), nStart(1), bReplace( Replace )
+ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, const uno::Reference< text::XSimpleText>& xRange,const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool Replace  ) throw ( css::lang::IllegalArgumentException ) : ScVbaCharacters_BASE( xParent, xContext ), m_xSimpleText(xRange), m_aPalette( dPalette),  nLength(-1), nStart(1), bReplace( Replace )
 {
     Start >>= nStart;
     if ( nStart < 1 )
@@ -46,7 +46,12 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< vba::XHelperInterface >&
     uno::Reference< text::XTextCursor > xTextCursor( m_xSimpleText->createTextCursor(), uno::UNO_QUERY_THROW );
     xTextCursor->collapseToStart();
     if ( nStart )
+    {
+        if ( ( nStart + 1 ) > m_xSimpleText->getString().getLength() )
+            //nStart = m_xSimpleText->getString().getLength();
+            xTextCursor->gotoEnd( sal_False );
         xTextCursor->goRight( nStart, sal_False );
+    }
     if ( nLength < 0 ) // expand to end
         xTextCursor->gotoEnd( sal_True );
     else
@@ -127,7 +132,7 @@ ScVbaCharacters::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Characters" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Characters" ) );
     }
     return aServiceNames;
 }

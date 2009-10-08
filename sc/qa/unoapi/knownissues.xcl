@@ -159,6 +159,7 @@ sc.ScModelObj::com::sun::star::document::XEventBroadcaster
 
 ### i91044 ###
 sc.ScAccessibleCsvCell
+sc.ScAccessibleCsvGrid
 #-> disabled in sc.sce
 
 ### i91045 ###

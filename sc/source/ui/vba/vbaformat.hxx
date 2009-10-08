@@ -29,7 +29,7 @@
  ************************************************************************/
 #ifndef SC_VBA_FORMAT_HXX
 #define SC_VBA_FORMAT_HXX
-#include <org/openoffice/excel/XFormat.hpp>
+#include <ooo/vba/excel/XFormat.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
@@ -64,16 +64,16 @@ protected:
     void initializeNumberFormats() throw ( css::script::BasicErrorException );
     void setNumberFormat( css::lang::Locale _aLocale, const rtl::OUString& _sFormatString) throw( css::script::BasicErrorException );
 public:
-    ScVbaFormat( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( css::script::BasicErrorException );
+    ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( css::script::BasicErrorException );
     virtual ~ScVbaFormat() {}
-    virtual css::uno::Reference< oo::vba::XHelperInterface > thisHelperIface() = 0;
+    virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
     css::uno::Reference< css::lang::XServiceInfo > getXServiceInfo() { return mxServiceInfo; }
      void SAL_CALL setAddIndent( const css::uno::Any& _BAddIndent) throw( css::uno::RuntimeException ) { _BAddIndent >>= mbAddIndent; }
      css::uno::Any SAL_CALL getAddIndent() throw( css::uno::RuntimeException ) { return css::uno::makeAny( mbAddIndent ); }
         // Interface Methods
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Reference< ::org::openoffice::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Reference< ::org::openoffice::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setNumberFormat( const css::uno::Any& NumberFormat ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getNumberFormat(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setNumberFormatLocal( const css::uno::Any& NumberFormatLocal ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

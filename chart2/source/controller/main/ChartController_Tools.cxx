@@ -80,6 +80,8 @@
 // for SolarMutex
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+// for OutlinerView
+#include <svx/outliner.hxx>
 
 using namespace ::com::sun::star;
 
@@ -376,14 +378,23 @@ void ChartController::executeDispatch_Paste()
                 OUString aString;
                 if( aDataHelper.GetString( FORMAT_STRING, aString ) && m_pDrawModelWrapper )
                 {
-                    awt::Point aTextPos;
-                    awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()));
-                    aTextPos.X = (aPageSize.Width / 2);
-                    aTextPos.Y = (aPageSize.Height / 2);
-                    lcl_InsertStringAsTextShapeIntoDrawPage(
-                        m_pDrawModelWrapper->getShapeFactory(),
-                        m_pDrawModelWrapper->getMainDrawPage(),
-                        aString, aTextPos );
+                    if( m_pDrawViewWrapper )
+                    {
+                        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+                        if( pOutlinerView )//in case of edit mode insert into edited string
+                            pOutlinerView->InsertText( aString );
+                        else
+                        {
+                            awt::Point aTextPos;
+                            awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()));
+                            aTextPos.X = (aPageSize.Width / 2);
+                            aTextPos.Y = (aPageSize.Height / 2);
+                            lcl_InsertStringAsTextShapeIntoDrawPage(
+                                m_pDrawModelWrapper->getShapeFactory(),
+                                m_pDrawModelWrapper->getMainDrawPage(),
+                                aString, aTextPos );
+                        }
+                    }
                 }
             }
         }

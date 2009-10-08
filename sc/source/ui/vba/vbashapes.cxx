@@ -30,14 +30,14 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <org/openoffice/msforms/XShapeRange.hpp>
-#include <org/openoffice/office/MsoAutoShapeType.hpp>
+#include <ooo/vba/msforms/XShapeRange.hpp>
+#include <ooo/vba/office/MsoAutoShapeType.hpp>
 
 #include "vbashapes.hxx"
 #include "vbashape.hxx"
 #include "vbashaperange.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 class VbShapeEnumHelper : public EnumerationHelper_BASE
@@ -76,7 +76,7 @@ void ScVbaShapes::initBaseCollection()
     m_xNameAccess.set( xShapes, uno::UNO_QUERY );
 }
 
-ScVbaShapes::ScVbaShapes( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes ): ScVbaShapes_BASE( xParent, xContext, xShapes ), m_nNewShapeCount(0)
+ScVbaShapes::ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes ): ScVbaShapes_BASE( xParent, xContext, xShapes ), m_nNewShapeCount(0)
 {
     m_xShapes.set( xShapes, uno::UNO_QUERY_THROW );
     m_xDrawPage.set( xShapes, uno::UNO_QUERY_THROW );
@@ -103,7 +103,7 @@ ScVbaShapes::createCollectionObject( const css::uno::Any& aSource )
 uno::Type
 ScVbaShapes::getElementType() throw (uno::RuntimeException)
 {
-    return org::openoffice::msforms::XShape::static_type(0);
+    return ooo::vba::msforms::XShape::static_type(0);
 }
 rtl::OUString&
 ScVbaShapes::getServiceImplName()
@@ -119,7 +119,7 @@ ScVbaShapes::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.msform.Shapes" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.Shapes" ) );
     }
     return aServiceNames;
 }
@@ -172,7 +172,7 @@ ScVbaShapes::Item( const uno::Any& Index, const uno::Any& Index2 ) throw (uno::R
     {
         uno::Reference< container::XIndexAccess > xIndexAccess( getShapesByArrayIndices( Index ) );
         // return new collection instance
-        uno::Reference< vba::XCollection > xShapesCollection(  new ScVbaShapes( this->getParent(), mxContext, xIndexAccess ) );
+        uno::Reference< XCollection > xShapesCollection(  new ScVbaShapes( this->getParent(), mxContext, xIndexAccess ) );
         return uno::makeAny( xShapesCollection );
     }
 */
@@ -385,7 +385,7 @@ ScVbaShapes::createName( rtl::OUString sName )
 #if 0
 //TODO helperapi using a writer document
 awt::Point
-calculateTopLeftMargin( uno::Reference< vba::XHelperInterface > xDocument )
+calculateTopLeftMargin( uno::Reference< XHelperInterface > xDocument )
 {
     awt::Point aPoint( 0, 0 );
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );

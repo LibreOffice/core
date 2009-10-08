@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.26.100.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -117,6 +117,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/cell2.obj \
     $(SLO)$/column.obj \
+    $(SLO)$/column3.obj \
     $(SLO)$/documen2.obj \
     $(SLO)$/document.obj \
     $(SLO)$/dpdimsave.obj \

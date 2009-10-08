@@ -30,13 +30,13 @@
 #ifndef SC_VBA_NAMES_HXX
 #define SC_VBA_NAMES_HXX
 
-#include <org/openoffice/excel/XNames.hpp>
-#include <org/openoffice/vba/XCollection.hpp>
+#include <ooo/vba/excel/XNames.hpp>
+#include <ooo/vba/XCollection.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include "vbacollectionimpl.hxx"
 
-typedef CollTestImplHelper< oo::excel::XNames > ScVbaNames_BASE;
+typedef CollTestImplHelper< ov::excel::XNames > ScVbaNames_BASE;
 
 class ScVbaNames : public ScVbaNames_BASE
 {
@@ -47,7 +47,7 @@ protected:
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
 
 public:
-    ScVbaNames( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaNames( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
 
     ScDocument* getScDocument();
     ScDocShell* getScDocShell();

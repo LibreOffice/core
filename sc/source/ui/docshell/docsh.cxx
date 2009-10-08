@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.cxx,v $
- * $Revision: 1.100.30.2 $
+ * $Revision: 1.103.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,13 +261,9 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         while ( nTable < nTableCount && !bFound )
         {
             ScCellIterator aCellIter( &aDocument, 0,0, nTable, MAXCOL,MAXROW, nTable );
-            ScBaseCell* pCell = aCellIter.GetFirst();
-            while (pCell && !bFound)
-            {
-                if (pCell->GetNotePtr())
+            for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bFound; pCell = aCellIter.GetNext() )
+                if (pCell->HasNote())
                     bFound = sal_True;
-                pCell = aCellIter.GetNext();
-            }
             nTable++;
         }
 

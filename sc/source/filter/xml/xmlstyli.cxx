@@ -874,7 +874,16 @@ uno::Reference < XNameContainer >
             {
                 uno::Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
-                xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
+                try
+                {
+                    xStyles.set(xFamilies->getByName( sName ), uno::UNO_QUERY);
+                }
+                catch ( uno::Exception& )
+                {
+                    // #i97680# Named table/column/row styles aren't supported, getByName will throw an exception.
+                    // For better interoperability, these styles should then be handled as automatic styles.
+                    // For now, NULL is returned (and the style is ignored).
+                }
                 switch( nFamily )
                 {
                 case XML_STYLE_FAMILY_TABLE_TABLE:

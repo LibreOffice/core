@@ -76,7 +76,7 @@ BOOL PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
     }
 
     if( m_aCB_Clockwise.IsVisible() )
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_CLOCKWISE,m_aCB_Clockwise.IsChecked()));
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_CLOCKWISE,m_aCB_Clockwise.IsChecked()));
 
     return TRUE;
 }

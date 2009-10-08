@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsuno.cxx,v $
- * $Revision: 1.113.132.2 $
+ * $Revision: 1.113.126.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3488,7 +3488,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
             while (pCell)
             {
                 //  Notizen zaehlen als nicht-leer
-                if ( pCell->GetCellType() != CELLTYPE_NOTE || pCell->GetNotePtr() )
+                if ( !pCell->IsBlank() )
                     aMarkData.SetMultiMarkArea(
                             ScRange( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ),
                             FALSE );
@@ -3530,7 +3530,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
             while (pCell)
             {
                 BOOL bAdd = FALSE;
-                if ( pCell->GetNotePtr() && ( nContentFlags & sheet::CellFlags::ANNOTATION ) )
+                if ( pCell->HasNote() && ( nContentFlags & sheet::CellFlags::ANNOTATION ) )
                     bAdd = TRUE;
                 else
                     switch ( pCell->GetCellType() )
@@ -6093,6 +6093,11 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
 const SfxItemPropertyMap* ScCellObj::GetEditPropertyMap()       // static
 {
     return lcl_GetEditPropertyMap();
+}
+
+const SfxItemPropertyMap* ScCellObj::GetCellPropertyMap()
+{
+    return lcl_GetCellPropertyMap();
 }
 
 ScCellObj::ScCellObj(ScDocShell* pDocSh, const ScAddress& rP) :

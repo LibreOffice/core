@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futext3.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.128.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
+#include <svx/editobj.hxx>
 #include <vcl/cursor.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/writingmodeitem.hxx>
@@ -54,6 +55,7 @@
 #include "attrib.hxx"
 #include "scitems.hxx"
 #include "drawview.hxx"
+#include "undocell.hxx"
 
 // ------------------------------------------------------------------------------------
 //  Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
@@ -62,213 +64,181 @@
 //  bTextDirection=TRUE means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
 // ------------------------------------------------------------------------------------
 
-void FuText::StopEditMode(BOOL bTextDirection)
+void FuText::StopEditMode(BOOL /*bTextDirection*/)
 {
-    BOOL bComment = FALSE;
-    ScAddress aTabPos;
-    BOOL bVertical = FALSE;
-
     SdrObject* pObject = pView->GetTextEditObject();
-    if ( pObject && pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
+    if( !pObject ) return;
+
+    // relock the internal layer that has been unlocked in FuText::SetInEditMode()
+    if ( pObject->GetLayer() == SC_LAYER_INTERN )
+        pView->LockInternalLayer();
+
+    ScViewData& rViewData = *pViewShell->GetViewData();
+    ScDocument& rDoc = *rViewData.GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    DBG_ASSERT( pDrawLayer && (pDrawLayer == pDrDoc), "FuText::StopEditMode - missing or different drawing layers" );
+
+    ScAddress aNotePos;
+    ScPostIt* pNote = 0;
+    if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.GetTabNo() ) )
     {
-        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewShell->GetViewData()->GetTabNo() );
-        if( pData )
-        {
-            aTabPos = ScAddress( pData->aStt);
-            bComment = TRUE;
-        }
-        const SfxItemSet& rSet = pObject->GetMergedItemSet();
-        bVertical = static_cast<const SvxWritingModeItem&> (rSet.Get (SDRATTR_TEXTDIRECTION)).GetValue() == com::sun::star::text::WritingMode_TB_RL;
+        aNotePos = pCaptData->maStart;
+        pNote = rDoc.GetNote( aNotePos );
+        DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "FuText::StopEditMode - missing or invalid cell note" );
     }
 
-    ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
-    BOOL bUndo (pDoc->IsUndoEnabled());
-
-    SfxObjectShell* pObjSh = pViewShell->GetViewData()->GetSfxDocShell();
-    SfxUndoManager* pUndoMan = NULL;
-    if (bUndo)
-        pUndoMan = pObjSh->GetUndoManager();
-    if ( bComment && bUndo)
+    ScDocShell* pDocShell = rViewData.GetDocShell();
+    SfxUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : 0;
+    bool bNewNote = false;
+    if( pNote && pUndoMgr )
     {
-        // fade in, edit, fade out, note change together into a ListAction
-
+        /*  Put all undo actions already collected (e.g. create caption object)
+            and all following undo actions (text changed) together into a ListAction. */
         String aUndoStr = ScGlobal::GetRscString( STR_UNDO_EDITNOTE );
-        pUndoMan->EnterListAction( aUndoStr, aUndoStr );
-
-        ScDrawLayer* pModel = pDoc->GetDrawLayer();
-        SdrUndoGroup* pShowUndo = pModel->GetCalcUndo();
-        if (pShowUndo)
-            pUndoMan->AddUndoAction( pShowUndo );
+        pUndoMgr->EnterListAction( aUndoStr, aUndoStr );
+        if( SdrUndoGroup* pCalcUndo = pDrawLayer->GetCalcUndo() )
+        {
+            /*  Note has been created before editing, if first undo action is
+                an insert action. Needed below to decide whether to drop the
+                undo if editing a new note has been cancelled. */
+            bNewNote = (pCalcUndo->GetActionCount() > 0) && pCalcUndo->GetAction( 0 )->ISA( SdrUndoNewObj );
+            // create a "insert note" undo action if needed
+            if( bNewNote )
+                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, pNote->GetNoteData(), true, pCalcUndo ) );
+            else
+                pUndoMgr->AddUndoAction( pCalcUndo );
+        }
     }
 
-    SdrEndTextEditKind eResult = pView->SdrEndTextEdit();
-    pViewShell->SetDrawTextUndo(NULL);  // or ScEndTextEdit (with drawview.hxx)
+    /*  SdrObjEditView::SdrEndTextEdit() may try to delete the entire drawing
+        object, if it does not contain text and has invisible border and fill.
+        This must not happen for note caption objects. They will be removed
+        below together with the cell note if the text is empty (independent of
+        border and area formatting). It is possible to prevent automatic
+        deletion by passing sal_True to this function. The return value changes
+        from SDRENDTEXTEDIT_DELETED to SDRENDTEXTEDIT_SHOULDBEDELETED in this
+        case. */
+    /*SdrEndTextEditKind eResult =*/ pView->SdrEndTextEdit( pNote != 0 );
+
+    // or ScEndTextEdit (with drawview.hxx)
+    pViewShell->SetDrawTextUndo( 0 );
 
     Cursor* pCur = pWindow->GetCursor();
-    if (pCur && pCur->IsVisible())
+    if( pCur && pCur->IsVisible() )
         pCur->Hide();
 
-    if ( bComment )
+    if( pNote )
     {
-        ScPostIt aNote(pDoc);
-        BOOL bWas = pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
-        if( bWas )
+        // hide the caption object if it is in hidden state
+        pNote->HideCaptionTemp();
+
+        // update author and date
+        pNote->AutoStamp();
+
+        /*  If the entire text has been cleared, the cell note and its caption
+            object have to be removed. */
+        SdrTextObj* pTextObject = dynamic_cast< SdrTextObj* >( pObject );
+        bool bDeleteNote = !pTextObject || !pTextObject->HasText();
+        if( bDeleteNote )
         {
-           SdrLayer* pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-           if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()))
-             pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
+            if( pUndoMgr )
+            {
+                // collect the "remove object" drawing undo action created by DeleteNote()
+                pDrawLayer->BeginCalcUndo();
+                // rescue note data before deletion
+                ScNoteData aNoteData( pNote->GetNoteData() );
+                // delete note from document (removes caption, but does not delete it)
+                rDoc.DeleteNote( aNotePos );
+                // create undo action for removed note
+                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+            }
+            else
+            {
+                rDoc.DeleteNote( aNotePos );
+            }
+            // ScDocument::DeleteNote has deleted the note that pNote points to
+            pNote = 0;
         }
 
-        //  Ignore if text unchanged. If called from a change in
-        //  TextDirection mode then always enter as we need to
-        //  store the new EditTextObject.
-
-        if ( eResult != SDRENDTEXTEDIT_UNCHANGED || !bWas || !aNote.IsShown() || bTextDirection)
+        // finalize the undo list action
+        if( pUndoMgr )
         {
-            ::std::auto_ptr<EditTextObject> pEditText ;
-            if ( eResult != SDRENDTEXTEDIT_DELETED )
+            pUndoMgr->LeaveListAction();
+
+            /*  #i94039# Update the default name "Edit Note" of the undo action
+                if the note has been created before editing or is deleted due
+                to deleted text. If the note has been created *and* is deleted,
+                the last undo action can be removed completely. Note: The
+                function LeaveListAction() removes the last action by itself,
+                if it is empty (when result is SDRENDTEXTEDIT_UNCHANGED). */
+            if( bNewNote && bDeleteNote )
             {
-                OutlinerParaObject* pParaObj = pObject->GetOutlinerParaObject();
-                if ( pParaObj )
-                {
-                    pParaObj->SetVertical(bVertical);
-                    ScNoteEditEngine& rEE = pDoc->GetNoteEngine();
-                    rEE.SetVertical(bVertical);
-                    const EditTextObject& rTextObj = pParaObj->GetTextObject();
-                    rEE.SetText(rTextObj);
-                    sal_uInt16 nCount = rEE.GetParagraphCount();
-                    for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
-                    {
-                        String aParaText( rEE.GetText( nPara ) );
-                        if( aParaText.Len() )
-                        {
-                            SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
-                            rEE.SetParaAttribs(nPara, aSet);
-                        }
-                    }
-                    pEditText.reset(rEE.CreateTextObject());
-                }
+                pUndoMgr->RemoveLastUndoAction();
             }
-            Rectangle aNewRect;
-            Rectangle aOldRect = aNote.GetRectangle();
-            SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObject);
-            if(pCaption)
+            else if( bNewNote || bDeleteNote )
             {
-                aNewRect = pCaption->GetLogicRect();
-                if(aOldRect != aNewRect)
-                    aNote.SetRectangle(aNewRect);
-            }
-            aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
-            aNote.AutoStamp();
-            aNote.SetItemSet(pCaption->GetMergedItemSet());
-
-            BOOL bRemove = (!aNote.IsShown() || aNote.IsEmpty() || !bWas)  && !bTextDirection;
-            if ( bRemove )
-                aNote.SetShown( FALSE );
-            pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );  // with Undo
-
-            if ( bRemove && eResult != SDRENDTEXTEDIT_DELETED )     // Object Delete ?
-            {
-                // Lock the internal layer here - UnLocked in SetInEditMode().
-                SdrLayer* pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-                if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()))
-                    pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
-
-                SdrPage* pPage = pDrDoc->GetPage( static_cast<sal_uInt16>(aTabPos.Tab()) );
-                pDrDoc->AddUndo( new SdrUndoRemoveObj( *pObject ) );
-                pPage->RemoveObject( pObject->GetOrdNum() );
-                // #39351# RemoveObject loescht nicht (analog zu anderen Containern)
-                // trotzden kein "delete pObject" mehr, das Objekt gehoert jetzt dem Undo
+                SfxListUndoAction* pAction = dynamic_cast< SfxListUndoAction* >( pUndoMgr->GetUndoAction() );
+                DBG_ASSERT( pAction, "FuText::StopEditMode - list undo action expected" );
+                if( pAction )
+                    pAction->SetComment( ScGlobal::GetRscString( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
             }
         }
-        if (pUndoMan)
-            pUndoMan->LeaveListAction();
-
-        // This repaint should not be necessary but it cleans
-        // up the 'marks' left behind  by the note handles and outline
-        // now that notes can simultaineously have handles and edit active.
-        ScRange aDrawRange(pDoc->GetRange(aTabPos.Tab(), aNote.GetRectangle()));
-
-        // Set Start/End Row to previous/next row to allow for handles.
-        SCROW aStartRow = aDrawRange.aStart.Row();
-        if(aStartRow > 0)
-            aDrawRange.aStart.SetRow(aStartRow - 1);
-        SCROW aEndRow = aDrawRange.aEnd.Row();
-        if(aEndRow < MAXROW)
-            aDrawRange.aEnd.SetRow(aEndRow + 1);
-        ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
-        pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
     }
 }
 
 // Called following an EndDragObj() to update the new note rectangle position
-void FuText::StopDragMode(SdrObject* pObject)
+void FuText::StopDragMode(SdrObject* /*pObject*/)
 {
-    BOOL bComment = FALSE;
-    ScAddress aTabPos;
-
-    if ( pObject && pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
+#if 0 // DR
+    ScViewData& rViewData = *pViewShell->GetViewData();
+    if( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, rViewData.GetTabNo() ) )
     {
-        ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewShell->GetViewData()->GetTabNo() );
-        if( pData )
+        ScDocument& rDoc = *rViewData.GetDocument();
+        const ScAddress& rPos = pData->maStart;
+        ScPostIt* pNote = rDoc.GetNote( rPos );
+        DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "FuText::StopDragMode - missing or invalid cell note" );
+        if( pNote )
         {
-            aTabPos = pData->aStt;
-            bComment = TRUE;
-        }
-    }
-
-    if ( bComment )
-    {
-        ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
-        if(pDoc)
-        {
-            ScPostIt aNote(pDoc);
-            if(pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote ))
+            Rectangle aOldRect = pNote->CalcRectangle( rDoc, rPos );
+            Rectangle aNewRect = pObject->GetLogicRect();
+            if( aOldRect != aNewRect )
             {
-                Rectangle aNewRect;
-                Rectangle aOldRect = aNote.GetRectangle();
-                SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObject);
-                if(pCaption)
-                    aNewRect = pCaption->GetLogicRect();
-                if(pCaption && aOldRect != aNewRect)
+                pNote->UpdateFromRectangle( rDoc, rPos, aNewRect );
+                OutlinerParaObject* pPObj = pCaption->GetOutlinerParaObject();
+                bool bVertical = (pPObj && pPObj->IsVertical());
+                // The new height/width is honoured if property item is reset.
+                if(!bVertical && aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
                 {
-                    aNote.SetRectangle(aNewRect);
-                    OutlinerParaObject* pPObj = pCaption->GetOutlinerParaObject();
-                    bool bVertical = (pPObj && pPObj->IsVertical());
-                    // The new height/width is honoured if property item is reset.
-                    if(!bVertical && aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
+                    if(pCaption->IsAutoGrowHeight() && !bVertical)
                     {
-                        if(pCaption->IsAutoGrowHeight() && !bVertical)
-                        {
-                            pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
-                            aNote.SetItemSet(pCaption->GetMergedItemSet());
-                        }
+                        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                        aNote.SetItemSet( *pDoc, pCaption->GetMergedItemSet() );
                     }
-                    else if(bVertical && aNewRect.Right() - aNewRect.Left() > aOldRect.Right() - aOldRect.Left())
-                    {
-                        if(pCaption->IsAutoGrowWidth() && bVertical)
-                        {
-                            pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
-                            aNote.SetItemSet(pCaption->GetMergedItemSet());
-                        }
-                    }
-                    pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
-                    // This repaint should not be necessary but it cleans
-                    // up the 'marks' left behind  by the note handles
-                    // now that notes can simultaineously have handles and edit active.
-                    ScRange aDrawRange(pDoc->GetRange(aTabPos.Tab(), aOldRect));
-                    // Set Start/End Row to previous/next row to allow for handles.
-                    SCROW aStartRow = aDrawRange.aStart.Row();
-                    if(aStartRow > 0)
-                        aDrawRange.aStart.SetRow(aStartRow - 1);
-                    SCROW aEndRow = aDrawRange.aEnd.Row();
-                    if(aEndRow < MAXROW)
-                        aDrawRange.aEnd.SetRow(aEndRow + 1);
-                    ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
-                    pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
                 }
+                else if(bVertical && aNewRect.Right() - aNewRect.Left() > aOldRect.Right() - aOldRect.Left())
+                {
+                    if(pCaption->IsAutoGrowWidth() && bVertical)
+                    {
+                        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
+                        aNote.SetItemSet( *pDoc, pCaption->GetMergedItemSet() );
+                    }
+                }
+                pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+
+                // This repaint should not be necessary but it cleans
+                // up the 'marks' left behind  by the note handles
+                // now that notes can simultaineously have handles and edit active.
+                ScRange aDrawRange = rDoc.GetRange( rPos.Tab(), aOldRect );
+                // Set Start/End Row to previous/next row to allow for handles.
+                if( aDrawRange.aStart.Row() > 0 )
+                    aDrawRange.aStart.IncRow( -1 );
+                if( aDrawRange.aEnd.Row() < MAXROW )
+                    aDrawRange.aEnd.IncRow( 1 );
+                ScDocShell* pDocSh = rViewData.GetDocShell();
+                pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
             }
         }
     }
+#endif
 }
 

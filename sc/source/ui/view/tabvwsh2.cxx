@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh2.cxx,v $
- * $Revision: 1.27.32.2 $
+ * $Revision: 1.27.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
     Window*     pWin    = pTabView->GetActiveWin();
-    SdrView*    pView   = pTabView->GetSdrView();
+    ScDrawView* pView   = pTabView->GetScDrawView();
     SdrModel*   pDoc    = pView->GetModel();
 
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -226,9 +226,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     SetDrawSelMode(bEx);
 
-    SdrLayer* pLayer = pView->GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
-    if (pLayer)
-        pView->SetLayerLocked( pLayer->GetName(), !bEx );
+    pView->LockBackgroundLayer( !bEx );
 
     if ( bSelectFirst )
     {

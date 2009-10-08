@@ -29,9 +29,9 @@
  ************************************************************************/
 #ifndef SC_VBA_FORMATCONDITION_HXX
 #define SC_VBA_FORMATCONDITION_HXX
-#include <org/openoffice/excel/XFormatCondition.hpp>
-#include <org/openoffice/excel/XFormatConditions.hpp>
-#include <org/openoffice/excel/XStyle.hpp>
+#include <ooo/vba/excel/XFormatCondition.hpp>
+#include <ooo/vba/excel/XFormatConditions.hpp>
+#include <ooo/vba/excel/XStyle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
@@ -39,18 +39,18 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "vbacondition.hxx"
 
-typedef ScVbaCondition< oo::excel::XFormatCondition >  ScVbaFormatCondition_BASE;
+typedef ScVbaCondition< ov::excel::XFormatCondition >  ScVbaFormatCondition_BASE;
 class ScVbaFormatCondition : public ScVbaFormatCondition_BASE
 {
 protected:
     rtl::OUString msStyleName;
     css::uno::Reference< css::sheet::XSheetConditionalEntry > mxSheetConditionalEntry;
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
-    css::uno::Reference< oo::excel::XFormatConditions> moFormatConditions;
-    css::uno::Reference< oo::excel::XStyle > mxStyle;
+    css::uno::Reference< ov::excel::XFormatConditions> moFormatConditions;
+    css::uno::Reference< ov::excel::XStyle > mxStyle;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
-    ScVbaFormatCondition(  const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSheetConditionalEntry >& _xSheetConditionalEntry, const css::uno::Reference< oo::excel::XStyle >&,  const css::uno::Reference< oo::excel::XFormatConditions >& _xFormatConditions, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException );
+    ScVbaFormatCondition(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSheetConditionalEntry >& _xSheetConditionalEntry, const css::uno::Reference< ov::excel::XStyle >&,  const css::uno::Reference< ov::excel::XFormatConditions >& _xFormatConditions, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException );
 
     void notifyRange() throw ( css::script::BasicErrorException );
     static css::sheet::ConditionOperator retrieveAPIType(sal_Int32 _nVBAType, const css::uno::Reference< css::sheet::XSheetCondition >& _xSheetCondition ) throw( css::script::BasicErrorException );
@@ -63,9 +63,9 @@ public:
     virtual ::sal_Int32 SAL_CALL Operator(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void setFormula1( const css::uno::Any& _aFormula1) throw ( css::script::BasicErrorException );
     virtual void setFormula2( const css::uno::Any& _aFormula2) throw ( css::script::BasicErrorException );
-    virtual css::uno::Reference< ::org::openoffice::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual css::uno::Reference< ::org::openoffice::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

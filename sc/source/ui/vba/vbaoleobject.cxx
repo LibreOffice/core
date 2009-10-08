@@ -37,7 +37,7 @@
 #include "vbaoleobject.hxx"
 
 using namespace com::sun::star;
-using namespace org::openoffice;
+using namespace ooo::vba;
 
 
 sal_Int32 pt2mm( double pt ) //1/100mm
@@ -51,7 +51,7 @@ double mm2pt( sal_Int32 mm )
 }
 
 
-ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
+ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > xControlShape )
 : OLEObjectImpl_BASE( xParent, xContext ), m_xControlShape( xControlShape )
 {
@@ -181,7 +181,7 @@ ScVbaOLEObject::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.OLEObject" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.OLEObject" ) );
     }
     return aServiceNames;
 }

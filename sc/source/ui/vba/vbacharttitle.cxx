@@ -29,10 +29,10 @@
  ************************************************************************/
 #include "vbacharttitle.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< vba::XHelperInterface >& xParent,  const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& _xTitleShape ) :  ChartTitleBase( xParent, xContext, _xTitleShape )
+ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< XHelperInterface >& xParent,  const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& _xTitleShape ) :  ChartTitleBase( xParent, xContext, _xTitleShape )
 {
 }
 
@@ -51,7 +51,7 @@ ScVbaChartTitle::getServiceNames()
     {
         uno::Sequence< rtl::OUString > BaseServiceNames = ChartTitleBase::getServiceNames();
         aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Chart" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Chart" ) );
         for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
             aServiceNames[ index ] = BaseServiceNames[ index ];
     }

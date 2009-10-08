@@ -30,7 +30,7 @@
 #include <vbacollectionimpl.hxx>
 #include "vbaglobals.hxx"
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 
 ScVbaCollectionBaseImpl::ScVbaCollectionBaseImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess ) throw (uno::RuntimeException) : m_xContext( xContext ), m_xIndexAccess( xIndexAccess )

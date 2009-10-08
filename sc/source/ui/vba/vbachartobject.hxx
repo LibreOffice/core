@@ -35,11 +35,11 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
-#include <org/openoffice/excel/XChartObject.hpp>
+#include <ooo/vba/excel/XChartObject.hpp>
 #include "vbahelperinterface.hxx"
 #include <memory>
 
-typedef InheritedHelperInterfaceImpl1<oo::excel::XChartObject > ChartObjectImpl_BASE;
+typedef InheritedHelperInterfaceImpl1<ov::excel::XChartObject > ChartObjectImpl_BASE;
 
 class ScVbaChartObject : public ChartObjectImpl_BASE
 {
@@ -52,15 +52,15 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     css::uno::Reference< css::drawing::XShape > xShape;
     css::uno::Reference< css::container::XNamed > xNamed;
     rtl::OUString sPersistName;
-    std::auto_ptr<oo::ShapeHelper> oShapeHelper;
+    std::auto_ptr<ov::ShapeHelper> oShapeHelper;
     css::uno::Reference< css::container::XNamed > xNamedShape;
     rtl::OUString getPersistName();
     css::uno::Reference< css::drawing::XShape > setShape() throw ( css::script::BasicErrorException );
 public:
-    ScVbaChartObject( const css::uno::Reference< oo::vba::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier );
+    ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier );
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString& sName ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException );
     virtual void Activate() throw ( css::script::BasicErrorException );
     // XHelperInterface

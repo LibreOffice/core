@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undocell.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.128.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-
 
 #include <svx/editobj.hxx>
 #include <svtools/zforlist.hxx>
@@ -60,6 +55,7 @@
 #include "rangenam.hxx"
 #include "chgtrack.hxx"
 #include "sc.hrc"
+#include "docuno.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -70,8 +66,8 @@ TYPEINIT1(ScUndoPutCell, ScSimpleUndo);
 TYPEINIT1(ScUndoPageBreak, ScSimpleUndo);
 TYPEINIT1(ScUndoPrintZoom, ScSimpleUndo);
 TYPEINIT1(ScUndoThesaurus, ScSimpleUndo);
-TYPEINIT1(ScUndoNote, ScSimpleUndo);
-TYPEINIT1(ScUndoEditNote, ScSimpleUndo);
+TYPEINIT1(ScUndoReplaceNote, ScSimpleUndo);
+TYPEINIT1(ScUndoShowHideNote, ScSimpleUndo);
 TYPEINIT1(ScUndoDetective, ScSimpleUndo);
 TYPEINIT1(ScUndoRangeNames, ScSimpleUndo);
 
@@ -268,18 +264,7 @@ void __EXPORT ScUndoEnterData::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     for (USHORT i=0; i<nCount; i++)
     {
-        ScBaseCell* pNewCell;
-        if ( ppOldCells[i] )
-        {
-            // Formelzelle mit CompileTokenArray() !
-            if ( ppOldCells[i]->GetCellType() == CELLTYPE_FORMULA )
-                pNewCell = ((ScFormulaCell*)ppOldCells[i])->Clone( pDoc,
-                    ScAddress( nCol, nRow, pTabs[i] ) );
-            else
-                pNewCell = ppOldCells[i]->Clone(pDoc);
-        }
-        else
-            pNewCell = NULL;
+        ScBaseCell* pNewCell = ppOldCells[i] ? ppOldCells[i]->CloneWithoutNote( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
         pDoc->PutCell( nCol, nRow, pTabs[i], pNewCell );
 
         if (pHasFormat && pOldFormats)
@@ -303,6 +288,18 @@ void __EXPORT ScUndoEnterData::Undo()
 
     DoChange();
     EndUndo();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        for ( USHORT i = 0; i < nCount; ++i )
+        {
+            aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 }
 
 void __EXPORT ScUndoEnterData::Redo()
@@ -324,6 +321,18 @@ void __EXPORT ScUndoEnterData::Redo()
 
     DoChange();
     EndRedo();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        for ( USHORT i = 0; i < nCount; ++i )
+        {
+            aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 }
 
 void __EXPORT ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
@@ -388,21 +397,11 @@ void __EXPORT ScUndoEnterValue::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell;
-    if ( pOldCell )
-    {
-        // Formelzelle mit CompileTokenArray() !
-        if ( pOldCell->GetCellType() == CELLTYPE_FORMULA )
-            pNewCell = ((ScFormulaCell*)pOldCell)->Clone( pDoc, aPos );
-        else
-            pNewCell = pOldCell->Clone(pDoc);
-    }
-    else
-        pNewCell = NULL;
+    ScBaseCell* pNewCell = pOldCell ? pOldCell->CloneWithoutNote( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
 
-    pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
+    pDoc->PutCell( aPos, pNewCell );
 
-    pDocShell->PostPaintCell( aPos.Col(), aPos.Row(), aPos.Tab() );
+    pDocShell->PostPaintCell( aPos );
 
     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
     if ( pChangeTrack )
@@ -417,7 +416,7 @@ void __EXPORT ScUndoEnterValue::Redo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->SetValue( aPos.Col(), aPos.Row(), aPos.Tab(), nValue );
-    pDocShell->PostPaintCell( aPos.Col(), aPos.Row(), aPos.Tab() );
+    pDocShell->PostPaintCell( aPos );
 
     SetChangeTrack();
 
@@ -484,21 +483,11 @@ void __EXPORT ScUndoPutCell::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell;
-    if ( pOldCell )
-    {
-        // Formelzelle mit CompileTokenArray() !
-        if ( pOldCell->GetCellType() == CELLTYPE_FORMULA )
-            pNewCell = ((ScFormulaCell*)pOldCell)->Clone( pDoc, aPos );
-        else
-            pNewCell = pOldCell->Clone(pDoc);
-    }
-    else
-        pNewCell = NULL;
+    ScBaseCell* pNewCell = pOldCell ? pOldCell->CloneWithoutNote( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
 
-    pDocShell->PostPaintCell( aPos.Col(), aPos.Row(), aPos.Tab() );
+    pDocShell->PostPaintCell( aPos );
 
     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
     if ( pChangeTrack )
@@ -512,23 +501,11 @@ void __EXPORT ScUndoPutCell::Redo()
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-//  pDoc->SetValue( aPos.Col(), aPos.Row(), aPos.Tab(), nValue );
-
-    ScBaseCell* pNewCell;
-    if ( pEnteredCell )
-    {
-        // Formelzelle mit CompileTokenArray() !
-        if ( pEnteredCell->GetCellType() == CELLTYPE_FORMULA )
-            pNewCell = ((ScFormulaCell*)pEnteredCell)->Clone( pDoc, aPos );
-        else
-            pNewCell = pEnteredCell->Clone(pDoc);
-    }
-    else
-        pNewCell = NULL;
+    ScBaseCell* pNewCell = pEnteredCell ? pEnteredCell->CloneWithoutNote( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
 
-    pDocShell->PostPaintCell( aPos.Col(), aPos.Row(), aPos.Tab() );
+    pDocShell->PostPaintCell( aPos );
 
     SetChangeTrack();
 
@@ -831,142 +808,145 @@ BOOL __EXPORT ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 
-// -----------------------------------------------------------------------
-//
-//      Notizen ein-/ausblenden
-//
+// ============================================================================
 
-ScUndoNote::ScUndoNote( ScDocShell* pNewDocShell, BOOL bShow,
-                        const ScAddress& rNewPos, SdrUndoAction* pDraw ) :
-    ScSimpleUndo( pNewDocShell ),
-    bIsShow     ( bShow ),
-    aPos        ( rNewPos ),
-    pDrawUndo   ( pDraw )
-
+ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
+        const ScNoteData& rNoteData, bool bInsert, SdrUndoAction* pDrawUndo ) :
+    ScSimpleUndo( &rDocShell ),
+    maPos( rPos ),
+    mpDrawUndo( pDrawUndo )
 {
+    DBG_ASSERT( rNoteData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
+    (bInsert ? maNewData : maOldData) = rNoteData;
 }
 
-__EXPORT ScUndoNote::~ScUndoNote()
+ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rPos,
+        const ScNoteData& rOldData, const ScNoteData& rNewData, SdrUndoAction* pDrawUndo ) :
+    ScSimpleUndo( &rDocShell ),
+    maPos( rPos ),
+    maOldData( rOldData ),
+    maNewData( rNewData ),
+    mpDrawUndo( pDrawUndo )
 {
-    DeleteSdrUndoAction( pDrawUndo );
+    DBG_ASSERT( maOldData.mpCaption || maNewData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
 }
 
-String __EXPORT ScUndoNote::GetComment() const
+ScUndoReplaceNote::~ScUndoReplaceNote()
 {
-    if ( bIsShow )
-        return ScGlobal::GetRscString( STR_UNDO_SHOWNOTE );     // Notiz anzeigen
-    else
-        return ScGlobal::GetRscString( STR_UNDO_HIDENOTE );     // Notiz ausblenden
+    DeleteSdrUndoAction( mpDrawUndo );
 }
 
-
-void __EXPORT ScUndoNote::Undo()
+void ScUndoReplaceNote::Undo()
 {
     BeginUndo();
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    DoSdrUndoAction(pDrawUndo, pDoc);
-
-    ScPostIt aNote(pDoc);
-    pDoc->GetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
-    aNote.SetShown( !bIsShow );
-    pDoc->SetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
-
+    DoSdrUndoAction( mpDrawUndo, pDocShell->GetDocument() );
+    /*  Undo insert -> remove new note.
+        Undo remove -> insert old note.
+        Undo replace -> remove new note, insert old note. */
+    DoRemoveNote( maNewData );
+    DoInsertNote( maOldData );
+    pDocShell->PostPaintCell( maPos );
     EndUndo();
 }
 
-void __EXPORT ScUndoNote::Redo()
+void ScUndoReplaceNote::Redo()
 {
     BeginRedo();
-
-    RedoSdrUndoAction(pDrawUndo);
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScPostIt aNote(pDoc);
-    pDoc->GetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
-    aNote.SetShown( bIsShow );
-    pDoc->SetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNote );
-
+    RedoSdrUndoAction( mpDrawUndo );
+    /*  Redo insert -> insert new note.
+        Redo remove -> remove old note.
+        Redo replace -> remove old note, insert new note. */
+    DoRemoveNote( maOldData );
+    DoInsertNote( maNewData );
+    pDocShell->PostPaintCell( maPos );
     EndRedo();
 }
 
-void __EXPORT ScUndoNote::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoReplaceNote::Repeat( SfxRepeatTarget& /*rTarget*/ )
 {
-    //  hammanich
 }
 
-BOOL __EXPORT ScUndoNote::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 {
     return FALSE;
 }
 
+String ScUndoReplaceNote::GetComment() const
+{
+    return ScGlobal::GetRscString( maNewData.mpCaption ?
+        (maOldData.mpCaption ? STR_UNDO_EDITNOTE : STR_UNDO_INSERTNOTE) : STR_UNDO_DELETENOTE );
+}
 
-// -----------------------------------------------------------------------
-//
-//      Text von Notiz aendern (ohne Drawing-Krempel)
-//
+void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
+{
+    if( rNoteData.mpCaption )
+    {
+        ScDocument& rDoc = *pDocShell->GetDocument();
+        DBG_ASSERT( !rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
+        ScPostIt* pNote = new ScPostIt( rDoc, rNoteData );
+        rDoc.TakeNote( maPos, pNote );
+    }
+}
 
-ScUndoEditNote::ScUndoEditNote( ScDocShell* pNewDocShell, const ScAddress& rNewPos,
-                                const ScPostIt& rOld, const ScPostIt& rNew ) :
-    ScSimpleUndo( pNewDocShell ),
-    aPos        ( rNewPos ),
-    aOldNote    ( rOld ),
-    aNewNote    ( rNew )
+void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
+{
+    if( rNoteData.mpCaption )
+    {
+        ScDocument& rDoc = *pDocShell->GetDocument();
+        DBG_ASSERT( rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
+        if( ScPostIt* pNote = rDoc.ReleaseNote( maPos ) )
+        {
+            // forget caption (already handled in drawing undo)
+            pNote->ForgetCaption();
+            delete pNote;
+        }
+    }
+}
+
+// ============================================================================
+
+ScUndoShowHideNote::ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& rPos, bool bShow ) :
+    ScSimpleUndo( &rDocShell ),
+    maPos( rPos ),
+    mbShown( bShow )
 {
 }
 
-__EXPORT ScUndoEditNote::~ScUndoEditNote()
+ScUndoShowHideNote::~ScUndoShowHideNote()
 {
 }
 
-String __EXPORT ScUndoEditNote::GetComment() const
-{
-    return ScGlobal::GetRscString( STR_UNDO_SHOWNOTE );
-}
-
-void __EXPORT ScUndoEditNote::Undo()
+void ScUndoShowHideNote::Undo()
 {
     BeginUndo();
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->SetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aOldNote );
-
-    // This repaint should not be neccessary but it solves a problem
-    // where following a removal of all the text the undo would only
-    // refresh the note to the source cell position.
-        ScRange aDrawRange(pDoc->GetRange(aPos.Tab(), aOldNote.GetRectangle()));
-        // Set Start/End Row to previous/next row to allow for handles.
-        SCROW aStartRow = aDrawRange.aStart.Row();
-        if(aStartRow > 0)
-            aDrawRange.aStart.SetRow(aStartRow - 1);
-        SCROW aEndRow = aDrawRange.aEnd.Row();
-        if(aEndRow < MAXROW)
-            aDrawRange.aEnd.SetRow(aEndRow + 1);
-    pDocShell->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
-
+    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( maPos ) )
+        pNote->ShowCaption( !mbShown );
     EndUndo();
 }
 
-void __EXPORT ScUndoEditNote::Redo()
+void ScUndoShowHideNote::Redo()
 {
     BeginRedo();
-
-    ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->SetNote( aPos.Col(), aPos.Row(), aPos.Tab(), aNewNote );
-
+    if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( maPos ) )
+        pNote->ShowCaption( mbShown );
     EndRedo();
 }
 
-void __EXPORT ScUndoEditNote::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoShowHideNote::Repeat( SfxRepeatTarget& /*rTarget*/ )
 {
-    //  hammanich
 }
 
-BOOL __EXPORT ScUndoEditNote::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoShowHideNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 {
     return FALSE;
 }
 
+String ScUndoShowHideNote::GetComment() const
+{
+    return ScGlobal::GetRscString( mbShown ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
+}
+
+// ============================================================================
 
 // -----------------------------------------------------------------------
 //

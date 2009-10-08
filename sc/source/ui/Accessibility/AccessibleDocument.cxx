@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleDocument.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.76.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1117,7 +1117,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
             sal_Int16 nLayerID = 0;
             if( aPropAny >>= nLayerID )
             {
-                if( nLayerID == SC_LAYER_INTERN )
+                if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
                     pShape->bSelectable = sal_False;
                 else
                     pShape->bSelectable = sal_True;

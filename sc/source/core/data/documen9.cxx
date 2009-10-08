@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen9.cxx,v $
- * $Revision: 1.42.32.4 $
+ * $Revision: 1.43.52.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,6 @@
 #include "table.hxx"
 #include "drwlayer.hxx"
 #include "markdata.hxx"
-#include "userdat.hxx"
 #include "patattr.hxx"
 #include "rechead.hxx"
 #include "poolhelp.hxx"
@@ -438,33 +437,6 @@ void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
     }
 }
 
-BOOL ScDocument::HasNoteObject( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
-{
-    if (!pDrawLayer)
-        return FALSE;
-    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
-    if (!pPage)
-        return FALSE;
-
-    BOOL bFound = FALSE;
-
-    SdrObjListIter aIter( *pPage, IM_FLAT );
-    SdrObject* pObject = aIter.Next();
-    while (pObject && !bFound)
-    {
-        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
-        {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-            if ( pData && nCol == pData->aStt.Col() && nRow == pData->aStt.Row() )
-                bFound = TRUE;
-        }
-        pObject = aIter.Next();
-    }
-
-    return bFound;
-}
-
 //UNUSED2008-05  void ScDocument::RefreshNoteFlags()
 //UNUSED2008-05  {
 //UNUSED2008-05      if (!pDrawLayer)
@@ -599,7 +571,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
                     //  Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
 
                     SdrLayerID nLayer = pObject->GetLayer();
-                    if ( nLayer != SC_LAYER_INTERN )
+                    if ( (nLayer != SC_LAYER_INTERN) && (nLayer != SC_LAYER_HIDDEN) )
                     {
                         if ( nLayer != SC_LAYER_BACK ||
                                 !pFound || pFound->GetLayer() == SC_LAYER_BACK )
@@ -775,7 +747,7 @@ BOOL ScDocument::HasDetectiveObjects(SCTAB nTab) const
             while (pObject && !bFound)
             {
                 // anything on the internal layer except captions (annotations)
-                if ( pObject->GetLayer() == SC_LAYER_INTERN && !pObject->ISA( SdrCaptionObj ) )
+                if ( (pObject->GetLayer() == SC_LAYER_INTERN) && !ScDrawLayer::IsNoteCaption( pObject ) )
                     bFound = TRUE;
 
                 pObject = aIter.Next();

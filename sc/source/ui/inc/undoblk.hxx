@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undoblk.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -450,7 +450,7 @@ public:
                     ScUndoMerge( ScDocShell* pNewDocShell,
                                  SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                  SCCOL nEndX,   SCROW nEndY,   SCTAB nEndZ,
-                                 BOOL bNewDoMerge, ScDocument* pNewUndoDoc = NULL );
+                                 bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo );
     virtual         ~ScUndoMerge();
 
     virtual void    Undo();
@@ -461,11 +461,12 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScRange         aRange;
-    BOOL            bDoMerge;               // Merge oder aufheben
-    ScDocument*     pUndoDoc;               // wenn Daten zusammengefasst
+    ScRange         maRange;
+    bool            mbMergeContents;        // Merge contents in Redo().
+    ScDocument*     mpUndoDoc;              // wenn Daten zusammengefasst
+    SdrUndoAction*  mpDrawUndo;
 
-    void            DoChange( const BOOL bUndo ) const;
+    void            DoChange( bool bUndo ) const;
 };
 
 

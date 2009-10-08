@@ -122,7 +122,7 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aFlAreas        ( this, ScResId( FL_OUTPUT ) ),
         aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
         aFtOutArea      ( this, ScResId( FT_OUTAREA ) ),
-        aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
+        aEdOutPos       ( this, this, ScResId( ED_OUTAREA ) ),
         aRbOutPos       ( this, ScResId( RB_OUTAREA ), &aEdOutPos, this ),
         aBtnIgnEmptyRows( this, ScResId( BTN_IGNEMPTYROWS ) ),
         aBtnDetectCat   ( this, ScResId( BTN_DETECTCAT ) ),

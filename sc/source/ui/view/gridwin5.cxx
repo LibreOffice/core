@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin5.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,7 +99,6 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
     BOOL bDone = FALSE;
 
     ScDocument* pDoc = pViewData->GetDocument();
-    ScPostIt    aNote(pDoc);
     SCTAB       nTab = pViewData->GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
@@ -202,8 +201,8 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
     }
 
     //  Notiz nur, wenn sie nicht schon auf dem Drawing-Layer angezeigt wird:
-    if ( aTrackText.Len() || ( pDoc->GetNote( nPosX, nPosY, nTab, aNote ) &&
-                                 !pDoc->HasNoteObject( nPosX, nPosY, nTab ) ) )
+    const ScPostIt* pNote = pDoc->GetNote( aCellPos );
+    if ( (aTrackText.Len() > 0) || (pNote && !pNote->IsCaptionShown()) )
     {
         BOOL bNew = TRUE;
         BOOL bFast = FALSE;
@@ -225,27 +224,29 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 
             delete pNoteMarker;
 
-            Window* pRight = NULL;
-            Window* pBottom = NULL;
-            Window* pDiagonal = NULL;
-            if ( pViewData->GetHSplitMode() == SC_SPLIT_FIX && eHWhich == SC_SPLIT_LEFT )
-            {
-                ScSplitPos eRight = ( eVWhich == SC_SPLIT_TOP ) ?
-                                        SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT;
-                pRight = pViewData->GetView()->GetWindowByPos(eRight);
-            }
-            if ( pViewData->GetVSplitMode() == SC_SPLIT_FIX && eVWhich == SC_SPLIT_TOP )
-            {
-                ScSplitPos eBottom = ( eHWhich == SC_SPLIT_LEFT ) ?
-                                        SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
-                pBottom = pViewData->GetView()->GetWindowByPos(eBottom);
-            }
-            if ( pRight && pBottom )
-                pDiagonal = pViewData->GetView()->GetWindowByPos(SC_SPLIT_BOTTOMRIGHT);
+            bool bHSplit = pViewData->GetHSplitMode() != SC_SPLIT_NONE;
+            bool bVSplit = pViewData->GetVSplitMode() != SC_SPLIT_NONE;
 
-            pNoteMarker = new ScNoteMarker( this, pRight, pBottom, pDiagonal,
+            Window* pLeft = pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT );
+            Window* pRight = bHSplit ? pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : 0;
+            Window* pBottom = bVSplit ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : 0;
+            Window* pDiagonal = (bHSplit && bVSplit) ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : 0;
+            DBG_ASSERT( pLeft, "ScGridWindow::ShowNoteMarker - missing top-left grid window" );
+
+            /*  If caption is shown from right or bottom windows, adjust
+                mapmode to include size of top-left window. */
+            MapMode aMapMode = GetDrawMapMode( TRUE );
+            Size aLeftSize = pLeft->PixelToLogic( pLeft->GetOutputSizePixel(), aMapMode );
+            Point aOrigin = aMapMode.GetOrigin();
+            if( (this == pRight) || (this == pDiagonal) )
+                aOrigin.X() += aLeftSize.Width();
+            if( (this == pBottom) || (this == pDiagonal) )
+                aOrigin.Y() += aLeftSize.Height();
+            aMapMode.SetOrigin( aOrigin );
+
+            pNoteMarker = new ScNoteMarker( pLeft, pRight, pBottom, pDiagonal,
                                             pDoc, aCellPos, aTrackText,
-                                            GetDrawMapMode(TRUE), bLeftEdge, bFast, bKeyboard );
+                                            aMapMode, bLeftEdge, bFast, bKeyboard );
         }
 
         bDone = TRUE;       // something is shown (old or new)

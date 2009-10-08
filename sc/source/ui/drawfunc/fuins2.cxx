@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuins2.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,6 @@
 #include <sfx2/docfile.hxx>
 #include <svtools/stritem.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/svdview.hxx>
 #include <svx/pfiledlg.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -94,6 +93,7 @@ using namespace ::com::sun::star;
 #include "chartlis.hxx"
 #include "uiitems.hxx"
 #include "globstr.hrc"
+#include "drawview.hxx"
 
 extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht zeichnen
 
@@ -217,7 +217,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 |*
 \************************************************************************/
 
-FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
@@ -486,7 +486,7 @@ void FuInsertOLE::Deactivate()
 |*
 \************************************************************************/
 
-FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {

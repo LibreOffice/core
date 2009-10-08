@@ -59,6 +59,10 @@
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -1449,11 +1453,11 @@ void ScInterpreter::ScArcCosHyp()
 void ScInterpreter::ScArcTanHyp()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcTanHyp" );
-    double nVal = GetDouble();
-    if (fabs(nVal) >= 1.0)
+    double fVal = GetDouble();
+    if (fabs(fVal) >= 1.0)
         PushIllegalArgument();
     else
-        PushDouble(0.5 * log((1.0 + nVal) / (1.0 - nVal)));
+        PushDouble( ::rtl::math::atanh( fVal));
 }
 
 
@@ -2643,251 +2647,31 @@ void ScInterpreter::ScChar()
 
 static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
 {
-    const sal_Unicode *pSrc = rStr.getStr();
-    sal_Int32 nLen = rStr.getLength();
-    ::rtl::OUStringBuffer aRes( nLen );
+    static bool bFirstASCCall = true;
+    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), 0 );
 
-    for (sal_Int32 i=0; i<nLen; i++)
+    if( bFirstASCCall )
     {
-        if( pSrc[i] >= 0x30a1 && pSrc[i] <= 0x30aa && (pSrc[i] % 2) == 0 )
-            // katakana a-o
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30a2) / 2 + 0xff71));
-        else if( pSrc[i] >= 0x30a1 && pSrc[i] <= 0x30aa && (pSrc[i] % 2) == 1 )
-            // katakana small a-o
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30a1) / 2 + 0xff67));
-        else if( pSrc[i] >= 0x30ab && pSrc[i] <= 0x30c2 && (pSrc[i] % 2) == 1 )
-            // katakana ka-chi
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30ab) / 2 + 0xff76));
-        else if( pSrc[i] >= 0x30ab && pSrc[i] <= 0x30c2 && (pSrc[i] % 2) == 0 )
-        {
-            // katakana ga-dhi
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30ac) / 2 + 0xff76));
-            aRes.append((sal_Unicode)0xff9e );
-        }
-        else if( pSrc[i] == 0x30c3 )
-            // katakana small tsu
-            aRes.append((sal_Unicode)0xff6f );
-        else if( pSrc[i] >= 0x30c4 && pSrc[i] <= 0x30c9 && (pSrc[i] % 2) == 0 )
-            // katakana tsu-to
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30c4) / 2 + 0xff82));
-        else if( pSrc[i] >= 0x30c4 && pSrc[i] <= 0x30c9 && (pSrc[i] % 2) == 1 )
-        {
-            // katakana du-do
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30c5) / 2 + 0xff82));
-            aRes.append((sal_Unicode)0xff9e );
-        }
-        else if( pSrc[i] >= 0x30ca && pSrc[i] <= 0x30ce )
-            // katakana na-no
-            aRes.append((sal_Unicode)(pSrc[i] - 0x30ca + 0xff85));
-        else if( pSrc[i] >= 0x30cf && pSrc[i] <= 0x30dd && (pSrc[i] % 3) == 0 )
-            // katakana ha-ho
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30cf) / 3 + 0xff8a));
-        else if( pSrc[i] >= 0x30cf && pSrc[i] <= 0x30dd && (pSrc[i] % 3) == 1 )
-        {
-            // katakana ba-bo
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30d0) / 3 + 0xff8a));
-            aRes.append((sal_Unicode)0xff9e );
-        }
-        else if( pSrc[i] >= 0x30cf && pSrc[i] <= 0x30dd && (pSrc[i] % 3) == 2 )
-        {
-            // katakana pa-po
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30d1) / 3 + 0xff8a));
-            aRes.append((sal_Unicode)0xff9f );
-        }
-        else if( pSrc[i] >= 0x30de && pSrc[i] <= 0x30e2 )
-            // katakana ma-mo
-            aRes.append((sal_Unicode)(pSrc[i] - 0x30de + 0xff8f));
-        else if( pSrc[i] >= 0x30e3 && pSrc[i] <= 0x30e8 && (pSrc[i] % 2) == 0)
-            // katakana ya-yo
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30e4) / 2 + 0xff94));
-        else if( pSrc[i] >= 0x30e3 && pSrc[i] <= 0x30e8 && (pSrc[i] % 2) == 1)
-            // katakana small ya-yo
-            aRes.append((sal_Unicode)((pSrc[i] - 0x30e3) / 2 + 0xff6c));
-        else if( pSrc[i] >= 0x30e9 && pSrc[i] <= 0x30ed )
-            // katakana ra-ro
-            aRes.append((sal_Unicode)(pSrc[i] - 0x30e9 + 0xff97));
-        else if( pSrc[i] == 0x30ef )
-            // katakana wa
-            aRes.append((sal_Unicode)0xff9c);
-        else if( pSrc[i] == 0x30f2 )
-            // katakana wo
-            aRes.append((sal_Unicode)0xff66);
-        else if( pSrc[i] == 0x30f3 )
-            // katakana nn
-            aRes.append((sal_Unicode)0xff9d);
-        else if( pSrc[i] >= 0xff01 && pSrc[i] <= 0xff5e )
-            // ASCII characters
-            aRes.append((sal_Unicode)(pSrc[i] - 0xff01 + 0x0021));
-        else
-        {
-            switch (pSrc[i])
-            {
-                case 0x2015:    // HORIZONTAL BAR => HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-                    aRes.append((sal_Unicode)0xff70); break;
-                case 0x2018:    // LEFT SINGLE QUOTATION MARK => GRAVE ACCENT
-                    aRes.append((sal_Unicode)0x0060); break;
-                case 0x2019:    // RIGHT SINGLE QUOTATION MARK => APOSTROPHE
-                    aRes.append((sal_Unicode)0x0027); break;
-                case 0x201d:    // RIGHT DOUBLE QUOTATION MARK => QUOTATION MARK
-                    aRes.append((sal_Unicode)0x0022); break;
-                case 0x3001:    // IDEOGRAPHIC COMMA
-                    aRes.append((sal_Unicode)0xff64); break;
-                case 0x3002:    // IDEOGRAPHIC FULL STOP
-                    aRes.append((sal_Unicode)0xff61); break;
-                case 0x300c:    // LEFT CORNER BRACKET
-                    aRes.append((sal_Unicode)0xff62); break;
-                case 0x300d:    // RIGHT CORNER BRACKET
-                    aRes.append((sal_Unicode)0xff63); break;
-                case 0x309b:    // KATAKANA-HIRAGANA VOICED SOUND MARK
-                    aRes.append((sal_Unicode)0xff9e); break;
-                case 0x309c:    // KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
-                    aRes.append((sal_Unicode)0xff9f); break;
-                case 0x30fb:    // KATAKANA MIDDLE DOT
-                    aRes.append((sal_Unicode)0xff65); break;
-                case 0x30fc:    // KATAKANA-HIRAGANA PROLONGED SOUND MARK
-                    aRes.append((sal_Unicode)0xff70); break;
-                case 0xffe5:    // FULLWIDTH YEN SIGN => REVERSE SOLIDUS "\"
-                    aRes.append((sal_Unicode)0x005c); break;
-                default:
-                    aRes.append( pSrc[i] );
-            }
-        }
+        aTrans.loadModuleByImplName( ::rtl::OUString::createFromAscii( "FULLWIDTH_HALFWIDTH_LIKE_ASC" ), LANGUAGE_SYSTEM );
+        bFirstASCCall = false;
     }
 
-    return aRes.makeStringAndClear();
+    return aTrans.transliterate( rStr, 0, USHORT( rStr.getLength() ), NULL );
 }
 
 
 static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
 {
-    const sal_Unicode *pSrc = rStr.getStr();
-    sal_Int32 nLen = rStr.getLength();
-    ::rtl::OUStringBuffer aRes( nLen );
+    static bool bFirstJISCall = true;
+    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), 0 );
 
-    for (sal_Int32 i=0; i<nLen; i++)
+    if( bFirstJISCall )
     {
-        if( pSrc[i] == 0x0022 )
-            // QUOTATION MARK => RIGHT DOUBLE QUOTATION MARK
-            // This is an exception to the ASCII range that follows below.
-            aRes.append((sal_Unicode)0x201d);
-        else if( pSrc[i] == 0x005c )
-            // REVERSE SOLIDUS "\", a specialty that gets displayed as a
-            // Yen sign, which is a legacy of code-page 932, see
-            // http://www.microsoft.com/globaldev/DrIntl/columns/019/default.mspx#EED
-            // http://www.microsoft.com/globaldev/reference/dbcs/932.htm
-            // This is an exception to the ASCII range that follows below.
-            aRes.append((sal_Unicode)0xffe5);
-        else if( pSrc[i] == 0x0060 )
-            // GRAVE ACCENT => LEFT SINGLE QUOTATION MARK
-            // This is an exception to the ASCII range that follows below.
-            aRes.append((sal_Unicode)0x2018);
-        else if( pSrc[i] == 0x0027 )
-            // APOSTROPHE => RIGHT SINGLE QUOTATION MARK
-            // This is an exception to the ASCII range that follows below.
-            aRes.append((sal_Unicode)0x2019);
-        else if( pSrc[i] >= 0x0021 && pSrc[i] <= 0x007e )
-            // ASCII characters
-            aRes.append((sal_Unicode)(pSrc[i] - 0x0021 + 0xff01));
-        else if( pSrc[i] == 0xff66 )
-            // katakana wo
-            aRes.append((sal_Unicode)0x30f2);
-        else if( pSrc[i] >= 0xff67 && pSrc[i] <= 0xff6b )
-            // katakana small a-o
-            aRes.append((sal_Unicode)((pSrc[i] - 0xff67) * 2 + 0x30a1 ));
-        else if( pSrc[i] >= 0xff6c && pSrc[i] <= 0xff6e )
-            // katakana small ya-yo
-            aRes.append((sal_Unicode)((pSrc[i] - 0xff6c) * 2 + 0x30e3 ));
-        else if( pSrc[i] == 0xff6f )
-            // katakana small tsu
-            aRes.append((sal_Unicode)0x30c3);
-        else if( pSrc[i] >= 0xff71 && pSrc[i] <= 0xff75 )
-            // katakana a-o
-            aRes.append((sal_Unicode)((pSrc[i] - 0xff71) * 2 + 0x30a2));
-        else if( pSrc[i] >= 0xff76 && pSrc[i] <= 0xff81 )
-        {
-            if( (i+1)<nLen && pSrc[i+1] == 0xff9e )
-            {
-                // katakana ga-dsu
-                aRes.append((sal_Unicode)((pSrc[i] - 0xff76) * 2 + 0x30ac));
-                i+=1;
-            }
-            else
-                // katakana ka-chi
-                aRes.append((sal_Unicode)((pSrc[i] - 0xff76) * 2 + 0x30ab));
-        }
-        else if( pSrc[i] >= 0xff82 && pSrc[i] <= 0xff84 )
-        {
-            if( (i+1)<nLen && pSrc[i+1] == 0xff9e )
-            {
-                // katakana du-do
-                aRes.append((sal_Unicode)((pSrc[i] - 0xff82) * 2 + 0x30c5));
-                i+=1;
-            }
-            else
-                // katakana tsu-to
-                aRes.append((sal_Unicode)((pSrc[i] - 0xff82) * 2 + 0x30c4));
-        }
-        else if( pSrc[i] >= 0xff85 && pSrc[i] <= 0xff89 )
-            // katakana na-no
-            aRes.append((sal_Unicode)(pSrc[i] - 0xff85 + 0x30ca));
-        else if( pSrc[i] >= 0xff8a && pSrc[i] <= 0xff8e )
-        {
-            if( (i+1)<nLen && pSrc[i+1] == 0xff9e )
-            {
-                // katakana ba-bo
-                aRes.append((sal_Unicode)((pSrc[i] - 0xff8a) * 3 + 0x30d0));
-                i+=1;
-            }
-            else if( (i+1)<nLen && pSrc[i+1] == 0xff9f )
-            {
-                // katakana pa-po
-                aRes.append((sal_Unicode)((pSrc[i] - 0xff8a) * 3 + 0x30d1));
-                i+=1;
-            }
-            else
-                // katakana ha-ho
-                aRes.append((sal_Unicode)((pSrc[i] - 0xff8a) * 3 + 0x30cf));
-        }
-        else if( pSrc[i] >= 0xff8f && pSrc[i] <= 0xff93 )
-            // katakana ma-mo
-            aRes.append((sal_Unicode)(pSrc[i] - 0xff8f + 0x30de));
-        else if( pSrc[i] >= 0xff94 && pSrc[i] <= 0xff96 )
-            // katakana ya-yo
-            aRes.append((sal_Unicode)((pSrc[i] - 0xff94) * 2 + 0x30e4));
-        else if( pSrc[i] >= 0xff97 && pSrc[i] <= 0xff9b )
-            // katakana ra-ro
-            aRes.append((sal_Unicode)(pSrc[i] - 0xff97 + 0x30e9));
-        else
-        {
-            switch (pSrc[i])
-            {
-                case 0xff9c:    // katakana wa
-                    aRes.append((sal_Unicode)0x30ef); break;
-                case 0xff9d:    // katakana nn
-                    aRes.append((sal_Unicode)0x30f3); break;
-                case 0xff9e:    // HALFWIDTH KATAKANA VOICED SOUND MARK
-                    aRes.append((sal_Unicode)0x309b); break;
-                case 0xff9f:    // HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
-                    aRes.append((sal_Unicode)0x309c); break;
-                case 0xff70:    // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-                    aRes.append((sal_Unicode)0x30fc); break;
-                case 0xff61:    // HALFWIDTH IDEOGRAPHIC FULL STOP
-                    aRes.append((sal_Unicode)0x3002); break;
-                case 0xff62:    // HALFWIDTH LEFT CORNER BRACKET
-                    aRes.append((sal_Unicode)0x300c); break;
-                case 0xff63:    // HALFWIDTH RIGHT CORNER BRACKET
-                    aRes.append((sal_Unicode)0x300d); break;
-                case 0xff64:    // HALFWIDTH IDEOGRAPHIC COMMA
-                    aRes.append((sal_Unicode)0x3001); break;
-                case 0xff65:    // HALFWIDTH KATAKANA MIDDLE DOT
-                    aRes.append((sal_Unicode)0x30fb); break;
-                default:
-                    aRes.append( pSrc[i] );
-            }
-        }
+        aTrans.loadModuleByImplName( ::rtl::OUString::createFromAscii( "HALFWIDTH_FULLWIDTH_LIKE_JIS" ), LANGUAGE_SYSTEM );
+        bFirstJISCall = false;
     }
 
-    return aRes.makeStringAndClear();
+    return aTrans.transliterate( rStr, 0, USHORT( rStr.getLength() ), NULL );
 }
 
 
@@ -6075,7 +5859,7 @@ void ScInterpreter::ScAddressFunc()
     USHORT  nFlags = SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;   // default
     if( nParamCount >= 3 )
     {
-        USHORT n = (USHORT) ::rtl::math::approxFloor(GetDouble());
+        USHORT n = (USHORT) ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0));
         switch ( n )
         {
             default :

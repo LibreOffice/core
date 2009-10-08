@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobase.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,9 +50,9 @@
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
-TYPEINIT1(ScBlockUndo,      SfxUndoAction);
-TYPEINIT1(ScMoveUndo,       SfxUndoAction);
-TYPEINIT1(ScDBFuncUndo,     SfxUndoAction);
+TYPEINIT1(ScBlockUndo,      ScSimpleUndo);
+TYPEINIT1(ScMoveUndo,       ScSimpleUndo);
+TYPEINIT1(ScDBFuncUndo,     ScSimpleUndo);
 TYPEINIT1(ScUndoWrapper,    SfxUndoAction);
 
 // -----------------------------------------------------------------------
@@ -345,21 +345,30 @@ void ScMoveUndo::EndRedo()
 
 // -----------------------------------------------------------------------
 
-ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal ) :
+ScDBFuncUndo::ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo ) :
     ScSimpleUndo( pDocSh ),
-    aOriginalRange( rOriginal )
+    aOriginalRange( rOriginal ),
+    mpDrawUndo( pDrawUndo )
 {
     pAutoDBRange = pDocSh->GetOldAutoDBRange();
 }
 
 ScDBFuncUndo::~ScDBFuncUndo()
 {
+    DeleteSdrUndoAction( mpDrawUndo );
     delete pAutoDBRange;
+}
+
+void ScDBFuncUndo::SetDrawUndoAction( SdrUndoAction* pDrawUndo )
+{
+    DeleteSdrUndoAction( mpDrawUndo );
+    mpDrawUndo = pDrawUndo;
 }
 
 void ScDBFuncUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
+    DoSdrUndoAction( mpDrawUndo, pDocShell->GetDocument() );
 }
 
 void ScDBFuncUndo::EndUndo()
@@ -398,6 +407,7 @@ void ScDBFuncUndo::EndUndo()
 
 void ScDBFuncUndo::BeginRedo()
 {
+    RedoSdrUndoAction( mpDrawUndo );
     if ( pAutoDBRange )
     {
         // move the database range to this function's position again (see ScDocShell::GetDBData)

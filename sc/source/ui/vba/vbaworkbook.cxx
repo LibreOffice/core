@@ -38,7 +38,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/excel/XlFileFormat.hpp>
+#include <ooo/vba/excel/XlFileFormat.hpp>
 
 #include "scextopt.hxx"
 #include "vbaworksheet.hxx"
@@ -56,7 +56,7 @@
 // Much of the impl. for the equivalend UNO module is
 // sc/source/ui/unoobj/docuno.cxx, viewuno.cxx
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 class ActiveSheet : public ScVbaWorksheet
@@ -80,7 +80,7 @@ protected:
         return xSheet;
     }
 public:
-    ActiveSheet( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : ScVbaWorksheet( xParent, xContext ) {}
+    ActiveSheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : ScVbaWorksheet( xParent, xContext ) {}
 
 };
 
@@ -192,7 +192,7 @@ ScVbaWorkbook::init()
     if ( !ColorData.getLength() )
         ResetColors();
 }
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext ), mxModel(NULL)
+ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext) :ScVbaWorkbook_BASE( xParent, xContext ), mxModel(NULL)
 {
     //#FIXME this persists the color data per office instance and
     // not per workbook instance, need to hook the data into XModel
@@ -203,13 +203,13 @@ ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< oo::vba::XHelperInter
     init();
 }
 
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext ),  mxModel( xModel )
+ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel ) : ScVbaWorkbook_BASE( xParent, xContext ),  mxModel( xModel )
 {
     init();
 }
 
 ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) : ScVbaWorkbook_BASE( getXSomethingFromArgs< vba::XHelperInterface >( args, 0 ), xContext ),  mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+    uno::Reference< uno::XComponentContext> const & xContext ) : ScVbaWorkbook_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ),  mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
 
 {
     init();
@@ -270,7 +270,7 @@ ScVbaWorkbook::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeException
     uno::Reference< frame::XModel > xModel( getModel() );
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
     uno::Reference<container::XIndexAccess > xSheets( xSpreadDoc->getSheets(), uno::UNO_QUERY_THROW );
-    uno::Reference< vba::XCollection > xWorkSheets(  new ScVbaWorksheets( this, mxContext, xSheets, xModel ) );
+    uno::Reference< XCollection > xWorkSheets(  new ScVbaWorksheets( this, mxContext, xSheets, xModel ) );
     if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
     {
         return uno::Any( xWorkSheets );
@@ -281,7 +281,7 @@ ScVbaWorkbook::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeException
 uno::Any SAL_CALL
 ScVbaWorkbook::Windows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< vba::XCollection >  xWindows = ScVbaWindows::Windows( mxContext );
+    uno::Reference< XCollection >  xWindows = ScVbaWindows::Windows( mxContext );
     if ( aIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::Any( xWindows );
     return uno::Any( xWindows->Item( aIndex, uno::Any() ) );
@@ -420,7 +420,7 @@ ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
     // quick look and Styles object doesn't seem to have a valid parent
     // or a least the object browser just shows an object that has no
     // variables ( therefore... leave as NULL for now )
-    uno::Reference< vba::XCollection > dStyles = new ScVbaStyles( uno::Reference< vba::XHelperInterface >(), mxContext, getModel() );
+    uno::Reference< XCollection > dStyles = new ScVbaStyles( uno::Reference< XHelperInterface >(), mxContext, getModel() );
     if ( Item.hasValue() )
         return dStyles->Item( Item, uno::Any() );
     return uno::makeAny( dStyles );
@@ -428,13 +428,17 @@ ScVbaWorkbook::Styles( const::uno::Any& Item ) throw (uno::RuntimeException)
 
 // Amelia Wang
 uno::Any SAL_CALL
-ScVbaWorkbook::Names( ) throw (uno::RuntimeException)
+ScVbaWorkbook::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getModel() );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
-    uno::Reference< vba::XCollection > xNames( new ScVbaNames( this , mxContext , xNamedRanges , xModel ));
+    uno::Reference< XCollection > xNames( new ScVbaNames( this , mxContext , xNamedRanges , xModel ));
+    if (  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
+    {
     return uno::Any( xNames );
+}
+    return uno::Any( xNames->Item( aIndex, uno::Any() ) );
 }
 
 rtl::OUString&
@@ -451,7 +455,7 @@ ScVbaWorkbook::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Workbook" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Workbook" ) );
     }
     return aServiceNames;
 }
@@ -494,5 +498,5 @@ sdecl::vba_service_class_<ScVbaWorkbook, sdecl::with_args<true> > serviceImpl;
 extern sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaWorkbook",
-    "org.openoffice.excel.Workbook" );
+    "ooo.vba.excel.Workbook" );
 }

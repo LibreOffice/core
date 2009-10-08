@@ -72,8 +72,12 @@
 #include "xipage.hxx"
 #include "xiview.hxx"
 #include "xiescher.hxx"
+#include "tokenarray.hxx"
+#include "token.hxx"
+#include "compiler.hxx"
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -110,6 +114,9 @@ using ::com::sun::star::chart2::data::XDataReceiver;
 using ::com::sun::star::chart2::data::XDataSink;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
 using ::com::sun::star::chart2::data::XDataSequence;
+
+using ::formula::FormulaToken;
+using ::formula::StackVar;
 
 // Helpers ====================================================================
 
@@ -626,7 +633,8 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
 // ----------------------------------------------------------------------------
 
 XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
-    XclImpChRoot( rRoot )
+    XclImpChRoot( rRoot ),
+    mpTokenArray(static_cast<ScTokenArray*>(NULL))
 {
 }
 
@@ -637,16 +645,18 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
             >> maData.mnFlags
             >> maData.mnNumFmtIdx;
 
-    maScRanges.Clear();
-
     if( GetLinkType() == EXC_CHSRCLINK_WORKSHEET )
     {
         // read token array
         XclTokenArray aXclTokArr;
         rStrm >> aXclTokArr;
-        // convert token array to range list
-        // FIXME: JEG : This is wrong.  It should be a formula
-        GetFormulaCompiler().CreateRangeList( maScRanges, EXC_FMLATYPE_CHART, aXclTokArr, rStrm );
+
+        // convert xcl formula tokens to Calc's.
+        const ScTokenArray* pTokenArray =
+            GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_CHART, aXclTokArr);
+
+        if (pTokenArray)
+            mpTokenArray.reset(pTokenArray->Clone());
     }
 
     // try to read a following CHSTRING record
@@ -671,6 +681,42 @@ void XclImpChSourceLink::SetTextFormats( const XclFormatRunVec& rFormats )
         mxString->SetFormats( rFormats );
 }
 
+sal_uInt16 XclImpChSourceLink::GetCellCount() const
+{
+    using namespace ::formula;
+
+    sal_uInt32 nCellCount = 0;
+    mpTokenArray->Reset();
+    for (const FormulaToken* p = mpTokenArray->First(); p; p = mpTokenArray->Next())
+    {
+        switch (p->GetType())
+        {
+            case svSingleRef:
+            case svExternalSingleRef:
+                // single cell
+                ++nCellCount;
+            break;
+            case svDoubleRef:
+            case svExternalDoubleRef:
+            {
+                // cell range
+                const ScComplexRefData& rData = static_cast<const ScToken*>(p)->GetDoubleRef();
+                const ScSingleRefData& s = rData.Ref1;
+                const ScSingleRefData& e = rData.Ref2;
+                SCsTAB nTab = e.nTab - s.nTab;
+                SCsCOL nCol = e.nCol - s.nCol;
+                SCsROW nRow = e.nRow - s.nRow;
+                nCellCount += static_cast<sal_uInt32>(nCol+1) *
+                              static_cast<sal_uInt32>(nRow+1) *
+                              static_cast<sal_uInt32>(nTab+1);
+            }
+            break;
+            default: ;
+        }
+    }
+    return limit_cast<sal_uInt16>(nCellCount);
+}
+
 void XclImpChSourceLink::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const
 {
     if( ::get_flag( maData.mnFlags, EXC_CHSRCLINK_NUMFMT ) )
@@ -693,16 +739,16 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
     Reference< XDataProvider > xDataProv = GetDataProvider();
     if( xDataProv.is() )
     {
-        // create the string representation of the range list
-        OUString aRangeRep;
-        ScRangeStringConverter::GetStringFromRangeList( aRangeRep, &maScRanges, GetDocPtr(), ';' );
-
-        // create the data sequence
-        try
+        if (mpTokenArray)
         {
-            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aRangeRep );
+            ScCompiler aComp(GetDocPtr(), ScAddress(), *mpTokenArray);
+            aComp.SetGrammar(::formula::FormulaGrammar::GRAM_ENGLISH);
+            OUStringBuffer aBuf;
+            aComp.CreateStringFromTokenArray(aBuf);
+            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation(
+                aBuf.makeStringAndClear());
         }
-        catch( Exception& )
+        else
         {
             DBG_ERRORFILE( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
         }

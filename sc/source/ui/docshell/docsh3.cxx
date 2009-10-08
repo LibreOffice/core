@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh3.cxx,v $
- * $Revision: 1.37.32.2 $
+ * $Revision: 1.38.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,6 +197,11 @@ void ScDocShell::PostPaintGridAll()
 void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, SC_PF_TESTMERGE );
+}
+
+void ScDocShell::PostPaintCell( const ScAddress& rPos )
+{
+    PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
 }
 
 void ScDocShell::PostPaintExtras()
@@ -769,15 +774,16 @@ inline BOOL lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, BOOL 
     //  State nicht vergleichen, falls eine alte Aenderung akzeptiert wurde
 }
 
-bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, BOOL bIgnore100Sec )
+bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, BOOL bIgnore100Sec )
 {
-    if ( !pDoc || !pAction || !pSearchDoc || !pFirstSearchAction )
+    if ( !pDoc || !pAction || !pSearchDoc || !pFirstSearchAction || !pLastSearchAction )
     {
         return false;
     }
 
+    ULONG nLastSearchAction = pLastSearchAction->GetActionNumber();
     const ScChangeAction* pA = pFirstSearchAction;
-    while ( pA )
+    while ( pA && pA->GetActionNumber() <= nLastSearchAction )
     {
         if ( pAction->GetType() == pA->GetType() &&
              pAction->GetUser() == pA->GetUser() &&
@@ -850,6 +856,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
     const ScChangeAction* pFirstMergeAction = pSourceAction;
     const ScChangeAction* pFirstSearchAction = pThisAction;
+
+    // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+    const ScChangeAction* pLastSearchAction = pThisTrack->GetLast();
+
     //  MergeChangeData aus den folgenden Aktionen erzeugen
     ULONG nNewActionCount = 0;
     const ScChangeAction* pCount = pSourceAction;
@@ -869,7 +879,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
     ULONG nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
     // UpdateReference-Undo, gueltige Referenzen fuer den letzten gemeinsamen Zustand
-    pSourceTrack->MergePrepare( (ScChangeAction*) pFirstMergeAction );
+    pSourceTrack->MergePrepare( (ScChangeAction*) pFirstMergeAction, bShared );
 
     //  MergeChangeData an alle noch folgenden Aktionen in diesem Dokument anpassen
     //  -> Referenzen gueltig fuer dieses Dokument
@@ -929,7 +939,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         bool bMergeAction = false;
         if ( bShared )
         {
-            if ( !bCheckDuplicates || !lcl_FindAction( &rOtherDoc, pSourceAction, &aDocument, pFirstSearchAction, bIgnore100Sec ) )
+            if ( !bCheckDuplicates || !lcl_FindAction( &rOtherDoc, pSourceAction, &aDocument, pFirstSearchAction, pLastSearchAction, bIgnore100Sec ) )
             {
                 bMergeAction = true;
             }
@@ -1119,7 +1129,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 }
 
                 // Referenzen anpassen
-                pSourceTrack->MergeOwn( (ScChangeAction*) pSourceAction, nFirstNewNumber );
+                pSourceTrack->MergeOwn( (ScChangeAction*) pSourceAction, nFirstNewNumber, bShared );
 
                 // merge action state
                 if ( bShared && !pSourceAction->IsRejected() )
@@ -1159,6 +1169,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         }
         pSourceAction = pSourceAction->GetNext();
     }
+
     rMarkData = aOldMarkData;
     pThisTrack->SetUser(aOldUser);
     pThisTrack->SetUseFixDateTime( FALSE );
@@ -1284,7 +1295,9 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 pThisTrack->Reject( pAction );
                 pAction = pAction->GetPrev();
             }
-            pThisTrack->Undo( nStartShared, pThisTrack->GetActionMax() );
+
+            // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+            pThisTrack->Undo( nStartShared, pThisTrack->GetActionMax(), true );
 
             // merge shared changes into own document
             ScChangeActionMergeMap aSharedMergeMap;

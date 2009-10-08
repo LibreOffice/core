@@ -30,14 +30,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
-#include <org/openoffice/office/MsoGradientStyle.hpp>
+#include <ooo/vba/office/MsoGradientStyle.hpp>
 #include "vbafillformat.hxx"
 #include "vbacolorformat.hxx"
 
-using namespace org::openoffice;
+using namespace ooo::vba;
 using namespace com::sun::star;
 
-ScVbaFillFormat::ScVbaFillFormat( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape ) : ScVbaFillFormat_BASE( xParent, xContext ), m_xShape( xShape )
+ScVbaFillFormat::ScVbaFillFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape ) : ScVbaFillFormat_BASE( xParent, xContext ), m_xShape( xShape )
 {
     m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
     m_nFillStyle = drawing::FillStyle_SOLID;
@@ -195,7 +195,7 @@ ScVbaFillFormat::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.msforms.FillFormat" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.FillFormat" ) );
     }
     return aServiceNames;
 }

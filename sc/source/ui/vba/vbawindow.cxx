@@ -27,6 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include "helperdecl.hxx"
 #include "vbawindow.hxx"
 #include "vbaworksheets.hxx"
 #include "vbaworksheet.hxx"
@@ -36,8 +37,12 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <org/openoffice/excel/XlWindowState.hpp>
-#include <org/openoffice/excel/Constants.hpp>
+#include <ooo/vba/excel/XlWindowState.hpp>
+#include <ooo/vba/excel/XlWindowView.hpp>
+#include <ooo/vba/excel/Constants.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
@@ -49,8 +54,8 @@
 #include "unonames.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
-using namespace ::org::openoffice::excel::XlWindowState;
+using namespace ::ooo::vba;
+using namespace ::ooo::vba::excel::XlWindowState;
 
 typedef  std::hash_map< rtl::OUString,
 SCTAB, ::rtl::OUStringHash,
@@ -92,7 +97,7 @@ public:
             throw container::NoSuchElementException();
         }
         // #FIXME needs ThisWorkbook as parent
-        return uno::makeAny( uno::Reference< excel::XWorksheet > ( new ScVbaWorksheet( uno::Reference< vba::XHelperInterface >(), m_xContext, *(m_it++), m_xModel ) ) );
+        return uno::makeAny( uno::Reference< excel::XWorksheet > ( new ScVbaWorksheet( uno::Reference< XHelperInterface >(), m_xContext, *(m_it++), m_xModel ) ) );
     }
 
 
@@ -197,9 +202,21 @@ public:
 
 };
 
-ScVbaWindow::ScVbaWindow( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : WindowImpl_BASE( xParent, xContext ), m_xModel( xModel )
+ScVbaWindow::ScVbaWindow( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : WindowImpl_BASE( xParent, xContext ), m_xModel( xModel )
 {
-    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    init();
+}
+
+ScVbaWindow::ScVbaWindow( uno::Sequence< uno::Any > const & args, uno::Reference< uno::XComponentContext > const & xContext )
+        : WindowImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ),
+          m_xModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+{
+    init();
+}
+void
+ScVbaWindow::init()
+{
+    uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     m_xViewPane.set( xController, uno::UNO_QUERY_THROW );
     m_xViewFreezable.set( xController, uno::UNO_QUERY_THROW );
     m_xViewSplitable.set( xController, uno::UNO_QUERY_THROW );
@@ -232,10 +249,10 @@ ScVbaWindow::SelectedSheets( const uno::Any& aIndex ) throw (uno::RuntimeExcepti
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( new SelectedSheetsEnumAccess( mxContext, m_xModel  ) );
     // #FIXME needs a workbook as a parent
-    uno::Reference< excel::XWorksheets > xSheets(  new ScVbaWorksheets( uno::Reference< vba::XHelperInterface >(), mxContext, xEnumAccess, m_xModel ) );
+    uno::Reference< excel::XWorksheets > xSheets(  new ScVbaWorksheets( uno::Reference< XHelperInterface >(), mxContext, xEnumAccess, m_xModel ) );
     if ( aIndex.hasValue() )
     {
-        uno::Reference< vba::XCollection > xColl( xSheets, uno::UNO_QUERY_THROW );
+        uno::Reference< XCollection > xColl( xSheets, uno::UNO_QUERY_THROW );
         return xColl->Item( aIndex, uno::Any() );
     }
     return uno::makeAny( xSheets );
@@ -289,8 +306,8 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException)
         if ( ( nCrudLen + nCrudIndex ) == sTitle.getLength() )
         {
             sTitle = sTitle.copy( 0, nCrudIndex );
-            uno::Reference< oo::vba::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
-            ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+            uno::Reference< ov::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
+            ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
             rtl::OUString sName = workbook.getName();
             // rather bizare hack to make sure the name behavior
             // is like XL
@@ -427,8 +444,8 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
 void
 ScVbaWindow::Activate() throw (css::uno::RuntimeException)
 {
-    uno::Reference< oo::vba::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
-    ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    uno::Reference< ov::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
+    ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
 
     workbook.Activate();
 }
@@ -436,13 +453,13 @@ ScVbaWindow::Activate() throw (css::uno::RuntimeException)
 void
 ScVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& FileName, const uno::Any& RouteWorkBook ) throw (uno::RuntimeException)
 {
-    uno::Reference< oo::vba::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
-    ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    uno::Reference< ov::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
+    ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
     workbook.Close(SaveChanges, FileName, RouteWorkBook );
 }
 
-uno::Reference< excel::XPane >
-ScVbaWindow::ActivePane()
+uno::Reference< excel::XPane > SAL_CALL
+ScVbaWindow::ActivePane() throw (script::BasicErrorException, uno::RuntimeException)
 {
     return new ScVbaPane( mxContext, m_xViewPane );
 }
@@ -629,7 +646,8 @@ ScVbaWindow::setSplitColumn( sal_Int32 _splitcolumn ) throw (uno::RuntimeExcepti
     if( getSplitColumn() != _splitcolumn )
     {
         sal_Bool bFrozen = getFreezePanes();
-        m_xViewFreezable->freezeAtPosition( _splitcolumn, 0 );
+        sal_Int32 nRow = getSplitRow();
+        m_xViewFreezable->freezeAtPosition( _splitcolumn, nRow );
         SplitAtDefinedPosition( !bFrozen );
     }
 }
@@ -646,13 +664,14 @@ void SAL_CALL
 ScVbaWindow::setSplitHorizontal( double _splithorizontal ) throw (uno::RuntimeException)
 {
     double fHoriPixels = PointsToPixels( m_xDevice, _splithorizontal, sal_True );
-   m_xViewSplitable->splitAtPosition( (int) fHoriPixels, 0 );
+   m_xViewSplitable->splitAtPosition( static_cast<sal_Int32>( fHoriPixels ), 0 );
 }
 
 sal_Int32 SAL_CALL
 ScVbaWindow::getSplitRow() throw (uno::RuntimeException)
 {
-    return m_xViewSplitable->getSplitRow();
+    sal_Int32 nValue = m_xViewSplitable->getSplitRow();
+    return nValue ? nValue - 1 : nValue;
 }
 
 void SAL_CALL
@@ -661,7 +680,8 @@ ScVbaWindow::setSplitRow( sal_Int32 _splitrow ) throw (uno::RuntimeException)
     if( getSplitRow() != _splitrow )
     {
         sal_Bool bFrozen = getFreezePanes();
-        m_xViewFreezable->freezeAtPosition( 0, _splitrow );
+        sal_Int32 nColumn = getSplitColumn();
+        m_xViewFreezable->freezeAtPosition( nColumn , _splitrow );
         SplitAtDefinedPosition( !bFrozen );
     }
 }
@@ -736,6 +756,184 @@ ScVbaWindow::setZoom( const uno::Any& _zoom ) throw (uno::RuntimeException)
     }
 }
 
+uno::Reference< excel::XWorksheet > SAL_CALL
+ScVbaWindow::ActiveSheet(  ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    return ScVbaGlobals::getGlobalsImpl(mxContext)->getApplication()->getActiveSheet();
+}
+
+uno::Any SAL_CALL
+ScVbaWindow::getView() throw (uno::RuntimeException)
+{
+    // not supported now
+    sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
+    return uno::makeAny( nWindowView );
+}
+
+void SAL_CALL
+ScVbaWindow::setView( const uno::Any& _view) throw (uno::RuntimeException)
+{
+    sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
+    _view >>= nWindowView;
+    USHORT nSlot = FID_NORMALVIEWMODE;
+    switch ( nWindowView )
+    {
+        case excel::XlWindowView::xlNormalView:
+            nSlot = FID_NORMALVIEWMODE;
+            break;
+        case excel::XlWindowView::xlPageBreakPreview:
+            nSlot = FID_PAGEBREAKMODE;
+            break;
+        default:
+            DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
+    }
+    dispatchExecute( m_xModel, nSlot );
+}
+
+sal_Bool SAL_CALL
+ScVbaWindow::getVisible() throw (uno::RuntimeException)
+{
+    sal_Bool bVisible = sal_True;
+    uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::awt::XWindow2 > xWindow2 (xWindow, uno::UNO_QUERY_THROW );
+    if( xWindow2.is() )
+    {
+        bVisible = xWindow2->isVisible();
+    }
+    return bVisible;
+}
+
+void SAL_CALL
+ScVbaWindow::setVisible(sal_Bool _visible) throw (uno::RuntimeException)
+{
+    uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
+    if( xWindow.is() )
+    {
+        xWindow->setVisible( _visible );
+    }
+}
+
+css::awt::Rectangle getPosSize( const uno::Reference< frame::XModel >& xModel )
+{
+    css::awt::Rectangle aRect;
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
+    if( xWindow.is() )
+    {
+        aRect = xWindow->getPosSize();
+    }
+    return aRect;
+}
+
+void setPosSize( const uno::Reference< frame::XModel >& xModel, sal_Int32 nValue, USHORT nFlag )
+{
+    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
+    if( xWindow.is() )
+    {
+        css::awt::Rectangle aRect = xWindow->getPosSize();
+        switch( nFlag )
+        {
+            case css::awt::PosSize::X:
+                xWindow->setPosSize( nValue, aRect.Y,   0, 0, css::awt::PosSize::X );
+                break;
+            case css::awt::PosSize::Y:
+                xWindow->setPosSize( aRect.X, nValue,   0, 0, css::awt::PosSize::Y );
+                break;
+            case css::awt::PosSize::WIDTH:
+                xWindow->setPosSize( 0, 0,  nValue, aRect.Height, css::awt::PosSize::WIDTH );
+                break;
+            case css::awt::PosSize::HEIGHT:
+                xWindow->setPosSize( 0, 0,  aRect.Width, nValue, css::awt::PosSize::HEIGHT );
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+sal_Int32 SAL_CALL
+ScVbaWindow::getHeight() throw (uno::RuntimeException)
+{
+    css::awt::Rectangle aRect = getPosSize(m_xModel);
+    return aRect.Height;
+}
+
+void SAL_CALL
+ScVbaWindow::setHeight( sal_Int32 _height ) throw (uno::RuntimeException)
+{
+    setPosSize(m_xModel, _height, css::awt::PosSize::HEIGHT);
+}
+
+sal_Int32 SAL_CALL
+ScVbaWindow::getLeft() throw (uno::RuntimeException)
+{
+    css::awt::Rectangle aRect = getPosSize(m_xModel);
+    return aRect.X;
+}
+
+void SAL_CALL
+ScVbaWindow::setLeft( sal_Int32 _left ) throw (uno::RuntimeException)
+{
+    setPosSize(m_xModel, _left, css::awt::PosSize::X);
+}
+sal_Int32 SAL_CALL
+ScVbaWindow::getTop() throw (uno::RuntimeException)
+{
+    css::awt::Rectangle aRect = getPosSize(m_xModel);
+    return aRect.Y;
+}
+
+void SAL_CALL
+ScVbaWindow::setTop( sal_Int32 _top ) throw (uno::RuntimeException)
+{
+    setPosSize(m_xModel, _top, css::awt::PosSize::Y);
+}
+sal_Int32 SAL_CALL
+ScVbaWindow::getWidth() throw (uno::RuntimeException)
+{
+    css::awt::Rectangle aRect = getPosSize(m_xModel);
+    return aRect.Width;
+}
+
+void SAL_CALL
+ScVbaWindow::setWidth( sal_Int32 _width ) throw (uno::RuntimeException)
+{
+    setPosSize(m_xModel, _width, css::awt::PosSize::WIDTH);
+}
+
+sal_Int32 SAL_CALL
+ScVbaWindow::PointsToScreenPixelsX(sal_Int32 _points) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+{
+    sal_Int32 nHundredthsofOneMillimeters = Millimeter::getInHundredthsOfOneMillimeter( _points );
+    double fConvertFactor = (m_xDevice->getInfo().PixelPerMeterX/100000);
+    return static_cast<sal_Int32>(fConvertFactor * nHundredthsofOneMillimeters );
+}
+
+sal_Int32 SAL_CALL
+ScVbaWindow::PointsToScreenPixelsY(sal_Int32 _points) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+{
+    sal_Int32 nHundredthsofOneMillimeters = Millimeter::getInHundredthsOfOneMillimeter( _points );
+    double fConvertFactor = (m_xDevice->getInfo().PixelPerMeterY/100000);
+    return static_cast<sal_Int32>(fConvertFactor * nHundredthsofOneMillimeters );
+}
+
+void SAL_CALL
+ScVbaWindow::PrintOut( const css::uno::Any& From, const css::uno::Any&To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+{
+    // need test, print current active sheet
+    PrintOutHelper( From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, m_xModel, sal_True );
+}
+
+void SAL_CALL
+ScVbaWindow::PrintPreview( const css::uno::Any& EnableChanges ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+{
+    // need test, print preview current active sheet
+    PrintPreviewHelper( EnableChanges, m_xModel );
+}
+
 rtl::OUString&
 ScVbaWindow::getServiceImplName()
 {
@@ -750,7 +948,16 @@ ScVbaWindow::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Window" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Window" ) );
     }
     return aServiceNames;
+}
+namespace window
+{
+namespace sdecl = comphelper::service_decl;
+sdecl::vba_service_class_<ScVbaWindow, sdecl::with_args<true> > serviceImpl;
+extern sdecl::ServiceDecl const serviceDecl(
+    serviceImpl,
+    "ScVbaWindow",
+    "ooo.vba.excel.Window" );
 }

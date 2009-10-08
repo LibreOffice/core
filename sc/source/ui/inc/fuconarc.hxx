@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconarc.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,7 @@
 #ifndef SC_FUCONARC_HXX
 #define SC_FUCONARC_HXX
 
-#ifndef _SV_HXX
-#endif
-
 #include "fuconstr.hxx"
-
 
 /*************************************************************************
 |*
@@ -46,7 +42,7 @@
 class FuConstArc : public FuConstruct
 {
  public:
-    FuConstArc( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuConstArc( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstArc();

@@ -31,7 +31,7 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <org/openoffice/excel/XApplication.hpp>
+#include <ooo/vba/excel/XApplication.hpp>
 
 #include <tools/string.hxx>
 
@@ -39,7 +39,7 @@
 #include "vbadialog.hxx"
 #include "vbaglobals.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 // fails silently
@@ -113,7 +113,7 @@ ScVbaDialog::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.PivotTable" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.PivotTable" ) );
     }
     return aServiceNames;
 }

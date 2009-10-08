@@ -282,7 +282,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                 if (xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS))) >>= aOutputPosition)
                 {
                     rtl::OUString sOUCellAddress;
-                    ScRangeStringConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
+                    ScRangeStringConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUCellAddress);
                 }
             }
@@ -294,7 +294,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
                 rtl::OUString sOUCellAddress;
-                ScRangeStringConverter::GetStringFromRange( sOUCellAddress, aAdvSource, pDoc );
+                ScRangeStringConverter::GetStringFromRange( sOUCellAddress, aAdvSource, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sOUCellAddress);
             }
 
@@ -437,7 +437,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         if (bCopyOutputData)
         {
             rtl::OUString sOUCellAddress;
-            ScRangeStringConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
+            ScRangeStringConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc, ::formula::FormulaGrammar::CONV_OOO );
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUCellAddress);
         }
 //      no longer supported
@@ -612,7 +612,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sDatabaseRangeName);
                             table::CellRangeAddress aRangeAddress(xDatabaseRange->getDataArea());
                             rtl::OUString sOUAddress;
-                            ScRangeStringConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc );
+                            ScRangeStringConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                             rExport.AddAttribute (XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUAddress);
                             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
                             sal_uInt16 nIndex;

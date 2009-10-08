@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undodat.cxx,v $
- * $Revision: 1.12.32.2 $
+ * $Revision: 1.12.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-// System - Includes -----------------------------------------------------
-
-
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -61,23 +57,23 @@
 
 // -----------------------------------------------------------------------
 
-TYPEINIT1(ScUndoDoOutline,          SfxUndoAction);
-TYPEINIT1(ScUndoMakeOutline,        SfxUndoAction);
-TYPEINIT1(ScUndoOutlineLevel,       SfxUndoAction);
-TYPEINIT1(ScUndoOutlineBlock,       SfxUndoAction);
-TYPEINIT1(ScUndoRemoveAllOutlines,  SfxUndoAction);
-TYPEINIT1(ScUndoAutoOutline,        SfxUndoAction);
-TYPEINIT1(ScUndoSubTotals,          SfxUndoAction);
-TYPEINIT1(ScUndoSort,               SfxUndoAction);
-TYPEINIT1(ScUndoQuery,              SfxUndoAction);
-TYPEINIT1(ScUndoAutoFilter,         SfxUndoAction);
-TYPEINIT1(ScUndoDBData,             SfxUndoAction);
-TYPEINIT1(ScUndoImportData,         SfxUndoAction);
-TYPEINIT1(ScUndoRepeatDB,           SfxUndoAction);
-//UNUSED2008-05  TYPEINIT1(ScUndoPivot,              SfxUndoAction);
-TYPEINIT1(ScUndoDataPilot,          SfxUndoAction);
-TYPEINIT1(ScUndoConsolidate,        SfxUndoAction);
-TYPEINIT1(ScUndoChartData,          SfxUndoAction);
+TYPEINIT1(ScUndoDoOutline,          ScSimpleUndo);
+TYPEINIT1(ScUndoMakeOutline,        ScSimpleUndo);
+TYPEINIT1(ScUndoOutlineLevel,       ScSimpleUndo);
+TYPEINIT1(ScUndoOutlineBlock,       ScSimpleUndo);
+TYPEINIT1(ScUndoRemoveAllOutlines,  ScSimpleUndo);
+TYPEINIT1(ScUndoAutoOutline,        ScSimpleUndo);
+TYPEINIT1(ScUndoSubTotals,          ScDBFuncUndo);
+TYPEINIT1(ScUndoSort,               ScDBFuncUndo);
+TYPEINIT1(ScUndoQuery,              ScDBFuncUndo);
+TYPEINIT1(ScUndoAutoFilter,         ScDBFuncUndo);
+TYPEINIT1(ScUndoDBData,             ScSimpleUndo);
+TYPEINIT1(ScUndoImportData,         ScSimpleUndo);
+TYPEINIT1(ScUndoRepeatDB,           ScSimpleUndo);
+//UNUSED2008-05  TYPEINIT1(ScUndoPivot,              ScSimpleUndo);
+TYPEINIT1(ScUndoDataPilot,          ScSimpleUndo);
+TYPEINIT1(ScUndoConsolidate,        ScSimpleUndo);
+TYPEINIT1(ScUndoChartData,          ScSimpleUndo);
 
 // -----------------------------------------------------------------------
 
@@ -858,15 +854,16 @@ void __EXPORT ScUndoSort::Undo()
     ScUndoUtil::MarkSimpleBlock( pDocShell, nStartCol, nStartRow, nSortTab,
                                  nEndCol, nEndRow, nSortTab );
 
-    pDoc->DeleteAreaTab( nStartCol,nStartRow, nEndCol,nEndRow, nSortTab, IDF_ALL );
-
+    // do not delete/copy note captions, they are handled in drawing undo (ScDBFuncUndo::mpDrawUndo)
+    pDoc->DeleteAreaTab( nStartCol,nStartRow, nEndCol,nEndRow, nSortTab, IDF_ALL|IDF_NOCAPTIONS );
     pUndoDoc->CopyToDocument( nStartCol, nStartRow, nSortTab, nEndCol, nEndRow, nSortTab,
-                                IDF_ALL, FALSE, pDoc );
+                                IDF_ALL|IDF_NOCAPTIONS, FALSE, pDoc );
 
     if (bDestArea)
     {
-        pDoc->DeleteAreaTab( aDestRange, IDF_ALL );
-        pUndoDoc->CopyToDocument( aDestRange, IDF_ALL, FALSE, pDoc );
+        // do not delete/copy note captions, they are handled in drawing undo (ScDBFuncUndo::mpDrawUndo)
+        pDoc->DeleteAreaTab( aDestRange, IDF_ALL|IDF_NOCAPTIONS );
+        pUndoDoc->CopyToDocument( aDestRange, IDF_ALL|IDF_NOCAPTIONS, FALSE, pDoc );
     }
 
     //  Zeilenhoehen immer (wegen automatischer Anpassung)

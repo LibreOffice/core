@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autonamecache.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +93,9 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurences( const String& rNa
                 case CELLTYPE_VALUE:
                 case CELLTYPE_NOTE:
                 case CELLTYPE_SYMBOLS:
+#ifdef DBG_UTIL
                 case CELLTYPE_DESTROYED:
+#endif
                     ;   // nothing, prevent compiler warning
                 break;
             }

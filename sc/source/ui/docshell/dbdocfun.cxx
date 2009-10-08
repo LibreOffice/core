@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbdocfun.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.20.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,7 @@
 #include "cell.hxx"         // for lcl_EmptyExcept
 #include "editable.hxx"
 #include "attrib.hxx"
+#include "drwlayer.hxx"
 
 // -----------------------------------------------------------------
 
@@ -420,6 +421,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
     SCTAB nSrcTab = nTab;
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
 
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
@@ -493,6 +495,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
             bRepeatQuery = FALSE;
     }
 
+    ScUndoSort* pUndoAction = 0;
     if ( bRecord )
     {
         //  Referenzen ausserhalb des Bereichs werden nicht veraendert !
@@ -501,20 +504,32 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         //  Zeilenhoehen immer (wegen automatischer Anpassung)
         //! auf ScBlockUndo umstellen
         pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
+
+        /*  #i59745# Do not copy note captions to undo document. All existing
+            caption objects will be repositioned while sorting which is tracked
+            in drawing undo. When undo is executed, the old positions will be
+            restored, and the cells with the old notes (which still refer to the
+            existing captions) will be copied back into the source document. */
         pDoc->CopyToDocument( aLocalParam.nCol1, aLocalParam.nRow1, nTab,
                                 aLocalParam.nCol2, aLocalParam.nRow2, nTab,
-                                IDF_ALL, FALSE, pUndoDoc );
+                                IDF_ALL|IDF_NOCAPTIONS, FALSE, pUndoDoc );
 
         const ScRange* pR = 0;
         if (pDestData)
         {
-            pDoc->CopyToDocument( aOldDest, IDF_ALL, FALSE, pUndoDoc );
+            /*  #i59745# Do not copy note captions from destination range to
+                undo document. All existing caption objects will be removed
+                which is tracked in drawing undo. When undo is executed, the
+                caption objects are reinserted with drawing undo, and the cells
+                with the old notes (which still refer to the existing captions)
+                will be copied back into the source document. */
+            pDoc->CopyToDocument( aOldDest, IDF_ALL|IDF_NOCAPTIONS, FALSE, pUndoDoc );
             pR = &aOldDest;
         }
 
         //  Zeilenhoehen immer (wegen automatischer Anpassung)
         //! auf ScBlockUndo umstellen
-//      if (bRepeatQuery)
+//        if (bRepeatQuery)
             pDoc->CopyToDocument( 0, aLocalParam.nRow1, nTab, MAXCOL, aLocalParam.nRow2, nTab,
                                     IDF_NONE, FALSE, pUndoDoc );
 
@@ -523,10 +538,12 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         if (pDocDB->GetCount())
             pUndoDB = new ScDBCollection( *pDocDB );
 
+        pUndoAction = new ScUndoSort( &rDocShell, nTab, rSortParam, bRepeatQuery, pUndoDoc, pUndoDB, pR );
+        rDocShell.GetUndoManager()->AddUndoAction( pUndoAction );
 
-        rDocShell.GetUndoManager()->AddUndoAction(
-            new ScUndoSort( &rDocShell, nTab,
-                            rSortParam, bRepeatQuery, pUndoDoc, pUndoDB, pR ) );
+        // #i59745# collect all drawing undo actions affecting cell note captions
+        if( pDrawLayer )
+            pDrawLayer->BeginCalcUndo();
     }
 
     if ( bCopy )
@@ -620,8 +637,12 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         rDocShell.PostPaint( nStartX, nStartY, nTab, nEndX, nEndY, nTab, nPaint );
     }
 
-//  AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, bPaint );
+    //  AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, bPaint );
     rDocShell.AdjustRowHeight( aLocalParam.nRow1, aLocalParam.nRow2, nTab );
+
+    // #i59745# set collected drawing undo actions at sorting undo action
+    if( pUndoAction && pDrawLayer )
+        pUndoAction->SetDrawUndoAction( pDrawLayer->GetCalcUndo() );
 
     aModificator.SetDocumentModified();
 
@@ -1132,7 +1153,7 @@ BOOL lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rE
     ScBaseCell* pCell = aIter.GetFirst();
     while (pCell)
     {
-        if ( pCell->GetCellType() != CELLTYPE_NOTE || pCell->GetNotePtr() )     // real content?
+        if ( !pCell->IsBlank() )      // real content?
         {
             if ( !rExcept.In( ScAddress( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ) ) )
                 return FALSE;       // cell found

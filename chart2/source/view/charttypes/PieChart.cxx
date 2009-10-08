@@ -570,7 +570,9 @@ namespace
 
 ::basegfx::B2IRectangle lcl_getRect( const uno::Reference< drawing::XShape >& xShape )
 {
-    ::basegfx::B2IRectangle aRect( BaseGFXHelper::makeRectangle(xShape->getPosition(),xShape->getSize() ));
+    ::basegfx::B2IRectangle aRect;
+    if( xShape.is() )
+        aRect = BaseGFXHelper::makeRectangle(xShape->getPosition(),xShape->getSize() );
     return aRect;
 }
 

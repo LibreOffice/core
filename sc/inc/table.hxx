@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table.hxx,v $
- * $Revision: 1.35.30.6 $
+ * $Revision: 1.35.126.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,7 +240,7 @@ public:
     BOOL        HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
     BOOL        HasSelectionMatrixFragment( const ScMarkData& rMark ) const;
 
-    BOOL        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+    BOOL        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
     void        PutCell( const ScAddress&, ScBaseCell* pCell );
     void        PutCell( const ScAddress&, ULONG nFormatIndex, ScBaseCell* pCell);
@@ -249,7 +249,6 @@ public:
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
-    void        SetNote( SCCOL nCol, SCROW nRow, const ScPostIt& rNote);
     void        SetError( SCCOL nCol, SCROW nRow, USHORT nError);
 
     void        GetString( SCCOL nCol, SCROW nRow, String& rString );
@@ -259,7 +258,6 @@ public:
     double      GetValue( SCCOL nCol, SCROW nRow );
     void        GetFormula( SCCOL nCol, SCROW nRow, String& rFormula,
                             BOOL bAsciiExport = FALSE );
-    BOOL        GetNote( SCCOL nCol, SCROW nRow, ScPostIt& rNote);
 
     CellType    GetCellType( const ScAddress& rPos ) const
                     { return aCol[rPos.Col()].GetCellType( rPos.Row() ); }
@@ -269,6 +267,15 @@ public:
     ScBaseCell* GetCell( SCCOL nCol, SCROW nRow ) const;
 
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
+
+    /** Returns the pointer to a cell note object at the passed cell address. */
+    ScPostIt*   GetNote( SCCOL nCol, SCROW nRow );
+    /** Sets the passed cell note object at the passed cell address. Takes ownership! */
+    void        TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote );
+    /** Returns and forgets the cell note object at the passed cell address. */
+    ScPostIt*   ReleaseNote( SCCOL nCol, SCROW nRow );
+    /** Deletes the note at the passed cell address. */
+    void        DeleteNote( SCCOL nCol, SCROW nRow );
 
     BOOL        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize );
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
@@ -282,7 +289,7 @@ public:
 
     void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nDelFlag);
     void        CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable,
-                            BOOL bKeepScenarioFlags);
+                            BOOL bKeepScenarioFlags, BOOL bCloneNoteCaptions);
     void        CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy,
                                 USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty, ScTable* pTable);
     void        StartListeningInArea( SCCOL nCol1, SCROW nRow1,
@@ -578,6 +585,7 @@ public:
 
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+
     void        Sort(const ScSortParam& rSortParam, BOOL bKeepQuery);
     BOOL        ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam,
                     BOOL* pSpecial = NULL, ScBaseCell* pCell = NULL,

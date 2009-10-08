@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen4.cxx,v $
- * $Revision: 1.22.32.2 $
+ * $Revision: 1.23.102.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,7 +159,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
             if (i == nTab1)
                 pTab[i]->PutCell(nCol1, nRow1, pCell);
             else
-                pTab[i]->PutCell(nCol1, nRow1, pCell->Clone(this, ScAddress( nCol1, nRow1, i)));
+                pTab[i]->PutCell(nCol1, nRow1, pCell->CloneWithoutNote(*this, ScAddress( nCol1, nRow1, i), SC_CLONECELL_STARTLISTENING));
         }
     }
 
@@ -287,7 +287,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
         for( k = nRow1; k <= nRow2; k++ )
             for (i = 0; i <= MAXTAB; i++)
                 if( pTab[i] && rMark.GetTableSelect(i) )
-                    pTab[i]->PutCell( j, k, aRefCell.Clone( this, ScAddress( j, k, i ) ) );
+                    pTab[i]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, i ), SC_CLONECELL_STARTLISTENING ) );
 }
 
 BOOL ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,

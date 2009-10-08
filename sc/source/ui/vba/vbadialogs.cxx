@@ -31,8 +31,8 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <org/openoffice/excel/XApplication.hpp>
-#include <org/openoffice/excel/XDialog.hpp>
+#include <ooo/vba/excel/XApplication.hpp>
+#include <ooo/vba/excel/XDialog.hpp>
 
 #include <tools/string.hxx>
 
@@ -41,7 +41,7 @@
 #include "vbaglobals.hxx"
 #include "vbadialog.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 void
@@ -62,7 +62,7 @@ ScVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
 {
     sal_Int32 nIndex = 0;
     aItem >>= nIndex;
-    uno::Reference< excel::XDialog > aDialog( new ScVbaDialog( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication(), uno::UNO_QUERY_THROW ), nIndex, mxContext ) );
+    uno::Reference< excel::XDialog > aDialog( new ScVbaDialog( uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication(), uno::UNO_QUERY_THROW ), nIndex, mxContext ) );
     return uno::Any( aDialog );
 }
 rtl::OUString&
@@ -79,7 +79,7 @@ ScVbaDialogs::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Worksheet" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Worksheet" ) );
     }
     return aServiceNames;
 }

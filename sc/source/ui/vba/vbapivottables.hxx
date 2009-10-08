@@ -32,7 +32,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <org/openoffice/excel/XPivotTables.hpp>
+#include <ooo/vba/excel/XPivotTables.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -41,14 +41,14 @@
 #include "vbacollectionimpl.hxx"
 
 
-typedef CollTestImplHelper< oo::excel::XPivotTables > ScVbaPivotTables_BASE;
+typedef CollTestImplHelper< ov::excel::XPivotTables > ScVbaPivotTables_BASE;
 
 class ScVbaPivotTables : public ScVbaPivotTables_BASE
 {
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 public:
-    ScVbaPivotTables( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaPivotTables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
     virtual ~ScVbaPivotTables() {}
 
     // XEnumerationAccess

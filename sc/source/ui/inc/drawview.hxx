@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.12.126.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer { class 
 
 class ScDocument;
 class ScViewData;
+class ScDrawObjData;
 
 class ScDrawView: public FmFormView
 {
@@ -58,7 +59,6 @@ class ScDrawView: public FmFormView
 
 protected:
     virtual void    ModelHasChanged();
-    virtual void    MakeVisible( const Rectangle& rRect, Window& rWin );
 
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
@@ -73,6 +73,10 @@ public:
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual void    DoConnect(SdrOle2Obj* pOleObj);
+
+    virtual void    MakeVisible( const Rectangle& rRect, Window& rWin );
+
+    virtual void    DeleteMarked();
 
     void            DrawMarks( OutputDevice* pOut ) const;
 
@@ -111,13 +115,34 @@ public:
 
     BOOL            SelectObject( const String& rName );
 //UNUSED2008-05  String         GetSelectedChartName() const;
-    BOOL            HasMarkedControl() const;
+    bool            HasMarkedControl() const;
+    bool            HasMarkedInternal() const;
 
     FASTBOOL        InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions=0);
 
+    /** Returns the selected object, if it is the caption object of a cell note.
+        @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
+    SdrObject*      GetMarkedNoteCaption( ScDrawObjData** ppCaptData = 0 );
+
+    /** Locks/unlocks the specified layer in the draw page.
+        Unlocked layer is required to be able to edit the contained objects. */
+    void            LockCalcLayer( SdrLayerID nLayer, bool bLock = true );
+    /** Unlocks the specified layer in the draw page. */
+    inline void     UnlockCalcLayer( SdrLayerID nLayer ) { LockCalcLayer( nLayer, false ); }
+
+    /** Locks/unlocks the background layer that contains background objects.
+        Unlocked layer is required to be able to edit the objects. */
+    inline void     LockBackgroundLayer( bool bLock = true ) { LockCalcLayer( SC_LAYER_BACK, bLock ); }
+    /** Unlocks the background layer that contains background objects. */
+    inline void     UnlockBackgroundLayer() { LockBackgroundLayer( false ); }
+
+    /** Locks/unlocks the internal layer that contains caption objects of cell notes.
+        Unlocked layer is required to be able to edit the contained objects. */
+    inline void     LockInternalLayer( bool bLock = true ) { LockCalcLayer( SC_LAYER_INTERN, bLock ); }
+    /** Unlocks the internal layer that contains caption objects of cell notes. */
+    inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
+
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
-    void                    StoreCaptionAttribs();
-    void                    StoreCaptionDimensions();
     void                    CaptionTextDirection(USHORT nSlot);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };

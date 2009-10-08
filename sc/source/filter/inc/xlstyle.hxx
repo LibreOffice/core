@@ -438,6 +438,7 @@ private:
     ScfPropSetHelper    maHlpChWstrnNoName; /// Chart properties for Western script, no font name.
     ScfPropSetHelper    maHlpChAsianNoName; /// Chart properties for Asian script, no font name.
     ScfPropSetHelper    maHlpChCmplxNoName; /// Chart properties for Complex script, no font name.
+    ScfPropSetHelper    maHlpChEscapement;  /// Chart properties for font escapement.
     ScfPropSetHelper    maHlpControl;       /// Properties for form controls.
 };
 

@@ -31,13 +31,13 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <org/openoffice/excel/XOLEObject.hpp>
+#include <ooo/vba/excel/XOLEObject.hpp>
 
 #include "vbaoleobject.hxx"
 #include "vbaoleobjects.hxx"
 
 using namespace com::sun::star;
-using namespace org::openoffice;
+using namespace ooo::vba;
 
 typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
 
@@ -85,12 +85,12 @@ public:
 class EnumWrapper : public EnumerationHelper_BASE
 {
 
-        uno::Reference<vba::XHelperInterface > m_xParent;
+        uno::Reference<XHelperInterface > m_xParent;
         uno::Reference<uno::XComponentContext > m_xContext;
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-        EnumWrapper(  const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< container::XIndexAccess >& xIndexAccess ) :  m_xParent( xParent ), m_xContext( xContext), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+        EnumWrapper(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< container::XIndexAccess >& xIndexAccess ) :  m_xParent( xParent ), m_xContext( xContext), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
 
         virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
         {
@@ -102,7 +102,7 @@ public:
                 if ( nIndex < m_xIndexAccess->getCount() )
         {
             uno::Reference< drawing::XControlShape > xControlShape (  m_xIndexAccess->getByIndex( nIndex++ ), uno::UNO_QUERY_THROW );
-                return uno::makeAny( uno::Reference< oo::excel::XOLEObject >( new ScVbaOLEObject( m_xParent, m_xContext, xControlShape ) ) );
+                return uno::makeAny( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( m_xParent, m_xContext, xControlShape ) ) );
         }
                 throw container::NoSuchElementException();
         }
@@ -113,7 +113,7 @@ uno::Reference< container::XIndexAccess > oleObjectIndexWrapper( const uno::Refe
     return new IndexAccessWrapper( xIndexAccess );
 }
 
-ScVbaOLEObjects::ScVbaOLEObjects( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
+ScVbaOLEObjects::ScVbaOLEObjects( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
                 const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
             : OLEObjectsImpl_BASE( xParent, xContext, oleObjectIndexWrapper( xIndexAccess  ) )
 {
@@ -131,7 +131,7 @@ ScVbaOLEObjects::createCollectionObject( const css::uno::Any& aSource )
     {
         uno::Reference< drawing::XControlShape > xControlShape( aSource, uno::UNO_QUERY_THROW );
     // parent of OLEObject is the same parent as the collection ( e.g. the sheet )
-        return uno::makeAny( uno::Reference< oo::excel::XOLEObject >( new ScVbaOLEObject( getParent(), mxContext, xControlShape ) ) );
+        return uno::makeAny( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( getParent(), mxContext, xControlShape ) ) );
     }
     return uno::Any();
 }
@@ -166,7 +166,7 @@ ScVbaOLEObjects::getItemByStringIndex( const rtl::OUString& sIndex ) throw (uno:
 uno::Type
 ScVbaOLEObjects::getElementType() throw (uno::RuntimeException)
 {
-    return org::openoffice::excel::XOLEObject::static_type(0);
+    return ooo::vba::excel::XOLEObject::static_type(0);
 }
 rtl::OUString&
 ScVbaOLEObjects::getServiceImplName()
@@ -182,7 +182,7 @@ ScVbaOLEObjects::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.OLEObjects" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.OLEObjects" ) );
     }
     return aServiceNames;
 }

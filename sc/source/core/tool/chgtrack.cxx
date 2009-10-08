@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgtrack.cxx,v $
- * $Revision: 1.31.28.5 $
+ * $Revision: 1.32.100.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2303,12 +2303,8 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
         const ScAddress& rPos, const ScBaseCell* pOrgCell,
         const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
-    if ( ScChangeActionContent::NeedsNumberFormat( pOrgCell ) )
-        ScChangeActionContent::SetValue( rStr, pCell,
-            pFromDoc->GetNumberFormat( rPos ), pOrgCell, pFromDoc, pToDoc );
-    else
-        ScChangeActionContent::SetValue( rStr, pCell,
-            0, pOrgCell, pFromDoc, pToDoc );
+    ULONG nFormat = NeedsNumberFormat( pOrgCell ) ? pFromDoc->GetNumberFormat( rPos ) : 0;
+    SetValue( rStr, pCell, nFormat, pOrgCell, pFromDoc, pToDoc );
 }
 
 
@@ -2322,7 +2318,7 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
         pCell->Delete();
     if ( ScChangeActionContent::GetContentCellType( pOrgCell ) )
     {
-        pCell = pOrgCell->Clone( pToDoc );
+        pCell = pOrgCell->CloneWithoutNote( *pToDoc );
         switch ( pOrgCell->GetCellType() )
         {
             case CELLTYPE_VALUE :
@@ -2418,8 +2414,7 @@ void ScChangeActionContent::GetFormulaString( String& rStr,
     else
     {
         DBG_ERROR( "ScChangeActionContent::GetFormulaString: aPos != pCell->aPos" );
-        ScFormulaCell* pNew = (ScFormulaCell*) pCell->Clone(
-            pCell->GetDocument(), aPos, TRUE );     // TRUE: bNoListening
+        ScFormulaCell* pNew = new ScFormulaCell( *pCell, *pCell->GetDocument(), aPos );
         pNew->GetFormula( rStr );
         delete pNew;
     }
@@ -2484,7 +2479,7 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
                             // nothing
                         break;
                         default:
-                            pDoc->PutCell( aPos, pCell->Clone( pDoc ) );
+                            pDoc->PutCell( aPos, pCell->CloneWithoutNote( *pDoc ) );
                     }
             }
         }
@@ -4042,8 +4037,14 @@ void ScChangeTrack::Remove( ScChangeAction* pRemove )
 }
 
 
-void ScChangeTrack::Undo( ULONG nStartAction, ULONG nEndAction )
+void ScChangeTrack::Undo( ULONG nStartAction, ULONG nEndAction, bool bMerge )
 {
+    // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+    if ( bMerge )
+    {
+        SetMergeState( SC_CTMS_UNDO );
+    }
+
     if ( nStartAction == 0 )
         ++nStartAction;
     if ( nEndAction > nActionMax )
@@ -4119,6 +4120,12 @@ void ScChangeTrack::Undo( ULONG nStartAction, ULONG nEndAction )
         }
         EndBlockModify( nEndAction );
     }
+
+    // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+    if ( bMerge )
+    {
+        SetMergeState( SC_CTMS_OTHER );
+    }
 }
 
 
@@ -4135,7 +4142,7 @@ BOOL ScChangeTrack::MergeIgnore( const ScChangeAction& rAction, ULONG nFirstMerg
 }
 
 
-void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge )
+void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge, bool bShared )
 {
     SetMergeState( SC_CTMS_PREPARE );
     ULONG nFirstMerge = pFirstMerge->GetActionNumber();
@@ -4145,7 +4152,8 @@ void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge )
         SetLastMerge( pAct->GetActionNumber() );
         while ( pAct )
         {   // rueckwaerts, Deletes in richtiger Reihenfolge
-            if ( !ScChangeTrack::MergeIgnore( *pAct, nFirstMerge ) )
+            // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+            if ( bShared || !ScChangeTrack::MergeIgnore( *pAct, nFirstMerge ) )
             {
                 if ( pAct->IsDeleteType() )
                 {
@@ -4167,9 +4175,10 @@ void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge )
 }
 
 
-void ScChangeTrack::MergeOwn( ScChangeAction* pAct, ULONG nFirstMerge )
+void ScChangeTrack::MergeOwn( ScChangeAction* pAct, ULONG nFirstMerge, bool bShared )
 {
-    if ( !ScChangeTrack::MergeIgnore( *pAct, nFirstMerge ) )
+    // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+    if ( bShared || !ScChangeTrack::MergeIgnore( *pAct, nFirstMerge ) )
     {
         SetMergeState( SC_CTMS_OWN );
         if ( pAct->IsDeleteType() )
@@ -4533,6 +4542,15 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 BOOL bUpdate = TRUE;
                 if ( aDelRange.In( p->GetBigRange() ) )
                 {
+                    // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+                    if ( GetMergeState() == SC_CTMS_UNDO && !p->IsDeletedIn( pAct ) && pAct->IsDeleteType() &&
+                         ( p->GetType() == SC_CAT_CONTENT ||
+                           p->GetType() == SC_CAT_DELETE_ROWS || p->GetType() == SC_CAT_DELETE_COLS ||
+                           p->GetType() == SC_CAT_INSERT_ROWS || p->GetType() == SC_CAT_INSERT_COLS ) )
+                    {
+                        p->SetDeletedIn( pAct );
+                    }
+
                     if ( p->IsDeletedInDelType( eActType ) )
                     {
                         if ( p->IsDeletedIn( pActDel ) )
@@ -4687,7 +4705,10 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
                 {
                     if ( !p->IsDeletedIn( pAct ) && pAct->IsInsertType() &&
-                         p->GetType() == SC_CAT_CONTENT &&
+                         // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+                         ( p->GetType() == SC_CAT_CONTENT ||
+                           p->GetType() == SC_CAT_DELETE_ROWS || p->GetType() == SC_CAT_DELETE_COLS ||
+                           p->GetType() == SC_CAT_INSERT_ROWS || p->GetType() == SC_CAT_INSERT_COLS ) &&
                          pAct->GetBigRange().Intersects( p->GetBigRange() ) )
                     {
                         p->SetDeletedIn( pAct );
@@ -4698,8 +4719,12 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 {
                     if ( p == pAct )
                         continue;   // for
-                    if ( !p->IsDeletedIn( pAct ) )
+                    if ( !p->IsDeletedIn( pAct )
+                         // #i95212# [Collaboration] Bad handling of row insertion in shared spreadsheet
+                         && p->GetActionNumber() <= pAct->GetActionNumber() )
+                    {
                         p->UpdateReference( this, eMode, aRange, nDx, nDy, nDz );
+                    }
                 }
             }
             break;
@@ -4709,8 +4734,12 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 {
                     if ( p == pAct )
                         continue;   // for
-                    if ( !p->IsDeletedIn( pAct ) )
+                    if ( !p->IsDeletedIn( pAct )
+                         // #i95212# [Collaboration] Bad handling of row insertion in shared spreadsheet
+                         && p->GetActionNumber() <= pAct->GetActionNumber() )
+                    {
                         p->UpdateReference( this, eMode, aRange, nDx, nDy, nDz );
+                    }
                 }
                 // in Insert-Undo "Delete" rueckgaengig
                 const ScChangeActionLinkEntry* pLink = pAct->GetFirstDependentEntry();
@@ -4726,10 +4755,41 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
                 {
                     if ( p->IsDeletedIn( pAct ) && pAct->IsInsertType() &&
-                         p->GetType() == SC_CAT_CONTENT &&
+                         // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+                         ( p->GetType() == SC_CAT_CONTENT ||
+                           p->GetType() == SC_CAT_DELETE_ROWS || p->GetType() == SC_CAT_DELETE_COLS ||
+                           p->GetType() == SC_CAT_INSERT_ROWS || p->GetType() == SC_CAT_INSERT_COLS ) &&
                          pAct->GetBigRange().Intersects( p->GetBigRange() ) )
                     {
                         p->RemoveDeletedIn( pAct );
+                    }
+                }
+            }
+            break;
+            // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+            case SC_CTMS_UNDO :
+            {
+                for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
+                {
+                    if ( !p->IsDeletedIn( pAct ) && pAct->IsInsertType() &&
+                         ( p->GetType() == SC_CAT_CONTENT ||
+                           p->GetType() == SC_CAT_DELETE_ROWS || p->GetType() == SC_CAT_DELETE_COLS ||
+                           p->GetType() == SC_CAT_INSERT_ROWS || p->GetType() == SC_CAT_INSERT_COLS ) &&
+                         pAct->GetBigRange().Intersects( p->GetBigRange() ) )
+                    {
+                        p->SetDeletedIn( pAct );
+                    }
+                }
+
+                for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
+                {
+                    if ( p == pAct )
+                    {
+                        continue;
+                    }
+                    if ( !p->IsDeletedIn( pAct ) && p->GetActionNumber() <= pAct->GetActionNumber() )
+                    {
+                        p->UpdateReference( this, eMode, aRange, nDx, nDy, nDz );
                     }
                 }
             }
@@ -5295,7 +5355,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         const ScBaseCell* pNewCell = pContent->GetNewCell();
         if ( pNewCell )
         {
-            ScBaseCell* pClonedNewCell = pNewCell->Clone( pDocument );
+            ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
             String aNewValue;
             pContent->GetNewString( aNewValue );
             pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
@@ -5379,7 +5439,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pAction );
                     DBG_ASSERT( pContent, "ScChangeTrack::Clone: pContent is null!" );
                     const ScBaseCell* pOldCell = pContent->GetOldCell();
-                    ScBaseCell* pClonedOldCell = ( pOldCell ? pOldCell->Clone( pDocument ) : NULL );
+                    ScBaseCell* pClonedOldCell = pOldCell ? pOldCell->CloneWithoutNote( *pDocument ) : 0;
                     String aOldValue;
                     pContent->GetOldString( aOldValue );
 
@@ -5398,7 +5458,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScBaseCell* pNewCell = pContent->GetNewCell();
                     if ( pNewCell )
                     {
-                        ScBaseCell* pClonedNewCell = pNewCell->Clone( pDocument );
+                        ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
                         pClonedContent->SetNewValue( pClonedNewCell, pDocument );
                     }
 

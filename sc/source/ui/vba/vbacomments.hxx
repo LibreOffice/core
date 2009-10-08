@@ -32,18 +32,18 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <org/openoffice/excel/XComments.hpp>
+#include <ooo/vba/excel/XComments.hpp>
 
 #include "vbahelper.hxx"
 #include "vbacollectionimpl.hxx"
 #include "vbacomment.hxx"
 
-typedef CollTestImplHelper< oo::excel::XComments > ScVbaComments_BASE;
+typedef CollTestImplHelper< ov::excel::XComments > ScVbaComments_BASE;
 
 class ScVbaComments : public ScVbaComments_BASE
 {
 public:
-    ScVbaComments( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaComments( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     virtual ~ScVbaComments() {}
 

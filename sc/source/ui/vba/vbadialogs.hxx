@@ -33,18 +33,18 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <org/openoffice/excel/XDialogs.hpp>
-#include <org/openoffice/vba/XCollection.hpp>
+#include <ooo/vba/excel/XDialogs.hpp>
+#include <ooo/vba/XCollection.hpp>
 #include "vbahelperinterface.hxx"
 
 class ScModelObj;
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XDialogs > ScVbaDialogs_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XDialogs > ScVbaDialogs_BASE;
 
 class ScVbaDialogs : public ScVbaDialogs_BASE
 {
 public:
-    ScVbaDialogs( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext ): ScVbaDialogs_BASE( xParent, xContext ) {}
+    ScVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext ): ScVbaDialogs_BASE( xParent, xContext ) {}
     virtual ~ScVbaDialogs() {}
 
     // XCollection

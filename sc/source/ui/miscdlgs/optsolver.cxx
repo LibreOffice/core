@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ ScSolverSuccessDialog::~ScSolverSuccessDialog()
 //----------------------------------------------------------------------------
 
 ScCursorRefEdit::ScCursorRefEdit( ScAnyRefDlg* pParent, const ResId& rResId ) :
-    formula::RefEdit( pParent, rResId )
+    formula::RefEdit( pParent, pParent, rResId )
 {
 }
 
@@ -189,16 +189,16 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_OPTSOLVER ),
         //
         maFtObjectiveCell   ( this, ScResId( FT_OBJECTIVECELL ) ),
-        maEdObjectiveCell   ( this, ScResId( ED_OBJECTIVECELL ) ),
+        maEdObjectiveCell   ( this, this, ScResId( ED_OBJECTIVECELL ) ),
         maRBObjectiveCell   ( this, ScResId( IB_OBJECTIVECELL ), &maEdObjectiveCell, this ),
         maFtDirection       ( this, ScResId( FT_DIRECTION ) ),
         maRbMax             ( this, ScResId( RB_MAX ) ),
         maRbMin             ( this, ScResId( RB_MIN ) ),
         maRbValue           ( this, ScResId( RB_VALUE ) ),
-        maEdTargetValue     ( this, ScResId( ED_TARGET ) ),
+        maEdTargetValue     ( this, this, ScResId( ED_TARGET ) ),
         maRBTargetValue     ( this, ScResId( IB_TARGET ), &maEdTargetValue, this ),
         maFtVariableCells   ( this, ScResId( FT_VARIABLECELLS ) ),
-        maEdVariableCells   ( this, ScResId( ED_VARIABLECELLS ) ),
+        maEdVariableCells   ( this, this, ScResId( ED_VARIABLECELLS ) ),
         maRBVariableCells   ( this, ScResId( IB_VARIABLECELLS ), &maEdVariableCells, this),
         maFlConditions      ( this, ScResId( FL_CONDITIONS ) ),
         maFtCellRef         ( this, ScResId( FT_CELLREF ) ),
@@ -501,7 +501,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         {
             USHORT nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
             if ( bSingle )
-                aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() ); 
+                aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
             else
                 rRef.Format( aStr, nFmt | SCR_ABS, pDocP, pDocP->GetAddressConvention() );
         }

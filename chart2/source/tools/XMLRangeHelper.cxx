@@ -198,12 +198,10 @@ bool lcl_getCellAddressFromXMLString(
         ++nDelimiterPos;
     }
 
-    if( nDelimiterPos == -1 ||
-        nDelimiterPos >= nEndPos )
-    {
+    if( nDelimiterPos == -1 )
         return false;
-    }
-    if( nDelimiterPos > nStartPos )
+
+    if( nDelimiterPos > nStartPos && nDelimiterPos < nEndPos )
     {
         // there is a table name before the address
 
@@ -226,6 +224,8 @@ bool lcl_getCellAddressFromXMLString(
         else
             rOutTableName = aTableNameBuffer.makeStringAndClear();
     }
+    else
+        nDelimiterPos = nStartPos;
 
     for( sal_Int32 i = 0;
          nNextDelimiterPos < nEndPos;
@@ -277,6 +277,8 @@ bool lcl_getCellRangeAddressFromXMLString(
         bResult = lcl_getCellAddressFromXMLString( rXMLString, nStartPos, nEndPos,
                                                    rOutRange.aUpperLeft,
                                                    rOutRange.aTableName );
+        if( !rOutRange.aTableName.getLength() )
+            bResult = false;
     }
     else
     {
@@ -284,6 +286,9 @@ bool lcl_getCellRangeAddressFromXMLString(
         bResult = lcl_getCellAddressFromXMLString( rXMLString, nStartPos, nDelimiterPos - 1,
                                                    rOutRange.aUpperLeft,
                                                    rOutRange.aTableName );
+        if( !rOutRange.aTableName.getLength() )
+            bResult = false;
+
         ::rtl::OUString sTableSecondName;
         if( bResult )
         {

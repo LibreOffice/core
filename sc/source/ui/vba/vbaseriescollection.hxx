@@ -30,20 +30,20 @@
 #ifndef SC_VBA_SERIESCOLLECTION_HXX
 #define SC_VBA_SERIESCOLLECTION_HXX
 
-#include <org/openoffice/excel/XSeriesCollection.hpp>
+#include <ooo/vba/excel/XSeriesCollection.hpp>
 #include "vbahelperinterface.hxx"
 #include "vbacollectionimpl.hxx"
 #include "vbahelper.hxx"
 
 
-typedef CollTestImplHelper< oo::excel::XSeriesCollection > SeriesCollection_BASE;
+typedef CollTestImplHelper< ov::excel::XSeriesCollection > SeriesCollection_BASE;
 
 class ScVbaSeriesCollection : public SeriesCollection_BASE
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 public:
-    ScVbaSeriesCollection( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    ScVbaSeriesCollection( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);

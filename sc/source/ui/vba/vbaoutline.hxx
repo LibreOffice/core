@@ -32,17 +32,17 @@
 
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/excel/XOutline.hpp>
+#include <ooo/vba/excel/XOutline.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XOutline > ScVbaOutline_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XOutline > ScVbaOutline_BASE;
 
 class ScVbaOutline :  public ScVbaOutline_BASE
 {
     css::uno::Reference< css::sheet::XSheetOutline > mxOutline;
 public:
-    ScVbaOutline( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaOutline( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
          css::uno::Reference<css::sheet::XSheetOutline> outline): ScVbaOutline_BASE( xParent, xContext) , mxOutline(outline)
     {}
     virtual ~ScVbaOutline(){}

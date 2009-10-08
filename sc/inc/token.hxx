@@ -33,6 +33,8 @@
 
 #include <memory>
 #include <vector>
+#include <boost/shared_ptr.hpp>
+
 #include "formula/opcode.hxx"
 #include "refdata.hxx"
 #include "scmatrix.hxx"
@@ -49,6 +51,15 @@ class ScToken;
 typedef ::std::vector< ScComplexRefData > ScRefList;
 typedef formula::SimpleIntrusiveReference< class ScToken > ScTokenRef;
 
+/**
+ * Another ref-counted token type using shared_ptr.  <b>Be extra careful
+ * not to mix use of this smart pointer type with ScTokenRef</b>, since
+ * mixing them might cause a premature object deletion because the same
+ * object may be ref-counted by two different smart pointer wrappers.
+ *
+ * You have been warned.
+ */
+typedef ::boost::shared_ptr< ScToken > ScSharedTokenRef;
 
 class SC_DLLPUBLIC ScToken : public formula::FormulaToken
 {
@@ -194,7 +205,10 @@ public:
     virtual const String&           GetString() const;
     virtual const ScSingleRefData&  GetSingleRef() const;
     virtual ScSingleRefData&          GetSingleRef();
+    virtual void                CalcAbsIfRel( const ScAddress& );
+    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScExternalSingleRefToken(*this); }
 };
 
 
@@ -219,7 +233,10 @@ public:
     virtual ScSingleRefData&       GetSingleRef2();
     virtual const ScComplexRefData&    GetDoubleRef() const;
     virtual ScComplexRefData&      GetDoubleRef();
+    virtual void                CalcAbsIfRel( const ScAddress& );
+    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScExternalDoubleRefToken(*this); }
 };
 
 
@@ -237,6 +254,7 @@ public:
     virtual USHORT              GetIndex() const;
     virtual const String&       GetString() const;
     virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
+    virtual FormulaToken*       Clone() const { return new ScExternalNameToken(*this); }
 };
 
 

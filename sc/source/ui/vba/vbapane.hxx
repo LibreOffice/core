@@ -32,11 +32,11 @@
 
 #include<cppuhelper/implbase1.hxx>
 #include<com/sun/star/sheet/XViewPane.hpp>
-#include<org/openoffice/excel/XPane.hpp>
+#include<ooo/vba/excel/XPane.hpp>
 
 #include"vbahelper.hxx"
 
-typedef cppu::WeakImplHelper1< oo::excel::XPane > PaneImpl_Base;
+typedef cppu::WeakImplHelper1< ov::excel::XPane > PaneImpl_Base;
 
 class ScVbaPane : public PaneImpl_Base
 {

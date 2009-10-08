@@ -88,7 +88,7 @@ class TypedScStrCollection;
     aBtnUnique      ( this, ScResId( BTN_UNIQUE ) ), \
     aBtnCopyResult  ( this, ScResId( BTN_COPY_RESULT ) ), \
     aLbCopyArea     ( this, ScResId( LB_COPY_AREA ) ), \
-    aEdCopyArea     ( this, ScResId( ED_COPY_AREA ) ), \
+    aEdCopyArea     ( this, this, ScResId( ED_COPY_AREA ) ), \
     aRbCopyArea     ( this, ScResId( RB_COPY_AREA ), &aEdCopyArea, this ), \
     aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ), \
     aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ), \

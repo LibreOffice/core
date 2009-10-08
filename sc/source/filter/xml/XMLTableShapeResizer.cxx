@@ -37,12 +37,19 @@
 #include "chartlis.hxx"
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
+#include "reftokenhelper.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <memory>
+#include <vector>
+
 using namespace ::com::sun::star;
+using ::std::auto_ptr;
+using ::std::vector;
+using ::rtl::OUString;
 
 ScMyShapeResizer::ScMyShapeResizer(ScXMLImport& rTempImport)
     : rImport(rTempImport),
@@ -64,38 +71,44 @@ void ScMyShapeResizer::CreateChartListener(ScDocument* pDoc,
     const rtl::OUString& rName,
     const rtl::OUString* pRangeList)
 {
-    if(pDoc)
+    if (!pDoc || !pRangeList)
+        // These are minimum required.
+        return;
+
+    if (!pRangeList->getLength())
     {
-        if (pRangeList)
-        {
-            if (pRangeList->getLength())
-            {
-                if (!pCollection)
-                    pCollection = pDoc->GetChartListenerCollection();//new ScChartListenerCollection(pDoc);
-                if (pCollection)
-                {
-                    ScRangeListRef aRangeListRef(new ScRangeList());
-                    ScRangeStringConverter::GetRangeListFromString(*aRangeListRef, *pRangeList, pDoc);
-                    if (aRangeListRef->Count())
-                    {
-                        ScChartListener* pCL(new ScChartListener(rName, pDoc, aRangeListRef ));
+        pDoc->AddOLEObjectToCollection(rName);
+        return;
+    }
 
-                        //for loading binary files e.g.
-                        //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
-                        //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completly and is incorect therefor
-                        if( (rImport.getImportFlags() & IMPORT_ALL) == IMPORT_ALL )
-                            pCL->SetDirty( TRUE );
+    OUString aRangeStr;
+    ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, *pRangeList, pDoc);
+    if (!aRangeStr.getLength())
+    {
+        pDoc->AddOLEObjectToCollection(rName);
+        return;
+    }
 
-                        pCollection->Insert( pCL );
-                        pCL->StartListeningTo();
-                    }
-                }
-            }
-            else
-            {
-                pDoc->AddOLEObjectToCollection(rName);
-            }
-        }
+    if (!pCollection)
+        pCollection = pDoc->GetChartListenerCollection();
+
+    if (!pCollection)
+        return;
+
+    auto_ptr< vector<ScSharedTokenRef> > pRefTokens(new vector<ScSharedTokenRef>);
+    ScRefTokenHelper::compileRangeRepresentation(*pRefTokens, aRangeStr, pDoc);
+    if (!pRefTokens->empty())
+    {
+        ScChartListener* pCL(new ScChartListener(rName, pDoc, pRefTokens.release()));
+
+        //for loading binary files e.g.
+        //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
+        //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completly and is incorect therefor
+        if( (rImport.getImportFlags() & IMPORT_ALL) == IMPORT_ALL )
+            pCL->SetDirty( TRUE );
+
+        pCollection->Insert( pCL );
+        pCL->StartListeningTo();
     }
 }
 

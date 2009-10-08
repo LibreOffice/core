@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun3.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.126.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,6 +208,7 @@
 #include "editable.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "docuno.hxx"
 
 using namespace com::sun::star;
 
@@ -264,7 +265,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
             ScRange aCopyRange = aRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(pDoc->GetTableCount()-1);
-            pDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( aCopyRange, (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS, FALSE, pUndoDoc );
             pDoc->BeginDrawUndo();
         }
 
@@ -491,12 +492,9 @@ void ScViewFunc::PasteFromSystem()
                 //  If it's a Writer object, insert RTF instead of OLE
 
                 BOOL bDoRtf = FALSE;
-                SotStorageStreamRef xStm;
                 TransferableObjectDescriptor aObjDesc;
-                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-                    aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
                 {
-                    SotStorageRef xStore( new SotStorage( *xStm ) );
                     bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                  aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                                && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
@@ -599,12 +597,9 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
             {
                 //  If it's a Writer object, insert RTF instead of OLE
                 BOOL bDoRtf = FALSE;
-                SotStorageStreamRef xStm;
                 TransferableObjectDescriptor aObjDesc;
-                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-                    aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
                 {
-                    SotStorageRef xStore( new SotStorage( *xStm ) );
                     bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                  aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                                && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
@@ -763,11 +758,14 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     USHORT nUndoFlags = nContFlags;
     if (nUndoExtraFlags & IDF_ATTRIB)
         nUndoFlags |= IDF_ATTRIB;
+    // do not copy note captions into undo document
+    nUndoFlags |= IDF_NOCAPTIONS;
 
     BOOL bCutMode = pClipDoc->IsCutMode();      // if transposing, take from original clipdoc
     BOOL bIncludeFiltered = bCutMode;
 
-    BOOL bPasteDraw = ( pClipDoc->GetDrawLayer() && ( nFlags & IDF_OBJECTS ) );
+    // paste drawing: also if IDF_NOTE is set (to create drawing layer for note captions)
+    BOOL bPasteDraw = ( pClipDoc->GetDrawLayer() && ( nFlags & (IDF_OBJECTS|IDF_NOTE) ) );
 
     ScDocShellRef aTransShellRef;   // for objects in xTransClip - must remain valid as long as xTransClip
     ScDocument* pOrigClipDoc = NULL;
@@ -1130,6 +1128,15 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
     }
 
+    /*  Make draw layer and start drawing undo.
+        - Needed before AdjustBlockHeight to track moved drawing objects.
+        - Needed before pDoc->CopyFromClip to track inserted note caption objects.
+     */
+    if ( bPasteDraw )
+        pDocSh->MakeDrawLayer();
+    if ( bRecord )
+        pDoc->BeginDrawUndo();
+
     USHORT nNoObjFlags = nFlags & ~IDF_OBJECTS;
     if (!bAsLink)
     {
@@ -1167,14 +1174,9 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     }
     delete pMixDoc;
 
-    if ( bPasteDraw )
-        pDocSh->MakeDrawLayer();    // before AdjustBlockHeight, so BeginDrawUndo can be called
-
-    if ( bRecord )
-        pDoc->BeginDrawUndo();
     AdjustBlockHeight();            // update row heights before pasting objects
 
-    if ( bPasteDraw )
+    if ( nFlags & IDF_OBJECTS )
     {
         //  Paste the drawing objects after the row heights have been updated.
 
@@ -1275,6 +1277,25 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     pDocSh->UpdateOle(GetViewData());
 
     SelectionChanged();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for ( SCTAB i = 0; i < nTabCount; ++i )
+        {
+            if ( rMark.GetTableSelect( i ) )
+            {
+                ScRange aChangeRange( aUserRange );
+                aChangeRange.aStart.SetTab( i );
+                aChangeRange.aEnd.SetTab( i );
+                aChangeRanges.Append( aChangeRange );
+            }
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 
     return TRUE;
 }

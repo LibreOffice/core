@@ -31,11 +31,11 @@
 #define SC_VBA_SHAPERANGE_HXX
 
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <org/openoffice/msforms/XShapeRange.hpp>
+#include <ooo/vba/msforms/XShapeRange.hpp>
 
 #include "vbacollectionimpl.hxx"
 
-typedef CollTestImplHelper< oo::msforms::XShapeRange > ScVbaShapeRange_BASE;
+typedef CollTestImplHelper< ov::msforms::XShapeRange > ScVbaShapeRange_BASE;
 
 class ScVbaShapeRange : public ScVbaShapeRange_BASE
 {
@@ -48,11 +48,11 @@ protected:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     css::uno::Reference< css::drawing::XShapes > getShapes() throw (css::uno::RuntimeException) ;
 public:
-    ScVbaShapeRange( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::drawing::XDrawPage>& xDrawShape );
+    ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::drawing::XDrawPage>& xDrawShape );
 
     // Methods
     virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< ::org::openoffice::msforms::XShape > SAL_CALL Group() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ::ooo::vba::msforms::XShape > SAL_CALL Group() throw (css::uno::RuntimeException);
     virtual void SAL_CALL IncrementRotation( double Increment ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL IncrementLeft( double Increment ) throw (css::uno::RuntimeException) ;
     virtual void SAL_CALL IncrementTop( double Increment ) throw (css::uno::RuntimeException);

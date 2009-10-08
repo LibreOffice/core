@@ -31,18 +31,18 @@
 #define SC_VBA_TEXTFRAME_HXX
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/excel/XCharacters.hpp>
-#include <org/openoffice/excel/XTextFrame.hpp>
+#include <ooo/vba/excel/XCharacters.hpp>
+#include <ooo/vba/excel/XTextFrame.hpp>
 
 #include "vbahelperinterface.hxx"
 #include "vbapalette.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XTextFrame > ScVbaTextFrame_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XTextFrame > ScVbaTextFrame_BASE;
 
 class ScVbaTextFrame : public ScVbaTextFrame_BASE
 {
 private:
-    css::uno::Reference< oo::excel::XCharacters > m_xCharacters;
+    css::uno::Reference< ov::excel::XCharacters > m_xCharacters;
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
@@ -52,7 +52,7 @@ protected:
     sal_Int32 getMargin( rtl::OUString sMarginType );
     void setMargin( rtl::OUString sMarginType, float fMargin );
 public:
-    ScVbaTextFrame( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
+    ScVbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
     virtual ~ScVbaTextFrame() {}
     // Attributes
     virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException);
@@ -67,7 +67,7 @@ public:
     virtual void SAL_CALL setMarginRight( float _marginright ) throw (css::uno::RuntimeException);
 
     // Methods
-    virtual css::uno::Reference< oo::excel::XCharacters > SAL_CALL Characters(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(  ) throw (css::uno::RuntimeException);
 
 };
 

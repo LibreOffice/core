@@ -31,7 +31,7 @@
 #include<vbapane.hxx>
 
 using namespace com::sun::star;
-using namespace org::openoffice;
+using namespace ooo::vba;
 
 /*
 ScVbaPane::ScVbaPane( uno::Reference< uno::XComponentContext > xContext, uno::Refrence< sheet::XViewPane > xViewPane )

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun6.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,69 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------
-
-#ifdef WIN
-#define _MENUBTN_HXX
-#endif
-
-//#define _SFX_DOCFILT_HXX
-#define _SFX_PRNMON_HXX
-#define _SFX_RESMGR_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXAPPWIN_HXX
-#define _SFXBASIC_HXX
-#define _SFXCTRLITEM
-#define _SFXDLGCFG_HXX
-//#define _SFXDISPATCH_HXX
-#define _SFXDOCFILE_HXX
-#define _SFXDOCMAN_HXX
-#define _SFXDOCMGR_HXX
-#define _SFXDOCTDLG_HXX
-#define _SFXFILEDLG_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXIPFRM_HXX
-#define _SFX_MACRO_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXMULTISEL_HXX
-#define _SFXMSG_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXOBJFACE_HXX
-#define _SFXOBJFAC_HXX
-#define _SFX_SAVEOPT_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXTBXMGR_HXX
-
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NOCONTROL
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-//#define _VCSBX_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-#define _VCATTR_HXX
-#define _VCONT_HXX
-
-#define _SDR_NOTRANSFORM
-#define _SDR_NOITEMS
-#define _SDR_NOOBJECTS
-#define _SVDXOUT_HXX
-
-//------------------------------------------------------------------
-
 #include <svx/svdundo.hxx>
+#include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
@@ -111,9 +50,6 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "fusel.hxx"
-
-
-// STATIC DATA -----------------------------------------------------------
 
 //==================================================================
 
@@ -206,105 +142,14 @@ void ScViewFunc::DetectiveRefresh()
 
 //---------------------------------------------------------------------------
 
-void ScViewFunc::ShowNote()
+void ScViewFunc::ShowNote( bool bShow )
 {
-    //  permanent einblenden
-
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    SCCOL nCol = GetViewData()->GetCurX();
-    SCROW nRow = GetViewData()->GetCurY();
-    SCTAB nTab = GetViewData()->GetTabNo();
-    BOOL bUndo (pDoc->IsUndoEnabled());
-
-    ScPostIt aNote(pDoc);
-    if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) &&
-         !pDoc->HasNoteObject( nCol, nRow, nTab ) )
-    {
+    if( bShow )
         HideNoteMarker();
-
-        pDocSh->MakeDrawLayer();
-        ScDrawLayer* pModel = pDoc->GetDrawLayer();
-
-        pModel->BeginCalcUndo();
-        SdrObject* pObject = ScDetectiveFunc( pDoc,nTab ).ShowComment( nCol, nRow, FALSE );
-        SdrUndoGroup* pUndo = NULL;
-        if (bUndo)
-            pUndo = pModel->GetCalcUndo();
-        if (pObject)
-        {
-            aNote.SetShown( TRUE );
-            pDoc->SetNote( nCol, nRow, nTab, aNote );
-            // This repaint should not be neccessary.
-            // But it solves a problem where following an
-            // insertion of more note text, the note sometimes
-            // displays the height to the previous note position.
-            // A similar problem is also in ScUndoEditNote::Undo().
-                        ScRange aDrawRange(pDoc->GetRange(nTab, aNote.GetRectangle()));
-            pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
-            if (pUndo)
-                pDocSh->GetUndoManager()->AddUndoAction( new ScUndoNote( pDocSh,
-                                                TRUE, ScAddress(nCol,nRow,nTab), pUndo ) );
-
-
-
-            pDocSh->SetDocumentModified();
-        }
-        else
-        {
-            delete pUndo;
-            Sound::Beep();
-        }
-    }
-}
-
-void ScViewFunc::HideNote()
-{
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    if (!pModel)
-        return;         // da is nix
-    BOOL bUndo (pDoc->IsUndoEnabled());
-
-    SCCOL nCol = GetViewData()->GetCurX();
-    SCROW nRow = GetViewData()->GetCurY();
-    SCTAB nTab = GetViewData()->GetTabNo();
-
-    ScPostIt aNote(pDoc);
-    if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) &&
-         pDoc->HasNoteObject( nCol, nRow, nTab ) )
-    {
-        pModel->BeginCalcUndo();
-        BOOL bDone = ScDetectiveFunc( pDoc,nTab ).HideComment( nCol, nRow );
-        SdrUndoGroup* pUndo = NULL;
-        if (bUndo)
-            pUndo = pModel->GetCalcUndo();
-        if (bDone)
-        {
-            aNote.SetShown( FALSE );
-            pDoc->SetNote( nCol, nRow, nTab, aNote );
-            // This repaint should not be neccessary.
-            // But it solves a problem where following an
-            // insertion of more note text, the note sometimes
-            // continues to displays the additional height to
-            // the previous note height position - despite the fact
-            // that we have chosen to hide the note.
-            // A similar problem is also in ScUndoEditNote::Undo().
-                        ScRange aDrawRange(pDoc->GetRange(nTab, aNote.GetRectangle()));
-            pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
-            if (pUndo)
-                pDocSh->GetUndoManager()->AddUndoAction( new ScUndoNote( pDocSh,
-                                                FALSE, ScAddress(nCol,nRow,nTab), pUndo ) );
-
-            pDocSh->SetDocumentModified();
-        }
-        else
-        {
-            delete pUndo;
-            Sound::Beep();
-        }
-    }
+    const ScViewData& rViewData = *GetViewData();
+    ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+    // show note moved to ScDocFunc, to be able to use it in notesuno.cxx
+    rViewData.GetDocShell()->GetDocFunc().ShowNote( aPos, bShow );
 }
 
 void ScViewFunc::EditNote()
@@ -316,46 +161,38 @@ void ScViewFunc::EditNote()
     SCCOL nCol = GetViewData()->GetCurX();
     SCROW nRow = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
+    ScAddress aPos( nCol, nRow, nTab );
 
-    ScPostIt aNote(pDoc);
-    BOOL bFound = pDoc->GetNote( nCol, nRow, nTab, aNote );
-    if ( !bFound || !pDoc->HasNoteObject( nCol, nRow, nTab ) )      // neu oder versteckt
+    // start drawing undo to catch undo action for insertion of the caption object
+    pDocSh->MakeDrawLayer();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    pDrawLayer->BeginCalcUndo();
+    // generated undo action is processed in FuText::StopEditMode
+
+    // get existing note or create a new note (including caption drawing object)
+    if( ScPostIt* pNote = pDoc->GetOrCreateNote( aPos ) )
     {
+        // hide temporary note caption
         HideNoteMarker();
+        // show caption object without changing internal visibility state
+        pNote->ShowCaptionTemp();
 
-        pDocSh->MakeDrawLayer();
-        ScDrawLayer* pModel = pDoc->GetDrawLayer();
-
-        pModel->BeginCalcUndo();
-        //  TRUE -> auch neu anlegen
-        SdrObject* pObject = ScDetectiveFunc( pDoc,nTab ).ShowComment( nCol, nRow, TRUE );
-
-        //  Undo-Action (pModel->GetCalcUndo) wird beim StopEditMode abgeholt
-
-        if (pObject)
+        // drawing object has been created in ScDocument::GetOrCreateNote
+        if( SdrCaptionObj* pCaption = pNote->GetCaption() )
         {
-            FuPoor* pDraw = GetDrawFuncPtr();
-            if ( pDraw )
-            {
-                FuSelection* pSel = static_cast<FuSelection*>(pDraw);
-                // #i33764# Enable the resize handles before editing.
-                pSel->ActivateNoteHandles(pObject);
-            }
-            //  Shown-Flag nicht veraendern
+            // #i33764# enable the resize handles before starting edit mode
+            if( FuPoor* pDraw = GetDrawFuncPtr() )
+                static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
 
-            //  Objekt aktivieren (wie in FuSelection::TestComment)
-            GetViewData()->GetDispatcher().Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+            // activate object (as in FuSelection::TestComment)
+            GetViewData()->GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
             // jetzt den erzeugten FuText holen und in den EditModus setzen
             FuPoor* pPoor = GetDrawFuncPtr();
-            if ( pPoor && pPoor->GetSlotID() == SID_DRAW_NOTEEDIT )  // hat keine RTTI
+            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // hat keine RTTI
             {
-                ScrollToObject( pObject );          // Objekt komplett sichtbar machen
-                FuText* pText = (FuText*)pPoor;
-                pText->SetInEditMode( pObject );
+                ScrollToObject( pCaption );         // Objekt komplett sichtbar machen
+                static_cast< FuText* >( pPoor )->SetInEditMode( pCaption );
             }
         }
     }
 }
-
-
-

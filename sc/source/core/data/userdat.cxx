@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: userdat.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,20 +71,15 @@ IMPL_LINK_INLINE_END( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFacto
 
 //------------------------------------------------------------------------
 
-ScDrawObjData::ScDrawObjData() : SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 )
+ScDrawObjData::ScDrawObjData() :
+    SdrObjUserData( SC_DRAWLAYER, SC_UD_OBJDATA, 0 ),
+    maStart( ScAddress::INITIALIZE_INVALID ),
+    maEnd( ScAddress::INITIALIZE_INVALID ),
+    mbNote( false )
 {
-    bValidEnd = FALSE;
 }
 
-ScDrawObjData::ScDrawObjData( const ScDrawObjData& r )
-             : SdrObjUserData( r ), aStt( r.aStt ), aEnd( r.aEnd ),
-               bValidStart( r.bValidStart ), bValidEnd( r.bValidEnd )
-{}
-
-ScDrawObjData::~ScDrawObjData()
-{}
-
-SdrObjUserData* ScDrawObjData::Clone(SdrObject*) const
+ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
 {
     return new ScDrawObjData( *this );
 }

@@ -68,7 +68,9 @@ class ScMessagePool: public SfxItemPool
 
 public:
     ScMessagePool();
-    ~ScMessagePool();
+protected:
+    virtual ~ScMessagePool();
+public:
 
     virtual SfxMapUnit              GetMetric( USHORT nWhich ) const;
 };

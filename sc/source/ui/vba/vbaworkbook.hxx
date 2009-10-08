@@ -31,12 +31,12 @@
 #define SC_VBA_WORKBOOK_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <org/openoffice/excel/XWorkbook.hpp>
+#include <ooo/vba/excel/XWorkbook.hpp>
 #include "vbahelperinterface.hxx"
 
 class ScModelObj;
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XWorkbook > ScVbaWorkbook_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XWorkbook > ScVbaWorkbook_BASE;
 
 class ScVbaWorkbook : public ScVbaWorkbook_BASE
 {
@@ -47,9 +47,9 @@ class ScVbaWorkbook : public ScVbaWorkbook_BASE
 protected:
 
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
-    ScVbaWorkbook(  const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
 public:
-    ScVbaWorkbook(  const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::frame::XModel > xModel );
     ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~ScVbaWorkbook() {}
@@ -59,7 +59,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFullName() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectStructure() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getSaved() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSaved( sal_Bool bSave ) throw (css::uno::RuntimeException);
 
@@ -75,7 +75,7 @@ public:
     virtual void SAL_CALL Save() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
     // Amelia Wang
-    virtual css::uno::Any SAL_CALL Names( ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Names( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL Styles( const css::uno::Any& Item ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL ResetColors(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

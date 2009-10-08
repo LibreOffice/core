@@ -32,13 +32,13 @@
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/excel/XlDVType.hpp>
-#include <org/openoffice/excel/XlFormatConditionOperator.hpp>
-#include <org/openoffice/excel/XlDVAlertStyle.hpp>
+#include <ooo/vba/excel/XlDVType.hpp>
+#include <ooo/vba/excel/XlFormatConditionOperator.hpp>
+#include <ooo/vba/excel/XlDVAlertStyle.hpp>
 
 #include "unonames.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 const static rtl::OUString VALIDATION( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_VALIDAT ) );
@@ -330,7 +330,7 @@ ScVbaValidation::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Validation" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Validation" ) );
     }
     return aServiceNames;
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.hxx,v $
- * $Revision: 1.50.32.2 $
+ * $Revision: 1.50.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,6 +321,7 @@ public:
     void            PostPaint( const ScRange& rRange, USHORT nPart, USHORT nExtFlags = 0 );
 
     void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void            PostPaintCell( const ScAddress& rPos );
     void            PostPaintGridAll();
     void            PostPaintExtras();
 

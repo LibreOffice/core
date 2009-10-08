@@ -324,6 +324,8 @@ void ScTabControl::UpdateStatus()
             if ( rMark.GetTableSelect(i) != IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = TRUE;
 
+        // #i99576# the following loop is mis-optimized on unxsoli4 and the reason
+        // why this file is in NOOPTFILES.
         if ( bModified )
             for (i=0; i<nCount; i++)
                 SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
@@ -365,11 +367,7 @@ void ScTabControl::ActivateView(BOOL bActivate)
 
 void ScTabControl::SetSheetLayoutRTL( BOOL bSheetRTL )
 {
-    /*  #106948# mirror the tabbar control, if sheet RTL mode differs from UI RTL mode
-        - In LTR Office the tabbar is mirrored for RTL sheets.
-        - In RTL Office the tabbar is mirrored anyway, mirror it again for LTR sheets. */
-    SetMirrored( bSheetRTL != GetSettings().GetLayoutRTL() );
-    // forget last selected sheet also if not mirrored (Mirror() is not called then)
+    SetEffectiveRTL( bSheetRTL );
     nSelPageIdByMouse = TAB_PAGE_NOTFOUND;
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column.hxx,v $
- * $Revision: 1.21.32.4 $
+ * $Revision: 1.21.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +160,7 @@ public:
     BOOL        IsEmpty() const;
 
                 // nur Daten:
-    BOOL        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
+    BOOL        IsEmptyBlock(SCROW nStartRow, SCROW nEndRow, bool bIgnoreNotes = false) const;
     SCSIZE      GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const;
     BOOL        HasDataAt(SCROW nRow) const;
     BOOL        HasVisibleDataAt(SCROW nRow) const;
@@ -191,7 +191,7 @@ public:
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFlag );
     void        DeleteArea(SCROW nStartRow, SCROW nEndRow, USHORT nDelFlag );
-    void        CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags);
+    void        CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKeepScenarioFlags, BOOL bCloneNoteCaptions);
     void        CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                                 USHORT nInsFlag, BOOL bAsLink, BOOL bSkipAttrForEmpty, ScColumn& rColumn);
     void        StartListeningInArea( SCROW nRow1, SCROW nRow2 );
@@ -243,7 +243,6 @@ public:
     BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
                            formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO );
     void        SetValue( SCROW nRow, const double& rVal);
-    void        SetNote( SCROW nRow, const ScPostIt& rNote );
     void        SetError( SCROW nRow, const USHORT nError);
 
     void        GetString( SCROW nRow, String& rString ) const;
@@ -251,7 +250,6 @@ public:
     double      GetValue( SCROW nRow ) const;
     void        GetFormula( SCROW nRow, String& rFormula,
                             BOOL bAsciiExport = FALSE ) const;
-    BOOL        GetNote( SCROW nRow, ScPostIt& rNote ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const { return nCount; }
     ULONG       GetWeightedCount() const;
@@ -262,6 +260,15 @@ public:
     BOOL        HasValueData( SCROW nRow ) const;
     USHORT      GetErrorData( SCROW nRow) const;
     BOOL        HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
+
+    /** Returns the pointer to a cell note object at the passed row. */
+    ScPostIt*   GetNote( SCROW nRow );
+    /** Sets the passed cell note object at the passed row. Takes ownership! */
+    void        TakeNote( SCROW nRow, ScPostIt* pNote );
+    /** Returns and forgets a cell note object at the passed row. */
+    ScPostIt*   ReleaseNote( SCROW nRow );
+    /** Deletes the note at the passed row. */
+    void        DeleteNote( SCROW nRow );
 
     void        SetDirty();
     void        SetDirty( const ScRange& );
@@ -397,8 +404,7 @@ public:
                                     SCROW nRowStart, SCROW nRowEnd ) const;
 
 private:
-    ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags,
-                            ScDocument* pDestDoc, const ScAddress& rDestPos);
+    ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);
 //UNUSED2008-05  void       CorrectSymbolCells( CharSet eStreamCharSet );
 };
 

@@ -106,7 +106,7 @@ __EXPORT ScMessagePool::~ScMessagePool()
 
     delete[] ppPoolDefaults;
 
-    delete pDocPool;
+    SfxItemPool::Free(pDocPool);
 }
 
 

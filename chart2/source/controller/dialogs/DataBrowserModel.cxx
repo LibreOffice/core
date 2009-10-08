@@ -40,6 +40,7 @@
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
 #include "StatisticsHelper.hxx"
+#include "ContainerHelper.hxx"
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -420,28 +421,30 @@ void DataBrowserModel::removeDataSeries( sal_Int32 nAtColumnIndex )
             m_apDialogModel->deleteSeries(
                 xSeries, getHeaderForSeries( xSeries ).m_xChartType );
 
-            Reference< chart2::XInternalDataProvider > xDataProvider(
-                m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
-            Reference< chart2::data::XDataSource > xSource( xSeries,uno::UNO_QUERY );
-            if( xDataProvider.is() && xSource.is())
+            //delete sequences from internal data provider that are not used anymore
+            //but do not delete sequences that are still in use by the remaining series
+            Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+            Reference< chart2::data::XDataSource > xSourceOfDeletedSeries( xSeries, uno::UNO_QUERY );
+            if( xDataProvider.is() && xSourceOfDeletedSeries.is())
             {
                 ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
-                Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xSource->getDataSequences());
-                Reference< chart2::XDataSeriesContainer > xSeriesCnt(
-                    getHeaderForSeries( xSeries ).m_xChartType, uno::UNO_QUERY );
+                Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequencesOfDeletedSeries( xSourceOfDeletedSeries->getDataSequences() );
+                Reference< chart2::XDataSeriesContainer > xSeriesCnt( getHeaderForSeries( xSeries ).m_xChartType, uno::UNO_QUERY );
                 if( xSeriesCnt.is())
                 {
-                    lcl_tSharedSeqVec aSharedSequences = lcl_getSharedSequences( xSeriesCnt->getDataSeries());
-                    for( sal_Int32 i=0; i<aUsedSequences.getLength(); ++i )
+                    Reference< chart2::data::XDataSource > xRemainingDataSource( DataSeriesHelper::getDataSource( xSeriesCnt->getDataSeries() ) );
+                    if( xRemainingDataSource.is() )
                     {
-                        lcl_tSharedSeqVec::const_iterator aHitIt(
-                            ::std::find_if(
-                                aSharedSequences.begin(), aSharedSequences.end(),
-                                lcl_RepresentationsOfLSeqMatch( aUsedSequences[i] )));
-                        // if not shared -> delete
-                        if( aHitIt == aSharedSequences.end())
-                            aSequenceIndexesToDelete.push_back(
-                                lcl_getValuesRepresentationIndex( aUsedSequences[i] ));
+                        ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aRemainingSeq( ContainerHelper::SequenceToVector( xRemainingDataSource->getDataSequences() ) );
+                        for( sal_Int32 i=0; i<aSequencesOfDeletedSeries.getLength(); ++i )
+                        {
+                            ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aHitIt(
+                                ::std::find_if( aRemainingSeq.begin(), aRemainingSeq.end(),
+                                    lcl_RepresentationsOfLSeqMatch( aSequencesOfDeletedSeries[i] )));
+                            // if not used by the remaining series this sequence can be deleted
+                            if( aHitIt == aRemainingSeq.end() )
+                                aSequenceIndexesToDelete.push_back( lcl_getValuesRepresentationIndex( aSequencesOfDeletedSeries[i] ) );
+                        }
                     }
                 }
 

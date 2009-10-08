@@ -32,10 +32,10 @@
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 
-ScVbaCharts::ScVbaCharts( const css::uno::Reference< oo::vba::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext ) : Charts_BASE(_xParent, _xContext, uno::Reference< container::XIndexAccess >() )
+ScVbaCharts::ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext ) : Charts_BASE(_xParent, _xContext, uno::Reference< container::XIndexAccess >() )
 {
     // #TODO #FIXME surely this is wrong, you should never use the
     // currently documement ( it could be anything )
@@ -118,7 +118,7 @@ ScVbaCharts::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Charts") );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Charts") );
     }
     return sNames;
 }

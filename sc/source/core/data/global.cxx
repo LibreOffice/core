@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.cxx,v $
- * $Revision: 1.56.118.1 $
+ * $Revision: 1.56.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -361,8 +361,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
 
 const String& ScGlobal::GetRscString( USHORT nIndex )
 {
-    DBG_ASSERT( nIndex <= STR_COUNT,
-        "-ScGlobal::GetRscString(): Index zu gross!");
+    DBG_ASSERT( nIndex < STR_COUNT, "ScGlobal::GetRscString - invalid string index");
     if( !ppRscString[ nIndex ] )
     {
         OpCode eOp = ocNone;
@@ -579,8 +578,8 @@ void ScGlobal::Init()
     pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
 
-    ppRscString = new String *[ STR_COUNT+1 ];
-    for( USHORT nC = 0 ; nC <= STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
+    ppRscString = new String *[ STR_COUNT ];
+    for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
@@ -884,7 +883,7 @@ xub_StrLen ScGlobal::FindUnquoted( const String& rString, sal_Unicode cChar, xub
     while (p < pStop)
     {
         if (*p == cChar && !bQuoted)
-            return xub_StrLen(p - pStart);
+            return sal::static_int_cast< xub_StrLen >( p - pStart );
         else if (*p == cQuote)
         {
             if (!bQuoted)
@@ -1896,7 +1895,7 @@ String ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
     return String(ScResId((USHORT)_nCategoryNumber));
 }
-const sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
+sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
     switch(_eToken)
     {

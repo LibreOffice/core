@@ -134,6 +134,13 @@ SLOFILES =  \
         $(SLO)$/tabvwsh2.obj \
         $(SLO)$/viewfun4.obj \
         $(SLO)$/viewfun2.obj
+.ELIF "$(OS)$(COM)$(CPUNAME)"=="SOLARISC52INTEL"
+# tabcont can be removed if -xspace is no longer used (i99576, i99592)
+    NOOPTFILES=\
+        $(SLO)$/drawview.obj    \
+        $(SLO)$/dbfunc2.obj     \
+        $(SLO)$/tabvwsh2.obj    \
+        $(SLO)$/tabcont.obj
 .ELSE
 
     NOOPTFILES=\

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuinsert.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 class FuInsertGraphic : public FuPoor
 {
  public:
-    FuInsertGraphic( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuInsertGraphic( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertGraphic();
 
@@ -50,7 +50,7 @@ class FuInsertGraphic : public FuPoor
 class FuInsertOLE : public FuPoor
 {
  public:
-    FuInsertOLE( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuInsertOLE( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertOLE();
 
@@ -63,7 +63,7 @@ class FuInsertOLE : public FuPoor
 class FuInsertChart : public FuPoor
 {
  public:
-    FuInsertChart( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuInsertChart( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertChart();
 
@@ -76,7 +76,7 @@ class FuInsertChart : public FuPoor
 class FuInsertMedia : public FuPoor
 {
  public:
-    FuInsertMedia( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuInsertMedia( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuInsertMedia();
 

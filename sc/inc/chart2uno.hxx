@@ -33,7 +33,11 @@
 
 #include "cellsuno.hxx"     // for XModifyListenerArr_Impl / ScLinkListener
 #include "rangelst.hxx"
+#include "externalrefmgr.hxx"
+#include "token.hxx"
+
 #include <svtools/lstner.hxx>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -57,8 +61,13 @@
 #include <rtl/ustring.hxx>
 #include <svtools/itemprop.hxx>
 
-#include <map>
+#include <hash_set>
 #include <list>
+#include <vector>
+#include <memory>
+#include <boost/shared_ptr.hpp>
+
+#define USE_CHART2_EMPTYDATASEQUENCE 0
 
 class ScDocument;
 
@@ -128,7 +137,23 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    static bool addUpperLeftCornerIfMissing( ScRangeListRef& xRanges );//returns true if the corner was added
+    /**
+     * Check the current list of reference tokens, and add the upper left
+     * corner of the minimum range that encloses all ranges if certain
+     * conditions are met.
+     *
+     * @param rRefTokens list of reference tokens
+     *
+     * @return true if the corner was added, false otherwise.
+     */
+    static bool addUpperLeftCornerIfMissing(::std::vector<ScSharedTokenRef>& rRefTokens);
+
+private:
+
+    void detectRangesFromDataSource(::std::vector<ScSharedTokenRef>& rRefTokens,
+                                    ::com::sun::star::chart::ChartDataRowSource& rRowSource,
+                                    bool& rRowSourceDetected,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource);
 
 private:
 
@@ -260,10 +285,10 @@ class ScChart2DataSequence : public
                 SfxListener
 {
 public:
-
     explicit ScChart2DataSequence( ScDocument* pDoc,
             const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >& xDP,
-            const ScRangeListRef& rRangeList );
+            ::std::vector<ScSharedTokenRef>* pTokens);
+
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -381,28 +406,89 @@ public:
 
     // Implementation --------------------------------------------------------
 
-    ScRangeListRef GetRangeList() { return m_xRanges; }
-
     void    RefChanged();
     DECL_LINK( ValueListenerHdl, SfxHint* );
 
 private:
+    ScChart2DataSequence(); // disabled
+    ScChart2DataSequence(const ScChart2DataSequence& r); // disabled
+
+    class ExternalRefListener : public ScExternalRefManager::LinkListener
+    {
+    public:
+        ExternalRefListener(ScChart2DataSequence& rParent, ScDocument* pDoc);
+        virtual ~ExternalRefListener();
+        virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
+        void addFileId(sal_uInt16 nFileId);
+        void removeFileId(sal_uInt16 nFileId);
+        const ::std::hash_set<sal_uInt16>& getAllFileIds();
+
+    private:
+        ExternalRefListener();
+        ExternalRefListener(const ExternalRefListener& r);
+
+        ScChart2DataSequence&       mrParent;
+        ::std::hash_set<sal_uInt16> maFileIds;
+        ScDocument*                 mpDoc;
+    };
+
+    /**
+     * Build an internal data array to cache the data ranges, and other
+     * information such as hidden values.
+     */
+    void BuildDataCache();
+
+    void RebuildDataCache();
+
+    sal_Int32 FillCacheFromExternalRef(const ScSharedTokenRef& pToken);
+
+    void UpdateTokensFromRanges(const ScRangeList& rRanges);
+
+    ExternalRefListener* GetExtRefListener();
+
+    void StopListeningToAllExternalRefs();
+
+    void CopyData(const ScChart2DataSequence& r);
+
+private:
+
+    // data array
+    struct Item
+    {
+        double              mfValue;
+        ::rtl::OUString     maString;
+        bool                mbIsValue;
+        Item();
+    };
+
+    ::std::list<Item>           m_aDataArray;
+    ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
     // properties
     ::com::sun::star::chart2::data::DataSequenceRole  m_aRole;
     sal_Bool                    m_bHidden;
+
     // internals
-    ScRangeListRef              m_xRanges;
+    typedef ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  TokenListPtr;
+    typedef ::std::auto_ptr< ::std::vector<sal_uInt32> >        RangeIndexMapPtr;
+    typedef ::std::auto_ptr<ExternalRefListener>                ExtRefListenerPtr;
+
     sal_Int64                   m_nObjectId;
     ScDocument*                 m_pDocument;
+    TokenListPtr                m_pTokens;
+    RangeIndexMapPtr            m_pRangeIndices;
+    ExtRefListenerPtr           m_pExtRefListener;
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
     SfxItemPropertySet          m_aPropSet;
 
     ScLinkListener*             m_pValueListener;
-    sal_Bool                    m_bGotDataChangedHint;
     XModifyListenerArr_Impl     m_aValueListeners;
+
+    bool                        m_bGotDataChangedHint;
+    bool                        m_bExtDataRebuildQueued;
 };
 
+#if USE_CHART2_EMPTYDATASEQUENCE
 // DataSequence ==============================================================
 
 class ScChart2EmptyDataSequence : public
@@ -548,5 +634,6 @@ private:
     sal_Bool                    m_bColumn; // defines the orientation to create the right labels
 
 };
+#endif
 
 #endif // SC_CHART2UNO_HXX

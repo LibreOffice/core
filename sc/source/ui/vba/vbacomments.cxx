@@ -34,7 +34,7 @@
 
 #include "vbaglobals.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 uno::Any AnnotationToComment( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext )
@@ -44,7 +44,7 @@ uno::Any AnnotationToComment( const uno::Any& aSource, uno::Reference< uno::XCom
     uno::Reference< table::XCellRange > xCellRange( xChild->getParent(), uno::UNO_QUERY_THROW );
 
     // #FIXME needs to find the correct Parent
-    return uno::makeAny( uno::Reference< excel::XComment > ( new ScVbaComment( uno::Reference< vba::XHelperInterface >(), xContext, xCellRange ) ) );
+    return uno::makeAny( uno::Reference< excel::XComment > ( new ScVbaComment( uno::Reference< XHelperInterface >(), xContext, xCellRange ) ) );
 }
 
 class CommentEnumeration : public EnumerationHelperImpl
@@ -59,7 +59,7 @@ public:
 
 };
 
-ScVbaComments::ScVbaComments( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  )
+ScVbaComments::ScVbaComments( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  )
 : ScVbaComments_BASE( xParent, xContext, xIndexAccess )
 {
 }
@@ -100,7 +100,7 @@ ScVbaComments::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Comments") );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Comments") );
     }
     return sNames;
 }

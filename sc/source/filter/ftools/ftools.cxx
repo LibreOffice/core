@@ -45,6 +45,8 @@
 #include "stlsheet.hxx"
 #include "compiler.hxx"
 
+#include <stdio.h>
+
 // ============================================================================
 // ScFilterTools::ReadLongDouble()
 

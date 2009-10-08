@@ -42,7 +42,7 @@ protected:
     css::uno::Reference< css::sheet::XCellRangeAddressable > mxAddressable;
     css::uno::Reference< css::sheet::XSheetCondition > mxSheetCondition;
 public:
-    ScVbaCondition(  const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSheetCondition >& _xSheetCondition );
+    ScVbaCondition(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSheetCondition >& _xSheetCondition );
 
     static css::sheet::ConditionOperator retrieveAPIOperator( const css::uno::Any& _aOperator) throw ( css::script::BasicErrorException );
 

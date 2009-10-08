@@ -281,7 +281,7 @@ ScEnginePoolHelper::~ScEnginePoolHelper()
     if ( bDeleteDefaults )
         delete pDefaults;
     if ( bDeleteEnginePool )
-        delete pEnginePool;
+        SfxItemPool::Free(pEnginePool);
 }
 
 

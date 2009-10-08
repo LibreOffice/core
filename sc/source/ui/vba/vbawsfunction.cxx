@@ -42,13 +42,13 @@
 #include <comphelper/anytostring.hxx>
 
 #include "vbawsfunction.hxx"
+#include "compiler.hxx"
 
 using namespace com::sun::star;
-using namespace org::openoffice;
+using namespace ooo::vba;
 
-ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext): ScVbaWSFunction_BASE( xParent, xContext )
+ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext): ScVbaWSFunction_BASE( xParent, xContext )
 {
-    m_xNameAccess.set(  mxContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.FunctionDescriptions") ), mxContext ), uno::UNO_QUERY_THROW );
 }
 
 
@@ -86,7 +86,25 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
     for ( int count=0; count < aParamTemp.getLength(); ++count )
         OSL_TRACE("Param[%d] is %s",
             count, rtl::OUStringToOString( comphelper::anyToString( aParamTemp[count] ), RTL_TEXTENCODING_UTF8 ).getStr()  );
-    return xFunctionAccess->callFunction(FunctionName,aParamTemp);
+
+    uno::Any aRet = xFunctionAccess->callFunction(FunctionName,aParamTemp);
+    // MATCH function should alwayse return a double value, but currently if the first argument is XCellRange, MATCH function returns an array instead of a double value. Don't know why?
+    // To fix this issue in safe, current solution is to convert this array to a double value just for MATCH function.
+    String aUpper( FunctionName );
+    ScCompiler aCompiler( NULL, ScAddress() );
+    OpCode eOp = aCompiler.GetEnglishOpCode( aUpper.ToUpperAscii() );
+    if( eOp == ocMatch )
+    {
+        double fVal = 0.0;
+        if( aRet >>= fVal )
+            return aRet;
+        uno::Sequence< uno::Sequence< uno::Any > > aSequence;
+        if( !( ( aRet >>= aSequence ) && ( aSequence.getLength() > 0 ) &&
+            ( aSequence[0].getLength() > 0 ) && ( aSequence[0][0] >>= fVal ) ) )
+                throw uno::RuntimeException();
+        aRet <<= fVal;
+    }
+    return aRet;
 }
 
 void SAL_CALL
@@ -107,7 +125,11 @@ ScVbaWSFunction::hasMethod(const rtl::OUString& Name)  throw(uno::RuntimeExcepti
     sal_Bool bIsFound = sal_False;
     try
     {
-        if ( m_xNameAccess->hasByName( Name ) )
+        // the function name contained in the com.sun.star.sheet.FunctionDescription service is alwayse localized.
+        // but the function name used in WorksheetFunction is a programmatic name (seems English).
+        // So m_xNameAccess->hasByName( Name ) may fail to find name when a function name has a localized name.
+        ScCompiler aCompiler( NULL, ScAddress() );
+        if( aCompiler.IsEnglishSymbol( Name ) )
             bIsFound = sal_True;
     }
     catch( uno::Exception& /*e*/ )
@@ -146,7 +168,7 @@ ScVbaWSFunction::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.WorksheetFunction" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.WorksheetFunction" ) );
     }
     return aServiceNames;
 }

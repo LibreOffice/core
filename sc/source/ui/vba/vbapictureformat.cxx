@@ -29,10 +29,10 @@
  ************************************************************************/
 #include "vbapictureformat.hxx"
 
-using namespace org::openoffice;
+using namespace ooo::vba;
 using namespace com::sun::star;
 
-ScVbaPictureFormat::ScVbaPictureFormat( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,
+ScVbaPictureFormat::ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent,
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     uno::Reference< drawing::XShape > xShape )
     throw( lang::IllegalArgumentException ) : ScVbaPictureFormat_BASE( xParent, xContext ), m_xShape( xShape )
@@ -141,7 +141,7 @@ ScVbaPictureFormat::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.msform.PictureFormat" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.PictureFormat" ) );
     }
     return aServiceNames;
 }

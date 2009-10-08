@@ -609,6 +609,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
     {
         case EXC_FMLATYPE_CELL:
         case EXC_FMLATYPE_MATRIX:
+        case EXC_FMLATYPE_CHART:
             mbOk = pScBasePos != 0;
             DBG_ASSERT( mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
             mpScBasePos = pScBasePos;

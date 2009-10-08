@@ -41,7 +41,7 @@
 #include <cppuhelper/bootstrap.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 
 
@@ -62,12 +62,12 @@ ScVbaGlobals::~ScVbaGlobals()
 }
 
 // Will throw if singleton can't be accessed
-uno::Reference< vba::XGlobals >
+uno::Reference< XGlobals >
 ScVbaGlobals::getGlobalsImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
 {
-    uno::Reference< vba::XGlobals > xGlobals(
+    uno::Reference< XGlobals > xGlobals(
         xContext->getValueByName( ::rtl::OUString::createFromAscii(
-            "/singletons/org.openoffice.vba.theGlobals") ), uno::UNO_QUERY);
+            "/singletons/ooo.vba.theGlobals") ), uno::UNO_QUERY);
 
     if ( !xGlobals.is() )
     {
@@ -153,9 +153,9 @@ ScVbaGlobals::Range( const uno::Any& Cell1, const uno::Any& Cell2 ) throw (uno::
 }
 
 uno::Any SAL_CALL
-ScVbaGlobals::Names( ) throw ( uno::RuntimeException )
+ScVbaGlobals::Names( const css::uno::Any& aIndex ) throw ( uno::RuntimeException )
 {
-    return getApplication()->Names();
+    return getApplication()->Names( aIndex );
 }
 
 namespace globals
@@ -165,6 +165,6 @@ sdecl::class_<ScVbaGlobals, sdecl::with_args<false> > serviceImpl;
 extern sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaGlobals",
-    "org.openoffice.vba.Globals" );
+    "ooo.vba.Globals" );
 }
 

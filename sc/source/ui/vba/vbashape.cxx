@@ -27,8 +27,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include<org/openoffice/office/MsoZOrderCmd.hpp>
-#include<org/openoffice/office/MsoScaleFrom.hpp>
+#include<ooo/vba/office/MsoZOrderCmd.hpp>
+#include<ooo/vba/office/MsoScaleFrom.hpp>
 #include<com/sun/star/container/XNamed.hpp>
 #include<com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -46,17 +46,17 @@
 #include "vbafillformat.hxx"
 #include "vbapictureformat.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 using namespace ::vos;
 
-ScVbaShape::ScVbaShape( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape, const uno::Reference< drawing::XShapes > xShapes, sal_Int32 nType ) throw( lang::IllegalArgumentException ) : ScVbaShape_BASE( xParent, xContext ), m_xShape( xShape ), m_xShapes( xShapes ), m_nType( nType )
+ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape, const uno::Reference< drawing::XShapes >& xShapes, sal_Int32 nType ) throw( lang::IllegalArgumentException ) : ScVbaShape_BASE( xParent, xContext ), m_xShape( xShape ), m_xShapes( xShapes ), m_nType( nType )
 {
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );
     addListeners();
 }
 
-ScVbaShape::ScVbaShape( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape ) throw( lang::IllegalArgumentException ) : ScVbaShape_BASE( uno::Reference< vba::XHelperInterface >(), xContext ), m_xShape( xShape )
+ScVbaShape::ScVbaShape( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape ) throw( lang::IllegalArgumentException ) : ScVbaShape_BASE( uno::Reference< XHelperInterface >(), xContext ), m_xShape( xShape )
 {
     // add listener
     addListeners();
@@ -474,7 +474,7 @@ ScVbaShape::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.msform.Shape" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.Shape" ) );
     }
     return aServiceNames;
 }

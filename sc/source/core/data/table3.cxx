@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table3.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
-
-// INCLUDE ---------------------------------------------------------------
 
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
@@ -63,6 +59,7 @@
 #include "userlist.hxx"
 #include "progress.hxx"
 #include "cellform.hxx"
+#include "postit.hxx"
 
 #include <vector>
 
@@ -536,6 +533,8 @@ void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
             QuickSort( pArray, nRow1, nLastRow );
             SortReorder( pArray, aProgress );
             delete pArray;
+            // #158377# #i59745# update position of caption objects of cell notes
+            ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( aSortParam.nCol1, nRow1, nTab, aSortParam.nCol2, nLastRow, nTab ) );
         }
     }
     else
@@ -555,6 +554,8 @@ void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
             QuickSort( pArray, nCol1, nLastCol );
             SortReorder( pArray, aProgress );
             delete pArray;
+            // #158377# #i59745# update position of caption objects of cell notes
+            ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( nCol1, aSortParam.nRow1, nTab, nLastCol, aSortParam.nRow2, nTab ) );
         }
     }
     DestroySortCollator();

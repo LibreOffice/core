@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undocell.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,53 +248,73 @@ private:
     void            SetChangeTrack( ScBaseCell* pOldCell );
 };
 
+// ============================================================================
 
-class ScUndoNote: public ScSimpleUndo
+/** Undo action for inserting, removing, and replacing a cell note. */
+class ScUndoReplaceNote : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoNote( ScDocShell* pNewDocShell,
-                                BOOL bShow, const ScAddress& rNewPos,
-                                SdrUndoAction* pDraw );
-    virtual         ~ScUndoNote();
+
+    /** Constructs an undo action for inserting or removing a cell note. */
+                    ScUndoReplaceNote(
+                        ScDocShell& rDocShell,
+                        const ScAddress& rPos,
+                        const ScNoteData& rNoteData,
+                        bool bInsert,
+                        SdrUndoAction* pDrawUndo );
+
+    /** Constructs an undo action for replacing a cell note with another. */
+                    ScUndoReplaceNote(
+                        ScDocShell& rDocShell,
+                        const ScAddress& rPos,
+                        const ScNoteData& rOldData,
+                        const ScNoteData& rNewData,
+                        SdrUndoAction* pDrawUndo );
+
+    virtual         ~ScUndoReplaceNote();
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Repeat( SfxRepeatTarget& rTarget );
+    virtual BOOL    CanRepeat( SfxRepeatTarget& rTarget ) const;
 
     virtual String  GetComment() const;
 
 private:
-    BOOL            bIsShow;
-    ScAddress       aPos;
-    SdrUndoAction*  pDrawUndo;
+    void            DoInsertNote( const ScNoteData& rNoteData );
+    void            DoRemoveNote( const ScNoteData& rNoteData );
+
+private:
+    ScAddress       maPos;
+    ScNoteData      maOldData;
+    ScNoteData      maNewData;
+    SdrUndoAction*  mpDrawUndo;
 };
 
+// ============================================================================
 
-class ScUndoEditNote: public ScSimpleUndo
+/** Undo action for showing or hiding a cell note caption. */
+class ScUndoShowHideNote : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoEditNote( ScDocShell* pNewDocShell,
-                                    const ScAddress& rNewPos,
-                                    const ScPostIt& rOld,
-                                    const ScPostIt& rNew );
-    virtual         ~ScUndoEditNote();
+                    ScUndoShowHideNote( ScDocShell& rDocShell, const ScAddress& rPos, bool bShow );
+    virtual         ~ScUndoShowHideNote();
 
     virtual void    Undo();
     virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual void    Repeat( SfxRepeatTarget& rTarget );
+    virtual BOOL    CanRepeat( SfxRepeatTarget& rTarget ) const;
 
     virtual String  GetComment() const;
 
 private:
-    ScAddress       aPos;
-    ScPostIt        aOldNote;
-    ScPostIt        aNewNote;
+    ScAddress       maPos;
+    bool            mbShown;
 };
 
+// ============================================================================
 
 class ScUndoDetective: public ScSimpleUndo
 {

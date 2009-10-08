@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -63,13 +63,13 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         //
         aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aFtFormulaRange     ( this, ScResId( FT_FORMULARANGE ) ),
-        aEdFormulaRange     ( this, ScResId( ED_FORMULARANGE ) ),
+        aEdFormulaRange     ( this, this, ScResId( ED_FORMULARANGE ) ),
         aRBFormulaRange     ( this, ScResId( RB_FORMULARANGE ), &aEdFormulaRange, this ),
         aFtRowCell          ( this, ScResId( FT_ROWCELL ) ),
-        aEdRowCell          ( this, ScResId( ED_ROWCELL ) ),
+        aEdRowCell          ( this, this, ScResId( ED_ROWCELL ) ),
         aRBRowCell          ( this, ScResId( RB_ROWCELL ), &aEdRowCell, this ),
         aFtColCell          ( this, ScResId( FT_COLCELL ) ),
-        aEdColCell          ( this, ScResId( ED_COLCELL ) ),
+        aEdColCell          ( this, this, ScResId( ED_COLCELL ) ),
         aRBColCell          ( this, ScResId( RB_COLCELL ), &aEdColCell, this ),
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
@@ -283,7 +283,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
             if (aEdRowCell.GetText().Len() > 0)
             {
-                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab, 
+                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab,
                                        theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else

@@ -31,7 +31,7 @@
 #define SC_VBA_WINDOWS_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/excel/XWindows.hpp>
+#include <ooo/vba/excel/XWindows.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -39,12 +39,12 @@
 #include "vbacollectionimpl.hxx"
 
 
-typedef CollTestImplHelper< oo::excel::XWindows > ScVbaWindows_BASE;
+typedef CollTestImplHelper< ov::excel::XWindows > ScVbaWindows_BASE;
 
 class ScVbaWindows : public ScVbaWindows_BASE
 {
 public:
-    ScVbaWindows( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
     virtual ~ScVbaWindows() {}
 
     // XEnumerationAccess
@@ -57,7 +57,7 @@ public:
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 
-    static css::uno::Reference< oo::vba::XCollection > Windows(  const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    static css::uno::Reference< ov::XCollection > Windows(  const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

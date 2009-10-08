@@ -30,12 +30,12 @@
 #include "vbastyles.hxx"
 #include "vbastyle.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 static rtl::OUString SDEFAULTCELLSTYLENAME( RTL_CONSTASCII_USTRINGPARAM("Default") );
 css::uno::Any
-lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel )
+lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< beans::XPropertySet > xStyleProps( aObject, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XStyle > xStyle( new ScVbaStyle( xParent, xContext, xStyleProps, xModel ) );
@@ -43,7 +43,7 @@ lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Referenc
 }
 
 
-ScVbaStyles::ScVbaStyles( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ) throw ( script::BasicErrorException ) : ScVbaStyles_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( ScVbaStyle::getStylesNameContainer( xModel ), uno::UNO_QUERY_THROW ) ), mxModel( xModel ), mxParent( xParent )
+ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ) throw ( script::BasicErrorException ) : ScVbaStyles_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( ScVbaStyle::getStylesNameContainer( xModel ), uno::UNO_QUERY_THROW ) ), mxModel( xModel ), mxParent( xParent )
 {
     try
     {
@@ -78,13 +78,13 @@ ScVbaStyles::getElementType() throw (uno::RuntimeException)
 class EnumWrapper : public EnumerationHelper_BASE
 {
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
-        uno::Reference<vba::XHelperInterface > m_xParent;
+        uno::Reference<XHelperInterface > m_xParent;
         uno::Reference<uno::XComponentContext > m_xContext;
         uno::Reference<frame::XModel > m_xModel;
 
         sal_Int32 nIndex;
 public:
-        EnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess, const uno::Reference<vba::XHelperInterface >& xParent, const uno::Reference<uno::XComponentContext >& xContext, const uno::Reference<frame::XModel >& xModel ) : m_xIndexAccess( xIndexAccess ), m_xParent( xParent ), m_xContext( xContext ), m_xModel( xModel ), nIndex( 0 ) {}
+        EnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess, const uno::Reference<XHelperInterface >& xParent, const uno::Reference<uno::XComponentContext >& xContext, const uno::Reference<frame::XModel >& xModel ) : m_xIndexAccess( xIndexAccess ), m_xParent( xParent ), m_xContext( xContext ), m_xModel( xModel ), nIndex( 0 ) {}
         virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
@@ -178,7 +178,7 @@ ScVbaStyles::getServiceNames()
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.XStyles" ) );
+                aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.XStyles" ) );
         }
         return aServiceNames;
 }

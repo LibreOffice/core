@@ -190,6 +190,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 
     Rectangle aMMRect = pDoc->GetMMRect( nCol1,nRow1, nCol2,nRow2, nTab1 );
     aObjDesc.maSize = aMMRect.GetSize();
+    PrepareOLE( aObjDesc );
 }
 
 ScTransferObj::~ScTransferObj()
@@ -605,6 +606,7 @@ void ScTransferObj::InitDocShell()
         SCCOL nCol;
         SCROW nRow;
         SCTAB nSrcTab = aBlock.aStart.Tab();
+        pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
             if ( pDoc->GetColFlags( nCol, nSrcTab ) & CR_HIDDEN )
                 pDestDoc->ShowCol( nCol, 0, FALSE );

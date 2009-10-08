@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <org/openoffice/excel/XRange.hpp>
+#include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <vector>
@@ -36,7 +36,7 @@
 #include "vbaformatcondition.hxx"
 #include "vbaworkbook.hxx"
 #include "vbastyles.hxx"
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 typedef std::vector< beans::PropertyValue > VecPropValues;
@@ -47,10 +47,10 @@ static rtl::OUString FORMULA2( RTL_CONSTASCII_USTRINGPARAM("Formula2") );
 static rtl::OUString STYLENAME( RTL_CONSTASCII_USTRINGPARAM("StyleName") );
 static rtl::OUString sStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM("Excel_CondFormat") );
 
-ScVbaFormatConditions::ScVbaFormatConditions( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetConditionalEntries >& _xSheetConditionalEntries, const uno::Reference< frame::XModel >& xModel ) : ScVbaFormatConditions_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( _xSheetConditionalEntries, uno::UNO_QUERY_THROW ) ), mxSheetConditionalEntries( _xSheetConditionalEntries )
+ScVbaFormatConditions::ScVbaFormatConditions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetConditionalEntries >& _xSheetConditionalEntries, const uno::Reference< frame::XModel >& xModel ) : ScVbaFormatConditions_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( _xSheetConditionalEntries, uno::UNO_QUERY_THROW ) ), mxSheetConditionalEntries( _xSheetConditionalEntries )
 {
     mxRangeParent.set( xParent, uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XWorkbook > xWorkbook = new ScVbaWorkbook(  uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext, xModel );
+    uno::Reference< excel::XWorkbook > xWorkbook = new ScVbaWorkbook(  uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext, xModel );
     mxStyles.set( xWorkbook->Styles( uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XCellRangeAddressable > xCellRange( mxRangeParent->getCellRange(), uno::UNO_QUERY_THROW );
     mxParentRangePropertySet.set( xCellRange, uno::UNO_QUERY_THROW );
@@ -89,7 +89,7 @@ ScVbaFormatConditions::getElementType() throw (css::uno::RuntimeException)
 }
 
 
-uno::Any xSheetConditionToFormatCondition( const uno::Reference< vba::XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
+uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
 {
     uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
     aObject >>= xSheetConditionalEntry;
@@ -102,7 +102,7 @@ uno::Any xSheetConditionToFormatCondition( const uno::Reference< vba::XHelperInt
 uno::Any
 ScVbaFormatConditions::createCollectionObject(const uno::Any& aObject )
 {
-    return xSheetConditionToFormatCondition( uno::Reference< vba::XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, mxStyles, this, mxParentRangePropertySet, aObject );
+    return xSheetConditionToFormatCondition( uno::Reference< XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, mxStyles, this, mxParentRangePropertySet, aObject );
 }
 
 class EnumWrapper : public EnumerationHelper_BASE
@@ -125,7 +125,7 @@ public:
         virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
         {
                 if ( nIndex < m_xIndexAccess->getCount() )
-                        return xSheetConditionToFormatCondition( uno::Reference< vba::XHelperInterface >( m_xParentRange, uno::UNO_QUERY_THROW ), m_xContext, m_xStyles, m_xParentCollection, m_xProps, m_xIndexAccess->getByIndex( nIndex++ ) );
+                        return xSheetConditionToFormatCondition( uno::Reference< XHelperInterface >( m_xParentRange, uno::UNO_QUERY_THROW ), m_xContext, m_xStyles, m_xParentCollection, m_xProps, m_xIndexAccess->getByIndex( nIndex++ ) );
                 throw container::NoSuchElementException();
         }
 };
@@ -199,7 +199,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
             uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );
             if (xSheetConditionalEntry->getStyleName().equals(sStyleName))
             {
-                xFormatCondition =  new ScVbaFormatCondition(uno::Reference< vba::XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, xSheetConditionalEntry, xStyle, this, mxParentRangePropertySet);
+                xFormatCondition =  new ScVbaFormatCondition(uno::Reference< XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, xSheetConditionalEntry, xStyle, this, mxParentRangePropertySet);
                 notifyRange();
                 return xFormatCondition;
             }
@@ -296,7 +296,7 @@ ScVbaFormatConditions::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.FormatConditions" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.FormatConditions" ) );
     }
     return aServiceNames;
 }

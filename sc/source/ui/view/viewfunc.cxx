@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfunc.cxx,v $
- * $Revision: 1.44.22.2 $
+ * $Revision: 1.46.18.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +91,8 @@
 #include "editable.hxx"
 #include "scui_def.hxx" //CHINA001
 #include "funcdesc.hxx"
+#include "docuno.hxx"
+#include "cellsuno.hxx"
 //==================================================================
 
 ScViewFunc::ScViewFunc( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
@@ -345,7 +347,7 @@ BOOL lcl_AddFunction( ScAppOptions& rAppOpt, USHORT nOpCode )
 //  Eingabe - Undo OK
 
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                            BOOL bRecord )
+                            BOOL bRecord, const EditTextObject* pData )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -369,6 +371,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
         ULONG* pOldFormats      = NULL;
         SCTAB* pTabs            = NULL;
         SCTAB nUndoPos = 0;
+        EditTextObject* pUndoData = NULL;
         if ( bRecord )
         {
             ppOldCells      = new ScBaseCell*[nSelCount];
@@ -385,7 +388,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     pDoc->GetCell( nCol, nRow, i, pDocCell );
                     if ( pDocCell )
                     {
-                        ppOldCells[nUndoPos] = pDocCell->Clone(pDoc);
+                        ppOldCells[nUndoPos] = pDocCell->CloneWithoutNote( *pDoc );
                         if ( pDocCell->GetCellType() == CELLTYPE_EDIT )
                             bEditDeleted = TRUE;
 
@@ -415,6 +418,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                 }
 
             DBG_ASSERT( nUndoPos==nSelCount, "nUndoPos!=nSelCount" );
+
+            pUndoData = ( pData ? pData->Clone() : NULL );
         }
 
         bool bFormula = false;
@@ -581,12 +586,20 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
                          ( ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' ) && nError && rString.Equals( aFormula ) ) )
                     {
-                        ScStringCell* pCell = new ScStringCell( aFormula );
-                        pDoc->PutCell( aPos, pCell );
+                        if ( pData )
+                        {
+                            ScEditCell* pCell = new ScEditCell( pData, pDoc, NULL );
+                            pDoc->PutCell( aPos, pCell );
+                        }
+                        else
+                        {
+                            ScStringCell* pCell = new ScStringCell( aFormula );
+                            pDoc->PutCell( aPos, pCell );
+                        }
                     }
                     else
                     {
-                        ScFormulaCell* pCell = new ScFormulaCell( pDoc, aPos, aCell );
+                        ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
                         if ( nError )
                         {
                             pCell->GetCode()->DelRPN();
@@ -631,10 +644,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
 
         if ( bRecord )
         {   // wg. ChangeTrack erst jetzt
-            pDocSh->GetUndoManager()->AddUndoAction(
+             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoEnterData( pDocSh, nCol, nRow, nTab, nUndoPos, pTabs,
                                      ppOldCells, pHasFormat, pOldFormats,
-                                     rString, NULL ) );
+                                     rString, pUndoData ) );
         }
 
         for (i=0; i<nTabCount; i++)
@@ -644,6 +657,22 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
         ShowAllCursors();
 
         pDocSh->UpdateOle(GetViewData());
+
+        // #i97876# Spreadsheet data changes are not notified
+        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+        if ( pModelObj && pModelObj->HasChangesListeners() )
+        {
+            ScRangeList aChangeRanges;
+            for ( i = 0; i < nTabCount; ++i )
+            {
+                if ( rMark.GetTableSelect( i ) )
+                {
+                    aChangeRanges.Append( ScRange( nCol, nRow, i ) );
+                }
+            }
+            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        }
+
         aModificator.SetDocumentModified();
     }
     else
@@ -654,9 +683,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
 }
 
 //  Wert in einzele Zelle eintragen (nur auf nTab)
-//! umbenennen in EnterValue !!!!
 
-void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue )
+void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -669,18 +697,14 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rV
         ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
         if (aTester.IsEditable())
         {
-            ScBaseCell* pOldCell;
-            pDoc->GetCell( nCol, nRow, nTab, pOldCell );
+            ScAddress aPos( nCol, nRow, nTab );
+            ScBaseCell* pOldCell = pDoc->GetCell( aPos );
             BOOL bNeedHeight = ( pOldCell && pOldCell->GetCellType() == CELLTYPE_EDIT )
                                 || pDoc->HasAttrib(
                                     nCol,nRow,nTab, nCol,nRow,nTab, HASATTR_NEEDHEIGHT );
 
             //  Undo
-            ScBaseCell* pUndoCell = NULL;
-            if (bUndo)
-            {
-                pUndoCell = pOldCell ? pOldCell->Clone(pDoc) : NULL;
-            }
+            ScBaseCell* pUndoCell = (bUndo && pOldCell) ? pOldCell->CloneWithoutNote( *pDoc ) : 0;
 
             pDoc->SetValue( nCol, nRow, nTab, rValue );
 
@@ -688,8 +712,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rV
             if (bUndo)
             {
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterValue( pDocSh, ScAddress(nCol,nRow,nTab),
-                                            pUndoCell, rValue, bNeedHeight ) );
+                    new ScUndoEnterValue( pDocSh, aPos, pUndoCell, rValue, bNeedHeight ) );
             }
 
 /*!             Zeilenhoehe anpassen? Dann auch bei Undo...
@@ -697,7 +720,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rV
                 AdjustRowHeight(nRow,nRow);
 */
 
-            pDocSh->PostPaintCell( nCol, nRow, nTab );
+            pDocSh->PostPaintCell( aPos );
             pDocSh->UpdateOle(GetViewData());
             aModificator.SetDocumentModified();
         }
@@ -782,10 +805,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
                     pTabs[nPos] = i;
                     ScBaseCell* pDocCell;
                     pDoc->GetCell( nCol, nRow, i, pDocCell );
-                    if ( pDocCell )
-                        ppOldCells[nPos] = pDocCell->Clone( pDoc );
-                    else
-                        ppOldCells[nPos] = NULL;
+                    ppOldCells[nPos] = pDocCell ? pDocCell->CloneWithoutNote( *pDoc ) : 0;
                     ++nPos;
                 }
 
@@ -833,6 +853,22 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
             ShowAllCursors();
 
             pDocSh->UpdateOle(GetViewData());
+
+            // #i97876# Spreadsheet data changes are not notified
+            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+            if ( pModelObj && pModelObj->HasChangesListeners() )
+            {
+                ScRangeList aChangeRanges;
+                for ( i = 0; i < nTabCount; ++i )
+                {
+                    if ( rMark.GetTableSelect( i ) )
+                    {
+                        aChangeRanges.Append( ScRange( nCol, nRow, i ) );
+                    }
+                }
+                pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+            }
+
             aModificator.SetDocumentModified();
         }
 
@@ -1287,10 +1323,24 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         aFuncMark.MarkToMulti();
     }
 
+    ScRangeList aChangeRanges;
+
     if (aFuncMark.IsMultiMarked() && !bCursorOnly)
     {
         ScRange aMarkRange;
         aFuncMark.GetMultiMarkArea( aMarkRange );
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for ( SCTAB i = 0; i < nTabCount; ++i )
+        {
+            if ( aFuncMark.GetTableSelect( i ) )
+            {
+                ScRange aChangeRange( aMarkRange );
+                aChangeRange.aStart.SetTab( i );
+                aChangeRange.aEnd.SetTab( i );
+                aChangeRanges.Append( aChangeRange );
+            }
+        }
+
         SCCOL nStartCol = aMarkRange.aStart.Col();
         SCROW nStartRow = aMarkRange.aStart.Row();
         SCTAB nStartTab = aMarkRange.aStart.Tab();
@@ -1301,7 +1351,6 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         if (bRecord)
         {
             ScRange aCopyRange = aMarkRange;
-            SCTAB nTabCount = pDoc->GetTableCount();
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
 
@@ -1336,6 +1385,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         SCCOL nCol = pViewData->GetCurX();
         SCROW nRow = pViewData->GetCurY();
         SCTAB nTab = pViewData->GetTabNo();
+        aChangeRanges.Append( ScRange( nCol, nRow, nTab ) );
         ScPatternAttr* pOldPat = new ScPatternAttr(*pDoc->GetPattern( nCol, nRow, nTab ));
 
         pDoc->ApplyPattern( nCol, nRow, nTab, rAttr );
@@ -1356,6 +1406,36 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         pDocSh->UpdateOle(GetViewData());
         aModificator.SetDocumentModified();
         CellContentChanged();
+    }
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
+        sal_Int32 nCount = 0;
+        for ( USHORT nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
+        {
+            const SfxPoolItem* pItem = 0;
+            if ( rNewSet.GetItemState( nWhich, TRUE, &pItem ) == SFX_ITEM_SET && pItem )
+            {
+                const SfxItemPropertyMap* pMap = ScCellObj::GetCellPropertyMap();
+                while ( pMap->pName )
+                {
+                    if ( pMap->nWID == nWhich )
+                    {
+                        ::com::sun::star::uno::Any aVal;
+                        pItem->QueryValue( aVal, pMap->nMemberId );
+                        aProperties.realloc( nCount + 1 );
+                        aProperties[ nCount ].Name = ::rtl::OUString::createFromAscii( pMap->pName );
+                        aProperties[ nCount ].Value <<= aVal;
+                        ++nCount;
+                    }
+                    ++pMap;
+                }
+            }
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "attribute" ) ), aChangeRanges, aProperties );
     }
 
     StartFormatArea();
@@ -1566,6 +1646,21 @@ BOOL ScViewFunc::InsertCells( InsCellCmd eCmd, BOOL bRecord, BOOL bPartOfPaste )
         {
             pDocSh->UpdateOle(GetViewData());
             CellContentChanged();
+
+            // #i97876# Spreadsheet data changes are not notified
+            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+            if ( pModelObj && pModelObj->HasChangesListeners() )
+            {
+                if ( eCmd == INS_INSROWS || eCmd == INS_INSCOLS )
+                {
+                    ScRangeList aChangeRanges;
+                    aChangeRanges.Append( aRange );
+                    ::rtl::OUString aOperation = ( eCmd == INS_INSROWS ?
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-rows" ) ) :
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-columns" ) ) );
+                    pModelObj->NotifyChanges( aOperation, aChangeRanges );
+                }
+            }
         }
         return bSuccess;
     }
@@ -1585,10 +1680,48 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, BOOL bRecord )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         const ScMarkData& rMark = GetViewData()->GetMarkData();
-        pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, bRecord, FALSE );
+
+        // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+        if ( pDocSh->IsDocShared() && ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS ) )
+        {
+            ScRange aDelRange( aRange.aStart );
+            SCCOLROW nCount = 0;
+            if ( eCmd == DEL_DELROWS )
+            {
+                nCount = sal::static_int_cast< SCCOLROW >( aRange.aEnd.Row() - aRange.aStart.Row() + 1 );
+            }
+            else
+            {
+                nCount = sal::static_int_cast< SCCOLROW >( aRange.aEnd.Col() - aRange.aStart.Col() + 1 );
+            }
+            while ( nCount > 0 )
+            {
+                pDocSh->GetDocFunc().DeleteCells( aDelRange, &rMark, eCmd, bRecord, FALSE );
+                --nCount;
+            }
+        }
+        else
+        {
+            pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, bRecord, FALSE );
+        }
 
         pDocSh->UpdateOle(GetViewData());
         CellContentChanged();
+
+        // #i97876# Spreadsheet data changes are not notified
+        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+        if ( pModelObj && pModelObj->HasChangesListeners() )
+        {
+            if ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS )
+            {
+                ScRangeList aChangeRanges;
+                aChangeRanges.Append( aRange );
+                ::rtl::OUString aOperation = ( eCmd == DEL_DELROWS ?
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-rows" ) ) :
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-columns" ) ) );
+                pModelObj->NotifyChanges( aOperation, aChangeRanges );
+            }
+        }
 
         //  #58106# Cursor direkt hinter den geloeschten Bereich setzen
         SCCOL nCurX = GetViewData()->GetCurX();
@@ -1912,6 +2045,8 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
             nUndoDocFlags |= IDF_STRING;    // -> Zellen werden geaendert
         if (nFlags & IDF_NOTE)
             nUndoDocFlags |= IDF_CONTENTS;  // #68795# copy all cells with their notes
+        // do not copy note captions to undo document
+        nUndoDocFlags |= IDF_NOCAPTIONS;
         pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &aFuncMark );
     }
 
@@ -1923,7 +2058,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
     else
     {
         pDoc->DeleteSelection( nFlags, aFuncMark );
-        aFuncMark.MarkToSimple();
+//       aFuncMark.MarkToSimple();
     }
 
     if ( bRecord )
@@ -1937,6 +2072,23 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
         pDocSh->PostPaint( aExtendedRange, PAINT_GRID, nExtFlags );
 
     pDocSh->UpdateOle(GetViewData());
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        if ( bSimple )
+        {
+            aChangeRanges.Append( aMarkRange );
+        }
+        else
+        {
+            aFuncMark.FillRangeListWithMarks( &aChangeRanges, FALSE );
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
+
     aModificator.SetDocumentModified();
     CellContentChanged();
     ShowAllCursors();
@@ -2222,6 +2374,33 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
 
         ShowCursor();
     }
+
+    // #i97876# Spreadsheet data changes are not notified
+    if ( bWidth )
+    {
+        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+        if ( pModelObj && pModelObj->HasChangesListeners() )
+        {
+            ScRangeList aChangeRanges;
+            for ( nTab = 0; nTab < nTabCount; ++nTab )
+            {
+                if ( pMarkData->GetTableSelect( nTab ) )
+                {
+                    const SCCOLROW* pTabRanges = pRanges;
+                    for ( SCCOLROW nRange = 0; nRange < nRangeCnt; ++nRange )
+                    {
+                        SCCOL nStartCol = static_cast< SCCOL >( *(pTabRanges++) );
+                        SCCOL nEndCol = static_cast< SCCOL >( *(pTabRanges++) );
+                        for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
+                        {
+                            aChangeRanges.Append( ScRange( nCol, 0, nTab ) );
+                        }
+                    }
+                }
+            }
+            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "column-resize" ) ), aChangeRanges );
+        }
+    }
 }
 
 //  Spaltenbreiten/Zeilenhoehen (ueber Blockmarken)
@@ -2468,10 +2647,14 @@ BOOL ScViewFunc::Unprotect( SCTAB nTab, const String& rPassword )
     return bChanged;
 }
 
-void ScViewFunc::SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote )
+void ScViewFunc::SetNoteText( const ScAddress& rPos, const String& rNoteText )
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().SetNote( ScAddress(nCol,nRow,nTab), rNote, FALSE );
+    GetViewData()->GetDocShell()->GetDocFunc().SetNoteText( rPos, rNoteText, FALSE );
+}
+
+void ScViewFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate )
+{
+    GetViewData()->GetDocShell()->GetDocFunc().ReplaceNote( rPos, rNoteText, pAuthor, pDate, FALSE );
 }
 
 void ScViewFunc::SetNumberFormat( short nFormatType, ULONG nAdd )

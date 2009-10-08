@@ -447,6 +447,8 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_VALIDATION );
     rBindings.Invalidate( SID_EXTERNAL_SOURCE );
     rBindings.Invalidate( SID_TEXT_TO_COLUMNS );
+    rBindings.Invalidate( SID_SORT_ASCENDING );
+    rBindings.Invalidate( SID_SORT_DESCENDING );
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_CURSORCHANGED));
@@ -2169,8 +2171,9 @@ void ScTabView::DoChartSelection(
     {
         Color aSelColor( rHilightRanges[i].PreferredColor );
         ScRangeList aRangeList;
+        ScDocument* pDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
-                aRangeList, rHilightRanges[i].RangeRepresentation, aViewData.GetDocShell()->GetDocument(), ';' ))
+                aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), ';' ))
         {
             for ( ScRangePtr p = aRangeList.First(); p; p = aRangeList.Next())
             {

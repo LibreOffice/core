@@ -30,9 +30,9 @@
 #include "vbaaxistitle.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
-ScVbaAxisTitle::ScVbaAxisTitle( const uno::Reference< vba::XHelperInterface >& xParent,  const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& _xTitleShape ) :  AxisTitleBase( xParent, xContext, _xTitleShape )
+ScVbaAxisTitle::ScVbaAxisTitle( const uno::Reference< XHelperInterface >& xParent,  const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& _xTitleShape ) :  AxisTitleBase( xParent, xContext, _xTitleShape )
 {
 }
 
@@ -51,7 +51,7 @@ ScVbaAxisTitle::getServiceNames()
     {
         uno::Sequence< rtl::OUString > BaseServiceNames = AxisTitleBase::getServiceNames();
         aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.AxisTitle" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.AxisTitle" ) );
         for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
             aServiceNames[ index ] = BaseServiceNames[ index ];
     }

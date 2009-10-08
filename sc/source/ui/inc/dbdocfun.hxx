@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbdocfun.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.128.1 $
  *
  * This file is part of OpenOffice.org.
  *

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.111.20.7 $
+ * $Revision: 1.115.36.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -712,7 +712,6 @@ public:
                     //  return TRUE = Zahlformat gesetzt
     SC_DLLPUBLIC BOOL           SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString );
     SC_DLLPUBLIC void           SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVal );
-    SC_DLLPUBLIC void           SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote );
     void            SetError( SCCOL nCol, SCROW nRow, SCTAB nTab, const USHORT nError);
 
     SC_DLLPUBLIC void           InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
@@ -741,14 +740,12 @@ public:
                         const ScAddress& rPos, const ScBaseCell* pCell ) const;
     void            GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormula,
                                 BOOL bAsciiExport = FALSE ) const;
-    BOOL            GetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt& rNote);
     SC_DLLPUBLIC void           GetCellType( SCCOL nCol, SCROW nRow, SCTAB nTab, CellType& rCellType ) const;
     SC_DLLPUBLIC CellType       GetCellType( const ScAddress& rPos ) const;
     SC_DLLPUBLIC void           GetCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell ) const;
     SC_DLLPUBLIC ScBaseCell*        GetCell( const ScAddress& rPos ) const;
 
 //UNUSED2008-05  void           RefreshNoteFlags();
-    BOOL            HasNoteObject( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     SC_DLLPUBLIC BOOL           HasData( SCCOL nCol, SCROW nRow, SCTAB nTab );
     SC_DLLPUBLIC BOOL           HasStringData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
@@ -757,6 +754,17 @@ public:
 
     /** Returns true, if there is any data to create a selection list for rPos. */
     BOOL            HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+
+    /** Returns the pointer to a cell note object at the passed cell address. */
+    ScPostIt*       GetNote( const ScAddress& rPos );
+    /** Sets the passed note at the cell with the passed cell address. */
+    void            TakeNote( const ScAddress& rPos, ScPostIt*& rpNote );
+    /** Returns and forgets the cell note object at the passed cell address. */
+    ScPostIt*       ReleaseNote( const ScAddress& rPos );
+    /** Returns the pointer to an existing or created cell note object at the passed cell address. */
+    SC_DLLPUBLIC ScPostIt* GetOrCreateNote( const ScAddress& rPos );
+    /** Deletes the note at the passed cell address. */
+    void            DeleteNote( const ScAddress& rPos );
 
     BOOL            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
@@ -777,11 +785,11 @@ public:
                                     SCCOL nEndCol, SCROW nEndRow );
                     //  ohne Ueberpruefung:
     SC_DLLPUBLIC void           DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                    SCCOL nEndCol, SCROW nEndRow );
+                                    SCCOL nEndCol, SCROW nEndRow, bool bDeleteCaptions = true );
     void            RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
     BOOL            IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                                SCCOL nEndCol, SCROW nEndRow ) const;
+                                                SCCOL nEndCol, SCROW nEndRow, bool bIgnoreNotes = false ) const;
     BOOL            IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                                 SCCOL nEndCol, SCROW nEndRow,
                                                 BOOL bLeftIsEmpty = FALSE,
@@ -935,7 +943,9 @@ public:
     void            CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 BOOL bCut, ScDocument* pClipDoc, BOOL bAllTabs,
                                 const ScMarkData* pMarks = NULL,
-                                BOOL bKeepScenarioFlags = FALSE, BOOL bIncludeObjects = FALSE);
+                                BOOL bKeepScenarioFlags = FALSE,
+                                BOOL bIncludeObjects = FALSE,
+                                BOOL bCloneNoteCaptions = TRUE);
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);
     void            CopyBlockFromClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -1326,9 +1336,6 @@ public:
 
     void            SetSrcCharSet( CharSet eNew )   { eSrcSet = eNew; }
     void            UpdateFontCharSet();
-
-    SC_DLLPUBLIC friend SvStream& operator>>( SvStream& rStream, ScDocument& rDocument );
-    SC_DLLPUBLIC friend SvStream& operator<<( SvStream& rStream, const ScDocument& rDocument );
 
     void            FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                         SCTAB nTab, double nScaleX, double nScaleY,

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleDocumentPagePreview.cxx,v $
- * $Revision: 1.38.32.2 $
+ * $Revision: 1.38.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,9 +193,8 @@ sal_Int32 ScNotesChilds::AddNotes(const ScPreviewLocationData& rData, const Rect
                 }
                 else
                 {
-                    ScPostIt aPostIt(pDoc);
-                    pDoc->GetNote(aNote.maNoteCell.Col(), aNote.maNoteCell.Row(), aNote.maNoteCell.Tab(), aPostIt);
-                    aNote.maNoteText = aPostIt.GetText();
+                    if( ScPostIt* pNote = pDoc->GetNote( aNote.maNoteCell ) )
+                        aNote.maNoteText = pNote->GetText();
                     aNote.mpTextHelper = CreateTextHelper(aNote.maNoteText, aNote.maRect, aNote.maNoteCell, aNote.mbMarkNote, nParagraphs + mnOffset);
                     if (aNote.mpTextHelper)
                         aNote.mnParaCount = aNote.mpTextHelper->GetChildCount();
@@ -371,9 +370,8 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                 }
                 else
                 {
-                    ScPostIt aPostIt(pDoc);
-                    pDoc->GetNote(aNote.maNoteCell.Col(), aNote.maNoteCell.Row(), aNote.maNoteCell.Tab(), aPostIt);
-                    aNote.maNoteText = aPostIt.GetText();
+                    if( ScPostIt* pNote = pDoc->GetNote( aNote.maNoteCell ) )
+                        aNote.maNoteText = pNote->GetText();
                 }
 
                 sal_Int8 nCompare(-1); // if there are no more old childs it is always a new one

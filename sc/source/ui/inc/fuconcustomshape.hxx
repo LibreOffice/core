@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconcustomshape.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@ class FuConstCustomShape : public FuConstruct
     void SetAttributes( SdrObject* pObj );
 
 public:
-    FuConstCustomShape(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuConstCustomShape(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
                        SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstCustomShape();

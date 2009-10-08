@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expop.cxx,v $
- * $Revision: 1.7.32.2 $
+ * $Revision: 1.7.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -399,7 +399,6 @@ FltError ExportWK1::Write()
                     break;
                 case CELLTYPE_NOTE:
                 case CELLTYPE_NONE:
-                case CELLTYPE_DESTROYED:
                     break;
                 default:
                     DBG_ASSERT( FALSE, "ExportWK1::Write(): unbekannter Celltype!" );

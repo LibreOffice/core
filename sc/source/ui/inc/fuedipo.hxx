@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuedipo.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,6 @@
 #ifndef SC_FUEDIPO_HXX
 #define SC_FUEDIPO_HXX
 
-#ifndef _SV_HXX
-#endif
-
 #include "fudraw.hxx"
 
 
@@ -46,7 +43,7 @@
 class FuEditPoints : public FuDraw
 {
  public:
-    FuEditPoints(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuEditPoints(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuEditPoints();

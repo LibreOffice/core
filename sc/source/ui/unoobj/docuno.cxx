@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docuno.cxx,v $
- * $Revision: 1.67.30.3 $
+ * $Revision: 1.68.52.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -217,7 +217,8 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     SfxBaseModel( pDocSh ),
     aPropSet( lcl_GetDocOptPropertyMap() ),
     pDocShell( pDocSh ),
-    pPrintFuncCache( NULL )
+    pPrintFuncCache( NULL ),
+    maChangesListeners( m_aMutex )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( pDocShell )
@@ -312,6 +313,7 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( lang::XMultiServiceFactory )
     SC_QUERYINTERFACE( lang::XServiceInfo )
+    SC_QUERYINTERFACE( util::XChangesNotifier )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue() && xNumberAgg.is() )
@@ -354,7 +356,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         long nAggLen = aAggTypes.getLength();
         const uno::Type* pAggPtr = aAggTypes.getConstArray();
 
-        const long nThisLen = 14;
+        const long nThisLen = 15;
         aTypes.realloc( nParentLen + nAggLen + nThisLen );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetDocument>*)0);
@@ -371,6 +373,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         pPtr[nParentLen +11] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
         pPtr[nParentLen +12] = getCppuType((const uno::Reference<lang::XMultiServiceFactory>*)0);
         pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+        pPtr[nParentLen +14] = getCppuType((const uno::Reference<util::XChangesNotifier>*)0);
 
         long i;
         for (i=0; i<nParentLen; i++)
@@ -1800,6 +1803,72 @@ ScModelObj* ScModelObj::getImplementation( const uno::Reference<uno::XInterface>
     return pRet;
 }
 
+// XChangesNotifier
+
+void ScModelObj::addChangesListener( const uno::Reference< util::XChangesListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    maChangesListeners.addInterface( aListener );
+}
+
+void ScModelObj::removeChangesListener( const uno::Reference< util::XChangesListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    maChangesListeners.removeInterface( aListener );
+}
+
+bool ScModelObj::HasChangesListeners() const
+{
+    return ( maChangesListeners.getLength() > 0 );
+}
+
+void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRangeList& rRanges,
+    const uno::Sequence< beans::PropertyValue >& rProperties )
+{
+    if ( pDocShell && HasChangesListeners() )
+    {
+        util::ChangesEvent aEvent;
+        aEvent.Source.set( static_cast< cppu::OWeakObject* >( this ) );
+        aEvent.Base <<= aEvent.Source;
+
+        ULONG nRangeCount = rRanges.Count();
+        aEvent.Changes.realloc( static_cast< sal_Int32 >( nRangeCount ) );
+        for ( ULONG nIndex = 0; nIndex < nRangeCount; ++nIndex )
+        {
+            uno::Reference< table::XCellRange > xRangeObj;
+
+            ScRange aRange( *rRanges.GetObject( nIndex ) );
+            if ( aRange.aStart == aRange.aEnd )
+            {
+                xRangeObj.set( new ScCellObj( pDocShell, aRange.aStart ) );
+            }
+            else
+            {
+                xRangeObj.set( new ScCellRangeObj( pDocShell, aRange ) );
+            }
+
+            util::ElementChange& rChange = aEvent.Changes[ static_cast< sal_Int32 >( nIndex ) ];
+            rChange.Accessor <<= rOperation;
+            rChange.Element <<= rProperties;
+            rChange.ReplacedElement <<= xRangeObj;
+        }
+
+        ::cppu::OInterfaceIteratorHelper aIter( maChangesListeners );
+        while ( aIter.hasMoreElements() )
+        {
+            try
+            {
+                static_cast< util::XChangesListener* >( aIter.next() )->changesOccurred( aEvent );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+}
+
 //------------------------------------------------------------------------
 
 ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :
@@ -2185,7 +2254,8 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
     uno::Sequence < uno::Reference < table::XCellRange > > xRet;
 
     ScRangeList aRangeList;
-    if (ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, pDocShell->GetDocument(), ';' ))
+    ScDocument* pDoc = pDocShell->GetDocument();
+    if (ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, pDoc, ::formula::FormulaGrammar::CONV_OOO, ';' ))
     {
         sal_Int32 nCount = aRangeList.Count();
         if (nCount)
@@ -2917,34 +2987,30 @@ void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-BOOL ScAnnotationsObj::GetAddressByIndex_Impl( ULONG nIndex, ScAddress& rPos ) const
+bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const
 {
     if (pDocShell)
     {
-        ULONG nFound = 0;
+        sal_Int32 nFound = 0;
         ScDocument* pDoc = pDocShell->GetDocument();
         ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
-        ScBaseCell* pCell = aCellIter.GetFirst();
-        while (pCell)
+        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
         {
-            if (pCell->GetNotePtr())
+            if (pCell->HasNote())
             {
                 if (nFound == nIndex)
                 {
                     rPos = ScAddress( aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab() );
-                    return TRUE;
+                    return true;
                 }
                 ++nFound;
             }
-            pCell = aCellIter.GetNext();
         }
     }
-    return FALSE;   // nicht gefunden
+    return false;
 }
 
-// XSheetAnnotations
-
-ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
+ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
 {
     if (pDocShell)
     {
@@ -2955,8 +3021,10 @@ ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
     return NULL;
 }
 
-void SAL_CALL ScAnnotationsObj::insertNew( const table::CellAddress& aPosition,
-                                            const ::rtl::OUString& aText )
+// XSheetAnnotations
+
+void SAL_CALL ScAnnotationsObj::insertNew(
+        const table::CellAddress& aPosition, const ::rtl::OUString& rText )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -2965,8 +3033,8 @@ void SAL_CALL ScAnnotationsObj::insertNew( const table::CellAddress& aPosition,
         DBG_ASSERT( aPosition.Sheet == nTab, "addAnnotation mit falschem Sheet" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
 
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.SetNoteText( aPos, String(aText), TRUE );
+        ScDocFunc aFunc( *pDocShell );
+        aFunc.ReplaceNote( aPos, rText, 0, 0, TRUE );
     }
 }
 
@@ -3007,15 +3075,10 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
     ULONG nCount = 0;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
-        ScBaseCell* pCell = aCellIter.GetFirst();
-        while (pCell)
-        {
-            if (pCell->GetNotePtr())
+        ScCellIterator aCellIter( pDocShell->GetDocument(), 0,0, nTab, MAXCOL,MAXROW, nTab );
+        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
+            if (pCell->HasNote())
                 ++nCount;
-            pCell = aCellIter.GetNext();
-        }
     }
     return nCount;
 }

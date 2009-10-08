@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfunc.hxx,v $
- * $Revision: 1.34.32.3 $
+ * $Revision: 1.34.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,8 +98,8 @@ public:
     String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                                BOOL bRecord = TRUE );
-    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
+                               BOOL bRecord = TRUE, const EditTextObject* pData = NULL );
+    void            EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
                                 BOOL bRecord = TRUE, BOOL bTestSimple = FALSE );
 
@@ -298,7 +298,9 @@ public:
     void            SetSelectionFrameLines( const SvxBorderLine* pLine,
                                             BOOL bColorOnly );
 
-    void            SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote );
+    void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
+    void            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate );
+
 //UNUSED2008-05  void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
     void            DoThesaurus( BOOL bRecord = TRUE );
@@ -321,9 +323,9 @@ public:
     void            DetectiveDelAll();
     void            DetectiveRefresh();
 
-    void            ShowNote();
+    void            ShowNote( bool bShow = true );
+    inline void     HideNote() { ShowNote( false ); }
     void            EditNote();
-    void            HideNote();
 
     void            ForgetFormatArea()      { bFormatValid = FALSE; }
     BOOL            SelectionEditable( BOOL* pOnlyNotBecauseOfMatrix = NULL );

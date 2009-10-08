@@ -31,7 +31,7 @@
 #define SC_VBA_BORDERS_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/excel/XBorders.hpp>
+#include <ooo/vba/excel/XBorders.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -40,7 +40,7 @@
 
 #include "vbacollectionimpl.hxx"
 
-typedef CollTestImplHelper< oo::excel::XBorders > ScVbaBorders_BASE;
+typedef CollTestImplHelper< ov::excel::XBorders > ScVbaBorders_BASE;
 class ScVbaPalette;
 class ScVbaBorders : public ScVbaBorders_BASE
 {
@@ -49,7 +49,7 @@ class ScVbaBorders : public ScVbaBorders_BASE
     bool bRangeIsSingleCell;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
-    ScVbaBorders( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, ScVbaPalette& rPalette );
+    ScVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, ScVbaPalette& rPalette );
     virtual ~ScVbaBorders() {}
 
     // XEnumerationAccess

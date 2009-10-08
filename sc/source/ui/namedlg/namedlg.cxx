@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aEdName         ( this, ScResId( ED_NAME ) ),
         //
         aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
-        aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
+        aEdAssign       ( this, this, ScResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
         //
         aFlType         ( this, ScResId( FL_TYPE ) ),
@@ -246,7 +246,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(&aEdAssign);
         String aRefStr;
-        rRef.Format( aRefStr, ABS_DREF3D, pDocP, 
+        rRef.Format( aRefStr, ABS_DREF3D, pDocP,
                      ScAddress::Details(pDocP->GetAddressConvention(), 0, 0) );
         aEdAssign.SetRefString( aRefStr );
     }

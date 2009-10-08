@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -93,12 +93,12 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
         aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
         aLbRange        ( this, ScResId( LB_RANGE ) ),
 
-        aEdAssign       ( this, ScResId( ED_AREA ) ),
+        aEdAssign       ( this, this, ScResId( ED_AREA ) ),
         aRbAssign       ( this, ScResId( RB_AREA ), &aEdAssign, this ),
         aBtnColHead     ( this, ScResId( BTN_COLHEAD ) ),
         aBtnRowHead     ( this, ScResId( BTN_ROWHEAD ) ),
         aFtAssign2      ( this, ScResId( FT_DATA_LABEL ) ),
-        aEdAssign2      ( this, ScResId( ED_DATA ) ),
+        aEdAssign2      ( this, this, ScResId( ED_DATA ) ),
         aRbAssign2      ( this, ScResId( RB_DATA ), &aEdAssign2, this ),
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),

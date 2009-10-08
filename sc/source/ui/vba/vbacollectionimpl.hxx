@@ -30,8 +30,8 @@
 #ifndef SC_VBA_COLLECTION_IMPL_HXX
 #define SC_VBA_COLLECTION_IMPL_HXX
 
-#include <org/openoffice/vba/XCollection.hpp>
-//#include <org/openoffice/vba/XCollectionTest.hpp>
+#include <ooo/vba/XCollection.hpp>
+//#include <ooo/vba/XCollectionTest.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
@@ -187,7 +187,7 @@ protected:
         return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );
     }
 public:
-    ScVbaCollectionBase( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ){ m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
+    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ){ m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
     //XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException)
     {
@@ -235,14 +235,14 @@ public:
 
 };
 
-typedef ::cppu::WeakImplHelper1<oo::vba::XCollection> XCollection_InterfacesBASE;
+typedef ::cppu::WeakImplHelper1<ov::XCollection> XCollection_InterfacesBASE;
 
 typedef ScVbaCollectionBase< XCollection_InterfacesBASE > CollImplBase1;
 // compatible with the old collections ( pre XHelperInterface base class ) ( some internal objects still use this )
 class ScVbaCollectionBaseImpl : public CollImplBase1
 {
 public:
-    ScVbaCollectionBaseImpl( const css::uno::Reference< oo::vba::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : CollImplBase1( xParent, xContext, xIndexAccess){}
+    ScVbaCollectionBaseImpl( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : CollImplBase1( xParent, xContext, xIndexAccess){}
 
 };
 
@@ -252,7 +252,7 @@ class CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper1<
 typedef ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc >  > ImplBase1;
 
 public:
-    CollTestImplHelper( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : ImplBase1( xParent, xContext, xIndexAccess ) {}
+    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : ImplBase1( xParent, xContext, xIndexAccess ) {}
 };
 
 

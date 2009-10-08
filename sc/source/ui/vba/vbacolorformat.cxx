@@ -28,10 +28,10 @@
  *
  ************************************************************************/
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/msforms/XLineFormat.hpp>
+#include <ooo/vba/msforms/XLineFormat.hpp>
 #include "vbacolorformat.hxx"
 
-using namespace org::openoffice;
+using namespace ooo::vba;
 using namespace com::sun::star;
 
 sal_Int32
@@ -51,13 +51,13 @@ MsoColorIndizes::getColorIndex( sal_Int32 nIndex )
     };
     return COLORINDIZES[nIndex];
 }
-ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< vba::XHelperInterface > xInternalParent, const uno::Reference< drawing::XShape > xShape, const sal_Int16 nColorFormatType ) : ScVbaColorFormat_BASE( xParent, xContext ), m_xInternalParent( xInternalParent ), m_xShape( xShape ), m_nColorFormatType( nColorFormatType )
+ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XHelperInterface > xInternalParent, const uno::Reference< drawing::XShape > xShape, const sal_Int16 nColorFormatType ) : ScVbaColorFormat_BASE( xParent, xContext ), m_xInternalParent( xInternalParent ), m_xShape( xShape ), m_nColorFormatType( nColorFormatType )
 {
     m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
     m_nFillFormatBackColor = 0;
     try
     {
-        uno::Reference< oo::msforms::XFillFormat > xFillFormat( xInternalParent, uno::UNO_QUERY_THROW );
+        uno::Reference< ov::msforms::XFillFormat > xFillFormat( xInternalParent, uno::UNO_QUERY_THROW );
         m_pFillFormat = ( ScVbaFillFormat* )( xFillFormat.get() );
     }catch ( uno::RuntimeException  e )
     {
@@ -183,7 +183,7 @@ ScVbaColorFormat::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.msforms.ColorFormat" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.ColorFormat" ) );
     }
     return aServiceNames;
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawsh2.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,12 +104,12 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
     ULONG nMarkCount = rMarkList.GetMarkCount();
     if ( nMarkCount == 1 )
     {
-            SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-            if( pObj && pObj->GetObjIdentifier() == OBJ_CAPTION && pObj->GetLayer() == SC_LAYER_INTERN)
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        if( ScDrawLayer::IsNoteCaption( pObj ) )
         {
-                bDisableAnchor = true;
-                rSet.DisableItem( SID_ANCHOR_PAGE );
-                rSet.DisableItem( SID_ANCHOR_CELL );
+            bDisableAnchor = true;
+            rSet.DisableItem( SID_ANCHOR_PAGE );
+            rSet.DisableItem( SID_ANCHOR_CELL );
         }
     }
 
@@ -178,9 +178,10 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_ALIGN_ANY_BOTTOM );
     }
 
-    if ( !nMarkCount || pView->HasMarkedControl() )
+    // do not change layer of form controls
+    // #158385# #i83729# do not change layer of cell notes (on internal layer)
+    if ( !nMarkCount || pView->HasMarkedControl() || pView->HasMarkedInternal() )
     {
-        //  Layer von Controls darf nicht veraendert werden
         rSet.DisableItem( SID_OBJECT_HEAVEN );
         rSet.DisableItem( SID_OBJECT_HELL );
     }

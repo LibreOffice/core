@@ -53,12 +53,22 @@ namespace  worksheet
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
+namespace window
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
 namespace globals
 {
 extern sdecl::ServiceDecl const serviceDecl;
 }
-
-
+namespace  userform
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
+namespace hyperlink
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
 
 extern "C"
 {
@@ -76,7 +86,7 @@ extern "C"
 
     // Component registration
         if ( component_writeInfoHelper( pServiceManager, pRegistryKey,
-        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl ) )
+        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, userform::serviceDecl, window::serviceDecl, hyperlink::serviceDecl ) )
         {
             // Singleton registration
             try
@@ -85,9 +95,9 @@ extern "C"
                     reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
 
                 Reference< registry::XRegistryKey >xKey = pKey->createKey(
-                    rtl::OUString::createFromAscii( ("org.openoffice.vba.Globals/UNO/SINGLETONS/org.openoffice.vba.theGlobals") ) );
+                    rtl::OUString::createFromAscii( ("ooo.vba.Globals/UNO/SINGLETONS/ooo.vba.theGlobals") ) );
                 xKey->setStringValue( ::rtl::OUString::createFromAscii(
-                    ("org.openoffice.vba.Globals") ) );
+                    ("ooo.vba.Globals") ) );
                 return sal_True;
             }
             catch( uno::Exception& /*e*/ )
@@ -104,7 +114,7 @@ extern "C"
     {
         OSL_TRACE("In component_getFactory for %s", pImplName );
     void* pRet =  component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl );
+            pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, userform::serviceDecl, window::serviceDecl, hyperlink::serviceDecl );
     OSL_TRACE("Ret is 0x%x", pRet);
     return pRet;
     }

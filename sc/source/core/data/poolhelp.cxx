@@ -70,11 +70,11 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
 
 ScPoolHelper::~ScPoolHelper()
 {
-    delete pEnginePool;
-    delete pEditPool;
+    SfxItemPool::Free(pEnginePool);
+    SfxItemPool::Free(pEditPool);
     delete pFormTable;
     mxStylePool.clear();
-    delete pDocPool;
+    SfxItemPool::Free(pDocPool);
 }
 
 void ScPoolHelper::SourceDocumentGone()

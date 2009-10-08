@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin3.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.20.126.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-
 
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
@@ -56,12 +51,10 @@
 
 #include "drawutil.hxx"
 #include "document.hxx"
+#include "drwlayer.hxx"
 #include <vcl/svapp.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 // -----------------------------------------------------------------------
-
 
 BOOL ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
