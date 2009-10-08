@@ -58,6 +58,7 @@ SLOFILES=   \
             $(SLO)$/componentmodule.obj \
             $(SLO)$/configurationhelper.obj \
             $(SLO)$/documentinfo.obj \
+            $(SLO)$/documentiologring.obj \
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/ihwrapnofilter.obj \
             $(SLO)$/instancelocker.obj \

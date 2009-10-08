@@ -503,6 +503,10 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "Function not possible: write protected." ;
     };
+    String ERRCODE_SFX_SHARED_NOPASSWORDCHANGE
+    {
+        Text [ en-US ] = "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first.";
+    };
 };
 
 // eof ------------------------------------------------------------------------

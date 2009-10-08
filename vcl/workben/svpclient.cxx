@@ -50,6 +50,8 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include "ucbhelper/contentbroker.hxx"
+#include "ucbhelper/configurationkeys.hxx"
 
 #include <errno.h>
 #include <unistd.h>
@@ -60,6 +62,8 @@
 
 
 using namespace rtl;
+using namespace cppu;
+using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 // -----------------------------------------------------------------------
@@ -73,10 +77,47 @@ SAL_IMPLEMENT_MAIN()
 {
     tools::extendApplicationEnvironment();
 
-    Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+    //-------------------------------------------------
+    // create the global service-manager
+    //-------------------------------------------------
+    Reference< XMultiServiceFactory > xFactory;
+    try
+    {
+        Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
+        xFactory = Reference< XMultiServiceFactory >(  xCtx->getServiceManager(), UNO_QUERY );
+        if( xFactory.is() )
+            setProcessServiceFactory( xFactory );
+    }
+    catch( com::sun::star::uno::Exception& rExc)
+    {
+    }
 
-    InitVCL( xMS );
+    if( ! xFactory.is() )
+    {
+        fprintf( stderr, "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
+    }
+
+    /*
+     *  Create UCB.
+     */
+    Sequence< Any > aArgs( 2 );
+    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+#if OSL_DEBUG_LEVEL > 1
+    sal_Bool bSuccess =
+#endif
+        ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
+
+#if OSL_DEBUG_LEVEL > 1
+    if ( !bSuccess )
+    {
+        fprintf( stderr, "Error creating UCB, installation must be in disorder. Exiting.\n" );
+        exit( 1 );
+    }
+#endif
+
+    InitVCL( xFactory );
     ::Main();
     DeInitVCL();
 

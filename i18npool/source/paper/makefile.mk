@@ -1,14 +1,14 @@
 #*************************************************************************
-#
+#*
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: MAKEFILE.MK,v $
+# $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14.94.2 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -27,39 +27,49 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#************************************************************************/
 
+PRJ=..$/..
 
-PRJ=..$/..$/..
+PRJNAME=i18npool
+TARGET=i18npaper
 
-PRJNAME=vcl
-TARGET=salwin
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile2.pmk
-
-# --- #105371#
-.IF "$(COM)"=="GCC"
-CFLAGS += -D_WIN32_WINNT=0x0501
-.ELSE
-CFLAGS += -DWINVER=0x0400 -D_WIN32_WINNT=0x0501
-
-.ENDIF
+.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
+#
+SLOFILES=$(SLO)$/paper.obj
+SHL1OBJS=$(SLOFILES)
 
-SLOFILES=   \
-            $(SLO)$/salframe.obj   \
-            $(SLO)$/salmenu.obj    \
-            $(SLO)$/salobj.obj
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
+SHL1IMPLIB=i$(TARGET)
 
-.IF "$(COM)"=="GCC"
-EXCEPTIONSFILES=   $(SLO)$/salframe.obj
-.ENDIF
+DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+DEFLIB1NAME=$(SHL1TARGET)
+
+LIB1TARGET=     $(SLB)$/$(SHL1TARGET).lib
+LIB1OBJFILES=$(SHL1OBJS)
+
+SHL1STDLIBS= \
+    $(I18NISOLANGLIB) \
+    $(COMPHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo CLEAR_THE_FILE > $@
+    @echo __CT >> $@

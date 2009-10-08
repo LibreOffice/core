@@ -960,10 +960,19 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                   (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
                   (rNEvt.GetWindow() == mpImplWin) )
         {
-            if( ! GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus() || HasChildPathFocus() )
+            USHORT nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
+            if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
+                ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
+                    &&  HasChildPathFocus()
+                    )
+                )
+            {
                 nDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+            }
             else
+            {
                 nDone = 0;  // don't eat this event, let the default handling happen (i.e. scroll the context)
+            }
         }
     }
 
