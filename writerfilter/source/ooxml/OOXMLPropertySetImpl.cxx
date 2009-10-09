@@ -32,7 +32,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
+#include <resourcemodel/Protocol.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
+#include "ooxmlLoggers.hxx"
 
 //#define DEBUG_RESOLVE
 
@@ -158,14 +160,21 @@ Sprm * OOXMLPropertyImpl::clone()
 
 void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
 {
+    writerfilter::Properties * pProperties = NULL;
+#ifdef DEBUG_ELEMENT
+    pProperties = new writerfilter::PropertiesProtocol(&rProperties, debug_logger);
+#else
+    pProperties = &rProperties;
+#endif
+
     switch (meType)
     {
     case SPRM:
         if (mId != 0x0)
-            rProperties.sprm(*this);
+            pProperties->sprm(*this);
         break;
     case ATTRIBUTE:
-        rProperties.attribute(mId, *getValue());
+        pProperties->attribute(mId, *getValue());
         break;
     }
 }
