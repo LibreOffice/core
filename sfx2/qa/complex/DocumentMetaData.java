@@ -42,6 +42,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.EventObject;
 import com.sun.star.util.Time;
+import com.sun.star.util.Date;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.XModifyListener;
 import com.sun.star.util.XModifyBroadcaster;
@@ -354,11 +355,16 @@ public class DocumentMetaData extends ComplexTestCase
             Time t = new Time();
             t.Hours = 1;
             t.Minutes = 16;
+            Date date = new Date();
+            date.Year = 2071;
+            date.Month = 2;
+            date.Day = 3;
             dt.Year = 2065;
 
             udpc.addProperty("Frobnicate", PropertyAttribute.REMOVEABLE,
                 new Boolean(b));
             udpc.addProperty("FrobDuration", PropertyAttribute.REMOVEABLE, t);
+            udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVEABLE, date);
             udpc.addProperty("FrobStartTime", PropertyAttribute.REMOVEABLE, dt);
             udpc.addProperty("Pi", PropertyAttribute.REMOVEABLE, new Double(d));
             udpc.addProperty("Foo", PropertyAttribute.REMOVEABLE, "bar");
@@ -385,7 +391,9 @@ public class DocumentMetaData extends ComplexTestCase
                     udps.getPropertyValue("Frobnicate")));
             assure ("UserDefined time", eqTime(t, (Time)
                     udps.getPropertyValue("FrobDuration")));
-            assure ("UserDefined date", eqDateTime(dt, (DateTime)
+            assure ("UserDefined date", eqDate(date, (Date)
+                    udps.getPropertyValue("FrobEndDate")));
+            assure ("UserDefined datetime", eqDateTime(dt, (DateTime)
                     udps.getPropertyValue("FrobStartTime")));
             assure ("UserDefined float", new Double(d).equals(
                     udps.getPropertyValue("Pi")));
@@ -425,7 +433,9 @@ public class DocumentMetaData extends ComplexTestCase
                     udps.getPropertyValue("Frobnicate")));
             assure ("UserDefined time", eqTime(t, (Time)
                     udps.getPropertyValue("FrobDuration")));
-            assure ("UserDefined date", eqDateTime(dt, (DateTime)
+            assure ("UserDefined date", eqDate(date, (Date)
+                    udps.getPropertyValue("FrobEndDate")));
+            assure ("UserDefined datetime", eqDateTime(dt, (DateTime)
                     udps.getPropertyValue("FrobStartTime")));
             assure ("UserDefined float", new Double(d).equals(
                     udps.getPropertyValue("Pi")));
@@ -472,6 +482,10 @@ public class DocumentMetaData extends ComplexTestCase
             && a.Hours == b.Hours && a.Minutes == b.Minutes
             && a.Seconds == b.Seconds
             && a.HundredthSeconds == b.HundredthSeconds;
+    }
+
+    boolean eqDate(Date a, Date b) {
+        return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day;
     }
 
     boolean eqTime(Time a, Time b) {

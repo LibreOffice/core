@@ -468,6 +468,11 @@ const char* s_nsODFMeta = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
 const char* s_metaXml = "meta.xml";
 
 
+bool isValidDate(const css::util::Date & i_rDate)
+{
+    return i_rDate.Month > 0;
+}
+
 bool isValidDateTime(const css::util::DateTime & i_rDateTime)
 {
     return i_rDateTime.Month > 0;
@@ -499,6 +504,27 @@ getQualifier(const char* i_name) {
     return ::rtl::OUString::createFromAscii(ns);
 }
 
+bool SAL_CALL
+textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
+        bool & o_rIsDateTime, ::rtl::OUString i_text) throw ()
+{
+    if (::sax::Converter::convertDateOrDateTime(
+                io_rd, io_rdt, o_rIsDateTime, i_text)) {
+        if (o_rIsDateTime) {
+            // NB: there may be rounding errors; handle these here
+            if (io_rdt.HundredthSeconds > 0) {
+                    io_rdt.Seconds++;
+                    io_rdt.HundredthSeconds = 0;
+            }
+        }
+        return true;
+    } else {
+        DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
+            OUStringToOString(i_text, RTL_TEXTENCODING_UTF8).getStr());
+        return false;
+    }
+}
+
 // convert string to date/time
 bool SAL_CALL
 textToDateTime(css::util::DateTime & io_rdt, ::rtl::OUString i_text) throw ()
@@ -526,6 +552,20 @@ textToDateTimeDefault(::rtl::OUString i_text) throw ()
     // on conversion error: return default value (unchanged)
     return dt;
 }
+
+// convert date to string
+::rtl::OUString SAL_CALL
+dateToText(css::util::Date const& i_rd) throw ()
+{
+    if (isValidDate(i_rd)) {
+        ::rtl::OUStringBuffer buf;
+        ::sax::Converter::convertDate(buf, i_rd);
+        return buf.makeStringAndClear();
+    } else {
+        return ::rtl::OUString();
+    }
+}
+
 
 // convert date/time to string
 ::rtl::OUString SAL_CALL
@@ -921,11 +961,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         } else if (type == ::cppu::UnoType<css::util::Date>::get()) {
             css::util::Date d;
             any >>= d;
-            css::util::DateTime dt;
-            dt.Year = d.Year;
-            dt.Month = d.Month;
-            dt.Day = d.Day;
-            values.push_back(dateTimeToText(dt));
+            values.push_back(dateToText(d));
             as.push_back(std::make_pair(vt,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("date"))));
         } else if (type == ::cppu::UnoType<css::util::Time>::get()) {
@@ -1225,7 +1261,6 @@ void SAL_CALL SfxDocumentMetaData::init(
     }
 
     // user-defined meta data: initialize PropertySet from DOM nodes
-
     for (std::vector<css::uno::Reference<css::xml::dom::XNode> >::iterator
             it = vec.begin(); it != vec.end(); ++it) {
         css::uno::Reference<css::xml::dom::XElement> xElem(*it,
@@ -1248,9 +1283,15 @@ void SAL_CALL SfxDocumentMetaData::init(
                 continue;
             }
         } else if (type.equalsAscii("date")) {
+            bool isDateTime;
+            css::util::Date d;
             css::util::DateTime dt;
-            if (textToDateTime(dt, text)) {
-                any <<= dt;
+            if (textToDateOrDateTime(d, dt, isDateTime, text)) {
+                if (isDateTime) {
+                    any <<= dt;
+                } else {
+                    any <<= d;
+                }
             } else {
                 DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
