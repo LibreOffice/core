@@ -68,6 +68,10 @@ struct Data: private boost::noncopyable {
     static rtl::OUString fullTemplateName(
         rtl::OUString const & component, rtl::OUString const & name);
 
+    //TODO: better rules under which circumstances a short template name matches
+    static bool equalTemplateNames(
+        rtl::OUString const & shortName, rtl::OUString const & longName);
+
     static rtl::Reference< Node > findNode(
         int layer, NodeMap const & map, rtl::OUString const & name);
 

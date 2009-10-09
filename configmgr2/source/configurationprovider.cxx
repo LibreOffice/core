@@ -201,7 +201,7 @@ Service::createInstanceWithArguments(
             value = v2.Value;
         } else if (Arguments.getLength() == 1 && (Arguments[i] >>= nodepath)) {
             // For backwards compatibility, allow a single string argument that
-            // denotes notepath.
+            // denotes nodepath.
             if (nodepath.getLength() == 0) {
                 badNodePath();
             }
@@ -258,7 +258,6 @@ Service::createInstanceWithArguments(
     bool update;
     if (ServiceSpecifier.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM(accessServiceName)))
-
     {
         update = false;
     } else if (ServiceSpecifier.equalsAsciiL(

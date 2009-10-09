@@ -167,11 +167,35 @@ sal_Int32 Data::parseSegment(
 rtl::OUString Data::fullTemplateName(
     rtl::OUString const & component, rtl::OUString const & name)
 {
-    OSL_ASSERT(component.indexOf(':') == -1);
+    if (component.indexOf(':') != -1 || name.indexOf(':') != -1) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "bad component/name pair containing colon ")) +
+             component + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +
+             name),
+            css::uno::Reference< css::uno::XInterface >());
+    }
     rtl::OUStringBuffer buf(component);
     buf.append(sal_Unicode(':'));
     buf.append(name);
     return buf.makeStringAndClear();
+}
+
+bool Data::equalTemplateNames(
+    rtl::OUString const & shortName, rtl::OUString const & longName)
+{
+    if (shortName.indexOf(':') == -1) {
+        sal_Int32 i = longName.indexOf(':') + 1;
+        OSL_ASSERT(i > 0);
+        return
+            rtl_ustr_compare_WithLength(
+                shortName.getStr(), shortName.getLength(),
+                longName.getStr() + i, longName.getLength() - i) ==
+            0;
+    } else {
+        return shortName == longName;
+    }
 }
 
 rtl::Reference< Node > Data::findNode(
@@ -274,9 +298,8 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                     css::uno::Reference< css::uno::XInterface >());
             }
             if (templateName.getLength() != 0 && p != 0) {
-                rtl::OUString name(p->getTemplateName());
-                OSL_ASSERT(name.getLength() != 0);
-                if (templateName != name) {
+                OSL_ASSERT(p->getTemplateName().getLength() != 0);
+                if (!equalTemplateNames(templateName, p->getTemplateName())) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
