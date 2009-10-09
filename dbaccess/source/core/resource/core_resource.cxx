@@ -88,6 +88,17 @@ namespace dbaccess
         sString.SearchAndReplaceAscii( _pPlaceholderAscii, _rReplace );
         return sString;
     }
+
+    //------------------------------------------------------------------
+    ::rtl::OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii1, const ::rtl::OUString& _rReplace1,
+        const sal_Char* _pPlaceholderAscii2, const ::rtl::OUString& _rReplace2 )
+    {
+        String sString( loadString( _nResId ) );
+        sString.SearchAndReplaceAscii( _pPlaceholderAscii1, _rReplace1 );
+        sString.SearchAndReplaceAscii( _pPlaceholderAscii2, _rReplace2 );
+        return sString;
+    }
+
     //-------------------------------------------------------------------------
     void ResourceManager::registerClient()
     {

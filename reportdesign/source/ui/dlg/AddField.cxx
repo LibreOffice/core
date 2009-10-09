@@ -116,7 +116,7 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindowListBox::getSelectedFieldDe
 DBG_NAME( rpt_OAddFieldWindowListBox );
 //------------------------------------------------------------------------------
 OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
-    :SvTreeListBox( _pParent, WB_BORDER|WB_SORT )
+    :SvTreeListBox( _pParent, WB_TABSTOP|WB_BORDER|WB_SORT )
     ,m_pTabWin( _pParent )
 {
     DBG_CTOR( rpt_OAddFieldWindowListBox,NULL);

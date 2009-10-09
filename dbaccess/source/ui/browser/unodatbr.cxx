@@ -1547,25 +1547,6 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
     // if the form has been loaded, this means that our "selection" has changed
     EventObject aEvent( *this );
     m_aSelectionListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvent );
-
-    // update our database document
-    Reference< XModel > xDocument;
-    try
-    {
-        Reference< XPropertySet > xCursorProps( getRowSet(), UNO_QUERY_THROW );
-        Reference< XConnection > xConnection( xCursorProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ), UNO_QUERY );
-        if ( xConnection.is() )
-        {
-            Reference< XChild > xChild( xConnection, UNO_QUERY_THROW );
-            Reference< XDocumentDataSource > xDataSource( xChild->getParent(), UNO_QUERY_THROW );
-            xDocument.set( xDataSource->getDatabaseDocument(), UNO_QUERY_THROW );
-        }
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-    m_xCurrentDatabaseDocument = xDocument;
 }
 
 //------------------------------------------------------------------------------
@@ -1636,7 +1617,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             else if ( nId == ID_TREE_EDIT_DATABASE )
             {
                 ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithServiceFactory( getORB(),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/ApplicationIntegration/InstalledFeatures/Common" ) ) ) );
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/Policies/Features/Common" ) ) ) );
                 sal_Bool bHaveEditDatabase( sal_True );
                 OSL_VERIFY( aConfig.getNodeValue( "EditDatabaseFromDataSourceView" ) >>= bHaveEditDatabase );
                 aReturn.bEnabled = getORB().is() && ( pDataSourceEntry != NULL ) && bHaveEditDatabase;
@@ -1758,7 +1739,13 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
                 {
                     SbaGridControl* pControl = getBrowserView()->getVclControl();
-                    aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
+                    if ( pControl->GetSelectRowCount() )
+                    {
+                        aReturn.bEnabled = m_aCurrentFrame.isActive();
+                        break;
+                    } // if ( getBrowserView()->getVclControl()->GetSelectRowCount() )
+                    else
+                        aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
                     break;
                 }
                 // NO break here
@@ -1954,7 +1941,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
             {
                 copyEntry(m_pTreeView->getListBox().GetCurEntry());
             }
-            else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
+            else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing() && getBrowserView()->getVclControl()->GetSelectRowCount() < 1)
             {
                 SbaGridControl* pControl = getBrowserView()->getVclControl();
                 pControl->copyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
@@ -3713,8 +3700,25 @@ void SbaTableQueryBrowser::postReloadForm()
 Reference< XEmbeddedScripts > SAL_CALL SbaTableQueryBrowser::getScriptContainer() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaTableQueryBrowser::getScriptContainer" );
-    Reference< XEmbeddedScripts > xScripts( m_xCurrentDatabaseDocument, UNO_QUERY );
-    OSL_ENSURE( xScripts.is() || !m_xCurrentDatabaseDocument.is(),
+    // update our database document
+    Reference< XModel > xDocument;
+    try
+    {
+        Reference< XPropertySet > xCursorProps( getRowSet(), UNO_QUERY_THROW );
+        Reference< XConnection > xConnection( xCursorProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ), UNO_QUERY );
+        if ( xConnection.is() )
+        {
+            Reference< XChild > xChild( xConnection, UNO_QUERY_THROW );
+            Reference< XDocumentDataSource > xDataSource( xChild->getParent(), UNO_QUERY_THROW );
+            xDocument.set( xDataSource->getDatabaseDocument(), UNO_QUERY_THROW );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    Reference< XEmbeddedScripts > xScripts( xDocument, UNO_QUERY );
+    OSL_ENSURE( xScripts.is() || !xDocument.is(),
         "SbaTableQueryBrowser::getScriptContainer: invalid database document!" );
     return xScripts;
 }

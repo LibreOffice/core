@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xmlJavaClassPath.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: RowSetEventListener.java,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,32 +27,27 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef DBA_XMLJAVACLASSPATH_HXX_INCLUDED
-#define DBA_XMLJAVACLASSPATH_HXX_INCLUDED
+package complex.dbaccess;
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#include <vector>
+import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.task.XInteractionRequest;
 
-namespace dbaxml
+/**
+ *
+ * @author oj93728
+ */
+class CopyTableInterActionHandler extends WeakBase
+        implements XInteractionHandler
 {
-    class ODBFilter;
-    class OXMLJavaClassPath : public SvXMLImportContext
+    private final CopyTableWizard test;
+    public CopyTableInterActionHandler(CopyTableWizard testCase)
     {
-    public:
+        test = testCase;
+    }
 
-        OXMLJavaClassPath( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-        virtual ~OXMLJavaClassPath();
-    };
-// -----------------------------------------------------------------------------
-} // namespace dbaxml
-// -----------------------------------------------------------------------------
-
-#endif // DBA_XMLJAVACLASSPATH_HXX_INCLUDED
-
+    public void handle(XInteractionRequest xRequest)
+    {
+        test.assure(xRequest.toString());
+    }
+}

@@ -101,6 +101,14 @@ namespace dbaui
             base_type::reset( rhs );
             return *this;
         }
+        optional& operator= ( optional< T > const& rhs )
+        {
+            if ( rhs.is_initialized() )
+                base_type::reset( rhs.get() );
+            else
+                base_type::reset();
+            return *this;
+        }
     };
 
     template< typename T >

@@ -12,6 +12,8 @@
   <accel:item accel:code="KEY_F" accel:mod1="true" accel:shift="false" xlink:href=".uno:SelectAllEdits"/>
   <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href=".uno:Redo"/>
   <accel:item accel:code="KEY_Z" accel:mod1="true" xlink:href=".uno:Undo"/>
+  <accel:item accel:code="KEY_SUBTRACT" xlink:href=".uno:CollapseSection"/>
+  <accel:item accel:code="KEY_ADD" xlink:href=".uno:ExpandSection"/>
   <accel:item accel:code="KEY_TAB" accel:mod1="true" xlink:href=".uno:NextMark"/>
   <accel:item accel:code="KEY_TAB" accel:mod1="true" accel:shift="true" xlink:href=".uno:PrevMark"/>
 </accel:acceleratorlist>

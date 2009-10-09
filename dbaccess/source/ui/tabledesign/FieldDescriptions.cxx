@@ -176,7 +176,11 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
                     SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
-                    SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
+                {
+                    const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY);
+                    if ( aValue.hasValue() )
+                        SetFormatKey(::comphelper::getINT32(aValue));
+                }
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
                     m_aRelativePosition = xAffectedCol->getPropertyValue(PROPERTY_RELATIVEPOSITION);
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_WIDTH))
@@ -184,7 +188,11 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_HIDDEN))
                     xAffectedCol->getPropertyValue(PROPERTY_HIDDEN) >>= m_bHidden;
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
-                    SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
+                {
+                    const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
+                    if ( aValue.hasValue() )
+                        SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT32(aValue)));
+                }
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
                     SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
             }

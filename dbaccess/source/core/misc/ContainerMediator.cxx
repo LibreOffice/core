@@ -289,7 +289,7 @@ Reference< XPropertySet > OContainerMediator::impl_getSettingsForInitialization_
 void OContainerMediator::notifyElementCreated(const ::rtl::OUString& _sName,const Reference<XPropertySet>& _xDest)
 {
     PropertyForwardList::iterator aFind = m_aForwardList.find(_sName);
-    if ( aFind == m_aForwardList.end() && m_xSettings.is() )
+    if ( (aFind == m_aForwardList.end() || !aFind->second->getDefinition().is() )&& m_xSettings.is() )
     {
         ::std::vector< ::rtl::OUString> aPropertyList;
 
@@ -321,8 +321,8 @@ void OContainerMediator::notifyElementCreated(const ::rtl::OUString& _sName,cons
         }
 
         ::rtl::Reference< OPropertyForward > pForward( new OPropertyForward( _xDest, m_xSettings, _sName, aPropertyList ) );
-        m_aForwardList.insert( PropertyForwardList::value_type( _sName, pForward ) );
-    }
+        m_aForwardList[_sName] = pForward;
+    } // if ( aFind == m_aForwardList.end() && m_xSettings.is() )
 }
 // -----------------------------------------------------------------------------
 //........................................................................

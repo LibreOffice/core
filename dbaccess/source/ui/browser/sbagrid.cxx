@@ -983,9 +983,16 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 
         rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), 0, nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
+        rMenu.InsertSeparator(nPos++);
+    } // if (!IsReadOnlyDB())
+    
+    if ( GetSelectRowCount() > 0 )
+    {
+        rMenu.InsertItem(ID_BROWSER_COPY, aNewItems.GetItemText(SID_COPY), 0, nPos++);
+        rMenu.SetHelpId(ID_BROWSER_COPY, aNewItems.GetHelpId(SID_COPY));
+
+        rMenu.InsertSeparator(nPos++);
     }
-    if (nPos)
-        rMenu.InsertSeparator(nPos);
 }
 
 //------------------------------------------------------------------------------
@@ -1144,6 +1151,9 @@ void SbaGridControl::PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu&
             break;
         case ID_BROWSER_ROWHEIGHT:
             SetRowHeight();
+            break;
+        case ID_BROWSER_COPY:
+            CopySelectedRowsToClipboard();
             break;
 
         default:
@@ -1418,10 +1428,23 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 }
 
 // -----------------------------------------------------------------------
-void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
+void SbaGridControl::CopySelectedRowsToClipboard()
+{
+    DBG_ASSERT( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
+    implTransferSelectedRows( (sal_Int16)FirstSelectedRow(), true );
+}
+
+// -----------------------------------------------------------------------
+void SbaGridControl::DoRowDrag( sal_Int16 nRowPos )
+{
+    implTransferSelectedRows( nRowPos, false );
+}
+
+// -----------------------------------------------------------------------
+void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoRowDrag : invalid data source !");
+    DBG_ASSERT(xDataSource.is(), "SbaGridControl::implTransferSelectedRows : invalid data source !");
 
     // build the sequence of numbers of selected rows
     Sequence< Any > aSelectedRows;
@@ -1452,10 +1475,13 @@ void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
         if ( xResultSetAccess.is() )
             xRowSetClone = xResultSetAccess->createResultSet();
 
-        ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows,xRowSetClone);
+        ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows,xRowSetClone, getServiceManager());
 
         Reference< XTransferable > xEnsureDelete = pTransfer;
-        pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
+        if ( _bTrueIfClipboardFalseIfDrag )
+            pTransfer->CopyToClipboard( this );
+        else
+            pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
     }
     catch(Exception&)
     {

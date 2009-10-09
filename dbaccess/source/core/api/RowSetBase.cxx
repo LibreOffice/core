@@ -226,7 +226,10 @@ void SAL_CALL ORowSetBase::disposing(void)
         m_pColumns->disposing();
     }
     if ( m_pCache )
+    {
         m_pCache->deregisterOldRow(m_aOldRow);
+        m_pCache->deleteIterator(this);
+    }
     m_pCache = NULL;
 }
 // -------------------------------------------------------------------------

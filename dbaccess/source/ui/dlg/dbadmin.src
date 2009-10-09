@@ -46,6 +46,7 @@
 #ifndef DBAUI_ADABASPAGE_HRC
 #include "AdabasPage.hrc"
 #endif
+#include "admincontrols.hrc"
 
 //-------------------------------------------------------------------------
 
@@ -72,7 +73,7 @@
 #define AUTO_HOST_AND_PORT(AUTO_Y)                                                                      \
     FixedText FT_HOSTNAME                                                                               \
     {                                                                                                   \
-        Pos = MAP_APPFONT ( 6 , AUTO_Y ) ;                                                              \
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + 2 ) ;                                                          \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                          \
         Text[ en-US ] = "~Host name";                                                                   \
     };                                                                                                  \
@@ -81,13 +82,13 @@
         TabStop = TRUE ;                                                                                \
         Border = TRUE ;                                                                                 \
         HelpId = HID_DSADMIN_HOSTNAME;                                                                  \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y - 1 ) ;                                                     \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y ) ;                                                         \
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
     };                                                                                                  \
                                                                                                         \
     FixedText FT_PORTNUMBER                                                                             \
     {                                                                                                   \
-        Pos = MAP_APPFONT ( 6 , AUTO_Y + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT ) ;                      \
+        Pos = MAP_APPFONT ( 6 , AUTO_Y + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2 ) ;                  \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                          \
         Text[ en-US ] = "~Port number";                                                                 \
     };                                                                                                  \
@@ -96,7 +97,8 @@
         TabStop = TRUE ;                                                                                \
         Border = TRUE ;                                                                                 \
         HelpId = HID_DSADMIN_PORTNUMBER;                                                                \
-        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;               \
+        NoThousandSep = TRUE;                                                                           \
+        Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT ) ;                  \
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
     };
 //-------------------------------------------------------------------------
@@ -158,7 +160,7 @@ ModalDialog DLG_DATABASE_TYPE_CHANGE
 TabPage PAGE_GENERAL
 {
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_GENERAL;
 
@@ -571,37 +573,34 @@ TabPage PAGE_MYSQL_NATIVE
     Hide = TRUE;
 
     AUTO_FIXEDLINE_CONNSETTINGS( UNRELATED_CONTROLS )
-    AUTO_NAMECONTROLGROUP( UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT, HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME )
-    AUTO_HOST_AND_PORT( UNRELATED_CONTROLS + 2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + EDIT_HEIGHT )
-    AUTO_SOCKETCONTROLGROUP(3*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + EDIT_HEIGHT )
 
     FixedLine FL_SEPARATOR2
     {
-        Pos = MAP_APPFONT ( 3 , 4*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 3 , 4*UNRELATED_CONTROLS + 3*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT ) ;
         Size = MAP_APPFONT ( PAGE_X - 6, FIXEDTEXT_HEIGHT ) ;
         Text[ en-US ] = "User authentication";
     };
     FixedText FT_USERNAME
     {
-        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 3*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT ) ;
         Size = MAP_APPFONT ( EDIT_X - 6 - RELATED_CONTROLS, FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "~User name" ;
     };
     Edit ET_USERNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 3*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*EDIT_HEIGHT - 1 ) ;
+        Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT - 1 ) ;
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
         TabStop = TRUE ;
     };
     CheckBox CB_PASSWORD_REQUIRED
     {
-        Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT ) ;
+        Pos = MAP_APPFONT ( EDIT_X, 4*UNRELATED_CONTROLS + 5*RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 4*EDIT_HEIGHT ) ;
         Size = MAP_APPFONT ( 105, CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Password required";
     };
 
-    AUTO_CHARSET( 5*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 3*EDIT_HEIGHT, PAGE_X )
+    AUTO_CHARSET( 5*UNRELATED_CONTROLS + 5*RELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 4*EDIT_HEIGHT, PAGE_X )
 };
 
 TabPage PAGE_ORACLE_JDBC
@@ -694,6 +693,7 @@ TabPage PAGE_LDAP
         TabStop = TRUE ;
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_PORTNUMBER;
+        NoThousandSep = TRUE;
 
         Pos = MAP_APPFONT ( EDIT_X , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT-1  + CHECKBOX_HEIGHT) ;
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
@@ -709,6 +709,7 @@ TabPage PAGE_LDAP
         TabStop = TRUE ;
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_ROWCOUNT;
+        NoThousandSep = TRUE;
 
         Pos = MAP_APPFONT ( EDIT_X , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT -1  + CHECKBOX_HEIGHT) ;
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
@@ -763,6 +764,7 @@ TabPage PAGE_USERDRIVER
     {
         TabStop = TRUE ;
         Border = TRUE ;
+        NoThousandSep = TRUE;
 
         Pos = MAP_APPFONT ( EDIT_X , 2*UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT -1 ) ;
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;

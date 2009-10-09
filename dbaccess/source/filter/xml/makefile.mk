@@ -67,7 +67,6 @@ SLOFILES=	$(SLO)$/xmlfilter.obj				\
             $(SLO)$/xmlFileBasedDatabase.obj	\
             $(SLO)$/xmlServerDatabase.obj		\
             $(SLO)$/xmlConnectionResource.obj	\
-            $(SLO)$/xmlJavaClassPath.obj		\
             $(SLO)$/xmlservices.obj
 
 # --- Library -----------------------------------

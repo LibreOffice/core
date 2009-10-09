@@ -32,7 +32,6 @@ package complex.dbaccess;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdbc.SQLException;
 import connectivity.tools.HsqlColumnDescriptor;
@@ -43,6 +42,7 @@ import com.sun.star.sdbc.XResultSet;
 
 public class QueryInQuery extends CRMBasedTestCase
 {
+    private static final String QUERY_PRODUCTS = "query products";
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames()
     {
@@ -67,7 +67,7 @@ public class QueryInQuery extends CRMBasedTestCase
         try
         {
             super.createTestCase();
-            m_database.getDatabase().getDataSource().createQuery( "query products", "SELECT * FROM \"products\"" );
+            m_database.getDatabase().getDataSource().createQuery( QUERY_PRODUCTS,"SELECT * FROM \"products\"");
         }
         catch ( Exception e )
         {
@@ -79,10 +79,10 @@ public class QueryInQuery extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     private void verifyEqualRowSetContent( int _outerCommandType, String _outerCommand, int _innerCommandType, String _innerCommand ) throws SQLException
     {
-        RowSet outerRowSet = m_database.getDatabase().createRowSet( _outerCommandType, _outerCommand );
+        final RowSet outerRowSet = m_database.getDatabase().createRowSet( _outerCommandType, _outerCommand );
         outerRowSet.execute();
 
-        RowSet innerRowSet = m_database.getDatabase().createRowSet( _innerCommandType, _innerCommand );
+        final RowSet innerRowSet = m_database.getDatabase().createRowSet( _innerCommandType, _innerCommand );
         innerRowSet.execute();
 
         outerRowSet.last();
@@ -110,7 +110,7 @@ public class QueryInQuery extends CRMBasedTestCase
     {
         verifyEqualRowSetContent(
             CommandType.COMMAND, "SELECT * FROM \"query products\"",
-            CommandType.QUERY, "query products" );
+            CommandType.QUERY,QUERY_PRODUCTS);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public class QueryInQuery extends CRMBasedTestCase
             CommandType.COMMAND, "SELECT \"ID\" FROM \"products\"" );
         verifyEqualRowSetContent(
             CommandType.COMMAND, "SELECT \"PROD\".* FROM \"query products\" AS \"PROD\"",
-            CommandType.QUERY, "query products" );
+            CommandType.QUERY,QUERY_PRODUCTS);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ public class QueryInQuery extends CRMBasedTestCase
             caughtExpected );
 
         // create a table with a name which is used by a query
-        HsqlTableDescriptor table = new HsqlTableDescriptor( "query products",
+        final HsqlTableDescriptor table = new HsqlTableDescriptor( QUERY_PRODUCTS,
             new HsqlColumnDescriptor[] {
                 new HsqlColumnDescriptor( "ID", "INTEGER" ),
                 new HsqlColumnDescriptor( "Name", "VARCHAR(50)" ) } );
@@ -169,7 +169,7 @@ public class QueryInQuery extends CRMBasedTestCase
         m_database.getDatabase().getDataSource().createQuery( "orders level 3", "SELECT * FROM \"orders level 2\"" );
         m_database.getDatabase().getDataSource().createQuery( "orders level 0", "SELECT * FROM \"orders level 3\"" );
 
-        RowSet rowSet = m_database.getDatabase().createRowSet( CommandType.QUERY, "orders level 0" );
+        final RowSet rowSet = m_database.getDatabase().createRowSet( CommandType.QUERY, "orders level 0" );
 
         boolean caughtExpected = false;
         try { rowSet.execute(); }
@@ -183,8 +183,9 @@ public class QueryInQuery extends CRMBasedTestCase
     {
         try
         {
-            XStatement statement = m_database.getConnection().createStatement();
-            XResultSet resultSet = statement.executeQuery( "SELECT * FROM \"query products\"" );
+            final XStatement statement = m_database.getConnection().createStatement();
+            final XResultSet resultSet = statement.executeQuery( "SELECT * FROM \"query products\"" );
+            assure( "Result Set is null", resultSet != null );
         }
         catch( SQLException e )
         {

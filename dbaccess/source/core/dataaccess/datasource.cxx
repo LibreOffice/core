@@ -783,8 +783,13 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         {
             DBG_ERROR( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
         }
-        if ( !xDriver.is() )
+        if ( !xDriver.is() || !xDriver->acceptsURL( m_pImpl->m_sConnectURL ) )
+        {
+            // Nowadays, it's allowed for a driver to be registered for a given URL, but actually not to accept it.
+            // This is because registration nowadays happens at compile time (by adding respective configuration data),
+            // but acceptance is decided at runtime.
             nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
+        }
         else
         {
             Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(

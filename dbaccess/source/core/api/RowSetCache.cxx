@@ -1359,6 +1359,21 @@ ORowSetCacheIterator ORowSetCache::createIterator(ORowSetBase* _pRowSet)
     return ORowSetCacheIterator(m_aCacheIterators.insert(m_aCacheIterators.begin(),ORowSetCacheMap::value_type(m_aCacheIterators.size()+1,aHelper)),this,_pRowSet);
 }
 // -----------------------------------------------------------------------------
+void ORowSetCache::deleteIterator(const ORowSetBase* _pRowSet)
+{
+    ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
+    for(;aCacheIter != m_aCacheIterators.end();)
+    {
+        if ( aCacheIter->second.pRowSet == _pRowSet )
+        {
+            m_aCacheIterators.erase(aCacheIter);
+            aCacheIter = m_aCacheIterators.begin();
+        } // if ( aCacheIter->second.pRowSet == _pRowSet )
+        else
+            ++aCacheIter;
+    }
+}
+// -----------------------------------------------------------------------------
 void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
 {
     if(_nDist)

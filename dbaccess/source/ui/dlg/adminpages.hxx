@@ -215,6 +215,7 @@ namespace dbaui
         */
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) = 0;
 
+    public:
         /** fills the Boolean value into the item set when the value changed.
             @param  _rSet
                 The item set where to put the new value into.
@@ -227,7 +228,7 @@ namespace dbaui
             @param _bRevertValue
                 set to <TRUE/> if the display value should be reverted before putting it into the set
         */
-        void fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue = false);
+        static void fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue = false);
 
         /** fills the int value into the item set when the value changed.
             @param  _rSet
@@ -239,7 +240,7 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        void fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
+        static void fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
 
         /** fills the String value into the item set when the value changed.
             @param  _rSet
@@ -251,16 +252,13 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        void fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
+        static void fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
 
+    protected:
         // used to set the right Pane header of a wizard to bold
         void SetControlFontWeight(Window* _pWindow, FontWeight _eWeight = WEIGHT_BOLD);
         void SetHeaderText( USHORT _nFTResId, USHORT _StringResId);
 
-        Point MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift);
-
-
-    protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
         */
@@ -269,6 +267,28 @@ namespace dbaui
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
         virtual Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
+    };
+
+    //=========================================================================
+    //= ControlRelation
+    //=========================================================================
+    enum ControlRelation
+    {
+        RelatedControls, UnrelatedControls
+    };
+
+    //=========================================================================
+    //= LayoutHelper
+    //=========================================================================
+    class LayoutHelper
+    {
+    public:
+        static void     positionBelow(
+                            const Control& _rReference,
+                            Control& _rControl,
+                            const ControlRelation _eRelation,
+                            const long _nIndentAppFont
+                        );
     };
 
 //.........................................................................

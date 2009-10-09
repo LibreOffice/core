@@ -344,7 +344,7 @@ void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
     // update columns and tables
     // why? Shouldn't this be done on request only?
     // otherwise nothing is working anymore :-)
-    getColumns();
+//  getColumns();
     getTables();
 }
 // -----------------------------------------------------------------------------
@@ -380,6 +380,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
+    getColumns();
     if ( !column.is()
         || !m_aCurrentColumns[SelectColumns]
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
@@ -734,7 +735,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
 
         if ( aSelectColumns->get().empty() )
         {
-            // This is a valid casse. If we can syntactically parse the query, but not semantically
+            // This is a valid case. If we can syntactically parse the query, but not semantically
             // (e.g. because it is based on a table we do not know), then there will be no SelectColumns
             aSelectColumns = ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, m_xMetaData );
             break;
@@ -1457,7 +1458,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
 
     if ( !column.is()
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE)
-        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME) )
+        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
+        || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE))
         throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
     sal_Int32 nType = 0;
@@ -1475,7 +1477,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
     ::rtl::OUStringBuffer aSQL;
-    ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
+    const ::rtl::OUString aQuote    = m_xMetaData->getIdentifierQuoteString();
+    getColumns();
 
     if ( m_aCurrentColumns[SelectColumns] && m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {

@@ -45,7 +45,6 @@
 #include "localresaccess.hxx"
 #include <vcl/msgbox.hxx>
 #include <svtools/stritem.hxx>
-#include <connectivity/DriversConfig.hxx>
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -53,6 +52,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "DriverSettings.hxx"
 #include "UITools.hxx"
+#include <comphelper/processfactory.hxx>
+#include <unotools/confignode.hxx>
+
 //.........................................................................
 namespace dbaui
 {
@@ -100,16 +102,51 @@ namespace dbaui
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-
         DBG_ASSERT(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
+
+        // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
+        sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
+        if ( nCreateNewDBIndex == -1 )
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString::createFromAscii( "sdbc:dbase:" ) );
+        bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
+
+        // also, if our application policies tell us to hide the option, do it
+        ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+            ::comphelper::getProcessServiceFactory(),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/Policies/Features/Base" ) )
+        ) );
+        sal_Bool bAllowCreateLocalDatabase( sal_True );
+        OSL_VERIFY( aConfig.getNodeValue( "CreateLocalDatabase" ) >>= bAllowCreateLocalDatabase );
+        if ( !bAllowCreateLocalDatabase )
+            bHideCreateNew = true;
+
+        if ( bHideCreateNew )
+        {
+            m_aRB_CreateDatabase.Hide();
+            Window* pWindowsToMove[] = {
+                &m_aRB_OpenDocument, &m_aRB_GetExistingDatabase, &m_aFT_DocListLabel, m_pLB_DocumentList.get(),
+                &m_aPB_OpenDocument, &m_aDatasourceTypeLabel, m_pDatasourceType.get(), &m_aFTDataSourceAppendix,
+                &m_aTypePostLabel
+            };
+            const long nOffset = m_aRB_OpenDocument.GetPosPixel().Y() - m_aRB_CreateDatabase.GetPosPixel().Y();
+            for ( size_t i=0; i < sizeof( pWindowsToMove ) / sizeof( pWindowsToMove[0] ); ++i )
+            {
+                Point aPos( pWindowsToMove[i]->GetPosPixel() );
+                aPos.Y() -= nOffset;
+                pWindowsToMove[i]->SetPosPixel( aPos );
+            }
+        }
+
+        if ( bHideCreateNew )
+            m_aRB_GetExistingDatabase.Check();
+        else
+            m_aRB_CreateDatabase.Check();
 
         // do some knittings
         m_pDatasourceType->SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
            m_aRB_CreateDatabase.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
            m_aRB_GetExistingDatabase.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
            m_aRB_OpenDocument.SetClickHdl(LINK(this, OGeneralPage, OnSetupModeSelected));
-        m_aRB_CreateDatabase.Check();
-
         m_pLB_DocumentList->SetSelectHdl( LINK( this, OGeneralPage, OnDocumentSelected ) );
         m_aPB_OpenDocument.SetClickHdl( LINK( this, OGeneralPage, OnOpenDocument ) );
     }
@@ -275,7 +312,7 @@ namespace dbaui
             SetControlFontWeight(&m_aFTHeaderText);
             SetText(String());
 
-            m_pDatasourceType->SetPosPixel( MovePoint( m_aRB_GetExistingDatabase.GetPosPixel(), INDENT_BELOW_RADIO, 14 ) );
+            LayoutHelper::positionBelow( m_aRB_GetExistingDatabase, *m_pDatasourceType, RelatedControls, INDENT_BELOW_RADIO );
 
             if ( !bValid || bReadonly )
             {
@@ -384,16 +421,32 @@ namespace dbaui
     bool OGeneralPage::approveDataSourceType( const ::rtl::OUString& _sURLPrefix, String& _inout_rDisplayName )
     {
         const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(_sURLPrefix);
-        if ( m_DBWizardMode && ( eType ==  ::dbaccess::DST_MYSQL_JDBC ) )
-            _inout_rDisplayName = m_sMySQLEntry;
 
-        else if ( m_DBWizardMode && ( eType ==  ::dbaccess::DST_MYSQL_ODBC ) )
-            _inout_rDisplayName = String();
+        if ( m_DBWizardMode )
+        {
+            switch ( eType )
+            {
+            case ::dbaccess::DST_MYSQL_JDBC:
+                _inout_rDisplayName = m_sMySQLEntry;
+                break;
+            case ::dbaccess::DST_MYSQL_ODBC:
+            case ::dbaccess::DST_MYSQL_NATIVE:
+                // don't display those, the decision whether the user connects via JDBC/ODBC/C-OOo is made on another
+                // page
+                _inout_rDisplayName = String();
+                break;
+            case ::dbaccess::DST_MYSQL_NATIVE_DIRECT:
+                // do not display the Connector/OOo driver itself, it is always wrapped via the MySQL-Driver, if
+                // this driver is installed
+                if ( m_pCollection->hasDriver( "sdbc:mysql:mysqlc:" ) )
+                    _inout_rDisplayName = String();
+                break;
+            default:
+                break;
+            }
+        }
 
-        else if ( m_DBWizardMode && ( eType ==  ::dbaccess::DST_MYSQL_NATIVE ) )
-            _inout_rDisplayName = String();
-
-        else if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
+        if ( eType ==  ::dbaccess::DST_EMBEDDED_HSQLDB )
             _inout_rDisplayName = String();
 
         return _inout_rDisplayName.Len() > 0;
@@ -559,7 +612,8 @@ namespace dbaui
         }
         if ( aFileDlg.Execute() == ERRCODE_NONE )
         {
-            if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() )
+            String sPath = aFileDlg.GetPath();
+            if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() || !pFilter->GetWildcard().Matches(sPath) )
             {
                 String sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
                 InfoBox aError(this, sMessage);
@@ -568,7 +622,7 @@ namespace dbaui
                 OnSetupModeSelected(&m_aRB_GetExistingDatabase);
                 return 0L;
             }
-            m_aBrowsedDocument.sURL = aFileDlg.GetPath();
+            m_aBrowsedDocument.sURL = sPath;
             m_aBrowsedDocument.sFilter = String();
             m_aChooseDocumentHandler.Call( this );
             return 1L;

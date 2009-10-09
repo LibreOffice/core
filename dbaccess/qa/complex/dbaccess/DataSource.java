@@ -30,21 +30,27 @@
 package complex.dbaccess;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
+import complexlib.ComplexTestCase;
+import connectivity.tools.HsqlDatabase;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class DataSource extends complexlib.ComplexTestCase {
+public class DataSource extends ComplexTestCase
+{
 
-    connectivity.tools.HsqlDatabase m_database;
-    connectivity.tools.DataSource   m_dataSource;
+    HsqlDatabase m_database;
+    connectivity.tools.DataSource m_dataSource;
 
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames()
     {
         return new String[]
-        {
-            "testRegistrationName"
-        };
+                {
+                    "testRegistrationName"
+                };
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -58,52 +64,49 @@ public class DataSource extends complexlib.ComplexTestCase {
     {
         try
         {
-            if ( m_database == null )
+            if (m_database == null)
             {
-                CRMDatabase database = new CRMDatabase( getFactory() );
+                final CRMDatabase database = new CRMDatabase(getFactory());
                 m_database = database.getDatabase();
                 m_dataSource = m_database.getDataSource();
             }
         }
-        catch( Exception e )
+        catch (Exception e)
         {
-            failed( "could not create the test case, error message:\n" + e.getMessage() );
+            failed("could not create the test case, error message:\n" + e.getMessage());
+        }
+        catch (java.lang.Exception e)
+        {
+            failed("could not create the test case, error message:\n" + e.getMessage());
         }
     }
 
     // --------------------------------------------------------------------------------------------------------
     private XMultiServiceFactory getFactory()
     {
-        return (XMultiServiceFactory)param.getMSF();
+        return (XMultiServiceFactory) param.getMSF();
     }
 
     // --------------------------------------------------------------------------------------------------------
     public void testRegistrationName()
     {
-        createTestCase();
-
         try
         {
+            createTestCase();
             // 1. check the existing "Bibliography" data source whether it has the proper name
             String dataSourceName = "Bibliography";
-            connectivity.tools.DataSource bibliography = new connectivity.tools.DataSource( getFactory(), dataSourceName );
-            assureEquals( "pre-registered database has a wrong name!",
-                dataSourceName, bibliography.getName() );
-
+            final connectivity.tools.DataSource bibliography = new connectivity.tools.DataSource(getFactory(), dataSourceName);
+            assureEquals("pre-registered database has a wrong name!", dataSourceName, bibliography.getName());
             // 2. register a newly created data source, and verify it has the proper name
             dataSourceName = "someDataSource";
-
-            XNamingService dataSourceRegistrations = (XNamingService)UnoRuntime.queryInterface(
-                XNamingService.class, getFactory().createInstance("com.sun.star.sdb.DatabaseContext"));
+            final XNamingService dataSourceRegistrations = (XNamingService) UnoRuntime.queryInterface(
+                    XNamingService.class, getFactory().createInstance("com.sun.star.sdb.DatabaseContext"));
             dataSourceRegistrations.registerObject("someDataSource", m_dataSource.getXDataSource());
-
-            assureEquals( "registration name of a newly registered data source is wrong",
-                dataSourceName, m_dataSource.getName() );
+            assureEquals("registration name of a newly registered data source is wrong", dataSourceName, m_dataSource.getName());
         }
-        catch ( AssureException e ) { throw e; }
-        catch ( Exception e )
+        catch (Exception ex)
         {
-            failed( "caught an unexpected exception: " + e.getMessage() );
+            Logger.getLogger(DataSource.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

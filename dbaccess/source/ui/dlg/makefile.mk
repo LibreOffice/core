@@ -55,11 +55,15 @@ CFLAGS+=-fpermissive
 
 # ... resource files ............................
 
+
+LOCALIZE_ME=AutoControls_tmpl.hrc
+
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
         AutoControls.src	\
         ConnectionPage.src	\
         UserAdmin.src		\
+        admincontrols.src   \
         directsql.src		\
         AdabasStat.src		\
         indexdialog.src		\
@@ -80,7 +84,6 @@ SRC1FILES =	\
         advancedsettings.src\
         UserAdminDlg.src	\
         sqlmessage.src      \
-        ExtensionNotPresent.src \
         textconnectionsettings.src
 
 
@@ -95,6 +98,7 @@ EXCEPTIONSFILES=						\
         $(SLO)$/RelationDlg.obj			\
         $(SLO)$/adtabdlg.obj			\
         $(SLO)$/dlgsave.obj				\
+        $(SLO)$/admincontrols.obj       \
         $(SLO)$/adminpages.obj			\
         $(SLO)$/queryorder.obj			\
         $(SLO)$/queryfilter.obj			\
@@ -119,7 +123,6 @@ EXCEPTIONSFILES=						\
         $(SLO)$/dbfindex.obj            \
         $(SLO)$/DriverSettings.obj      \
         $(SLO)$/odbcconfig.obj          \
-        $(SLO)$/ExtensionNotPresent.obj \
         $(SLO)$/advancedsettings.obj    \
         $(SLO)$/datasourceui.obj	\
         $(SLO)$/textconnectionsettings.obj
@@ -138,7 +141,7 @@ SLOFILES+=		$(SLO)$/adodatalinks.obj
 .ENDIF
 
 # --- Targets ----------------------------------
-LOCALIZE_ME=AutoControls_tmpl.hrc
+#LOCALIZE_ME=AutoControls_tmpl.hrc
 
 .INCLUDE : target.mk
 

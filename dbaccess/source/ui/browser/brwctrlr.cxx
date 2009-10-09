@@ -1344,8 +1344,11 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
 //------------------------------------------------------------------------------
 IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotInterestedIn */ )
 {
-    OSQLMessageBox aDlg( getBrowserView(), m_aCurrentError );
-    aDlg.Execute();
+    if ( m_aCurrentError.isValid() )
+    {
+        OSQLMessageBox aDlg( getBrowserView(), m_aCurrentError );
+        aDlg.Execute();
+    }
     return 0L;
 }
 
@@ -1541,8 +1544,14 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 }
                 break;
 
-            case ID_BROWSER_PASTE:
             case ID_BROWSER_COPY:
+                if ( getBrowserView()->getVclControl()->GetSelectRowCount() )
+                {
+                    aReturn.bEnabled = m_aCurrentFrame.isActive();
+                    break;
+                }
+                // run through
+            case ID_BROWSER_PASTE:
             case ID_BROWSER_CUT:
             {
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
@@ -1988,6 +1997,12 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             break;
 
         case ID_BROWSER_COPY:
+            if ( getBrowserView()->getVclControl()->GetSelectRowCount() > 0 )
+            {
+                getBrowserView()->getVclControl()->CopySelectedRowsToClipboard();
+                break;
+            }
+            // run through
         case ID_BROWSER_CUT:
         case ID_BROWSER_PASTE:
         {
@@ -2002,9 +2017,9 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             Edit& rEdit = (Edit&)xCurrentController->GetWindow();
             switch (nId)
             {
-                case ID_BROWSER_CUT : rEdit.Cut(); break;
-                case SID_COPY   : rEdit.Copy(); break;
-                case ID_BROWSER_PASTE   : rEdit.Paste(); break;
+                case ID_BROWSER_CUT :       rEdit.Cut();    break;
+                case SID_COPY   :           rEdit.Copy();   break;
+                case ID_BROWSER_PASTE   :   rEdit.Paste();  break;
             }
             if (ID_BROWSER_CUT == nId || ID_BROWSER_PASTE == nId)
             {

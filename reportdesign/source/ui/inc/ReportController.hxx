@@ -277,6 +277,12 @@ namespace rptui
         */
         void markSection(const bool _bNext);
 
+        /** collapse or expand the currently selected section.
+        *
+        * \param _bCollapse collapse if TRUE otherwise expand
+        */
+        void collapseSection(const bool _bCollapse);
+
         /** fills the member that chart is enabled or not
         *
         */

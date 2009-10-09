@@ -450,6 +450,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_IGNORECURRENCY, sal_False);
     *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, String());
     *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True); // must be the same as in ModelImpl.cxx
+    *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, String());
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
@@ -510,6 +511,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
         {0,0},
         {0,0},
         {0,0}, /* for Escape DateTime*/
+        {0,0},
         {0,0}
     };
 

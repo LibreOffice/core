@@ -61,6 +61,8 @@ JARCOMPRESS 	= TRUE
 
 RUNNER_ARGS = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar" org.openoffice.Runner -TestBase java_complex 
 
+RUNNER_CALL = $(AUGMENT_LIBRARY_PATH) java
+
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" == ""
@@ -73,10 +75,10 @@ ALL: 	ALLDEP
 
 
 run: $(CLASSDIR)$/$(JARTARGET)
-    +java $(RUNNER_ARGS) -sce dbaccess.sce
+    +$(RUNNER_CALL) $(RUNNER_ARGS) -sce dbaccess.sce
 
 run_%: $(CLASSDIR)$/$(JARTARGET)
-    +java $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
+    +$(RUNNER_CALL) $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
 
 .ELSE
 .INCLUDE :  target.mk

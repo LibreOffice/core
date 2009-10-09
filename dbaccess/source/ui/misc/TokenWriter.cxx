@@ -95,6 +95,7 @@ const static char __FAR_DATA sFontFamily[]      = "font-family: ";
 const static char __FAR_DATA sFontSize[]        = "font-size: ";
 
 #define SBA_FORMAT_SELECTION_COUNT  4
+#define CELL_X                      1437
 
 DBG_NAME(ODatabaseImportExport)
 //======================================================================
@@ -479,12 +480,9 @@ BOOL ORTFImportExport::Write()
     (*m_pStream) << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"
                  << ODatabaseImportExport::sNewLine;
 
-    sal_Int32 nCellx = 1437;
     ::rtl::OString aTRRH("\\trrh-270\\pard\\intbl");
     ::rtl::OString aFS("\\fs20\\f0\\cf0\\cb2");
-    ::rtl::OString aFS2("\\fs20\\f1\\cf0\\cb1");
     ::rtl::OString aCell1("\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx");
-    ::rtl::OString aCell2("\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx");
 
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
     m_pStream->WriteNumber(40);
@@ -508,7 +506,7 @@ BOOL ORTFImportExport::Write()
         for( sal_Int32 i=1; i<=nCount; ++i )
         {
             (*m_pStream) << aCell1;
-            m_pStream->WriteNumber(i*nCellx);
+            m_pStream->WriteNumber(i*CELL_X);
             (*m_pStream) << ODatabaseImportExport::sNewLine;
         }
 
@@ -572,71 +570,105 @@ BOOL ORTFImportExport::Write()
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 k=1;
         sal_Int32 kk=0;
-        m_xResultSet->beforeFirst(); // set back before the first row
-        while(m_xResultSet->next())
+        if(m_aSelection.getLength())
         {
-            if(!m_pRowMarker || m_pRowMarker[kk] == k)
+            const Any* pSelIter = m_aSelection.getConstArray();
+            const Any* pEnd   = pSelIter + m_aSelection.getLength();
+            sal_Bool bContinue = sal_True;
+            for(;pSelIter != pEnd && bContinue;++pSelIter)
             {
-                ++kk;
-                (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
-                m_pStream->WriteNumber(40);
-                (*m_pStream) << ODatabaseImportExport::sNewLine;
+                sal_Int32 nPos = -1;
+                *pSelIter >>= nPos;
+                OSL_ENSURE(nPos != -1,"Invalid posiotion!");
+                bContinue = (m_xResultSet->absolute(nPos));
+                if ( bContinue )
+                    appendRow(pHorzChar,nCount,k,kk);
 
-                for ( sal_Int32 i=1; i<=nCount; ++i )
-                {
-                    (*m_pStream) << aCell2;
-                    m_pStream->WriteNumber(i*nCellx);
-                    (*m_pStream) << ODatabaseImportExport::sNewLine;
-                }
-
-                (*m_pStream) << '{';
-                (*m_pStream) << aTRRH;
-                for ( sal_Int32 i=1; i<=nCount; ++i )
-                {
-                    (*m_pStream) << ODatabaseImportExport::sNewLine;
-                    (*m_pStream) << '{';
-                    (*m_pStream) << pHorzChar[i-1];
-
-                    if ( bBold )        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_B;
-                    if ( bItalic )      (*m_pStream) << OOO_STRING_SVTOOLS_RTF_I;
-                    if ( bUnderline )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_UL;
-                    if ( bStrikeout )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_STRIKE;
-
-                    (*m_pStream) << aFS2;
-                    (*m_pStream) << ' ';
-
-                    try
-                    {
-                        Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
-                        dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
-                        ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
-                        // m_xRow->getString(i);
-                        //if (!m_xRow->wasNull())
-                        if ( sValue.getLength() )
-                            RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
-                    }
-                    catch (Exception&)
-                    {
-                        OSL_ENSURE(0,"RTF WRITE!");
-                    }
-
-                    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
-                    (*m_pStream) << '}';
-                    (*m_pStream) << ODatabaseImportExport::sNewLine;
-                    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
-                }
-                (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW << ODatabaseImportExport::sNewLine;
-                (*m_pStream) << '}';
             }
-            ++k;
+        } // if(m_aSelection.getLength())
+        else
+        {
+            m_xResultSet->beforeFirst(); // set back before the first row
+            while(m_xResultSet->next())
+            {
+                appendRow(pHorzChar,nCount,k,kk);
+            }
         }
-
         delete [] pHorzChar;
     }
 
     (*m_pStream) << '}' << ODatabaseImportExport::sNewLine;
     (*m_pStream) << (BYTE) 0;
     return ((*m_pStream).GetError() == SVSTREAM_OK);
+}
+// -----------------------------------------------------------------------------
+void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk)
+{
+    if(!m_pRowMarker || m_pRowMarker[kk] == k)
+    {
+        ++kk;
+        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
+        m_pStream->WriteNumber(40);
+        (*m_pStream) << ODatabaseImportExport::sNewLine;
+
+        static const ::rtl::OString aCell2("\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx");
+        static const ::rtl::OString aTRRH("\\trrh-270\\pard\\intbl");
+
+        for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
+        {
+            (*m_pStream) << aCell2;
+            m_pStream->WriteNumber(i*CELL_X);
+            (*m_pStream) << ODatabaseImportExport::sNewLine;
+        }
+
+        const BOOL bBold            = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
+        const BOOL bItalic      = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
+        const BOOL bUnderline       = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
+        const BOOL bStrikeout       = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+        static const ::rtl::OString aFS2("\\fs20\\f1\\cf0\\cb1");
+        ::comphelper::ComponentContext aContext(m_xFactory);
+        Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
+
+        (*m_pStream) << '{';
+        (*m_pStream) << aTRRH;
+        for ( sal_Int32 i=1; i <= _nColumnCount; ++i )
+        {
+            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << '{';
+            (*m_pStream) << pHorzChar[i-1];
+
+            if ( bBold )        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_B;
+            if ( bItalic )      (*m_pStream) << OOO_STRING_SVTOOLS_RTF_I;
+            if ( bUnderline )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_UL;
+            if ( bStrikeout )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_STRIKE;
+
+            (*m_pStream) << aFS2;
+            (*m_pStream) << ' ';
+
+            try
+            {
+                Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
+                dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
+                ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
+                // m_xRow->getString(i);
+                //if (!m_xRow->wasNull())
+                if ( sValue.getLength() )
+                    RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
+            }
+            catch (Exception&)
+            {
+                OSL_ENSURE(0,"RTF WRITE!");
+            }
+
+            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
+            (*m_pStream) << '}';
+            (*m_pStream) << ODatabaseImportExport::sNewLine;
+            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
+        }
+        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW << ODatabaseImportExport::sNewLine;
+        (*m_pStream) << '}';
+    }
+    ++k;
 }
 //-------------------------------------------------------------------
 BOOL ORTFImportExport::Read()

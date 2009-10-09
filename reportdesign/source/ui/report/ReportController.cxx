@@ -559,6 +559,8 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_RPT_NEW_FUNCTION:
             aReturn.bEnabled = isEditable();
             break;
+        case SID_COLLAPSE_SECTION:
+        case SID_EXPAND_SECTION:
         case SID_NEXT_MARK:
         case SID_PREV_MARK:
             aReturn.bEnabled = isEditable();
@@ -1170,6 +1172,12 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             break;
         case SID_RPT_NEW_FUNCTION:
             createNewFunction(aArgs[0].Value);
+            break;
+        case SID_COLLAPSE_SECTION:
+            collapseSection(true);
+            break;
+        case SID_EXPAND_SECTION:
+            collapseSection(false);
             break;
         case SID_NEXT_MARK:
             markSection(true);
@@ -2107,6 +2115,8 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:TerminateInplaceActivation",    SID_TERMINATE_INPLACEACTIVATION);
     implDescribeSupportedFeature( ".uno:SelectAllLabels",               SID_SELECT_ALL_LABELS);
     implDescribeSupportedFeature( ".uno:SelectAllEdits",                SID_SELECT_ALL_EDITS);
+    implDescribeSupportedFeature( ".uno:CollapseSection",           SID_COLLAPSE_SECTION);
+    implDescribeSupportedFeature( ".uno:ExpandSection",             SID_EXPAND_SECTION);
 }
 // -----------------------------------------------------------------------------
 SfxUndoManager* OReportController::getUndoMgr()
@@ -3964,6 +3974,15 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
             else
                 xGroup->setFooterOn( bSwitchOn );
         }
+    }
+}
+// -----------------------------------------------------------------------------
+void OReportController::collapseSection(const bool _bCollapse)
+{
+    ::boost::shared_ptr<OSectionWindow> pSection = m_pMyOwnView->getMarkedSection();
+    if ( pSection )
+    {
+        pSection->setCollapsed(_bCollapse);
     }
 }
 // -----------------------------------------------------------------------------

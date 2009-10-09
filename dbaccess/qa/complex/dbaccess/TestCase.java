@@ -55,7 +55,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase
         XComponentContext context = null;
         try
         {
-            XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, getORB() );
+            final XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, getORB() );
             context = (XComponentContext)UnoRuntime.queryInterface( XComponentContext.class,
                 orbProps.getPropertyValue( "DefaultContext" ) );
         }
@@ -84,9 +84,10 @@ public abstract class TestCase extends complexlib.ComplexTestCase
      */
     protected final String createTempFileURL() throws IOException
     {
-        File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" );
-        documentFile.deleteOnExit();
-        return documentFile.getAbsoluteFile().toURL().toString();
+        final File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" ).getAbsoluteFile();
+        if ( documentFile.exists() )
+            documentFile.delete();
+        return FileHelper.getOOoCompatibleFileURL( documentFile.toURI().toURL().toString() );
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -97,7 +98,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase
      */
     protected final String copyToTempFile( String _sourceURL ) throws IOException
     {
-        String targetURL = createTempFileURL();
+        final String targetURL = createTempFileURL();
         try
         {
             FileTools.copyFile( new File( new URI( _sourceURL ) ), new File( new URI( targetURL ) ) );

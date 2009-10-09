@@ -363,7 +363,7 @@ namespace
         _rItemSet.Put(aHorJustifyItem);
         //_rItemSet.Put(SfxInt32Item(ITEMID_DEGREES,_rxReportControlFormat->getCharRotation()));
         SvxVerJustifyItem aVerJustifyItem(ITEMID_VERJUSTIFY);
-        aVerJustifyItem.PutValue(xSet->getPropertyValue(PROPERTY_VERTICALALIGN),0);
+        aVerJustifyItem.PutValue(xSet->getPropertyValue(PROPERTY_VERTICALALIGN),MID_HORJUST_ADJUST);
         _rItemSet.Put(aVerJustifyItem);
         //_rItemSet.Put(SfxInt32Item(ITEMID_IDENT,_rxReportControlFormat->getCharRotation()));
 
@@ -489,7 +489,7 @@ namespace
         {
             const SvxVerJustifyItem* pJustifyItem = static_cast<const SvxVerJustifyItem*>(pItem);
             uno::Any aValue;
-            pJustifyItem->QueryValue(aValue,0);
+            pJustifyItem->QueryValue(aValue,MID_HORJUST_ADJUST);
             lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, aValue );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CHARRELIEF,sal_True,&pItem) && pItem->ISA(SvxCharReliefItem))

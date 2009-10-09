@@ -341,6 +341,7 @@
 // controls
 
 #define RID_DB_TAB_EDITOR               RID_CONTROL_START +  0
+#define RID_MYSQL_NATIVE_SETTINGS       RID_CONTROL_START +  1
 
 //========================================================================
 // strings
