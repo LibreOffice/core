@@ -40,31 +40,32 @@ TARGET=so_berkeleydb
 
 .IF "$(SYSTEM_DB)" == "YES"
 all:
-        @echo "An already available installation of db should exist on your system."
+    @echo "An already available installation of db should exist on your system."
     @echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=db-4.2.52.NC-custom
-TARFILE_ROOTDIR=db-4.2.52.NC
+TARFILE_NAME=db-4.7.25.NC-custom
+TARFILE_ROOTDIR=db-4.7.25.NC
 
-ADDITIONAL_FILES=    \
-    makefile.mk btree$/makefile.mk clib$/makefile.mk common$/makefile.mk  \
-    cxx$/makefile.mk db$/makefile.mk dbm$/makefile.mk dbreg$/makefile.mk  \
-    db_printlog$/makefile.mk env$/makefile.mk fileops$/makefile.mk hash$/makefile.mk  \
-    hmac$/makefile.mk hsearch$/makefile.mk lock$/makefile.mk  \
-    log$/makefile.mk mp$/makefile.mk mutex$/makefile.mk os$/makefile.mk  \
-    os_win32$/makefile.mk qam$/makefile.mk rep$/makefile.mk txn$/makefile.mk  \
-    xa$/makefile.mk libdb42.dxp db_4_2_gcc3.map
+ADDITIONAL_FILES= \
+    makefile.mk btree$/makefile.mk clib$/makefile.mk common$/makefile.mk \
+    cxx$/makefile.mk db$/makefile.mk dbm$/makefile.mk dbreg$/makefile.mk \
+    env$/makefile.mk fileops$/makefile.mk hash$/makefile.mk hmac$/makefile.mk \
+    hsearch$/makefile.mk lock$/makefile.mk log$/makefile.mk mp$/makefile.mk \
+    mutex$/makefile.mk os$/makefile.mk os_windows$/makefile.mk \
+    qam$/makefile.mk rep$/makefile.mk repmgr$/makefile.mk \
+    sequence$/makefile.mk txn$/makefile.mk xa$/makefile.mk \
+    db_4_7_gcc4.map
 
 
 
 # not needed for win32. comment out when causing problems...
 .IF "$(GUI)$(COM)"=="WNTGCC"
-PATCH_FILES=db-4.2.52-mingw.patch
+PATCH_FILES=db-4.7.25-mingw.patch
 .ELSE
-PATCH_FILES=db-4.2.52.patch
+PATCH_FILES=db-4.7.25.patch
 .ENDIF
 
 # clean compiler flags
@@ -84,7 +85,7 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
 .EXPORT: LDFLAGS
 #The current dir when linking is unxlngi6.pro/misc/build/db-4.2.52.NC/out
 # the map file is in  unxlngi6.pro/misc/build/db-4.2.52.NC
-LDFLAGSVERSION:= -Wl,--version-script=../db_4_2_gcc3.map
+LDFLAGSVERSION:= -Wl,--version-script=../db_4_7_gcc4.map
 .EXPORT: LDFLAGSVERSION
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
@@ -95,12 +96,15 @@ LDFLAGSVERSION:= -Wl,--version-script=../db_4_2_gcc3.map
 LDFLAGS:=$(ARCH_FLAGS) -R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
+
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION= \
     ..$/dist$/configure
 CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185
-
+.IF "$(OS)"=="MACOSX"
+CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
+.ENDIF
 # just pass ARCH_FLAGS to native build
 CFLAGS+:=$(ARCH_FLAGS)
 CXXFLAGS+:=$(ARCH_FLAGS)
@@ -108,6 +112,7 @@ CXXFLAGS+:=$(ARCH_FLAGS)
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
+
 .IF "$(OS)"=="IRIX"
 CONFIGURE_ACTION= $(CONFIG_SHELL) ..$/dist$/configure
 BUILD_ACTION=gmake 
@@ -127,20 +132,35 @@ CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 # TODO needs clean up
 CFLAGS+=-nostdinc -D_MT
-CONFIGURE_ACTION=..$/dist$/configure
-CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="$(CFLAGS)" CPPFLAGS="$(INCLUDE)" LIBS="-lmingwthrd" LIBSO_LIBS="-lmingwthrd" LIBJSO_LIBS="-lmingwthrd" LIBXSO_LIBS="-lmingwthrd $(LIBSTLPORT)"
-.IF "$(USE_MINGW)"=="cygwin"
-CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin -L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)/lib"
-.ELSE
-CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin -L$(COMPATH)/lib"
+db_CC=$(CC)
+db_CXX=$(CXX)
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+db_CC+=-shared-libgcc
+db_CXX+=-shared-libgcc
 .ENDIF
+db_LDFLAGS=-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin
+.IF "$(USE_MINGW)"=="cygwin"
+db_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
+.ENDIF
+db_LDFLAGS+=-L$(COMPATH)/lib -L$(MINGW_CLIB_DIR)
+db_LIBS=-lmingwthrd
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+CFLAGS+=-D_GLIBCXX_DLL
+db_LIBS+=-lstdc++_s
+.ENDIF
+db_LIBXSO_LIBS=$(LIBSTLPORT) $(db_LIBS)
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+db_LIBXSO_LIBS+=-lgcc_s
+.ENDIF
+CONFIGURE_ACTION=..$/dist$/configure
+CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw CC="$(db_CC)" CXX="$(db_CXX)" LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="$(CFLAGS)" CPPFLAGS="$(INCLUDE)" LDFLAGS="$(db_LDFLAGS)" LIBS="$(db_LIBS)" LIBSO_LIBS="$(db_LIBS)" LIBJSO_LIBS="$(db_LIBS)" LIBXSO_LIBS="$(db_LIBXSO_LIBS)"
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
 BUILD_ACTION=make
 
-OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*42.a
-OUT2BIN=$(BUILD_DIR)$/.libs$/libdb*42.dll
+OUT2LIB=$(BUILD_DIR)$/.libs$/libdb47.dll.a
+OUT2BIN=$(BUILD_DIR)$/.libs$/libdb47.dll
 
 OUT2INC= \
     $(BUILD_DIR)$/db.h
@@ -160,7 +180,7 @@ BUILD_ACTION_SEP=^
 BUILD_DIR=
 BUILD_ACTION=dmake
 
-BUILD_DIR_OUT=build_win32
+BUILD_DIR_OUT=build_windows
 #OUT2LIB= \
 #	$(BUILD_DIR_OUT)$/Release$/libdb42.lib
 #OUT2BIN=$(BUILD_DIR_OUT)$/Release$/libdb42.dll

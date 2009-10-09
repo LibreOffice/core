@@ -86,6 +86,7 @@ icu_LDFLAGS+=-Wl,-z,noexecstack
 .ENDIF
 
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 
 BUILD_ACTION_SEP=;
@@ -149,11 +150,18 @@ OUT2BIN= \
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
 CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
-.IF "$(USE_MINGW)"=="cygwin"
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
-.ELSE
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+icu_LDFLAGS+=-shared-libgcc
 .ENDIF
+.IF "$(USE_MINGW)"=="cygwin"
+icu_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
+.ENDIF
+icu_LDFLAGS+=-L$(COMPATH)$/lib
+icu_LIBS=-lmingwthrd
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+icu_LIBS+=-lstdc++_s
+.ENDIF
+CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
