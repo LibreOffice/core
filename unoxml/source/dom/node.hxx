@@ -37,9 +37,10 @@
 #include <sal/types.h>
 #include <sax/fastattribs.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
@@ -66,6 +67,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
+
+using com::sun::star::lang::XUnoTunnel;
 
 namespace DOM
 {
@@ -117,7 +120,7 @@ namespace DOM
     typedef std::map< const xmlNodePtr, CNode* > nodemap_t;
 
 
-    class CNode : public cppu::WeakImplHelper2< XNode, XEventTarget >
+    class CNode : public cppu::WeakImplHelper3< XNode, XUnoTunnel, XEventTarget >
     {
         friend class CDocument;
         friend class CElement;
@@ -342,6 +345,9 @@ namespace DOM
         virtual sal_Bool SAL_CALL dispatchEvent(const Reference< XEvent >& evt)
             throw(RuntimeException, EventException);
 
+        // --- XUnoTunnel
+        virtual ::sal_Int64 SAL_CALL getSomething(const Sequence< ::sal_Int8 >& aIdentifier)
+            throw (RuntimeException);
     };
 
     /// eliminate redundant namespace declarations
