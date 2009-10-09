@@ -194,11 +194,14 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
     {
 #ifdef DEBUG_PROPERTIES
         debug_logger->startElement("resolveCharacterProperties");
-        debug_logger->chars(mpCharacterProps->toString());
-        debug_logger->endElement("resolveCharacterProperties");
 #endif
+
         rStream.props(mpCharacterProps);
         mpCharacterProps.reset(new OOXMLPropertySetImpl());
+
+#ifdef DEBUG_PROPERTIES
+        debug_logger->endElement("resolveCharacterProperties");
+#endif
     }
 }
 

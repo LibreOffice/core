@@ -1268,10 +1268,11 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
         {
 #ifdef DEBUG_PROPERTIES
             debug_logger->startElement("sendproperties");
-            debug_logger->addTag(toPropertiesTag(getPropertySet()));
-            debug_logger->endElement("sendproperties");
 #endif
             mpStream->props(mpPropertySet);
+#ifdef DEBUG_PROPERTIES
+            debug_logger->endElement("sendproperties");
+#endif
         }
     }
     else
