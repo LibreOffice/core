@@ -83,6 +83,7 @@
 #include "SdUnoDrawView.hxx"
 #include "slideshow.hxx"
 #include "ToolBarManager.hxx"
+#include "annotationmanager.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -138,15 +139,10 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
 |*
 \************************************************************************/
 
-DrawViewShell::DrawViewShell (
-    SfxViewFrame* pFrame,
-    ViewShellBase& rViewShellBase,
-    ::Window* pParentWindow,
-    PageKind ePageKind,
-    FrameView* pFrameViewArgument)
-    : ViewShell (pFrame, pParentWindow, rViewShellBase),
-      maTabControl(this, pParentWindow),
-      mbIsInSwitchPage(false)
+DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
+: ViewShell (pFrame, pParentWindow, rViewShellBase)
+, maTabControl(this, pParentWindow)
+, mbIsInSwitchPage(false)
 {
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
@@ -161,13 +157,10 @@ DrawViewShell::DrawViewShell (
 |*
 \************************************************************************/
 
-DrawViewShell::DrawViewShell (
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    const DrawViewShell& rShell)
-    : ViewShell(pFrame, pParentWindow, rShell),
-      maTabControl(this, pParentWindow),
-      mbIsInSwitchPage(false)
+DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ::Window* pParentWindow, const DrawViewShell& rShell )
+: ViewShell(pFrame, pParentWindow, rShell)
+, maTabControl(this, pParentWindow)
+, mbIsInSwitchPage(false)
 {
     mpFrameView = new FrameView(GetDoc());
     Construct (GetDocSh(), PK_STANDARD);
@@ -181,6 +174,8 @@ DrawViewShell::DrawViewShell (
 
 DrawViewShell::~DrawViewShell()
 {
+    mpAnnotationManager.release();
+
     OSL_ASSERT (GetViewShell()!=NULL);
 
     if( mxScannerListener.is() )
@@ -422,6 +417,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
                                 ::com::sun::star::uno::UNO_QUERY );
         }
     }
+
+    mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
 }
 
 
@@ -857,6 +854,20 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
         }
     }
 
+}
+
+void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
+{
+    if( mpAnnotationManager.get() )
+        mpAnnotationManager->ExecuteAnnotation( rRequest );
+}
+
+// --------------------------------------------------------------------
+
+void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
+{
+    if( mpAnnotationManager.get() )
+        mpAnnotationManager->GetAnnotationState( rItemSet );
 }
 
 

@@ -3028,3 +3028,14 @@ void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEvent
         xModel->notifyEvent(aEvent );
     }
 }
+
+void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
+{
+    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
+
+    if( xModel.is() )
+    {
+        ::com::sun::star::document::EventObject aEvent( xSource, rEventName );
+        xModel->notifyEvent(aEvent );
+    }
+}

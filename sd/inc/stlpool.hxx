@@ -47,6 +47,8 @@
 #include <stlfamily.hxx>
 #include <stlsheet.hxx>
 
+#include <sddllapi.h>
+
 class SdStyleSheet;
 class SdDrawDocument;
 class SdPage;
@@ -82,7 +84,7 @@ public:
                             had to be created. This is used to assert errors in documents
                             when styles are missing.
     */
-    void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
+    SD_DLLPUBLIC void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
     void                EraseLayoutStyleSheets(const String& rLayoutName);
     List*               CreateLayoutSheetNames(const String& rLayoutName) const;
     void                CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
@@ -150,6 +152,3 @@ private:
 };
 
 #endif     // _SD_STLPOOL_HXX
-
-
-

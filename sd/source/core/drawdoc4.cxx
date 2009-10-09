@@ -1543,6 +1543,11 @@ sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight
     return nWesternFontHeight;
 }
 
+SdStyleSheetPool* SdDrawDocument::GetSdStyleSheetPool() const
+{
+    return dynamic_cast< SdStyleSheetPool* >( GetStyleSheetPool() );
+}
+
 ModifyGuard::ModifyGuard( DrawDocShell* pDocShell )
 : mpDocShell( pDocShell ), mpDoc( 0 )
 {
