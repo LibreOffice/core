@@ -72,8 +72,6 @@ OUT2INC += include/openssl/*
         libssl_OOo_0_9_8k.map
     .IF "$(CPU)" == "I"
         CONFIGURE_ACTION=Configure linux-elf
-    .ELIF "$(CPU)" == "X"
-        CONFIGURE_ACTION=Configure linux-x86_64
     .ELIF "$(BUILD64)" == "1"
         CONFIGURE_ACTION=Configure linux-generic64
     .ELSE
