@@ -55,6 +55,7 @@
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
 #include <wincomp.hxx>  // CS_DROPSHADOW
+#include <tools/solarmutex.hxx>
 
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
