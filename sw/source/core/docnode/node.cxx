@@ -1479,7 +1479,6 @@ SwCntntNode *SwCntntNode::JoinPrev()
     // erfrage vom Modify Informationen
 BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 {
-    const SwNumRuleItem* pItem;
     switch( rInfo.Which() )
     {
     case RES_AUTOFMT_DOCNODE:
