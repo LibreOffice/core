@@ -1,7 +1,7 @@
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP1DEF = $(MISC)$/$(APP1TARGET).def
+APP1DEF = $(MISC)/$(APP1TARGET).def
 .ENDIF
 
 .IF "$(APP1LINKTYPE)" != ""
@@ -43,7 +43,7 @@ APP1OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP1RESO=
 .IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
-APP1RESO=$(MISC)$/$(APP1TARGET:b)_res.o
+APP1RESO=$(MISC)/$(APP1TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -55,19 +55,19 @@ USE_APP1DEF=
 .IF "$(APP1TARGETN)"!=""
 
 .IF "$(APP1PRODUCTNAME)"!=""
-APP1PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
+APP1PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP1PRODUCTNAME)\"
 .ENDIF			# "$(APP1PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP1LIBS)"!=""
-$(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP1TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP1LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP1TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP1TARGETN:b)_linkinc.ls
 $(APP1TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -75,7 +75,7 @@ $(APP1TARGETN) : $(LINKINCTARGETS)
 APP1LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP1IMP_ORD = $(APP1STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP1STDLIBS:^"$(LB)$/") 
+_APP1IMP_ORD = $(APP1STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP1STDLIBS:^"$(LB)/") 
 APP1IMP_ORD = $(foreach,i,$(_APP1IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP1IMP_ORD = 
@@ -90,24 +90,24 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_1.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP1LINKTYPEFLAG) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_1.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP1RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -115,42 +115,44 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP1OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @echo $(APP1LINKER) $(APP1LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP1OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @echo $(APP1LINKTYPEFLAG) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) -o $@ >> $(MISC)/$(TARGET).$(@:b)_1.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP1LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP1LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP1LINKRES:b).rc
 .IF "$(APP1ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP1ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP1ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF		# "$(APP1ICON)" != ""
 .IF "$(APP1VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP1VERINFO)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP1LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP1VERINFO)$(EMQ)" >> $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF		# "$(APP1VERINFO)" != ""
-    $(RC) -DWIN32 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
+    $(RC) -DWIN32 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
-    @cat $(APP1LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP1RESO)
+    @cat $(APP1LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP1RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP1BASEX) $(APP1STACKN) -o $@ $(APP1OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP1RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP1RESO) \
         `$(TYPE) /dev/null $(APP1LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_1.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
+        $(APP_LINKTYPE) $(APP1LIBSALCPPRT) \
+        -Wl,--start-group $(APP1STDLIBS) -Wl,--end-group $(APP1STDLIB) \
+        $(STDLIB1) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_1.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -159,7 +161,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(LINKFLAGSAPP) $(APP1BASEX) \
         $(APP1STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP1TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP1TARGET)).map} \
         $(STDOBJ) \
         $(APP1LINKRES) \
         $(APP1RES) \
@@ -170,7 +172,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -195,17 +197,13 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1STDLIBS) \
         $(APP1STDLIB) $(STDLIB1))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP1TARGETN:b)_linkobj.lst >> $(MISC)\$(APP1TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP1TARGET).lst $(THEN) type $(MISC)$/$(APP1TARGET).lst  >> $(MISC)$/$(APP1TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP1TARGET).lst $(THEN) type $(MISC)/$(APP1TARGET).lst  >> $(MISC)/$(APP1TARGET).lnk $(FI)
         $(APP1LINKER) @$(MISC)\$(APP1TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP1TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -215,23 +213,19 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP1LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP1LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP1LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP1ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP1ICON:s/\/\\/)" >> $(MISC)$/$(APP1LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP1ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP1LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP1ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF		# "$(APP1ICON)" != ""
 .IF "$(APP1VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP1LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP1VERINFO)$(EMQ)" >> $(MISC)$/$(APP1LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP1LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP1VERINFO)$(EMQ)" >> $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF		# "$(APP1VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP1TARGET) WINDOWAPI > $(MISC)$/$(APP1TARGET).def
+    @echo NAME $(APP1TARGET) WINDOWAPI > $(MISC)/$(APP1TARGET).def
 .ENDIF
 
     @+echo	$(APP1LINKFLAGS) \
@@ -239,7 +233,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP1LINKRES) \
         $(APP1RES) \
@@ -254,7 +248,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP1LINKRES) \
         $(APP1RES) \
@@ -267,11 +261,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 .IF "$(APP1TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -285,7 +275,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP2DEF = $(MISC)$/$(APP2TARGET).def
+APP2DEF = $(MISC)/$(APP2TARGET).def
 .ENDIF
 
 .IF "$(APP2LINKTYPE)" != ""
@@ -327,7 +317,7 @@ APP2OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP2RESO=
 .IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
-APP2RESO=$(MISC)$/$(APP2TARGET:b)_res.o
+APP2RESO=$(MISC)/$(APP2TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -339,19 +329,19 @@ USE_APP2DEF=
 .IF "$(APP2TARGETN)"!=""
 
 .IF "$(APP2PRODUCTNAME)"!=""
-APP2PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
+APP2PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP2PRODUCTNAME)\"
 .ENDIF			# "$(APP2PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP2LIBS)"!=""
-$(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP2TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP2LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP2TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP2TARGETN:b)_linkinc.ls
 $(APP2TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -359,7 +349,7 @@ $(APP2TARGETN) : $(LINKINCTARGETS)
 APP2LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP2IMP_ORD = $(APP2STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP2STDLIBS:^"$(LB)$/") 
+_APP2IMP_ORD = $(APP2STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP2STDLIBS:^"$(LB)/") 
 APP2IMP_ORD = $(foreach,i,$(_APP2IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP2IMP_ORD = 
@@ -374,24 +364,24 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_2.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP2LINKTYPEFLAG) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_2.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP2RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -399,42 +389,44 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP2OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @echo $(APP2LINKER) $(APP2LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP2OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @echo $(APP2LINKTYPEFLAG) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) -o $@ >> $(MISC)/$(TARGET).$(@:b)_2.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP2LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP2LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP2LINKRES:b).rc
 .IF "$(APP2ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP2ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP2ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF		# "$(APP2ICON)" != ""
 .IF "$(APP2VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP2VERINFO)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP2LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP2VERINFO)$(EMQ)" >> $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF		# "$(APP2VERINFO)" != ""
-    $(RC) -DWIN32 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
+    $(RC) -DWIN32 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
-    @cat $(APP2LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP2RESO)
+    @cat $(APP2LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP2RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP2BASEX) $(APP2STACKN) -o $@ $(APP2OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP2RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP2RESO) \
         `$(TYPE) /dev/null $(APP2LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_2.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
+        $(APP_LINKTYPE) $(APP2LIBSALCPPRT) \
+        -Wl,--start-group $(APP2STDLIBS) -Wl,--end-group $(APP2STDLIB) \
+        $(STDLIB2) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_2.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -443,7 +435,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(LINKFLAGSAPP) $(APP2BASEX) \
         $(APP2STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP2TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP2TARGET)).map} \
         $(STDOBJ) \
         $(APP2LINKRES) \
         $(APP2RES) \
@@ -454,7 +446,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -479,17 +471,13 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2STDLIBS) \
         $(APP2STDLIB) $(STDLIB2))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP2TARGETN:b)_linkobj.lst >> $(MISC)\$(APP2TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP2TARGET).lst $(THEN) type $(MISC)$/$(APP2TARGET).lst  >> $(MISC)$/$(APP2TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP2TARGET).lst $(THEN) type $(MISC)/$(APP2TARGET).lst  >> $(MISC)/$(APP2TARGET).lnk $(FI)
         $(APP2LINKER) @$(MISC)\$(APP2TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP2TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -499,23 +487,19 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP2LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP2LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP2LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP2ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP2ICON:s/\/\\/)" >> $(MISC)$/$(APP2LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP2ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP2LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP2ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF		# "$(APP2ICON)" != ""
 .IF "$(APP2VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP2LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP2VERINFO)$(EMQ)" >> $(MISC)$/$(APP2LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP2LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP2VERINFO)$(EMQ)" >> $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF		# "$(APP2VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP2TARGET) WINDOWAPI > $(MISC)$/$(APP2TARGET).def
+    @echo NAME $(APP2TARGET) WINDOWAPI > $(MISC)/$(APP2TARGET).def
 .ENDIF
 
     @+echo	$(APP2LINKFLAGS) \
@@ -523,7 +507,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP2LINKRES) \
         $(APP2RES) \
@@ -538,7 +522,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP2LINKRES) \
         $(APP2RES) \
@@ -551,11 +535,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 .IF "$(APP2TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -569,7 +549,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP3DEF = $(MISC)$/$(APP3TARGET).def
+APP3DEF = $(MISC)/$(APP3TARGET).def
 .ENDIF
 
 .IF "$(APP3LINKTYPE)" != ""
@@ -611,7 +591,7 @@ APP3OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP3RESO=
 .IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
-APP3RESO=$(MISC)$/$(APP3TARGET:b)_res.o
+APP3RESO=$(MISC)/$(APP3TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -623,19 +603,19 @@ USE_APP3DEF=
 .IF "$(APP3TARGETN)"!=""
 
 .IF "$(APP3PRODUCTNAME)"!=""
-APP3PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
+APP3PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP3PRODUCTNAME)\"
 .ENDIF			# "$(APP3PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP3LIBS)"!=""
-$(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP3TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP3LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP3TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP3TARGETN:b)_linkinc.ls
 $(APP3TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -643,7 +623,7 @@ $(APP3TARGETN) : $(LINKINCTARGETS)
 APP3LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP3IMP_ORD = $(APP3STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP3STDLIBS:^"$(LB)$/") 
+_APP3IMP_ORD = $(APP3STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP3STDLIBS:^"$(LB)/") 
 APP3IMP_ORD = $(foreach,i,$(_APP3IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP3IMP_ORD = 
@@ -658,24 +638,24 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_3.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP3LINKTYPEFLAG) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_3.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP3RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -683,42 +663,44 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP3OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @echo $(APP3LINKER) $(APP3LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP3OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @echo $(APP3LINKTYPEFLAG) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) -o $@ >> $(MISC)/$(TARGET).$(@:b)_3.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP3LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP3LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP3LINKRES:b).rc
 .IF "$(APP3ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP3ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP3ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF		# "$(APP3ICON)" != ""
 .IF "$(APP3VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP3VERINFO)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP3LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP3VERINFO)$(EMQ)" >> $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF		# "$(APP3VERINFO)" != ""
-    $(RC) -DWIN32 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
+    $(RC) -DWIN32 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
-    @cat $(APP3LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP3RESO)
+    @cat $(APP3LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP3RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP3BASEX) $(APP3STACKN) -o $@ $(APP3OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP3RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP3RESO) \
         `$(TYPE) /dev/null $(APP3LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_3.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
+        $(APP_LINKTYPE) $(APP3LIBSALCPPRT) \
+        -Wl,--start-group $(APP3STDLIBS) -Wl,--end-group $(APP3STDLIB) \
+        $(STDLIB3) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_3.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -727,7 +709,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(LINKFLAGSAPP) $(APP3BASEX) \
         $(APP3STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP3TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP3TARGET)).map} \
         $(STDOBJ) \
         $(APP3LINKRES) \
         $(APP3RES) \
@@ -738,7 +720,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -763,17 +745,13 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3STDLIBS) \
         $(APP3STDLIB) $(STDLIB3))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP3TARGETN:b)_linkobj.lst >> $(MISC)\$(APP3TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP3TARGET).lst $(THEN) type $(MISC)$/$(APP3TARGET).lst  >> $(MISC)$/$(APP3TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP3TARGET).lst $(THEN) type $(MISC)/$(APP3TARGET).lst  >> $(MISC)/$(APP3TARGET).lnk $(FI)
         $(APP3LINKER) @$(MISC)\$(APP3TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP3TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -783,23 +761,19 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP3LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP3LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP3LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP3ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP3ICON:s/\/\\/)" >> $(MISC)$/$(APP3LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP3ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP3LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP3ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF		# "$(APP3ICON)" != ""
 .IF "$(APP3VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP3LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP3VERINFO)$(EMQ)" >> $(MISC)$/$(APP3LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP3LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP3VERINFO)$(EMQ)" >> $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF		# "$(APP3VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP3TARGET) WINDOWAPI > $(MISC)$/$(APP3TARGET).def
+    @echo NAME $(APP3TARGET) WINDOWAPI > $(MISC)/$(APP3TARGET).def
 .ENDIF
 
     @+echo	$(APP3LINKFLAGS) \
@@ -807,7 +781,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP3LINKRES) \
         $(APP3RES) \
@@ -822,7 +796,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP3LINKRES) \
         $(APP3RES) \
@@ -835,11 +809,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 .IF "$(APP3TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -853,7 +823,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP4DEF = $(MISC)$/$(APP4TARGET).def
+APP4DEF = $(MISC)/$(APP4TARGET).def
 .ENDIF
 
 .IF "$(APP4LINKTYPE)" != ""
@@ -895,7 +865,7 @@ APP4OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP4RESO=
 .IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
-APP4RESO=$(MISC)$/$(APP4TARGET:b)_res.o
+APP4RESO=$(MISC)/$(APP4TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -907,19 +877,19 @@ USE_APP4DEF=
 .IF "$(APP4TARGETN)"!=""
 
 .IF "$(APP4PRODUCTNAME)"!=""
-APP4PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
+APP4PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP4PRODUCTNAME)\"
 .ENDIF			# "$(APP4PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP4LIBS)"!=""
-$(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP4TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP4LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP4TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP4TARGETN:b)_linkinc.ls
 $(APP4TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -927,7 +897,7 @@ $(APP4TARGETN) : $(LINKINCTARGETS)
 APP4LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP4IMP_ORD = $(APP4STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP4STDLIBS:^"$(LB)$/") 
+_APP4IMP_ORD = $(APP4STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP4STDLIBS:^"$(LB)/") 
 APP4IMP_ORD = $(foreach,i,$(_APP4IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP4IMP_ORD = 
@@ -942,24 +912,24 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_4.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP4LINKTYPEFLAG) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_4.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP4RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -967,42 +937,44 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP4OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @echo $(APP4LINKER) $(APP4LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP4OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @echo $(APP4LINKTYPEFLAG) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) -o $@ >> $(MISC)/$(TARGET).$(@:b)_4.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP4LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP4LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP4LINKRES:b).rc
 .IF "$(APP4ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP4ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP4ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF		# "$(APP4ICON)" != ""
 .IF "$(APP4VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP4VERINFO)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP4LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP4VERINFO)$(EMQ)" >> $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF		# "$(APP4VERINFO)" != ""
-    $(RC) -DWIN32 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
+    $(RC) -DWIN32 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
-    @cat $(APP4LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP4RESO)
+    @cat $(APP4LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP4RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP4BASEX) $(APP4STACKN) -o $@ $(APP4OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP4RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP4RESO) \
         `$(TYPE) /dev/null $(APP4LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_4.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
+        $(APP_LINKTYPE) $(APP4LIBSALCPPRT) \
+        -Wl,--start-group $(APP4STDLIBS) -Wl,--end-group $(APP4STDLIB) \
+        $(STDLIB4) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_4.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1011,7 +983,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(LINKFLAGSAPP) $(APP4BASEX) \
         $(APP4STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP4TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP4TARGET)).map} \
         $(STDOBJ) \
         $(APP4LINKRES) \
         $(APP4RES) \
@@ -1022,7 +994,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -1047,17 +1019,13 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4STDLIBS) \
         $(APP4STDLIB) $(STDLIB4))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP4TARGETN:b)_linkobj.lst >> $(MISC)\$(APP4TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP4TARGET).lst $(THEN) type $(MISC)$/$(APP4TARGET).lst  >> $(MISC)$/$(APP4TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP4TARGET).lst $(THEN) type $(MISC)/$(APP4TARGET).lst  >> $(MISC)/$(APP4TARGET).lnk $(FI)
         $(APP4LINKER) @$(MISC)\$(APP4TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP4TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1067,23 +1035,19 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP4LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP4LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP4LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP4ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP4ICON:s/\/\\/)" >> $(MISC)$/$(APP4LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP4ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP4LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP4ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF		# "$(APP4ICON)" != ""
 .IF "$(APP4VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP4LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP4VERINFO)$(EMQ)" >> $(MISC)$/$(APP4LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP4LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP4VERINFO)$(EMQ)" >> $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF		# "$(APP4VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP4TARGET) WINDOWAPI > $(MISC)$/$(APP4TARGET).def
+    @echo NAME $(APP4TARGET) WINDOWAPI > $(MISC)/$(APP4TARGET).def
 .ENDIF
 
     @+echo	$(APP4LINKFLAGS) \
@@ -1091,7 +1055,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP4LINKRES) \
         $(APP4RES) \
@@ -1106,7 +1070,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP4LINKRES) \
         $(APP4RES) \
@@ -1119,11 +1083,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 .IF "$(APP4TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1137,7 +1097,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP5DEF = $(MISC)$/$(APP5TARGET).def
+APP5DEF = $(MISC)/$(APP5TARGET).def
 .ENDIF
 
 .IF "$(APP5LINKTYPE)" != ""
@@ -1179,7 +1139,7 @@ APP5OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP5RESO=
 .IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
-APP5RESO=$(MISC)$/$(APP5TARGET:b)_res.o
+APP5RESO=$(MISC)/$(APP5TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -1191,19 +1151,19 @@ USE_APP5DEF=
 .IF "$(APP5TARGETN)"!=""
 
 .IF "$(APP5PRODUCTNAME)"!=""
-APP5PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
+APP5PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP5PRODUCTNAME)\"
 .ENDIF			# "$(APP5PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP5LIBS)"!=""
-$(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP5TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP5LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP5TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP5TARGETN:b)_linkinc.ls
 $(APP5TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -1211,7 +1171,7 @@ $(APP5TARGETN) : $(LINKINCTARGETS)
 APP5LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP5IMP_ORD = $(APP5STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP5STDLIBS:^"$(LB)$/") 
+_APP5IMP_ORD = $(APP5STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP5STDLIBS:^"$(LB)/") 
 APP5IMP_ORD = $(foreach,i,$(_APP5IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP5IMP_ORD = 
@@ -1226,24 +1186,24 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_5.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP5LINKTYPEFLAG) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_5.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP5RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -1251,42 +1211,44 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP5OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @echo $(APP5LINKER) $(APP5LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP5OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @echo $(APP5LINKTYPEFLAG) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) -o $@ >> $(MISC)/$(TARGET).$(@:b)_5.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP5LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP5LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP5LINKRES:b).rc
 .IF "$(APP5ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP5ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP5ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF		# "$(APP5ICON)" != ""
 .IF "$(APP5VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP5VERINFO)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP5LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP5VERINFO)$(EMQ)" >> $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF		# "$(APP5VERINFO)" != ""
-    $(RC) -DWIN32 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
+    $(RC) -DWIN32 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
-    @cat $(APP5LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP5RESO)
+    @cat $(APP5LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP5RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP5BASEX) $(APP5STACKN) -o $@ $(APP5OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP5RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP5RESO) \
         `$(TYPE) /dev/null $(APP5LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_5.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
+        $(APP_LINKTYPE) $(APP5LIBSALCPPRT) \
+        -Wl,--start-group $(APP5STDLIBS) -Wl,--end-group $(APP5STDLIB) \
+        $(STDLIB5) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_5.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1295,7 +1257,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(LINKFLAGSAPP) $(APP5BASEX) \
         $(APP5STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP5TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP5TARGET)).map} \
         $(STDOBJ) \
         $(APP5LINKRES) \
         $(APP5RES) \
@@ -1306,7 +1268,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -1331,17 +1293,13 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5STDLIBS) \
         $(APP5STDLIB) $(STDLIB5))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP5TARGETN:b)_linkobj.lst >> $(MISC)\$(APP5TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP5TARGET).lst $(THEN) type $(MISC)$/$(APP5TARGET).lst  >> $(MISC)$/$(APP5TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP5TARGET).lst $(THEN) type $(MISC)/$(APP5TARGET).lst  >> $(MISC)/$(APP5TARGET).lnk $(FI)
         $(APP5LINKER) @$(MISC)\$(APP5TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP5TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1351,23 +1309,19 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP5LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP5LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP5LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP5ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP5ICON:s/\/\\/)" >> $(MISC)$/$(APP5LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP5ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP5LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP5ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF		# "$(APP5ICON)" != ""
 .IF "$(APP5VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP5LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP5VERINFO)$(EMQ)" >> $(MISC)$/$(APP5LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP5LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP5VERINFO)$(EMQ)" >> $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF		# "$(APP5VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP5TARGET) WINDOWAPI > $(MISC)$/$(APP5TARGET).def
+    @echo NAME $(APP5TARGET) WINDOWAPI > $(MISC)/$(APP5TARGET).def
 .ENDIF
 
     @+echo	$(APP5LINKFLAGS) \
@@ -1375,7 +1329,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP5LINKRES) \
         $(APP5RES) \
@@ -1390,7 +1344,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP5LINKRES) \
         $(APP5RES) \
@@ -1403,11 +1357,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 .IF "$(APP5TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1421,7 +1371,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP6DEF = $(MISC)$/$(APP6TARGET).def
+APP6DEF = $(MISC)/$(APP6TARGET).def
 .ENDIF
 
 .IF "$(APP6LINKTYPE)" != ""
@@ -1463,7 +1413,7 @@ APP6OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP6RESO=
 .IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
-APP6RESO=$(MISC)$/$(APP6TARGET:b)_res.o
+APP6RESO=$(MISC)/$(APP6TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -1475,19 +1425,19 @@ USE_APP6DEF=
 .IF "$(APP6TARGETN)"!=""
 
 .IF "$(APP6PRODUCTNAME)"!=""
-APP6PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
+APP6PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP6PRODUCTNAME)\"
 .ENDIF			# "$(APP6PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP6LIBS)"!=""
-$(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP6TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP6LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP6TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP6TARGETN:b)_linkinc.ls
 $(APP6TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -1495,7 +1445,7 @@ $(APP6TARGETN) : $(LINKINCTARGETS)
 APP6LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP6IMP_ORD = $(APP6STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP6STDLIBS:^"$(LB)$/") 
+_APP6IMP_ORD = $(APP6STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP6STDLIBS:^"$(LB)/") 
 APP6IMP_ORD = $(foreach,i,$(_APP6IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP6IMP_ORD = 
@@ -1510,24 +1460,24 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_6.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP6LINKTYPEFLAG) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_6.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP6RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -1535,42 +1485,44 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP6OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @echo $(APP6LINKER) $(APP6LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP6OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @echo $(APP6LINKTYPEFLAG) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) -o $@ >> $(MISC)/$(TARGET).$(@:b)_6.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP6LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP6LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP6LINKRES:b).rc
 .IF "$(APP6ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP6ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP6ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF		# "$(APP6ICON)" != ""
 .IF "$(APP6VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP6VERINFO)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP6LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP6VERINFO)$(EMQ)" >> $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF		# "$(APP6VERINFO)" != ""
-    $(RC) -DWIN32 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
+    $(RC) -DWIN32 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
-    @cat $(APP6LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP6RESO)
+    @cat $(APP6LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP6RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP6BASEX) $(APP6STACKN) -o $@ $(APP6OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP6RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP6RESO) \
         `$(TYPE) /dev/null $(APP6LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_6.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
+        $(APP_LINKTYPE) $(APP6LIBSALCPPRT) \
+        -Wl,--start-group $(APP6STDLIBS) -Wl,--end-group $(APP6STDLIB) \
+        $(STDLIB6) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_6.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1579,7 +1531,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(LINKFLAGSAPP) $(APP6BASEX) \
         $(APP6STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP6TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP6TARGET)).map} \
         $(STDOBJ) \
         $(APP6LINKRES) \
         $(APP6RES) \
@@ -1590,7 +1542,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -1615,17 +1567,13 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6STDLIBS) \
         $(APP6STDLIB) $(STDLIB6))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP6TARGETN:b)_linkobj.lst >> $(MISC)\$(APP6TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP6TARGET).lst $(THEN) type $(MISC)$/$(APP6TARGET).lst  >> $(MISC)$/$(APP6TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP6TARGET).lst $(THEN) type $(MISC)/$(APP6TARGET).lst  >> $(MISC)/$(APP6TARGET).lnk $(FI)
         $(APP6LINKER) @$(MISC)\$(APP6TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP6TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1635,23 +1583,19 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP6LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP6LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP6LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP6ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP6ICON:s/\/\\/)" >> $(MISC)$/$(APP6LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP6ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP6LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP6ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF		# "$(APP6ICON)" != ""
 .IF "$(APP6VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP6LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP6VERINFO)$(EMQ)" >> $(MISC)$/$(APP6LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP6LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP6VERINFO)$(EMQ)" >> $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF		# "$(APP6VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP6TARGET) WINDOWAPI > $(MISC)$/$(APP6TARGET).def
+    @echo NAME $(APP6TARGET) WINDOWAPI > $(MISC)/$(APP6TARGET).def
 .ENDIF
 
     @+echo	$(APP6LINKFLAGS) \
@@ -1659,7 +1603,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP6LINKRES) \
         $(APP6RES) \
@@ -1674,7 +1618,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP6LINKRES) \
         $(APP6RES) \
@@ -1687,11 +1631,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 .IF "$(APP6TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1705,7 +1645,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP7DEF = $(MISC)$/$(APP7TARGET).def
+APP7DEF = $(MISC)/$(APP7TARGET).def
 .ENDIF
 
 .IF "$(APP7LINKTYPE)" != ""
@@ -1747,7 +1687,7 @@ APP7OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP7RESO=
 .IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
-APP7RESO=$(MISC)$/$(APP7TARGET:b)_res.o
+APP7RESO=$(MISC)/$(APP7TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -1759,19 +1699,19 @@ USE_APP7DEF=
 .IF "$(APP7TARGETN)"!=""
 
 .IF "$(APP7PRODUCTNAME)"!=""
-APP7PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
+APP7PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP7PRODUCTNAME)\"
 .ENDIF			# "$(APP7PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP7LIBS)"!=""
-$(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP7TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP7LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP7TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP7TARGETN:b)_linkinc.ls
 $(APP7TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -1779,7 +1719,7 @@ $(APP7TARGETN) : $(LINKINCTARGETS)
 APP7LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP7IMP_ORD = $(APP7STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP7STDLIBS:^"$(LB)$/") 
+_APP7IMP_ORD = $(APP7STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP7STDLIBS:^"$(LB)/") 
 APP7IMP_ORD = $(foreach,i,$(_APP7IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP7IMP_ORD = 
@@ -1794,24 +1734,24 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_7.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP7LINKTYPEFLAG) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_7.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP7RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -1819,42 +1759,44 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP7OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @echo $(APP7LINKER) $(APP7LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP7OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @echo $(APP7LINKTYPEFLAG) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) -o $@ >> $(MISC)/$(TARGET).$(@:b)_7.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP7LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP7LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP7LINKRES:b).rc
 .IF "$(APP7ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP7ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP7ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF		# "$(APP7ICON)" != ""
 .IF "$(APP7VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP7VERINFO)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP7LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP7VERINFO)$(EMQ)" >> $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF		# "$(APP7VERINFO)" != ""
-    $(RC) -DWIN32 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
+    $(RC) -DWIN32 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
-    @cat $(APP7LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP7RESO)
+    @cat $(APP7LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP7RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP7BASEX) $(APP7STACKN) -o $@ $(APP7OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP7RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP7RESO) \
         `$(TYPE) /dev/null $(APP7LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_7.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
+        $(APP_LINKTYPE) $(APP7LIBSALCPPRT) \
+        -Wl,--start-group $(APP7STDLIBS) -Wl,--end-group $(APP7STDLIB) \
+        $(STDLIB7) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_7.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1863,7 +1805,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(LINKFLAGSAPP) $(APP7BASEX) \
         $(APP7STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP7TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP7TARGET)).map} \
         $(STDOBJ) \
         $(APP7LINKRES) \
         $(APP7RES) \
@@ -1874,7 +1816,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -1899,17 +1841,13 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7STDLIBS) \
         $(APP7STDLIB) $(STDLIB7))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP7TARGETN:b)_linkobj.lst >> $(MISC)\$(APP7TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP7TARGET).lst $(THEN) type $(MISC)$/$(APP7TARGET).lst  >> $(MISC)$/$(APP7TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP7TARGET).lst $(THEN) type $(MISC)/$(APP7TARGET).lst  >> $(MISC)/$(APP7TARGET).lnk $(FI)
         $(APP7LINKER) @$(MISC)\$(APP7TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP7TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1919,23 +1857,19 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP7LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP7LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP7LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP7ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP7ICON:s/\/\\/)" >> $(MISC)$/$(APP7LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP7ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP7LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP7ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF		# "$(APP7ICON)" != ""
 .IF "$(APP7VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP7LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP7VERINFO)$(EMQ)" >> $(MISC)$/$(APP7LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP7LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP7VERINFO)$(EMQ)" >> $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF		# "$(APP7VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP7TARGET) WINDOWAPI > $(MISC)$/$(APP7TARGET).def
+    @echo NAME $(APP7TARGET) WINDOWAPI > $(MISC)/$(APP7TARGET).def
 .ENDIF
 
     @+echo	$(APP7LINKFLAGS) \
@@ -1943,7 +1877,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP7LINKRES) \
         $(APP7RES) \
@@ -1958,7 +1892,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP7LINKRES) \
         $(APP7RES) \
@@ -1971,11 +1905,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 .IF "$(APP7TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -1989,7 +1919,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP8DEF = $(MISC)$/$(APP8TARGET).def
+APP8DEF = $(MISC)/$(APP8TARGET).def
 .ENDIF
 
 .IF "$(APP8LINKTYPE)" != ""
@@ -2031,7 +1961,7 @@ APP8OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP8RESO=
 .IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
-APP8RESO=$(MISC)$/$(APP8TARGET:b)_res.o
+APP8RESO=$(MISC)/$(APP8TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -2043,19 +1973,19 @@ USE_APP8DEF=
 .IF "$(APP8TARGETN)"!=""
 
 .IF "$(APP8PRODUCTNAME)"!=""
-APP8PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
+APP8PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP8PRODUCTNAME)\"
 .ENDIF			# "$(APP8PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP8LIBS)"!=""
-$(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP8TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP8LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP8TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP8TARGETN:b)_linkinc.ls
 $(APP8TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -2063,7 +1993,7 @@ $(APP8TARGETN) : $(LINKINCTARGETS)
 APP8LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP8IMP_ORD = $(APP8STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP8STDLIBS:^"$(LB)$/") 
+_APP8IMP_ORD = $(APP8STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP8STDLIBS:^"$(LB)/") 
 APP8IMP_ORD = $(foreach,i,$(_APP8IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP8IMP_ORD = 
@@ -2078,24 +2008,24 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_8.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP8LINKTYPEFLAG) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_8.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP8RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -2103,42 +2033,44 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP8OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @echo $(APP8LINKER) $(APP8LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP8OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @echo $(APP8LINKTYPEFLAG) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) -o $@ >> $(MISC)/$(TARGET).$(@:b)_8.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP8LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP8LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP8LINKRES:b).rc
 .IF "$(APP8ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP8ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP8ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF		# "$(APP8ICON)" != ""
 .IF "$(APP8VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP8VERINFO)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP8LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP8VERINFO)$(EMQ)" >> $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF		# "$(APP8VERINFO)" != ""
-    $(RC) -DWIN32 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
+    $(RC) -DWIN32 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
-    @cat $(APP8LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP8RESO)
+    @cat $(APP8LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP8RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP8BASEX) $(APP8STACKN) -o $@ $(APP8OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP8RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP8RESO) \
         `$(TYPE) /dev/null $(APP8LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_8.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
+        $(APP_LINKTYPE) $(APP8LIBSALCPPRT) \
+        -Wl,--start-group $(APP8STDLIBS) -Wl,--end-group $(APP8STDLIB) \
+        $(STDLIB8) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_8.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -2147,7 +2079,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(LINKFLAGSAPP) $(APP8BASEX) \
         $(APP8STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP8TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP8TARGET)).map} \
         $(STDOBJ) \
         $(APP8LINKRES) \
         $(APP8RES) \
@@ -2158,7 +2090,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -2183,17 +2115,13 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8STDLIBS) \
         $(APP8STDLIB) $(STDLIB8))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP8TARGETN:b)_linkobj.lst >> $(MISC)\$(APP8TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP8TARGET).lst $(THEN) type $(MISC)$/$(APP8TARGET).lst  >> $(MISC)$/$(APP8TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP8TARGET).lst $(THEN) type $(MISC)/$(APP8TARGET).lst  >> $(MISC)/$(APP8TARGET).lnk $(FI)
         $(APP8LINKER) @$(MISC)\$(APP8TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP8TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -2203,23 +2131,19 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP8LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP8LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP8LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP8ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP8ICON:s/\/\\/)" >> $(MISC)$/$(APP8LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP8ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP8LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP8ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF		# "$(APP8ICON)" != ""
 .IF "$(APP8VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP8LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP8VERINFO)$(EMQ)" >> $(MISC)$/$(APP8LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP8LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP8VERINFO)$(EMQ)" >> $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF		# "$(APP8VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP8TARGET) WINDOWAPI > $(MISC)$/$(APP8TARGET).def
+    @echo NAME $(APP8TARGET) WINDOWAPI > $(MISC)/$(APP8TARGET).def
 .ENDIF
 
     @+echo	$(APP8LINKFLAGS) \
@@ -2227,7 +2151,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP8LINKRES) \
         $(APP8RES) \
@@ -2242,7 +2166,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP8LINKRES) \
         $(APP8RES) \
@@ -2255,11 +2179,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 .IF "$(APP8TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -2273,7 +2193,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP9DEF = $(MISC)$/$(APP9TARGET).def
+APP9DEF = $(MISC)/$(APP9TARGET).def
 .ENDIF
 
 .IF "$(APP9LINKTYPE)" != ""
@@ -2315,7 +2235,7 @@ APP9OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP9RESO=
 .IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
-APP9RESO=$(MISC)$/$(APP9TARGET:b)_res.o
+APP9RESO=$(MISC)/$(APP9TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -2327,19 +2247,19 @@ USE_APP9DEF=
 .IF "$(APP9TARGETN)"!=""
 
 .IF "$(APP9PRODUCTNAME)"!=""
-APP9PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
+APP9PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP9PRODUCTNAME)\"
 .ENDIF			# "$(APP9PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP9LIBS)"!=""
-$(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP9TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP9LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP9TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP9TARGETN:b)_linkinc.ls
 $(APP9TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -2347,7 +2267,7 @@ $(APP9TARGETN) : $(LINKINCTARGETS)
 APP9LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP9IMP_ORD = $(APP9STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP9STDLIBS:^"$(LB)$/") 
+_APP9IMP_ORD = $(APP9STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP9STDLIBS:^"$(LB)/") 
 APP9IMP_ORD = $(foreach,i,$(_APP9IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP9IMP_ORD = 
@@ -2362,24 +2282,24 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_9.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP9LINKTYPEFLAG) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_9.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP9RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -2387,42 +2307,44 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP9OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @echo $(APP9LINKER) $(APP9LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP9OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @echo $(APP9LINKTYPEFLAG) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) -o $@ >> $(MISC)/$(TARGET).$(@:b)_9.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP9LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP9LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP9LINKRES:b).rc
 .IF "$(APP9ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP9ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP9ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF		# "$(APP9ICON)" != ""
 .IF "$(APP9VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP9VERINFO)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP9LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP9VERINFO)$(EMQ)" >> $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF		# "$(APP9VERINFO)" != ""
-    $(RC) -DWIN32 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
+    $(RC) -DWIN32 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
-    @cat $(APP9LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP9RESO)
+    @cat $(APP9LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP9RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP9BASEX) $(APP9STACKN) -o $@ $(APP9OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP9RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP9RESO) \
         `$(TYPE) /dev/null $(APP9LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_9.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
+        $(APP_LINKTYPE) $(APP9LIBSALCPPRT) \
+        -Wl,--start-group $(APP9STDLIBS) -Wl,--end-group $(APP9STDLIB) \
+        $(STDLIB9) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_9.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -2431,7 +2353,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(LINKFLAGSAPP) $(APP9BASEX) \
         $(APP9STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP9TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP9TARGET)).map} \
         $(STDOBJ) \
         $(APP9LINKRES) \
         $(APP9RES) \
@@ -2442,7 +2364,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -2467,17 +2389,13 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9STDLIBS) \
         $(APP9STDLIB) $(STDLIB9))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP9TARGETN:b)_linkobj.lst >> $(MISC)\$(APP9TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP9TARGET).lst $(THEN) type $(MISC)$/$(APP9TARGET).lst  >> $(MISC)$/$(APP9TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP9TARGET).lst $(THEN) type $(MISC)/$(APP9TARGET).lst  >> $(MISC)/$(APP9TARGET).lnk $(FI)
         $(APP9LINKER) @$(MISC)\$(APP9TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP9TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -2487,23 +2405,19 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP9LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP9LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP9LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP9ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP9ICON:s/\/\\/)" >> $(MISC)$/$(APP9LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP9ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP9LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP9ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF		# "$(APP9ICON)" != ""
 .IF "$(APP9VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP9LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP9VERINFO)$(EMQ)" >> $(MISC)$/$(APP9LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP9LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP9VERINFO)$(EMQ)" >> $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF		# "$(APP9VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP9TARGET) WINDOWAPI > $(MISC)$/$(APP9TARGET).def
+    @echo NAME $(APP9TARGET) WINDOWAPI > $(MISC)/$(APP9TARGET).def
 .ENDIF
 
     @+echo	$(APP9LINKFLAGS) \
@@ -2511,7 +2425,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP9LINKRES) \
         $(APP9RES) \
@@ -2526,7 +2440,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP9LINKRES) \
         $(APP9RES) \
@@ -2539,11 +2453,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 .IF "$(APP9TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -2557,7 +2467,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 # unroll begin
 
 .IF "$(GUI)" == "OS2" && "$(TARGETTYPE)" == "GUI" 
-APP10DEF = $(MISC)$/$(APP10TARGET).def
+APP10DEF = $(MISC)/$(APP10TARGET).def
 .ENDIF
 
 .IF "$(APP10LINKTYPE)" != ""
@@ -2599,7 +2509,7 @@ APP10OBJS+= $(STDOBJVCL)
 .IF "$(GUI)$(COM)" == "WNTGCC"
 APP10RESO=
 .IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
-APP10RESO=$(MISC)$/$(APP10TARGET:b)_res.o
+APP10RESO=$(MISC)/$(APP10TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -2611,19 +2521,19 @@ USE_APP10DEF=
 .IF "$(APP10TARGETN)"!=""
 
 .IF "$(APP10PRODUCTNAME)"!=""
-APP10PRODUCTDEF:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
+APP10PRODUCTDEF+:=-DPRODUCT_NAME=\"$(APP10PRODUCTNAME)\"
 .ENDIF			# "$(APP10PRODUCTNAME)"!=""
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 .IF "$(APP10LIBS)"!=""
-$(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
+$(MISC)/$(APP10TARGET)_linkinc.ls .PHONY:
     @@-$(RM) $@
-    sed -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
+    sed -f $(SOLARENV)/bin/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          #"$(APP10LIBS)"!="" 
 .ENDIF
 
-LINKINCTARGETS+=$(MISC)$/$(APP10TARGETN:b)_linkinc.ls
+LINKINCTARGETS+=$(MISC)/$(APP10TARGETN:b)_linkinc.ls
 $(APP10TARGETN) : $(LINKINCTARGETS)
 .ENDIF          # "$(linkinc)"!=""
 
@@ -2631,7 +2541,7 @@ $(APP10TARGETN) : $(LINKINCTARGETS)
 APP10LIBSALCPPRT*=$(LIBSALCPPRT)
 
 .IF "$(GUI)" == "OS2"
-_APP10IMP_ORD = $(APP10STDLIBS:^"$(SOLARVERSION)$/$(INPATH)$/lib$/") $(APP10STDLIBS:^"$(LB)$/") 
+_APP10IMP_ORD = $(APP10STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP10STDLIBS:^"$(LB)/") 
 APP10IMP_ORD = $(foreach,i,$(_APP10IMP_ORD) $(shell @-ls $i))
 .ELSE
 APP10IMP_ORD = 
@@ -2646,24 +2556,24 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(@:b).list
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @-$(RM) $(MISC)$/$(@:b).strip
+    @-$(RM) $(MISC)/$(@:b).list
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @-$(RM) $(MISC)/$(@:b).strip
     @echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
-    `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @echo -n $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @$(PERL) $(SOLARENV)$/bin$/macosx-dylib-link-list.pl \
-        `cat $(MISC)$/$(TARGET).$(@:b)_10.cmd` \
-        >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
+    @echo -n $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) -o $@ \
+    $(APP10LINKTYPEFLAG) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -filelist $(MISC)/$(@:b).list > $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        `cat $(MISC)/$(TARGET).$(@:b)_10.cmd` \
+        >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @cat $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
 # libraries at runtime
-    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
-    @strip -i -R $(MISC)$/$(@:b).strip -X $@
+    @-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)/$(@:b).strip
+    @strip -i -R $(MISC)/$(@:b).strip -X $@
     @ls -l $@
-    @$(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl \
+    @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         app $(APP10RPATH) $@
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
@@ -2671,42 +2581,44 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ELSE		# "$(OS)"=="MACOSX"
     @echo unx
-    @-$(RM) $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    $(APP10OBJS:s/.obj/.o/) '\' >  $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    cat $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @-$(RM) $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @echo $(APP10LINKER) $(APP10LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
+    $(APP10OBJS:s/.obj/.o/) '\' >  $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @echo $(APP10LINKTYPEFLAG) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) -o $@ >> $(MISC)/$(TARGET).$(@:b)_10.cmd
+    cat $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)" == "WNT"
     @@-$(MKDIR) $(@:d:d)
 .IF "$(APP10LINKRES)" != ""
-    @@-$(RM) $(MISC)$/$(APP10LINKRES:b).rc
+    @@-$(RM) $(MISC)/$(APP10LINKRES:b).rc
 .IF "$(APP10ICON)" != ""
-    @-echo 1 ICON $(EMQ)"$(APP10ICON:s/\/\\/)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-echo 1 ICON $(EMQ)"$(APP10ICON:s/\/\\/)$(EMQ)" >> $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF		# "$(APP10ICON)" != ""
 .IF "$(APP10VERINFO)" != ""
-    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
-    @-echo $(EMQ)#include  $(EMQ)"$(APP10VERINFO)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP10LINKRES:b).rc
+    @-echo $(EMQ)#include  $(EMQ)"$(APP10VERINFO)$(EMQ)" >> $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF		# "$(APP10VERINFO)" != ""
-    $(RC) -DWIN32 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
+    $(RC) -DWIN32 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(COM)" == "GCC"
     @echo mingw
 .IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
-    @cat $(APP10LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)$/$(@:b)_all.res
-    windres $(MISC)$/$(@:b)_all.res $(APP10RESO)
+    @cat $(APP10LINKRES) $(subst,/res/,/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)/$(@:b)_all.res
+    windres $(MISC)/$(@:b)_all.res $(APP10RESO)
 .ENDIF
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(MINGWSSTDOBJ) -L$(PRJ)/$(INPATH)/lib $(SOLARLIB) $(STDSLO) \
         $(APP10BASEX) $(APP10STACKN) -o $@ $(APP10OBJS) \
-        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP10RESO) \
+        -Wl,-Map,$(MISC)/$(@:b).map $(STDOBJ) $(APP10RESO) \
         `$(TYPE) /dev/null $(APP10LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_10.cmd
-    @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
+        $(APP_LINKTYPE) $(APP10LIBSALCPPRT) \
+        -Wl,--start-group $(APP10STDLIBS) -Wl,--end-group $(APP10STDLIB) \
+        $(STDLIB10) $(MINGWSSTDENDOBJ) > $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @$(TYPE)  $(MISC)/$(TARGET).$(@:b)_10.cmd
+    @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -2715,7 +2627,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(LINKFLAGSAPP) $(APP10BASEX) \
         $(APP10STACKN) \
         -out:$@ \
-        -map:$(MISC)$/{$(subst,$/,_ $(APP10TARGET)).map} \
+        -map:$(MISC)/{$(subst,/,_ $(APP10TARGET)).map} \
         $(STDOBJ) \
         $(APP10LINKRES) \
         $(APP10RES) \
@@ -2726,7 +2638,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         )
     @-echo linking $@.manifest ...
 .IF "$(VISTA_MANIFEST)"!=""
-    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
 .ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
@@ -2751,17 +2663,13 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10STDLIBS) \
         $(APP10STDLIB) $(STDLIB10))
         $(SED) -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP10TARGETN:b)_linkobj.lst >> $(MISC)\$(APP10TARGET).lst
-        $(IFEXIST) $(MISC)$/$(APP10TARGET).lst $(THEN) type $(MISC)$/$(APP10TARGET).lst  >> $(MISC)$/$(APP10TARGET).lnk $(FI)
+        $(IFEXIST) $(MISC)/$(APP10TARGET).lst $(THEN) type $(MISC)/$(APP10TARGET).lst  >> $(MISC)/$(APP10TARGET).lnk $(FI)
         $(APP10LINKER) @$(MISC)\$(APP10TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP10TARGET)" == "loader"
     $(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    $(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     $(RM) $@
     $(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"
@@ -2771,23 +2679,19 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .IF "$(GUI)" == "OS2"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP10LINKRES)" != ""
-    @+-$(RM) $(MISC)$/$(APP10LINKRES:b).rc >& $(NULLDEV)
+    @+-$(RM) $(MISC)/$(APP10LINKRES:b).rc >& $(NULLDEV)
 .IF "$(APP10ICON)" != ""
-.IF "$(USE_SHELL)"=="4nt"
-    @-+echo ICON 1 "$(APP10ICON:s/\/\\/)" >> $(MISC)$/$(APP10LINKRES:b).rc
-.ELSE			# "$(USE_SHELL)"=="4nt"
-    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP10ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)$/$(APP10LINKRES:b).rc
-.ENDIF			# "$(USE_SHELL)"=="4nt"
+    @-+$(WRAPCMD) echo 1 ICON $(EMQ)"$(APP10ICON)$(EMQ)" | $(SED) 'sX\\X\\\\Xg' >> $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF		# "$(APP10ICON)" != ""
 .IF "$(APP10VERINFO)" != ""
-    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(APP10LINKRES:b).rc
-    @-+echo $(EMQ)#include  $(EMQ)"$(APP10VERINFO)$(EMQ)" >> $(MISC)$/$(APP10LINKRES:b).rc
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)/$(APP10LINKRES:b).rc
+    @-+echo $(EMQ)#include  $(EMQ)"$(APP10VERINFO)$(EMQ)" >> $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF		# "$(APP10VERINFO)" != ""
-    $(RC) -r -DOS2 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
+    $(RC) -r -DOS2 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 
 .IF "$(TARGETTYPE)" == "GUI" 
-    @echo NAME $(APP10TARGET) WINDOWAPI > $(MISC)$/$(APP10TARGET).def
+    @echo NAME $(APP10TARGET) WINDOWAPI > $(MISC)/$(APP10TARGET).def
 .ENDIF
 
     @+echo	$(APP10LINKFLAGS) \
@@ -2795,7 +2699,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP10LINKRES) \
         $(APP10RES) \
@@ -2810,7 +2714,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10STACKN) \
         -o $@ \
         -Zmap -L$(LB) \
-        -L$(SOLARVERSION)$/$(INPATH)$/lib \
+        -L$(SOLARVERSION)/$(INPATH)/lib \
         $(STDOBJ) \
         $(APP10LINKRES) \
         $(APP10RES) \
@@ -2823,11 +2727,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 
 .IF "$(APP10TARGET)" == "loader"
     +$(PERL) loader.pl $@
-.IF "$(USE_SHELL)"=="4nt"
-    +$(COPY) /b $(@)+$(@:d)unloader.exe $(@:d)_new.exe
-.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(TYPE) $(@) $(@:d)unloader.exe > $(@:d)_new.exe
-.ENDIF			# "$(USE_SHELL)"=="4nt"
     +$(RM) $@
     +$(RENAME) $(@:d)_new.exe $(@:d)loader.exe
 .ENDIF			# "$(TARGET)" == "setup"

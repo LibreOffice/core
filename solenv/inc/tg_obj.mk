@@ -44,7 +44,7 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-    $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) > $@
+    $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)/$(i)) > $@
 .ELSE			# "$(COM)"=="GCC"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
@@ -53,11 +53,11 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
+    echo $(foreach,i,$(OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
-    @-nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @-nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
-    @nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(OBJTARGET)"!=""
@@ -78,7 +78,7 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    $(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
+    $(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)/$(i)) > $@
 .ELSE
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
@@ -87,7 +87,7 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$($(SECOND_BUILD)OBJTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""

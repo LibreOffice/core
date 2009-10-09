@@ -591,6 +591,66 @@ sub get_children
 }
 
 ################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_langpack_hostname
+{
+    my ($dirsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        if (( $onedir->{'LangPackHostName'} ) && ( $onedir->{'LangPackHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'LangPackHostName'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_patch_hostname
+{
+    my ($dirsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        if (( $onedir->{'PatchHostName'} ) && ( $onedir->{'PatchHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'PatchHostName'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_langpack_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'LangPackCopy'} ) && ( $onescpaction->{'LangPackCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'LangPackCopy'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_patch_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'PatchCopy'} ) && ( $onescpaction->{'PatchCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'PatchCopy'}; }
+    }
+}
+
+################################################################################
 # Shifting parent directories of URE and Basis layer, so that
 # these directories are located below the Brand layer.
 # Style: SHIFT_BASIS_INTO_BRAND_LAYER
@@ -1181,6 +1241,8 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
         if (( $styles =~ /\bSTARREGISTRY\b/ ) || ( $styles =~ /\bFILE_CAN_MISS\b/ )) { $file_can_miss = 1; }
 
+        if (( $installer::globals::languagepack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))) { $file_can_miss = 1; }
+
         my $sourcepathref = "";
 
         if ( $file_can_miss ) { $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 0); }
@@ -1310,13 +1372,39 @@ sub remove_Files_Without_Sourcedirectory
             if ( ! ( $styles =~ /\bSTARREGISTRY\b/ ))   # StarRegistry files will be created later
             {
                 my $filename = $onefile->{'Name'};
-                $infoline = "ERROR: Removing file $filename from file list.\n";
-                push( @installer::globals::logfileinfo, $infoline);
 
-                push(@missingfiles, "ERROR: File not found: $filename\n");
-                $error_occured = 1;
+                if ( ! $installer::globals::languagepack )
+                {
+                    $infoline = "ERROR: Removing file $filename from file list.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
 
-                next;   # removing this file from list, if sourcepath is empty
+                    push(@missingfiles, "ERROR: File not found: $filename\n");
+                    $error_occured = 1;
+
+                    next;   # removing this file from list, if sourcepath is empty
+                }
+                else # special case for language packs
+                {
+                    if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
+                    {
+                        $infoline = "ERROR: Removing file $filename from file list.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+
+                        push(@missingfiles, "ERROR: File not found: $filename\n");
+                        $error_occured = 1;
+
+                        next;   # removing this file from list, if sourcepath is empty
+                    }
+                    else
+                    {
+                        $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                        $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+
+                        next;   # removing this file from list, if sourcepath is empty
+                    }
+                }
             }
         }
 

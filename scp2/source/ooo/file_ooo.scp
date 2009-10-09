@@ -359,7 +359,7 @@ End
 
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Emp, emp)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Sdfilt, sdfilt)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -453,12 +453,6 @@ End
 #ifndef SYSTEM_BSH
 STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
 #endif
-#endif
-
-#ifdef SOLAR_JAVA
-
-STD_JAR_FILE( gid_File_Jar_Classes, classes )
-
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1169,7 +1163,7 @@ End
 File gid_File_Mozilla_Runtime
     TXT_FILE_BODY;
     Styles = (ARCHIVE);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "mozruntime.zip";
 End
 
@@ -1392,7 +1386,6 @@ File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/ExtendedColorScheme.xcs";
 End
-
 
 File gid_File_Oo_Office_Paths_Xcs
     TXT_FILE_BODY;
@@ -2252,6 +2245,17 @@ File gid_File_Registry_Spool_Oo_Accelerators_System_Xcu
 #endif
 End
 
+File gid_File_Oo_Office_Paths_System_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Paths;
+#ifdef MACOSX
+    Name = "/registry/spool/org/openoffice/Office/Paths-macosx.xcu";
+#else
+    Name = "/registry/spool/org/openoffice/Office/Paths-unxwnt.xcu";
+#endif
+End
+
 File gid_File_Registry_Spool_Oo_Common_System_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2732,7 +2736,11 @@ File gid_Starregistry_Services_Rdb
     Name = "services.rdb";
     Dir = gid_Dir_Program;
     Styles = (PACKED, STARREGISTRY, PATCH);
+#if defined WNT
+    NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
+#else
     NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
+#endif
     JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
 End
 

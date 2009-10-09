@@ -40,29 +40,29 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @echo Making: $@
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @cat $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @+source $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
-    @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
 .IF "$(OS)" == "MACOSX"
-     @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+     @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
-    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-    @+source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @+source $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)$(COM)"=="WNTGCC"
-    @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)$/$(ROUT)#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-    @+source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @+-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)/$(ROUT)#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @cat $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
+    @+source $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .ELSE
     @echo just a dummy > $@
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
@@ -79,13 +79,13 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @echo Making: $@
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
+    @echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @$(RM) $(@:d)$(@:b).dump
 .IF "$(OS)"=="MACOSX"
-    @-nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @-nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
-    @nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
@@ -102,7 +102,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-    +$(ECHONL) $(LIB$(TNR)OBJFILES) | sed "s#$(PRJ:s/././)$/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
+    +$(ECHONL) $(LIB$(TNR)OBJFILES) | sed "s#$(PRJ:s/././)/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n1 >> $@
 .ELSE
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))

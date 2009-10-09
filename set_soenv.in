@@ -88,7 +88,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT,
      $SYSTEM_PYTHON, $PYTHONPATH, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
@@ -355,7 +355,7 @@ elsif ( $platform =~ m/freebsd/ )
 elsif ( $platform =~ m/linux/ ) 
 {
 # General Linux settings:
-      $CVER           = "C300";
+      $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
@@ -390,20 +390,13 @@ elsif ( $platform =~ m/linux/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
       }
 
-      if( @GCCVER@ >= 30401 ) {
-         $OUTPATH     = "unxlngi6";
-      	 $CVER        = "C341";
-      }
-      else {
-         $OUTPATH     = "unxlngi4";
-      }
+      $OUTPATH     = "unxlngi6";
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
       $outfile        = "LinuxX86-64Env.Set";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
-      $CVER           = "C341";
       $OUTPATH        = "unxlngx6";
       # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
@@ -416,7 +409,6 @@ elsif ( $platform =~ m/linux/ )
       $outfile        = "LinuxIA64Env.Set";
       $CPU            = "A";
       $CPUNAME        = "IA64";
-      $CVER           = "C341";
       $OUTPATH        = "unxlnga";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
@@ -499,7 +491,6 @@ elsif ( $platform =~ m/linux/ )
       $outfile        = "LinuxM68KEnv.Set";
       $CPU            = "6";
       $CPUNAME        = "M68K";
-      $CVER           = "C341";
       $OUTPATH        = "unxlngm68k";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
@@ -1108,7 +1099,8 @@ if ($platform =~ m/cygwin|os2/)
       else
       {  $ILIB       .= $wps.$COMPATH.$LIB;
       }
-      $ILIB       .= $wps.$PSDK_HOME.$LIB;
+      $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
+                     $wps.$PSDK_HOME.$LIB;
       if ( '@ENABLE_DIRETX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
@@ -1485,6 +1477,7 @@ elsif ($platform =~ m/cygwin/)
      else
      {  $SOLARINC    .= $I.'$COMPATH'.$ds."include"; }
      @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
+     $SOLARINC .= $I.PathFormat("@MINGW_BACKWARD_INCLUDE_PATH@");
      foreach $mingw_lib_include_path (@mingw_lib_include_paths)
        {   chomp $mingw_lib_include_path;
            if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
@@ -1644,6 +1637,8 @@ ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
 ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
+ToFile( "ENABLE_NSS_MODULE",  "@ENABLE_NSS_MODULE@", "e" );
+ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
 ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
@@ -1804,6 +1799,7 @@ ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
 ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
 		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
 ToFile( "CXX",               $CXX,               "e" );
+ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
@@ -1819,8 +1815,11 @@ ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
 ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
+ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
+ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
+ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
+ToFile( "GRAPHITE_CFLAGS",   "@GRAPHITE_CFLAGS@",   "e");
 ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
-ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
 ToFile( "SYSTEM_DICTS",      "@SYSTEM_DICTS@",     "e");
 ToFile( "DICT_SYSTEM_DIR",   "@DICT_SYSTEM_DIR@",  "e");
@@ -1959,8 +1958,15 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "ILIB",              $ILIB,              "e" );
    if ( $MINGW eq "yes" )
    {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+      ToFile( "EXCEPTIONS",        "@EXCEPTIONS@",        "e" );
       ToFile( "DIRECTXSDK_HOME",    PathFormat("@DIRECTXSDK_HOME@"),    "e" );
       ToFile( "USE_MINGW",         $USE_MINGW,              "e" );
+      ToFile( "MINGW_CLIB_DIR",         PathFormat("@MINGW_CLIB_DIR@"),              "e" );
+      ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
+      ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
+      ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
+      ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
+      ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
    }
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );

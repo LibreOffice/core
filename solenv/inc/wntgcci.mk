@@ -29,7 +29,7 @@
 #
 #*************************************************************************
 
-# mk file for wntgcci6
+# mk file for Window Intel using GCC
 
 SOLAR_JAVA*=TRUE
 FULL_DESK=TRUE

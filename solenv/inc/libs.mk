@@ -36,7 +36,7 @@ LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 #externe libs in plattform.mk
 #
 .IF "$(GUI)$(COM)"=="WNTGCC"
-AWTLIB*=$(JAVA_HOME)$/lib$/jawt.lib
+AWTLIB*=$(JAVA_HOME)/lib/jawt.lib
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 AWTLIB*=-ljawt
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
@@ -54,19 +54,16 @@ ICUUCLIB=-licuuc
 ICUDATALIB=-licudata
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 I18NUTILLIB=-li18nutil$(COMID)
-.INCLUDE .IGNORE : i18npool$/version.mk
+.INCLUDE .IGNORE : i18npool/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
-.IF "$(WITH_GPC)"!="NO"
-GPC3RDLIB=-lgpc
-.ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-luno_salhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
-.INCLUDE .IGNORE : comphelper$/version.mk
+.INCLUDE .IGNORE : comphelper/version.mk
 COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
@@ -80,7 +77,7 @@ CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : ucbhelper$/version.mk
+.INCLUDE .IGNORE : ucbhelper/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 .IF "$(SYSTEM_OPENSSL)" == "YES"
 OPENSSLLIB=$(OPENSSL_LIBS)
@@ -98,7 +95,7 @@ REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : vos$/version.mk
+.INCLUDE .IGNORE : vos/version.mk
 VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
@@ -109,7 +106,7 @@ SALLIB=-lsal$(UDK_MAJOR)
 STORELIB=-lstore
 SALLIB=-luno_sal
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
-.INCLUDE .IGNORE : connectivity$/version.mk
+.INCLUDE .IGNORE : connectivity/version.mk
 ODBCLIB=-lodbc$(DLLPOSTFIX)
 ODBCBASELIB=-lodbcbase$(DLLPOSTFIX)
 DBFILELIB=-lfile$(DLLPOSTFIX)
@@ -185,7 +182,6 @@ BTCOMMUNILIB=-lbtcommuni$(DLLPOSTFIX)
 AUTOMATIONLIB=-lsts$(DLLPOSTFIX)
 SVLLIB=-lsvl$(DLLPOSTFIX)
 TKTLIB=-ltkt$(DLLPOSTFIX)
-SJLIB=-lj$(DLLPOSTFIX)_g
 GOODIESLIB=-lgo$(DLLPOSTFIX)
 SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
@@ -227,16 +223,14 @@ JPEG3RDLIB=-ljpeglib
 .IF "$(SYSTEM_NEON)" == "YES" || "$(GUI)$(COM)"=="WNTGCC"
 NEON3RDLIB=-lneon
 .ELIF "$(OS)" == "MACOSX"
-NEON3RDLIB=$(SOLARLIBDIR)$/libneon.a
+NEON3RDLIB=$(SOLARLIBDIR)/libneon.a
 .ELSE
 NEON3RDLIB=$(STATIC) -lneon $(DYNAMIC)
 .ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
-BERKELEYCPPLIB=-ldb_cxx
 .ELSE
-BERKELEYLIB=-ldb-4.2
-BERKELEYCPPLIB=-ldb_cxx-4.2
+BERKELEYLIB=-ldb-4.7
 .ENDIF
 CURLLIB=-lcurl
 SFX2LIB=-lsfx$(DLLPOSTFIX)
@@ -245,6 +239,8 @@ EGGTRAYLIB=-leggtray$(DLLPOSTFIX)
 SFXDEBUGLIB=
 FWELIB=-lfwe$(DLLPOSTFIX)
 FWILIB=-lfwi$(DLLPOSTFIX)
+SVXCORELIB=-lsvxcore$(DLLPOSTFIX)
+SVXMSFILTERLIB=-lsvxmsfilter$(DLLPOSTFIX)
 SVXLIB=-lsvx$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
@@ -266,7 +262,6 @@ ISCLIB=-lsc$(DLLPOSTFIX)
 ISDLIB=-lsd$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(DLLPOSTFIX)
 HELPLINKERLIB=-lhelplinker$(DLLPOSTFIX)
-SYSSHELLLIB=-lsysshell
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
@@ -353,13 +348,14 @@ AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib
 ICULELIB=icule.lib
 ICUUCLIB=icuuc.lib
+.IF "$(GUI)"=="OS2"
+ICUDATALIB=icudt.lib
+.ELSE
 ICUDATALIB=icudata.lib
+.ENDIF
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
 I18NPAPERLIB=ii18npaper.lib
-.IF "$(WITH_GPC)"!="NO"
-GPC3RDLIB=gpc.lib
-.ENDIF
 SALHELPERLIB=isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
 COMPHELPERLIB=icomphelp.lib
@@ -427,7 +423,8 @@ MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
 TKTLIB=tkt.lib
-SJLIB=sj.lib
+SVXCORELIB=isvxcore.lib
+SVXMSFILTERLIB=isvxmsfilter.lib
 SVXLIB=isvx.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
@@ -442,8 +439,7 @@ EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
 JPEG3RDLIB=jpeglib.lib
 NEON3RDLIB=neon.lib
-BERKELEYLIB=libdb42.lib
-BERKELEYCPPLIB=
+BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
 UUILIB=iuui.lib
@@ -475,7 +471,6 @@ SVXLLIB=svxl.lib
 FREETYPELIB=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 HELPLINKERLIB=ihelplinker.lib
-SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
 XSLTLIB = libxslt.lib $(ZLIB3RDLIB) $(LIBXML2LIB)

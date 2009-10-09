@@ -41,7 +41,7 @@ sub otoolD($) {
     my $line = <IN>;
     $line =~ /^$file:\n$/ or
         die "unexpected otool -D output (\"$line\", expecting \"$file:\")";
-    $line = <IN> or die "unexpected otool -D output";
+    $line = <IN>;
     <IN> == undef or die "unexpected otool -D output";
     close(IN);
     return $line;
