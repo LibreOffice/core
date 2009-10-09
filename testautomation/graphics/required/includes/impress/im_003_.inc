@@ -41,11 +41,11 @@
 ' #1 tiViewSlideMaster
 ' #1 tiViewToolbar_1
 '\**********************************************************************************
-
 testcase tiViewPanes
+
     goto endsub 'TODO WG, tiViewPanes outcommented due to reconstruction of test
     dim bState as boolean
-    '/// open application ///'
+    printlog "open application "
     Call hCloseDocument
     Call hNewDocument
     sleep 1
@@ -60,7 +60,7 @@ testcase tiViewPanes
         ViewTaskSlide
     endif
     kontext "Tasks"
-    '/// Deactivate all but "masterpages" ///'
+    printlog "Deactivate all but masterpages "
     View.OpenMenu
     hMenuSelectNr (2)
     View.OpenMenu
@@ -83,14 +83,14 @@ testcase tiViewPanes
         endif
         kontext "Tasks"
         sleep 1
-        '/// View->Task Pane ///'
+        printlog "View->Task Pane "
         ViewTaskPane
         sleep 1
         if (Tasks.exists) then
             warnlog "View->Task Panel failed"
             ViewTaskPane
         endif
-        '/// View->Task Pane ///'
+        printlog "View->Task Pane "
         ViewTaskPane
         sleep 1
         if (NOT Tasks.exists) then
@@ -107,7 +107,7 @@ testcase tiViewPanes
             warnlog "View->Slide Panel failed."
             ViewTaskSlide
         endif
-        '/// View->Slide Pane ///'
+        printlog "View->Slide Pane "
         ViewTaskSlide
         sleep 1
         if (NOT Slides.exists) then
@@ -116,9 +116,9 @@ testcase tiViewPanes
         endif
     catch
         warnlog "View->Slide Pane couldn't get executed"
-    endcatch
+    endcatch 
 
-    '/// Reactivate all pages in the Task-panel ///'
+    printlog "Reactivate all pages in the Task-panel "
     kontext "Tasks"
     View.OpenMenu
     hMenuSelectNr (2)
@@ -126,135 +126,131 @@ testcase tiViewPanes
     hMenuSelectNr (3)
     View.OpenMenu
     hMenuSelectNr (4)
-endcase
-
+    
+endcase 'tiViewPanes
+'---------------------------------------------------------
 testcase tiViewMasterView
-'/// open application ///'
-   Call hNewDocument
-'/// View->Master View->Drawing View ///'
-   sleep 1
-   ViewWorkspaceDrawingView
-'     Kontext "DocumentImpress"
-'     gMouseClick 70,70
-     sleep 5
-'/// View->Master View->Outline View ///'
-   ViewWorkspaceOutlineView
-'     Kontext "DocumentImpressOutlineView"
-'     DocumentImpressOutlineView.MouseDown 70,70
-'     DocumentImpressOutlineView.MouseUp 70,70
-     sleep 1
-'/// View->Master View->Slides View ///'
-   ViewWorkspaceSlidesView
-'     Kontext "DocumentImpressSlideView"
-'     DocumentImpressSlideView.MouseDown 70,70
-'     DocumentImpressSlideView.MouseUp 70,70
-     sleep 1
-'/// View->Master View->Notes View ///'
-   ViewWorkspaceNotesView
-      sleep 1
-'/// View->Master View->Handout View ///'
-   ViewWorkspaceHandoutView
-      sleep 1
-'/// View->Master View->Drawing View ///'
-   ViewWorkspaceDrawingView
-'/// close application ///'
-      sleep 1
-   Call hCloseDocument
-endcase
 
-testcase tiViewSlideMaster
-'/// open application with : File->Autopilot->Presentation; OK; OK ///'
-'   Call  hNewDocument
-      FileAutopilotPresentation                ' to get a title :-)
-      sleep 2
-      Kontext "AutopilotPraesentation1"
-      AutopilotPraesentation1.Ok
-      sleep 1
-      Kontext "Seitenlayout"  ' aka: Modify Slide
-      if Seitenlayout.exists(5) then
-           warnlog "Slidelayout has to vanish; moved to sidebar"
-           Seitenlayout.OK
-      endif
-   kontext "DocumentImpress"
-   sleep 1
-'/// View->Slide ///'
-   ViewSlide
-   Sleep 1
-'/// View->Master->Drawing ///'
-   ViewDrawing
-   Sleep 1
-'/// View->Slide ///'
-   ViewSlide
-   Sleep 1
-'/// View->Master->Title ///'
-   try
-      ViewTitle
-      Errorlog "View - Master - Title Slide Master should NOT be accessable"
-   catch
-      printlog "View - Master - Title Slide Master not accessable - good"
-   endcatch
-   Sleep 1
-'/// View->Slide ///'
-   ViewSlide
-   Sleep 1
-'/// View->Master->Handout ///'
-   ViewHandout
-   Sleep 1
-'   ViewSlide
-   Sleep 1
-'/// View->Master->Notes ///'
-   ViewNotes
-   kontext "DocumentImpress"
-   Sleep 1
-'/// View->Slide ///'
-   ViewSlide
-   Sleep 1
-'/// close application ///'
-   Call  hCloseDocument
-endcase
-
-testcase tiViewToolbar_1
-  Dim Zaehler as integer
-  Dim i as integer
-
-'/// open application ///'
- Call hNewDocument
-  sleep 2
-'/// Insert->Graphic... : "global\input\graf_inp\desp.bmp" ///'
-  InsertGraphicsFromFile
-  sleep 2
-   Kontext "GrafikEinfuegenDlg"
-   sleep 1
-   Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
-   sleep 1
-   Oeffnen.Click
-   sleep 3
-   Kontext "Messagebox"
-    if Messagebox.Exists then
-      Warnlog Messagebox.GetText
-      Messagebox.OK
-    end if
-   Kontext "DocumentImpress"
-'/// select graphic ///'
-   EditSelectAll
-   sleep 2
-   Kontext "GraphicObjectbar"
+    printlog "open application"
+    Call hNewDocument
+    printlog "View->Master View->Drawing View"
     sleep 1
-'/// The Graphics Toolbar has to be visible now; If not -> ERROR ///'
-    if GraphicObjectbar.Exists Then
-       Printlog "- graphic object toolbar exists"
-       Zaehler=Grafikmodus.GetItemCount
-       for i = 1 to Zaehler
-           Printlog "- access all controls in the toolbar (" +i+"/"+Zaehler+")"
-           Grafikmodus.Select i
-           sleep 3
-       next i
-       sleep 3
-    else
-       Warnlog "- No graphic function toolbar visible"
+    ViewWorkspaceDrawingView
+     sleep 5
+    printlog "View->Master View->Outline View "
+    ViewWorkspaceOutlineView
+     sleep 1
+    printlog "View->Master View->Slides View "
+    ViewWorkspaceSlidesView
+     sleep 1
+    printlog "View->Master View->Notes View "
+    ViewWorkspaceNotesView
+      sleep 1
+    printlog "View->Master View->Handout View "
+    ViewWorkspaceHandoutView
+      sleep 1
+    printlog "View->Master View->Drawing View "
+    ViewWorkspaceDrawingView
+    printlog "close application "
+      sleep 1
+    Call hCloseDocument
+   
+endcase 'tiViewMasterView
+'---------------------------------------------------------
+testcase tiViewSlideMaster
+    
+    printlog "open application with : File->Autopilot->Presentation; OK; OK "
+    FileAutopilotPresentation                ' to get a title :-)
+    sleep 2
+    Kontext "AutopilotPraesentation1"
+    AutopilotPraesentation1.Ok
+    sleep 1
+    Kontext "Seitenlayout"  ' aka: Modify Slide
+    if Seitenlayout.exists(5) then
+        warnlog "Slidelayout has to vanish; moved to sidebar"
+        Seitenlayout.OK
+    endif
+    kontext "DocumentImpress"
+    sleep 1
+    printlog "View->Slide "
+    ViewSlide
+    Sleep 1
+    printlog "View->Master->Drawing "
+    ViewDrawing
+    Sleep 1
+    printlog "View->Slide "
+    ViewSlide
+    Sleep 1
+    printlog "View->Master->Title "
+    try
+    ViewTitle
+    Errorlog "View - Master - Title Slide Master should NOT be accessable"
+    catch
+    printlog "View - Master - Title Slide Master not accessable - good"
+    endcatch
+    Sleep 1
+    printlog "View->Slide "
+    ViewSlide
+    Sleep 1
+    printlog "View->Master->Handout "
+    ViewHandout
+    Sleep 1
+    '   ViewSlide
+    Sleep 1
+    printlog "View->Master->Notes "
+    ViewNotes
+    kontext "DocumentImpress"
+    Sleep 1
+    printlog "View->Slide "
+    ViewSlide
+    Sleep 1
+    printlog "close application "
+    Call  hCloseDocument
+   
+endcase 'tiViewSlideMaster
+'--------------------------------------------------------
+testcase tiViewToolbar_1
+    
+    Dim Zaehler as integer
+    Dim i as integer
+    
+    printlog "open application "
+    Call hNewDocument
+    sleep 2
+    printlog "Insert->Graphic... : global\input\graf_inp\desp.bmp "
+    InsertGraphicsFromFile
+    sleep 2
+    Kontext "GrafikEinfuegenDlg"
+    sleep 1
+    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
+    sleep 1
+    Oeffnen.Click
+    sleep 3
+    Kontext "Messagebox"
+    if Messagebox.Exists then
+        Warnlog Messagebox.GetText
+        Messagebox.OK
     end if
-'/// close application ///'
-  Call hCloseDocument
-endcase
-
-
+    Kontext "DocumentImpress"
+    printlog "select graphic "
+    EditSelectAll
+    sleep 2
+    Kontext "GraphicObjectbar"
+    sleep 1
+    printlog "The Graphics Toolbar has to be visible now; If not -> ERROR "
+    if GraphicObjectbar.Exists Then
+        Printlog "- graphic object toolbar exists"
+        Zaehler=Grafikmodus.GetItemCount
+        for i = 1 to Zaehler
+            Printlog "- access all controls in the toolbar (" +i+"/"+Zaehler+")"
+            Grafikmodus.Select i
+            sleep 3
+        next i
+        sleep 3
+    else
+        Warnlog "- No graphic function toolbar visible"
+    end if
+    printlog "close application "
+    Call hCloseDocument
+    
+endcase 'tiViewToolbar_1

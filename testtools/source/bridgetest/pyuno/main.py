@@ -34,11 +34,12 @@ import importer
 import unittest
 import core
 import impl
+import os
 import sys
 
 ctx = uno.getComponentContext()
 # needed for the tests 
-unohelper.addComponentsToContext(ctx,ctx,("cppobj.uno","bridgetest.uno","streams.uno","bootstrap.uno"),"com.sun.star.loader.SharedLibrary")
+unohelper.addComponentsToContext(ctx,ctx,(os.environ["FOO"]+"/cppobj.uno",os.environ["FOO"]+"/bridgetest.uno","streams.uno","bootstrap.uno"),"com.sun.star.loader.SharedLibrary")
 
 unohelper.addComponentsToContext(ctx,ctx,("vnd.openoffice.pymodule:samplecomponent",),"com.sun.star.loader.Python")
 

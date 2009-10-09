@@ -39,24 +39,24 @@
 
 sub w_fields2
 
-    Call tFieldsOther_0      'NON modal
-    Call tFieldsOther_1_1    'Insert/Fields/Other/Document / Author
-    Call tFieldsOther_1_2    'Insert/Fields/Other/Document / Author - Fixed
-    Call tFieldsOther_2      'Insert/Fields/Other/Document / Chapter
-    Call tFieldsOther_3      'Insert/Fields/Other/Document / Date
-    Call tFieldsOther_4      'Insert/Fields/Other/Document / File name
-    Call tFieldsOther_5      'Insert/Fields/Other/Document / Page
-    Call tFieldsOther_6_1    'Insert/Fields/Other/Document / Sender
-    Call tFieldsOther_6_2    'Insert/Fields/Other/Document / Sender - Fixed
-    Call tFieldsOther_7      'Insert/Fields/Other/Document / Statistics
-    Call tFieldsOther_8      'Insert/Fields/Other/Document / Template
-    Call tFieldsOther_9      'Insert/Fields/Other/Document / Time
+    Call tDialogNonModal
+    Call tDocumentAuthor
+    Call tDocumentAuthorFixed
+    Call tDocumentChapter
+    Call tDocumentDate
+    Call tDocumentFilename
+    Call tDocumentPage
+    Call tDocumentSender
+    Call tDocumentSenderFixed
+    Call tDocumentStatistics
+    Call tDocumentTemplate
+    Call tDocumentTime
 
 end sub
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_0
+testcase tDialogNonModal
 
   Dim sTest as String
 
@@ -90,7 +90,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_1_1
+testcase tDocumentAuthor
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
@@ -196,7 +196,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_1_2
+testcase tDocumentAuthorFixed
     if iSprache <> 1 then
         QaErrorLog "Currently no any other language than English. Aborting."
         exit sub
@@ -304,7 +304,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_2
+testcase tDocumentChapter
 
   Dim sTestFile  as String
   Dim sChapter() as String
@@ -360,7 +360,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_3
+testcase tDocumentDate
 
     Dim sDate as String
     
@@ -391,66 +391,72 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_4
-    if bAsianLan = true then
-        QaErrorLog "No testing with Asian language. Aborting."
-        exit sub
-    end if
-
-  Dim  sTestFile     as String
-  Dim  sFilename(4)  as String
-  Dim  i             as Integer
-
-  sTestFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
-
-  sFilename(0) = "pageTest.sxw"
-  sFilename(1) = "pageTest"
-  sFilename(2) = Convertpath (gTesttoolpath + "writer\optional\input\fields\")
-  sFilename(3) = sTestFile
-
-  printlog "Insert/Fields/Other/Document / File name"
- '/// <b> Insert/Fields/Other/Document / File name </b>
-
-  Call hNewDocument
-
-  '/// Open test file pageTest.sxw
-   Call hFileOpen(sTestFile)
-   Call sMakeReadOnlyDocumentEditable
-
-   Call wTypeKeys "<MOD1 Home>"
-   Call wTypeKeys "<End><Return>"
-
-  '/// Insert/Fields/Other/Document / File name
-  '/// Insert File name, File name without extension ,
-  '/// Path , Path/File name
-  '/// Check if the insertion is correct
-   Call fInsertFieldsOther("TabDokumentFeldbefehle")
-     Feldtyp.Select fGetType("File name")
-     for i = 0 to 3
-         Kontext "TabDokumentFeldbefehle"
-         Formatliste.Select i+1
-         Sleep 1
-         Einfuegen.Click
-         sleep 1
-         Call wTypeKeys "<F9>"
-         Sleep 2
-         Call wTypeKeys "<Shift LEFT>"  'HOME
-         Sleep 1
-         if fGetFieldContent() <> sFilename(i) then
-             Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
-         end if
-         Call wTypeKeys "<Delete>"
-     next i
-     Kontext "TabDokumentFeldbefehle"
-   TabDokumentFeldbefehle.Close
-
- Call hCloseDocument
+testcase tDocumentFilename
+	if bAsianLan = true then
+		QaErrorLog "No testing with Asian language. Aborting."
+		goto endsub
+	end if
+	
+	Dim  sOriginalFile as String
+	Dim  sTestFile     as String
+	Dim  sFilename(4)  as String
+	Dim  i             as Integer
+	
+	sTestFile    = Convertpath (gOfficepath + "user\work\pageTest.sxw")
+	sOriginalFile    = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
+	' document has to be copied to local file system to avoid opening a read-only file
+	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
+	FileCopy (sOriginalFile, sTestFile)
+	if hFileExists ( sTestFile ) = false then
+		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
+		goto endsub
+	end if
+	
+	sFilename(0) = "pageTest.sxw"
+	sFilename(1) = "pageTest"
+	sFilename(2) = Convertpath (gOfficepath + "user\work\")
+	sFilename(3) = sTestFile
+	
+	printlog "Insert/Fields/Other/Document / File name"
+	
+	Call hNewDocument
+	
+	'/// Open test file pageTest.sxw
+	Call hFileOpen(sTestFile)
+	
+	Call wTypeKeys "<MOD1 Home>"
+	Call wTypeKeys "<End><Return>"
+	
+	printlog "Insert/Fields/Other/Document / File name"
+	printlog "Insert File name, File name without extension , Path , Path/File name"
+	printlog "Check if the insertion is correct"
+	Call fInsertFieldsOther("TabDokumentFeldbefehle")
+	Feldtyp.Select fGetType("File name")
+	for i = 0 to 3
+		Kontext "TabDokumentFeldbefehle"
+		Formatliste.Select i+1
+		Sleep 1
+		Einfuegen.Click
+		sleep 1
+		Call wTypeKeys "<F9>"
+		Sleep 2
+		Call wTypeKeys "<Shift LEFT>"  'HOME
+		Sleep 1
+		if fGetFieldContent() <> sFilename(i) then
+			Warnlog i &" - Should get " & sFilename(i) & " but get " & fGetFieldContent()
+		end if
+		Call wTypeKeys "<Delete>"
+	next i
+	Kontext "TabDokumentFeldbefehle"
+	TabDokumentFeldbefehle.Close
+	
+	Call hCloseDocument
 
 endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_5
+testcase tDocumentPage
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -509,7 +515,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_6_1
+testcase tDocumentSender
     if iSprache <> 1 then
         QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
         exit sub
@@ -686,7 +692,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_6_2
+testcase tDocumentSenderFixed
     if iSprache <> 1 then
         QaErrorLog "Currently no testing with other languages than English. (ID's are not the same) Aborting."
         exit sub
@@ -866,7 +872,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_7
+testcase tDocumentStatistics
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -929,7 +935,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_8
+testcase tDocumentTemplate
 qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
 goto endsub
 
@@ -999,7 +1005,7 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFieldsOther_9
+testcase tDocumentTime
 
     Dim sTime1 as String
     Dim sTime2 as String

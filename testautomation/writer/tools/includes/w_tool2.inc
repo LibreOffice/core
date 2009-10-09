@@ -347,7 +347,12 @@ function wDeleteAutotext(vAutotextName as string) as boolean
     '/// returns true if Autotext could be deleted
     '/// Attention: Autotext-Dialog leaves open after deleting autotext
 
-    Dim j as integer, sAll as integer
+    Dim j as integer
+    Dim ik as integer
+    Dim bDeleted as boolean
+    Dim sAllGroups as integer
+    Dim sAllInGroups as integer
+    
     Kontext "Autotext"
     if Not Autotext.Exists then EditAutotext
 
@@ -367,30 +372,40 @@ function wDeleteAutotext(vAutotextName as string) as boolean
         wait 500
     next j
 
-    Liste.Select 1
-    Liste.TypeKeys "+"
-    sAll = Liste.GetItemCount
-    For j = 1 to sAll
-        Liste.TypeKeys "<Down>"
-        if Liste.Gettext = vAutotextName then
-            try
-                Menue.Click
-                wait 500
-                Call hMenuSelectNr ( 3 )
-                Kontext "Active"
-                if Active.Exists and Active.GetRT = 304 then
-                    Active.yes
-                    wDeleteAutotext = true
-                else
-                    Warnlog "No messages to confirm deleting the Autotext!"
-                end if
-                exit for
-            catch
-                Warnlog "Menu Autotext->'Delete' disabled ! Test failed !"
-            endcatch
-        end if
-        Liste.TypeKeys "+"
-        sAll = Liste.GetItemCount
-    next j
+    bDeleted = false
+    ' count all groups
+    sAllGroups = Liste.GetItemCount
+    ' travel through all groups
+    For ik = 1 to sAllGroups            
+    	Liste.Select ik
+    	Liste.TypeKeys "+"
+    
+    	sAllInGroups = Liste.GetItemCount - sAllGroups
+		For j = 1 to sAllInGroups
+			Liste.TypeKeys "<Down>"
+			if Liste.Gettext = vAutotextName then
+				try
+					Menue.Click
+					wait 500
+					Call hMenuSelectNr ( 3 )
+					Kontext "Active"
+					if Active.Exists and Active.GetRT = 304 then
+						Active.yes
+						wDeleteAutotext = true
+					else
+						Warnlog "No messages to confirm deleting the Autotext!"
+					end if
+					bDeleted = true
+					exit for
+				catch
+					Warnlog "Menu Autotext->'Delete' disabled ! Test failed !"
+				endcatch
+			end if
+		next j
+		if bDeleted = true then exit for
+		' close group
+        Liste.Select ik
+        Liste.TypeKeys "-"	
+    next ik
 
 end function

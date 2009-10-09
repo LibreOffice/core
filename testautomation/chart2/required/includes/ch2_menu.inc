@@ -50,6 +50,10 @@ testcase tMainMenu
     dim iHelpMenuItemCount as integer
         iHelpMenuItemCount = 5  : if ( gPlatform = "osx" ) then iHelpMenuItemCount = 4
     
+    dim iToolsMenuItemCount as integer
+        iToolsMenuItemCount = 4  : if ( gPlatform = "osx" ) then iToolsMenuItemCount = 3
+        'Options entry is called Preferences and resides in application MacOS X menu
+    
     printlog "Close all document windows (File / Close)"
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -149,7 +153,7 @@ testcase tMainMenu
         printlog "check if there are 6 items in the FORMAT/AXIS menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
-        hMenuSelectNr(5) ' AXIS        
+        hMenuSelectNr(6) ' AXIS        
         iCount = hMenuItemGetCount()        
         if (iCount <> 6) then
             warnlog "There should 6 items in the FORMAT/AXIS menu but there are " + iCount + " items."
@@ -158,7 +162,7 @@ testcase tMainMenu
         printlog "check if there are 7 items in the FORMAT/GRID menu."
         DocumentCalc.UseMenu
         hMenuSelectNr(5) ' FORMAT
-        hMenuSelectNr(6) ' GRID        
+        hMenuSelectNr(7) ' GRID        
         iCount = hMenuItemGetCount()        
         if (iCount <> 7) then
             warnlog "There should 7 items in the FORMAT/GRID menu but there are " + iCount + " items."
@@ -173,12 +177,12 @@ testcase tMainMenu
             warnlog "There should 8 items in the FORMAT/Title menu but there are " + iCount + " items."
         end if
 
-        printlog "check if there are 13 items in the TOOLS menu."        
+        printlog "check if there are " + iToolsMenuItemCount + " items in the TOOLS menu."        
         DocumentCalc.UseMenu 
-        hMenuSelectNr(5)        
+        hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 13) then
-            warnlog "There should 13 items in the tools menu but there are " + iCount + " items."
+        if (iCount <> iToolsMenuItemCount) then
+            warnlog "There should " + iToolsMenuItemCount + " items in the tools menu but there are " + iCount + " items."
         end if
         call hMenuClose()
         

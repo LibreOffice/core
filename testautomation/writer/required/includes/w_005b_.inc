@@ -218,8 +218,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignment
-Warnlog "#i102752# - tFormatAlignment outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Alignment"
 
@@ -416,8 +414,6 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorObject
-Warnlog "#i102752# - tFormatAnchorObject outcommented due to bug."
-goto endsub
 
     PrintLog "- Format / Anchor Frame"
 
@@ -887,9 +883,6 @@ endcase
 
 testcase tFormatAlignmentArea
 
-	Warnlog "#i102752#Writer crashes if you change the anchor of a drawing object to page"
-	goto endsub
-
     PrintLog "- Format / Alignment drawing objects"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
@@ -1098,13 +1091,12 @@ testcase tFormatPositionAndSizeLegend
     Kontext "NavigatorWriter"
     if NavigatorWriter.Exists then ViewNavigator
 
+	printlog " Insert a legend"
     Call wZeichenobjektEinfuegen ( "Legende", 45, 35, 50, 50 )
+	Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<SHIFT F4>"
 
-    printlog " Insert a legend"
-    sleep (1)
-    Call wObjektSelektieren(30, 30, 75, 75)
-
-    hUseAsyncSlot( "FormatPositionAndSize" )
+    Call hUseAsyncSlot( "FormatPositionAndSize" )
     kontext "active"
     if ( active.exists( 1 ) ) then
         printlog( "Dialog open. Good" )
@@ -1418,10 +1410,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocFormatAlignment
-Warnlog "#i102752# - tHtmlDocFormatAlignment outcommented due to bug."
-goto endsub
 
-    gApplication = "HTML"
+	gApplication = "HTML"
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"

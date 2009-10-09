@@ -37,7 +37,6 @@
 '*
 '\******************************************************************************
 
-
 sub GetPathList ( ls1 () as String, ls2 () as String, ls3 () as String )
 
     Dim lsInterim ( 50 ) as String
@@ -202,7 +201,6 @@ end function
 sub DialogTestForViewOptions
 
     FormatParagraph
-    '///Dialog test for view options
 
     Kontext
     active.SetPage TabEinzuegeUndAbstaende
@@ -231,57 +229,6 @@ end sub
 
 '*******************************************************************************
 
-sub DialogTextForViewOptions_move
-
-    Dim xPos, yPos, xSize, ySize
-    '///Dialog test for view options
-
-    Kontext "NavigatorWriter"
-
-    if Not NavigatorWriter.Exists then
-        ViewNavigator
-    endif
-
-    Kontext "Navigator"
-    xPos = Navigator.GetPosX
-    yPos = Navigator.GetPosY
-    xSize = Navigator.GetSizeX
-    ySize = Navigator.GetSizeY
-    Navigator.Move 10, 10
-    Sleep 1
-    Navigator.Move 50, 50
-    Sleep 1
-    Navigator.Size 200, 150
-    Sleep 1
-    Navigator.Size 150, 80
-    Sleep 1
-    Navigator.Size xSize, ySize
-    Sleep 1
-    Navigator.Move xPos, yPos
-    Sleep 1
-    Navigator.Close
-
-end sub
-
-'*******************************************************************************
-
-sub MouseTestForViewOptions
-
-    '///mouse test for view options
-
-    Kontext "DocumentWriter"
-    DocumentWriter.MouseMove 50, 50
-    DocumentWriter.OpenContextMenu
-    Sleep 1
-
-    Kontext "DocumentWriter"
-    DocumentWriter.MouseMove 50, 70
-    hMenuClose
-
-end sub
-
-'*******************************************************************************
-
 sub Make3D
 
     '///test with 3D-objects when 3D-options are changed ( view page )
@@ -298,22 +245,6 @@ sub Make3D
     call hCloseDocument()
     gApplication = "WRITER"
 
-end sub
-
-'*******************************************************************************
-
-sub hResetAutosave()
-    ' this sub resets the autosave feature to 15 minutes with confirmation and
-    ' disables the feature entirely afterwards.
-    printlog( " * Resetting autosave feature to defaults" )
-    ToolsOptions
-    hToolsOptions( "LoadSave" , "General" )
-    AutomatischSpeichern.check
-    Minuten.setText( "15" )
-    AutomatischSpeichern.unCheck
-
-    Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
 end sub
 
 '*******************************************************************************
@@ -372,14 +303,15 @@ end sub
 
 sub modifyColorRGB_PGUP( iColor as Integer )
     'The current color's values are set to maximum (255) for RGB
-    printlog "modifyColorRGB_PGUP:: - change the color by pressing PAGE UP in RGB listboxes."
+    printlog( "modifyColorRGB_PGUP:: - change the color by pressing PAGE UP in RGB listboxes." )
+    
     Kontext "TabFarben"
     Farbe.Select(iColor)
     R.TypeKeys("<PageUp>")
     G.TypeKeys("<PageUp>")
     B.TypeKeys("<PageUp>")
-    printlog("modifyColorRGB_PGUP:: - press 'modify'")
-    Aendern.Click
+    printlog("modifyColorRGB_PGUP:: Press 'modify'")
+    Aendern.Click()
     Sleep (1)
 end sub
 
@@ -390,7 +322,7 @@ sub createNewColor( aColor() as String )
     ' OUTPUT: 
     'The desired color is selected by name and created.
     'If it already exists, there is a problem
-    printlog( "createNewColor:: - adding a color to the list: '" + aColor(1) + "'"
+    printlog( "createNewColor:: Adding a color to the list: '" + aColor(1) + "'"
     Kontext "TabFarben"
     FarbName.setText(aColor(1))
     R.SetText(aColor(2))
@@ -399,19 +331,20 @@ sub createNewColor( aColor() as String )
     Sleep(1)
     Hinzufuegen.Click
     Sleep(1)
+    
     Kontext "DuplicateNameWarning"
     if DuplicateNameWarning.Exists then
-        warnlog "createNewColor:: - Color already exists."
+        warnlog "createNewColor:: Color already exists."
         DuplicateNameWarning.OK
         Kontext "NameDlg"
         if NameDlg.Exists then
-            printlog "createNewColor:: - Naming dialog shown. Good, cancelling"
+            printlog "createNewColor:: Naming dialog shown. Good, cancelling"
             NameDlg.Cancel
         else
-            warnlog "createNewColor:: - Naming dialog didn't came up."
+            warnlog "createNewColor:: Naming dialog didn't came up."
         end if
     else
-        printlog "createNewColor:: - New color has been created"
+        printlog "createNewColor:: New color has been created"
     end if
 end sub
 
@@ -422,16 +355,18 @@ sub getColorRGB( aColor() as String )
     ' OUTPUT: array: (1): Name; (2): Red value; (3): Green value; (4): Blue value
     'A RGB color always has four attributes:
     'The name and the three RGB values (0...255)
-    printlog "GetColorRGB:: - determining the current color"
+    printlog( "GetColorRGB:: Determining the current color" )
     FarbModell.Select(1)
-    aColor(1) = FarbName.GetText
-    aColor(2) = R.GetText
-    aColor(3) = G.GetText
-    aColor(4) = B.GetText
-    printlog( "GetColorRGB:: N =" + aColor(1) )
-    printlog( "GetColorRGB:: R =" + aColor(2) )
-    printlog( "GetColorRGB:: G =" + aColor(3) )
-    printlog( "GetColorRGB:: B =" + aColor(4) )
+    
+    aColor(1) = FarbName.GetText()
+    aColor(2) = R.GetText()
+    aColor(3) = G.GetText()
+    aColor(4) = B.GetText()
+    
+    printlog( "GetColorRGB:: N = " & aColor(1) )
+    printlog( "GetColorRGB:: R = " & aColor(2) )
+    printlog( "GetColorRGB:: G = " & aColor(3) )
+    printlog( "GetColorRGB:: B = " & aColor(4) )
 end sub
 
 '*******************************************************************************
@@ -446,13 +381,14 @@ sub compareTwoColorsRGB( aColor() as String )
     dim i as Integer
     dim bColor(4) as String
 
-    printlog "compareTwoColorsRGB:: - compare saved default color with the current"
+    printlog( "compareTwoColorsRGB:: Compare saved default color with the current" )
     call getColorRGB(bColor()) 
     for i = 1 to 4
         if aColor(i) <> bColor(i) then
-            warnlog "compareTwoColorsRGB:: "+"("+i+") Expected: '" + aColor(i) + "' found: '" + bColor(i) + "'"
+            warnlog( "compareTwoColorsRGB:: " & "(" & i & ") Expected: '" _
+            & aColor( i ) & "' found: '" & bColor(i) & "'" )
         else
-            printlog "compareTwoColorsRGB:: "+"("+i+") OK"
+            printlog( "compareTwoColorsRGB:: " & "(" & i & ") OK" )
         endif
     next i
 end sub

@@ -40,303 +40,222 @@
 testcase tStandardBar_3
 
     dim sFileOut as String
+    dim HyperlinkTabID as integer
+    dim iTabPage as integer
     
-    '///<h1>Update test for all icons on the StandardBar</h1>
+    printlog( "Icons on the standardbar" )
 
-    '///<ul>
-    printlog "************************************************************"
-    printlog "Check all visible icons on the Standardbar"
-    printlog "************************************************************"
-    
     gApplication = "CALC"
 
-    '///+<li>Setup: Delete files from the workdirectory to ensure a clean test</li>
+    printlog( "Cleanup test environment - delete files" )
     sFileOut = hGetWorkPath() & "FWK-update-functionbar" & hGetSuffix( "current" )
     ConvertPath ( sFileOut )
     hDeleteFile( sFileOut )
 
-    '///+<li>Setup: Reset the Standardbar to defaults</li>
+    printlog( "Reset the standardbar to defaults" )
     hResetStandardBar()
-    printlog "check all entries on the 'Standardbar'"
 
-    '///+<li>Skipping testing of URL field, it is hidden by default and tested somewhere else</li>
-    printlog "Skipping URL-Field"
-
-    '///+<li>File Save</li>
-    '///<ul>
-
-    printlog "Save File"
-    gApplication = "CALC"
-
-    '///+<li>New Spreadsheet document, ensure that the navigator is closed</li>
     printlog( "New Spreadsheet document" )
     hCreateDocument()
+
     Kontext "Navigator"
     if ( Navigator.Exists() ) then
         Navigator.close()
     endif
 
-    '///+<li>Insert some text in one cell (don't forget to press a <Enter> at the end)<br>
     printlog( "Insert text into a random cell, press <Enter>" )
     Kontext "DocumentCalc"
     DocumentCalc.TypeKeys( "Only for a test.<Return>" )
 
-    '///+ <i>Save-Button must be active -> click on the button</i></li>
-    printlog( "Press the 'Save' button" )
-
     Kontext "Standardbar"
+    printlog( "Press the 'Save' button" )
     hWaitForObject( Speichern , 1000 )
     Speichern.click()
 
-    '///+<li>Set a filenname, remember it for further usage</li>
-    printlog( "- Save the file to: " & sFileOut )
 
     Kontext "SpeichernDlg"
+    printlog( "- Save the file to: " & sFileOut )
     Dateiname.SetText( sFileOut )
     Speichern.Click()
 
-    '///+<li>Close the document</li>
     printlog( "Close the document" )
     hDestroyDocument()
-
-    '///</ul>
     
-    '///+<li>Edit File by pressing &quot;File Open&quot; button on the StandardBar</li>
-
-    '///<ul>
-    printlog( "Edit the file by pressing the 'File Open' button" )
-
-    '///+<li>Click the File Open button<br>The File Open dialog should pop up</li>
-    FileOpen
+    printlog( "Click the 'File Open' button" )
+    hUseAsyncSlot( "FileOpen" )
 
     Kontext "OeffnenDlg"
+    Printlog( "Load test file in read-only mode" )
     if ( OeffnenDlg.exists( 2 ) ) then
-    
-        '///+<li>Enter the name of the file we used earlier</li>
         Dateiname.SetText( sFileOut )
-        
-        '///+<li>Check the &quot;Read only&quot; checkbox</li>
         NurLesen.Check()
-        
-        '///+<li>Click &quot;Open&quot;</li>
         oeffnen.click()
-        sleep( 3 )
     else
         warnlog( "File Open dialog is missing" )
     endif
+    
+    wait( 2000 )
 
-    '///+<li>Verify that the document is opened read-only<br>This can be done by 
-    '///+ travelling through the menus or trying to enter some text into the document.<br>
-    '///+ In this case we try to insert a chart into the spreadsheet which should fail.</li>
     Kontext "DocumentCalc"
+    printlog( "Try to insert a chart to verify that the document is read-only (this should fail)" )
     try
-        printlog( "Trying to insert a chart" )
         InsertChartCalc
         warnlog( "The document is not read-only" )
     catch
-        printlog( "Failed to insert chart -> Document is read-only. Good!" )
     endcatch
-        
 
-    '///+<li>Click on &quot;Edit File&quot;<br>This should open another copy of the
-    '///+ document. The copy should open in the foreground and be editable.</li>
     Kontext "Standardbar"
+    printlog( "Click the <Edit File> button" )
     hWaitForObject( Bearbeiten , 1000 )
-    Bearbeiten.click()
+    Bearbeiten.click() : WaitSlot()
 
-    '///+<li>Verify that the file can be edited by inserting a Chart</li>
+    printlog( "Try to insert a chart (should work this time)" )
     InsertChartCalc
+    
     Kontext "ChartWizard"
     if ( ChartWizard.exists( 2 ) ) then
-        printlog( "Chart Wizard is open. Good." )
-        
-        '///+<li>Cancel Chart Wizard</li>
         printlog( "Cancel Chart Wizard" )
         ChartWizard.cancel()
-        WaitSlot
+        WaitSlot()
     else
         warnlog( "Chart Wizard should be open" )
     endif
-    
 
-    '///</ul>
-    '///+<li>Skipping to print file directly</li>
-
-    '///+<li>Cut / Copy / Paste</li>
-
-    '///<ul>
-    '///+<li>Select a row in the spreadsheet</li>
+    printlog( "Select a few cells for Cut/Copy/Paste test" )
     Kontext "DocumentCalc"
     DocumentCalc.TypeKeys( "<Up>", 7 )
     DocumentCalc.TypeKeys( "<Shift Down>", 5 )
 
-    '///+<li>Click on Cut</li>
     printlog( "Cut" )
     Kontext "Standardbar"
     hWaitForObject( Ausschneiden , 1000 )
     Ausschneiden.Click()
     WaitSlot()
 
-    '///+<li>Move one cell down</li>
     Kontext "DocumentCalc"
+    printlog( "Move down one cell" )
     DocumentCalc.TypeKeys( "<Down>" )
 
-    '///+<li>Click on Paste</li>
     printlog( "Paste" )
     Kontext "Standardbar"
     sleep( 3 ) ' No better solution found yet.
     Einfuegen.Click()
 
     Kontext "DocumentCalc"
+    printlog( "Move up 7 cells, then do <shift down>" )
     DocumentCalc.TypeKeys( "<Up>", 7 )
     DocumentCalc.TypeKeys( "<Shift Down>", 5 )
-    waitslot
+    WaitSlot()
 
-    '///+<li>Select a row in the spreadsheet at random</li>
-    '///+<li>Click on Copy</li>
     printlog( "Copy" )
     Kontext "Standardbar"
     hWaitForObject( Kopieren , 1000 )
     Kopieren.Click()
-    waitslot
-
-    '///+<li>Press right-arrow and <return></li>
+    WaitSlot()
 
     Kontext "DocumentCalc"
+    printlog( "Press right arrow and RETURN" )
     DocumentCalc.TypeKeys( "<Right><Return>" )
-    waitslot
+    WaitSlot()
 
-    '///+<li>Click on Paste</li>
     printlog( "Paste again" )
     Kontext "Standardbar"
     hWaitForObject( Einfuegen , 1000 )
     Einfuegen.Click()
 
-
-    '///</ul>
-
-    '///+<li>Undo / Redo</li>
-
-    '///<ul>
-
-    '///+<li>click on Undo</li>
     printlog( "Undo" )
     hWaitForObject( Undo , 2000 )
     Undo.Click()
     WaitSlot()
     
-    '///+<li>click on Redo</li>
+    printlog( "Redo" )
     hWaitForObject( Redo , 2000 )
     Redo.Click()
     WaitSlot()
 
-    '///</ul>
-
-    '///+<li>Navigator ( on/off )</li>
-
-    '///<ul>
-    '///+<li>Click on Navigator -> on</li>
-    printlog( "Open Navigator" )
     Kontext "Standardbar"
+    printlog( "Open Navigator" )
     hWaitForObject( NavigatorButton , 1000 )
     NavigatorButton.Click()
 
-    '///+<li>check if the navigator is visible</li>
-
     Kontext "Navigator"
     if ( Navigator.Exists( 1 ) ) then
-        printlog( "Navigator present. Good." )
-        
-        '///+<li>Click on Navigator -> off</li>
         printlog( "Close Navigator" )
         Kontext "Standardbar"
         NavigatorButton.Click()
-
-        '///+<li>Verify that the navigator is closed</li>
-        Kontext "Navigator"
-        if ( Navigator.exists() ) then
-            warnlog( "The navigator is still open" )
-        else
-            printlog( "Navigator is closed. Good." )
-        endif
     else
         warnlog( "Navigator did not open" )
     endif
 
-    '///</ul>
-    
-    '///+<li>Hyperlink dialog ( on / off )</li>
-    '///<ul>
+    Kontext "Navigator"
+    if ( Navigator.exists() ) then
+        warnlog( "The navigator should not be visible" )
+    endif
 
-    '///+<li>Click on Hyperlink dialog  -> on</li>
-    printlog( "Click <HyperLink> to open the dialog" )
     Kontext "Standardbar"
+    printlog( "Click <HyperLink> to open the dialog" )
     hWaitForObject( HyperlinkDialog , 1000 )
     HyperlinkDialog.Click()
 
-    '///+<li>check if the Hyperlink dialog is visible
-    Kontext "Hyperlink"
-    if ( Hyperlink.Exists( 1 ) ) then
-        printlog( "Hyperlink dialog is open" )
+    for iTabPage = 1 to 4
+        select case iTabPage
+        case 1: Kontext "Hyperlink"
+            if ( Hyperlink.exists() ) then HyperlinkTabID = 1
+            exit for
+        case 2: kontext "TabHyperlinkMailUndNews"
+            if ( TabHyperlinkMailUndNews.exists() ) then HyperlinkTabID = 2
+            exit for
+        case 3: kontext "TabHyperlinkDokument"
+            if ( TabHyperlinkDokument.exists() ) then HyperlinkTabID = 3
+            exit for
+        case 4: kontext "TabHyperlinkNeuesDokument"
+            if ( TabHyperlinkNeuesDokument.exists() ) then HyperlinkTabID = 4
+            exit for
+        case default:
+            HyperlinkTabID = 0
+        end select
+    next iTabPage
+
+    if ( HyperlinkTabID > 0 ) then    
+    
+        if ( HyperlinkTabID <> 1 ) then
+            qaerrorlog( "This is not the internet tabpage, did you " & _
+                        "kill the userlayer before running the test?" )
+        endif
         
-        '///+<li>Click on HyperLink again to close the dialog</li>
-        printlog( "Click <HyperLink> to close" )
         kontext "Standardbar"
+        printlog( "Click <HyperLink> to close" )
         HyperlinkDialog.Click()
         WaitSlot()
-        kontext "HyperLink"
-        if ( HyperLink.exists() ) then
-            warnlog( "Hyperlink dialog not closed" )
-        else
-            printlog( "Hyperlink dialog has been closed. Good." )
-        endif
     else
-        warnlog( "Hyperlink dialog is not open" )
+        warnlog( "#i104704# - Insert Hyperlink dialog cannot be accessed" )
+        Kontext "Standardbar"
+        HyperlinkDialog.Click()
     endif
 
-    '///+<li>click on Hyperlink dialog  -> off
-    '///</ul>
-
-    '///+<li>Gallery ( on / off )</li>
-
-    '///<ul>
-    '///+<li>Click on the &quot;Gallery&quot; button</li>
-    printlog( "Gallery button" )
     Kontext "Standardbar"
-    hWaitForObject( GalleryButton , 1000 
+    printlog( "Gallery button" )
+    hWaitForObject( GalleryButton , 1000 )
     GalleryButton.Click()
     
     kontext "Gallery"
     if ( Gallery.exists( 3 ) ) then
-        printlog( "Gallery is open. Good." )
-        
-        '///+<li>Close the Gallery again</li>
         printlog( "Gallery button again, to close" )
         kontext "StandardBar"
         GalleryButton.click()
-        waitslot
+        WaitSlot()
         
         kontext "Gallery" 
         if ( Gallery.exists() ) then    
             warnlog( "Gallery did not close " )
-        else
-            printlog( "Gallery is closed" )
         endif
     else
         warnlog( "The Gallery did not open" )
     endif
-    '///</ul>
-        
-    '///+<li>Cleanup: Close both documents</li>
-    do while( getDocumentCount > 0 ) 
-        hDestroyDocument()
-    loop
 
-    
-    '///+<li>Cleanup: Delete the workfile</li>
+    printlog( "Close all documents and delete files" )        
+    hDestroyDocument()
     hDeleteFile( sFileOut )
-
-    '///</ul>
 
 endcase
 

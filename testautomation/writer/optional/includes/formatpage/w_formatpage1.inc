@@ -591,8 +591,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_11
-Warnlog "#i102752# - tFormatPage_11 outcommented due to bug."
-goto endsub
 
     Dim sTestFile    as String
     Dim sMarginsLeft as String
@@ -652,8 +650,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_12
-Warnlog "#i102752# - tFormatPage_12 outcommented due to bug."
-goto endsub
 
     Dim sTestFile    as String
     Dim sMarginsLeft as String
@@ -716,8 +712,6 @@ endcase
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_13
-Warnlog "#i102752# - tFormatPage_13 outcommented due to bug."
-goto endsub
 
     Dim sTestFile as String
     Dim sPage1 as String

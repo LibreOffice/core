@@ -921,22 +921,15 @@ sub mMakeGeneralOptionsAPI
             qaErrorLog( sFileFunction & "This build does not support online update." )
         endcatch
 
-        '///+ OOo Improvement
-	    try
-            aPropertyValue(0).Value="/org.openoffice.Office.OOoImprovement.Settings/Participation"
-            xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-            xViewRoot.replaceByName( "ShowedInvitation", true )
-            xViewRoot.replaceByName( "InvitationAccepted", false )
-            xViewRoot.commitChanges()
-            if xViewRoot.hasPendingChanges() then
-	            qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
-            endif
-            xViewRoot.dispose()
-	        gOOoImprovementIsEnabled = TRUE
-	    catch
-	        QAErrorLog( "Failed to disable usage tracking feature. This might cause errors and warnings during test execution." )
-	        gOOoImprovementIsEnabled = FALSE
-	    endcatch
+        '///+ OOo Improvement - only if BUILD_SPECIAL is set we have this file created.
+        sTempPath = gOfficeBasisPath & "share/registry/modules/org/openoffice/Office/Jobs/Jobs-oooimprovement.xcu"
+        sTempPath = ConvertPath( sTempPath )
+        
+        if ( FileExists( sTempPath ) ) then
+            gOOoImprovementIsEnabled = TRUE
+        else
+            gOOoImprovementIsEnabled = FALSE
+        endif
 	    
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")

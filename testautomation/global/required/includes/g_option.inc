@@ -36,28 +36,18 @@
 '* short description : update and resouce test for all option pages (at tools/options)
 '*
 '\***********************************************************************
+
 global sErrMes as String
 global iSectionNumber as Integer
 
-'*******************************************************************************
-
 sub tToolsOptionsTest
-
-    dim sPreviousApplication as string
-
-    sPreviousApplication = gApplication
-    ' Document- and database related options are placed in the g_option2.inc library
-    use "global\required\includes\g_option2.inc"
-    ' subs and functions has been placed there
-    use "global/tools/includes/required/t_option2.inc"
-
     ' To prevent users from running just a subsection from this file, without THIS
     ' subroutine, in every subsection the value of 'iSectionNumber' is checked.
     ' The test will exit with warnlog, if iSectionNumber is 0
     sErrMes = ""
     select case uCase(gApplication)
-    case "WRITER","MASTERDOCUMENT","HTML"   : iSectionNumber = 8
-    case "IMPRESS","DRAW","MATH","CALC"     : iSectionNumber = 7
+       case "WRITER","MASTERDOCUMENT","HTML"   : iSectionNumber = 8
+       case "IMPRESS","DRAW","MATH","CALC"     : iSectionNumber = 7
     end select
     ' common testcases are placed in this library
     ' these tab-sets are always available:
@@ -68,35 +58,9 @@ sub tToolsOptionsTest
     Call tToolsOptionsChart
     Call tToolsOptionsInternet
     Call tToolsOptionsImprovementProgram
-
-    ' these tabpages only exist in the respective application
-    gApplication = "WRITER"
-    iSectionNumber = 8
-    Call tToolsOptionsTextdocument
-
-    gApplication = "HTML"
-    Call tToolsOptionsHTMLDocument
-
-    gApplication = "CALC"
-    iSectionNumber = 7
-    Call tToolsOptionsSpreadsheet
-
-    gApplication = "IMPRESS"
-    iSectionNumber = 7
-    Call tToolsOptionsPresentation
-
-    gApplication = "DRAW"
-    iSectionNumber = 7
-    Call tToolsOptionsDrawing
-
-    gApplication = "MATH"
-    iSectionNumber = 7
-    Call tToolsOptionsFormula
-
-    gApplication = sPreviousApplication
 end sub
 
-'*******************************************************************************
+'-------------------------------------------------------------------------
 
 testcase tToolsOptionsStarOffice
 
@@ -736,56 +700,145 @@ testcase tToolsOptionsImprovementProgram
     printlog( "Update test for the tools/options dialog of the OOo Improvement Program" )
 
     dim cLogFile as string
-    cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
-    cLogFile = convertpath( cLogFile )
+        cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
+        cLogFile = convertpath( cLogFile )
 
     if ( hDeleteFile( cLogFile ) ) then
+    
         printlog( "Test environment is clean, no logfile present (anymore)" )
-    endif
 
-    ToolsOptions
-    hToolsOptions( "StarOffice", "Improvement" )
-    printlog( "Improvement Program tabpage" )
+        ToolsOptions
+        hToolsOptions( "StarOffice", "Improvement" )
+        printlog( "Improvement Program tabpage" )
 
-    call DialogTest( TabOOoImprovement )
+        call DialogTest( TabOOoImprovement )
 
-    ParticipateNo.check()
-    ParticipateYes.check()
+        ParticipateNo.check()
+        ParticipateYes.check()
 
-    if ( ShowData.isEnabled() ) then
+        if ( ShowData.isEnabled() ) then
 
-        ShowData.click()
+            ShowData.click()
 
-        Kontext "TextImport"
-        if ( TextImport.exists( 1 ) ) then
-            printlog( "Text import dialog" )
+            Kontext "FilterAuswahl"
+            if ( FilterAuswahl.exists( 1 ) ) then
+                printlog( "Text import dialog/FilterAuswahl" )
 
-            call DialogTest( TextImport )
-            TextImport.cancel()
+                call DialogTest( FilterAuswahl )
+                FilterAuswahl.cancel()
+            else
+                qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            endif
+
+            Kontext "Active"
+            if ( Active.exists( 1 ) ) then
+                printlog( "Messagebox: " & Active.getText() )
+                Active.ok()
+            else
+                warnlog( "No warning for missing file: " & cLogFile )
+            endif
+
+            Kontext "Active"
+            if ( Active.exists( 1 ) ) then
+                warnlog( "#97342# Second message for missing " & cLogFile )
+                Active.ok()
+            endif
         else
-            qaerrorlog( "#i97340# Show Data button enabled but no logged data found" )
+            printlog( "Show data is disabled" )
         endif
 
-        Kontext "Active"
-        if ( Active.exists( 1 ) ) then
-            printlog( "Messagebox: " & Active.getText() )
-            Active.ok()
-        else
-            warnlog( "No warning for missing file: " & cLogFile )
-        endif
-
-        Kontext "Active"
-        if ( Active.exists( 1 ) ) then
-            warnlog( "#97342# Second message for missing " & cLogFile )
-            Active.ok()
-        endif
+        Kontext "OptionenDlg"
+        OptionenDlg.cancel()
+        
     else
-        printlog( "Show data is disabled" )
+        ' hDeleteFile() returns FALSE if the file is still present for some weird reason
+        ' We should warn about this because the test breaks at a later point then.
+        warnlog( "Logfile present, it could not be deleted. Please check path and accessrights" )
+        printlog( "Path: " & cLogFile )
     endif
-
-    Kontext "OptionenDlg"
-    OptionenDlg.cancel()
 
 endcase
 
+'-------------------------------------------------------------------------
+
+testcase tToolsOptionsChart
+    Dim EchteAnzahl as Integer, i as Integer
+
+    PrintLog "- Tools/Options/Chart  ( Extras/Optionen/Diagramme )"
+    if (0 = iSectionNumber) then 
+        warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
+        goto endsub
+    endif    
+'/// Create a new document    
+    if gApplication <> "BACKGROUND" then 
+        Call hNewDocument
+    end if
+'/// <i>Tools</i> / <i>Options</i> / <i>Chart</i>    
+    ToolsOptions
+    ToPosInOptionlist ( iSectionNumber -1 )
+    EchteAnzahl = OptionTabPageZaehler ( 1, FALSE )
+    Kontext "OptionenDlg"
+    Optionsliste.TypeKeys "<Down>"
+'/// Default colors
+    printlog "  - Default Colors / Grundfarben"
+    Kontext "TabGrundfarben"
+    Call DialogTest ( TabGrundfarben )
+'/// Close the options dialog
+    Kontext "OptionenDlg"
+    OptionenDlg.Cancel
+    if gApplication <> "BACKGROUND" then
+'/// Close bthe document    
+        Call hCloseDocument
+    end if
+endcase
+
+'-------------------------------------------------------------------------
+
+testcase tToolsOptionsDataSources
+   qaerrorlog "#i104508# crashes on quit or reload if this is run."
+   goto endsub
+   
+   Dim EchteAnzahl as Integer, i as Integer
+
+   PrintLog "- Tools/Options/Data Sources  ( Extras/Optionen/Datenbank )"
+    if (0 = iSectionNumber) then 
+        warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
+        goto endsub
+    endif   
+    '/// Create a new document
+    if gApplication <> "BACKGROUND" then    
+        Call hNewDocument
+    end if
+    '/// <i>Tools</i> / <i>Options</i> / <i>Data source</i>
+    ToolsOptions
+    ToPosInOptionlist ( iSectionNumber -2)
+    EchteAnzahl = OptionTabPageZaehler ( 2 , FALSE )
+    Kontext "OptionenDlg"
+    Optionsliste.TypeKeys "<Down>"
+    printlog "  - Connections / Verbindungen"
+    Kontext "TabConnections"
+    '/// Connections
+    Call DialogTest ( TabConnections )
+    Kontext "OptionenDlg"
+    Optionsliste.TypeKeys "<Down>"
+    printlog "  - Databases / Datenbanken"   
+    Kontext "TabRegisteredDatabase"
+    '/// Databases
+    Call DialogTest ( TabRegisteredDatabase )
+    NewBtn.click
+    Kontext "CreateDatabaseLink"
+    call DialogTest( CreateDatabaseLink )
+    Browse.click
+    Kontext "OeffnenDlg"
+    OeffnenDlg.cancel
+    Kontext "CreateDatabaseLink"
+    CreateDatabaseLink.cancel
+    Kontext "OptionenDlg"
+    '/// Close the options dialog
+    OptionenDlg.Cancel
+    '/// Close the document
+    if gApplication <> "BACKGROUND" then 
+        Call hCloseDocument
+    end if
+endcase
 

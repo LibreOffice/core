@@ -44,7 +44,7 @@ JARCOMMANDS_TESTS = $(foreach,i,$(SUBDIRS_TESTS) -C $(CLASSDIR) $i)
 JARCOMMANDS_RUNNER = $(foreach,i,$(SUBDIRS_RUNNER) -C $(CLASSDIR) $i)
 
 # --- Targets ------------------------------------------------------
-.IF "$(SOLAR_JAVA)"=="TRUE"
+.IF "$(SOLAR_JAVA)"=="TRUE" && "$(L10N_framework)"==""
 OWNJAR: ALLTAR
 
 

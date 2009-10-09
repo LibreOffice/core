@@ -37,33 +37,33 @@
 '*
 '\******************************************************************************
 
+private const VERBOSE = true
+
 function hWaitForObject( oControl as object, iTime as integer ) as integer
 
     const CFN = "hWaitForObject()::"
     dim iWait as integer
     
+    if ( VERBOSE ) then printlog( CFN & "Entering function for control: " & oControl.name() )
+    
+    WaitSlot( 2000 )
+    
     for iWait = 0 to iTime
         try
-            oControl.Exists()
-            printlog( CFN & "Control Name....: " & oControl.Name() )
-            printlog( CFN & "Control ID......: " & oControl.ID()   )
-            printlog( CFN & "Control ready in: " & iWait & " ms")
-            
             if ( oControl.isEnabled() ) then
-                printlog( CFN & "Control enabled.: Yes" )
-                hWaitForObject() = 0 
+                printlog( CFN & "Control is enabled: " & oControl.name() )
+                hWaitForObject() = 0
+                exit function
             else
-                printlog( CFN & "Control enabled.: No" )
-                hWaitForObject() = -1
+                if ( VERBOSE ) then printlog( "Waiting..." )
             endif
-            exit function            
         catch
             wait( 1 )            
         endcatch
     next iWait
     
-    hWaitForObject() = -2
-    printlog( CFN & "Control not found, timeout reached" )
+    printlog( CFN & "Control not found or not enabled, timeout reached" )
+    hWaitForObject() = -1
 
 end function
 

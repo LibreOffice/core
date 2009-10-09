@@ -91,6 +91,7 @@ public class OfficeProvider implements AppProvider
             OfficeWatcherPing owp = new OfficeWatcherPing((OfficeWatcher) param.get(PropertyName.OFFICE_WATCHER));
             owp.start();
 
+            deleteFilesAndDirector (new File(copyLayer));
             FileTools.copyDirectory(new File(userLayer), new File(copyLayer), new String[]
                     {
                         "temp"
@@ -581,6 +582,7 @@ public class OfficeProvider implements AppProvider
                 final String copyLayer = (String) param.get("copyLayer");
                 if (userLayer != null && copyLayer != null)
                 {
+                    deleteFilesAndDirector(new File(userLayer));
                     final File copyFile = new File(copyLayer);
                     dbg("copy '" + copyFile + "' -> '" + userLayer + "'");
                     FileTools.copyDirectory(copyFile, new File(userLayer), new String[]
@@ -823,4 +825,22 @@ public class OfficeProvider implements AppProvider
             }
         }
     }
+
+private void deleteFilesAndDirector(File file)
+        {
+            File f = file;
+            if(f.isDirectory())
+            {
+                File files[] = f.listFiles();
+                for(int i = 0; i < files.length; i++)
+                {
+                    deleteFilesAndDirector(files[i]);
+                }
+                f.delete();
+            }
+            else if (f.isFile())
+            {
+                f.delete();
+            }
+        }
 }

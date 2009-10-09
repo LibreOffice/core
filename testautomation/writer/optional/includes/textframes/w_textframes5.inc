@@ -113,8 +113,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_72
-Warnlog "#i102752# - tTextframes_72 outcommented due to bug."
-goto endsub
 
     printlog "- 'Vertical to' when anchor is inside frame"
     '/// 'Vertical to' when anchor is inside frame
@@ -153,8 +151,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_73
-Warnlog "#i102752# - tTextframes_73 outcommented due to bug."
-goto endsub
 
     printlog "- 'Vertical to' when anchor is inside document body"
     '/// 'Vertical to' when anchor is inside document body
@@ -370,8 +366,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_80
-Warnlog "#i102752# - tTextframes_80 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -428,8 +422,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_81
-Warnlog "#i102752# - tTextframes_81 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -486,8 +478,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_82
-Warnlog "#i102752# - tTextframes_82 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -544,8 +534,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_83
-Warnlog "#i102752# - tTextframes_83 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -612,8 +600,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_84
-Warnlog "#i102752# - tTextframes_84 outcommented due to bug."
-goto endsub
 
     Dim sTestFile   as String
     Dim iVertical   as Integer
@@ -680,8 +666,6 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tTextframes_85
-Warnlog "#i102752# - tTextframes_85 outcommented due to bug."
-goto endsub
 
     Dim sTestFile       as String
     Dim iVerticalTop    as Integer

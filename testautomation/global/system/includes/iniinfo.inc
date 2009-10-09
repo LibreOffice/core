@@ -35,29 +35,6 @@
 '*
 '* short description : get information for startup a test out of important ini-files
 '*
-'************************************************************************
-' **
-' #1 GetIniInformation          ' Set all important variables
-' #1 GetOfficeInformation       ' Generates the path to the StarOffice executable.
-' #1 ConvertPath                ' Path conversion
-' #1 GetLanguageInformation     ' Main routine to get the language information from Setup.xcu file.
-' #1 ConvertLanguage            ' Sets international language code for the whole language name.
-' #1 GetLanguageText            ' Sets the language name for the international language-code.
-' #1 ConvertLanguage2           ' Sets the international language code for the international language shortcut.
-' #1 ConvertCodeToLanguage      ' Converts the old language code to international language code
-' #1 GetTheInstallationType     ' The global variable 'gNetzInst' and 'gNetzOfficePath' will be set here.
-' #1 FileURLToNormalFile        ' Converts a file URL to a system specific URL.
-' #1 ReplaceCharacter           ' Replace a character with another
-' #1 fgetL10Nvalue              ' Search routine to get the language information from Setup.xcu file
-' #1 sGetCrashreporterValues    ' Reading the crashreporter relevant values from testtool control file.
-' #1 getSofficeNative           ' Reading the registry entries where the application is installed
-' #1 getSofficeTesttool         ' Trying to get value of [OOoProgramDir] section from testtool control file
-' #1 hGetPathSigne              ' Return the path signe for the given platform
-' #1 hPlatformToGroup           ' Return the operating system group for the given platform
-' #1 sGetScreenshotValue        ' Check if screenshots are requested
-' #1 fgetOOoStartupTimeOut      ' Set a value for OOo start up time out
-' #1 fgetOOoShutdownTimeOut     ' Set a value for OOo shut down time out
-' **
 '\***********************************************************************
 
 sub GetIniInformation
@@ -1247,33 +1224,46 @@ end function
 '-------------------------------------------------------------------------
 
 function getOfficeBasisPath as string
+
+    const CFN = "global::system::iniinfo.inc:getOfficeBasisPath: "
     'get the basis directory from the information of basis-link
     dim ltemp(5) as string
     dim sFile as string
     dim sTemp as string
+    dim sPath as string
 
     sTemp = gNetzOfficePath
-    sFile = gNetzOfficePath + "basis-link"
-
-    if fileExists(sFile) then
+    sFile = gNetzOfficePath & "basis-link"
+    
+    if FileExists( sFile ) then
         if ( lcase( gPlatform ) = "osx" ) then
             'MacOS X
-            sTemp = sFile + gPathSigne
+            sTemp = sFile
         else
-            if gPlatGroup = "unx" then
+            if ( gPlatGroup = "unx" ) then
                 'Unixes
-               sTemp = getLinkDestination(sFile)
-               sTemp = fRelativeToAbsolutePath(gNetzOfficePath + sTemp) + gPathSigne
+               sPath = getLinkDestination( sFile )
+               sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sPath )
+               if ( NOT FileExists( sTemp ) ) then
+                    sTemp = fRelativeToAbsolutePath( sPath )
+               endif
+               
             else
-                'Win32
-                ListRead(lTemp, sFile)
+                'all other platforms are Windows/DOS style
+                ListRead( lTemp, sFile )
                 if lTemp(1) <> "" then
                     stemp = lTemp(1)
-                    sTemp = fRelativeToAbsolutePath(gNetzOfficePath + sTemp) + gPathSigne
-                end if
-            end if
-        end if
-    end if
+                    sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sTemp )
+                endif
+            endif
+        endif
+    else
+        warnlog( CFN & "Basis-link could not be found" )
+    endif
+    
+    if ( NOT FileExists( sTemp ) ) then
+        warnlog( CFN & "Retrieved invalid path" )
+    endif
 
-    getOfficeBasisPath = sTemp
+    getOfficeBasisPath = sTemp & gPathSigne
 end function

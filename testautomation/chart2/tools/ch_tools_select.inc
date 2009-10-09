@@ -39,6 +39,7 @@
 '*
 ' #1 fSelectChartByNumber
 ' #1 fCalcSelectSheet
+' #1 fChartSelectElement
 '*
 '\************************************************************************************************
 
@@ -123,4 +124,19 @@ function fCalcSelectSheet ( sSelectThisSheet ) as boolean
        endif
    endcatch   
 end function
-
+'
+'--------------------------------------------------------------------
+'
+function fChartSelectElement ( iObjectPosition as INTEGER ) as boolean
+	' Select a chartelement by using the ChartElementSelectorListBox in the Toolbar
+	' RETURNS: boolean (success)
+	fChartSelectElement = FALSE
+	try
+		Kontext "Toolbar"
+		sleep (1)
+		ChartElementSelector.Select (iObjectPosition)
+		fChartSelectElement = TRUE
+	catch
+		warnlog "Something went wrong while selecting a chartelement"
+	endcatch
+end function

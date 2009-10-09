@@ -11,7 +11,9 @@ dokumentansicht=checked
 geoeffnetedokumente=unchecked
 opengl=unchecked
 useantialiasing=checked
-usehardwareacceleration=disabled
+usehardwareacceleration=checked
 mousepositioning=3
 mausaktion=2
+transparency=checked
+selectionopacity=75%
 

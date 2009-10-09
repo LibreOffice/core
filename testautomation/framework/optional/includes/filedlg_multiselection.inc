@@ -56,6 +56,7 @@ testcase tFiledlgMultiselection1()
     dim lTime as long
     dim lWait as long
     dim lTimeSum as long
+    dim iCurrentTime as long
     
     
     dim iDocType as integer
@@ -71,7 +72,7 @@ testcase tFiledlgMultiselection1()
     dim brc as boolean
     
     const TESTFILE_COUNT = 60 ' the number of documents in cWorkPath
-    const TESTFILE_TIMEOUT = 120000
+    const TESTFILE_TIMEOUT = 480000
 
     ' Minimum cleanup
     while( getDocumentCount > 0 ) 
@@ -144,12 +145,20 @@ testcase tFiledlgMultiselection1()
             lTime = GetSystemTicks
             iOpenDocuments = 0   
             while ( iOpenDocuments < TESTFILE_COUNT )
-                iOpenDocuments = getDocumentCount
-                if ( (getSystemTicks - lTime) > TESTFILE_TIMEOUT ) then
-                    warnlog( "Loading files max wait time exceed (120 seconds), aborting" )
+                iOpenDocuments = getDocumentCount()
+                iCurrentTime = getSystemTicks - lTime
+                
+                ' exit the hard way
+                if ( iCurrentTime > TESTFILE_TIMEOUT ) then
+                    warnlog( "Loading files max wait time exceed (" & _
+                              TESTFILE_TIMEOUT/1000 & "), aborting" )
                     goto endsub
                 endif
             wend
+            
+            if ( iCurrentTime > 120000 ) then
+                warnlog( "#i105289# Slow loading of files, should be less than 120 seconds on all platforms" )
+            endif
             lWait = getSystemTicks - lTime ' time diff
 
             printlog( "All documents loaded in " & lWait & " ms" )
