@@ -158,7 +158,6 @@ ULONG SwReader::Read( const Reader& rOptions )
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
     RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
     // Array von FlyFormaten
     SwSpzFrmFmts aFlyFrmArr;
@@ -169,6 +168,8 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         if( bSaveUndo )
             pUndo = new SwUndoInsDoc( *pPam );
+
+        pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
         SwPaM* pUndoPam = 0;
         if( bDocUndo || pCrsr )
@@ -190,7 +191,11 @@ ULONG SwReader::Read( const Reader& rOptions )
         xub_StrLen nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
+        pDoc->SetRedlineMode_intern( eOld );
+
         nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
+
+        pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
         if( !IsError( nError ))     // dann setzen wir das Ende mal richtig
         {
