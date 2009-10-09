@@ -72,6 +72,21 @@ SHL4DEF     := empty.def
 SHL4OBJS    := $(SLO)$/AffineBridge.obj
 SHL4RPATH   := URELIB
 
+
+SHL5TARGET  := log_uno_uno
+SHL5IMPLIB  := i$(SHL5TARGET)
+SHL5STDLIBS := $(purpenv_helper_LIB) $(SALLIB) $(CPPULIB)
+SHL5OBJS    := $(SLO)$/LogBridge.obj
+                
+.IF "$(GUI)"=="OS2"
+SHL5VERSIONMAP=unsafe_os2.map
+SHL5DEF=$(MISC)$/$(SHL5TARGET).def
+DEF5NAME=LogMapping.def
+.ELSE
+SHL5DEF     := empty.def
+.ENDIF
+SHL5RPATH   := URELIB
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk

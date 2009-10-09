@@ -67,7 +67,7 @@ public final class Bug51323_Test extends ComplexTestCase {
         protected boolean run(XComponentContext context) throws Throwable {
             XConnection connection =
                 Connector.create(context).connect(getConnectionDescription());
-            XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+            XBridgeFactory factory = UnoRuntime.queryInterface(
                 XBridgeFactory.class,
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));

@@ -30,45 +30,31 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
+
+#include "file_url.h"
+
 #include "system.h"
 
-#ifndef _LIMITS_H
 #include <limits.h>
-#endif
-
-#ifndef _ERRNO_H
 #include <errno.h>
-#endif
-
-#ifndef _STRINGS_H
 #include <strings.h>
-#endif
-
-#ifndef _UNISTD_H
 #include <unistd.h>
-#endif
-#include <osl/file.h>
+
+#include "osl/file.hxx"
 #include <osl/security.h>
-#include <rtl/uri.h>
 #include <osl/diagnose.h>
+#include <osl/thread.h>
+#include <osl/process.h>
+
+#include <rtl/uri.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.h>
+#include "rtl/textcvt.h"
 
-#ifndef _OSL_TREAD_H_
-#include <osl/thread.h>
-#endif
-#include <osl/file.hxx>
-#include <osl/process.h>
 #include "file_error_transl.h"
-
-#ifndef _FILE_URL_H_
-#include "file_url.h"
-#endif
 #include "file_path_helper.hxx"
 
-#ifndef _OSL_UUNXAPI_HXX_
 #include "uunxapi.hxx"
-#endif
 
 /***************************************************
 
@@ -84,15 +70,13 @@
  so this code should be consolidated.
 
  **************************************************/
+/************************************************************************
+ *   ToDo
+ *
+ *   Fix osl_getCanonicalName
+ *
+ ***********************************************************************/
 
-
-
-/***************************************************
- * forward
- **************************************************/
-
-extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
-extern "C" int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 
 /***************************************************
  * namespace directives
@@ -149,6 +133,18 @@ static sal_Bool findWrongUsage( const sal_Unicode *path, sal_Int32 len )
     return bRet;
 }
 */
+
+/****************************************************************************/
+/*  osl_getCanonicalName */
+/****************************************************************************/
+
+oslFileError SAL_CALL osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
+{
+    OSL_ENSURE(0, "osl_getCanonicalName not implemented");
+
+    rtl_uString_newFromString(pustrValidURL, ustrFileURL);
+    return osl_File_E_None;
+}
 
 /****************************************************************************/
 /*  osl_getSystemPathFromFileURL */
@@ -849,4 +845,121 @@ oslFileError FileURLToPath(char * buffer, size_t bufLen, rtl_uString* ustrFileUR
     rtl_uString_release(ustrSystemPath);
 
     return osl_error;
+}
+
+/*****************************************************************************
+ * UnicodeToText
+ ****************************************************************************/
+
+namespace /* private */
+{
+    class UnicodeToTextConverter_Impl
+    {
+        rtl_UnicodeToTextConverter m_converter;
+
+        UnicodeToTextConverter_Impl()
+            : m_converter (rtl_createUnicodeToTextConverter (osl_getThreadTextEncoding()))
+        {}
+
+        ~UnicodeToTextConverter_Impl()
+        {
+            rtl_destroyUnicodeToTextConverter (m_converter);
+        }
+    public:
+        static UnicodeToTextConverter_Impl & getInstance()
+        {
+            static UnicodeToTextConverter_Impl g_theConverter;
+            return g_theConverter;
+        }
+
+        sal_Size convert(
+            sal_Unicode const * pSrcBuf, sal_Size nSrcChars, sal_Char * pDstBuf, sal_Size nDstBytes,
+            sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtChars)
+        {
+            OSL_ASSERT(m_converter != 0);
+            return rtl_convertUnicodeToText (
+                m_converter, 0, pSrcBuf, nSrcChars, pDstBuf, nDstBytes, nFlags, pInfo, pSrcCvtChars);
+        }
+    };
+} // end namespace private
+
+int UnicodeToText( char * buffer, size_t bufLen, const sal_Unicode * uniText, sal_Int32 uniTextLen )
+{
+    sal_uInt32   nInfo = 0;
+    sal_Size     nSrcChars = 0;
+
+    sal_Size nDestBytes = UnicodeToTextConverter_Impl::getInstance().convert (
+        uniText, uniTextLen, buffer, bufLen,
+        OUSTRING_TO_OSTRING_CVTFLAGS | RTL_UNICODETOTEXT_FLAGS_FLUSH, &nInfo, &nSrcChars);
+
+    if( nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL )
+    {
+        errno = EOVERFLOW;
+        return 0;
+    }
+
+    /* ensure trailing '\0' */
+    buffer[nDestBytes] = '\0';
+    return nDestBytes;
+}
+
+/*****************************************************************************
+ * TextToUnicode
+ ****************************************************************************/
+
+namespace /* private */
+{
+    class TextToUnicodeConverter_Impl
+    {
+        rtl_TextToUnicodeConverter m_converter;
+
+        TextToUnicodeConverter_Impl()
+            : m_converter (rtl_createTextToUnicodeConverter (osl_getThreadTextEncoding()))
+        {}
+
+        ~TextToUnicodeConverter_Impl()
+        {
+            rtl_destroyTextToUnicodeConverter (m_converter);
+        }
+
+    public:
+        static TextToUnicodeConverter_Impl & getInstance()
+        {
+            static TextToUnicodeConverter_Impl g_theConverter;
+            return g_theConverter;
+        }
+
+        sal_Size convert(
+            sal_Char const * pSrcBuf, sal_Size nSrcBytes, sal_Unicode * pDstBuf, sal_Size nDstChars,
+            sal_uInt32 nFlags, sal_uInt32 * pInfo, sal_Size * pSrcCvtBytes)
+        {
+            OSL_ASSERT(m_converter != 0);
+            return rtl_convertTextToUnicode (
+                m_converter, 0, pSrcBuf, nSrcBytes, pDstBuf, nDstChars, nFlags, pInfo, pSrcCvtBytes);
+        }
+    };
+} // end namespace private
+
+int TextToUnicode(
+    const char*  text,
+    size_t       text_buffer_size,
+    sal_Unicode* unic_text,
+    sal_Int32    unic_text_buffer_size)
+{
+    sal_uInt32 nInfo = 0;
+    sal_Size   nSrcChars = 0;
+
+    sal_Size nDestBytes = TextToUnicodeConverter_Impl::getInstance().convert(
+        text,  text_buffer_size, unic_text, unic_text_buffer_size,
+        OSTRING_TO_OUSTRING_CVTFLAGS | RTL_TEXTTOUNICODE_FLAGS_FLUSH, &nInfo, &nSrcChars);
+
+    if (nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL)
+    {
+        errno = EOVERFLOW;
+        return 0;
+    }
+
+    /* ensure trailing '\0' */
+    unic_text[nDestBytes] = '\0';
+    return nDestBytes;
 }

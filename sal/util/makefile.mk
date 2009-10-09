@@ -113,6 +113,10 @@ SHL1STDLIBS=	\
                 $(COMDLG32LIB)\
                 $(USER32LIB)\
                 $(OLE32LIB)
+.IF "$(COM)"=="GCC"
+MINGWSSTDOBJ=
+MINGWSSTDENDOBJ=
+.ENDIF
 .ENDIF # WNT
 
 .IF "$(GUI)"=="UNX"
