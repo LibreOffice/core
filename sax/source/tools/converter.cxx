@@ -937,7 +937,17 @@ bool Converter::convertTime( ::com::sun::star::util::DateTime& rDateTime,
     return false;
 }
 
-/** convert util::DateTime to ISO Date String */
+/** convert util::Date to ISO Date String */
+void Converter::convertDate(
+        ::rtl::OUStringBuffer& i_rBuffer,
+        const util::Date& i_rDate)
+{
+    const util::DateTime dt(
+            i_rDate.Year, i_rDate.Month, i_rDate.Day, 0, 0, 0, 0);
+    convertDateTime(i_rBuffer, dt, false);
+}
+
+/** convert util::DateTime to ISO Date or DateTime String */
 void Converter::convertDateTime(
         ::rtl::OUStringBuffer& i_rBuffer,
         const com::sun::star::util::DateTime& i_rDateTime,
@@ -990,9 +1000,36 @@ void Converter::convertDateTime(
     }
 }
 
-/** convert ISO Date String to util::DateTime */
-bool Converter::convertDateTime( com::sun::star::util::DateTime& rDateTime,
-                                     const ::rtl::OUString& rString )
+/** convert ISO Date or DateTime String to util::DateTime */
+bool Converter::convertDateTime( util::DateTime& rDateTime,
+                                 const ::rtl::OUString& rString )
+{
+    bool isDateTime;
+    util::Date date;
+    if (convertDateOrDateTime(date, rDateTime, isDateTime, rString))
+    {
+        if (!isDateTime)
+        {
+            rDateTime.Year = date.Year;
+            rDateTime.Month = date.Month;
+            rDateTime.Day = date.Day;
+            rDateTime.Hours = 0;
+            rDateTime.Minutes = 0;
+            rDateTime.Seconds = 0;
+            rDateTime.HundredthSeconds = 0;
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/** convert ISO Date or DateTime String to util::DateTime or util::Date */
+bool Converter::convertDateOrDateTime(
+                util::Date & rDate, util::DateTime & rDateTime,
+                bool & rbDateTime, const ::rtl::OUString & rString )
 {
     bool bSuccess = true;
 
@@ -1077,13 +1114,25 @@ bool Converter::convertDateTime( com::sun::star::util::DateTime& rDateTime,
 
     if (bSuccess)
     {
-        rDateTime.Year = (sal_uInt16)nYear;
-        rDateTime.Month = (sal_uInt16)nMonth;
-        rDateTime.Day = (sal_uInt16)nDay;
-        rDateTime.Hours = (sal_uInt16)nHour;
-        rDateTime.Minutes = (sal_uInt16)nMin;
-        rDateTime.Seconds = (sal_uInt16)nSec;
-        rDateTime.HundredthSeconds = (sal_uInt16)(sDoubleStr.toDouble() * 100);
+        if ( aTimeStr.getLength() > 0 ) // time is optional
+        {
+            rDateTime.Year = static_cast<sal_uInt16>(nYear);
+            rDateTime.Month = static_cast<sal_uInt16>(nMonth);
+            rDateTime.Day = static_cast<sal_uInt16>(nDay);
+            rDateTime.Hours = static_cast<sal_uInt16>(nHour);
+            rDateTime.Minutes = static_cast<sal_uInt16>(nMin);
+            rDateTime.Seconds = static_cast<sal_uInt16>(nSec);
+            rDateTime.HundredthSeconds =
+                static_cast<sal_uInt16>((sDoubleStr).toDouble() * 100);
+            rbDateTime = true;
+        }
+        else
+        {
+            rDate.Year = static_cast<sal_uInt16>(nYear);
+            rDate.Month = static_cast<sal_uInt16>(nMonth);
+            rDate.Day = static_cast<sal_uInt16>(nDay);
+            rbDateTime = false;
+        }
     }
     return bSuccess;
 }

@@ -154,14 +154,25 @@ public:
     static bool convertTime( ::com::sun::star::util::DateTime& rDateTime,
                                  const ::rtl::OUString& rString );
 
-    /** convert util::DateTime to ISO Date String */
+    /** convert util::Date to ISO Date String */
+    static void convertDate( ::rtl::OUStringBuffer& rBuffer,
+                    const com::sun::star::util::Date& rDate );
+
+    /** convert util::DateTime to ISO Date or DateTime String */
     static void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                                 const com::sun::star::util::DateTime& rDateTime,
                                    bool bAddTimeIf0AM = false );
 
-    /** convert ISO Date String to util::DateTime */
+    /** convert ISO Date or DateTime String to util::DateTime */
     static bool convertDateTime( com::sun::star::util::DateTime& rDateTime,
                                  const ::rtl::OUString& rString );
+
+    /** convert ISO Date or DateTime String to util::DateTime or util::Date */
+    static bool convertDateOrDateTime(
+                    com::sun::star::util::Date & rDate,
+                    com::sun::star::util::DateTime & rDateTime,
+                    bool & rbDateTime,
+                    const ::rtl::OUString & rString );
 
     /** gets the position of the first comma after npos in the string
         rStr. Commas inside '"' pairs are not matched */
