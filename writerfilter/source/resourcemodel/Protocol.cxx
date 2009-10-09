@@ -141,3 +141,38 @@ void StreamProtocol::info(const string & rInfo)
     m_pStream->info(rInfo);
 }
 
+/*
+    PropertiesProtocol
+*/
+
+PropertiesProtocol::PropertiesProtocol(Properties * pProperties,
+                                       TagLogger::Pointer_t pTagLogger)
+: m_pProperties(pProperties), m_pTagLogger(pTagLogger)
+{
+}
+
+PropertiesProtocol::~PropertiesProtocol()
+{
+}
+
+void PropertiesProtocol::attribute(Id name, Value & val)
+{
+    m_pTagLogger->startElement("protocol-attribute");
+    m_pTagLogger->attribute("name", (*QNameToString::Instance())(name));
+    m_pTagLogger->attribute("value", val.toString());
+    m_pProperties->attribute(name, val);
+    m_pTagLogger->endElement("protocol-attribute");
+}
+
+void PropertiesProtocol::sprm(Sprm & _sprm)
+{
+    m_pTagLogger->startElement("protocol-sprm");
+    static char sBuffer[256];
+    snprintf(sBuffer, sizeof(sBuffer), "%04" SAL_PRIxUINT32, _sprm.getId());
+    m_pTagLogger->attribute("id", sBuffer);
+    m_pTagLogger->attribute("name", _sprm.getName());
+    m_pProperties->sprm(_sprm);
+    m_pTagLogger->endElement("protocol-sprm");
+}
+
+}

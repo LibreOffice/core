@@ -60,5 +60,18 @@ public:
     virtual void info(const string & rInfo);
 };
 
+class PropertiesProtocol : public Properties
+{
+    Properties * m_pProperties;
+    TagLogger::Pointer_t m_pTagLogger;
+
+public:
+    PropertiesProtocol(Properties * pProperties, TagLogger::Pointer_t pTagLogger);
+    virtual ~PropertiesProtocol();
+
+    virtual void attribute(Id name, Value & val);
+    virtual void sprm(Sprm & sprm);
+};
+
 }
 #endif // INCLUDE_WRITERFILTER_PROTOCOL_HXX
