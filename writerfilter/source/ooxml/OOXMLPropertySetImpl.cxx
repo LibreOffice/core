@@ -699,6 +699,12 @@ OOXMLTableImpl::~OOXMLTableImpl()
 
 void OOXMLTableImpl::resolve(Table & rTable)
 {
+#ifdef DEBUG_ELEMENT
+    Table * pTable = new TableProtocol(&rTable, debug_logger);
+#else
+    Table * pTable = &rTable;
+#endif
+
     int nPos = 0;
 
     PropertySets_t::iterator it = mPropertySets.begin();
@@ -710,7 +716,7 @@ void OOXMLTableImpl::resolve(Table & rTable)
             ((*it)->getProperties());
 
         if (pProperties.get() != NULL)
-            rTable.entry(nPos, pProperties);
+            pTable->entry(nPos, pProperties);
 
         ++nPos;
         it++;
