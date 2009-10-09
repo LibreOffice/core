@@ -39,6 +39,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <svtools/lstner.hxx>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include "shell.hxx"
 #include <tools/gen.hxx>
@@ -78,6 +79,9 @@ class NotifyEvent;
 
 #define SFX_PRINTER_CHG_ORIENTATION_FLAG  3
 #define SFX_PRINTER_CHG_SIZE_FLAG         4
+
+#define SFX_PRINTERROR_NONE          0
+#define SFX_PRINTERROR_BUSY          1
 
 enum SfxScrollingMode
 {
@@ -310,6 +314,8 @@ public:
 
     void                        SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool, sal_Bool );
+
+    void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, BOOL );
 
 #if _SOLAR__PRIVATE
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;

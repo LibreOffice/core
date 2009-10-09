@@ -85,7 +85,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
         m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
         aSchema,aTable,_rName);
 
-    sdbcx::ObjectType xRet = NULL;
+    sdbcx::ObjectType xRet;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

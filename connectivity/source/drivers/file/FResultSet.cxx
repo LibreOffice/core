@@ -174,13 +174,13 @@ void OResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_xStatement    = NULL;
-    m_xMetaData     = NULL;
+    m_xStatement.clear();
+    m_xMetaData.clear();
     m_pParseTree    = NULL;
-    m_xColNames     = NULL;
-    m_xColumns      = NULL;
+    m_xColNames.clear();
+    m_xColumns = NULL;
     m_xParamColumns = NULL;
-    m_xColsIdx      = NULL;
+    m_xColsIdx.clear();
 
     Reference<XComponent> xComp = m_pTable;
     if ( xComp.is() )
@@ -1303,8 +1303,9 @@ void OResultSet::sortRows()
         OSL_ENSURE((sal_Int32)m_aRow->get().size() > *aOrderByIter,"Invalid Index");
         switch ((*(m_aRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
         {
-        case DataType::CHAR:
+            case DataType::CHAR:
             case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
                 eKeyType[i] = SQL_ORDERBYKEY_STRING;
                 break;
 
@@ -1471,6 +1472,7 @@ BOOL OResultSet::OpenImpl()
                     if(IsSorted())
                     {
                         aOrderbyColumnNumberSave = m_aOrderbyColumnNumber;// .assign(m_aOrderbyColumnNumber.begin(), m_aOrderbyColumnNumber.end());
+                        m_aOrderbyColumnNumber.clear();
                         aOrderbyAscendingSave.assign(m_aOrderbyAscending.begin(), m_aOrderbyAscending.end());
                         bWasSorted = TRUE;
                     }

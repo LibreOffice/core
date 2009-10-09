@@ -39,7 +39,9 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include "sdxmlexp_impl.hxx"
@@ -51,9 +53,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 
-#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER2_HPP_
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#endif
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -96,9 +96,13 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::office;
 using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::geometry;
+using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 
@@ -639,6 +643,14 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         GetXMLToken(XML_NP_ANIMATION),
         GetXMLToken(XML_N_ANIMATION),
         XML_NAMESPACE_ANIMATION);
+
+    if( getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+    {
+        _GetNamespaceMap().Add(
+            GetXMLToken(XML_NP_OFFICE_EXT),
+            GetXMLToken(XML_N_OFFICE_EXT),
+            XML_NAMESPACE_OFFICE_EXT);
+    }
 
     GetShapeExport()->enableLayerExport();
 
@@ -2060,6 +2072,8 @@ void SdXMLExport::_ExportContent()
                     }
                 }
             }
+
+            exportAnnotations( xDrawPage );
         }
     }
 
@@ -2355,10 +2369,9 @@ void SdXMLExport::_ExportAutoStyles()
         // create auto style infos for objects on master pages
         for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)
         {
-            Any aAny(mxDocMasterPages->getByIndex(nMPageId));
-            Reference< XDrawPage > xMasterPage;
+            Reference< XDrawPage > xMasterPage(mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
 
-            if((aAny >>= xMasterPage) && xMasterPage.is() )
+            if( xMasterPage.is() )
             {
                 // collect layer information
                 GetFormExport()->examineForms( xMasterPage );
@@ -2397,6 +2410,7 @@ void SdXMLExport::_ExportAutoStyles()
                         }
                     }
                 }
+                collectAnnotationAutoStyles(xMasterPage);
             }
         }
     }
@@ -2413,10 +2427,8 @@ void SdXMLExport::_ExportAutoStyles()
         // create auto style infos for objects on pages
         for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
         {
-            Any aAny(mxDocDrawPages->getByIndex(nPageInd));
-            Reference<XDrawPage> xDrawPage;
-
-            if((aAny >>= xDrawPage) && xDrawPage.is() )
+            Reference<XDrawPage> xDrawPage( mxDocDrawPages->getByIndex(nPageInd), UNO_QUERY );
+            if( xDrawPage.is() )
             {
                 // collect layer information
                 GetFormExport()->examineForms( xDrawPage );
@@ -2466,6 +2478,8 @@ void SdXMLExport::_ExportAutoStyles()
                         }
                     }
                 }
+
+                collectAnnotationAutoStyles( xDrawPage );
             }
         }
         if(IsImpress())
@@ -2536,10 +2550,8 @@ void SdXMLExport::_ExportMasterStyles()
     // export MasterPages in master-styles section
     for(sal_Int32 nMPageId = 0L; nMPageId < mnDocMasterPageCount; nMPageId++)
     {
-        Any aAny(mxDocMasterPages->getByIndex(nMPageId));
-        Reference< XDrawPage > xMasterPage;
-
-        if((aAny >>= xMasterPage) && xMasterPage.is())
+        Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
+        if(xMasterPage.is())
         {
             // prepare masterpage attributes
             OUString sMasterPageName;
@@ -2610,6 +2622,7 @@ void SdXMLExport::_ExportMasterStyles()
                     }
                 }
             }
+            exportAnnotations( xMasterPage );
         }
     }
 }
@@ -2766,6 +2779,98 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
     {
     }
     return sNavOrder.makeStringAndClear();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDrawPage )
+{
+    Reference< XAnnotationAccess > xAnnotationAccess( xDrawPage, UNO_QUERY );
+    if( xAnnotationAccess.is() ) try
+    {
+        Reference< XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
+        if( xAnnotationEnumeration.is() )
+        {
+            while( xAnnotationEnumeration->hasMoreElements() )
+            {
+                Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement(), UNO_QUERY_THROW );
+                Reference< XText > xText( xAnnotation->getTextRange() );
+                if(xText.is() && xText->getString().getLength())
+                    GetTextParagraphExport()->collectTextAutoStyles( xText );
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SdXMLExport::collectAnnotationAutoStyles(), exception caught during export of annotation auto styles");
+    }
+}
+
+void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
+{
+    // do not export in ODF 1.2 or older
+    if( getDefaultVersion() != SvtSaveOptions::ODFVER_LATEST )
+        return;
+
+    Reference< XAnnotationAccess > xAnnotationAccess( xDrawPage, UNO_QUERY );
+    if( xAnnotationAccess.is() ) try
+    {
+        Reference< XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
+        if( xAnnotationEnumeration.is() && xAnnotationEnumeration->hasMoreElements() )
+        {
+            OUStringBuffer sStringBuffer;
+            do
+            {
+                Reference< XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement(), UNO_QUERY_THROW );
+
+                RealPoint2D aPosition( xAnnotation->getPosition() );
+
+                   GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aPosition.X * 100 ) );
+                AddAttribute(XML_NAMESPACE_SVG, XML_X, sStringBuffer.makeStringAndClear());
+
+                   GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aPosition.Y * 100 ) );
+                AddAttribute(XML_NAMESPACE_SVG, XML_Y, sStringBuffer.makeStringAndClear());
+
+                RealSize2D aSize( xAnnotation->getSize() );
+
+                if( aSize.Width || aSize.Height )
+                {
+                       GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aSize.Width * 100 ) );
+                    AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, sStringBuffer.makeStringAndClear());
+                       GetMM100UnitConverter().convertMeasure(sStringBuffer, static_cast<sal_Int32>( aSize.Height * 100 ) );
+                    AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, sStringBuffer.makeStringAndClear());
+                }
+
+                // annotation element + content
+                SvXMLElementExport aElem(*this, XML_NAMESPACE_OFFICE_EXT, XML_ANNOTATION, sal_False, sal_True);
+
+                // author
+                OUString aAuthor( xAnnotation->getAuthor() );
+                if( aAuthor.getLength() )
+                {
+                    SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC, XML_CREATOR, sal_True, sal_False );
+                    this->Characters(aAuthor);
+                }
+
+                {
+                    // date time
+                    DateTime aDate( xAnnotation->getDateTime() );
+                    GetMM100UnitConverter().convertDateTime(sStringBuffer, aDate, sal_True);
+                    SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC, XML_DATE, sal_True, sal_False );
+                    Characters(sStringBuffer.makeStringAndClear());
+                }
+
+                com::sun::star::uno::Reference < com::sun::star::text::XText > xText( xAnnotation->getTextRange() );
+                if( xText.is() )
+                    this->GetTextParagraphExport()->exportText( xText );
+            }
+            while( xAnnotationEnumeration->hasMoreElements() );
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SdXMLExport::exportAnnotations(), exception caught during export of annotations");
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////

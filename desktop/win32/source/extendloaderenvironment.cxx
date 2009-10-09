@@ -135,18 +135,21 @@ void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory) {
         if (GetLastError() != ERROR_FILE_NOT_FOUND) {
             fail();
         }
+        // This path is only taken by testtool.exe in basis program directory;
+        // its PATH needs to include the brand program directory:
         pathEnd = tools::buildPath(
             path, iniDirectory, iniDirEnd, MY_STRING(L".."));
         if (pathEnd == NULL) {
             fail();
         }
-        exclude1 = true;
-    } else {
-        padEnd = tools::buildPath(pad, path, pathEnd, MY_STRING(L"\\program"));
+        padEnd = tools::buildPath(
+            pad, path, pathEnd, MY_STRING(L"\\..\\program"));
         if (padEnd == NULL) {
             fail();
         }
         exclude1 = contains(env, pad, padEnd);
+    } else {
+        exclude1 = true;
     }
     WCHAR * pad2 = exclude1 ? pad : padEnd + 1;
     pathEnd = tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link"));

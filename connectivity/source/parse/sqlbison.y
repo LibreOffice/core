@@ -3473,30 +3473,6 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 }
 
 //-----------------------------------------------------------------------------
-/*sal_uInt32 OSQLParser::StrToTokenID(const ::rtl::OString & rName)
-{
-	::rtl::OString aName;
-	if (rName.IsAlphaNumericAscii())
-		aName = rName;
-	else
-	{
-		aName = "'";
-		aName += rName;
-		aName += "'";
-	}
-
-	// Gewuenschten Token-Namen suchen:
-	for (sal_uInt32 i = 0; i < SQLyyntoken; i++)
-	{
-		if (aName == TokenTypes[i].name)
-			return TokenTypes[i].token;
-	}
-
-	// Nicht gefunden
-	return 0;
-}*/
-
-//-----------------------------------------------------------------------------
 ::rtl::OUString OSQLParser::RuleIDToStr(sal_uInt32 nRuleID)
 {
 	OSL_ENSURE(nRuleID < (sizeof yytname/sizeof yytname[0]), "OSQLParser::RuleIDToStr: Invalid nRuleId!");
@@ -3599,17 +3575,15 @@ void OSQLParser::reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank)
 	OSL_ENSURE(pLiteral->isRule(), "This is no ::com::sun::star::chaos::Rule");
 	OSL_ENSURE(pLiteral->count() == 2, "OSQLParser::ReduceLiteral() Invalid count");
 	OSQLParseNode* pTemp = pLiteral;
-	::rtl::OUString aValue;
+	::rtl::OUStringBuffer aValue(pLiteral->getChild(0)->getTokenValue());
 	if (bAppendBlank)
 	{
-		((aValue = pLiteral->getChild(0)->getTokenValue()) += ::rtl::OUString::createFromAscii(" ")) +=
-					pLiteral->getChild(1)->getTokenValue();
+		aValue.appendAscii(" ");
 	}
-	else
-		(aValue = pLiteral->getChild(0)->getTokenValue()) +=
-					pLiteral->getChild(1)->getTokenValue();
+	
+	aValue.append(pLiteral->getChild(1)->getTokenValue());
 
-	pLiteral = new OSQLInternalNode(aValue,SQL_NODE_STRING);
+	pLiteral = new OSQLInternalNode(aValue.makeStringAndClear(),SQL_NODE_STRING);
 	delete pTemp;
 }
 

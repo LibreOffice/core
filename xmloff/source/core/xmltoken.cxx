@@ -152,6 +152,10 @@ namespace xmloff { namespace token {
         TOKEN( "grddl",                                 XML_NP_GRDDL ),
         TOKEN( "http://www.w3.org/2003/g/data-view#",   XML_N_GRDDL ),
 
+        // ODF Enhanced namespaces
+        TOKEN( "officeooo", XML_NP_OFFICE_EXT ),
+        TOKEN( "http://openoffice.org/2009/office", XML_N_OFFICE_EXT ),
+
         // units
         TOKEN( "mm",                              XML_UNIT_MM ),
         TOKEN( "m",                               XML_UNIT_M ),
@@ -3076,6 +3080,8 @@ namespace xmloff { namespace token {
         TOKEN( "at-labels",             XML_AT_LABELS ),
         TOKEN( "at-axis",               XML_AT_AXIS ),
         TOKEN( "at-labels-and-axis",    XML_AT_LABELS_AND_AXIS ),
+        TOKEN( "filled-radar",                    XML_FILLED_RADAR ),
+        TOKEN( "surface",               XML_SURFACE ),
 
         TOKEN( "mathvariant",           XML_MATHVARIANT ),
         TOKEN( "mathsize",              XML_MATHSIZE ),

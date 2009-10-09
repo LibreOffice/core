@@ -390,7 +390,7 @@ IMPL_LINK_INLINE_END( SfxPrintProgress, PrintErrorNotify, void *, EMPTYARG )
 IMPL_LINK( SfxPrintProgress, StartPrintNotify, void *, EMPTYARG )
 {
     SfxObjectShell *pObjShell = pImp->pViewShell->GetObjectShell();
-    SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_PRINTDOC, pObjShell));
+    SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_PRINTDOC, GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ), pObjShell));
     pObjShell->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_STARTED, NULL, NULL ) );
     return 0;
 }

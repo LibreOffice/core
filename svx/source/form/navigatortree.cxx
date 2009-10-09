@@ -1573,7 +1573,7 @@ namespace svxform
             aBaseName = SVX_RES( RID_STR_STDFORMNAME );
 
         else if( pEntryData->ISA(FmControlData) )
-            aBaseName = SVX_RES( RID_STR_CONTROL_CLASSNAME );
+            aBaseName = SVX_RES( RID_STR_CONTROL );
 
         //////////////////////////////////////////////////////////////////////
         // Neuen Namen erstellen

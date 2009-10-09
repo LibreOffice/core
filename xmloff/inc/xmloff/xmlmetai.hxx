@@ -35,6 +35,7 @@
 #include "xmloff/dllapi.h"
 #include <xmloff/xmlictxt.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
@@ -76,6 +77,10 @@ protected:
     void initDocumentProperties();
     // set the BuildId property at the importer
     void setBuildId(const ::rtl::OUString & i_rBuildId);
+
+public:
+    static void setBuildId(const ::rtl::OUString & rGenerator,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xImportInfo );
 };
 
 #endif // _XMLOFF_XMLMETAI_HXX

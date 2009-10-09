@@ -107,12 +107,12 @@ private:
     BOOL                        bAbortActualize;
 
     void                        ImplCreateSvDrawStorage();
-    SgaObject*                  ImplReadSgaObject( GalleryObject* pEntry );
+    SVX_DLLPUBLIC SgaObject*                    ImplReadSgaObject( GalleryObject* pEntry );
     BOOL                        ImplWriteSgaObject( const SgaObject& rObj, ULONG nPos, GalleryObject* pExistentEntry );
     void                        ImplRead();
     void                        ImplWrite();
     const GalleryObject*        ImplGetGalleryObject( ULONG nPos ) const { return aObjectList.GetObject( nPos ); }
-    const GalleryObject*        ImplGetGalleryObject( const INetURLObject& rURL );
+    SVX_DLLPUBLIC const GalleryObject*      ImplGetGalleryObject( const INetURLObject& rURL );
     ULONG                       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const { return aObjectList.GetPos( pObj ); }
     INetURLObject               ImplGetURL( const GalleryObject* pObject ) const;
     INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFormat = CVT_UNKNOWN );
@@ -129,11 +129,11 @@ public:
 
     ULONG                   GetObjectCount() const { return aObjectList.Count(); }
 
-    SgaObject*                  AcquireObject( ULONG nPos );
-    void                        ReleaseObject( SgaObject* pObj );
+    SVX_DLLPUBLIC SgaObject*                    AcquireObject( ULONG nPos );
+    SVX_DLLPUBLIC void                      ReleaseObject( SgaObject* pObj );
 
-    BOOL                        InsertObject( const SgaObject& rObj, ULONG nPos = LIST_APPEND );
-    BOOL                        RemoveObject( ULONG nPos );
+    SVX_DLLPUBLIC BOOL                      InsertObject( const SgaObject& rObj, ULONG nPos = LIST_APPEND );
+    SVX_DLLPUBLIC BOOL                      RemoveObject( ULONG nPos );
     BOOL                        ChangeObjectPos( ULONG nOldPos, ULONG nNewPos );
 
     const String&               GetName() const { return IsImported() ? aImportName : pThm->GetThemeName(); }
@@ -194,11 +194,11 @@ public:
 
     BOOL                        GetThumb( ULONG nPos, Bitmap& rBmp, BOOL bProgress = FALSE );
 
-    BOOL                        GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress = FALSE );
-    BOOL                        InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC BOOL                      GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress = FALSE );
+    SVX_DLLPUBLIC BOOL                      InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos = LIST_APPEND );
 
-    BOOL                        GetModel( ULONG nPos, SdrModel& rModel, BOOL bProgress = FALSE );
-    BOOL                        InsertModel( const FmFormModel& rModel, ULONG nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC BOOL                      GetModel( ULONG nPos, SdrModel& rModel, BOOL bProgress = FALSE );
+    SVX_DLLPUBLIC BOOL                      InsertModel( const FmFormModel& rModel, ULONG nInsertPos = LIST_APPEND );
 
     BOOL                        GetModelStream( ULONG nPos, SotStorageStreamRef& rModelStreamRef, BOOL bProgress = FALSE );
     BOOL                        InsertModelStream( const SotStorageStreamRef& rModelStream, ULONG nInsertPos = LIST_APPEND );

@@ -656,12 +656,12 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "C~ollect words";
     };
-    CheckBox CB_KEEP_LIST
+    CheckBox CB_REMOVE_LIST
     {
         Pos = MAP_APPFONT( 10, 59 );
         Size = MAP_APPFONT( 110, 40 );
         WordBreak = TRUE;
-        Text [ en-US ] = "~When closing a document, save the list for later use in other documents.";
+        Text [ en-US ] = "~When closing a document, remove the words collected from it from the list";
     };
     FixedText FT_EXPAND_KEY
     {

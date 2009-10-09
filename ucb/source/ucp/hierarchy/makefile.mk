@@ -44,6 +44,7 @@ UCPHIER_MAJOR=1
 .INCLUDE: settings.mk
 
 # --- General -----------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 SLOFILES=\
     $(SLO)$/hierarchyservices.obj		\
@@ -82,5 +83,6 @@ DEF1NAME=$(SHL1TARGET)
 
 # --- Targets ----------------------------------------------------------
 
+.ENDIF # L10N_framework
 .INCLUDE: target.mk
 

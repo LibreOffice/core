@@ -41,7 +41,7 @@
             </node>
             <node oor:name=".uno:ShowAnnotations" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Notes</value>
+                    <value xml:lang="en-US">Comments</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertScript" oor:op="replace">
@@ -322,7 +322,7 @@
             </node>
             <node oor:name=".uno:InsertAnnotation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Note</value>
+                    <value xml:lang="en-US">Comme~nt</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>

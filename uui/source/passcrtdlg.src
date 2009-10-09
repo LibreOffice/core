@@ -91,7 +91,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     {
         Pos = MAP_APPFONT( 4, 64 );
         Size = MAP_APPFONT( 137, 40 );
-        Text [ en-US ] = "WARNING: If you lose or forget the password, it cannot be recovered. It is advisable to keep passwords in a safe place. Passwords are case-sensitive and at least five characters long.";
+        Text [ en-US ] = "WARNING: If you lose or forget the password, it cannot be recovered. It is advisable to keep passwords in a safe place. Passwords are case-sensitive.";
         WordBreak = TRUE;
     };
     FixedText FT_MSPASSWORD_WARNING

@@ -40,22 +40,16 @@
 #include <com/sun/star/util/XStringAbbreviation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 namespace framework
 {
 
-class UriAbbreviation:
-    public ::com::sun::star::lang::XTypeProvider,
-    public ::com::sun::star::lang::XServiceInfo,
-    public ::com::sun::star::util::XStringAbbreviation,
-    public ::cppu::OWeakObject  // helper implements XInterface, XWeak
+class UriAbbreviation:    public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringAbbreviation, css::lang::XServiceInfo>
 {
 public:
     explicit UriAbbreviation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
 
-    FWK_DECLARE_XINTERFACE
-    FWK_DECLARE_XTYPEPROVIDER
     DECLARE_XSERVICEINFO
 
     // ::com::sun::star::util::XStringAbbreviation:

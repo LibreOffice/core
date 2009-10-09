@@ -36,23 +36,6 @@
 #include "fmservs.hxx"
 #include "fmtools.hxx"
 
-namespace svxform
-{
-
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_TEXTFIELD, "TextField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_COMBOBOX, "ComboBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_CHECKBOX, "CheckBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_TIMEFIELD, "TimeField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_DATEFIELD, "DateField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_NUMERICFIELD, "NumericField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_CURRENCYFIELD, "CurrencyField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_PATTERNFIELD, "PatternField");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_LISTBOX, "ListBox");
-    IMPLEMENT_CONSTASCII_USTRING(FM_COL_FORMATTEDFIELD, "FormattedField");
-
-}   // namespace svxform
-using namespace ::svxform;
-
 //------------------------------------------------------------------------------
 const ::comphelper::StringSequence& getColumnTypes()
 {
@@ -81,7 +64,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
     const ::rtl::OUString aCompatibleModelPrefix = ::rtl::OUString::createFromAscii("stardiv.one.form.component.");
 
     sal_Int32 nTypeId = -1;
-    if (aModelName == ::svxform::FM_COMPONENT_EDIT)
+    if (aModelName == FM_COMPONENT_EDIT)
         nTypeId = TYPE_TEXTFIELD;
     else
     {

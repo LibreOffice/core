@@ -365,12 +365,13 @@ namespace
             for(sal_uInt32 a(0L); a < rTextPortions.size() && fPolyStart < fPolyEnd; a++)
             {
                 const impPathTextPortion* pCandidate = rTextPortions[a];
-                basegfx::B2DVector aSize;
-                const drawinglayer::primitive2d::FontAttributes aCandidateFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-                    aSize,
-                    pCandidate->getFont(),
-                    pCandidate->isRTL(),
-                    false));
+                basegfx::B2DVector aFontScaling;
+                const drawinglayer::primitive2d::FontAttributes aCandidateFontAttributes(
+                    drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                        aFontScaling,
+                        pCandidate->getFont(),
+                        pCandidate->isRTL(),
+                        false));
 
                 if(pCandidate && pCandidate->getTextLength())
                 {
@@ -397,7 +398,7 @@ namespace
                         basegfx::B2DPoint aEndPos(aStartPos);
 
                         // add font scaling
-                        aNewTransformA.scale(aSize.getX(), aSize.getY());
+                        aNewTransformA.scale(aFontScaling.getX(), aFontScaling.getY());
 
                         // prepare scaling of text primitive
                         if(XFT_AUTOSIZE == mrSdrFormTextAttribute.getFormTextAdjust())
@@ -512,15 +513,16 @@ namespace
                                     pCandidate->getDoubleDXArray().begin() + nPortionIndex,
                                     pCandidate->getDoubleDXArray().begin() + nPortionIndex + nNextGlyphLen);
 
-                                drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                    aNewTransformB * aNewShadowTransform * aNewTransformA,
-                                    pCandidate->getText(),
-                                    nPortionIndex,
-                                    nNextGlyphLen,
-                                    aNewDXArray,
-                                    aCandidateFontAttributes,
-                                    pCandidate->getLocale(),
-                                    aRGBShadowColor);
+                                drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew =
+                                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                        aNewTransformB * aNewShadowTransform * aNewTransformA,
+                                        pCandidate->getText(),
+                                        nPortionIndex,
+                                        nNextGlyphLen,
+                                        aNewDXArray,
+                                        aCandidateFontAttributes,
+                                        pCandidate->getLocale(),
+                                        aRGBShadowColor);
 
                                 mrShadowDecomposition.push_back(pNew);
                             }
@@ -536,15 +538,16 @@ namespace
                                 pCandidate->getDoubleDXArray().begin() + nPortionIndex,
                                 pCandidate->getDoubleDXArray().begin() + nPortionIndex + nNextGlyphLen);
 
-                            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                aNewTransformB * aNewTransformA,
-                                pCandidate->getText(),
-                                nPortionIndex,
-                                nNextGlyphLen,
-                                aNewDXArray,
-                                aCandidateFontAttributes,
-                                pCandidate->getLocale(),
-                                aRGBColor);
+                            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew =
+                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    aNewTransformB * aNewTransformA,
+                                    pCandidate->getText(),
+                                    nPortionIndex,
+                                    nNextGlyphLen,
+                                    aNewDXArray,
+                                    aCandidateFontAttributes,
+                                    pCandidate->getLocale(),
+                                    aRGBColor);
 
                             mrDecomposition.push_back(pNew);
                         }
@@ -671,7 +674,7 @@ namespace
 //////////////////////////////////////////////////////////////////////////////
 // primitive decomposition
 
-bool SdrTextObj::impDecomposePathTextPrimitive(
+void SdrTextObj::impDecomposePathTextPrimitive(
     drawinglayer::primitive2d::Primitive2DSequence& rTarget,
     const drawinglayer::primitive2d::SdrPathTextPrimitive2D& rSdrPathTextPrimitive,
     const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
@@ -789,8 +792,6 @@ bool SdrTextObj::impDecomposePathTextPrimitive(
     // concatenate all results
     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalA);
     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aRetvalB);
-
-    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////////

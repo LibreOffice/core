@@ -86,13 +86,13 @@ OResultSetMetaData::~OResultSetMetaData()
     return  sValue;
 }
 // -------------------------------------------------------------------------
-SWORD OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
+SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
                                               ,sal_Int32 _column
                                               ,sal_Int32 _ident) throw(SQLException, RuntimeException)
 {
-    SWORD nValue=0;
+    SQLLEN nValue=0;
     OTools::ThrowException(_pConnection,(*(T3SQLColAttribute)_pConnection->getOdbcFunction(ODBC3SQLColAttribute))(_aStatementHandle,
                                          (SQLUSMALLINT)_column,
                                          (SQLUSMALLINT)_ident,
@@ -117,49 +117,55 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) 
     return getNumColAttrib(column,SQL_DESC_DISPLAY_SIZE);
 }
 // -------------------------------------------------------------------------
-SWORD OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
+SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
                                               ,sal_Int32 column)
                                                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SWORD nType = 0;
+    SQLSMALLINT nType = 0;
     try
     {
-        nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE);
+        nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE);
         if(nType == SQL_UNKNOWN_TYPE)
-            nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE);
+            nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE);
     }
     catch(SQLException& ) // in this case we have an odbc 2.0 driver
     {
-        nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE );
+        nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE );
     }
+
     return nType;
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nType = 0;
-    if(!m_bUseODBC2Types)
+    ::std::map<sal_Int32,sal_Int32>::iterator aFind = m_aColumnTypes.find(column);
+    if ( aFind == m_aColumnTypes.end() )
     {
-        try
+        sal_Int32 nType = 0;
+        if(!m_bUseODBC2Types)
         {
-            nType = getNumColAttrib(column,SQL_DESC_CONCISE_TYPE);
-            if(nType == SQL_UNKNOWN_TYPE)
-                nType = getNumColAttrib(column, SQL_DESC_TYPE);
-            nType = OTools::MapOdbcType2Jdbc(nType);
+            try
+            {
+                nType = getNumColAttrib(column,SQL_DESC_CONCISE_TYPE);
+                if(nType == SQL_UNKNOWN_TYPE)
+                    nType = getNumColAttrib(column, SQL_DESC_TYPE);
+                nType = OTools::MapOdbcType2Jdbc(nType);
+            }
+            catch(SQLException& ) // in this case we have an odbc 2.0 driver
+            {
+                m_bUseODBC2Types = sal_True;
+                nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
+            }
         }
-        catch(SQLException& ) // in this case we have an odbc 2.0 driver
-        {
-            m_bUseODBC2Types = sal_True;
+        else
             nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
-        }
+        aFind = m_aColumnTypes.insert(::std::map<sal_Int32,sal_Int32>::value_type(column,nType)).first;
     }
-    else
-        nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
 
 
-    return nType;
+    return aFind->second;
 }
 // -------------------------------------------------------------------------
 

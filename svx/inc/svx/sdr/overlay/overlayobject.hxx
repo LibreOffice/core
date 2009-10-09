@@ -133,8 +133,9 @@ namespace sdr
             OverlayManager* getOverlayManager() const { return mpOverlayManager; }
 
             // the access method for Primitive2DSequence. Will use createPrimitive2DSequence and
-            // setPrimitive2DSequence if needed
-            const drawinglayer::primitive2d::Primitive2DSequence& getOverlayObjectPrimitive2DSequence() const;
+            // setPrimitive2DSequence if needed. Overloading may be used to allow disposal of last
+            // created primitives to react on changed circumstances and to re-create primitives
+            virtual drawinglayer::primitive2d::Primitive2DSequence getOverlayObjectPrimitive2DSequence() const;
 
             // access to visibility state
             bool isVisible() const { return mbIsVisible; }

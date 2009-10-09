@@ -69,23 +69,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 // -----------------------------------------------------------------------
-
-#define PROPERTYVALUE           ::com::sun::star::beans::PropertyValue
-#define XNAMEREPLACE            ::com::sun::star::container::XNameReplace
-#define XEVENTSSUPPLIER         ::com::sun::star::document::XEventsSupplier
-#define ANY                     ::com::sun::star::uno::Any
-#define REFERENCE               ::com::sun::star::uno::Reference
-#define SEQUENCE                ::com::sun::star::uno::Sequence
-#define UNO_QUERY               ::com::sun::star::uno::UNO_QUERY
-
-#define OUSTRING                ::rtl::OUString
-
-// -----------------------------------------------------------------------
-
-static const USHORT nCompatVersion = 3;
-static const USHORT nOldVersion = 4;
-static const USHORT nVersion = 5;
-
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
 
@@ -176,175 +159,112 @@ void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, US
     aEventsList.Insert( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
 
-// class SfxAsyncEvent_Impl ----------------------------------------------
-
-class SfxAsyncEvent_Impl : public SfxListener
-{
-    String          aArgs;
-    SfxObjectShell* pSh;
-    const SvxMacro* pMacro;
-    Timer *pTimer;
-
-public:
-
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    SfxAsyncEvent_Impl( SfxObjectShell *pDoc, const SvxMacro *pMacro, const String& rArgs );
-    ~SfxAsyncEvent_Impl();
-    DECL_LINK( TimerHdl, Timer*);
-};
-
-// -----------------------------------------------------------------------
-
-void SfxAsyncEvent_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
-    if( pHint && pHint->GetId() == SFX_HINT_DYING && pTimer->IsActive() )
-    {
-        pTimer->Stop();
-        delete this;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-SfxAsyncEvent_Impl::SfxAsyncEvent_Impl( SfxObjectShell *pDoc, const SvxMacro *pMac, const String& rArgs )
- : aArgs( rArgs )
- , pSh( pDoc )
- , pMacro( pMac )
-{
-    if( pSh ) StartListening( *pSh );
-    pTimer = new Timer;
-    pTimer->SetTimeoutHdl( LINK(this, SfxAsyncEvent_Impl, TimerHdl) );
-    pTimer->SetTimeout( 0 );
-    pTimer->Start();
-}
-
-// -----------------------------------------------------------------------
-
-SfxAsyncEvent_Impl::~SfxAsyncEvent_Impl()
-{
-    delete pTimer;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK(SfxAsyncEvent_Impl, TimerHdl, Timer*, pAsyncTimer)
-{
-    pAsyncTimer->Stop();
-    ScriptType eSType = pMacro->GetScriptType();
-    BOOL bIsBasic = ( eSType == STARBASIC );
-    if ( bIsBasic && StarBASIC::IsRunning() )
-        // Neues eventgebundenes Macro erst ausf"uhren, wenn gerade kein anderes Macro mehr l"auft
-        pAsyncTimer->Start();
-    else
-    {
-        SFX_APP()->GetMacroConfig()->ExecuteMacro( pSh, pMacro, aArgs );
-        delete this;
-    }
-
-    return 0L;
-}
-
-SfxEventNamesList   *gp_Id_SortList = NULL;
-SfxEventNamesList   *gp_Name_SortList = NULL;
 
 //==========================================================================
 
-SfxEventConfiguration::SfxEventConfiguration()
- : pAppTable( NULL )
- , pDocTable( NULL )
+//--------------------------------------------------------------------------
+uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 {
-    bIgnoreConfigure = sal_False;
-}
+/*
+    This function converts a SvxMacro into an Any containing three
+    properties. These properties are EventType and Script. Possible
+    values for EventType ar StarBasic, JavaScript, ...
+    The Script property should contain the URL to the macro and looks
+    like "macro://./standard.module1.main()"
 
-//==========================================================================
+    If pMacro is NULL, we return an empty property sequence, so PropagateEvent_Impl
+    can delete an event binding.
+*/
+    uno::Any aEventData;
 
-SfxEventConfiguration::~SfxEventConfiguration()
-{
-    delete pDocTable;
-
-    if ( gp_Id_SortList )
+    if ( pMacro )
     {
-        delete gp_Id_SortList;
-        delete gp_Name_SortList;
-        gp_Id_SortList = NULL;
-        gp_Name_SortList = NULL;
-    }
-}
-
-void SfxEventConfiguration::ConfigureEvent( USHORT nId, const SvxMacro& rMacro, SfxObjectShell *pDoc )
-{
-    if ( bIgnoreConfigure )
-        return;
-
-    SvxMacro *pMacro = NULL;
-    if ( rMacro.GetMacName().Len() )
-        pMacro = new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
-    if ( pDoc )
-    {
-        PropagateEvent_Impl( pDoc, nId, pMacro );
-    }
-    else
-    {
-        PropagateEvent_Impl( NULL, nId, pMacro );
-    }
-}
-
-//==========================================================================
-
-SvxMacroTableDtor* SfxEventConfiguration::GetDocEventTable( SfxObjectShell*pDoc )
-{
-    if ( pDocTable )
-        delete pDocTable;
-
-    pDocTable = new SvxMacroTableDtor;
-
-    if ( pDoc )
-    {
-        REFERENCE< XEVENTSSUPPLIER > xSup( pDoc->GetModel(), UNO_QUERY );
-        uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
-
-        uno::Sequence < ::rtl::OUString > aNames = xEvents->getElementNames();
-        for ( sal_Int32 i=0; i<aNames.getLength(); i++ )
+        if ( pMacro->GetScriptType() == STARBASIC )
         {
-            SvxMacro* pMacro = SfxEvents_Impl::ConvertToMacro( xEvents->getByName( aNames[i] ), pDoc, TRUE );
-            USHORT nID = (USHORT) GetEventId_Impl( aNames[i] );
-            if ( nID && pMacro )
-                pDocTable->Insert( nID, pMacro );
+            uno::Sequence < beans::PropertyValue > aProperties(3);
+            beans::PropertyValue *pValues = aProperties.getArray();
+
+            ::rtl::OUString aType = ::rtl::OUString::createFromAscii( STAR_BASIC );;
+            ::rtl::OUString aLib  = pMacro->GetLibName();
+            ::rtl::OUString aMacro = pMacro->GetMacName();
+
+            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= aType;
+
+            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_LIBRARY );
+            pValues[ 1 ].Value <<= aLib;
+
+            pValues[ 2 ].Name = ::rtl::OUString::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 2 ].Value <<= aMacro;
+
+            aEventData <<= aProperties;
+        }
+        else if ( pMacro->GetScriptType() == EXTENDED_STYPE )
+        {
+            uno::Sequence < beans::PropertyValue > aProperties(2);
+            beans::PropertyValue *pValues = aProperties.getArray();
+
+            ::rtl::OUString aLib   = pMacro->GetLibName();
+            ::rtl::OUString aMacro = pMacro->GetMacName();
+
+            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= aLib;
+
+            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_SCRIPT );
+            pValues[ 1 ].Value <<= aMacro;
+
+            aEventData <<= aProperties;
+        }
+        else if ( pMacro->GetScriptType() == JAVASCRIPT )
+        {
+            uno::Sequence < beans::PropertyValue > aProperties(2);
+            beans::PropertyValue *pValues = aProperties.getArray();
+
+            ::rtl::OUString aMacro  = pMacro->GetMacName();
+
+            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= ::rtl::OUString::createFromAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+
+            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 1 ].Value <<= aMacro;
+
+            aEventData <<= aProperties;
+        }
+        else
+        {
+            DBG_ERRORFILE( "CreateEventData_Impl(): ScriptType not supported!");
         }
     }
+    else
+    {
+        uno::Sequence < beans::PropertyValue > aProperties;
+        aEventData <<= aProperties;
+    }
 
-    return pDocTable;
+    return aEventData;
 }
 
 //--------------------------------------------------------------------------
-void SfxEventConfiguration::PropagateEvent_Impl( SfxObjectShell *pDoc,
-                                                 USHORT nId,
-                                                 const SvxMacro* pMacro )
+void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const SvxMacro* pMacro )
 {
-    REFERENCE< XEVENTSSUPPLIER > xSupplier;
+    uno::Reference < document::XEventsSupplier > xSupplier;
     if ( pDoc )
     {
-        xSupplier = REFERENCE< XEVENTSSUPPLIER >( pDoc->GetModel(), UNO_QUERY );
+        xSupplier = uno::Reference < document::XEventsSupplier >( pDoc->GetModel(), uno::UNO_QUERY );
     }
     else
     {
-        xSupplier = REFERENCE< XEVENTSSUPPLIER >
+        xSupplier = uno::Reference < document::XEventsSupplier >
                 ( ::comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), UNO_QUERY );
+                rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), uno::UNO_QUERY );
     }
 
     if ( xSupplier.is() )
     {
-        REFERENCE< XNAMEREPLACE > xEvents = xSupplier->getEvents();
-
-        bIgnoreConfigure = sal_True;
-
-        OUSTRING aEventName = GetEventName_Impl( nId );
-
+        uno::Reference < container::XNameReplace > xEvents = xSupplier->getEvents();
         if ( aEventName.getLength() )
         {
-            ANY aEventData = CreateEventData_Impl( pMacro );
+            uno::Any aEventData = CreateEventData_Impl( pMacro );
 
             try
             {
@@ -358,251 +278,27 @@ void SfxEventConfiguration::PropagateEvent_Impl( SfxObjectShell *pDoc,
         else {
             DBG_WARNING( "PropagateEvents_Impl: Got unkown event" );
         }
-
-        bIgnoreConfigure = sal_False;
     }
-}
-
-// -------------------------------------------------------------------------------------------------------
-ANY SfxEventConfiguration::CreateEventData_Impl( const SvxMacro *pMacro )
-{
-/*
-    This function converts a SvxMacro into an Any containing three
-    properties. These properties are EventType and Script. Possible
-    values for EventType ar StarBasic, JavaScript, ...
-    The Script property should contain the URL to the macro and looks
-    like "macro://./standard.module1.main()"
-
-    If pMacro is NULL, we return an empty property sequence, so PropagateEvent_Impl
-    can delete an event binding.
-*/
-    ANY aEventData;
-
-    if ( pMacro )
-    {
-        if ( pMacro->GetScriptType() == STARBASIC )
-        {
-            SEQUENCE < PROPERTYVALUE > aProperties(3);
-            PROPERTYVALUE  *pValues = aProperties.getArray();
-
-            OUSTRING    aType   = OUSTRING::createFromAscii( STAR_BASIC );;
-            OUSTRING    aLib    = pMacro->GetLibName();
-            OUSTRING    aMacro  = pMacro->GetMacName();
-
-            pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
-            pValues[ 0 ].Value <<= aType;
-
-            pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
-            pValues[ 1 ].Value <<= aLib;
-
-            pValues[ 2 ].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
-            pValues[ 2 ].Value <<= aMacro;
-
-            aEventData <<= aProperties;
-        }
-        else if ( pMacro->GetScriptType() == EXTENDED_STYPE )
-        {
-            SEQUENCE < PROPERTYVALUE > aProperties(2);
-            PROPERTYVALUE  *pValues = aProperties.getArray();
-
-            OUSTRING    aLib    = pMacro->GetLibName();
-            OUSTRING    aMacro  = pMacro->GetMacName();
-
-            pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
-            pValues[ 0 ].Value <<= aLib;
-
-            pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_SCRIPT );
-            pValues[ 1 ].Value <<= aMacro;
-
-            aEventData <<= aProperties;
-        }
-        else if ( pMacro->GetScriptType() == JAVASCRIPT )
-        {
-            SEQUENCE < PROPERTYVALUE > aProperties(2);
-            PROPERTYVALUE  *pValues = aProperties.getArray();
-
-            OUSTRING    aMacro  = pMacro->GetMacName();
-
-            pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
-            pValues[ 0 ].Value <<= ::rtl::OUString::createFromAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT);
-
-            pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
-            pValues[ 1 ].Value <<= aMacro;
-
-            aEventData <<= aProperties;
-        }
-        else
-        {
-            DBG_ERRORFILE( "CreateEventData_Impl(): ScriptType not supported!");
-        }
-    }
-    else
-    {
-        SEQUENCE < PROPERTYVALUE > aProperties;
-        aEventData <<= aProperties;
-    }
-
-    return aEventData;
-}
-
-// -------------------------------------------------------------------------------------------------------
-ULONG SfxEventConfiguration::GetPos_Impl( USHORT nId, sal_Bool &rFound )
-{
-    rFound = sal_False;
-
-    if ( ! gp_Id_SortList->Count() )
-        return 0;
-
-    // use binary search to find the correct position
-    // in the list
-
-    int     nCompVal = 1;
-    long    nStart = 0;
-    long    nEnd = gp_Id_SortList->Count() - 1;
-    long    nMid = 0;
-
-    SfxEventName* pMid;
-
-    rFound = sal_False;
-
-    while ( nCompVal && ( nStart <= nEnd ) )
-    {
-        nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = gp_Id_SortList->GetObject( (USHORT) nMid );
-
-        nCompVal = pMid->mnId - nId;
-
-        if ( nCompVal < 0 )     // pMid < pData
-            nStart = nMid + 1;
-        else
-            nEnd = nMid - 1;
-    }
-
-    if ( nCompVal == 0 )
-    {
-        rFound = sal_True;
-    }
-    else
-    {
-        if ( nCompVal < 0 )     // pMid < pData
-            nMid++;
-    }
-
-    return (USHORT) nMid;
-}
-
-// -------------------------------------------------------------------------------------------------------
-ULONG SfxEventConfiguration::GetPos_Impl( const String& rName, sal_Bool &rFound )
-{
-    rFound = sal_False;
-
-    if ( ! gp_Name_SortList->Count() )
-        return 0;
-
-    // use binary search to find the correct position
-    // in the list
-
-    int     nCompVal = 1;
-    long    nStart = 0;
-    long    nEnd = gp_Name_SortList->Count() - 1;
-    long    nMid = 0;
-
-    SfxEventName* pMid;
-
-    rFound = sal_False;
-
-    while ( nCompVal && ( nStart <= nEnd ) )
-    {
-        nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = gp_Name_SortList->GetObject( (USHORT) nMid );
-
-        nCompVal = rName.CompareTo( pMid->maEventName );
-
-        if ( nCompVal < 0 )     // pMid < pData
-            nStart = nMid + 1;
-        else
-            nEnd = nMid - 1;
-    }
-
-    if ( nCompVal == 0 )
-    {
-        rFound = sal_True;
-    }
-    else
-    {
-        if ( nCompVal < 0 )     // pMid < pData
-            nMid++;
-    }
-
-    return (USHORT) nMid;
 }
 
 //--------------------------------------------------------------------------------------------------------
-OUSTRING SfxEventConfiguration::GetEventName_Impl( ULONG nID )
+void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
-    OUSTRING    aRet;
-
-    if ( gp_Id_SortList )
+    SvxMacro *pMacro = NULL;
+    if ( rMacro.GetMacName().Len() )
+        pMacro = new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() );
+    if ( pDoc )
     {
-        sal_Bool    bFound;
-        ULONG       nPos = GetPos_Impl( (USHORT) nID, bFound );
-
-        if ( bFound )
-        {
-            SfxEventName *pData = gp_Id_SortList->GetObject( nPos );
-            aRet = pData->maEventName;
-        }
+        PropagateEvent_Impl( pDoc, aName, pMacro );
     }
-
-    return aRet;
-}
-
-//--------------------------------------------------------------------------------------------------------
-ULONG SfxEventConfiguration::GetEventId_Impl( const OUSTRING& rEventName )
-{
-    ULONG nRet = 0;
-
-    if ( gp_Name_SortList )
+    else
     {
-        sal_Bool    bFound;
-        ULONG       nPos = GetPos_Impl( rEventName, bFound );
-
-        if ( bFound )
-        {
-            SfxEventName *pData = gp_Name_SortList->GetObject( nPos );
-            nRet = pData->mnId;
-        }
+        PropagateEvent_Impl( NULL, aName, pMacro );
     }
-
-    return nRet;
 }
 
 // -------------------------------------------------------------------------------------------------------
-void SfxEventConfiguration::RegisterEvent( USHORT nId,
-                                           const String& rUIName,
-                                           const String& rMacroName )
+SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp )
 {
-    if ( ! gp_Id_SortList )
-    {
-        gp_Id_SortList = new SfxEventNamesList;
-        gp_Name_SortList = new SfxEventNamesList;
-    }
-
-    sal_Bool    bFound = sal_False;
-    ULONG       nPos = GetPos_Impl( nId, bFound );
-
-    if ( bFound )
-    {
-        DBG_ERRORFILE( "RegisterEvent: Event already registered?" );
-        return;
-    }
-
-    gp_Id_SortList->Insert( new SfxEventName( nId, rMacroName, rUIName ), nPos );
-    nPos = GetPos_Impl( rMacroName, bFound );
-
-    DBG_ASSERT( !bFound, "RegisterEvent: Name in List, but ID not?" );
-
-    gp_Name_SortList->Insert( new SfxEventName( nId, rMacroName, rUIName ), nPos );
-
-    SFX_APP()->GetEventConfig();
+    return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );
 }

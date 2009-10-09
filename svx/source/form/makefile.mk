@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=form
+LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -53,7 +54,8 @@ SRC1FILES= \
     formshell.src   \
     datanavi.src
 
-SLOFILES = \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
     $(SLO)$/formtoolbars.obj \
     $(SLO)$/fmdocumentclassification.obj \
     $(SLO)$/fmcontrolbordermanager.obj \
@@ -61,7 +63,6 @@ SLOFILES = \
     $(SLO)$/fmtextcontroldialogs.obj \
     $(SLO)$/fmtextcontrolfeature.obj \
     $(SLO)$/fmtextcontrolshell.obj \
-    $(SLO)$/dbcharsethelper.obj			\
     $(SLO)$/ParseContext.obj			\
     $(SLO)$/typeconversionclient.obj    \
     $(SLO)$/confirmdelete.obj      \
@@ -69,9 +70,7 @@ SLOFILES = \
     $(SLO)$/sqlparserclient.obj      \
     $(SLO)$/dataaccessdescriptor.obj      \
     $(SLO)$/fmpage.obj      \
-    $(SLO)$/fmPropBrw.obj			\
     $(SLO)$/fmundo.obj  	\
-    $(SLO)$/fmprop.obj      \
     $(SLO)$/fmmodel.obj		\
     $(SLO)$/navigatortree.obj      \
     $(SLO)$/navigatortreemodel.obj      \
@@ -81,21 +80,14 @@ SLOFILES = \
     $(SLO)$/fmvwimp.obj     \
     $(SLO)$/fmdpage.obj		\
     $(SLO)$/fmitems.obj  	\
-    $(SLO)$/tbxform.obj     \
     $(SLO)$/fmobj.obj      	\
     $(SLO)$/fmdmod.obj		\
-    $(SLO)$/fmobjfac.obj	\
-    $(SLO)$/fmsrccfg.obj	\
     $(SLO)$/fmservs.obj     \
     $(SLO)$/typemap.obj		\
     $(SLO)$/fmexch.obj      \
-    $(SLO)$/tabwin.obj      \
-    $(SLO)$/fmurl.obj		\
-    $(SLO)$/filtnav.obj		\
     $(SLO)$/fmtools.obj     \
     $(SLO)$/fmshimp.obj     \
     $(SLO)$/fmshell.obj     \
-    $(SLO)$/fmsrcimp.obj	\
     $(SLO)$/fmview.obj		\
     $(SLO)$/sdbdatacolumn.obj \
     $(SLO)$/formcontrolling.obj \
@@ -105,13 +97,22 @@ SLOFILES = \
     $(SLO)$/datalistener.obj \
     $(SLO)$/fmscriptingenv.obj \
     $(SLO)$/stringlistresource.obj \
-    $(SLO)$/databaselocationinput.obj \
     $(SLO)$/delayedevent.obj \
     $(SLO)$/formcontrolfactory.obj
 
-.IF "$(OS)$(CPU)"=="SOLARISI"
-NOOPTFILES=$(SLO)$/fmprop.obj
-.ENDIF
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+    $(SLO)$/dbcharsethelper.obj			\
+    $(SLO)$/fmPropBrw.obj			\
+    $(SLO)$/tbxform.obj     \
+    $(SLO)$/fmobjfac.obj	\
+    $(SLO)$/fmsrccfg.obj	\
+    $(SLO)$/tabwin.obj      \
+    $(SLO)$/filtnav.obj		\
+    $(SLO)$/fmsrcimp.obj	\
+    $(SLO)$/databaselocationinput.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 # --- Targets ----------------------------------
 

@@ -50,11 +50,10 @@ DLLPRE =
 .IF "$(OS)" != "MACOSX"
 
 dummy:
-        @echo "Nothing to build for OS $(OS)."
+    @echo "Nothing to build for OS $(OS)."
 
 .ELSE
 
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \

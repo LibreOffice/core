@@ -38,6 +38,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <comphelper/implementationreference.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
@@ -54,16 +55,70 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+namespace
+{
+    /// helper class for column property change events which holds the OComponentDefinition weak
+typedef ::cppu::WeakImplHelper1 < XContainerListener > OTableContainerListener_BASE;
+class OTableContainerListener : public OTableContainerListener_BASE
+{
+    OTableHelper* m_pComponent;
+    ::std::map< ::rtl::OUString,bool> m_aRefNames;
+
+    OTableContainerListener(const OTableContainerListener&);
+    void operator =(const OTableContainerListener&);
+protected:
+    virtual ~OTableContainerListener(){}
+public:
+    OTableContainerListener(OTableHelper* _pComponent) : m_pComponent(_pComponent){}
+    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& /*Event*/ ) throw (RuntimeException)
+    {
+    }
+    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException)
+    {
+        ::rtl::OUString sName;
+        Event.Accessor  >>= sName;
+        if ( m_aRefNames.find(sName) != m_aRefNames.end() )
+            m_pComponent->refreshKeys();
+    }
+    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException)
+    {
+        ::rtl::OUString sOldComposedName,sNewComposedName;
+        Event.ReplacedElement   >>= sOldComposedName;
+        Event.Accessor          >>= sNewComposedName;
+        if ( sOldComposedName != sNewComposedName && m_aRefNames.find(sOldComposedName) != m_aRefNames.end() )
+            m_pComponent->refreshKeys();
+    }
+    // XEventListener
+    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
+    {
+    }
+    void clear() { m_pComponent = NULL; }
+    inline void add(const ::rtl::OUString& _sRefName) { m_aRefNames.insert(::std::map< ::rtl::OUString,bool>::value_type(_sRefName,true)); }
+};
+}
+namespace connectivity
+{
+    struct OTableHelperImpl
+    {
+        TKeyMap  m_aKeys;
+        Reference< ::com::sun::star::sdbc::XDatabaseMetaData >  m_xMetaData;
+        Reference< ::com::sun::star::sdbc::XConnection >            m_xConnection;
+        ::comphelper::ImplementationReference< OTableContainerListener,XContainerListener>
+                                    m_xTablePropertyListener;
+        ::std::vector< ColumnDesc > m_aColumnDesc;
+    };
+}
 
 OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
                            sal_Bool _bCase)
     :OTable_TYPEDEF(_pTables,_bCase)
-    ,m_xConnection(_xConnection)
+    ,m_pImpl(new OTableHelperImpl)
 {
     try
     {
-        m_xMetaData = m_xConnection->getMetaData();
+        m_pImpl->m_xConnection = _xConnection;
+        m_pImpl->m_xMetaData = m_pImpl->m_xConnection->getMetaData();
     }
     catch(const Exception&)
     {
@@ -85,42 +140,41 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                                           _Description,
                                           _SchemaName,
                                           _CatalogName)
-                        ,m_xConnection(_xConnection)
+                        ,m_pImpl(new OTableHelperImpl)
 {
     try
     {
-        m_xMetaData = m_xConnection->getMetaData();
+        m_pImpl->m_xConnection = _xConnection;
+        m_pImpl->m_xMetaData = m_pImpl->m_xConnection->getMetaData();
     }
     catch(const Exception&)
     {
     }
 }
 // -----------------------------------------------------------------------------
+OTableHelper::~OTableHelper()
+{
+}
+// -----------------------------------------------------------------------------
 void SAL_CALL OTableHelper::disposing()
 {
-    OTable_TYPEDEF::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_xConnection   = NULL;
-    m_xMetaData     = NULL;
+    if ( m_pImpl->m_xTablePropertyListener.is() )
+    {
+        m_pTables->removeContainerListener(m_pImpl->m_xTablePropertyListener.getRef());
+        m_pImpl->m_xTablePropertyListener->clear();
+        m_pImpl->m_xTablePropertyListener.dispose();
+    }
+    OTable_TYPEDEF::disposing();
+
+    m_pImpl->m_xConnection  = NULL;
+    m_pImpl->m_xMetaData    = NULL;
+
 }
 
 // -------------------------------------------------------------------------
 namespace
 {
-    typedef sal_Int32   OrdinalPosition;
-    struct ColumnDesc
-    {
-        ::rtl::OUString sName;
-        OrdinalPosition nOrdinalPosition;
-
-        ColumnDesc() {}
-        ColumnDesc( const ::rtl::OUString& _rName, OrdinalPosition _nPosition )
-            :sName( _rName )
-            ,nOrdinalPosition( _nPosition )
-        {
-        }
-    };
-
     /** collects ColumnDesc's from a resultset produced by XDatabaseMetaData::getColumns
     */
     void lcl_collectColumnDescs_throw( const Reference< XResultSet >& _rxResult, ::std::vector< ColumnDesc >& _out_rColumns )
@@ -131,8 +185,14 @@ namespace
         while ( _rxResult->next() )
         {
             sName = xRow->getString( 4 );           // COLUMN_NAME
+            sal_Int32       nField5 = xRow->getInt(5);
+            ::rtl::OUString aField6 = xRow->getString(6);
+            sal_Int32       nField7 = xRow->getInt(7)
+                        ,   nField9 = xRow->getInt(9)
+                        ,   nField11= xRow->getInt(11);
+            ::rtl::OUString sField13 = xRow->getString(13);
             nOrdinalPosition = xRow->getInt( 17 );  // ORDINAL_POSITION
-            _out_rColumns.push_back( ColumnDesc( sName, nOrdinalPosition ) );
+            _out_rColumns.push_back( ColumnDesc( sName,nField5,aField6,nField7,nField9,nField11,sField13, nOrdinalPosition ) );
         }
     }
 
@@ -201,16 +261,16 @@ void OTableHelper::refreshColumns()
         ) );
 
         // collect the column names, together with their ordinal position
-        ::std::vector< ColumnDesc > aColumns;
-        lcl_collectColumnDescs_throw( xResult, aColumns );
+        m_pImpl->m_aColumnDesc.clear();
+        lcl_collectColumnDescs_throw( xResult, m_pImpl->m_aColumnDesc );
 
         // ensure that the ordinal positions as obtained from the meta data do make sense
-        lcl_sanitizeColumnDescs( aColumns );
+        lcl_sanitizeColumnDescs( m_pImpl->m_aColumnDesc );
 
         // sort by ordinal position
         ::std::map< OrdinalPosition, ::rtl::OUString > aSortedColumns;
-        for (   ::std::vector< ColumnDesc >::const_iterator copy = aColumns.begin();
-                copy != aColumns.end();
+        for (   ::std::vector< ColumnDesc >::const_iterator copy = m_pImpl->m_aColumnDesc.begin();
+                copy != m_pImpl->m_aColumnDesc.end();
                 ++copy
             )
             aSortedColumns[ copy->nOrdinalPosition ] = copy->sName;
@@ -229,6 +289,21 @@ void OTableHelper::refreshColumns()
     else
         m_pColumns  = createColumns(aVector);
 }
+// -----------------------------------------------------------------------------
+const ColumnDesc* OTableHelper::getColumnDescription(const ::rtl::OUString& _sName) const
+{
+    const ColumnDesc* pRet = NULL;
+    ::std::vector< ColumnDesc >::const_iterator aEnd = m_pImpl->m_aColumnDesc.end();
+    for (::std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
+    {
+        if ( aIter->sName == _sName )
+        {
+            pRet = &*aIter;
+            break;
+        }
+    } // for (::std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
+    return pRet;
+}
 // -------------------------------------------------------------------------
 void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
 {
@@ -237,14 +312,26 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
         aCatalog <<= m_CatalogName;
     Reference< XResultSet > xResult = getMetaData()->getPrimaryKeys(aCatalog,m_SchemaName,m_Name);
 
-    if ( xResult.is() && xResult->next() )
+    if ( xResult.is() )
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        const ::rtl::OUString aPkName = xRow->getString(6);
-        m_aKeys.insert(TKeyMap::value_type(aPkName,sdbcx::TKeyProperties(new sdbcx::KeyProperties(::rtl::OUString(),KeyType::PRIMARY,0,0))));
+        sdbcx::TKeyProperties pKeyProps(new sdbcx::KeyProperties(::rtl::OUString(),KeyType::PRIMARY,0,0));
+        ::rtl::OUString aPkName;
+        bool bAlreadyFetched = false;
+        const Reference< XRow > xRow(xResult,UNO_QUERY);
+        while ( xResult->next() )
+        {
+            pKeyProps->m_aKeyColumnNames.push_back(xRow->getString(4));
+            if ( !bAlreadyFetched )
+            {
+                aPkName = xRow->getString(6);
+                bAlreadyFetched = true;
+            }
+        }
+
+        m_pImpl->m_aKeys.insert(TKeyMap::value_type(aPkName,pKeyProps));
         _rNames.push_back(aPkName);
-        ::comphelper::disposeComponent(xResult);
-    }
+    } // if ( xResult.is() && xResult->next() )
+    ::comphelper::disposeComponent(xResult);
 }
 // -------------------------------------------------------------------------
 void OTableHelper::refreshForgeinKeys(TStringVector& _rNames)
@@ -257,7 +344,8 @@ void OTableHelper::refreshForgeinKeys(TStringVector& _rNames)
 
     if ( xRow.is() )
     {
-        ::rtl::OUString aName,sCatalog,aSchema;
+        sdbcx::TKeyProperties pKeyProps;
+        ::rtl::OUString aName,sCatalog,aSchema,sOldFKName;
         while( xResult->next() )
         {
             // this must be outsid the "if" because we have to call in a right order
@@ -267,29 +355,51 @@ void OTableHelper::refreshForgeinKeys(TStringVector& _rNames)
             aSchema     = xRow->getString(2);
             aName       = xRow->getString(3);
 
-            const sal_Int32 nKeySeq = xRow->getInt(9);
+            const ::rtl::OUString sForeignKeyColumn = xRow->getString(8);
             const sal_Int32 nUpdateRule = xRow->getInt(10);
             const sal_Int32 nDeleteRule = xRow->getInt(11);
+            const ::rtl::OUString sFkName = xRow->getString(12);
 
-            if ( nKeySeq == 1 )
-            { // only append when the sequnce number is 1 to forbid serveral inserting the same key name
-                const ::rtl::OUString sFkName = xRow->getString(12);
-                if ( sFkName.getLength() && !xRow->wasNull() )
+                if ( pKeyProps.get() )
                 {
-                    ::rtl::OUString sReferencedName;
-                    sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,sal_False,::dbtools::eInDataManipulation);
-                    m_aKeys.insert(TKeyMap::value_type(sFkName,sdbcx::TKeyProperties(new sdbcx::KeyProperties(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule))));
+                }
+
+
+            if ( sFkName.getLength() && !xRow->wasNull() )
+            {
+                if ( sOldFKName != sFkName )
+                {
+                    if ( pKeyProps.get() )
+                        m_pImpl->m_aKeys.insert(TKeyMap::value_type(sOldFKName,pKeyProps));
+
+                    const ::rtl::OUString sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,sal_False,::dbtools::eInDataManipulation);
+                    pKeyProps.reset(new sdbcx::KeyProperties(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule));
+                    pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
                     _rNames.push_back(sFkName);
+                    if ( m_pTables->hasByName(sReferencedName) )
+                    {
+                        if ( !m_pImpl->m_xTablePropertyListener.is() )
+                            m_pImpl->m_xTablePropertyListener = ::comphelper::ImplementationReference< OTableContainerListener,XContainerListener>( new OTableContainerListener(this) );
+                        m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener.getRef());
+                        m_pImpl->m_xTablePropertyListener->add(sReferencedName);
+                    } // if ( m_pTables->hasByName(sReferencedName) )
+                    sOldFKName = sFkName;
+                } // if ( sOldFKName != sFkName )
+                else if ( pKeyProps.get() )
+                {
+                    pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
                 }
             }
-        }
+        } // while( xResult->next() )
+        if ( pKeyProps.get() )
+            m_pImpl->m_aKeys.insert(TKeyMap::value_type(sOldFKName,pKeyProps));
         ::comphelper::disposeComponent(xResult);
     }
 }
 // -------------------------------------------------------------------------
 void OTableHelper::refreshKeys()
 {
-    m_aKeys.clear();
+    m_pImpl->m_aKeys.clear();
 
     TStringVector aNames;
 
@@ -386,7 +496,7 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
         sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
         sSql += sComposedName;
 
-        Reference< XStatement > xStmt = m_xConnection->createStatement(  );
+        Reference< XStatement > xStmt = m_pImpl->m_xConnection->createStatement(  );
         if ( xStmt.is() )
         {
             xStmt->execute(sSql);
@@ -401,7 +511,7 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
 // -----------------------------------------------------------------------------
 Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
 {
-    return m_xMetaData;
+    return m_pImpl->m_xMetaData;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
@@ -441,8 +551,8 @@ void SAL_CALL OTableHelper::release() throw()
 sdbcx::TKeyProperties OTableHelper::getKeyProperties(const ::rtl::OUString& _sName) const
 {
     sdbcx::TKeyProperties pKeyProps;
-    TKeyMap::const_iterator aFind = m_aKeys.find(_sName);
-    if ( aFind != m_aKeys.end() )
+    TKeyMap::const_iterator aFind = m_pImpl->m_aKeys.find(_sName);
+    if ( aFind != m_pImpl->m_aKeys.end() )
     {
         pKeyProps = aFind->second;
     }
@@ -457,7 +567,7 @@ sdbcx::TKeyProperties OTableHelper::getKeyProperties(const ::rtl::OUString& _sNa
 // -----------------------------------------------------------------------------
 void OTableHelper::addKey(const ::rtl::OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties)
 {
-    m_aKeys.insert(TKeyMap::value_type(_sName,_aKeyProperties));
+    m_pImpl->m_aKeys.insert(TKeyMap::value_type(_sName,_aKeyProperties));
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OTableHelper::getTypeCreatePattern() const
@@ -465,4 +575,7 @@ void OTableHelper::addKey(const ::rtl::OUString& _sName,const sdbcx::TKeyPropert
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
-
+Reference< XConnection> OTableHelper::getConnection() const
+{
+    return m_pImpl->m_xConnection;
+}

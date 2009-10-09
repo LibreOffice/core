@@ -56,26 +56,21 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
 
-class TabWinFactory :  public com::sun::star::lang::XTypeProvider               ,
-                       public com::sun::star::lang::XServiceInfo                ,
-                       public com::sun::star::lang::XSingleComponentFactory     ,
-                       protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                       public ::cppu::OWeakObject
+class TabWinFactory :  protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                       public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
 {
     public:
         TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~TabWinFactory();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
         DECLARE_XSERVICEINFO
-        FWK_DECLARE_XTYPEPROVIDER
 
         // XSingleComponentFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);

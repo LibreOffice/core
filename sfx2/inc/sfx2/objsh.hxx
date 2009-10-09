@@ -43,6 +43,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -235,10 +236,6 @@ private:
     SAL_DLLPRIVATE sal_Bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
 //REMOVE        sal_Bool                    SaveInfoAndConfig_Impl( SvStorageRef pNewStg );
-
-    SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
-
 
 //#endif
 
@@ -733,8 +730,11 @@ public:
     SAL_DLLPRIVATE void BreakMacroSign_Impl( sal_Bool bBreakMacroSing );
     SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
     SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+    SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
+    SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
-    SAL_DLLPRIVATE static SEQUENCE< OUSTRING > GetEventNames_Impl();
+    SAL_DLLPRIVATE SEQUENCE< OUSTRING > GetEventNames_Impl();
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
 
@@ -797,6 +797,13 @@ public:
     SAL_DLLPRIVATE SfxAcceleratorManager* GetAccMgr_Impl();
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
+
+    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >
+        ImplAnalyzeSignature(
+            sal_Bool bScriptingContent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >& xSigner
+                = ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >() );
+
     SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = FALSE );
     SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 //#endif

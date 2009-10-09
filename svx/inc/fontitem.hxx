@@ -111,7 +111,7 @@ public:
         return *this;
     }
 
-    static void EnableStoreUnicodeNames( BOOL bEnable ) { bEnableStoreUnicodeNames = bEnable; }
+    static void EnableStoreUnicodeNames( BOOL bEnable );
 
 };
 

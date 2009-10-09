@@ -62,6 +62,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -81,19 +82,6 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3                    (    MenuBarFactory                                                  ,
-                                            OWeakObject                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                       ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementFactory )
-                                        )
-
-DEFINE_XTYPEPROVIDER_3                  (   MenuBarFactory                                  ,
-                                            css::lang::XTypeProvider                        ,
-                                            css::lang::XServiceInfo                         ,
-                                            ::com::sun::star::ui::XUIElementFactory
-                                        )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MenuBarFactory                                  ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_MENUBARFACTORY                      ,
@@ -104,6 +92,12 @@ DEFINE_INIT_SERVICE                     (   MenuBarFactory, {} )
 
 MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase()
+    , m_xServiceManager( xServiceManager )
+    , m_xModuleManager( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY )
+{
+}
+MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool ) :
+    ThreadHelpBase(&Application::GetSolarMutex())
     , m_xServiceManager( xServiceManager )
     , m_xModuleManager( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY )
 {
@@ -121,12 +115,27 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-
+    MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xServiceManager );
+    Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
+    Reference< ::com::sun::star::frame::XModuleManager > xModuleManager = m_xModuleManager;
+    aLock.unlock();
+    CreateUIElement(ResourceURL,Args,"MenuOnly","private:resource/menubar/",xMenuBar,xModuleManager,m_xServiceManager);
+    return xMenuBar;
+}
+void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
+                                     , const Sequence< PropertyValue >& Args
+                                     ,const char* _pExtraMode
+                                     ,const char* _pAsciiName
+                                     ,const Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
+                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >& _xModuleManager
+                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager)
+{
+    Reference< XUIConfigurationManager > xCfgMgr;
     Reference< XUIConfigurationManager > xConfigSource;
     Reference< XFrame >                  xFrame;
     rtl::OUString                        aResourceURL( ResourceURL );
     sal_Bool                             bPersistent( sal_True );
-    sal_Bool                             bMenuOnly( sal_False );
+    sal_Bool                             bExtraMode( sal_False );
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
@@ -138,51 +147,47 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
             Args[n].Value >>= aResourceURL;
         else if ( Args[n].Name.equalsAscii( "Persistent" ))
             Args[n].Value >>= bPersistent;
-        else if ( Args[n].Name.equalsAscii( "MenuOnly" ))
-            Args[n].Value >>= bMenuOnly;
-    }
-
-    Reference< XUIConfigurationManager > xCfgMgr;
-    if ( aResourceURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/" ))) != 0 )
+        else if ( _pExtraMode && Args[n].Name.equalsAscii( _pExtraMode ))
+            Args[n].Value >>= bExtraMode;
+    } // for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
+    if ( aResourceURL.indexOf( rtl::OUString::createFromAscii(_pAsciiName)) != 0 )
         throw IllegalArgumentException();
-    else
+
+    // Identify frame and determine document based ui configuration manager/module ui configuration manager
+    if ( xFrame.is() && !xConfigSource.is() )
     {
-        // Identify frame and determine document based ui configuration manager/module ui configuration manager
-        if ( xFrame.is() && !xConfigSource.is() )
+        bool bHasSettings( false );
+        Reference< XModel > xModel;
+
+        Reference< XController > xController = xFrame->getController();
+        if ( xController.is() )
+            xModel = xController->getModel();
+
+        if ( xModel.is() )
         {
-            bool bHasSettings( false );
-            Reference< XModel > xModel;
-
-            Reference< XController > xController = xFrame->getController();
-            if ( xController.is() )
-                xModel = xController->getModel();
-
-            if ( xModel.is() )
+            Reference< XUIConfigurationManagerSupplier > xUIConfigurationManagerSupplier( xModel, UNO_QUERY );
+            if ( xUIConfigurationManagerSupplier.is() )
             {
-                Reference< XUIConfigurationManagerSupplier > xUIConfigurationManagerSupplier( xModel, UNO_QUERY );
-                if ( xUIConfigurationManagerSupplier.is() )
-                {
-                    xCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
-                    bHasSettings = xCfgMgr->hasSettings( aResourceURL );
-                }
+                xCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
+                bHasSettings = xCfgMgr->hasSettings( aResourceURL );
             }
+        }
 
-            if ( !bHasSettings )
+        if ( !bHasSettings )
+        {
+            rtl::OUString aModuleIdentifier = _xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
+            if ( aModuleIdentifier.getLength() )
             {
-                rtl::OUString aModuleIdentifier = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
-                if ( aModuleIdentifier.getLength() )
-                {
-                    Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
-                        m_xServiceManager->createInstance( SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ), UNO_QUERY );
-                    xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
-                    bHasSettings = xCfgMgr->hasSettings( aResourceURL );
-                }
+                Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
+                    _xServiceManager->createInstance( SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ), UNO_QUERY );
+                xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
+                bHasSettings = xCfgMgr->hasSettings( aResourceURL );
             }
         }
     }
 
     PropertyValue aPropValue;
-    Sequence< Any > aPropSeq( 5 );
+    Sequence< Any > aPropSeq( _pExtraMode ? 5 : 4);
     aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
     aPropValue.Value <<= xFrame;
     aPropSeq[0] <<= aPropValue;
@@ -195,16 +200,16 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
     aPropValue.Value <<= bPersistent;
     aPropSeq[3] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MenuOnly" ));
-    aPropValue.Value <<= bMenuOnly;
-    aPropSeq[4] <<= aPropValue;
+    if ( _pExtraMode )
+    {
+        aPropValue.Name = rtl::OUString::createFromAscii(_pExtraMode);
+        aPropValue.Value <<= bExtraMode;
+        aPropSeq[4] <<= aPropValue;
+    }
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xServiceManager );
-    Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
-    Reference< XInitialization > xInit( xMenuBar, UNO_QUERY );
+    Reference< XInitialization > xInit( _xMenuBar, UNO_QUERY );
     xInit->initialize( aPropSeq );
-    return xMenuBar;
 }
 
 } // namespace framework

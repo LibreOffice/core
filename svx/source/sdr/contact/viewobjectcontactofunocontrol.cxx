@@ -30,12 +30,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
 #include <svx/sdr/contact/viewcontactofunocontrol.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <svx/svdouno.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include "sdrpaintwindow.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -53,23 +59,21 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 /** === end UNO includes === **/
-#include <svx/svdouno.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
-#include <svx/sdrpagewindow.hxx>
-#include "sdrpaintwindow.hxx"
+
 #include <toolkit/helper/formpdfexport.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+
 #include <boost/shared_ptr.hpp>
+#include <boost/bind.hpp>
 
 //........................................................................
 namespace sdr { namespace contact {
@@ -220,10 +224,17 @@ namespace sdr { namespace contact {
     void ControlHolder::setPosSize( const Rectangle& _rPosSize ) const
     {
         // no check whether we're valid, this is the responsibility of the caller
-        m_xControlWindow->setPosSize(
-            _rPosSize.Left(), _rPosSize.Top(), _rPosSize.GetWidth(), _rPosSize.GetHeight(),
-            POSSIZE
-        );
+
+        // don't call setPosSize when pos/size did not change
+        // #i104181# / 2009-08-18 / frank.schoenheit@sun.com
+        ::Rectangle aCurrentRect( getPosSize() );
+        if ( aCurrentRect != _rPosSize )
+        {
+            m_xControlWindow->setPosSize(
+                _rPosSize.Left(), _rPosSize.Top(), _rPosSize.GetWidth(), _rPosSize.GetHeight(),
+                POSSIZE
+            );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -453,7 +464,10 @@ namespace sdr { namespace contact {
     {
     private:
         /// the instance whose IMPL we are
-        ViewObjectContactOfUnoControl*    m_pAntiImpl;
+        ViewObjectContactOfUnoControl*  m_pAntiImpl;
+
+        /// are we currently inside impl_ensureControl_nothrow?
+        bool                            m_bCreatingControl;
 
         /** thread safety
 
@@ -842,6 +856,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
         :m_pAntiImpl( _pAntiImpl )
+        ,m_bCreatingControl( false )
         ,m_pOutputDeviceForWindow( NULL )
         ,m_bControlIsVisible( false )
         ,m_bIsDesignModeListening( false )
@@ -985,10 +1000,37 @@ namespace sdr { namespace contact {
         return rPageWindow.GetPaintWindow().GetOutputDevice();
     }
 
+    namespace
+    {
+        static void lcl_resetFlag( bool& rbFlag )
+        {
+            rbFlag = false;
+        }
+    }
+
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice,
         const basegfx::B2DHomMatrix& _rInitialViewTransformation )
     {
+        if ( m_bCreatingControl )
+        {
+            OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
+            // We once had a situation where this was called reentrantly, which lead to all kind of strange effects. All
+            // those affected the grid control, which is the only control so far which is visible in design mode (and
+            // not only in alive mode).
+            // Creating the control triggered an Window::Update on some of its child windows, which triggered a
+            // Paint on parent of the grid control (e.g. the SwEditWin), which triggered a reentrant call to this method,
+            // which it is not really prepared for.
+            //
+            // /me thinks that re-entrance should be caught on a higher level, i.e. the Drawing Layer should not allow
+            // reentrant paint requests. For the moment, until /me can discuss this with AW, catch it here.
+            // 2009-08-27 / #i104544# frank.schoenheit@sun.com
+            return false;
+        }
+
+        m_bCreatingControl = true;
+        ::comphelper::ScopeGuard aGuard( ::boost::bind( lcl_resetFlag, ::boost::ref( m_bCreatingControl ) ) );
+
         if ( m_aControl.is() )
         {
             if ( m_pOutputDeviceForWindow == &_rDevice )

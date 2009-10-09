@@ -210,6 +210,9 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
         if ( nHelpId )
             SfxHelp::OpenHelpAgent( pFrame, nHelpId );
 
+        // if focus was on an external window, the clipboard content might have been changed
+        pView->GetBindings().Invalidate( SID_PASTE );
+        pView->GetBindings().Invalidate( SID_PASTE_SPECIAL );
         return sal_True;
     }
     else if( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -1016,7 +1019,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             GetCurrentViewFrame()->Resize(TRUE);
     }
 
-    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, pDoc ) );
+    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), pDoc ) );
     return sal_True;
 }
 

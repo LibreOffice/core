@@ -36,6 +36,7 @@
 #include <sfx2/printer.hxx>     // Printer
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
+#include <unicode/uchar.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -244,7 +245,25 @@ void FontPrevWin_Impl::_CheckScript()
         do
         {
             nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
-            aScriptChg.Insert( nChg, nCnt );
+            if (nChg < aText.Len() && nChg > 0 &&
+                (com::sun::star::i18n::ScriptType::WEAK ==
+                 xBreak->getScriptType(aText, nChg - 1)))
+            {
+                int8_t nType = u_charType(aText.GetChar(nChg) );
+                if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
+                    nType == U_COMBINING_SPACING_MARK )
+                {
+                    aScriptChg.Insert( nChg - 1, nCnt );
+                }
+                else
+                {
+                    aScriptChg.Insert( nChg, nCnt );
+                }
+            }
+            else
+            {
+                aScriptChg.Insert( nChg, nCnt );
+            }
             aScriptType.Insert( nScript, nCnt );
             aTextWidth.Insert( ULONG(0), nCnt++ );
 
