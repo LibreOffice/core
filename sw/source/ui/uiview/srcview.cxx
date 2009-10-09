@@ -57,6 +57,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/request.hxx>
@@ -457,17 +458,21 @@ void SwSrcView::Execute(SfxRequest& rReq)
         break;
         case SID_UNDO:
             pTextView->Undo();
+            GetViewFrame()->GetBindings().InvalidateAll(FALSE);
         break;
         case SID_REDO:
             pTextView->Redo();
+            GetViewFrame()->GetBindings().InvalidateAll(FALSE);
         break;
         case SID_REPEAT:
         break;
         case SID_CUT:
-            pTextView->Cut();
+            if(pTextView->HasSelection())
+                pTextView->Cut();
         break;
         case SID_COPY:
-            pTextView->Copy();
+            if(pTextView->HasSelection())
+                pTextView->Copy();
         break;
         case SID_PASTE:
             pTextView->Paste();
@@ -588,6 +593,8 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             case SID_DIRECTEXPORTDOCASPDF:
             case SID_EXPORTDOC:
             case SID_REPEAT:
+            case SID_BROWSER_MODE:
+            case FN_PRINT_LAYOUT:
                 rSet.DisableItem(nWhich);
             break;
             case SID_CUT:

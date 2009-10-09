@@ -821,7 +821,7 @@ SfxVoidItem ChangeDatabaseField FN_CHANGE_DBFIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -1759,7 +1759,7 @@ SfxVoidItem ExecuteMacroField FN_EXECUTE_MACROFIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -1809,7 +1809,7 @@ SfxVoidItem FieldDialog FN_EDIT_FIELD
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -4370,7 +4370,7 @@ SfxVoidItem InsertMultiIndex FN_INSERT_MULTI_TOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -6509,12 +6509,12 @@ SfxVoidItem PageUpSel FN_PAGEUP_SEL
 ]
 
 //--------------------------------------------------------------------------
-SfxInt16Item PasteSpecial FN_PASTESPECIAL
+SfxVoidItem PreviewPrintOptions FN_PREVIEW_PRINT_OPTIONS
 ()
 [
     /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
@@ -6523,14 +6523,14 @@ SfxInt16Item PasteSpecial FN_PASTESPECIAL
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
+    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    GroupId = GID_DOC;
 ]
 
 //--------------------------------------------------------------------------
@@ -6567,7 +6567,7 @@ SfxBoolItem PrintLayout FN_PRINT_LAYOUT
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -6848,7 +6848,7 @@ SfxBoolItem Ruler FN_RULER
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -7027,7 +7027,7 @@ SfxUInt16Item SelectionMode FN_STAT_SELMODE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -7394,7 +7394,7 @@ SfxVoidItem SetOptimalColumnWidth FN_TABLE_ADJUST_CELLS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -7905,7 +7905,7 @@ SfxStringItem StatePageNumber FN_STAT_PAGE
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -8683,7 +8683,7 @@ SfxBoolItem ViewBounds FN_VIEW_BOUNDS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,

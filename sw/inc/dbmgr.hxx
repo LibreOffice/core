@@ -252,9 +252,6 @@ public:
     // Mischen von Datensaetzen in Felder
     BOOL            MergeNew( const SwMergeDescriptor& rMergeDesc );
     BOOL            Merge(SwWrtShell* pSh);
-    // printing parts of a merge result document
-    BOOL            MergePrintDocuments( SwView& rView,
-                                SwPrtOptions& rOpt, SfxProgress& rProgress, BOOL bIsAPI );
 
     // Datenbankfelder mit fehlendem Datenbankname initialisieren
     inline BOOL     IsInitDBFields() const  { return bInitDBFields; }

@@ -275,7 +275,7 @@ public:
     void SetFtnPage( BOOL b )                               { bFtnPage = b; }
     void SetEndNotePage( BOOL b )                           { bEndNotePage = b; }
 
-    inline  USHORT GetPhyPageNum() const    { return nPhyPageNum;}
+    inline  USHORT GetPhyPageNum() const        { return nPhyPageNum;}
     inline  void SetPhyPageNum( USHORT nNum )   { nPhyPageNum = nNum;}
     inline  void DecrPhyPageNum()               { --nPhyPageNum;     }
     inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }

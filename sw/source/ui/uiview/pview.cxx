@@ -1575,6 +1575,10 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     {
         switch(nWhich)
         {
+        case SID_BROWSER_MODE:
+        case FN_PRINT_LAYOUT:
+            rSet.DisableItem(nWhich);
+            break;
         case FN_START_OF_DOCUMENT:
         {
             if ( pPagePrevwLay->IsPageVisible( 1 ) )
@@ -2299,13 +2303,11 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
     aDocSz = rSz;
 
-    // die neue Anzahl von Seiten bestimmen
-    USHORT nNewCnt = GetViewShell()->GetNumPages();
-    if( nNewCnt == mnPageCount )
-        return;
+    // --> OD 2009-08-20 #i96726#
+    // Due to the multiple page layout it is needed to trigger recalculation
+    // of the page preview layout, even if the count of pages is not changing.
+    mnPageCount = GetViewShell()->GetNumPages();
 
-    // dann eine neue Startseite berechnen
-    mnPageCount = nNewCnt;
     if( aVisArea.GetWidth() )
     {
         ChgPage( SwPagePreViewWin::MV_CALC, TRUE );
@@ -2313,6 +2315,7 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
         aViewWin.Invalidate();
     }
+    // <--
 }
 
 /*--------------------------------------------------------------------
@@ -2421,6 +2424,10 @@ SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
 {
     ViewShell &rSh = *GetViewShell();
+    SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
     if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
     {

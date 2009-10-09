@@ -2103,6 +2103,11 @@ void SwTabFrm::MakeAll()
             {
                 bMovedFwd = TRUE;
                 bCalcLowers = TRUE;
+                // --> OD 2009-08-12 #i99267#
+                // reset <bSplit> after forward move to assure that follows
+                // can be joined, if further space is available.
+                bSplit = FALSE;
+                // <--
             }
 
         Point aOldPos( (Frm().*fnRect->fnGetPos)() );

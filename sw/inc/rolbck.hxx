@@ -40,6 +40,10 @@
 
 //Nur die History anziehen, um das docnew.cxx gegen die CLOOK's zu behaupten.
 
+namespace sfx2 {
+    class MetadatableUndo;
+}
+
 class SwDoc;
 class SwFmt;
 class SwFmtColl;
@@ -298,6 +302,7 @@ class SwHistoryBookmark : public SwHistoryHint
         const bool m_bSaveOtherPos;
         const bool m_bHadOtherPos;
         const IDocumentMarkAccess::MarkType m_eBkmkType;
+        ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
 };
 
 class SwHistorySetAttrSet : public SwHistoryHint
@@ -449,13 +454,16 @@ public:
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     SwRegHistory( SwHistory* pHst );
     // <--
-    SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
-                xub_StrLen nStart, xub_StrLen nEnd, USHORT nFlags,
-                SwHistory* pHst );
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+
+    /// @return true iff at least 1 item was inserted
+    bool InsertItems( const SfxItemSet& rSet,
+        xub_StrLen const nStart, xub_StrLen const nEnd,
+        SetAttrMode const nFlags );
+
     void AddHint( SwTxtAttr* pHt, const bool bNew = false );
 
     void RegisterInModify( SwModify* pRegIn, const SwNode& rNd );

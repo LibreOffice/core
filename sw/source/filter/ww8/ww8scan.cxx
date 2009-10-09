@@ -1498,8 +1498,15 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             }
             INT32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
             if( 8 <= pWw8Fib->nVersion )
+            {
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
                                                                 bIsUnicode );
+            }
+            else
+            {
+                if (pWw8Fib->fExtChar)
+                    bIsUnicode=true;
+            }
             INT32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
             /*
@@ -1581,7 +1588,10 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
-            *pIsUnicode = false;
+        if (pWw8Fib->fExtChar)
+                *pIsUnicode=true;
+            else
+                    *pIsUnicode = false;
         else
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
 

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: porlay.cxx,v $
- * $Revision: 1.67.190.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -45,6 +42,7 @@
 #include <porrst.hxx>       // SwHangingPortion
 #include <pormulti.hxx>     // SwMultiPortion
 #include <breakit.hxx>
+#include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <com/sun/star/i18n/CTLScriptType.hdl>
 #include <com/sun/star/i18n/WordType.hdl>
@@ -800,7 +798,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
 
 void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 {
-    if( !pBreakIt->xBreak.is() )
+    if( !pBreakIt->GetBreakIter().is() )
         return;
 
     const String& rTxt = rNode.GetTxt();
@@ -909,13 +907,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // we go back in our group until we reach the first character of
     // type nScript
     while ( nChg > nGrpStart &&
-            nScript != pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
+            nScript != pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
         --nChg;
 
     // If we are at the start of a group, we do not trust nScript,
     // we better get nScript from the breakiterator:
     if ( nChg == nGrpStart )
-        nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
+        nScript = (BYTE)pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
 
     //
     // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
@@ -961,14 +959,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
     //
 
-    if( WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
+    if( WEAK == pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
     {
         // If the beginning of the current group is weak, this means that
         // all of the characters in this grounp are weak. We have to assign
         // the scripts to these characters depending on the fonts which are
         // set for these characters to display them.
         xub_StrLen nEnd =
-                (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, WEAK );
+                (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
 
         if( nEnd > rTxt.Len() )
             nEnd = rTxt.Len();
@@ -983,7 +981,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         // Get next script type or set to weak in order to exit
         BYTE nNextScript = ( nEnd < rTxt.Len() ) ?
-           (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nEnd ) :
+           (BYTE)pBreakIt->GetBreakIter()->getScriptType( rTxt, nEnd ) :
            (BYTE)WEAK;
 
         if ( nScript != nNextScript )
@@ -1005,7 +1003,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
 
         xub_StrLen nSearchStt = nChg;
-        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nSearchStt, nScript );
+        nChg = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rTxt, nSearchStt, nScript );
 
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
@@ -1013,16 +1011,16 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // --> FME 2008-09-17 #i28203#
         // for 'complex' portions, we make sure that a portion does not contain more
         // than one script:
-        if( pBreakIt->xCTLDetect.is() && i18n::ScriptType::COMPLEX == nScript )
+        if( i18n::ScriptType::COMPLEX == nScript && pBreakIt->GetScriptTypeDetector().is() )
         {
-            const short nScriptType = pBreakIt->xCTLDetect->getCTLScriptType( rTxt, nSearchStt );
+            const short nScriptType = pBreakIt->GetScriptTypeDetector()->getCTLScriptType( rTxt, nSearchStt );
             xub_StrLen nNextCTLScriptStart = nSearchStt;
             short nCurrentScriptType = nScriptType;
             while( com::sun::star::i18n::CTLScriptType::CTL_UNKNOWN == nCurrentScriptType || nScriptType == nCurrentScriptType )
             {
-                nNextCTLScriptStart = (xub_StrLen)pBreakIt->xCTLDetect->endOfCTLScriptType( rTxt, nNextCTLScriptStart );
+                nNextCTLScriptStart = (xub_StrLen)pBreakIt->GetScriptTypeDetector()->endOfCTLScriptType( rTxt, nNextCTLScriptStart );
                 if( nNextCTLScriptStart < rTxt.Len() && nNextCTLScriptStart < nChg )
-                    nCurrentScriptType = pBreakIt->xCTLDetect->getCTLScriptType( rTxt, nNextCTLScriptStart );
+                    nCurrentScriptType = pBreakIt->GetScriptTypeDetector()->getCTLScriptType( rTxt, nNextCTLScriptStart );
                 else
                     break;
             }
@@ -1030,7 +1028,26 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         }
         // <--
 
-        aScriptChg.Insert( nChg, nCnt );
+        // special case for dotted circle since it can be used with complex
+        // before a mark, so we want it associated with the mark's script
+        if (nChg < rTxt.Len() && nChg > 0 && (i18n::ScriptType::WEAK ==
+            pBreakIt->GetBreakIter()->getScriptType(rTxt,nChg - 1)))
+        {
+            int8_t nType = u_charType(rTxt.GetChar(nChg) );
+            if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
+                nType == U_COMBINING_SPACING_MARK )
+            {
+                aScriptChg.Insert( nChg - 1, nCnt );
+            }
+            else
+            {
+                aScriptChg.Insert( nChg, nCnt );
+            }
+        }
+        else
+        {
+            aScriptChg.Insert( nChg, nCnt );
+        }
         aScriptType.Insert( nScript, nCnt++ );
 
         // if current script is asian, we search for compressable characters
@@ -1270,7 +1287,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         }
 
         if ( nChg < rTxt.Len() )
-            nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
+            nScript = (BYTE)pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
 
         nLastCompression = nChg;
         nLastKashida = nChg;
@@ -1549,7 +1566,7 @@ void SwScriptInfo::DeleteHiddenRanges( SwTxtNode& rNode )
         nHiddenStart = *(rFirst++);
 
         SwPaM aPam( rNode, nHiddenStart, rNode, nHiddenEnd );
-        rNode.getIDocumentContentOperations()->Delete( aPam );
+        rNode.getIDocumentContentOperations()->DeleteRange( aPam );
     }
 }
 

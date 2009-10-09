@@ -124,6 +124,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sfx2/Metadatable.hxx>
+#include <fmtmeta.hxx> // MetaFieldManager
 
 
 using namespace ::com::sun::star;
@@ -225,6 +226,7 @@ SwDoc::SwDoc() :
     aUndoNodes( this ),
     mpAttrPool(new SwAttrPool(this)),
     pMarkManager(new ::sw::mark::MarkManager(*this)),
+    m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
     pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
@@ -1058,6 +1060,12 @@ SwDoc::GetXmlIdRegistry()
     return *m_pXmlIdRegistry;
 }
 
+::sw::MetaFieldManager &
+SwDoc::GetMetaFieldManager()
+{
+    return *m_pMetaFieldManager;
+}
+
 void SwDoc::InitTOXTypes()
 {
    ShellResource* pShellRes = ViewShell::GetShellRes();
@@ -1398,7 +1406,7 @@ void SwDoc::Paste( const SwDoc& rSource )
 
             aIndexBefore--;
 
-            rSource.Copy( aCpyPam, rInsPos, true );
+            rSource.CopyRange( aCpyPam, rInsPos, true );
 
             {
                 aIndexBefore++;

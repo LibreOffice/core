@@ -74,6 +74,7 @@
 #include <svtools/langtab.hxx>
 #include <svtools/smplhint.hxx>
 
+#include <svx/svdview.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/outliner.hxx>
@@ -153,6 +154,14 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
         mbWaitingForCalcRects = true;
         mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
     }
+
+    //#i#
+    if (HasNotes() && !mpWrtShell->GetViewOptions()->IsPostIts())
+        {
+                SfxRequest aRequest(mpView->GetViewFrame(),FN_VIEW_NOTES);
+                mpView->ExecViewOptions(aRequest);
+        }
+
 }
 
 SwPostItMgr::~SwPostItMgr()
@@ -307,8 +316,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     /*
     else if ( rHint.IsA(TYPE(SwRedlineHint) ) )
     {
-        SwRedline* pRedline = const_cast<SwRedline*>(((SwRedlineHint&)rHint).GetRedline());
-        switch ( ((SwRedlineHint&)rHint).Which() )
+        const SwRedlineHint rRedlineHint = static_cast<const SwRedlineHint&>(rHint);
+           SwRedline* pRedline = const_cast<SwRedline*>(rRedlineHint.GetRedline());
+        switch ( rRedlineHint.Which() )
         {
             case SWREDLINE_INSERTED :
             {
@@ -325,7 +335,8 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             case SWREDLINE_FOCUS:
             {
-                Focus(rBC);
+                                if (rRedlineHint.GetView()== mpView)
+                    Focus(rBC);
                 break;
             }
         }
@@ -333,8 +344,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     */
     else if ( rHint.IsA(TYPE(SwFmtFldHint) ) )
     {
-        SwFmtFld* pFld = const_cast <SwFmtFld*>( ((SwFmtFldHint&)rHint).GetField() );
-        switch ( ((SwFmtFldHint&)rHint).Which() )
+        const SwFmtFldHint& rFmtHint = static_cast<const SwFmtFldHint&>(rHint);
+        SwFmtFld* pFld = const_cast <SwFmtFld*>( rFmtHint.GetField() );
+        switch ( rFmtHint.Which() )
         {
             case SWFMTFLD_INSERTED :
             {
@@ -351,9 +363,10 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (bEmpty && !mvPostItFlds.empty())
                         PrepareView(true);
                 }
-                else {
+                else
+                {
                     DBG_ERROR( "Inserted field not in document!" );
-                }
+                        }
                 break;
             }
             case SWFMTFLD_REMOVED:
@@ -371,18 +384,22 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             case SWFMTFLD_FOCUS:
             {
-                Focus(rBC);
+                       if (rFmtHint.GetView()== mpView)
+                    Focus(rBC);
                 break;
             }
             case SWFMTFLD_CHANGED:
             {
-                SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
+                        SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
                 for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
                 {
-                    if ( pFmtFld == (*i)->GetBroadCaster() )
+                            if ( pFmtFld == (*i)->GetBroadCaster() )
                     {
                         if ((*i)->pPostIt)
+                        {
                             (*i)->pPostIt->SetPostItText();
+                            mbLayout = true;
+                        }
                         break;
                     }
                 }
@@ -390,10 +407,10 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             case SWFMTFLD_LANGUAGE:
             {
-                SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
+                        SwFmtFld* pFmtFld = dynamic_cast<SwFmtFld*>(&rBC);
                 for(std::list<SwMarginItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
                 {
-                    if ( pFmtFld == (*i)->GetBroadCaster() )
+                                if ( pFmtFld == (*i)->GetBroadCaster() )
                     {
                         if ((*i)->pPostIt)
                         {
@@ -1913,4 +1930,28 @@ sal_uInt16 SwPostItMgr::SearchReplace(const SwFmtFld &pFld, const ::com::sun::st
         }
     }
     return aResult;
+}
+
+void SwPostItMgr::AssureStdModeAtShell()
+{
+    //#i103373# #i103645#
+        // deselect any drawing or frame and leave editing mode
+          SdrView* pSdrView = mpWrtShell->GetDrawView();
+        if ( pSdrView && pSdrView->IsTextEdit() )
+        {
+            sal_Bool bLockView = mpWrtShell->IsViewLocked();
+               mpWrtShell->LockView( sal_True );
+            mpWrtShell->EndTextEdit();
+                mpWrtShell->LockView( bLockView );
+        }
+
+        if( mpWrtShell->IsSelFrmMode() || mpWrtShell->IsObjSelected())
+        {
+                mpWrtShell->UnSelectFrm();
+                mpWrtShell->LeaveSelFrmMode();
+                mpWrtShell->EnterStdMode();
+
+                mpWrtShell->DrawSelChanged();
+                mpView->StopShellTimer();
+        }
 }

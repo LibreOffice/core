@@ -386,7 +386,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
         // die Undo-History
         pSttStr = (String*)new String( pSttTxtNd->GetTxt().Copy( nSttCntnt, nLen ));
-        pSttTxtNd->Erase( pStt->nContent, nLen );
+        pSttTxtNd->EraseText( pStt->nContent, nLen );
         if( pSttTxtNd->GetpSwpHints() )
             pSttTxtNd->GetpSwpHints()->DeRegister();
 
@@ -422,7 +422,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         // die Undo-History
         pEndStr = (String*)new String( pEndTxtNd->GetTxt().Copy( 0,
                                     pEnd->nContent.GetIndex() ));
-        pEndTxtNd->Erase( aEndIdx, pEnd->nContent.GetIndex() );
+        pEndTxtNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTxtNd->GetpSwpHints() )
             pEndTxtNd->GetpSwpHints()->DeRegister();
 
@@ -511,7 +511,7 @@ BOOL SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         nUChrPos++;
     }
     pSttStr->Insert( cDelChar, nUChrPos );
-    pDelTxtNd->Erase( pStt->nContent, 1 );
+    pDelTxtNd->EraseText( pStt->nContent, 1 );
 
     bGroup = TRUE;
     return TRUE;
@@ -711,7 +711,8 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             }
             if( pTxtNd )
             {
-                pTxtNd->Insert( *pEndStr, aPos.nContent, INS_NOHINTEXPAND );
+                pTxtNd->InsertText( *pEndStr, aPos.nContent,
+                        IDocumentContentOperations::INS_NOHINTEXPAND );
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoEnd);
             }
@@ -804,7 +805,8 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 // SectionNode-Modus und von oben nach unten selektiert:
                 //  -> im StartNode steht noch der Rest vom Join => loeschen
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
-                pTxtNd->Insert( *pSttStr, aPos.nContent, INS_NOHINTEXPAND );
+                pTxtNd->InsertText( *pSttStr, aPos.nContent,
+                        IDocumentContentOperations::INS_NOHINTEXPAND );
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoStart);
             }

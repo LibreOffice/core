@@ -1653,7 +1653,12 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 {
                     ASSERT( maAnchoredDrawObj.DrawObj(), "SwDrawContact::Modify: no draw object here?" );
                     if ( maAnchoredDrawObj.DrawObj() )
-                        maAnchoredDrawObj.DrawObj()->getShapePropertyChangeNotifier().notifyPropertyChange( ::svx::eTextShapeAnchorType );
+                    {
+                        // --> OD 2009-07-10 #i102752#
+                        // assure that a ShapePropertyChangeNotifier exists
+                        maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange( ::svx::eTextShapeAnchorType );
+                        // <--
+                    }
                 }
             }
         }

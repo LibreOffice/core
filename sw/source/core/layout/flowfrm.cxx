@@ -1514,7 +1514,12 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             // values of found previous frame and use these values.
             SwTwips nPrevLowerSpace = 0;
             SwTwips nPrevLineSpacing = 0;
-            GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
+            // --> OD 2009-08-28 #i102458#
+            bool bPrevLineSpacingPorportional = false;
+            GetSpacingValuesOfFrm( (*pPrevFrm),
+                                   nPrevLowerSpace, nPrevLineSpacing,
+                                   bPrevLineSpacingPorportional );
+            // <--
             if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) )
             {
                 nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
@@ -1539,7 +1544,22 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     //      building its maximum.
                     if ( pOwn->IsTxtFrm() )
                     {
-                        nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        // --> OD 2009-08-28 #i102458#
+                        // Correction:
+                        // A proportional line spacing of the previous text frame
+                        // is added up to a own leading line spacing.
+                        // Otherwise, the maximum of the leading line spacing
+                        // of the previous text frame and the own leading line
+                        // spacing is built.
+                        if ( bPrevLineSpacingPorportional )
+                        {
+                            nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        }
+                        else
+                        {
+                            nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
+                        }
+                        // <--
                     }
                     nUpper += nAdd;
                 }
@@ -1571,7 +1591,22 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                     SwTwips nAdd = nPrevLineSpacing;
                     if ( pOwn->IsTxtFrm() )
                     {
-                        nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        // --> OD 2009-08-28 #i102458#
+                        // Correction:
+                        // A proportional line spacing of the previous text frame
+                        // is added up to a own leading line spacing.
+                        // Otherwise, the maximum of the leading line spacing
+                        // of the previous text frame and the own leading line
+                        // spacing is built.
+                        if ( bPrevLineSpacingPorportional )
+                        {
+                            nAdd += static_cast<SwTxtFrm&>(rThis).GetLineSpace( true );
+                        }
+                        else
+                        {
+                            nAdd = Max( nAdd, static_cast<SwTxtFrm&>(rThis).GetLineSpace( true ) );
+                        }
+                        // <--
                     }
                     nUpper += nAdd;
                 }
@@ -1675,7 +1710,10 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
     {
         SwTwips nPrevLowerSpace = 0;
         SwTwips nPrevLineSpacing = 0;
-        GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing );
+        // --> OD 2009-08-28 #i102458#
+        bool bDummy = false;
+        GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing, bDummy );
+        // <--
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
         {
             const IDocumentSettingAccess* pIDSA = rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess();
@@ -2697,8 +2735,3 @@ const SwFlowFrm *SwFlowFrm::CastFlowFrm( const SwFrm *pFrm )
         return (SwSectionFrm*)pFrm;
     return 0;
 }
-
-
-
-
-

@@ -41,19 +41,19 @@
 #include <unoobj.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 #include <txtatr.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtfld.hxx>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -63,88 +63,95 @@ using ::rtl::OUString;
  * SwXTextPortion
  ******************************************************************/
 
-/*-- 11.12.98 09:56:52---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
+static void init(SwXTextPortion & rPortion, const SwUnoCrsr* pPortionCursor)
 {
-    SwFmtFld* pRet = 0;
-    // initial wird es immer gesucht, danach nur noch, wenn es bereits existierte
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr && (bInit || pFmtFld))
+    SwUnoCrsr* pUnoCursor =
+        pPortionCursor->GetDoc()->CreateUnoCrsr(*pPortionCursor->GetPoint());
+    if (pPortionCursor->HasMark())
     {
-        SwTxtNode *pNode = pUnoCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
-        SwTxtFld *pTxtFld = 0;
-        if( pNode )
-            pTxtFld = pNode->GetTxtFld( pUnoCrsr->Start()->nContent );
-        if(pTxtFld)
-            pFmtFld = pRet = (SwFmtFld*)&pTxtFld->GetFld();
+        pUnoCursor->SetMark();
+        *pUnoCursor->GetMark() = *pPortionCursor->GetMark();
     }
-    return pRet;
+    pUnoCursor->Add(& rPortion);
 }
+
 /*-- 11.12.98 09:56:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
         uno::Reference< text::XText > const& rParent,
-        SwTextPortionType eType) :
-    aLstnrCntnr( (text::XTextRange*)this),
-    m_pPropSet(aSwMapProvider.GetPropertySet(
-                (PORTION_REDLINE_START == eType ||
-                 PORTION_REDLINE_END   == eType) ?
-                    PROPERTY_MAP_REDLINE_PORTION : PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
-    xParentText(rParent),
-    pRubyText(0),
-    pRubyStyle(0),
-    pRubyAdjust(0),
-    pRubyIsAbove(0),
-    pFmtFld(0),
-    aFrameDepend(this, 0),
-    pFrameFmt(0),
-    ePortionType(eType),
-    nControlChar(0),
-    bIsCollapsed(FALSE)
+        SwTextPortionType eType)
+    : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
+    , m_pPropSet(aSwMapProvider.GetPropertySet(
+        (PORTION_REDLINE_START == eType ||
+         PORTION_REDLINE_END   == eType)
+            ?  PROPERTY_MAP_REDLINE_PORTION
+            :  PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
+    , m_xParentText(rParent)
+    , m_pRubyText(0)
+    , m_pRubyStyle(0)
+    , m_pRubyAdjust(0)
+    , m_pRubyIsAbove(0)
+    , m_FrameDepend(this, 0)
+    , m_pFrameFmt(0)
+    , m_ePortionType(eType)
+    , m_bIsCollapsed(false)
 {
-    SwUnoCrsr* pUnoCrsr = pPortionCrsr->GetDoc()->CreateUnoCrsr(*pPortionCrsr->GetPoint());
-    if(pPortionCrsr->HasMark())
-    {
-        pUnoCrsr->SetMark();
-        *pUnoCrsr->GetMark() = *pPortionCrsr->GetMark();
-    }
-    pUnoCrsr->Add(this);
-    // erst nach ->Add()
-    if(ePortionType == PORTION_FIELD)
-        GetFldFmt(sal_True);
-//  else if(ePortionType == PORTION_FRAME)
-//      ...;
+    init(*this, pPortionCrsr);
 }
+
 /* -----------------24.03.99 16:30-------------------
  *
  * --------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
         uno::Reference< text::XText > const& rParent,
-        SwFrmFmt& rFmt ) :
-    aLstnrCntnr( (text::XTextRange*)this),
-    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
-    xParentText(rParent),
-    pRubyText(0),
-    pRubyStyle(0),
-    pRubyAdjust(0),
-    pRubyIsAbove(0),
-    pFmtFld(0),
-    aFrameDepend(this, &rFmt),
-    pFrameFmt(&rFmt),
-    ePortionType(PORTION_FRAME),
-    nControlChar(0),
-    bIsCollapsed(FALSE)
+        SwFrmFmt& rFmt )
+    : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
+    , m_pPropSet(aSwMapProvider.GetPropertySet(
+                    PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
+    , m_xParentText(rParent)
+    , m_pRubyText(0)
+    , m_pRubyStyle(0)
+    , m_pRubyAdjust(0)
+    , m_pRubyIsAbove(0)
+    , m_FrameDepend(this, &rFmt)
+    , m_pFrameFmt(&rFmt)
+    , m_ePortionType(PORTION_FRAME)
+    , m_bIsCollapsed(false)
 {
-    SwUnoCrsr* pUnoCrsr = pPortionCrsr->GetDoc()->CreateUnoCrsr(*pPortionCrsr->GetPoint());
-    if(pPortionCrsr->HasMark())
+    init(*this, pPortionCrsr);
+}
+
+/* -----------------------------19.02.01 10:52--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+                    SwTxtRuby const& rAttr,
+                    uno::Reference< text::XText > const& xParent,
+                    sal_Bool bIsEnd )
+    : m_ListenerContainer( static_cast<text::XTextRange*>(this) )
+    , m_pPropSet(aSwMapProvider.GetPropertySet(
+                    PROPERTY_MAP_TEXTPORTION_EXTENSIONS))
+    , m_xParentText(xParent)
+    , m_pRubyText   ( bIsEnd ? 0 : new uno::Any )
+    , m_pRubyStyle  ( bIsEnd ? 0 : new uno::Any )
+    , m_pRubyAdjust ( bIsEnd ? 0 : new uno::Any )
+    , m_pRubyIsAbove( bIsEnd ? 0 : new uno::Any )
+    , m_FrameDepend(this, 0)
+    , m_pFrameFmt(0)
+    , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
+    , m_bIsCollapsed(false)
+{
+    init(*this, pPortionCrsr);
+
+    if (!bIsEnd)
     {
-        pUnoCrsr->SetMark();
-        *pUnoCrsr->GetMark() = *pPortionCrsr->GetMark();
+        const SfxPoolItem& rItem = rAttr.GetAttr();
+        rItem.QueryValue(*m_pRubyText, MID_RUBY_TEXT);
+        rItem.QueryValue(*m_pRubyStyle, MID_RUBY_CHARSTYLE);
+        rItem.QueryValue(*m_pRubyAdjust, MID_RUBY_ADJUST);
+        rItem.QueryValue(*m_pRubyIsAbove, MID_RUBY_ABOVE);
     }
-    pUnoCrsr->Add(this);
 }
 
 /*-- 11.12.98 09:56:55---------------------------------------------------
@@ -153,77 +160,71 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
 SwXTextPortion::~SwXTextPortion()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    SwUnoCrsr* pUnoCrsr = GetCursor();
     delete pUnoCrsr;
-    delete pRubyText;
-    delete pRubyStyle;
-    delete pRubyAdjust;
-    delete pRubyIsAbove;
 }
 /*-- 11.12.98 09:56:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XText >  SwXTextPortion::getText(void) throw( uno::RuntimeException )
+uno::Reference< text::XText >  SwXTextPortion::getText()
+throw( uno::RuntimeException )
 {
-    return xParentText;
+    return m_xParentText;
 }
 /*-- 11.12.98 09:56:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange >  SwXTextPortion::getStart(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextPortion::getStart()
+throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< text::XTextRange >  xRet;
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-    {
-        SwPaM aPam(*pUnoCrsr->Start());
-        uno::Reference< text::XText >  xParent = getText();
-        xRet = new SwXTextRange(aPam, xParent);
-    }
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    SwPaM aPam(*pUnoCrsr->Start());
+    uno::Reference< text::XText > xParent = getText();
+    xRet = new SwXTextRange(aPam, xParent);
     return xRet;
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange >  SwXTextPortion::getEnd(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextPortion::getEnd()
+throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< text::XTextRange >  xRet;
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-    {
-        SwPaM aPam(*pUnoCrsr->End());
-        uno::Reference< text::XText >  xParent = getText();
-        xRet = new SwXTextRange(aPam, xParent);
-    }
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    SwPaM aPam(*pUnoCrsr->End());
+    uno::Reference< text::XText > xParent = getText();
+    xRet = new SwXTextRange(aPam, xParent);
     return xRet;
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OUString SwXTextPortion::getString(void) throw( uno::RuntimeException )
+OUString SwXTextPortion::getString()
+throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    String aTxt;
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-    {
-        //TextPortions liegen immer innerhalb eines Absatzes
-        SwTxtNode* pTxtNd = pUnoCrsr->GetNode()->GetTxtNode();
-        if( pTxtNd )
-        {
-            xub_StrLen nStt = pUnoCrsr->Start()->nContent.GetIndex();
-            aTxt = pTxtNd->GetExpandTxt( nStt,
-                    pUnoCrsr->End()->nContent.GetIndex() - nStt );
-        }
-    }
-    else
+    OUString aTxt;
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    // TextPortions are always within a paragraph
+    SwTxtNode* pTxtNd = pUnoCrsr->GetNode()->GetTxtNode();
+    if ( pTxtNd )
+    {
+        xub_StrLen nStt = pUnoCrsr->Start()->nContent.GetIndex();
+        aTxt = pTxtNd->GetExpandTxt( nStt,
+                pUnoCrsr->End()->nContent.GetIndex() - nStt );
+    }
     return aTxt;
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
@@ -232,17 +233,19 @@ OUString SwXTextPortion::getString(void) throw( uno::RuntimeException )
 void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-        SwXTextCursor::SetString(*pUnoCrsr, aString);
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    SwXTextCursor::SetString(*pUnoCrsr, aString);
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo(void) throw( uno::RuntimeException )
+uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo()
+throw( uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     //! PropertySetInfo for text portion extensions
     static uno::Reference< beans::XPropertySetInfo >
             xTxtPorExtRef = aSwMapProvider.GetPropertySet(
@@ -252,8 +255,8 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo(vo
             xRedlPorRef = aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_REDLINE_PORTION)->getPropertySetInfo();
 
-    return (PORTION_REDLINE_START == ePortionType ||
-            PORTION_REDLINE_END   == ePortionType) ? xRedlPorRef : xTxtPorExtRef;
+    return (PORTION_REDLINE_START == m_ePortionType ||
+            PORTION_REDLINE_END   == m_ePortionType) ? xRedlPorRef : xTxtPorExtRef;
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
@@ -264,13 +267,12 @@ void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
         beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-    {
-        SwXTextCursor::SetPropertyValue(*pUnoCrsr, *m_pPropSet, rPropertyName, aValue);
-    }
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    SwXTextCursor::SetPropertyValue(*pUnoCrsr, *m_pPropSet,
+            rPropertyName, aValue);
 }
 /*-- 04.11.03 09:56:58---------------------------------------------------
 
@@ -291,13 +293,12 @@ void SwXTextPortion::GetPropertyValue(
             case FN_UNO_TEXT_PORTION_TYPE:
             {
                 const char* pRet;
-                switch (ePortionType)
+                switch (m_ePortionType)
                 {
                 case PORTION_TEXT:          pRet = "Text";break;
                 case PORTION_FIELD:         pRet = "TextField";break;
                 case PORTION_FRAME:         pRet = "Frame";break;
                 case PORTION_FOOTNOTE:      pRet = "Footnote";break;
-                case PORTION_CONTROL_CHAR:  pRet = "ControlCharacter";break;
                 case PORTION_REFMARK_START:
                 case PORTION_REFMARK_END:   pRet = SW_PROP_NAME_STR(UNO_NAME_REFERENCE_MARK);break;
                 case PORTION_TOXMARK_START:
@@ -309,6 +310,7 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_RUBY_START:
                 case PORTION_RUBY_END:      pRet = "Ruby";break;
                 case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
+                case PORTION_META:          pRet = SW_PROP_NAME_STR(UNO_NAME_META); break;
                 case PORTION_FIELD_START:pRet = "TextFieldStart";break;
                 case PORTION_FIELD_END:pRet = "TextFieldEnd";break;
                 case PORTION_FIELD_START_END:pRet = "TextFieldStartEnd";break;
@@ -322,28 +324,29 @@ void SwXTextPortion::GetPropertyValue(
                 rVal <<= sRet;
             }
             break;
-            case FN_UNO_CONTROL_CHARACTER:
-            {
-                if(PORTION_CONTROL_CHAR == ePortionType)
-                    rVal <<= (sal_Int16) nControlChar;
-            }
+            case FN_UNO_CONTROL_CHARACTER: // obsolete!
             break;
             case FN_UNO_DOCUMENT_INDEX_MARK:
-                rVal <<= xTOXMark;
+                rVal <<= m_xTOXMark;
             break;
             case FN_UNO_REFERENCE_MARK:
-                rVal <<= xRefMark;
+                rVal <<= m_xRefMark;
             break;
             case FN_UNO_BOOKMARK:
-                rVal <<= xBookmark;
+                rVal <<= m_xBookmark;
             break;
             case FN_UNO_FOOTNOTE:
-                rVal <<= xFootnote;
+                rVal <<= m_xFootnote;
+            break;
+            case FN_UNO_TEXT_FIELD:
+                rVal <<= m_xTextField;
+            break;
+            case FN_UNO_META:
+                rVal <<= m_xMeta;
             break;
             case FN_UNO_IS_COLLAPSED:
             {
-                BOOL bPut = TRUE;
-                switch (ePortionType)
+                switch (m_ePortionType)
                 {
                     case PORTION_REFMARK_START:
                     case PORTION_BOOKMARK_START :
@@ -357,17 +360,17 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_RUBY_END:
                     case PORTION_FIELD_START:
                     case PORTION_FIELD_END:
-                        rVal.setValue(&bIsCollapsed, ::getBooleanCppuType());
+                        rVal.setValue(&m_bIsCollapsed, ::getBooleanCppuType());
                     break;
                     default:
-                        bPut = FALSE;
+                    break;
                 }
             }
             break;
             case FN_UNO_IS_START:
             {
                 BOOL bStart = TRUE, bPut = TRUE;
-                switch (ePortionType)
+                switch (m_ePortionType)
                 {
                     case PORTION_REFMARK_START:
                     case PORTION_BOOKMARK_START:
@@ -394,13 +397,13 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case RES_TXTATR_CJK_RUBY:
             {
-                uno::Any* pToSet = 0;
+                const uno::Any* pToSet = 0;
                 switch(rEntry.nMemberId)
                 {
-                    case MID_RUBY_TEXT :    pToSet = pRubyText;     break;
-                    case MID_RUBY_ADJUST :  pToSet = pRubyAdjust;   break;
-                    case MID_RUBY_CHARSTYLE:pToSet = pRubyStyle;    break;
-                    case MID_RUBY_ABOVE :   pToSet = pRubyIsAbove;  break;
+                    case MID_RUBY_TEXT :    pToSet = m_pRubyText.get();   break;
+                    case MID_RUBY_ADJUST :  pToSet = m_pRubyAdjust.get(); break;
+                    case MID_RUBY_CHARSTYLE:pToSet = m_pRubyStyle.get();  break;
+                    case MID_RUBY_ABOVE :   pToSet = m_pRubyIsAbove.get();break;
                 }
                 if(pToSet)
                     rVal = *pToSet;
@@ -436,8 +439,10 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
     const OUString *pPropertyNames = rPropertyNames.getConstArray();
     uno::Sequence< uno::Any > aValues(rPropertyNames.getLength());
     uno::Any *pValues = aValues.getArray();
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
+        throw uno::RuntimeException();
+
     {
         SfxItemSet *pSet = 0;
         // get startting pount fo the look-up, either the provided one or else
@@ -455,8 +460,6 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
         }
         delete pSet;
     }
-    else
-        throw uno::RuntimeException();
     return aValues;
 }
 /*-- 11.12.98 09:56:58---------------------------------------------------
@@ -480,8 +483,10 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
             lang::WrappedTargetException, uno::RuntimeException)
 {
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
+        throw uno::RuntimeException();
+
     {
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const uno::Any* pValues = rValues.getConstArray();
@@ -494,11 +499,10 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-            SwXTextCursor::SetPropertyValue( *pUnoCrsr, *m_pPropSet, pPropertyNames[nProp], pValues[nProp]);
+            SwXTextCursor::SetPropertyValue( *pUnoCrsr, *m_pPropSet,
+                     pPropertyNames[nProp], pValues[nProp]);
         }
     }
-    else
-        throw uno::RuntimeException();
 }
 
 void SwXTextPortion::setPropertyValues(
@@ -564,7 +568,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
 
     if (rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
+    SwUnoCrsr* pUnoCrsr = this->GetCursor();
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
@@ -664,7 +668,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
+    SwUnoCrsr* pUnoCrsr = this->GetCursor();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
@@ -701,6 +705,12 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
+                //#i104499# ruby portion attributes need special handling:
+                if( pEntry->nWID == RES_TXTATR_CJK_RUBY &&
+                    m_ePortionType == PORTION_RUBY_START )
+                {
+                        aResult.State = beans::PropertyState_DIRECT_VALUE;
+                }
                 if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == aResult.State)
                 {
                     // get property value
@@ -811,17 +821,20 @@ beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyN
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
+        throw uno::RuntimeException();
+
+    if (GetTextPortionType() == PORTION_RUBY_START &&
+        !rPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("Ruby") ))
     {
-        if(GetTextPortionType() == PORTION_RUBY_START &&
-           !rPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("Ruby") ))
-            eRet = beans::PropertyState_DIRECT_VALUE;
-        else
-            eRet = SwXTextCursor::GetPropertyState(*pUnoCrsr, *m_pPropSet, rPropertyName);
+        eRet = beans::PropertyState_DIRECT_VALUE;
     }
     else
-        throw uno::RuntimeException();
+    {
+        eRet = SwXTextCursor::GetPropertyState(*pUnoCrsr, *m_pPropSet,
+                rPropertyName);
+    }
     return eRet;
 }
 /*-- 08.03.99 09:41:47---------------------------------------------------
@@ -832,10 +845,13 @@ uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
         throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
+    SwUnoCrsr* pUnoCrsr = GetCursor();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
-    uno::Sequence< beans::PropertyState > aRet = SwXTextCursor::GetPropertyStates(*pUnoCrsr, *m_pPropSet, rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
+
+    uno::Sequence< beans::PropertyState > aRet =
+        SwXTextCursor::GetPropertyStates(*pUnoCrsr, *m_pPropSet,
+                rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
 
     if(GetTextPortionType() == PORTION_RUBY_START)
     {
@@ -856,13 +872,11 @@ void SwXTextPortion::setPropertyToDefault(const OUString& rPropertyName)
                 throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-    {
-        SwXTextCursor::SetPropertyToDefault(*pUnoCrsr, *m_pPropSet, rPropertyName);
-    }
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    SwXTextCursor::SetPropertyToDefault(*pUnoCrsr, *m_pPropSet, rPropertyName);
 }
 /*-- 08.03.99 09:41:48---------------------------------------------------
 
@@ -870,33 +884,17 @@ void SwXTextPortion::setPropertyToDefault(const OUString& rPropertyName)
 uno::Any SwXTextPortion::getPropertyDefault(const OUString& rPropertyName)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-    {
-        aRet = SwXTextCursor::GetPropertyDefault(*pUnoCrsr, *m_pPropSet, rPropertyName);
-    }
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    aRet = SwXTextCursor::GetPropertyDefault(*pUnoCrsr, *m_pPropSet,
+                rPropertyName);
     return aRet;
 }
-/*-- 11.12.98 09:56:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-OUString SwXTextPortion::getPresentation(sal_Bool /*bShowCommand*/) throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    String sRet;
-    SwFmtFld* pFmt = 0;
-    if(pUnoCrsr && 0 != (pFmt = GetFldFmt()))
-    {
-        const SwField* pField = pFmt->GetFld();
-        DBG_ERROR("bShowCommand auswerten!");
-        sRet = pField->Expand();
-    }
-    return sRet;
-}
 /*-- 11.12.98 09:56:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -911,31 +909,31 @@ void SwXTextPortion::attach(const uno::Reference< text::XTextRange > & /*xTextRa
 /*-- 11.12.98 09:57:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange >  SwXTextPortion::getAnchor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange >  SwXTextPortion::getAnchor()
+throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< text::XTextRange >  aRet;
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-        aRet = new SwXTextRange(*pUnoCrsr, xParentText);
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    aRet = new SwXTextRange(*pUnoCrsr, m_xParentText);
     return aRet;
 }
 /*-- 11.12.98 09:57:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::dispose(void) throw( uno::RuntimeException )
+void SwXTextPortion::dispose()
+throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
-    if(pUnoCrsr)
-    {
-        setString(aEmptyStr);
-        pUnoCrsr->Remove(this);
-    }
-    else
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
+
+    setString(aEmptyStr);
+    pUnoCrsr->Remove(this);
 }
 /*-- 11.12.98 09:57:00---------------------------------------------------
 
@@ -945,7 +943,8 @@ void SwXTextPortion::addEventListener(const uno::Reference< lang::XEventListener
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetRegisteredIn())
         throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+
+    m_ListenerContainer.AddListener(aListener);
 }
 /*-- 11.12.98 09:57:01---------------------------------------------------
 
@@ -953,7 +952,7 @@ void SwXTextPortion::addEventListener(const uno::Reference< lang::XEventListener
 void SwXTextPortion::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
+    if (!GetRegisteredIn() || !m_ListenerContainer.RemoveListener(aListener))
         throw uno::RuntimeException();
 }
 /* -----------------24.03.99 13:30-------------------
@@ -963,10 +962,13 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
         throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    SwUnoCrsr* pUnoCrsr = GetCursor();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
-    uno::Reference< container::XEnumeration >  xRet = new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_CHAR, pFrameFmt);
+
+    uno::Reference< container::XEnumeration >  xRet =
+        new SwXParaFrameEnumeration(*pUnoCrsr, PARAFRAME_PORTION_CHAR,
+                m_pFrameFmt);
     return xRet;
 
 }
@@ -995,7 +997,8 @@ sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
 /* -----------------24.03.99 13:30-------------------
  *
  * --------------------------------------------------*/
-uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames()
+throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Sequence< OUString > aRet(1);
@@ -1006,7 +1009,8 @@ uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames(void) throw( 
 /* -----------------25.03.99 10:30-------------------
  *
  * --------------------------------------------------*/
-OUString SwXTextPortion::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXTextPortion::getImplementationName()
+throw( uno::RuntimeException )
 {
     return C2U("SwXTextPortion");
 }
@@ -1016,7 +1020,7 @@ OUString SwXTextPortion::getImplementationName(void) throw( uno::RuntimeExceptio
 sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    SwUnoCrsr* pUnoCrsr = GetCursor();
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
@@ -1028,25 +1032,24 @@ sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( un
             !rServiceName.compareToAscii("com.sun.star.style.ParagraphProperties") ||
             !rServiceName.compareToAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
             !rServiceName.compareToAscii("com.sun.star.style.ParagraphPropertiesComplex"))
+    {
         bRet = sal_True;
-    else if(COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.text.TextField"))
-        bRet = 0 != GetFldFmt();
+    }
 
     return bRet;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames(void)
-                                                throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()
+throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
+    SwUnoCrsr* pUnoCrsr = GetCursor();
+    if (!pUnoCrsr)
         throw uno::RuntimeException();
-    sal_Bool bField = 0 != GetFldFmt();
-    sal_uInt16 nCount = bField ? 8 : 7;
-    uno::Sequence< OUString > aRet(nCount);
+
+    uno::Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.TextPortion");
     pArray[1] = C2U("com.sun.star.style.CharacterProperties");
@@ -1055,8 +1058,6 @@ uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames(void)
     pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
     pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
     pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
-    if(bField)
-        pArray[7] = C2U("com.sun.star.text.TextField");
     return aRet;
 }
 /*-- 11.12.98 09:57:01---------------------------------------------------
@@ -1065,35 +1066,9 @@ uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames(void)
 void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
-    if(!aFrameDepend.GetRegisteredIn())
-        pFrameFmt = 0;
-}
-/* -----------------------------19.02.01 10:52--------------------------------
-
- ---------------------------------------------------------------------------*/
-SwXRubyPortion::SwXRubyPortion(const SwUnoCrsr* pPortionCrsr,
-                    SwTxtRuby& rAttr,
-                    uno::Reference< text::XText > const& rParent,
-                    sal_Bool bEnd   ) :
-        SwXTextPortion(pPortionCrsr, rParent, bEnd ? PORTION_RUBY_END : PORTION_RUBY_START  )
-{
-    if(!bEnd)
+    if (!m_FrameDepend.GetRegisteredIn())
     {
-        const SfxPoolItem& rItem = rAttr.GetAttr();
-        pRubyText = new uno::Any;
-        pRubyStyle = new uno::Any;
-        pRubyAdjust = new uno::Any;
-        pRubyIsAbove = new uno::Any;
-        rItem.QueryValue(*pRubyText, MID_RUBY_TEXT);
-        rItem.QueryValue(*pRubyStyle, MID_RUBY_CHARSTYLE);
-        rItem.QueryValue(*pRubyAdjust, MID_RUBY_ADJUST);
-        rItem.QueryValue(*pRubyIsAbove, MID_RUBY_ABOVE);
+        m_pFrameFmt = 0;
     }
-}
-/* -----------------------------19.02.01 10:52--------------------------------
-
- ---------------------------------------------------------------------------*/
-SwXRubyPortion::~SwXRubyPortion()
-{
 }
 

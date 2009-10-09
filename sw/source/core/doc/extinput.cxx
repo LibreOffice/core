@@ -89,7 +89,7 @@ SwExtTextInput::~SwExtTextInput()
                 if ( bLang )
                 {
                     SvxLanguageItem aLangItem( eInputLanguage, nWhich );
-                    pDoc->Insert(*this, aLangItem, 0 );
+                    pDoc->InsertPoolItem(*this, aLangItem, 0 );
                 }
             }
             rIdx = nSttCnt;
@@ -100,9 +100,9 @@ SwExtTextInput::~SwExtTextInput()
                 if( nLen > sOverwriteText.Len() )
                 {
                     rIdx += sOverwriteText.Len();
-                    pTNd->Erase( rIdx, nLen - sOverwriteText.Len() );
+                    pTNd->EraseText( rIdx, nLen - sOverwriteText.Len() );
                     rIdx = nSttCnt;
-                    pTNd->Replace( rIdx, sOverwriteText.Len(),
+                    pTNd->ReplaceText( rIdx, sOverwriteText.Len(),
                                             sOverwriteText );
                     if( bInsText )
                     {
@@ -110,13 +110,15 @@ SwExtTextInput::~SwExtTextInput()
                         pDoc->StartUndo( UNDO_OVERWRITE, NULL );
                         pDoc->Overwrite( *this, sTxt.Copy( 0,
                                                     sOverwriteText.Len() ));
-                        pDoc->Insert( *this, sTxt.Copy( sOverwriteText.Len() ), true);
+                        pDoc->InsertString( *this,
+                            sTxt.Copy( sOverwriteText.Len() ) );
                         pDoc->EndUndo( UNDO_OVERWRITE, NULL );
                     }
                 }
                 else
                 {
-                    pTNd->Replace( rIdx, nLen, sOverwriteText.Copy( 0, nLen ));
+                    pTNd->ReplaceText( rIdx, nLen,
+                            sOverwriteText.Copy( 0, nLen ));
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
@@ -126,10 +128,12 @@ SwExtTextInput::~SwExtTextInput()
             }
             else
             {
-                pTNd->Erase( rIdx, nEndCnt - nSttCnt );
+                pTNd->EraseText( rIdx, nEndCnt - nSttCnt );
 
                 if( bInsText )
-                    pDoc->Insert( *this, sTxt, true );
+                {
+                    pDoc->InsertString( *this, sTxt );
+                }
             }
         }
     }
@@ -159,7 +163,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
                 // some characters
                 nReplace = nReplace - rNewStr.Len();
                 aIdx += rNewStr.Len();
-                pTNd->Replace( aIdx, nReplace,
+                pTNd->ReplaceText( aIdx, nReplace,
                             sOverwriteText.Copy( rNewStr.Len(), nReplace ));
                 aIdx = nSttCnt;
                 nReplace = rNewStr.Len();
@@ -168,14 +172,14 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             {
                 nReplace = nReplace - sOverwriteText.Len();
                 aIdx += sOverwriteText.Len();
-                pTNd->Erase( aIdx, nReplace );
+                pTNd->EraseText( aIdx, nReplace );
                 aIdx = nSttCnt;
                 nReplace = sOverwriteText.Len();
             }
             else if( (nReplace = sOverwriteText.Len()) > rNewStr.Len() )
                 nReplace = rNewStr.Len();
 
-            pTNd->Replace( aIdx, nReplace, rNewStr );
+            pTNd->ReplaceText( aIdx, nReplace, rNewStr );
             if( !HasMark() )
                 SetMark();
             GetMark()->nContent = aIdx;
@@ -183,9 +187,12 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         else
         {
             if( nSttCnt < nEndCnt )
-                pTNd->Erase( aIdx, nEndCnt - nSttCnt );
+            {
+                pTNd->EraseText( aIdx, nEndCnt - nSttCnt );
+            }
 
-            pTNd->Insert( rNewStr, aIdx, INS_EMPTYEXPAND );
+            pTNd->InsertText( rNewStr, aIdx,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
             if( !HasMark() )
                 SetMark();
         }

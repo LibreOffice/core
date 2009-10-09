@@ -1615,7 +1615,7 @@ USHORT SwFldMgr::GetCurrLanguage() const
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     if( pSh )
         return pSh->GetCurLang();
-    return SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
+    return SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
 }
 
 void SwFieldType::_GetFldName()

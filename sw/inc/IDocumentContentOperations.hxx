@@ -67,11 +67,19 @@
         DOC_NO_DELFRMS = 0x08
     };
 
+    // constants for inserting text
+    enum InsertFlags
+    {   INS_DEFAULT         = 0x00 // no extras
+    ,   INS_EMPTYEXPAND     = 0x01 // expand empty hints at insert position
+    ,   INS_NOHINTEXPAND    = 0x02 // do not expand any hints at insert pos
+    ,   INS_FORCEHINTEXPAND = 0x04 // expand all hints at insert position
+    };
+
  public:
     /** Kopieren eines Bereiches im oder in ein anderes Dokument !
         Die Position kann auch im Bereich liegen !!
     */
-    virtual bool Copy(SwPaM&, SwPosition&, bool bCopyAll ) const = 0;
+    virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll ) const = 0;
 
     /** Loesche die Section, in der der Node steht.
     */
@@ -79,46 +87,41 @@
 
     /** loeschen eines BereichesSwFlyFrmFmt
     */
-    virtual bool Delete(SwPaM&) = 0;
+    virtual bool DeleteRange(SwPaM&) = 0;
 
     /** loeschen gesamter Absaetze
     */
     virtual bool DelFullPara(SwPaM&) = 0;
 
-    /** komplett loeschen eines Bereiches
+    /** complete delete of a given PaM
+
+        OD 2009-08-20 #i100466#
+        Add optional parameter <bForceJoinNext>, default value <false>
+        Needed for hiding of deletion redlines
     */
-    virtual bool DeleteAndJoin(SwPaM&) = 0;
+    virtual bool DeleteAndJoin( SwPaM&,
+                                const bool bForceJoinNext = false ) = 0;
 
     /** verschieben eines Bereiches
     */
-    virtual bool Move(SwPaM&, SwPosition&, SwMoveFlags) = 0;
+    virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 
     /** verschieben ganzer Nodes
     */
-    virtual bool Move(SwNodeRange&, SwNodeIndex&, SwMoveFlags) = 0;
+    virtual bool MoveNodeRange(SwNodeRange&, SwNodeIndex&, SwMoveFlags) = 0;
 
     /** verschieben eines Bereiches
     */
     virtual bool MoveAndJoin(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 
-    /** Ueberschreiben eines einzelnen Zeichens. rRg.Start() bezeichnet
-        den Node und die Position in dem Node, an der eingefuegt wird,
-    */
-    virtual bool Overwrite(const SwPaM &rRg, sal_Unicode c) = 0;
-
     /** Ueberschreiben eines Strings in einem bestehenden Textnode.
     */
     virtual bool Overwrite(const SwPaM &rRg, const String& rStr) = 0;
 
-    /** Einfuegen eines einzelnen Zeichens. rRg.Start() bezeichnet
-        den Node und die Position in dem Node, an der eingefuegt wird.
+    /** Insert string into existing text node at position rRg.Point().
     */
-    virtual bool Insert(const SwPaM &rRg, sal_Unicode c) = 0;
-
-    /** Einfuegen eines Strings in einen bestehenden
-        Textnode. Der Text wird kopiert.
-    */
-    virtual bool Insert(const SwPaM &rRg, const String&, bool bHintExpand) = 0;
+    virtual bool InsertString(const SwPaM &rRg, const String&,
+              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) = 0;
 
     /** change text to Upper/Lower/Hiragana/Katagana/...
     */
@@ -166,7 +169,8 @@
                     z.B.: Fnd: "zzz", Repl: "xx\t\\t..&..\&"
                         --> "xx\t<Tab>..zzz..&"
     */
-    virtual bool Replace(SwPaM& rPam, const String& rNewStr, bool bRegExpRplc) = 0;
+    virtual bool ReplaceRange(SwPaM& rPam, const String& rNewStr,
+                              const bool bRegExReplace) = 0;
 
     /** Einfuegen eines Attributs. Erstreckt sich rRg ueber
         mehrere Nodes, wird das Attribut aufgespaltet, sofern
@@ -182,11 +186,13 @@
         hinzugefuegt.  Wenn das Attribut nicht eingefuegt werden
         konnte, liefert die Methode sal_False.
     */
-    virtual bool Insert(const SwPaM &rRg, const SfxPoolItem&, sal_uInt16 nFlags) = 0;
+    virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
+                                const sal_uInt16 nFlags) = 0;
 
     /**
     */
-    virtual bool Insert(const SwPaM &rRg, const SfxItemSet&, sal_uInt16 nFlags) = 0;
+    virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
+                                const sal_uInt16 nFlags) = 0;
 
     /** Removes any leading white space from the paragraph
     */

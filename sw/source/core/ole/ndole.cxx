@@ -467,7 +467,8 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                                     (SwAttrSet*)GetpSwAttrSet() );
 
     pOLENd->SetChartTblName( GetChartTblName() );
-    pOLENd->SetAlternateText( GetAlternateText() );
+    pOLENd->SetTitle( GetTitle() );
+    pOLENd->SetDescription( GetDescription() );
     pOLENd->SetContour( HasContour(), HasAutomaticContour() );
     pOLENd->SetAspect( GetAspect() ); // the replacement image must be already copied
 

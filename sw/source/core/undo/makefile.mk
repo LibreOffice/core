@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -68,6 +68,7 @@ SLOFILES =	\
         $(SLO)$/undel.obj \
         $(SLO)$/undobj.obj \
         $(SLO)$/undobj1.obj \
+                $(SLO)$/undoflystrattr.obj \
         $(SLO)$/undraw.obj \
         $(SLO)$/unfmco.obj \
         $(SLO)$/unins.obj \

@@ -143,6 +143,10 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
 USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 {
     SwWrtShell &rSh = GetWrtShell();
+    SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
     {
         rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );

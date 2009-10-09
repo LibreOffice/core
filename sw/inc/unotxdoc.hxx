@@ -179,7 +179,7 @@ typedef cppu::WeakImplHelper32
 >
 SwXTextDocumentBaseClass;
 
-class SwXTextDocument : public SwXTextDocumentBaseClass,
+class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel
 {

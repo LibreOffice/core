@@ -284,6 +284,7 @@ public:
     void SetPrintEmptyPages(sal_Bool b ) { doSetModified(); bPrintEmptyPages = b;}
     void SetPrintPostIts    ( sal_Int16 n){ doSetModified(); nPrintPostIts = n; }
     void SetPrintProspect   ( sal_Bool b ) { doSetModified(); bPrintProspect = b; }
+    void SetPrintProspect_RTL   ( sal_Bool b ) { doSetModified(); bPrintProspect_RTL = b; }
     void SetPrintPageBackground(sal_Bool b){ doSetModified(); bPrintPageBackground = b;}
     void SetPrintBlackFont(sal_Bool b){ doSetModified(); bPrintBlackFont = b;}
     void SetPrintSingleJobs(sal_Bool b){ doSetModified(); bPrintSingleJobs = b;}
@@ -297,4 +298,3 @@ public:
 ////////////////////////////////////////////////////////////
 
 #endif  //_SW_PRINTDATA_HXX
-

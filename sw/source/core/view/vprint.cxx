@@ -1,4 +1,5 @@
-/*************************************************************************
+/**************************************************************************
+ *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -61,6 +62,7 @@
 #include <unotxdoc.hxx>
 
 #include <docsh.hxx>
+#include <svtools/syslocale.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -1271,7 +1273,9 @@ BOOL ViewShell::IsAnyFieldInDoc() const
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            //#i101026# mod: do not include postits in field check
+            const SwField* pFld = pFmtFld->GetFld();
+            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() && (pFld->Which() != RES_POSTITFLD))
                 return TRUE;
         }
     return FALSE;

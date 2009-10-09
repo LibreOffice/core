@@ -1184,6 +1184,9 @@ SfxPrinter* SmViewShell::GetPrinter(BOOL bCreate)
 USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetPrinter" );
+    SfxPrinter *pOld = GetDoc()->GetPrinter();
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
 
     if ((nDiffFlags & SFX_PRINTER_PRINTER) == SFX_PRINTER_PRINTER)
         GetDoc()->SetPrinter( pNewPrinter );
@@ -1559,7 +1562,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             pImpl->pDocInserter =
                 new ::sfx2::DocumentInserter( 0, GetDoc()->GetFactory().GetFactoryName(), 0 );
             pImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
-            return;
+            break;
         }
 
         case SID_NEXTERR:
@@ -1687,8 +1690,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
             SmSymbolDialog( NULL, pDev, pp->GetSymSetManager(), *this ).Execute();
         }
         break;
-
-
     }
     rReq.Done();
 }
@@ -1715,7 +1716,6 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_PASTE:
             if( !xClipEvtLstnr.is()  &&  pEditWin)
             {
-                AddRemoveClipboardListener( TRUE );
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
                                                         pEditWin) );
@@ -1805,8 +1805,6 @@ SmViewShell::~SmViewShell()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::~SmViewShell" );
 
-    AddRemoveClipboardListener( FALSE );
-
     //!! this view shell is not active anymore !!
     // Thus 'SmGetActiveView' will give a 0 pointer.
     // Thus we need to supply this view as argument
@@ -1881,5 +1879,21 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     pImpl->pRequest->SetReturnValue( SfxBoolItem( pImpl->pRequest->GetSlot(), TRUE ) );
     pImpl->pRequest->Done();
     return 0;
+}
+
+void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
+{
+    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    {
+        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        {
+            case SFX_HINT_MODECHANGED:
+            case SFX_HINT_DOCCHANGED:
+                GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
