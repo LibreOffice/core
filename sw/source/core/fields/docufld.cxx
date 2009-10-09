@@ -1147,15 +1147,8 @@ String SwDocInfoField::Expand() const
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
                     uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                     aNew >>= sVal;
-                    ((SwDocInfoField*)this)->aContent = sVal;
+                    const_cast<SwDocInfoField*>(this)->aContent = sVal;
                 }
-            }
-            else
-            {
-                // property is "void" - means it has not been added until now - do it!
-                aAny <<= ::rtl::OUString(aContent);
-                uno::Reference < beans::XPropertyContainer > xCont( xSet, uno::UNO_QUERY );
-                xCont->addProperty( aName, ::com::sun::star::beans::PropertyAttribute::REMOVEABLE, aAny );
             }
         }
         catch (uno::Exception&) {}
