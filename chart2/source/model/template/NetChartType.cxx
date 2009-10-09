@@ -52,76 +52,24 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-namespace
-{
-
-void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & /* rOutProperties */ )
-{
-}
-
-void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & /* rOutMap */ )
-{
-}
-
-const Sequence< Property > & lcl_GetPropertySequence()
-{
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
-    {
-        // get properties
-        ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        // and sort them for access via bsearch
-        ::std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
-    }
-
-    return aPropSeq;
-}
-
-} // anonymous namespace
-
 namespace chart
 {
 
-NetChartType::NetChartType(
+NetChartType_Base::NetChartType_Base(
     const uno::Reference< uno::XComponentContext > & xContext ) :
         ChartType( xContext )
 {}
 
-NetChartType::NetChartType( const NetChartType & rOther ) :
+NetChartType_Base::NetChartType_Base( const NetChartType_Base & rOther ) :
         ChartType( rOther )
 {
 }
 
-NetChartType::~NetChartType()
+NetChartType_Base::~NetChartType_Base()
 {}
 
-// ____ XCloneable ____
-uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
-    throw (uno::RuntimeException)
-{
-    return uno::Reference< util::XCloneable >( new NetChartType( *this ));
-}
-
-// ____ XChartType ____
-::rtl::OUString SAL_CALL NetChartType::getChartType()
-    throw (uno::RuntimeException)
-{
-    return CHART2_SERVICE_NAME_CHARTTYPE_NET;
-}
-
 Reference< XCoordinateSystem > SAL_CALL
-    NetChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
+    NetChartType_Base::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
@@ -157,42 +105,23 @@ Reference< XCoordinateSystem > SAL_CALL
 }
 
 // ____ OPropertySet ____
-uno::Any NetChartType::GetDefaultValue( sal_Int32 nHandle ) const
+uno::Any NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/ ) const
     throw(beans::UnknownPropertyException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        // initialize defaults
-        lcl_AddDefaultsToMap( aStaticDefaults );
-    }
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
-        return uno::Any();
-
-    return (*aFound).second;
-    // \--
+    return uno::Any();
 }
 
 // ____ OPropertySet ____
-::cppu::IPropertyArrayHelper & SAL_CALL NetChartType::getInfoHelper()
+::cppu::IPropertyArrayHelper & SAL_CALL NetChartType_Base::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper( lcl_GetPropertySequence(),
-                                                      /* bSorted = */ sal_True );
-
+    uno::Sequence< beans::Property > aProps;
+    static ::cppu::OPropertyArrayHelper aArrayHelper(aProps);
     return aArrayHelper;
 }
 
-
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    NetChartType::getPropertySetInfo()
+    NetChartType_Base::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo;
@@ -207,6 +136,35 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 
     return xInfo;
     // \--
+}
+
+//-----------------------------------------------------------------------------
+
+NetChartType::NetChartType(
+    const uno::Reference< uno::XComponentContext > & xContext ) :
+        NetChartType_Base( xContext )
+{}
+
+NetChartType::NetChartType( const NetChartType & rOther ) :
+        NetChartType_Base( rOther )
+{
+}
+
+NetChartType::~NetChartType()
+{}
+
+// ____ XCloneable ____
+uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new NetChartType( *this ));
+}
+
+// ____ XChartType ____
+::rtl::OUString SAL_CALL NetChartType::getChartType()
+    throw (uno::RuntimeException)
+{
+    return CHART2_SERVICE_NAME_CHARTTYPE_NET;
 }
 
 uno::Sequence< ::rtl::OUString > NetChartType::getSupportedServiceNames_Static()

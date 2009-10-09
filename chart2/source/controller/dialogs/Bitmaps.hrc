@@ -173,8 +173,8 @@
 #define BMP_NET_SYMB_STACK (RID_APP_START + 77)
 #define BMP_NET_LINESYMB (RID_APP_START + 78)
 #define BMP_NET_LINESYMB_STACK (RID_APP_START + 79)
-#define BMP_NET_FILLED (RID_APP_START + 80)
-#define BMP_NET_FILLED_STACKED (RID_APP_START + 81)
+#define BMP_NET_FILL (RID_APP_START + 80)
+#define BMP_NET_FILL_STACK (RID_APP_START + 81)
 
 //----------------------
 // Stock Chart Subtypes

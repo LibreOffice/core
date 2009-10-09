@@ -50,6 +50,7 @@
 #include "XMLStylesImportHelper.hxx"
 #include "rangeutl.hxx"
 #include "externalrefmgr.hxx"
+#include "sheetdata.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -147,9 +148,13 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       const sal_Int32 nSpannedCols) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pExternalRefInfo(NULL),
+    nStartOffset(-1),
     bStartFormPage(sal_False),
     bPrintEntireSheet(sal_True)
 {
+    // get start offset in file (if available)
+    nStartOffset = GetScImport().GetByteOffset();
+
     if (!bTempIsSubTable)
     {
         sal_Bool bProtection(sal_False);
@@ -326,6 +331,9 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
+    // get end offset in file (if available)
+//    sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+
     GetScImport().LockSolarMutex();
     GetScImport().GetStylesImportHelper()->EndTable();
     ScDocument* pDoc(GetScImport().GetDocument());
@@ -386,6 +394,15 @@ void ScXMLTableContext::EndElement()
 
         GetScImport().GetTables().DeleteTable();
         GetScImport().ProgressBarIncrement(sal_False);
+
+        // store stream positions
+        if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
+        {
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
+            sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
+            // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
+            pSheetData->StartStreamPos( nTab, nStartOffset );
+        }
     }
     GetScImport().UnlockSolarMutex();
 }

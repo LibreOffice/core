@@ -91,7 +91,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
             break;
 
         case SID_PASTE:
-        case FID_PASTE_CONTENTS:
+        case SID_PASTE_SPECIAL:
         case SID_CLIPBOARD_FORMAT_ITEMS:
         case SID_HYPERLINK_SETLINK:
             {

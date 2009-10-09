@@ -296,6 +296,8 @@ public:
 
     virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
 
+    bool WantToPlotInFrontOfAxisLine();
+
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

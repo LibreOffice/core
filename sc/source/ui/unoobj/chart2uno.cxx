@@ -500,6 +500,10 @@ void Chart2Positioner::glueState()
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
         SCCOLROW n1 = aData.Ref1.nCol;
         SCCOLROW n2 = aData.Ref2.nCol;
+        if (n1 > MAXCOL)
+            n1 = MAXCOL;
+        if (n2 > MAXCOL)
+            n2 = MAXCOL;
         SCCOLROW nTmp = n2 - n1 + 1;
         if (n1 < mnStartCol)
             mnStartCol = static_cast<SCCOL>(n1);
@@ -510,14 +514,18 @@ void Chart2Positioner::glueState()
 
         n1 = aData.Ref1.nRow;
         n2 = aData.Ref2.nRow;
+        if (n1 > MAXROW)
+            n1 = MAXROW;
+        if (n2 > MAXROW)
+            n2 = MAXROW;
         nTmp = n2 - n1 + 1;
 
         if (n1 < mnStartRow)
-            mnStartRow = static_cast<SCCOL>(n1);
+            mnStartRow = static_cast<SCROW>(n1);
         if (n2 > nEndRow)
-            nEndRow = static_cast<SCCOL>(n2);
+            nEndRow = static_cast<SCROW>(n2);
         if (nTmp > nMaxRows)
-            nMaxRows = static_cast<SCCOL>(nTmp);
+            nMaxRows = static_cast<SCROW>(nTmp);
     }
 
     // total column size ?
@@ -957,15 +965,6 @@ void lcl_convertTokensToString(OUString& rStr, const vector<ScSharedTokenRef>& r
     func.getString(rStr);
 }
 
-void lcl_convertTokenToString(OUString& rStr, const ScSharedTokenRef& rToken, ScDocument* pDoc,
-                              FormulaGrammar::Grammar eGrammar)
-{
-    const sal_Unicode cRangeSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
-    Tokens2RangeString func(pDoc, eGrammar, cRangeSep);
-    func.operator() (rToken);
-    func.getString(rStr);
-}
-
 } // anonymous namespace
 
 // DataProvider ==============================================================
@@ -992,44 +991,6 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
         m_pDocument = NULL;
-    }
-}
-
-void lcl_SeperateOneColumnRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& xRanges)
-{
-    if (aR.aStart == rPos)
-    {
-        aR.aStart.SetRow(aR.aStart.Row() + 1);
-        xRanges->Join(aR);
-    }
-    else if (aR.aEnd == rPos)
-    {
-        aR.aStart.SetRow(aR.aStart.Row() - 1);
-        xRanges->Join(aR);
-    }
-    else
-    {
-        xRanges->Join(ScRange(aR.aStart, ScAddress(rPos.Col(), rPos.Row() - 1, rPos.Tab())));
-        xRanges->Join(ScRange(ScAddress(rPos.Col(), rPos.Row() + 1, rPos.Tab()), aR.aEnd ));
-    }
-}
-
-void lcl_SeperateOneRowRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& xRanges)
-{
-    if (aR.aStart == rPos)
-    {
-        aR.aStart.SetCol(aR.aStart.Col() + 1);
-        xRanges->Join(aR);
-    }
-    else if (aR.aEnd == rPos)
-    {
-        aR.aStart.SetCol(aR.aStart.Col() - 1);
-        xRanges->Join(aR);
-    }
-    else
-    {
-        xRanges->Join(ScRange(aR.aStart, ScAddress(rPos.Col() - 1, rPos.Row(), rPos.Tab())));
-        xRanges->Join(ScRange(ScAddress(rPos.Col() + 1, rPos.Row(), rPos.Tab()), aR.aEnd ));
     }
 }
 

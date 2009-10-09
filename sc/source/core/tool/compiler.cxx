@@ -127,77 +127,6 @@ enum ScanState
 static const sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
 
 using namespace ::com::sun::star::i18n;
-/////////////////////////////////////////////////////////////////////////
-
-short lcl_GetRetFormat( OpCode eOpCode )
-{
-    switch (eOpCode)
-    {
-        case ocEqual:
-        case ocNotEqual:
-        case ocLess:
-        case ocGreater:
-        case ocLessEqual:
-        case ocGreaterEqual:
-        case ocAnd:
-        case ocOr:
-        case ocNot:
-        case ocTrue:
-        case ocFalse:
-        case ocIsEmpty:
-        case ocIsString:
-        case ocIsNonString:
-        case ocIsLogical:
-        case ocIsRef:
-        case ocIsValue:
-        case ocIsFormula:
-        case ocIsNA:
-        case ocIsErr:
-        case ocIsError:
-        case ocIsEven:
-        case ocIsOdd:
-        case ocExact:
-            return NUMBERFORMAT_LOGICAL;
-        case ocGetActDate:
-        case ocGetDate:
-        case ocEasterSunday :
-            return NUMBERFORMAT_DATE;
-        case ocGetActTime:
-            return NUMBERFORMAT_DATETIME;
-        case ocGetTime:
-            return NUMBERFORMAT_TIME;
-        case ocNPV:
-        case ocBW:
-        case ocDIA:
-        case ocGDA:
-        case ocGDA2:
-        case ocVBD:
-        case ocLIA:
-        case ocRMZ:
-        case ocZW:
-        case ocZinsZ:
-        case ocKapz:
-        case ocKumZinsZ:
-        case ocKumKapZ:
-            return NUMBERFORMAT_CURRENCY;
-        case ocZins:
-        case ocIRR:
-        case ocMIRR:
-        case ocZGZ:
-        case ocEffektiv:
-        case ocNominal:
-        case ocPercentSign:
-            return NUMBERFORMAT_PERCENT;
-//      case ocSum:
-//      case ocSumSQ:
-//      case ocProduct:
-//      case ocAverage:
-//          return -1;
-        default:
-            return NUMBERFORMAT_NUMBER;
-    }
-    return NUMBERFORMAT_NUMBER;
-}
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -443,6 +372,15 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
     }
 }
 
+void ScCompiler::SetEncodeUrlMode( EncodeUrlMode eMode )
+{
+    meEncodeUrlMode = eMode;
+}
+
+ScCompiler::EncodeUrlMode ScCompiler::GetEncodeUrlMode() const
+{
+    return meEncodeUrlMode;
+}
 
 void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 {
@@ -532,22 +470,22 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* + */     t[43] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
 /* , */     t[44] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE;
 /* - */     t[45] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
-/* . */     t[46] = SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE | SC_COMPILER_C_IDENT;
+/* . */     t[46] = SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE | SC_COMPILER_C_IDENT | SC_COMPILER_C_NAME;
 /* / */     t[47] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
 
     for (i = 48; i < 58; i++)
-/* 0-9 */   t[i] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_WORD | SC_COMPILER_C_VALUE | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_VALUE | SC_COMPILER_C_IDENT;
+/* 0-9 */   t[i] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_WORD | SC_COMPILER_C_VALUE | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_VALUE | SC_COMPILER_C_IDENT | SC_COMPILER_C_NAME;
 
 /* : */     t[58] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD;
 /* ; */     t[59] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
 /* < */     t[60] = SC_COMPILER_C_CHAR_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
 /* = */     t[61] = SC_COMPILER_C_CHAR | SC_COMPILER_C_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
 /* > */     t[62] = SC_COMPILER_C_CHAR_BOOL | SC_COMPILER_C_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* ? */     t[63] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD;
+/* ? */     t[63] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_NAME;
 /* @ */     // FREE
 
     for (i = 65; i < 91; i++)
-/* A-Z */   t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
+/* A-Z */   t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
 
     if (FormulaGrammar::CONV_ODF == meConv)
     {
@@ -562,11 +500,11 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* ] */     // FREE
     }
 /* ^ */     t[94] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* _ */     t[95] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
+/* _ */     t[95] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
 /* ` */     // FREE
 
     for (i = 97; i < 123; i++)
-/* a-z */   t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
+/* a-z */   t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
 
 /* { */     t[123] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array open
 /* | */     t[124] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array row sep (Should be OOo specific)
@@ -1066,14 +1004,19 @@ struct ConventionOOO_A1 : public Convention_A1
 
     bool makeExternalSingleRefStr( ::rtl::OUStringBuffer& rBuffer, sal_uInt16 nFileId,
                                    const String& rTabName, const ScSingleRefData& rRef,
-                                   ScExternalRefManager* pRefMgr, bool bDisplayTabName ) const
+                                   ScExternalRefManager* pRefMgr, bool bDisplayTabName, bool bEncodeUrl ) const
     {
         if (bDisplayTabName)
         {
             String aFile;
             const String* p = pRefMgr->getExternalFileName(nFileId);
             if (p)
-                aFile = *p;
+            {
+                if (bEncodeUrl)
+                    aFile = *p;
+                else
+                    aFile = INetURLObject::decode(*p, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
+            }
             aFile.SearchAndReplaceAllAscii("'", String::CreateFromAscii("''"));
 
             rBuffer.append(sal_Unicode('\''));
@@ -1107,7 +1050,23 @@ struct ConventionOOO_A1 : public Convention_A1
 
         if (bODF)
             rBuffer.append( sal_Unicode('['));
-        makeExternalSingleRefStr(rBuffer, nFileId, rTabName, aRef, pRefMgr, true);
+
+        bool bEncodeUrl = true;
+        switch (rCompiler.GetEncodeUrlMode())
+        {
+            case ScCompiler::ENCODE_BY_GRAMMAR:
+                bEncodeUrl = bODF;
+            break;
+            case ScCompiler::ENCODE_ALWAYS:
+                bEncodeUrl = true;
+            break;
+            case ScCompiler::ENCODE_NEVER:
+                bEncodeUrl = false;
+            break;
+            default:
+                ;
+        }
+        makeExternalSingleRefStr(rBuffer, nFileId, rTabName, aRef, pRefMgr, true, bEncodeUrl);
         if (bODF)
             rBuffer.append( sal_Unicode(']'));
     }
@@ -1129,9 +1088,25 @@ struct ConventionOOO_A1 : public Convention_A1
         if (bODF)
             rBuffer.append( sal_Unicode('['));
         // Ensure that there's always a closing bracket, no premature returns.
+        bool bEncodeUrl = true;
+        switch (rCompiler.GetEncodeUrlMode())
+        {
+            case ScCompiler::ENCODE_BY_GRAMMAR:
+                bEncodeUrl = bODF;
+            break;
+            case ScCompiler::ENCODE_ALWAYS:
+                bEncodeUrl = true;
+            break;
+            case ScCompiler::ENCODE_NEVER:
+                bEncodeUrl = false;
+            break;
+            default:
+                ;
+        }
+
         do
         {
-            if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, aRef.Ref1, pRefMgr, true))
+            if (!makeExternalSingleRefStr(rBuffer, nFileId, rTabName, aRef.Ref1, pRefMgr, true, bEncodeUrl))
                 break;
 
             rBuffer.append(sal_Unicode(':'));
@@ -1157,7 +1132,7 @@ struct ConventionOOO_A1 : public Convention_A1
             else if (bODF)
                 rBuffer.append( sal_Unicode('.'));      // need at least the sheet separator in ODF
             makeExternalSingleRefStr( rBuffer, nFileId, aLastTabName,
-                    aRef.Ref2, pRefMgr, bDisplayTabName);
+                    aRef.Ref2, pRefMgr, bDisplayTabName, bEncodeUrl);
         } while (0);
         if (bODF)
             rBuffer.append( sal_Unicode(']'));
@@ -1319,7 +1294,7 @@ struct ConventionXL
         return lcl_makeExternalNameStr( rFile, rName, sal_Unicode('!'), false);
     }
 
-    static void makeExternalDocStr( ::rtl::OUStringBuffer& rBuffer, const String& rFullName )
+    static void makeExternalDocStr( ::rtl::OUStringBuffer& rBuffer, const String& rFullName, bool bEncodeUrl )
     {
         // Format that is easier to deal with inside OOo, because we use file
         // URL, and all characetrs are allowed.  Check if it makes sense to do
@@ -1330,8 +1305,14 @@ struct ConventionXL
 
         rBuffer.append(sal_Unicode('['));
         rBuffer.append(sal_Unicode('\''));
-        const sal_Unicode* pBuf = rFullName.GetBuffer();
-        xub_StrLen nLen = rFullName.Len();
+        String aFullName;
+        if (bEncodeUrl)
+            aFullName = rFullName;
+        else
+            aFullName = INetURLObject::decode(rFullName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
+
+        const sal_Unicode* pBuf = aFullName.GetBuffer();
+        xub_StrLen nLen = aFullName.Len();
         for (xub_StrLen i = 0; i < nLen; ++i)
         {
             const sal_Unicode c = pBuf[i];
@@ -1544,7 +1525,8 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         ScSingleRefData aRef(rRef);
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
+        ConventionXL::makeExternalDocStr(
+            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
@@ -1567,7 +1549,8 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         ScComplexRefData aRef(rRef);
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
+        ConventionXL::makeExternalDocStr(
+            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aRef);
         rBuffer.append(sal_Unicode('!'));
 
@@ -1748,7 +1731,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         ScSingleRefData aRef(rRef);
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
+        ConventionXL::makeExternalDocStr(
+            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
@@ -1772,7 +1756,8 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         ScComplexRefData aRef(rRef);
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
-        ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
+        ConventionXL::makeExternalDocStr(
+            rBuffer, *pFullName, rCompiler.GetEncodeUrlMode() == ScCompiler::ENCODE_ALWAYS);
         ConventionXL::makeExternalTabNameRange(rBuffer, rTabName, aTabNames, aRef);
         rBuffer.append(sal_Unicode('!'));
 
@@ -1824,6 +1809,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
+        meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
         mbCloseBrackets( true ),
         mbExtendedErrorDetection( false ),
         mbRewind( false )
@@ -1839,6 +1825,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( pConvOOO_A1 ),
+        meEncodeUrlMode( ENCODE_BY_GRAMMAR ),
         mbCloseBrackets( true ),
         mbExtendedErrorDetection( false ),
         mbRewind( false )
@@ -2873,6 +2860,23 @@ BOOL ScCompiler::IsReference( const String& rName )
         mbRewind = true;
         return true;    // end all checks
     }
+    else
+    {
+        // Special treatment for the 'E:\[doc]Sheet1:Sheet3'!D5 Excel sickness,
+        // mnRangeOpPosInSymbol did not catch the range operator as it is
+        // within a quoted name.
+        switch (pConv->meConv)
+        {
+            case FormulaGrammar::CONV_XL_A1:
+            case FormulaGrammar::CONV_XL_R1C1:
+            case FormulaGrammar::CONV_XL_OOX:
+                if (rName.GetChar(0) == '\'' && IsDoubleReference( rName))
+                    return true;
+                break;
+            default:
+                ;   // nothing
+        }
+    }
     return false;
 }
 
@@ -3044,7 +3048,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                                 ;   // nothing, prevent compiler warning
                             break;
                         }
-                        if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                        if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                         {
                             aRef.InitFlags();
                             aRef.nCol = aIter.GetCol();
@@ -3173,7 +3177,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                             ;   // nothing, prevent compiler warning
                         break;
                     }
-                    if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
+                    if ( ScGlobal::GetpTransliteration()->isEqual( aStr, aName ) )
                     {
                         SCCOL nCol = aIter.GetCol();
                         SCROW nRow = aIter.GetRow();

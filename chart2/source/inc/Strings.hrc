@@ -33,7 +33,7 @@
 // this includes no link dependency
 #include <vcl/solar.hrc>
 
-//next free is 285
+//next free is 290
 //single free is: 134
 
 //#define RID_APP_START 30000
@@ -100,6 +100,7 @@
 #define STR_STACKED                         (RID_APP_START + 11)
 #define STR_PERCENT                         (RID_APP_START + 12)
 #define STR_DEEP                            (RID_APP_START + 13)
+#define STR_FILLED                          (RID_APP_START + 285)
 
 #define STR_DONUT                           (RID_APP_START + 8)
 #define STR_TYPE_PIE                        (RID_APP_START + 187)
@@ -230,8 +231,11 @@
 #define STR_OBJECT_DATASERIES               (RID_APP_START + 204)
 #define STR_OBJECT_DATASERIES_PLURAL        (RID_APP_START + 205)
 
+#define STR_OBJECT_FOR_SERIES               (RID_APP_START + 288)
+#define STR_OBJECT_FOR_ALL_SERIES           (RID_APP_START + 289)
+
 #define STR_OBJECT_AVERAGE_LINE             (RID_APP_START + 174)
-#define STR_OBJECT_ERROR_INDICATOR          (RID_APP_START + 175)
+#define STR_OBJECT_ERROR_BARS               (RID_APP_START + 175)
 #define STR_OBJECT_CURVE                    (RID_APP_START + 176)
 #define STR_OBJECT_CURVES                   (RID_APP_START + 130)
 
@@ -243,6 +247,9 @@
 #define STR_OBJECT_AXIS_X                   (RID_APP_START + 211)
 #define STR_OBJECT_AXIS_Y                   (RID_APP_START + 212)
 #define STR_OBJECT_AXIS_Z                   (RID_APP_START + 213)
+
+#define STR_OBJECT_SECONDARY_X_AXIS         (RID_APP_START + 286)
+#define STR_OBJECT_SECONDARY_Y_AXIS         (RID_APP_START + 287)
 
 #define STR_OBJECT_GRID                     (RID_APP_START + 214)
 #define STR_OBJECT_GRIDS                    (RID_APP_START + 215)
@@ -267,7 +274,7 @@
 #define STR_PAGE_BORDER                      (RID_APP_START + 217)
 #define STR_PAGE_AREA                        (RID_APP_START + 218)
 #define STR_PAGE_TRANSPARENCY                (RID_APP_START + 219)
-#define STR_PAGE_CHARACTERS                  (RID_APP_START + 220)
+#define STR_PAGE_FONT                        (RID_APP_START + 220)
 #define STR_PAGE_FONT_EFFECTS                (RID_APP_START + 221)
 #define STR_PAGE_LAYOUT                      (RID_APP_START + 222)
 #define STR_PAGE_OPTIONS                     (RID_APP_START + 223)

@@ -62,6 +62,9 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include "docuno.hxx"
@@ -372,27 +375,6 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     if ( pDocShell )
     {
         pDocShell->GetDocument()->AddUnoObject(*this);      // SfxModel is derived from SfxListener
-
-        // setDelegator veraendert den RefCount, darum eine Referenz selber halten
-        // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
-        comphelper::increment( m_refCount );
-
-        // waehrend des queryInterface braucht man ein Ref auf das
-        // SvNumberFormatsSupplierObj, sonst wird es geloescht.
-        uno::Reference<util::XNumberFormatsSupplier> xFormatter(new SvNumberFormatsSupplierObj(
-                                                pDocShell->GetDocument()->GetFormatTable() ));
-        {
-            xNumberAgg.set(uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY ));
-            // extra block to force deletion of the temporary before setDelegator
-        }
-
-        // beim setDelegator darf die zusaetzliche Ref nicht mehr existieren
-        xFormatter = NULL;
-
-        if (xNumberAgg.is())
-            xNumberAgg->setDelegator( (cppu::OWeakObject*)this );
-
-        comphelper::decrement( m_refCount );
     }
 }
 
@@ -406,6 +388,31 @@ ScModelObj::~ScModelObj()
 
     delete pPrintFuncCache;
     delete pPrinterOptions;
+}
+
+uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
+{
+    if ( !xNumberAgg.is() )
+    {
+        // setDelegator veraendert den RefCount, darum eine Referenz selber halten
+        // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
+        comphelper::increment( m_refCount );
+        // waehrend des queryInterface braucht man ein Ref auf das
+        // SvNumberFormatsSupplierObj, sonst wird es geloescht.
+        uno::Reference<util::XNumberFormatsSupplier> xFormatter(new SvNumberFormatsSupplierObj(pDocShell->GetDocument()->GetFormatTable() ));
+        {
+            xNumberAgg.set(uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY ));
+            // extra block to force deletion of the temporary before setDelegator
+        }
+
+        // beim setDelegator darf die zusaetzliche Ref nicht mehr existieren
+        xFormatter = NULL;
+
+        if (xNumberAgg.is())
+            xNumberAgg->setDelegator( (cppu::OWeakObject*)this );
+        comphelper::decrement( m_refCount );
+    } // if ( !xNumberAgg.is() )
+    return xNumberAgg;
 }
 
 ScDocument* ScModelObj::GetDocument() const
@@ -426,13 +433,6 @@ void ScModelObj::UpdateAllRowHeights(const ScMarkData* pTabMark)
         pDocShell->UpdateAllRowHeights(pTabMark);
 }
 
-ScDrawLayer* ScModelObj::MakeDrawLayer()
-{
-    if (pDocShell)
-        return pDocShell->MakeDrawLayer();
-    return NULL;
-}
-
 void ScModelObj::BeforeXMLLoading()
 {
     if (pDocShell)
@@ -443,6 +443,13 @@ void ScModelObj::AfterXMLLoading(sal_Bool bRet)
 {
     if (pDocShell)
         pDocShell->AfterXMLLoading(bRet);
+}
+
+ScSheetSaveData* ScModelObj::GetSheetSaveData()
+{
+    if (pDocShell)
+        return pDocShell->GetSheetSaveData();
+    return NULL;
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
@@ -465,8 +472,19 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( util::XChangesNotifier )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
-    if ( !aRet.hasValue() && xNumberAgg.is() )
-        aRet = xNumberAgg->queryAggregation( rType );
+    if ( !aRet.hasValue()
+        && rType != ::getCppuType((uno::Reference< com::sun::star::document::XDocumentEventBroadcaster>*)0)
+        && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XController>*)0)
+        && rType != ::getCppuType((uno::Reference< com::sun::star::frame::XFrame>*)0)
+        && rType != ::getCppuType((uno::Reference< com::sun::star::script::XInvocation>*)0)
+        && rType != ::getCppuType((uno::Reference< com::sun::star::reflection::XIdlClassProvider>*)0)
+        && rType != ::getCppuType((uno::Reference< com::sun::star::beans::XFastPropertySet>*)0)
+        && rType != ::getCppuType((uno::Reference< com::sun::star::awt::XWindow>*)0))
+    {
+        GetFormatter();
+        if ( xNumberAgg.is() )
+            aRet = xNumberAgg->queryAggregation( rType );
+    }
 
     return aRet;
 }
@@ -491,7 +509,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
         uno::Sequence<uno::Type> aAggTypes;
-        if ( xNumberAgg.is() )
+        if ( GetFormatter().is() )
         {
             const uno::Type& rProvType = ::getCppuType((uno::Reference<lang::XTypeProvider>*) 0);
             uno::Any aNumProv(xNumberAgg->queryAggregation(rProvType));
@@ -582,7 +600,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             //  NumberFormatter-Pointer am Uno-Objekt neu setzen
 
-            if (xNumberAgg.is())
+            if (GetFormatter().is())
             {
                 SvNumberFormatsSupplierObj* pNumFmt =
                     SvNumberFormatsSupplierObj::getImplementation(
@@ -2048,7 +2066,7 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     if ( nRet )
         return nRet;
 
-    if ( xNumberAgg.is() )
+    if ( GetFormatter().is() )
     {
         const uno::Type& rTunnelType = ::getCppuType((uno::Reference<lang::XUnoTunnel>*) 0);
         uno::Any aNumTunnel(xNumberAgg->queryAggregation(rTunnelType));

@@ -96,11 +96,6 @@ public:
     static ScRefUpdateRes UpdateGrow(
                                 const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                 ScComplexRefData& rRef );
-
-#if OLD_PIVOT_IMPLEMENTATION
-    static ScRefUpdateRes DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                ScRange& rRef );
-#endif
 };
 
 

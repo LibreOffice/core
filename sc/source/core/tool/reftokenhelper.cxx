@@ -51,7 +51,7 @@ using ::rtl::OUString;
 void ScRefTokenHelper::compileRangeRepresentation(
     vector<ScSharedTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc, FormulaGrammar::Grammar eGrammar)
 {
-    const sal_Unicode cSep = ';';
+    const sal_Unicode cSep = GetScCompilerNativeSymbol(ocSep).GetChar(0);
     const sal_Unicode cQuote = '\'';
 
     bool bFailure = false;

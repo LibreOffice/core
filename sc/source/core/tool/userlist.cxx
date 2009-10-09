@@ -153,7 +153,7 @@ StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSub
     else if (bFound2)
         return COMPARE_GREATER;
     else
-        return (StringCompare) ScGlobal::pCaseTransliteration->compareString( rSubStr1, rSubStr2 );
+        return (StringCompare) ScGlobal::GetCaseTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
 StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSubStr2) const
@@ -179,7 +179,7 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
     else if (bFound2)
         return COMPARE_GREATER;
     else
-        return (StringCompare) ScGlobal::pTransliteration->compareString( rSubStr1, rSubStr2 );
+        return (StringCompare) ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
 ScUserList::ScUserList(USHORT nLim, USHORT nDel) :

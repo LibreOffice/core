@@ -244,7 +244,9 @@ public:
 
     void    FindChanged();
     void    SetPagebreakMode( ScPageBreakData* pPageData );
+#ifdef OLD_SELECTION_PAINT
     void    DrawMark( Window* pWin );
+#endif
     void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,
                          const Color& rColor, BOOL bHandle );

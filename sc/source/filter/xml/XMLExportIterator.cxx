@@ -130,6 +130,13 @@ void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
     rMyCell.bHasShape = !rMyCell.aShapeList.empty();
 }
 
+void ScMyShapesContainer::SkipTable(SCTAB nSkip)
+{
+    ScMyShapeList::iterator aItr = aShapeList.begin();
+    while( (aItr != aShapeList.end()) && (aItr->aAddress.Tab() == nSkip) )
+        aItr = aShapeList.erase(aItr);
+}
+
 void ScMyShapesContainer::Sort()
 {
     aShapeList.sort();
@@ -182,6 +189,13 @@ void ScMyNoteShapesContainer::SetCellData( ScMyCell& rMyCell )
         rMyCell.xNoteShape = aItr->xShape;
         aItr = aNoteShapeList.erase(aItr);
     }
+}
+
+void ScMyNoteShapesContainer::SkipTable(SCTAB nSkip)
+{
+    ScMyNoteShapeList::iterator aItr = aNoteShapeList.begin();
+    while( (aItr != aNoteShapeList.end()) && (aItr->aPos.Tab() == nSkip) )
+        aItr = aNoteShapeList.erase(aItr);
 }
 
 void ScMyNoteShapesContainer::Sort()
@@ -269,6 +283,13 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
     }
 }
 
+void ScMyMergedRangesContainer::SkipTable(SCTAB nSkip)
+{
+    ScMyMergedRangeList::iterator aItr = aRangeList.begin();
+    while( (aItr != aRangeList.end()) && (aItr->aCellRange.Sheet == nSkip) )
+        aItr = aRangeList.erase(aItr);
+}
+
 void ScMyMergedRangesContainer::Sort()
 {
     aRangeList.sort();
@@ -344,6 +365,13 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
     }
 }
 
+void ScMyAreaLinksContainer::SkipTable(SCTAB nSkip)
+{
+    ScMyAreaLinkList::iterator aItr = aAreaLinkList.begin();
+    while( (aItr != aAreaLinkList.end()) && (aItr->aDestRange.Sheet == nSkip) )
+        aItr = aAreaLinkList.erase(aItr);
+}
+
 void ScMyAreaLinksContainer::Sort()
 {
     aAreaLinkList.sort();
@@ -415,6 +443,13 @@ void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
                 aDatabaseList.erase(aItr);
         }
     }
+}
+
+void ScMyEmptyDatabaseRangesContainer::SkipTable(SCTAB nSkip)
+{
+    ScMyEmptyDatabaseRangeList::iterator aItr = aDatabaseList.begin();
+    while( (aItr != aDatabaseList.end()) && (aItr->Sheet == nSkip) )
+        aItr = aDatabaseList.erase(aItr);
 }
 
 void ScMyEmptyDatabaseRangesContainer::Sort()
@@ -498,6 +533,13 @@ void ScMyDetectiveObjContainer::SetCellData( ScMyCell& rMyCell )
     rMyCell.bHasDetectiveObj = (rMyCell.aDetectiveObjVec.size() != 0);
 }
 
+void ScMyDetectiveObjContainer::SkipTable(SCTAB nSkip)
+{
+    ScMyDetectiveObjList::iterator aItr = aDetectiveObjList.begin();
+    while( (aItr != aDetectiveObjList.end()) && (aItr->aPosition.Sheet == nSkip) )
+        aItr = aDetectiveObjList.erase(aItr);
+}
+
 void ScMyDetectiveObjContainer::Sort()
 {
     aDetectiveObjList.sort();
@@ -555,6 +597,13 @@ void ScMyDetectiveOpContainer::SetCellData( ScMyCell& rMyCell )
         aItr = aDetectiveOpList.erase( aItr );
     }
     rMyCell.bHasDetectiveOp = (rMyCell.aDetectiveOpVec.size() != 0);
+}
+
+void ScMyDetectiveOpContainer::SkipTable(SCTAB nSkip)
+{
+    ScMyDetectiveOpList::iterator aItr = aDetectiveOpList.begin();
+    while( (aItr != aDetectiveOpList.end()) && (aItr->aPosition.Sheet == nSkip) )
+        aItr = aDetectiveOpList.erase(aItr);
 }
 
 void ScMyDetectiveOpContainer::Sort()
@@ -764,6 +813,27 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
             }
         }
     }
+}
+
+void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
+{
+    // Skip entries for a sheet that is copied instead of saving normally.
+    // Cells (including aAnnotations) are handled separately in SetCurrentTable.
+
+    if( pShapes )
+        pShapes->SkipTable(nSkip);
+    if( pNoteShapes )
+        pNoteShapes->SkipTable(nSkip);
+    if( pEmptyDatabaseRanges )
+        pEmptyDatabaseRanges->SkipTable(nSkip);
+    if( pMergedRanges )
+        pMergedRanges->SkipTable(nSkip);
+    if( pAreaLinks )
+        pAreaLinks->SkipTable(nSkip);
+    if( pDetectiveObj )
+        pDetectiveObj->SkipTable(nSkip);
+    if( pDetectiveOp )
+        pDetectiveOp->SkipTable(nSkip);
 }
 
 sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)

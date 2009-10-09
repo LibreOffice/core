@@ -80,6 +80,7 @@
 #include "listenercalls.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
+#include "clipparam.hxx"
 
 #include <memory>
 
@@ -229,46 +230,6 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
 
     return NULL;
 }
-
-#if OLD_PIVOT_IMPLEMENTATION
-ScPivotCollection* ScDocument::GetPivotCollection() const
-{
-    return pPivotCollection;
-}
-
-void ScDocument::SetPivotCollection(ScPivotCollection* pNewPivotCollection)
-{
-    if ( pPivotCollection && pNewPivotCollection &&
-            *pPivotCollection == *pNewPivotCollection )
-    {
-        delete pNewPivotCollection;
-        return;
-    }
-
-    if (pPivotCollection)
-        delete pPivotCollection;
-    pPivotCollection = pNewPivotCollection;
-
-    if (pPivotCollection)
-    {
-        USHORT nCount = pPivotCollection->GetCount();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ScPivot* pPivot = (*pPivotCollection)[i];
-            if (pPivot->CreateData())
-                pPivot->ReleaseData();
-        }
-    }
-}
-
-ScPivot* ScDocument::GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
-{
-    if (pPivotCollection)
-        return pPivotCollection->GetPivotAtCursor(nCol, nRow, nTab);
-    else
-        return NULL;
-}
-#endif
 
 ScChartCollection* ScDocument::GetChartCollection() const
 {
@@ -468,7 +429,7 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( TRUE );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
+        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
                                         &aFilterName );
         pLink->Update();
         pLink->SetInCreate( FALSE );
@@ -479,10 +440,11 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     return TRUE;
 }
 
-ScExternalRefManager* ScDocument::GetExternalRefManager()
+ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
+    ScDocument* pThis = const_cast<ScDocument*>(this);
     if (!pExternalRefMgr.get())
-        pExternalRefMgr.reset(new ScExternalRefManager(this));
+        pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
 
     return pExternalRefMgr.get();
 }
@@ -845,10 +807,6 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
             pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
             pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
-#if OLD_PIVOT_IMPLEMENTATION
-            if (pPivotCollection)
-                pPivotCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
-#endif
             if ( pDPCollection )
                 pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
@@ -898,7 +856,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         {
             ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
             if (pClipDoc)
-                pClipDoc->bCutMode = FALSE;
+                pClipDoc->GetClipParam().mbCutMode = false;
         }
     }
 }
@@ -908,7 +866,10 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 {
     DBG_ASSERT(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
 
-    ScRange aSource = pClipDoc->aClipRange;         // Tab wird noch angepasst
+    ScRange aSource;
+    ScClipParam& rClipParam = GetClipParam();
+    if (rClipParam.maRanges.Count())
+        aSource = *rClipParam.maRanges.First();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;
@@ -938,9 +899,6 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     //! UpdateChartRef
 
     pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );
-#if OLD_PIVOT_IMPLEMENTATION
-    pPivotCollection->UpdateGrow( rArea, nGrowX, nGrowY );
-#endif
 
     for (SCTAB i=0; i<=MAXTAB && pTab[i]; i++)
         pTab[i]->UpdateGrow( rArea, nGrowX, nGrowY );
@@ -1782,10 +1740,7 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
     *pDocOptions = rOpt;
     rOpt.GetDate( d,m,y );
 
-    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
-    pFormatter->ChangeNullDate( d,m,y );
-    pFormatter->ChangeStandardPrec( (USHORT)rOpt.GetStdPrecision() );
-    pFormatter->SetYear2000( rOpt.GetYear2000() );
+    xPoolHelper->SetFormTableOpt(rOpt);
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

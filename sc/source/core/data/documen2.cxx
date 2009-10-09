@@ -86,7 +86,6 @@
 #include "editutil.hxx"
 #include "hints.hxx"
 #include "dpobject.hxx"
-#include "indexmap.hxx"
 #include "scrdata.hxx"
 #include "poolhelp.hxx"
 #include "unoreflist.hxx"
@@ -96,6 +95,7 @@
 #include "externalrefmgr.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
+#include "clipparam.hxx"
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -155,6 +155,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pScriptTypeData( NULL ),
         pCacheFieldEditEngine( NULL ),
         pDocProtection( NULL ),
+        mpClipParam( NULL),
+        pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
         pExtDocOptions( NULL ),
@@ -182,7 +184,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bForcedFormulaPending( FALSE ),
         bCalculatingFormulaTree( FALSE ),
         bIsClip( eMode == SCDOCMODE_CLIP ),
-        bCutMode( FALSE ),
         bIsUndo( eMode == SCDOCMODE_UNDO ),
         bIsVisible( FALSE ),
         bIsEmbedded( FALSE ),
@@ -217,6 +218,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbAdjustHeightEnabled( true ),
         mbExecuteLinkEnabled( true ),
         mbChangeReadOnlyEnabled( false ),
+        mbStreamValidLocked( false ),
         mnNamedRangesLockCount( 0 )
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
@@ -248,9 +250,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
     pRangeName = new ScRangeName( 4, 4, FALSE, this );
     pDBCollection = new ScDBCollection( 4, 4, FALSE, this );
-#if OLD_PIVOT_IMPLEMENTATION
-    pPivotCollection = new ScPivotCollection(4, 4, this );
-#endif
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
     apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
@@ -262,6 +261,15 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 
     aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
     aTrackTimer.SetTimeout( 100 );
+}
+
+SvxLinkManager* ScDocument::GetLinkManager()  const
+{
+    if ( bAutoCalc && !pLinkManager && pShell)
+    {
+        pLinkManager = new SvxLinkManager( pShell );
+    }
+    return pLinkManager;
 }
 
 
@@ -374,7 +382,7 @@ ScDocument::~ScDocument()
 
     // Links aufrauemen
 
-    if ( pLinkManager )
+    if ( GetLinkManager() )
     {
         // BaseLinks freigeben
         for ( USHORT n = pLinkManager->GetServers().Count(); n; )
@@ -421,9 +429,6 @@ ScDocument::~ScDocument()
     }
     delete pRangeName;
     delete pDBCollection;
-#if OLD_PIVOT_IMPLEMENTATION
-    delete pPivotCollection;
-#endif
     delete pSelectionAttr;
     apTemporaryChartLock.reset();
     delete pChartCollection;
@@ -548,12 +553,12 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
     return *pNoteEngine;
 }
 
-SfxItemPool& ScDocument::GetNoteItemPool()
-{
-    if ( !pNoteItemPool )
-        pNoteItemPool = new SfxItemPool(SdrObject::GetGlobalDrawObjectItemPool());
-    return *pNoteItemPool;
-}
+//UNUSED2009-05 SfxItemPool& ScDocument::GetNoteItemPool()
+//UNUSED2009-05 {
+//UNUSED2009-05     if ( !pNoteItemPool )
+//UNUSED2009-05         pNoteItemPool = new SfxItemPool(SdrObject::GetGlobalDrawObjectItemPool());
+//UNUSED2009-05     return *pNoteItemPool;
+//UNUSED2009-05 }
 
 void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
 {
@@ -623,22 +628,22 @@ void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
-void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell,
-                            ULONG nFormatIndex, BOOL bForceTab )
-{
-    SCTAB nTab = rPos.Tab();
-    if ( bForceTab && !pTab[nTab] )
-    {
-        BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
-
-        pTab[nTab] = new ScTable(this, nTab,
-                            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
-                            bExtras, bExtras);
-    }
-
-    if (pTab[nTab])
-        pTab[nTab]->PutCell( rPos, nFormatIndex, pCell );
-}
+//UNUSED2009-05 void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell,
+//UNUSED2009-05                             ULONG nFormatIndex, BOOL bForceTab )
+//UNUSED2009-05 {
+//UNUSED2009-05     SCTAB nTab = rPos.Tab();
+//UNUSED2009-05     if ( bForceTab && !pTab[nTab] )
+//UNUSED2009-05     {
+//UNUSED2009-05         BOOL bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+//UNUSED2009-05
+//UNUSED2009-05         pTab[nTab] = new ScTable(this, nTab,
+//UNUSED2009-05                             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("temp")),
+//UNUSED2009-05                             bExtras, bExtras);
+//UNUSED2009-05     }
+//UNUSED2009-05
+//UNUSED2009-05     if (pTab[nTab])
+//UNUSED2009-05         pTab[nTab]->PutCell( rPos, nFormatIndex, pCell );
+//UNUSED2009-05 }
 
 BOOL ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                 BOOL bNotes ) const
@@ -759,11 +764,6 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
                 xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
                 xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference( URM_REORDER,
-                                    0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_REORDER, aSourceRange, 0,0,nDz );
                 if (pDetOpList)
@@ -858,11 +858,6 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 pRangeName->UpdateTabRef(nNewPos, 1);
                 pDBCollection->UpdateReference(
                                     URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#if OLD_PIVOT_IMPLEMENTATION
-                if (pPivotCollection)
-                    pPivotCollection->UpdateReference(
-                                    URM_INSDEL, 0,0,nNewPos, MAXCOL,MAXROW,MAXTAB, 0,0,1 );
-#endif
                 if (pDPCollection)
                     pDPCollection->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if (pDetOpList)
@@ -978,23 +973,18 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
             pSrcDoc->SetAutoCalc( TRUE );   // falls was berechnet werden muss
         }
-        SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
-        SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
-        if (pOtherFormatter && pOtherFormatter != pThisFormatter)
+
         {
-            SvNumberFormatterIndexTable* pExchangeList =
-                     pThisFormatter->MergeFormatter(*(pOtherFormatter));
-            if (pExchangeList->Count() > 0)
-                pFormatExchangeList = pExchangeList;
+            NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
+
+            nDestPos = Min(nDestPos, (SCTAB)(GetTableCount() - 1));
+            {   // scope for bulk broadcast
+                ScBulkBroadcast aBulkBroadcast( pBASM);
+                pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
+                        ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
+                        FALSE, pTab[nDestPos] );
+            }
         }
-        nDestPos = Min(nDestPos, (SCTAB)(GetTableCount() - 1));
-        {   // scope for bulk broadcast
-            ScBulkBroadcast aBulkBroadcast( pBASM);
-            pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
-                    ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
-                    FALSE, pTab[nDestPos] );
-        }
-        pFormatExchangeList = NULL;
         pTab[nDestPos]->SetTabNo(nDestPos);
 
         if ( !bResultsOnly )
@@ -1004,7 +994,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             // array containing range names which might need update of indices
             ScRangeData** pSrcRangeNames = nSrcRangeNames ? new ScRangeData* [nSrcRangeNames] : NULL;
             // the index mapping thereof
-            ScIndexMap aSrcRangeMap( nSrcRangeNames );
+            ScRangeData::IndexMap aSrcRangeMap;
             BOOL bRangeNameReplace = FALSE;
 
             // find named ranges that are used in the source sheet
@@ -1029,7 +1019,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                         USHORT nExistingIndex = pExistingData->GetIndex();
 
                         pSrcRangeNames[i] = NULL;       // don't modify the named range
-                        aSrcRangeMap.SetPair( i, nOldIndex, nExistingIndex );
+                        aSrcRangeMap.insert(
+                            ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
                         bRangeNameReplace = TRUE;
                         bNamesLost = TRUE;
                     }
@@ -1049,7 +1040,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                             pData->TransferTabRef( nSrcPos, nDestPos );
                             pSrcRangeNames[i] = pData;
                             USHORT nNewIndex = pData->GetIndex();
-                            aSrcRangeMap.SetPair( i, nOldIndex, nNewIndex );
+                            aSrcRangeMap.insert(
+                                ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
                             if ( !bRangeNameReplace )
                                 bRangeNameReplace = ( nOldIndex != nNewIndex );
                         }

@@ -40,8 +40,6 @@
 class ScBaseCell;
 class ScFormulaCell;
 class ScTokenArray;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 class ScRangeList;
 
 
@@ -284,8 +282,6 @@ public:
                 { if (!Insert(pNew)) delete pNew; }
 
     ScConditionalFormat* GetFormat( sal_uInt32 nKey );
-
-//UNUSED2008-05  void   ResetUsed();
 
     void    CompileAll();
     void    CompileXML();

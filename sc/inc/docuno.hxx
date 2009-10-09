@@ -76,6 +76,7 @@ class SvxFmDrawPage;
 class SvxDrawPage;
 class ScRangeList;
 class ScPrintUIOptions;
+class ScSheetSaveData;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::sheet::XSpreadsheetDocument,
@@ -113,6 +114,7 @@ private:
     BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
                                                 const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptions,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus, String& rPagesStr ) const;
+    com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
 
     rtl::OUString           maBuildId;
 protected:
@@ -130,9 +132,9 @@ public:
 
     void                    UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
 
-    ScDrawLayer*                            MakeDrawLayer();
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);
+    ScSheetSaveData*        GetSheetSaveData();
 
     bool                    HasChangesListeners() const;
 

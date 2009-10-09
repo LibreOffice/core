@@ -669,209 +669,16 @@ STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
     return aRet;
 }
 
-/** Approximation algorithm for erf for 0 < x < 0.65. */
-void Erf0065( double x, double& fVal )
-{
-    static const double pn[] = {
-        1.12837916709551256,
-        1.35894887627277916E-1,
-        4.03259488531795274E-2,
-        1.20339380863079457E-3,
-        6.49254556481904354E-5
-    };
-    static const double qn[] = {
-        1.00000000000000000,
-        4.53767041780002545E-1,
-        8.69936222615385890E-2,
-        8.49717371168693357E-3,
-        3.64915280629351082E-4
-    };
-
-    double fPSum = 0.0;
-    double fQSum = 0.0;
-    double fXPow = 1.0;
-    for ( unsigned int i = 0; i <= 4; ++i )
-    {
-        fPSum += pn[i]*fXPow;
-        fQSum += qn[i]*fXPow;
-        fXPow *= x*x;
-    }
-    fVal = x * fPSum / fQSum;
-}
-
-/** Approximation algorithm for erfc for 0.65 < x < 6.0. */
-void Erfc0600( double x, double& fVal )
-{
-    double fPSum = 0.0;
-    double fQSum = 0.0;
-    double fXPow = 1.0;
-    const double *pn;
-    const double *qn;
-
-    if ( x < 2.2 )
-    {
-        static const double pn22[] = {
-            9.99999992049799098E-1,
-            1.33154163936765307,
-            8.78115804155881782E-1,
-            3.31899559578213215E-1,
-            7.14193832506776067E-2,
-            7.06940843763253131E-3
-        };
-        static const double qn22[] = {
-            1.00000000000000000,
-            2.45992070144245533,
-            2.65383972869775752,
-            1.61876655543871376,
-            5.94651311286481502E-1,
-            1.26579413030177940E-1,
-            1.25304936549413393E-2
-        };
-        pn = pn22;
-        qn = qn22;
-    }
-    else /* if ( x < 6.0 )  this is true, but the compiler does not know */
-    {
-        static const double pn60[] = {
-            9.99921140009714409E-1,
-            1.62356584489366647,
-            1.26739901455873222,
-            5.81528574177741135E-1,
-            1.57289620742838702E-1,
-            2.25716982919217555E-2
-        };
-        static const double qn60[] = {
-            1.00000000000000000,
-            2.75143870676376208,
-            3.37367334657284535,
-            2.38574194785344389,
-            1.05074004614827206,
-            2.78788439273628983E-1,
-            4.00072964526861362E-2
-        };
-        pn = pn60;
-        qn = qn60;
-    }
-
-    for ( unsigned int i = 0; i < 6; ++i )
-    {
-        fPSum += pn[i]*fXPow;
-        fQSum += qn[i]*fXPow;
-        fXPow *= x;
-    }
-    fQSum += qn[6]*fXPow;
-    fVal = exp( -1.0*x*x )* fPSum / fQSum;
-}
-
-/** Approximation algorithm for erfc for 6.0 < x < 26.54 (but used for all
-    x > 6.0). */
-void Erfc2654( double x, double& fVal )
-{
-    static const double pn[] = {
-        5.64189583547756078E-1,
-        8.80253746105525775,
-        3.84683103716117320E1,
-        4.77209965874436377E1,
-        8.08040729052301677
-    };
-    static const double qn[] = {
-        1.00000000000000000,
-        1.61020914205869003E1,
-        7.54843505665954743E1,
-        1.12123870801026015E2,
-        3.73997570145040850E1
-    };
-
-    double fPSum = 0.0;
-    double fQSum = 0.0;
-    double fXPow = 1.0;
-
-    for ( unsigned int i = 0; i <= 4; ++i )
-    {
-        fPSum += pn[i]*fXPow;
-        fQSum += qn[i]*fXPow;
-        fXPow /= x*x;
-    }
-    fVal = exp(-1.0*x*x)*fPSum / (x*fQSum);
-}
-
-double Erfc( double );
-
-/** Parent error function (erf) that calls different algorithms based on the
-    value of x.  It takes care of cases where x is negative as erf is an odd
-    function i.e. erf(-x) = -erf(x).
-
-    Kramer, W., and Blomquist, F., 2000, Algorithms with Guaranteed Error Bounds
-    for the Error Function and the Complementary Error Function
-
-    http://www.math.uni-wuppertal.de/wrswt/literatur_en.html
-
-    @author Kohei Yoshida <kohei@openoffice.org>
-
-    @see #i55735#
- */
+// implementation moved to module sal, see #i97091#
 double Erf( double x )
 {
-    if( x == 0.0 )
-        return 0.0;
-
-    bool bNegative = false;
-    if ( x < 0.0 )
-    {
-        x = fabs( x );
-        bNegative = true;
-    }
-
-    double fErf = 1.0;
-    if ( x < 1.0e-10 )
-        fErf = (double) (x*1.1283791670955125738961589031215452L);
-    else if ( x < 0.65 )
-        Erf0065( x, fErf );
-    else
-        fErf = 1.0 - Erfc( x );
-
-    if ( bNegative )
-        fErf *= -1.0;
-
-    return fErf;
+    return ::rtl::math::erf(x);
 }
 
-/** Parent complementary error function (erfc) that calls different algorithms
-    based on the value of x.  It takes care of cases where x is negative as erfc
-    satisfies relationship erfc(-x) = 2 - erfc(x).  See the comment for Erf(x)
-    for the source publication.
-
-    @author Kohei Yoshida <kohei@openoffice.org>
-
-    @see #i55735#
- */
+// implementation moved to module sal, see #i97091#
 double Erfc( double x )
 {
-    if ( x == 0.0 )
-        return 1.0;
-
-    bool bNegative = false;
-    if ( x < 0.0 )
-    {
-        x = fabs( x );
-        bNegative = true;
-    }
-
-    double fErfc = 0.0;
-    if ( x >= 0.65 )
-    {
-        if ( x < 6.0 )
-            Erfc0600( x, fErfc );
-        else
-            Erfc2654( x, fErfc );
-    }
-    else
-        fErfc = 1.0 - Erf( x );
-
-    if ( bNegative )
-        fErfc = 2.0 - fErfc;
-
-    return fErfc;
+    return ::rtl::math::erfc(x);
 }
 
 inline sal_Bool IsNum( sal_Unicode c )
@@ -2378,10 +2185,11 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH 
 
 
 
-ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e ) : aName( p, strlen( p ), RTL_TEXTENCODING_MS_1252 )
+ConvertData::ConvertData( const sal_Char p[], double fC, ConvertDataClass e, sal_Bool bPrefSupport ) : aName( p, strlen( p ), RTL_TEXTENCODING_MS_1252 )
 {
     fConst = fC;
     eClass = e;
+    bPrefixSupport = bPrefSupport;
 }
 
 ConvertData::~ConvertData()
@@ -2391,13 +2199,26 @@ ConvertData::~ConvertData()
 
 sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
 {
-    if( aName.equals( rRef ) )
+    STRING aStr = rRef;
+    sal_Int32 nLen = rRef.getLength();
+    sal_Int32 nIndex = rRef.lastIndexOf( '^' );
+    if( nIndex > 0 && nIndex  == ( nLen - 2 ) )
+    {
+        const sal_Unicode*  p = aStr.getStr();
+        aStr = STRING( p, nLen - 2 );
+        aStr += STRING( p[ nLen - 1 ] );
+    }
+    if( aName.equals( aStr ) )
         return 0;
     else
     {
-        const sal_Unicode*  p = rRef.getStr();
+        const sal_Unicode*  p = aStr.getStr();
 
-        if ( aName == p + 1 )
+        nLen = aStr.getLength();
+        bool bPref = IsPrefixSupport();
+        bool bOneChar = (bPref && nLen > 1 && (aName == p + 1));
+        if (bOneChar || (bPref && nLen > 2 && (aName == p + 2) &&
+                    *p == 'd' && *(p+1) == 'a'))
         {
             sal_Int16       n;
             switch( *p )
@@ -2411,7 +2232,14 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
                 case 'u':   n = -6;     break;
                 case 'm':   n = -3;     break;
                 case 'c':   n = -2;     break;
-                case 'd':   n = -1;     break;
+                case 'd':
+                    {
+                        if ( bOneChar )
+                            n = -1;                 // deci
+                        else
+                            n = 1;                  // deca
+                    }
+                    break;
                 case 'e':   n = 1;      break;
                 case 'h':   n = 2;      break;
                 case 'k':   n = 3;      break;
@@ -2426,10 +2254,16 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
                             n = INV_MATCHLEV;
             }
 
+// We could weed some nonsense out, ODFF doesn't say so though.
+#if 0
+            if (n < 0 && Class() == CDC_Information)
+                n = INV_MATCHLEV;   // milli-bits doesn't make sense
+#endif
+
 //! <HACK> #100616# "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
             if( n != INV_MATCHLEV )
             {
-                sal_Unicode cLast = p[ rRef.getLength() - 1 ];
+                sal_Unicode cLast = p[ aStr.getLength() - 1 ];
                 if( cLast == '2' )
                     n *= 2;
                 else if( cLast == '3' )
@@ -2437,6 +2271,27 @@ sal_Int16 ConvertData::GetMatchingLevel( const STRING& rRef ) const
             }
 //! </HACK> -------------------------------------------------------------------
 
+            return n;
+        }
+        else if ( nLen > 2 && ( aName == p + 2 ) && ( Class() == CDC_Information ) )
+        {
+            const sal_Unicode*  pStr = aStr.getStr();
+            if ( *(pStr + 1) != 'i')
+                return INV_MATCHLEV;
+            sal_Int16 n;
+            switch( *pStr )
+            {
+                case 'k':   n = 10;      break;
+                case 'M':   n = 20;      break;
+                case 'G':   n = 30;      break;
+                case 'T':   n = 40;      break;
+                case 'P':   n = 50;      break;
+                case 'E':   n = 60;      break;
+                case 'Z':   n = 70;      break;
+                case 'Y':   n = 80;      break;
+                default:
+                            n = INV_MATCHLEV;
+            }
             return n;
         }
         else
@@ -2450,6 +2305,25 @@ double ConvertData::Convert(
 {
     if( Class() != r.Class() )
         THROW_IAE;
+
+    sal_Bool bBinFromLev = ( nLevFrom > 0 && ( nLevFrom % 10 ) == 0 );
+    sal_Bool bBinToLev   = ( nLevTo > 0 && ( nLevTo % 10 ) == 0 );
+
+    if ( Class() == CDC_Information && ( bBinFromLev || bBinToLev ) )
+    {
+        if ( bBinFromLev && bBinToLev )
+        {
+            nLevFrom = sal::static_int_cast<sal_Int16>( nLevFrom - nLevTo );
+            f *= r.fConst / fConst;
+            if( nLevFrom )
+                f *= pow( 2.0, nLevFrom );
+        }
+        else if ( bBinFromLev )
+            f *= ( r.fConst / fConst ) * ( pow( 2.0, nLevFrom ) / pow( 10.0, nLevTo ) );
+        else
+            f *= ( r.fConst / fConst ) * ( pow( 10.0, nLevFrom ) / pow( 2.0, nLevTo ) );
+        return f;
+    }
 
     nLevFrom = sal::static_int_cast<sal_Int16>( nLevFrom - nLevTo );    // effective level
 
@@ -2519,15 +2393,17 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 ConvertDataList::ConvertDataList( void )
 {
 #define NEWD(str,unit,cl)   Append(new ConvertData(str,unit,cl))
+#define NEWDP(str,unit,cl)  Append(new ConvertData(str,unit,cl,sal_True))
 #define NEWL(str,unit,offs,cl)  Append(new ConvertDataLinear(str,unit,offs,cl))
+#define NEWLP(str,unit,offs,cl) Append(new ConvertDataLinear(str,unit,offs,cl,sal_True))
 
     // *** are extra and not standard Excel Analysis Addin!
 
     // MASS: 1 Gram is...
-    NEWD( "g",          1.0000000000000000E00,  CDC_Mass ); // Gram
+    NEWDP( "g",         1.0000000000000000E00,  CDC_Mass ); // Gram
     NEWD( "sg",         6.8522050005347800E-05, CDC_Mass ); // Pieces
     NEWD( "lbm",        2.2046229146913400E-03, CDC_Mass ); // Pound (commercial weight)
-    NEWD( "u",          6.0221370000000000E23,  CDC_Mass ); // U (atomic mass)
+    NEWDP( "u",         6.0221370000000000E23,  CDC_Mass ); // U (atomic mass)
     NEWD( "ozm",        3.5273971800362700E-02, CDC_Mass ); // Ounce (commercial weight)
     NEWD( "stone",      1.574730e-04,           CDC_Mass ); // *** Stone
     NEWD( "ton",        1.102311e-06,           CDC_Mass ); // *** Ton
@@ -2536,9 +2412,16 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "hweight",    1.968413E-05,           CDC_Mass ); // *** Hundredweight
     NEWD( "shweight",   2.204623E-05,           CDC_Mass ); // *** Shorthundredweight
     NEWD( "brton",      9.842065E-07,           CDC_Mass ); // *** Gross Registered Ton
+    NEWD( "cwt",        2.2046226218487758E-05, CDC_Mass ); // U.S. (short) hundredweight
+    NEWD( "shweight",   2.2046226218487758E-05, CDC_Mass ); // U.S. (short) hundredweight also
+    NEWD( "uk_cwt",     1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight
+    NEWD( "lcwt",       1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight also
+    NEWD( "hweight",    1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight also
+    NEWD( "uk_ton",     9.8420652761106063E-07, CDC_Mass ); // Imperial ton
+    NEWD( "LTON",       9.8420652761106063E-07, CDC_Mass ); // Imperial ton also
 
     // LENGTH: 1 Meter is...
-    NEWD( "m",          1.0000000000000000E00,  CDC_Length ); // Meter
+    NEWDP( "m",         1.0000000000000000E00,  CDC_Length ); // Meter
     NEWD( "mi",         6.2137119223733397E-04, CDC_Length ); // Britsh Mile        6,21371192237333969617434184363e-4
     NEWD( "Nmi",        5.3995680345572354E-04, CDC_Length ); // Nautical Mile      5,39956803455723542116630669546e-4
     NEWD( "in",         3.9370078740157480E01,  CDC_Length ); // Inch               39,37007874015748031496062992126
@@ -2547,56 +2430,73 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "ang",        1.0000000000000000E10,  CDC_Length ); // Angstroem
     NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); // Pica (1/72 Inch)   2834,6456692913385826771653543307
     NEWD( "ell",        8.748906E-01,           CDC_Length ); // *** Ell
-    NEWD( "parsec",     3.240779E-17,           CDC_Length ); // *** Parsec
-    NEWD( "lightyear",  1.0570234557732930E-16, CDC_Length ); // *** Light Year
+    NEWDP( "parsec",    3.240779E-17,           CDC_Length ); // *** Parsec
+    NEWDP( "pc",        3.240779E-17,           CDC_Length ); // *** Parsec also
+    NEWDP( "lightyear", 1.0570234557732930E-16, CDC_Length ); // *** Light Year
+    NEWDP( "ly",        1.0570234557732930E-16, CDC_Length ); // *** Light Year also
+    NEWD( "survey_mi",  6.2136994949494949E-04, CDC_Length ); // U.S. survey mile
 
     // TIME: 1 Second is...
     NEWD( "yr",     3.1688087814028950E-08, CDC_Time ); // Year
     NEWD( "day",    1.1574074074074074E-05, CDC_Time ); // Day
+    NEWD( "d",      1.1574074074074074E-05, CDC_Time ); // Day also
     NEWD( "hr",     2.7777777777777778E-04, CDC_Time ); // Hour
     NEWD( "mn",     1.6666666666666667E-02, CDC_Time ); // Minute
-    NEWD( "sec",    1.0000000000000000E00,  CDC_Time ); // Second
+    NEWD( "min",    1.6666666666666667E-02, CDC_Time ); // Minute also
+    NEWDP( "sec",   1.0000000000000000E00,  CDC_Time ); // Second
+    NEWDP( "s",     1.0000000000000000E00,  CDC_Time ); // Second also
 
     // PRESSURE: 1 Pascal is...
-    NEWD( "Pa",     1.0000000000000000E00,  CDC_Pressure ); // Pascal
-    NEWD( "atm",    9.8692329999819300E-06, CDC_Pressure ); // Atmoshpere
-    NEWD( "mmHg",   7.5006170799862700E-03, CDC_Pressure ); // mm Hg (Mercury)
+    NEWDP( "Pa",    1.0000000000000000E00,  CDC_Pressure ); // Pascal
+    NEWDP( "atm",   9.8692329999819300E-06, CDC_Pressure ); // Atmosphere
+    NEWDP( "at",    9.8692329999819300E-06, CDC_Pressure ); // Atmosphere also
+    NEWDP( "mmHg",  7.5006170799862700E-03, CDC_Pressure ); // mm Hg (Mercury)
     NEWD( "Torr",   7.5006380000000000E-03, CDC_Pressure ); // *** Torr
     NEWD( "psi",    1.4503770000000000E-04, CDC_Pressure ); // *** Psi
 
     // FORCE: 1 Newton is...
-    NEWD( "N",      1.0000000000000000E00,  CDC_Force ); // Newton
-    NEWD( "dyn",    1.0000000000000000E05,  CDC_Force ); // Dyn
+    NEWDP( "N",     1.0000000000000000E00,  CDC_Force ); // Newton
+    NEWDP( "dyn",   1.0000000000000000E05,  CDC_Force ); // Dyn
+    NEWDP( "dy",    1.0000000000000000E05,  CDC_Force ); // Dyn also
     NEWD( "lbf",    2.24808923655339E-01,   CDC_Force ); // Pound-Force
-    NEWD( "pond",   1.019716E02,            CDC_Force ); // *** Pond
+    NEWDP( "pond",  1.019716E02,            CDC_Force ); // *** Pond
 
     // ENERGY: 1 Joule is...
-    NEWD( "J",      1.0000000000000000E00,  CDC_Energy ); // Joule
-    NEWD( "e",      1.0000000000000000E07,  CDC_Energy ); // Erg  -> http://www.chemie.fu-berlin.de/chemistry/general/si.html
+    NEWDP( "J",     1.0000000000000000E00,  CDC_Energy ); // Joule
+    NEWDP( "e",     1.0000000000000000E07,  CDC_Energy ); // Erg  -> http://www.chemie.fu-berlin.de/chemistry/general/si.html
 //  NEWD( "e",      9.99999519343231E06,    CDC_Energy ); // Erg
-    NEWD( "c",      2.3900624947346700E-01, CDC_Energy ); // Thermodynamical Calorie
-    NEWD( "cal",    2.3884619064201700E-01, CDC_Energy ); // Calorie
-    NEWD( "eV",     6.2414570000000000E18,  CDC_Energy ); // Electronvolt
+    NEWDP( "c",     2.3900624947346700E-01, CDC_Energy ); // Thermodynamical Calorie
+    NEWDP( "cal",   2.3884619064201700E-01, CDC_Energy ); // Calorie
+    NEWDP( "eV",    6.2414570000000000E18,  CDC_Energy ); // Electronvolt
+    NEWDP( "ev",    6.2414570000000000E18,  CDC_Energy ); // Electronvolt also
     NEWD( "HPh",    3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours
+    NEWD( "hh",     3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours also
 //  NEWD( "HPh",    3.72506430801000E-07,   CDC_Energy ); // Horsepower Hours
-    NEWD( "Wh",     2.7777777777777778E-04, CDC_Energy ); // Watt Hours
+    NEWDP( "Wh",    2.7777777777777778E-04, CDC_Energy ); // Watt Hours
+    NEWDP( "wh",    2.7777777777777778E-04, CDC_Energy ); // Watt Hours also
     NEWD( "flb",    2.37304222192651E01,    CDC_Energy ); // Foot Pound
     NEWD( "BTU",    9.4781506734901500E-04, CDC_Energy ); // British Thermal Unit
+    NEWD( "btu",    9.4781506734901500E-04, CDC_Energy ); // British Thermal Unit also
 
     // POWER: 1 Watt is...
-    NEWD( "W",      1.0000000000000000E00,  CDC_Power ); // Watt
+    NEWDP( "W",     1.0000000000000000E00,  CDC_Power ); // Watt
+    NEWDP( "w",     1.0000000000000000E00,  CDC_Power ); // Watt also
     NEWD( "HP",     1.341022E-03,           CDC_Power ); // Horsepower
+    NEWD( "h",      1.341022E-03,           CDC_Power ); // Horsepower also
     NEWD( "PS",     1.359622E-03,           CDC_Power ); // *** German Pferdestaerke
 //  NEWD( "HP",     1.4102006031908E-03,    CDC_Power ); // Excel seams to be a little bit wrong... either this doesn't fit to J -> HPh
 
     // MAGNETISM: 1 Tesla is...
-    NEWD( "T",      1.0000000000000000E00,  CDC_Magnetism ); // Tesla
-    NEWD( "ga",     1.0000000000000000E04,  CDC_Magnetism ); // Gauss
+    NEWDP( "T",     1.0000000000000000E00,  CDC_Magnetism ); // Tesla
+    NEWDP( "ga",    1.0000000000000000E04,  CDC_Magnetism ); // Gauss
 
     // TEMERATURE: 1 Kelvin is...
     NEWL( "C",      1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius
+    NEWL( "cel",    1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius also
     NEWL( "F",      1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); // Fahrenheit
-    NEWL( "K",      1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // Kelvin
+    NEWL( "fah",    1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); // Fahrenheit also
+    NEWLP( "K",     1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // Kelvin
+    NEWLP( "kel",   1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // Kelvin also
     NEWL( "Reau",   8.0000000000000000E-01, -2.7315000000000000E02, CDC_Temperature ); // *** Reaumur
     NEWL( "Rank",   1.8000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // *** Rankine
 
@@ -2606,11 +2506,14 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "oz",         3.3806666666666667E01,  CDC_Volume ); // Ounce Liquid
     NEWD( "cup",        4.2258333333333333E00,  CDC_Volume ); // Cup
     NEWD( "pt",         2.1129166666666667E00,  CDC_Volume ); // US Pint
+    NEWD( "us_pt",      2.1129166666666667E00,  CDC_Volume ); // US Pint also
     NEWD( "uk_pt",      1.75975569552166E00,    CDC_Volume ); // UK Pint
     NEWD( "qt",         1.0564583333333333E00,  CDC_Volume ); // Quart
     NEWD( "gal",        2.6411458333333333E-01, CDC_Volume ); // Gallone
-    NEWD( "l",          1.0000000000000000E00,  CDC_Volume ); // Liter
-    NEWD( "m3",         1.0000000000000000E-03, CDC_Volume ); // *** Cubic Meter
+    NEWDP( "l",         1.0000000000000000E00,  CDC_Volume ); // Liter
+    NEWDP( "L",         1.0000000000000000E00,  CDC_Volume ); // Liter also
+    NEWDP( "lt",        1.0000000000000000E00,  CDC_Volume ); // Liter also
+    NEWDP( "m3",        1.0000000000000000E-03, CDC_Volume ); // *** Cubic Meter
     NEWD( "mi3",        2.3991275857892772E-13, CDC_Volume ); // *** Cubic Britsh Mile
     NEWD( "Nmi3",       1.5742621468581148E-13, CDC_Volume ); // *** Cubic Nautical Mile
     NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); // *** Cubic Inch
@@ -2621,30 +2524,41 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "barrel",     6.289811E-03,           CDC_Volume ); // *** Barrel (=42gal?)
     NEWD( "bushel",     2.837759E-02,           CDC_Volume ); // *** Bushel
     NEWD( "regton",     3.531467E-04,           CDC_Volume ); // *** Register ton
+    NEWD( "GRT",        3.531467E-04,           CDC_Volume ); // *** Register ton also
     NEWD( "Schooner",   2.3529411764705882E00,  CDC_Volume ); // *** austr. Schooner
     NEWD( "Middy",      3.5087719298245614E00,  CDC_Volume ); // *** austr. Middy
     NEWD( "Glass",      5.0000000000000000E00,  CDC_Volume ); // *** austr. Glass
     NEWD( "Sixpack",    0.5,                    CDC_Volume ); // ***
     NEWD( "Humpen",     2.0,                    CDC_Volume ); // ***
+    NEWD( "ly3",        1.1810108125623799E-51, CDC_Volume ); // *** Cubic light-year
+    NEWD( "MTON",       1.4125866688595436E00,  CDC_Volume ); // *** Measurement ton
+    NEWD( "tspm",       5.0000000000000000E02,  CDC_Volume ); // *** Modern teaspoon
+    NEWD( "uk_gal",     2.6411458333333333E-01, CDC_Volume ); // U.K. / Imperial gallon ??
+    NEWD( "uk_qt",      1.0564583333333333E00,  CDC_Volume ); // U.K. / Imperial quart  ??
 
     // 1 Square Meter is...
-    NEWD( "m2",         1.0000000000000000E00,  CDC_Area ); // *** Square Meter
+    NEWDP( "m2",        1.0000000000000000E00,  CDC_Area ); // *** Square Meter
     NEWD( "mi2",        3.8610215854244585E-07, CDC_Area ); // *** Square Britsh Mile
     NEWD( "Nmi2",       2.9155334959812286E-07, CDC_Area ); // *** Square Nautical Mile
     NEWD( "in2",        1.5500031000062000E03,  CDC_Area ); // *** Square Inch
     NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); // *** Square Foot
     NEWD( "yd2",        1.1959900463010803E00,  CDC_Area ); // *** Square Yard
-    NEWD( "ang2",       1.0000000000000000E20,  CDC_Area ); // *** Square Angstroem
+    NEWDP( "ang2",      1.0000000000000000E20,  CDC_Area ); // *** Square Angstroem
     NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); // *** Square Pica
     NEWD( "Morgen",     4.0000000000000000E-04, CDC_Area ); // *** Morgen
-    NEWD( "ar",         1.000000E-02,           CDC_Area ); // *** Ar
+    NEWDP( "ar",        1.000000E-02,           CDC_Area ); // *** Ar
     NEWD( "acre",       2.471053815E-04,        CDC_Area ); // *** Acre
+    NEWD( "uk_acre",    2.4710538146716534E-04, CDC_Area ); // *** International acre
+    NEWD( "us_acre",    2.4710439304662790E-04, CDC_Area ); // *** U.S. survey/statute acre
+    NEWD( "ly2",        1.1172985860549147E-32, CDC_Area ); // *** Square Light-year
     NEWD( "ha",         1.000000E-04,           CDC_Area ); // *** Hectare
     NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area ); // ***
 
     // SPEED: 1 Meter per Second is...
-    NEWD( "m/s",    1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second
+    NEWDP( "m/s",   1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second
+    NEWDP( "m/sec", 1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second also
     NEWD( "m/h",    3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour
+    NEWD( "m/hr",   3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour also
     NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); // *** Britsh Miles per Hour
     NEWD( "kn",     1.9438444924406048E00,  CDC_Speed ); // *** Knot = Nautical Miles per Hour
     NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed ); // *** Admiralty Knot
@@ -2652,6 +2566,10 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "ludicrous speed", 2.0494886343432328E-14, CDC_Speed ); // ***
     NEWD( "laecherliche Geschwindigkeit", 4.0156958471424288E-06, CDC_Speed); // ***
     NEWD( "ridiculous speed", 4.0156958471424288E-06, CDC_Speed); // ***
+
+    // INFORMATION: 1 Bit is...
+    NEWDP( "bit",   1.00E00,  CDC_Information); // *** Bit
+    NEWDP( "byte",  1.25E-01, CDC_Information); // *** Byte
 }
 
 

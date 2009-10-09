@@ -63,6 +63,7 @@ SLOFILES=	\
     $(SLO)$/ColumnChartType.obj \
     $(SLO)$/ColumnLineChartTypeTemplate.obj \
     $(SLO)$/DataInterpreter.obj \
+    $(SLO)$/FilledNetChartType.obj \
     $(SLO)$/LineChartType.obj \
     $(SLO)$/LineChartTypeTemplate.obj \
     $(SLO)$/NetChartType.obj \
