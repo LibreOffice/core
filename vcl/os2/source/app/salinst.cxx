@@ -55,6 +55,7 @@
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
+#include <tools/solarmutex.hxx>
 
 // =======================================================================
 
@@ -501,12 +502,14 @@ Os2SalInstance::Os2SalInstance()
     mpSalWaitMutex          = new vos::OMutex;
     mnYieldWaitCount         = 0;
     mpSalYieldMutex->acquire();
+    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
 }
 
 // -----------------------------------------------------------------------
 
 Os2SalInstance::~Os2SalInstance()
 {
+    ::tools::SolarMutex::SetSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     delete mpSalWaitMutex;
