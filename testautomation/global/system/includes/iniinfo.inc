@@ -304,50 +304,11 @@ end function
 sub GetLanguageInformation
 '/// Extracts the language information from <i>Setup.xcu</i>.
 '/// <u>note</u>: It uses the <b>fgetL10Nvalue</b>.
-   Dim i as integer
-   Dim iTimeOut as integer
    Dim sLanOutIni as string
-   Dim SetupXML as String
-   Dim ChildsOfSetupNodes as integer
-   Dim ArtOfInst as string
-   Dim SetupXMLNet as string
-   Dim SetupXMLDefault as string
-   dim SetupXcuPath as string
-        
-    SetupXcuPath = ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-    SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
-    
-    if gNetzInst = TRUE then
-        SetupXMLNet = gNetzOfficePath & SetupXcuPath
-        ArtOfInst = "NET- / Workstation Inst."
-    else
-        SetupXMLDefault = gOfficePath & SetupXcuPath
-        ArtOfInst = "FAT Inst."
-    end if
-
-    ' Issue #i97875 (JSK) experimental delay
-    ' If we're too fast we might encounter that the Setup.xcu is not created yet.
-    ' So we retry a couple of times    
-    while( IsMissing( SetupXML ) ) 
-        iTimeOut = iTimeOut + 1
-        if ( iTimeOut = 10 ) then
-            warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
-            iSprache = 01
-            Exit sub
-        endif
-        wait( 100 )
-    wend
 
     ' function 'fgetL10Nvalue' is also in this library
-    sLanOutIni = fgetL10Nvalue(SetupXML)
+    sLanOutIni = fgetL10Nvalue()
     ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
-    if sLanOutIni = "" and gNetzInst = TRUE then
-        sLanOutIni = fgetL10Nvalue(SetupXMLNet)
-    end if
-    ' It is an English FAT version 645m9s2 or higher.
-    if sLanOutIni = "" and gNetzInst = FALSE then
-        sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
-    end if
 
     if sLanOutIni = "" then
         warnlog "=> default is now 01 = en_US"
@@ -699,54 +660,15 @@ end function
 
 '-------------------------------------------------------------------------
 
-function fgetL10Nvalue ( setupxcu as string) as string
-'/// Gets the value of the child from
-'///+ <ul><li>node: oor:name=&quot;L10N&quot;<ul><li>node: oor:name = &quot;ooLocale&quot;</li><ul><li>element: value</li></ul></ul></li></ul>
-'///+ in a file (normaly <b>Setup.xcu</b> in network path or installation path).
-'/// <u>Note</u>: The structure is hard coded and specified. A change must be announced by feature mail!
-'/// <u><i>Description</i></u>:
-  Dim i as integer
-  Dim ChildsOfSetupNodes as integer
-
-  fgetL10Nvalue = ""
-
-'///<ul><li>Open the file given as parameter.</li>
-   SAXReadFile(setupxcu)
-'///+<li>Go to the DOM (Document Object Model) root.</li>
-   SAXSeekElement("/")
-'///+<li>Go <b>into</b> the first <b>node</b> of the tree.</li>
-   SAXSeekElement(1)
-'///+<li>Get the <b>count of children</b> (nodes/elements) in that node.</li>
-   ChildsOfSetupNodes = SAXGetChildCount
-      for i = 1 to ChildsOfSetupNodes
-'///+<li>Run in a for next loop of going <b>into</b> the next node and existing it until ...</li>
-       SAXSeekElement(i)
-'///+<li>...the <i>oor:name</i> attribute value is identical to &quot;L10N&quot;</li>
-       if SaxGetAttributeValue("oor:name") = "L10N" then
-'///+<li>Go <b>into</b> the next node (&quot;prop&quot;)</li>
-        SAXSeekElement("prop")
-'///+<li>If the attribute value of &quot;oor:name&quot; is identical to &quot;ooLocale&quot;...</li>
-         if SAXgetAttributeValue("oor:name") = "ooLocale" then
-'///+<li>go <b>into</b> that node and also into the next one, named &quot;value&quot;.</li>
-           SAXSeekElement("value")
-'///+<li>Go <b>into</b> the next node - a <i>node type</i> <b>character</b>...</li>
-           SAXSeekElement(1)
-            if SAXGetNodeType = NodeTypeCharacter then
-'///+<li>...and get the characters out in the string which will be returned from this function.</li>
-              fgetL10Nvalue = SAXGetChars
-'///+<li><i>Release()</i> the DOM.</li>
-              SAXRelease()
-'///+<li>Exit the function.</li></ul>
-              Exit function
-            end if
-          else
-            SAXRelease()
-'/// If the result is empty exit the function without warning.</ul>
-            Exit function
-           end if
-         end if
-         SAXSeekElement(0)
-      next i
+function fgetL10Nvalue() as string
+    dim args(1) as new com.sun.star.beans.NamedValue
+    args(0).Name = "nodepath"
+    args(0).Value = "/org.openoffice.Setup/L10N"
+    fgetL10Nvalue = hGetUnoService(TRUE)._
+        createInstance("com.sun.star.configuration.DefaultProvider")._
+        createInstanceWithArguments(_
+            "com.sun.star.configuration.ConfigurationAccess", args())._
+        getByName("ooLocale")
 end function
 
 '-------------------------------------------------------------------------
