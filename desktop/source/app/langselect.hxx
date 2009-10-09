@@ -33,10 +33,6 @@
 #include <tools/string.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/resid.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -50,7 +50,6 @@ SHL1OBJS = \
     $(SLO)$/appfirststart.obj \
     $(SLO)$/appinit.obj \
     $(SLO)$/appsys.obj \
-    $(SLO)$/cfgfilter.obj \
     $(SLO)$/checkinstall.obj \
     $(SLO)$/check_ext_deps.obj \
     $(SLO)$/cmdlineargs.obj \
@@ -62,12 +61,12 @@ SHL1OBJS = \
     $(SLO)$/langselect.obj \
     $(SLO)$/lockfile.obj \
     $(SLO)$/lockfile2.obj \
-    $(SLO)$/migration.obj \
     $(SLO)$/officeipcthread.obj \
-    $(SLO)$/pages.obj \
     $(SLO)$/sofficemain.obj \
-    $(SLO)$/userinstall.obj \
-    $(SLO)$/wizard.obj
+    $(SLO)$/userinstall.obj
+
+SHL1LIBS = $(SLB)$/mig.lib
+
 SHL1STDLIBS = \
     $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
