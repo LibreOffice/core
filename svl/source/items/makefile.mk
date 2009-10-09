@@ -60,10 +60,8 @@ SLOFILES=\
     $(SLO)$/cenumitm.obj	\
     $(SLO)$/cintitem.obj	\
     $(SLO)$/cntwall.obj	\
-    $(SLO)$/cstitem.obj	\
     $(SLO)$/ctypeitm.obj	\
     $(SLO)$/custritm.obj	\
-    $(SLO)$/dateitem.obj	\
     $(SLO)$/dtritem.obj	\
     $(SLO)$/frqitem.obj	\
     $(SLO)$/ilstitem.obj    \
@@ -82,10 +80,6 @@ SLOFILES=\
     $(SLO)$/tresitem.obj	\
     $(SLO)$/whiter.obj \
     $(SLO)$/visitem.obj
-
-SRS1NAME=$(TARGET)
-SRC1FILES=\
-    cstitem.src
 
 # --- Targets -------------------------------------------------------
 

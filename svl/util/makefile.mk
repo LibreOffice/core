@@ -45,8 +45,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- general section ----------------------------------------------------
 
 .IF "$(GUI)"!="UNX"
-LIB1TARGET= $(LB)$/isvl.lib
-LIB1FILES=	$(LB)$/_isvl.lib
+LIB2TARGET= $(LB)$/isvl.lib
+LIB2FILES=	$(LB)$/_isvl.lib
 .ENDIF
 
 LIB1TARGET= $(SLB)$/svl.lib
@@ -88,6 +88,7 @@ SHL1STDLIBS= \
         $(CPPULIB)			\
         $(VOSLIB)			\
         $(VCLLIB)			\
+                $(SOTLIB)     \
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
