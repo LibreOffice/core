@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.81.14.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -40,6 +37,7 @@
 #include "salatsuifontutils.hxx"
 
 #include "vcl/impfont.hxx"
+#include "vcl/fontsubset.hxx"
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
 #include "vcl/svapp.hxx"
@@ -153,7 +151,7 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
     if( !ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
         return mpCharMap;
 
-    mpCharMap = new ImplFontCharMap( aCmapResult.mnPairCount, aCmapResult.mpPairCodes, aCmapResult.mpStartGlyphs );
+    mpCharMap = new ImplFontCharMap( aCmapResult );
     return mpCharMap;
 }
 
@@ -175,8 +173,7 @@ void ImplMacFontData::ReadOs2Table( void ) const
         return;
 
     // allocate a buffer for the OS/2 raw data
-    ByteVector aBuffer;
-    aBuffer.resize( nBufSize );
+    ByteVector aBuffer( nBufSize );
 
     // get the OS/2 raw data
     ByteCount nRawLength = 0;
@@ -215,8 +212,7 @@ void ImplMacFontData::ReadMacCmapEncoding( void ) const
     if( eStatus != noErr )
         return;
 
-    ByteVector aBuffer;
-    aBuffer.resize( nBufSize );
+    ByteVector aBuffer( nBufSize );
 
     ByteCount nRawLength = 0;
     eStatus = ATSFontGetTable( rFont, GetTag("cmap"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
@@ -1994,15 +1990,30 @@ static void FakeDirEntry( FourCharCode eFCC, ByteCount nOfs, ByteCount nLen,
 }
 
 static bool GetRawFontData( const ImplFontData* pFontData,
-    ByteVector& rBuffer )
+    ByteVector& rBuffer, bool* pJustCFF )
 {
     const ImplMacFontData* pMacFont = static_cast<const ImplMacFontData*>(pFontData);
     const ATSUFontID nFontId = static_cast<ATSUFontID>(pMacFont->GetFontId());
     ATSFontRef rFont = FMGetATSFontRefFromFont( nFontId );
 
+    ByteCount nCffLen = 0;
+    OSStatus eStatus = ATSFontGetTable( rFont, GetTag("CFF "), 0, 0, NULL, &nCffLen);
+    if( pJustCFF != NULL )
+    {
+        *pJustCFF = (eStatus == noErr) && (nCffLen > 0);
+        if( *pJustCFF )
+        {
+            rBuffer.resize( nCffLen );
+            eStatus = ATSFontGetTable( rFont, GetTag("CFF "), 0, nCffLen, (void*)&rBuffer[0], &nCffLen);
+            if( (eStatus != noErr) || (nCffLen <= 0) )
+                return false;
+            return true;
+        }
+    }
+
     // get font table availability and size in bytes
     ByteCount nHeadLen  = 0;
-    OSStatus eStatus = ATSFontGetTable( rFont, GetTag("head"), 0, 0, NULL, &nHeadLen);
+    eStatus = ATSFontGetTable( rFont, GetTag("head"), 0, 0, NULL, &nHeadLen);
     if( (eStatus != noErr) || (nHeadLen <= 0) )
         return false;
     ByteCount nMaxpLen  = 0;
@@ -2012,14 +2023,6 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     ByteCount nCmapLen  = 0;
     eStatus = ATSFontGetTable( rFont, GetTag("cmap"), 0, 0, NULL, &nCmapLen);
     if( (eStatus != noErr) || (nCmapLen <= 0) )
-        return false;
-    ByteCount nLocaLen  = 0;
-    eStatus = ATSFontGetTable( rFont, GetTag("loca"), 0, 0, NULL, &nLocaLen);
-    if( (eStatus != noErr) || (nLocaLen <= 0) )
-        return false;
-    ByteCount nGlyfLen  = 0;
-    eStatus = ATSFontGetTable( rFont, GetTag("glyf"), 0, 0, NULL, &nGlyfLen);
-    if( (eStatus != noErr) || (nGlyfLen <= 0) )
         return false;
     ByteCount nNameLen  = 0;
     eStatus = ATSFontGetTable( rFont, GetTag("name"), 0, 0, NULL, &nNameLen);
@@ -2034,8 +2037,21 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     if( (eStatus != noErr) || (nHmtxLen <= 0) )
         return false;
 
+    // get the glyph outline tables
+    ByteCount nLocaLen  = 0;
+    ByteCount nGlyfLen  = 0;
+    if( (eStatus != noErr) || (nCffLen <= 0) )
+    {
+        eStatus = ATSFontGetTable( rFont, GetTag("loca"), 0, 0, NULL, &nLocaLen);
+        if( (eStatus != noErr) || (nLocaLen <= 0) )
+            return false;
+        eStatus = ATSFontGetTable( rFont, GetTag("glyf"), 0, 0, NULL, &nGlyfLen);
+        if( (eStatus != noErr) || (nGlyfLen <= 0) )
+            return false;
+    }
+
     ByteCount nPrepLen=0, nCvtLen=0, nFpgmLen=0;
-    if( 1 ) // TODO: reduce PDF size by making hint subsetting optional
+    if( nGlyfLen )  // TODO: reduce PDF size by making hint subsetting optional
     {
         eStatus = ATSFontGetTable( rFont, GetTag("prep"), 0, 0, NULL, &nPrepLen);
         eStatus = ATSFontGetTable( rFont, GetTag("cvt "), 0, 0, NULL, &nCvtLen);
@@ -2043,11 +2059,15 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     }
 
     // prepare a byte buffer for a fake font
-    int nTableCount = 8;
-    nTableCount += (nPrepLen>0) + (nCvtLen>0) + (nFpgmLen>0);
+    int nTableCount = 7;
+    nTableCount += (nPrepLen>0) + (nCvtLen>0) + (nFpgmLen>0) + (nGlyfLen>0);
     const ByteCount nFdirLen = 12 + 16*nTableCount;
     ByteCount nTotalLen = nFdirLen;
-    nTotalLen += nHeadLen + nMaxpLen + nNameLen + nCmapLen + nLocaLen + nGlyfLen;
+    nTotalLen += nHeadLen + nMaxpLen + nNameLen + nCmapLen;
+    if( nGlyfLen )
+        nTotalLen += nLocaLen + nGlyfLen;
+    else
+        nTotalLen += nCffLen;
     nTotalLen += nHheaLen + nHmtxLen;
     nTotalLen += nPrepLen + nCvtLen + nFpgmLen;
     rBuffer.resize( nTotalLen );
@@ -2080,9 +2100,18 @@ static bool GetRawFontData( const ImplFontData* pFontData,
         FakeDirEntry( GetTag("fpgm"), nOfs, nFpgmLen, &rBuffer[0], pFakeEntry );
         nOfs += nFpgmLen;
     }
-    eStatus = ATSFontGetTable( rFont, GetTag("glyf"), 0, nGlyfLen, (void*)&rBuffer[nOfs], &nGlyfLen);
-    FakeDirEntry( GetTag("glyf"), nOfs, nGlyfLen, &rBuffer[0], pFakeEntry );
-    nOfs += nGlyfLen;
+    if( nCffLen ) {
+        eStatus = ATSFontGetTable( rFont, GetTag("CFF "), 0, nCffLen, (void*)&rBuffer[nOfs], &nCffLen);
+        FakeDirEntry( GetTag("CFF "), nOfs, nCffLen, &rBuffer[0], pFakeEntry );
+        nOfs += nGlyfLen;
+    } else {
+        eStatus = ATSFontGetTable( rFont, GetTag("glyf"), 0, nGlyfLen, (void*)&rBuffer[nOfs], &nGlyfLen);
+        FakeDirEntry( GetTag("glyf"), nOfs, nGlyfLen, &rBuffer[0], pFakeEntry );
+        nOfs += nGlyfLen;
+        eStatus = ATSFontGetTable( rFont, GetTag("loca"), 0, nLocaLen, (void*)&rBuffer[nOfs], &nLocaLen);
+        FakeDirEntry( GetTag("loca"), nOfs, nLocaLen, &rBuffer[0], pFakeEntry );
+        nOfs += nLocaLen;
+    }
     eStatus = ATSFontGetTable( rFont, GetTag("head"), 0, nHeadLen, (void*)&rBuffer[nOfs], &nHeadLen);
     FakeDirEntry( GetTag("head"), nOfs, nHeadLen, &rBuffer[0], pFakeEntry );
     nOfs += nHeadLen;
@@ -2092,9 +2121,6 @@ static bool GetRawFontData( const ImplFontData* pFontData,
     eStatus = ATSFontGetTable( rFont, GetTag("hmtx"), 0, nHmtxLen, (void*)&rBuffer[nOfs], &nHmtxLen);
     FakeDirEntry( GetTag("hmtx"), nOfs, nHmtxLen, &rBuffer[0], pFakeEntry );
     nOfs += nHmtxLen;
-    eStatus = ATSFontGetTable( rFont, GetTag("loca"), 0, nLocaLen, (void*)&rBuffer[nOfs], &nLocaLen);
-    FakeDirEntry( GetTag("loca"), nOfs, nLocaLen, &rBuffer[0], pFakeEntry );
-    nOfs += nLocaLen;
     eStatus = ATSFontGetTable( rFont, GetTag("maxp"), 0, nMaxpLen, (void*)&rBuffer[nOfs], &nMaxpLen);
     FakeDirEntry( GetTag("maxp"), nOfs, nMaxpLen, &rBuffer[0], pFakeEntry );
     nOfs += nMaxpLen;
@@ -2116,9 +2142,37 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     const ImplFontData* pFontData, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
+    // TODO: move more of the functionality here into the generic subsetter code
+
+    // prepare the requested file name for writing the font-subset file
+    rtl::OUString aSysPath;
+    if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
+        return FALSE;
+    const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
+    const ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
+
+    // get the raw-bytes from the font to be subset
     ByteVector aBuffer;
-    if( !GetRawFontData( pFontData, aBuffer ) )
+    bool bCffOnly = false;
+    if( !GetRawFontData( pFontData, aBuffer, &bCffOnly ) )
         return sal_False;
+
+    // handle CFF-subsetting
+    if( bCffOnly )
+    {
+        // provide the raw-CFF data to the subsetter
+        ByteCount nCffLen = aBuffer.size();
+        rInfo.LoadFont( FontSubsetInfo::CFF_FONT, &aBuffer[0], nCffLen );
+
+        // NOTE: assuming that all glyphids requested on Aqua are fully translated
+
+        // make the subsetter provide the requested subset
+        FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
+        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
+            pGlyphIDs, pEncoding, nGlyphCount, pGlyphWidths );
+        fclose( pOutFile );
+        return bRC;
+    }
 
     // TODO: modernize psprint's horrible fontsubset C-API
     // this probably only makes sense after the switch to another SCM
@@ -2133,7 +2187,7 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // get details about the subsetted font
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( pSftFont, &aTTInfo );
-    rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;
+    rInfo.m_nFontType   = FontSubsetInfo::SFNT_TTF;
     rInfo.m_aPSName     = String( aTTInfo.psname, RTL_TEXTENCODING_UTF8 );
     rInfo.m_aFontBBox   = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),
                                     Point( aTTInfo.xMax, aTTInfo.yMax ) );
@@ -2211,11 +2265,6 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     free( pGlyphMetrics );
 
     // write subset into destination file
-    rtl::OUString aSysPath;
-    if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-        return FALSE;
-    rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
     nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.GetBuffer(), aShortIDs,
             aTempEncs, nGlyphCount, 0, NULL, 0 );
     ::CloseTTFont(pSftFont);
@@ -2233,7 +2282,7 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
     if( pFontData->IsSubsettable() )
     {
         ByteVector aBuffer;
-        if( !GetRawFontData( pFontData, aBuffer ) )
+        if( !GetRawFontData( pFontData, aBuffer, NULL ) )
             return;
 
         // TODO: modernize psprint's horrible fontsubset C-API
@@ -2318,7 +2367,6 @@ const void* AquaSalGraphics::GetEmbedFontData( const ImplFontData* pFontData,
                               FontSubsetInfo& rInfo,
                               long* pDataLen )
 {
-    // TODO: are the non-subsettable fonts on OSX that are embeddable?
     return NULL;
 }
 

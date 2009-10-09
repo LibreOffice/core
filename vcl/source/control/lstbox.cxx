@@ -304,6 +304,7 @@ IMPL_LINK( ListBox, ImplClickBtnHdl, void*, EMPTYARG )
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
+        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
         mpImplWin->GrabFocus();
         mpBtn->SetPressed( TRUE );
         mpFloatWin->StartFloat( TRUE );
@@ -364,6 +365,7 @@ void ListBox::ToggleDropDown()
             mpFloatWin->EndPopupMode();
         else
         {
+            ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
             mpImplWin->GrabFocus();
             mpBtn->SetPressed( TRUE );
             mpFloatWin->StartFloat( TRUE );
@@ -920,6 +922,7 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
                     if( mpFloatWin && !mpFloatWin->IsInPopupMode() &&
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
+                        ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
                         mpBtn->SetPressed( TRUE );
                         mpFloatWin->StartFloat( FALSE );
                         ImplCallEventListeners( VCLEVENT_DROPDOWN_OPEN );

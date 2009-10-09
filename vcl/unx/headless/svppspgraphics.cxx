@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svppspgraphics.cxx,v $
- * $Revision: 1.9 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,6 +25,9 @@
  *
  ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
+
 #include "svppspgraphics.hxx"
 #include "svpbmp.hxx"
 
@@ -39,6 +39,7 @@
 #include "vcl/glyphcache.hxx"
 #include "vcl/impfont.hxx"
 #include "vcl/outfont.hxx"
+#include "vcl/fontsubset.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/salprn.hxx"
 #include "vcl/sysdata.hxx"
@@ -685,16 +686,13 @@ void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
 {
     // TODO: get ImplFontCharMap directly from fonts
-    int nPairCount = 0;
-    if( m_pServerFont[0] )
-        nPairCount = m_pServerFont[0]->GetFontCodeRanges( NULL );
-    if( !nPairCount )
+    if( !m_pServerFont[0] )
         return NULL;
 
-    sal_uInt32* pCodePairs = new sal_uInt32[ 2 * nPairCount ];
-    if( m_pServerFont[0] )
-        m_pServerFont[0]->GetFontCodeRanges( pCodePairs );
-    return new ImplFontCharMap( nPairCount, pCodePairs );
+    CmapResult aCmapResult;
+    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
+        return NULL;
+    return new ImplFontCharMap( aCmapResult );
 }
 
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
@@ -906,7 +904,7 @@ BOOL PspGraphics::CreateFontSubset(
                                    sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
-                                   int nGlyphs,
+                                   int nGlyphCount,
                                    FontSubsetInfo& rInfo
                                    )
 {
@@ -916,7 +914,16 @@ BOOL PspGraphics::CreateFontSubset(
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoCreateFontSubset( rToFile, aFont, pGlyphIDs, pEncoding, pWidths, nGlyphs, rInfo );
+
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    bool bSuccess = rMgr.createFontSubset( rInfo,
+                                 aFont,
+                                 rToFile,
+                                 pGlyphIDs,
+                                 pEncoding,
+                                 pWidths,
+                                 nGlyphCount );
+    return bSuccess;
 }
 
 //--------------------------------------------------------------------------
@@ -970,50 +977,6 @@ void PspGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
 // static helpers of PspGraphics
 
-bool PspGraphics::DoCreateFontSubset( const rtl::OUString& rToFile,
-                                      psp::fontID aFont,
-                                      sal_Int32* pGlyphIDs,
-                                      sal_uInt8* pEncoding,
-                                      sal_Int32* pWidths,
-                                      int nGlyphs,
-                                      FontSubsetInfo& rInfo )
-{
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    psp::PrintFontInfo aFontInfo;
-
-    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
-        return false;
-
-    // fill in font info
-    switch( aFontInfo.m_eType )
-    {
-        case psp::fonttype::TrueType: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;break;
-        case psp::fonttype::Type1: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;break;
-        default:
-            return false;
-    }
-    rInfo.m_nAscent     = aFontInfo.m_nAscend;
-    rInfo.m_nDescent    = aFontInfo.m_nDescend;
-    rInfo.m_aPSName     = rMgr.getPSName( aFont );
-
-    int xMin, yMin, xMax, yMax;
-    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
-
-    if( ! rMgr.createFontSubset( aFont,
-                                 rToFile,
-                                 pGlyphIDs,
-                                 pEncoding,
-                                 pWidths,
-                                 nGlyphs
-                                 ) )
-        return false;
-
-    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
-    rInfo.m_nCapHeight  = yMax; // Well ...
-
-    return true;
-}
-
 const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -1025,8 +988,8 @@ const void* PspGraphics::DoGetEmbedFontData( fontID aFont, const sal_Ucs* pUnico
     // fill in font info
     switch( aFontInfo.m_eType )
     {
-        case psp::fonttype::TrueType: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;break;
-        case psp::fonttype::Type1: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;break;
+        case psp::fonttype::TrueType: rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF; break;
+        case psp::fonttype::Type1: rInfo.m_nFontType = FontSubsetInfo::ANY_TYPE1; break;
         default:
             return NULL;
     }

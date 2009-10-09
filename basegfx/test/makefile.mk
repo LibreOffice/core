@@ -58,6 +58,7 @@ SHL1LIBS=\
     $(SLB)$/range.lib	\
     $(SLB)$/tuple.lib	\
     $(SLB)$/tools.lib	\
+    $(SLB)$/color.lib	\
     $(SLB)$/vector.lib
 
 SHL1TARGET= basegfx_tests

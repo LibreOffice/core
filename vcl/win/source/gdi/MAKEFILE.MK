@@ -64,6 +64,10 @@ SLOFILES=   $(SLO)$/salgdi.obj   \
 
 EXCEPTIONSFILES=	$(SLO)$/salprn.obj
 
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CFLAGS+=-DENABLE_GRAPHITE
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk

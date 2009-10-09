@@ -35,7 +35,7 @@
 
 #include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
-
+#include <i18npool/mslangid.hxx>
 #include <vcl/metric.hxx>
 
 #include "canvasfont.hxx"
@@ -66,6 +66,8 @@ namespace vclcanvas
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+
+        maFont->SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
         // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
@@ -125,8 +127,19 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        // TODO(F1)
-        return rendering::FontMetrics();
+        OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
+        VirtualDevice aVDev( rOutDev );
+        aVDev.SetFont(getVCLFont());
+        const ::FontMetric& aMetric( aVDev.GetFontMetric() );
+
+        return rendering::FontMetrics(
+            aMetric.GetAscent(),
+            aMetric.GetDescent(),
+            aMetric.GetIntLeading(),
+            aMetric.GetExtLeading(),
+            0,
+            aMetric.GetDescent() / 2.0,
+            aMetric.GetAscent() / 2.0);
     }
 
     uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  ) throw (uno::RuntimeException)

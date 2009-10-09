@@ -106,6 +106,8 @@ protected:
     Pixel           nTextPixel_;
     BOOL            bFontVertical_;
 
+    BOOL            bDisableGraphite_;
+
     GC              pBrushGC_;      // Brush attributes
     SalColor        nBrushColor_;
     Pixel           nBrushPixel_;

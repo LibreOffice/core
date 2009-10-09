@@ -116,6 +116,13 @@ public:
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     void                    FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
 
+    // dtrans implementation
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+        CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
+    virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+
 
     bool isPrinterInit() const
     {

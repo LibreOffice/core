@@ -2901,23 +2901,8 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
 
         if( !!maImageHC )
         {
-            // determine backgroundcolor as done in Paint()
-            Color aBackCol;
-            if( IsEnabled() )
-            {
-                if( HasFocus() )
-                    aBackCol = GetSettings().GetStyleSettings().GetHighlightColor();
-                else
-                    aBackCol = GetBackground().GetColor();
-            }
-            else // Disabled
-                aBackCol = GetBackground().GetColor();
-
-            if( aBackCol.IsDark() )
+            if( GetSettings().GetStyleSettings().GetHighContrastMode() )
                 pImage = &maImageHC;
-            // #99902 no col transform required
-            //if( aBackCol.IsBright() )
-            //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
         }
 
         if ( !IsZoom() )

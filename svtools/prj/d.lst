@@ -310,8 +310,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 
 ..\inc\textwindowaccessibility.hxx %_DEST%\inc%_EXT%\svtools\textwindowaccessibility.hxx
 
-..\inc\docpasswdrequest.hxx %_DEST%\inc%_EXT%\svtools\docpasswdrequest.hxx
-..\inc\docmspasswdrequest.hxx %_DEST%\inc%_EXT%\svtools\docmspasswdrequest.hxx
 ..\inc\fontsubstconfig.hxx %_DEST%\inc%_EXT%\svtools\fontsubstconfig.hxx
 ..\inc\apearcfg.hxx %_DEST%\inc%_EXT%\svtools\apearcfg.hxx
 ..\inc\fltrcfg.hxx %_DEST%\inc%_EXT%\svtools\fltrcfg.hxx

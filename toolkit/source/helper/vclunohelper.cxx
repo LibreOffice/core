@@ -45,6 +45,8 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 
@@ -66,6 +68,8 @@
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
+
+using namespace ::com::sun::star;
 
 //  ----------------------------------------------------
 //  class VCLUnoHelper
@@ -744,4 +748,55 @@ com::sun::star::awt::Point VCLUnoHelper::ConvertToAWTPoint(::Point /* VCLPoint *
 ::com::sun::star::awt::Rectangle VCLUnoHelper::ConvertToAWTRect( ::Rectangle const & _rRect )
 {
     return ::com::sun::star::awt::Rectangle( _rRect.Left(), _rRect.Top(), _rRect.GetWidth(), _rRect.GetHeight() );
+}
+
+awt::MouseEvent VCLUnoHelper::createMouseEvent( const ::MouseEvent& _rVclEvent, const uno::Reference< uno::XInterface >& _rxContext )
+{
+    awt::MouseEvent aMouseEvent;
+    aMouseEvent.Source = _rxContext;
+
+    aMouseEvent.Modifiers = 0;
+    if ( _rVclEvent.IsShift() )
+        aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+    if ( _rVclEvent.IsMod1() )
+    aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+    if ( _rVclEvent.IsMod2() )
+        aMouseEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+
+    aMouseEvent.Buttons = 0;
+    if ( _rVclEvent.IsLeft() )
+        aMouseEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
+    if ( _rVclEvent.IsRight() )
+        aMouseEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
+    if ( _rVclEvent.IsMiddle() )
+        aMouseEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
+
+    aMouseEvent.X = _rVclEvent.GetPosPixel().X();
+    aMouseEvent.Y = _rVclEvent.GetPosPixel().Y();
+    aMouseEvent.ClickCount = _rVclEvent.GetClicks();
+    aMouseEvent.PopupTrigger = sal_False;
+
+    return aMouseEvent;
+}
+
+awt::KeyEvent VCLUnoHelper::createKeyEvent( const ::KeyEvent& _rVclEvent, const uno::Reference< uno::XInterface >& _rxContext )
+{
+    awt::KeyEvent aKeyEvent;
+    aKeyEvent.Source = _rxContext;
+
+    aKeyEvent.Modifiers = 0;
+    if ( _rVclEvent.GetKeyCode().IsShift() )
+        aKeyEvent.Modifiers |= awt::KeyModifier::SHIFT;
+    if ( _rVclEvent.GetKeyCode().IsMod1() )
+        aKeyEvent.Modifiers |= awt::KeyModifier::MOD1;
+    if ( _rVclEvent.GetKeyCode().IsMod2() )
+        aKeyEvent.Modifiers |= awt::KeyModifier::MOD2;
+    if ( _rVclEvent.GetKeyCode().IsMod3() )
+            aKeyEvent.Modifiers |= awt::KeyModifier::MOD3;
+
+    aKeyEvent.KeyCode = _rVclEvent.GetKeyCode().GetCode();
+    aKeyEvent.KeyChar = _rVclEvent.GetCharCode();
+    aKeyEvent.KeyFunc = ::sal::static_int_cast< sal_Int16 >( _rVclEvent.GetKeyCode().GetFunction());
+
+    return aKeyEvent;
 }

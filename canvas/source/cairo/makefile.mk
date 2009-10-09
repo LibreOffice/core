@@ -49,7 +49,7 @@ DLLPRE =
 # --- X11 Mac build currently doesn't work with cairo -----------
 .IF "$(OS)" == "MACOSX" && "$(GUIBASE)" == "unx"
 @all:   
-        @echo "Cannot build cairocanvas with X11..."
+    @echo "Cannot build cairocanvas with X11..."
 .ENDIF
 .ENDIF
 
@@ -65,7 +65,7 @@ CFLAGS+=-I$(SOLARINCDIR)/cairo
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/cairo_cachedbitmap.obj \
             $(SLO)$/cairo_cairo.obj \
             $(SLO)$/cairo_canvas.obj \
@@ -84,7 +84,7 @@ SLOFILES =	$(SLO)$/cairo_cachedbitmap.obj \
 
 SHL1TARGET=$(TARGET).uno
 
-SHL1STDLIBS= $(CPPULIB) $(TKLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB) $(TOOLSLIB)
+SHL1STDLIBS= $(CPPULIB) $(TKLIB) $(SALLIB) $(VCLLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(BASEGFXLIB) $(CANVASTOOLSLIB) $(TOOLSLIB) $(I18NISOLANGLIB)
 
 .IF "$(GUI)"=="UNX" 
 
@@ -97,7 +97,6 @@ SHL1STDLIBS+= -lcairo
 .IF "$(GUIBASE)"=="aqua"
 # native Mac OS X (Quartz)
 SLOFILES+= $(SLO)$/cairo_quartz_cairo.obj
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ELSE    # "$(GUIBASE)"=="aqua"
 
@@ -131,7 +130,7 @@ SHL1VERSIONMAP=exports.map
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :	target.mk

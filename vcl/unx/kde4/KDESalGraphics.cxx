@@ -35,6 +35,8 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QPainter>
+#include <QFrame>
+#include <QLabel>
 
 #include <kapplication.h>
 
@@ -42,10 +44,9 @@
 
 #include "KDESalGraphics.hxx"
 
-#include <vcl/settings.hxx>
-#include <rtl/ustrbuf.hxx>
-
-#include <stdio.h>
+#include "vcl/settings.hxx"
+#include "vcl/decoview.hxx"
+#include "rtl/ustrbuf.hxx"
 
 using namespace ::rtl;
 
@@ -148,6 +149,30 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
                                            SalControlHandle&, BOOL& )
 {
     return FALSE;
+}
+
+void lcl_drawFrame( QRect& i_rRect, QPainter& i_rPainter, QStyle::PrimitiveElement i_nElement,
+                    ControlState i_nState, const ImplControlValue& i_rValue )
+{
+    #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
+    QStyleOptionFrameV3 styleOption;
+    styleOption.frameShape = QFrame::StyledPanel;
+    #else
+    QStyleOptionFrame styleOption;
+    QFrame aFrame( NULL );
+    aFrame.setFrameRect( QRect(0, 0, i_rRect.width(), i_rRect.height()) );
+    aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    aFrame.ensurePolished();
+    styleOption.initFrom( &aFrame );
+    styleOption.lineWidth = aFrame.lineWidth();
+    styleOption.midLineWidth = aFrame.midLineWidth();
+    #endif
+    styleOption.rect = QRect(0, 0, i_rRect.width(), i_rRect.height());
+    styleOption.state = vclStateValue2StateFlag( i_nState, i_rValue );
+    #if ( QT_VERSION < QT_VERSION_CHECK( 4, 5, 0 ) )
+    styleOption.state |= QStyle::State_Sunken;
+    #endif
+    kapp->style()->drawPrimitive(i_nElement, &styleOption, &i_rPainter);
 }
 
 BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
@@ -352,18 +377,25 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_LISTBOX)
     {
-        QStyleOptionComboBox styleOption;
-
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-
-        if (part == PART_SUB_EDIT)
+        if( part == PART_WINDOW )
         {
-            kapp->style()->drawControl(QStyle::CE_ComboBoxLabel, &styleOption, &painter);
+            lcl_drawFrame( widgetRect, painter, QStyle::PE_Frame, nControlState, value );
         }
         else
         {
-            kapp->style()->drawComplexControl(QStyle::CC_ComboBox, &styleOption, &painter);
+            QStyleOptionComboBox styleOption;
+
+            styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
+            styleOption.state = vclStateValue2StateFlag( nControlState, value );
+
+            if (part == PART_SUB_EDIT)
+            {
+                kapp->style()->drawControl(QStyle::CE_ComboBoxLabel, &styleOption, &painter);
+            }
+            else
+            {
+                kapp->style()->drawComplexControl(QStyle::CC_ComboBox, &styleOption, &painter);
+            }
         }
     }
     else if (type == CTRL_LISTNODE)
@@ -481,33 +513,11 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_FRAME)
     {
-        #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-        QStyleOptionFrameV3 styleOption;
-        #else
-        QStyleOptionFrameV2 styleOption;
-        #endif
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-        #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-        styleOption.frameShape = QFrame::StyledPanel;
-        #endif
-
-        kapp->style()->drawPrimitive(QStyle::PE_FrameWindow, &styleOption, &painter);
+        lcl_drawFrame( widgetRect, painter, QStyle::PE_Frame, nControlState, value );
     }
     else if (type == CTRL_FIXEDBORDER)
     {
-        #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-        QStyleOptionFrameV3 styleOption;
-        #else
-        QStyleOptionFrameV2 styleOption;
-        #endif
-        styleOption.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
-        styleOption.state = vclStateValue2StateFlag( nControlState, value );
-        #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
-        styleOption.frameShape = QFrame::StyledPanel;
-        #endif
-
-        kapp->style()->drawPrimitive(QStyle::PE_FrameWindow, &styleOption, &painter);
+        lcl_drawFrame( widgetRect, painter, QStyle::PE_FrameWindow, nControlState, value );
     }
     else if (type == CTRL_WINDOW_BACKGROUND)
     {
@@ -573,14 +583,21 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             break;
         case CTRL_EDITBOX:
         {
-            styleOption.rect = QRect(0, 0, contentRect.width(), contentRect.height());
-            styleOption.state = vclStateValue2StateFlag(controlState, val);
+            int nFontHeight    = kapp->fontMetrics().height();
+            //int nFrameSize     = kapp->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+            int nLayoutTop     = kapp->style()->pixelMetric(QStyle::PM_LayoutTopMargin);
+            int nLayoutBottom  = kapp->style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
+            int nLayoutLeft    = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+            int nLayoutRight   = kapp->style()->pixelMetric(QStyle::PM_LayoutRightMargin);
 
-            int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin) - 1;
-
-            contentRect.adjust( -size, -size, size, size);
-            boundingRect = contentRect;
-
+            int nMinHeight = (nFontHeight + nLayoutTop + nLayoutBottom);
+            if( boundingRect.height() < nMinHeight )
+            {
+                int delta = nMinHeight - boundingRect.height();
+                boundingRect.adjust( 0, 0, 0, delta );
+            }
+            contentRect = boundingRect;
+            contentRect.adjust( -nLayoutLeft+1, -nLayoutTop+1, nLayoutRight-1, nLayoutBottom-1 );
             retVal = true;
 
             break;
@@ -621,7 +638,6 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 case PART_ENTIRE_CONTROL:
                 {
                     int size = kapp->style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
-                    contentRect.adjust(-size,-size,size,size);
 
                     // find out the minimum size that should be used
                     // assume contents is a text ling
@@ -632,6 +648,11 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     if( aMinSize.height() > contentRect.height() )
                         contentRect.adjust( 0, 0, 0, aMinSize.height() - contentRect.height() );
                     boundingRect = contentRect;
+                    // FIXME: why this difference between comboboxes and listboxes ?
+                    // because a combobox has a sub edit and that is positioned
+                    // inside the outer bordered control ?
+                    if( type == CTRL_COMBOBOX )
+                        contentRect.adjust(-size,-size,size,size);
                     retVal = true;
                     break;
                 }
@@ -645,6 +666,9 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
 
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
 
+                    retVal = true;
+                    break;
+                case PART_WINDOW:
                     retVal = true;
                     break;
             }
@@ -703,14 +727,19 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             break;
         case CTRL_FRAME:
         {
-            if (part == PART_BORDER)
+            if( part == PART_BORDER )
             {
-                int size = kapp->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-                //contentRect.adjust(size, size, size, size);
-                boundingRect.adjust(-size, -size, size, size);
+                int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+                USHORT nStyle = val.getNumericVal();
+                if( nStyle & FRAME_DRAW_NODRAW )
+                {
+                    // in this case the question is: how thick would a frame be
+                    // see brdwin.cxx, decoview.cxx
+                    // most probably the behavior in decoview.cxx is wrong.
+                    contentRect.adjust(size, size, -size, -size);
+                }
                 retVal = true;
             }
-
             break;
         }
         case CTRL_RADIOBUTTON:

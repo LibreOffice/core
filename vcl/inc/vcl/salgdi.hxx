@@ -53,7 +53,7 @@ class ImplFontCharMap;
 class SalLayout;
 class ImplLayoutArgs;
 class Rectangle;
-struct FontSubsetInfo;
+class FontSubsetInfo;
 class OutputDevice;
 class ServerFontLayout;
 struct SystemGraphicsData;
