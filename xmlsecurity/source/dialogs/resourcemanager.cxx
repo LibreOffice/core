@@ -38,7 +38,12 @@
 #include <svtools/stdctrl.hxx>
 #include <vcl/solar.hrc>
 #include <svtools/syslocale.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustrbuf.h>
+#include <vector>
 
+using ::rtl::OUString;
+using namespace std;
 
 namespace XmlSec
 {
@@ -110,122 +115,249 @@ namespace XmlSec
         return GetLocaleData().getDate( GetDateTime( _rDT ) );
     }
 
-    String GetPureContent( const String& _rRawString, const char* _pCommaReplacement, bool _bPreserveId )
+    /*
+        Creates two strings based on the distinguished name which are displayed in the
+        certificate details view. The first string contains only the values of the attribute
+        and valudes pairs, which are separated by commas. All escape characters ('"') are
+        removed.
+        The second string is for the details view at the bottom. It shows the attribute/value
+        pairs on different lines. All escape characters ('"') are removed.
+    */
+    pair< OUString, OUString> GetDNForCertDetailsView( const OUString & rRawString)
     {
-        enum STATE { PRE_ID, ID, EQUALSIGN, PRE_CONT, CONT };
-        String      s;
-        STATE       e = _bPreserveId? PRE_ID : ID;
-
-        const sal_Unicode*  p = _rRawString.GetBuffer();
-        sal_Unicode         c;
-        const sal_Unicode   cComma = ',';
-        const sal_Unicode   cEqualSign = '=';
-        const sal_Unicode   cSpace = ' ';
-        String              aCommaReplacement;
-        if( _pCommaReplacement )
-            aCommaReplacement = String::CreateFromAscii( _pCommaReplacement );
-
-        while( *p )
+        vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(rRawString);
+        ::rtl::OUStringBuffer s1, s2;
+        OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
+        typedef vector< pair < OUString, OUString > >::const_iterator CIT;
+        for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); i ++)
         {
-            c = *p;
-            switch( e )
+            if (i != vecAttrValueOfDN.begin())
             {
-                case PRE_ID:
-                    if( c != cSpace )
-                    {
-                        s += c;
-                        e = ID;
-                    }
-                    break;
-                case ID:
-                    if( _bPreserveId )
-                        s += c;
-
-                    if( c == cEqualSign )
-                        e = _bPreserveId? PRE_CONT : CONT;
-                    break;
-                case EQUALSIGN:
-                    break;
-                case PRE_CONT:
-                    if( c != cSpace )
-                    {
-                        s += c;
-                        e = CONT;
-                    }
-                    break;
-                case CONT:
-                    if( c == cComma )
-                    {
-                        s += aCommaReplacement;
-                        e = _bPreserveId? PRE_ID : ID;
-                    }
-                    else
-                        s += c;
-                    break;
+                s1.append(static_cast<sal_Unicode>(','));
+                s2.append(static_cast<sal_Unicode>('\n'));
             }
-
-            ++p;
+            s1.append(i->second);
+            s2.append(i->first);
+            s2.append(sEqual);
+            s2.append(i->second);
         }
-
-//      xub_StrLen  nEquPos = _rRawString.SearchAscii( "=" );
-//      if( nEquPos == STRING_NOTFOUND )
-//          s = _rRawString;
-//      else
-//      {
-//          ++nEquPos;
-//          s = String( _rRawString, nEquPos, STRING_MAXLEN );
-//          s.EraseLeadingAndTrailingChars();
-//      }
-
-        return s;
+        return make_pair(s1.makeStringAndClear(), s2.makeStringAndClear());
     }
 
-    String GetContentPart( const String& _rRawString, const String& _rPartId )
+/*
+    Whenever the attribute value contains special characters, such as '"' or ',' (without '')
+    then the value will be enclosed in double quotes by the respective Windows or NSS function
+    which we use to retrieve, for example, the subject name. If double quotes appear in the value then
+    they are escaped with a double quote. This function removes the escape characters.
+*/
+#ifdef WNT
+vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
     {
-        String s;
+        vector< pair<OUString, OUString> > retVal;
+        bool bInEscape = false;
+        bool bInValue = false;
+        bool bInType = true;
+        sal_Int32 nTypeNameStart = 0;
+        OUString sType;
+        ::rtl::OUStringBuffer sbufValue;
+        sal_Int32 length = rRawString.getLength();
 
-        xub_StrLen nContStart = _rRawString.Search( _rPartId );
-        if( nContStart != STRING_NOTFOUND )
+        for (sal_Int32 i = 0; i < length; i++)
         {
-            nContStart = nContStart + _rPartId.Len();
-            ++nContStart;                   // now it's start of content, directly after Id
+            sal_Unicode c = rRawString[i];
 
-            xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
-
-            s = String( _rRawString, nContStart, nContEnd - nContStart );
+            if (c == '=')
+            {
+                if (! bInValue)
+                {
+                    sType = rRawString.copy(nTypeNameStart, i - nTypeNameStart);
+                    sType = sType.trim();
+                    bInType = false;
+                }
+                else
+                {
+                    sbufValue.append(c);
+                }
+            }
+            else if (c == '"')
+            {
+                if (!bInEscape)
+                {
+                    //If this is the quote is the first of the couple which enclose the
+                    //whole value, because the value contains special characters
+                    //then we just drop it. That is, this character must be followed by
+                    //a character which is not '"'.
+                    if ( i + 1 < length && rRawString[i+1] == '"')
+                        bInEscape = true;
+                    else
+                        bInValue = !bInValue; //value is enclosed in " "
+                }
+                else
+                {
+                    //This quote is escaped by a preceding quote and therefore is
+                    //part of the value
+                    sbufValue.append(c);
+                    bInEscape = false;
+                }
+            }
+            else if (c == ',')
+            {
+                //The comma separate the attribute value pairs.
+                //If the comma is not part of a value (the value would then be enclosed in '"'),
+                //then we have reached the end of the value
+                if (!bInValue)
+                {
+                    OSL_ASSERT(sType.getLength());
+                    retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+                    sType = OUString();
+                    //The next char is the start of the new type
+                    nTypeNameStart = i + 1;
+                    bInType = true;
+                }
+                else
+                {
+                    //The whole string is enclosed because it contains special characters.
+                    //The enclosing '"' are not part of certificate but will be added by
+                    //the function (Windows or NSS) which retrieves DN
+                    sbufValue.append(c);
+                }
+            }
+            else
+            {
+                if (!bInType)
+                    sbufValue.append(c);
+            }
         }
+        if (sbufValue.getLength())
+        {
+            OSL_ASSERT(sType.getLength());
+            retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+        }
+        return retVal;
+    }
+#else
+vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
+    {
+        vector< pair<OUString, OUString> > retVal;
+        //bInEscape == true means that the preceding character is an escape character
+        bool bInEscape = false;
+        bool bInValue = false;
+        bool bInType = true;
+        sal_Int32 nTypeNameStart = 0;
+        OUString sType;
+        ::rtl::OUStringBuffer sbufValue;
+        sal_Int32 length = rRawString.getLength();
 
-        return s;
+        for (sal_Int32 i = 0; i < length; i++)
+        {
+            sal_Unicode c = rRawString[i];
+
+            if (c == '=')
+            {
+                if (! bInValue)
+                {
+                    sType = rRawString.copy(nTypeNameStart, i - nTypeNameStart);
+                    sType = sType.trim();
+                    bInType = false;
+                }
+                else
+                {
+                    sbufValue.append(c);
+                }
+            }
+            else if (c == '\\')
+            {
+                if (!bInEscape)
+                {
+                    bInEscape = true;
+                }
+                else
+                { // bInEscape is true
+                    sbufValue.append(c);
+                    bInEscape = false;
+                }
+            }
+            else if (c == '"')
+            {
+                //an unescaped '"' is either at the beginning or end of the value
+                if (!bInEscape)
+                {
+                    if ( !bInValue)
+                        bInValue = true;
+                    else if (bInValue)
+                        bInValue = false;
+                }
+                else
+                {
+                    //This quote is escaped by a preceding quote and therefore is
+                    //part of the value
+                    sbufValue.append(c);
+                    bInEscape = false;
+                }
+            }
+            else if (c == ',')
+            {
+                //The comma separate the attribute value pairs.
+                //If the comma is not part of a value (the value would then be enclosed in '"'),
+                //then we have reached the end of the value
+                if (!bInValue)
+                {
+                    OSL_ASSERT(sType.getLength());
+                    retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+                    sType = OUString();
+                    //The next char is the start of the new type
+                    nTypeNameStart = i + 1;
+                    bInType = true;
+                }
+                else
+                {
+                    //The whole string is enclosed because it contains special characters.
+                    //The enclosing '"' are not part of certificate but will be added by
+                    //the function (Windows or NSS) which retrieves DN
+                    sbufValue.append(c);
+                }
+            }
+            else
+            {
+                if (!bInType)
+                {
+                    sbufValue.append(c);
+                    bInEscape = false;
+                }
+            }
+        }
+        if (sbufValue.getLength())
+        {
+            OSL_ASSERT(sType.getLength());
+            retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
+        }
+        return retVal;
     }
 
-    /**
-     * This Method should consider some string like "C=CN-XXX , O=SUN-XXX , CN=Jack" ,
-     * here the first CN represent china , and the second CN represent the common name ,
-     * so I changed the method to handle this .
-     * By CP , mailto : chandler.peng@sun.com
-     **/
+#endif
+
     String GetContentPart( const String& _rRawString )
     {
-        // search over some parts to find a string
-        //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
-        static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
-        String sPart;
+        char const * aIDs[] = { "CN", "OU", "O", "E", NULL };
+        OUString retVal;
         int i = 0;
+        vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(_rRawString);
         while ( aIDs[i] )
         {
-            String sPartId = String::CreateFromAscii( aIDs[i++] );
-            xub_StrLen nContStart = _rRawString.Search( sPartId );
-            if ( nContStart != STRING_NOTFOUND )
+            OUString sPartId = OUString::createFromAscii( aIDs[i++] );
+            typedef vector< pair < OUString, OUString > >::const_iterator CIT;
+            for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); idn++)
             {
-                nContStart = nContStart + sPartId.Len();
-                //++nContStart;                   // now it's start of content, directly after Id // delete By CP
-                xub_StrLen nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
-                sPart = String( _rRawString, nContStart, nContEnd - nContStart );
-                break;
+                if (idn->first.equals(sPartId))
+                {
+                    retVal = idn->second;
+                    break;
+                }
             }
+            if (retVal.getLength())
+                break;
         }
-
-        return sPart;
+        return retVal;
     }
 
     String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, UINT16 _nLineBreak )

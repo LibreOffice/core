@@ -542,6 +542,15 @@ BOOL ModulWindow::SaveBasicSource()
     return bDone;
 }
 
+BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
+
+BOOL ModulWindow::ImportDialog()
+{
+    const ScriptDocument& rDocument = GetDocument();
+    String aLibName = GetLibName();
+    BOOL bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
+    return bRet;
+}
 
 BOOL ModulWindow::ToggleBreakPoint( ULONG nLine )
 {
@@ -1030,6 +1039,11 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_BASICSAVEAS:
         {
             SaveBasicSource();
+        }
+        break;
+        case SID_IMPORT_DIALOG:
+        {
+            ImportDialog();
         }
         break;
         case SID_BASICIDE_MATCHGROUP:

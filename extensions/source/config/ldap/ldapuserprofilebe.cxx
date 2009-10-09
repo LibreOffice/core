@@ -112,27 +112,30 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
         OSL_ENSURE(!bReentrantCall, "configuration: Ldap Backend constructor called reentrantly - probably a registration error.");
 
         if (!bReentrantCall)
-        try
         {
-            bReentrantCall = true ;
-            if (! readLdapConfiguration(aDefinition) )
+            try
             {
-                throw backend::BackendSetupException(
-                    rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),
-                    NULL, uno::Any());
-            }
+                bReentrantCall = true ;
+                if (! readLdapConfiguration(aDefinition) )
+                {
+                    throw backend::BackendSetupException(
+                        rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),
+                        NULL, uno::Any());
+                }
 
-            bReentrantCall = false ;
-        }
-        catch (uno::Exception&)
-        {
-            bReentrantCall = false;
-            throw;
+                bReentrantCall = false ;
+            }
+            catch (uno::Exception&)
+            {
+                bReentrantCall = false;
+                throw;
+            }
         }
     }
 
     try
     {
+        mLdapSource->mConnection.loadModule();
         mLdapSource->mConnection.connectSimple(aDefinition);
         //Set the UserDN
         mUserDN = mLdapSource->mConnection.findUserDn(

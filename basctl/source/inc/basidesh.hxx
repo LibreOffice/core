@@ -86,6 +86,7 @@ class BasicIDEShell :public SfxViewShell
 {
 friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
+friend BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
 friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
     ObjectCatalog*      pObjectCatalog;
@@ -147,7 +148,6 @@ protected:
     DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
     ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -221,6 +221,7 @@ public:
     ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
 
     IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), USHORT nType = BASICIDE_TYPE_UNKNOWN, BOOL bFindSuspended = FALSE );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
     IDEBaseWindow*      FindApplicationWindow();
     BOOL                NextPage( BOOL bPrev = FALSE );
 

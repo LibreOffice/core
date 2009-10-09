@@ -37,7 +37,7 @@ TARGET=install
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 
 UNIXTEXT= \
@@ -59,8 +59,9 @@ FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root
 
 # --- Targets ------------------------------------------------------
 
+.ENDIF # L10N_framework
 .INCLUDE :	target.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(OS)" == "SOLARIS" || "$(OS)" == "LINUX"
 
 ALLTAR: $(BIN)$/install $(BIN)$/uninstall
@@ -99,3 +100,4 @@ $(LB)$/getuid.so.stripped: $(LB)$/getuid.so
 
 .ENDIF
 
+.ENDIF # L10N_framework

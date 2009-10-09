@@ -44,6 +44,7 @@ namespace pcr
 //............................................................................
 
     ::rtl::OUString GetUIHeadlineName(sal_Int16 _nClassId, const ::com::sun::star::uno::Any& _rUnoObject);
+    sal_Int16 classifyComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
     //========================================================================
     struct FindPropertyByHandle : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
