@@ -661,10 +661,10 @@ end function
 '-------------------------------------------------------------------------
 
 function fgetL10Nvalue() as string
-    dim args(1) as new com.sun.star.beans.NamedValue
+    dim args(0) as new com.sun.star.beans.NamedValue
     args(0).Name = "nodepath"
     args(0).Value = "/org.openoffice.Setup/L10N"
-    fgetL10Nvalue = hGetUnoService(TRUE)._
+    fgetL10Nvalue = hGetUNOService()._
         createInstance("com.sun.star.configuration.DefaultProvider")._
         createInstanceWithArguments(_
             "com.sun.star.configuration.ConfigurationAccess", args())._
