@@ -95,8 +95,8 @@ Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMul
 // - PDFDialog -
 // -------------
 
-PDFDialog::PDFDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
-    OGenericUnoDialog( rxMSF )
+PDFDialog::PDFDialog( const Reference< XMultiServiceFactory > &rxMSF )
+: PDFDialog_Base( rxMSF )
 {
 }
 
@@ -104,37 +104,6 @@ PDFDialog::PDFDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
 
 PDFDialog::~PDFDialog()
 {
-}
-
-// -----------------------------------------------------------------------------
-
-Any SAL_CALL PDFDialog::queryInterface( const Type& rType )
-    throw (RuntimeException)
-{
-    Any aReturn = OGenericUnoDialog::queryInterface( rType );
-
-    if( !aReturn.hasValue() )
-        aReturn = ::cppu::queryInterface( rType,
-                                          static_cast< XPropertyAccess* >( this ),
-                                          static_cast< XExporter* >( this ) );
-
-    return aReturn;
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL PDFDialog::acquire()
-    throw ()
-{
-    OWeakObject::acquire();
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL PDFDialog::release()
-    throw ()
-{
-    OWeakObject::release();
 }
 
 // -----------------------------------------------------------------------------

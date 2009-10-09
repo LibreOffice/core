@@ -30,6 +30,8 @@
 
 #include "cdatasection.hxx"
 
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+
 namespace DOM
 {
     CCDATASection::CCDATASection(const xmlNodePtr aNodePtr)

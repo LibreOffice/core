@@ -34,14 +34,24 @@
 #include "pdffilter.hxx"
 #include <svtools/genericunodialog.hxx>
 
+#include <cppuhelper/implbase2.hxx>
+
 // -------------
 // - PDFDialog -
 // -------------
 
-class PDFDialog : public ::svt::OGenericUnoDialog,
-                  public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >,
-                  public XPropertyAccess,
-                  public XExporter
+class Window;
+class ResMgr;
+
+typedef ::svt::OGenericUnoDialog             PDFDialog_DialogBase;
+typedef ::cppu::ImplInheritanceHelper2  <
+                                             PDFDialog_DialogBase,
+                                             XPropertyAccess,
+                                             XExporter
+                                        >    PDFDialog_Base;
+
+class PDFDialog : public PDFDialog_Base,
+                  public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >
 {
 private:
     Sequence< PropertyValue >   maMediaDescriptor;
@@ -49,12 +59,6 @@ private:
     Reference< XComponent >     mxSrcDoc;
 
 protected:
-
-    // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
-
     // OGenericUnoDialog
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException);
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);

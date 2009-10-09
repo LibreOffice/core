@@ -1056,7 +1056,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
     GDIMetaFile aMtf;
     bool bTransparenciesRemoved = false;
-    #if 0
     if( mbRemoveTransparencies )
     {
         bTransparenciesRemoved = rWriter.GetReferenceDevice()->
@@ -1064,7 +1063,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                               false, true, mbReduceImageResolution );
     }
     else
-    #endif
     {
         aMtf = rInMtf;
     }

@@ -44,6 +44,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
+    namespace document { class XDocumentProperties; }
     namespace xml { namespace sax { class XLocator; } }
     namespace xml { namespace sax { class XFastDocumentHandler; } }
 } } }
@@ -85,9 +86,6 @@ public:
     /** Has to be implemented by each filter, returns the current theme. */
     virtual const ::oox::drawingml::Theme*
                         getCurrentTheme() const = 0;
-
-    /** Has to be implemented by each filter to resolve scheme colors. */
-    virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const = 0;
 
     /** Has to be implemented by each filter to return the collection of VML shapes. */
     virtual ::oox::vml::Drawing* getVmlDrawing() = 0;
@@ -195,10 +193,23 @@ public:
     inline ::rtl::OString GetUniqueIdOString() { return ::rtl::OString::valueOf( mnMaxDocId++ ); }
     inline ::rtl::OUString GetUniqueIdOUString() { return ::rtl::OUString::valueOf( mnMaxDocId++ ); }
 
+    /** Write the document properties into into the current OPC package.
+
+        @param xProperties  The document properties to export.
+
+        @return *this
+     */
+    XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
+
+protected:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+
 private:
     virtual StorageRef  implCreateStorage(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream,
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const;
+    virtual StorageRef  implCreateStorage(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const;
 
 private:
     ::std::auto_ptr< XmlFilterBaseImpl > mxImpl;

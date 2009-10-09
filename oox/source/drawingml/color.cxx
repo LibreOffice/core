@@ -29,11 +29,15 @@
  ************************************************************************/
 
 #include "oox/drawingml/color.hxx"
-#include "oox/core/namespaces.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "tokens.hxx"
 #include <algorithm>
 #include <math.h>
+#include "tokens.hxx"
+#include "oox/helper/containerhelper.hxx"
+#include "oox/core/namespaces.hxx"
+#include "oox/core/filterbase.hxx"
+#include "oox/drawingml/drawingmltypes.hxx"
+
+using ::rtl::OUString;
 
 namespace oox {
 namespace drawingml {
@@ -42,163 +46,126 @@ namespace drawingml {
 
 namespace {
 
-const sal_Int32 PER_PERCENT     = 1000;
-const sal_Int32 MAX_PERCENT     = 100 * PER_PERCENT;
+/** Global storage for predefined color values used in OOXML file formats. */
+struct PresetColorsPool
+{
+    typedef ::std::vector< sal_Int32 > ColorVector;
 
-const sal_Int32 PER_DEGREE      = 60000;
-const sal_Int32 MAX_DEGREE      = 360 * PER_DEGREE;
+    ColorVector         maDmlColors;        /// Predefined colors in DrawingML, indexed by XML token.
+    ColorVector         maVmlColors;        /// Predefined colors in VML, indexed by XML token.
+
+    explicit            PresetColorsPool();
+};
+
+// ----------------------------------------------------------------------------
+
+PresetColorsPool::PresetColorsPool() :
+    maDmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT ),
+    maVmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT )
+{
+    // predefined colors in DrawingML (map XML token identifiers to RGB values)
+    static const sal_Int32 spnDmlColors[] =
+    {
+        XML_aliceBlue,         0xF0F8FF,    XML_antiqueWhite,      0xFAEBD7,
+        XML_aqua,              0x00FFFF,    XML_aquamarine,        0x7FFFD4,
+        XML_azure,             0xF0FFFF,    XML_beige,             0xF5F5DC,
+        XML_bisque,            0xFFE4C4,    XML_black,             0x000000,
+        XML_blanchedAlmond,    0xFFEBCD,    XML_blue,              0x0000FF,
+        XML_blueViolet,        0x8A2BE2,    XML_brown,             0xA52A2A,
+        XML_burlyWood,         0xDEB887,    XML_cadetBlue,         0x5F9EA0,
+        XML_chartreuse,        0x7FFF00,    XML_chocolate,         0xD2691E,
+        XML_coral,             0xFF7F50,    XML_cornflowerBlue,    0x6495ED,
+        XML_cornsilk,          0xFFF8DC,    XML_crimson,           0xDC143C,
+        XML_cyan,              0x00FFFF,    XML_deepPink,          0xFF1493,
+        XML_deepSkyBlue,       0x00BFFF,    XML_dimGray,           0x696969,
+        XML_dkBlue,            0x00008B,    XML_dkCyan,            0x008B8B,
+        XML_dkGoldenrod,       0xB8860B,    XML_dkGray,            0xA9A9A9,
+        XML_dkGreen,           0x006400,    XML_dkKhaki,           0xBDB76B,
+        XML_dkMagenta,         0x8B008B,    XML_dkOliveGreen,      0x556B2F,
+        XML_dkOrange,          0xFF8C00,    XML_dkOrchid,          0x9932CC,
+        XML_dkRed,             0x8B0000,    XML_dkSalmon,          0xE9967A,
+        XML_dkSeaGreen,        0x8FBC8B,    XML_dkSlateBlue,       0x483D8B,
+        XML_dkSlateGray,       0x2F4F4F,    XML_dkTurquoise,       0x00CED1,
+        XML_dkViolet,          0x9400D3,    XML_dodgerBlue,        0x1E90FF,
+        XML_firebrick,         0xB22222,    XML_floralWhite,       0xFFFAF0,
+        XML_forestGreen,       0x228B22,    XML_fuchsia,           0xFF00FF,
+        XML_gainsboro,         0xDCDCDC,    XML_ghostWhite,        0xF8F8FF,
+        XML_gold,              0xFFD700,    XML_goldenrod,         0xDAA520,
+        XML_gray,              0x808080,    XML_green,             0x008000,
+        XML_greenYellow,       0xADFF2F,    XML_honeydew,          0xF0FFF0,
+        XML_hotPink,           0xFF69B4,    XML_indianRed,         0xCD5C5C,
+        XML_indigo,            0x4B0082,    XML_ivory,             0xFFFFF0,
+        XML_khaki,             0xF0E68C,    XML_lavender,          0xE6E6FA,
+        XML_lavenderBlush,     0xFFF0F5,    XML_lawnGreen,         0x7CFC00,
+        XML_lemonChiffon,      0xFFFACD,    XML_lime,              0x00FF00,
+        XML_limeGreen,         0x32CD32,    XML_linen,             0xFAF0E6,
+        XML_ltBlue,            0xADD8E6,    XML_ltCoral,           0xF08080,
+        XML_ltCyan,            0xE0FFFF,    XML_ltGoldenrodYellow, 0xFAFA78,
+        XML_ltGray,            0xD3D3D3,    XML_ltGreen,           0x90EE90,
+        XML_ltPink,            0xFFB6C1,    XML_ltSalmon,          0xFFA07A,
+        XML_ltSeaGreen,        0x20B2AA,    XML_ltSkyBlue,         0x87CEFA,
+        XML_ltSlateGray,       0x778899,    XML_ltSteelBlue,       0xB0C4DE,
+        XML_ltYellow,          0xFFFFE0,    XML_magenta,           0xFF00FF,
+        XML_maroon,            0x800000,    XML_medAquamarine,     0x66CDAA,
+        XML_medBlue,           0x0000CD,    XML_medOrchid,         0xBA55D3,
+        XML_medPurple,         0x9370DB,    XML_medSeaGreen,       0x3CB371,
+        XML_medSlateBlue,      0x7B68EE,    XML_medSpringGreen,    0x00FA9A,
+        XML_medTurquoise,      0x48D1CC,    XML_medVioletRed,      0xC71585,
+        XML_midnightBlue,      0x191970,    XML_mintCream,         0xF5FFFA,
+        XML_mistyRose,         0xFFE4E1,    XML_moccasin,          0xFFE4B5,
+        XML_navajoWhite,       0xFFDEAD,    XML_navy,              0x000080,
+        XML_oldLace,           0xFDF5E6,    XML_olive,             0x808000,
+        XML_oliveDrab,         0x6B8E23,    XML_orange,            0xFFA500,
+        XML_orangeRed,         0xFF4500,    XML_orchid,            0xDA70D6,
+        XML_paleGoldenrod,     0xEEE8AA,    XML_paleGreen,         0x98FB98,
+        XML_paleTurquoise,     0xAFEEEE,    XML_paleVioletRed,     0xDB7093,
+        XML_papayaWhip,        0xFFEFD5,    XML_peachPuff,         0xFFDAB9,
+        XML_peru,              0xCD853F,    XML_pink,              0xFFC0CB,
+        XML_plum,              0xDDA0DD,    XML_powderBlue,        0xB0E0E6,
+        XML_purple,            0x800080,    XML_red,               0xFF0000,
+        XML_rosyBrown,         0xBC8F8F,    XML_royalBlue,         0x4169E1,
+        XML_saddleBrown,       0x8B4513,    XML_salmon,            0xFA8072,
+        XML_sandyBrown,        0xF4A460,    XML_seaGreen,          0x2E8B57,
+        XML_seaShell,          0xFFF5EE,    XML_sienna,            0xA0522D,
+        XML_silver,            0xC0C0C0,    XML_skyBlue,           0x87CEEB,
+        XML_slateBlue,         0x6A5ACD,    XML_slateGray,         0x708090,
+        XML_snow,              0xFFFAFA,    XML_springGreen,       0x00FF7F,
+        XML_steelBlue,         0x4682B4,    XML_tan,               0xD2B48C,
+        XML_teal,              0x008080,    XML_thistle,           0xD8BFD8,
+        XML_tomato,            0xFF6347,    XML_turquoise,         0x40E0D0,
+        XML_violet,            0xEE82EE,    XML_wheat,             0xF5DEB3,
+        XML_white,             0xFFFFFF,    XML_whiteSmoke,        0xF5F5F5,
+        XML_yellow,            0xFFFF00,    XML_yellowGreen,       0x9ACD32
+    };
+    for( const sal_Int32* pnEntry = spnDmlColors; pnEntry < STATIC_ARRAY_END( spnDmlColors ); pnEntry += 2 )
+        maDmlColors[ static_cast< size_t >( pnEntry[ 0 ] ) ] = pnEntry[ 1 ];
+
+    // predefined colors in VML (map XML token identifiers to RGB values)
+    static const sal_Int32 spnVmlColors[] =
+    {
+        XML_aqua,              0x00FFFF,    XML_black,             0x000000,
+        XML_blue,              0x0000FF,    XML_fuchsia,           0xFF00FF,
+        XML_gray,              0x808080,    XML_green,             0x008000,
+        XML_lime,              0x00FF00,    XML_maroon,            0x800000,
+        XML_navy,              0x000080,    XML_olive,             0x808000,
+        XML_purple,            0x800080,    XML_red,               0xFF0000,
+        XML_silver,            0xC0C0C0,    XML_teal,              0x008080,
+        XML_white,             0xFFFFFF,    XML_yellow,            0xFFFF00
+    };
+    for( const sal_Int32* pnEntry = spnVmlColors; pnEntry < STATIC_ARRAY_END( spnVmlColors ); pnEntry += 2 )
+        maVmlColors[ static_cast< size_t >( pnEntry[ 0 ] ) ] = pnEntry[ 1 ];
+}
+
+// ----------------------------------------------------------------------------
+
+struct StaticPresetColorsPool : public ::rtl::Static< PresetColorsPool, StaticPresetColorsPool > {};
+
+// ----------------------------------------------------------------------------
 
 const double DEC_GAMMA          = 2.3;
 const double INC_GAMMA          = 1.0 / DEC_GAMMA;
 
-sal_Int32 lclGetPresetColor( sal_Int32 nToken )
-{
-    switch( nToken )
-    {
-        case XML_aliceBlue:         return 0xF0F8FF;
-        case XML_antiqueWhite:      return 0xFAEBD7;
-        case XML_aqua:              return 0x00FFFF;
-        case XML_aquamarine:        return 0x7FFFD4;
-        case XML_azure:             return 0xF0FFFF;
-        case XML_beige:             return 0xF5F5DC;
-        case XML_bisque:            return 0xFFE4C4;
-        case XML_black:             return 0x000000;
-        case XML_blanchedAlmond:    return 0xFFEBCD;
-        case XML_blue:              return 0x0000FF;
-        case XML_blueViolet:        return 0x8A2BE2;
-        case XML_brown:             return 0xA52A2A;
-        case XML_burlyWood:         return 0xDEB887;
-        case XML_cadetBlue:         return 0x5F9EA0;
-        case XML_chartreuse:        return 0x7FFF00;
-        case XML_chocolate:         return 0xD2691E;
-        case XML_coral:             return 0xFF7F50;
-        case XML_cornflowerBlue:    return 0x6495ED;
-        case XML_cornsilk:          return 0xFFF8DC;
-        case XML_crimson:           return 0xDC143C;
-        case XML_cyan:              return 0x00FFFF;
-        case XML_deepPink:          return 0xFF1493;
-        case XML_deepSkyBlue:       return 0x00BFFF;
-        case XML_dimGray:           return 0x696969;
-        case XML_dkBlue:            return 0x00008B;
-        case XML_dkCyan:            return 0x008B8B;
-        case XML_dkGoldenrod:       return 0xB8860B;
-        case XML_dkGray:            return 0xA9A9A9;
-        case XML_dkGreen:           return 0x006400;
-        case XML_dkKhaki:           return 0xBDB76B;
-        case XML_dkMagenta:         return 0x8B008B;
-        case XML_dkOliveGreen:      return 0x556B2F;
-        case XML_dkOrange:          return 0xFF8C00;
-        case XML_dkOrchid:          return 0x9932CC;
-        case XML_dkRed:             return 0x8B0000;
-        case XML_dkSalmon:          return 0xE9967A;
-        case XML_dkSeaGreen:        return 0x8FBC8B;
-        case XML_dkSlateBlue:       return 0x483D8B;
-        case XML_dkSlateGray:       return 0x2F4F4F;
-        case XML_dkTurquoise:       return 0x00CED1;
-        case XML_dkViolet:          return 0x9400D3;
-        case XML_dodgerBlue:        return 0x1E90FF;
-        case XML_firebrick:         return 0xB22222;
-        case XML_floralWhite:       return 0xFFFAF0;
-        case XML_forestGreen:       return 0x228B22;
-        case XML_fuchsia:           return 0xFF00FF;
-        case XML_gainsboro:         return 0xDCDCDC;
-        case XML_ghostWhite:        return 0xF8F8FF;
-        case XML_gold:              return 0xFFD700;
-        case XML_goldenrod:         return 0xDAA520;
-        case XML_gray:              return 0x808080;
-        case XML_green:             return 0x008000;
-        case XML_greenYellow:       return 0xADFF2F;
-        case XML_honeydew:          return 0xF0FFF0;
-        case XML_hotPink:           return 0xFF69B4;
-        case XML_indianRed:         return 0xCD5C5C;
-        case XML_indigo:            return 0x4B0082;
-        case XML_ivory:             return 0xFFFFF0;
-        case XML_khaki:             return 0xF0E68C;
-        case XML_lavender:          return 0xE6E6FA;
-        case XML_lavenderBlush:     return 0xFFF0F5;
-        case XML_lawnGreen:         return 0x7CFC00;
-        case XML_lemonChiffon:      return 0xFFFACD;
-        case XML_lime:              return 0x00FF00;
-        case XML_limeGreen:         return 0x32CD32;
-        case XML_linen:             return 0xFAF0E6;
-        case XML_ltBlue:            return 0xADD8E6;
-        case XML_ltCoral:           return 0xF08080;
-        case XML_ltCyan:            return 0xE0FFFF;
-        case XML_ltGoldenrodYellow: return 0xFAFA78;
-        case XML_ltGray:            return 0xD3D3D3;
-        case XML_ltGreen:           return 0x90EE90;
-        case XML_ltPink:            return 0xFFB6C1;
-        case XML_ltSalmon:          return 0xFFA07A;
-        case XML_ltSeaGreen:        return 0x20B2AA;
-        case XML_ltSkyBlue:         return 0x87CEFA;
-        case XML_ltSlateGray:       return 0x778899;
-        case XML_ltSteelBlue:       return 0xB0C4DE;
-        case XML_ltYellow:          return 0xFFFFE0;
-        case XML_magenta:           return 0xFF00FF;
-        case XML_maroon:            return 0x800000;
-        case XML_medAquamarine:     return 0x66CDAA;
-        case XML_medBlue:           return 0x0000CD;
-        case XML_medOrchid:         return 0xBA55D3;
-        case XML_medPurple:         return 0x9370DB;
-        case XML_medSeaGreen:       return 0x3CB371;
-        case XML_medSlateBlue:      return 0x7B68EE;
-        case XML_medSpringGreen:    return 0x00FA9A;
-        case XML_medTurquoise:      return 0x48D1CC;
-        case XML_medVioletRed:      return 0xC71585;
-        case XML_midnightBlue:      return 0x191970;
-        case XML_mintCream:         return 0xF5FFFA;
-        case XML_mistyRose:         return 0xFFE4E1;
-        case XML_moccasin:          return 0xFFE4B5;
-        case XML_navajoWhite:       return 0xFFDEAD;
-        case XML_navy:              return 0x000080;
-        case XML_oldLace:           return 0xFDF5E6;
-        case XML_olive:             return 0x808000;
-        case XML_oliveDrab:         return 0x6B8E23;
-        case XML_orange:            return 0xFFA500;
-        case XML_orangeRed:         return 0xFF4500;
-        case XML_orchid:            return 0xDA70D6;
-        case XML_paleGoldenrod:     return 0xEEE8AA;
-        case XML_paleGreen:         return 0x98FB98;
-        case XML_paleTurquoise:     return 0xAFEEEE;
-        case XML_paleVioletRed:     return 0xDB7093;
-        case XML_papayaWhip:        return 0xFFEFD5;
-        case XML_peachPuff:         return 0xFFDAB9;
-        case XML_peru:              return 0xCD853F;
-        case XML_pink:              return 0xFFC0CB;
-        case XML_plum:              return 0xDDA0DD;
-        case XML_powderBlue:        return 0xB0E0E6;
-        case XML_purple:            return 0x800080;
-        case XML_red:               return 0xFF0000;
-        case XML_rosyBrown:         return 0xBC8F8F;
-        case XML_royalBlue:         return 0x4169E1;
-        case XML_saddleBrown:       return 0x8B4513;
-        case XML_salmon:            return 0xFA8072;
-        case XML_sandyBrown:        return 0xF4A460;
-        case XML_seaGreen:          return 0x2E8B57;
-        case XML_seaShell:          return 0xFFF5EE;
-        case XML_sienna:            return 0xA0522D;
-        case XML_silver:            return 0xC0C0C0;
-        case XML_skyBlue:           return 0x87CEEB;
-        case XML_slateBlue:         return 0x6A5ACD;
-        case XML_slateGray:         return 0x708090;
-        case XML_snow:              return 0xFFFAFA;
-        case XML_springGreen:       return 0x00FF7F;
-        case XML_steelBlue:         return 0x4682B4;
-        case XML_tan:               return 0xD2B48C;
-        case XML_teal:              return 0x008080;
-        case XML_thistle:           return 0xD8BFD8;
-        case XML_tomato:            return 0xFF6347;
-        case XML_turquoise:         return 0x40E0D0;
-        case XML_violet:            return 0xEE82EE;
-        case XML_wheat:             return 0xF5DEB3;
-        case XML_white:             return 0xFFFFFF;
-        case XML_whiteSmoke:        return 0xF5F5F5;
-        case XML_yellow:            return 0xFFFF00;
-        case XML_yellowGreen:       return 0x9ACD32;
-    }
-    OSL_ENSURE( false, "lclGetPresetColor - invalid preset color token" );
-    return API_RGB_BLACK;
-}
+// ----------------------------------------------------------------------------
 
 inline void lclRgbToRgbComponents( sal_Int32& ornR, sal_Int32& ornG, sal_Int32& ornB, sal_Int32 nRgb )
 {
@@ -248,7 +215,7 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 Color::Color() :
     meMode( COLOR_UNUSED ),
@@ -261,6 +228,24 @@ Color::Color() :
 
 Color::~Color()
 {
+}
+
+/*static*/ sal_Int32 Color::getDmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb )
+{
+    /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
+        able to catch the existing vector entries without corresponding XML
+        token identifier. */
+    sal_Int32 nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maDmlColors, nToken, API_RGB_TRANSPARENT );
+    return (nRgbValue >= 0) ? nRgbValue : nDefaultRgb;
+}
+
+/*static*/ sal_Int32 Color::getVmlPresetColor( sal_Int32 nToken, sal_Int32 nDefaultRgb )
+{
+    /*  Do not pass nDefaultRgb to ContainerHelper::getVectorElement(), to be
+        able to catch the existing vector entries without corresponding XML
+        token identifier. */
+    sal_Int32 nRgbValue = ContainerHelper::getVectorElement( StaticPresetColorsPool::get().maVmlColors, nToken, API_RGB_TRANSPARENT );
+    return (nRgbValue >= 0) ? nRgbValue : nDefaultRgb;
 }
 
 void Color::setUnused()
@@ -299,7 +284,10 @@ void Color::setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum )
 
 void Color::setPrstClr( sal_Int32 nToken )
 {
-    setSrgbClr( lclGetPresetColor( nToken ) );
+    sal_Int32 nRgbValue = getDmlPresetColor( nToken, API_RGB_TRANSPARENT );
+    OSL_ENSURE( nRgbValue >= 0, "Color::setPrstClr - invalid preset color token" );
+    if( nRgbValue >= 0 )
+        setSrgbClr( nRgbValue );
 }
 
 void Color::setSchemeClr( sal_Int32 nToken )
@@ -307,6 +295,13 @@ void Color::setSchemeClr( sal_Int32 nToken )
     OSL_ENSURE( nToken != XML_TOKEN_INVALID, "Color::setSchemeClr - invalid color token" );
     meMode = (nToken == XML_phClr) ? COLOR_PH : COLOR_SCHEME;
     mnC1 = nToken;
+}
+
+void Color::setPaletteClr( sal_Int32 nPaletteIdx )
+{
+    OSL_ENSURE( nPaletteIdx >= 0, "Color::setPaletteClr - invalid palette index" );
+    meMode = COLOR_PALETTE;
+    mnC1 = nPaletteIdx;
 }
 
 void Color::setSysClr( sal_Int32 nToken, sal_Int32 nLastRgb )
@@ -347,12 +342,18 @@ void Color::addExcelTintTransformation( double fTint )
     maTransforms.push_back( Transformation( NMSP_XLS | XML_tint, nValue ) );
 }
 
+void Color::clearTransformations()
+{
+    maTransforms.clear();
+    clearTransparence();
+}
+
 void Color::clearTransparence()
 {
     mnAlpha = MAX_PERCENT;
 }
 
-sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 nPhClr ) const
+sal_Int32 Color::getColor( const ::oox::core::FilterBase& rFilter, sal_Int32 nPhClr ) const
 {
     /*  Special handling for theme style list placeholder colors (state
         COLOR_PH), Color::getColor() may be called with different placeholder
@@ -364,151 +365,154 @@ sal_Int32 Color::getColor( const ::oox::core::XmlFilterBase& rFilter, sal_Int32 
 
     switch( meMode )
     {
-        case COLOR_UNUSED:  return -1;
-        case COLOR_FINAL:   return mnC1;
+        case COLOR_UNUSED:  mnC1 = API_RGB_TRANSPARENT; break;
 
         case COLOR_RGB:     break;  // nothing to do
         case COLOR_CRGB:    break;  // nothing to do
         case COLOR_HSL:     break;  // nothing to do
 
-        case COLOR_SCHEME:
-            meMode = COLOR_RGB;
-            lclRgbToRgbComponents( mnC1, mnC2, mnC3, rFilter.getSchemeClr( mnC1 ) );
-        break;
-        case COLOR_PH:
-            meMode = COLOR_RGB;
-            lclRgbToRgbComponents( mnC1, mnC2, mnC3, nPhClr );
-            bIsPh = true;
-        break;
-        case COLOR_SYSTEM:
-            meMode = COLOR_RGB;
-            lclRgbToRgbComponents( mnC1, mnC2, mnC3, rFilter.getSystemColor( mnC1, mnC2 ) );
-        break;
+        case COLOR_SCHEME:  setResolvedRgb( rFilter.getSchemeColor( mnC1 ) );       break;
+        case COLOR_PALETTE: setResolvedRgb( rFilter.getPaletteColor( mnC1 ) );      break;
+        case COLOR_SYSTEM:  setResolvedRgb( rFilter.getSystemColor( mnC1, mnC2 ) ); break;
+        case COLOR_PH:      setResolvedRgb( nPhClr ); bIsPh = true;                 break;
+
+        case COLOR_FINAL:   return mnC1;
     }
 
-    for( TransformVec::const_iterator aIt = maTransforms.begin(), aEnd = maTransforms.end(); aIt != aEnd; ++aIt )
+    // if color is UNUSED or turns to UNUSED in setResolvedRgb, do not perform transformations
+    if( meMode != COLOR_UNUSED )
     {
-        switch( aIt->mnToken )
+        for( TransformVec::const_iterator aIt = maTransforms.begin(), aEnd = maTransforms.end(); aIt != aEnd; ++aIt )
         {
-            case XML_red:       toCrgb(); lclSetValue( mnC1, aIt->mnValue );    break;
-            case XML_redMod:    toCrgb(); lclModValue( mnC1, aIt->mnValue );    break;
-            case XML_redOff:    toCrgb(); lclOffValue( mnC1, aIt->mnValue );    break;
-            case XML_green:     toCrgb(); lclSetValue( mnC2, aIt->mnValue );    break;
-            case XML_greenMod:  toCrgb(); lclModValue( mnC2, aIt->mnValue );    break;
-            case XML_greenOff:  toCrgb(); lclOffValue( mnC2, aIt->mnValue );    break;
-            case XML_blue:      toCrgb(); lclSetValue( mnC3, aIt->mnValue );    break;
-            case XML_blueMod:   toCrgb(); lclModValue( mnC3, aIt->mnValue );    break;
-            case XML_blueOff:   toCrgb(); lclOffValue( mnC3, aIt->mnValue );    break;
+            switch( aIt->mnToken )
+            {
+                case XML_red:       toCrgb(); lclSetValue( mnC1, aIt->mnValue );    break;
+                case XML_redMod:    toCrgb(); lclModValue( mnC1, aIt->mnValue );    break;
+                case XML_redOff:    toCrgb(); lclOffValue( mnC1, aIt->mnValue );    break;
+                case XML_green:     toCrgb(); lclSetValue( mnC2, aIt->mnValue );    break;
+                case XML_greenMod:  toCrgb(); lclModValue( mnC2, aIt->mnValue );    break;
+                case XML_greenOff:  toCrgb(); lclOffValue( mnC2, aIt->mnValue );    break;
+                case XML_blue:      toCrgb(); lclSetValue( mnC3, aIt->mnValue );    break;
+                case XML_blueMod:   toCrgb(); lclModValue( mnC3, aIt->mnValue );    break;
+                case XML_blueOff:   toCrgb(); lclOffValue( mnC3, aIt->mnValue );    break;
 
-            case XML_hue:       toHsl(); lclSetValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
-            case XML_hueMod:    toHsl(); lclModValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
-            case XML_hueOff:    toHsl(); lclOffValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
-            case XML_sat:       toHsl(); lclSetValue( mnC2, aIt->mnValue );             break;
-            case XML_satMod:    toHsl(); lclModValue( mnC2, aIt->mnValue );             break;
-            case XML_satOff:    toHsl(); lclOffValue( mnC2, aIt->mnValue );             break;
+                case XML_hue:       toHsl(); lclSetValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
+                case XML_hueMod:    toHsl(); lclModValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
+                case XML_hueOff:    toHsl(); lclOffValue( mnC1, aIt->mnValue, MAX_DEGREE ); break;
+                case XML_sat:       toHsl(); lclSetValue( mnC2, aIt->mnValue );             break;
+                case XML_satMod:    toHsl(); lclModValue( mnC2, aIt->mnValue );             break;
+                case XML_satOff:    toHsl(); lclOffValue( mnC2, aIt->mnValue );             break;
 
-            case XML_lum:
-                toHsl();
-                lclSetValue( mnC3, aIt->mnValue );
-                // if color changes to black or white, it will stay gray if luminance changes again
-                if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
-            break;
-            case XML_lumMod:
-                toHsl();
-                lclModValue( mnC3, aIt->mnValue );
-                // if color changes to black or white, it will stay gray if luminance changes again
-                if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
-            break;
-            case XML_lumOff:
-                toHsl();
-                lclOffValue( mnC3, aIt->mnValue );
-                // if color changes to black or white, it will stay gray if luminance changes again
-                if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
-            break;
+                case XML_lum:
+                    toHsl();
+                    lclSetValue( mnC3, aIt->mnValue );
+                    // if color changes to black or white, it will stay gray if luminance changes again
+                    if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
+                break;
+                case XML_lumMod:
+                    toHsl();
+                    lclModValue( mnC3, aIt->mnValue );
+                    // if color changes to black or white, it will stay gray if luminance changes again
+                    if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
+                break;
+                case XML_lumOff:
+                    toHsl();
+                    lclOffValue( mnC3, aIt->mnValue );
+                    // if color changes to black or white, it will stay gray if luminance changes again
+                    if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
+                break;
 
-            case XML_shade:
-                // shade: 0% = black, 100% = original color
-                toCrgb();
-                OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid shade value" );
-                if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
-                {
-                    double fFactor = static_cast< double >( aIt->mnValue ) / MAX_PERCENT;
-                    mnC1 = static_cast< sal_Int32 >( mnC1 * fFactor );
-                    mnC2 = static_cast< sal_Int32 >( mnC2 * fFactor );
-                    mnC3 = static_cast< sal_Int32 >( mnC3 * fFactor );
-                }
-            break;
-            case XML_tint:
-                // tint: 0% = white, 100% = original color
-                toCrgb();
-                OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
-                if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
-                {
-                    double fFactor = static_cast< double >( aIt->mnValue ) / MAX_PERCENT;
-                    mnC1 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC1) * fFactor );
-                    mnC2 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC2) * fFactor );
-                    mnC3 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC3) * fFactor );
-                }
-            break;
-            case XLS_TOKEN( tint ):
-                // Excel tint: move luminance relative to current value
-                toHsl();
-                OSL_ENSURE( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
-                if( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue < 0) )
-                {
-                    // negative: luminance towards 0% (black)
-                    lclModValue( mnC3, aIt->mnValue + MAX_PERCENT );
-                }
-                else if( (0 < aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
-                {
-                    // positive: luminance towards 100% (white)
+                case XML_shade:
+                    // shade: 0% = black, 100% = original color
+                    toCrgb();
+                    OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid shade value" );
+                    if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
+                    {
+                        double fFactor = static_cast< double >( aIt->mnValue ) / MAX_PERCENT;
+                        mnC1 = static_cast< sal_Int32 >( mnC1 * fFactor );
+                        mnC2 = static_cast< sal_Int32 >( mnC2 * fFactor );
+                        mnC3 = static_cast< sal_Int32 >( mnC3 * fFactor );
+                    }
+                break;
+                case XML_tint:
+                    // tint: 0% = white, 100% = original color
+                    toCrgb();
+                    OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
+                    if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
+                    {
+                        double fFactor = static_cast< double >( aIt->mnValue ) / MAX_PERCENT;
+                        mnC1 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC1) * fFactor );
+                        mnC2 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC2) * fFactor );
+                        mnC3 = static_cast< sal_Int32 >( MAX_PERCENT - (MAX_PERCENT - mnC3) * fFactor );
+                    }
+                break;
+                case XLS_TOKEN( tint ):
+                    // Excel tint: move luminance relative to current value
+                    toHsl();
+                    OSL_ENSURE( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
+                    if( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue < 0) )
+                    {
+                        // negative: luminance towards 0% (black)
+                        lclModValue( mnC3, aIt->mnValue + MAX_PERCENT );
+                    }
+                    else if( (0 < aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
+                    {
+                        // positive: luminance towards 100% (white)
+                        mnC3 = MAX_PERCENT - mnC3;
+                        lclModValue( mnC3, MAX_PERCENT - aIt->mnValue );
+                        mnC3 = MAX_PERCENT - mnC3;
+                    }
+                break;
+
+                case XML_gray:
+                    // change color to gray, weighted RGB: 22% red, 72% green, 6% blue
+                    toRgb();
+                    mnC1 = mnC2 = mnC3 = (mnC1 * 22 + mnC2 * 72 + mnC3 * 6) / 100;
+                break;
+
+                case XML_comp:
+                    // comp: rotate hue by 180 degrees, do not change lum/sat
+                    toHsl();
+                    (mnC1 += 180 * PER_DEGREE) %= MAX_DEGREE;
+                break;
+                case XML_inv:
+                    // invert percentual RGB values
+                    toCrgb();
+                    mnC1 = MAX_PERCENT - mnC1;
+                    mnC2 = MAX_PERCENT - mnC2;
                     mnC3 = MAX_PERCENT - mnC3;
-                    lclModValue( mnC3, MAX_PERCENT - aIt->mnValue );
-                    mnC3 = MAX_PERCENT - mnC3;
-                }
-            break;
+                break;
 
-            case XML_gray:
-                // change color to gray, weighted RGB: 22% red, 72% green, 6% blue
-                toRgb();
-                mnC1 = mnC2 = mnC3 = (mnC1 * 22 + mnC2 * 72 + mnC3 * 6) / 100;
-            break;
-
-            case XML_comp:
-                // comp: rotate hue by 180 degrees, do not change lum/sat
-                toHsl();
-                (mnC1 += 180 * PER_DEGREE) %= MAX_DEGREE;
-            break;
-            case XML_inv:
-                // invert percentual RGB values
-                toCrgb();
-                mnC1 = MAX_PERCENT - mnC1;
-                mnC2 = MAX_PERCENT - mnC2;
-                mnC3 = MAX_PERCENT - mnC3;
-            break;
-
-            case XML_gamma:
-                // increase gamma of color
-                toCrgb();
-                mnC1 = lclGamma( mnC1, INC_GAMMA );
-                mnC2 = lclGamma( mnC2, INC_GAMMA );
-                mnC3 = lclGamma( mnC3, INC_GAMMA );
-            break;
-            case XML_invGamma:
-                // decrease gamma of color
-                toCrgb();
-                mnC1 = lclGamma( mnC1, DEC_GAMMA );
-                mnC2 = lclGamma( mnC2, DEC_GAMMA );
-                mnC3 = lclGamma( mnC3, DEC_GAMMA );
-            break;
+                case XML_gamma:
+                    // increase gamma of color
+                    toCrgb();
+                    mnC1 = lclGamma( mnC1, INC_GAMMA );
+                    mnC2 = lclGamma( mnC2, INC_GAMMA );
+                    mnC3 = lclGamma( mnC3, INC_GAMMA );
+                break;
+                case XML_invGamma:
+                    // decrease gamma of color
+                    toCrgb();
+                    mnC1 = lclGamma( mnC1, DEC_GAMMA );
+                    mnC2 = lclGamma( mnC2, DEC_GAMMA );
+                    mnC3 = lclGamma( mnC3, DEC_GAMMA );
+                break;
+            }
         }
+
+        // store resulting RGB value in mnC1
+        toRgb();
+        mnC1 = lclRgbComponentsToRgb( mnC1, mnC2, mnC3 );
+    }
+    else // if( meMode != COLOR_UNUSED )
+    {
+        mnC1 = API_RGB_TRANSPARENT;
     }
 
-    toRgb();
     meMode = bIsPh ? COLOR_PH : COLOR_FINAL;
     if( meMode == COLOR_FINAL )
         maTransforms.clear();
-    return mnC1 = lclRgbComponentsToRgb( mnC1, mnC2, mnC3 );
+    return mnC1;
 }
 
 bool Color::hasTransparence() const
@@ -522,6 +526,12 @@ sal_Int16 Color::getTransparence() const
 }
 
 // private --------------------------------------------------------------------
+
+void Color::setResolvedRgb( sal_Int32 nRgb ) const
+{
+    meMode = (nRgb < 0) ? COLOR_UNUSED : COLOR_RGB;
+    lclRgbToRgbComponents( mnC1, mnC2, mnC3, nRgb );
+}
 
 void Color::toRgb() const
 {

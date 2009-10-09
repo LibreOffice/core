@@ -36,6 +36,7 @@
 #include "../events/mutationevent.hxx"
 
 #include "comphelper/attributelist.hxx"
+#include <com/sun/star/xml/sax/FastToken.hdl>
 
 #include <string.h>
 
@@ -96,6 +97,105 @@ namespace DOM
             pNode->saxify(i_xHandler);
         }
         i_xHandler->endElement(name);
+    }
+
+    void SAL_CALL CElement::fastSaxify( Context& i_rContext ) {
+        if (!i_rContext.mxDocHandler.is()) throw RuntimeException();
+        pushContext(i_rContext);
+        addNamespaces(i_rContext,m_aNodePtr);
+
+        // add attributes
+        i_rContext.mxAttribList->clear();
+        for (xmlAttrPtr pAttr = m_aNodePtr->properties;
+                        pAttr != 0; pAttr = pAttr->next) {
+            CNode * pNode = CNode::get(reinterpret_cast<xmlNodePtr>(pAttr));
+            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+
+            const xmlChar* xName = pAttr->name;
+            sal_Int32 nAttributeToken=FastToken::DONTKNOW;
+
+            if( pAttr->ns && strlen((char*)pAttr->ns->prefix) )
+                nAttributeToken = getTokenWithPrefix( i_rContext,
+                                                      (sal_Char*)pAttr->ns->prefix,
+                                                      (sal_Char*)xName );
+            else
+                nAttributeToken = getToken( i_rContext, (sal_Char*)xName );
+
+            if( nAttributeToken != FastToken::DONTKNOW )
+                i_rContext.mxAttribList->add( nAttributeToken,
+                                              OUStringToOString(pNode->getNodeValue(),
+                                                                RTL_TEXTENCODING_UTF8));
+        }
+
+        const xmlChar* xPrefix = m_aNodePtr->ns ? m_aNodePtr->ns->prefix : (const xmlChar*)"";
+        const xmlChar* xName = m_aNodePtr->name;
+        sal_Int32 nElementToken=FastToken::DONTKNOW;
+        if( strlen((char*)xPrefix) )
+            nElementToken = getTokenWithPrefix( i_rContext, (sal_Char*)xPrefix, (sal_Char*)xName );
+        else
+            nElementToken = getToken( i_rContext, (sal_Char*)xName );
+
+        Reference<XFastContextHandler> xParentHandler(i_rContext.mxCurrentHandler);
+        try
+        {
+            Reference< XFastAttributeList > xAttr( i_rContext.mxAttribList.get() );
+            if( nElementToken == FastToken::DONTKNOW )
+            {
+                const OUString aNamespace;
+                const OUString aElementName( (sal_Char*)xPrefix,
+                                             strlen((char*)xPrefix),
+                                             RTL_TEXTENCODING_UTF8 );
+
+                if( xParentHandler.is() )
+                    i_rContext.mxCurrentHandler = xParentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
+                else
+                    i_rContext.mxCurrentHandler = i_rContext.mxDocHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
+
+                if( i_rContext.mxCurrentHandler.is() )
+                    i_rContext.mxCurrentHandler->startUnknownElement( aNamespace, aElementName, xAttr );
+            }
+            else
+            {
+                if( xParentHandler.is() )
+                    i_rContext.mxCurrentHandler = xParentHandler->createFastChildContext( nElementToken, xAttr );
+                else
+                    i_rContext.mxCurrentHandler = i_rContext.mxDocHandler->createFastChildContext( nElementToken, xAttr );
+
+                if( i_rContext.mxCurrentHandler.is() )
+                    i_rContext.mxCurrentHandler->startFastElement( nElementToken, xAttr );
+            }
+        }
+        catch( Exception& )
+        {}
+
+        // recurse
+        for (xmlNodePtr pChild = m_aNodePtr->children;
+                        pChild != 0; pChild = pChild->next) {
+            CNode * pNode = CNode::get(pChild);
+            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            pNode->fastSaxify(i_rContext);
+        }
+
+        if( i_rContext.mxCurrentHandler.is() ) try
+        {
+            if( nElementToken != FastToken::DONTKNOW )
+                i_rContext.mxCurrentHandler->endFastElement( nElementToken );
+            else
+            {
+                const OUString aNamespace;
+                const OUString aElementName( (sal_Char*)xPrefix,
+                                             strlen((char*)xPrefix),
+                                             RTL_TEXTENCODING_UTF8 );
+
+                i_rContext.mxCurrentHandler->endUnknownElement( aNamespace, aElementName );
+            }
+        }
+        catch( Exception& )
+        {}
+
+        // restore after children have been processed
+        i_rContext.mxCurrentHandler = xParentHandler;
+        popContext(i_rContext);
     }
 
     /**

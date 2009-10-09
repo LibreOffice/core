@@ -966,7 +966,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     // UGLY: if only that redland junk could read streams...
     const sal_Int64 sz( xSeekable.is() ? xSeekable->getLength() : 1 << 20 );
     // exceptions are propagated
-    i_xInStream->readBytes(buf, sz);
+    i_xInStream->readBytes( buf, static_cast<sal_Int32>( sz ) );
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_parser_parse_counted_string_as_stream(pParser.get(),
             reinterpret_cast<const unsigned char*>(buf.getConstArray()),
