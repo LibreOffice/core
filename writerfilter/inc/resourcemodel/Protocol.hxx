@@ -73,5 +73,17 @@ public:
     virtual void sprm(Sprm & sprm);
 };
 
+class TableProtocol : public Table
+{
+    Table * m_pTable;
+    TagLogger::Pointer_t m_pTagLogger;
+
+public:
+    TableProtocol(Table * pTable, TagLogger::Pointer_t pTagLogger);
+    virtual ~TableProtocol();
+
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+};
+
 }
 #endif // INCLUDE_WRITERFILTER_PROTOCOL_HXX

@@ -175,4 +175,26 @@ void PropertiesProtocol::sprm(Sprm & _sprm)
     m_pTagLogger->endElement("protocol-sprm");
 }
 
+/*
+  TableProtocol
+ */
+
+TableProtocol::TableProtocol(Table * pTable, TagLogger::Pointer_t pTagLogger)
+: m_pTable(pTable), m_pTagLogger(pTagLogger)
+{
+}
+
+TableProtocol::~TableProtocol()
+{
+}
+
+void TableProtocol::entry(int pos,
+                          writerfilter::Reference<Properties>::Pointer_t ref)
+{
+    m_pTagLogger->startElement("protocol-entry");
+    m_pTagLogger->attribute("pos", pos);
+    m_pTable->entry(pos, ref);
+    m_pTagLogger->endElement("protocol-entry");
+}
+
 }
