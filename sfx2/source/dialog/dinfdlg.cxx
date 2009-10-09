@@ -269,8 +269,12 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
                 // "fix" property? => not a custom property => ignore it!
-                if ( !(pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE) )
+                if (!(pProps[i].Attributes &
+                        ::com::sun::star::beans::PropertyAttribute::REMOVABLE))
+                {
+                    DBG_ASSERT(false, "non-removable user-defined property?");
                     continue;
+                }
 
                 uno::Any aValue = xSet->getPropertyValue(pProps[i].Name);
                 CustomProperty* pProp = new CustomProperty( pProps[i].Name, aValue );
@@ -424,7 +428,13 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
         const beans::Property* pProps = lProps.getConstArray();
         sal_Int32 nCount = lProps.getLength();
         for ( sal_Int32 j = 0; j < nCount; ++j )
-            xContainer->removeProperty( pProps[j].Name );
+        {
+            if ((pProps[j].Attributes &
+                    ::com::sun::star::beans::PropertyAttribute::REMOVABLE))
+            {
+                xContainer->removeProperty( pProps[j].Name );
+            }
+        }
 
         for ( sal_uInt32 k = 0; k < m_aCustomProperties.size(); ++k )
         {
