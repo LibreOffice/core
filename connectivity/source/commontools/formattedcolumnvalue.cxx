@@ -44,7 +44,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 /** === end UNO includes === **/
 
-#include <svtools/syslocale.hxx>
+//#include <svtools/syslocale.hxx>
 
 #include <tools/diagnose_ex.h>
 
