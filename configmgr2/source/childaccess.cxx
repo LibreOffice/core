@@ -32,12 +32,16 @@
 
 #include <vector>
 
+#include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
+#include "com/sun/star/lang/XUnoTunnel.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "cppu/unotype.hxx"
 #include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
@@ -339,6 +343,12 @@ ChildAccess::~ChildAccess() {
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
+}
+
+void ChildAccess::addTypes(std::vector< css::uno::Type > * types) const {
+    OSL_ASSERT(types != 0);
+    types->push_back(cppu::UnoType< css::container::XChild >::get());
+    types->push_back(cppu::UnoType< css::lang::XUnoTunnel >::get());
 }
 
 void ChildAccess::addSupportedServiceNames(

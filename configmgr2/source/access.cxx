@@ -719,6 +719,7 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
                 cppu::UnoType< css::lang::XSingleServiceFactory >::get());
         }
     }
+    addTypes(&types);
     return types.getAsConstList();
 }
 

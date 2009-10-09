@@ -37,11 +37,14 @@
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/ChangesEvent.hpp"
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/ElementChange.hpp"
+#include "com/sun/star/util/XChangesBatch.hpp"
 #include "com/sun/star/util/XChangesListener.hpp"
+#include "com/sun/star/util/XChangesNotifier.hpp"
 #include "comphelper/sequenceasvector.hxx"
 #include "cppu/unotype.hxx"
 #include "cppuhelper/queryinterface.hxx"
@@ -152,6 +155,12 @@ rtl::Reference< RootAccess > RootAccess::getRootAccess() {
 
 rtl::Reference< Access > RootAccess::getParentAccess() {
     return rtl::Reference< Access >();
+}
+
+void RootAccess::addTypes(std::vector< css::uno::Type > * types) const {
+    OSL_ASSERT(types != 0);
+    types->push_back(cppu::UnoType< css::util::XChangesNotifier >::get());
+    types->push_back(cppu::UnoType< css::util::XChangesBatch >::get());
 }
 
 void RootAccess::addSupportedServiceNames(

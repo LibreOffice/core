@@ -33,6 +33,7 @@
 #include "sal/config.h"
 
 #include <set>
+#include <vector>
 
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -99,6 +100,9 @@ private:
     virtual rtl::Reference< RootAccess > getRootAccess();
 
     virtual rtl::Reference< Access > getParentAccess();
+
+    virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
+        const;
 
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services);

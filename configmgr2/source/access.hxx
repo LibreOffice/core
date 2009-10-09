@@ -160,6 +160,9 @@ protected:
 
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
+    virtual void addTypes(std::vector< com::sun::star::uno::Type > * types)
+        const = 0;
+
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services) = 0;
 

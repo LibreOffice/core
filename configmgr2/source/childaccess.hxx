@@ -135,6 +135,9 @@ public:
 private:
     virtual ~ChildAccess();
 
+    virtual void addTypes(
+        std::vector< com::sun::star::uno::Type > * types) const;
+
     virtual void addSupportedServiceNames(
         std::vector< rtl::OUString > * services);
 
