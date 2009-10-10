@@ -1254,7 +1254,7 @@ SfxViewShell::SfxViewShell
 {
     DBG_CTOR(SfxViewShell, 0);
 
-    pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
+    //pImp->pPrinterCommandQueue = new SfxAsyncPrintExec_Impl( this );
     pImp->pController = 0;
     pImp->bIsShowView =
         !(SFX_VIEW_NO_SHOW == (nFlags & SFX_VIEW_NO_SHOW));
@@ -1309,7 +1309,7 @@ SfxViewShell::~SfxViewShell()
         pImp->pAccExec = 0;
     }
 
-    delete pImp->pPrinterCommandQueue;
+    //delete pImp->pPrinterCommandQueue;
     delete pImp;
     delete pIPClientList;
 }

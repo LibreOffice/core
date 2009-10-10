@@ -56,6 +56,7 @@ typedef SfxShell* SfxShellPtr_Impl;
 SV_DECL_PTRARR( SfxShellArr_Impl, SfxShellPtr_Impl, 4, 4 )
 
 // struct SfxViewShell_Impl ----------------------------------------------
+#if 0
 class SfxAsyncPrintExec_Impl : public SfxListener
 {
     SfxViewShell*                   pView;
@@ -70,6 +71,7 @@ public:
 
     void                            AddRequest( SfxRequest& rReq );
 };
+#endif
 
 struct SfxViewShell_Impl
 {
@@ -94,7 +96,7 @@ struct SfxViewShell_Impl
     USHORT                      nFamily;
     SfxBaseController*          pController;
     ::svt::AcceleratorExecute*  pAccExec;
-    SfxAsyncPrintExec_Impl*     pPrinterCommandQueue;
+//  SfxAsyncPrintExec_Impl*     pPrinterCommandQueue;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
 
                                 SfxViewShell_Impl()
