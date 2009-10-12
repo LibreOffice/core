@@ -1656,6 +1656,21 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
     pLine->m_aDateField.Show( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
     pLine->m_aTimeField.Show( (CUSTOM_TYPE_TIME == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
     pLine->m_aYesNoButton.Show( CUSTOM_TYPE_BOOLEAN == nType );
+    //adjust positions of date and time controls
+    if( nType == CUSTOM_TYPE_DATE )
+    {
+        pLine->m_aDateField.SetPosSizePixel(pLine->m_aValueEdit.GetPosPixel(), pLine->m_aValueEdit.GetSizePixel());
+    }
+    else if( nType == CUSTOM_TYPE_DATETIME)
+    {
+        pLine->m_aDateField.SetPosSizePixel( pLine->m_aDatePos, pLine->m_aDateTimeSize );
+        pLine->m_aTimeField.SetPosSizePixel(pLine->m_aTimePos, pLine->m_aDateTimeSize );
+    }
+    else if( nType == CUSTOM_TYPE_TIME)
+    {
+        pLine->m_aTimeField.SetPosSizePixel(pLine->m_aValueEdit.GetPosPixel(), pLine->m_aValueEdit.GetSizePixel());
+    }
+
     return 0;
 }
 
@@ -1881,6 +1896,10 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
         pCurrent++;
         pNewCurrent++;
     }
+    //
+    pNewLine->m_aDatePos = pNewLine->m_aDateField.GetPosPixel();
+    pNewLine->m_aTimePos = pNewLine->m_aTimeField.GetPosPixel();
+    pNewLine->m_aDateTimeSize = pNewLine->m_aDateField.GetSizePixel();
 
     double nTmpValue = 0;
     bool bTmpValue = false;
@@ -1898,6 +1917,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     {
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
         m_aNumberFormatter.GetInputLineString( nTmpValue, nIndex, sValue );
+        pNewLine->m_aValueEdit.SetText( sValue );
         nType = CUSTOM_TYPE_NUMBER;
     }
     else if ( rAny >>= bTmpValue )
@@ -1939,8 +1959,6 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
             else
                 pNewLine->m_aYesNoButton.CheckNo();
         }
-//        else
-//            pNewLine->m_aValueEdit.SetText( sValue );
         pNewLine->m_aTypeBox.SelectEntryPos( m_aTypeBox.GetEntryPos( (void*)nType ) );
     }
 
