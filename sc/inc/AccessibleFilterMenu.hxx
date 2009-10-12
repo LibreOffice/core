@@ -104,6 +104,9 @@ public:
 
     // XAccessibleEventBroadcaster
 
+    using ScAccessibleContextBase::addEventListener;
+    using ScAccessibleContextBase::removeEventListener;
+
     virtual void SAL_CALL
         addEventListener(
             const ::com::sun::star::uno::Reference<
