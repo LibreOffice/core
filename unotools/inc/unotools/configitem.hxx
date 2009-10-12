@@ -88,7 +88,6 @@ namespace utl
             com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
                                         xChangeLstnr;
             ConfigItem_Impl*            pImpl;
-            IMPL_ConfigurationListenerList* mpList;
 
             ConfigItem();//
             void                    RemoveChangesListener();

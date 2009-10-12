@@ -34,13 +34,13 @@
 #include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <vcl/svapp.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vos/mutex.hxx>
-#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <tools/solarmutex.hxx>
+#include <unotools/syslocale.hxx>
 
 using namespace ::com::sun::star;
 // global ----------------------------------------------------------------------
@@ -205,8 +205,11 @@ sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) con
  --------------------------------------------------*/
 void SvtLanguageOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
-    Broadcast( rHint );
+    if ( ::tools::SolarMutex::Acquire() )
+    {
+        Broadcast( rHint );
+        ::tools::SolarMutex::Release();
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -216,7 +219,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
     if( LANGUAGE_DONTKNOW == nLang )
         nLang = LANGUAGE_ENGLISH_US;
     else if( LANGUAGE_SYSTEM == nLang  )
-        nLang = Application::GetSettings().GetLanguage();
+        nLang = SvtSysLocale().GetLanguage();
 
     sal_Int16 nScriptType = MsLangId::getScriptType( nLang );
     USHORT nScript;

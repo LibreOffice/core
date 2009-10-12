@@ -29,12 +29,9 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
+#include "precompiled_unotools.hxx"
 
-#include <svl/syslocaleoptions.hxx>
-#include <broadcast.hxx>
-#include <listener.hxx>
-#include <svl/smplhint.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -44,12 +41,9 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-
 #include <rtl/logfile.hxx>
 
-#include "itemholder2.hxx"
+#include "itemholder1.hxx"
 
 
 #define CFG_READONLY_DEFAULT    sal_False
@@ -74,11 +68,8 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
         LanguageType            m_eLocaleLanguageType;  // same for convenience access
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
-        SvtBroadcaster          m_aBroadcaster;
         ULONG                   m_nBlockedHint;     // pending hints
-        sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
         sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
-
 
         sal_Bool                m_bROLocale;
         sal_Bool                m_bROCurrency;
@@ -86,10 +77,8 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 
     static  const Sequence< /* const */ OUString >  GetPropertyNames();
 
-            void                UpdateMiscSettings_Impl();
             ULONG               ChangeLocaleSettings();
             void                ChangeDefaultCurrency() const;
-            void                Broadcast( ULONG nHint );
 
 public:
                                 SvtSysLocaleOptions_Impl();
@@ -111,9 +100,6 @@ public:
             sal_Bool            IsDecimalSeparatorAsLocale() const { return m_bDecimalSeparator;}
             void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
 
-            SvtBroadcaster&     GetBroadcaster()
-                                    { return m_aBroadcaster; }
-            void                BlockBroadcasts( BOOL bBlock );
             sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
 };
 
@@ -148,7 +134,6 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
     , m_nBlockedHint( 0 )
-    , m_nBroadcastBlocked( 0 )
     , m_bDecimalSeparator( sal_True )
     , m_bROLocale(CFG_READONLY_DEFAULT)
     , m_bROCurrency(CFG_READONLY_DEFAULT)
@@ -217,7 +202,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                 }
             }
         }
-        UpdateMiscSettings_Impl();
+//        UpdateMiscSettings_Impl();
         ChangeLocaleSettings();
         EnableNotification( aNames );
     }
@@ -230,17 +215,6 @@ SvtSysLocaleOptions_Impl::~SvtSysLocaleOptions_Impl()
         Commit();
 }
 
-
-void SvtSysLocaleOptions_Impl::BlockBroadcasts( BOOL bBlock )
-{
-    if ( bBlock )
-        ++m_nBroadcastBlocked;
-    else if ( m_nBroadcastBlocked )
-    {
-        if ( --m_nBroadcastBlocked == 0 )
-            Broadcast( 0 );
-    }
-}
 
 sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const
 {
@@ -262,7 +236,7 @@ sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOpt
 }
 
 
-void SvtSysLocaleOptions_Impl::Broadcast( ULONG nHint )
+/*void SvtSysLocaleOptions_Impl::Broadcast( ULONG nHint )
 {
     if ( m_nBroadcastBlocked )
         m_nBlockedHint |= nHint;
@@ -278,7 +252,7 @@ void SvtSysLocaleOptions_Impl::Broadcast( ULONG nHint )
             GetBroadcaster().Broadcast( aHint );
         }
     }
-}
+}*/
 
 
 void SvtSysLocaleOptions_Impl::Commit()
@@ -344,7 +318,8 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
         SetModified();
         ULONG nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
         nHint |= ChangeLocaleSettings();
-        Broadcast( nHint );
+        //Broadcast( nHint );
+        NotifyListeners();
     }
 }
 
@@ -370,7 +345,8 @@ void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
     {
         m_aCurrencyString = rStr;
         SetModified();
-        Broadcast( SYSLOCALEOPTIONS_HINT_CURRENCY );
+        //Broadcast( SYSLOCALEOPTIONS_HINT_CURRENCY );
+        NotifyListeners();
     }
 }
 
@@ -380,7 +356,8 @@ void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
     {
         m_bDecimalSeparator = bSet;
         SetModified();
-        UpdateMiscSettings_Impl();
+        //UpdateMiscSettings_Impl();
+        NotifyListeners();
     }
 }
 
@@ -420,22 +397,11 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
         {
             seqValues[nProp] >>= m_bDecimalSeparator;
             m_bRODecimalSeparator = seqROStates[nProp];
-            UpdateMiscSettings_Impl();
         }
     }
     if ( nHint )
-        Broadcast( nHint );
-}
-/* -----------------10.02.2004 15:25-----------------
-
- --------------------------------------------------*/
-void SvtSysLocaleOptions_Impl::UpdateMiscSettings_Impl()
-{
-    AllSettings aAllSettings( Application::GetSettings() );
-    MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
-    aMiscSettings.SetEnableLocalizedDecimalSep(m_bDecimalSeparator);
-    aAllSettings.SetMiscSettings( aMiscSettings );
-    Application::SetSettings( aAllSettings );
+        //Broadcast( nHint );
+        NotifyListeners();
 }
 
 // ====================================================================
@@ -448,7 +414,7 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svl ( ??? ) ::SvtSysLocaleOptions_Impl::ctor()");
         pOptions = new SvtSysLocaleOptions_Impl;
 
-        ItemHolder2::holdConfigItem(E_SYSLOCALEOPTIONS);
+        ItemHolder1::holdConfigItem(E_SYSLOCALEOPTIONS);
     }
     ++nRefCount;
 }
@@ -495,20 +461,6 @@ void SvtSysLocaleOptions::Commit()
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->Commit();
-}
-
-
-BOOL SvtSysLocaleOptions::AddListener( SvtListener& rLst )
-{
-    MutexGuard aGuard( GetMutex() );
-    return rLst.StartListening( pOptions->GetBroadcaster() );
-}
-
-
-BOOL SvtSysLocaleOptions::RemoveListener( SvtListener& rLst )
-{
-    MutexGuard aGuard( GetMutex() );
-    return rLst.EndListening( pOptions->GetBroadcaster() );
 }
 
 

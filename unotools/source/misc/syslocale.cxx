@@ -29,20 +29,16 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
+#include "precompiled_unotools.hxx"
 #ifndef GCC
 #endif
 
-#include <svl/syslocale.hxx>
-#include <broadcast.hxx>
-#include <listener.hxx>
-#include <svl/smplhint.hxx>
-#include <vcl/svapp.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/string.hxx>
-#include <svl/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <i18npool/mslangid.hxx>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -52,39 +48,64 @@ SvtSysLocale_Impl*  SvtSysLocale::pImpl = NULL;
 sal_Int32           SvtSysLocale::nRefCount = 0;
 
 
-class SvtSysLocale_Impl : public SvtListener
+class SvtSysLocale_Impl : public utl::ConfigurationListener
 {
     friend class SvtSysLocale;
 
         SvtSysLocaleOptions     aSysLocaleOptions;
         LocaleDataWrapper*      pLocaleData;
         CharClass*              pCharClass;
+        com::sun::star::lang::Locale maLocale;
 
 public:
                                 SvtSysLocale_Impl();
     virtual                     ~SvtSysLocale_Impl();
 
-    virtual void                Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
-
     CharClass*                  GetCharClass();
-
+    SvtSysLocaleOptions&        GetOptions() { return aSysLocaleOptions; }
+    void ConfigurationChanged( utl::ConfigurationBroadcaster* );
+    com::sun::star::lang::Locale GetLocale();
 };
 
+com::sun::star::lang::Locale SvtSysLocale_Impl::GetLocale()
+{
+    // ask configuration
+    rtl::OUString aLocaleString = aSysLocaleOptions.GetLocaleConfigString();
+    if (!aLocaleString.getLength())
+        // if no configuration is set, use system locale
+        return maLocale;
+
+    com::sun::star::lang::Locale aLocale;
+    sal_Int32 nSep = aLocaleString.indexOf('-');
+    if (nSep < 0)
+        aLocale.Language = aLocaleString;
+    else
+    {
+        aLocale.Language = aLocaleString.copy(0, nSep);
+        if (nSep < aLocaleString.getLength())
+            aLocale.Country = aLocaleString.copy(nSep+1, aLocaleString.getLength() - (nSep+1));
+    }
+
+    return aLocale;
+}
 
 // -----------------------------------------------------------------------
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
-    const lang::Locale& rLocale = Application::GetSettings().GetLocale();
-    pLocaleData = new LocaleDataWrapper(
-        ::comphelper::getProcessServiceFactory(), rLocale );
-    aSysLocaleOptions.AddListener( *this );
+    // first initialize maLocale with system locale
+    MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage(), maLocale );
+
+    pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), GetLocale() );
+
+    // listen for further changes
+    aSysLocaleOptions.AddListener( this );
 }
 
 
 SvtSysLocale_Impl::~SvtSysLocale_Impl()
 {
-    aSysLocaleOptions.RemoveListener( *this );
+    aSysLocaleOptions.RemoveListener( this );
     delete pCharClass;
     delete pLocaleData;
 }
@@ -92,24 +113,17 @@ SvtSysLocale_Impl::~SvtSysLocale_Impl()
 CharClass* SvtSysLocale_Impl::GetCharClass()
 {
     if ( !pCharClass )
-    {
-        const lang::Locale& rLocale = Application::GetSettings().GetLocale();
-        pCharClass = new CharClass(::comphelper::getProcessServiceFactory(), rLocale );
-    }
+        pCharClass = new CharClass(::comphelper::getProcessServiceFactory(), GetLocale() );
     return pCharClass;
 }
-void SvtSysLocale_Impl::Notify( SvtBroadcaster&, const SfxHint& rHint )
-{
-    const SfxSimpleHint* p = PTR_CAST( SfxSimpleHint, &rHint );
-    if( p && (p->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE) )
-    {
-        MutexGuard aGuard( SvtSysLocale::GetMutex() );
-        const lang::Locale& rLocale = Application::GetSettings().GetLocale();
-        pLocaleData->setLocale( rLocale );
-        GetCharClass()->setLocale( rLocale );
-    }
-}
 
+void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster* )
+{
+    MutexGuard aGuard( SvtSysLocale::GetMutex() );
+    lang::Locale aLocale = GetLocale();
+    pLocaleData->setLocale( aLocale );
+    GetCharClass()->setLocale( aLocale );
+}
 
 // ====================================================================
 
@@ -173,4 +187,19 @@ const CharClass& SvtSysLocale::GetCharClass() const
 const CharClass* SvtSysLocale::GetCharClassPtr() const
 {
     return pImpl->GetCharClass();
+}
+
+SvtSysLocaleOptions& SvtSysLocale::GetOptions() const
+{
+    return pImpl->GetOptions();
+}
+
+com::sun::star::lang::Locale SvtSysLocale::GetLocale() const
+{
+    return pImpl->GetLocale();
+}
+
+LanguageType SvtSysLocale::GetLanguage() const
+{
+    return MsLangId::convertLocaleToLanguage( pImpl->GetLocale() );
 }

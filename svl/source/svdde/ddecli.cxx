@@ -38,7 +38,7 @@
 
 #include <osl/thread.h>
 #include <tools/debug.hxx>
-#include <vcl/svapp.hxx>
+#include <tools/solarmutex.hxx>
 #include <vos/mutex.hxx>
 
 // static DWORD        hDdeInst  = NULL;
@@ -367,9 +367,11 @@ const String& DdeTransaction::GetName() const
 
 void __EXPORT DdeTransaction::Data( const DdeData* p )
 {
-    Application::GetSolarMutex().acquire();
-    aData.Call( (void*)p );
-    Application::GetSolarMutex().release();
+    if ( ::tools::SolarMutex::Acquire() )
+    {
+        aData.Call( (void*)p );
+        ::tools::SolarMutex::Release();
+    }
 }
 
 // --- DdeTransaction::Done() --------------------------------------

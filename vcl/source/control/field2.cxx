@@ -55,6 +55,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/misccfg.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1312,7 +1313,7 @@ static BOOL ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFieldFo
         return FALSE;
 
     Date aNewDate( nDay, nMonth, nYear );
-    DateFormatter::ExpandCentury( aNewDate, rSettings.GetMiscSettings().GetTwoDigitYearStart() );
+    DateFormatter::ExpandCentury( aNewDate, utl::MiscCfg().GetYear2000() );
     if ( aNewDate.IsValid() )
     {
         rDate = aNewDate;
@@ -1379,7 +1380,7 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
     if ( !bShowCentury )
     {
         // Check if I have to use force showing the century
-        USHORT nTwoDigitYearStart = rSettings.GetMiscSettings().GetTwoDigitYearStart();
+        USHORT nTwoDigitYearStart = utl::MiscCfg().GetYear2000();
         USHORT nYear = rDate.GetYear();
 
         // Wenn Jahr nicht im 2stelligen Grenzbereich liegt,
@@ -2033,7 +2034,7 @@ void DateFormatter::Reformat()
 
 void DateFormatter::ExpandCentury( Date& rDate )
 {
-    ExpandCentury( rDate, Application::GetSettings().GetMiscSettings().GetTwoDigitYearStart() );
+    ExpandCentury( rDate, utl::MiscCfg().GetYear2000() );
 }
 
 // -----------------------------------------------------------------------

@@ -36,7 +36,6 @@
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <strmadpt.hxx>
 #include "instrm.hxx"

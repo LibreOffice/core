@@ -29,14 +29,19 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svl.hxx"
+#include "precompiled_unotools.hxx"
 
-#include "misccfg.hxx"
-#include <svl/zforlist.hxx>
+#include <unotools/misccfg.hxx>
+#include "rtl/instance.hxx"
+#include <unotools/configmgr.hxx>
+#include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
-
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
-
+#include "itemholder1.hxx"
 
 #define DEFAULT_TAB 2000
 
@@ -47,6 +52,45 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
+
+namespace utl
+{
+
+static SfxMiscCfg* pOptions = NULL;
+static sal_Int32 nRefCount = 0;
+
+class SfxMiscCfg : public utl::ConfigItem
+{
+    BOOL            bPaperSize;     // printer warnings
+    BOOL            bPaperOrientation;
+    BOOL            bNotFound;
+    sal_Int32       nYear2000;      // two digit year representation
+
+    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    void                    Load();
+
+public:
+    SfxMiscCfg( );
+    ~SfxMiscCfg( );
+
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Commit();
+
+    BOOL        IsNotFoundWarning()     const {return bNotFound;}
+    void        SetNotFoundWarning( BOOL bSet);
+
+    BOOL        IsPaperSizeWarning()    const {return bPaperSize;}
+    void        SetPaperSizeWarning(BOOL bSet);
+
+    BOOL        IsPaperOrientationWarning()     const {return bPaperOrientation;}
+    void        SetPaperOrientationWarning( BOOL bSet);
+
+                // 0 ... 99
+    sal_Int32   GetYear2000()           const { return nYear2000; }
+    void        SetYear2000( sal_Int32 nSet );
+
+};
+
 /*--------------------------------------------------------------------
      Beschreibung:
  --------------------------------------------------------------------*/
@@ -55,7 +99,7 @@ SfxMiscCfg::SfxMiscCfg() :
     bPaperSize(FALSE),
     bPaperOrientation (FALSE),
     bNotFound (FALSE),
-    nYear2000( SvNumberFormatter::GetYear2000Default() )
+    nYear2000( 1930 )
 {
     RTL_LOGFILE_CONTEXT(aLog, "svl SfxMiscCfg::SfxMiscCfg()");
 
@@ -187,4 +231,82 @@ void SfxMiscCfg::Commit()
     }
     PutProperties(aNames, aValues);
 }
+// -----------------------------------------------------------------------
+namespace
+{
+    class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
+    {
+    };
+}
 
+MiscCfg::MiscCfg( )
+{
+    // Global access, must be guarded (multithreading)
+    ::osl::MutexGuard aGuard( LocalSingleton::get() );
+    if ( !pOptions )
+    {
+        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) SfxMiscCfg::ctor()");
+        pOptions = new SfxMiscCfg;
+
+        ItemHolder1::holdConfigItem(E_MISCCFG);
+    }
+
+    ++nRefCount;
+    pImpl = pOptions;
+    pImpl->AddListener(this);
+}
+
+MiscCfg::~MiscCfg( )
+{
+    // Global access, must be guarded (multithreading)
+    ::osl::MutexGuard aGuard( LocalSingleton::get() );
+    pImpl->RemoveListener(this);
+    if ( !--nRefCount )
+    {
+        if ( pOptions->IsModified() )
+            pOptions->Commit();
+        DELETEZ( pOptions );
+    }
+}
+
+BOOL MiscCfg::IsNotFoundWarning()   const
+{
+    return pImpl->IsNotFoundWarning();
+}
+
+void MiscCfg::SetNotFoundWarning(   BOOL bSet)
+{
+    pImpl->SetNotFoundWarning( bSet );
+}
+
+BOOL MiscCfg::IsPaperSizeWarning()  const
+{
+    return pImpl->IsPaperSizeWarning();
+}
+
+void MiscCfg::SetPaperSizeWarning(BOOL bSet)
+{
+    pImpl->SetPaperSizeWarning( bSet );
+}
+
+BOOL MiscCfg::IsPaperOrientationWarning()   const
+{
+    return pImpl->IsPaperOrientationWarning();
+}
+
+void MiscCfg::SetPaperOrientationWarning(   BOOL bSet)
+{
+    pImpl->SetPaperOrientationWarning( bSet );
+}
+
+sal_Int32 MiscCfg::GetYear2000() const
+{
+    return pImpl->GetYear2000();
+}
+
+void MiscCfg::SetYear2000( sal_Int32 nSet )
+{
+    pImpl->SetYear2000( nSet );
+}
+
+}

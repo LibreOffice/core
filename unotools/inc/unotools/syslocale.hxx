@@ -31,13 +31,15 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #define INCLUDED_SVTOOLS_SYSLOCALE_HXX
 
-#include "svl/svldllapi.h"
+#include "unotools/unotoolsdllapi.h"
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/types.h>
-
+#include <i18npool/lang.h>
 
 class SvtSysLocale_Impl;
+class SvtSysLocaleOptions;
+
 namespace osl { class Mutex; }
 class LocaleDataWrapper;
 
@@ -50,14 +52,14 @@ class LocaleDataWrapper;
     SvtSysLocale is not expensive as long as there is at least one instance
     left.
  */
-class SVL_DLLPUBLIC SvtSysLocale
+class UNOTOOLS_DLLPUBLIC SvtSysLocale
 {
     friend class SvtSysLocale_Impl;     // access to mutex
 
     static  SvtSysLocale_Impl*  pImpl;
     static  sal_Int32           nRefCount;
 
-    SVL_DLLPRIVATE static  ::osl::Mutex&               GetMutex();
+    UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&               GetMutex();
 
 public:
                                         SvtSysLocale();
@@ -72,7 +74,9 @@ public:
      */
             const LocaleDataWrapper*    GetLocaleDataPtr() const;
             const CharClass*            GetCharClassPtr() const;
-
+            SvtSysLocaleOptions&        GetOptions() const;
+            com::sun::star::lang::Locale GetLocale() const;
+            LanguageType                GetLanguage() const;
 };
 
 #endif  // INCLUDED_SVTOOLS_SYSLOCALE_HXX

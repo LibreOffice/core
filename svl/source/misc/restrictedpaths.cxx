@@ -36,7 +36,7 @@
 #include <osl/process.h>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svl/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 namespace svt
 {

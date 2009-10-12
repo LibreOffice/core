@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <unotools/misccfg.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/accelcfg.hxx>
@@ -70,6 +71,7 @@
 #include <unotools/workingsetoptions.hxx>
 #include <unotools/xmlaccelcfg.hxx>
 #include <unotools/options.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 //-----------------------------------------------
 // namespaces
@@ -252,8 +254,8 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem = new SvtPrintWarningOptions();
             break;
 
-        case E_REGOPTIONS :
-// no ref count            rItem.pItem = new ::utl::RegOptions();
+        case E_MISCCFG :
+            rItem.pItem = new ::utl::MiscCfg();
             break;
 
         case E_SAVEOPTIONS :
@@ -306,6 +308,10 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 
         case E_USEROPTIONS :
             rItem.pItem = new SvtUserOptions();
+            break;
+
+        case E_SYSLOCALEOPTIONS :
+            rItem.pItem = new SvtSysLocaleOptions();
             break;
 
         default:

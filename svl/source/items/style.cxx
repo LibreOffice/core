@@ -52,8 +52,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
 #include <svl/svstdarr.hxx>
-#include <vcl/svapp.hxx>
-
+#include <unotools/syslocale.hxx>
 #include <algorithm>
 
 #define STYLESTREAM             "SfxStyleSheets"
@@ -393,7 +392,7 @@ XubString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
     const SfxPoolItem* pItem = aIter.FirstItem();
 
     IntlWrapper aIntlWrapper(comphelper::getProcessServiceFactory(),
-            Application::GetSettings().GetLanguage());
+            SvtSysLocale().GetLanguage());
     while ( pItem )
     {
         XubString aItemPresentation;

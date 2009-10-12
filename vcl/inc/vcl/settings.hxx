@@ -38,6 +38,7 @@
 #include "vcl/accel.hxx"
 #include "vcl/wall.hxx"
 #include "com/sun/star/lang/Locale.hpp"
+#include <unotools/syslocale.hxx>
 
 class CollatorWrapper;
 class LocaleDataWrapper;
@@ -993,7 +994,6 @@ class ImplMiscData
 
 private:
     ULONG                           mnRefCount;
-    USHORT                          mnTwoDigitYearStart;
     USHORT                          mnEnableATT;
     BOOL                            mbEnableLocalizedDecimalSep;
     USHORT                          mnDisablePrinting;
@@ -1015,10 +1015,6 @@ public:
                                     MiscSettings( const MiscSettings& rSet );
                                     ~MiscSettings();
 
-    void                            SetTwoDigitYearStart( USHORT nYearStart )
-                                        { CopyData(); mpData->mnTwoDigitYearStart = nYearStart; }
-    USHORT                          GetTwoDigitYearStart() const
-                                        { return mpData->mnTwoDigitYearStart; }
     void                            SetEnableATToolSupport( BOOL bEnable );
     BOOL                            GetEnableATToolSupport() const;
     void                            SetDisablePrinting( BOOL bEnable );
@@ -1141,7 +1137,7 @@ public:
 // -----------------------
 // - ImplAllSettingsData -
 // -----------------------
-
+class LocaleConfigurationListener;
 class ImplAllSettingsData
 {
     friend class    AllSettings;
@@ -1171,6 +1167,8 @@ private:
     CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
+    LocaleConfigurationListener*            mpLocaleCfgListener;
+    SvtSysLocale                            maSysLocale;
 };
 
 // ---------------
@@ -1287,6 +1285,8 @@ public:
     BOOL                                    operator ==( const AllSettings& rSet ) const;
     BOOL                                    operator !=( const AllSettings& rSet ) const
                                                 { return !(*this == rSet); }
+    static void                             LocaleSettingsChanged();
+    void                                    StartListening();
 };
 
 #endif // _SV_SETTINGS_HXX

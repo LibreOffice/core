@@ -46,9 +46,7 @@ SLOFILES=  \
         $(SLO)$/cjkoptions.obj          \
         $(SLO)$/ctloptions.obj          \
         $(SLO)$/itemholder2.obj \
-        $(SLO)$/languageoptions.obj     \
-        $(SLO)$/misccfg.obj				\
-        $(SLO)$/syslocaleoptions.obj
+        $(SLO)$/languageoptions.obj  
 
 # --- Targets ------------------------------------------------------
 

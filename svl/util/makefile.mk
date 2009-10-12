@@ -52,7 +52,6 @@ LIB2FILES=	$(LB)$/_isvl.lib
 LIB1TARGET= $(SLB)$/svl.lib
 LIB1FILES=	\
         $(SLB)$/config.lib	\
-        $(SLB)$/syslocale.lib   \
         $(SLB)$/svdde.lib \
         $(SLB)$/undo.lib		\
         $(SLB)$/numbers.lib 	\
@@ -69,7 +68,6 @@ LIB1FILES=	\
 
 RESLIB1NAME=	$(RESTARGETSIMPLE)
 RESLIB1SRSFILES=\
-        $(SRS)$/items.srs \
         $(SRS)$/misc.srs
 
 # build the shared library  --------------------------------------------------

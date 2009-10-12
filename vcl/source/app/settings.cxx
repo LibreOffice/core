@@ -45,6 +45,7 @@
 #include "unotools/collatorwrapper.hxx"
 #include "unotools/configmgr.hxx"
 #include "unotools/confignode.hxx"
+#include <unotools/syslocaleoptions.hxx>
 
 #ifdef WNT
 #include "tools/prewin.h"
@@ -66,6 +67,16 @@ DBG_NAME( AllSettings )
                                  STYLE_OPTION_NOMNEMONICS)
 
 // =======================================================================
+class LocaleConfigurationListener : public utl::ConfigurationListener
+{
+public:
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* );
+};
+
+void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster* )
+{
+    AllSettings::LocaleSettingsChanged();
+}
 
 ImplMachineData::ImplMachineData()
 {
@@ -1069,7 +1080,6 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
 ImplMiscData::ImplMiscData()
 {
     mnRefCount                  = 1;
-    mnTwoDigitYearStart         = 1930;
     mnEnableATT                 = sal::static_int_cast<USHORT>(~0U);
     mnDisablePrinting           = sal::static_int_cast<USHORT>(~0U);
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
@@ -1081,7 +1091,6 @@ ImplMiscData::ImplMiscData()
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
     mnRefCount                  = 1;
-    mnTwoDigitYearStart         = rData.mnTwoDigitYearStart;
     mnEnableATT                 = rData.mnEnableATT;
     mnDisablePrinting           = rData.mnDisablePrinting;
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
@@ -1155,8 +1164,7 @@ BOOL MiscSettings::operator ==( const MiscSettings& rSet ) const
     if ( mpData == rSet.mpData )
         return TRUE;
 
-    if ( (mpData->mnTwoDigitYearStart   == rSet.mpData->mnTwoDigitYearStart ) &&
-         (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
+    if ( (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
          (mpData->mnDisablePrinting     == rSet.mpData->mnDisablePrinting ) &&
          (mpData->mbEnableLocalizedDecimalSep == rSet.mpData->mbEnableLocalizedDecimalSep ) )
         return TRUE;
@@ -1535,6 +1543,8 @@ ImplAllSettingsData::ImplAllSettingsData()
     mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
+    mpLocaleCfgListener         = NULL;
+    maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
 
 // -----------------------------------------------------------------------
@@ -1564,6 +1574,7 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
+    mpLocaleCfgListener         = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1582,6 +1593,11 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpI18nHelper;
     if ( mpUII18nHelper )
         delete mpUII18nHelper;
+    if (mpLocaleCfgListener )
+    {
+        maSysLocale.GetOptions().RemoveListener( mpLocaleCfgListener );
+        delete mpLocaleCfgListener;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1638,6 +1654,13 @@ const AllSettings& AllSettings::operator =( const AllSettings& rSet )
     mpData = rSet.mpData;
 
     return *this;
+}
+
+void AllSettings::StartListening()
+{
+    if (!mpData->mpLocaleCfgListener)
+        mpData->mpLocaleCfgListener = new LocaleConfigurationListener;
+    mpData->maSysLocale.GetOptions().AddListener( mpData->mpLocaleCfgListener );
 }
 
 // -----------------------------------------------------------------------
@@ -2075,4 +2098,15 @@ const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
     return *mpData->mpUICollatorWrapper;
 }
 */
-
+void AllSettings::LocaleSettingsChanged()
+{
+    AllSettings aAllSettings( Application::GetSettings() );
+    MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
+    BOOL bIsDecSepAsLocale = aAllSettings.mpData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
+    if ( aMiscSettings.GetEnableLocalizedDecimalSep() != bIsDecSepAsLocale )
+    {
+        aMiscSettings.SetEnableLocalizedDecimalSep( bIsDecSepAsLocale );
+        aAllSettings.SetMiscSettings( aMiscSettings );
+        Application::SetSettings( aAllSettings );
+    }
+}

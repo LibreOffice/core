@@ -45,6 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=	$(SLO)$/atom.obj \
             $(SLO)$/datetime.obj \
+            $(SLO)$/syslocale.obj \
             $(SLO)$/eventlisteneradapter.obj \
             $(SLO)$/desktopterminationobserver.obj \
             $(SLO)$/sharedunocomponent.obj \

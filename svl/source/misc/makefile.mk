@@ -42,7 +42,6 @@ TARGET=misc
 
 EXCEPTIONSFILES=\
     $(SLO)$/documentlockfile.obj \
-    $(SLO)$/flbytes.obj \
     $(SLO)$/folderrestriction.obj \
     $(SLO)$/fstathelper.obj \
     $(SLO)$/lockfilecommon.obj \

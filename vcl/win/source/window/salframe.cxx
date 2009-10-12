@@ -39,6 +39,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <comphelper/processfactory.hxx>
+#include <unotools/misccfg.hxx>
 
 #include <string.h>
 #include <limits.h>
@@ -3085,7 +3086,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
                 if ( (nValue > 1000) && (nValue < 10000) )
                 {
                     MiscSettings aMiscSettings = rSettings.GetMiscSettings();
-                    aMiscSettings.SetTwoDigitYearStart( (USHORT)(nValue-99) );
+                    utl::MiscCfg().SetYear2000( (sal_Int32)(nValue-99) );
                     rSettings.SetMiscSettings( aMiscSettings );
                 }
             }

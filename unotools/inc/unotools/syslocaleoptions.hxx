@@ -31,7 +31,7 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 #define INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 
-#include "svl/svldllapi.h"
+#include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
@@ -48,12 +48,12 @@ class SvtSysLocaleOptions_Impl;
 class SvtListener;
 namespace osl { class Mutex; }
 
-class SVL_DLLPUBLIC SvtSysLocaleOptions: public utl::detail::Options
+class UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions: public utl::detail::Options
 {
     static  SvtSysLocaleOptions_Impl*   pOptions;
     static  sal_Int32                   nRefCount;
 
-    SVL_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
+    UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
 
 public:
 
@@ -76,8 +76,6 @@ public:
                                         <TRUE/> if added
                                         <FALSE/> if not added
                                  */
-            BOOL                AddListener( SvtListener& );
-            BOOL                RemoveListener( SvtListener& );
 
     /** Block broadcasts and accumulate hints. This may be useful if, for
         example, the locale and currency are changed and the currency was

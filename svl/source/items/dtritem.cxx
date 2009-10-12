@@ -40,9 +40,6 @@
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
-
-#include <vcl/svapp.hxx>
-
 #include <svl/dtritem.hxx>
 
 

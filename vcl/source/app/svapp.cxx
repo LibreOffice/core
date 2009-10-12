@@ -710,6 +710,7 @@ void Application::SetSettings( const AllSettings& rSettings )
     if ( !pSVData->maAppData.mpSettings )
     {
         pSVData->maAppData.mpSettings = new AllSettings();
+        pSVData->maAppData.mpSettings->StartListening();
         *pSVData->maAppData.mpSettings = rSettings;
         ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
     }

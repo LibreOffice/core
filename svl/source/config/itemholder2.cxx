@@ -41,8 +41,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/languageoptions.hxx>
-#include <misccfg.hxx>
-#include <svl/syslocaleoptions.hxx>
 #include <unotools/options.hxx>
 
 #include <tools/debug.hxx>
@@ -165,14 +163,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 
         case E_LANGUAGEOPTIONS :
 // capsulate CTL and CJL options !            rItem.pItem = new SvtLanguageOptions();
-            break;
-
-        case E_MISCCFG :
-// no ref count            rItem.pItem = new SfxMiscCfg();
-            break;
-
-        case E_SYSLOCALEOPTIONS :
-            rItem.pItem = new SvtSysLocaleOptions();
             break;
 
         default:

@@ -45,6 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/syslocaleoptions.obj \
         $(SLO)$/configvaluecontainer.obj \
         $(SLO)$/confignode.obj \
         $(SLO)$/configitem.obj \
@@ -69,6 +70,7 @@ SLOFILES=\
         $(SLO)$/javaoptions.obj             \
         $(SLO)$/lingucfg.obj                \
     $(SLO)$/localisationoptions.obj		\
+        $(SLO)$/misccfg.obj                             \
         $(SLO)$/moduleoptions.obj           \
         $(SLO)$/options.obj                     \
         $(SLO)$/optionsdlg.obj              \

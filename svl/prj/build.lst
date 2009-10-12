@@ -13,10 +13,9 @@ sl	svl\source\notify				nmake	-	all	sl_not sl_inc NULL
 sl	svl\source\numbers				nmake	-	all	sl_num sl_inc NULL
 sl	svl\source\svdde				nmake	-	all	sl__dde sl_inc NULL
 sl	svl\source\svsql				nmake	-	all	sl_sql sl_inc NULL
-sl  svl\source\syslocale            nmake   -   all sl_sysloc sl_inc NULL
 sl	svl\source\undo					nmake	-	all	sl_undo sl_inc NULL
 sl	svl\source\uno					nmake	-	all	sl_uno sl_inc NULL
-sl  svl\util                        nmake   -   all sl_util sl_usdde.u sl_psdde.p sl_conf sl_filepick sl_file sl__item sl_mem sl__misc sl_not sl_num sl__dde sl_sql sl_sysloc sl_undo sl_uno NULL
+sl  svl\util                        nmake   -   all sl_util sl_usdde.u sl_psdde.p sl_conf sl_filepick sl_file sl__item sl_mem sl__misc sl_not sl_num sl__dde sl_sql sl_undo sl_uno NULL
 sl	svl\source\fsstor				nmake	-	all	sl_fsstor sl_inc NULL
 sl	svl\source\passwordcontainer	nmake	-	all	sl_passcont sl_inc NULL
 

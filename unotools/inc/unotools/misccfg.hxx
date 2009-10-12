@@ -27,46 +27,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SFX_MISCCFG_HXX
-#define _SFX_MISCCFG_HXX
+#ifndef _UTL_MISCCFG_HXX
+#define _UTL_MISCCFG_HXX
 
-#include "svl/svldllapi.h"
+#include "unotools/unotoolsdllapi.h"
 #include "tools/solar.h"
-#include "unotools/configitem.hxx"
+#include "unotools/options.hxx"
 
 /*--------------------------------------------------------------------
      Beschreibung:
  --------------------------------------------------------------------*/
-
-class SVL_DLLPUBLIC SfxMiscCfg : public utl::ConfigItem
+namespace utl
 {
-    BOOL            bPaperSize;     // printer warnings
-    BOOL            bPaperOrientation;
-    BOOL            bNotFound;
-    sal_Int32       nYear2000;      // two digit year representation
+    class SfxMiscCfg;
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
-    void                    Load();
+class UNOTOOLS_DLLPUBLIC MiscCfg : public detail::Options
+{
+    SfxMiscCfg*     pImpl;
 
 public:
-    SfxMiscCfg( );
-    ~SfxMiscCfg( );
+    MiscCfg( );
+    virtual ~MiscCfg( );
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
-    virtual void            Commit();
-
-    BOOL        IsNotFoundWarning()     const {return bNotFound;}
+    BOOL        IsNotFoundWarning()     const;
     void        SetNotFoundWarning( BOOL bSet);
 
-    BOOL        IsPaperSizeWarning()    const {return bPaperSize;}
+    BOOL        IsPaperSizeWarning()    const;
     void        SetPaperSizeWarning(BOOL bSet);
 
-    BOOL        IsPaperOrientationWarning()     const {return bPaperOrientation;}
+    BOOL        IsPaperOrientationWarning()     const;
     void        SetPaperOrientationWarning( BOOL bSet);
 
                 // 0 ... 99
-    sal_Int32   GetYear2000()           const { return nYear2000; }
+    sal_Int32   GetYear2000()           const;
     void        SetYear2000( sal_Int32 nSet );
+};
 
 };
 

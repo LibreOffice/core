@@ -45,6 +45,7 @@ using utl::ConfigurationBroadcaster;
 
 ConfigurationBroadcaster::ConfigurationBroadcaster()
 : mpList(0)
+, m_nBroadcastBlocked( 0 )
 {
 }
 
@@ -68,9 +69,15 @@ void ConfigurationBroadcaster::RemoveListener( utl::ConfigurationListener* pList
 
 void ConfigurationBroadcaster::NotifyListeners()
 {
-    if ( mpList )
-        for ( sal_uInt32 n=0; n<mpList->Count(); n++ )
-            mpList->GetObject(n)->ConfigurationChanged(this);
+//    if ( m_nBroadcastBlocked )
+//        m_nBlockedHint |= nHint;
+//    else
+    if (!m_nBroadcastBlocked)
+    {
+        if ( mpList )
+            for ( sal_uInt32 n=0; n<mpList->Count(); n++ )
+                mpList->GetObject(n)->ConfigurationChanged(this);
+    }
 }
 
 Options::Options()
@@ -86,3 +93,13 @@ void Options::ConfigurationChanged( utl::ConfigurationBroadcaster* )
     NotifyListeners();
 }
 
+void ConfigurationBroadcaster::BlockBroadcasts( bool bBlock )
+{
+    if ( bBlock )
+        ++m_nBroadcastBlocked;
+    else if ( m_nBroadcastBlocked )
+    {
+        if ( --m_nBroadcastBlocked == 0 )
+            NotifyListeners();
+    }
+}

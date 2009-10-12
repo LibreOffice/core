@@ -48,12 +48,15 @@ namespace utl {
     class UNOTOOLS_DLLPUBLIC ConfigurationBroadcaster
     {
         IMPL_ConfigurationListenerList* mpList;
+        sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
+
     public:
         void AddListener( utl::ConfigurationListener* pListener );
         void RemoveListener( utl::ConfigurationListener* pListener );
         void NotifyListeners();
         ConfigurationBroadcaster();
         ~ConfigurationBroadcaster();
+        void BlockBroadcasts( bool bBlock );
     };
 
 namespace detail {

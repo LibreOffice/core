@@ -35,11 +35,6 @@
 
 // #include <math.h>
 #include <tools/debug.hxx>
-#ifndef _SOUND_HXX //autogen
-#include <vcl/sound.hxx>
-#endif
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <unotools/charclass.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -48,6 +43,7 @@
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <unotools/misccfg.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
@@ -62,7 +58,7 @@
 #include <svl/zformat.hxx>
 #include "numhead.hxx"
 
-#include <svl/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include "listener.hxx"
 #include <svl/smplhint.hxx>
 #include <unotools/digitgroupingiterator.hxx>
@@ -107,7 +103,7 @@ static sal_uInt32 __FAR_DATA theIndexTable[NF_INDEX_TABLE_ENTRIES];
     also handles one instance of the SysLocale options
  */
 
-class SvNumberFormatterRegistry_Impl : public SvtListener
+class SvNumberFormatterRegistry_Impl : public utl::ConfigurationListener
 {
     List                    aFormatters;
     SvtSysLocaleOptions     aSysLocaleOptions;
@@ -124,30 +120,26 @@ public:
             sal_uInt32           Count()
                                 { return aFormatters.Count(); }
 
-    virtual void            Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
-
+            virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* );
 };
 
 
 SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()
 {
     eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
-    aSysLocaleOptions.AddListener( *this );
+    aSysLocaleOptions.AddListener( this );
 }
 
 
 SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 {
-    aSysLocaleOptions.RemoveListener( *this );
+    aSysLocaleOptions.RemoveListener( this );
 }
 
 
-void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster&, const SfxHint& rHint )
+void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster* )
 {
-    const SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
-    if( pHint )
-    {
-        if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE )
+        //if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
             for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
@@ -157,7 +149,7 @@ void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster&, const SfxHint& rHi
             }
             eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
         }
-        if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_CURRENCY )
+        //if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_CURRENCY )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
             for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
@@ -166,7 +158,6 @@ void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster&, const SfxHint& rHi
                 p->ResetDefaultSystemCurrency();
             }
         }
-    }
 }
 
 
@@ -535,7 +526,6 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
             sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
             if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
-                Sound::Beep();
                 DBG_ERROR("SvNumberFormatter:: Zu viele Formate pro CL");
                 delete p_Entry;
             }
@@ -601,15 +591,14 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
     // #62389# empty format string (of Writer) => General standard format
     if (!rString.Len())
         ;   // nothing
-    else if (eLnge == LANGUAGE_SYSTEM && eSysLnge !=
-            Application::GetSettings().GetLanguage())
+    else if (eLnge == LANGUAGE_SYSTEM && eSysLnge != SvtSysLocale().GetLanguage())
     {
         sal_uInt32 nOrig = GetEntryKey( rString, eSysLnge );
         if (nOrig == NUMBERFORMAT_ENTRY_NOT_FOUND)
             nKey = nOrig;   // none avaliable, maybe user-defined
         else
-            nKey = GetFormatForLanguageIfBuiltIn( nOrig,
-                    Application::GetSettings().GetLanguage());
+            nKey = GetFormatForLanguageIfBuiltIn( nOrig, SvtSysLocale().GetLanguage() );
+
         if (nKey == nOrig)
         {
             // Not a builtin format, convert.
@@ -617,7 +606,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
             // language and wouldn't match eSysLnge anymore, do that on a copy.
             String aTmp( rString);
             rNewInserted = PutandConvertEntrySystem( aTmp, rCheckPos, rType,
-                    nKey, eLnge, Application::GetSettings().GetLanguage());
+                    nKey, eLnge, SvtSysLocale().GetLanguage());
             if (rCheckPos > 0)
             {
                 DBG_ERRORFILE("SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for current locale");
@@ -685,7 +674,7 @@ void SvNumberFormatter::SetFormatUsed(sal_uInt32 nFIndex)
 
 BOOL SvNumberFormatter::Load( SvStream& rStream )
 {
-    LanguageType eSysLang = Application::GetSettings().GetLanguage();
+    LanguageType eSysLang = SvtSysLocale().GetLanguage();
     SvNumberFormatter* pConverter = NULL;
 
     ImpSvNumMultipleReadHeader aHdr( rStream );
@@ -894,7 +883,7 @@ BOOL SvNumberFormatter::Save( SvStream& rStream ) const
     ImpSvNumMultipleWriteHeader aHdr( rStream );
     // ab 364i wird gespeichert was SYSTEM wirklich war, vorher hart LANGUAGE_SYSTEM
     rStream << (USHORT) SV_NUMBERFORMATTER_VERSION;
-    rStream << (USHORT) Application::GetSettings().GetLanguage() << (USHORT) IniLnge;
+    rStream << (USHORT) SvtSysLocale().GetLanguage() << (USHORT) IniLnge;
     SvNumberFormatTable* pTable = (SvNumberFormatTable*) &aFTable;
     SvNumberformat* pEntry = (SvNumberformat*) pTable->First();
     while (pEntry)
@@ -2900,7 +2889,6 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 nNewKey = nPos+1;
                 if (nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
-                    Sound::Beep();
                     DBG_ERROR(
                         "SvNumberFormatter:: Zu viele Formate pro CL");
                     delete pNewEntry;
@@ -3005,7 +2993,7 @@ USHORT SvNumberFormatter::ExpandTwoDigitYear( USHORT nYear ) const
 // static
 USHORT SvNumberFormatter::GetYear2000Default()
 {
-    return Application::GetSettings().GetMiscSettings().GetTwoDigitYearStart();
+    return (USHORT) ::utl::MiscCfg().GetYear2000();
 }
 
 
@@ -3106,7 +3094,7 @@ void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, Languag
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     if ( eLang == LANGUAGE_SYSTEM )
-        eLang = Application::GetSettings().GetLanguage();
+        eLang = SvtSysLocale().GetLanguage();
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     USHORT nCount = rTable.Count();
     const NfCurrencyEntryPtr* ppData = rTable.GetData();
@@ -3549,7 +3537,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svl", "er93726", "SvNumberFormatter::ImpInitCurrencyTable" );
 
-    LanguageType eSysLang = Application::GetSettings().GetLanguage();
+    LanguageType eSysLang = SvtSysLocale().GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
         ::comphelper::getProcessServiceFactory(),
         MsLangId::convertLanguageToLocale( eSysLang ) );

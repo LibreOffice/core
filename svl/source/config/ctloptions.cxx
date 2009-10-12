@@ -42,9 +42,9 @@
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
 #include <svl/smplhint.hxx>
-#include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
-
+#include <tools/solarmutex.hxx>
+#include <unotools/syslocale.hxx>
 #include <itemholder2.hxx>
 
 using namespace ::com::sun::star;
@@ -309,7 +309,7 @@ void SvtCTLOptions_Impl::Load()
             ((eSystemLanguage != LANGUAGE_SYSTEM)  && ( nWinScript & SCRIPTTYPE_COMPLEX )))  )
     {
         m_bCTLFontEnabled = sal_True;
-        sal_uInt16 nLanguage = Application::GetSettings().GetLanguage();
+        sal_uInt16 nLanguage = SvtSysLocale().GetLanguage();
         //enable sequence checking for the appropriate languages
         m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
             (MsLangId::needsSequenceChecking( nLanguage) ||
@@ -490,8 +490,11 @@ sal_Bool SvtCTLOptions::IsReadOnly(EOption eOption) const
  --------------------------------------------------*/
 void SvtCTLOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
-    Broadcast( rHint );
+    if ( ::tools::SolarMutex::Acquire() )
+    {
+        Broadcast( rHint );
+        ::tools::SolarMutex::Release();
+    }
 }
 
 // -----------------------------------------------------------------------------

@@ -33,7 +33,6 @@
 #ifndef GCC
 #endif
 
-#include <vcl/svapp.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
