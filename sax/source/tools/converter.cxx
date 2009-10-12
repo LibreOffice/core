@@ -943,7 +943,7 @@ void Converter::convertDate(
         const util::Date& i_rDate)
 {
     const util::DateTime dt(
-            i_rDate.Year, i_rDate.Month, i_rDate.Day, 0, 0, 0, 0);
+            0, 0, 0, 0, i_rDate.Day, i_rDate.Month, i_rDate.Year);
     convertDateTime(i_rBuffer, dt, false);
 }
 
