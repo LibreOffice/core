@@ -1,41 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: code,v $
+*
+* $Revision: 1.4 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+**********************************************************************-->
 
-<!ELEMENT oor:component-data ((prop|node)*)>
+<!ELEMENT oor:component-data ((node | prop)*)>
 <!ATTLIST oor:component-data
-  oor:name NMTOKEN #REQUIRED
-  oor:package NMTOKEN #REQUIRED
-  oor:finalized (true | false) #IMPLIED
-  oor:op (modify | replace | fuse | remove | reset) #IMPLIED
-  xmlns:oor CDATA #FIXED "http://openoffice.org/2001/registry"
-  xmlns:install CDATA #FIXED "http://openoffice.org/2004/installation"
-  xmlns:xs CDATA #FIXED "http://www.w3.org/2001/XMLSchema"
-  xmlns:xsi CDATA #FIXED "http://www.w3.org/2001/XMLSchema-instance"
->
+    oor:package CDATA #REQUIRED
+    oor:name CDATA #REQUIRED
+    oor:op (modify | replace | fuse | remove) #IMPLIED
+    oor:finalized (false | true) #IMPLIED
+    xmlns:oor CDATA #FIXED "http://openoffice.org/2001/registry"
+    xmlns:xs CDATA #FIXED "http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi CDATA #FIXED "http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:install CDATA #FIXED "http://openoffice.org/2004/installation">
 
-<!ELEMENT node ((prop|node)*)>
+<!ELEMENT node ((node | prop)*)>
 <!ATTLIST node
-  oor:name CDATA #REQUIRED
-  oor:component CDATA #IMPLIED
-  oor:finalized (true | false) #IMPLIED
-  oor:mandatory (true | false) #IMPLIED
-  oor:op (modify | replace | fuse | remove | reset) #IMPLIED
-  oor:node-type NMTOKEN #IMPLIED
-  install:module NMTOKEN #IMPLIED
->
+    oor:name CDATA #REQUIRED
+    oor:op (modify | replace | fuse | remove) #IMPLIED
+    oor:finalized (true | false) #IMPLIED
+    oor:mandatory (true | false) #IMPLIED
+    oor:node-type CDATA #IMPLIED
+    oor:component CDATA #IMPLIED
+    install:module CDATA #IMPLIED>
 
 <!ELEMENT prop (value*)>
 <!ATTLIST prop
-  oor:name CDATA #REQUIRED
-  oor:op (modify | replace | fuse | remove | reset) #IMPLIED
-  oor:finalized CDATA #IMPLIED
-  oor:type (xs:boolean | xs:short | xs:int | xs:long | xs:double | xs:string | xs:hexBinary | oor:boolean-list | oor:short-list | oor:int-list | oor:long-list | oor:double-list | oor:string-list | oor:hexBinary-list) #IMPLIED
-  install:module NMTOKEN #IMPLIED
->
+    oor:name CDATA #REQUIRED
+    oor:op (modify | replace | fuse | remove) #IMPLIED
+    oor:finalized (true | false) #IMPLIED
+    oor:type
+        (xs:boolean | xs:short | xs:int | xs:long | xs:double | xs:string |
+         xs:hexBinary | oor:boolean-list | oor:short-list | oor:int-list |
+         oor:long-list | oor:double-list | oor:string-list | oor:hexBinary-list)
+        #IMPLIED
+    install:module CDATA #IMPLIED>
 
-<!ELEMENT value (#PCDATA)>
+<!ELEMENT value (#PCDATA | it | unicode)*>
+    <!-- EMPTY  if oor:op="remove", xsi:nil="true", or oor:external is used
+         #PCDATA  if the property type is a non-list type other than xs:string
+         (#PCDATA | unicode)*  if the property type is xs:string
+         #PCDATA  or  it*  if the property type is a list type other than
+             oor:string-list
+         (#PCDATA | unicode)*  or  it*  if the property type is
+             oor:string-list -->
 <!ATTLIST value
-  xsi:nil (true | false) #IMPLIED
-  oor:separator CDATA #IMPLIED
-  xml:lang CDATA #IMPLIED
-  install:module NMTOKEN #IMPLIED
->
+    xml:lang CDATA #IMPLIED
+    oor:op (modify | remove) #IMPLIED
+    xsi:nil (true | false) #IMPLIED
+    oor:separator CDATA #IMPLIED
+    oor:external CDATA #IMPLIED
+    install:module CDATA #IMPLIED>
+    <!-- xml:lang  must only be used for localized properties; defaults to the
+             empty string
+         oor:op  defaults to "modify"; "remove" must only be used for localized
+             properties
+         xsi:nil  defaults to "false"; "true" must only be used for nillable
+             properties
+         oor:separator  must only be used if the property type is a list type
+             and the element content is #PCDATA or (#PCDATA | unicode)* (and not
+             EMPTY or it*)
+         oor:external  must only be used for non-localized properties and must
+             not be used together with xsi:nil="true" -->
+
+<!ELEMENT it (#PCDATA | unicode)*>
+    <!-- #PCDATA  if the property type is a list type other than
+             oor:string-list
+         (#PCDATA | unicode)*  if the property type is oor:string-list -->
+<!ATTLIST it>
+
+<!ELEMENT unicode EMPTY>
+<!ATTLIST unicode
+    oor:scalar NMTOKEN #REQUIRED>
+        <!-- must syntactically match xs:integer and have a value in {0, ..., 8,
+             11, 12, 14, ..., 31, 65534, 65535} -->
+
+<!-- oor:items is an alternative root element to oor:component-data (in plain
+     .xcu files only; not when nested in an .xcd file), used for the user-layer
+     registrymodifications.xcu: -->
+
+<!ELEMENT oor:items (item*)>
+<!ATTLIST oor:items>
+
+<!ELEMENT item ((prop | node)*)>
+<!ATTLIST item
+    oor:path CDATA #REQUIRED>
+        <!-- the absolute path representation of a set or group node -->

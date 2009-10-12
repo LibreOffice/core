@@ -386,7 +386,7 @@ void XcsParser::handleProp(XmlReader & reader) {
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("type")))
         {
-            attrType = reader.getAttributeValue(false);
+            attrType = reader.getAttributeValue(true);
         } else if (attrNs == XmlReader::NAMESPACE_OOR &&
                    attrLn.equals(RTL_CONSTASCII_STRINGPARAM("localized")))
         {
