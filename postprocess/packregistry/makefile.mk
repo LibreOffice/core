@@ -451,8 +451,8 @@ $(MISC)/%.xcd .ERRREMOVE: $(MISC)/%.list
 
 $(MISC)/%.list: makefile.mk
     - $(RM) $@
-    echo '<list>$(foreach,i,$(MY_DEPS_$(@:b)) <dependency file="$i"/>) \
-        $(foreach,i,$(MY_FILES_$(@:b)) <filename>$i</filename>)</list>' > $@
+    echo '<list>' $(foreach,i,$(MY_DEPS_$(@:b)) '<dependency file="$i"/>') \
+        $(foreach,i,$(MY_FILES_$(@:b)) '<filename>$i</filename>') '</list>' > $@
 
 $(MISC)/lang1/Langpack-{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
     $(MKDIRHIER) $(@:d)
@@ -467,7 +467,7 @@ $(MISC)/lang2/%_{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
     mkdir $(MISC)/$(@:b).unzip
     cd $(MISC)/$(@:b).unzip && unzip $(SOLARPCKDIR)/$(@:b).zip
     - $(RM) $(MISC)/$(@:b).list
-    echo '<list>$(foreach,i,$(shell cd $(MISC) && \
+    echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
         find $(@:b).unzip -name \*.xcu -print) \
-        <filename>$i</filename>)</list>' > $(MISC)/$(@:b).list
+        '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)/$(@:b).list
