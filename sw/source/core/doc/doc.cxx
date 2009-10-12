@@ -50,6 +50,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/itemiter.hxx>
+#include <svtools/syslocale.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/cscoitem.hxx>
@@ -1116,7 +1117,7 @@ static void lcl_FormatPostIt(
 
     if (bNewPage)
     {
-        pIDCO->Insert( aPam, SvxFmtBreakItem( SVX_BREAK_PAGE_AFTER, RES_BREAK ), 0 );
+        pIDCO->InsertPoolItem( aPam, SvxFmtBreakItem( SVX_BREAK_PAGE_AFTER, RES_BREAK ), 0 );
         pIDCO->SplitNode( *aPam.GetPoint(), false );
     }
     else if (!bIsFirstPostIt)
@@ -1142,8 +1143,9 @@ static void lcl_FormatPostIt(
     aStr.AppendAscii(sTmp);
     aStr += pField->GetPar1();
     aStr += ' ';
-    aStr += GetAppLocaleData().getDate( pField->GetDate() );
-    pIDCO->Insert( aPam, aStr, true );
+    SvtSysLocale aSysLocale;
+    aStr += /*(LocaleDataWrapper&)*/aSysLocale.GetLocaleData().getDate( pField->GetDate() );
+    pIDCO->InsertString( aPam, aStr );
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
@@ -1151,7 +1153,7 @@ static void lcl_FormatPostIt(
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
-    pIDCO->Insert( aPam, aStr, true );
+    pIDCO->InsertString( aPam, aStr );
 }
 
 
@@ -1324,7 +1326,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         aPam.Move( fnMoveBackward, fnGoDoc );
         aPam.SetMark();
         aPam.Move( fnMoveForward, fnGoDoc );
-        rData.m_pPostItDoc->Delete( aPam );
+        rData.m_pPostItDoc->DeleteRange( aPam );
 
         const StringRangeEnumerator aRangeEnum( rData.GetPageRange(), 1, nDocPageCount, 0 );
 
