@@ -32,8 +32,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <svtools/section.hxx>
-#include <svtools/sectctr.hxx>
 #include "formcontrolcontainer.hxx"
 #include "bibshortcuthandler.hxx"
 
