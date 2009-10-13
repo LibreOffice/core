@@ -80,7 +80,6 @@ Reference<XAccessible> ScAccessibleFilterMenuItem::getAccessibleChild(sal_Int32 
     throw (RuntimeException, IndexOutOfBoundsException)
 {
     throw IndexOutOfBoundsException();
-    return Reference<XAccessible>();
 }
 
 Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet()
