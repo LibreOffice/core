@@ -169,7 +169,6 @@ common
 		PROFILE
 		profile
         PROSWITCH
-        PTHREAD_CFLAGS
 		REMOTE_BUILD_FLAG
 		RES_ARAB
 		RES_CHINSIM

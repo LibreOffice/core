@@ -937,9 +937,6 @@ case "$build_os" in
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
-		if getconf GNU_LIBPTHREAD_VERSION |grep -q NPTL; then
-			PTHREAD_CFLAGS="-DNPTL"
-		fi
 		_os=Linux
 		;;
 	gnu)
