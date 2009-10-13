@@ -681,14 +681,6 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     if( ! (pPageHeader && pPageBody) )
         return sal_False;
 
-    /* #i7262# write setup only before first page
-     *  don't do this in StartJob since the jobsetup there may be
-     *  different.
-     */
-    bool bSuccess =  true;
-    if( 1 == maPageList.size() )
-        m_aDocumentJobData = rJobSetup;
-
     // write page header according to Document Structuring Conventions (DSC)
     WritePS (pPageHeader, "%%Page: ");
     WritePS (pPageHeader, aPageNo);
@@ -722,13 +714,25 @@ PrinterJob::StartPage (const JobData& rJobSetup)
 
     WritePS (pPageHeader, pBBox);
 
-    if (bSuccess)
-        bSuccess = writePageSetup ( pPageHeader, rJobSetup );
-    if(bSuccess)
+    /* #i7262# #i65491# write setup only before first page
+     *  (to %%Begin(End)Setup, instead of %%Begin(End)PageSetup)
+     *  don't do this in StartJob since the jobsetup there may be
+     *  different.
+     */
+    bool bWriteFeatures = true;
+    if( 1 == maPageList.size() )
+    {
+        m_aDocumentJobData = rJobSetup;
+        bWriteFeatures = false;
+    }
+
+    if ( writePageSetup( pPageHeader, rJobSetup, bWriteFeatures ) )
+    {
         m_aLastJobData = rJobSetup;
+        return true;
+    }
 
-
-    return bSuccess;
+    return false;
 }
 
 sal_Bool
@@ -828,12 +832,9 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
                 if( pKey->getSetupType()    == PPDKey::DocumentSetup )
                     bEmit = true;
             }
-            else
-            {
-                if( pKey->getSetupType()    == PPDKey::PageSetup        ||
-                    pKey->getSetupType()    == PPDKey::AnySetup )
-                    bEmit = true;
-            }
+            if( pKey->getSetupType()    == PPDKey::PageSetup        ||
+                pKey->getSetupType()    == PPDKey::AnySetup )
+                bEmit = true;
             if( bEmit )
             {
                 const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
@@ -866,13 +867,13 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
     return bSuccess;
 }
 
-bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
+bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob, bool bWriteFeatures )
 {
     bool bSuccess = true;
 
     WritePS (pFile, "%%BeginPageSetup\n%\n");
-
-    bSuccess = writeFeatureList( pFile, rJob, false );
+    if ( bWriteFeatures )
+        bSuccess = writeFeatureList( pFile, rJob, false );
     WritePS (pFile, "%%EndPageSetup\n");
 
     sal_Char  pTranslate [128];
