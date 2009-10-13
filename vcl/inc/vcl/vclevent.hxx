@@ -201,7 +201,6 @@ private:
 
 public:
     VclSimpleEvent( ULONG n ) { nId = n; }
-    virtual ~VclSimpleEvent();
     TYPEINFO();
 
     ULONG GetId() const { return nId; }
@@ -253,6 +252,7 @@ class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
 {
 public:
     VclAccessibleEvent( ULONG n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    virtual ~VclAccessibleEvent();
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
 
 private:
