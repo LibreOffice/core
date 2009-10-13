@@ -756,6 +756,8 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     {
         PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
         Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize );
+        mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+        mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
         if( aPaperSize != aPageSize.aSize )
         {
             // user overridden page size, center Metafile
