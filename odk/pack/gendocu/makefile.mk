@@ -52,7 +52,6 @@ JAVA_PACKAGES=\
         com.sun.star.comp.helper \
         com.sun.star.lib.uno.helper \
         com.sun.star.lib.unoloader \
-        com.sun.star.tools.uno \
         com.sun.star.uno \
         $(JAVA_SRC_DIR)$/com$/sun$/star$/lib$/util$/UrlToFileMapper.java
 #        com.sun.star.beans \
