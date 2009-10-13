@@ -490,11 +490,6 @@ static void ChildStatusProc(void *pData)
             for (i = 0; data.m_pszEnv[i] != NULL; i++)
                  putenv(data.m_pszEnv[i]);
 
-#if defined(LINUX) && !defined(NPTL)
-            /* mfe: linux likes to have just one thread when the exec family is called */
-            /*      this np function has this purpose ...                              */
-            pthread_kill_other_threads_np();
-#endif
             OSL_TRACE("ChildStatusProc : starting '%s'",data.m_pszArgs[0]);
 
             /* Connect std IO to pipe ends */
