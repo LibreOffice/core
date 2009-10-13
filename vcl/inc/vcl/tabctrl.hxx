@@ -78,6 +78,7 @@ private:
     Link                maActivateHdl;
     Link                maDeactivateHdl;
 
+    using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( USHORT nId ) const;
     SAL_DLLPRIVATE void         ImplScrollBtnsColor();

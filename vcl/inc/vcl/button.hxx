@@ -144,10 +144,10 @@ protected:
     SAL_DLLPRIVATE                 PushButton( const PushButton & );
     SAL_DLLPRIVATE                 PushButton& operator=( const PushButton & );
 
-protected:
-    using Window::ImplInit;
     SAL_DLLPRIVATE void            ImplInit( Window* pParent, WinBits nStyle );
 
+    using Control::ImplInitSettings;
+    using Window::ImplInit;
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( BOOL bSet );
     SAL_DLLPRIVATE static void     ImplDrawPushButtonFrame( Window* pDev, Rectangle& rRect, USHORT nStyle );
@@ -324,6 +324,7 @@ private:
     SAL_DLLPRIVATE          RadioButton& operator= (const RadioButton &);
 
 protected:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
@@ -439,6 +440,7 @@ private:
     SAL_DLLPRIVATE              CheckBox& operator= (const CheckBox &);
 
 protected:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );

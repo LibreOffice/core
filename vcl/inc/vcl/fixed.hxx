@@ -47,6 +47,7 @@ class VCL_DLLPUBLIC FixedText : public Control
 {
 //#if 0 // _SOLAR__PRIVATE
 private:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
@@ -86,6 +87,7 @@ public:
 class VCL_DLLPUBLIC FixedLine : public Control
 {
 private:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
@@ -122,6 +124,7 @@ private:
     Bitmap          maBitmap;
     Bitmap          maBitmapHC;
 
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
@@ -162,6 +165,7 @@ private:
     BOOL            mbInUserDraw;
 
 private:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
