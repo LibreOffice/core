@@ -2487,10 +2487,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                         {
                             const USHORT nGlyph0 = GetUShort( pCoverage+0 );
                             const USHORT nGlyph1 = GetUShort( pCoverage+2 );
-                            const USHORT nCovIdx = GetUShort( pCoverage+4 );
+                            const USHORT nStartCoverageIndex = GetUShort( pCoverage+4 );
+                            DBG_ASSERT( aSubstVector.size() == nStartCoverageIndex, "coverage index mismatch");
+                            (void)nStartCoverageIndex;
                             pCoverage += 6;
                             for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
-                                aSubstVector.push_back( GlyphSubst( j + nCovIdx, 0 ) );
+                                aSubstVector.push_back( GlyphSubst( j, 0 ) );
                         }
                     }
                     break;

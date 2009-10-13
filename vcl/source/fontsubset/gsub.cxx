@@ -32,6 +32,8 @@
 
 #include "gsub.h"
 
+#include <osl/diagnose.h>
+
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -280,9 +282,11 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                     {
                         const USHORT nGlyph0 = NEXT_UShort( pCoverage );
                         const USHORT nGlyph1 = NEXT_UShort( pCoverage );
-                        const USHORT nCovIdx = NEXT_UShort( pCoverage );
+                        const USHORT nStartCoverageIndex = NEXT_UShort( pCoverage );
+                        OSL_ENSURE( aSubstVector.size() == nStartCoverageIndex, "coverage index mismatch");
+                        (void)nStartCoverageIndex;
                         for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
-                            aSubstVector.push_back( GlyphSubst( j + nCovIdx, 0 ) );
+                            aSubstVector.push_back( GlyphSubst( j, 0 ) );
                     }
                 }
                 break;
