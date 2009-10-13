@@ -285,6 +285,7 @@ private:
 #ifdef _SV_VALUESET_CXX
     friend class ValueSetAcc;
     friend class ValueItemAcc;
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     SVT_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );

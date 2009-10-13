@@ -251,6 +251,7 @@ private:
     USHORT          mnDragScrollHitTest;
 
 #ifdef _SV_CALENDAR_CXX
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void         ImplInitSettings();

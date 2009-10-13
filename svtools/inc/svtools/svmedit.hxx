@@ -61,6 +61,7 @@ protected:
     void            DataChanged( const DataChangedEvent& rDCEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );
     long            Notify( NotifyEvent& rNEvt );
+    using Control::ImplInitSettings;
     void            ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     WinBits         ImplInitStyle( WinBits nStyle );
 
