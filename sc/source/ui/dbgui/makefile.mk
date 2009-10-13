@@ -80,6 +80,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/csvsplits.obj \
     $(SLO)$/csvtablebox.obj \
     $(SLO)$/fieldwnd.obj \
+    $(SLO)$/pvfundlg.obj	\
     $(SLO)$/pvlaydlg.obj	\
     $(SLO)$/dapidata.obj
 
