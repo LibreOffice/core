@@ -201,6 +201,7 @@ private:
 
 public:
     VclSimpleEvent( ULONG n ) { nId = n; }
+    virtual ~VclSimpleEvent();
     TYPEINFO();
 
     ULONG GetId() const { return nId; }
