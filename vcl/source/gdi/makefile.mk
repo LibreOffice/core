@@ -75,7 +75,8 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/virdev.obj \
                     $(SLO)$/impprn.obj \
                     $(SLO)$/gdimtf.obj		\
-                    $(SLO)$/graphictools.obj
+                    $(SLO)$/graphictools.obj \
+                    $(SLO)$/textlayout.obj
 
 SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/animate.obj 	\
@@ -117,8 +118,7 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/pdfwriter.obj	\
             $(SLO)$/salgdilayout.obj	\
             $(SLO)$/extoutdevdata.obj	\
-            $(SLO)$/salnativewidgets-none.obj   \
-            $(SLO)$/textlayout.obj
+            $(SLO)$/salnativewidgets-none.obj
 
 # --- Targets ------------------------------------------------------
 
