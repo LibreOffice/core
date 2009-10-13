@@ -645,3 +645,8 @@ String STR_NO_DOCUMENTUI
 {
     Text [ en-US ] = "The provided DocumentUI is not allowed to be NULL.";
 };
+String STR_ERROR_NEW_VERSION
+{
+    Text = "The connection could not be established. The database was created by a newer version of %PRODUCTNAME.";
+};
+

@@ -102,6 +102,7 @@ SHL1STDLIBS=\
     $(DBTOOLSLIB)				\
     $(JVMFWKLIB)				\
     $(COMPHELPERLIB)            \
+    $(TOOLSLIB)            		\
     $(UNOTOOLSLIB)
 
 

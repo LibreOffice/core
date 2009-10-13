@@ -55,6 +55,7 @@
 #include <connectivity/dbexception.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <unotools/confignode.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include "resource/hsqldb_res.hrc"
 #include "resource/sharedresources.hxx"
 
@@ -70,6 +71,8 @@ namespace connectivity
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::embed;
+    using namespace ::com::sun::star::io;
+    using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::reflection;
 
     namespace hsqldb
@@ -259,6 +262,46 @@ namespace connectivity
                     makeAny( lcl_getPermittedJavaMethods_nothrow( m_xFactory ) )
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
+
+                ::rtl::OUString sProperties( RTL_CONSTASCII_USTRINGPARAM( "properties" ) );
+                try
+                {
+                    if ( !bIsNewDatabase && xStorage->isStreamElement(sProperties) )
+                    {
+                        Reference<XStream > xStream = xStorage->openStreamElement(sProperties,ElementModes::READ);
+                        if ( xStream.is() )
+                        {
+                            ::std::auto_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
+                            if ( pStream.get() )
+                            {
+                                ByteString sLine;
+                                while ( pStream->ReadLine(sLine) )
+                                {
+                                    if ( sLine.Equals("version=",0,sizeof("version=")-1) )
+                                    {
+                                        sLine = sLine.GetToken(1,'=');
+                                        const sal_Int32 nMajor = sLine.GetToken(0,'.').ToInt32();
+                                        const sal_Int32 nMinor = sLine.GetToken(1,'.').ToInt32();
+                                        const sal_Int32 nMicro = sLine.GetToken(2,'.').ToInt32();
+                                        if (     nMajor > 1
+                                            || ( nMajor == 1 && nMinor > 8 )
+                                            || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
+                                        {
+                                            ::connectivity::SharedResources aResources;
+                                            const ::rtl::OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
+                                            ::dbtools::throwGenericSQLException(sMessage ,*this);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        } // if ( xStream.is() )
+                        ::comphelper::disposeComponent(xStream);
+                    }
+                }
+                catch(Exception&)
+                {
+                }
 
                 // readonly?
                 Reference<XPropertySet> xProp(xStorage,UNO_QUERY);
