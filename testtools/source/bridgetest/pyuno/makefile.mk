@@ -56,9 +56,10 @@ PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
 PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
 .ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
 .IF "$(GUI)"=="WNT"
-PYTHONPATH:=$(SOLARLIBDIR)$/pyuno;$(PWD);$(SOLARLIBDIR)
+PYTHONPATH:=$(SOLARLIBDIR)$/pyuno;$(PWD);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+
 .ELSE                   # "$(GUI)"=="WNT"
-PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR)
+PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
 .ENDIF                  # "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
