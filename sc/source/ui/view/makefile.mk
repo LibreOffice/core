@@ -157,7 +157,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/cellsh1.obj \
     $(SLO)$/drawvie4.obj \
     $(SLO)$/formatsh.obj \
-        $(SLO)$/scextopt.obj \
+    $(SLO)$/gridwin2.obj \
+    $(SLO)$/scextopt.obj \
     $(SLO)$/tabvwshb.obj \
     $(SLO)$/viewdata.obj \
     $(SLO)$/viewfun5.obj \
