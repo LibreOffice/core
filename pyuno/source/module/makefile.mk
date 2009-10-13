@@ -42,7 +42,7 @@ LINKFLAGSDEFS = # do not fail with missing symbols
 .IF "$(L10N_framework)"==""
 #-------------------------------------------------------------------
 
-.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
+.IF "$(OS)$(COMEX)" == "SOLARIS4"
 # no -Bdirect for SunWS CC
 DIRECT = $(LINKFLAGSDEFS)
 .ENDIF
