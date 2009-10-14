@@ -550,7 +550,7 @@ static sal_Bool performTest(
                 bRet = check( memcmp(&aIn, &aOut, sizeof(BigStruct)) == 0, "big struct test" ) && bRet;
         }
         {
-                AllFloats aIn(1.1, 2.2, 3.3, 4.4);
+                AllFloats aIn(1.1f, 2.2f, 3.3f, 4.4f);
                 AllFloats aOut = xLBT->echoAllFloats(aIn);
                 bRet = check( memcmp(&aIn, &aOut, sizeof(AllFloats)) == 0, "all floats struct test" ) && bRet;
         }

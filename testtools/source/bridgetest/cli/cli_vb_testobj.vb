@@ -202,39 +202,39 @@ Public Class VBBridgeTestObject
     End Function
 
     Public Overridable Function  echoSmallStruct( _
-        ByRef i_Struct As SmallStruct) As SmallStruct _
+        smallStruct As SmallStruct) As SmallStruct _
         Implements XBridgeTest2.echoSmallStruct
 #if DEBUG
         'Console.WriteLine( "##### " + GetType().FullName + ".echoSmallStruct" )
 #endif
-        Return i_Struct
+        Return smallStruct
     End Function
 
     Public Overridable Function  echoMediumStruct( _
-        ByRef i_Struct As MediumStruct) As MediumStruct _
+        mediumStruct As MediumStruct) As MediumStruct _
         Implements XBridgeTest2.echoMediumStruct
 #if DEBUG
         'Console.WriteLine( "##### " + GetType().FullName + ".echoMediumStruct" )
 #endif
-        Return i_Struct
+        Return mediumStruct
     End Function
 
     Public Overridable Function  echoBigStruct( _
-        ByRef i_Struct As BigStruct) As BigStruct _
+        bigStruct As BigStruct) As BigStruct _
         Implements XBridgeTest2.echoBigStruct
 #if DEBUG
         'Console.WriteLine( "##### " + GetType().FullName + ".echoBigStruct" )
 #endif
-        Return i_Struct
+        Return bigStruct
     End Function
 
     Public Overridable Function  echoAllFloats( _
-        ByRef i_Struct As AllFloats) As AllFloats _
+        allFloats As AllFloats) As AllFloats _
         Implements XBridgeTest2.echoAllFloats
 #if DEBUG
         'Console.WriteLine( "##### " + GetType().FullName + ".echoAllFloats" )
 #endif
-        Return i_Struct
+        Return allFloats
     End Function
    
     ' Attributes ---------------------------------------------------------
