@@ -246,7 +246,8 @@ void ChildAccess::setProperty(
                 if (child.is()) {
                     child->setProperty(value, localModifications);
                 } else {
-                    insertLocalizedValueChild(locale, value);
+                    insertLocalizedValueChild(
+                        locale, value, localModifications);
                 }
                 return;
             }

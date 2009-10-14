@@ -65,7 +65,12 @@ public:
             const & listener,
         com::sun::star::lang::EventObject const & event);
 
-    void addContainerNotification(
+    void addContainerElementInsertedNotification(
+        com::sun::star::uno::Reference<
+            com::sun::star::container::XContainerListener > const & listener,
+        com::sun::star::container::ContainerEvent const & event);
+
+    void addContainerElementReplacedNotification(
         com::sun::star::uno::Reference<
             com::sun::star::container::XContainerListener > const & listener,
         com::sun::star::container::ContainerEvent const & event);
@@ -182,7 +187,8 @@ private:
     typedef std::vector< ChangesNotification > ChangesNotifications;
 
     DisposeNotifications disposeNotifications_;
-    ContainerNotifications containerNotifications_;
+    ContainerNotifications containerElementInsertedNotifications_;
+    ContainerNotifications containerElementReplacedNotifications_;
     PropertyChangeNotifications propertyChangeNotifications_;
     VetoableChangeNotifications vetoableChangeNotifications_;
     PropertiesChangeNotifications propertiesChangeNotifications_;

@@ -143,9 +143,6 @@ public:
 
     virtual bool isFinalized() = 0;
 
-    virtual void initGlobalBroadcaster(
-        Modifications::Node const & modifications, Broadcaster * broadcaster);
-
     using OWeakObject::acquire;
     using OWeakObject::release;
 
@@ -191,12 +188,21 @@ protected:
         com::sun::star::uno::Any const & value, Type type, bool nillable);
 
     void insertLocalizedValueChild(
-        rtl::OUString const & name, com::sun::star::uno::Any const & value);
+        rtl::OUString const & name, com::sun::star::uno::Any const & value,
+        Modifications * localModifications);
 
     void reportChildChanges(
         std::vector< com::sun::star::util::ElementChange > * changes);
 
     void commitChildChanges(bool valid, Modifications * globalModifications);
+
+    void initLocalBroadcasterAndChanges(
+        Modifications::Node const & modifications, Broadcaster * broadcaster,
+        std::vector< com::sun::star::util::ElementChange > * changes);
+
+    void initGlobalBroadcasterAndChanges(
+        Modifications::Node const & modifications, Broadcaster * broadcaster,
+        std::vector< com::sun::star::util::ElementChange > * changes);
 
     bool isDisposed() const;
 
@@ -506,7 +512,8 @@ private:
     rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
 
     bool setChildProperty(
-        rtl::OUString const & name, com::sun::star::uno::Any const & value);
+        rtl::OUString const & name, com::sun::star::uno::Any const & value,
+        Modifications * localModifications);
 
     com::sun::star::beans::Property asProperty();
 

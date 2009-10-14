@@ -63,11 +63,20 @@ void Broadcaster::addDisposeNotification(
     disposeNotifications_.push_back(DisposeNotification(listener, event));
 }
 
-void Broadcaster::addContainerNotification(
+void Broadcaster::addContainerElementReplacedNotification(
     css::uno::Reference< css::container::XContainerListener > const & listener,
     css::container::ContainerEvent const & event)
 {
-    containerNotifications_.push_back(ContainerNotification(listener, event));
+    containerElementReplacedNotifications_.push_back(
+        ContainerNotification(listener, event));
+}
+
+void Broadcaster::addContainerElementInsertedNotification(
+    css::uno::Reference< css::container::XContainerListener > const & listener,
+    css::container::ContainerEvent const & event)
+{
+    containerElementInsertedNotifications_.push_back(
+        ContainerNotification(listener, event));
 }
 
 void Broadcaster::addPropertyChangeNotification(
@@ -113,12 +122,23 @@ void Broadcaster::send() {
             exception = true;
         }
     }
-    for (ContainerNotifications::iterator i(containerNotifications_.begin());
-         i != containerNotifications_.end(); ++i)
+    for (ContainerNotifications::iterator i(
+             containerElementInsertedNotifications_.begin());
+         i != containerElementInsertedNotifications_.end(); ++i)
+    {
+        try {
+            i->listener->elementInserted(i->event);
+        } catch (css::lang::DisposedException &) {
+        } catch (css::uno::Exception &) {
+            exception = true;
+        }
+    }
+    for (ContainerNotifications::iterator i(
+             containerElementReplacedNotifications_.begin());
+         i != containerElementReplacedNotifications_.end(); ++i)
     {
         try {
             i->listener->elementReplaced(i->event);
-                //TODO: elementInserted/Removed/Replaced
         } catch (css::lang::DisposedException &) {
         } catch (css::uno::Exception &) {
             exception = true;

@@ -35,6 +35,7 @@
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Type.hxx"
@@ -85,13 +86,6 @@ Path RootAccess::getAbsolutePath() {
     return path_;
 }
 
-void RootAccess::initGlobalBroadcaster(
-    Modifications::Node const & modifications, Broadcaster * broadcaster)
-{
-    Access::initGlobalBroadcaster(modifications, broadcaster);
-    //TODO: handle changesListeners_
-}
-
 void RootAccess::acquire() throw () {
     Access::acquire();
 }
@@ -106,6 +100,25 @@ rtl::OUString RootAccess::getLocale() const {
 
 bool RootAccess::isUpdate() const {
     return update_;
+}
+
+void RootAccess::initGlobalBroadcaster(
+    Modifications::Node const & modifications, Broadcaster * broadcaster)
+{
+    OSL_ASSERT(broadcaster != 0);
+    comphelper::SequenceAsVector< css::util::ElementChange > changes;
+    initGlobalBroadcasterAndChanges(
+        modifications, broadcaster, changesListeners_.empty() ? 0 : &changes);
+    css::util::ChangesSet set(changes.getAsConstList());
+    for (ChangesListeners::iterator i(changesListeners_.begin());
+         i != changesListeners_.end(); ++i)
+    {
+        broadcaster->addChangesNotification(
+            *i,
+            css::util::ChangesEvent(
+                static_cast< cppu::OWeakObject * >(this),
+                css::uno::makeAny(pathRepresentation_), set));
+    }
 }
 
 RootAccess::~RootAccess() {
@@ -199,8 +212,20 @@ void RootAccess::clearListeners() throw() {
 void RootAccess::initLocalBroadcaster(
     Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
-    Access::initLocalBroadcaster(modifications, broadcaster);
-    //TODO: handle changesListeners_
+    OSL_ASSERT(broadcaster != 0);
+    comphelper::SequenceAsVector< css::util::ElementChange > changes;
+    initLocalBroadcasterAndChanges(
+        modifications, broadcaster, changesListeners_.empty() ? 0 : &changes);
+    css::util::ChangesSet set(changes.getAsConstList());
+    for (ChangesListeners::iterator i(changesListeners_.begin());
+         i != changesListeners_.end(); ++i)
+    {
+        broadcaster->addChangesNotification(
+            *i,
+            css::util::ChangesEvent(
+                static_cast< cppu::OWeakObject * >(this),
+                css::uno::makeAny(pathRepresentation_), set));
+    }
 }
 
 css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
@@ -247,7 +272,6 @@ void RootAccess::addChangesListener(
         aListener->disposing(
             css::lang::EventObject(static_cast< cppu::OWeakObject * >(this)));
     } catch (css::lang::DisposedException &) {}
-    //TODO: actually fire changes events through Broadcaster::send
 }
 
 void RootAccess::removeChangesListener(

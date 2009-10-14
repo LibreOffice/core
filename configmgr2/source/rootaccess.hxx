@@ -73,9 +73,6 @@ public:
 
     virtual Path getAbsolutePath();
 
-    virtual void initGlobalBroadcaster(
-        Modifications::Node const & modifications, Broadcaster * broadcaster);
-
     virtual void SAL_CALL acquire() throw ();
 
     virtual void SAL_CALL release() throw ();
@@ -83,6 +80,9 @@ public:
     rtl::OUString getLocale() const;
 
     bool isUpdate() const;
+
+    void initGlobalBroadcaster(
+        Modifications::Node const & modifications, Broadcaster * broadcaster);
 
 private:
     virtual ~RootAccess();
