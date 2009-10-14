@@ -1,2 +1,0 @@
-mf      msfontextract : soltools sal NULL
-mf	msfontextract						nmake	-	all	mf_mkout NULL
