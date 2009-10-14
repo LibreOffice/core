@@ -1,0 +1,764 @@
+--- misc/xmlsec1-1.2.12/aclocal.m4	2009-06-25 22:53:24.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/aclocal.m4	2009-09-29 15:49:39.550158665 +0200
+@@ -6219,6 +6219,10 @@
+ AC_SUBST(LIBADD_DL)
+ AC_LANG_PUSH([C])
+ 
++case $host_os in
++mingw*)
++;;
++*)
+ AC_CHECK_FUNC([shl_load],
+       [AC_DEFINE([HAVE_SHL_LOAD], [1],
+ 		 [Define if you have the shl_load function.])],
+@@ -6254,6 +6258,8 @@
+     ])
+   ])
+ ])
++;;
++esac
+ 
+ if test x"$libltdl_cv_func_dlopen" = xyes || test x"$libltdl_cv_lib_dl_dlopen" = xyes
+ then
+--- misc/xmlsec1-1.2.12/configure	2009-09-29 15:55:33.269924586 +0200
++++ misc/build/xmlsec1-1.2.12/configure	2009-09-29 15:55:08.838176411 +0200
+@@ -21883,6 +21883,10 @@
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ 
++case $host_os in
++mingw*)
++;;
++*)
+ echo "$as_me:$LINENO: checking for shl_load" >&5
+ echo $ECHO_N "checking for shl_load... $ECHO_C" >&6
+ if test "${ac_cv_func_shl_load+set}" = set; then
+@@ -22434,6 +22438,8 @@
+ 
+ fi
+ 
++;;
++esac
+ 
+ if test x"$libltdl_cv_func_dlopen" = xyes || test x"$libltdl_cv_lib_dl_dlopen" = xyes
+ then
+@@ -22614,7 +22620,7 @@
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat > conftest.$ac_ext <<EOF
+-#line 22617 "configure"
++#line 22623 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -26178,7 +26184,9 @@
+ 	done
+ 
+ 	for dir in $ac_nss_lib_dir ; do
+-	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
++            case $host_os in
++            cygwin* | mingw* | pw32*)
++    	      if test -f $dir/libnspr4.$libext ; then
+ 		        	if test "z$dir" = "z/usr/lib" ; then
+             	    NSPR_LIBS="$NSPR_LIBS_LIST"
+     		else
+@@ -26191,6 +26199,25 @@
+ 		NSPR_LIBS_FOUND="yes"
+ 		break
+ 	    fi
++              ;;
++
++            *)
++
++              if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
++		        	if test "z$dir" = "z/usr/lib" ; then
++            	    NSPR_LIBS="$NSPR_LIBS_LIST"
++    		else
++    		    if test "z$with_gnu_ld" = "zyes" ; then
++    			NSPR_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSPR_LIBS_LIST"
++    		    else
++    			NSPR_LIBS="-L$dir $NSPR_LIBS_LIST"
++		    fi
++		fi
++		NSPR_LIBS_FOUND="yes"
++		break
++	    fi
++              ;;
++            esac
+ 	done
+     fi
+ 
+@@ -26264,6 +26291,24 @@
+         done
+ 
+         for dir in $ac_nss_lib_dir ; do
++            case $host_os in
++            cygwin* | mingw* | pw32*)
++    	      if test -f $dir/libnss3.$libext ; then
++        	    		if test "z$dir" = "z/usr/lib" ; then
++        	    NSS_LIBS="$NSS_LIBS_LIST"
++                else
++            	    if test "z$with_gnu_ld" = "zyes" ; then
++    			NSS_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSS_LIBS_LIST"
++            	    else
++        		NSS_LIBS="-L$dir $NSS_LIBS_LIST"
++		    fi
++		fi
++    		NSS_LIBS_FOUND="yes"
++    		break
++	    fi
++              ;;
++
++            *)
+             if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
+         	    		if test "z$dir" = "z/usr/lib" ; then
+         	    NSS_LIBS="$NSS_LIBS_LIST"
+@@ -26277,6 +26322,8 @@
+     		NSS_LIBS_FOUND="yes"
+     		break
+ 	    fi
++              ;;
++            esac
+ 	done
+     fi
+ 
+@@ -26769,7 +26816,7 @@
+ echo "${ECHO_T}$MSCRYPTO_ENABLE" >&6
+ else
+     LIBS_SAVE="$LIBS"
+-    LIBS="$LIBS -lcrypt32"
++    LIBS="$LIBS ${PSDK_HOME}/lib/crypt32.lib"
+     echo "$as_me:$LINENO: checking for mscrypto libraries" >&5
+ echo $ECHO_N "checking for mscrypto libraries... $ECHO_C" >&6
+     cat >conftest.$ac_ext <<_ACEOF
+@@ -26819,13 +26866,7 @@
+     XMLSEC_NO_MSCRYPTO="0"
+ 
+     MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -DXMLSEC_CRYPTO_MSCRYPTO=1"
+-    case $host in
+-	*-*-mingw*)
+-						MSCRYPTO_LIBS='-Wl,$(srcdir)/mingw-crypt32.def';;
+-	*)
+-		MSCRYPTO_LIBS="-lcrypt32";;
+-    esac
+-
++    MSCRYPTO_LIBS="${PSDK_HOME}/lib/crypt32.lib"
+         if test "z$XMLSEC_CRYPTO" = "z" ; then
+ 	XMLSEC_CRYPTO="mscrypto"
+     	XMLSEC_CRYPTO_LIB="$MSCRYPTO_CRYPTO_LIB"
+--- misc/xmlsec1-1.2.12/configure.in	2009-09-29 15:55:33.282288142 +0200
++++ misc/build/xmlsec1-1.2.12/configure.in	2009-09-29 15:49:39.614223428 +0200
+@@ -606,7 +606,9 @@
+ 	done
+ 	
+ 	for dir in $ac_nss_lib_dir ; do
+-	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
++            case $host_os in
++            cygwin* | mingw* | pw32*)
++    	      if test -f $dir/libnspr4.$libext ; then
+ 		dnl do not add -L/usr/lib because compiler does it anyway
+         	if test "z$dir" = "z/usr/lib" ; then
+             	    NSPR_LIBS="$NSPR_LIBS_LIST"
+@@ -620,6 +622,26 @@
+ 		NSPR_LIBS_FOUND="yes"
+ 		break
+ 	    fi
++              ;;
++
++            *)
++
++              if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
++		dnl do not add -L/usr/lib because compiler does it anyway
++        	if test "z$dir" = "z/usr/lib" ; then
++            	    NSPR_LIBS="$NSPR_LIBS_LIST"
++    		else
++    		    if test "z$with_gnu_ld" = "zyes" ; then
++    			NSPR_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSPR_LIBS_LIST"
++    		    else
++    			NSPR_LIBS="-L$dir $NSPR_LIBS_LIST"
++		    fi
++		fi
++		NSPR_LIBS_FOUND="yes"
++		break
++	    fi
++              ;;
++            esac
+ 	done
+     fi
+ 
+@@ -677,6 +699,25 @@
+         done
+        
+         for dir in $ac_nss_lib_dir ; do
++            case $host_os in
++            cygwin* | mingw* | pw32*)
++    	      if test -f $dir/libnss3.$libext ; then
++        	dnl do not add -L/usr/lib because compiler does it anyway
++    		if test "z$dir" = "z/usr/lib" ; then
++        	    NSS_LIBS="$NSS_LIBS_LIST"
++                else
++            	    if test "z$with_gnu_ld" = "zyes" ; then
++    			NSS_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $NSS_LIBS_LIST"
++            	    else
++        		NSS_LIBS="-L$dir $NSS_LIBS_LIST"
++		    fi
++		fi
++    		NSS_LIBS_FOUND="yes"
++    		break
++	    fi
++              ;;
++
++            *)
+             if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
+         	dnl do not add -L/usr/lib because compiler does it anyway
+     		if test "z$dir" = "z/usr/lib" ; then
+@@ -691,6 +732,8 @@
+     		NSS_LIBS_FOUND="yes"
+     		break
+ 	    fi
++              ;;
++            esac
+ 	done
+     fi
+ 
+@@ -861,7 +904,7 @@
+ dnl cannot detect __stdcall functions
+ dnl    AC_CHECK_LIB(crypt32, CertOpenStore, ....
+     LIBS_SAVE="$LIBS"
+-    LIBS="$LIBS -lcrypt32"
++    LIBS="$LIBS ${PSDK_HOME}/lib/crypt32.lib"
+     AC_MSG_CHECKING(for mscrypto libraries)
+     AC_LINK_IFELSE([
+ 	#include <windows.h>
+@@ -878,15 +921,7 @@
+     XMLSEC_NO_MSCRYPTO="0"
+ 
+     MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -DXMLSEC_CRYPTO_MSCRYPTO=1"
+-    case $host in
+-	*-*-mingw*)
+-		dnl since mingw crypt32 library is limited
+-		dnl we use own def-file
+-		MSCRYPTO_LIBS='-Wl,$(srcdir)/mingw-crypt32.def';;
+-	*)
+-		MSCRYPTO_LIBS="-lcrypt32";;
+-    esac
+-
++    MSCRYPTO_LIBS="${PSDK_HOME}/lib/crypt32.lib"
+     dnl first crypto library is default one
+     if test "z$XMLSEC_CRYPTO" = "z" ; then
+ 	XMLSEC_CRYPTO="mscrypto"
+--- misc/xmlsec1-1.2.12/ltmain.sh	2009-06-25 22:53:19.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/ltmain.sh	2009-09-29 15:49:39.628349554 +0200
+@@ -1661,6 +1661,11 @@
+ 	fi
+ 	;;
+ 
++      *.lib)
++	deplibs="$deplibs $arg"
++	continue
++	;;
++
+       *.$libext)
+ 	# An archive.
+ 	deplibs="$deplibs $arg"
+@@ -1974,6 +1979,10 @@
+ 	  continue
+ 	  ;;
+ 	*.la) lib="$deplib" ;;
++	*.lib)
++	  deplibs="$deplib $deplibs"
++	  continue
++	  ;;
+ 	*.$libext)
+ 	  if test "$pass" = conv; then
+ 	    deplibs="$deplib $deplibs"
+--- misc/xmlsec1-1.2.12/src/mscrypto/certkeys.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/certkeys.c	2009-09-29 15:49:39.643186151 +0200
+@@ -938,7 +938,11 @@
+ static void	            xmlSecMSCryptoKeyDataRsaDebugDump(xmlSecKeyDataPtr data, FILE* output);
+ static void	            xmlSecMSCryptoKeyDataRsaDebugXmlDump(xmlSecKeyDataPtr data, FILE* output);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRsaKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRsaKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecMSCryptoKeyDataSize,
+ 
+@@ -1649,7 +1653,11 @@
+ static void		xmlSecMSCryptoKeyDataDsaDebugXmlDump(xmlSecKeyDataPtr data,
+ 							 FILE* output);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDsaKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDsaKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecMSCryptoKeyDataSize,
+ 
+--- misc/xmlsec1-1.2.12/src/mscrypto/ciphers.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/ciphers.c	2009-09-29 15:49:39.652528324 +0200
+@@ -802,7 +802,11 @@
+  * AES CBC cipher transforms
+  *
+  ********************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+@@ -841,7 +845,11 @@
+     return(&xmlSecMSCryptoAes128CbcKlass);
+ }
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+@@ -880,7 +888,11 @@
+     return(&xmlSecMSCryptoAes192CbcKlass);
+ }
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+@@ -923,7 +935,11 @@
+ 
+ 
+ #ifndef XMLSEC_NO_DES
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),	/* size_t klassSize */
+     xmlSecMSCryptoBlockCipherSize,	/* size_t objSize */
+--- misc/xmlsec1-1.2.12/src/mscrypto/digests.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/digests.c	2009-09-29 15:49:39.660554904 +0200
+@@ -329,7 +329,11 @@
+  * SHA1
+  *
+  *****************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoSha1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoSha1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* size_t klassSize */
+     xmlSecMSCryptoDigestSize,			/* size_t objSize */
+--- misc/xmlsec1-1.2.12/src/mscrypto/keysstore.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/keysstore.c	2009-09-29 15:49:39.667289994 +0200
+@@ -66,7 +66,11 @@
+ 								     const xmlChar* name, 
+ 								     xmlSecKeyInfoCtxPtr keyInfoCtx);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyStoreKlass xmlSecMSCryptoKeysStoreKlass = {
++#else
+ static xmlSecKeyStoreKlass xmlSecMSCryptoKeysStoreKlass = {
++#endif
+     sizeof(xmlSecKeyStoreKlass),
+     xmlSecMSCryptoKeysStoreSize,
+ 
+--- misc/xmlsec1-1.2.12/src/mscrypto/kt_rsa.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/kt_rsa.c	2009-09-29 15:49:39.674284044 +0200
+@@ -66,7 +66,11 @@
+ static int  	xmlSecMSCryptoRsaPkcs1Process			(xmlSecTransformPtr transform, 
+ 								 xmlSecTransformCtxPtr transformCtx);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecMSCryptoRsaPkcs1Size,			/* xmlSecSize objSize */
+--- misc/xmlsec1-1.2.12/src/mscrypto/signatures.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/signatures.c	2009-09-29 15:49:39.682580497 +0200
+@@ -524,7 +524,11 @@
+  * RSA-SHA1 signature transform
+  *
+  ***************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecMSCryptoSignatureSize,		/* xmlSecSize objSize */
+@@ -572,7 +576,11 @@
+  *
+  ***************************************************************************/
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecMSCryptoSignatureSize,	        /* xmlSecSize objSize */
+--- misc/xmlsec1-1.2.12/src/mscrypto/symkeys.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/symkeys.c	2009-09-29 15:49:39.691081347 +0200
+@@ -72,7 +72,11 @@
+  * <xmlsec:AESKeyValue> processing
+  *
+  *************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecKeyDataBinarySize,
+ 
+@@ -153,7 +157,11 @@
+  * <xmlsec:DESKeyValue> processing
+  *
+  *************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecKeyDataBinarySize,
+ 
+--- misc/xmlsec1-1.2.12/src/mscrypto/x509.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/x509.c	2009-09-29 15:49:39.699931741 +0200
+@@ -243,7 +243,11 @@
+ 
+ 
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
++#else
+ static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecMSCryptoX509DataSize,
+ 
+@@ -2148,7 +2152,11 @@
+ 								 xmlSecSize bufSize,
+ 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     sizeof(xmlSecKeyData),
+ 
+--- misc/xmlsec1-1.2.12/src/mscrypto/x509vfy.c	2009-09-29 15:55:33.502779834 +0200
++++ misc/build/xmlsec1-1.2.12/src/mscrypto/x509vfy.c	2009-09-29 15:49:39.708831697 +0200
+@@ -67,7 +67,11 @@
+ static int         xmlSecMSCryptoX509StoreInitialize    (xmlSecKeyDataStorePtr store);
+ static void        xmlSecMSCryptoX509StoreFinalize      (xmlSecKeyDataStorePtr store);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
++#else
+ static xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
++#endif
+     sizeof(xmlSecKeyDataStoreKlass),
+     xmlSecMSCryptoX509StoreSize,
+ 
+--- misc/xmlsec1-1.2.12/src/nss/ciphers.c	2009-09-29 15:55:33.488430535 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/ciphers.c	2009-09-29 15:49:39.717511164 +0200
+@@ -777,7 +777,11 @@
+  * AES CBC cipher transforms
+  *
+  ********************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssAes128CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecNssAes128CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
+@@ -816,7 +820,11 @@
+     return(&xmlSecNssAes128CbcKlass);
+ }
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssAes192CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecNssAes192CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
+@@ -855,7 +863,11 @@
+     return(&xmlSecNssAes192CbcKlass);
+ }
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssAes256CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecNssAes256CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
+@@ -897,7 +909,11 @@
+ #endif /* XMLSEC_NO_AES */
+ 
+ #ifndef XMLSEC_NO_DES
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssDes3CbcKlass = {
++#else
+ static xmlSecTransformKlass xmlSecNssDes3CbcKlass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssBlockCipherSize,		/* xmlSecSize objSize */
+--- misc/xmlsec1-1.2.12/src/nss/digests.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/digests.c	2009-09-29 15:49:39.725650968 +0200
+@@ -285,7 +285,11 @@
+  * SHA1 Digest transforms
+  *
+  *****************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssSha1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecNssSha1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssDigestSize,			/* xmlSecSize objSize */
+--- misc/xmlsec1-1.2.12/src/nss/hmac.c	2009-09-29 15:55:33.409285968 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/hmac.c	2009-09-29 15:49:39.733673690 +0200
+@@ -502,7 +502,11 @@
+ /** 
+  * HMAC SHA1
+  */
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssHmacSha1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecNssHmacSha1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssHmacSize,				/* xmlSecSize objSize */
+@@ -544,7 +548,11 @@
+ /** 
+  * HMAC Ripemd160
+  */
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssHmacRipemd160Klass = {
++#else
+ static xmlSecTransformKlass xmlSecNssHmacRipemd160Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssHmacSize,				/* xmlSecSize objSize */
+@@ -586,7 +594,11 @@
+ /** 
+  * HMAC Md5
+  */
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssHmacMd5Klass = {
++#else
+ static xmlSecTransformKlass xmlSecNssHmacMd5Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssHmacSize,				/* xmlSecSize objSize */
+--- misc/xmlsec1-1.2.12/src/nss/keysstore.c	2009-09-29 15:55:33.422265895 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/keysstore.c	2009-09-29 15:49:39.741628057 +0200
+@@ -489,7 +489,11 @@
+     return NULL ;
+ }
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
++#else
+ static xmlSecKeyStoreKlass xmlSecNssKeysStoreKlass = {
++#endif
+        sizeof( xmlSecKeyStoreKlass ) ,
+        xmlSecNssKeysStoreSize ,
+        BAD_CAST "implicit_nss_keys_store" ,
+--- misc/xmlsec1-1.2.12/src/nss/keywrapers.c	2009-09-29 15:55:33.430875248 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/keywrapers.c	2009-09-29 15:49:39.749963247 +0200
+@@ -1126,6 +1126,7 @@
+     NULL,					/* void* reserved1; */
+ };
+ 
++#ifndef __MINGW32__
+ /** 
+  * xmlSecNssTransformKWAes128GetKlass:
+  *
+@@ -1160,6 +1161,7 @@
+ xmlSecNssTransformKWAes256GetKlass(void) {
+     return(&xmlSecNssKWAes256Klass);
+ }
++#endif /* __MINGW32__ */
+ 
+ #endif /* XMLSEC_NO_AES */
+ 
+@@ -1197,6 +1199,7 @@
+     NULL,					/* void* reserved1; */
+ };
+ 
++#ifndef __MINGW32__
+ /** 
+  * xmlSecNssTransformKWDes3GetKlass:
+  * 
+@@ -1208,6 +1211,7 @@
+ xmlSecNssTransformKWDes3GetKlass(void) {
+     return(&xmlSecNssKWDes3Klass);
+ }
++#endif /* __MINGW32__ */
+ 
+ #endif /* XMLSEC_NO_DES */
+ 
+--- misc/xmlsec1-1.2.12/src/nss/pkikeys.c	2009-09-29 15:55:33.440002568 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/pkikeys.c	2009-09-29 15:49:39.757984523 +0200
+@@ -491,7 +491,11 @@
+ static void		xmlSecNssKeyDataDsaDebugXmlDump	(xmlSecKeyDataPtr data,
+ 							 FILE* output);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecNssKeyDataDsaKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecNssKeyDataDsaKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecNssPKIKeyDataSize,
+ 
+@@ -1124,7 +1128,11 @@
+ static void		xmlSecNssKeyDataRsaDebugXmlDump	(xmlSecKeyDataPtr data,
+ 							 FILE* output);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecNssKeyDataRsaKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecNssKeyDataRsaKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecNssPKIKeyDataSize,
+ 
+--- misc/xmlsec1-1.2.12/src/nss/signatures.c	2009-06-25 22:53:18.000000000 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/signatures.c	2009-09-29 15:49:39.765851110 +0200
+@@ -459,7 +459,11 @@
+  *
+  ***************************************************************************/
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssDsaSha1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecNssDsaSha1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssSignatureSize,		/* xmlSecSize objSize */
+@@ -506,7 +510,11 @@
+  * RSA-SHA1 signature transform
+  *
+  ***************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecTransformKlass xmlSecNssRsaSha1Klass = {
++#else
+ static xmlSecTransformKlass xmlSecNssRsaSha1Klass = {
++#endif
+     /* klass/object sizes */
+     sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+     xmlSecNssSignatureSize,		/* xmlSecSize objSize */
+--- misc/xmlsec1-1.2.12/src/nss/symkeys.c	2009-09-29 15:55:33.448817761 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/symkeys.c	2009-09-29 15:49:39.773211741 +0200
+@@ -856,7 +856,11 @@
+  * <xmlsec:AESKeyValue> processing
+  *
+  *************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecNssKeyDataAesKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecNssKeyDataAesKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecNssSymKeyDataSize,
+ 
+@@ -937,7 +941,11 @@
+  * <xmlsec:DESKeyValue> processing
+  *
+  *************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecNssKeyDataDesKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecNssKeyDataDesKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecNssSymKeyDataSize,
+ 
+@@ -1019,7 +1027,11 @@
+  * <xmlsec:HMACKeyValue> processing
+  *
+  *************************************************************************/
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecNssKeyDataHmacKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecNssKeyDataHmacKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecNssSymKeyDataSize,
+ 
+--- misc/xmlsec1-1.2.12/src/nss/x509.c	2009-09-29 15:55:33.465839785 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/x509.c	2009-09-29 15:49:39.784408301 +0200
+@@ -235,7 +235,11 @@
+ 
+ 
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecNssKeyDataX509Klass = {
++#else
+ static xmlSecKeyDataKlass xmlSecNssKeyDataX509Klass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     xmlSecNssX509DataSize,
+ 
+@@ -1779,7 +1783,11 @@
+ 								 xmlSecSize bufSize,
+ 								 xmlSecKeyInfoCtxPtr keyInfoCtx);
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataKlass xmlSecNssKeyDataRawX509CertKlass = {
++#else
+ static xmlSecKeyDataKlass xmlSecNssKeyDataRawX509CertKlass = {
++#endif
+     sizeof(xmlSecKeyDataKlass),
+     sizeof(xmlSecKeyData),
+ 
+--- misc/xmlsec1-1.2.12/src/nss/x509vfy.c	2009-09-29 15:55:33.510337681 +0200
++++ misc/build/xmlsec1-1.2.12/src/nss/x509vfy.c	2009-09-29 15:49:39.791239957 +0200
+@@ -64,7 +64,11 @@
+ static void		xmlSecNssX509StoreFinalize	(xmlSecKeyDataStorePtr store);
+ static int		xmlSecNssIntegerToItem( const xmlChar* integer , SECItem *it ) ;
+ 
++#ifdef __MINGW32__ // for runtime-pseudo-reloc
++static struct _xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
++#else
+ static xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
++#endif
+     sizeof(xmlSecKeyDataStoreKlass),
+     xmlSecNssX509StoreSize,
+ 
