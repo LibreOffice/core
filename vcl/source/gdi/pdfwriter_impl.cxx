@@ -8792,6 +8792,13 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     aLine.append( ' ' );
     appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aLine );
     aLine.append( " ]\n" );
+    if( ! rObject.m_pSoftMaskStream )
+    {
+        if( ! m_bIsPDF_A1 )
+        {
+            aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/K true>>\n" );
+        }
+    }
     /* #i42884# the PDF reference recommends that each Form XObject
     *  should have a resource dict; alas if that is the same object
     *  as the one of the page it triggers an endless recursion in
