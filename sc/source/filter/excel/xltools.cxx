@@ -426,16 +426,19 @@ rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
     return pEntry->meTextEnc;
 }
 
-//UNUSED2008-05  sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
-//UNUSED2008-05  {
-//UNUSED2008-05      const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
-//UNUSED2008-05      if( pEntry == pCodePageTableEnd )
-//UNUSED2008-05      {
-//UNUSED2008-05          DBG_ERROR1( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
-//UNUSED2008-05          return 1252;
-//UNUSED2008-05      }
-//UNUSED2008-05      return pEntry->mnCodePage;
-//UNUSED2008-05  }
+sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
+{
+    if( eTextEnc == RTL_TEXTENCODING_UNICODE )
+        return 1200;    // for BIFF8
+
+    const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
+    if( pEntry == pCodePageTableEnd )
+    {
+        DBG_ERROR1( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
+        return 1252;
+    }
+    return pEntry->mnCodePage;
+}
 
 // font names -----------------------------------------------------------------
 
@@ -528,17 +531,26 @@ static const sal_Char* const ppcStyleNames[] =
     "Followed_Hyperlink"
 };
 
-String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel )
+String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, sal_uInt8 nLevel )
 {
     String aStyleName;
 
     if( nStyleId == EXC_STYLE_NORMAL )  // "Normal" becomes "Default" style
+    {
         aStyleName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
-    else if( nStyleId < STATIC_TABLE_SIZE( ppcStyleNames ) )
-        aStyleName.Assign( maStyleNamePrefix1 ).AppendAscii( ppcStyleNames[ nStyleId ] );
-
-    if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
-        aStyleName.Append( String::CreateFromInt32( nLevel + 1 ) );
+    }
+    else
+    {
+        aStyleName = maStyleNamePrefix1;
+        if( nStyleId < STATIC_TABLE_SIZE( ppcStyleNames ) )
+            aStyleName.AppendAscii( ppcStyleNames[ nStyleId ] );
+        else if( rName.Len() > 0 )
+            aStyleName.Append( rName );
+        else
+            aStyleName.Append( String::CreateFromInt32( nStyleId ) );
+        if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
+            aStyleName.Append( String::CreateFromInt32( nLevel + 1 ) );
+    }
 
     return aStyleName;
 }

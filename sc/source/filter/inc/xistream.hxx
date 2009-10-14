@@ -269,6 +269,10 @@ public:
         CONTINUE usage is switched on.
         @return  false = no record found (end of stream). */
     bool                StartNextRecord();
+    /** Sets stream pointer to the start of the record content for the record
+        at the passed absolute stream position.
+        @return  false = no record found (end of stream). */
+    bool                StartNextRecord( sal_Size nNextRecPos );
     /** Sets stream pointer to begin of record content.
         @param bContLookup  Automatic CONTINUE lookup on/off. In difference
         to other stream settings, this setting is persistent until next call of
