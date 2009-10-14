@@ -103,6 +103,13 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
     }
     namespaces_.push_back(
         NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xml")), NAMESPACE_XML));
+    namespaces_.push_back(
+        NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xsi")), NAMESPACE_XSI));
+        // old user layer .xcu files used the xsi namespace prefix without
+        // declaring a corresponding namespace binding, see issue 77174; reading
+        // those files during migration would fail without this hack that can be
+        // removed once migration is no longer relevant (see
+        // Components::parseModificationLayer)
     pos_ = static_cast< char * >(fileAddress_);
     end_ = pos_ + fileSize_;
     state_ = STATE_CONTENT;

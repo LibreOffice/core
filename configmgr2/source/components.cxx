@@ -374,7 +374,16 @@ Components::Components(
     // potentially fail, anyway, as xcu files in that layer used the xsi
     // namespace prefix without declaring a corresponding namespace binding (see
     // issue 77174)
-    parseModificationLayer();
+    try {
+        parseModificationLayer();
+    } catch (css::uno::Exception & e) { //TODO: more specific exception catching
+        // Silently ignore unreadable parts of a corrupted
+        // registrymodifications.xcu file, instead of completely preventing OOo
+        // from starting:
+        OSL_TRACE(
+            "configmgr error reading user modification layer: %s",
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
 }
 
 Components::~Components() {}
@@ -617,6 +626,18 @@ void Components::parseModificationLayer() {
     } catch (css::container::NoSuchElementException &) {
         OSL_TRACE(
             "configmgr user registrymodifications.xcu does not (yet) exist");
+        // Migrate old user layer data (can be removed once migration is no
+        // longer relevant; also see hack for xsi namespace in XmlReader
+        // constructor):
+        parseFiles(
+            Data::NO_LAYER, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".xcu")),
+            &parseXcuFile,
+            expand(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap")
+                        ":UserInstallation}/user/registry/data"))),
+            false);
     }
 }
 

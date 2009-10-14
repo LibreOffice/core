@@ -447,6 +447,8 @@ void writeModifications(
     rtl::OUString const & nodeName, rtl::Reference< Node > const & node,
     Modifications::Node const & modifications)
 {
+    // It is never necessary to write oor:finalized or oor:mandatory attributes,
+    // as they cannot be set via the UNO API.
     if (modifications.children.empty()) {
         OSL_ASSERT(parent.is());
             // components themselves have no parent but must have children
@@ -460,8 +462,6 @@ void writeModifications(
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
             writeNode(components, handle, parent, nodeName, node);
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("</item>"));
-            // It is never necessary to write the oor:mandatory attribute, as it
-            // cannot be set via the UNO API.
         } else {
             writeData(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
             switch (parent->kind()) {

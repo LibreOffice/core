@@ -89,7 +89,7 @@ bool XcuParser::startElement(
         } else if (ns == XmlReader::NAMESPACE_OOR &&
                    name.equals(RTL_CONSTASCII_STRINGPARAM("items")))
         {
-            state_.push(State(rtl::Reference< Node >(), false, false));
+            state_.push(State(rtl::Reference< Node >(), false));
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -209,6 +209,7 @@ void XcuParser::endElement(XmlReader const & reader) {
         return;
     }
     OSL_ASSERT(!state_.empty());
+    bool ignore = state_.top().ignore;
     rtl::Reference< Node > insert;
     rtl::OUString name;
     if (state_.top().insert) {
@@ -221,14 +222,23 @@ void XcuParser::endElement(XmlReader const & reader) {
         OSL_ASSERT(!state_.empty() && state_.top().node.is());
         state_.top().node->getMembers()[name] = insert;
     }
+    if (!ignore && !modificationPath_.empty()) {
+        modificationPath_.pop_back();
+            // </item> will pop less than <item> pushed, but that is harmless,
+            // as the next <item> will reset modificationPath_
+    }
 }
 
 void XcuParser::characters(Span const & text) {
     valueParser_.characters(text);
 }
 
-XcuParser::Operation XcuParser::parseOperation(Span const & text) {
-    if (!text.is() || text.equals(RTL_CONSTASCII_STRINGPARAM("modify"))) {
+XcuParser::Operation XcuParser::parseOperation(
+    Span const & text, Operation defaultOperation)
+{
+    if (!text.is()) {
+        return defaultOperation;
+    } else if (text.equals(RTL_CONSTASCII_STRINGPARAM("modify"))) {
         return OPERATION_MODIFY;
     } else if (text.equals(RTL_CONSTASCII_STRINGPARAM("replace"))) {
         return OPERATION_REPLACE;
@@ -306,7 +316,7 @@ void XcuParser::handleComponentData(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    switch (parseOperation(attrOp)) {
+    switch (parseOperation(attrOp, OPERATION_MODIFY)) {
     case OPERATION_MODIFY:
     case OPERATION_FUSE:
         break;
@@ -323,7 +333,11 @@ void XcuParser::handleComponentData(XmlReader & reader) {
          ? valueParser_.getLayer() : Data::NO_LAYER),
         node->getFinalized());
     node->setFinalized(finalizedLayer);
-    state_.push(State(node, finalizedLayer < valueParser_.getLayer(), false));
+    state_.push(State(node, finalizedLayer < valueParser_.getLayer()));
+    if (valueParser_.getLayer() == Data::NO_LAYER) {
+        OSL_ASSERT(modificationPath_.empty());
+        modificationPath_.push_back(componentName_);
+    }
 }
 
 void XcuParser::handleItem(XmlReader & reader) {
@@ -350,7 +364,8 @@ void XcuParser::handleItem(XmlReader & reader) {
     int finalizedLayer;
     rtl::Reference< Node > node(
         data_->resolvePathRepresentation(
-            xmldata::convertFromUtf8(attrPath), &pathPrefix_, &finalizedLayer));
+            xmldata::convertFromUtf8(attrPath), &modificationPath_,
+            &finalizedLayer));
     if (!node.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -358,16 +373,15 @@ void XcuParser::handleItem(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    OSL_ASSERT(!pathPrefix_.empty());
-    componentName_ = pathPrefix_.front();
-    state_.push(
-        State(
-            node, finalizedLayer < valueParser_.getLayer(),
-            valueParser_.getLayer() == Data::NO_LAYER));
+    OSL_ASSERT(!modificationPath_.empty());
+    componentName_ = modificationPath_.front();
+    if (valueParser_.getLayer() != Data::NO_LAYER) {
+        modificationPath_.clear();
+    }
+    state_.push(State(node, finalizedLayer < valueParser_.getLayer()));
 }
 
 void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
-    OSL_ASSERT(!state_.top().record);
     Span attrNil;
     Span attrSeparator;
     Span attrExternal;
@@ -431,7 +445,6 @@ void XcuParser::handlePropValue(XmlReader & reader, PropertyNode * prop) {
 void XcuParser::handleLocpropValue(
     XmlReader & reader, LocalizedPropertyNode * locprop)
 {
-    OSL_ASSERT(!state_.top().record);
     Span attrLang;
     Span attrNil;
     Span attrSeparator;
@@ -480,8 +493,8 @@ void XcuParser::handleLocpropValue(
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    switch (parseOperation(attrOp)) {
-    case OPERATION_MODIFY:
+    switch (parseOperation(attrOp, OPERATION_FUSE)) {
+    case OPERATION_FUSE:
         if (nil) {
             if (i == locprop->getMembers().end()) {
                 locprop->getMembers()[name] = new LocalizedValueNode(
@@ -495,6 +508,11 @@ void XcuParser::handleLocpropValue(
             valueParser_.separator_ = attrSeparator;
             valueParser_.start(locprop, name);
         }
+        if (!modificationPath_.empty()) {
+            modificationPath_.push_back(name);
+            data_->modifications.add(modificationPath_);
+            modificationPath_.pop_back();
+        }
         break;
     case OPERATION_REMOVE:
         //TODO: only allow if parent.op == OPERATION_FUSE
@@ -503,6 +521,11 @@ void XcuParser::handleLocpropValue(
             locprop->getMembers().erase(i);
         }
         state_.push(State());
+        if (!modificationPath_.empty()) {
+            modificationPath_.push_back(name);
+            data_->modifications.add(modificationPath_);
+            modificationPath_.pop_back();
+        }
         break;
     default:
         throw css::uno::RuntimeException(
@@ -551,11 +574,6 @@ void XcuParser::handleGroupProp(XmlReader & reader, GroupNode * group) {
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OUString name(xmldata::convertFromUtf8(attrName));
-    if (state_.top().record) {
-        Path path(pathPrefix_);
-        path.push_back(name);
-        data_->modifications.add(path);
-    }
     Type type = xmldata::parseType(reader, attrType);
     if (type == TYPE_ANY) {
         throw css::uno::RuntimeException(
@@ -565,7 +583,7 @@ void XcuParser::handleGroupProp(XmlReader & reader, GroupNode * group) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    Operation op = parseOperation(attrOp);
+    Operation op = parseOperation(attrOp, OPERATION_MODIFY);
     bool finalized = xmldata::parseBoolean(attrFinalized, false);
     NodeMap::iterator i(group->getMembers().find(name));
     if (i == group->getMembers().end()) {
@@ -633,7 +651,11 @@ void XcuParser::handleUnknownGroupProp(
             if (finalized) {
                 prop->setFinalized(valueParser_.getLayer());
             }
-            state_.push(State(prop, name, state_.top().locked, false));
+            state_.push(State(prop, name, state_.top().locked));
+            if (!modificationPath_.empty()) {
+                modificationPath_.push_back(name);
+                data_->modifications.add(modificationPath_);
+            }
         }
         break;
     case OPERATION_REMOVE:
@@ -676,8 +698,12 @@ void XcuParser::handlePlainGroupProp(
         state_.push(
             State(
                 property,
-                state_.top().locked || finalizedLayer < valueParser_.getLayer(),
-                false));
+                (state_.top().locked ||
+                 finalizedLayer < valueParser_.getLayer())));
+        if (!modificationPath_.empty()) {
+            modificationPath_.push_back(name);
+            data_->modifications.add(modificationPath_);
+        }
         break;
     case OPERATION_REMOVE:
         if (!property->isExtension()) {
@@ -691,6 +717,11 @@ void XcuParser::handlePlainGroupProp(
         }
         group->getMembers().erase(propertyIndex);
         state_.push(State()); // ignore children
+        if (!modificationPath_.empty()) {
+            modificationPath_.push_back(name);
+            data_->modifications.add(modificationPath_);
+            modificationPath_.pop_back();
+        }
         break;
     }
 }
@@ -724,8 +755,11 @@ void XcuParser::handleLocalizedGroupProp(
         state_.push(
             State(
                 property,
-                state_.top().locked || finalizedLayer < valueParser_.getLayer(),
-                false));
+                (state_.top().locked ||
+                 finalizedLayer < valueParser_.getLayer())));
+        if (!modificationPath_.empty()) {
+            modificationPath_.push_back(name);
+        }
         break;
     case OPERATION_REPLACE:
         {
@@ -738,8 +772,11 @@ void XcuParser::handleLocalizedGroupProp(
                 State(
                     replacement, name,
                     (state_.top().locked ||
-                     finalizedLayer < valueParser_.getLayer()),
-                    false));
+                     finalizedLayer < valueParser_.getLayer())));
+            if (!modificationPath_.empty()) {
+                modificationPath_.push_back(name);
+                data_->modifications.add(modificationPath_);
+            }
         }
         break;
     case OPERATION_REMOVE:
@@ -756,7 +793,6 @@ void XcuParser::handleLocalizedGroupProp(
 void XcuParser::handleGroupNode(
     XmlReader & reader, rtl::Reference< Node > const & group)
 {
-    OSL_ASSERT(!state_.top().record);
     Span attrName;
     Span attrOp;
     Span attrFinalized;
@@ -788,18 +824,17 @@ void XcuParser::handleGroupNode(
             css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OUString name(xmldata::convertFromUtf8(attrName));
-    rtl::Reference< Node > subgroup(
+    rtl::Reference< Node > child(
         Data::findNode(valueParser_.getLayer(), group->getMembers(), name));
-    if (!subgroup.is()) {
+    if (!child.is()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown node ")) +
              name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    Operation op(parseOperation(attrOp));
-    if ((op != OPERATION_MODIFY && op != OPERATION_FUSE) || state_.top().record)
-    {
+    Operation op(parseOperation(attrOp, OPERATION_MODIFY));
+    if (op != OPERATION_MODIFY && op != OPERATION_FUSE) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -810,13 +845,15 @@ void XcuParser::handleGroupNode(
     int finalizedLayer = std::min(
         (xmldata::parseBoolean(attrFinalized, false)
          ? valueParser_.getLayer() : Data::NO_LAYER),
-        subgroup->getFinalized());
-    subgroup->setFinalized(finalizedLayer);
+        child->getFinalized());
+    child->setFinalized(finalizedLayer);
     state_.push(
         State(
-            subgroup,
-            state_.top().locked || finalizedLayer < valueParser_.getLayer(),
-            false));
+            child,
+            state_.top().locked || finalizedLayer < valueParser_.getLayer()));
+    if (!modificationPath_.empty()) {
+        modificationPath_.push_back(name);
+    }
 }
 
 void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
@@ -870,11 +907,6 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
         xmldata::parseTemplateReference(
             attrComponent, attrNodeType, componentName_,
             &set->getDefaultTemplateName()));
-    if (state_.top().record) {
-        Path path(pathPrefix_);
-        path.push_back(name);
-        data_->modifications.add(path);
-    }
     if (!set->isValidTemplate(templateName)) {
         throw css::uno::RuntimeException(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("set member node ")) +
@@ -898,7 +930,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    Operation op(parseOperation(attrOp));
+    Operation op(parseOperation(attrOp, OPERATION_MODIFY));
     int finalizedLayer = xmldata::parseBoolean(attrFinalized, false)
         ? valueParser_.getLayer() : Data::NO_LAYER;
     int mandatoryLayer = xmldata::parseBoolean(attrMandatory, false)
@@ -928,8 +960,11 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
         state_.push(
             State(
                 i->second,
-                state_.top().locked || finalizedLayer < valueParser_.getLayer(),
-                false));
+                (state_.top().locked ||
+                 finalizedLayer < valueParser_.getLayer())));
+        if (!modificationPath_.empty()) {
+            modificationPath_.push_back(name);
+        }
         break;
     case OPERATION_REPLACE:
         if (state_.top().locked || finalizedLayer < valueParser_.getLayer()) {
@@ -939,7 +974,11 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             member->setLayer(valueParser_.getLayer());
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
-            state_.push(State(member, name, false, false));
+            state_.push(State(member, name, false));
+            if (!modificationPath_.empty()) {
+                modificationPath_.push_back(name);
+                data_->modifications.add(modificationPath_);
+            }
         }
         break;
     case OPERATION_FUSE:
@@ -952,15 +991,21 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
                 member->setLayer(valueParser_.getLayer());
                 member->setFinalized(finalizedLayer);
                 member->setMandatory(mandatoryLayer);
-                state_.push(State(member, name, false, false));
+                state_.push(State(member, name, false));
+                if (!modificationPath_.empty()) {
+                    modificationPath_.push_back(name);
+                    data_->modifications.add(modificationPath_);
+                }
             }
         } else {
             state_.push(
                 State(
                     i->second,
                     (state_.top().locked ||
-                     finalizedLayer < valueParser_.getLayer()),
-                    false));
+                     finalizedLayer < valueParser_.getLayer())));
+            if (!modificationPath_.empty()) {
+                modificationPath_.push_back(name);
+            }
         }
         break;
     case OPERATION_REMOVE:
@@ -973,6 +1018,11 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             set->getMembers().erase(i);
         }
         state_.push(State());
+        if (!modificationPath_.empty()) {
+            modificationPath_.push_back(name);
+            data_->modifications.add(modificationPath_);
+            modificationPath_.pop_back();
+        }
         break;
     }
 }

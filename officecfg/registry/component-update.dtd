@@ -71,14 +71,14 @@
              oor:string-list -->
 <!ATTLIST value
     xml:lang CDATA #IMPLIED
-    oor:op (modify | remove) #IMPLIED
+    oor:op (fuse | remove) #IMPLIED
     xsi:nil (true | false) #IMPLIED
     oor:separator CDATA #IMPLIED
     oor:external CDATA #IMPLIED
     install:module CDATA #IMPLIED>
     <!-- xml:lang  must only be used for localized properties; defaults to the
              empty string
-         oor:op  defaults to "modify"; "remove" must only be used for localized
+         oor:op  defaults to "fuse"; "remove" must only be used for localized
              properties
          xsi:nil  defaults to "false"; "true" must only be used for nillable
              properties

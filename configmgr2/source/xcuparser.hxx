@@ -74,7 +74,8 @@ private:
     enum Operation {
         OPERATION_MODIFY, OPERATION_REPLACE, OPERATION_FUSE, OPERATION_REMOVE };
 
-    static Operation parseOperation(Span const & text);
+    static Operation parseOperation(
+        Span const & text, Operation defaultOperation);
 
     void handleComponentData(XmlReader & reader);
 
@@ -112,22 +113,19 @@ private:
         bool ignore;
         bool insert;
         bool locked;
-        bool record;
 
-        inline State():
-            ignore(true), insert(false), locked(false), record(false) {}
+        inline State(): ignore(true), insert(false), locked(false) {}
 
-        inline State(
-            rtl::Reference< Node > const & theNode, bool theLocked,
-            bool theRecord):
-            node(theNode), ignore(false), insert(false), locked(theLocked),
-            record(theRecord) {}
+        inline State(rtl::Reference< Node > const & theNode, bool theLocked):
+            node(theNode), ignore(false), insert(false), locked(theLocked)
+        {}
 
         inline State(
             rtl::Reference< Node > const & theNode,
-            rtl::OUString const & theName, bool theLocked, bool theRecord):
+            rtl::OUString const & theName, bool theLocked):
             node(theNode), name(theName), ignore(false), insert(true),
-            locked(theLocked), record(theRecord) {}
+            locked(theLocked)
+        {}
     };
 
     typedef std::stack< State > StateStack;
@@ -136,7 +134,7 @@ private:
     Data * data_;
     rtl::OUString componentName_;
     StateStack state_;
-    Path pathPrefix_;
+    Path modificationPath_;
     rtl::OUString path_;
 };
 
