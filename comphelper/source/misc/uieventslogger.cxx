@@ -394,7 +394,6 @@ namespace comphelper
             OUStringToOString(logdata[7],RTL_TEXTENCODING_UTF8).getStr(),
             OUStringToOString(logdata[8],RTL_TEXTENCODING_UTF8).getStr());
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
-        m_LogHandler->flush();
         m_SessionLogEventCount++;
     }
 
@@ -413,7 +412,6 @@ namespace comphelper
             OUStringToOString(logdata[7],RTL_TEXTENCODING_UTF8).getStr(),
             OUStringToOString(logdata[8],RTL_TEXTENCODING_UTF8).getStr());
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
-        m_LogHandler->flush();
     }
 
     void UiEventsLogger_Impl::logVcl(
@@ -445,7 +443,6 @@ namespace comphelper
             OUStringToOString(logdata[7],RTL_TEXTENCODING_UTF8).getStr(),
             OUStringToOString(logdata[8],RTL_TEXTENCODING_UTF8).getStr());
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
-        m_LogHandler->flush();
         m_SessionLogEventCount++;
     }
 
