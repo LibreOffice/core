@@ -3770,14 +3770,37 @@ FASTBOOL SvxMSDffManager::GetColorFromPalette( USHORT /* nNum */, Color& rColor 
     return TRUE;
 }
 
+// sj: the documentation is not complete, especially in ppt the normal rgb for text
+// color is written as 0xfeRRGGBB, this can't be explained by the documentation, nearly
+// every bit in the upper code is set -> so there seems to be a special handling for
+// ppt text colors, i decided not to fix this in MSO_CLR_ToColor because of possible
+// side effects, instead MSO_TEXT_CLR_ToColor is called for PPT text colors, to map
+// the color code to something that behaves like the other standard color codes used by
+// fill and line color
+Color SvxMSDffManager::MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const
+{
+    // Fuer Textfarben: Header ist 0xfeRRGGBB
+    if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )
+        nColorCode &= 0x00ffffff;
+    else
+    {
+        // for colorscheme colors the color index are the lower three bits of the upper byte
+        if ( ( nColorCode & 0xf8000000 ) == 0 ) // this must be a colorscheme index
+        {
+            nColorCode >>= 24;
+            nColorCode |= 0x8000000;
+        }
+    }
+    return MSO_CLR_ToColor( nColorCode );
+}
 
 Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nContentProperty ) const
 {
     Color aColor( mnDefaultColor );
 
     // Fuer Textfarben: Header ist 0xfeRRGGBB
-    if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )
-        nColorCode &= 0x00ffffff;
+    if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )    // sj: it needs to be checked if 0xfe is used in
+        nColorCode &= 0x00ffffff;                       // other cases than ppt text -> if not this code can be removed
 
     sal_uInt8 nUpper = (sal_uInt8)( nColorCode >> 24 );
 

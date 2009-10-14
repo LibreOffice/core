@@ -310,6 +310,7 @@ namespace sdr
                         false,
                         false,
                         false,
+                        false,
                         false);
 
                     // decompose immediately with neutral ViewInformation. This will
