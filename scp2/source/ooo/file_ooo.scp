@@ -3047,6 +3047,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_He
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-he.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hu
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-hu.oxt";
