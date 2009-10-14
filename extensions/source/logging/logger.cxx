@@ -230,6 +230,8 @@ namespace logging
 
         m_aHandlers.forEach< XLogHandler >(
             ::boost::bind( &XLogHandler::publish, _1, ::boost::cref( _rRecord ) ) );
+        m_aHandlers.forEach< XLogHandler >(
+            ::boost::bind( &XLogHandler::flush, _1 ) );
     }
 
     //--------------------------------------------------------------------
