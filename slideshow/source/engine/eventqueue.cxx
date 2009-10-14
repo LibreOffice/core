@@ -106,9 +106,10 @@ namespace slideshow
             ::osl::MutexGuard aGuard( maMutex );
 
 #if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-            OSL_TRACE("adding event at %x [%s] with delay %f\r",
-                rEvent.get(),
+            OSL_TRACE("adding at %f event [%s] at %x  with delay %f\r",
+                mpTimer->getElapsedTime(),
                 OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rEvent.get(),
                 rEvent->getActivationTime(0.0));
 #endif
             ENSURE_OR_RETURN( rEvent,
@@ -133,9 +134,10 @@ namespace slideshow
             ::osl::MutexGuard aGuard( maMutex );
 
 #if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-            OSL_TRACE("adding event at %x [%s] for next round with delay %f\r",
-                rEvent.get(),
+            OSL_TRACE("adding at %f event [%s] at %x  for next round with delay %f\r",
+                mpTimer->getElapsedTime(),
                 OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rEvent.get(),
                 rEvent->getActivationTime(0.0));
 #endif
 
@@ -152,9 +154,10 @@ namespace slideshow
             ::osl::MutexGuard aGuard( maMutex );
 
 #if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-            OSL_TRACE("adding event at %x [%s] for execution when queue is empty with delay %f\r",
-                rpEvent.get(),
+            OSL_TRACE("adding at %f event [%s] at %x for execution when queue is empty with delay %f\r",
+                mpTimer->getElapsedTime(),
                 OUStringToOString(rpEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rpEvent.get(),
                 rpEvent->getActivationTime(0.0));
 #endif
 
@@ -239,10 +242,11 @@ namespace slideshow
                                        event.pEvent->getActivationTime(0.0) );
 #endif
 #if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-                        OSL_TRACE("firing event at %x [%s] with delay %f\r",
-                            event.pEvent.get(),
+                        OSL_TRACE("firing at %f event [%s] at %x with delay %f\r",
+                            mpTimer->getElapsedTime(),
                             OUStringToOString(event.pEvent->GetDescription(),
                                 RTL_TEXTENCODING_UTF8).getStr(),
+                            event.pEvent.get(),
                             event.pEvent->getActivationTime(0.0));
 #endif
 
@@ -326,6 +330,9 @@ namespace slideshow
             // TODO(P1): Maybe a plain vector and vector.swap will
             // be faster here. Profile.
             maEvents = ImplQueueType();
+
+            maNextEvents.clear();
+            maNextNextEvents = ImplQueueType();
         }
     }
 }

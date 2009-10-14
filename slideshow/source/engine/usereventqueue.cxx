@@ -330,8 +330,6 @@ private:
         // next effect listeners:
         if(fireAllEvents( maEvents, mrEventQueue ))
         {
-            makeEvent(::boost::bind(&EventQueue::forceEmpty, ::boost::ref(mrEventQueue)),
-                      "EventQueue::forceEmpty");
             if (mbSkipTriggersNextEffect && bNotifyNextEffect)
             {
                 // then simulate a next effect event: this skip effect
@@ -793,6 +791,7 @@ void UserEventQueue::setAdvanceOnClick( bool bAdvanceOnClick )
     if( mpClickEventHandler )
         mpClickEventHandler->setAdvanceOnClick( bAdvanceOnClick );
 }
+
 
 void UserEventQueue::registerSlideStartEvent( const EventSharedPtr& rEvent )
 {

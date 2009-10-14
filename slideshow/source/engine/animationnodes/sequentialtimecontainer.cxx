@@ -141,7 +141,6 @@ bool SequentialTimeContainer::resolveChild(
 void SequentialTimeContainer::notifyDeactivating(
     AnimationNodeSharedPtr const& rNotifier )
 {
-    OSL_TRACE("    SequentialTimeContainer::notifyDeactivating\r");
     if (notifyDeactivatedChild( rNotifier ))
         return;
 

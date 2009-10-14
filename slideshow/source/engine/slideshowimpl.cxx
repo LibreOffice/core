@@ -71,6 +71,7 @@
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
+#include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
@@ -509,11 +510,14 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
         // directly, but queue an event. handleEvent()
         // might be called from e.g.
         // showNext(), and notifySlideAnimationsEnded() must not be called
-        // in recursion.
-        mrEventQueue.addEvent(
-            makeEvent( boost::bind( &SlideShowImpl::notifySlideAnimationsEnded,
-                                    boost::ref(mrShow) ),
-                       "SlideShowImpl::notifySlideAnimationsEnded"));
+        // in recursion.  Note that the event is scheduled for the next
+        // frame so that its expensive execution does not come in between
+        // sprite hiding and shape redraw (at the end of the animation of a
+        // shape), which would cause a flicker.
+        mrEventQueue.addEventForNextRound(
+            makeEvent(
+                boost::bind( &SlideShowImpl::notifySlideAnimationsEnded, boost::ref(mrShow) ),
+                "SlideShowImpl::notifySlideAnimationsEnded"));
         return true;
     }
 
@@ -2079,7 +2083,7 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
         boost::bind(
             &presentation::XSlideShowListener::slideEnded,
             _1,
-            bReverse) );
+            bReverse));
 }
 
 bool SlideShowImpl::notifyHyperLinkClicked( rtl::OUString const& hyperLink )
