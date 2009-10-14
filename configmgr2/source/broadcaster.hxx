@@ -41,7 +41,6 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/util/ChangesEvent.hpp"
-#include "rtl/ref.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace beans {
