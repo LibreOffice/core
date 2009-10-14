@@ -141,7 +141,7 @@ void ScDPFieldButton::draw()
         Font aTextFont( mpStyle->GetLabelFont() );
         double fFontHeight = 12.0;
         fFontHeight *= static_cast<double>(maZoomY.GetNumerator()) / static_cast<double>(maZoomY.GetDenominator());
-        aTextFont.SetHeight(fFontHeight);
+        aTextFont.SetHeight(static_cast<long>(fFontHeight));
         mpOutDev->SetFont(aTextFont);
 
         Point aTextPos = maPos;
@@ -159,7 +159,7 @@ void ScDPFieldButton::draw()
 
 void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
 {
-    long nW = maSize.getWidth()*0.5;
+    long nW = maSize.getWidth() / 2;
     long nH = maSize.getHeight();
     if (nW > 18)
         nW = 18;
@@ -830,7 +830,7 @@ void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rS
 {
     const sal_uInt16 nLeftMargin = 5;
     const sal_uInt16 nTopMargin = 5;
-    const sal_uInt16 nMenuItemHeight = maLabelFont.GetHeight()*1.8;
+    const sal_uInt16 nMenuItemHeight = static_cast< sal_uInt16 >( maLabelFont.GetHeight()*1.8 );
 
     Size aWndSize = GetSizePixel();
 
@@ -1062,15 +1062,15 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     const sal_uInt16 nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
     const sal_uInt16 nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
     const sal_uInt16 nBtnWidth = 60;
-    const sal_uInt16 nLabelHeight = getLabelFont().GetHeight();
+    const sal_uInt16 nLabelHeight = static_cast< sal_uInt16 >( getLabelFont().GetHeight() );
     const sal_uInt16 nBtnHeight = nLabelHeight*2;
     const sal_uInt16 nBottomMargin = 10;
     const sal_uInt16 nMenuListMargin = 20;
 
     // parameters calculated from constants.
-    const sal_uInt16 nListBoxWidth = maWndSize.Width() - nListBoxMargin*2;
-    const sal_uInt16 nListBoxHeight = maWndSize.Height() - nTopMargin - nMenuHeight -
-        nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
+    const sal_uInt16 nListBoxWidth = static_cast< sal_uInt16 >( maWndSize.Width() - nListBoxMargin*2 );
+    const sal_uInt16 nListBoxHeight = static_cast< sal_uInt16 >( maWndSize.Height() - nTopMargin - nMenuHeight -
+        nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight );
 
     const sal_uInt16 nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin - 1;
 
@@ -1157,7 +1157,7 @@ void ScDPFieldPopupWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maChecks.CheckEntryPos(i, bSet);
+        maChecks.CheckEntryPos(static_cast< USHORT >( i ), bSet);
 }
 
 void ScDPFieldPopupWindow::selectCurrentMemberOnly(bool bSet)
@@ -1353,7 +1353,7 @@ void ScDPFieldPopupWindow::initMembers()
     for (size_t i = 0; i < n; ++i)
     {
         maChecks.InsertEntry(maMembers[i].maName);
-        maChecks.CheckEntryPos(i, maMembers[i].mbVisible);
+        maChecks.CheckEntryPos(static_cast< USHORT >( i ), maMembers[i].mbVisible);
         if (maMembers[i].mbVisible)
             ++nVisMemCount;
     }
@@ -1388,7 +1388,7 @@ void ScDPFieldPopupWindow::getResult(hash_map<OUString, bool, OUStringHash>& rRe
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
-        bool bState = maChecks.IsChecked(i);
+        bool bState = maChecks.IsChecked(static_cast< USHORT >( i ));
         aResult.insert(ResultMap::value_type(maMembers[i].maName, bState));
     }
     rResult.swap(aResult);

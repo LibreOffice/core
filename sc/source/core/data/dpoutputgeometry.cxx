@@ -101,7 +101,7 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
 
     SCROW nRow = nCurRow;
     SCTAB nTab = maOutRange.aStart.Tab();
-    SCCOL nColStart = maOutRange.aStart.Col() + mnRowFields + bDataLayout;
+    SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields + (bDataLayout ? 1 : 0));
     SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnColumnFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
@@ -194,7 +194,7 @@ ScDPOutputGeometry::FieldType ScDPOutputGeometry::getFieldButtonType(const ScAdd
     if (mnColumnFields)
     {
         SCROW nRow = nCurRow;
-        SCCOL nColStart = maOutRange.aStart.Col() + mnRowFields + bDataLayout;
+        SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + mnRowFields + (bDataLayout ? 1 : 0));
         SCCOL nColEnd = nColStart + static_cast<SCCOL>(mnColumnFields-1);
         if (rPos.Row() == nRow && nColStart <= rPos.Col() && rPos.Col() <= nColEnd)
             return Column;

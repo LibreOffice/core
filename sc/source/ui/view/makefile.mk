@@ -140,7 +140,6 @@ SLOFILES =  \
         $(SLO)$/dbfunc2.obj     \
         $(SLO)$/tabvwsh2.obj
 .ELSE
-
     NOOPTFILES=\
         $(SLO)$/drawview.obj	\
         $(SLO)$/dbfunc2.obj     \
