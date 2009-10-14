@@ -364,7 +364,7 @@ BOOL ORelationTableConnectionData::Update()
 
     // get the name of foreign key // search for columns
     m_aConnName = ::rtl::OUString();
-    xKey = NULL;
+xKey.clear();
     bool bDropRelation = false;
     for(sal_Int32 i=0;i<xKeys->getCount();++i)
     {
@@ -422,7 +422,7 @@ BOOL ORelationTableConnectionData::Update()
                 }
             }
         }
-        xKey = NULL;
+    xKey.clear();
     } // for(sal_Int32 i=0;i<xKeys->getCount();++i)
     if ( bDropRelation )
     {
