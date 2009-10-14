@@ -61,7 +61,7 @@ BUILD_OPT=1
 #LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
 .EXPORT: LDFLAGS
 
-.IF "$(CPU)"=="X"
+.IF "$(BUILD64)"=="1"
 # force 64-bit buildmode
 USE_64:=1
 .EXPORT : USE_64
