@@ -61,6 +61,7 @@ namespace xls {
 // ============================================================================
 
 SheetInfoModel::SheetInfoModel() :
+    mnBiffHandle( -1 ),
     mnSheetId( -1 ),
     mnState( XML_visible )
 {
@@ -111,19 +112,19 @@ void WorksheetBuffer::importSheet( RecordInputStream& rStrm )
 
 void WorksheetBuffer::importSheet( BiffInputStream& rStrm )
 {
-    sal_uInt16 nState = 0;
+    SheetInfoModel aModel;
     if( getBiff() >= BIFF5 )
     {
-        rStrm.skip( 4 );
-        rStrm >> nState;
+        rStrm.enableDecoder( false );
+        aModel.mnBiffHandle = rStrm.readuInt32();
+        rStrm.enableDecoder( true );
+        sal_uInt16 nState = rStrm.readuInt16();
+        static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
+        aModel.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
     }
-
-    SheetInfoModel aModel;
     aModel.maName = (getBiff() == BIFF8) ?
         rStrm.readUniStringBody( rStrm.readuInt8() ) :
         rStrm.readByteStringUC( false, getTextEncoding() );
-    static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
-    aModel.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
     insertSheet( aModel );
 }
 
@@ -141,6 +142,12 @@ OUString WorksheetBuffer::getWorksheetRelId( sal_Int32 nWorksheet ) const
 {
     const SheetInfo* pSheetInfo = maSheetInfos.get( nWorksheet ).get();
     return pSheetInfo ? pSheetInfo->maRelId : OUString();
+}
+
+sal_Int64 WorksheetBuffer::getBiffRecordHandle( sal_Int32 nWorksheet ) const
+{
+    const SheetInfo* pSheetInfo = maSheetInfos.get( nWorksheet ).get();
+    return pSheetInfo ? pSheetInfo->mnBiffHandle : -1;
 }
 
 sal_Int16 WorksheetBuffer::getCalcSheetIndex( sal_Int32 nWorksheet ) const
@@ -248,13 +255,6 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
     maSheetInfos.push_back( xSheetInfo );
     maSheetInfosByName[ rModel.maName ] = xSheetInfo;
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;
-}
-
-bool WorksheetBuffer::SheetNameCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
-{
-    // there is no wrapper in rtl::OUString, TODO: compare with collator
-    return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
-        rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
 }
 
 // ============================================================================
