@@ -1629,6 +1629,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
     if ( aODFVersion.getLength() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
     {
         // check the consistency only for the ODF1.2 and later ( according to content.xml )
+        // manifest.xml might have no version, it should be checked here and the correct version should be set
         try
         {
             uno::Reference< document::XStorageBasedDocument > xDoc( mxModel, uno::UNO_QUERY_THROW );
@@ -1654,7 +1655,24 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
                     ::rtl::OUString aStorVersion;
                     xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) )
                         >>= aStorVersion;
-                    bResult = aODFVersion.equals( aStorVersion );
+
+                    // if the storage version is set in manifest.xml, it must be the same as in content.xml
+                    // if not, set it explicitly to be used further ( it will work even for readonly storage )
+                    // This workaround is not nice, but I see no other way to handle it, since there are
+                    // ODF1.2 documents without version in manifest.xml
+                    if ( aStorVersion.getLength() )
+                        bResult = aODFVersion.equals( aStorVersion );
+                    else
+                        xStorProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ),
+                                                      uno::makeAny( aODFVersion ) );
+
+                    if ( bResult )
+                    {
+                        sal_Bool bInconsistent = sal_False;
+                        xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsInconsistent" ) ) )
+                            >>= bInconsistent;
+                        bResult = !bInconsistent;
+                    }
                 }
             }
         }
