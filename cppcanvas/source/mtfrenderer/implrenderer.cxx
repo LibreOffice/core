@@ -275,10 +275,25 @@ namespace
             (getState( rParms.mrStates ).mapModeTransform * aWidth).getX();
 
         // setup reasonable defaults
-        o_rStrokeAttributes.MiterLimit   = 1.0;
+        o_rStrokeAttributes.MiterLimit   = 15.0; // 1.0 was no good default; GDI+'s limit is 10.0, our's is 15.0
         o_rStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
         o_rStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
-        o_rStrokeAttributes.JoinType     = rendering::PathJoinType::MITER;
+
+        switch(rLineInfo.GetLineJoin())
+        {
+            default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::NONE;
+                break;
+            case basegfx::B2DLINEJOIN_BEVEL:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::BEVEL;
+                break;
+            case basegfx::B2DLINEJOIN_MITER:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::MITER;
+                break;
+            case basegfx::B2DLINEJOIN_ROUND:
+                o_rStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
+                break;
+        }
 
         if( LINE_DASH == rLineInfo.GetStyle() )
         {

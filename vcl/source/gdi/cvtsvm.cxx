@@ -483,6 +483,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 }
                 break;
 
+                case (GDI_LINEJOIN_ACTION) :
+                {
+                    INT16 nLineJoin(0);
+                    rIStm >> nLineJoin;
+                    aLineInfo.SetLineJoin((basegfx::B2DLineJoin)nLineJoin);
+                }
+                break;
+
                 case( GDI_RECT_ACTION ):
                 {
                     ImplReadRect( rIStm, aRect );
@@ -1247,12 +1255,20 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaLineAction* pAct = (MetaLineAction*) pAction;
                 const LineInfo& rInfo = pAct->GetLineInfo();
-                const BOOL      bFatLine = ( !rInfo.IsDefault() && ( LINE_NONE != rInfo.GetStyle() ) );
+                const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
+                const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
 
                 if( bFatLine )
                 {
                     ImplWritePushAction( rOStm );
                     ImplWriteLineColor( rOStm, rLineCol, 1, rInfo.GetWidth() );
+
+                    if(bLineJoin)
+                    {
+                        rOStm << (INT16) GDI_LINEJOIN_ACTION;
+                        rOStm << (INT32) 6;
+                        rOStm << (INT16) rInfo.GetLineJoin();
+                    }
                 }
 
                 rOStm << (INT16) GDI_LINE_ACTION;
@@ -1265,6 +1281,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 {
                     ImplWritePopAction( rOStm );
                     nCount += 3;
+
+                    if(bLineJoin)
+                    {
+                        nCount += 1;
+                    }
                 }
             }
             break;
@@ -1356,12 +1377,20 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const Polygon&      rPoly = pAct->GetPolygon();
                 const LineInfo&     rInfo = pAct->GetLineInfo();
                 const USHORT        nPoints = rPoly.GetSize();
-                const BOOL          bFatLine = ( !rInfo.IsDefault() && ( LINE_NONE != rInfo.GetStyle() ) );
+                const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
+                const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
 
                 if( bFatLine )
                 {
                     ImplWritePushAction( rOStm );
                     ImplWriteLineColor( rOStm, rLineCol, 1, rInfo.GetWidth() );
+
+                    if(bLineJoin)
+                    {
+                        rOStm << (INT16) GDI_LINEJOIN_ACTION;
+                        rOStm << (INT32) 6;
+                        rOStm << (INT16) rInfo.GetLineJoin();
+                    }
                 }
 
                 rOStm << (INT16) GDI_POLYLINE_ACTION;
@@ -1377,6 +1406,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 {
                     ImplWritePopAction( rOStm );
                     nCount += 3;
+
+                    if(bLineJoin)
+                    {
+                        nCount += 1;
+                    }
                 }
             }
             break;

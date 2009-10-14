@@ -107,11 +107,18 @@ namespace dxcanvas
         GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const ::com::sun::star::uno::Sequence<
                                                                  ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& );
 
-        GraphicsPathSharedPtr graphicsPathFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly );
-        GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly );
+        GraphicsPathSharedPtr graphicsPathFromB2DPolygon(
+            const ::basegfx::B2DPolygon& rPoly,
+            bool bNoLineJoin = false);
 
-        GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
-                                                              ::com::sun::star::rendering::XPolyPolygon2D >& );
+        GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon(
+            const ::basegfx::B2DPolyPolygon& rPoly,
+            bool bNoLineJoin = false);
+
+        GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&,
+            bool bNoLineJoin = false );
+
         bool drawGdiPlusBitmap( const GraphicsSharedPtr& rGraphics,
                                 const BitmapSharedPtr&   rBitmap );
         bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,

@@ -85,6 +85,8 @@
 #define GDI_COMMENT_COMMENT             1031
 #define GDI_UNICODE_COMMENT             1032
 
+#define GDI_LINEJOIN_ACTION             1033
+
 // ----------------
 // - SVMConverter -
 // ----------------

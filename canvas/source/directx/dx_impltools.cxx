@@ -194,7 +194,8 @@ namespace dxcanvas
 
             void graphicsPathFromB2DPolygon( GraphicsPathSharedPtr&             rOutput,
                                              ::std::vector< Gdiplus::PointF >&  rPoints,
-                                             const ::basegfx::B2DPolygon&       rPoly )
+                                             const ::basegfx::B2DPolygon&       rPoly,
+                                             bool bNoLineJoin)
             {
                 const sal_uInt32 nPoints( rPoly.count() );
 
@@ -241,7 +242,18 @@ namespace dxcanvas
                         rPoints[nCurrOutput++] = Gdiplus::PointF( static_cast<Gdiplus::REAL>(rPoint.getX()),
                                                                   static_cast<Gdiplus::REAL>(rPoint.getY()) );
 
-                        rOutput->AddBeziers( &rPoints[0], nCurrOutput );
+                        if(bNoLineJoin && nCurrOutput > 7)
+                        {
+                            for(sal_uInt32 a(3); a < nCurrOutput; a+=3)
+                            {
+                                rOutput->StartFigure();
+                                rOutput->AddBezier(rPoints[a - 3], rPoints[a - 2], rPoints[a - 1], rPoints[a]);
+                            }
+                        }
+                        else
+                        {
+                            rOutput->AddBeziers( &rPoints[0], nCurrOutput );
+                        }
                     }
                     else
                     {
@@ -251,7 +263,20 @@ namespace dxcanvas
                         // Therefore, simply don't pass the last two
                         // points here.
                         if( nCurrOutput > 3 )
-                            rOutput->AddBeziers( &rPoints[0], nCurrOutput-2 );
+                        {
+                            if(bNoLineJoin && nCurrOutput > 7)
+                            {
+                                for(sal_uInt32 a(3); a < nCurrOutput; a+=3)
+                                {
+                                    rOutput->StartFigure();
+                                    rOutput->AddBezier(rPoints[a - 3], rPoints[a - 2], rPoints[a - 1], rPoints[a]);
+                                }
+                            }
+                            else
+                            {
+                                rOutput->AddBeziers( &rPoints[0], nCurrOutput-2 );
+                            }
+                        }
                     }
                 }
                 else
@@ -267,10 +292,27 @@ namespace dxcanvas
                                                                static_cast<Gdiplus::REAL>(rPoint.getY()) );
                     }
 
-                    rOutput->AddLines( &rPoints[0], nPoints );
+                    if(bNoLineJoin && nPoints > 2)
+                    {
+                        for(sal_uInt32 a(1); a < nPoints; a++)
+                        {
+                            rOutput->StartFigure();
+                            rOutput->AddLine(rPoints[a - 1], rPoints[a]);
+                        }
+
+                        if(bClosedPolygon)
+                        {
+                            rOutput->StartFigure();
+                            rOutput->AddLine(rPoints[nPoints - 1], rPoints[0]);
+                        }
+                    }
+                    else
+                    {
+                        rOutput->AddLines( &rPoints[0], nPoints );
+                    }
                 }
 
-                if( bClosedPolygon )
+                if( bClosedPolygon && !bNoLineJoin )
                     rOutput->CloseFigure();
             }
         }
@@ -426,17 +468,17 @@ namespace dxcanvas
             return pRes;
         }
 
-        GraphicsPathSharedPtr graphicsPathFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly )
+        GraphicsPathSharedPtr graphicsPathFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly, bool bNoLineJoin )
         {
             GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
             ::std::vector< Gdiplus::PointF >    aPoints;
 
-            graphicsPathFromB2DPolygon( pRes, aPoints, rPoly );
+            graphicsPathFromB2DPolygon( pRes, aPoints, rPoly, bNoLineJoin );
 
             return pRes;
         }
 
-        GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly )
+        GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly, bool bNoLineJoin )
         {
             GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
             ::std::vector< Gdiplus::PointF >    aPoints;
@@ -446,24 +488,25 @@ namespace dxcanvas
             {
                 graphicsPathFromB2DPolygon( pRes,
                                             aPoints,
-                                            rPoly.getB2DPolygon( nCurrPoly ) );
+                                            rPoly.getB2DPolygon( nCurrPoly ),
+                                            bNoLineJoin);
             }
 
             return pRes;
         }
 
-        GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
+        GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly, bool bNoLineJoin )
         {
             LinePolyPolygon* pPolyImpl = dynamic_cast< LinePolyPolygon* >( xPoly.get() );
 
             if( pPolyImpl )
             {
-                return pPolyImpl->getGraphicsPath();
+                return pPolyImpl->getGraphicsPath( bNoLineJoin );
             }
             else
             {
                 return tools::graphicsPathFromB2DPolyPolygon(
-                    polyPolygonFromXPolyPolygon2D( xPoly ) );
+                    polyPolygonFromXPolyPolygon2D( xPoly ), bNoLineJoin );
             }
         }
 

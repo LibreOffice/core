@@ -368,7 +368,11 @@ namespace dxcanvas
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
-            aPen.SetMiterLimit( static_cast< Gdiplus::REAL >(strokeAttributes.MiterLimit) );
+            const bool bIsMiter(rendering::PathJoinType::MITER == strokeAttributes.JoinType);
+            const bool bIsNone(rendering::PathJoinType::NONE == strokeAttributes.JoinType);
+
+            if(bIsMiter)
+                aPen.SetMiterLimit( static_cast< Gdiplus::REAL >(strokeAttributes.MiterLimit) );
 
             const ::std::vector< Gdiplus::REAL >& rDashArray(
                 ::comphelper::sequenceToContainer< ::std::vector< Gdiplus::REAL > >(
@@ -381,9 +385,10 @@ namespace dxcanvas
             aPen.SetLineCap( gdiCapFromCap(strokeAttributes.StartCapType),
                              gdiCapFromCap(strokeAttributes.EndCapType),
                              Gdiplus::DashCapFlat );
-            aPen.SetLineJoin( gdiJoinFromJoin(strokeAttributes.JoinType) );
+            if(!bIsNone)
+                aPen.SetLineJoin( gdiJoinFromJoin(strokeAttributes.JoinType) );
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
+            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon, bIsNone ) );
 
             // TODO(E1): Return value
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );

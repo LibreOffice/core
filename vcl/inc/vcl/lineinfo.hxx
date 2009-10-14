@@ -32,9 +32,9 @@
 #define _SV_LINEINFO_HXX
 
 #include <vcl/dllapi.h>
-
 #include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
+#include <basegfx/vector/b2enums.hxx>
 
 // ----------------
 // - ImplLineInfo -
@@ -44,14 +44,16 @@ class SvStream;
 
 struct ImplLineInfo
 {
-    ULONG               mnRefCount;
-    LineStyle           meStyle;
-    long                mnWidth;
-    USHORT              mnDashCount;
-    long                mnDashLen;
-    USHORT              mnDotCount;
-    long                mnDotLen;
-    long                mnDistance;
+    ULONG                   mnRefCount;
+    LineStyle               meStyle;
+    long                    mnWidth;
+    USHORT                  mnDashCount;
+    long                    mnDashLen;
+    USHORT                  mnDotCount;
+    long                    mnDotLen;
+    long                    mnDistance;
+
+    basegfx::B2DLineJoin    meLineJoin;
 
                         ImplLineInfo();
                         ImplLineInfo( const ImplLineInfo& rImplLineInfo );
@@ -106,6 +108,9 @@ public:
 
     void            SetDistance( long nDistance );
     long            GetDistance() const { return mpImplLineInfo->mnDistance; }
+
+    void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
+    basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
 
     BOOL            IsDefault() const { return( !mpImplLineInfo->mnWidth && ( LINE_SOLID == mpImplLineInfo->meStyle ) ); }
 

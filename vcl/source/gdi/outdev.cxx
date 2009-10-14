@@ -2541,7 +2541,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && LINE_SOLID == rLineInfo.GetStyle())
     {
-        DrawPolyLine(rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), basegfx::B2DLINEJOIN_ROUND);
+        DrawPolyLine(rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin());
         return;
     }
 
@@ -3042,7 +3042,12 @@ void OutputDevice::DrawPolyLine(
         SetFillColor(aOldLineColor);
         ImplInitFillColor();
 
-        ImpDrawPolyPolygonWithB2DPolyPolygon(aAreaPolyPolygon);
+        // draw usig a loop; else the topology will paint a PolyPolygon
+        for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
+        {
+            ImpDrawPolyPolygonWithB2DPolyPolygon(
+                basegfx::B2DPolyPolygon(aAreaPolyPolygon.getB2DPolygon(a)));
+        }
 
         SetLineColor(aOldLineColor);
         ImplInitLineColor();
@@ -3059,14 +3064,16 @@ void OutputDevice::DrawPolyLine(
             }
         }
     }
-
-    // fallback to old polygon drawing if needed. This will really
-    // use ImplLineConverter, but still try to AA lines
-    const Polygon aToolsPolygon( rB2DPolygon );
-    LineInfo aLineInfo;
-    if( fLineWidth != 0.0 )
-        aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-    ImpDrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
+    else
+    {
+        // fallback to old polygon drawing if needed. This will really
+        // use ImplLineConverter, but still try to AA lines
+        const Polygon aToolsPolygon( rB2DPolygon );
+        LineInfo aLineInfo;
+        if( fLineWidth != 0.0 )
+            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+        ImpDrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
+    }
 }
 
 // -----------------------------------------------------------------------

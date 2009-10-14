@@ -49,7 +49,8 @@ ImplLineInfo::ImplLineInfo() :
     mnDashLen   ( 0 ),
     mnDotCount  ( 0 ),
     mnDotLen    ( 0 ),
-    mnDistance  ( 0 )
+    mnDistance  ( 0 ),
+    meLineJoin  ( basegfx::B2DLINEJOIN_ROUND )
 {
 }
 
@@ -63,7 +64,8 @@ ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
     mnDashLen   ( rImplLineInfo.mnDashLen ),
     mnDotCount  ( rImplLineInfo.mnDotCount ),
     mnDotLen    ( rImplLineInfo.mnDotLen ),
-    mnDistance  ( rImplLineInfo.mnDistance )
+    mnDistance  ( rImplLineInfo.mnDistance ),
+    meLineJoin  ( rImplLineInfo.meLineJoin )
 {
 }
 
@@ -209,6 +211,19 @@ void LineInfo::SetDistance( long nDistance )
 
 // -----------------------------------------------------------------------
 
+void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
+{
+    DBG_CHKTHIS( LineInfo, NULL );
+
+    if(eLineJoin != mpImplLineInfo->meLineJoin)
+    {
+        ImplMakeUnique();
+        mpImplLineInfo->meLineJoin = eLineJoin;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
@@ -225,6 +240,12 @@ SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
         rIStm >> rImplLineInfo.mnDistance;
     }
 
+    if( aCompat.GetVersion() >= 3 )
+    {
+        // version 3
+        rIStm >> nTmp16; rImplLineInfo.meLineJoin = (basegfx::B2DLineJoin) nTmp16;
+    }
+
     return rIStm;
 }
 
@@ -232,7 +253,7 @@ SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 
 SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
-    VersionCompat aCompat( rOStm, STREAM_WRITE, 2 );
+    VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
 
     // version 1
     rOStm << (UINT16) rImplLineInfo.meStyle << rImplLineInfo.mnWidth;
@@ -241,6 +262,9 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
     rOStm << rImplLineInfo.mnDashCount << rImplLineInfo.mnDashLen;
     rOStm << rImplLineInfo.mnDotCount << rImplLineInfo.mnDotLen;
     rOStm << rImplLineInfo.mnDistance;
+
+    // since version3
+    rOStm << (UINT16) rImplLineInfo.meLineJoin;
 
     return rOStm;
 }

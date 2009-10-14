@@ -45,7 +45,7 @@ namespace dxcanvas
     public:
         explicit LinePolyPolygon( const ::basegfx::B2DPolyPolygon& );
 
-        GraphicsPathSharedPtr getGraphicsPath() const;
+        GraphicsPathSharedPtr getGraphicsPath( bool bNoLineJoin = false) const;
 
     private:
         // overridden, to clear mpPath
