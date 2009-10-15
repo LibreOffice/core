@@ -45,7 +45,6 @@ private const MAX_FILE_COUNT = 3000 ' the max number of templates or samples
 
 testcase tShowAllObjectsAsPreview( cCategory as string )
 
-    '///<h1>Show documents in the preview pane of the teplates-dialog</h1>
 
     dim iObjectFolder as Integer   ' the current folder in loops
     dim iObjectFolders as integer  ' the number of template/sample-folders
@@ -57,19 +56,14 @@ testcase tShowAllObjectsAsPreview( cCategory as string )
     printlog( "" )
    
    
-    '///<ul>
-    '///+<li>Open File->New->Templates and documents</li>
     FileNewFromTemplate
     if ( TemplateAndDocuments.exists( 1 ) ) then
 
    
-        '///+<li>find the category we want to work with (TEMPLATES/SAMPLES...)</li>
         hSelectCategory( cCategory )
        
-        '///+<li>Count the folders in the root of cCategory</li>
         iObjectFolders = FileList.getItemCount()
        
-        '///+</li>Now go through every folder and count the number of objects</li>
         for iObject = 1 to iObjectFolders
        
             '//<li>grab a folder below cCategory and open it</li>
@@ -83,45 +77,35 @@ testcase tShowAllObjectsAsPreview( cCategory as string )
           
         next iObject
        
-        '///+<li>Click the preview button</li>
         preview.click()
 
         printlog( "" )
         printlog( "Displaying documents in preview pane" )
         printlog( "" )
 
-        '///+<li>Step through all folders and templates/samples</li>
-        '///<ol>   
         for iObjectFolder = 1 to iObjectFolders
             
             kontext "TemplateAndDocuments"
 
-            '///+<li>Select the category (samples, templates ...)</li>
             hSelectCategory( cCategory )
 
-            '///+<li>Select the current folder</li>
             hSelectFileFolder( iObjectFolder , false )
 
             for iObject = 1 to iObjectCount( iObjectFolder ) 
        
                 printlog( "Object-Folder: " & iObjectFolder & " Entry: " & iObject )
 
-                '///+<li>Select the desired template</li>
                 hSelectDocumentObject( iObject , 0 )
           
-                '///+<li>Wait for the preview to be loaded and displayed</li>
                 'Problem: Cannot verify the content of preview window.
                 WaitSlot( 5000 )
           
-                '///+<li>Next document</li>
 
             next iObject
           
-            '///</ol>
           
        next iObjectFolder
        
-       '///</ul>
        Kontext "TemplateAndDocuments"
        TemplateAndDocuments.cancel()
        

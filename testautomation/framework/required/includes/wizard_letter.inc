@@ -39,6 +39,8 @@
 
 testcase tUpdtWizardLetter
 
+    printlog( "Resource test for the letter-wizard" )
+
     dim iErr as integer
     dim brc as boolean
     dim irc as integer

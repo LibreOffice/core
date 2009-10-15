@@ -38,11 +38,8 @@
 '\******************************************************************************
 
 testcase tSmokeTest
-    '/// Open the smoketest aka 10er test document and run the included macro. ///'
-    '/// File: qa/qatesttool/framework/first/input/10erTest_680.sxw ///'
-    '/// The logfile of the test document is searched for "-> error" and "-> ok" ///'
-    '/// Right now there are 35 ok and no errors. ///'
-    '/// If errors occour, a warnlog is thrown. ///'
+
+    printlog( "Smoketest (10er-Test) from Release Engineering" )
     dim sLocation as string
     dim i,x,a as integer
     dim sTemp as string

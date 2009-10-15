@@ -39,6 +39,8 @@
 
 testcase tUpdtWizardAgenda
 
+    printlog( "Resource test for the agenda wizard" )
+
     dim iErr as integer
     dim brc as boolean
     

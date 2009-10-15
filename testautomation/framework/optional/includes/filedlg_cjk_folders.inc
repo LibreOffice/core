@@ -39,7 +39,6 @@
 
 testcase tCJKFolders()
 
-    '///<h1>Create and delete folders containing CJK characters</h1>
     
     if ( not hTestLocale() ) then
         warnlog( "Test requires UTF-8 locale" )
@@ -47,7 +46,6 @@ testcase tCJKFolders()
     endif
     
     
-    '///<ul>
     
     dim cStrangeFolder as string
     dim cStrangeFile as string
@@ -59,51 +57,36 @@ testcase tCJKFolders()
     printlog( "Check if CJK-files/folders are handled ok" )
     printlog( CHR$(13) )
     
-    '///+<li>Create a new document</li>
     printlog( "Open a new document" )
     brc = hCreateDocument()
     
     printlog( CHR$(13) + "Names with CJK-chars" )
     printlog( "" )
     
-    '///+<li>Invoke randomizer</li>
     call randomize()
     
-    '///+<li>Repeat following steps for at least three asian characters:</li>
-    '///<ul>
     for iCounter = 1 to 3
         
         iRandom = int( 19968 + ( 20911 * rnd ) )
         printlog( " * Using decimal char: " & iRandom )
         
-        '///+<li>Create a folder with a name containing cjk characters</li>
         cStrangeFolder = hNameGen_append( iRandom )
         brc = hCreateDirctoryExpectSuccess( cStrangeFolder )
         
-        '///+<li>Save a file w. trailing cjk characters to the newly created directory</li>
-        '///+<li>Load the file again</li>
-        '///+<li>Delete the file</li>
         cStrangeFile = hNameGen_append( iRandom )
         cStrangeFile = convertpath( cStrangeFolder & "\" & cStrangeFile )
         brc = hSaveLoadDelSuccess( cStrangeFile , TRUE )
         
-        '///+<li>Save a file w. leading cjk characters to the newly created directory</li>
-        '///+<li>Load the file again</li>
-        '///+<li>Delete the file</li>        
         cStrangeFile = hNameGen_lead( iRandom , true )
         cStrangeFile = convertpath( cStrangeFolder & "\" & cStrangeFile )
         brc = hSaveLoadDelSuccess( cStrangeName , true )
         
-        '///+<li>Delete the folder</li>
         brc = hDeleteFileExpectSuccess( cStrangeFolder )
         
     next iCounter
-    '///</ul>
     
-    '///+<li>Close the document</li>
     printlog( "Close the document" )
     brc = hDestroyDocument()
-    '///</ul>
     
 endcase
 

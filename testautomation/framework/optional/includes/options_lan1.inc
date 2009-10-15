@@ -68,17 +68,12 @@ testcase tLanguageSettingsLanguages
 
    bChanged = FALSE
 
-   '///check if all settings are saved in configuration ( Language Settings / Languages )
 
-   '///open a new document
-   '///+open options 'Language settings' / 'languages'
 
    hNewDocument
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "Languages" )
 
-   '///+check dependences in this dialog
-   '///+- asian support <-> listbox for default language for asian
    printlog "- check dependences in this dialog"
    printlog "    - asian support"
    if Aktivieren.IsChecked() = FALSE then
@@ -125,7 +120,6 @@ testcase tLanguageSettingsLanguages
    endif
    end if
 
-   '///+- CTL support <-> listbox for default language for CTL
    printlog "    - CTL support"
    if ComplexScriptEnabled.IsChecked() = FALSE then
       if LanguageComplexScript.IsEnabled() = TRUE then
@@ -151,7 +145,6 @@ testcase tLanguageSettingsLanguages
       ComplexScriptEnabled.Check()
    end if
 
-   '///save raw data
    printlog "- save raw data"
    lsSave (1) = Gebietsschema.GetSelText()
    lsSave (2) = StandardWaehrung.GetSelText()
@@ -177,7 +170,6 @@ testcase tLanguageSettingsLanguages
       Warnlog "Empty entry is selected for 'Complex script'! => Bug 102046"
       endif
 
-   '///+change all settings
    printlog "- change settings"
    select case iSprache
       case 34   : Gebietsschema.Select( 40 )
@@ -204,19 +196,15 @@ testcase tLanguageSettingsLanguages
    LanguageComplexScript.Select( 7 )
    lsSave2 (3) = LanguageComplexScript.GetSelText()
 
-   '///+close options dialog with OK, close all documents
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK()
    Sleep ( 3 )
 
    hCloseDocument
 
-   '///+wait until StarOffice is out of memory and restart it
    printlog "- exit/restart StarOffice"
    ExitRestartTheOffice
    hNewDocument
-   '///+open options 'Language settings' / 'languages'
-   '///+check all changes
    printlog "- check changes"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "Languages" )
@@ -263,7 +251,6 @@ testcase tLanguageSettingsLanguages
       Warnlog  "CTL language => changes not saved! "
       endif
 
-   '///+set all to default and close options dialog with OK
    printlog "- set to default"
    Gebietsschema.Select lsSave(1)
    StandardWaehrung.Select lsSave (2)
@@ -310,8 +297,6 @@ testcase tLanguageSettingsLanguages
    ExtrasOptionenDlg.OK()
    Sleep (3)
 
-   '///+open options 'Language settings' / 'languages'
-   '///+check the default settings
    printlog "- check the data"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "Languages" )
@@ -371,7 +356,6 @@ testcase tLanguageSettingsLanguages
       ComplexScriptEnabled.Uncheck()
    endif
 
-   '///+close the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK()
    Sleep (3)
@@ -388,16 +372,12 @@ testcase tLanguageSettingsWritingAids
    dim iCounter as Integer
    Dim i as Integer, iCounter1 as Integer, iCounter2 as Integer, iCounter3 as Integer
 
-   '///check if all settings are saved in configuration ( Language Settings / writing aids )
 
-   '///open a new document
-   '///+open options 'Language settings' / 'writing aids'
 
    hNewDocument
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "WritingAids" )
 
-   '///+save raw data and inverted all settings
    printlog " - save raw data / and inverted settings"
    iCounter1 = Sprachmodule.GetItemCount
    Sprachmodule.TypeKeys "<PageUp>", 6
@@ -417,7 +397,6 @@ testcase tLanguageSettingsWritingAids
       Benutzerwoerterbuch.TypeKeys "<Down>"
    next i
 
-   '///+- last entry of 'User-defined dictionaries' - internal IgnoreAll-List - cannot be changed
    if Benutzerwoerterbuch.IsChecked <> TRUE then
       Warnlog "Last entry in 'User-defined dictionaries' should be checked ( internal Ignore-All List ), but it isn't => BUG?!"
       endif
@@ -432,18 +411,14 @@ testcase tLanguageSettingsWritingAids
       Optionen.TypeKeys "<Down>"
    next i
 
-   '///+close options dialog with OK, close all documents and exit StarOffice
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
    hCloseDocument
 
-   '///+wait until StarOffice is out of memory and restart it
    printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-   '///+open options 'Language settings' / 'writing aids'
-   '///+check all changes
    printlog " - check changes"
 
    hNewDocument
@@ -475,14 +450,12 @@ testcase tLanguageSettingsWritingAids
    printlog "    'options'"
    Optionen.TypeKeys "<PageUp>", 6
    for i=1 to iCounter3
-      '///+- options list : entry 9, 10 and 11 are depend only at a document => cannot check globally
       if i<>9 AND i<>10 AND i<>11 then
          if Optionen.IsChecked = lbSave3 (i) then Warnlog "entry no. " + i + " => changes not saved!"
          end if
       Optionen.TypeKeys "<Down>"
    next i
 
-   '///+make different changes in options list
    printlog " - make second changes"
    Optionen.TypeKeys "<PageUp>", 6
 
@@ -496,15 +469,12 @@ testcase tLanguageSettingsWritingAids
       Optionen.TypeKeys "<Down>"
    next i
 
-   '///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
    hCloseDocument
 
-   '///+open options 'Language settings' / 'writing aids'
-   '///+check second changes
    printlog " - check second changes"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "WritingAids" )
@@ -534,7 +504,6 @@ testcase tLanguageSettingsWritingAids
       Optionen.TypeKeys "<Down>"
    next i
 
-   '///+reset all to default settings
    printlog " - reset settings"
    Sprachmodule.TypeKeys "<PageUp>", 6
 
@@ -559,13 +528,10 @@ testcase tLanguageSettingsWritingAids
       Optionen.TypeKeys "<Down>"
    next i
 
-   '///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-   '///+open options 'Language settings' / 'writing aids'
-   '///+check the changes
    printlog " - check raw data"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "WritingAids" )
@@ -588,14 +554,12 @@ testcase tLanguageSettingsWritingAids
    printlog "    'options'"
    Optionen.TypeKeys "<PageUp>", 6
    for i=1 to iCounter3
-      '///+- options list : entry 9, 10 and 11 are depend only at a document => cannot check globally
       if i<>9 AND i<>10 AND i<>11 then
          if Optionen.IsChecked <> lbSave3 (i) then Warnlog "entry no. " + i + " => changes not saved!"
       end if
       Optionen.TypeKeys "<Down>"
    next i
 
-   '///+close options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
@@ -606,15 +570,11 @@ endcase
 testcase tLanguageSettingsJapaneseFind
  Dim bSave ( 20 ) as Boolean
 
-'///check if all settings are saved in configuration ( Language Settings / Japanese find )   => asian support must be activated
-'///open a new document
-'///+open options 'Language settings' / 'japanese find'
 
    hNewDocument
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "SearchingInJapanese" )
 
-'///+save raw data and inverted all settings
  printlog " - save data"
    bSave (1 ) = MatchCase.IsChecked
    bSave (2 ) = MatchFullHalf.IsChecked
@@ -657,18 +617,14 @@ testcase tLanguageSettingsJapaneseFind
    if bSave (18) = TRUE then ProlongedSoundmarks.Uncheck       else ProlongedSoundmarks.Check
    if bSave (19) = TRUE then MiddleDots.Uncheck                else MiddleDots.Check
 
-'///+close options dialog with OK, close all documents and exit StarOffice
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
    hCloseDocument
 
-'///+wait until StarOffice is out of memory and restart it
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///+open options 'Language settings' / 'japanese find'
-'///+check all changes
  printlog " - check changes"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "SearchingInJapanese" )
@@ -693,7 +649,6 @@ testcase tLanguageSettingsJapaneseFind
    if ProlongedSoundmarks.IsChecked       = bSave (18) then Warnlog "Prolonged Soundmarks => changes not saved!"
    if MiddleDots.IsChecked                = bSave (19) then Warnlog "Middle Dots => changes not saved!"
 
-'///+make different changes
  printlog " - second changes"
    MatchCase.Check
    MatchFullHalf.Uncheck
@@ -715,13 +670,10 @@ testcase tLanguageSettingsJapaneseFind
    ProlongedSoundmarks.Uncheck
    MiddleDots.Check
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Language settings' / 'japanese find'
-'///+check the second changes
  printlog " - check changes"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "SearchingInJapanese" )
@@ -746,7 +698,6 @@ testcase tLanguageSettingsJapaneseFind
    if ProlongedSoundmarks.IsChecked       <> FALSE then Warnlog "Prolonged Soundmarks => changes not saved!"
    if MiddleDots.IsChecked                <> TRUE  then Warnlog "Middle Dots => changes not saved!"
 
-'///+reset all settings to default
  printlog " - reset to saved data"
    if bSave (1 ) = TRUE then MatchCase.Check                 else MatchCase.UnCheck
    if bSave (2 ) = TRUE then MatchFullHalf.Check             else MatchFullHalf.UnCheck
@@ -768,13 +719,10 @@ testcase tLanguageSettingsJapaneseFind
    if bSave (18) = TRUE then ProlongedSoundmarks.Check       else ProlongedSoundmarks.UnCheck
    if bSave (19) = TRUE then MiddleDots.Check                else MiddleDots.UnCheck
 
-'///+close options dialoge with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Language settings' / 'japanese find'
-'///+check the raw data
  printlog " - check saved data"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "SearchingInJapanese" )
@@ -799,7 +747,6 @@ testcase tLanguageSettingsJapaneseFind
    if ProlongedSoundmarks.IsChecked       <> bSave (18) then Warnlog "Prolonged Soundmarks => changes not saved!"
    if MiddleDots.IsChecked                <> bSave (19) then Warnlog "Middle Dots => changes not saved!"
 
-'///+close options dialoge
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
@@ -813,15 +760,11 @@ testcase tLanguageSettingsAsianLayout
  Dim sSave ( 20 ) as String
  Dim i as Integer, iLan as Integer
 
-'///check if all settings are saved in configuration ( Language Settings / Asian Layout )   => asian support must be activated
 
-'///open a new document
-'///+open options 'Language settings' / 'asian layout'
    hNewDocument
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "AsianLayout" )
 
-'///+save raw data
  printlog " - save raw data"
    bSave ( 1 ) = WesternCharactersOnly.IsChecked
    bSave ( 2 ) = WesternTextAndPunctuation.IsChecked
@@ -852,7 +795,6 @@ testcase tLanguageSettingsAsianLayout
       end if
    next i
 
-'///+change all settings
  printlog " - change data"
    WesternTextAndPunctuation.Check
    CompressPunctuationOnly.Check
@@ -867,18 +809,14 @@ testcase tLanguageSettingsAsianLayout
       end select
    next i
 
-'///+close options dialog with OK, close all documents and exit StarOffice
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
    hCloseDocument
 
-'///+wait until StarOffice is out of memory and restart it
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///+open options 'Language settings' / 'asian layout'
-'///+check the changes
  printlog " - check changes"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "AsianLayout" )
@@ -904,18 +842,14 @@ testcase tLanguageSettingsAsianLayout
       end select
    next i
 
-'///+make different changes
  printlog " - second changes"
    WesternCharactersOnly.Check
    CompressPunctuationAndJapaneseKana.Check
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Language settings' / 'asian layout'
-'///+check the changes
  printlog " - check changes"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "AsianLayout" )
@@ -923,7 +857,6 @@ testcase tLanguageSettingsAsianLayout
    if WesternCharactersOnly.IsChecked <> TRUE then Warnlog "Western Characters Only => changes not saved!"
    if CompressPunctuationAndJapaneseKana.IsChecked <> TRUE then Warnlog "Compress Punctuation And Japanese Kana => changes not saved!"
 
-'///+reset all changes to default data
  printlog " - reset to saved data"
    if bSave ( 1 ) = TRUE then WesternCharactersOnly.Check
    if bSave ( 2 ) = TRUE then WesternTextAndPunctuation.Check
@@ -939,13 +872,10 @@ testcase tLanguageSettingsAsianLayout
       if bSave ( 5+i ) = TRUE then Standard.Check else Standard.Uncheck
    next i
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Language settings' / 'asian layout'
-'///+check raw data
  printlog " - check reset"
    ToolsOptions
    hToolsOptions ( "LanguageSettings", "AsianLayout" )
@@ -964,7 +894,6 @@ testcase tLanguageSettingsAsianLayout
       if bSave ( 5+i ) = TRUE then Standard.Check else Standard.Uncheck
    next i
 
-'///+close options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)

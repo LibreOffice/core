@@ -56,8 +56,6 @@ end sub
 
 testcase tMacroSecurityLevels( cFileFormat )
 
-    '///<H1>Macro execution in all security levels</H1>
-    '///<ul>
 
     dim cWorkFile as string
         cWorkFile = gTesttoolPath & "framework\optional\input\BasicDocs\"
@@ -82,18 +80,12 @@ testcase tMacroSecurityLevels( cFileFormat )
     '         |---------------------------------------------------------|
     ' *) Covered by test "f_sec_trusted_path.bas"
     
-    '///+<li>Cycle through all four security levels and load a document with macro</li>
-    '///<ul>
     for iSecLevel = 0 to 3
 
-        '///+<li>Set the macro security level</li>
         printlog( "" )
         hSetMacroSecurityAPI( iSecLevel )
         FileOpen( "URL", cWorkFile, "FrameName", "_default" )
-        '///+<li>Load a file from ..\framework\optional\input\BasicDocs\</li>
-        '///<ul>
         select case iSecLevel
-        '///+<li>For security level &eq; 0: Macro should be executed</li>
         case 0 : brc = hIdentifyExecutedMacro()
                  if ( not brc ) then
                      if ( gApplication = "MATH" ) then
@@ -103,7 +95,6 @@ testcase tMacroSecurityLevels( cFileFormat )
                      endif
                  endif   
                  
-        '///+<li>For security level &eq; 1: Macro should be executed after security warning</li>                               
         case 1 : brc = hAllowMacroExecution()
                  if ( not brc ) then
                      warnlog( "Macro execution warning missing, chek the file/security settings" )
@@ -118,7 +109,6 @@ testcase tMacroSecurityLevels( cFileFormat )
                      endif
                  endif
                  
-        '///+<li>For security level &eq; 2: Macro should *not* be executed (it is not in trusted path)</li>                 
         case 2 : brc = hHandleActivesOnLoad( 1 , 1 )
                  if ( not brc ) then
                      qaerrorlog( "#i53710# unexpected second messagebox" )
@@ -128,23 +118,18 @@ testcase tMacroSecurityLevels( cFileFormat )
                      warnlog( "Macro was executed" )
                  endif                 
                  
-        '///+<li>For security level &eq; 3: Macro should *never* be executed</li>                 
         case 3 : brc = hHandleActivesOnLoad( 1 , 0 )
                  brc = hIdentifyExecutedMacro()
                  if ( brc ) then
                      warnlog( "Macro was executed" )
                  endif
         end select
-        '///</ul>
 
         brc = hDestroyDocument()
 
     next iSecLevel
-    '///</ul>
 
-    '///+<li>Reset macro security level to default (High)</li>
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
-    '///</ul>
 
 endcase
 
@@ -152,10 +137,6 @@ endcase
 
 function hIdentifyExecutedMacro() as boolean
 
-    '///<h3>Function to identify the macro just being executed</h3>
-    '///This is a tiny helper function that compares the string from the message-
-    '///+box with a reference - TTMacro3 - and returns TRUE if the macro is the 
-    '///+ correct one. FALSE in any other case.
 
     dim cMessage as string
     const CFN = "hIdentifyExecutedMacro::"

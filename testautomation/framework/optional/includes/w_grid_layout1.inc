@@ -41,7 +41,6 @@ private const SOURCE_PATH = "framework\optional\input\CJK\"
 
 testcase tTextGridDialog_1
 
-'/// Check if tabpage 'Text Grid' disappears when "Asian Language support" is NOT checked
  if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
    Call CheckAsianLanguageSupport("Off")
    hNewDocument()
@@ -60,7 +59,6 @@ testcase tTextGridDialog_1
    endcatch
  end if
 
-'/// Check if tabpage 'Text Grid' appears when "Asian Language support" is checked
    Call CheckAsianLanguageSupport("On")
 
    sleep 5
@@ -88,7 +86,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tTextGridDialog_2
-'/// No grid is active, no changes to existing version
    Dim testFile , sCorrectResult as String
 
    testFile       = "gridtest.sxw"
@@ -96,7 +93,6 @@ testcase tTextGridDialog_2
 
    Call hNewDocument
 
-  '/// open a test file , and check No Grid checkbox
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
    sMakeReadOnlyDocumentEditable
    
@@ -111,7 +107,6 @@ testcase tTextGridDialog_2
     TabGrid.OK
     Sleep 1
 
-   '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
     ViewNavigator
      Kontext "NavigatorWriter"
@@ -120,7 +115,6 @@ testcase tTextGridDialog_2
      Sleep 5
     fCloseNavigator
 
-   '/// In No Grid mode, there should be only 1 page, the focus is before the first line
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
     Sleep 1
@@ -135,7 +129,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tTextGridDialog_3
-'/// Grid (lines only): The page is set up with a defined number of lines
    Dim testFile  , sCorrectResult , sLinesPerPage as String
 
    testFile       = "gridtest.sxw"
@@ -144,8 +137,6 @@ testcase tTextGridDialog_3
 
    Call hNewDocument
 
-  '/// open a test file and check Grid(lines onle) checkbox ,
-  '/// + set 10 line/page
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
    sMakeReadOnlyDocumentEditable
     FormatPageWriter
@@ -160,7 +151,6 @@ testcase tTextGridDialog_3
     TabGrid.OK
     Sleep 1
 
-   '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
     ViewNavigator
      Kontext "NavigatorWriter"
@@ -183,7 +173,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tTextGridDialog_4
-'/// Grid (lines and characters): The page is set up with a defined number of lines and a defined number of characters in each line
    Dim testFile      , sCorrectResult as String
    Dim sLinesPerPage , sCharsPerLine  as String
 
@@ -194,8 +183,6 @@ testcase tTextGridDialog_4
 
    Call hNewDocument
 
-  '/// open a test file and check Grid(lines and characters) checkbox
-  '/// + set 10 line/page and 9 characters/line
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
    sMakeReadOnlyDocumentEditable
     FormatPageWriter
@@ -211,7 +198,6 @@ testcase tTextGridDialog_4
     TabGrid.OK
     Sleep 1
 
-   '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
     ViewNavigator
      Kontext "NavigatorWriter"
@@ -234,11 +220,8 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase  tGridDisplay_1
-'/// Print grid: The grid lines will be printed. Inactive if "Display grid" is inactive.
    Call hNewDocument
 
-   '/// format / page  / tabpage Text grid
-   '/// + check "display grid" and check "print grid"
     FormatPageWriter
     Kontext
     if active.exists(5) then
@@ -253,7 +236,6 @@ testcase  tGridDisplay_1
     TabGrid.OK
     Sleep 1
 
-   '/// Print to printer
     FilePrint
     Kontext "Active"
     if Active.Exists(5) then
@@ -276,8 +258,6 @@ testcase  tGridDisplay_1
       end if
     end if
 
-   '/// format / page  / tabpage Text grid
-   '/// + check "display grid" and uncheck "print grid"
     FormatPageWriter
     Kontext
     if active.exists(5) then
@@ -292,7 +272,6 @@ testcase  tGridDisplay_1
     TabGrid.OK
     Sleep 1
 
-   '/// Print to printer
     FilePrint
     Kontext "Active"
     if Active.Exists(5) then
@@ -321,7 +300,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tUserDefineLayout_1
-'/// Decrease characters per line will cause lines per page decrease accordingly
    Dim sLinesPerPage       , sCharsPerLine          as String
    Dim sExpectLinesPerPage , sExpectLinesPerPage1   as String
 
@@ -332,8 +310,6 @@ testcase tUserDefineLayout_1
 
   Call hNewDocument
 
-  '/// Format/page , set lines per page to 20, and set charsets per line to 2
-  '/// + wait for a moment , then check the the number  of lines per page.
    FormatPageWriter
    Kontext
    if active.exists(5) then
@@ -362,7 +338,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tFontSizeChanges_1
-'/// Change the font size to bigger enough will change the layout
     Dim testFile      , sCorrectResult as String
     Dim sLinesPerPage , sCharsPerLine  as String
     dim sTemp as string
@@ -372,19 +347,16 @@ testcase tFontSizeChanges_1
     sLinesPerPage  = "2"
     sCharsPerLine  = "9"
 
-    '/// open a test file
     Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
     sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Shift Right>"
 
-    '/// set font size to 60
     Kontext "FormatObjectbar"
         Schriftgroesse.Select   "60"
         Schriftgroesse.TypeKeys "<Return>"
         Sleep 1
 
-    '/// Check if lines per page and charsets per line is still right
     Kontext "DocumentWriter"
     FormatPageWriter
         Kontext
@@ -406,7 +378,6 @@ testcase tFontSizeChanges_1
             warnlog "TabGrid is not available."
         endif
 
-    '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
@@ -434,7 +405,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tRubyText_1
-'/// If Ruby Text is applied and longer than its Base Text it will stretch over more grid cells than the base text itself.
    Dim testFile , sRubyText as String
 
    testFile   = "rubytest.sxw"
@@ -442,7 +412,6 @@ testcase tRubyText_1
 
    Call hNewDocument
 
-  '/// open a test file , and insert  long ruby test text
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
     sMakeReadOnlyDocumentEditable
    Kontext "DocumentWriter"
@@ -477,7 +446,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tIndentsTest_1
- '/// Indents should work and always indenting as close as possible to their measurements by snapping to the appropriate grid cell. Tabs therefore will be ignored.
    Dim testFile , sCorrectPage1 , sCorrectPage2 as String
 
    testFile       = "IndentsTest.sxw"
@@ -486,7 +454,6 @@ testcase tIndentsTest_1
 
    Call hNewDocument
 
-  '/// open a test file , and press TAB in second line
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
     sMakeReadOnlyDocumentEditable
    Kontext "DocumentWriter"
@@ -497,14 +464,12 @@ testcase tIndentsTest_1
    Call DocumentWriter.TypeKeys  "<End>"
    Sleep 1
 
-   '/// Active navigator dialogue , check if the page number is 1
     Kontext
     ViewNavigator
      Kontext "NavigatorWriter"
      if Seitennummer.GetText <> sCorrectPage1 then Warnlog "First test :Something wrong in indents test!"
     fCloseNavigator
 
-   '/// press TAB in second line again
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Home>"
     Sleep 1
@@ -513,7 +478,6 @@ testcase tIndentsTest_1
     Call DocumentWriter.TypeKeys  "<End>"
     Sleep 1
 
-   '/// Active navigator dialogue , check if the page number is 2
     Kontext
     ViewNavigator
      Kontext "NavigatorWriter"
@@ -526,8 +490,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tObjectsTest_1
-  '/// If objects are anchored to text they will "wander" with its surrounding text.
-  '/// If they are anchored as character they will snap to the appropriate grid cell (since they are a character).
    Dim testFile , sCorrectPage1 , sCorrectPage2 as String
 
    testFile       = "objectsTest.sxw"
@@ -536,10 +498,8 @@ testcase tObjectsTest_1
 
    Call hNewDocument
 
-  '/// open a test file , and press TAB in second line
    Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
 
-  '/// If object is anchored as Character , check if it will snap to the appropriate grid cell
     fStartupNavigator( "OLEObject" , 1 )
     Sleep 1
     Auswahlliste.TypeKeys "<Return>"
@@ -558,7 +518,6 @@ testcase tObjectsTest_1
      if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Something wrong when object is anchored as Character!"
     fCloseNavigator
 
-  '/// If object is anchored to Character , check if it will NOT snap to the appropriate grid cell
     fStartupNavigator( "OLEObject" , 1 )
     Auswahlliste.TypeKeys "<Return>"
     fCloseNavigator

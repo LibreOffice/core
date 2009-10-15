@@ -60,9 +60,7 @@ end sub
 ' --------------------------------------------------------------------------------
 
 testcase tFileLoadSave
-'///general load-save-routine for level1-test
 
-'///create the document and save it ( 'edit/save as' )
    Dim Datei1$ 
    Dim Datei2$ 
    Dim DokName1$ 
@@ -87,30 +85,25 @@ testcase tFileLoadSave
 
    PrintLog Chr(13)+"** " + gApplication
 
-'///file/new/ -> all applications ( one by one )
    Call hNewDocument
 
-'///+ insert a short text in Writer/MasterDoc/WriterWeb document
    if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOCUMENT" then
       Kontext "DocumentWriter"
       DocumentWriter.TypeKeys gApplication + "   =>   Load - Save - Load - Save<Return>"
       DocumentWriter.TypeKeys "- first saving / loading<Return>"
    end if
 
-'///+_ or insert a short text in the Calc document
    if gApplication = "CALC" then
       Kontext "DocumentCalc"
       DocumentCalc.TypeKeys "Testdokument   =>   Load - Save - Load - Save<Return>"
       DocumentCalc.TypeKeys "- first saving / loading<Return>"
    end if
 
-'///+_ or insert a short text in the Math document
    if gApplication = "MATH" then
       SchreibenInMathDok "a over 2 = 3 over d"
       Sleep (2)
    end if
 
-'///+_ or create a rectangle in a Draw/Impress document
    if gApplication = "DRAW" OR gApplication = "IMPRESS" then
       hRechteckErstellen ( 30, 30, 60, 60 )
    end if
@@ -123,49 +116,38 @@ testcase tFileLoadSave
    if app.Dir (Datei2$) <> "" then app.kill Datei2$
    Sleep 2
 
-'///+ save the file locally
    PrintLog "- first saving"
    hFileSaveAsKill ( Datei1$ )
 
-'///change the file and save if again ( edit/save )
    PrintLog "- change and save"
-'///+ insert a short text in Writer/MasterDoc/WriterWeb document
    if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOCUMENT" then
       Kontext "DocumentWriter"
       DocumentWriter.TypeKeys "- file/save<Return>"
    end if
 
-'///+_ or insert a short text in the Calc document
    if gApplication = "CALC" then
       Kontext "DocumentCalc"
       DocumentCalc.TypeKeys "- file/save<Return>"
    end if
 
-'///+_ or insert a short text in the Math document
    if gApplication = "MATH" then
       SchreibenInMathDok "file save : 4 over 5 = 3 over d"
       Sleep (2)
    end if
 
-'///+_ or create a rectangle in a Draw/Impress document
    if gApplication = "DRAW" OR gApplication = "IMPRESS" then
       hRechteckErstellen ( 10, 10, 20, 20 )
    end if
 
-'///+file save ( edit/save )
    hFileSave()
 
-'///+close the document
    PrintLog "- close"
    Call hCloseDocument()
 
-'///load the file again change it and save it with another name
    PrintLog "- first loading"
-'///+ file/open the file
    hFileOpen ( Datei1$ )
    sleep( 2 )
 
-'///+ insert a short text in Writer/MasterDoc/WriterWeb document
    if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOCUMENT" then
       Kontext "DocumentWriter"
       gMouseClick ( 50, 50 )
@@ -174,7 +156,6 @@ testcase tFileLoadSave
       DocumentWriter.TypeKeys "<Return>- second saving / loading"
    end if
 
-'///+_ or insert a short text in the Calc document
    if gApplication = "CALC" then
       Kontext "DocumentCalc"
       gMouseClick ( 50, 50 )
@@ -182,24 +163,19 @@ testcase tFileLoadSave
       DocumentCalc.TypeKeys "<Return>- second saving / loading"
    end if
 
-'///+_ or insert a short text in the Math document
    if gApplication = "MATH" then
       SchreibenInMathDok "file save : 4 over 5 = 3 over d"
       Sleep (2)
    end if
 
-'///+_ or create a rectangle in a Draw/Impress document
    if gApplication = "DRAW" OR gApplication = "IMPRESS" then
       hRechteckErstellen ( 65, 65, 75, 75 )
    end if
 
-'///+file save with another name ( edit/save as )
    PrintLog "- second saving"
    hFileSaveAsKill ( Datei2$ )
-'///+close the document
    Call hCloseDocument
 
-'///+open it again ( file/open )
    PrintLog "- second loading"
    hFileOpen ( Datei2$ )
    Kontext "Navigator"

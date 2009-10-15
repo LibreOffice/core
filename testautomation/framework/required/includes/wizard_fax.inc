@@ -39,6 +39,8 @@
 
 testcase tUpdtWizardFax
 
+    printlog( "Resource test for the fax wizard" )
+
     dim iErr as integer
     dim brc as boolean
     
@@ -100,6 +102,5 @@ testcase tUpdtWizardFax
         hDestroyDocument()
     wend
     
-    '///</ul>
     
 endcase
