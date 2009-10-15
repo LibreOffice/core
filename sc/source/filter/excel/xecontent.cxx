@@ -1279,7 +1279,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
 
 void XclExpDval::WriteBody( XclExpStream& rStrm )
 {
-    rStrm.WriteZeroBytes( 10 );
+    rStrm.WriteZeroBytesToRecord( 10 );
     rStrm << EXC_DVAL_NOOBJ << static_cast< sal_uInt32 >( maDVList.GetSize() );
 }
 
@@ -1346,7 +1346,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm   << nFlags
             << sal_uInt16( 0x0000 )
             << sal_uInt16( 0x0001 );
-    rStrm.WriteZeroBytes( 6 );
+    rStrm.WriteZeroBytesToRecord( 6 );
     rStrm.EndRecord();
 
     // WQSTRING record
@@ -1357,7 +1357,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     // unknown record 0x0802
     rStrm.StartRecord( EXC_ID_0802, 16 + maDestRange.GetSize() );
     rStrm   << EXC_ID_0802;             // repeated record id ?!?
-    rStrm.WriteZeroBytes( 6 );
+    rStrm.WriteZeroBytesToRecord( 6 );
     rStrm   << sal_uInt16( 0x0003 )
             << sal_uInt32( 0x00000000 )
             << sal_uInt16( 0x0010 )
@@ -1373,7 +1373,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
             << sal_uInt16( 0x0000 )
             << EXC_WQSETT_DEFAULTFLAGS
             << nFlags;
-    rStrm.WriteZeroBytes( 10 );
+    rStrm.WriteZeroBytesToRecord( 10 );
     rStrm   << mnRefresh                // refresh delay in minutes
             << EXC_WQSETT_FORMATFULL
             << sal_uInt16( 0x0000 );
