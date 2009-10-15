@@ -59,7 +59,6 @@
 
 #include "viewshape.hxx"
 #include "tools.hxx"
-#include "lerp.hxx"
 
 #include <boost/bind.hpp>
 
@@ -463,9 +462,9 @@ namespace slideshow
             if( mbForceUpdate || (nUpdateFlags & ALPHA) )
             {
                 mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
-                                    ::canvas::tools::clamp(pAttr->getAlpha(),
-                                                           0.0,
-                                                           1.0) :
+                                    ::basegfx::clamp(pAttr->getAlpha(),
+                                                     0.0,
+                                                     1.0) :
                                     1.0 );
             }
             if( mbForceUpdate || (nUpdateFlags & CLIP) )

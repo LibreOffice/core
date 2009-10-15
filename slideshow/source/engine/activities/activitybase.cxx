@@ -162,7 +162,7 @@ namespace slideshow
             // ================================
 
             // clamp nT to permissible [0,1] range
-            nT = ::canvas::tools::clamp( nT, 0.0, 1.0 );
+            nT = ::basegfx::clamp( nT, 0.0, 1.0 );
 
             // take acceleration/deceleration into account. if the sum
             // of mnAccelerationFraction and mnDecelerationFraction

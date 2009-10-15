@@ -51,10 +51,10 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tools/lerp.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include "lerp.hxx"
 #include "unoview.hxx"
 #include "smilfunctionparser.hxx"
 #include "tools.hxx"
@@ -641,18 +641,18 @@ namespace slideshow
                                                     const ::basegfx::B2DRange&      rShapeBounds )
         {
             return ::basegfx::B2DRectangle(
-                lerp( rShapeBounds.getMinX(),
-                      rShapeBounds.getMaxX(),
-                      rUnitBounds.getMinX() ),
-                lerp( rShapeBounds.getMinY(),
-                      rShapeBounds.getMaxY(),
-                      rUnitBounds.getMinY() ),
-                lerp( rShapeBounds.getMinX(),
-                      rShapeBounds.getMaxX(),
-                      rUnitBounds.getMaxX() ),
-                lerp( rShapeBounds.getMinY(),
-                      rShapeBounds.getMaxY(),
-                      rUnitBounds.getMaxY() ) );
+                basegfx::tools::lerp( rShapeBounds.getMinX(),
+                                      rShapeBounds.getMaxX(),
+                                      rUnitBounds.getMinX() ),
+                basegfx::tools::lerp( rShapeBounds.getMinY(),
+                                      rShapeBounds.getMaxY(),
+                                      rUnitBounds.getMinY() ),
+                basegfx::tools::lerp( rShapeBounds.getMinX(),
+                                      rShapeBounds.getMaxX(),
+                                      rUnitBounds.getMaxX() ),
+                basegfx::tools::lerp( rShapeBounds.getMinY(),
+                                      rShapeBounds.getMaxY(),
+                                      rUnitBounds.getMaxY() ) );
         }
 
         ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&         rOrigBounds,
