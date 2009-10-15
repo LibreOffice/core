@@ -63,6 +63,8 @@ class PolyPolygon;
 class Gradient;
 class SvtGraphicFill;
 class SvtGraphicStroke;
+class LineInfo;
+namespace basegfx { class B2DPolygon; }
 
 inline sal_uInt16 _uInt16( sal_Int32 nValue )
 {
@@ -363,6 +365,7 @@ private:
     void Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const Rectangle& rClipRect, bool bMap );
     void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
+    void Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void Impl_writeActions( const GDIMetaFile& rMtf );
     void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled );
     void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );
