@@ -44,7 +44,7 @@
 /** === end UNO includes === **/
 
 #include <connectivity/dbconversion.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>

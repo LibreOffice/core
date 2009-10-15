@@ -56,7 +56,7 @@
 #include <svtools/transfer.hxx>
 #include <osl/mutex.hxx>
 #include <vos/thread.hxx>
-#include <svtools/cancel.hxx>
+#include <svl/cancel.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <svtools/cliplistener.hxx>
 

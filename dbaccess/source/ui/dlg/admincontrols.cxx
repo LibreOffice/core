@@ -32,9 +32,9 @@
 #include "dsitems.hxx"
 #include "moduledbu.hxx"
 
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 
 //........................................................................
 namespace dbaui

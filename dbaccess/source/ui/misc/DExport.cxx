@@ -50,7 +50,7 @@
 #include "dbu_misc.hrc"
 #include <connectivity/dbconversion.hxx>
 #include <sfx2/sfxhtml.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include "TypeInfo.hxx"
@@ -65,8 +65,8 @@
 #include "WCopyTable.hxx"
 #include "WExtendPages.hxx"
 #include "WCPage.hxx"
-#include <svtools/syslocale.hxx>
-#include <svtools/zforlist.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/zforlist.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/FValue.hxx>
 #include <com/sun/star/sdbc/SQLWarning.hpp>

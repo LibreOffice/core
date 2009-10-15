@@ -40,7 +40,7 @@
 #include "RelationController.hxx"
 #endif
 #ifndef _UNDO_HXX
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>

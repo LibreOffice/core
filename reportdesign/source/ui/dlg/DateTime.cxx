@@ -54,7 +54,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <connectivity/dbconversion.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif

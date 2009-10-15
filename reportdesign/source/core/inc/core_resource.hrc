@@ -32,7 +32,7 @@
 #define REPORTDESIGN_CORE_RESOURCE_HRC_
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 //------------------------------------------------------------------------------

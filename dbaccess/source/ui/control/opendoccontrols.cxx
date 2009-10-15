@@ -81,7 +81,7 @@
 #include <tools/urlobj.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 
 //........................................................................

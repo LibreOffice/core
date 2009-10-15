@@ -32,7 +32,7 @@
 #define _DBU_RESOURCE_HRC_
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 #define RID_DIALOG_START                RID_DBACCESS_START

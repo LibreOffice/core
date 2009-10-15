@@ -33,7 +33,7 @@
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vector>
 
 class SfxTabPage;

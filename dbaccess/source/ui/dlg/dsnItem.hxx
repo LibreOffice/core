@@ -32,7 +32,7 @@
 #ifndef _DBAUI_DSNITEM_HXX_
 #define _DBAUI_DSNITEM_HXX_
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 //.........................................................................
 namespace dbaccess

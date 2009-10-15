@@ -52,7 +52,7 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <cppuhelper/implbase5.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/svdedtv.hxx>
 #include <svx/zoomitem.hxx>
 #include "ModuleHelper.hxx"

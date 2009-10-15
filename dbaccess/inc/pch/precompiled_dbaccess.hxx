@@ -457,8 +457,8 @@
 #include "comphelper/classids.hxx"
 
 
-#include "svtools/cjkoptions.hxx"
-#include "svtools/filenotation.hxx"
+#include "svl/cjkoptions.hxx"
+#include "svl/filenotation.hxx"
 #include "unotools/historyoptions.hxx"
 #include "svtools/htmlkywd.hxx"
 #include "svtools/imgdef.hxx"
@@ -467,7 +467,7 @@
 #include "svtools/miscopt.hxx"
 #include "svtools/rtfkeywd.hxx"
 #include "svtools/rtftoken.h"
-#include "svtools/solar.hrc"
+#include "svl/solar.hrc"
 #include "svtools/toolboxcontroller.hxx"
 #include "unotools/viewoptions.hxx"
 

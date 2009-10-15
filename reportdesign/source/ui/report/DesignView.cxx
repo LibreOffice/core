@@ -33,7 +33,7 @@
 #include <tools/debug.hxx>
 #include "ReportController.hxx"
 #include <comphelper/types.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
 #include "RptDef.hxx"
 #include "UITools.hxx"

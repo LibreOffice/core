@@ -38,9 +38,9 @@
 #include "dlgpage.hxx"
 #include "ModuleHelper.hxx"
 #include "RptResId.hrc"
-#include <svtools/intitem.hxx> //add CHINA001
-#include <svtools/cjkoptions.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/intitem.hxx> //add CHINA001
+#include <svl/cjkoptions.hxx>
+#include <svl/aeitem.hxx>
 
 namespace rptui
 {

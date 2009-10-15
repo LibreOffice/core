@@ -69,7 +69,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

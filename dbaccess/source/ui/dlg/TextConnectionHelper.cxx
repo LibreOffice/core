@@ -51,16 +51,16 @@
 #endif
 
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
@@ -81,7 +81,7 @@
 #include <vcl/mnemonic.hxx>
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #endif
 #include <jvmaccess/virtualmachine.hxx>
 #ifndef _DBAUI_ADASTAT_HXX_
@@ -109,7 +109,7 @@
 #endif
 
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX

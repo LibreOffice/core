@@ -37,8 +37,8 @@
 
 #include <tools/debug.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "RptDef.hxx"
 #include "dlgedfunc.hxx"

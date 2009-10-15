@@ -72,7 +72,7 @@
 #include "localresaccess.hxx"
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #endif
 
 #define EF_VISITED      0x0001

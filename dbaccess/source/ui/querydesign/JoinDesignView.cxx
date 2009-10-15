@@ -40,7 +40,7 @@
 #include "JoinController.hxx"
 #endif
 #ifndef _UNDO_HXX
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #endif
 #ifndef DBAUI_QYDLGTAB_HXX
 #include "adtabdlg.hxx"

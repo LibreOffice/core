@@ -31,14 +31,14 @@
 #define DBAUI_SQLEDIT_HXX
 
 #include <svtools/editsyntaxhighlighter.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 #include <unotools/sourceviewconfig.hxx>
 
 namespace dbaui
 {
     class OQueryTextView;
-    class OSqlEdit : public MultiLineEditSyntaxHighlight, SfxListener, utl::ConfigurationListener
+    class OSqlEdit : public MultiLineEditSyntaxHighlight, utl::ConfigurationListener
     {
     private:
         Timer                   m_timerInvalidate;
@@ -82,8 +82,7 @@ namespace dbaui
         void stopTimer();
         void startTimer();
 
-        virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-        virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster* );
+        virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
         using MultiLineEditSyntaxHighlight::Notify;
     };
 }

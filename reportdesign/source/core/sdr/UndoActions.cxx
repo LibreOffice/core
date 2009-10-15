@@ -51,7 +51,7 @@
 /** === end UNO includes === **/
 
 #include <connectivity/dbtools.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
 #include <vcl/svapp.hxx>

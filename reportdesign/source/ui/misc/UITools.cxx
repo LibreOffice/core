@@ -87,8 +87,8 @@
 
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/namedvaluecollection.hxx>

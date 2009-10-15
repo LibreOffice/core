@@ -86,7 +86,7 @@
 #include <vcl/button.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>

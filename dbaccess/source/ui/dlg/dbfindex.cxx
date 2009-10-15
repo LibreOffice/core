@@ -66,7 +66,7 @@
 #include <ucbhelper/content.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 
 

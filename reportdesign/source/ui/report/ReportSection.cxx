@@ -67,7 +67,7 @@
 #include <vcl/lineinfo.hxx>
 #include "ColorChanger.hxx"
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
 #include <framework/imageproducer.hxx>

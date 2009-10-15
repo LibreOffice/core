@@ -121,7 +121,7 @@
 #endif
 
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 
 #ifndef _SVX_ALGITEM_HXX //autogen
@@ -137,19 +137,19 @@
 #endif
 
 #ifndef _NUMUNO_HXX
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemInfo
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 
 #ifndef _SFXRNGITEM_HXX
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #endif
 
 #ifndef _SV_WAITOBJ_HXX
@@ -160,7 +160,7 @@
 #endif
 
 #ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>

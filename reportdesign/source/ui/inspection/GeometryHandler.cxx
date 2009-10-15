@@ -42,7 +42,7 @@
 #include <unotools/configmgr.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/StringListResource.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -84,8 +84,8 @@
 #include <boost/bind.hpp>
 #include <tools/string.hxx>
 #include "metadata.hxx"
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_DASH_LIST        SID_DASH_LIST

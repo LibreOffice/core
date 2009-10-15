@@ -138,11 +138,11 @@
 #include "dlgpage.hxx"
 #include "RptResId.hrc"
 
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/aeitem.hxx> //CHINA001
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/aeitem.hxx> //CHINA001
 #include <svtools/cliplistener.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
 
 #include <vos/mutex.hxx>

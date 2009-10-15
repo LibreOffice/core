@@ -58,7 +58,7 @@
 #include <tools/diagnose_ex.h>
 #endif
 #include <comphelper/sequence.hxx>
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
 #include "dsntypes.hxx"
 namespace dbaxml

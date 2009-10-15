@@ -110,7 +110,7 @@
 #include "ImageControl.hxx"
 #include "Shape.hxx"
 #include "ReportHelperImpl.hxx"
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/thread.hxx>
 

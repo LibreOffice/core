@@ -55,7 +55,7 @@
 #include <tools/color.hxx>
 #include <svtools/htmlout.hxx>
 #include <sfx2/frmhtmlw.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
 #include "UITools.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
@@ -63,7 +63,7 @@
 #include <svtools/rtfout.hxx>
 #include <svx/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <rtl/logfile.hxx>
 
