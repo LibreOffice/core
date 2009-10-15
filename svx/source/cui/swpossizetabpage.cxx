@@ -40,7 +40,7 @@
 #include <svx/dialmgr.hxx>
 #include <dlgutil.hxx>
 #include <anchorid.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <swframevalidation.hxx>
 #include <tools/debug.hxx>
 #include <svx/dialogs.hrc>

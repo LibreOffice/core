@@ -55,8 +55,8 @@
 #include <vcl/graph.hxx>
 #endif
 #include <sfx2/viewsh.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 #include "htmlmode.hxx"
@@ -89,14 +89,14 @@
 #include <sfx2/module.hxx>
 
 
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include <svx/svxids.hrc> //CHINA001
 
 // #i4219#
 #include <svtools/optionsdrawinglayer.hxx>
-#include <svtools/slstitm.hxx> //CHINA001
-#include <svtools/aeitem.hxx> //CHINA001
+#include <svl/slstitm.hxx> //CHINA001
+#include <svl/aeitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 // configuration helper =======================================================
 
@@ -121,6 +121,9 @@ public:
     /** Returns true, if the current HTML export mode is set to HTML 3.2. */
     inline bool                 IsExportModeHTML32() const { return mnExpMode == 0; } // 0 == HTML_CFG_HTML32, see offmgr/htmlcfg.hxx
 
+    virtual void    Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+
 private:
     sal_Int32                   mnExpMode;
 };
@@ -139,6 +142,13 @@ SvxHtmlExportModeConfigItem_Impl::SvxHtmlExportModeConfigItem_Impl() :
         aPropValues[ 0 ] >>= mnExpMode;
 }
 
+void SvxHtmlExportModeConfigItem_Impl::Commit()
+{
+}
+
+void SvxHtmlExportModeConfigItem_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
 
 // static ----------------------------------------------------------------
 

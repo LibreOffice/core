@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #define ITEMID_MACRO 0
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #undef ITEMID_MACRO
 
 #include "macroass.hxx"
@@ -41,7 +41,7 @@
 #include <svx/dialmgr.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <svtools/svmedit.hxx>
 #include "cfgutil.hxx"

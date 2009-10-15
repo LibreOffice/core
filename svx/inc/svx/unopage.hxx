@@ -44,7 +44,7 @@
 #endif
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svx/mutxhelp.hxx>
 #include "svx/svxdllapi.h"
 

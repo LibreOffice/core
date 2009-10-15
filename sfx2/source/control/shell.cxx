@@ -33,8 +33,8 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <basic/sbstar.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/undo.hxx>
+#include <svl/itempool.hxx>
+#include <svl/undo.hxx>
 #include <svtools/itemdel.hxx>
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>

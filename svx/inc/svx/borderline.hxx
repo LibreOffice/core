@@ -32,7 +32,7 @@
 #define SVX_BORDERLINE_HXX
 
 #include <tools/color.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
 // Line defaults in twips (former Writer defaults):

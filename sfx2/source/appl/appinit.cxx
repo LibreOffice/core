@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/soerr.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <unotools/saveopt.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <tools/config.hxx>
@@ -46,9 +46,9 @@
 #include <tools/resary.hxx>
 #endif
 #include <tools/urlobj.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif

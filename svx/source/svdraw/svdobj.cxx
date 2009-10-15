@@ -97,7 +97,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/editeng.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 
 // #97849#
 #include <svx/fmmodel.hxx>

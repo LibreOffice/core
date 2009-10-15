@@ -43,7 +43,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/sound.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <svtools/transfer.hxx>
 #include <goodies/grfmgr.hxx>
 #include <sfx2/tabdlg.hxx>

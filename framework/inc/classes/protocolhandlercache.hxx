@@ -194,6 +194,7 @@ class HandlerCFGAccess : public ::utl::ConfigItem
 
         void setCache(HandlerCache* pCache) {m_pCache = pCache;};
         virtual void Notify(const css::uno::Sequence< rtl::OUString >& lPropertyNames);
+        virtual void Commit();
 };
 
 } // namespace framework

@@ -37,17 +37,17 @@
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
 #endif
 #include <svx/numitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <gallery.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/brshitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>

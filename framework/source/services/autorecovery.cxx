@@ -91,7 +91,7 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-#include <svtools/documentlockfile.hxx>
+#include <svl/documentlockfile.hxx>
 
 #include <tools/urlobj.hxx>
 

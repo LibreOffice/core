@@ -32,7 +32,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include "svx/svxdllapi.h"

@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include <svx/xftdiit.hxx>
 #include <svx/xftstit.hxx>

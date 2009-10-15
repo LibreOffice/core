@@ -32,7 +32,7 @@
 
 #include <vcl/field.hxx>
 #include <svx/svddef.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 
 // Vorgabe einer Masseinheit. Der Zahlenwert wird in diese Einheit umgerechnet

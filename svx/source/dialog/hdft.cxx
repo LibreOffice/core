@@ -33,7 +33,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>

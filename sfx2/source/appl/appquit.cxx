@@ -36,14 +36,14 @@
 #ifdef WIN
 #define _TL_LANG_SPECIAL
 #endif
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <unotools/saveopt.hxx>
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 
 #ifndef GCC
 #endif

@@ -43,7 +43,7 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 

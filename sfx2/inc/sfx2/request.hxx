@@ -33,8 +33,8 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#include <svtools/itemset.hxx>
-#include <svtools/hint.hxx>
+#include <svl/itemset.hxx>
+#include <svl/hint.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

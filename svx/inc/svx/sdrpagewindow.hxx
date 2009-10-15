@@ -38,7 +38,7 @@
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <svx/svdtypes.hxx> // fuer SdrLayerID
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/contnr.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include "svx/svxdllapi.h"

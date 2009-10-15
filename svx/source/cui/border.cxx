@@ -60,7 +60,7 @@
 #include <svx/svxids.hrc> //CHINA001
 #include "flagsdef.hxx" //CHINA001
 #include <sfx2/request.hxx>
-#include <svtools/intitem.hxx> //CHINA001
+#include <svl/intitem.hxx> //CHINA001
 #include <sfx2/itemconnect.hxx>
 #include "borderconn.hxx"
 

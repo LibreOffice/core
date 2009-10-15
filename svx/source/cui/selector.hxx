@@ -43,7 +43,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/minarray.hxx>
 
 #define SVX_CFGGROUP_FUNCTION 1

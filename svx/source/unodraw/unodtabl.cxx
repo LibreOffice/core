@@ -31,8 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
 #include <vector>
 #include "UnoNameItemTable.hxx"

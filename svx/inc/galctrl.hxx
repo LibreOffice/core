@@ -41,7 +41,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/sound.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/brwbox.hxx>

@@ -41,7 +41,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/field.hxx>
 #include "connpoolsettings.hxx"
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"

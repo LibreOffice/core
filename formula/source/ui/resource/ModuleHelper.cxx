@@ -37,7 +37,7 @@
 #include <rtl/uri.hxx>
 #include <tools/debug.hxx>
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"

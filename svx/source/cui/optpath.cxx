@@ -42,8 +42,8 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/pickerhelper.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/pickerhelper.hxx>
+#include <svl/aeitem.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/filedlg.hxx>
 #include <tools/config.hxx>

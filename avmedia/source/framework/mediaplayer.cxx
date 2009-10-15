@@ -35,7 +35,7 @@
 #include "mediacontrol.hrc"
 #include "helpids.hrc"
 
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/bindings.hxx>

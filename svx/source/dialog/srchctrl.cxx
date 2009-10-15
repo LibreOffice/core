@@ -33,7 +33,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/pstm.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <svx/svxids.hrc>

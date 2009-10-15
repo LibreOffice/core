@@ -37,10 +37,10 @@
 #include <vcl/graph.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/rectitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
@@ -50,8 +50,8 @@
 #include <sfx2/dispatch.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/itemset.hxx>
+#include <svl/urihelper.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 
 #include "linkmgr.hxx"

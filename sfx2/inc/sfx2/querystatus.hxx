@@ -33,7 +33,7 @@
 
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/conditn.hxx>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>

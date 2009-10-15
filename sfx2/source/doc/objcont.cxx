@@ -41,15 +41,15 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <tools/cachestr.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/ctloptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/securityoptions.hxx>

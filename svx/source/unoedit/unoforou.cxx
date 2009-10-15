@@ -32,16 +32,16 @@
 #include "precompiled_svx.hxx"
 
 #include <algorithm>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editdata.hxx>
 #include <svx/outliner.hxx>
 #include <unoedhlp.hxx>
 #include <svx/svdobj.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/eeitem.hxx>
 

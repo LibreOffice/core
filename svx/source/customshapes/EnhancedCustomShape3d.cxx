@@ -37,8 +37,8 @@
 #include <svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xsflclit.hxx>
 #include <svx/xit.hxx>

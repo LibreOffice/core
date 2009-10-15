@@ -38,16 +38,16 @@
 #include <com/sun/star/text/XTextField.hdl>
 #endif
 #include <vos/mutex.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include <svx/eeitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <fontitem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/svdobj.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>

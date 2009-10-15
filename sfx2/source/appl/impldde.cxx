@@ -53,7 +53,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
 #define DDELINK_COLD        0

@@ -32,7 +32,7 @@
 #define SVX_DBREGISTERSETTING_HXX
 
 #include <comphelper/stl_types.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 //........................................................................
 namespace svx

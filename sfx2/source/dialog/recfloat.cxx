@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/generictoolboxcontroller.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>

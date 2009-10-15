@@ -50,7 +50,6 @@
 #include <unotools/charclass.hxx>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;

@@ -36,7 +36,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_USHORTS
 //#ifndef _SVSTDARR_HXX
-//#include <svtools/svstdarr.hxx>
+//#include <svl/svstdarr.hxx>
 //#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
@@ -44,7 +44,7 @@
 #include <tools/shl.hxx>
 #include <tools/dynary.hxx>
 #include <i18npool/mslangid.hxx>
-//#include <svtools/svarray.hxx>
+//#include <svl/svarray.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unolingu.hxx>
 #include <dlgutil.hxx>
@@ -72,8 +72,8 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/svlbox.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #define _SVX_OPTLINGU_CXX

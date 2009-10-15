@@ -33,7 +33,7 @@
 
 #include <vcl/mapmod.hxx>
 
-//#include <svtools/lstner.hxx>
+//#include <svl/lstner.hxx>
 //#include <vcl/timer.hxx>
 //#include <svx/svdsob.hxx>
 //#include <svx/svdtypes.hxx> // fuer SdrLayerID

@@ -43,8 +43,8 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX

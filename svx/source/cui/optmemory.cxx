@@ -36,12 +36,12 @@
 #endif
 
 #include <svtools/langtab.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <goodies/grfmgr.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/szitem.hxx>
+#include <svl/szitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -53,11 +53,11 @@
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/startoptions.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #ifndef INCLUDED_SVTOOLS_MISCPOPT_HXX
 #include <svtools/miscopt.hxx>
 #endif
-#include <svtools/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>

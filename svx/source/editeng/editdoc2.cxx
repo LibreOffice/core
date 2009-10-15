@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include <eeng_pch.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <tools/rtti.hxx>
 #include <svx/lspcitem.hxx>
 #include <svx/adjitem.hxx>

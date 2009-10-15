@@ -62,7 +62,7 @@
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
 #endif
-#include <svtools/visitem.hxx>
+#include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
 
 #ifndef _UNOTOOLS_CONFIGMGR_HXX_
@@ -71,10 +71,10 @@
 #include <tools/config.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/cancel.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/cancel.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>

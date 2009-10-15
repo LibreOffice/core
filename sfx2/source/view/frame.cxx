@@ -43,12 +43,12 @@
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
 #endif
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif

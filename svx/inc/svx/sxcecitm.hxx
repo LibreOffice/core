@@ -30,7 +30,7 @@
 #ifndef _SXCECITM_HXX
 #define _SXCECITM_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 #include <svx/sdmetitm.hxx>

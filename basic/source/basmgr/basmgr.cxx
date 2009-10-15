@@ -33,7 +33,7 @@
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>

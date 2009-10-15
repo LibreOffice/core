@@ -57,21 +57,21 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svtools/svarray.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/svarray.hxx>
+#include <svl/lstner.hxx>
 
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_BYTES
 #define _SVSTDARR_LONGS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "fmtools.hxx"
 #include "fmsrccfg.hxx"
 #include <osl/mutex.hxx>
 #include <vos/thread.hxx>
-#include <svtools/cancel.hxx>
+#include <svl/cancel.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/component.hxx>
 #include <comphelper/stl_types.hxx>
@@ -534,6 +534,7 @@ private:
 
     // ConfigItem related stuff
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Commit();
     void implAdjustConfigCache();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >

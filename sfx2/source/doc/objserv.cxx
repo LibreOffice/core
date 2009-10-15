@@ -54,10 +54,10 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>

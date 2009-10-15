@@ -57,8 +57,8 @@
 #include <svx/svxenum.hxx>
 #include "anchorid.hxx"
 #include <sfx2/module.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/aeitem.hxx>
 #include <swpossizetabpage.hxx>
 
 // Toleranz fuer WorkingArea

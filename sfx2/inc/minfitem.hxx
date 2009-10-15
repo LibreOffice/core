@@ -33,7 +33,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 class BasicManager;
 
 class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem

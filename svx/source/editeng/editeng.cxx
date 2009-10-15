@@ -36,8 +36,8 @@
 #define USE_SVXFONT
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/ctloptions.hxx>
 #include <svtools/ctrltool.hxx>
 
 #include <svx/svxfont.hxx>

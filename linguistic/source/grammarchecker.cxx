@@ -34,7 +34,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/linguistic2/XGrammarChecker.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <vcl/unohelp.hxx>
+//#include <vcl/unohelp.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

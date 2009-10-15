@@ -42,7 +42,7 @@
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>

@@ -47,7 +47,7 @@
 
 // === includes (global) =================================================
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
 // === /includes (global) ================================================
 

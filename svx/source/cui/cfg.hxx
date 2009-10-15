@@ -54,7 +54,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/minarray.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vector>

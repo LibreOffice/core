@@ -48,10 +48,10 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
-#include <svtools/cancel.hxx>
+#include <svl/cancel.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
 

@@ -31,7 +31,7 @@
 #ifndef _SVX_XFTSTIT_HXX
 #define _SVX_XFTSTIT_HXX
 
-#include <svtools/metitem.hxx>
+#include <svl/metitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************

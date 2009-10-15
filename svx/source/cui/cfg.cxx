@@ -62,7 +62,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/unohlp.hxx>

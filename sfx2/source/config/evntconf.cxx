@@ -34,7 +34,7 @@
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>

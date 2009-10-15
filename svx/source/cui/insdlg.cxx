@@ -55,7 +55,7 @@
 #include <stdio.h>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -67,7 +67,7 @@
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 #include <comphelper/seqstream.hxx>
 
 #include "svuidlg.hrc"
@@ -87,7 +87,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using ::rtl::OUString;
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 
 static String impl_getSvtResString( sal_uInt32 nId )

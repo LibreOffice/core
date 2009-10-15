@@ -32,7 +32,7 @@
 #define _EDITUND2_HXX
 
 #include "svx/svxdllapi.h"
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 class ImpEditEngine;
 

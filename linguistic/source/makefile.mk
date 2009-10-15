@@ -41,10 +41,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+#        $(SLO)$/convdicxml.obj\
+
+
 SLOFILES = \
         $(SLO)$/convdiclist.obj\
         $(SLO)$/convdic.obj\
-        $(SLO)$/convdicxml.obj\
         $(SLO)$/dicimp.obj\
         $(SLO)$/dlistimp.obj\
         $(SLO)$/hhconvdic.obj\
@@ -72,14 +74,14 @@ SHL1STDLIBS= \
         $(VOSLIB)		\
         $(TOOLSLIB)		\
         $(I18NISOLANGLIB) \
-        $(SVTOOLLIB)	\
-        $(SVLLIB)		\
-        $(VCLLIB)		\
+        $(SVLLIB)	\
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)  \
-        $(XMLOFFLIB)    \
         $(ICUUCLIB)
+
+#		$(VCLLIB)		\
+#        $(XMLOFFLIB)    \
         
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib

@@ -36,7 +36,7 @@
 #ifndef _TOOLERR_HXX //autogen
 #include <tools/errcode.hxx>
 #endif
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/exc_hlp.hxx>

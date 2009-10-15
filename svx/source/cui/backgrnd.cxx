@@ -37,13 +37,13 @@
 
 // include ---------------------------------------------------------------
 #include <unotools/pathoptions.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/wallitem.hxx>
-#include <svtools/cntwall.hxx>
+#include <svl/cntwall.hxx>
 #ifndef _CNTIDS_HRC
 #include <sfx2/cntids.hrc>
 #endif
@@ -77,7 +77,7 @@
 #endif
 #include <svx/svxids.hrc> //CHINA001
 #include "flagsdef.hxx" //CHINA001
-#include <svtools/intitem.hxx> //CHINA001
+#include <svl/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------

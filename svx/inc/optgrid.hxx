@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <sfx2/tabdlg.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>

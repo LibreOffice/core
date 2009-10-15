@@ -46,8 +46,8 @@
 #endif
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
-#include <svtools/cntnrsrt.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/cntnrsrt.hxx>
+#include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>

@@ -31,8 +31,8 @@
 #define _SVX_SVXIDS_HRC
 // include ------------------------------------------------------------------
 
-#include <svtools/memberid.hrc>
-#include <svtools/solar.hrc>
+#include <svl/memberid.hrc>
+#include <svl/solar.hrc>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>
 

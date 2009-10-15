@@ -30,7 +30,7 @@
 #ifndef sdtacitm_hxx
 #define sdtacitm_hxx
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svddef.hxx>
 
 // Anzahl der Durchlaeufe. 0=Endlos.

@@ -91,7 +91,7 @@
 #endif
 #include <comphelper/mediadescriptor.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>

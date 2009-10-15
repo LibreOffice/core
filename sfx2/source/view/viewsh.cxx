@@ -30,12 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>

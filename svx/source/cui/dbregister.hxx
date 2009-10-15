@@ -34,7 +34,7 @@
 #include "optpath.hxx"
 #include <tools/string.hxx>
 #include <comphelper/stl_types.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "ControlFocusHelper.hxx"
 #include <sfx2/basedlgs.hxx>
 

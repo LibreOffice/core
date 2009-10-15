@@ -37,7 +37,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/outliner.hxx>
 #include <editstat.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
 

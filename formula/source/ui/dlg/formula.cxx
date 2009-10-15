@@ -47,9 +47,9 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svtreebx.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/eitem.hxx>
 
 #include <unotools/charclass.hxx>
 #include <tools/urlobj.hxx>

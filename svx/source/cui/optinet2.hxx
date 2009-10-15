@@ -34,7 +34,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <sfx2/tabdlg.hxx>

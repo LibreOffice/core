@@ -41,7 +41,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <tools/urlobj.hxx>
 
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
@@ -58,7 +58,7 @@
 #include "svdstr.hrc"    // Objektname
 
 #include <svx/svxids.hrc>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/sdr/properties/groupproperties.hxx>
 

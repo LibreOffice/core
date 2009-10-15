@@ -90,19 +90,19 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/lckbitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/lckbitem.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <unotools/streamwrap.hxx>
 
@@ -123,7 +123,7 @@ using namespace ::com::sun::star::io;
 #include <unotools/ucblockbytes.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/inettype.hxx>
+#include <svl/inettype.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -134,7 +134,7 @@ using namespace ::com::sun::star::io;
 #include <ucbhelper/interactionrequest.hxx>
 #include <sot/stg.hxx>
 #include <unotools/saveopt.hxx>
-#include <svtools/documentlockfile.hxx>
+#include <svl/documentlockfile.hxx>
 
 #include "opostponedtruncationstream.hxx"
 #include "helper.hxx"

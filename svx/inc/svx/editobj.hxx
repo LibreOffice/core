@@ -34,7 +34,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <rsc/rscsfx.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/eeitem.hxx>
 #include "svx/svxdllapi.h"
 

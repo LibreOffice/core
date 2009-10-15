@@ -33,7 +33,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 #include <unotools/eventcfg.hxx>
 #include <rtl/ustring.hxx>
 

@@ -41,7 +41,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // includes for special text box shadow (SC)
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>

@@ -43,7 +43,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include "svx/dialogs.hrc"
 #include "acccfg.hrc"

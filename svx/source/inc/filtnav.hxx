@@ -32,11 +32,11 @@
 
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <svtools/lstner.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/lstner.hxx>
+#include <svl/brdcst.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/childwin.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>

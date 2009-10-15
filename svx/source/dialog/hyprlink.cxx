@@ -35,14 +35,14 @@
 #include <unotools/configitem.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <svtools/inetimg.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -66,6 +66,8 @@ public:
     ~SearchDefaultConfigItem_Impl();
 
     const OUString&    GetDefaultSearchEngine(){ return sDefaultEngine;}
+    virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void            Commit();
 };
 
 /*-- 11.11.2003 14:20:59---------------------------------------------------
@@ -83,6 +85,14 @@ SearchDefaultConfigItem_Impl::SearchDefaultConfigItem_Impl() :
 
   -----------------------------------------------------------------------*/
 SearchDefaultConfigItem_Impl::~SearchDefaultConfigItem_Impl()
+{
+}
+
+void SearchDefaultConfigItem_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
+void SearchDefaultConfigItem_Impl::Commit()
 {
 }
 

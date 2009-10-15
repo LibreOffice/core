@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 
 // class SvxNoLinebreakItem ----------------------------------------------

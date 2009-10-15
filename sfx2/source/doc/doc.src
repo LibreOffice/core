@@ -30,7 +30,7 @@
 #include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #define __RSC
-#include <svtools/inetdef.hxx>
+#include <svl/inetdef.hxx>
 //#include <so3/so2defs.hxx>
 
  // -----------------------------------------------------------------------

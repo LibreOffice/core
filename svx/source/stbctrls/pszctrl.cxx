@@ -42,9 +42,9 @@
 #include <vcl/menu.hxx>
 #endif
 #include <vcl/image.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>

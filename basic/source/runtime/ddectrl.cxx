@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 #include <tools/errcode.hxx>
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 #include "ddectrl.hxx"
 #ifndef _SBERRORS_HXX
 #include <basic/sberrors.hxx>

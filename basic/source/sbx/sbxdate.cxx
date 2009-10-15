@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/errcode.hxx>
 #include <tools/color.hxx>
 #include <i18npool/lang.h>

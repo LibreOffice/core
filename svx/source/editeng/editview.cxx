@@ -38,13 +38,13 @@
 #define _SOLAR__PRIVATE 1
 
 #include <i18npool/mslangid.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/ctrltool.hxx>
 
 #include <sfx2/srchitem.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <impedit.hxx>
 #include <svx/editeng.hxx>

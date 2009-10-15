@@ -45,12 +45,12 @@
 #include <vcl/splitwin.hxx>
 #endif
 #include <unotools/moduleoptions.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/undo.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/whiter.hxx>
+#include <svl/undo.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -90,7 +90,7 @@
 #include <basic/sbx.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

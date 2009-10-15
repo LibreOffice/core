@@ -39,7 +39,7 @@
 
 
 #include <tools/shl.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>

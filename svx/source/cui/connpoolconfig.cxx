@@ -38,10 +38,10 @@
 #include "connpoolsettings.hxx"
 
 #include "connpooloptions.hxx"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/extract.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include "sdbcdriverenum.hxx"
 

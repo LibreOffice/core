@@ -59,7 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/FilterConfigItem.hxx>
-#include <svtools/outstrm.hxx>
+#include <svl/outstrm.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>

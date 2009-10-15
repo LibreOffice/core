@@ -71,10 +71,10 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include "svx/dialmgr.hxx"
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

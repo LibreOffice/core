@@ -32,7 +32,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include "svx/svxdllapi.h"
 
 // class SvxPostItAuthorItem ---------------------------------------------

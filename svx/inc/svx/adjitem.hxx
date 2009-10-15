@@ -32,7 +32,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svxenum.hxx>
 
 #ifndef _SVX_SVXIDS_HRC

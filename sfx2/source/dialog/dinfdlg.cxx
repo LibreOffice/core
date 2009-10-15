@@ -32,12 +32,12 @@
 #include "precompiled_sfx2.hxx"
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/datetime.hxx>
@@ -49,7 +49,7 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

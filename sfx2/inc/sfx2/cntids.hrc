@@ -32,11 +32,11 @@
 #define _CNTIDS_HRC
 
 #ifndef _CNTWIDS_HRC
-#include <svtools/cntwids.hrc>
+#include <svl/cntwids.hrc>
 #endif
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 // Slot-ID's -----------------------------------------------------------------

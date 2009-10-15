@@ -52,7 +52,7 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <svtools/filerec.hxx>
+#include <svl/filerec.hxx>
 #include "fmsrcimp.hxx"
 #include "fmsrccfg.hxx"
 
@@ -61,7 +61,7 @@
 #endif // _FMSEARCH_HRC
 #include "cuifmsearch.hxx"
 #include "srchdlg.hxx"
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
 

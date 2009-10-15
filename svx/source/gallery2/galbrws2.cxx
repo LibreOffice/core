@@ -35,10 +35,10 @@
 #include <sot/formats.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/transfer.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

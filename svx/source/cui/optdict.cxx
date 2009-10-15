@@ -42,7 +42,7 @@
 #include <unolingu.hxx>
 #include <dlgutil.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>

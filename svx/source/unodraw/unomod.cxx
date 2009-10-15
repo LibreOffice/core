@@ -38,7 +38,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/list.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
 

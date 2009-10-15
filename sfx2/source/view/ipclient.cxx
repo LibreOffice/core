@@ -72,7 +72,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/rectitem.hxx>
 #include <svtools/soerr.hxx>
 #include <comphelper/processfactory.hxx>
 

@@ -34,9 +34,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <tools/zcodec.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>

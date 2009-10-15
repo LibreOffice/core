@@ -38,8 +38,8 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/salctype.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
 #include <sot/storage.hxx>
 #include "galobj.hxx"

@@ -33,7 +33,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -43,10 +43,10 @@
 #ifndef _SV_PRNSETUP_HXX //autogen
 #include <svtools/prnsetup.hxx>
 #endif
-#include <svtools/flagitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/flagitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/printwarningoptions.hxx>

@@ -33,12 +33,12 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <com/sun/star/frame/status/Verb.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 

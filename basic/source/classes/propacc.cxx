@@ -35,7 +35,7 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/errcode.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <basic/sbstar.hxx>
 #include <sbunoobj.hxx>
 

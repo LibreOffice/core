@@ -57,7 +57,7 @@
 #include <vos/mutex.hxx>
 
 #include <svx/flditem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/transfer.hxx>
 
 #include <sot/exchange.hxx>

@@ -3919,6 +3919,10 @@ void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >&
         }
 }
 
+void FmXFormShell::Commit()
+{
+}
+
 //------------------------------------------------------------------------
 void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 {

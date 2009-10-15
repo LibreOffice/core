@@ -37,7 +37,7 @@
 #include <unotools/viewoptions.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include "appdata.hxx"
 #include "sfxtypes.hxx"

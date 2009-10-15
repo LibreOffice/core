@@ -71,7 +71,7 @@
 
 #ifndef _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <sfx2/ctrlitem.hxx>
 #include <tools/link.hxx>

@@ -31,7 +31,7 @@
 #define _SVX_FMHELP_HRC
 
 // include     -----------------------------------------------------------
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 // in solar.hrc
 //#define HID_FORMS_START               (HID_LIB_START+4000)

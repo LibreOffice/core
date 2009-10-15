@@ -34,7 +34,7 @@
 #ifndef SVX_LIGHT
 
 #include <tools/solar.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #ifndef _SV_COLOR_HXX

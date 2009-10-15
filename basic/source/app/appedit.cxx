@@ -34,7 +34,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/textview.hxx>
 #include <svtools/texteng.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>

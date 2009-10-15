@@ -34,17 +34,17 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/datetime.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include "versdlg.hrc"
 #include "versdlg.hxx"

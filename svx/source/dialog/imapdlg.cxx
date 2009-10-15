@@ -52,13 +52,13 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>

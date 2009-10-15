@@ -37,7 +37,7 @@
 
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star;

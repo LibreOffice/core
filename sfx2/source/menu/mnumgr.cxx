@@ -60,7 +60,7 @@
 #include <sfx2/mnumgr.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/menuoptions.hxx>
 
 #include "virtmenu.hxx"

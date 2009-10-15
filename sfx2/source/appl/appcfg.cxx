@@ -46,24 +46,24 @@
 #include <vcl/sound.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/string.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/szitem.hxx>
-#include <svtools/undo.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/szitem.hxx>
+#include <svl/undo.hxx>
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/ttprops.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sot/exchange.hxx>
 
 //#include <svtools/agprop.hxx>
 //#include <sj2/sjapplet.hxx>
-#include <svtools/isethint.hxx>
+#include <svl/isethint.hxx>
 
 #include <unotools/configmgr.hxx>
 #include <tools/urlobj.hxx>
@@ -79,7 +79,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/misccfg.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -1075,10 +1074,3 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
 
 IMPL_OBJHINT( SfxStringHint, String )
 
-SfxMiscCfg* SfxApplication::GetMiscConfig()
-{
-    if ( !pAppData_Impl->pMiscConfig )
-        pAppData_Impl->pMiscConfig = new SfxMiscCfg;
-
-    return pAppData_Impl->pMiscConfig;
-}

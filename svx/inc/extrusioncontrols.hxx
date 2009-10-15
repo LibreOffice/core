@@ -31,7 +31,7 @@
 #define _SVX_EXTRUSION_CONTROLS_HXX
 
 #include <svtools/valueset.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svtools/svtreebx.hxx>
 #ifndef _SV_BUTTON_HXX

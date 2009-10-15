@@ -43,7 +43,7 @@
 #include <vcl/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/time.h>

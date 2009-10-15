@@ -31,7 +31,7 @@
 
 #include "precompiled_svx.hxx"
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/xlineit0.hxx>
@@ -67,7 +67,7 @@
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/xbtmpit.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <svx/svx3ditems.hxx>

@@ -43,7 +43,7 @@
 #include <svx/numdef.hxx>
 #endif
 #include <svtools/ctrlbox.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 // -----------------------------------------------------------------------
 class SvxNumRule;

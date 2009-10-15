@@ -39,7 +39,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 
 using namespace ::com::sun::star::uno;

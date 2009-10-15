@@ -50,11 +50,11 @@
 #include "galbrws2.hxx"
 #include "galdlg.hxx"
 #include "cuigaldlg.hxx" //CHINA001
-#include <svtools/pickerhelper.hxx>
+#include <svl/pickerhelper.hxx>
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
 #endif
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>

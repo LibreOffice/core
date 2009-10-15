@@ -41,7 +41,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <vcl/timer.hxx>
 #include <svtools/svtabbx.hxx>

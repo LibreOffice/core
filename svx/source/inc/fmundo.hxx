@@ -51,7 +51,7 @@
 #include <cppuhelper/implbase3.hxx>
 
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <comphelper/uno3.hxx>
 
 class FmFormModel;

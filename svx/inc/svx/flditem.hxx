@@ -33,7 +33,7 @@
 #include <i18npool/lang.h>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/pstm.hxx>
 #include "svx/svxdllapi.h"
 

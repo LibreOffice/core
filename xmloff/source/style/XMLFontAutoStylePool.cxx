@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
-#include <svtools/cntnrsrt.hxx>
+#include <svl/cntnrsrt.hxx>
 #include <vcl/vclenum.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>

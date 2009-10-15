@@ -49,7 +49,7 @@
 #include <svx/langbox.hxx>
 #include <memory>
 #include <svtools/svmedit.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svx/SpellPortions.hxx>
 

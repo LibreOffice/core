@@ -34,9 +34,9 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_LONGS_DECL
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 

@@ -64,8 +64,7 @@
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/adrparse.hxx>
+#include <svl/itemset.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>

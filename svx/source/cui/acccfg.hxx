@@ -60,7 +60,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <sfx2/minarray.hxx>
 

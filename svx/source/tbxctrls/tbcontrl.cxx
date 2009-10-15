@@ -36,15 +36,15 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <tools/shl.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -52,7 +52,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/templdlg.hxx>
-#include <svtools/isethint.hxx>
+#include <svl/isethint.hxx>
 #include <sfx2/querystatus.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <tools/urlobj.hxx>
@@ -64,7 +64,7 @@
 #endif
 
 #include <vcl/svapp.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #define _SVX_TBCONTRL_CXX
 #include <svtools/colorcfg.hxx>

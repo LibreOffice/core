@@ -33,7 +33,7 @@
 #include "fmexch.hxx"
 
 #include <sot/storage.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #ifndef _SVX_DBEXCH_HRC
 #include <dbexch.hrc>
@@ -43,7 +43,7 @@
 #include <tools/diagnose_ex.h>
 
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 //........................................................................
 namespace svxform

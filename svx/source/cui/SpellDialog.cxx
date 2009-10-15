@@ -48,7 +48,7 @@
 #include <SpellAttrib.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svtools/textdata.hxx>
 #include <svtools/filter.hxx>

@@ -33,8 +33,8 @@
 
 #ifndef GCC
 #endif
-#include <svtools/whiter.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/eitem.hxx>
 
 #include <sfx2/app.hxx>
 #include "appdata.hxx"

@@ -32,7 +32,7 @@
 #include "precompiled_linguistic.hxx"
 #include <i18npool/lang.h>
 #include <tools/debug.hxx>
-#include <svtools/lngmisc.hxx>
+#include <svl/lngmisc.hxx>
 
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>

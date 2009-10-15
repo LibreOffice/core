@@ -35,11 +35,11 @@
 #include <tools/table.hxx>
 #endif
 #include <tools/string.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svtools/parrtf.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include "svx/svxdllapi.h"
 
 

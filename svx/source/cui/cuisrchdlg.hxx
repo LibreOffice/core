@@ -57,9 +57,9 @@
 #endif
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/srchdefs.hxx>
 

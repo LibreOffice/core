@@ -43,10 +43,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itempool.hxx>
 
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
@@ -570,7 +570,7 @@ IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
 
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 IMPL_LINK( SvxCharMapData, AssignHdl, PushButton *, EMPTYARG )
 {

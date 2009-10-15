@@ -36,13 +36,13 @@
 #include "LFolderList.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <svtools/converter.hxx>
+#include <svl/converter.hxx>
 #include "LConnection.hxx"
 #include "LColumns.hxx"
 #include <osl/thread.h>
 #include <tools/config.hxx>
 #include <comphelper/sequence.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <stdio.h>      //sprintf
 #include <comphelper/extract.hxx>
@@ -59,7 +59,7 @@
 #ifndef CONNECTIVITY_EVOAB_DEBUG_HELPER_HXX
 #include "LDebug.hxx"
 #endif
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

@@ -33,7 +33,7 @@
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/font.hxx>
 #include "svx/svxdllapi.h"
 

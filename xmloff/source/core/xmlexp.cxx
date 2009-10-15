@@ -86,7 +86,7 @@
 #include <comphelper/extract.hxx>
 #include "PropertySetMerger.hxx"
 
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #include "xformsexport.hxx"
 
 #include <unotools/docinfohelper.hxx>

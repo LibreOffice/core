@@ -33,7 +33,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
 
 #ifndef GCC

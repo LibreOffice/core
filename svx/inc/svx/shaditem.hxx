@@ -33,7 +33,7 @@
 // include ---------------------------------------------------------------
 
 #include <tools/color.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svxenum.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>

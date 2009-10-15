@@ -38,8 +38,8 @@
 // include ---------------------------------------------------------------
 
 #include <tools/shl.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
 

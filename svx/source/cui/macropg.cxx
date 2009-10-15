@@ -36,12 +36,12 @@
 #include "macropg.hxx"
 #include <vcl/msgbox.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #ifndef _SV_MEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
 #ifndef _EITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #include <tools/diagnose_ex.h>
 

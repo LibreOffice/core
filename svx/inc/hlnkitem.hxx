@@ -31,9 +31,9 @@
 #define _SVX_HLNKITEM_HXX
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include "svx/svxdllapi.h"
 
 #define HYPERDLG_EVENT_MOUSEOVER_OBJECT     0x0001

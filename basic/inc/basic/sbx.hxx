@@ -32,9 +32,9 @@
 #define _SBXCLASS_HXX
 
 #include "tools/ref.hxx"
-#include "svtools/svarray.hxx"
-#include "svtools/smplhint.hxx"
-#include "svtools/lstner.hxx"
+#include "svl/svarray.hxx"
+#include "svl/smplhint.hxx"
+#include "svl/lstner.hxx"
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
 

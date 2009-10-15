@@ -54,12 +54,12 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfxhelp.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/eventcfg.hxx>
 
@@ -82,9 +82,9 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>

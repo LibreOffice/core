@@ -48,7 +48,7 @@
 #include <svx/outlobj.hxx>
 #include <svx/outliner.hxx>
 #include <svx/svdoutl.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>

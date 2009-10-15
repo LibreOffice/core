@@ -37,8 +37,8 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #define _SVX_OPTSAVE_CXX
 
 #include "optsave.hrc"

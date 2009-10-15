@@ -39,7 +39,7 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <comphelper/types.hxx>
 
@@ -51,9 +51,9 @@ using namespace ::com::sun::star;
 #define GLOBALOVERFLOW3
 
 #define _SVX_PARAITEM_CXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #include <svx/svxitems.hrc>
 
 #include <svx/lspcitem.hxx>

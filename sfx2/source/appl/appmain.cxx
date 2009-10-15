@@ -37,12 +37,11 @@
 
 #include <stdio.h>
 #include <tools/urlobj.hxx>
-#include <svtools/cstitem.hxx>
 #include <tools/config.hxx>
 #include <svtools/ehdl.hxx>
 #include <unotools/startoptions.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/itempool.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/helpopt.hxx>
 #include <vos/process.hxx>
 #include <framework/sfxhelperfunctions.hxx>

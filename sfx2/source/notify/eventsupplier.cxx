@@ -42,7 +42,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 #include <tools/urlobj.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/appuno.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>

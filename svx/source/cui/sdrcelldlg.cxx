@@ -34,7 +34,7 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include "flagsdef.hxx"
 #include "svx/dialogs.hrc"
 #include "sdrcelldlg.hxx"

@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/solar.h>        // UINTXX
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>

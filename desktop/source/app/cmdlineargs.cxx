@@ -41,7 +41,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "tools/getprocessworkingdir.hxx"
 
-#include <svtools/documentlockfile.hxx>
+#include <svl/documentlockfile.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::lang;

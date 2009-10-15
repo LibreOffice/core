@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 #include <svx/sdr/properties/emptyproperties.hxx>
 #include <tools/debug.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>

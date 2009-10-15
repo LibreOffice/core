@@ -34,7 +34,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"
 #include "gallery.hrc"
 

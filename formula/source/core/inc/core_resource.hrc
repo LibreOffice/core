@@ -31,7 +31,7 @@
 #ifndef _FORMULA_CORE_RESOURCE_HRC_
 #define _FORMULA_CORE_RESOURCE_HRC_
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 //------------------------------------------------------------------------------
 #define RID_CORE_STRINGS_START                  RID_FORMULA_START

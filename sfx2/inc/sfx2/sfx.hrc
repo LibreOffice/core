@@ -33,11 +33,11 @@
 // include ---------------------------------------------------------------
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 #ifndef _MEMBERID_HRC
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #endif
 
 #define RID_GROUPS_OFFSET           32000

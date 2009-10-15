@@ -44,8 +44,8 @@
 #ifndef _SV_GRAPH_HXX_
 #include <vcl/graph.hxx>
 #endif
-#include <svtools/itemprop.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/itempool.hxx>
 
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HDL_

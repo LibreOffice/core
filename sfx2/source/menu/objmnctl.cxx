@@ -38,7 +38,7 @@
 #include <vcl/menu.hxx>
 #endif
 #ifndef _SXSTRITEM_HXX //autogen
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef GCC
 #endif

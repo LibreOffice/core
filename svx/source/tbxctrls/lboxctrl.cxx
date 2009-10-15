@@ -43,11 +43,11 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/gen.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <lboxctrl.hxx>
 #ifndef _VCL_MNEMONIC_HXX_

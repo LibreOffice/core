@@ -40,7 +40,7 @@
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
@@ -48,7 +48,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/field.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -58,7 +58,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/svtabbx.hxx>
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "doclinkdialog.hxx"
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>

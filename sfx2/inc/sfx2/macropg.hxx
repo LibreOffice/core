@@ -35,7 +35,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 

@@ -73,7 +73,7 @@
 #include "fmsearch.hrc"
 #endif
 #include <comphelper/numbers.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #define EQUAL_BOOKMARKS(a, b) a == b
 

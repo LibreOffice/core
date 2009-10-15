@@ -38,7 +38,7 @@
 #include "dbregisterednamesconfig.hxx"
 
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <svx/svxids.hrc>
@@ -46,7 +46,7 @@
 #include <comphelper/extract.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include "dbregistersettings.hxx"

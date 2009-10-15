@@ -31,7 +31,7 @@
 #define _SVX_FMRESIDS_HRC
 
 // include     -----------------------------------------------------------
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 // unnamed ressources -------------------------------------------------------
 // sub ressources .....................

@@ -34,8 +34,8 @@
 #include <osl/diagnose.h>
 #include "connectivity/sqlparse.hxx"
 #include <i18npool/mslangid.hxx>
-#include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
+#include <tools/string.hxx>
 #include "TConnection.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <comphelper/types.hxx>

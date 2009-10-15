@@ -68,7 +68,7 @@
 
 
 #include "convdic.hxx"
-#include "convdicxml.hxx"
+//#include "convdicxml.hxx"
 #include "misc.hxx"
 #include "defs.hxx"
 
@@ -87,7 +87,7 @@ using namespace linguistic;
 
 
 ///////////////////////////////////////////////////////////////////////////
-
+#if XML
 void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 {
     if (rMainURL.Len() == 0)
@@ -165,7 +165,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     {
     }
 }
-
+#endif
 
 BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
 {
@@ -186,6 +186,7 @@ BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
     // first argument being 0 should stop the file from being parsed
     // up to the end (reading all entries) when the required
     // data (language, conversion type) is found.
+#if XML
     ConvDicXMLImport *pImport = new ConvDicXMLImport( 0, rFileURL );
 
     //!! keep a first reference to ensure the lifetime of the object !!
@@ -201,6 +202,7 @@ BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
         nLang       = pImport->GetLanguage();
         nConvType   = pImport->GetConversionType();
     }
+#endif
 
     return bRes;
 }
@@ -266,12 +268,12 @@ void ConvDic::Load()
 
     //!! prevent function from being called recursively via HasEntry, AddEntry
     bNeedEntries = FALSE;
-
+#if XML
     ConvDicXMLImport *pImport = new ConvDicXMLImport( this, aMainURL );
     //!! keep a first reference to ensure the lifetime of the object !!
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
-
+#endif
     bIsModified = FALSE;
 }
 
@@ -326,7 +328,7 @@ void ConvDic::Save()
 
         // prepare arguments (prepend doc handler to given arguments)
         uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
-
+#if XML
         ConvDicXMLExport *pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
         //!! keep a first(!) reference until everything is done to
         //!! ensure the proper lifetime of the object
@@ -335,6 +337,7 @@ void ConvDic::Save()
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)
             bIsModified = FALSE;
+#endif
     }
     DBG_ASSERT( !bIsModified, "dictionary still modified after save. Save failed?" );
 }

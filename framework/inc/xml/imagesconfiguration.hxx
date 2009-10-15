@@ -31,7 +31,7 @@
 #ifndef __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_IMAGESCONFIGURATION_HXX_
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/color.hxx>

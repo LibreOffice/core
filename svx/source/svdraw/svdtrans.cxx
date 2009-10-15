@@ -38,7 +38,7 @@
 #include <vcl/virdev.hxx>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

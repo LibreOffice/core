@@ -34,7 +34,7 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-#include "svtools/syslocale.hxx"
+#include "unotools/syslocale.hxx"
 
 #if defined ( UNX )
 #include <stdlib.h>
@@ -50,12 +50,12 @@
 #include "sbxres.hxx"
 #include <basic/sbxbase.hxx>
 #include <basic/sbxform.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 
 #include "basrid.hxx"
 #include "runtime.hxx"
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 
 

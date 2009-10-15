@@ -33,7 +33,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SfxPoolItem;
 class SfxBindings;

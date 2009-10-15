@@ -32,7 +32,7 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _INETDEF_HXX
-#include <svtools/inetdef.hxx>
+#include <svl/inetdef.hxx>
 #endif
 #include "svtools/htmlkywd.hxx"
 
@@ -40,7 +40,7 @@
 #include <rtl/tencinfo.h>
 
 #include <unotools/configmgr.hxx>
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #include <tools/datetime.hxx>
 
 #include <sfx2/frmhtmlw.hxx>

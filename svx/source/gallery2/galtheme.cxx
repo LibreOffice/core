@@ -45,7 +45,7 @@
 #include <sot/filelist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svx/svdograf.hxx>

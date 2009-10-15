@@ -35,8 +35,8 @@
 #include <limits.h>             // USHRT_MAX
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>

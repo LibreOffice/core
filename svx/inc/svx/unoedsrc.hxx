@@ -42,8 +42,8 @@
 #ifndef _SV_COLOR_HXX //autogen
 #include <tools/color.hxx>
 #endif
-#include <svtools/poolitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itempool.hxx>
 #include "svx/svxdllapi.h"
 
 #include <list>

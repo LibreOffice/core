@@ -56,7 +56,7 @@
 #include <svx/editdata.hxx>
 #endif
 
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 //      textitem.hxx        editdata.hxx
 
@@ -170,7 +170,7 @@
 #include <svx/editeng.hxx>
 #include "gallery.hxx"
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svdoashp.hxx>

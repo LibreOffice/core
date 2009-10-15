@@ -32,8 +32,8 @@
 #include "precompiled_svx.hxx"
 #include <sfx2/objitem.hxx>
 #include <sfx2/msg.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/crsditem.hxx>

@@ -6,7 +6,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menu.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/imap.hxx>

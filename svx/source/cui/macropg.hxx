@@ -37,7 +37,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif

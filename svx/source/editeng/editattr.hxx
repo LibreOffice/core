@@ -54,7 +54,7 @@ class SvxFieldItem;
 class SvxLanguageItem;
 class SvxEmphasisMarkItem;
 class SvxCharReliefItem;
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 
 class SfxVoidItem;

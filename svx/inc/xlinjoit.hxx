@@ -31,7 +31,7 @@
 #ifndef _SVX_XLINJOIT_HXX
 #define _SVX_XLINJOIT_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/xenum.hxx>
 #include "svx/svxdllapi.h"
 

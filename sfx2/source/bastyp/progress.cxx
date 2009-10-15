@@ -39,7 +39,7 @@
 #include <basic/sbx.hxx>
 #endif
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/time.hxx>
 
 // wg. nRescheduleLocks

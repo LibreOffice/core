@@ -40,8 +40,8 @@
 #include "srchxtra.hxx"
 #include <tools/rcid.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
 
 #ifndef _SVX_DIALOGS_HRC

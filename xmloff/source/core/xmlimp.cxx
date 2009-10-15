@@ -36,7 +36,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>

@@ -43,7 +43,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include "unoapi.hxx"
 #include "xmlcnitm.hxx"
 

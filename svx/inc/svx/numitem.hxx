@@ -34,7 +34,7 @@
 
 #include <tools/link.hxx>
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/svxenum.hxx>
 #include <tools/gen.hxx>
 #ifndef _SVX_NUMDEF_HXX //autogen

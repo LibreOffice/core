@@ -66,7 +66,7 @@
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <svtools/svmedit.hxx>
 #include <svx/dialmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

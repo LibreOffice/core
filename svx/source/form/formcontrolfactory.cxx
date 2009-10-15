@@ -57,7 +57,7 @@
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/numbers.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
 

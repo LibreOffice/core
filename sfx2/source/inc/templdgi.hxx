@@ -41,12 +41,12 @@ class SfxTemplateControllerItem;
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/svtreebx.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 
 #include <rsc/rscsfx.hxx>
 #include <tools/rtti.hxx>

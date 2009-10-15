@@ -70,7 +70,7 @@
 #ifndef _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <comphelper/extract.hxx>
@@ -80,9 +80,9 @@
 #include <connectivity/dbtools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <tools/multisel.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>

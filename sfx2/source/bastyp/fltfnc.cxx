@@ -60,12 +60,12 @@
 #include <rtl/ustring.hxx>
 #endif
 #include <rtl/ustrbuf.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/lckbitem.hxx>
-#include <svtools/inettype.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/inettype.hxx>
+#include <svl/rectitem.hxx>
 
 #include <sot/storage.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
@@ -109,9 +109,9 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::vos;
-#include <svtools/ctypeitm.hxx>
+#include <svl/ctypeitm.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "sfxhelp.hxx"
 #include "sfxbasic.hxx"

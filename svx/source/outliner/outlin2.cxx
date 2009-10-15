@@ -33,7 +33,7 @@
 #include <outl_pch.hxx>
 
 #include <tools/list.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/mapmod.hxx>
 
 #include <forbiddencharacterstable.hxx>

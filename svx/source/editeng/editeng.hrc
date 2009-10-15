@@ -31,7 +31,7 @@
 #define _EDITENG_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 #define RID_EDITUNDO_DEL            ( RID_EDIT_START + 0 )

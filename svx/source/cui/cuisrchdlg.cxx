@@ -39,16 +39,16 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/style.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/style.hxx>
 #include <unotools/searchopt.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #define _CUI_SRCHDLG_CXX

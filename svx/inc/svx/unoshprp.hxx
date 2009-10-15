@@ -82,7 +82,7 @@
 #include <svx/unoprnms.hxx>
 #include <svx/unomid.hxx>
 #include <svx/unotext.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include <svx/svxids.hrc>
 

@@ -61,7 +61,7 @@
 #include "dlgname.hxx"
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include <svtools/intitem.hxx> //add CHINA001
+#include <svl/intitem.hxx> //add CHINA001
 #include <sfx2/request.hxx>//add CHINA001
 
 #define DLGWIN this->GetParent()->GetParent()

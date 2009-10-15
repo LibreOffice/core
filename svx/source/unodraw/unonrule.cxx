@@ -43,7 +43,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <goodies/grfmgr.hxx>
 
 #include <vcl/svapp.hxx>

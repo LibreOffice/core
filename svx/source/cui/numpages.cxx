@@ -52,12 +52,12 @@
 #include <helpid.hrc>
 #endif
 #include <svx/numitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <gallery.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/brshitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
@@ -86,9 +86,9 @@
 
 #include <svx/dialogs.hrc> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
-#include <svtools/aeitem.hxx> //add CHINA001
-#include <svtools/stritem.hxx>//add CHINA001
-#include <svtools/slstitm.hxx> //add CHINA001
+#include <svl/aeitem.hxx> //add CHINA001
+#include <svl/stritem.hxx>//add CHINA001
+#include <svl/slstitm.hxx> //add CHINA001
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

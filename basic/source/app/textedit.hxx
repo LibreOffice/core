@@ -40,7 +40,7 @@ class BreakpointWindow;
 #include <vcl/timer.hxx>
 #include <tools/table.hxx>
 #include <tools/debug.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/svmedit.hxx>
 
 #include "dataedit.hxx"

@@ -40,8 +40,8 @@
 #endif
 
 // include ---------------------------------------------------------------
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -49,7 +49,7 @@
 
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/colorcfg.hxx>
 
 #define _SVX_NUMFMT_CXX

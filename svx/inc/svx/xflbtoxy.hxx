@@ -31,7 +31,7 @@
 #ifndef _SVX_XFLBTOXY_HXX
 #define _SVX_XFLBTOXY_HXX
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"
 
 /*************************************************************************

@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #ifndef GCC
 #endif
 

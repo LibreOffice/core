@@ -60,7 +60,7 @@
 #include <svx/dialmgr.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #define MAX_FILENAME    18
 #define MAX_LINKNAME    18

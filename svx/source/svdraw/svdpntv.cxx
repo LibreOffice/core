@@ -42,7 +42,7 @@
 #endif
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <svx/svdpntv.hxx>
 #include <svx/editdata.hxx>
@@ -66,10 +66,10 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxlayitm.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/eeitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/style.hxx>
+#include <svl/whiter.hxx>
+#include <svl/style.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdouno.hxx>
 #include <vcl/svapp.hxx>
@@ -289,14 +289,14 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     // Flag zur Visualisierung von Gruppen
     bVisualizeEnteredGroup = TRUE;
 
-    StartListening( maColorConfig );
+    maColorConfig.AddListener(this);
     onChangeColorConfig();
 }
 
 SdrPaintView::~SdrPaintView()
 {
     DBG_DTOR(SdrPaintView,NULL);
-    EndListening( maColorConfig );
+    maColorConfig.RemoveListener(this);
     ClearPageView();
 
 #ifdef DBG_UTIL
@@ -345,12 +345,12 @@ void __EXPORT SdrPaintView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             }
         }
     }
+}
 
-    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
-    {
-        onChangeColorConfig();
-        InvalidateAllWin();
-    }
+void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 )
+{
+    onChangeColorConfig();
+    InvalidateAllWin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

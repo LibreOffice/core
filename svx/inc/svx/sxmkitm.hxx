@@ -31,7 +31,7 @@
 #define _SXMKITM_HXX
 
 #include <svx/svddef.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 enum SdrMeasureKind     {SDRMEASURE_STD,SDRMEASURE_RADIUS}; // n.i.
 

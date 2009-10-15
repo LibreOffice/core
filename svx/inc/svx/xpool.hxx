@@ -31,7 +31,7 @@
 #ifndef _XPOOL_HXX
 #define _XPOOL_HXX
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/xdef.hxx>
 #include "svx/svxdllapi.h"
 

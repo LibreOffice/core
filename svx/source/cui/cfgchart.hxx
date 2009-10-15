@@ -36,7 +36,7 @@
 // header for ConfigItem
 #include <unotools/configitem.hxx>
 // header for SfxPoolItem
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 // header for XColorEntry
 #include <svx/xtable.hxx>
 
@@ -90,6 +90,7 @@ public:
     void                        SetDefaultColors( const SvxChartColorTable& aCol );
 
     virtual void                Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 };
 
 // ====================

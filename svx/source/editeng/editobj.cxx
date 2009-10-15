@@ -50,7 +50,7 @@
 #include <svx/numitem.hxx>
 #include <svx/brshitem.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <vcl/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 

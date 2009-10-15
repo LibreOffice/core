@@ -38,7 +38,7 @@
 #include "osl/file.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
-#include "svtools/inettype.hxx"
+#include "svl/inettype.hxx"
 
 #include <transex3/compilehelp.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>

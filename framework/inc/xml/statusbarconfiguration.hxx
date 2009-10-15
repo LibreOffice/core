@@ -1,7 +1,7 @@
 #ifndef __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 #define __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 #include <vcl/status.hxx>

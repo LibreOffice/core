@@ -56,7 +56,7 @@
 #include <svx/dialmgr.hxx>
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/objsh.hxx>

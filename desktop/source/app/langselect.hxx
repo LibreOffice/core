@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 
 namespace desktop
 {

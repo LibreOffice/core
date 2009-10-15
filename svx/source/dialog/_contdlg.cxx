@@ -35,7 +35,7 @@
 #include <tools/shl.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/msgbox.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/miscopt.hxx>

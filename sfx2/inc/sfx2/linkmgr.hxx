@@ -34,7 +34,7 @@
 #include "sfx2/dllapi.h"
 #include <sfx2/linksrc.hxx>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SfxObjectShell;
 

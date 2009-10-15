@@ -38,9 +38,9 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>

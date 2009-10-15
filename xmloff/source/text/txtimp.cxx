@@ -34,7 +34,7 @@
 #include <tools/debug.hxx>
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

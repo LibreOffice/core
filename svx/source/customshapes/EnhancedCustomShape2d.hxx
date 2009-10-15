@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>

@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <tools/shl.hxx>
-#include <svtools/lngmisc.hxx>
+#include <svl/lngmisc.hxx>
 #include <vcl/wrkwin.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>

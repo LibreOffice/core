@@ -40,12 +40,12 @@
 #ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
 #endif
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <tools/string.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
 

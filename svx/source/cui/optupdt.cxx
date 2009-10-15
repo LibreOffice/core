@@ -38,7 +38,7 @@
 // include ---------------------------------------------------------------
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "optupdt.hxx"
 #include "optupdt.hrc"

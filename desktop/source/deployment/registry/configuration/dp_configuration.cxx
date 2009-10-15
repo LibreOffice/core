@@ -45,7 +45,7 @@
 #include "comphelper/anytostring.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "xmlscript/xml_helper.hxx"
-#include "svtools/inettype.hxx"
+#include "svl/inettype.hxx"
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/io/XActiveDataSink.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"

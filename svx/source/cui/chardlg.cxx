@@ -40,7 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/sfontitm.hxx>
+#include <svl/sfontitm.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
@@ -49,7 +49,7 @@
 #include <vcl/msgbox.hxx>
 
 #define _SVX_CHARDLG_CXX
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
@@ -88,12 +88,12 @@
 #include <svx/charreliefitem.hxx>
 #include <svx/twolinesitem.hxx>
 #include <charhiddenitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/charscaleitem.hxx>
 #include <svx/charrotateitem.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
-#include <svtools/intitem.hxx> //CHINA001
+#include <svl/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 #include "flagsdef.hxx" //CHINA001
 

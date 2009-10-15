@@ -31,7 +31,7 @@
 #ifndef _SFX_IMPFRAME_HXX
 #define _SFX_IMPFRAME_HXX
 
-#include <svtools/cancel.hxx>
+#include <svl/cancel.hxx>
 
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>                  // SvBorder

@@ -41,7 +41,7 @@
 #include <sfx2/fcontnr.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/sequenceasvector.hxx>

@@ -48,13 +48,13 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;

@@ -45,7 +45,7 @@
 
 #include "unotools/dynamicmenuoptions.hxx"
 #include "svtools/imagemgr.hxx"
-#include "svtools/svtools.hrc"
+#include "svl/svtools.hrc"
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"

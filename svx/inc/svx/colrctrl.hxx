@@ -34,7 +34,7 @@
 #include <sfx2/childwin.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "svx/svxdllapi.h"
 
 class XColorTable;

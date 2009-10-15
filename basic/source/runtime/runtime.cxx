@@ -33,8 +33,8 @@
 #include <tools/fsys.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/wldcrd.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/zforlist.hxx>
+#include <unotools/syslocale.hxx>
 #include "runtime.hxx"
 #include "sbintern.hxx"
 #include "opcodes.hxx"

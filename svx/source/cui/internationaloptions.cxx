@@ -38,7 +38,7 @@
 #ifndef _OFFAPP_INTERNATIONALOPTIONS_HRC_
 #include "internationaloptions.hrc"
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"

@@ -32,7 +32,7 @@
 
 
 #include <svtools/valueset.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
 

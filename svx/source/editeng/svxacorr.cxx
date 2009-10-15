@@ -50,13 +50,13 @@
 // fuer die Sort-String-Arrays aus dem SVMEM.HXX
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
 #include <svtools/helpopt.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
 #ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HDL_
 #include <com/sun/star/i18n/UnicodeType.hdl>

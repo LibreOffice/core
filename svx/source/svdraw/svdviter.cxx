@@ -38,7 +38,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdsob.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <sdrpaintwindow.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

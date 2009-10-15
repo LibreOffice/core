@@ -58,12 +58,12 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/imageitm.hxx>
-#include <svtools/visitem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/imageitm.hxx>
+#include <svl/visitem.hxx>
+#include <svl/urlbmk.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/moduleoptions.hxx>
 

@@ -70,7 +70,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdetc.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 

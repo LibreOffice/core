@@ -31,7 +31,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menu.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <vector>
 #include "galbrws.hxx"
 

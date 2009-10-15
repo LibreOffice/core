@@ -41,7 +41,7 @@
 #endif
 #include <vcl/image.hxx>
 //#ifndef _SFXITEMPOOL_HXX
-//#include <svtools/itempool.hxx>
+//#include <svl/itempool.hxx>
 //#endif
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -50,9 +50,9 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>

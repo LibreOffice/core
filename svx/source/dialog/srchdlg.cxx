@@ -35,16 +35,16 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/style.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/style.hxx>
 #include <unotools/searchopt.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -52,7 +52,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #include <sfx2/app.hxx>
 #include <toolkit/unohlp.hxx>

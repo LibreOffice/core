@@ -31,7 +31,7 @@
 #define _SVX_GRAPHICITEM_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
 #include <vcl/graph.hxx>

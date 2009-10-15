@@ -50,7 +50,7 @@
 
 #include <tools/debug.hxx>
 
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 
 using namespace ::com::sun::star::uno;
 

@@ -38,8 +38,8 @@
 #endif
 #include <vcl/image.hxx>
 #include <svtools/ivctrl.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <tools/list.hxx>
 #include <tools/string.hxx>
 

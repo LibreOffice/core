@@ -31,7 +31,7 @@
 #define _SVX_HELPID_HRC
 // include ---------------------------------------------------------------
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 // Help-Ids --------------------------------------------------------------
 

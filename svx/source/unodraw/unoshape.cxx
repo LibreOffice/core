@@ -38,7 +38,7 @@
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <vcl/svapp.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <svtools/fltcall.hxx>
 #include <vos/mutex.hxx>
 #include <svx/unotext.hxx>

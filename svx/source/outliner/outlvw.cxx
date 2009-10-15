@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <outl_pch.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #define _OUTLINER_CXX
 #include <svx/outliner.hxx>
@@ -44,7 +44,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/numitem.hxx>
 #include <vcl/window.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <editstat.hxx>
 
 

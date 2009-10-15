@@ -83,7 +83,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>

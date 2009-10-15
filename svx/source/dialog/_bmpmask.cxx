@@ -34,7 +34,7 @@
 #include <tools/shl.hxx>
 #include <vcl/metaact.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/colrdlg.hxx>
 

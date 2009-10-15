@@ -39,10 +39,10 @@
 #include <tools/shl.hxx>
 #include <tools/config.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfilt.hxx>
@@ -50,10 +50,10 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <tools/inetdef.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 #ifndef _CNTWIDS_HRC
-#include <svtools/cntwids.hrc>
+#include <svl/cntwids.hrc>
 #endif
 #include <unotools/inetoptions.hxx>
 #ifndef _SV_SVAPP_HXX
@@ -2154,7 +2154,7 @@ public:
     virtual ~MailerProgramCfg_Impl();
 
     virtual void    Commit();
-
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 };
 
 /* -------------------------------------------------------------------------*/
@@ -2232,6 +2232,10 @@ void MailerProgramCfg_Impl::Commit()
     aNames.realloc(nRealCount);
     aValues.realloc(nRealCount);
     PutProperties(aNames, aValues);
+}
+
+void MailerProgramCfg_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
 }
 
 /* -------------------------------------------------------------------------*/

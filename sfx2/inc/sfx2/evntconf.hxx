@@ -38,7 +38,7 @@
 #include <vcl/button.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/event.hxx>
 
 #include <sfx2/sfxsids.hrc>
@@ -46,7 +46,7 @@
 #undef ITEMID_MACRO
 #endif
 #define ITEMID_MACRO SID_ATTR_MACROITEM
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 class SfxMacroInfo;
 class SfxMacroInfoArr_Impl;

@@ -71,7 +71,7 @@
 #include <toolkit/unohlp.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <dispatch/uieventloghelper.hxx>
 

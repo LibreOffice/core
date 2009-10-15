@@ -30,7 +30,7 @@
 #ifndef _SCRIPTDLG_HRC
 #define _SCRIPTDLG_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 #define SCRIPTDLG_OFFSET        400
 

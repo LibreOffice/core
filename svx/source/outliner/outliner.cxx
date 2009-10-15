@@ -34,7 +34,7 @@
 #include <outl_pch.hxx>
 
 #include <math.h>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 #define _OUTLINER_CXX
 #include <svx/outliner.hxx>
@@ -46,8 +46,8 @@
 #include <editstat.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/editobj.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/itemset.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/metric.hxx>
 #include <svx/numitem.hxx>
 #include <svx/adjitem.hxx>
@@ -57,7 +57,7 @@
 #include <goodies/grfmgr.hxx>
 #include <svx/svxfont.hxx>
 #include <svx/brshitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 // #101498# calculate if it's RTL or not
 #include <unicode/ubidi.h>

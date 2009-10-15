@@ -34,8 +34,8 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/solar.h>
-#include <svtools/smplhint.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -94,7 +94,6 @@ class SfxModule;
 class SfxModuleArr_Impl;
 class Window;
 class INetURLObject;
-class SfxMiscCfg;
 struct SfxConstant;
 struct SfxChildWinFactory;
 struct SfxMenuCtrlFactory;
@@ -229,7 +228,6 @@ public:
     USHORT                      GetFreeIndex();
     void                        ReleaseIndex(USHORT i);
     SfxEventConfiguration*      GetEventConfig() const;
-    SfxMiscCfg*                 GetMiscConfig();
 
     // Basic/Scripting
     static sal_Bool             IsXScriptURL( const String& rScriptURL );

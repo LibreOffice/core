@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 // INCLUDE ---------------------------------------------------------------
-#include <svtools/rectitem.hxx>
+#include <svl/rectitem.hxx>
 
 
 
@@ -48,7 +48,7 @@
 #include "protitem.hxx"
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 // class SvxRulerItem ----------------------------------------------------
 

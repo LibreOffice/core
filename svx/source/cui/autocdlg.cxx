@@ -37,13 +37,13 @@
 
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/charclass.hxx>
@@ -56,8 +56,8 @@
 #include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/eitem.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>

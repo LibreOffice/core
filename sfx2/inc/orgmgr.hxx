@@ -30,7 +30,7 @@
 #ifndef _SFX_ORGMGR_HXX
 #define _SFX_ORGMGR_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SfxDocumentTemplates;
 class SfxOrganizeListBox_Impl;

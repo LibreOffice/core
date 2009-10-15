@@ -34,7 +34,7 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
@@ -58,7 +58,7 @@
 
 
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <pgrditem.hxx>
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
@@ -81,9 +81,9 @@
 #include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
 #include <svx/paravertalignitem.hxx>
-#include <svtools/eitem.hxx> //add CHINA001
+#include <svl/eitem.hxx> //add CHINA001
 #include <sfx2/request.hxx> //add CHINA001
-#include <svtools/intitem.hxx> //add CHINA001
+#include <svl/intitem.hxx> //add CHINA001
 
 // static ----------------------------------------------------------------
 

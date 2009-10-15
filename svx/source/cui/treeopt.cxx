@@ -72,13 +72,13 @@
 #endif
 #include <svtools/helpopt.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <sfx2/module.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/viewoptions.hxx>
 #include <sfx2/printopt.hxx>
@@ -86,7 +86,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/tplpitem.hxx>
@@ -312,6 +312,7 @@ public:
     virtual ~MailMergeCfg_Impl();
 
     virtual void    Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
     sal_Bool IsEmailSupported() const {return bIsEmailSupported;}
 
@@ -338,6 +339,10 @@ MailMergeCfg_Impl::~MailMergeCfg_Impl()
 }
 /* -------------------------------------------------------------------------*/
 void MailMergeCfg_Impl::Commit()
+{
+}
+
+void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
 {
 }
 
@@ -1551,7 +1556,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SFX_APP()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
-            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+            utl::MiscCfg    aMisc;
             const SfxPoolItem* pItem;
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
@@ -1562,17 +1567,17 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 if( SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, ((const SfxUInt16Item*)pItem)->GetValue() ) );
                 else
-                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (USHORT)pMisc->GetYear2000() ) );
+                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (USHORT)aMisc.GetYear2000() ) );
             }
             else
-                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (USHORT)pMisc->GetYear2000() ) );
+                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (USHORT)aMisc.GetYear2000() ) );
 
 
             // Sonstiges - Tabulator
-            pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, pMisc->IsNotFoundWarning()));
+            pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning()));
 
-            sal_uInt16 nFlag = pMisc->IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0;
-            nFlag  |= pMisc->IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0;
+            sal_uInt16 nFlag = aMisc.IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0;
+            nFlag  |= aMisc.IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0;
             pRet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlag ));
 
         }
@@ -1686,7 +1691,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
     {
         case SID_GENERAL_OPTIONS:
         {
-            SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
+            utl::MiscCfg    aMisc;
             const SfxPoolItem* pItem;
             SfxItemSet aOptSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER );
             aOptSet.Put(rSet);
@@ -1707,20 +1712,20 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                     SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
                     pDispatch->Execute( SID_ATTR_YEAR2000, SFX_CALLMODE_ASYNCHRON, pItem, 0L);
                 }
-                pMisc->SetYear2000(nY2K);
+                aMisc.SetYear2000(nY2K);
             }
 
 // -------------------------------------------------------------------------
 //          Drucken auswerten
 // -------------------------------------------------------------------------
             if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, sal_False, &pItem))
-                pMisc->SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
+                aMisc.SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
 
             if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_CHANGESTODOC, sal_False, &pItem))
             {
                 const SfxFlagItem* pFlag = (const SfxFlagItem*)pItem;
-                pMisc->SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
-                pMisc->SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
+                aMisc.SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
+                aMisc.SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
             }
 // -------------------------------------------------------------------------
 //          evaluate help options

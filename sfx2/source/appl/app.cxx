@@ -45,19 +45,19 @@
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>
 #include <svtools/asynclink.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/eitem.hxx>
+#include <svl/urlbmk.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/svdde.hxx>
+#include <svl/svdde.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
@@ -65,7 +65,7 @@
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -153,8 +153,8 @@
 #include <unotools/fontoptions.hxx>
 #include <unotools/internaloptions.hxx>
 #include <unotools/workingsetoptions.hxx>
-#include <svtools/syslocaleoptions.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <unotools/syslocale.hxx>
 #include <framework/addonsoptions.hxx>
 #include <svtools/ttprops.hxx>
 #include <unotools/extendedsecurityoptions.hxx>

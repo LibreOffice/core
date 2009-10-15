@@ -31,7 +31,7 @@
 #define _SFX_ARRDECL_HXX
 
 #include <tools/list.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <sfx2/minarray.hxx>
 
 struct CntUpdateResult;

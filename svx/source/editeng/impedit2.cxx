@@ -44,9 +44,9 @@
 #include <edtspell.hxx>
 #include <eeobj.hxx>
 #include <txtrange.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <acorrcfg.hxx>
 
 #include <svx/fhgtitem.hxx>

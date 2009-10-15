@@ -38,7 +38,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include "hyperdlg.hrc"

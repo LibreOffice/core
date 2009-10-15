@@ -46,8 +46,8 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdomeas.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
@@ -67,9 +67,9 @@
 //#include <svx/charscaleitem.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svtools/style.hxx>
-#include <svtools/style.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/style.hxx>
+#include <svl/style.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlntrit.hxx>

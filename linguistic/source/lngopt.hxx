@@ -42,15 +42,15 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <unotools/lingucfg.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <tools/solar.h>
 
-#include <vcl/timer.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include "misc.hxx"
 #include "defs.hxx"
+#include <vos/refernce.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace beans {

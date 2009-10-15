@@ -43,16 +43,16 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #include <tools/stream.hxx>
 
 #include "unoapi.hxx"
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include "unopolyhelper.hxx"
 
 #include <tools/bigint.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/dialogs.hrc>
 #include "svdstr.hrc"
 #include "xattr.hxx"

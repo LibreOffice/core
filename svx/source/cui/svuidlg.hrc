@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 #define HID_PASTE_DLG                   (HID_SO2_START +  0)
 #define HID_LINKDLG_TABLB               (HID_SO2_START +  1)

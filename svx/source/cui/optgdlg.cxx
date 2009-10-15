@@ -33,12 +33,12 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <goodies/grfmgr.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/szitem.hxx>
+#include <svl/szitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/imgmgr.hxx>
@@ -51,16 +51,16 @@
 #include <unotools/fontoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/startoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/printwarningoptions.hxx>
-#include <svtools/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/types.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>

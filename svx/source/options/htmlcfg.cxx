@@ -265,6 +265,11 @@ void    SvxHtmlOptions::Commit()
     }
     PutProperties(aNames, aValues);
 }
+
+void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
 // -----------------------------------------------------------------------
 USHORT  SvxHtmlOptions::GetFontSize(USHORT nPos) const
 {

@@ -39,7 +39,7 @@
 #include <tools/shl.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/dialmgr.hxx>
 
 #include "iconcdlg.hxx"

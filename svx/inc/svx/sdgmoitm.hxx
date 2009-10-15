@@ -32,7 +32,7 @@
 #define _SDGMOITM_HXX
 
 #include <goodies/grfmgr.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"
 

@@ -31,7 +31,7 @@
 
 #include "formula/formulahelper.hxx"
 #include <unotools/charclass.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 namespace formula
 {

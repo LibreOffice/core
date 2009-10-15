@@ -30,9 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xit.hxx>
 #ifndef SVX_LIGHT
 #ifndef _SFXDOCFILE_HXX

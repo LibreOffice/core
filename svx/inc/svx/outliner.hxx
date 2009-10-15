@@ -34,7 +34,7 @@
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 #include <svx/editdata.hxx>
 #include <i18npool/lang.h>

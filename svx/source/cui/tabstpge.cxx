@@ -52,14 +52,14 @@
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include <sfx2/module.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
 #include <sfx2/request.hxx> //CHINA001
 #include <svx/svxids.hrc> //add CHINA001
-#include <svtools/intitem.hxx> //add CHINA001
+#include <svl/intitem.hxx> //add CHINA001
 
 
 // class TabWin_Impl -----------------------------------------------------

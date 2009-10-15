@@ -36,7 +36,7 @@
 #include <svx/fmsearch.hxx> //CHINA001
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>

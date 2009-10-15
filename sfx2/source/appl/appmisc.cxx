@@ -36,10 +36,10 @@
 #include <vos/process.hxx>
 #endif
 #include <vos/xception.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/filter.hxx>
 #include <unotools/internaloptions.hxx>
 #include <unotools/pathoptions.hxx>

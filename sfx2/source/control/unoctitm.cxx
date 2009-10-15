@@ -32,13 +32,13 @@
 #include "precompiled_sfx2.hxx"
 
 #include <tools/debug.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/visitem.hxx>
 #include <svtools/javacontext.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XController.hpp>

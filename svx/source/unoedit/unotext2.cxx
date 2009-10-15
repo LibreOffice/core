@@ -34,7 +34,7 @@
 #include <vos/mutex.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>

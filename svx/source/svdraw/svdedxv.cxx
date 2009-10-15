@@ -33,14 +33,14 @@
 #include <svtools/accessibilityoptions.hxx>
 
 #include <svx/svdedxv.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 //#include <tools/string.h>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/hatch.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/style.hxx>
+#include <svl/whiter.hxx>
+#include <svl/style.hxx>
 #include <editstat.hxx>
 #include <tools/config.hxx>
 #include <vcl/cursor.hxx>

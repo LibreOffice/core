@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <eerdll.hxx>
 #include <eerdll2.hxx>
 #include <svx/lspcitem.hxx>
@@ -46,7 +46,7 @@
 #include <svx/flditem.hxx>
 #include <svx/emphitem.hxx>
 #include <svx/scriptspaceitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 

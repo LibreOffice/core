@@ -34,7 +34,7 @@
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/imap.hxx>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/svdobj.hxx>
 #include "galobj.hxx"

@@ -34,9 +34,10 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
-#include <svtools/adrparse.hxx>
+//#include <unotools/adrparse.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
+#include <svl/adrparse.hxx>
 
 #include "hlinettp.hxx"
 #include "hyperdlg.hrc"

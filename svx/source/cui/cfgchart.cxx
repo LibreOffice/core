@@ -270,6 +270,10 @@ void SvxChartOptions::Commit()
     PutProperties( aNames, aValues );
 }
 
+void SvxChartOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
 // --------------------
 // class SvxChartColorTableItem
 // --------------------

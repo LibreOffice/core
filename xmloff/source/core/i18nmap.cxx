@@ -32,7 +32,7 @@
 #include "precompiled_xmloff.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "i18nmap.hxx"
 
 using namespace rtl;

@@ -35,7 +35,7 @@
 #include <svx/eeitem.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>
 #include <unoedhlp.hxx>

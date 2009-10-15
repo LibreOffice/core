@@ -120,12 +120,13 @@
 #include <osl/signal.h>
 #include <rtl/uuid.h>
 #include <unotools/pathoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <unotools/internaloptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/syslocaleoptions.hxx>
-#include <svtools/folderrestriction.hxx>
+#include <unotools/syslocaleoptions.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/folderrestriction.hxx>
 #include <unotools/tempfile.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -147,7 +148,7 @@
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
-#include <svtools/misccfg.hxx>
+#include <unotools/misccfg.hxx>
 #include <svtools/filter.hxx>
 #include <unotools/regoptions.hxx>
 
@@ -1329,7 +1330,7 @@ void Desktop::Main()
         //LanguageSelection langselect;
         OUString aUILocaleString = LanguageSelection::getLanguageString();
         Locale aUILocale = LanguageSelection::IsoStringToLocale(aUILocaleString);
-        LanguageType eLanguage = SvtSysLocaleOptions().GetLocaleLanguageType();
+        LanguageType eLanguage = SvtSysLocale().GetLanguage();
 
         // #i39040#, do not call anything between GetSettings and SetSettings that might have
         // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
@@ -1820,10 +1821,6 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
 
     hStyleSettings.SetDragFullOptions( nDragFullOptions );
     rSettings.SetStyleSettings ( hStyleSettings );
-
-    MiscSettings aMiscSettings( rSettings.GetMiscSettings() );
-    aMiscSettings.SetTwoDigitYearStart( (USHORT) SfxMiscCfg().GetYear2000() );
-    rSettings.SetMiscSettings( aMiscSettings );
 }
 
 // ========================================================================

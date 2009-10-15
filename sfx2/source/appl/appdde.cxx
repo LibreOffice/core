@@ -31,12 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <vcl/wrkwin.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/svdde.hxx>
+#include <svl/stritem.hxx>
+#include <svl/svdde.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 

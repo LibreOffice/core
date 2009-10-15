@@ -35,7 +35,7 @@
 
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/imagemgr.hxx>

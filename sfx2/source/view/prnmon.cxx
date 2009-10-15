@@ -40,7 +40,7 @@
 #include <svtools/asynclink.hxx>
 
 #include <unotools/printwarningoptions.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #ifndef GCC
 #endif

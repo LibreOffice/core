@@ -91,8 +91,8 @@
 #include "fmprop.hrc"
 #endif
 #include <sfx2/bindings.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>

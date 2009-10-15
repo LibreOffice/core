@@ -36,7 +36,7 @@
 #ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
 #endif
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 

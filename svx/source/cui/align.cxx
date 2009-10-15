@@ -52,12 +52,12 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/itemconnect.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/localresaccess.hxx>
 #include <svx/svxids.hrc> //CHINA001
 #include "flagsdef.hxx" //CHINA001
-#include <svtools/intitem.hxx> //CHINA001
+#include <svl/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 
 namespace svx {

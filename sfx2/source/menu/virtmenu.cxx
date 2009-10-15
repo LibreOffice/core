@@ -34,7 +34,7 @@
 #include <sot/factory.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>

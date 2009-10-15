@@ -32,7 +32,7 @@
 
 #include <vcl/menu.hxx>
 #include <svtools/ruler.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "svx/svxdllapi.h"
 
 class SvxProtectItem;

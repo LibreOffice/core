@@ -64,16 +64,16 @@
 #include <comphelper/sequenceasvector.hxx>
 
 #include <vcl/wrkwin.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/doctempl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <framework/preventduplicateinteraction.hxx>
 #include <svtools/ehdl.hxx>
 #include <basic/sbxobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -95,7 +95,7 @@
 #include <sfx2/new.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include "objshimp.hxx"
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
@@ -112,7 +112,7 @@
 #include <sfx2/event.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

@@ -32,8 +32,8 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-#include <svtools/whiter.hxx>
-#include <svtools/style.hxx>
+#include <svl/whiter.hxx>
+#include <svl/style.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif

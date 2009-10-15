@@ -31,7 +31,7 @@
 #ifndef _OFFAPP_CONNPOOLOPTIONS_HXX_
 #define _OFFAPP_CONNPOOLOPTIONS_HXX_
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

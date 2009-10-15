@@ -43,8 +43,8 @@
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/transfer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
