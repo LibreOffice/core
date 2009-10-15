@@ -39,7 +39,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 

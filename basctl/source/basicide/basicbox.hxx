@@ -32,7 +32,7 @@
 #define _BASICBOX_HXX
 
 #include "doceventnotifier.hxx"
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svheader.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/lstbox.hxx>

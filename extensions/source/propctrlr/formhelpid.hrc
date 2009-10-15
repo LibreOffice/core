@@ -32,10 +32,10 @@
 #define _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
-// TODO: create a new help id range in <svtools/solar.hrc>
+// TODO: create a new help id range in <svl/solar.hrc>
 // at the moment, the help ids are ripped from svx/inc/fmhelper.hrc
 // (the old property browser was implemented in svx)
 

@@ -39,7 +39,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/pathoptions.hxx>
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #include <sfx2/docfilt.hxx>
 #include <vcl/msgbox.hxx>

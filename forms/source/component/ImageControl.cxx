@@ -65,7 +65,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/guarding.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 #include <memory>
 

@@ -42,7 +42,7 @@
 #include <tbxctl.hrc>
 #include <idetemp.hxx>
 #include <sfx2/imagemgr.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star::uno;

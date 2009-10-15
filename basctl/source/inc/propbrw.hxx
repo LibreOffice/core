@@ -37,8 +37,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <comphelper/composedprops.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
 #include <svx/svdmark.hxx>
 

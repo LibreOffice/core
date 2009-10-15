@@ -30,7 +30,7 @@
 #ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #define EXTENSIONS_INC_EXTENSIO_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 // -----------------------------------------------------------------------
 // - resource id areas

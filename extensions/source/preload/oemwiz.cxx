@@ -34,8 +34,8 @@
 #include "componentmodule.hxx"
 #include <tools/debug.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>
 #ifndef _EXTENSIONS_PRELOAD_PRELOAD_HRC_

@@ -114,6 +114,7 @@ public:
     ~BibConfig();
 
     virtual void    Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
     BibDBDescriptor         GetBibliographyURL();
     void                    SetBibliographyURL(const BibDBDescriptor& rDesc);

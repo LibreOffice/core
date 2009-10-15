@@ -41,14 +41,14 @@
 #endif
 #include <vcl/image.hxx>
 //#ifndef _SFXITEMPOOL_HXX
-//#include <svtools/itempool.hxx>
+//#include <svl/itempool.hxx>
 //#endif
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 
 #include <xmlsecurity/stbcontrl.hxx>

@@ -70,7 +70,7 @@
 
 #include <xmlscript/xmldlg_imexp.hxx>
 
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <unotools/collatorwrapper.hxx>
 

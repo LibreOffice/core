@@ -58,7 +58,7 @@ using namespace com::sun::star::devtools;
 #include <vcl/svapp.hxx>
 #endif
 #include <svtools/stringtransfer.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 //#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
 //#endif

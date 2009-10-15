@@ -51,8 +51,8 @@
 
 #include <svx/svxids.hrc>
 #include <svx/editview.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/msgpool.hxx>
 
 //--------------------------------------------------------------------------

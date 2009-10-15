@@ -53,7 +53,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 //.........................................................................
 namespace dbp

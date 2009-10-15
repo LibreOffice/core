@@ -31,7 +31,7 @@
 #define _SBXITEM_HXX
 
 #include "scriptdocument.hxx"
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 const USHORT BASICIDE_TYPE_UNKNOWN  =   0;
 const USHORT BASICIDE_TYPE_SHELL    =   1;

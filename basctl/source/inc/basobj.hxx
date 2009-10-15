@@ -32,7 +32,7 @@
 
 #include "scriptdocument.hxx"
 #include <tools/string.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>

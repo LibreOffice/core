@@ -46,8 +46,8 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/sfxsids.hrc>

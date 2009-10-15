@@ -60,7 +60,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/container.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <vcl/dialog.hxx>

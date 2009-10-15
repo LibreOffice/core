@@ -32,7 +32,7 @@
 #include "precompiled_basctl.hxx"
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #define _BASIC_TEXTPORTIONS
 #include <basic/sbdef.hxx>
 #include <ide_pch.hxx>
@@ -40,7 +40,7 @@
 
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <basic/sbx.hxx>
 #include <vcl/sound.hxx>
 #include <svtools/xtextedt.hxx>
@@ -719,7 +719,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void EditorWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* )
+void EditorWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     ImplSetFont();
 }

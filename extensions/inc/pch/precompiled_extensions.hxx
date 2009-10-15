@@ -507,11 +507,11 @@
 
 
 
-#include "svtools/filenotation.hxx"
+#include "svl/filenotation.hxx"
 #include "svtools/imgdef.hxx"
 #include "svtools/miscopt.hxx"
 #include "unotools/moduleoptions.hxx"
-#include "svtools/numuno.hxx"
+#include "svl/numuno.hxx"
 
 #include "svx/flagsdef.hxx"
 

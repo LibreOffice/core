@@ -34,7 +34,7 @@
 
 #include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
