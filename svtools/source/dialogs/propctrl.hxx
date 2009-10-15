@@ -34,7 +34,7 @@
 #include "sbx.hxx"
 #include "sbxbase.hxx"
 #include "sbxres.hxx"
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
   */
 
 

@@ -79,7 +79,7 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "rtl/logfile.hxx"
-
+#include <unotools/syslocaleoptions.hxx>
 #include "vcl/fontcfg.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/lazydelete.hxx"
@@ -467,6 +467,12 @@ void DeInitVCL()
 
     if ( pSVData->maAppData.mpSettings )
     {
+        if ( pSVData->maAppData.mpCfgListener )
+        {
+            pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
+            delete pSVData->maAppData.mpCfgListener;
+        }
+
         delete pSVData->maAppData.mpSettings;
         pSVData->maAppData.mpSettings = NULL;
     }

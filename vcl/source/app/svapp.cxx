@@ -88,6 +88,7 @@
 
 #include <utility>
 #include <vcl/lazydelete.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -709,8 +710,7 @@ void Application::SetSettings( const AllSettings& rSettings )
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
-        pSVData->maAppData.mpSettings = new AllSettings();
-        pSVData->maAppData.mpSettings->StartListening();
+        GetSettings();
         *pSVData->maAppData.mpSettings = rSettings;
         ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
     }
@@ -812,7 +812,12 @@ const AllSettings& Application::GetSettings()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
+    {
+        pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
         pSVData->maAppData.mpSettings = new AllSettings();
+        pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+    }
+
     return *(pSVData->maAppData.mpSettings);
 }
 

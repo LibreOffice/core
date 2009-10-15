@@ -523,3 +523,9 @@ Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
 
     return NULL;
 }
+
+void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
+{
+    AllSettings::LocaleSettingsChanged( nHint );
+}
+

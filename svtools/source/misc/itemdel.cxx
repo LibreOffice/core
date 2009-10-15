@@ -37,8 +37,8 @@
 #include <limits.h>
 
 #include <svtools/svtdata.hxx>
-#include <svtools/svarray.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/svarray.hxx>
+#include <svl/itempool.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

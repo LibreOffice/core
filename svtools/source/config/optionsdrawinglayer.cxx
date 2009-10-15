@@ -191,6 +191,7 @@ public:
 //---------------------------------------------------------------------------------------------------------
 
     virtual void Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
 //---------------------------------------------------------------------------------------------------------
 //  public interface
@@ -733,6 +734,10 @@ void SvtOptionsDrawinglayer_Impl::Commit()
     }
 
     PutProperties( aSeqNames, aSeqValues );
+}
+
+void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{
 }
 
 //*****************************************************************************************************************

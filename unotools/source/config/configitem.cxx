@@ -83,6 +83,13 @@ catch(Exception& rEx)   \
     #define CATCH_INFO(a) catch(Exception& ){}
 #endif
 
+/*
+    The ConfigChangeListener_Impl receives notifications from the configuration about changes that
+    have happened. It forwards this notification to the ConfigItem it knows a pParent by calling its
+    "CallNotify" method. As ConfigItems are most probably not thread safe, the SolarMutex is acquired
+    before doing so.
+*/
+
 namespace utl{
     class ConfigChangeListener_Impl : public cppu::WeakImplHelper1
     <
@@ -280,13 +287,6 @@ ConfigItem::~ConfigItem()
 /* -----------------------------29.08.00 12:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    ConfigItem::Commit()
-{
-    OSL_ENSURE(sal_False, "Base class called");
-}
-/* -----------------------------29.08.00 12:52--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    ConfigItem::ReleaseConfigMgr()
 {
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
@@ -308,18 +308,13 @@ void    ConfigItem::ReleaseConfigMgr()
  ---------------------------------------------------------------------------*/
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
+    // the call is forwarded to the virtual Notify() method
+    // it is pure virtual, so all classes deriving from ConfigItem have to decide how they
+    // want to notify listeners
     if(!IsInValueChange() || pImpl->bEnableInternalNotification)
         Notify(rPropertyNames);
-    NotifyListeners();
 }
 
-/* -----------------------------29.08.00 12:52--------------------------------
-
- ---------------------------------------------------------------------------*/
-void ConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /*rPropertyNames*/)
-{
-    OSL_ENSURE(sal_False, "Base class called");
-}
 /* -----------------------------12.12.00 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/

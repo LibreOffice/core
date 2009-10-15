@@ -168,6 +168,7 @@ void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
 
         SetModified();
         Commit();
+        NotifyListeners(0);
     }
 }
 /*-- 10.04.01 12:41:56---------------------------------------------------
@@ -240,6 +241,7 @@ void SvtCJKOptions_Impl::Load()
 void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
+    NotifyListeners(0);
 }
 /*-- 10.04.01 12:41:57---------------------------------------------------
 

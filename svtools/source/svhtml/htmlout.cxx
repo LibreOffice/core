@@ -32,11 +32,11 @@
 #include "precompiled_svtools.hxx"
 
 #include <tools/urlobj.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/zformat.hxx>
+#include <svl/macitem.hxx>
 #include <tools/cachestr.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include <svtools/htmlout.hxx>
 #include "htmlkywd.hxx"
@@ -44,7 +44,7 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 
 #ifndef RTL_CONSTASCII_STRINGPARAM
 #define RTL_CONSTASCII_STRINGPARAM( c ) c, sizeof(c)-1

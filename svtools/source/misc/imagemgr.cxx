@@ -55,7 +55,7 @@
 #include <rtl/logfile.hxx>
 #include <unotools/configmgr.hxx>
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include "imagemgr.hrc"
 #include <svtools/svtdata.hxx>
 #include <vos/mutex.hxx>

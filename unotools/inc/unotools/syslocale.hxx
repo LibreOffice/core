@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#define INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#ifndef INCLUDED_UNOTOOLS_SYSLOCALE_HXX
+#define INCLUDED_UNOTOOLS_SYSLOCALE_HXX
 
 #include "unotools/unotoolsdllapi.h"
 #include <unotools/localedatawrapper.hxx>
@@ -77,6 +77,8 @@ public:
             SvtSysLocaleOptions&        GetOptions() const;
             com::sun::star::lang::Locale GetLocale() const;
             LanguageType                GetLanguage() const;
+            com::sun::star::lang::Locale GetUILocale() const;
+            LanguageType                GetUILanguage() const;
 };
 
 #endif  // INCLUDED_SVTOOLS_SYSLOCALE_HXX

@@ -40,8 +40,7 @@ class SvtCTLOptions_Impl;
 
 // class SvtCTLOptions --------------------------------------------------------
 
-class SVL_DLLPUBLIC SvtCTLOptions:
-    public utl::detail::Options, public SfxBroadcaster, public SfxListener
+class SVL_DLLPUBLIC SvtCTLOptions : public utl::detail::Options
 {
 private:
     SvtCTLOptions_Impl*    m_pImp;
@@ -51,8 +50,6 @@ public:
     // bDontLoad is for referencing purposes only
     SvtCTLOptions( sal_Bool bDontLoad = sal_False );
     virtual ~SvtCTLOptions();
-
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            SetCTLFontEnabled( sal_Bool _bEnabled );
     sal_Bool        IsCTLFontEnabled() const;

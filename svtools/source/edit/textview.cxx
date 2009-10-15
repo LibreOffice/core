@@ -36,7 +36,7 @@
 #include <svtools/textdata.hxx>
 #include <textdat2.hxx>
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
@@ -44,7 +44,7 @@
 #include <tools/stream.hxx>
 
 #include <sot/formats.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>

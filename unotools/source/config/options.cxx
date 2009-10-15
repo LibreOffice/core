@@ -46,6 +46,7 @@ using utl::ConfigurationBroadcaster;
 ConfigurationBroadcaster::ConfigurationBroadcaster()
 : mpList(0)
 , m_nBroadcastBlocked( 0 )
+, m_nBlockedHint( 0 )
 {
 }
 
@@ -67,16 +68,28 @@ void ConfigurationBroadcaster::RemoveListener( utl::ConfigurationListener* pList
         mpList->Remove( pListener );
 }
 
-void ConfigurationBroadcaster::NotifyListeners()
+void ConfigurationBroadcaster::NotifyListeners( sal_uInt32 nHint )
 {
-//    if ( m_nBroadcastBlocked )
-//        m_nBlockedHint |= nHint;
-//    else
-    if (!m_nBroadcastBlocked)
+    if ( m_nBroadcastBlocked )
+        m_nBlockedHint |= nHint;
+    else
     {
+        nHint |= m_nBlockedHint;
+        m_nBlockedHint = 0;
         if ( mpList )
             for ( sal_uInt32 n=0; n<mpList->Count(); n++ )
-                mpList->GetObject(n)->ConfigurationChanged(this);
+                mpList->GetObject(n)->ConfigurationChanged( this, nHint );
+    }
+}
+
+void ConfigurationBroadcaster::BlockBroadcasts( bool bBlock )
+{
+    if ( bBlock )
+        ++m_nBroadcastBlocked;
+    else if ( m_nBroadcastBlocked )
+    {
+        if ( --m_nBroadcastBlocked == 0 )
+            NotifyListeners( 0 );
     }
 }
 
@@ -88,18 +101,9 @@ Options::~Options()
 {
 }
 
-void Options::ConfigurationChanged( utl::ConfigurationBroadcaster* )
+void Options::ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint )
 {
-    NotifyListeners();
+    NotifyListeners( nHint );
 }
 
-void ConfigurationBroadcaster::BlockBroadcasts( bool bBlock )
-{
-    if ( bBlock )
-        ++m_nBroadcastBlocked;
-    else if ( m_nBroadcastBlocked )
-    {
-        if ( --m_nBroadcastBlocked == 0 )
-            NotifyListeners();
-    }
-}
+

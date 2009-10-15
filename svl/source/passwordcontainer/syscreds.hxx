@@ -49,7 +49,7 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         virtual void Notify(
             const com::sun::star::uno::Sequence< rtl::OUString > &
                 seqPropertyNames );
-        //virtual void Commit();
+        virtual void Commit();
 
         com::sun::star::uno::Sequence< rtl::OUString >
         getSystemCredentialsURLs();

@@ -67,17 +67,6 @@ DBG_NAME( AllSettings )
                                  STYLE_OPTION_NOMNEMONICS)
 
 // =======================================================================
-class LocaleConfigurationListener : public utl::ConfigurationListener
-{
-public:
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* );
-};
-
-void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster* )
-{
-    AllSettings::LocaleSettingsChanged();
-}
-
 ImplMachineData::ImplMachineData()
 {
     mnRefCount                  = 1;
@@ -1543,7 +1532,6 @@ ImplAllSettingsData::ImplAllSettingsData()
     mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
-    mpLocaleCfgListener         = NULL;
     maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
 
@@ -1574,7 +1562,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
-    mpLocaleCfgListener         = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1593,11 +1580,6 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpI18nHelper;
     if ( mpUII18nHelper )
         delete mpUII18nHelper;
-    if (mpLocaleCfgListener )
-    {
-        maSysLocale.GetOptions().RemoveListener( mpLocaleCfgListener );
-        delete mpLocaleCfgListener;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -1654,13 +1636,6 @@ const AllSettings& AllSettings::operator =( const AllSettings& rSet )
     mpData = rSet.mpData;
 
     return *this;
-}
-
-void AllSettings::StartListening()
-{
-    if (!mpData->mpLocaleCfgListener)
-        mpData->mpLocaleCfgListener = new LocaleConfigurationListener;
-    mpData->maSysLocale.GetOptions().AddListener( mpData->mpLocaleCfgListener );
 }
 
 // -----------------------------------------------------------------------
@@ -1996,8 +1971,7 @@ BOOL AllSettings::GetLayoutRTL() const
 const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 {
     if ( !mpData->maLocale.Language.getLength() )
-        MsLangId::convertLanguageToLocale( GetLanguage(),
-                ((AllSettings*)this)->mpData->maLocale );
+        mpData->maLocale = mpData->maSysLocale.GetLocale();
 
     return mpData->maLocale;
 }
@@ -2007,8 +1981,7 @@ const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 {
     if ( !mpData->maUILocale.Language.getLength() )
-        MsLangId::convertLanguageToLocale( GetUILanguage(),
-                ((AllSettings*)this)->mpData->maUILocale );
+        mpData->maUILocale = mpData->maSysLocale.GetUILocale();
 
     return mpData->maUILocale;
 }
@@ -2018,7 +1991,7 @@ const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 LanguageType AllSettings::GetLanguage() const
 {
     if ( mpData->meLanguage == LANGUAGE_SYSTEM )
-        return MsLangId::getSystemLanguage();
+        mpData->meLanguage = mpData->maSysLocale.GetLanguage();
 
     return mpData->meLanguage;
 }
@@ -2028,7 +2001,7 @@ LanguageType AllSettings::GetLanguage() const
 LanguageType AllSettings::GetUILanguage() const
 {
     if ( mpData->meUILanguage == LANGUAGE_SYSTEM )
-        return MsLangId::getSystemUILanguage();
+        mpData->meUILanguage = mpData->maSysLocale.GetUILanguage();
 
     return mpData->meUILanguage;
 }
@@ -2098,15 +2071,26 @@ const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
     return *mpData->mpUICollatorWrapper;
 }
 */
-void AllSettings::LocaleSettingsChanged()
+
+void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
 {
     AllSettings aAllSettings( Application::GetSettings() );
-    MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
-    BOOL bIsDecSepAsLocale = aAllSettings.mpData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
-    if ( aMiscSettings.GetEnableLocalizedDecimalSep() != bIsDecSepAsLocale )
+    if ( nHint & SYSLOCALEOPTIONS_HINT_DECSEP )
     {
-        aMiscSettings.SetEnableLocalizedDecimalSep( bIsDecSepAsLocale );
-        aAllSettings.SetMiscSettings( aMiscSettings );
-        Application::SetSettings( aAllSettings );
+        MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
+        BOOL bIsDecSepAsLocale = aAllSettings.mpData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
+        if ( aMiscSettings.GetEnableLocalizedDecimalSep() != bIsDecSepAsLocale )
+        {
+            aMiscSettings.SetEnableLocalizedDecimalSep( bIsDecSepAsLocale );
+            aAllSettings.SetMiscSettings( aMiscSettings );
+        }
     }
+
+    if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
+        aAllSettings.SetLocale( aAllSettings.mpData->maSysLocale.GetOptions().GetLocale() );
+
+    if ( nHint & SYSLOCALEOPTIONS_HINT_UILOCALE )
+        aAllSettings.SetLocale( aAllSettings.mpData->maSysLocale.GetOptions().GetUILocale() );
+
+    Application::SetSettings( aAllSettings );
 }

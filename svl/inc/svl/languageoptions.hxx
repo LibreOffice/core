@@ -35,6 +35,7 @@
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/options.hxx>
 #include <i18npool/lang.h>
 
 // class SvtLanguageOptions ----------------------------------------------------
@@ -47,7 +48,7 @@
 class SvtCJKOptions;
 class SvtCTLOptions;
 
-class SVL_DLLPUBLIC SvtLanguageOptions : public SfxBroadcaster, public SfxListener
+class SVL_DLLPUBLIC SvtLanguageOptions : public ::utl::detail::Options
 {
 private:
     SvtCJKOptions*  m_pCJKOptions;
@@ -77,8 +78,6 @@ public:
     // bDontLoad is for referencing purposes only
     SvtLanguageOptions( sal_Bool _bDontLoad = sal_False );
     ~SvtLanguageOptions();
-
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // CJK options
     sal_Bool    IsCJKFontEnabled() const;
@@ -123,6 +122,7 @@ public:
     ~SvtSystemLanguageOptions();
 
     virtual void    Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
 
     LanguageType GetWin16SystemLanguage();
 };

@@ -32,7 +32,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "fontsubstconfig.hxx"
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -124,6 +124,10 @@ SvtFontSubstConfig::~SvtFontSubstConfig()
 /*-- 18.01.01 12:08:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
 void SvtFontSubstConfig::Commit()
 {
     Sequence<OUString> aNames(1);

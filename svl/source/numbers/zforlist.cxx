@@ -59,8 +59,6 @@
 #include "numhead.hxx"
 
 #include <unotools/syslocaleoptions.hxx>
-#include "listener.hxx"
-#include <svl/smplhint.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
@@ -120,7 +118,7 @@ public:
             sal_uInt32           Count()
                                 { return aFormatters.Count(); }
 
-            virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* );
+            virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 };
 
 
@@ -137,9 +135,9 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 }
 
 
-void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster* )
+void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
 {
-        //if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE )
+        if ( nHint & SYSLOCALEOPTIONS_HINT_LOCALE )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
             for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
@@ -149,7 +147,7 @@ void SvNumberFormatterRegistry_Impl::ConfigurationChanged( utl::ConfigurationBro
             }
             eSysLanguage = MsLangId::getRealLanguage( LANGUAGE_SYSTEM );
         }
-        //if ( pHint->GetId() & SYSLOCALEOPTIONS_HINT_CURRENCY )
+        if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
         {
             ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
             for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();

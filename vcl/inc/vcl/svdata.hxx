@@ -44,6 +44,7 @@
 #include <tools/debug.hxx>
 #include <vcl/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <unotools/options.hxx>
 
 namespace com {
 namespace sun {
@@ -118,6 +119,11 @@ namespace vcl { class DisplayConnection; class FontSubstConfiguration; class Set
 // -----------------
 // - ImplSVAppData -
 // -----------------
+class LocaleConfigurationListener : public utl::ConfigurationListener
+{
+public:
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+};
 
 struct ImplSVAppData
 {
@@ -131,6 +137,7 @@ struct ImplSVAppData
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMSF;
     String*                 mpMSFTempFileName;
     AllSettings*            mpSettings;         // Application settings
+    LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;   // listeners for vcl events (eg, extended toolkit)
     VclEventListeners*      mpKeyListeners;     // listeners for key events only (eg, extended toolkit)
     ImplAccelManager*       mpAccelMgr;         // Accelerator Manager

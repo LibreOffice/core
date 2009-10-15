@@ -59,6 +59,11 @@ void SysCredentialsConfigItem::Notify(
     m_pOwner->persistentConfigChanged();
 }
 
+void SysCredentialsConfigItem::Commit()
+{
+    // does nothing
+}
+
 uno::Sequence< rtl::OUString >
 SysCredentialsConfigItem::getSystemCredentialsURLs()
 {

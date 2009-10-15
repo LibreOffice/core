@@ -32,7 +32,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <svtools/urlcontrol.hxx>
-#include "svtools/filenotation.hxx"
+#include "svl/filenotation.hxx"
 
 //.........................................................................
 namespace svt

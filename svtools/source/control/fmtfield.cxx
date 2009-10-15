@@ -36,7 +36,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <svtools/fmtfield.hxx>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -45,7 +45,7 @@
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #ifndef REGEXP_SUPPORT
 #include <map>

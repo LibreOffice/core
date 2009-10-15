@@ -62,7 +62,7 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 
 #define _SV_CALENDAR_CXX
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <calendar.hxx>
 

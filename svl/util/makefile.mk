@@ -68,6 +68,7 @@ LIB1FILES=	\
 
 RESLIB1NAME=	$(RESTARGETSIMPLE)
 RESLIB1SRSFILES=\
+        $(SRS)$/items.srs \
         $(SRS)$/misc.srs
 
 # build the shared library  --------------------------------------------------
@@ -85,7 +86,6 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
         $(VOSLIB)			\
-        $(VCLLIB)			\
                 $(SOTLIB)     \
         $(SALLIB)
 

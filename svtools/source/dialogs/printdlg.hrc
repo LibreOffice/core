@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 
 #define FL_PRINTER              1
 #define LB_NAMES                2

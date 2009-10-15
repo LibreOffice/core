@@ -111,6 +111,8 @@ public:
                     SvtDefaultOptions_Impl();
 
     String          GetDefaultPath( USHORT nId ) const;
+    virtual void    Commit();
+    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 };
 
 // global ----------------------------------------------------------------
@@ -187,6 +189,16 @@ Sequence< OUString > GetDefaultPropertyNames()
         pNames[i] = OUString::createFromAscii( aPropNames[i] );
 
     return aNames;
+}
+
+void SvtDefaultOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
+{
+    // no notification, will never be changed
+}
+
+void SvtDefaultOptions_Impl::Commit()
+{
+    // will never be changed
 }
 
 // class SvtDefaultOptions_Impl ------------------------------------------

@@ -32,7 +32,7 @@
 #include "precompiled_svtools.hxx"
 #include <svtools/fileurlbox.hxx>
 #include <osl/file.h>
-#include "svtools/filenotation.hxx"
+#include "svl/filenotation.hxx"
 
 //.........................................................................
 namespace svt

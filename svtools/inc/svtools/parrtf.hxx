@@ -33,7 +33,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <svtools/svparser.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 struct RtfParserState_Impl
 {

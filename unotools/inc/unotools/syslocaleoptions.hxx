@@ -43,6 +43,8 @@
 // bits for broadcasting hints of changes in a SfxSimpleHint, may be combined
 const ULONG SYSLOCALEOPTIONS_HINT_LOCALE    = 0x00000001;
 const ULONG SYSLOCALEOPTIONS_HINT_CURRENCY  = 0x00000002;
+const ULONG SYSLOCALEOPTIONS_HINT_UILOCALE  = 0x00000004;
+const ULONG SYSLOCALEOPTIONS_HINT_DECSEP    = 0x00000008;
 
 class SvtSysLocaleOptions_Impl;
 class SvtListener;
@@ -54,12 +56,14 @@ class UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions: public utl::detail::Options
     static  sal_Int32                   nRefCount;
 
     UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&       GetMutex();
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint );
 
 public:
 
     enum EOption
     {
         E_LOCALE,
+        E_UILOCALE,
         E_CURRENCY
     };
                                 SvtSysLocaleOptions();
@@ -102,6 +106,12 @@ public:
     /// The config string may be empty to denote the SYSTEM locale
             const ::rtl::OUString&  GetLocaleConfigString() const;
             void                SetLocaleConfigString( const ::rtl::OUString& rStr );
+            com::sun::star::lang::Locale GetLocale() const;
+
+    /// The config string may be empty to denote the SYSTEM locale
+            const ::rtl::OUString&  GetUILocaleConfigString() const;
+            void                SetUILocaleConfigString( const ::rtl::OUString& rStr );
+            com::sun::star::lang::Locale GetUILocale() const;
 
     /// The config string may be empty to denote the default currency of the locale
             const ::rtl::OUString&  GetCurrencyConfigString() const;
@@ -112,11 +122,6 @@ public:
             void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
 
     // convenience methods
-
-    /** Get the LanguageType of the current locale, may be LANGUAGE_SYSTEM if
-        LocaleConfigString is empty. If you need the real locale used in the
-        application, call Application::GetSettings().GetLanguage() instead */
-            LanguageType        GetLocaleLanguageType() const;
 
     /// Get currency abbreviation and locale from an USD-en-US or EUR-de-DE string
     static  void                GetCurrencyAbbrevAndLanguage(

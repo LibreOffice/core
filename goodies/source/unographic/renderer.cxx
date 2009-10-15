@@ -48,7 +48,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include "grfmgr.hxx"
 #include "graphic.hxx"
 #include "renderer.hxx"

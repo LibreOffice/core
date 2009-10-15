@@ -648,7 +648,7 @@ SvtHistoryOptions::SvtHistoryOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtHistoryOptions_Impl::ctor()");
+        RTL_LOGFILE_CONTEXT(aLog, "unotools ( ??? ) ::SvtHistoryOptions_Impl::ctor()");
         m_pDataContainer = new SvtHistoryOptions_Impl;
 
         ItemHolder1::holdConfigItem(E_HISTORYOPTIONS);

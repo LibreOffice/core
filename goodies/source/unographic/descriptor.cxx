@@ -37,7 +37,7 @@
 #include <vos/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HDL_
 #include <com/sun/star/beans/PropertyState.hpp>

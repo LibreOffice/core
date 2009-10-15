@@ -39,7 +39,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <tools/solarmutex.hxx>
 #include <unotools/syslocale.hxx>
 
 using namespace ::com::sun::star;
@@ -56,13 +55,17 @@ SvtLanguageOptions::SvtLanguageOptions( sal_Bool _bDontLoad )
 
     m_pCJKOptions = new SvtCJKOptions( _bDontLoad );
     m_pCTLOptions = new SvtCTLOptions( _bDontLoad );
-    StartListening(*m_pCTLOptions);
+    m_pCTLOptions->AddListener(this);
+    m_pCJKOptions->AddListener(this);
 }
 //------------------------------------------------------------------------------
 SvtLanguageOptions::~SvtLanguageOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( ALMutex::get() );
+
+    m_pCTLOptions->RemoveListener(this);
+    m_pCJKOptions->RemoveListener(this);
 
     delete m_pCJKOptions;
     delete m_pCTLOptions;
@@ -200,19 +203,8 @@ sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) con
     }
     return bReadOnly;
 }
-/* -----------------30.04.2003 11:03-----------------
+/* -----------------30.04.2003 11:03-----------------*/
 
- --------------------------------------------------*/
-void SvtLanguageOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    if ( ::tools::SolarMutex::Acquire() )
-    {
-        Broadcast( rHint );
-        ::tools::SolarMutex::Release();
-    }
-}
-
-// -----------------------------------------------------------------------------
 // returns for a language the scripttype
 sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 {
@@ -268,6 +260,12 @@ void    SvtSystemLanguageOptions::Commit()
 {
     //does nothing
 }
+
+void    SvtSystemLanguageOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+    // no listeners supported yet
+}
+
 /*-- 27.10.2005 08:36:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/

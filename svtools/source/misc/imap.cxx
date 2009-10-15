@@ -36,7 +36,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/window.hxx>
 
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/imapcirc.hxx>

@@ -229,6 +229,7 @@ SvtLinguConfigItem::~SvtLinguConfigItem()
 void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames )
 {
     LoadOptions( rPropertyNames );
+    NotifyListeners(0);
 }
 
 
@@ -573,6 +574,7 @@ BOOL SvtLinguConfigItem::SetProperty( INT32 nPropertyHandle, const uno::Any &rVa
     if (bMod)
         SetModified();
 
+    NotifyListeners(0);
     return bSucc;
 }
 
@@ -592,6 +594,7 @@ BOOL SvtLinguConfigItem::SetOptions( const SvtLinguOptions &rOptions )
 
     aOpt = rOptions;
     SetModified();
+    NotifyListeners(0);
     return TRUE;
 }
 

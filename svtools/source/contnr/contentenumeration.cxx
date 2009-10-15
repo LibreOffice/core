@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include "contentenumeration.hxx"
-#include <svtools/urlfilter.hxx>
+#include <svl/urlfilter.hxx>
 #include <svtools/inettbc.hxx>
 #include "imagemgr.hxx"
 

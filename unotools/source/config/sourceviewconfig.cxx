@@ -191,7 +191,7 @@ void SourceViewConfig_Impl::Commit()
     }
     PutProperties( aNames, aValues );
 
-    NotifyListeners();
+    NotifyListeners(0);
 }
 /*-- 28.08.2002 16:32:19---------------------------------------------------
 

@@ -48,7 +48,7 @@
 #include <rtl/instance.hxx>
 
 #define _SVSTDARR_ULONGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef _SVEDI_HXX
 #include <svtools/svmedit.hxx>

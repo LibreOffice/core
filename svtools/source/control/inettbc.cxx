@@ -67,15 +67,15 @@
 #endif
 #include <vcl/svapp.hxx>
 #include <unotools/historyoptions.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/cancel.hxx>
-#include <svtools/itemset.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/cancel.hxx>
+#include <svl/itemset.hxx>
+#include "svl/urihelper.hxx"
 #include <unotools/pathoptions.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -83,7 +83,7 @@
 
 #include "iodlg.hrc"
 #include <asynclink.hxx>
-#include <svtools/urlfilter.hxx>
+#include <svl/urlfilter.hxx>
 
 #include <vector>
 #include <algorithm>

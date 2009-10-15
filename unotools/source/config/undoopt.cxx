@@ -94,7 +94,7 @@ void SvtUndoOptions_Impl::Commit()
     }
 
     PutProperties( m_aPropertyNames, aValues );
-    NotifyListeners();
+    NotifyListeners(0);
 }
 
 // -----------------------------------------------------------------------

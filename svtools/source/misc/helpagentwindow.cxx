@@ -39,7 +39,7 @@
 #include <svtools/svtdata.hxx>
 
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>

@@ -54,7 +54,7 @@
 #include "jpeg.hxx"
 #include "xbmread.hxx"
 #include "xpmread.hxx"
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include "strings.hrc"
 #include "sgffilt.hxx"
 #include "osl/module.hxx"

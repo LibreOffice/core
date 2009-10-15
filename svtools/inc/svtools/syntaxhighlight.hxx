@@ -40,7 +40,7 @@
 #include <tools/stream.hxx>
 #include <tools/shl.hxx>
 
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <svtools/svtdllapi.h>
 
 
@@ -60,7 +60,7 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 
 // Token-Typen TT_...

@@ -33,14 +33,14 @@
 #include "svtools/svtdllapi.h"
 #include <unotools/configitem.hxx>
 #include <tools/string.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 
 class SvtAccessibilityOptions_Impl;
 
 class SVT_DLLPUBLIC SvtAccessibilityOptions:
-    public utl::detail::Options, public SfxBroadcaster, private SfxListener
+    public utl::detail::Options, private SfxListener
 {
 private:
     static SvtAccessibilityOptions_Impl* volatile sm_pSingleImplConfig;

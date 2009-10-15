@@ -43,43 +43,43 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
     $(SLO)$/aeitem.obj	\
-    $(SLO)$/eitem.obj	\
-    $(SLO)$/flagitem.obj	\
-    $(SLO)$/globalnameitem.obj	\
-    $(SLO)$/imageitm.obj    \
-    $(SLO)$/intitem.obj	\
-    $(SLO)$/macitem.obj	\
-    $(SLO)$/poolcach.obj	\
-    $(SLO)$/ptitem.obj	\
-    $(SLO)$/rectitem.obj	\
-    $(SLO)$/rngitem.obj	\
-    $(SLO)$/stritem.obj	\
-    $(SLO)$/style.obj	\
-    $(SLO)$/szitem.obj \
-    $(SLO)$/bintitem.obj	\
     $(SLO)$/cenumitm.obj	\
     $(SLO)$/cintitem.obj	\
     $(SLO)$/cntwall.obj	\
     $(SLO)$/ctypeitm.obj	\
     $(SLO)$/custritm.obj	\
-    $(SLO)$/dtritem.obj	\
-    $(SLO)$/frqitem.obj	\
+    $(SLO)$/dateitem.obj \
+    $(SLO)$/eitem.obj	\
+    $(SLO)$/flagitem.obj	\
+    $(SLO)$/globalnameitem.obj	\
     $(SLO)$/ilstitem.obj    \
+    $(SLO)$/imageitm.obj    \
+    $(SLO)$/intitem.obj	\
     $(SLO)$/itemiter.obj	\
     $(SLO)$/itempool.obj	\
     $(SLO)$/itemprop.obj	\
     $(SLO)$/itemset.obj	\
     $(SLO)$/lckbitem.obj	\
+    $(SLO)$/macitem.obj	\
+    $(SLO)$/poolcach.obj	\
     $(SLO)$/poolio.obj	\
-    $(SLO)$/stylepool.obj	\
     $(SLO)$/poolitem.obj	\
+    $(SLO)$/ptitem.obj	\
+    $(SLO)$/rectitem.obj	\
+    $(SLO)$/rngitem.obj	\
     $(SLO)$/sfontitm.obj	\
     $(SLO)$/sitem.obj	    \
     $(SLO)$/slstitm.obj	\
-    $(SLO)$/tfrmitem.obj	\
-    $(SLO)$/tresitem.obj	\
-    $(SLO)$/whiter.obj \
-    $(SLO)$/visitem.obj
+    $(SLO)$/stritem.obj	\
+    $(SLO)$/style.obj	\
+    $(SLO)$/stylepool.obj	\
+    $(SLO)$/szitem.obj \
+    $(SLO)$/visitem.obj \
+    $(SLO)$/whiter.obj 
+
+SRS1NAME=$(TARGET)
+SRC1FILES=\
+    cstitem.src
 
 # --- Targets -------------------------------------------------------
 

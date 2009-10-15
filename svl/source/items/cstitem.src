@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: tresitem.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: cstitem.src,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,38 +28,45 @@
  *
  ************************************************************************/
 
-#ifndef SVTOOLS_TRESITEM_HXX
-#define SVTOOLS_TRESITEM_HXX
-
-#include <com/sun/star/ucb/TransferResult.hpp>
-#include <svl/poolitem.hxx>
-
-//============================================================================
-class CntTransferResultItem: public SfxPoolItem
+#include <svl/svtools.hrc>
+String STR_COLUM_DT_AUTO
 {
-    com::sun::star::ucb::TransferResult m_aResult;
-
-public:
-    TYPEINFO();
-
-    CntTransferResultItem(USHORT which = 0): SfxPoolItem(which) {}
-
-    CntTransferResultItem(USHORT which,
-                          com::sun::star::ucb::TransferResult const &
-                              rTheResult):
-        SfxPoolItem(which), m_aResult(rTheResult) {}
-
-    virtual int operator ==(SfxPoolItem const & rItem) const;
-
-    virtual BOOL QueryValue(com::sun::star::uno::Any & rVal, BYTE = 0) const;
-
-    virtual BOOL PutValue(const com::sun::star::uno::Any & rVal, BYTE = 0);
-
-    virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
-
-    com::sun::star::ucb::TransferResult const & GetValue() const
-    { return m_aResult; }
+    Text [ en-US ] = "automatic" ;
 };
 
-#endif // SVTOOLS_TRESITEM_HXX
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

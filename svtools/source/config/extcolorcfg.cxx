@@ -40,8 +40,8 @@
 #include <unotools/configitem.hxx>
 #include <unotools/configpathes.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/poolitem.hxx> //Any2Bool
-#include <svtools/smplhint.hxx>
+#include <svl/poolitem.hxx> //Any2Bool
+#include <svl/smplhint.hxx>
 #include <vos/mutex.hxx>
 
  /* #100822# ----

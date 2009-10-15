@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 #include "testtool.hrc"
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 
 #define Control_Control 5

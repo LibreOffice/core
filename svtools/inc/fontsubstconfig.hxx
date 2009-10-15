@@ -53,6 +53,7 @@ public:
     virtual ~SvtFontSubstConfig();
 
     virtual void            Commit();
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
     sal_Bool                IsEnabled() const {return bIsEnabled;}
     void                    Enable(sal_Bool bSet)  {bIsEnabled = bSet; SetModified();}

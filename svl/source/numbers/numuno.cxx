@@ -35,7 +35,6 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 
-#include <vcl/svapp.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>

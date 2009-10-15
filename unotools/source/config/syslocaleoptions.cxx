@@ -31,20 +31,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
 
-#include <unotools/syslocaleoptions.hxx>
-#include <i18npool/mslangid.hxx>
-#include <tools/string.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/logfile.hxx>
+#include <i18npool/mslangid.hxx>
+#include <tools/string.hxx>
+#include <tools/debug.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <rtl/logfile.hxx>
 
 #include "itemholder1.hxx"
-
 
 #define CFG_READONLY_DEFAULT    sal_False
 
@@ -66,19 +65,17 @@ namespace
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 {
         OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
-        LanguageType            m_eLocaleLanguageType;  // same for convenience access
+        OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
         ULONG                   m_nBlockedHint;     // pending hints
         sal_Bool                m_bDecimalSeparator; //use decimal separator same as locale
 
         sal_Bool                m_bROLocale;
+        sal_Bool                m_bROUILocale;
         sal_Bool                m_bROCurrency;
         sal_Bool                m_bRODecimalSeparator;
 
     static  const Sequence< /* const */ OUString >  GetPropertyNames();
-
-            ULONG               ChangeLocaleSettings();
-            void                ChangeDefaultCurrency() const;
 
 public:
                                 SvtSysLocaleOptions_Impl();
@@ -90,8 +87,10 @@ public:
             const OUString&     GetLocaleString() const
                                     { return m_aLocaleString; }
             void                SetLocaleString( const OUString& rStr );
-            LanguageType        GetLocaleLanguageType() const
-                                    { return m_eLocaleLanguageType; }
+
+            const OUString&     GetUILocaleString() const
+                                    { return m_aUILocaleString; }
+            void                SetUILocaleString( const OUString& rStr );
 
             const OUString&     GetCurrencyString() const
                                     { return m_aCurrencyString; }
@@ -104,30 +103,32 @@ public:
 };
 
 
-#define ROOTNODE_SYSLOCALE  OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/L10N"))
+#define ROOTNODE_SYSLOCALE              OUString(RTL_CONSTASCII_USTRINGPARAM("Setup/L10N"))
 
-#define PROPERTYNAME_LOCALE         OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))
-#define PROPERTYNAME_CURRENCY       OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupCurrency"))
-#define PROPERTYNAME_DECIMALSEPARATOR OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalSeparatorAsLocale"))
+#define PROPERTYNAME_LOCALE             OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupSystemLocale"))
+#define PROPERTYNAME_UILOCALE           OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale"))
+#define PROPERTYNAME_CURRENCY           OUString(RTL_CONSTASCII_USTRINGPARAM("ooSetupCurrency"))
+#define PROPERTYNAME_DECIMALSEPARATOR   OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalSeparatorAsLocale"))
 
-#define PROPERTYHANDLE_LOCALE       0
-#define PROPERTYHANDLE_CURRENCY     1
-#define PROPERTYHANDLE_DECIMALSEPARATOR 2
+#define PROPERTYHANDLE_LOCALE           0
+#define PROPERTYHANDLE_UILOCALE         1
+#define PROPERTYHANDLE_CURRENCY         2
+#define PROPERTYHANDLE_DECIMALSEPARATOR 3
 
-#define PROPERTYCOUNT               3
+#define PROPERTYCOUNT                   4
 
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
     static const OUString pProperties[] =
     {
         PROPERTYNAME_LOCALE,
+        PROPERTYNAME_UILOCALE,
         PROPERTYNAME_CURRENCY,
         PROPERTYNAME_DECIMALSEPARATOR
     };
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -136,13 +137,12 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     , m_nBlockedHint( 0 )
     , m_bDecimalSeparator( sal_True )
     , m_bROLocale(CFG_READONLY_DEFAULT)
+    , m_bROUILocale(CFG_READONLY_DEFAULT)
     , m_bROCurrency(CFG_READONLY_DEFAULT)
     , m_bRODecimalSeparator(sal_False)
 
 {
-    if ( !IsValidConfigMgr() )
-        ChangeLocaleSettings();     // assume SYSTEM defaults during Setup
-    else
+    if ( IsValidConfigMgr() )
     {
         const Sequence< OUString > aNames = GetPropertyNames();
         Sequence< Any > aValues = GetProperties( aNames );
@@ -170,6 +170,18 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                                     DBG_ERRORFILE( "Wrong property type!" );
                                 }
                                 m_bROLocale = pROStates[nProp];
+                            }
+                            break;
+                        case PROPERTYHANDLE_UILOCALE :
+                            {
+                                OUString aStr;
+                                if ( pValues[nProp] >>= aStr )
+                                    m_aUILocaleString = aStr;
+                                else
+                                {
+                                    DBG_ERRORFILE( "Wrong property type!" );
+                                }
+                                m_bROUILocale = pROStates[nProp];
                             }
                             break;
                         case PROPERTYHANDLE_CURRENCY :
@@ -203,7 +215,6 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
             }
         }
 //        UpdateMiscSettings_Impl();
-        ChangeLocaleSettings();
         EnableNotification( aNames );
     }
 }
@@ -226,6 +237,11 @@ sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOpt
                 bReadOnly = m_bROLocale;
                 break;
             }
+        case SvtSysLocaleOptions::E_UILOCALE :
+            {
+                bReadOnly = m_bROUILocale;
+                break;
+            }
         case SvtSysLocaleOptions::E_CURRENCY :
             {
                 bReadOnly = m_bROCurrency;
@@ -234,25 +250,6 @@ sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOpt
     }
     return bReadOnly;
 }
-
-
-/*void SvtSysLocaleOptions_Impl::Broadcast( ULONG nHint )
-{
-    if ( m_nBroadcastBlocked )
-        m_nBlockedHint |= nHint;
-    else
-    {
-        nHint |= m_nBlockedHint;
-        m_nBlockedHint = 0;
-        if ( nHint )
-        {
-            if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
-                ChangeDefaultCurrency();
-            SfxSimpleHint aHint( nHint );
-            GetBroadcaster().Broadcast( aHint );
-        }
-    }
-}*/
 
 
 void SvtSysLocaleOptions_Impl::Commit()
@@ -281,9 +278,19 @@ void SvtSysLocaleOptions_Impl::Commit()
                     }
                 }
                 break;
+            case PROPERTYHANDLE_UILOCALE :
+                {
+                    if (!m_bROUILocale)
+                    {
+                        pNames[nRealCount] = aOrgNames[nProp];
+                        pValues[nRealCount] <<= m_aUILocaleString;
+                        ++nRealCount;
+                    }
+                }
+                break;
             case PROPERTYHANDLE_CURRENCY :
                 {
-                    if (!m_bROLocale)
+                    if (!m_bROCurrency)
                     {
                         pNames[nRealCount] = aOrgNames[nProp];
                         pValues[nRealCount] <<= m_aCurrencyString;
@@ -317,27 +324,21 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
         m_aLocaleString = rStr;
         SetModified();
         ULONG nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
-        nHint |= ChangeLocaleSettings();
-        //Broadcast( nHint );
-        NotifyListeners();
+        if ( !m_aCurrencyString.getLength() )
+            nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
+        NotifyListeners( nHint );
     }
 }
 
-
-ULONG SvtSysLocaleOptions_Impl::ChangeLocaleSettings()
+void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
 {
-    // An empty config value denotes SYSTEM locale
-    if ( m_aLocaleString.getLength() )
-        m_eLocaleLanguageType = MsLangId::convertIsoStringToLanguage( m_aLocaleString );
-    else
-        m_eLocaleLanguageType = LANGUAGE_SYSTEM;
-    ULONG nHint = 0;
-    // new locale and no fixed currency => locale default currency might change
-    if ( !m_aCurrencyString.getLength() )
-        nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
-    return nHint;
+    if (!m_bROUILocale && rStr != m_aUILocaleString )
+    {
+        m_aUILocaleString = rStr;
+        SetModified();
+        NotifyListeners( SYSLOCALEOPTIONS_HINT_UILOCALE );
+    }
 }
-
 
 void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
 {
@@ -345,8 +346,7 @@ void SvtSysLocaleOptions_Impl::SetCurrencyString( const OUString& rStr )
     {
         m_aCurrencyString = rStr;
         SetModified();
-        //Broadcast( SYSLOCALEOPTIONS_HINT_CURRENCY );
-        NotifyListeners();
+        NotifyListeners( SYSLOCALEOPTIONS_HINT_CURRENCY );
     }
 }
 
@@ -356,19 +356,9 @@ void SvtSysLocaleOptions_Impl::SetDecimalSeparatorAsLocale( sal_Bool bSet)
     {
         m_bDecimalSeparator = bSet;
         SetModified();
-        //UpdateMiscSettings_Impl();
-        NotifyListeners();
+        NotifyListeners( SYSLOCALEOPTIONS_HINT_DECSEP );
     }
 }
-
-
-void SvtSysLocaleOptions_Impl::ChangeDefaultCurrency() const
-{
-    const Link& rLink = SvtSysLocaleOptions::GetCurrencyChangeLink();
-    if ( rLink.IsSet() )
-        rLink.Call( NULL );
-}
-
 
 void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPropertyNames )
 {
@@ -384,7 +374,15 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
             seqValues[nProp] >>= m_aLocaleString;
             m_bROLocale = seqROStates[nProp];
             nHint |= SYSLOCALEOPTIONS_HINT_LOCALE;
-            nHint |= ChangeLocaleSettings();
+            if ( !m_aCurrencyString.getLength() )
+                nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
+        }
+        if( seqPropertyNames[nProp] == PROPERTYNAME_UILOCALE )
+        {
+            DBG_ASSERT( seqValues[nProp].getValueTypeClass() == TypeClass_STRING, "Locale property type" );
+            seqValues[nProp] >>= m_aUILocaleString;
+            m_bROUILocale = seqROStates[nProp];
+            nHint |= SYSLOCALEOPTIONS_HINT_UILOCALE;
         }
         else if( seqPropertyNames[nProp] == PROPERTYNAME_CURRENCY )
         {
@@ -400,8 +398,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
         }
     }
     if ( nHint )
-        //Broadcast( nHint );
-        NotifyListeners();
+        NotifyListeners( nHint );
 }
 
 // ====================================================================
@@ -417,12 +414,14 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
         ItemHolder1::holdConfigItem(E_SYSLOCALEOPTIONS);
     }
     ++nRefCount;
+    pOptions->AddListener(this);
 }
 
 
 SvtSysLocaleOptions::~SvtSysLocaleOptions()
 {
     MutexGuard aGuard( GetMutex() );
+    pOptions->RemoveListener(this);
     if ( !--nRefCount )
     {
         delete pOptions;
@@ -477,13 +476,23 @@ const OUString& SvtSysLocaleOptions::GetLocaleConfigString() const
     return pOptions->GetLocaleString();
 }
 
-
 void SvtSysLocaleOptions::SetLocaleConfigString( const OUString& rStr )
 {
     MutexGuard aGuard( GetMutex() );
     pOptions->SetLocaleString( rStr );
 }
 
+const OUString& SvtSysLocaleOptions::GetUILocaleConfigString() const
+{
+    MutexGuard aGuard( GetMutex() );
+    return pOptions->GetUILocaleString();
+}
+
+void SvtSysLocaleOptions::SetUILocaleConfigString( const OUString& rStr )
+{
+    MutexGuard aGuard( GetMutex() );
+    pOptions->SetUILocaleString( rStr );
+}
 
 const OUString& SvtSysLocaleOptions::GetCurrencyConfigString() const
 {
@@ -499,11 +508,6 @@ void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
 }
 
 
-LanguageType SvtSysLocaleOptions::GetLocaleLanguageType() const
-{
-    MutexGuard aGuard( GetMutex() );
-    return pOptions->GetLocaleLanguageType();
-}
 
 /*-- 11.02.2004 13:31:41---------------------------------------------------
 
@@ -582,3 +586,45 @@ const Link& SvtSysLocaleOptions::GetCurrencyChangeLink()
     return CurrencyChangeLink::get();
 }
 
+
+void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 nHint  )
+{
+    if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
+    {
+        const Link& rLink = GetCurrencyChangeLink();
+        if ( rLink.IsSet() )
+            rLink.Call( NULL );
+    }
+
+    ::utl::detail::Options::ConfigurationChanged( p, nHint );
+}
+
+com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rStr )
+{
+    com::sun::star::lang::Locale aRet;
+    if ( rStr.getLength() )
+    {
+        aRet = com::sun::star::lang::Locale();
+        sal_Int32 nSep = rStr.indexOf('-');
+        if (nSep < 0)
+            aRet.Language = rStr;
+        else
+        {
+            aRet.Language = rStr.copy(0, nSep);
+            if (nSep < rStr.getLength())
+                aRet.Country = rStr.copy(nSep+1, rStr.getLength() - (nSep+1));
+        }
+    }
+
+    return aRet;
+}
+
+com::sun::star::lang::Locale SvtSysLocaleOptions::GetLocale() const
+{
+    return lcl_str_to_locale( GetLocaleConfigString() );
+}
+
+com::sun::star::lang::Locale SvtSysLocaleOptions::GetUILocale() const
+{
+    return lcl_str_to_locale( GetUILocaleConfigString() );
+}

@@ -271,6 +271,8 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
         else DBG_ASSERT( sal_False, "SvtLocalisationOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
+
+    NotifyListeners(0);
 }
 
 //*****************************************************************************************************************

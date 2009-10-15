@@ -39,7 +39,7 @@
 #include "addresstemplate.hrc"
 #endif
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
@@ -70,7 +70,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include "localresaccess.hxx"
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include "svtools/filenotation.hxx"
+#include "svl/filenotation.hxx"
 #endif
 #include <tools/urlobj.hxx>
 
@@ -324,7 +324,19 @@ public:
 
         virtual void    setDatasourceName(const ::rtl::OUString& _rName);
         virtual void    setCommand(const ::rtl::OUString& _rCommand);
+
+        virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+        virtual void    Commit();
     };
+
+
+void AssignmentPersistentData::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{
+}
+
+void AssignmentPersistentData::Commit()
+{
+}
 
     // -------------------------------------------------------------------
     AssignmentPersistentData::AssignmentPersistentData()

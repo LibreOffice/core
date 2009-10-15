@@ -54,17 +54,17 @@
 #endif
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/scrbar.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #ifndef _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

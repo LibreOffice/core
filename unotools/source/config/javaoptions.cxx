@@ -57,6 +57,7 @@ public:
     SvtExecAppletsItem_Impl();
 
     virtual void    Commit();
+    void Notify( const Sequence< rtl::OUString >&  );
 
     sal_Bool IsExecuteApplets() const {return bExecute;}
     void     SetExecuteApplets(sal_Bool bSet);
@@ -108,6 +109,10 @@ void    SvtExecAppletsItem_Impl::Commit()
     PutProperties(aNames, aValues);
 }
 
+void SvtExecAppletsItem_Impl::Notify( const Sequence< rtl::OUString >&  )
+{
+    // no listeners supported yet
+}
 
 struct SvtJavaOptions_Impl
 {

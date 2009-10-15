@@ -772,7 +772,7 @@ void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
 
 void SvtUserOptions_Impl::Notify()
 {
-    NotifyListeners();
+    NotifyListeners(0);
 }
 
 // -----------------------------------------------------------------------

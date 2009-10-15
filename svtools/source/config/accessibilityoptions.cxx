@@ -55,7 +55,7 @@
 #include <unotools/loghelper.hxx>
 #endif
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -539,7 +539,7 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
 
 void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    Broadcast( rHint );
+    NotifyListeners(0);
     if ( rHint.IsA(TYPE(SfxSimpleHint)) )
     {
         if ( ((SfxSimpleHint&)rHint).GetId()  == SFX_HINT_ACCESSIBILITY_CHANGED )

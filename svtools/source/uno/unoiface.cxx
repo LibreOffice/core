@@ -48,7 +48,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <calendar.hxx>
 #include <prgsbar.hxx>
 

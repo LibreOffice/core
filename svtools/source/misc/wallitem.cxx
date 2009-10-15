@@ -52,7 +52,7 @@
 #include <vcl/cvtgrf.hxx>
 
 #include "wallitem.hxx"
-#include <svtools/cntwall.hxx>
+#include <svl/cntwall.hxx>
 
 // -----------------------------------------------------------------------
 

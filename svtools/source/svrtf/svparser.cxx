@@ -37,7 +37,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 

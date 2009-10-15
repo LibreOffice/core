@@ -34,8 +34,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 
 //-----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ struct ColorConfigValue
 
  ---------------------------------------------------------------------------*/
 class SVT_DLLPUBLIC ColorConfig:
-    public utl::detail::Options, public SfxBroadcaster, public SfxListener
+    public utl::detail::Options
 {
     friend class ColorConfig_Impl;
 private:
@@ -117,12 +117,9 @@ public:
     ColorConfig();
     virtual ~ColorConfig();
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
     // get the configured value - if bSmart is set the default color setting is provided
     // instead of the automatic color
     ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, sal_Bool bSmart = sal_True)const;
-
     static Color            GetDefaultColor(ColorConfigEntry eEntry);
 };
 /* -----------------------------22.03.2002 15:31------------------------------

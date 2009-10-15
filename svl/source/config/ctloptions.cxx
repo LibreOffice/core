@@ -43,7 +43,6 @@
 #include <vos/mutex.hxx>
 #include <svl/smplhint.hxx>
 #include <rtl/instance.hxx>
-#include <tools/solarmutex.hxx>
 #include <unotools/syslocale.hxx>
 #include <itemholder2.hxx>
 
@@ -55,7 +54,7 @@ using namespace ::com::sun::star::uno;
 
 // SvtCJKOptions_Impl ----------------------------------------------------------
 
-class SvtCTLOptions_Impl : public utl::ConfigItem, public SfxBroadcaster
+class SvtCTLOptions_Impl : public utl::ConfigItem
 {
 private:
     sal_Bool                        m_bIsLoaded;
@@ -155,7 +154,7 @@ SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
 void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& )
 {
     Load();
-    Broadcast(SfxSimpleHint(SFX_HINT_CTL_SETTINGS_CHANGED));
+    NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
 }
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Commit()
@@ -247,7 +246,7 @@ void SvtCTLOptions_Impl::Commit()
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
     //broadcast changes
-    Broadcast(SfxSimpleHint(SFX_HINT_CTL_SETTINGS_CHANGED));
+    NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
 }
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Load()
@@ -325,6 +324,7 @@ void SvtCTLOptions_Impl::SetCTLFontEnabled( sal_Bool _bEnabled )
     {
         m_bCTLFontEnabled = _bEnabled;
         SetModified();
+        NotifyListeners(0);
     }
 }
 //------------------------------------------------------------------------------
@@ -334,6 +334,7 @@ void SvtCTLOptions_Impl::SetCTLSequenceChecking( sal_Bool _bEnabled )
     {
         SetModified();
         m_bCTLSequenceChecking = _bEnabled;
+        NotifyListeners(0);
     }
 }
 //------------------------------------------------------------------------------
@@ -343,6 +344,7 @@ void SvtCTLOptions_Impl::SetCTLSequenceCheckingRestricted( sal_Bool _bEnabled )
     {
         SetModified();
         m_bCTLRestricted = _bEnabled;
+        NotifyListeners(0);
     }
 }
 //------------------------------------------------------------------------------
@@ -352,6 +354,7 @@ void  SvtCTLOptions_Impl::SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnabl
     {
         SetModified();
         m_bCTLTypeAndReplace = _bEnabled;
+        NotifyListeners(0);
     }
 }
 //------------------------------------------------------------------------------
@@ -361,6 +364,7 @@ void SvtCTLOptions_Impl::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eM
     {
         SetModified();
         m_eCTLCursorMovement = _eMovement;
+        NotifyListeners(0);
     }
 }
 //------------------------------------------------------------------------------
@@ -370,6 +374,7 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
     {
         SetModified();
         m_eCTLTextNumerals = _eNumerals;
+        NotifyListeners(0);
     }
 }
 // global ----------------------------------------------------------------
@@ -394,7 +399,7 @@ SvtCTLOptions::SvtCTLOptions( sal_Bool bDontLoad )
 
     ++nCTLRefCount;
     m_pImp = pCTLOptions;
-    StartListening( *m_pImp);
+    m_pImp->AddListener(this);
 }
 
 // -----------------------------------------------------------------------
@@ -404,6 +409,7 @@ SvtCTLOptions::~SvtCTLOptions()
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( CTLMutex::get() );
 
+    m_pImp->RemoveListener(this);
     if ( !--nCTLRefCount )
         DELETEZ( pCTLOptions );
 }
@@ -485,17 +491,5 @@ sal_Bool SvtCTLOptions::IsReadOnly(EOption eOption) const
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsReadOnly(eOption);
 }
-/* -----------------30.04.2003 10:40-----------------
-
- --------------------------------------------------*/
-void SvtCTLOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    if ( ::tools::SolarMutex::Acquire() )
-    {
-        Broadcast( rHint );
-        ::tools::SolarMutex::Release();
-    }
-}
-
 // -----------------------------------------------------------------------------
 

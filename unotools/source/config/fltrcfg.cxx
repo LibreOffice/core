@@ -81,6 +81,7 @@ public:
         bSaveVBA(sal_False)  {}
     ~SvtAppFilterOptions_Impl();
     virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     void                    Load();
 
     sal_Bool                IsLoad() const {return bLoadVBA;}
@@ -125,6 +126,13 @@ void    SvtAppFilterOptions_Impl::Commit()
 
     PutProperties(aNames, aValues);
 }
+
+void SvtAppFilterOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
+{
+    // no listeners supported yet
+}
+
+
 /* -----------------------------22.01.01 10:38--------------------------------
 
  ---------------------------------------------------------------------------*/

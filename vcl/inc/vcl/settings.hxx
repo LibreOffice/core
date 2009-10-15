@@ -1285,8 +1285,8 @@ public:
     BOOL                                    operator ==( const AllSettings& rSet ) const;
     BOOL                                    operator !=( const AllSettings& rSet ) const
                                                 { return !(*this == rSet); }
-    static void                             LocaleSettingsChanged();
-    void                                    StartListening();
+    static void                             LocaleSettingsChanged( sal_uInt32 nHint );
+    SvtSysLocale&                           GetSysLocale() { return mpData->maSysLocale; }
 };
 
 #endif // _SV_SETTINGS_HXX

@@ -34,26 +34,40 @@
 #include "sal/config.h"
 #include "unotools/unotoolsdllapi.h"
 
+/*
+    The class utl::detail::Options provides a kind of multiplexer. It implements a ConfigurationListener
+    that is usually registered at a ConfigItem class. At the same time it implements a ConfigurationBroadcaster
+    that allows further ("external") listeners to register.
+    Once the class deriving from Options is notified about
+    configuration changes by the ConfigItem if its content has been changed by calling some of its methods,
+    a call of the Options::NotifyListeners() method will send out notifications to all external listeners.
+*/
+
 namespace utl {
 
     class ConfigurationBroadcaster;
     class IMPL_ConfigurationListenerList;
 
+    // interface for configuration listener
     class UNOTOOLS_DLLPUBLIC ConfigurationListener
     {
     public:
-        virtual void ConfigurationChanged( ConfigurationBroadcaster* ) = 0;
+        virtual void ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) = 0;
     };
 
+    // complete broadcasting implementation
     class UNOTOOLS_DLLPUBLIC ConfigurationBroadcaster
     {
         IMPL_ConfigurationListenerList* mpList;
         sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
+        sal_uInt32              m_nBlockedHint;
 
     public:
         void AddListener( utl::ConfigurationListener* pListener );
         void RemoveListener( utl::ConfigurationListener* pListener );
-        void NotifyListeners();
+
+        // notify listeners; nHint is an implementation detail of the particular class deriving from ConfigurationBroadcaster
+        void NotifyListeners( sal_uInt32 nHint );
         ConfigurationBroadcaster();
         ~ConfigurationBroadcaster();
         void BlockBroadcasts( bool bBlock );
@@ -63,7 +77,9 @@ namespace detail {
 
 // A base class for the various option classes supported by
 // unotools/source/config/itemholderbase.hxx (which must be public, as it is
-// shared between svl and svt):
+// shared between unotools, svl and svt)
+// It also provides an implementation for a Configuration Listener and inherits a broadcaster implementation
+
 class UNOTOOLS_DLLPUBLIC Options : public utl::ConfigurationBroadcaster, public utl::ConfigurationListener
 {
 public:
@@ -74,7 +90,9 @@ public:
 private:
     UNOTOOLS_DLLPRIVATE Options(Options &); // not defined
     UNOTOOLS_DLLPRIVATE void operator =(Options &); // not defined
-    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster* );
+
+protected:
+    virtual void ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 nHint=0 );
 };
 
 } }

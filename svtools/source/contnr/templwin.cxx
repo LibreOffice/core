@@ -37,14 +37,14 @@
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svtools/xtextedt.hxx>
-#include <svtools/inettype.hxx>
+#include <svl/inettype.hxx>
 #include "imagemgr.hxx"
 #include <svtools/miscopt.hxx>
 #include "templatefoldercache.hxx"
 #include "imgdef.hxx"
 #include "txtattr.hxx"
 #ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #endif
 #ifndef _SVTOOLS_TEMPLWIN_HRC
 #include "templwin.hrc"
