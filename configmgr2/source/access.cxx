@@ -159,6 +159,12 @@ void Access::releaseChild(rtl::OUString const & name) {
     cachedChildren_.erase(name);
 }
 
+void Access::initBroadcaster(
+    Modifications::Node const & modifications, Broadcaster * broadcaster)
+{
+    initBroadcasterAndChanges(modifications, broadcaster, 0);
+}
+
 Access::Access(Components & components):
     components_(components), disposed_(false)
 {}
@@ -239,12 +245,6 @@ void Access::clearListeners() throw() {
             child->clearListeners();
         }
     }
-}
-
-void Access::initLocalBroadcaster(
-    Modifications::Node const & modifications, Broadcaster * broadcaster)
-{
-    initLocalBroadcasterAndChanges(modifications, broadcaster, 0);
 }
 
 css::uno::Any Access::queryInterface(css::uno::Type const & aType)
@@ -474,12 +474,13 @@ void Access::commitChildChanges(
     }
 }
 
-void Access::initLocalBroadcasterAndChanges(
+void Access::initBroadcasterAndChanges(
     Modifications::Node const & modifications, Broadcaster * broadcaster,
-    std::vector< css::util::ElementChange > * changes)
+    std::vector< css::util::ElementChange > * allChanges)
 {
     OSL_ASSERT(broadcaster != 0);
-    //TODO: handle vetoableChangeListeners_, propertiesChangeListeners_
+    comphelper::SequenceAsVector< css::beans::PropertyChangeEvent > propChanges;
+    bool collectPropChanges = !propertiesChangeListeners_.empty();
     for (Modifications::Node::Children::const_iterator i(
              modifications.children.begin());
          i != modifications.children.end(); ++i)
@@ -488,47 +489,70 @@ void Access::initLocalBroadcasterAndChanges(
         if (child.is()) {
             switch (child->getNode()->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
-                if (Components::allLocales(getRootAccess()->getLocale())) {
-                    break;
-                }
-                //TODO: filter child mods that are irrelevant for locale:
                 if (!i->second.children.empty()) {
-                    for (ContainerListeners::iterator j(
-                             containerListeners_.begin());
-                         j != containerListeners_.end(); ++j)
-                    {
-                        //TODO: distinguish add/remove/modify:
-                        broadcaster->addContainerElementReplacedNotification(
-                            *j,
-                            css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i->first), child->asValue(),
-                                css::uno::Any()));
-                            //TODO: non-void ReplacedElement
-                    }
-                    PropertyChangeListeners::iterator j(
-                        propertyChangeListeners_.find(i->first));
-                    if (j != propertyChangeListeners_.end()) {
-                        for (PropertyChangeListenersElement::iterator k(
-                                 j->second.begin());
-                             k != j->second.end(); ++k)
+                    if (Components::allLocales(getRootAccess()->getLocale())) {
+                        child->initBroadcasterAndChanges(
+                            i->second, broadcaster, allChanges);
+                            //TODO: if allChanges==0, recurse only into children
+                            // w/ listeners
+                    } else {
+                        //TODO: filter child mods that are irrelevant for
+                        // locale:
+                        for (ContainerListeners::iterator j(
+                                 containerListeners_.begin());
+                             j != containerListeners_.end(); ++j)
                         {
-                            broadcaster->addPropertyChangeNotification(
-                                *k,
-                                css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
-                                    i->first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
+                            broadcaster->
+                                addContainerElementReplacedNotification(
+                                    *j,
+                                    css::container::ContainerEvent(
+                                        static_cast< cppu::OWeakObject * >(
+                                            this),
+                                        css::uno::makeAny(i->first),
+                                        css::uno::Any(), css::uno::Any()));
+                                //TODO: non-void Element, ReplacedElement
                         }
-                    }
-                    j = propertyChangeListeners_.find(rtl::OUString());
-                    if (j != propertyChangeListeners_.end()) {
-                        for (PropertyChangeListenersElement::iterator k(
-                                 j->second.begin());
-                             k != j->second.end(); ++k)
-                        {
-                            broadcaster->addPropertyChangeNotification(
-                                *k,
+                        PropertyChangeListeners::iterator j(
+                            propertyChangeListeners_.find(i->first));
+                        if (j != propertyChangeListeners_.end()) {
+                            for (PropertyChangeListenersElement::iterator k(
+                                     j->second.begin());
+                                 k != j->second.end(); ++k)
+                            {
+                                broadcaster->addPropertyChangeNotification(
+                                    *k,
+                                    css::beans::PropertyChangeEvent(
+                                        static_cast< cppu::OWeakObject * >(
+                                            this),
+                                        i->first, false, -1, css::uno::Any(),
+                                        css::uno::Any()));
+                            }
+                        }
+                        j = propertyChangeListeners_.find(rtl::OUString());
+                        if (j != propertyChangeListeners_.end()) {
+                            for (PropertyChangeListenersElement::iterator k(
+                                     j->second.begin());
+                                 k != j->second.end(); ++k)
+                            {
+                                broadcaster->addPropertyChangeNotification(
+                                    *k,
+                                    css::beans::PropertyChangeEvent(
+                                        static_cast< cppu::OWeakObject * >(
+                                            this),
+                                        i->first, false, -1, css::uno::Any(),
+                                        css::uno::Any()));
+                            }
+                        }
+                        if (allChanges != 0) {
+                            allChanges->push_back(
+                                css::util::ElementChange(
+                                    css::uno::makeAny(
+                                        child->getRelativePathRepresentation()),
+                                    css::uno::Any(), css::uno::Any()));
+                                //TODO: non-void Element, ReplacedElement
+                        }
+                        if (collectPropChanges) {
+                            propChanges.push_back(
                                 css::beans::PropertyChangeEvent(
                                     static_cast< cppu::OWeakObject * >(this),
                                     i->first, false, -1, css::uno::Any(),
@@ -536,40 +560,47 @@ void Access::initLocalBroadcasterAndChanges(
                         }
                     }
                 }
-                return;
+                // else: spurious Modifications::Node not representing a change
+                break;
             case Node::KIND_LOCALIZED_VALUE:
-                if (Components::allLocales(getRootAccess()->getLocale())) {
-                    OSL_ASSERT(i->second.children.empty());
-                    //TODO: removed members
-                    for (ContainerListeners::iterator j(
-                             containerListeners_.begin());
-                         j != containerListeners_.end(); ++j)
-                    {
-                        broadcaster->addContainerElementInsertedNotification(
-                            *j,
-                            css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i->first), child->asValue(),
-                                css::uno::Any()));
-                    }
-                    return;
+                OSL_ASSERT(
+                    Components::allLocales(getRootAccess()->getLocale()));
+                for (ContainerListeners::iterator j(
+                         containerListeners_.begin());
+                     j != containerListeners_.end(); ++j)
+                {
+                    broadcaster->addContainerElementReplacedNotification(
+                        *j,
+                        css::container::ContainerEvent(
+                            static_cast< cppu::OWeakObject * >(this),
+                            css::uno::makeAny(i->first), child->asValue(),
+                            css::uno::Any()));
+                        //TODO: distinguish add/modify; non-void ReplacedElement
                 }
-                // fall through
+                if (allChanges != 0) {
+                    allChanges->push_back(
+                        css::util::ElementChange(
+                            css::uno::makeAny(
+                                child->getRelativePathRepresentation()),
+                            child->asValue(), css::uno::Any()));
+                        //TODO: non-void ReplacedElement
+                }
+                OSL_ASSERT(!collectPropChanges);
+                break;
             case Node::KIND_PROPERTY:
                 {
-                    OSL_ASSERT(i->second.children.empty());
                     for (ContainerListeners::iterator j(
                              containerListeners_.begin());
                          j != containerListeners_.end(); ++j)
                     {
-                        //TODO: distinguish add/remove/modify:
                         broadcaster->addContainerElementReplacedNotification(
                             *j,
                             css::container::ContainerEvent(
                                 static_cast< cppu::OWeakObject * >(this),
                                 css::uno::makeAny(i->first), child->asValue(),
                                 css::uno::Any()));
-                            //TODO: non-void ReplacedElement
+                            //TODO: distinguish add/remove/modify; non-void
+                            // ReplacedElement
                     }
                     PropertyChangeListeners::iterator j(
                         propertyChangeListeners_.find(i->first));
@@ -578,7 +609,6 @@ void Access::initLocalBroadcasterAndChanges(
                                  j->second.begin());
                              k != j->second.end(); ++k)
                         {
-                            //TODO: filter out adds/removes:
                             broadcaster->addPropertyChangeNotification(
                                 *k,
                                 css::beans::PropertyChangeEvent(
@@ -593,7 +623,6 @@ void Access::initLocalBroadcasterAndChanges(
                                  j->second.begin());
                              k != j->second.end(); ++k)
                         {
-                            //TODO: filter out adds/removes:
                             broadcaster->addPropertyChangeNotification(
                                 *k,
                                 css::beans::PropertyChangeEvent(
@@ -602,224 +631,199 @@ void Access::initLocalBroadcasterAndChanges(
                                     css::uno::Any()));
                         }
                     }
-                }
-                return;
-            case Node::KIND_GROUP:
-            case Node::KIND_SET:
-                //TODO: removed members
-                if (i->second.children.empty() &&
-                    child->getNode()->getTemplateName().getLength() != 0)
-                {
-                    for (ContainerListeners::iterator j(
-                             containerListeners_.begin());
-                         j != containerListeners_.end(); ++j)
-                    {
-                        broadcaster->addContainerElementInsertedNotification(
-                            *j,
-                            css::container::ContainerEvent(
+                    if (allChanges != 0) {
+                        allChanges->push_back(
+                            css::util::ElementChange(
+                                css::uno::makeAny(
+                                    child->getRelativePathRepresentation()),
+                                child->asValue(), css::uno::Any()));
+                            //TODO: non-void ReplacedElement
+                    }
+                    if (collectPropChanges) {
+                        propChanges.push_back(
+                            css::beans::PropertyChangeEvent(
                                 static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i->first), child->asValue(),
+                                i->first, false, -1, css::uno::Any(),
                                 css::uno::Any()));
                     }
-                    return;
+                }
+                break;
+            case Node::KIND_GROUP:
+            case Node::KIND_SET:
+                if (i->second.children.empty()) {
+                    if (child->getNode()->getTemplateName().getLength() != 0) {
+                        for (ContainerListeners::iterator j(
+                                 containerListeners_.begin());
+                             j != containerListeners_.end(); ++j)
+                        {
+                            broadcaster->
+                                addContainerElementInsertedNotification(
+                                    *j,
+                                    css::container::ContainerEvent(
+                                        static_cast< cppu::OWeakObject * >(
+                                            this),
+                                        css::uno::makeAny(i->first),
+                                        child->asValue(), css::uno::Any()));
+                        }
+                        if (allChanges != 0) {
+                            allChanges->push_back(
+                                css::util::ElementChange(
+                                    css::uno::makeAny(
+                                        child->getRelativePathRepresentation()),
+                                    css::uno::Any(), css::uno::Any()));
+                                //TODO: non-void Element, ReplacedElement
+                        }
+                    }
+                    // else: spurious Modifications::Node not representing a
+                    // change
+                } else {
+                    child->initBroadcasterAndChanges(
+                        i->second, broadcaster, allChanges);
+                        //TODO: if allChanges==0, recurse only into children w/
+                        // listeners
                 }
                 break;
             }
-            child->initLocalBroadcasterAndChanges(
-                i->second, broadcaster, changes);
-                //TODO: if changes==0, recurse only into children w/ listeners
+        } else {
+            switch (getNode()->kind()) {
+            case Node::KIND_LOCALIZED_PROPERTY:
+                // Removed localized property value:
+                OSL_ASSERT(
+                    Components::allLocales(getRootAccess()->getLocale()));
+                for (ContainerListeners::iterator j(
+                         containerListeners_.begin());
+                     j != containerListeners_.end(); ++j)
+                {
+                    broadcaster->addContainerElementRemovedNotification(
+                        *j,
+                        css::container::ContainerEvent(
+                            static_cast< cppu::OWeakObject * >(this),
+                            css::uno::makeAny(i->first), css::uno::Any(),
+                            css::uno::Any()));
+                        //TODO: non-void ReplacedElement
+                }
+                if (allChanges != 0) {
+                    rtl::OUStringBuffer path(getRelativePathRepresentation());
+                    if (path.getLength() != 0) {
+                        path.append(sal_Unicode('/'));
+                    }
+                    path.append(
+                        Data::createSegment(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")),
+                            i->first));
+                    allChanges->push_back(
+                        css::util::ElementChange(
+                            css::uno::makeAny(path.makeStringAndClear()),
+                            css::uno::Any(), css::uno::Any()));
+                        //TODO: non-void ReplacedElement
+                }
+                OSL_ASSERT(!collectPropChanges);
+                break;
+            case Node::KIND_GROUP:
+                {
+                    // Removed (non-localized) extension property:
+                    for (ContainerListeners::iterator j(
+                             containerListeners_.begin());
+                         j != containerListeners_.end(); ++j)
+                    {
+                        broadcaster->addContainerElementRemovedNotification(
+                            *j,
+                            css::container::ContainerEvent(
+                                static_cast< cppu::OWeakObject * >(this),
+                                css::uno::makeAny(i->first), css::uno::Any(),
+                                css::uno::Any()));
+                            //TODO: non-void ReplacedElement
+                    }
+                    PropertyChangeListeners::iterator j(
+                        propertyChangeListeners_.find(i->first));
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                    j = propertyChangeListeners_.find(rtl::OUString());
+                    if (j != propertyChangeListeners_.end()) {
+                        for (PropertyChangeListenersElement::iterator k(
+                                 j->second.begin());
+                             k != j->second.end(); ++k)
+                        {
+                            broadcaster->addPropertyChangeNotification(
+                                *k,
+                                css::beans::PropertyChangeEvent(
+                                    static_cast< cppu::OWeakObject * >(this),
+                                    i->first, false, -1, css::uno::Any(),
+                                    css::uno::Any()));
+                        }
+                    }
+                    if (allChanges != 0) {
+                        rtl::OUStringBuffer path(
+                            getRelativePathRepresentation());
+                        if (path.getLength() != 0) {
+                            path.append(sal_Unicode('/'));
+                        }
+                        path.append(i->first);
+                        allChanges->push_back(
+                            css::util::ElementChange(
+                                css::uno::makeAny(path.makeStringAndClear()),
+                                css::uno::Any(), css::uno::Any()));
+                            //TODO: non-void ReplacedElement
+                    }
+                    if (collectPropChanges) {
+                        propChanges.push_back(
+                            css::beans::PropertyChangeEvent(
+                                static_cast< cppu::OWeakObject * >(this),
+                                i->first, false, -1, css::uno::Any(),
+                                css::uno::Any()));
+                    }
+                }
+                break;
+            case Node::KIND_SET:
+                // Removed set member:
+                if (i->second.children.empty()) {
+                    for (ContainerListeners::iterator j(
+                             containerListeners_.begin());
+                         j != containerListeners_.end(); ++j)
+                    {
+                        broadcaster->addContainerElementRemovedNotification(
+                            *j,
+                            css::container::ContainerEvent(
+                                static_cast< cppu::OWeakObject * >(this),
+                                css::uno::makeAny(i->first),
+                                css::uno::Any(), css::uno::Any()));
+                            //TODO: non-void ReplacedElement
+                    }
+                    //TODO: if (allChanges != 0) {
+                    //  allChanges->push_back(
+                    //      css::util::ElementChange(
+                    //          css::uno::makeAny(...),
+                    //          css::uno::Any(), css::uno::Any()));
+                    //      //TODO: non-void ReplacedElement
+                    //}
+                }
+                // else: spurious Modifications::Node not representing a change
+                break;
+            default:
+                OSL_ASSERT(false); // this cannot happen
+                break;
+            }
         }
     }
-}
-
-void Access::initGlobalBroadcasterAndChanges(
-    Modifications::Node const & modifications, Broadcaster * broadcaster,
-    std::vector< css::util::ElementChange > * changes)
-{
-    OSL_ASSERT(broadcaster != 0);
-    //TODO: handle propertiesChangeListeners_
-    for (Modifications::Node::Children::const_iterator i(
-             modifications.children.begin());
-         i != modifications.children.end(); ++i)
-    {
-        rtl::Reference< ChildAccess > child(getChild(i->first));
-        if (child.is()) {
-            switch (child->getNode()->kind()) {
-            case Node::KIND_LOCALIZED_PROPERTY:
-                if (Components::allLocales(getRootAccess()->getLocale())) {
-                    break;
-                }
-                //TODO: filter child mods that are irrelevant for locale:
-                if (!i->second.children.empty()) {
-                    for (ContainerListeners::iterator j(
-                             containerListeners_.begin());
-                         j != containerListeners_.end(); ++j)
-                    {
-                        //TODO: distinguish add/remove/modify:
-                        broadcaster->addContainerElementReplacedNotification(
-                            *j,
-                            css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i->first), child->asValue(),
-                                css::uno::Any()));
-                            //TODO: non-void ReplacedElement
-                    }
-                    PropertyChangeListeners::iterator j(
-                        propertyChangeListeners_.find(i->first));
-                    if (j != propertyChangeListeners_.end()) {
-                        for (PropertyChangeListenersElement::iterator k(
-                                 j->second.begin());
-                             k != j->second.end(); ++k)
-                        {
-                            broadcaster->addPropertyChangeNotification(
-                                *k,
-                                css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
-                                    i->first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
-                        }
-                    }
-                    j = propertyChangeListeners_.find(rtl::OUString());
-                    if (j != propertyChangeListeners_.end()) {
-                        for (PropertyChangeListenersElement::iterator k(
-                                 j->second.begin());
-                             k != j->second.end(); ++k)
-                        {
-                            broadcaster->addPropertyChangeNotification(
-                                *k,
-                                css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
-                                    i->first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
-                        }
-                    }
-                    if (changes != 0) {
-                        //TODO: removed members
-                        changes->push_back(
-                            css::util::ElementChange(
-                                css::uno::makeAny(
-                                    child->getRelativePathRepresentation()),
-                                css::uno::Any(), css::uno::Any()));
-                            //TODO: non-void Element, ReplacedElement
-                    }
-                }
-                return;
-            case Node::KIND_LOCALIZED_VALUE:
-                if (Components::allLocales(getRootAccess()->getLocale())) {
-                    OSL_ASSERT(i->second.children.empty());
-                    //TODO: removed members
-                    for (ContainerListeners::iterator j(
-                             containerListeners_.begin());
-                         j != containerListeners_.end(); ++j)
-                    {
-                        broadcaster->addContainerElementInsertedNotification(
-                            *j,
-                            css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i->first), child->asValue(),
-                                css::uno::Any()));
-                    }
-                    if (changes != 0) {
-                        changes->push_back(
-                            css::util::ElementChange(
-                                css::uno::makeAny(
-                                    child->getRelativePathRepresentation()),
-                                css::uno::Any(), css::uno::Any()));
-                            //TODO: non-void Element, ReplacedElement
-                    }
-                    return;
-                }
-                // fall through
-            case Node::KIND_PROPERTY:
-                {
-                    OSL_ASSERT(i->second.children.empty());
-                    for (ContainerListeners::iterator j(
-                             containerListeners_.begin());
-                         j != containerListeners_.end(); ++j)
-                    {
-                        //TODO: distinguish add/remove/modify:
-                        broadcaster->addContainerElementReplacedNotification(
-                            *j,
-                            css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i->first), child->asValue(),
-                                css::uno::Any()));
-                            //TODO: non-void ReplacedElement
-                    }
-                    PropertyChangeListeners::iterator j(
-                        propertyChangeListeners_.find(i->first));
-                    if (j != propertyChangeListeners_.end()) {
-                        for (PropertyChangeListenersElement::iterator k(
-                                 j->second.begin());
-                             k != j->second.end(); ++k)
-                        {
-                            //TODO: filter out adds/removes:
-                            broadcaster->addPropertyChangeNotification(
-                                *k,
-                                css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
-                                    i->first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
-                        }
-                    }
-                    j = propertyChangeListeners_.find(rtl::OUString());
-                    if (j != propertyChangeListeners_.end()) {
-                        for (PropertyChangeListenersElement::iterator k(
-                                 j->second.begin());
-                             k != j->second.end(); ++k)
-                        {
-                            //TODO: filter out adds/removes:
-                            broadcaster->addPropertyChangeNotification(
-                                *k,
-                                css::beans::PropertyChangeEvent(
-                                    static_cast< cppu::OWeakObject * >(this),
-                                    i->first, false, -1, css::uno::Any(),
-                                    css::uno::Any()));
-                        }
-                    }
-                    if (changes != 0) {
-                        //TODO: removed members
-                        changes->push_back(
-                            css::util::ElementChange(
-                                css::uno::makeAny(
-                                    child->getRelativePathRepresentation()),
-                                css::uno::Any(), css::uno::Any()));
-                            //TODO: non-void Element, ReplacedElement
-                    }
-                }
-                return;
-            case Node::KIND_GROUP:
-            case Node::KIND_SET:
-                //TODO: removed members
-                if (i->second.children.empty() &&
-                    child->getNode()->getTemplateName().getLength() != 0)
-                {
-                    for (ContainerListeners::iterator j(
-                             containerListeners_.begin());
-                         j != containerListeners_.end(); ++j)
-                    {
-                        broadcaster->addContainerElementInsertedNotification(
-                            *j,
-                            css::container::ContainerEvent(
-                                static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i->first), child->asValue(),
-                                css::uno::Any()));
-                    }
-                    if (changes != 0) {
-                        changes->push_back(
-                            css::util::ElementChange(
-                                css::uno::makeAny(
-                                    child->getRelativePathRepresentation()),
-                                css::uno::Any(), css::uno::Any()));
-                            //TODO: non-void Element, ReplacedElement
-                    }
-                    return;
-                }
-                break;
-            }
-            child->initGlobalBroadcasterAndChanges(
-                i->second, broadcaster, changes);
-                //TODO: if changes==0, recurse only into children w/ listeners
+    if (!propChanges.empty()) {
+        css::uno::Sequence< css::beans::PropertyChangeEvent > seq(
+            propChanges.getAsConstList());
+        for (PropertiesChangeListeners::iterator i(
+                 propertiesChangeListeners_.begin());
+             i != propertiesChangeListeners_.end(); ++i)
+        {
+            broadcaster->addPropertiesChangeNotification(*i, seq);
         }
     }
 }
@@ -1324,7 +1328,7 @@ void Access::setName(rtl::OUString const & aName)
             OSL_ASSERT(false); // this cannot happen
             break;
         }
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1367,7 +1371,7 @@ void Access::setPropertyValue(
             throw css::beans::UnknownPropertyException(
                 aPropertyName, static_cast< cppu::OWeakObject * >(this));
         }
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1458,6 +1462,7 @@ void Access::addVetoableChangeListener(
         checkKnownProperty(PropertyName);
         if (!disposed_) {
             vetoableChangeListeners_[PropertyName].insert(aListener);
+            //TODO: actually call vetoableChangeListeners_
             return;
         }
     }
@@ -1528,7 +1533,7 @@ void Access::setPropertyValues(
                     static_cast< cppu::OWeakObject * >(this), -1);
             }
         }
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1648,7 +1653,7 @@ void Access::setHierarchicalPropertyValue(
         child->checkFinalized();
         Modifications localMods;
         child->setProperty(aValue, &localMods);
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1713,7 +1718,7 @@ void Access::setHierarchicalPropertyValues(
             child->checkFinalized();
             child->setProperty(Values[i], &localMods);
         }
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1806,7 +1811,7 @@ void Access::replaceByName(
             OSL_ASSERT(false); // this cannot happen
             break;
         }
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1858,7 +1863,7 @@ void Access::insertByName(
             OSL_ASSERT(false); // this cannot happen
             break;
         }
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }
@@ -1895,7 +1900,7 @@ void Access::removeByName(rtl::OUString const & aName)
         // so order is important:
         markChildAsModified(child); //TODO: must not throw
         child->unbind();
-        getNotificationRoot()->initLocalBroadcaster(localMods.getRoot(), &bc);
+        getNotificationRoot()->initBroadcaster(localMods.getRoot(), &bc);
     }
     bc.send();
 }

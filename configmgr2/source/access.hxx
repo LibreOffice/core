@@ -143,6 +143,9 @@ public:
 
     virtual bool isFinalized() = 0;
 
+    virtual void initBroadcaster(
+        Modifications::Node const & modifications, Broadcaster * broadcaster);
+
     using OWeakObject::acquire;
     using OWeakObject::release;
 
@@ -166,9 +169,6 @@ protected:
     virtual void initDisposeBroadcaster(Broadcaster * broadcaster);
 
     virtual void clearListeners() throw ();
-
-    virtual void initLocalBroadcaster(
-        Modifications::Node const & modifications, Broadcaster * broadcaster);
 
     virtual com::sun::star::uno::Any SAL_CALL queryInterface(
         com::sun::star::uno::Type const & aType)
@@ -196,11 +196,7 @@ protected:
 
     void commitChildChanges(bool valid, Modifications * globalModifications);
 
-    void initLocalBroadcasterAndChanges(
-        Modifications::Node const & modifications, Broadcaster * broadcaster,
-        std::vector< com::sun::star::util::ElementChange > * changes);
-
-    void initGlobalBroadcasterAndChanges(
+    void initBroadcasterAndChanges(
         Modifications::Node const & modifications, Broadcaster * broadcaster,
         std::vector< com::sun::star::util::ElementChange > * changes);
 

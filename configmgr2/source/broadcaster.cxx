@@ -30,10 +30,8 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/XPropertiesChangeListener.hpp"
 #include "com/sun/star/beans/XPropertyChangeListener.hpp"
-#include "com/sun/star/beans/XVetoableChangeListener.hpp"
 #include "com/sun/star/container/XContainerListener.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
@@ -79,20 +77,20 @@ void Broadcaster::addContainerElementInsertedNotification(
         ContainerNotification(listener, event));
 }
 
+void Broadcaster::addContainerElementRemovedNotification(
+    css::uno::Reference< css::container::XContainerListener > const & listener,
+    css::container::ContainerEvent const & event)
+{
+    containerElementRemovedNotifications_.push_back(
+        ContainerNotification(listener, event));
+}
+
 void Broadcaster::addPropertyChangeNotification(
     css::uno::Reference< css::beans::XPropertyChangeListener > const & listener,
     css::beans::PropertyChangeEvent const & event)
 {
     propertyChangeNotifications_.push_back(
         PropertyChangeNotification(listener, event));
-}
-
-void Broadcaster::addVetoableChangeNotification(
-    css::uno::Reference< css::beans::XVetoableChangeListener > const & listener,
-    css::beans::PropertyChangeEvent const & event)
-{
-    vetoableChangeNotifications_.push_back(
-        VetoableChangeNotification(listener, event));
 }
 
 void Broadcaster::addPropertiesChangeNotification(
@@ -134,6 +132,17 @@ void Broadcaster::send() {
         }
     }
     for (ContainerNotifications::iterator i(
+             containerElementRemovedNotifications_.begin());
+         i != containerElementRemovedNotifications_.end(); ++i)
+    {
+        try {
+            i->listener->elementRemoved(i->event);
+        } catch (css::lang::DisposedException &) {
+        } catch (css::uno::Exception &) {
+            exception = true;
+        }
+    }
+    for (ContainerNotifications::iterator i(
              containerElementReplacedNotifications_.begin());
          i != containerElementReplacedNotifications_.end(); ++i)
     {
@@ -151,19 +160,6 @@ void Broadcaster::send() {
         try {
             i->listener->propertyChange(i->event);
         } catch (css::lang::DisposedException &) {
-        } catch (css::uno::Exception &) {
-            exception = true;
-        }
-    }
-    for (VetoableChangeNotifications::iterator i(
-             vetoableChangeNotifications_.begin());
-         i != vetoableChangeNotifications_.end(); ++i)
-    {
-        try {
-            i->listener->vetoableChange(i->event);
-        } catch (css::lang::DisposedException &) {
-        } catch (css::beans::PropertyVetoException &) {
-            //TODO
         } catch (css::uno::Exception &) {
             exception = true;
         }
@@ -216,15 +212,6 @@ Broadcaster::ContainerNotification::ContainerNotification(
 
 Broadcaster::PropertyChangeNotification::PropertyChangeNotification(
     css::uno::Reference< css::beans::XPropertyChangeListener > const &
-        theListener,
-    css::beans::PropertyChangeEvent const & theEvent):
-    listener(theListener), event(theEvent)
-{
-    OSL_ASSERT(theListener.is());
-}
-
-Broadcaster::VetoableChangeNotification::VetoableChangeNotification(
-    css::uno::Reference< css::beans::XVetoableChangeListener > const &
         theListener,
     css::beans::PropertyChangeEvent const & theEvent):
     listener(theListener), event(theEvent)

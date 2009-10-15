@@ -189,7 +189,7 @@ void Components::initGlobalBroadcaster(
                 // or replaced, mods will be null, but some of the listeners
                 // from within root should probably fire nonetheless:
                 if (mods != 0) {
-                    root->initGlobalBroadcaster(*mods, broadcaster);
+                    root->initBroadcaster(*mods, broadcaster);
                 }
             }
         }

@@ -46,7 +46,6 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         class XPropertiesChangeListener;
         class XPropertyChangeListener;
-        class XVetoableChangeListener;
     }
     namespace container { class XContainerListener; }
     namespace lang { class XEventListener; }
@@ -69,6 +68,11 @@ public:
             com::sun::star::container::XContainerListener > const & listener,
         com::sun::star::container::ContainerEvent const & event);
 
+    void addContainerElementRemovedNotification(
+        com::sun::star::uno::Reference<
+            com::sun::star::container::XContainerListener > const & listener,
+        com::sun::star::container::ContainerEvent const & event);
+
     void addContainerElementReplacedNotification(
         com::sun::star::uno::Reference<
             com::sun::star::container::XContainerListener > const & listener,
@@ -77,11 +81,6 @@ public:
     void addPropertyChangeNotification(
         com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertyChangeListener > const & listener,
-        com::sun::star::beans::PropertyChangeEvent const & event);
-
-    void addVetoableChangeNotification(
-        com::sun::star::uno::Reference<
-            com::sun::star::beans::XVetoableChangeListener > const & listener,
         com::sun::star::beans::PropertyChangeEvent const & event);
 
     void addPropertiesChangeNotification(
@@ -133,18 +132,6 @@ private:
             com::sun::star::beans::PropertyChangeEvent const & theEvent);
     };
 
-    struct VetoableChangeNotification {
-        com::sun::star::uno::Reference<
-            com::sun::star::beans::XVetoableChangeListener > listener;
-        com::sun::star::beans::PropertyChangeEvent event;
-
-        VetoableChangeNotification(
-            com::sun::star::uno::Reference<
-                com::sun::star::beans::XVetoableChangeListener > const &
-                theListener,
-            com::sun::star::beans::PropertyChangeEvent const & theEvent);
-    };
-
     struct PropertiesChangeNotification {
         com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertiesChangeListener > listener;
@@ -177,9 +164,6 @@ private:
     typedef std::vector< PropertyChangeNotification >
         PropertyChangeNotifications;
 
-    typedef std::vector< VetoableChangeNotification >
-        VetoableChangeNotifications;
-
     typedef std::vector< PropertiesChangeNotification >
         PropertiesChangeNotifications;
 
@@ -187,9 +171,9 @@ private:
 
     DisposeNotifications disposeNotifications_;
     ContainerNotifications containerElementInsertedNotifications_;
+    ContainerNotifications containerElementRemovedNotifications_;
     ContainerNotifications containerElementReplacedNotifications_;
     PropertyChangeNotifications propertyChangeNotifications_;
-    VetoableChangeNotifications vetoableChangeNotifications_;
     PropertiesChangeNotifications propertiesChangeNotifications_;
     ChangesNotifications changesNotifications_;
 };
