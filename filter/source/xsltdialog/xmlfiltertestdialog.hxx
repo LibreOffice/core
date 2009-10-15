@@ -39,7 +39,7 @@
 #include <vcl/button.hxx>
 #endif
 #include <vcl/fixed.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class filter_info_impl;
 class XMLSourceFileDialog;

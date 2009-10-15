@@ -31,7 +31,7 @@
 #define _XMLFILEVIEW_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 
 #ifndef _TABLE_HXX //autogen

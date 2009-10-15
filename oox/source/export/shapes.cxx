@@ -68,7 +68,7 @@
 #include <goodies/grfmgr.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/escherex.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svxenum.hxx>

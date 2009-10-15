@@ -51,7 +51,7 @@
 #include <unotools/processfactory.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <comphelper/string.hxx>
 
 #include <unotools/saveopt.hxx> // only for testing of relative saving options in PDF

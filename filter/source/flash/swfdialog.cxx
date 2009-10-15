@@ -35,7 +35,7 @@
 #include "impswfdialog.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
