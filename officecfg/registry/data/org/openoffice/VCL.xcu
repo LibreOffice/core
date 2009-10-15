@@ -1161,7 +1161,7 @@
     </node>
     <node oor:name="si" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>LKLUG;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>LKLUG;Iskoola Pota;Lucidasans;Lucida Sans;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
         <value>Iskoola Pota;LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
