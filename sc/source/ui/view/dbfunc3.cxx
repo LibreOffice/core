@@ -1788,7 +1788,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
             nRank = itrSub->second;
 
         if (!bAscending)
-            nRank = nMemberCount - nRank - 1;
+            nRank = static_cast< sal_uInt16 >( nMemberCount - nRank - 1 );
 
         aRankedNames[nRank] = aName;
     }
