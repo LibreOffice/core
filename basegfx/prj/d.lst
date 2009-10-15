@@ -27,7 +27,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\range
 ..\inc\basegfx\range\basicrange.hxx %_DEST%\inc%_EXT%\basegfx\range\basicrange.hxx
 ..\inc\basegfx\range\basicbox.hxx %_DEST%\inc%_EXT%\basegfx\range\basicbox.hxx
 ..\inc\basegfx\range\b1drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1drange.hxx
-..\inc\basegfx\range\b2dmultirange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2dmultirange.hxx
+..\inc\basegfx\range\b2dpolyrange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2dpolyrange.hxx
 ..\inc\basegfx\range\b2drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drange.hxx
 ..\inc\basegfx\range\b2drectangle.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drectangle.hxx
 ..\inc\basegfx\range\b2dconnectedranges.hxx %_DEST%\inc%_EXT%\basegfx\range\b2dconnectedranges.hxx
@@ -92,6 +92,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\tools
 ..\inc\basegfx\tools\keystoplerp.hxx %_DEST%\inc%_EXT%\basegfx\tools\keystoplerp.hxx
 ..\inc\basegfx\tools\lerp.hxx %_DEST%\inc%_EXT%\basegfx\tools\lerp.hxx
 ..\inc\basegfx\tools\unopolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\tools\unopolypolygon.hxx
+..\inc\basegfx\tools\b2dclipstate.hxx %_DEST%\inc%_EXT%\basegfx\tools\b2dclipstate.hxx
 ..\inc\basegfx\tools\rectcliptools.hxx %_DEST%\inc%_EXT%\basegfx\tools\rectcliptools.hxx
 ..\inc\basegfx\tools\tools.hxx %_DEST%\inc%_EXT%\basegfx\tools\tools.hxx
 ..\inc\basegfx\tools\gradienttools.hxx %_DEST%\inc%_EXT%\basegfx\tools\gradienttools.hxx

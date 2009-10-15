@@ -227,6 +227,26 @@ namespace basegfx
             return tools::solveCrossovers(maRanges,maOrient);
         }
 
+        const B2DRange* begin() const
+        {
+            return &maRanges.front();
+        }
+
+        const B2DRange* end() const
+        {
+            return &maRanges[maRanges.size()];
+        }
+
+        B2DRange* begin()
+        {
+            return &maRanges.front();
+        }
+
+        B2DRange* end()
+        {
+            return &maRanges[maRanges.size()];
+        }
+
     private:
         B2DRange                         maBounds;
         std::vector<B2DRange>            maRanges;
@@ -364,6 +384,26 @@ namespace basegfx
     B2DPolyPolygon B2DPolyRange::solveCrossovers() const
     {
         return mpImpl->solveCrossovers();
+    }
+
+    const B2DRange* B2DPolyRange::begin() const
+    {
+        return mpImpl->begin();
+    }
+
+    const B2DRange* B2DPolyRange::end() const
+    {
+        return mpImpl->end();
+    }
+
+    B2DRange* B2DPolyRange::begin()
+    {
+        return mpImpl->begin();
+    }
+
+    B2DRange* B2DPolyRange::end()
+    {
+        return mpImpl->end();
     }
 
 } // end of namespace basegfx

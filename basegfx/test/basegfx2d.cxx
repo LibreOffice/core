@@ -321,6 +321,12 @@ public:
                                aRange.getElement(0).head == B2DRange(0,0,1,1));
         CPPUNIT_ASSERT_MESSAGE("simple poly range - second element",
                                aRange.getElement(1).head == B2DRange(2,2,3,3));
+
+        // B2DPolyRange relies on correctly orientated rects
+        const B2DRange aRect(0,0,1,1);
+        CPPUNIT_ASSERT_MESSAGE("createPolygonFromRect - correct orientation",
+                               tools::getOrientation(
+                                   tools::createPolygonFromRect(aRect)) == ORIENTATION_POSITIVE );
     }
 
     // Change the following lines only, if you add, remove or rename

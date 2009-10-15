@@ -43,10 +43,13 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Common ----------------------------------------------------------
 
 SHL1OBJS=  \
-    $(SLO)$/basegfx1d.obj \
-    $(SLO)$/basegfx2d.obj \
-    $(SLO)$/basegfx3d.obj \
-    $(SLO)$/basegfxtools.obj \
+    $(SLO)$/basegfx1d.obj      \
+    $(SLO)$/basegfx2d.obj      \
+    $(SLO)$/basegfx3d.obj      \
+    $(SLO)$/boxclipper.obj     \
+    $(SLO)$/basegfxtools.obj   \
+    $(SLO)$/clipstate.obj      \
+    $(SLO)$/genericclipper.obj \
     $(SLO)$/testtools.obj	
 
 # linking statically against basegfx parts

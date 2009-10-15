@@ -131,6 +131,12 @@ namespace basegfx
          */
         B2DPolyPolygon solveCrossovers() const;
 
+        // element iterators
+        const B2DRange* begin() const;
+        const B2DRange* end() const;
+        B2DRange* begin();
+        B2DRange* end();
+
     private:
         o3tl::cow_wrapper< ImplB2DPolyRange > mpImpl;
     };
