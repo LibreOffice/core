@@ -514,7 +514,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         {
             pSubMenu->addMenuItem(
                 aUserSortNames[i], true,
-                new PopupSortAction(rPos, PopupSortAction::CUSTOM, i, pViewShell));
+                new PopupSortAction(rPos, PopupSortAction::CUSTOM, static_cast<sal_uInt16>(i), pViewShell));
         }
     }
 
