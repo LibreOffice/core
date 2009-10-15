@@ -35,13 +35,13 @@
 
 
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 #ifndef _SFX_INIMGR_HXX
 #endif
 #include <sfx2/docfile.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/brshitem.hxx>
 
 

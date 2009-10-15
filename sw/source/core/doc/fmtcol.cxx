@@ -48,7 +48,7 @@
 
 //--> #outlinelevel added by zhaojianwei
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 //<--end
 

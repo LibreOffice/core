@@ -140,5 +140,7 @@ const SwDBData& SwDBConfig::GetBibliographySource()
     return *pBibImpl;
 }
 
+void SwDBConfig::Commit() {}
+void SwDBConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
 
 

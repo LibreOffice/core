@@ -32,15 +32,15 @@
 #include "precompiled_starmath.hxx"
 
 
-#include <svtools/itemset.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/itemset.hxx>
+#include <svl/hint.hxx>
+#include <svl/smplhint.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/eitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <tools/stream.hxx>
 
 

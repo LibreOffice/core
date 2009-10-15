@@ -48,7 +48,7 @@
 #include <svx/spltitem.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 
 #include <fmtornt.hxx>

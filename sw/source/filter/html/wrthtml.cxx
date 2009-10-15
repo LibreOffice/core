@@ -34,7 +34,7 @@
 
 #include <stdlib.h>
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <rtl/tencinfo.h>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -51,7 +51,7 @@
 #include <svx/fontitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/frmdiritem.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

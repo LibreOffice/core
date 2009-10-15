@@ -45,7 +45,7 @@
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <redline.hxx>
 #include <shellio.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(s))
 

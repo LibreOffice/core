@@ -68,7 +68,7 @@
 #include <swunohelper.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <addresslistdialog.hrc>
 #include <dbui.hrc>
 

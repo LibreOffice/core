@@ -44,7 +44,7 @@
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif

@@ -30,7 +30,7 @@
 #ifndef _SCRRECT_HXX
 #define _SCRRECT_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "swrect.hxx"
 #include <swtypes.hxx>
 

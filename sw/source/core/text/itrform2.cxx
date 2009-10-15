@@ -66,7 +66,7 @@
 #include <doc.hxx>          // SwDoc
 #include <pormulti.hxx>     // SwMultiPortion
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
 
 #if OSL_DEBUG_LEVEL > 1

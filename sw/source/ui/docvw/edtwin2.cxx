@@ -41,19 +41,19 @@
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
 #include <svx/flditem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
 #ifndef _OUTLINER_HXX //autogen
 #define _EEITEMID_HXX
 #include <svx/outliner.hxx>
 #endif
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <swmodule.hxx>

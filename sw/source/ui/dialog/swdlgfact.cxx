@@ -36,7 +36,7 @@
 #endif
 
 #include "swdlgfact.hxx"
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif

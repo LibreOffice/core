@@ -65,7 +65,7 @@
 #include <uinums.hxx>
 #include <poolfmt.hxx>
 #include <shellres.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <charfmt.hxx>
 #include <docstyle.hxx>
 #include <viewopt.hxx>

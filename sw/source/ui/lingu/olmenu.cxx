@@ -35,7 +35,7 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
@@ -64,7 +64,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/dlgutil.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/langitem.hxx>
 #include <svx/splwrap.hxx>
 #include <vcl/svapp.hxx>
@@ -92,7 +92,7 @@
 // <- #111827#
 
 #include <unomid.h>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <map>
 #include <svtools/langtab.hxx>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
@@ -101,7 +101,7 @@
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
 #include <svx/brshitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
 

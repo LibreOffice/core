@@ -48,15 +48,15 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/cmdevt.h>
 #include <sot/storage.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
 #endif
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
 #endif
@@ -64,7 +64,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/htmlmode.hxx>

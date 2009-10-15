@@ -1317,6 +1317,7 @@ namespace numfunc
                 @author OD
             */
             virtual void Notify( const uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Commit();
 
             static SwDefBulletConfig* mpInstance;
 
@@ -1487,6 +1488,10 @@ namespace numfunc
         InitFont();
     }
 
+    void SwDefBulletConfig::Commit()
+    {
+    }
+
     const String& GetDefBulletFontname()
     {
         return SwDefBulletConfig::getInstance()->GetFontname();
@@ -1562,6 +1567,7 @@ namespace numfunc
                 @author OD
             */
             virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Commit();
 
             static SwNumberingUIBehaviorConfig* mpInstance;
 
@@ -1595,6 +1601,8 @@ namespace numfunc
 
         return aPropNames;
     }
+
+    void SwNumberingUIBehaviorConfig::Commit() {}
 
     void SwNumberingUIBehaviorConfig::LoadConfig()
     {

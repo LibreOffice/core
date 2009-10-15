@@ -29,7 +29,7 @@
  ************************************************************************/
 #ifndef _FRAME_HXX
 #define _FRAME_HXX
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient

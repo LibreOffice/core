@@ -35,7 +35,7 @@
 #include <tools/datetime.hxx>
 #include <tools/string.hxx>
 #include <vcl/timer.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SwGlossaries;
 class SvStringsISortDtor;

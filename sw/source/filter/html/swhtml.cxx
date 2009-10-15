@@ -42,8 +42,8 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>

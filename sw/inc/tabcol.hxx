@@ -33,7 +33,7 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_LONGS
 #define _SVSTDARR_BOOLS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #ifndef INCLUDED_VECTOR

@@ -42,7 +42,8 @@ public:
     SwPrintOptions(sal_Bool bWeb);
     virtual ~SwPrintOptions();
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            doSetModified( ) { bModified = sal_True; SetModified();}
 
     SwPrintOptions& operator=(const SwPrintData& rData)

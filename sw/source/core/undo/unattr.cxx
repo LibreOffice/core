@@ -39,7 +39,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/svdpage.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 
 #include <fmtflcnt.hxx>

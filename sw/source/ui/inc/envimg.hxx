@@ -30,7 +30,7 @@
 #ifndef _ENVIMG_HXX
 #define _ENVIMG_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 
@@ -97,6 +97,7 @@ public:
     SwEnvItem& GetItem() {return aEnvItem;}
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 #endif
 

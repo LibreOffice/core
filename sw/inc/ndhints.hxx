@@ -31,7 +31,7 @@
 #define _NDHINTS_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/mempool.hxx>
 
 #include "swtypes.hxx"

@@ -35,12 +35,12 @@
 #include <tools/shl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdotext.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/xftsfit.hxx>
 #include <svx/extrusionbar.hxx>

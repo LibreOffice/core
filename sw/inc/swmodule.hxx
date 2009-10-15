@@ -32,12 +32,12 @@
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <vcl/fldunit.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
 
 #include <tools/shl.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "swdllapi.h"
 #include "shellid.hxx"
 #include <fldupde.hxx>
@@ -127,7 +127,7 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     // Hint abfangen fuer DocInfo
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster* );
+    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
 protected:
     // Briefumschlaege, Etiketten

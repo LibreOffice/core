@@ -40,14 +40,14 @@
 #include <i18npool/lang.h>
 #ifndef _ZFORMAT_HXX //autogen
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/flagsdef.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <docsh.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>

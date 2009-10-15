@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/brkitem.hxx>

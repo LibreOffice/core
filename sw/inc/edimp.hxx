@@ -32,7 +32,7 @@
 #define _EDIMP_HXX
 
 #include <tools/solar.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 class SwPaM;
 class SwNodeIndex;

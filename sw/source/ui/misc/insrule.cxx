@@ -43,7 +43,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <svx/brshitem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <vcl/graph.hxx>
 
 #include "swtypes.hxx"

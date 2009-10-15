@@ -33,7 +33,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -53,13 +53,13 @@
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <basic/sbmod.hxx>
 #include <fmtrfmrk.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/mnemonic.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>        // Actives Fenster

@@ -30,7 +30,7 @@
 #ifndef SW_HINTS_HXX
 #define SW_HINTS_HXX
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #define SW_BROADCASTID_START            SFX_HINT_USER00
 #define SW_BROADCAST_DRAWVIEWS_CREATED  SW_BROADCASTID_START

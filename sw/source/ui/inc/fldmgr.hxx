@@ -31,7 +31,7 @@
 #define _FLDMGR_HXX
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <tools/string.hxx>
 #include "swdllapi.h"

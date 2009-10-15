@@ -46,9 +46,9 @@
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
 #include <swprtopt.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <unoobj.hxx>
 #include <unosett.hxx>
 #include <unocoll.hxx>
@@ -61,7 +61,7 @@
 #include <unoprnms.hxx>
 #include <unostyle.hxx>
 #include <unodraw.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <pagedesc.hxx>
 #include <svtools/txtcmp.hxx>
 #include <unocrsr.hxx>
@@ -103,7 +103,7 @@
 #include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
 #include <svx/forbiddencharacterstable.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
@@ -127,7 +127,7 @@
 #include <unostyle.hxx>   //SwAutoStyleFamily
 #include <istyleaccess.hxx> // handling of automatic styles
 
-#include <svtools/stylepool.hxx>
+#include <svl/stylepool.hxx>
 #include <swatrset.hxx>
 
 //#include <com/sun/star/i18n/ScriptType.hpp>
@@ -138,7 +138,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/editeng.hxx>
 #include <svx/svdoutl.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
 
 //

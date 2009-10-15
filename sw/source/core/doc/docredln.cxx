@@ -35,7 +35,7 @@
 #include <hintids.hxx>
 #include <tools/shl.hxx>
 #ifndef _SFX_ITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #endif
 #include <sfx2/app.hxx>
 #include <svx/colritem.hxx>

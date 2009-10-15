@@ -35,10 +35,10 @@
 #include <hintids.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/style.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/style.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/ulspitem.hxx>

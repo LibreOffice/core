@@ -44,12 +44,12 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <poolfmt.hxx>
 #include <fmtcol.hxx>

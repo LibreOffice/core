@@ -35,8 +35,8 @@
 // #include <math.h>
 #include <float.h>
 #include <rtl/math.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svx/unolingu.hxx>
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>

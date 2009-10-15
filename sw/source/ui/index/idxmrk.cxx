@@ -37,7 +37,7 @@
 #include <helpid.h>
 #endif
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -45,15 +45,15 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/dispatch.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/txtcmp.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/langitem.hxx>
 #include <swtypes.hxx>
 #include <idxmrk.hxx>
@@ -78,7 +78,7 @@
 #include <fldbas.hxx>
 #include <utlui.hrc>
 #include <swcont.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <ndtxt.hxx>
 #include <breakit.hxx>
 

@@ -37,7 +37,7 @@
 
 
 #include <sfx2/viewfrm.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/msgbox.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

@@ -51,7 +51,7 @@
 #include <svx/scripttypeitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <viewsh.hxx>

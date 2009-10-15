@@ -48,7 +48,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 // <--
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 class SdrMarkList;
 class SdrView;

@@ -37,8 +37,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/stritem.hxx>
 
 #include "swtypes.hxx"
 #include "cmdid.h"

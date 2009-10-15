@@ -48,7 +48,7 @@
 #include "dbg_lay.hxx"
 
 #include <ftnidx.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <docary.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/ulspitem.hxx>

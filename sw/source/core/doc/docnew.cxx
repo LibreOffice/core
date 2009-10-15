@@ -47,12 +47,12 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdogrp.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/forbiddencharacterstable.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>

@@ -31,7 +31,7 @@
 #define _FMTCNCT_HXX
 
 #include <hintids.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <format.hxx>
 #include <calbck.hxx>
 

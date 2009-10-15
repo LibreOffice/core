@@ -29,7 +29,7 @@
  ************************************************************************/
 #ifndef _TXTFLY_HXX
 #define _TXTFLY_HXX
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include "swtypes.hxx"
 #include "swrect.hxx"

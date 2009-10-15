@@ -31,7 +31,7 @@
 #ifndef SW_FMTMETA_HXX
 #define SW_FMTMETA_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/Metadatable.hxx>
 
 #include <boost/shared_ptr.hpp>

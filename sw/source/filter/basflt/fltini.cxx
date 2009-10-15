@@ -39,7 +39,7 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/app.hxx>
@@ -417,6 +417,9 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
         for( n = 0; n < nCnt; ++n )
             pValues[ n ] = 0;
 }
+
+void SwFilterOptions::Commit() {}
+void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
 
 /*  */
 

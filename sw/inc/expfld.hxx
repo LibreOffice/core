@@ -30,7 +30,7 @@
 #ifndef _EXPFLD_HXX
 #define _EXPFLD_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <fldbas.hxx>
 #include <cellfml.hxx>

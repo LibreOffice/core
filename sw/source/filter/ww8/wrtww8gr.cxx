@@ -37,8 +37,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemiter.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/itemiter.hxx>
+#include "svl/urihelper.hxx"
 
 #include <svtools/embedhlp.hxx>
 

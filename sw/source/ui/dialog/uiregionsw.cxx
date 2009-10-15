@@ -36,12 +36,12 @@
 
 #include <hintids.hxx>
 #include <regionsw.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>

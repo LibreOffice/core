@@ -47,7 +47,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/cscoitem.hxx>

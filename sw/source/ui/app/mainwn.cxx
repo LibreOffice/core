@@ -37,7 +37,7 @@
 #include <tools/shl.hxx>
 #include <tools/string.hxx>
 #ifndef _SVARRAY_HXX
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <sfx2/progress.hxx>
 #ifndef _RESID_HXX //autogen

@@ -38,16 +38,15 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/jobset.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/adjitem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <sfx2/app.hxx>
+#include <unotools/misccfg.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/misccfg.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
@@ -1134,7 +1133,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.Put( SfxUInt16Item( nWhich,
                         static_cast< sal_uInt16 >(
                         pFmtr ? pFmtr->GetYear2000()
-                              : SFX_APP()->GetMiscConfig()->GetYear2000() )));
+                              : ::utl::MiscCfg().GetYear2000() )));
             }
             break;
         case SID_ATTR_CHAR_FONTLIST:

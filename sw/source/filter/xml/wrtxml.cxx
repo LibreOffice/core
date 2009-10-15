@@ -48,7 +48,7 @@
 #include <svx/xmleohlp.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <pam.hxx>

@@ -47,7 +47,7 @@
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <unotools/configitem.hxx>
 #include <numfmtlb.hxx>
 #include <swdbdata.hxx>
@@ -166,7 +166,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 
     BOOL SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, BOOL bInsField );
 
-
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();
     void                    Load();
 

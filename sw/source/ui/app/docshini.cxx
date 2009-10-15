@@ -40,19 +40,16 @@
 #include <i18npool/mslangid.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/storage.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/ctrltool.hxx>
 #include <unotools/lingucfg.hxx>
 #include <sfx2/docfile.hxx>
-#ifndef _OFA_MISCCFG_HXX //autogen
-#include <svtools/misccfg.hxx>
-#endif
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/asiancfg.hxx>
 #include <svx/unolingu.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/adjitem.hxx>
 #ifndef _SVX_AKRNTEM_HXX
 #include <svx/akrnitem.hxx>

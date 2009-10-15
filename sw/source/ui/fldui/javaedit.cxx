@@ -46,7 +46,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif

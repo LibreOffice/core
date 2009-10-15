@@ -31,7 +31,7 @@
 #define _CFGITEMS_HXX
 
 #include <tools/color.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <printdata.hxx>
 

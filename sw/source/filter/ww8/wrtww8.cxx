@@ -46,12 +46,12 @@
 #include <docsh.hxx>
 
 #define _SVSTDARR_BOOLS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <unotools/fltrcfg.hxx>
 #include <vcl/salbtype.hxx>
 #include <sot/storage.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/docinf.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/svdmodel.hxx>
@@ -112,7 +112,7 @@
 #include "dbgoutsw.hxx"
 
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/mscodec.hxx>
 #include <osl/time.h>

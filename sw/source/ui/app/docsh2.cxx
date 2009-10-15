@@ -49,13 +49,13 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/lckbitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/eitem.hxx>
 /*
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 */
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
 #ifndef _SFXSIDS_HRC //autogen

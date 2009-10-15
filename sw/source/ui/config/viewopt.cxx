@@ -58,7 +58,7 @@
 #include <crstate.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <svx/acorrcfg.hxx>
 

@@ -38,11 +38,11 @@
 #include <fmtfld.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/postattr.hxx>

@@ -53,8 +53,8 @@
 #include <hintids.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
@@ -68,7 +68,7 @@
 //#include <sfx2/docfilt.hxx>
 //#endif
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _VCL_PRINT_HXX
 #include <vcl/print.hxx>
 #endif

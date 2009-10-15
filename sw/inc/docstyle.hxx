@@ -34,10 +34,10 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/style.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/style.hxx>
+#include <svl/itemset.hxx>
 #include "swdllapi.h"
 
 class SwDoc;

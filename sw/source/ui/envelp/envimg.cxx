@@ -293,6 +293,9 @@ void    SwEnvCfgItem::Commit()
     }
     PutProperties(aNames, aValues);
 }
+
+void SwEnvCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 /* -----------------------------26.09.00 14:04--------------------------------
 
  ---------------------------------------------------------------------------*/

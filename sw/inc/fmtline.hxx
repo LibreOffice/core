@@ -31,7 +31,7 @@
 #define SW_FMTLINE_HXX
 
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>
 #include "swdllapi.h"

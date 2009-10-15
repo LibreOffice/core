@@ -37,7 +37,7 @@
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>

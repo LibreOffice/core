@@ -46,9 +46,9 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #include <sot/storage.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 
 class SfxItemSet;
 

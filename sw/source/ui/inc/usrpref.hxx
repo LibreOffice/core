@@ -71,6 +71,7 @@ class SwLayoutViewConfig : public utl::ConfigItem
         SwLayoutViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwLayoutViewConfig();
 
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -88,7 +89,8 @@ class SwGridConfig : public utl::ConfigItem
         SwGridConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwGridConfig();
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -104,7 +106,8 @@ class SwCursorConfig : public utl::ConfigItem
         SwCursorConfig(SwMasterUsrPref& rParent);
         ~SwCursorConfig();
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -120,7 +123,8 @@ class SwWebColorConfig : public utl::ConfigItem
         SwWebColorConfig(SwMasterUsrPref& rParent);
         ~SwWebColorConfig();
 
-    virtual void            Commit();
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };

@@ -30,7 +30,7 @@
 #ifndef _UNOEVTLSTNR_HXX
 #define _UNOEVTLSTNR_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com{namespace sun{namespace star{

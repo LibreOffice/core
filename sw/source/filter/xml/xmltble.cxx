@@ -39,8 +39,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/numehelp.hxx>
-#include <svtools/cntnrsrt.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/cntnrsrt.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
 #include <fmtrowsplt.hxx>

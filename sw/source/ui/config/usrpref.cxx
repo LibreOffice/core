@@ -33,7 +33,7 @@
 
 
 #include <tools/stream.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "swtypes.hxx"
 #include "hintids.hxx"
@@ -427,6 +427,9 @@ void SwLayoutViewConfig::Load()
         }
     }
 }
+
+void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 /* -----------------------------19.01.01 13:07--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -531,6 +534,8 @@ void SwGridConfig::Load()
     }
 }
 
+void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 /* -----------------------------19.01.01 13:07--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -621,6 +626,9 @@ void SwCursorConfig::Load()
 
     }
 }
+
+void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -654,6 +662,9 @@ void SwWebColorConfig::Commit()
     }
     PutProperties(aPropNames, aValues);
 }
+
+void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 /*-- 28.09.00 09:55:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/

@@ -38,7 +38,7 @@
 
 
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <modcfg.hxx>
 #include <svx/htmlmode.hxx>

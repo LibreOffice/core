@@ -76,7 +76,7 @@
 #include <SwNodeNum.hxx>
 
 #include <doc.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 using namespace ::com::sun::star;
 

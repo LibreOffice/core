@@ -30,7 +30,7 @@
 #ifndef _FMTFTNTX_HXX
 #define _FMTFTNTX_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>
 #include <numrule.hxx>

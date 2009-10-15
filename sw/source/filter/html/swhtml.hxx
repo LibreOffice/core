@@ -44,11 +44,11 @@
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
 #endif
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <tools/urlobj.hxx>
 #include <sfx2/sfxhtml.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/svxenum.hxx>
 #include <fmtornt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>

@@ -37,7 +37,7 @@
 
 #define _SVSTDARR_XUB_STRLEN
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 class OutputDevice;
 class SwFont;

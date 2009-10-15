@@ -30,7 +30,7 @@
 #ifndef _CCOLL_HXX
 #define _CCOLL_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <tools/string.hxx>
 #include <sfx2/tabdlg.hxx>
 

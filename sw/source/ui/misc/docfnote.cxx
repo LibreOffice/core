@@ -36,7 +36,7 @@
 #endif
 
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <errhdl.hxx>
 #include <wrtsh.hxx>
 #ifndef _VIEW_HXX

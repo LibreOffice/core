@@ -62,8 +62,8 @@
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlnmspe.hxx>

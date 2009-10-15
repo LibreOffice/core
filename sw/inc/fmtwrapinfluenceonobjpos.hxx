@@ -32,7 +32,7 @@
 
 #include <hintids.hxx>
 #include <format.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
 class SW_DLLPUBLIC SwFmtWrapInfluenceOnObjPos: public SfxPoolItem

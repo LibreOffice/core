@@ -37,7 +37,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/svapp.hxx>
 #include <txatritr.hxx>
 #include <fldbas.hxx>

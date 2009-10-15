@@ -40,7 +40,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
 #include <basic/sbxobj.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svtools/printdlg.hxx>

@@ -39,7 +39,7 @@
 #include <vcl/status.hxx>
 #endif
 #include <sfx2/app.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/zoomitem.hxx>
 
 #include "swtypes.hxx"

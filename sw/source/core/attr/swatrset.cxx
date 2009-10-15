@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/colritem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/bolnitem.hxx>

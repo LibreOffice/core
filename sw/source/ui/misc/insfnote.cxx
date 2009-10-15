@@ -36,8 +36,8 @@
 #endif
 
 #include <hintids.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/fontitem.hxx>
 #include <vcl/msgbox.hxx>

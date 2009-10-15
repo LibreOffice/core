@@ -50,9 +50,9 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef _SVSTDARR_HXX
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <sfx2/request.hxx>
@@ -70,7 +70,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
 #include <swwait.hxx>
 #include <swtypes.hxx>

@@ -30,7 +30,7 @@
 #ifndef _SWLBOX_HXX
 #define _SWLBOX_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>

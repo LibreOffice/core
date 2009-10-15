@@ -33,15 +33,15 @@
 
 
 #include <hintids.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/imapobj.hxx>
 #include <svx/srchitem.hxx>
 #include <svtools/imap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/bolnitem.hxx>
 #include <svx/boxitem.hxx>

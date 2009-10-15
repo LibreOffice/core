@@ -37,8 +37,8 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/numitem.hxx>
 #include <svx/brshitem.hxx>
 #include <numrule.hxx>

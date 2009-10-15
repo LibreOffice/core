@@ -38,7 +38,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <goodies/mailenum.hxx>
 #include <svx/svxdlg.hxx>

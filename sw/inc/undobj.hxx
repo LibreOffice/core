@@ -36,9 +36,9 @@
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <numrule.hxx>
 #include <itabenum.hxx>

@@ -44,11 +44,11 @@
 #include <svx/ulspitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/frmdiritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <svx/ruler.hxx>
 #include <svx/protitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/rectitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>

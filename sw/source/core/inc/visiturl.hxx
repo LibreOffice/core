@@ -33,7 +33,7 @@
 
 
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 class SwDoc;
 
 class SwURLStateChanged : public SfxListener

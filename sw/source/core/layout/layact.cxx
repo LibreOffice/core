@@ -69,7 +69,7 @@
 #include <SwSmartTagMgr.hxx>
 
 #define _SVSTDARR_BOOLS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #define _LAYACT_CXX
 #include "layact.hxx"

@@ -64,9 +64,9 @@
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>

@@ -43,13 +43,13 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <svtools/txtcmp.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
 

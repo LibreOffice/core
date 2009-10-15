@@ -46,7 +46,7 @@
 #include <svx/langitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>
 #include <paratr.hxx>

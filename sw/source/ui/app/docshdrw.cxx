@@ -45,7 +45,7 @@
 
 
 
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>

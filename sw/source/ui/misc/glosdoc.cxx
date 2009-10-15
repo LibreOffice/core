@@ -38,15 +38,15 @@
 #define _SVSTDARR_STRINGS
 #include <unotools/transliterationwrapper.hxx>
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
 #include <tools/debug.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>

@@ -31,7 +31,7 @@
 #define _FMTFTN_HXX
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 
 class SwDoc;

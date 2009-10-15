@@ -32,7 +32,7 @@
 
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include <swdllapi.h>
 

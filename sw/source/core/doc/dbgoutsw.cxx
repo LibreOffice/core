@@ -33,8 +33,8 @@
 #ifdef DEBUG
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemiter.hxx>
 #include <string>
 #include <map>
 #include <node.hxx>

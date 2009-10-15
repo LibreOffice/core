@@ -34,7 +34,7 @@
 
 #include <hintids.hxx>
 #include <tools/poly.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/contdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <docary.hxx>

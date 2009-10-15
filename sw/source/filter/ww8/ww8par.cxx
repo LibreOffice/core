@@ -129,7 +129,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <svtools/itemiter.hxx>  //SfxItemIter
+#include <svl/itemiter.hxx>  //SfxItemIter
 
 #include <stdio.h>
 

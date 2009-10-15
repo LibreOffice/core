@@ -38,14 +38,14 @@
 #include <svx/galbrws.hxx>
 #include <svx/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/templdlg.hxx>
 #include <uivwimp.hxx>

@@ -32,7 +32,7 @@
 
 #include <hintids.hxx>
 #include <format.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <calbck.hxx>
 
 class SwFrmFmt;

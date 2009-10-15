@@ -40,8 +40,8 @@
 
 #include <sfx2/objsh.hxx>
 #include "types.hxx"
-#include <svtools/itempool.hxx>     //SfxItemPool
-#include <svtools/itemset.hxx>      //SfxItemSet
+#include <svl/itempool.hxx>     //SfxItemPool
+#include <svl/itemset.hxx>      //SfxItemSet
 #include <format.hxx>               //SwFmt
 #include <node.hxx>                 //SwCntntNode
 #include <pam.hxx>                  //SwPaM

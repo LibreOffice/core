@@ -37,8 +37,8 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #include <i18npool/mslangid.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/adjitem.hxx>

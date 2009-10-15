@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <hintids.hxx>
 #include <osl/endian.h>
 #include <svx/fmglob.hxx>

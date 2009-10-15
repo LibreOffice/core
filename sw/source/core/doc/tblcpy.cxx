@@ -35,7 +35,7 @@
 #include <hintids.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>

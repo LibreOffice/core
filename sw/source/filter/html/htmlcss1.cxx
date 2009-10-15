@@ -34,9 +34,9 @@
 
 
 #include "hintids.hxx"
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
+#include <svl/urihelper.hxx>
 #include <i18npool/mslangid.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _APP_HXX //autogen

@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <basic/basmgr.hxx>
 #include <svtools/imapobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/help.hxx>
 #include <svx/svdview.hxx>

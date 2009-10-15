@@ -41,7 +41,7 @@
 #endif
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/brshitem.hxx>

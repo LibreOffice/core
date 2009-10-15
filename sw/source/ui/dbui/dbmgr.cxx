@@ -64,15 +64,15 @@
 #include <vcl/lstbox.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
@@ -120,7 +120,7 @@
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <svx/langitem.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>

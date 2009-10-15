@@ -41,9 +41,9 @@
 #include <vcl/cmdevt.hxx>
 #include <vcl/button.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/topfrm.hxx>

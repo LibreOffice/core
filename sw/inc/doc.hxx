@@ -59,7 +59,7 @@
 class SwList;
 // <--
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>
@@ -76,7 +76,7 @@ class SwList;
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <vos/ref.hxx>
 #include <svx/svdtypes.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>

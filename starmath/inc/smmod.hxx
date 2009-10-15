@@ -34,7 +34,7 @@
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <tools/shl.hxx>
@@ -43,6 +43,8 @@
 #ifndef _STARMATH_HRC
 #include "starmath.hrc"
 #endif
+
+#include <unotools/options.hxx>
 
 class SvxErrorHandler;
 class SfxObjectFactory;
@@ -124,7 +126,7 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-class SmModule : public SfxModule, public SfxListener
+class SmModule : public SfxModule, utl::ConfigurationListener
 {
     svtools::ColorConfig        *pColorConfig;
     SmConfig                *pConfig;
@@ -145,8 +147,7 @@ public:
     SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule();
 
-    // SfxListener
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     svtools::ColorConfig &  GetColorConfig();
 

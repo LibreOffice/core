@@ -38,10 +38,10 @@
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/flagsdef.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 #include "swtypes.hxx"
 #include "uiborder.hxx"

@@ -50,7 +50,7 @@
 #include <fmtmeta.hxx>
 
 #include <docsh.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 extern BOOL CheckNodesRange( const SwNodeIndex& rStt,
                             const SwNodeIndex& rEnd, BOOL bChkSection );

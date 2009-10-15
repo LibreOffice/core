@@ -1292,6 +1292,8 @@ void SmMathConfig::SetShowFormulaCursor( BOOL bVal )
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
 }
 
+void SmMathConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{}
 
 /////////////////////////////////////////////////////////////////
 

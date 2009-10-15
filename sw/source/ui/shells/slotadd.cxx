@@ -35,12 +35,12 @@
 #include "uiitems.hxx"
 #include "cmdid.h"
 
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 
 
-#include <svtools/imageitm.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/imageitm.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/rectitem.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/rulritem.hxx>
@@ -49,7 +49,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/SmartTagItem.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/tplpitem.hxx>
@@ -130,7 +130,7 @@
 #include "fmtline.hxx"
 #include <svx/clipfmtitem.hxx>
 #include <svx/blnkitem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <svx/paravertalignitem.hxx>
 #include <svx/charreliefitem.hxx>
 #include <svx/charrotateitem.hxx>

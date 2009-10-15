@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <hints.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>

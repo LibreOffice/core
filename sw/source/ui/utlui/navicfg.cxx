@@ -139,3 +139,6 @@ void SwNavigationConfig::Commit()
     PutProperties(aNames, aValues);
 }
 
+void SwNavigationConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
+

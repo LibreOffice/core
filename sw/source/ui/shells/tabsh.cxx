@@ -34,10 +34,10 @@
 
 #ifndef _ZFORLIST_HXX
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/srchitem.hxx>
@@ -55,7 +55,7 @@
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>

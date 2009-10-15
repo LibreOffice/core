@@ -30,7 +30,7 @@
 #ifndef _SWUNDO_HXX
 #define _SWUNDO_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 // die Ids fuer StdAktionen
 enum SwUndoId

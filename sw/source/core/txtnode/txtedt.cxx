@@ -41,7 +41,7 @@
 #endif
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/splwrap.hxx>
 #include <svx/langitem.hxx>
 #include <svx/fontitem.hxx>

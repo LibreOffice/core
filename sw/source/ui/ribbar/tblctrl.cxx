@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>

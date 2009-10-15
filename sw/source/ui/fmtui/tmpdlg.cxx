@@ -40,7 +40,7 @@
 
 #ifndef _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -48,7 +48,7 @@
 #include <svx/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/htmlcfg.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <numpara.hxx>
 #include <fmtclds.hxx>
 #include <swtypes.hxx>
@@ -95,11 +95,11 @@
 #endif
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
-#include <svtools/stritem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>

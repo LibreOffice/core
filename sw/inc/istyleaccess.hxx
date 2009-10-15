@@ -31,7 +31,7 @@
 #define _ISTYLEACCESS_HXX
 
 #include <vector>
-#include <svtools/stylepool.hxx>
+#include <svl/stylepool.hxx>
 
 /*--------------------------------------------------------------------
     Management of (automatic) styles

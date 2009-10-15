@@ -57,17 +57,17 @@
 #include <svx/fontitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/slstitm.hxx>
 #include <svx/colritem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/cntritem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/flditem.hxx>
@@ -108,18 +108,18 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/svxids.hrc>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/outliner.hxx>
 #include <svx/editeng.hxx>
 #include <svx/editview.hxx>
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/langitem.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 
 #include <docsh.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include "swabstdlg.hxx" //CHINA001
 #include "chrdlg.hrc" //CHINA001
 #include "misc.hrc"

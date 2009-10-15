@@ -844,7 +844,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst )
+void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal_uInt32 )
 {
     if( pBrdCst == pSourceViewConfig)
         SetFont();

@@ -37,20 +37,20 @@
 #define _SVSTDARR_USHORTS
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/misccfg.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/brkitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #ifndef _ZFORLIST_HXX //autogen
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 #include <comphelper/processfactory.hxx>
+#include <unotools/misccfg.hxx>
 #include <com/sun/star/i18n/WordType.hdl>
 #include <fmtpdsc.hxx>
 #include <fmthdft.hxx>
@@ -2440,7 +2440,7 @@ void SwDoc::_CreateNumberFormatter()
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     pNumberFormatter = new SvNumberFormatter( xMSF, eLang );
     pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-    pNumberFormatter->SetYear2000(static_cast<USHORT>(SFX_APP()->GetMiscConfig()->GetYear2000()));
+    pNumberFormatter->SetYear2000(static_cast<USHORT>(::utl::MiscCfg().GetYear2000()));
 
 }
 

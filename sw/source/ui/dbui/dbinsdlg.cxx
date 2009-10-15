@@ -64,19 +64,19 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/numuno.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/numuno.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #ifndef __SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
-#include <svtools/style.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/style.hxx>
+#include <svl/zformat.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/unolingu.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/rulritem.hxx>
@@ -1651,6 +1651,8 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 /* -----------------------------05.12.00 15:00--------------------------------
 
  ---------------------------------------------------------------------------*/
+void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 void SwInsertDBColAutoPilot::Commit()
 {
     Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());

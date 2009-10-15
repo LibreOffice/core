@@ -34,7 +34,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <ndole.hxx>
 #include <docary.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtclds.hxx>

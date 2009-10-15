@@ -33,7 +33,7 @@
 
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include "swdllapi.h"
 #include <swdbdata.hxx>

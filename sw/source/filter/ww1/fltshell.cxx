@@ -38,7 +38,7 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/boxitem.hxx>
@@ -47,7 +47,7 @@
 #include <svx/cntritem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/crsditem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 #include <txtftn.hxx>
 #include <fmtpdsc.hxx>

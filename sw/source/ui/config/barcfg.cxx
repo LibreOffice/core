@@ -151,3 +151,5 @@ void SwToolbarConfigItem::Commit()
     PutProperties(aNames, aValues);
 }
 
+void SwToolbarConfigItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+

@@ -44,7 +44,7 @@
 #endif
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _SFXAPP_HXX

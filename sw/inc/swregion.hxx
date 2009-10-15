@@ -30,7 +30,7 @@
 #ifndef _SWREGION_HXX
 #define _SWREGION_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include "swrect.hxx"
 

@@ -63,7 +63,7 @@
 #include <unomid.h>
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 using namespace utl;
 using ::rtl::OUString;
@@ -183,8 +183,8 @@ public:
     SwMailMergeConfigItem_Impl();
     ~SwMailMergeConfigItem_Impl();
 
-    virtual void        Commit();
-
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     const           Sequence< ::rtl::OUString>
                         GetAddressBlocks(sal_Bool bConvertToConfig = sal_False) const;
     void                SetAddressBlocks(
@@ -538,6 +538,8 @@ const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
 /*-- 15.04.2004 08:48:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+void SwMailMergeConfigItem_Impl::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 void  SwMailMergeConfigItem_Impl::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();

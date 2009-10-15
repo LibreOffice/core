@@ -38,16 +38,16 @@
 #endif
 
 #include <svtools/svmedit.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

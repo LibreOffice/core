@@ -34,7 +34,7 @@
 #include <tools/stream.hxx>
 #include <svtools/rtftoken.h>
 #include <svtools/rtfkeywd.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/rtfout.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/fontitem.hxx>

@@ -39,9 +39,9 @@
 #include <tools/errinf.hxx>
 #endif
 #include <tools/stream.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/ulspitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen

@@ -38,7 +38,7 @@
 #ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
 #endif
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/brkitem.hxx>

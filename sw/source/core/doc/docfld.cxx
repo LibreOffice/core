@@ -39,7 +39,7 @@
 #include <tools/datetime.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>

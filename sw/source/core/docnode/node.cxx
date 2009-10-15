@@ -1572,7 +1572,7 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     }
     return bRet;
 }
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {

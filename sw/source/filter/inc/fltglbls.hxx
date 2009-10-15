@@ -32,7 +32,7 @@
 
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 
 class SfxPoolItem;

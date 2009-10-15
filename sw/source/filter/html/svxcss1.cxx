@@ -39,7 +39,7 @@
 #endif
 #include <i18npool/mslangid.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/blnkitem.hxx>
@@ -57,7 +57,7 @@
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/langitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/spltitem.hxx>
 #include <svx/widwitem.hxx>
 #include <svx/frmdiritem.hxx>

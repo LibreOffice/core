@@ -35,9 +35,9 @@
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
 #ifndef _SVSTDARR_HXX
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

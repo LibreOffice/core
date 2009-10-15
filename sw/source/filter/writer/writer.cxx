@@ -33,11 +33,11 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/filter.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/fontitem.hxx>

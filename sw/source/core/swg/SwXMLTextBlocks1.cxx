@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svtools/unoevent.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/streamwrap.hxx>

@@ -52,7 +52,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 #include <svx/editeng.hxx>
 #include <svx/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder

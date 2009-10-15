@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtftn.hxx>
 #include <fchrfmt.hxx>
 #include <fmtflcnt.hxx>

@@ -38,8 +38,8 @@
 #include <i18npool/mslangid.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/fontitem.hxx>

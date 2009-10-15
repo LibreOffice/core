@@ -60,7 +60,7 @@
 #include <crsskip.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <scriptinfo.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <charfmt.hxx>  // #i27615#
 #include <numrule.hxx>
 

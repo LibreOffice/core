@@ -39,8 +39,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <svtools/itemset.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/itemset.hxx>
+#include <svl/zformat.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>

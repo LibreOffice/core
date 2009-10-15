@@ -37,7 +37,7 @@
 #include <iterator>
 #endif
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>

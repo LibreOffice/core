@@ -32,8 +32,8 @@
 
 #include <hintids.hxx>      // fuer die WhichIds @@@ must be included first @@@
 #include <tools/gen.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
 #include <swatrset.hxx>     // fuer inlines

@@ -36,16 +36,16 @@
 
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/newstyle.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/brshitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/languageoptions.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <swmodule.hxx>

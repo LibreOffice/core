@@ -30,7 +30,7 @@
 #ifndef _FMTCNTNT_HXX
 #define _FMTCNTNT_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <hintids.hxx>
 #include <format.hxx>
 

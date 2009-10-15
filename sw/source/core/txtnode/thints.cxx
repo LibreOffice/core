@@ -35,9 +35,9 @@
 #include <hintids.hxx>
 #include <sot/factory.hxx>
 #include <svx/xmlcnitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/stylepool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/stylepool.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/emphitem.hxx>
@@ -84,7 +84,7 @@
 // OD 26.06.2003 #108784#
 #include <dcontact.hxx>
 #include <docsh.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <algorithm>
 #include <map>
 

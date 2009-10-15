@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <stdlib.h>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <rtl/tencinfo.h>
 
 

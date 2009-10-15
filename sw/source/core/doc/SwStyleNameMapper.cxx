@@ -34,7 +34,7 @@
 
 #include <SwStyleNameMapper.hxx>
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
 #ifndef _RDIC_HRC

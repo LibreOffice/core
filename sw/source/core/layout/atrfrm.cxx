@@ -127,7 +127,7 @@
 // --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
 // <--
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

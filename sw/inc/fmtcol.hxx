@@ -30,7 +30,7 @@
 #ifndef _FMTCOL_HXX
 #define _FMTCOL_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <format.hxx>
 #include <swtypes.hxx>      // fuer MAXLEVEL

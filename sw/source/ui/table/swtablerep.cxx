@@ -35,14 +35,14 @@
 #include <hintids.hxx>
 #include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/frmdiritem.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>

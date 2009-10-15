@@ -143,6 +143,9 @@ SwPrintOptions::~SwPrintOptions()
 /* -----------------------------06.09.00 16:43--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+
 void    SwPrintOptions::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();

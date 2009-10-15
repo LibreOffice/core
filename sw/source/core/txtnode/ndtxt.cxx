@@ -40,12 +40,12 @@
 // --> OD 2008-01-17 #newlistlevelattrs#
 #include <svx/tstpitem.hxx>
 // <--
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>
@@ -92,13 +92,13 @@
 #include <numrule.hxx>
 
 //--> #outlinelevel added by zhaojianwei
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 //<--end
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
 // --> OD 2008-02-25 #refactorlists#
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <list.hxx>
 // <--
 

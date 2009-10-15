@@ -36,7 +36,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/brshitem.hxx>
 #ifndef _SVX_XMLCNITEM_HXX
 #include <svx/xmlcnitm.hxx>

@@ -39,7 +39,7 @@
 #include <vcl/window.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <rsc/rscsfx.hxx>
 
 

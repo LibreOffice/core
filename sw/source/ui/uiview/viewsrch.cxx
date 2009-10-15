@@ -35,17 +35,17 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svx/pageitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _T2XTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
 #endif
-#include <svtools/itempool.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/eitem.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>

@@ -34,7 +34,7 @@
 #include <tools/globname.hxx>
 #include <vcl/mapmod.hxx>
 #include <svx/xmlcnitm.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/pbinitem.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/nlbkitem.hxx>
@@ -83,7 +83,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <svx/acorrcfg.hxx>

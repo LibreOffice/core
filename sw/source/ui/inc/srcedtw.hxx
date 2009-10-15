@@ -31,7 +31,7 @@
 #define _SRCEDTW_HXX
 
 #include <vcl/window.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 #include <vcl/timer.hxx>
 
@@ -120,7 +120,7 @@ protected:
     void            DoSyntaxHighlight( USHORT nPara );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster* );
+    virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 
