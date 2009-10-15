@@ -1215,7 +1215,7 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                         const Color aTransCol( rTransparenceGradient.GetStartColor() );
                         const USHORT nTransPercent = aTransCol.GetLuminance() * 100 / 255;
                         rWriter.BeginTransparencyGroup();
-                        ImplWriteActions( rWriter, pPDFExtOutDevData, aTmpMtf, rDummyVDev );
+                        ImplWriteActions( rWriter, NULL, aTmpMtf, rDummyVDev );
                         rWriter.EndTransparencyGroup( Rectangle( rPos, rSize ), nTransPercent );
                     }
                     else
