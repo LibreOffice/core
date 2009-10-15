@@ -51,8 +51,8 @@
 #ifndef __com_sun_star_rendering_XParametricPolyPolygon2DFactory_idl__
 #include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.idl>
 #endif
-#ifndef __com_sun_star_rendering_XColorSpace_idl__
-#include <com/sun/star/rendering/XColorSpace.idl>
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
 #endif
 
 module com { module sun { module star { module rendering {
@@ -220,8 +220,67 @@ interface XGraphicDevice : ::com::sun::star::uno::XInterface
         this is not advisable: each canvas implementation is free to
         internally generate optimized parametric polygons, which can
         be used more directly for e.g. texturing operations.
+
+        <pre>
+        Available services (all canvas implementations should provide
+        this minimal set, though are free to add more; just check the
+        getAvailableServiceNames() on the returned interface):
+
+        - Gradients - all gradients need to support two construction
+          parameters, "Colors" being a <type>sequence<Color></type>
+          and "Stops" being a <type>sequence<double></type>. Both must
+          have the same length, and at least two elements. See
+          http://www.w3.org/TR/SVG11/pservers.html#GradientStops for
+          the semantics of gradient stops and colors.
+          Required gradient services:
+
+          * "LinearGradient" - the gradient varies linearly between
+            the given colors. without coordinate system
+            transformation, the color interpolation happens in
+            increasing x direction, and is constant in y
+            direction. Equivalent to svg linear gradient
+            http://www.w3.org/TR/SVG11/pservers.html#LinearGradients
+
+          * "EllipticalGradient" - this gradient has zeroth color
+            index in the middle, and varies linearly between center
+            and final color. The services takes an additional
+            parameter named "AspectRatio" of <type>double</type>
+            (width divided by height), if this aspect ratio is 1, the
+            gradient is circular. If it's not 1, the gradient is
+            elliptical, with the special twist that the aspect ratio
+            is maintained also for the center color: the gradient will
+            not collapse into a single point, but become a line of
+            center color. If "AspectRatio" is missing, or equal to 1,
+            this gradient yields similar results as the svg radial
+            gradient
+            http://www.w3.org/TR/SVG11/pservers.html#RadialGradients
+
+          * "RectangularGradient" - this gradient has zeroth color
+            index in the middle, and varies linearly between center
+            and final color via rectangular boxes
+            around the center point. The services takes an additional
+            parameter named "AspectRatio" of <type>double</type>
+            (width divided by height), if this aspect ratio is 1, the
+            gradient is quadratic. If it's not 1, the gradient is
+            rectangular, with the special twist that the aspect ratio
+            is maintained also for the center color: the gradient will
+            not collapse into a single point, but become a line of
+            center color.
+
+        - Hatch patterns - Required hatch services:
+
+          * "VerticalLineHatch" - this hatching consists of vertical lines
+          * "OrthogonalLinesHatch" - this hatching consists of
+            crossing vertical and horizontal lines
+          * "ThreeCrossingLinesHatch" - this hatching consists of
+            vertical and horizontal lines plus diagonal lines from
+            left, top to bottom, right.
+          * "FourCrossingLinesHatch" - this hatching consists of
+            vertical and horizontal lines plus diagonal lines in both
+            directions.
+        </pre>
      */
-    XParametricPolyPolygon2DFactory getParametricPolyPolygonFactory();
+    com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
 
     //-------------------------------------------------------------------------
 
