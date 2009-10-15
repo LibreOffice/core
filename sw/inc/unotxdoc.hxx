@@ -258,7 +258,7 @@ public:
 
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException);
 
-    SW_DLLPUBLIC static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
