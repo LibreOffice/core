@@ -97,7 +97,7 @@ namespace drawinglayer
             basegfx::B2DPolyPolygon             maClipPolyPolygon;
 
             // the target MetaFile
-            GDIMetaFile&                        mrMetaFile;
+            GDIMetaFile*                        mpMetaFile;
 
             // do not allow embedding SvtGraphicFills into each other,
             // use a counter to prevent that
