@@ -314,6 +314,7 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 100, 80 );
             Border = TRUE;
+            Sort = TRUE;
             HelpText [en-US] = "Select the printer to print on.";
         };
         CheckBox SV_PRINT_DETAILS_BTN
