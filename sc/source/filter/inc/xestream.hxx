@@ -126,6 +126,9 @@ public:
     sal_Size            Write( const void* pData, sal_Size nBytes );
     /** Writes a sequence of nBytes zero bytes (respects slice setting). */
     void                WriteZeroBytes( sal_Size nBytes );
+
+    void                WriteZeroBytesToRecord( sal_Size nBytes );
+
     /** Copies nBytes bytes from current position of the stream rInStrm.
         @descr  Omitting the second parameter means: read to end of stream. */
     sal_Size            CopyFromStream( SvStream& rInStrm, sal_Size nBytes = STREAM_SEEK_TO_END );

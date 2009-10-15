@@ -1496,8 +1496,10 @@ XclExpInterfaceEnd::~XclExpInterfaceEnd()
 {
 }
 
-void XclExpInterfaceEnd::WriteBody( XclExpStream& /*rStrm*/ )
+void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
 {
+    // Don't forget to re-enable encryption.
+    rStrm.EnableEncryption();
 }
 
 // ============================================================================
