@@ -199,7 +199,7 @@ namespace {
 
         bool IsPaperBin (void) const
         {
-            return GetBoolValue("PaperTray", false);
+            return GetBoolValue("PrintPaperFromSetup", false);
         }
 
         OUString GetPrinterSelection (void) const
@@ -611,7 +611,7 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY) ),
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY_HELP) ),
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPaperFromSetup" ) ),
                                 sal_False,
                                 aPaperTrayOpt
                                 )
