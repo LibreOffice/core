@@ -31,7 +31,7 @@
 #ifndef SC_STLPOOL_HXX
 #define SC_STLPOOL_HXX
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 
 class ScStyleSheet;

@@ -39,7 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <usr/proptypehlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>

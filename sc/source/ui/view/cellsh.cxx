@@ -35,9 +35,9 @@
 
 #include "scitems.hxx"
 
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/insdlg.hxx>

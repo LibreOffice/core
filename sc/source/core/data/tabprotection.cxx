@@ -35,7 +35,7 @@
 
 #include "tabprotection.hxx"
 #include "tools/debug.hxx"
-#include "svtools/PasswordHelper.hxx"
+#include "svl/PasswordHelper.hxx"
 #include "document.hxx"
 
 #define DEBUG_TAB_PROTECTION 0

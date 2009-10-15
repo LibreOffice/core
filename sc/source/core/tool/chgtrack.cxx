@@ -36,10 +36,10 @@
 #include <tools/shl.hxx>        // SHL_CALC
 #include <tools/stack.hxx>
 #include <tools/rtti.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/isethint.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/itemset.hxx>
+#include <svl/isethint.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -2340,7 +2340,7 @@ void ScChangeTrack::Clear()
 }
 
 
-void __EXPORT ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster* )
+void __EXPORT ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     if ( !pDoc->IsInDtorClear() )
     {

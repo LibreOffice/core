@@ -33,9 +33,9 @@
 #include "ftools.hxx"
 #include <tools/color.hxx>
 #include <unotools/charclass.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/poolitem.hxx>
 #include <sot/storage.hxx>
 
 #include <math.h>

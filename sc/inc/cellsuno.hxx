@@ -35,9 +35,9 @@
 #include "rangelst.hxx"         // ScRangeList
 
 #include "formula/grammar.hxx"
-#include <svtools/lstner.hxx>
-#include <svtools/listener.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/listener.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

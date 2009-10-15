@@ -41,7 +41,7 @@
 #include <svx/bolnitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/shaditem.hxx>
-#include <svtools/poolcach.hxx>
+#include <svl/poolcach.hxx>
 #include <svx/fontitem.hxx>
 #include <vcl/fontcvt.hxx>
 

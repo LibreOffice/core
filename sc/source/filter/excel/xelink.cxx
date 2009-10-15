@@ -34,7 +34,7 @@
 
 #include <algorithm>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "document.hxx"
 #include "cell.hxx"
 #include "scextopt.hxx"

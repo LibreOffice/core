@@ -42,7 +42,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <basic/sbxcore.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "tabvwsh.hxx"

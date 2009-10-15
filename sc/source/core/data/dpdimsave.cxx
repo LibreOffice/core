@@ -38,7 +38,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <algorithm>

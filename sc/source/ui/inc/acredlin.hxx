@@ -55,7 +55,7 @@
 
 #ifndef _SVARRAY_HXX
 #define _SVARRAY_HXX
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #endif
 #include "chgtrack.hxx"
 #include "chgviset.hxx"

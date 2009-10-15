@@ -33,7 +33,7 @@
 
 
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <svx/linkmgr.hxx>
 
 #include "linkuno.hxx"

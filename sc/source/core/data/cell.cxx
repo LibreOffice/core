@@ -33,7 +33,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "scitems.hxx"
 #include "attrib.hxx"
@@ -55,9 +55,9 @@
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
 #include <svx/editobj.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/flditem.hxx>
-#include <svtools/broadcast.hxx>
+#include <svl/broadcast.hxx>
 
 using namespace formula;
 // More or less arbitrary, of course all recursions must fit into available

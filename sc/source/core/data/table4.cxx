@@ -61,7 +61,7 @@
 #include <svx/editeng.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/escpitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>

@@ -31,7 +31,7 @@
 #ifndef SC_STLSHEET_HXX
 #define SC_STLSHEET_HXX
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 //------------------------------------------------------------------------
 

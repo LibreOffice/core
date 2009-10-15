@@ -64,12 +64,12 @@
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/cliplistener.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <sot/formats.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #define _EDITSH_CXX
 #include "editsh.hxx"

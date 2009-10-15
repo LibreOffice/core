@@ -33,7 +33,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -51,9 +51,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/languageoptions.hxx>
 
 #include "xmlimprt.hxx"
 #include "document.hxx"

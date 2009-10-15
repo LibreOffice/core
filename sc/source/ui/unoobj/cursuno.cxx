@@ -34,8 +34,8 @@
 
 
 #include "scitems.hxx"
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/uuid.h>
 
 #include "cursuno.hxx"

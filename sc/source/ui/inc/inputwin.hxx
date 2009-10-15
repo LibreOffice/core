@@ -36,7 +36,7 @@
 #include <vcl/toolbox.hxx>
 #endif
 #include <sfx2/childwin.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
 #endif

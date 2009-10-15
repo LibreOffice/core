@@ -173,9 +173,9 @@
 #include <svx/svdetc.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/stritem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/urlbmk.hxx>
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <vcl/graph.hxx>

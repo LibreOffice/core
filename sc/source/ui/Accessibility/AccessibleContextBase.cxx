@@ -47,7 +47,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
 #include <toolkit/helper/convert.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/unohelp.hxx>

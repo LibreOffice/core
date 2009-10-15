@@ -31,8 +31,8 @@
 #ifndef SC_LINKUNO_HXX
 #define SC_LINKUNO_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XDDELink.hpp>
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include <com/sun/star/sheet/XDDELinks.hpp>

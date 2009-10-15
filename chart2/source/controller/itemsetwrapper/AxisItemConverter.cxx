@@ -49,11 +49,11 @@
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // for SvxDoubleItem
 #include <svx/chrtitem.hxx>
 // for SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 
 #include <algorithm>

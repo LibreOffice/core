@@ -36,8 +36,8 @@
 #include <svx/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/logfile.hxx>
 
 #include "interpre.hxx"

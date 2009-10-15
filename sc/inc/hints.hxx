@@ -33,7 +33,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 
 // ---------------------------------------------------------------------------
 

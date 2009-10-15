@@ -72,7 +72,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
-#include <svtools/zforlist.hxx>     // IsNumberFormat
+#include <svl/zforlist.hxx>     // IsNumberFormat
 
 #include <vector>
 

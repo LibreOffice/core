@@ -52,7 +52,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/useroptions.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 //CHINA001 #include "tphfedit.hxx"
 #include "editutil.hxx"

@@ -34,8 +34,8 @@
 #include "global.hxx"           // ScRange, ScAddress
 #include "address.hxx"
 #include <svx/unotext.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

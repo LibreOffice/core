@@ -37,7 +37,7 @@
 
 //----------------------------------------------------------------------------
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <limits.h>
 

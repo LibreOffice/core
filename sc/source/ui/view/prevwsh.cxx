@@ -49,8 +49,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/topfrm.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>

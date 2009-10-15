@@ -37,8 +37,8 @@
 #include <vcl/virdev.hxx>
 //#include <toolkit/unoiface.hxx>
 #include <toolkit/unohlp.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>

@@ -62,13 +62,13 @@
 #include <svx/ulspitem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/escpitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <string.h>
 

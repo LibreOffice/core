@@ -50,7 +50,7 @@
 #include <cppuhelper/interfacecontainer.h>
 
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/servicehelper.hxx>

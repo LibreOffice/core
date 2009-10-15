@@ -45,7 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include <docuno.hxx>
 

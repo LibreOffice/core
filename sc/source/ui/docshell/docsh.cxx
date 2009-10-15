@@ -51,7 +51,7 @@
 #include <vcl/waitobj.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -65,8 +65,8 @@
 #include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <svtools/documentlockfile.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/documentlockfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/virdev.hxx>
 #include "chgtrack.hxx"

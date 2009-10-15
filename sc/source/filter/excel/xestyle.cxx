@@ -37,8 +37,8 @@
 #include <set>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/font.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/zformat.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/printer.hxx>
 #include "scitems.hxx"
 #include <svx/algitem.hxx>

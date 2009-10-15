@@ -48,7 +48,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "drawsh.hxx"
@@ -71,7 +71,7 @@
 
 #include "userdat.hxx"
 #include <sfx2/objsh.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XModifiable.hpp>

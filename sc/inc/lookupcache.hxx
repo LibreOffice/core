@@ -34,7 +34,7 @@
 #include "address.hxx"
 #include "global.hxx"
 #include "formula/token.hxx"
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include <tools/string.hxx>
 
 #include <hash_map>

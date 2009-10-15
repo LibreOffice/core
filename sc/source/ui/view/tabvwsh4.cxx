@@ -51,7 +51,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <rtl/logfile.hxx>
 #include <tools/urlobj.hxx>

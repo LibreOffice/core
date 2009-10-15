@@ -32,7 +32,7 @@
 #define SC_UNOREFLIST_HXX
 
 #include <list>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 #include "rangelst.hxx"
 
 

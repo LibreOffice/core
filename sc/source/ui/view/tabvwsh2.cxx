@@ -41,10 +41,10 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include "tabvwsh.hxx"
@@ -67,7 +67,7 @@
 
 // #98185# Create default drawing objects via keyboard
 #include <svx/svdpagv.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdpage.hxx>
 #include <fuconcustomshape.hxx>
 

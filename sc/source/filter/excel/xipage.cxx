@@ -31,11 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "xipage.hxx"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/graph.hxx>
 #include "scitems.hxx"
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/lrspitem.hxx>

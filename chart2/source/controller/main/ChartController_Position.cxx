@@ -48,7 +48,7 @@
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>

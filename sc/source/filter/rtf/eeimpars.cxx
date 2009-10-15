@@ -50,10 +50,10 @@
 #include <svx/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svtools/parhtml.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 
 #include "eeimport.hxx"

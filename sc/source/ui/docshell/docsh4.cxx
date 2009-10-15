@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 #include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/multisel.hxx>
@@ -73,9 +73,9 @@ using namespace ::com::sun::star;
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docinsert.hxx>
-#include <svtools/PasswordHelper.hxx>
-#include <svtools/documentlockfile.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/PasswordHelper.hxx>
+#include <svl/documentlockfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include "docuno.hxx"

@@ -34,9 +34,9 @@
 #include "macros.hxx"
 #include <comphelper/processfactory.hxx>
 // header for class SvNumberFormatsSupplierObj
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 // header for class SvNumberformat
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <tools/color.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>

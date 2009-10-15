@@ -34,7 +34,7 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "dif.hxx"
 #include "filter.hxx"

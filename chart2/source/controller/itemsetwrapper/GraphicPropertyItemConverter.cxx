@@ -38,7 +38,7 @@
 #include "CommonConverters.hxx"
 
 // #ifndef _SFXINTITEM_HXX
-// #include <svtools/intitem.hxx>
+// #include <svl/intitem.hxx>
 // #endif
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
@@ -53,7 +53,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/eeitem.hxx>
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // for XFillGradientStepCountItem
 #include <svx/xgrscit.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>

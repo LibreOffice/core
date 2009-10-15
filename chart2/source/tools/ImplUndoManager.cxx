@@ -463,6 +463,10 @@ void UndoStepsConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
     }
 }
 
+void UndoStepsConfigItem::Commit()
+{
+}
+
 // mtehod is not const, because GetProperties is not const
 sal_Int32 UndoStepsConfigItem::getUndoSteps()
 {

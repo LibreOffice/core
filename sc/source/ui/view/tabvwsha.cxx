@@ -37,10 +37,10 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zformat.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/numinf.hxx>
 #include <svx/srchitem.hxx>

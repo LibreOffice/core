@@ -35,7 +35,7 @@
 #include "conditio.hxx"
 #include <formula/grammar.hxx>
 #include <tools/list.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>

@@ -32,7 +32,7 @@
 #define SC_CHARTUNO_HXX
 
 #include "address.hxx"
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <tools/string.hxx>
 
 #include <com/sun/star/table/XTableChart.hpp>

@@ -38,7 +38,7 @@
 #include "rangeutl.hxx"
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <xmloff/xmluconv.hxx>
 
 #define SC_CHANGE_ID_PREFIX "ct"

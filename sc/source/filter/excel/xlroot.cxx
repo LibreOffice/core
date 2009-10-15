@@ -33,8 +33,8 @@
 #include "xlroot.hxx"
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>

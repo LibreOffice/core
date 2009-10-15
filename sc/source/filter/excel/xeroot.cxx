@@ -33,9 +33,9 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <unotools/saveopt.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include "xecontent.hxx"
 #include "xltracer.hxx"
 #include "xehelper.hxx"

@@ -42,7 +42,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>

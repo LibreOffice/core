@@ -31,8 +31,8 @@
 #ifndef SC_CONFUNO_HXX
 #define SC_CONFUNO_HXX
 
-#include <svtools/itemprop.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase2.hxx>

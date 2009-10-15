@@ -49,7 +49,7 @@
 #include <svx/wghtitem.hxx>
 #include <sfx2/topfrm.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
 

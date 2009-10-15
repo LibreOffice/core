@@ -57,7 +57,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/sound.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/help.hxx>

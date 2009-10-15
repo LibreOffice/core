@@ -40,15 +40,15 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/pfiledlg.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/insdlg.hxx>
 #include <svtools/soerr.hxx>

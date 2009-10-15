@@ -49,11 +49,11 @@
 #include <svx/numitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/inethist.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/inethist.hxx>
+#include <unotools/syslocale.hxx>
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include "editutil.hxx"

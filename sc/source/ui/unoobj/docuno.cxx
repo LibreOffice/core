@@ -40,8 +40,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 
-#include <svtools/numuno.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/numuno.hxx>
+#include <svl/smplhint.hxx>
 #include <unotools/undoopt.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>

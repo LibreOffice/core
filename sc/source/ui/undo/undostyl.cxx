@@ -35,7 +35,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/virdev.hxx>
 
 #include "undostyl.hxx"

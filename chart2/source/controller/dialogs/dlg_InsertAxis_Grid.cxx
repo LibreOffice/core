@@ -41,7 +41,7 @@
 #include "ObjectNameProvider.hxx"
 
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 //.............................................................................
 namespace chart

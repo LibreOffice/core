@@ -37,7 +37,7 @@
 
 #include <algorithm>
 #include <svtools/colorcfg.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <tools/poly.hxx>
 #include "scmod.hxx"
 #include "asciiopt.hxx"
@@ -52,7 +52,7 @@
 #include <svx/colritem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/fontitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "editutil.hxx"
 // *** edit engine ***
 
@@ -96,12 +96,12 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     InitColors();
     InitFonts();
     ImplClearSplits();
-    StartListening( mrColorConfig );
+    mrColorConfig.AddListener(this);
 }
 
 ScCsvGrid::~ScCsvGrid()
 {
-    EndListening( mrColorConfig );
+    mrColorConfig.RemoveListener(this);
 }
 
 
@@ -995,14 +995,10 @@ void ScCsvGrid::DataChanged( const DataChangedEvent& rDCEvt )
     ScCsvControl::DataChanged( rDCEvt );
 }
 
-void ScCsvGrid::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    if( rHint.ISA( SfxSimpleHint ) &&
-        (static_cast< const SfxSimpleHint& >( rHint ).GetId() == SFX_HINT_COLORS_CHANGED) )
-    {
-        InitColors();
-        Repaint();
-    }
+    InitColors();
+    Repaint();
 }
 
 

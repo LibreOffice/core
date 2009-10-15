@@ -57,7 +57,7 @@
 //oldChartModelWrapper
 
 // header for class SfxItemPool
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 // header for class FontList
 #include <svtools/ctrltool.hxx>
 // header for class Application

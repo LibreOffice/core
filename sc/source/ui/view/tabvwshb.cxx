@@ -63,8 +63,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 

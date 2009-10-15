@@ -34,7 +34,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "formula/grammar.hxx"
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "scdllapi.h"
 
 class ScBaseCell;

@@ -42,8 +42,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/stritem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
 #include "miscuno.hxx"
 
 using ::rtl::OUString;

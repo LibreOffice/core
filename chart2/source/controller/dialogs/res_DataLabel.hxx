@@ -34,7 +34,7 @@
 // header for class CheckBox
 #include <vcl/button.hxx>
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "TextDirectionListBox.hxx"
 
 #include <svx/dialcontrol.hxx>

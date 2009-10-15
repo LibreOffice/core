@@ -41,13 +41,13 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <basic/sbxcore.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/visitem.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

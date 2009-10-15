@@ -34,10 +34,8 @@
 #define _SC_CSVGRID_HXX
 
 #include <vcl/virdev.hxx>
-#ifndef _MENU_HXX
 #include <vcl/menu.hxx>
-#endif
-#include <svtools/lstner.hxx>
+#include <unotools/options.hxx>
 
 #include <vector>
 #include <memory>
@@ -100,7 +98,7 @@ typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 
 /** A data grid control for the CSV import dialog. The design of this control
     simulates a Calc spreadsheet with row and column headers. */
-class SC_DLLPUBLIC ScCsvGrid : public ScCsvControl, public SfxListener
+class SC_DLLPUBLIC ScCsvGrid : public ScCsvControl, public utl::ConfigurationListener
 {
 private:
     typedef ::std::auto_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
@@ -299,8 +297,7 @@ protected:
 
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
-    using Control::Notify;
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void                ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     // painting ---------------------------------------------------------------
 protected:

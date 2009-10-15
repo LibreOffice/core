@@ -41,8 +41,8 @@
 #include <sfx2/event.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/navigat.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/stritem.hxx>
+#include <svl/urlbmk.hxx>
 #include <vcl/sound.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>

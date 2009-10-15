@@ -39,8 +39,8 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 
 #include <tools/datetime.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/zformat.hxx>
+#include <svl/intitem.hxx>
 
 #include "document.hxx"
 #include "cell.hxx"

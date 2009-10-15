@@ -33,7 +33,7 @@
 
 #include "address.hxx"
 #include <sfx2/lnkbase.hxx>
-#include <svtools/broadcast.hxx>
+#include <svl/broadcast.hxx>
 #include "scmatrix.hxx"
 
 class ScDocument;

@@ -35,8 +35,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/itemwrapper.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase3.hxx>

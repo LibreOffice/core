@@ -46,7 +46,7 @@
 #include <unotools/pathoptions.hxx>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <vcl/edit.hxx>
 

@@ -37,9 +37,9 @@
 #include "ChartItemPool.hxx"
 #include "ObjectIdentifier.hxx"
 #include <svx/unomodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // header for define EE_PARA_HYPHENATE
 #include <svx/eeitem.hxx>
 // header for class Svx3DPercentDiagonalItem

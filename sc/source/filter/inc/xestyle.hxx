@@ -34,8 +34,8 @@
 #include <map>
 #include <tools/mempool.hxx>
 #include <tools/string.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/nfkeytab.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/nfkeytab.hxx>
 #include <svx/svxfont.hxx>
 #include "xerecord.hxx"
 #include "xlstyle.hxx"

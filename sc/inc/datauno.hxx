@@ -32,8 +32,8 @@
 #define SC_DATAUNO_HXX
 
 #include "global.hxx"
-#include <svtools/itemprop.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>

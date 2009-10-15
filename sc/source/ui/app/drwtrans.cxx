@@ -60,8 +60,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdxcgv.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/itempool.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 

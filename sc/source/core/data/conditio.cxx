@@ -37,8 +37,8 @@
 
 #include "scitems.hxx"
 #include <sfx2/objsh.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/itemset.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
 

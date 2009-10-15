@@ -34,7 +34,7 @@
 #include "XclImpChangeTrack.hxx"
 #include <tools/debug.hxx>
 #include <sot/storage.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "chgviset.hxx"
 #include "cell.hxx"
 #include "chgtrack.hxx"

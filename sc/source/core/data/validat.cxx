@@ -45,7 +45,7 @@
 #include <basic/basmgr.hxx>
 
 #include <basic/sbx.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>

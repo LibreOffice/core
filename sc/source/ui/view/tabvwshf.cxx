@@ -39,9 +39,9 @@
 #include <sfx2/request.hxx>
 #include <basic/sbstar.hxx>
 #include <layout/layout.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "tabvwsh.hxx"

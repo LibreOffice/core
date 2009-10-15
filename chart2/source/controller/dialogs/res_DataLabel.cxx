@@ -42,13 +42,13 @@
 
 // header for class SvxNumberInfoItem
 #include <svx/numinf.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // for SfxUInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 // header for class SfxStringItem
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/frmdiritem.hxx>
 
@@ -56,7 +56,7 @@
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 // header for SvNumberFormatter
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/controldims.hrc>
 
 

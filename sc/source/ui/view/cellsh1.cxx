@@ -55,10 +55,10 @@
 #include <sfx2/viewfrm.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>

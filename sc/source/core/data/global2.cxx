@@ -44,7 +44,7 @@
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <ctype.h>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "global.hxx"
 #include "rangeutl.hxx"

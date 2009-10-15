@@ -31,7 +31,7 @@
 #ifndef SC_TARGUNO_HXX
 #define SC_TARGUNO_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>

@@ -48,7 +48,7 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include <rtl/math.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>

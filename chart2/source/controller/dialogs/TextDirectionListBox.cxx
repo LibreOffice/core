@@ -34,7 +34,7 @@
 #include "TextDirectionListBox.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/window.hxx>
 
 namespace chart

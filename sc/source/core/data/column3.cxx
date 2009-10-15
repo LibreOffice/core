@@ -35,8 +35,8 @@
 
 
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include "scitems.hxx"
 #include "column.hxx"

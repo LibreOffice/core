@@ -45,8 +45,8 @@
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/topfrm.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 
 #include <vcl/msgbox.hxx>
@@ -78,9 +78,9 @@
 #include "tabprotection.hxx"
 #include "protectiondlg.hxx"
 
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx> //CHINA001

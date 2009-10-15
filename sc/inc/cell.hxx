@@ -35,7 +35,7 @@
 
 #include <set>
 #include <tools/mempool.hxx>
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include "global.hxx"
 #include "rangenam.hxx"
 #include "formula/grammar.hxx"

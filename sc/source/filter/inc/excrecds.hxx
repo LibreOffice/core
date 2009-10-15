@@ -32,7 +32,7 @@
 #define SC_EXCRECDS_HXX
 
 #include <tools/solar.h>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/string.hxx>
 #include <vcl/vclenum.hxx>
 #include <tools/color.hxx>

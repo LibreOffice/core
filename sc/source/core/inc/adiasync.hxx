@@ -31,8 +31,8 @@
 #ifndef SC_ADIASYNC_HXX
 #define SC_ADIASYNC_HXX
 
-#include <svtools/broadcast.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/svarray.hxx>
 
 #include "callform.hxx"
 

@@ -40,7 +40,7 @@
 #define _TPHF_CXX
 #include "scitems.hxx"
 #include <sfx2/basedlgs.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 

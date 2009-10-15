@@ -47,7 +47,7 @@
 #include <svx/colritem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include <sfx2/objsh.hxx>
 #include "docuno.hxx"

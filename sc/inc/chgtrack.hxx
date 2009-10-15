@@ -1127,7 +1127,7 @@ class ScChangeTrack : public utl::ConfigurationListener
 #endif  // SC_CHGTRACK_CXX
 
             void                ClearMsgQueue();
-    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster* );
+    virtual void                ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
 public:
 

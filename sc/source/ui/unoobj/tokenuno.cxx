@@ -39,7 +39,7 @@
 #include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include "miscuno.hxx"
 #include "convuno.hxx"

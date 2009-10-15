@@ -42,7 +42,7 @@
 #include <svx/postitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/fhgtitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>

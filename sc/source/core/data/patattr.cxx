@@ -60,8 +60,8 @@
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/wrlmitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 

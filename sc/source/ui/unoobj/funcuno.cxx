@@ -35,7 +35,7 @@
 
 #include <tools/debug.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include "funcuno.hxx"
 #include "miscuno.hxx"

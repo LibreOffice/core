@@ -155,7 +155,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 /*
 #ifdef _ZFORLIST_DECLARE_TABLE
 class SvNumberFormatterIndexTable;

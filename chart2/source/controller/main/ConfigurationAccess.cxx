@@ -35,7 +35,7 @@
 #include "macros.hxx"
 
 // header for class SvtSysLocale
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 // header for class ConfigItem
 #include <unotools/configitem.hxx>
 // header for rtl::Static
@@ -69,6 +69,8 @@ public:
     virtual ~CalcConfigItem();
 
     FieldUnit getFieldUnit();
+    virtual void                    Commit();
+    virtual void                    Notify( const uno::Sequence<rtl::OUString>& aPropertyNames);
 };
 
 CalcConfigItem::CalcConfigItem()
@@ -79,6 +81,9 @@ CalcConfigItem::CalcConfigItem()
 CalcConfigItem::~CalcConfigItem()
 {
 }
+
+void CalcConfigItem::Commit() {}
+void CalcConfigItem::Notify( const uno::Sequence<rtl::OUString>& aPropertyNames) {}
 
 FieldUnit CalcConfigItem::getFieldUnit()
 {

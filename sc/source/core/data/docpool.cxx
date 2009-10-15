@@ -36,8 +36,8 @@
 #include "scitems.hxx"
 #include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/bolnitem.hxx>

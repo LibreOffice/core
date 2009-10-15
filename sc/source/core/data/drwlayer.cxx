@@ -65,7 +65,7 @@
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>

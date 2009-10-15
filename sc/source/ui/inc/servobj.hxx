@@ -31,8 +31,8 @@
 #ifndef SC_SERVOBJ_HXX
 #define SC_SERVOBJ_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/listener.hxx>
+#include <svl/lstner.hxx>
+#include <svl/listener.hxx>
 #include <sfx2/linksrc.hxx>
 #include "global.hxx"
 #include "address.hxx"

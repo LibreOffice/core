@@ -65,8 +65,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <svx/svxdlg.hxx>

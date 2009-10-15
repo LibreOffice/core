@@ -45,10 +45,10 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/svlbox.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/sound.hxx>

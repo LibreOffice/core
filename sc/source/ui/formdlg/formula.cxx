@@ -39,8 +39,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/svtreebx.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/topfrm.hxx>

@@ -88,7 +88,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/extract.hxx>
 #include <svx/eeitem.hxx>

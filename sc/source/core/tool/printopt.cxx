@@ -210,4 +210,5 @@ void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
     SetModified();
 }
 
+void ScPrintCfg::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 

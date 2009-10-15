@@ -56,7 +56,7 @@
 
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
@@ -66,7 +66,7 @@
 #include <svx/langitem.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
@@ -74,7 +74,7 @@
 #include <svx/pszctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/inethist.hxx>
+#include <svl/inethist.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
 
@@ -217,6 +217,118 @@ ScModule::~ScModule()
 }
 
 //------------------------------------------------------------------
+void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 )
+{
+    if ( p == pColorConfig || p == pAccessOptions )
+    {
+        //  Test if detective objects have to be updated with new colors
+        //  (if the detective colors haven't been used yet, there's nothing to update)
+        if ( ScDetectiveFunc::IsColorsInitialized() )
+        {
+            const svtools::ColorConfig& rColors = GetColorConfig();
+            BOOL bArrows =
+                ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
+                  ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
+            BOOL bComments =
+                ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
+            if ( bArrows || bComments )
+            {
+                ScDetectiveFunc::InitializeColors();        // get the new colors
+
+                //  update detective objects in all open documents
+                SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+                while ( pObjSh )
+                {
+                    if ( pObjSh->Type() == TYPE(ScDocShell) )
+                    {
+                        ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
+                        if ( bArrows )
+                            ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
+                        if ( bComments )
+                            ScDetectiveFunc::UpdateAllComments( *pDocSh->GetDocument() );
+                    }
+                    pObjSh = SfxObjectShell::GetNext( *pObjSh );
+                }
+            }
+        }
+
+        //  force all views to repaint, using the new options
+
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while(pViewShell)
+        {
+            if ( pViewShell->ISA(ScTabViewShell) )
+            {
+                ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
+                pViewSh->PaintGrid();
+                pViewSh->PaintTop();
+                pViewSh->PaintLeft();
+                pViewSh->PaintExtras();
+
+                ScInputHandler* pHdl = pViewSh->GetInputHandler();
+                if ( pHdl )
+                    pHdl->ForgetLastPattern();  // EditEngine BackgroundColor may change
+            }
+            else if ( pViewShell->ISA(ScPreviewShell) )
+            {
+                Window* pWin = pViewShell->GetWindow();
+                if (pWin)
+                    pWin->Invalidate();
+            }
+            pViewShell = SfxViewShell::GetNext( *pViewShell );
+        }
+    }
+    else if ( p == pCTLOptions )
+    {
+        //  for all documents: set digit language for printer, recalc output factor, update row heights
+        SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+        while ( pObjSh )
+        {
+            if ( pObjSh->Type() == TYPE(ScDocShell) )
+            {
+                ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
+                OutputDevice* pPrinter = pDocSh->GetPrinter();
+                if ( pPrinter )
+                    pPrinter->SetDigitLanguage( GetOptDigitLanguage() );
+
+                pDocSh->CalcOutputFactor();
+
+                SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                    pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+            }
+            pObjSh = SfxObjectShell::GetNext( *pObjSh );
+        }
+
+        //  for all views (table and preview): update digit language
+        SfxViewShell* pSh = SfxViewShell::GetFirst();
+        while ( pSh )
+        {
+            if ( pSh->ISA( ScTabViewShell ) )
+            {
+                ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+
+                //  set ref-device for EditEngine (re-evaluates digit settings)
+                ScInputHandler* pHdl = GetInputHdl(pViewSh);
+                if (pHdl)
+                    pHdl->UpdateRefDevice();
+
+                pViewSh->DigitLanguageChanged();
+                pViewSh->PaintGrid();
+            }
+            else if ( pSh->ISA( ScPreviewShell ) )
+            {
+                ScPreviewShell* pPreviewSh = (ScPreviewShell*)pSh;
+                ScPreview* pPreview = pPreviewSh->GetPreview();
+
+                pPreview->SetDigitLanguage( GetOptDigitLanguage() );
+                pPreview->Invalidate();
+            }
+
+            pSh = SfxViewShell::GetNext( *pSh );
+        }
+    }
+}
 
 void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -227,115 +339,6 @@ void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             //  ConfigItems must be removed before ConfigManager
             DeleteCfg();
-        }
-        else if ( nHintId == SFX_HINT_COLORS_CHANGED || nHintId == SFX_HINT_ACCESSIBILITY_CHANGED )
-        {
-            //  Test if detective objects have to be updated with new colors
-            //  (if the detective colors haven't been used yet, there's nothing to update)
-            if ( ScDetectiveFunc::IsColorsInitialized() )
-            {
-                const svtools::ColorConfig& rColors = GetColorConfig();
-                BOOL bArrows =
-                    ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
-                      ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
-                BOOL bComments =
-                    ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
-                if ( bArrows || bComments )
-                {
-                    ScDetectiveFunc::InitializeColors();        // get the new colors
-
-                    //  update detective objects in all open documents
-                    SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
-                    while ( pObjSh )
-                    {
-                        if ( pObjSh->Type() == TYPE(ScDocShell) )
-                        {
-                            ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
-                            if ( bArrows )
-                                ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
-                            if ( bComments )
-                                ScDetectiveFunc::UpdateAllComments( *pDocSh->GetDocument() );
-                        }
-                        pObjSh = SfxObjectShell::GetNext( *pObjSh );
-                    }
-                }
-            }
-
-            //  force all views to repaint, using the new options
-
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while(pViewShell)
-            {
-                if ( pViewShell->ISA(ScTabViewShell) )
-                {
-                    ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
-                    pViewSh->PaintGrid();
-                    pViewSh->PaintTop();
-                    pViewSh->PaintLeft();
-                    pViewSh->PaintExtras();
-
-                    ScInputHandler* pHdl = pViewSh->GetInputHandler();
-                    if ( pHdl )
-                        pHdl->ForgetLastPattern();  // EditEngine BackgroundColor may change
-                }
-                else if ( pViewShell->ISA(ScPreviewShell) )
-                {
-                    Window* pWin = pViewShell->GetWindow();
-                    if (pWin)
-                        pWin->Invalidate();
-                }
-                pViewShell = SfxViewShell::GetNext( *pViewShell );
-            }
-        }
-        else if ( nHintId == SFX_HINT_CTL_SETTINGS_CHANGED )
-        {
-            //  for all documents: set digit language for printer, recalc output factor, update row heights
-            SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
-            while ( pObjSh )
-            {
-                if ( pObjSh->Type() == TYPE(ScDocShell) )
-                {
-                    ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
-                    OutputDevice* pPrinter = pDocSh->GetPrinter();
-                    if ( pPrinter )
-                        pPrinter->SetDigitLanguage( GetOptDigitLanguage() );
-
-                    pDocSh->CalcOutputFactor();
-
-                    SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
-                    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                        pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
-                }
-                pObjSh = SfxObjectShell::GetNext( *pObjSh );
-            }
-
-            //  for all views (table and preview): update digit language
-            SfxViewShell* pSh = SfxViewShell::GetFirst();
-            while ( pSh )
-            {
-                if ( pSh->ISA( ScTabViewShell ) )
-                {
-                    ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
-
-                    //  set ref-device for EditEngine (re-evaluates digit settings)
-                    ScInputHandler* pHdl = GetInputHdl(pViewSh);
-                    if (pHdl)
-                        pHdl->UpdateRefDevice();
-
-                    pViewSh->DigitLanguageChanged();
-                    pViewSh->PaintGrid();
-                }
-                else if ( pSh->ISA( ScPreviewShell ) )
-                {
-                    ScPreviewShell* pPreviewSh = (ScPreviewShell*)pSh;
-                    ScPreview* pPreview = pPreviewSh->GetPreview();
-
-                    pPreview->SetDigitLanguage( GetOptDigitLanguage() );
-                    pPreview->Invalidate();
-                }
-
-                pSh = SfxViewShell::GetNext( *pSh );
-            }
         }
     }
 }
@@ -354,17 +357,17 @@ void ScModule::DeleteCfg()
 
     if ( pColorConfig )
     {
-        EndListening(*pColorConfig);
+        pColorConfig->RemoveListener(this);
         DELETEZ( pColorConfig );
     }
     if ( pAccessOptions )
     {
-        EndListening(*pAccessOptions);
+        pAccessOptions->RemoveListener(this);
         DELETEZ( pAccessOptions );
     }
     if ( pCTLOptions )
     {
-        EndListening(*pCTLOptions);
+        pCTLOptions->RemoveListener(this);
         DELETEZ( pCTLOptions );
     }
     if( pUserOptions )
@@ -967,7 +970,7 @@ svtools::ColorConfig& ScModule::GetColorConfig()
     if ( !pColorConfig )
     {
         pColorConfig = new svtools::ColorConfig;
-        StartListening(*pColorConfig);
+        pColorConfig->AddListener(this);
     }
 
     return *pColorConfig;
@@ -978,7 +981,7 @@ SvtAccessibilityOptions& ScModule::GetAccessOptions()
     if ( !pAccessOptions )
     {
         pAccessOptions = new SvtAccessibilityOptions;
-        StartListening(*pAccessOptions);
+        pAccessOptions->AddListener(this);
     }
 
     return *pAccessOptions;
@@ -989,7 +992,7 @@ SvtCTLOptions& ScModule::GetCTLOptions()
     if ( !pCTLOptions )
     {
         pCTLOptions = new SvtCTLOptions;
-        StartListening(*pCTLOptions);
+        pCTLOptions->AddListener(this);
     }
 
     return *pCTLOptions;

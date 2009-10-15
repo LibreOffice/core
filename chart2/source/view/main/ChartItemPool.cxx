@@ -36,15 +36,15 @@
 
 #include "chartview/ChartSfxItemIds.hxx"
 #include <svx/chrtitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/sizeitem.hxx>
 // header for class SfxStringItem
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 namespace chart
 {

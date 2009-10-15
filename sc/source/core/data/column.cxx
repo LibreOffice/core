@@ -37,8 +37,8 @@
 
 #include <map>
 
-#include <svtools/poolcach.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/poolcach.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <string.h>
 
