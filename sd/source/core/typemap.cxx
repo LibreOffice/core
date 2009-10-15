@@ -43,13 +43,13 @@
 #include <svx/wghtitem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/fontitem.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/protitem.hxx>
 #include <svx/chrtitem.hxx>
 
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/postattr.hxx>
 #include <svx/editdata.hxx>
@@ -96,9 +96,9 @@
 #include <svx/drawitem.hxx>
 
 // #UndoRedo#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 
-#include <svtools/lckbitem.hxx>
+#include <svl/lckbitem.hxx>
 
 
 #define CharSetItem                 SfxUInt16Item
@@ -129,8 +129,8 @@
 #define OfaStringListItem           SfxStringListItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 #include <sfx2/tplpitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/rectitem.hxx>
 
 #include <sfx2/frame.hxx>
 

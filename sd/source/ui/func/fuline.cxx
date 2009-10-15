@@ -38,8 +38,8 @@
 #include <svx/tabline.hxx>
 #include <svx/xenum.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/xdef.hxx>
 #include <sfx2/bindings.hxx>

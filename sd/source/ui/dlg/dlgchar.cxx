@@ -44,7 +44,7 @@
 #include "sdresid.hxx"
 #include "dlg_char.hxx"
 #include <svx/svxids.hrc>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 /*************************************************************************
 |*

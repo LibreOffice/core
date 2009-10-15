@@ -36,10 +36,10 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svtools/aeitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>

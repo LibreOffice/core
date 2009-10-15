@@ -63,10 +63,10 @@
 
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>

@@ -38,8 +38,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 

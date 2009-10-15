@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "sdattr.hxx"
 #include "present.hxx"

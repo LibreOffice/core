@@ -52,7 +52,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/eeitem.hxx>
 #include <basic/sbstar.hxx>
 #include <svx/flditem.hxx>

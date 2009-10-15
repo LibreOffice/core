@@ -33,7 +33,7 @@
 
 #include "DrawViewShell.hxx"
 #include <com/sun/star/embed/EmbedMisc.hpp>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #ifndef _SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif

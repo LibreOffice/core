@@ -45,7 +45,7 @@
 #include "app.hrc"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <cppuhelper/compbase1.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <comphelper/stl_types.hxx>
 #include <sfx2/request.hxx>

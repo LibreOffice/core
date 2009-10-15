@@ -31,7 +31,7 @@
 #ifndef SD_TOOLS_EVENT_MULTIPLEXER_HXX
 #define SD_TOOLS_EVENT_MULTIPLEXER_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 #include <set>
 #include <memory>

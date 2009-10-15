@@ -32,9 +32,9 @@
 #define _SDATTR_HXX
 
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/sfx.hrc>
 
 #ifndef _SDATTR_HRC

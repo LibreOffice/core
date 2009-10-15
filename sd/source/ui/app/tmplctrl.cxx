@@ -37,8 +37,8 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/status.hxx>
-#include <svtools/style.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/style.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include "tmplctrl.hxx"

@@ -46,8 +46,8 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <vos/process.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/urihelper.hxx>
 
 #include <toolkit/unohlp.hxx>
 

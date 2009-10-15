@@ -35,7 +35,7 @@
 
 #include "showwindow.hxx"
 
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
 
 

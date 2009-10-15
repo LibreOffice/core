@@ -50,7 +50,7 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svditer.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
@@ -75,9 +75,9 @@
 #include <svx/flditem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 //#ifndef _SVDETC_HXX
 //#include <svx/svdetc.hxx>
 //#endif

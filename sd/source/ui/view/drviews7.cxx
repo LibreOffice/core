@@ -46,11 +46,11 @@
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/fmshell.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/visitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/visitem.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/unolingu.hxx>
@@ -58,11 +58,11 @@
 #include <svx/fontworkbar.hxx>
 
 // #UndoRedo#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/insdlg.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
 

@@ -38,7 +38,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdundo.hxx>

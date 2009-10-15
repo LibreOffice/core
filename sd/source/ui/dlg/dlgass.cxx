@@ -41,7 +41,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <sfx2/doctempl.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
@@ -49,7 +49,7 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <fadedef.h>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include "DrawDocShell.hxx"
 #include <vcl/gdimtf.hxx>
 #include <vcl/wintypes.hxx>

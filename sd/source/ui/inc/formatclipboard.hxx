@@ -33,7 +33,7 @@
 
 #include "View.hxx"
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 //-----------------------------------------------------------------------------
 /** This class acts as data container and execution class for the format paintbrush feature in draw and impress.

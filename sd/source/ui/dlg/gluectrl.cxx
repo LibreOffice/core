@@ -36,7 +36,7 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>

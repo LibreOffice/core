@@ -37,8 +37,8 @@
 #include <svx/svxids.hrc>
 #include <svx/tabarea.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>

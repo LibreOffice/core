@@ -38,8 +38,8 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
 
 #include "dlgsnap.hrc"
 #include "sdattr.hxx"

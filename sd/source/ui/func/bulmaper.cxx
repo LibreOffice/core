@@ -54,8 +54,8 @@
 #include <svx/bulitem.hxx>
 #include <svx/brshitem.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <svx/numitem.hxx>
 #include <svx/eeitem.hxx>
 

@@ -45,10 +45,10 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <svtools/style.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/style.hxx>
+#include <svl/itempool.hxx>
 #include <unotools/useroptions.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/saveopt.hxx>
 
 #include <sfx2/imagemgr.hxx>

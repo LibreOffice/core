@@ -35,7 +35,7 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdfppt.hxx>
 #include <svx/svditer.hxx>
@@ -44,11 +44,11 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdlayer.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/colritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xbtmpit.hxx>
@@ -75,7 +75,7 @@
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/numitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdomedia.hxx>

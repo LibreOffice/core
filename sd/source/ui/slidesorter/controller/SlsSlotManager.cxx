@@ -88,10 +88,10 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>

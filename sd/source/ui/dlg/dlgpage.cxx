@@ -35,7 +35,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
@@ -48,7 +48,7 @@
 #include "dlgpage.hxx"
 
 #include "DrawDocShell.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxenum.hxx>
 

@@ -49,7 +49,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

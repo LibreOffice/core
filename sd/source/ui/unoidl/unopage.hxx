@@ -39,7 +39,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #ifndef _SVX_UNOPAGE_HXX
 #include <svx/unopage.hxx>

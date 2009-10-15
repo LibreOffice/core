@@ -44,9 +44,6 @@
 
 #include <unotools/useroptions.hxx>
 
-#ifndef _OFA_MISCCFG_HXX
-#include <svtools/misccfg.hxx>
-#endif
 #include <sfx2/printer.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
@@ -57,14 +54,14 @@
 #include <svx/eeitem.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fontitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/flagitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/bulitem.hxx>
 #include <svx/numitem.hxx>
 #include <svx/svditer.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svx/xtable.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
@@ -262,7 +259,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     // DefTab und SpellOptions setzen
-    //OfaMiscCfg* pOfaMiscCfg = SFX_APP()->GetMiscConfig();
     // Jetzt am Modul (SD)
     USHORT nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );

@@ -36,7 +36,7 @@
 
 #include <svx/editeng.hxx>
 #include <svx/flditem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/useroptions.hxx>

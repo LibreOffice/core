@@ -33,9 +33,9 @@
 #include <svx/eeitem.hxx>
 #include <svx/flditem.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/inethist.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/inethist.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/flagitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
@@ -85,7 +85,7 @@
 #include "sdabstdlg.hxx"
 #include "tpoption.hrc"
 #include "prntopts.hrc"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 /** retrieves the page that is currently painted. This will only be the master page
     if the current drawn view only shows the master page*/

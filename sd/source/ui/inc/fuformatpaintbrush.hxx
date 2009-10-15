@@ -34,7 +34,7 @@
 #include "fupoor.hxx"
 
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 namespace sd {
 

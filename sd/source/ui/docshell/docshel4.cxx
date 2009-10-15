@@ -41,8 +41,8 @@
 #endif
 #include <svx/flstitem.hxx>
 #include <svx/eeitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/flagitem.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -50,7 +50,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <svx/svdotext.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #ifndef _SFX_ECODE_HXX //autogen

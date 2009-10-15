@@ -36,9 +36,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/outliner.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 
 #include "app.hrc"

@@ -44,12 +44,12 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 
 #include <svtools/sores.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/impgrf.hxx>
@@ -64,7 +64,7 @@
 #include <sot/clsids.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>

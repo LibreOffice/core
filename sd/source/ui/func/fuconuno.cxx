@@ -32,11 +32,11 @@
 #include "precompiled_sd.hxx"
 
 #include "fuconuno.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 
 #include <svx/fmglob.hxx>

@@ -34,7 +34,7 @@
 #ifdef SD_DLLIMPLEMENTATION
 #undef SD_DLLIMPLEMENTATION
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "strings.hrc"
 #include "sdattr.hxx"

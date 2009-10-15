@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include <svtools/lckbitem.hxx>
+#include <svl/lckbitem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/moduleoptions.hxx>

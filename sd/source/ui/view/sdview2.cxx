@@ -52,8 +52,8 @@
 #include <sfx2/childwin.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/outliner.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/dbexch.hrc>

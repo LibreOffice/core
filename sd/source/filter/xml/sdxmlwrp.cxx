@@ -70,8 +70,8 @@
 #include <unotools/saveopt.hxx>
 
 // #80365# include necessary for XML progress bar at load time
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/sfxecode.hxx>
 
 #include "sderror.hxx"

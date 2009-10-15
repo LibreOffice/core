@@ -60,8 +60,8 @@
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 #include "sdresid.hxx"
 #include "tools/TimerBasedTaskExecution.hxx"
 #include "pres.hxx"

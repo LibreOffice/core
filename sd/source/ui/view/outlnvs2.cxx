@@ -40,7 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #ifndef _ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
 #endif

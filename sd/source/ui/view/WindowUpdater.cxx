@@ -42,7 +42,7 @@
 #endif
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <algorithm>
 
@@ -52,7 +52,7 @@ WindowUpdater::WindowUpdater (void)
     : mpViewShell (NULL),
       mpDocument (NULL)
 {
-    StartListening (maCTLOptions);
+    maCTLOptions.AddListener(this);
 }
 
 
@@ -60,7 +60,7 @@ WindowUpdater::WindowUpdater (void)
 
 WindowUpdater::~WindowUpdater (void) throw ()
 {
-    EndListening (maCTLOptions);
+    maCTLOptions.RemoveListener(this);
 }
 
 
@@ -163,33 +163,29 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 
 
 
-void WindowUpdater::Notify (SfxBroadcaster&, const SfxHint& rHint)
+void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    const SfxSimpleHint& rSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
-    if (rSimpleHint.GetId() == SFX_HINT_CTL_SETTINGS_CHANGED)
-    {
-        // #110094#-7
-        // Clear the master page cache so that master pages will be redrawn.
-        //if (mpViewShell != NULL)
-        //{
-        //    SdView* pView = mpViewShell->GetView();
-        //    if (pView != NULL)
-        //        pView->ReleaseMasterPagePaintCache ();
-        //}
-        // Set the current state at all registered output devices.
-        tWindowList::iterator aWindowIterator (maWindowList.begin());
-        while (aWindowIterator != maWindowList.end())
-            Update (*aWindowIterator++);
+    // #110094#-7
+    // Clear the master page cache so that master pages will be redrawn.
+    //if (mpViewShell != NULL)
+    //{
+    //    SdView* pView = mpViewShell->GetView();
+    //    if (pView != NULL)
+    //        pView->ReleaseMasterPagePaintCache ();
+    //}
+    // Set the current state at all registered output devices.
+    tWindowList::iterator aWindowIterator (maWindowList.begin());
+    while (aWindowIterator != maWindowList.end())
+        Update (*aWindowIterator++);
 
-        // Reformat the document for the modified state to take effect.
-        if (mpDocument != NULL)
-            mpDocument->ReformatAllTextObjects();
+    // Reformat the document for the modified state to take effect.
+    if (mpDocument != NULL)
+        mpDocument->ReformatAllTextObjects();
 
-        // Invalidate the windows to make the modified state visible.
-        aWindowIterator = maWindowList.begin();
-        while (aWindowIterator != maWindowList.end())
-            (*aWindowIterator++)->Invalidate();
-    }
+    // Invalidate the windows to make the modified state visible.
+    aWindowIterator = maWindowList.begin();
+    while (aWindowIterator != maWindowList.end())
+        (*aWindowIterator++)->Invalidate();
 }
 
 

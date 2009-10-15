@@ -35,8 +35,8 @@
 
 #include <limits.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
 #include <svx/svxids.hrc>
@@ -44,7 +44,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/grafctrl.hxx>
 
 

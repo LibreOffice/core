@@ -52,7 +52,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
 

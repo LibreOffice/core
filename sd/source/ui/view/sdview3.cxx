@@ -40,7 +40,7 @@
 #ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
 #endif
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
@@ -55,7 +55,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sot/clsids.hxx>
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>

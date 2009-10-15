@@ -38,7 +38,7 @@
 #include <svx/gallery.hxx>
 #include <svx/colritem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "sdattr.hxx"

@@ -41,7 +41,7 @@
 #include <vcl/scrbar.hxx>
 #include <svx/eeitem.hxx>
 #include "sdresid.hxx"
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fhgtitem.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>

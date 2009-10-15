@@ -35,7 +35,7 @@
 #include <vcl/waitobj.hxx>
 
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

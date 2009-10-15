@@ -40,10 +40,10 @@
 #include <svx/editeng.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/flditem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/langitem.hxx>
 #include <unotools/useroptions.hxx>
 

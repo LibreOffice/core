@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <unotools/pathoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -39,14 +39,14 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/status.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/modctrl.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/ehdl.hxx>
 

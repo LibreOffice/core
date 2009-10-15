@@ -35,10 +35,10 @@
 #include <svx/globl3d.hxx>
 
 // header for class SfxItemIter
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 // header for class SfxStyleSheet
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 /*--------------------------------------------------------------------
  --------------------------------------------------------------------*/

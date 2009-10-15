@@ -57,7 +57,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svx/svdpagv.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/docfile.hxx>
@@ -68,7 +68,7 @@
 #include <svx/xtable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/drawitem.hxx>
 #include "View.hxx"
