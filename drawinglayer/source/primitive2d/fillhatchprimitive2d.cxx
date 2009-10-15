@@ -59,7 +59,7 @@ namespace drawinglayer
         {
             // create hatch
             const basegfx::BColor aHatchColor(maFillHatch.getColor());
-            const double fAngle(-maFillHatch.getAngle());
+            const double fAngle(maFillHatch.getAngle());
             ::std::vector< basegfx::B2DHomMatrix > aMatrices;
 
             // get hatch transformations
@@ -68,7 +68,7 @@ namespace drawinglayer
                 case attribute::HATCHSTYLE_TRIPLE:
                 {
                     // rotated 45 degrees
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI4);
+                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle - F_PI4);
                     aHatch.appendTransformations(aMatrices);
 
                     // fall-through by purpose
@@ -76,7 +76,7 @@ namespace drawinglayer
                 case attribute::HATCHSTYLE_DOUBLE:
                 {
                     // rotated 90 degrees
-                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI2);
+                    texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle - F_PI2);
                     aHatch.appendTransformations(aMatrices);
 
                     // fall-through by purpose

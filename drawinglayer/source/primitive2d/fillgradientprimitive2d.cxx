@@ -62,16 +62,6 @@ namespace drawinglayer
             basegfx::B2DPolygon aUnitPolygon;
             sal_uInt32 nSteps(maFillGradient.getSteps());
 
-            if(attribute::GRADIENTSTYLE_RADIAL == aGradientStyle || attribute::GRADIENTSTYLE_ELLIPTICAL == aGradientStyle)
-            {
-                const basegfx::B2DPoint aCircleCenter(0.5, 0.5);
-                aUnitPolygon = basegfx::tools::createPolygonFromEllipse(aCircleCenter, 0.5, 0.5);
-            }
-            else
-            {
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
-            }
-
             // make sure steps is not too high/low
             const basegfx::BColor aStart(maFillGradient.getStartColor());
             const basegfx::BColor aEnd(maFillGradient.getEndColor());
@@ -96,16 +86,18 @@ namespace drawinglayer
             {
                 case attribute::GRADIENTSTYLE_LINEAR:
                 {
-                    texture::GeoTexSvxGradientLinear aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientLinear aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getAngle());
                     aGradient.appendTransformations(aMatrices);
                     aGradient.appendColors(aColors);
+                    aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0, 0, 1, 1));
                     break;
                 }
                 case attribute::GRADIENTSTYLE_AXIAL:
                 {
-                    texture::GeoTexSvxGradientAxial aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientAxial aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getAngle());
                     aGradient.appendTransformations(aMatrices);
                     aGradient.appendColors(aColors);
+                    aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RADIAL:
@@ -113,27 +105,31 @@ namespace drawinglayer
                     texture::GeoTexSvxGradientRadial aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY());
                     aGradient.appendTransformations(aMatrices);
                     aGradient.appendColors(aColors);
+                    aUnitPolygon = basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(0,0), 1, 1);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_ELLIPTICAL:
                 {
-                    texture::GeoTexSvxGradientElliptical aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientElliptical aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), maFillGradient.getAngle());
                     aGradient.appendTransformations(aMatrices);
                     aGradient.appendColors(aColors);
+                    aUnitPolygon = basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(0,0), 1, 1);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_SQUARE:
                 {
-                    texture::GeoTexSvxGradientSquare aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientSquare aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), maFillGradient.getAngle());
                     aGradient.appendTransformations(aMatrices);
                     aGradient.appendColors(aColors);
+                    aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RECT:
                 {
-                    texture::GeoTexSvxGradientRect aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), -maFillGradient.getAngle());
+                    texture::GeoTexSvxGradientRect aGradient(getObjectRange(), aStart, aEnd, nSteps, maFillGradient.getBorder(), maFillGradient.getOffsetX(), maFillGradient.getOffsetY(), maFillGradient.getAngle());
                     aGradient.appendTransformations(aMatrices);
                     aGradient.appendColors(aColors);
+                    aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                     break;
                 }
             }

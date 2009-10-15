@@ -155,7 +155,7 @@ namespace drawinglayer
                                             // get 2d range of texture coordinates
                                             const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(aTexPolyPolygon));
                                             const basegfx::BColor aHatchColor(getHatch().getColor());
-                                            const double fAngle(-getHatch().getAngle());
+                                            const double fAngle(getHatch().getAngle());
                                             ::std::vector< basegfx::B2DHomMatrix > aMatrices;
 
                                             // get hatch transformations
@@ -164,13 +164,13 @@ namespace drawinglayer
                                                 case attribute::HATCHSTYLE_TRIPLE:
                                                 {
                                                     // rotated 45 degrees
-                                                    texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle + F_PI4);
+                                                    texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle - F_PI4);
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                                 case attribute::HATCHSTYLE_DOUBLE:
                                                 {
                                                     // rotated 90 degrees
-                                                    texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle + F_PI2);
+                                                    texture::GeoTexSvxHatch aHatch(aOutlineRange, getHatch().getDistance(), fAngle - F_PI2);
                                                     aHatch.appendTransformations(aMatrices);
                                                 }
                                                 case attribute::HATCHSTYLE_SINGLE:

@@ -561,7 +561,7 @@ namespace drawinglayer
                 impDrawGradientToOutDev(
                     *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
                     aStartColor, aEndColor, rGradient.getBorder(),
-                    -rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
+                    rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
             }
         }
 

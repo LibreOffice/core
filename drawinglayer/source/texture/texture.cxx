@@ -165,15 +165,10 @@ namespace drawinglayer
         {
             if(maGradientInfo.mnSteps)
             {
-                const double fTop(mfBorder);
-                const double fStripeWidth((1.0 - fTop) / maGradientInfo.mnSteps);
-
+                const double fStripeWidth(1.0 / maGradientInfo.mnSteps);
                 for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
-                    const double fOffsetUpper(fStripeWidth * (double)a);
-
-                    // create matrix
-                    const basegfx::B2DRange aRect(0.0, fTop + fOffsetUpper, 1.0, 1.0);
+                    const basegfx::B2DRange aRect(0.0, fStripeWidth * a, 1.0, 1.0);
                     impAppendMatrix(rMatrices, aRect);
                 }
             }
@@ -225,17 +220,10 @@ namespace drawinglayer
         {
             if(maGradientInfo.mnSteps)
             {
-                const double fHalfBorder(mfBorder * 0.5);
-                double fTop(fHalfBorder);
-                double fBottom(1.0 - fHalfBorder);
-                const double fStripeWidth((fBottom - fTop) / ((maGradientInfo.mnSteps * 2L) - 1L));
-
-                for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
+                const double fStripeWidth=1.0 / (maGradientInfo.mnSteps - 1L);
+                for(sal_uInt32 a(maGradientInfo.mnSteps-1L); a != 0; a--)
                 {
-                    const double fOffset(fStripeWidth * (double)a);
-
-                    // create matrix
-                    const basegfx::B2DRange aRect(0.0, fTop + fOffset, 1.0, fBottom - fOffset);
+                    const basegfx::B2DRange aRect(0, 0, 1.0, fStripeWidth * a);
                     impAppendMatrix(rMatrices, aRect);
                 }
             }
@@ -287,34 +275,10 @@ namespace drawinglayer
         {
             if(maGradientInfo.mnSteps)
             {
-                const double fHalfBorder((1.0 - mfBorder) * 0.5);
-                double fLeft(0.5 - fHalfBorder);
-                double fTop(0.5 - fHalfBorder);
-                double fRight(0.5 + fHalfBorder);
-                double fBottom(0.5 + fHalfBorder);
-                double fIncrementX, fIncrementY;
-
-                if(maGradientInfo.mfAspectRatio > 1.0)
-                {
-                    fIncrementY = (fBottom - fTop) / (double)(maGradientInfo.mnSteps * 2L);
-                    fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
-                }
-                else
-                {
-                    fIncrementX = (fRight - fLeft) / (double)(maGradientInfo.mnSteps * 2L);
-                    fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
-                }
-
+                const double fStepSize=1.0 / maGradientInfo.mnSteps;
                 for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
-                    // next step
-                    fLeft += fIncrementX;
-                    fRight -= fIncrementX;
-                    fTop += fIncrementY;
-                    fBottom -= fIncrementY;
-
-                    // create matrix
-                    const basegfx::B2DRange aRect(fLeft, fTop, fRight, fBottom);
+                    const basegfx::B2DRange aRect(0, 0, fStepSize*a, fStepSize*a);
                     impAppendMatrix(rMatrices, aRect);
                 }
             }
@@ -359,34 +323,29 @@ namespace drawinglayer
         {
             if(maGradientInfo.mnSteps)
             {
-                const double fHalfBorder((1.0 - mfBorder) * 0.5);
-                double fLeft(0.5 - fHalfBorder);
-                double fTop(0.5 - fHalfBorder);
-                double fRight(0.5 + fHalfBorder);
-                double fBottom(0.5 + fHalfBorder);
+                double fWidth(1);
+                double fHeight(1);
                 double fIncrementX, fIncrementY;
 
                 if(maGradientInfo.mfAspectRatio > 1.0)
                 {
-                    fIncrementY = (fBottom - fTop) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementY = fHeight / maGradientInfo.mnSteps;
                     fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
                 }
                 else
                 {
-                    fIncrementX = (fRight - fLeft) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementX = fWidth / maGradientInfo.mnSteps;
                     fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
                 }
 
                 for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     // next step
-                    fLeft += fIncrementX;
-                    fRight -= fIncrementX;
-                    fTop += fIncrementY;
-                    fBottom -= fIncrementY;
+                    fWidth  -= fIncrementX;
+                    fHeight -= fIncrementY;
 
                     // create matrix
-                    const basegfx::B2DRange aRect(fLeft, fTop, fRight, fBottom);
+                    const basegfx::B2DRange aRect(0, 0, fWidth, fHeight);
                     impAppendMatrix(rMatrices, aRect);
                 }
             }
@@ -431,42 +390,10 @@ namespace drawinglayer
         {
             if(maGradientInfo.mnSteps)
             {
-                const double fHalfBorder((1.0 - mfBorder) * 0.5);
-                double fLeft(0.5 - fHalfBorder);
-                double fTop(0.5 - fHalfBorder);
-                double fRight(0.5 + fHalfBorder);
-                double fBottom(0.5 + fHalfBorder);
-                double fIncrementX, fIncrementY;
-
-                if(maGradientInfo.mfAspectRatio > 1.0)
-                {
-                    const double fWidth(fRight - fLeft);
-                    const double fHalfAspectExpansion(((maGradientInfo.mfAspectRatio - 1.0) * 0.5) * fWidth);
-                    fTop -= fHalfAspectExpansion;
-                    fBottom += fHalfAspectExpansion;
-                    fIncrementX = fWidth / (double)(maGradientInfo.mnSteps * 2L);
-                    fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
-                }
-                else
-                {
-                    const double fHeight(fBottom - fTop);
-                    const double fHalfAspectExpansion((((1.0 / maGradientInfo.mfAspectRatio) - 1.0) * 0.5) * fHeight);
-                    fLeft -= fHalfAspectExpansion;
-                    fRight += fHalfAspectExpansion;
-                    fIncrementY = fHeight / (double)(maGradientInfo.mnSteps * 2L);
-                    fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
-                }
-
+                const double fStepSize=1.0 / maGradientInfo.mnSteps;
                 for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
-                    // next step
-                    fLeft += fIncrementX;
-                    fRight -= fIncrementX;
-                    fTop += fIncrementY;
-                    fBottom -= fIncrementY;
-
-                    // create matrix
-                    const basegfx::B2DRange aRect(fLeft, fTop, fRight, fBottom);
+                    const basegfx::B2DRange aRect(0, 0, fStepSize*a, fStepSize*a);
                     impAppendMatrix(rMatrices, aRect);
                 }
             }
@@ -511,34 +438,29 @@ namespace drawinglayer
         {
             if(maGradientInfo.mnSteps)
             {
-                const double fHalfBorder((1.0 - mfBorder) * 0.5);
-                double fLeft(0.5 - fHalfBorder);
-                double fTop(0.5 - fHalfBorder);
-                double fRight(0.5 + fHalfBorder);
-                double fBottom(0.5 + fHalfBorder);
+                double fWidth(1);
+                double fHeight(1);
                 double fIncrementX, fIncrementY;
 
                 if(maGradientInfo.mfAspectRatio > 1.0)
                 {
-                    fIncrementY = (fBottom - fTop) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementY = fHeight / maGradientInfo.mnSteps;
                     fIncrementX = fIncrementY / maGradientInfo.mfAspectRatio;
                 }
                 else
                 {
-                    fIncrementX = (fRight - fLeft) / (double)(maGradientInfo.mnSteps * 2L);
+                    fIncrementX = fWidth / maGradientInfo.mnSteps;
                     fIncrementY = fIncrementX * maGradientInfo.mfAspectRatio;
                 }
 
                 for(sal_uInt32 a(1L); a < maGradientInfo.mnSteps; a++)
                 {
                     // next step
-                    fLeft += fIncrementX;
-                    fRight -= fIncrementX;
-                    fTop += fIncrementY;
-                    fBottom -= fIncrementY;
+                    fWidth  -= fIncrementX;
+                    fHeight -= fIncrementY;
 
                     // create matrix
-                    const basegfx::B2DRange aRect(fLeft, fTop, fRight, fBottom);
+                    const basegfx::B2DRange aRect(0, 0, fWidth, fHeight);
                     impAppendMatrix(rMatrices, aRect);
                 }
             }
@@ -573,6 +495,8 @@ namespace drawinglayer
             double fTargetSizeY(rTargetRange.getHeight());
             double fTargetOffsetX(rTargetRange.getMinX());
             double fTargetOffsetY(rTargetRange.getMinY());
+
+            fAngle = -fAngle;
 
             // add object expansion
             if(0.0 != fAngle)
