@@ -67,15 +67,19 @@ namespace basegfx
                 }
             }
 
-            inline bool lcl_isOnNumberChar(const ::rtl::OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
+            inline bool lcl_isOnNumberChar(const sal_Unicode aChar, bool bSignAllowed = true)
             {
-                const sal_Unicode aChar(rStr[nPos]);
-
                 const bool bPredicate( (sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
                                        || (bSignAllowed && sal_Unicode('+') == aChar)
                                        || (bSignAllowed && sal_Unicode('-') == aChar) );
 
                 return bPredicate;
+            }
+
+            inline bool lcl_isOnNumberChar(const ::rtl::OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
+            {
+                return lcl_isOnNumberChar(rStr[nPos],
+                                          bSignAllowed);
             }
 
             bool lcl_getDoubleChar(double&                  o_fRetval,
@@ -233,16 +237,16 @@ namespace basegfx
                 lcl_skipSpacesAndCommas(io_rPos, rStr, nLen);
             }
 
-            void lcl_putNumberChar( ::rtl::OUString& rStr,
-                                    double           fValue )
+            void lcl_putNumberChar( ::rtl::OUStringBuffer& rStr,
+                                    double                 fValue )
             {
-                rStr += ::rtl::OUString::valueOf( fValue );
+                rStr.append( fValue );
             }
 
-            void lcl_putNumberCharWithSpace( ::rtl::OUString& rStr,
-                                             double           fValue,
-                                             double           fOldValue,
-                                             bool             bUseRelativeCoordinates )
+            void lcl_putNumberCharWithSpace( ::rtl::OUStringBuffer& rStr,
+                                             double                 fValue,
+                                             double                 fOldValue,
+                                             bool                   bUseRelativeCoordinates )
             {
                 if( bUseRelativeCoordinates )
                     fValue -= fOldValue;
@@ -250,11 +254,10 @@ namespace basegfx
                 const sal_Int32 aLen( rStr.getLength() );
                 if(aLen)
                 {
-                    if( lcl_isOnNumberChar(rStr, aLen - 1, false) &&
+                    if( lcl_isOnNumberChar(rStr.charAt(aLen - 1), false) &&
                         fValue >= 0.0 )
                     {
-                        rStr += ::rtl::OUString::valueOf(
-                            sal_Unicode(' ') );
+                        rStr.append( sal_Unicode(' ') );
                     }
                 }
 
@@ -879,7 +882,7 @@ namespace basegfx
             bool bDetectQuadraticBeziers)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
-            ::rtl::OUString aResult;
+            ::rtl::OUStringBuffer aResult;
             B2DPoint aCurrentSVGPosition(0.0, 0.0); // SVG assumes (0,0) as the initial current point
 
             for(sal_uInt32 i(0); i < nCount; i++)
@@ -896,7 +899,7 @@ namespace basegfx
 
                     // handle polygon start point
                     B2DPoint aEdgeStart(aPolygon.getB2DPoint(0));
-                    aResult += ::rtl::OUString::valueOf(lcl_getCommand('M', 'm', bUseRelativeCoordinates));
+                    aResult.append(lcl_getCommand('M', 'm', bUseRelativeCoordinates));
                     lcl_putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
                     lcl_putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                     aLastSVGCommand =  lcl_getCommand('L', 'l', bUseRelativeCoordinates);
@@ -957,7 +960,7 @@ namespace basegfx
 
                                     if(aLastSVGCommand != aCommand)
                                     {
-                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
 
@@ -972,7 +975,7 @@ namespace basegfx
 
                                     if(aLastSVGCommand != aCommand)
                                     {
-                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
 
@@ -993,7 +996,7 @@ namespace basegfx
 
                                     if(aLastSVGCommand != aCommand)
                                     {
-                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
 
@@ -1010,7 +1013,7 @@ namespace basegfx
 
                                     if(aLastSVGCommand != aCommand)
                                     {
-                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
 
@@ -1049,7 +1052,7 @@ namespace basegfx
 
                                     if(aLastSVGCommand != aCommand)
                                     {
-                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
 
@@ -1063,7 +1066,7 @@ namespace basegfx
 
                                     if(aLastSVGCommand != aCommand)
                                     {
-                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
 
@@ -1077,7 +1080,7 @@ namespace basegfx
 
                                     if(aLastSVGCommand != aCommand)
                                     {
-                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aResult.append(aCommand);
                                         aLastSVGCommand = aCommand;
                                     }
 
@@ -1095,12 +1098,12 @@ namespace basegfx
                     // close path if closed poly (Z and z are equivalent here, but looks nicer when case is matched)
                     if(aPolygon.isClosed())
                     {
-                        aResult += ::rtl::OUString::valueOf(lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
+                        aResult.append(lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
                     }
                 }
             }
 
-            return aResult;
+            return aResult.makeStringAndClear();
         }
     }
 }
