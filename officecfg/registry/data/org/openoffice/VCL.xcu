@@ -924,7 +924,7 @@
     </node>
     <node oor:name="mai-IN" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+        <value>Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
         <value>Lohit Maithili;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
@@ -984,22 +984,22 @@
     </node>
     <node oor:name="or-IN" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>utkal;Kalinga;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
+        <value>utkal;Kalinga;Lohit Oriya;Samyak Oriya;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>utkal;Kalinga;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>utkal;Kalinga;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>utkal;Kalinga;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>utkal;Kalinga;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>utkal;Kalinga;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>utkal;Kalinga;Lohit Oriya;Samyak Oriya;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
     <node oor:name="pa-IN" oor:op="replace">
@@ -1060,6 +1060,26 @@
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
         <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+    </node>
+    <node oor:name="ur" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>PakTypeNaqsh;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
 
