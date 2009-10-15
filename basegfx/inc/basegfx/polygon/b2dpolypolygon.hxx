@@ -128,6 +128,12 @@ namespace basegfx
 
         // apply transformation given in matrix form to the polygon
         void transform(const basegfx::B2DHomMatrix& rMatrix);
+
+        // polygon iterators
+        const B2DPolygon* begin() const;
+        const B2DPolygon* end() const;
+        B2DPolygon* begin();
+        B2DPolygon* end();
     };
 } // end of namespace basegfx
 

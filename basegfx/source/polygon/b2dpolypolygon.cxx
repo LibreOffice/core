@@ -166,6 +166,26 @@ public:
                        maPolygons.end(),
                        std::mem_fun_ref( &basegfx::B2DPolygon::makeUnique ));
     }
+
+    const basegfx::B2DPolygon* begin() const
+    {
+        return &maPolygons.front();
+    }
+
+    const basegfx::B2DPolygon* end() const
+    {
+        return &maPolygons[maPolygons.size()];
+    }
+
+    basegfx::B2DPolygon* begin()
+    {
+        return &maPolygons.front();
+    }
+
+    basegfx::B2DPolygon* end()
+    {
+        return &maPolygons[maPolygons.size()];
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -377,6 +397,26 @@ namespace basegfx
         {
             mpPolyPolygon->transform(rMatrix);
         }
+    }
+
+    const B2DPolygon* B2DPolyPolygon::begin() const
+    {
+        return mpPolyPolygon->begin();
+    }
+
+    const B2DPolygon* B2DPolyPolygon::end() const
+    {
+        return mpPolyPolygon->end();
+    }
+
+    B2DPolygon* B2DPolyPolygon::begin()
+    {
+        return mpPolyPolygon->begin();
+    }
+
+    B2DPolygon* B2DPolyPolygon::end()
+    {
+        return mpPolyPolygon->end();
     }
 } // end of namespace basegfx
 

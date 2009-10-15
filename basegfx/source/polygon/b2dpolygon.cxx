@@ -44,38 +44,24 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-class CoordinateData2D
+struct CoordinateData2D : public basegfx::B2DPoint
 {
-    basegfx::B2DPoint                               maPoint;
-
 public:
-    CoordinateData2D()
-    :   maPoint()
-    {}
+    CoordinateData2D() {}
 
     explicit CoordinateData2D(const basegfx::B2DPoint& rData)
-    :   maPoint(rData)
+    :   B2DPoint(rData)
     {}
 
-    const basegfx::B2DPoint& getCoordinate() const
+    CoordinateData2D& operator=(const basegfx::B2DPoint& rData)
     {
-        return maPoint;
-    }
-
-    void setCoordinate(const basegfx::B2DPoint& rValue)
-    {
-        if(rValue != maPoint)
-            maPoint = rValue;
-    }
-
-    bool operator==(const CoordinateData2D& rData ) const
-    {
-        return (maPoint == rData.getCoordinate());
+        B2DPoint::operator=(rData);
+        return *this;
     }
 
     void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
-        maPoint *= rMatrix;
+        *this *= rMatrix;
     }
 };
 
@@ -115,12 +101,12 @@ public:
 
     const basegfx::B2DPoint& getCoordinate(sal_uInt32 nIndex) const
     {
-        return maVector[nIndex].getCoordinate();
+        return maVector[nIndex];
     }
 
     void setCoordinate(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue)
     {
-        maVector[nIndex].setCoordinate(rValue);
+        maVector[nIndex] = rValue;
     }
 
     void insert(sal_uInt32 nIndex, const CoordinateData2D& rValue, sal_uInt32 nCount)
@@ -220,6 +206,26 @@ public:
         {
             aStart->transform(rMatrix);
         }
+    }
+
+    const basegfx::B2DPoint* begin() const
+    {
+        return &maVector.front();
+    }
+
+    const basegfx::B2DPoint* end() const
+    {
+        return &maVector[maVector.size()];
+    }
+
+    basegfx::B2DPoint* begin()
+    {
+        return &maVector.front();
+    }
+
+    basegfx::B2DPoint* end()
+    {
+        return &maVector[maVector.size()];
     }
 };
 
@@ -1113,6 +1119,28 @@ public:
             maPoints.transform(rMatrix);
         }
     }
+
+    const basegfx::B2DPoint* begin() const
+    {
+        return maPoints.begin();
+    }
+
+    const basegfx::B2DPoint* end() const
+    {
+        return maPoints.end();
+    }
+
+    basegfx::B2DPoint* begin()
+    {
+       mpBufferedData.reset();
+       return maPoints.begin();
+    }
+
+    basegfx::B2DPoint* end()
+    {
+        mpBufferedData.reset();
+        return maPoints.end();
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1173,7 +1201,7 @@ namespace basegfx
         return mpPolygon->count();
     }
 
-    B2DPoint B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
+    const B2DPoint& B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
@@ -1432,7 +1460,7 @@ namespace basegfx
         return mpPolygon->getDefaultAdaptiveSubdivision(*this);
     }
 
-    B2DRange B2DPolygon::getB2DRange() const
+    const B2DRange& B2DPolygon::getB2DRange() const
     {
         return mpPolygon->getB2DRange(*this);
     }
@@ -1539,6 +1567,26 @@ namespace basegfx
         {
             mpPolygon->transform(rMatrix);
         }
+    }
+
+    const B2DPoint* B2DPolygon::begin() const
+    {
+        return mpPolygon->begin();
+    }
+
+    const B2DPoint* B2DPolygon::end() const
+    {
+        return mpPolygon->end();
+    }
+
+    B2DPoint* B2DPolygon::begin()
+    {
+        return mpPolygon->begin();
+    }
+
+    B2DPoint* B2DPolygon::end()
+    {
+        return mpPolygon->end();
     }
 } // end of namespace basegfx
 

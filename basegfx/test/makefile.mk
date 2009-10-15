@@ -85,6 +85,10 @@ SLOFILES=$(SHL1OBJS)
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk 
 
+.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
+CDEFS+= -DVERBOSE
+.ENDIF
+
 # --- Enable testshl2 execution in normal build ------------------------
 
 $(MISC)$/unittest_succeeded : $(SHL1TARGETN)

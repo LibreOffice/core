@@ -47,7 +47,8 @@ SLOFILES= \
                 $(SLO)$/b1drange.obj		\
                 $(SLO)$/b2drange.obj		\
                 $(SLO)$/b2xrange.obj		\
-                $(SLO)$/b2dmultirange.obj		\
+                $(SLO)$/b2dpolyrange.obj	\
+                $(SLO)$/b2drangeclipper.obj	\
                 $(SLO)$/b3drange.obj
 
 # --- Targets ----------------------------------

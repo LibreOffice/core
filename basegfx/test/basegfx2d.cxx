@@ -41,7 +41,9 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2dmultirange.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
@@ -56,214 +58,6 @@ using namespace ::basegfx;
 
 namespace basegfx2d
 {
-/// Gets a random ordinal [0,n)
-inline double getRandomOrdinal( const ::std::size_t n )
-{
-    return double(n) * rand() / (RAND_MAX + 1.0);
-}
-
-class b2dmultirange : public CppUnit::TestFixture
-{
-private:
-    B2DMultiRange aDisjunctRanges;
-    B2DMultiRange aEqualRanges;
-    B2DMultiRange aIntersectionN;
-    B2DMultiRange aIntersectionE;
-    B2DMultiRange aIntersectionS;
-    B2DMultiRange aIntersectionW;
-    B2DMultiRange aIntersectionNE;
-    B2DMultiRange aIntersectionSE;
-    B2DMultiRange aIntersectionSW;
-    B2DMultiRange aIntersectionNW;
-    B2DMultiRange aRingIntersection;
-    B2DMultiRange aComplexIntersections;
-    B2DMultiRange aRandomIntersections;
-
-public:
-    // initialise your test code values here.
-    void setUp()
-    {
-        B2DRange aCenter(1.0, 1.0, -1.0, -1.0);
-        B2DRange aOffside(9.0, 9.0, 11.0, 11.0);
-        B2DRange aNorth(1.0, 0.0, -1.0, -2.0);
-        B2DRange aSouth(1.0, 2.0, -1.0, 0.0);
-        B2DRange aEast(0.0, 1.0, 2.0, -1.0);
-        B2DRange aWest(-2.0, 1.0, 0.0, -1.0);
-        B2DRange aNorthEast(0.0, 0.0, 2.0, -2.0);
-        B2DRange aSouthEast(0.0, 0.0, 2.0, 2.0);
-        B2DRange aSouthWest(0.0, 0.0, -2.0, 2.0);
-        B2DRange aNorthWest(0.0, 0.0, -2.0, -2.0);
-
-        B2DRange aNorth2(-1.5, 0.5,  1.5,  3.5);
-        B2DRange aSouth2(-1.5, -0.5, 1.5, -3.5);
-        B2DRange aEast2 (0.5,  -1.5, 3.5,  1.5);
-        B2DRange aWest2 (-0.5, -1.5,-3.5,  1.5);
-
-        ::std::ofstream output("multirange_testcases.gnuplot");
-        DebugPlotter aPlotter( "multirange testcases",
-                               output );
-
-        aPlotter.plot( aCenter, "center" );
-        aPlotter.plot( aOffside, "offside" );
-        aPlotter.plot( aNorth, "north" );
-        aPlotter.plot( aSouth, "south" );
-        aPlotter.plot( aEast, "east" );
-        aPlotter.plot( aWest, "west" );
-        aPlotter.plot( aNorthEast, "northeast" );
-        aPlotter.plot( aSouthEast, "southeast" );
-        aPlotter.plot( aSouthWest, "southwest" );
-        aPlotter.plot( aNorthWest, "northwest" );
-
-        aDisjunctRanges.addRange( aCenter );
-        aDisjunctRanges.addRange( aOffside );
-
-        aEqualRanges.addRange( aCenter );
-        aEqualRanges.addRange( aCenter );
-
-        aIntersectionN.addRange( aCenter );
-        aIntersectionN.addRange( aNorth );
-
-        aIntersectionE.addRange( aCenter );
-        aIntersectionE.addRange( aEast );
-
-        aIntersectionS.addRange( aCenter );
-        aIntersectionS.addRange( aSouth );
-
-        aIntersectionW.addRange( aCenter );
-        aIntersectionW.addRange( aWest );
-
-        aIntersectionNE.addRange( aCenter );
-        aIntersectionNE.addRange( aNorthEast );
-
-        aIntersectionSE.addRange( aCenter );
-        aIntersectionSE.addRange( aSouthEast );
-
-        aIntersectionSW.addRange( aCenter );
-        aIntersectionSW.addRange( aSouthWest );
-
-        aIntersectionNW.addRange( aCenter );
-        aIntersectionNW.addRange( aNorthWest );
-
-        aRingIntersection.addRange( aNorth2 );
-        aRingIntersection.addRange( aEast2 );
-        aRingIntersection.addRange( aSouth2 );
-        aRingIntersection.addRange( aWest2 );
-
-        aComplexIntersections.addRange( aCenter );
-        aComplexIntersections.addRange( aOffside );
-        aComplexIntersections.addRange( aCenter );
-        aComplexIntersections.addRange( aNorth );
-        aComplexIntersections.addRange( aEast );
-        aComplexIntersections.addRange( aSouth );
-        aComplexIntersections.addRange( aWest );
-        aComplexIntersections.addRange( aNorthEast );
-        aComplexIntersections.addRange( aSouthEast );
-        aComplexIntersections.addRange( aSouthWest );
-        aComplexIntersections.addRange( aNorthWest );
-
-/*
-        for( int i=0; i<10; ++i )
-        {
-            B2DRange aRandomRange(
-                getRandomOrdinal( 10 ),
-                getRandomOrdinal( 10 ),
-                getRandomOrdinal( 10 ),
-                getRandomOrdinal( 10 ) );
-
-            aRandomIntersections.addRange( aRandomRange );
-        }
-*/
-    }
-
-    void tearDown()
-    {
-    }
-
-    ::basegfx::B2DPolyPolygon shiftPoly( int                                nCount,
-                                         const ::basegfx::B2DPolyPolygon&   rPoly )
-    {
-        B2DHomMatrix aMatrix;
-        aMatrix.translate( nCount*4.0,
-                           10.0-nCount*2.0 );
-
-        ::basegfx::B2DPolyPolygon aRes( rPoly );
-        aRes.transform( aMatrix );
-
-        return aRes;
-    }
-
-    void getPolyPolygon()
-    {
-        ::std::ofstream output("multirange_getpolypolygon.gnuplot");
-        DebugPlotter aPlotter( "multirange getPolyPolygon",
-                               output );
-
-        B2DPolyPolygon result;
-
-        aPlotter.plot( shiftPoly(
-                           0,
-                           aDisjunctRanges.getPolyPolygon() ),
-                       "disjunct" );
-        aPlotter.plot( shiftPoly(
-                           1,
-                           aEqualRanges.getPolyPolygon() ),
-                       "equal" );
-        aPlotter.plot( shiftPoly(
-                           2,
-                           aIntersectionN.getPolyPolygon() ),
-                       "intersectionN" );
-        aPlotter.plot( shiftPoly(
-                           3,
-                           aIntersectionE.getPolyPolygon() ),
-                       "intersectionE" );
-        aPlotter.plot( shiftPoly(
-                           4,
-                           aIntersectionS.getPolyPolygon() ),
-                       "intersectionS" );
-        aPlotter.plot( shiftPoly(
-                           5,
-                           aIntersectionW.getPolyPolygon() ),
-                       "intersectionW" );
-        aPlotter.plot( shiftPoly(
-                           6,
-                           aIntersectionNE.getPolyPolygon() ),
-                       "intersectionNE" );
-        aPlotter.plot( shiftPoly(
-                           7,
-                           aIntersectionSE.getPolyPolygon() ),
-                       "intersectionSE" );
-        aPlotter.plot( shiftPoly(
-                           8,
-                           aIntersectionSW.getPolyPolygon() ),
-                       "intersectionSW" );
-        aPlotter.plot( shiftPoly(
-                           9,
-                           aIntersectionNW.getPolyPolygon() ),
-                       "intersectionNW" );
-        aPlotter.plot( shiftPoly(
-                           10,
-                           aRingIntersection.getPolyPolygon() ),
-                       "intersection ring" );
-        aPlotter.plot( shiftPoly(
-                           11,
-                           aComplexIntersections.getPolyPolygon() ),
-                       "intersection complex" );
-        aPlotter.plot( shiftPoly(
-                           12,
-                           aRandomIntersections.getPolyPolygon() ),
-                       "intersection random" );
-
-        CPPUNIT_ASSERT_MESSAGE("getPolyPolygon", true );
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(b2dmultirange);
-    CPPUNIT_TEST(getPolyPolygon);
-    CPPUNIT_TEST_SUITE_END();
-}; // class b2dmultirange
 
 class b2dsvgdimpex : public CppUnit::TestFixture
 {
@@ -504,6 +298,39 @@ public:
     CPPUNIT_TEST(impex);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dsvgdimpex
+
+class b2dpolyrange : public CppUnit::TestFixture
+{
+private:
+public:
+    void setUp()
+    {}
+
+    void tearDown()
+    {}
+
+    void check()
+    {
+        B2DPolyRange aRange;
+        aRange.appendElement(B2DRange(0,0,1,1),ORIENTATION_POSITIVE);
+        aRange.appendElement(B2DRange(2,2,3,3),ORIENTATION_POSITIVE);
+
+        CPPUNIT_ASSERT_MESSAGE("simple poly range - count",
+                               aRange.count() == 2);
+        CPPUNIT_ASSERT_MESSAGE("simple poly range - first element",
+                               aRange.getElement(0).head == B2DRange(0,0,1,1));
+        CPPUNIT_ASSERT_MESSAGE("simple poly range - second element",
+                               aRange.getElement(1).head == B2DRange(2,2,3,3));
+    }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+
+    CPPUNIT_TEST_SUITE(b2dpolyrange);
+    CPPUNIT_TEST(check);
+    CPPUNIT_TEST_SUITE_END();
+};
 
 class b2dbeziertools : public CppUnit::TestFixture
 {
@@ -1618,8 +1445,9 @@ public:
 }; // class b2dvector
 
 // -----------------------------------------------------------------------------
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dmultirange, "basegfx2d");
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dsvgdimpex, "basegfx2d");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dpolyrange, "basegfx2d");
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dbeziertools, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dcubicbezier, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dhommatrix, "basegfx2d");
