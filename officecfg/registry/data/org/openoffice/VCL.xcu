@@ -1022,6 +1022,26 @@
     </node>
     <node oor:name="rw" oor:op="replace">
     </node>
+    <node oor:name="si" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>LKLUG;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>LKLUG;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+    </node>
   </node>
   <node oor:name="FontSubstitutions">
     <node oor:name="en" oor:op="replace">
