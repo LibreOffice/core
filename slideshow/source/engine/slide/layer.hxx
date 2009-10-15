@@ -31,7 +31,7 @@
 #ifndef INCLUDED_SLIDESHOW_LAYER_HXX
 #define INCLUDED_SLIDESHOW_LAYER_HXX
 
-#include <basegfx/range/b2dmultirange.hxx>
+#include <basegfx/range/b2dpolyrange.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 
 #include "view.hxx"
@@ -187,7 +187,7 @@ namespace slideshow
                 @return true, if any non-empty addUpdateRange() calls
                 have been made since the last render()/update() call.
              */
-            bool isUpdatePending() const { return !maUpdateAreas.isEmpty(); }
+            bool isUpdatePending() const { return maUpdateAreas.count()!=0; }
 
             /** Update layer bound rect from shape bounds
              */
@@ -297,7 +297,7 @@ namespace slideshow
             typedef ::std::vector< ViewEntry > ViewEntryVector;
 
             ViewEntryVector            maViewEntries;
-            basegfx::B2DMultiRange     maUpdateAreas;
+            basegfx::B2DPolyRange      maUpdateAreas;
             basegfx::B2DRange          maBounds;
             basegfx::B2DRange          maNewBounds;
             const basegfx::B2DRange    maMaxBounds;       // maBounds is clipped against this
