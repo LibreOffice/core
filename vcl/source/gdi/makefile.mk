@@ -81,7 +81,6 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/imagerepository.obj   \
             $(SLO)$/impprn.obj		\
             $(SLO)$/impvect.obj 	\
-            $(SLO)$/implncvt.obj	\
             $(SLO)$/jobset.obj		\
             $(SLO)$/lineinfo.obj	\
             $(SLO)$/mapmod.obj		\

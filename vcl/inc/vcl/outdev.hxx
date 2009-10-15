@@ -577,6 +577,9 @@ public:
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
     SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(const basegfx::B2DPolygon& rB2DPolygon, double fLineWidth, basegfx::B2DLineJoin eLineJoin);
 
+    // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
+    void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
+
 protected:
                         OutputDevice();
 

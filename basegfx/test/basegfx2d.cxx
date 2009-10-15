@@ -483,7 +483,7 @@ public:
         while ( nIndex >= 0 );
 
         CPPUNIT_ASSERT_MESSAGE("exporting to circle does not produce the expected number of coordinates",
-                               nCount==18);
+                               nCount==50);
 
         const B2DPolygon aRect(
             tools::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));

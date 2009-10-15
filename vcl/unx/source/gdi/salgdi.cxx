@@ -1494,6 +1494,9 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
         // the used basegfx::tools::createAreaGeometry is simply too
         // expensive with very big polygons; fallback to caller (who
         // should use ImplLineConverter normally)
+        // AW: ImplLineConverter had to be removed since it does not even
+        // know LineJoins, so the fallback will now prepare the line geometry
+        // the same way.
         return false;
     }
     const XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();

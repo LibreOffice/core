@@ -56,7 +56,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/outdata.hxx>
 #include <vcl/print.hxx>
-#include <implncvt.hxx>
 #include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
@@ -76,6 +75,8 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/unohelp.hxx>
+
+#include <numeric>
 
 using namespace ::com::sun::star;
 
@@ -2325,6 +2326,130 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
 // -----------------------------------------------------------------------
 
+void OutputDevice::impPaintLineGeometryWithEvtlExpand(
+    const LineInfo& rInfo,
+    basegfx::B2DPolyPolygon aLinePolyPolygon)
+{
+    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
+        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
+        && ROP_OVERPAINT == GetRasterOp()
+        && IsLineColor());
+    basegfx::B2DPolyPolygon aFillPolyPolygon;
+    const bool bDashUsed(LINE_DASH == rInfo.GetStyle());
+    const bool bLineWidthUsed(rInfo.GetWidth() > 1);
+
+    if(bDashUsed && aLinePolyPolygon.count())
+    {
+        ::std::vector< double > fDotDashArray;
+        const double fDashLen(rInfo.GetDashLen());
+        const double fDotLen(rInfo.GetDotLen());
+        const double fDistance(rInfo.GetDistance());
+
+        for(sal_uInt16 a(0); a < rInfo.GetDashCount(); a++)
+        {
+            fDotDashArray.push_back(fDashLen);
+            fDotDashArray.push_back(fDistance);
+        }
+
+        for(sal_uInt16 b(0); b < rInfo.GetDotCount(); b++)
+        {
+            fDotDashArray.push_back(fDotLen);
+            fDotDashArray.push_back(fDistance);
+        }
+
+        const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
+
+        if(fAccumulated > 0.0)
+        {
+            basegfx::B2DPolyPolygon aResult;
+
+            for(sal_uInt32 c(0); c < aLinePolyPolygon.count(); c++)
+            {
+                basegfx::B2DPolyPolygon aLineTraget;
+                basegfx::tools::applyLineDashing(
+                    aLinePolyPolygon.getB2DPolygon(c),
+                    fDotDashArray,
+                    &aLineTraget);
+                aResult.append(aLineTraget);
+            }
+
+            aLinePolyPolygon = aResult;
+        }
+    }
+
+    if(bLineWidthUsed && aLinePolyPolygon.count())
+    {
+        const double fHalfLineWidth((rInfo.GetWidth() * 0.5) + 0.5);
+
+        for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+        {
+            aFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
+                aLinePolyPolygon.getB2DPolygon(a),
+                fHalfLineWidth,
+                rInfo.GetLineJoin()));
+        }
+
+        aLinePolyPolygon.clear();
+    }
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = NULL;
+
+    if(aLinePolyPolygon.count())
+    {
+        for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+        {
+            const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+            bool bDone(false);
+
+            if(bTryAA)
+            {
+                bDone = mpGraphics->DrawPolyLine(aCandidate, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLINEJOIN_NONE, this);
+            }
+
+            if(!bDone)
+            {
+                const Polygon aPolygon(aCandidate);
+                mpGraphics->DrawPolyLine(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
+            }
+        }
+    }
+
+    if(aFillPolyPolygon.count())
+    {
+        const Color     aOldLineColor( maLineColor );
+        const Color     aOldFillColor( maFillColor );
+
+        SetLineColor();
+        ImplInitLineColor();
+        SetFillColor( aOldLineColor );
+        ImplInitFillColor();
+
+        bool bDone(false);
+
+        if(bTryAA)
+        {
+            bDone = mpGraphics->DrawPolyPolygon(aFillPolyPolygon, 0.0, this);
+        }
+
+        if(!bDone)
+        {
+            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            {
+                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                mpGraphics->DrawPolygon(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
+            }
+        }
+
+        SetFillColor( aOldFillColor );
+        SetLineColor( aOldLineColor );
+    }
+
+    mpMetaFile = pOldMetaFile;
+}
+
+// -----------------------------------------------------------------------
+
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
                              const LineInfo& rLineInfo )
 {
@@ -2352,47 +2477,22 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     if ( mbOutputClipped )
         return;
 
+    const Point aStartPt( ImplLogicToDevicePixel( rStartPt ) );
+    const Point aEndPt( ImplLogicToDevicePixel( rEndPt ) );
     const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
+    const bool bDashUsed(LINE_DASH == aInfo.GetStyle());
+    const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
-    if( ( aInfo.GetWidth() > 1L ) || ( LINE_DASH == aInfo.GetStyle() ) )
+    if(bDashUsed || bLineWidthUsed)
     {
-        Polygon             aPoly( 2 ); aPoly[ 0 ] = rStartPt; aPoly[ 1 ] = rEndPt;
-        GDIMetaFile*        pOldMetaFile = mpMetaFile;
-        ImplLineConverter   aLineCvt( ImplLogicToDevicePixel( aPoly ), aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
+        basegfx::B2DPolygon aLinePolygon;
+        aLinePolygon.append(basegfx::B2DPoint(aStartPt.X(), aStartPt.Y()));
+        aLinePolygon.append(basegfx::B2DPoint(aEndPt.X(), aEndPt.Y()));
 
-        mpMetaFile = NULL;
-
-        if ( aInfo.GetWidth() > 1 )
-        {
-            const Color     aOldLineColor( maLineColor );
-            const Color     aOldFillColor( maFillColor );
-
-            SetLineColor();
-            ImplInitLineColor();
-            SetFillColor( aOldLineColor );
-            ImplInitFillColor();
-
-            for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->GetConstPointAry(), this );
-
-            SetFillColor( aOldFillColor );
-            SetLineColor( aOldLineColor );
-        }
-        else
-        {
-            if ( mbInitLineColor )
-                ImplInitLineColor();
-
-            for ( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawLine( (*pPoly)[ 0 ].X(), (*pPoly)[ 0 ].Y(), (*pPoly)[ 1 ].X(), (*pPoly)[ 1 ].Y(), this );
-        }
-        mpMetaFile = pOldMetaFile;
+        impPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aLinePolygon));
     }
     else
     {
-        const Point aStartPt( ImplLogicToDevicePixel( rStartPt ) );
-        const Point aEndPt( ImplLogicToDevicePixel( rEndPt ) );
-
         if ( mbInitLineColor )
             ImplInitLineColor();
 
@@ -2553,7 +2653,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
 void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
 {
-    USHORT nPoints = rPoly.GetSize();
+    const USHORT nPoints(rPoly.GetSize());
 
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ( nPoints < 2 ) || ( LINE_NONE == rLineInfo.GetStyle() ) || ImplIsRecordLayout() )
         return;
@@ -2561,11 +2661,19 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
 
     // #100127# LineInfo is not curve-safe, subdivide always
-    if( aPoly.HasFlags() )
-    {
-        aPoly = ImplSubdivideBezier( aPoly );
-        nPoints = aPoly.GetSize();
-    }
+    //
+    // What shall this mean? It's wrong to subdivide here when the
+    // polygon is a fat line. In that case, the painted geometry
+    // WILL be much different.
+    // I also have no idea how this could be related to the given ID
+    // which reads 'consolidate boost versions' in the task description.
+    // Removing.
+    //
+    //if( aPoly.HasFlags() )
+    //{
+    //    aPoly = ImplSubdivideBezier( aPoly );
+    //    nPoints = aPoly.GetSize();
+    //}
 
     // we need a graphics
     if ( !mpGraphics && !ImplGetGraphics() )
@@ -2577,67 +2685,20 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
     if ( mbOutputClipped )
         return;
 
-    const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
-        && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
-        && IsLineColor());
-
-    if( aInfo.GetWidth() > 1L )
-    {
-        const Color         aOldLineColor( maLineColor );
-        const Color         aOldFillColor( maFillColor );
-        GDIMetaFile*        pOldMetaFile = mpMetaFile;
-        ImplLineConverter   aLineCvt( aPoly, aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
-
-        mpMetaFile = NULL;
-        SetLineColor();
+    if ( mbInitLineColor )
         ImplInitLineColor();
-        SetFillColor( aOldLineColor );
-        ImplInitFillColor();
-        bool bDone(false);
 
-        if(bTryAA)
-        {
-            // #i101491# try AAed version
-            // Use old on-the-fly geometry preparation, combine with AA
-            bool bSuccess(true);
+    const LineInfo aInfo( ImplLogicToDevicePixel( rLineInfo ) );
+    const bool bDashUsed(LINE_DASH == aInfo.GetStyle());
+    const bool bLineWidthUsed(aInfo.GetWidth() > 1);
 
-            for(const Polygon* pPoly = aLineCvt.ImplGetFirst(); bSuccess && pPoly; pPoly = aLineCvt.ImplGetNext())
-            {
-                bSuccess = mpGraphics->DrawPolyPolygon(basegfx::B2DPolyPolygon(pPoly->getB2DPolygon()), 0.0, this);
-            }
-
-            if(bSuccess)
-            {
-                bDone = true;
-            }
-        }
-
-        if(!bDone)
-        {
-            for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-            {
-                mpGraphics->DrawPolygon( pPoly->GetSize(), (const SalPoint*) pPoly->GetConstPointAry(), this );
-            }
-        }
-
-        SetLineColor( aOldLineColor );
-        SetFillColor( aOldFillColor );
-        mpMetaFile = pOldMetaFile;
+    if(bDashUsed || bLineWidthUsed)
+    {
+        impPaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()));
     }
     else
     {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( LINE_DASH == aInfo.GetStyle() )
-        {
-            ImplLineConverter   aLineCvt( aPoly, aInfo, ( mbRefPoint ) ? &maRefPoint : NULL );
-            for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-                mpGraphics->DrawPolyLine( pPoly->GetSize(), (const SalPoint*)pPoly->GetConstPointAry(), this );
-        }
-        else
-            mpGraphics->DrawPolyLine( nPoints, (const SalPoint*) aPoly.GetConstPointAry(), this );
+        mpGraphics->DrawPolyLine(nPoints, (const SalPoint*)aPoly.GetConstPointAry(), this);
     }
 
     if( mpAlphaVDev )
@@ -3066,8 +3127,7 @@ void OutputDevice::DrawPolyLine(
     }
     else
     {
-        // fallback to old polygon drawing if needed. This will really
-        // use ImplLineConverter, but still try to AA lines
+        // fallback to old polygon drawing if needed
         const Polygon aToolsPolygon( rB2DPolygon );
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
