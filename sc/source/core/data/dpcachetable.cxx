@@ -210,9 +210,39 @@ sal_Int32 ScDPCacheTable::getColSize() const
     return maTable.empty() ? 0 : maTable[0].size();
 }
 
+namespace {
+
+/**
+ * While the macro interpret level is incremented, the formula cells are
+ * (semi-)guaranteed to be interpreted.
+ */
+class MacroInterpretIncrementer
+{
+public:
+    MacroInterpretIncrementer(ScDocument* pDoc) :
+        mpDoc(pDoc)
+    {
+        mpDoc->IncMacroInterpretLevel();
+    }
+    ~MacroInterpretIncrementer()
+    {
+        mpDoc->DecMacroInterpretLevel();
+    }
+private:
+    ScDocument* mpDoc;
+};
+
+}
+
 void ScDPCacheTable::fillTable(ScDocument* pDoc, const ScRange& rRange, const ScQueryParam& rQuery, BOOL* pSpecial,
                                bool bIgnoreEmptyRows)
 {
+    // Make sure the formula cells within the data range are interpreted
+    // during this call, for this method may be called from the interpretation
+    // of GETPIVOTDATA, which disables nested formula interpretation without
+    // increasing the macro level.
+    MacroInterpretIncrementer aMacroInc(pDoc);
+
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
