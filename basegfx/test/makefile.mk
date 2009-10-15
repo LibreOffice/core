@@ -46,6 +46,7 @@ SHL1OBJS=  \
     $(SLO)$/basegfx1d.obj \
     $(SLO)$/basegfx2d.obj \
     $(SLO)$/basegfx3d.obj \
+    $(SLO)$/basegfxtools.obj \
     $(SLO)$/testtools.obj	
 
 # linking statically against basegfx parts

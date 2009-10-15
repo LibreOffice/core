@@ -42,7 +42,6 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
 #include <cppuhelper/compbase9.hxx>
 #include <comphelper/uno3.hxx>
@@ -65,7 +64,7 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::rendering::XSpriteCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                               ::com::sun::star::rendering::XGraphicDevice,
-                                              ::com::sun::star::rendering::XParametricPolyPolygon2DFactory,
+                                              ::com::sun::star::lang::XMultiServiceFactory,
                                               ::com::sun::star::rendering::XBufferController,
                                               ::com::sun::star::awt::XWindowListener,
                                               ::com::sun::star::util::XUpdatable,

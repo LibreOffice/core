@@ -52,6 +52,8 @@ namespace basegfx
         o_rGradientInfo.maBackTextureTransform.identity();
         o_rGradientInfo.mnSteps = nSteps;
 
+        fAngle = -fAngle;
+
         double fTargetSizeX(rTargetRange.getWidth());
         double fTargetSizeY(rTargetRange.getHeight());
         double fTargetOffsetX(rTargetRange.getMinX());
@@ -70,7 +72,23 @@ namespace basegfx
             fTargetSizeY = fNewY;
         }
 
-        // add object scale before rotate
+        double fSizeWithoutBorder=0;
+        double fTranslateY=0;
+        if( bAxial )
+        {
+            fSizeWithoutBorder = (1.0 - fBorder) * 0.5;
+            fTranslateY = 0.5;
+        }
+        else
+        {
+            fSizeWithoutBorder = 1.0 - fBorder;
+            fTranslateY = fBorder;
+        }
+
+        if(!fTools::equal(fSizeWithoutBorder, 0.0))
+            o_rGradientInfo.maTextureTransform.scale(1.0, fSizeWithoutBorder);
+
+        o_rGradientInfo.maTextureTransform.translate(0.0, fTranslateY);
         o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
         // add texture rotate after scale to keep perpendicular angles
@@ -90,24 +108,9 @@ namespace basegfx
         // prepare aspect for texture
         o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
 
-        // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
+        // build transform from u,v to [0.0 .. 1.0].
         o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
         o_rGradientInfo.maBackTextureTransform.invert();
-
-        double fSizeWithoutBorder=0;
-        if( bAxial )
-        {
-            fSizeWithoutBorder = (1.0 - fBorder) * 0.5;
-            o_rGradientInfo.maBackTextureTransform.translate(0.0, -0.5);
-        }
-        else
-        {
-            fSizeWithoutBorder = 1.0 - fBorder;
-            o_rGradientInfo.maBackTextureTransform.translate(0.0, -fBorder);
-        }
-
-        if(!fTools::equal(fSizeWithoutBorder, 0.0))
-            o_rGradientInfo.maBackTextureTransform.scale(1.0, 1.0 / fSizeWithoutBorder);
     }
 
     /** Most of the setup for radial & ellipsoidal gradient is the same,
@@ -124,6 +127,8 @@ namespace basegfx
         o_rGradientInfo.maTextureTransform.identity();
         o_rGradientInfo.maBackTextureTransform.identity();
         o_rGradientInfo.mnSteps = nSteps;
+
+        fAngle = -fAngle;
 
         double fTargetSizeX(rTargetRange.getWidth());
         double fTargetSizeY(rTargetRange.getHeight());
@@ -147,7 +152,11 @@ namespace basegfx
             fTargetSizeY = 1.4142 * fTargetSizeY;
         }
 
-        // add object scale before rotate
+        const double fHalfBorder((1.0 - fBorder) * 0.5);
+        if(!fTools::equal(fHalfBorder, 0.0))
+            o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
+
+        o_rGradientInfo.maTextureTransform.translate(0.5, 0.5);
         o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
         if( !bCircular )
@@ -155,9 +164,8 @@ namespace basegfx
             // add texture rotate after scale to keep perpendicular angles
             if(0.0 != fAngle)
             {
-                B2DPoint aCenter(0.5, 0.5);
-                aCenter *= o_rGradientInfo.maTextureTransform;
-
+                const B2DPoint aCenter(0.5*fTargetSizeX,
+                                       0.5*fTargetSizeY);
                 o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
                 o_rGradientInfo.maTextureTransform.rotate(fAngle);
                 o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
@@ -178,17 +186,9 @@ namespace basegfx
         // prepare aspect for texture
         o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
 
-        // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
+        // build transform from u,v to [0.0 .. 1.0].
         o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
         o_rGradientInfo.maBackTextureTransform.invert();
-        o_rGradientInfo.maBackTextureTransform.translate(-0.5, -0.5);
-        const double fHalfBorder((1.0 - fBorder) * 0.5);
-
-        if(!fTools::equal(fHalfBorder, 0.0))
-        {
-            const double fFactor(1.0 / fHalfBorder);
-            o_rGradientInfo.maBackTextureTransform.scale(fFactor, fFactor);
-        }
     }
 
     /** Setup for rect & square gradient is exactly the same. Factored out
@@ -204,6 +204,8 @@ namespace basegfx
         o_rGradientInfo.maTextureTransform.identity();
         o_rGradientInfo.maBackTextureTransform.identity();
         o_rGradientInfo.mnSteps = nSteps;
+
+        fAngle = -fAngle;
 
         double fTargetSizeX(rTargetRange.getWidth());
         double fTargetSizeY(rTargetRange.getHeight());
@@ -223,15 +225,18 @@ namespace basegfx
             fTargetSizeY = fNewY;
         }
 
-        // add object scale before rotate
+        const double fHalfBorder((1.0 - fBorder) * 0.5);
+        if(!fTools::equal(fHalfBorder, 0.0))
+            o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
+
+        o_rGradientInfo.maTextureTransform.translate(0.5, 0.5);
         o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
         // add texture rotate after scale to keep perpendicular angles
         if(0.0 != fAngle)
         {
-            B2DPoint aCenter(0.5, 0.5);
-            aCenter *= o_rGradientInfo.maTextureTransform;
-
+            const B2DPoint aCenter(0.5*fTargetSizeX,
+                                   0.5*fTargetSizeY);
             o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
             o_rGradientInfo.maTextureTransform.rotate(fAngle);
             o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
@@ -254,14 +259,6 @@ namespace basegfx
         // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
         o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
         o_rGradientInfo.maBackTextureTransform.invert();
-        o_rGradientInfo.maBackTextureTransform.translate(-0.5, -0.5);
-        const double fHalfBorder((1.0 - fBorder) * 0.5);
-
-        if(!fTools::equal(fHalfBorder, 0.0))
-        {
-            const double fFactor(1.0 / fHalfBorder);
-            o_rGradientInfo.maBackTextureTransform.scale(fFactor, fFactor);
-        }
     }
 
     namespace tools

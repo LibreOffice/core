@@ -112,7 +112,7 @@ namespace basegfx
 
     /** clamp given value against given minimum and maximum values
     */
-    template <class T> const T& clamp(const T& value, const T& minimum, const T& maximum)
+    template <class T> inline const T& clamp(const T& value, const T& minimum, const T& maximum)
     {
         if(value < minimum)
         {

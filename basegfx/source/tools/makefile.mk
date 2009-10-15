@@ -44,6 +44,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES= $(SLO)$/canvastools.obj	\
           $(SLO)$/gradienttools.obj	\
           $(SLO)$/debugplotter.obj	\
+          $(SLO)$/keystoplerp.obj	\
           $(SLO)$/liangbarsky.obj	\
           $(SLO)$/tools.obj		    \
           $(SLO)$/unopolypolygon.obj

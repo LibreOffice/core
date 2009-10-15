@@ -33,7 +33,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
+#include <com/sun/star/rendering/XParametricPolyPolygon2D.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -62,7 +62,6 @@ namespace canvas
         enum GradientType
         {
             GRADIENT_LINEAR,
-            GRADIENT_AXIAL,
             GRADIENT_ELLIPTICAL,
             GRADIENT_RECTANGULAR
         };
@@ -103,24 +102,11 @@ namespace canvas
             const GradientType                                  meType;
         };
 
-        static ParametricPolyPolygon* createLinearHorizontalGradient( const ::com::sun::star::uno::Reference<
-                                                                          ::com::sun::star::rendering::XGraphicDevice >&    rDevice,
-                                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&   colors,
-                                                                      const ::com::sun::star::uno::Sequence< double >&  stops );
-        static ParametricPolyPolygon* createAxialHorizontalGradient( const ::com::sun::star::uno::Reference<
-                                                                          ::com::sun::star::rendering::XGraphicDevice >&    rDevice,
-                                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&   colors,
-                                                                      const ::com::sun::star::uno::Sequence< double >&  stops );
-        static ParametricPolyPolygon* createEllipticalGradient( const ::com::sun::star::uno::Reference<
-                                                                ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-                                                                const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&     colors,
-                                                                const ::com::sun::star::uno::Sequence< double >&    stops,
-                                                                const ::com::sun::star::geometry::RealRectangle2D&      boundRect );
-        static ParametricPolyPolygon* createRectangularGradient( const ::com::sun::star::uno::Reference<
-                                                                 ::com::sun::star::rendering::XGraphicDevice >&     rDevice,
-                                                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >&    colors,
-                                                                 const ::com::sun::star::uno::Sequence< double >&   stops,
-                                                                 const ::com::sun::star::geometry::RealRectangle2D&     boundRect );
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getAvailableServiceNames();
+        static ParametricPolyPolygon* create(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& rDevice,
+            const ::rtl::OUString& rServiceName,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -143,6 +129,20 @@ namespace canvas
         ~ParametricPolyPolygon(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
+        static ParametricPolyPolygon* createLinearHorizontalGradient( const ::com::sun::star::uno::Reference<
+                                                                         ::com::sun::star::rendering::XGraphicDevice >& rDevice,
+                                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors,
+                                                                      const ::com::sun::star::uno::Sequence< double >& stops );
+        static ParametricPolyPolygon* createEllipticalGradient( const ::com::sun::star::uno::Reference<
+                                                                   ::com::sun::star::rendering::XGraphicDevice >& rDevice,
+                                                                const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors,
+                                                                const ::com::sun::star::uno::Sequence< double >& stops,
+                                                                double fAspect );
+        static ParametricPolyPolygon* createRectangularGradient( const ::com::sun::star::uno::Reference<
+                                                                    ::com::sun::star::rendering::XGraphicDevice >& rDevice,
+                                                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors,
+                                                                 const ::com::sun::star::uno::Sequence< double >& stops,
+                                                                 double fAspect );
 
         /// Private, because objects can only be created from the static factories
         ParametricPolyPolygon( const ::com::sun::star::uno::Reference<

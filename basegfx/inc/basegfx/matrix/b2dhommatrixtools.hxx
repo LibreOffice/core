@@ -36,6 +36,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 
+namespace rtl { class OUString; }
+
 ///////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
@@ -79,6 +81,10 @@ namespace basegfx
         double getRotate() const { const_cast< DecomposedB2DHomMatrixContainer* >(this)->impCheckDecompose(); return mfRotate; }
         double getShearX() const { const_cast< DecomposedB2DHomMatrixContainer* >(this)->impCheckDecompose(); return mfShearX; }
     };
+
+    /// Returns a string with svg's "matrix(m00,m10,m01,m11,m02,m12)" representation
+    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix );
+
 } // end of namespace basegfx
 
 ///////////////////////////////////////////////////////////////////////////////

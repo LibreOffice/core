@@ -53,6 +53,87 @@ using namespace ::com::sun::star;
 
 namespace canvas
 {
+    uno::Sequence<rtl::OUString> ParametricPolyPolygon::getAvailableServiceNames()
+    {
+        uno::Sequence<rtl::OUString> aRet(3);
+        aRet[0] = rtl::OUString::createFromAscii("LinearGradient");
+        aRet[1] = rtl::OUString::createFromAscii("EllipticalGradient");
+        aRet[2] = rtl::OUString::createFromAscii("RectangularGradient");
+
+        return aRet;
+    }
+
+    ParametricPolyPolygon* ParametricPolyPolygon::create(
+        const uno::Reference< rendering::XGraphicDevice >& rDevice,
+        const ::rtl::OUString& rServiceName,
+        const uno::Sequence< uno::Any >& rArgs )
+    {
+        uno::Sequence< uno::Sequence< double > > colorSequence(2);
+        uno::Sequence< double > colorStops(2);
+        double fAspectRatio=1.0;
+
+        // defaults
+        uno::Sequence< rendering::RGBColor > rgbColors(1);
+        rgbColors[0] = rendering::RGBColor(0,0,0);
+        colorSequence[0] = rDevice->getDeviceColorSpace()->convertFromRGB(rgbColors);
+        rgbColors[0] = rendering::RGBColor(1,1,1);
+        colorSequence[1] = rDevice->getDeviceColorSpace()->convertFromRGB(rgbColors);
+        colorStops[0] = 0;
+        colorStops[1] = 1;
+
+        // extract args
+        for( sal_Int32 i=0; i<rArgs.getLength(); ++i )
+        {
+            beans::PropertyValue aProp;
+            if( (rArgs[i] >>= aProp) )
+            {
+                if( aProp.Name.equalsAscii("Colors") )
+                {
+                    aProp.Value >>= colorSequence;
+                }
+                else if( aProp.Name.equalsAscii("Stops") )
+                {
+                    aProp.Value >>= colorStops;
+                }
+                else if( aProp.Name.equalsAscii("AspectRatio") )
+                {
+                    aProp.Value >>= fAspectRatio;
+                }
+            }
+        }
+
+        if( rServiceName.equalsAscii("LinearGradient") )
+        {
+            return createLinearHorizontalGradient(rDevice, colorSequence, colorStops);
+        }
+        else if( rServiceName.equalsAscii("EllipticalGradient") )
+        {
+            return createEllipticalGradient(rDevice, colorSequence, colorStops, fAspectRatio);
+        }
+        else if( rServiceName.equalsAscii("RectangularGradient") )
+        {
+            return createRectangularGradient(rDevice, colorSequence, colorStops, fAspectRatio);
+        }
+        else if( rServiceName.equalsAscii("VerticalLineHatch") )
+        {
+            // TODO: NYI
+        }
+        else if( rServiceName.equalsAscii("OrthogonalLinesHatch") )
+        {
+            // TODO: NYI
+        }
+        else if( rServiceName.equalsAscii("ThreeCrossingLinesHatch") )
+        {
+            // TODO: NYI
+        }
+        else if( rServiceName.equalsAscii("FourCrossingLinesHatch") )
+        {
+            // TODO: NYI
+        }
+
+        return NULL;
+    }
+
     ParametricPolyPolygon* ParametricPolyPolygon::createLinearHorizontalGradient(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
         const uno::Sequence< uno::Sequence< double > >&     colors,
@@ -63,58 +144,35 @@ namespace canvas
         return new ParametricPolyPolygon( rDevice, GRADIENT_LINEAR, colors, stops );
     }
 
-    ParametricPolyPolygon* ParametricPolyPolygon::createAxialHorizontalGradient(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const uno::Sequence< uno::Sequence< double > >&     colors,
-        const uno::Sequence< double >&                      stops )
-    {
-        // TODO(P2): hold gradient brush statically, and only setup
-        // the colors
-        return new ParametricPolyPolygon( rDevice, GRADIENT_AXIAL, colors, stops );
-    }
-
-    namespace
-    {
-        double calcAspectRatio( const geometry::RealRectangle2D& rBoundRect )
-        {
-            const double nWidth( rBoundRect.X2 - rBoundRect.X1 );
-            const double nHeight( rBoundRect.Y2 - rBoundRect.Y1 );
-
-            return ::basegfx::fTools::equalZero( nHeight ) ? 1.0 : fabs( nWidth / nHeight );
-        }
-    }
-
     ParametricPolyPolygon* ParametricPolyPolygon::createEllipticalGradient(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
         const uno::Sequence< uno::Sequence< double > >&     colors,
         const uno::Sequence< double >&                      stops,
-        const geometry::RealRectangle2D&                    boundRect )
+        double                                              fAspectRatio )
     {
         // TODO(P2): hold gradient polygon statically, and only setup
         // the colors
         return new ParametricPolyPolygon(
             rDevice,
             ::basegfx::tools::createPolygonFromCircle(
-                ::basegfx::B2DPoint( 0.5, 0.5), 0.5 ),
+                ::basegfx::B2DPoint(0,0), 1 ),
             GRADIENT_ELLIPTICAL,
-            colors, stops,
-            calcAspectRatio( boundRect ) );
+            colors, stops, fAspectRatio );
     }
 
     ParametricPolyPolygon* ParametricPolyPolygon::createRectangularGradient( const uno::Reference< rendering::XGraphicDevice >& rDevice,
                                                                              const uno::Sequence< uno::Sequence< double > >&    colors,
                                                                              const uno::Sequence< double >&                     stops,
-                                                                             const geometry::RealRectangle2D&                   boundRect )
+                                                                             double                                             fAspectRatio )
     {
         // TODO(P2): hold gradient polygon statically, and only setup
         // the colors
         return new ParametricPolyPolygon(
             rDevice,
             ::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle( 0.0, 0.0, 1.0, 1.0 ) ),
+                ::basegfx::B2DRectangle( -1, -1, 1, 1 ) ),
             GRADIENT_RECTANGULAR,
-            colors, stops,
-            calcAspectRatio( boundRect ) );
+            colors, stops, fAspectRatio );
     }
 
     void SAL_CALL ParametricPolyPolygon::disposing()

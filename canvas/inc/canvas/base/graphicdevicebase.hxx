@@ -33,11 +33,11 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XColorSpace.hpp>
-#include <com/sun/star/rendering/XParametricPolyPolygon2DFactory.hpp>
 
 #include <canvas/parametricpolypolygon.hxx>
 #include <canvas/propertysethelper.hxx>
@@ -50,8 +50,7 @@ namespace canvas
     /** Helper template base class for XGraphicDevice implementations.
 
         This base class provides partial implementations of the
-        XGraphicDevice-related interface, such as
-        XParametricPolyPolygon2DFactory and XColorSpace.
+        XGraphicDevice-related interface, such as XColorSpace.
 
         This template basically interposes itself between the full
         interface you implement (i.e. not restricted to XGraphicDevice
@@ -249,7 +248,7 @@ namespace canvas
             return maDeviceHelper.createVolatileAlphaBitmap( this, size );
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2DFactory > SAL_CALL getParametricPolyPolygonFactory(  ) throw (::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SAL_CALL getParametricPolyPolygonFactory(  ) throw (::com::sun::star::uno::RuntimeException)
         {
             return this;
         }
@@ -268,79 +267,26 @@ namespace canvas
             return maDeviceHelper.enterFullScreenMode( bEnter );
         }
 
-        // XParametricPolyPolygon2DFactory
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createLinearHorizontalGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                    ::com::sun::star::uno::RuntimeException)
+        // XMultiServiceFactory
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
-                ParametricPolyPolygon::createLinearHorizontalGradient( this,
-                                                                       colors,
-                                                                       stops ) );
+                ParametricPolyPolygon::create(this,
+                                              aServiceSpecifier,
+                                              ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >()));
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createAxialHorizontalGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                   ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& aServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
-                ParametricPolyPolygon::createAxialHorizontalGradient( this,
-                                                                      colors,
-                                                                      stops ) );
+                ParametricPolyPolygon::create(this,
+                                              aServiceSpecifier,
+                                              Arguments));
         }
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createEllipticalGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops, const ::com::sun::star::geometry::RealRectangle2D& boundRect ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                                                                            ::com::sun::star::uno::RuntimeException)
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
         {
-            return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
-                ParametricPolyPolygon::createEllipticalGradient( this,
-                                                                 colors,
-                                                                 stops,
-                                                                 boundRect ) );
-        }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createRectangularGradient( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& colors, const ::com::sun::star::uno::Sequence< double >& stops, const ::com::sun::star::geometry::RealRectangle2D& boundRect ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                                                                             ::com::sun::star::uno::RuntimeException)
-        {
-            return ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D >(
-                ParametricPolyPolygon::createRectangularGradient( this,
-                                                                  colors,
-                                                                  stops,
-                                                                  boundRect ) );
-        }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createVerticalLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*leftColor*/,
-                                                                                                                                             const ::com::sun::star::uno::Sequence< double >& /*rightColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                      ::com::sun::star::uno::RuntimeException)
-        {
-            // TODO(F1): hatch factory NYI
-            return ::com::sun::star::uno::Reference<
-                        ::com::sun::star::rendering::XParametricPolyPolygon2D >();
-        }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createOrthogonalLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*leftTopColor*/,
-                                                                                                                                               const ::com::sun::star::uno::Sequence< double >& /*rightBottomColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                              ::com::sun::star::uno::RuntimeException)
-        {
-            // TODO(F1): hatch factory NYI
-            return ::com::sun::star::uno::Reference<
-                        ::com::sun::star::rendering::XParametricPolyPolygon2D >();
-        }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createThreeCrossingLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*startColor*/,
-                                                                                                                                                  const ::com::sun::star::uno::Sequence< double >& /*endColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                         ::com::sun::star::uno::RuntimeException)
-        {
-            // TODO(F1): hatch factory NYI
-            return ::com::sun::star::uno::Reference<
-                        ::com::sun::star::rendering::XParametricPolyPolygon2D >();
-        }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XParametricPolyPolygon2D > SAL_CALL createFourCrossingLinesHatch( const ::com::sun::star::uno::Sequence< double >& /*startColor*/,
-                                                                                                                                                 const ::com::sun::star::uno::Sequence< double >& /*endColor*/ ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                                                                                                        ::com::sun::star::uno::RuntimeException)
-        {
-            // TODO(F1): hatch factory NYI
-            return ::com::sun::star::uno::Reference<
-                        ::com::sun::star::rendering::XParametricPolyPolygon2D >();
+            return ParametricPolyPolygon::getAvailableServiceNames();
         }
 
 

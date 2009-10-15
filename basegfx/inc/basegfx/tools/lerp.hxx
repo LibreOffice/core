@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: b2dhommatrixtools.cxx,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile: lerp.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,44 +28,33 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_basegfx.hxx"
+#ifndef _BGFX_TOOLS_LERP_HXX
+#define _BGFX_TOOLS_LERP_HXX
 
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-
-///////////////////////////////////////////////////////////////////////////////
+#include <sal/types.h>
 
 namespace basegfx
 {
-    ::rtl::OUString exportToSvg( const B2DHomMatrix& rMatrix )
+    namespace tools
     {
-        rtl::OUStringBuffer aStrBuf;
-        aStrBuf.appendAscii("matrix(");
+        /** Generic linear interpolator
 
-        aStrBuf.append(rMatrix.get(0,0));
-        aStrBuf.appendAscii(", ");
+            @tpl ValueType
+            Must have operator+ and operator* defined, and should
+            have value semantics.
 
-        aStrBuf.append(rMatrix.get(1,0));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,1));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(0,2));
-        aStrBuf.appendAscii(", ");
-
-        aStrBuf.append(rMatrix.get(1,2));
-        aStrBuf.appendAscii(")");
-
-        return aStrBuf.makeStringAndClear();
+            @param t
+            As usual, t must be in the [0,1] range
+        */
+        template< typename ValueType > ValueType lerp( const ValueType&     rFrom,
+                                                       const ValueType&     rTo,
+                                                       double               t )
+        {
+            // This is only to suppress a double->int warning. All other
+            // types should be okay here.
+            return static_cast<ValueType>( (1.0-t)*rFrom + t*rTo );
+        }
     }
+}
 
-} // end of namespace basegfx
-
-///////////////////////////////////////////////////////////////////////////////
-// eof
+#endif /* _BGFX_TOOLS_LERP_HXX */

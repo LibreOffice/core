@@ -56,6 +56,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tools/keystoplerp.hxx>
+#include <basegfx/tools/lerp.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/compbase1.hxx>
@@ -73,6 +75,7 @@
 #include "cairo_canvashelper.hxx"
 #include "cairo_canvasbitmap.hxx"
 
+#include <boost/tuple/tuple.hpp>
 #include <algorithm>
 
 using namespace ::cairo;
@@ -122,9 +125,29 @@ namespace cairocanvas
         mpCairo = pSurface->getCairo();
     }
 
+    static void setColor( Cairo* pCairo,
+                          const uno::Sequence<double>& rColor )
+    {
+        if( rColor.getLength() > 3 )
+        {
+            const double alpha = rColor[3];
+
+            cairo_set_source_rgba( pCairo,
+                                   alpha*rColor[0],
+                                   alpha*rColor[1],
+                                   alpha*rColor[2],
+                                   alpha );
+        }
+        else if( rColor.getLength() == 3 )
+            cairo_set_source_rgb( pCairo,
+                                  rColor[0],
+                                  rColor[1],
+                                  rColor[2] );
+    }
+
     void CanvasHelper::useStates( const rendering::ViewState& viewState,
                                   const rendering::RenderState& renderState,
-                                  bool setColor )
+                                  bool bSetColor )
     {
         Matrix aViewMatrix;
         Matrix aRenderMatrix;
@@ -158,19 +181,8 @@ namespace cairocanvas
             OSL_TRACE ("render clip END");
         }
 
-        if( setColor ) {
-            if( renderState.DeviceColor.getLength() > 3 )
-                cairo_set_source_rgba( mpCairo.get(),
-                                       renderState.DeviceColor [0],
-                                       renderState.DeviceColor [1],
-                                       renderState.DeviceColor [2],
-                                       renderState.DeviceColor [3] );
-            else if (renderState.DeviceColor.getLength() == 3)
-                cairo_set_source_rgb( mpCairo.get(),
-                                      renderState.DeviceColor [0],
-                                      renderState.DeviceColor [1],
-                                      renderState.DeviceColor [2] );
-        }
+        if( bSetColor )
+            setColor(mpCairo.get(),renderState.DeviceColor);
 
         cairo_operator_t compositingMode( CAIRO_OPERATOR_OVER );
         switch( renderState.CompositeOperation )
@@ -665,9 +677,31 @@ namespace cairocanvas
                 double alpha = rColor[3];
                 // cairo expects premultiplied alpha
                 cairo_pattern_add_color_stop_rgba( pPattern, stop, rColor[0]*alpha, rColor[1]*alpha, rColor[2]*alpha, alpha );
-                //cairo_pattern_add_color_stop_rgba( pPattern, stop, rColor[0], rColor[1], rColor[2], alpha );
             }
         }
+    }
+
+    static uno::Sequence<double> lerp(const uno::Sequence<double>& rLeft, const uno::Sequence<double>& rRight, double fAlpha)
+    {
+        if( rLeft.getLength() == 3 )
+        {
+            uno::Sequence<double> aRes(3);
+            aRes[0] = basegfx::tools::lerp(rLeft[0],rRight[0],fAlpha);
+            aRes[1] = basegfx::tools::lerp(rLeft[1],rRight[1],fAlpha);
+            aRes[2] = basegfx::tools::lerp(rLeft[2],rRight[2],fAlpha);
+            return aRes;
+        }
+        else if( rLeft.getLength() == 4 )
+        {
+            uno::Sequence<double> aRes(4);
+            aRes[0] = basegfx::tools::lerp(rLeft[0],rRight[0],fAlpha);
+            aRes[1] = basegfx::tools::lerp(rLeft[1],rRight[1],fAlpha);
+            aRes[2] = basegfx::tools::lerp(rLeft[2],rRight[2],fAlpha);
+            aRes[3] = basegfx::tools::lerp(rLeft[3],rRight[3],fAlpha);
+            return aRes;
+        }
+
+        return uno::Sequence<double>();
     }
 
     static Pattern* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon& rPolygon )
@@ -678,7 +712,6 @@ namespace cairocanvas
 
 // undef macros from vclenum.hxx which conflicts with GradientType enum values
 #undef GRADIENT_LINEAR
-#undef GRADIENT_AXIAL
 #undef GRADIENT_ELLIPTICAL
 
     switch( aValues.meType ) {
@@ -691,25 +724,16 @@ namespace cairocanvas
         addColorStops( pPattern, aValues.maColors, aValues.maStops );
         break;
 
-    // FIXME: NYI
-    case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
-    case ::canvas::ParametricPolyPolygon::GRADIENT_AXIAL:
-        x0 = 0;
-        y0 = 0;
-        x1 = 1;
-        y1 = 0;
-        pPattern = cairo_pattern_create_linear( x0, y0, x1, y1 );
-        addColorStops( pPattern, aValues.maColors, aValues.maStops );
-        break;
-
     case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
-        cx = 0.5;
-        cy = 0.5;
+        cx = 0;
+        cy = 0;
         r0 = 0;
-        r1 = 0.5;
+        r1 = 1;
 
-        pPattern = cairo_pattern_create_radial( cx, cy, r0, cx, cy, r1 );
+        pPattern = cairo_pattern_create_radial( cx, cy, r0, cy, cy, r1 );
         addColorStops( pPattern, aValues.maColors, aValues.maStops, true );
+        break;
+    default:
         break;
     }
 
@@ -719,7 +743,8 @@ namespace cairocanvas
     static void doOperation( Operation aOperation,
                              Cairo* pCairo,
                              const uno::Sequence< rendering::Texture >* pTextures,
-                             const SurfaceProviderRef& pDevice )
+                             const SurfaceProviderRef& pDevice,
+                             const basegfx::B2DRange& rBounds )
     {
     switch( aOperation ) {
     case Fill:
@@ -790,19 +815,70 @@ namespace cairocanvas
             cairo_matrix_init( &aTextureMatrix,
                        aTransform.m00, aTransform.m10, aTransform.m01,
                        aTransform.m11, aTransform.m02, aTransform.m12);
-            Pattern* pPattern = patternFromParametricPolyPolygon( *pPolyImpl );
-
-            if( pPattern ) {
-                OSL_TRACE( "filling with pattern" );
-
+            if( pPolyImpl->getValues().meType == canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR )
+            {
+                // no general path gradient yet in cairo; emulate then
                 cairo_save( pCairo );
+                cairo_clip( pCairo );
 
-               cairo_transform( pCairo, &aTextureMatrix );
-                cairo_set_source( pCairo, pPattern );
-                cairo_fill( pCairo );
+                // fill bound rect with start color
+                cairo_rectangle( pCairo, rBounds.getMinX(), rBounds.getMinY(),
+                                 rBounds.getWidth(), rBounds.getHeight() );
+                setColor(pCairo,pPolyImpl->getValues().maColors[0]);
+                cairo_fill(pCairo);
+
+                cairo_transform( pCairo, &aTextureMatrix );
+
+                // longest line in gradient bound rect
+                const unsigned int nGradientSize(
+                    static_cast<unsigned int>(
+                        ::basegfx::B2DVector(rBounds.getMinimum() - rBounds.getMaximum()).getLength() + 1.0 ) );
+
+                // typical number for pixel of the same color (strip size)
+                const unsigned int nStripSize( nGradientSize < 50 ? 2 : 4 );
+
+                // use at least three steps, and at utmost the number of color
+                // steps
+                const unsigned int nStepCount(
+                    ::std::max(
+                        3U,
+                        ::std::min(
+                            nGradientSize / nStripSize,
+                            128U )) + 1 );
+
+                const uno::Sequence<double>* pColors=&pPolyImpl->getValues().maColors[0];
+                basegfx::tools::KeyStopLerp aLerper(pPolyImpl->getValues().maStops);
+                for( unsigned int i=1; i<nStepCount; ++i )
+                {
+                    const double fT( i/double(nStepCount) );
+
+                    std::ptrdiff_t nIndex;
+                    double fAlpha;
+                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
+
+                    setColor(pCairo, lerp(pColors[nIndex], pColors[nIndex+1], fAlpha));
+                    cairo_rectangle( pCairo, -1+fT, -1+fT, 2-2*fT, 2-2*fT );
+                    cairo_fill(pCairo);
+                }
+
                 cairo_restore( pCairo );
+            }
+            else
+            {
+                Pattern* pPattern = patternFromParametricPolyPolygon( *pPolyImpl );
 
-                cairo_pattern_destroy( pPattern );
+                if( pPattern ) {
+                    OSL_TRACE( "filling with pattern" );
+
+                    cairo_save( pCairo );
+
+                    cairo_transform( pCairo, &aTextureMatrix );
+                    cairo_set_source( pCairo, pPattern );
+                    cairo_fill( pCairo );
+                    cairo_restore( pCairo );
+
+                    cairo_pattern_destroy( pPattern );
+                }
             }
             }
         }
@@ -935,7 +1011,7 @@ namespace cairocanvas
 
         if( aOperation == Fill && pTextures ) {
             cairo_set_matrix( pCairo, &aOrigMatrix );
-            doOperation( aOperation, pCairo, pTextures, pDevice );
+            doOperation( aOperation, pCairo, pTextures, pDevice, aPolyPolygon.getB2DRange() );
             cairo_set_matrix( pCairo, &aIdentityMatrix );
         }
         } else {
@@ -948,7 +1024,7 @@ namespace cairocanvas
         }
     }
     if( bOpToDo && ( aOperation != Fill || !pTextures ) )
-        doOperation( aOperation, pCairo, pTextures, pDevice );
+        doOperation( aOperation, pCairo, pTextures, pDevice, aPolyPolygon.getB2DRange() );
 
     cairo_set_matrix( pCairo, &aOrigMatrix );
 
@@ -1171,12 +1247,12 @@ namespace cairocanvas
                                                                                        const rendering::ViewState&      viewState,
                                                                                        const rendering::RenderState&    renderState,
                                                                                        const geometry::IntegerSize2D&   rSize,
-                                                                                       bool /*bModulateColors*/,
+                                                                                       bool bModulateColors,
                                                                                        bool bHasAlpha )
     {
         SurfaceSharedPtr pSurface=pInputSurface;
         uno::Reference< rendering::XCachedPrimitive > rv = uno::Reference< rendering::XCachedPrimitive >(NULL);
-                geometry::IntegerSize2D aBitmapSize = rSize;
+        geometry::IntegerSize2D aBitmapSize = rSize;
 
         if( mpCairo ) {
             cairo_save( mpCairo.get() );
@@ -1198,38 +1274,38 @@ namespace cairocanvas
                 ::rtl::math::approxEqual( aMatrix.y0, 0 ) &&
                 basegfx::fround( rSize.Width * aMatrix.xx ) > 8 &&
                 basegfx::fround( rSize.Height* aMatrix.yy ) > 8 )
-                {
-                    double dWidth, dHeight;
+            {
+                double dWidth, dHeight;
 
-                    dWidth = basegfx::fround( rSize.Width * aMatrix.xx );
-                    dHeight = basegfx::fround( rSize.Height* aMatrix.yy );
-                    aBitmapSize.Width = static_cast<sal_Int32>( dWidth );
-                    aBitmapSize.Height = static_cast<sal_Int32>( dHeight );
+                dWidth = basegfx::fround( rSize.Width * aMatrix.xx );
+                dHeight = basegfx::fround( rSize.Height* aMatrix.yy );
+                aBitmapSize.Width = static_cast<sal_Int32>( dWidth );
+                aBitmapSize.Height = static_cast<sal_Int32>( dHeight );
 
-                    SurfaceSharedPtr pScaledSurface = mpSurfaceProvider->createSurface(
-                        ::basegfx::B2ISize( aBitmapSize.Width, aBitmapSize.Height ),
-                        bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
-                    CairoSharedPtr pCairo = pScaledSurface->getCairo();
+                SurfaceSharedPtr pScaledSurface = mpSurfaceProvider->createSurface(
+                    ::basegfx::B2ISize( aBitmapSize.Width, aBitmapSize.Height ),
+                    bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
+                CairoSharedPtr pCairo = pScaledSurface->getCairo();
 
-                    cairo_set_operator( pCairo.get(), CAIRO_OPERATOR_SOURCE );
-                    // add 0.5px to size to avoid rounding errors in cairo, leading sometimes to random data on the image right/bottom borders
-                    cairo_scale( pCairo.get(), (dWidth+0.5)/rSize.Width, (dHeight+0.5)/rSize.Height );
-                    cairo_set_source_surface( pCairo.get(), pSurface->getCairoSurface().get(), 0, 0 );
-                    cairo_paint( pCairo.get() );
+                cairo_set_operator( pCairo.get(), CAIRO_OPERATOR_SOURCE );
+                // add 0.5px to size to avoid rounding errors in cairo, leading sometimes to random data on the image right/bottom borders
+                cairo_scale( pCairo.get(), (dWidth+0.5)/rSize.Width, (dHeight+0.5)/rSize.Height );
+                cairo_set_source_surface( pCairo.get(), pSurface->getCairoSurface().get(), 0, 0 );
+                cairo_paint( pCairo.get() );
 
-                    pSurface = pScaledSurface;
+                pSurface = pScaledSurface;
 
-                    aMatrix.xx = aMatrix.yy = 1;
-                    cairo_set_matrix( mpCairo.get(), &aMatrix );
+                aMatrix.xx = aMatrix.yy = 1;
+                cairo_set_matrix( mpCairo.get(), &aMatrix );
 
-                    rv = uno::Reference< rendering::XCachedPrimitive >(
-                        new CachedBitmap( pSurface, viewState, renderState,
-                                          // cast away const, need to
-                                          // change refcount (as this is
-                                          // ~invisible to client code,
-                                          // still logically const)
-                                          const_cast< rendering::XCanvas* >(pCanvas)) );
-                }
+                rv = uno::Reference< rendering::XCachedPrimitive >(
+                    new CachedBitmap( pSurface, viewState, renderState,
+                                      // cast away const, need to
+                                      // change refcount (as this is
+                                      // ~invisible to client code,
+                                      // still logically const)
+                                      const_cast< rendering::XCanvas* >(pCanvas)) );
+            }
 
             if( !bHasAlpha && mbHaveAlpha )
             {
@@ -1270,7 +1346,11 @@ namespace cairocanvas
                  cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
             cairo_rectangle( mpCairo.get(), 0, 0, aBitmapSize.Width, aBitmapSize.Height );
             cairo_clip( mpCairo.get() );
-            cairo_paint( mpCairo.get() );
+
+            if( bModulateColors )
+                cairo_paint_with_alpha( mpCairo.get(), renderState.DeviceColor[3] );
+            else
+                cairo_paint( mpCairo.get() );
             cairo_restore( mpCairo.get() );
         } else
             OSL_TRACE ("CanvasHelper called after it was disposed");
@@ -1309,15 +1389,35 @@ namespace cairocanvas
     return rv;
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      ,
-                                                                                     const uno::Reference< rendering::XBitmap >&    /*xBitmap*/,
-                                                                                     const rendering::ViewState&                    /*viewState*/,
-                                                                                     const rendering::RenderState&                  /*renderState*/ )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      pCanvas,
+                                                                                     const uno::Reference< rendering::XBitmap >&    xBitmap,
+                                                                                     const rendering::ViewState&                    viewState,
+                                                                                     const rendering::RenderState&                  renderState )
     {
-        // TODO(F3): Implement modulated bitmap!
+#ifdef CAIRO_CANVAS_PERF_TRACE
+        struct timespec aTimer;
+        mxDevice->startPerfTrace( &aTimer );
+#endif
 
-        // TODO(P1): Provide caching here.
-        return uno::Reference< rendering::XCachedPrimitive >(NULL);
+        uno::Reference< rendering::XCachedPrimitive > rv;
+        unsigned char* data = NULL;
+        bool bHasAlpha = false;
+        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
+        geometry::IntegerSize2D aSize = xBitmap->getSize();
+
+        if( pSurface ) {
+            rv = implDrawBitmapSurface( pCanvas, pSurface, viewState, renderState, aSize, true, bHasAlpha );
+
+            if( data )
+                free( data );
+        } else
+            rv = uno::Reference< rendering::XCachedPrimitive >(NULL);
+
+#ifdef CAIRO_CANVAS_PERF_TRACE
+        mxDevice->stopPerfTrace( &aTimer, "drawBitmap" );
+#endif
+
+        return rv;
     }
 
     uno::Reference< rendering::XGraphicDevice > CanvasHelper::getDevice()
