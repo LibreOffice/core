@@ -47,6 +47,7 @@ sub main
    use "math\required\includes\m_007_.inc"   ' help
    use "math\required\includes\m_010_.inc"
    use "math\required\includes\m_020_.inc"   ' toolbars
+   use "global\required\includes\g_009.inc"
 
    Call hStatusIn ( "Math","m_updt.bas" )
 
@@ -75,7 +76,6 @@ sub LoadIncludeFiles
    use "global\required\includes\g_option.inc"
    use "global\required\includes\g_customize.inc"
    use "global\required\includes\g_001.inc"
-   use "global\required\includes\g_009.inc"
    use "global\tools\includes\optional\t_ui_filters.inc" ' for gMathFilter in m_001_.inc
    gApplication = "MATH"
    Call GetUseFiles
