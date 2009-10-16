@@ -103,7 +103,7 @@ namespace ww8
         {
             ::rtl::OString aOStr(reinterpret_cast<const sal_Char *>(&mp_data[mn_offset + nOffset]),
                                  nCount);
-            ::rtl::OUString aOUStr(OStringToOUString(aOStr, RTL_TEXTENCODING_ASCII_US));
+            ::rtl::OUString aOUStr(rtl::OStringToOUString(aOStr, RTL_TEXTENCODING_ASCII_US));
             aResult = rtl::OUString(aOUStr);
         }
 
