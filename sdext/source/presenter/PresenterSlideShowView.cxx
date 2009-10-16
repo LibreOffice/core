@@ -1053,6 +1053,15 @@ void PresenterSlideShowView::Resize (void)
     // for the new size.
     CreateBackgroundPolygons();
 
+    // Notify listeners that the transformation that maps the view into the
+    // window has changed.
+    lang::EventObject aEvent (static_cast<XWeak*>(this));
+    ::cppu::OInterfaceContainerHelper* pIterator
+        = maBroadcaster.getContainer(getCppuType((Reference<util::XModifyListener>*)NULL));
+    if (pIterator != NULL)
+    {
+        pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
+    }
 
     // Due to constant aspect ratio resizing may lead a preview that changes
     // its position but not its size.  This invalidates the back buffer and
