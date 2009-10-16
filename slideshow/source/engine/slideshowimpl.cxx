@@ -1954,11 +1954,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         // schedule a slide end event, with automatic mode's
         // delay
         aNotificationEvents = makeInterruptableDelay(
-<<<<<<< .working
-            boost::bind( &SlideShowImpl::notifySlideEnded, this, false ),
-=======
-            boost::bind<void>( boost::mem_fn(&SlideShowImpl::notifySlideEnded), this ),
->>>>>>> .merge-right.r276697
+            boost::bind<void>( boost::mem_fn(&SlideShowImpl::notifySlideEnded), this, false ),
             maEventMultiplexer.getAutomaticTimeout() );
     }
     else

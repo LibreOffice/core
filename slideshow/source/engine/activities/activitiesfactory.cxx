@@ -289,6 +289,8 @@ public:
                                   BaseType::getNumberOfKeyTimes() ) ) ) );
     }
 
+    using BaseType::isAutoReverse;
+
     virtual void performEnd()
     {
         // xxx todo: good guess
