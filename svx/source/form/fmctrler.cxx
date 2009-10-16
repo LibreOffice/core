@@ -1545,7 +1545,7 @@ void FmXFormController::focusGained(const FocusEvent& e) throw( RuntimeException
     }
 
     // invalidate all features which depend on the currently focused control
-    if ( m_bDBConnection && !m_bFiltering && m_pView )
+    if ( m_bDBConnection && !m_bFiltering )
         implInvalidateCurrentControlDependentFeatures();
 
     if (m_xCurrentControl.is())
@@ -3150,10 +3150,6 @@ void FmXFormController::stopFiltering()
     Sequence< Reference< XControl > > aControlsCopy( m_aControls );
     const Reference< XControl > * pControls = aControlsCopy.getConstArray();
     sal_Int32 nControlCount = aControlsCopy.getLength();
-    // SdrPageView* pCurPageView = m_pView->GetSdrPageView();
-
-    // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-    // const SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*((OutputDevice*)m_pView->GetActualOutDev())) : 0L;
 
     // clear the filter control map
     for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
@@ -4007,8 +4003,6 @@ void FmXFormController::implInvalidateCurrentControlDependentFeatures()
     aCurrentControlDependentFeatures.push_back( SID_FM_AUTOFILTER );
     aCurrentControlDependentFeatures.push_back( SID_FM_REFRESH_FORM_CONTROL );
 
-    if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
-        m_pView->GetFormShell()->GetImpl()->invalidateFeatures( aCurrentControlDependentFeatures );
     invalidateFeatures( aCurrentControlDependentFeatures );
 }
 
