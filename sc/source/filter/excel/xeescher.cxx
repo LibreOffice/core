@@ -130,7 +130,7 @@ void XclExpImgData::Save( XclExpStream& rStrm )
                     const BitmapColor& rBmpColor = pAccess->GetPixel( nY, nX );
                     rStrm << rBmpColor.GetBlue() << rBmpColor.GetGreen() << rBmpColor.GetRed();
                 }
-                rStrm.WriteZeroBytesToRecord( nPadding );
+                rStrm.WriteZeroBytes( nPadding );
             }
 
             rStrm.EndRecord();
@@ -313,7 +313,7 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
             << sal_uInt8( 0x02 ) << sal_uInt32( 0 )     // tTbl token with unknown ID
             << sal_uInt8( 3 )                           // pad to word
             << aClass;                                  // "Forms.***.1"
-    rStrm.WriteZeroBytesToRecord( nClassNamePad );      // pad to word
+    rStrm.WriteZeroBytes( nClassNamePad );              // pad to word
     rStrm   << mnStrmStart                              // start in 'Ctls' stream
             << mnStrmSize                               // size in 'Ctls' stream
             << sal_uInt32( 0 );                         // class ID size
@@ -617,7 +617,7 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
 
             rStrm.StartRecord( EXC_ID_OBJCBLS, 12 );
             rStrm << mnState;
-            rStrm.WriteZeroBytesToRecord( 8 );
+            rStrm.WriteZeroBytes( 8 );
             rStrm << nStyle;
             rStrm.EndRecord();
 
@@ -629,7 +629,7 @@ void XclExpTbxControlObj::WriteSubRecs( XclExpStream& rStrm )
             // ftCblsData subrecord - box properties, again
             rStrm.StartRecord( EXC_ID_OBJCBLS, 8 );
             rStrm << mnState;
-            rStrm.WriteZeroBytesToRecord( 4 );
+            rStrm.WriteZeroBytes( 4 );
             rStrm << nStyle;
             rStrm.EndRecord();
         }

@@ -1112,7 +1112,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
             {
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_EMPTY;
-                rStrm.WriteZeroBytesToRecord( 8 );
+                rStrm.WriteZeroBytes( 8 );
             }
             else if( ScMatrix::IsNonValueType( nMatValType ) )
             {
@@ -1125,14 +1125,14 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
                 sal_Int8 nBool = pMatVal->GetBoolean();
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_BOOL << nBool;
-                rStrm.WriteZeroBytesToRecord( 7 );
+                rStrm.WriteZeroBytes( 7 );
             }
             else if( USHORT nScError = pMatVal->GetError() )
             {
                 sal_Int8 nError ( XclTools::GetXclErrorCode( nScError ) );
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_ERROR << nError;
-                rStrm.WriteZeroBytesToRecord( 7 );
+                rStrm.WriteZeroBytes( 7 );
             }
             else
             {

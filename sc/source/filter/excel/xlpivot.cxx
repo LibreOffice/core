@@ -652,7 +652,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
             << rInfo.mnShowField
             << EXC_SXVDEX_FORMAT_NONE
             << sal_uInt16( 0xFFFF );    // unknown
-    rStrm.WriteZeroBytesToRecord( 8 );          // unknown
+    rStrm.WriteZeroBytes( 8 );          // unknown
     return rStrm;
 }
 

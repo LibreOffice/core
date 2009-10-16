@@ -253,7 +253,7 @@ void XclExpFutureRecord::Save( XclExpStream& rStrm )
     rStrm.StartRecord( GetRecId(), GetRecSize() + ((meRecType == EXC_FUTUREREC_UNUSEDREF) ? 12 : 4) );
     rStrm << GetRecId() << sal_uInt16( 0 );
     if( meRecType == EXC_FUTUREREC_UNUSEDREF )
-        rStrm.WriteZeroBytesToRecord( 8 );
+        rStrm.WriteZeroBytes( 8 );
     WriteBody( rStrm );
     rStrm.EndRecord();
 }

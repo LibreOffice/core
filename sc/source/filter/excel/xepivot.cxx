@@ -1515,7 +1515,7 @@ void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sa
                     << EXC_SXVI_TYPE_DATA
                     << nIndexCount
                     << EXC_SXLI_DEFAULTFLAGS;
-            rStrm.WriteZeroBytesToRecord( 2 * nIndexCount );
+            rStrm.WriteZeroBytes( 2 * nIndexCount );
         }
         rStrm.EndRecord();
     }

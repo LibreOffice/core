@@ -64,7 +64,7 @@ void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, sal
     if( rString.Len() > 0 )
         rStrm << rString;
     if( nLength > nStrBytes )
-        rStrm.WriteZeroBytesToRecord( nLength - nStrBytes );
+        rStrm.WriteZeroBytes( nLength - nStrBytes );
 }
 
 inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
@@ -94,7 +94,7 @@ void XclExpUserBView::SaveCont( XclExpStream& rStrm )
     rStrm   << (sal_uInt32) 0xFF078014
             << (sal_uInt32) 0x00000001;
     lcl_WriteGUID( rStrm, aGUID );
-    rStrm.WriteZeroBytesToRecord( 8 );
+    rStrm.WriteZeroBytes( 8 );
     rStrm   << (sal_uInt32) 1200
             << (sal_uInt32) 1000
             << (sal_uInt16) 1000
@@ -237,7 +237,7 @@ sal_Size XclExpChTr0x0198::GetLen() const
 void XclExpChTr0x0192::SaveCont( XclExpStream& rStrm )
 {
     rStrm << sal_uInt16( 0x0022 );
-    rStrm.WriteZeroBytesToRecord( 510 );
+    rStrm.WriteZeroBytes( 510 );
 }
 
 UINT16 XclExpChTr0x0192::GetNum() const
@@ -291,7 +291,7 @@ XclExpChTr0x0195::~XclExpChTr0x0195()
 
 void XclExpChTr0x0195::SaveCont( XclExpStream& rStrm )
 {
-    rStrm.WriteZeroBytesToRecord( 162 );
+    rStrm.WriteZeroBytes( 162 );
 }
 
 UINT16 XclExpChTr0x0195::GetNum() const
@@ -928,7 +928,7 @@ void XclExpChTrInsertTab::SaveActionData( XclExpStream& rStrm ) const
     rStrm << sal_uInt32( 0 );
     lcl_WriteFixedString( rStrm, XclExpString( GetTabInfo().GetScTabName( nTab ) ), 127 );
     lcl_WriteDateTime( rStrm, GetDateTime() );
-    rStrm.WriteZeroBytesToRecord( 133 );
+    rStrm.WriteZeroBytes( 133 );
 }
 
 UINT16 XclExpChTrInsertTab::GetNum() const

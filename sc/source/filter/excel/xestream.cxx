@@ -266,15 +266,8 @@ void XclExpStream::WriteZeroBytesToRecord( sal_Size nBytes )
         return;
 
     sal_uInt8 nZero = 0;
-    sal_Size nBytesLeft = nBytes;
-    while (nBytesLeft > 0)
-    {
-        sal_Size nWriteLen = ::std::min< sal_Size >(PrepareWrite(), nBytesLeft);
-        for (sal_Size i = 0; i < nWriteLen; ++i)
-            *this << nZero;
-        nBytesLeft -= nWriteLen;
-        UpdateSizeVars(nWriteLen);
-    }
+    for (sal_Size i = 0; i < nBytes; ++i)
+        *this << nZero;
 }
 
 sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )

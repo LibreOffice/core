@@ -1221,7 +1221,7 @@ XclExpCrnBool::XclExpCrnBool( SCCOL nScCol, SCROW nScRow, bool bBoolVal ) :
 void XclExpCrnBool::WriteAddData( XclExpStream& rStrm )
 {
     rStrm << mnBool;
-    rStrm.WriteZeroBytesToRecord( 6 );
+    rStrm.WriteZeroBytes( 6 );
 }
 
 // Cached cells of a sheet ====================================================

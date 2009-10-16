@@ -380,7 +380,7 @@ void XclObj::WriteBody( XclExpStream& rStrm )
     // write the ftCmo subrecord
     pXclStrm->StartRecord( EXC_ID_OBJCMO, 18 );
     *pXclStrm << mnObjType << nObjId << nGrbit;
-    pXclStrm->WriteZeroBytesToRecord( 12 );
+    pXclStrm->WriteZeroBytes( 12 );
     pXclStrm->EndRecord();
 
     // write other subrecords
@@ -559,7 +559,7 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 {
     // ftSbs subrecord - Scroll bars (dummy)
     rStrm.StartRecord( EXC_ID_OBJSBS, 20 );
-    rStrm.WriteZeroBytesToRecord( 20 );
+    rStrm.WriteZeroBytes( 20 );
     rStrm.EndRecord();
 
     // ftLbsData subrecord - Listbox data
@@ -692,7 +692,7 @@ void XclTxo::SaveCont( XclExpStream& rStrm )
     ::insert_value( nFlags, mnVerAlign, 4, 3 );
 
     rStrm << nFlags << mnRotation;
-    rStrm.WriteZeroBytesToRecord( 6 );
+    rStrm.WriteZeroBytes( 6 );
     rStrm << mpString->Len() << nRunLen << sal_uInt32( 0 );
 }
 
@@ -1133,7 +1133,7 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
     for( pCell = _First(); pCell; pCell = _Next() )
         pCell->WriteText( rStrm );              // string content
     rStrm.SetSliceSize( 2 );
-    rStrm.WriteZeroBytesToRecord( 2 * List::Count() );  // date format
+    rStrm.WriteZeroBytes( 2 * List::Count() );  // date format
 }
 
 UINT16 ExcEScenario::GetNum() const
