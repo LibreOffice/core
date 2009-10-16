@@ -2710,7 +2710,7 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         if $EGREP -q '@PLT|\$stub' visibility.s; then
+         if $EGREP -q '@PLT|\$stub|\(PLT\)' visibility.s; then
              gccvisbroken=no;
          else 
              gccvisbroken=yes; 
