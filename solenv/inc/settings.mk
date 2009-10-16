@@ -238,7 +238,6 @@ STDSLO=
 STDLIB=
 STDSHL=
 
-LIBMGR=
 LIBFLAGS=
 
 IMPLIBMGR=
@@ -296,6 +295,7 @@ cap=
 #CC=
 #CXX=
 #LINK=
+#LIBMGR=
 
 
 # avoid confusion with CUE PROFILE variable...
@@ -906,10 +906,6 @@ CDEFS+=$(CDEFS_PRESET)
 
 .IF "$(TIMELOG)" != ""
 CDEFS+=-DTIMELOG
-.ENDIF
-
-.IF "$(GUI)"=="UNX"
-CDEFS+=-DCVER=$(CVER)
 .ENDIF
 
 CDEFSCXX=
