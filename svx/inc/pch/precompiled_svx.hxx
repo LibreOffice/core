@@ -57,7 +57,7 @@
 #include "basic/sbxvar.hxx"
 #include "boost/scoped_ptr.hpp"
 #include "boost/shared_ptr.hpp"
-#include "boost/spirit/core.hpp"
+#include "boost/spirit/include/classic_core.hpp"
 #include "bootstrp/sstring.hxx"
 #include "com/sun/star/accessibility/AccessibleEventId.hpp"
 #include "com/sun/star/accessibility/AccessibleEventObject.hpp"
