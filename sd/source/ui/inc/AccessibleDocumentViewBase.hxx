@@ -42,6 +42,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <tools/link.hxx>
 
 namespace sd {
@@ -159,7 +160,8 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IndexOutOfBoundsException);
 
 
     //=====  XAccessibleComponent  ============================================
