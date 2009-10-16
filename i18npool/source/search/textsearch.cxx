@@ -562,6 +562,7 @@ sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
 }
 
 
+// TextSearch::NSrchFrwrd is mis-optimized on unxsoli (#i105945#)
 SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
         throw(RuntimeException)
 {
