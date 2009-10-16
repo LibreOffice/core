@@ -37,7 +37,6 @@
 #include "dsitems.hxx"
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
-#include "datasourceui.hxx"
 #include "optionalboolitem.hxx"
 #include "dbu_resource.hrc"
 #include "dbu_dlg.hrc"
@@ -103,11 +102,11 @@ namespace dbaui
         ,m_pBooleanComparisonMode( NULL )
         ,m_aControlDependencies()
         ,m_aBooleanSettings()
-        ,m_aSupported( _rDSMeta.getAdvancedSettingsSupport() )
+        ,m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
     {
         impl_initBooleanSettings();
 
-        DataSourceUI aDSUI( _rDSMeta );
+        const FeatureSet& rFeatures( _rDSMeta.getFeatureSet() );
         // create all the check boxes for the boolean settings
         for (   BooleanSettingDescs::const_iterator setting = m_aBooleanSettings.begin();
                 setting != m_aBooleanSettings.end();
@@ -115,7 +114,7 @@ namespace dbaui
              )
         {
             USHORT nItemId = setting->nItemId;
-            if ( aDSUI.hasSetting( nItemId ) )
+            if ( rFeatures.has( nItemId ) )
             {
                 USHORT nResourceId = setting->nControlResId;
                 (*setting->ppControl) = new CheckBox( this, ModuleRes( nResourceId ) );
@@ -154,7 +153,7 @@ namespace dbaui
         }
 
         // create the controls for the boolean comparison mode
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             m_pBooleanComparisonModeLabel = new FixedText( this, ModuleRes( FT_BOOLEANCOMPARISON ) );
             m_pBooleanComparisonMode = new ListBox( this, ModuleRes( LB_BOOLEANCOMPARISON ) );
@@ -230,7 +229,7 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void SpecialSettingsPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             _rControlList.push_back( new ODisableWrapper< FixedText >( m_pBooleanComparisonModeLabel ) );
         }
@@ -250,7 +249,7 @@ namespace dbaui
             }
         }
 
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
             _rControlList.push_back( new OSaveValueWrapper< ListBox >( m_pBooleanComparisonMode ) );
     }
 
@@ -304,7 +303,7 @@ namespace dbaui
         }
 
         // the non-boolean items
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             SFX_ITEMSET_GET( _rSet, pBooleanComparison, SfxInt32Item, DSID_BOOLEANCOMPARISON, sal_True );
             m_pBooleanComparisonMode->SelectEntryPos( static_cast< USHORT >( pBooleanComparison->GetValue() ) );
@@ -330,7 +329,7 @@ namespace dbaui
         }
 
         // the non-boolean items
-        if ( m_aSupported.bBooleanComparisonMode )
+        if ( m_bHasBooleanComparisonMode )
         {
             if ( m_pBooleanComparisonMode->GetSelectEntryPos() != m_pBooleanComparisonMode->GetSavedValue() )
             {
@@ -445,14 +444,14 @@ namespace dbaui
         const ::rtl::OUString eType = m_pImpl->getDatasourceType(*_pItems);
 
         DataSourceMetaData aMeta( eType );
-        const AdvancedSettingsSupport& rAdvancedSupport( aMeta.getAdvancedSettingsSupport() );
+        const FeatureSet& rFeatures( aMeta.getFeatureSet() );
 
         // auto-generated values?
-        if ( rAdvancedSupport.bGeneratedValues )
+        if ( rFeatures.supportsGeneratedValues() )
             AddTabPage( PAGE_GENERATED_VALUES, String( ModuleRes( STR_GENERATED_VALUE ) ), ODriversSettings::CreateGeneratedValuesPage, NULL );
 
         // any "special settings"?
-        if ( rAdvancedSupport.supportsAnySpecialSetting() )
+        if ( rFeatures.supportsAnySpecialSetting() )
             AddTabPage( PAGE_ADVANCED_SETTINGS_SPECIAL, String( ModuleRes( STR_DS_BEHAVIOUR ) ), ODriversSettings::CreateSpecialSettingsPage, NULL );
 
         // remove the reset button - it's meaning is much too ambiguous in this dialog
@@ -471,8 +470,8 @@ namespace dbaui
     bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const ::rtl::OUString& _sURL )
     {
         DataSourceMetaData aMeta( _sURL );
-        const AdvancedSettingsSupport& rSupport( aMeta.getAdvancedSettingsSupport() );
-        if ( rSupport.bGeneratedValues || rSupport.supportsAnySpecialSetting() )
+        const FeatureSet& rFeatures( aMeta.getFeatureSet() );
+        if ( rFeatures.supportsGeneratedValues() || rFeatures.supportsAnySpecialSetting() )
             return true;
         return false;
     }

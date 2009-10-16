@@ -31,6 +31,8 @@
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #define _DBAUI_DATASOURCEITEMS_HXX_
 
+typedef sal_Int32   ItemID;
+
 //========================================================================
 //= item ids for the data source administration dialog
 

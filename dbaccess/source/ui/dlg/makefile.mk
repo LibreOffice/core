@@ -124,7 +124,6 @@ EXCEPTIONSFILES=						\
         $(SLO)$/DriverSettings.obj      \
         $(SLO)$/odbcconfig.obj          \
         $(SLO)$/advancedsettings.obj    \
-        $(SLO)$/datasourceui.obj	\
         $(SLO)$/textconnectionsettings.obj
 
 SLOFILES=								\

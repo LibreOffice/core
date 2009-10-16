@@ -32,6 +32,7 @@
 #define DBACCESS_DSMETA_HXX
 
 #include "dsntypes.hxx"
+#include "dsitems.hxx"
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -56,7 +57,7 @@ namespace dbaui
     //====================================================================
     //= DataSourceMetaData
     //====================================================================
-    struct AdvancedSettingsSupport;
+    class FeatureSet;
     class DataSourceMetaData_Impl;
     /** encapsulates meta data for a data source
 
@@ -74,7 +75,7 @@ namespace dbaui
         ~DataSourceMetaData();
 
         /// returns a struct describing this data source type's support for our known advanced settings
-        const AdvancedSettingsSupport&  getAdvancedSettingsSupport() const;
+        const FeatureSet&   getFeatureSet() const;
 
         /// determines whether or not the data source requires authentication
         AuthenticationMode  getAuthentication() const;
@@ -86,80 +87,56 @@ namespace dbaui
     };
 
     //====================================================================
-    //= AdvancedSettingsSupport
+    //= FeatureSet
     //====================================================================
-    /// struct taking flags for the supported advanced settings
-    struct AdvancedSettingsSupport
+    /** can be used to ask for (UI) support for certain advanced features
+    */
+    class FeatureSet
     {
-        // auto-generated values
-        bool    bGeneratedValues;
-        // various settings as found on the "Special Settings" page in the UI
-        bool    bUseSQL92NamingConstraints;
-        bool    bAppendTableAliasInSelect;
-        bool    bUseKeywordAsBeforeAlias;
-        bool    bUseBracketedOuterJoinSyntax;
-        bool    bIgnoreDriverPrivileges;
-        bool    bParameterNameSubstitution;
-        bool    bDisplayVersionColumns;
-        bool    bUseCatalogInSelect;
-        bool    bUseSchemaInSelect;
-        bool    bUseIndexDirectionKeyword;
-        bool    bUseDOSLineEnds;
-        bool    bBooleanComparisonMode;
-        bool    bFormsCheckRequiredFields;
-        bool    bIgnoreCurrency;
-        bool    bEscapeDateTime;
-        bool    bPrimaryKeySupport;
+    public:
+        typedef ::std::set< ItemID >::const_iterator    const_iterator;
 
-        // Note: If you extend this list, you need to adjust the ctor (of course)
-        // and (maybe) the implementation of supportsAnySpecialSetting
+    public:
+        inline FeatureSet() { }
 
-        AdvancedSettingsSupport()
-            :bGeneratedValues               ( false )
-            ,bUseSQL92NamingConstraints     ( false )
-            ,bAppendTableAliasInSelect      ( false )
-            ,bUseKeywordAsBeforeAlias       ( false )
-            ,bUseBracketedOuterJoinSyntax   ( false )
-            ,bIgnoreDriverPrivileges        ( false )
-            ,bParameterNameSubstitution     ( false )
-            ,bDisplayVersionColumns         ( false )
-            ,bUseCatalogInSelect            ( false )
-            ,bUseSchemaInSelect             ( false )
-            ,bUseIndexDirectionKeyword      ( false )
-            ,bUseDOSLineEnds                ( false )
-            ,bBooleanComparisonMode         ( false )
-            ,bFormsCheckRequiredFields      ( false )
-            ,bIgnoreCurrency                ( false )
-            ,bEscapeDateTime                ( false )
-            ,bPrimaryKeySupport             ( false )
-        {
-        }
+        inline void put( const ItemID _id )         { m_aContent.insert( _id ); }
+        inline bool has( const ItemID _id ) const   { return m_aContent.find( _id ) != m_aContent.end(); }
 
-        /** determines whether there is support for any of the settings found on the "Special Settings"
-            UI
-        */
-        inline bool    supportsAnySpecialSetting() const;
+        inline  bool    supportsAnySpecialSetting() const;
+        inline  bool    supportsGeneratedValues() const;
+
+        inline  const_iterator begin() const    { return m_aContent.begin(); }
+        inline  const_iterator end() const      { return m_aContent.end(); }
+
+    private:
+        ::std::set< ItemID >    m_aContent;
     };
 
     //--------------------------------------------------------------------
-    inline bool AdvancedSettingsSupport::supportsAnySpecialSetting() const
+    inline  bool FeatureSet::supportsGeneratedValues() const
     {
-        return  ( bUseSQL92NamingConstraints    == true )
-            ||  ( bAppendTableAliasInSelect     == true )
-            ||  ( bUseKeywordAsBeforeAlias      == true )
-            ||  ( bUseBracketedOuterJoinSyntax  == true )
-            ||  ( bIgnoreDriverPrivileges       == true )
-            ||  ( bParameterNameSubstitution    == true )
-            ||  ( bDisplayVersionColumns        == true )
-            ||  ( bUseCatalogInSelect           == true )
-            ||  ( bUseSchemaInSelect            == true )
-            ||  ( bUseIndexDirectionKeyword     == true )
-            ||  ( bUseDOSLineEnds               == true )
-            ||  ( bBooleanComparisonMode        == true )
-            ||  ( bFormsCheckRequiredFields     == true )
-            ||  ( bIgnoreCurrency               == true )
-            ||  ( bEscapeDateTime               == true )
-            ||  ( bPrimaryKeySupport            == true )
+        return has( DSID_AUTORETRIEVEENABLED );
+    }
+
+    //--------------------------------------------------------------------
+    inline bool FeatureSet::supportsAnySpecialSetting() const
+    {
+        return  has( DSID_SQL92CHECK )
+            ||  has( DSID_APPEND_TABLE_ALIAS )
+            ||  has( DSID_AS_BEFORE_CORRNAME )
+            ||  has( DSID_ENABLEOUTERJOIN )
+            ||  has( DSID_IGNOREDRIVER_PRIV )
+            ||  has( DSID_PARAMETERNAMESUBST )
+            ||  has( DSID_SUPPRESSVERSIONCL )
+            ||  has( DSID_CATALOG )
+            ||  has( DSID_SCHEMA )
+            ||  has( DSID_INDEXAPPENDIX )
+            ||  has( DSID_DOSLINEENDS )
+            ||  has( DSID_BOOLEANCOMPARISON )
+            ||  has( DSID_CHECK_REQUIRED_FIELDS )
+            ||  has( DSID_IGNORECURRENCY )
+            ||  has( DSID_ESCAPE_DATETIME )
+            ||  has( DSID_PRIMARY_KEY_SUPPORT )
             ;
     }
 

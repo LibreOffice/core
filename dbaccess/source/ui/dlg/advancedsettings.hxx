@@ -84,8 +84,7 @@ namespace dbaui
 
         BooleanSettingDescs m_aBooleanSettings;
 
-        AdvancedSettingsSupport
-                            m_aSupported;
+        bool                m_bHasBooleanComparisonMode;
 
     public:
         virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );

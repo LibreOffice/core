@@ -63,102 +63,75 @@ namespace dbaui
         }
     };
 
+    struct FeatureMapping
+    {
+        /// one of the items from dsitems.hxx
+        ItemID          nItemID;
+        const sal_Char* pAsciiFeatureName;
+    };
+
     //====================================================================
     //= global tables
     //====================================================================
     //--------------------------------------------------------------------
-    static const AdvancedSettingsSupport& getAdvancedSettingsSupport( const ::rtl::OUString& _sURL )
+    static const FeatureMapping* lcl_getFeatureMappings()
     {
-        DECLARE_STL_USTRINGACCESS_MAP( AdvancedSettingsSupport, AdvancedSupport);
-        static AdvancedSupport s_aSupport;
-        if ( s_aSupport.empty() )
+        static const FeatureMapping s_aMappings[] = {
+            { DSID_AUTORETRIEVEENABLED,     "GeneratedValues" },
+            { DSID_AUTOINCREMENTVALUE,      "GeneratedValues" },
+            { DSID_AUTORETRIEVEVALUE,       "GeneratedValues" },
+            { DSID_SQL92CHECK,              "UseSQL92NamingConstraints" },
+            { DSID_APPEND_TABLE_ALIAS,      "AppendTableAliasInSelect" },
+            { DSID_AS_BEFORE_CORRNAME,      "UseKeywordAsBeforeAlias" },
+            { DSID_ENABLEOUTERJOIN,         "UseBracketedOuterJoinSyntax" },
+            { DSID_IGNOREDRIVER_PRIV,       "IgnoreDriverPrivileges" },
+            { DSID_PARAMETERNAMESUBST,      "ParameterNameSubstitution" },
+            { DSID_SUPPRESSVERSIONCL,       "DisplayVersionColumns" },
+            { DSID_CATALOG,                 "UseCatalogInSelect" },
+            { DSID_SCHEMA,                  "UseSchemaInSelect" },
+            { DSID_INDEXAPPENDIX,           "UseIndexDirectionKeyword" },
+            { DSID_DOSLINEENDS,             "UseDOSLineEnds" },
+            { DSID_BOOLEANCOMPARISON,       "BooleanComparisonMode" },
+            { DSID_CHECK_REQUIRED_FIELDS,   "FormsCheckRequiredFields" },
+            { DSID_IGNORECURRENCY,          "IgnoreCurrency" },
+            { DSID_ESCAPE_DATETIME,         "EscapeDateTime" },
+            { DSID_PRIMARY_KEY_SUPPORT,     "PrimaryKeySupport" },
+            { 0, NULL }
+        };
+        return s_aMappings;
+    }
+
+    //--------------------------------------------------------------------
+    static const FeatureSet& lcl_getFeatureSet( const ::rtl::OUString _rURL )
+    {
+        typedef ::std::map< ::rtl::OUString, FeatureSet, ::comphelper::UStringLess >    FeatureSets;
+        static FeatureSets s_aFeatureSets;
+        if ( s_aFeatureSets.empty() )
         {
-            ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessServiceFactory());
-            const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
-            const ::rtl::OUString* pIter = aURLs.getConstArray();
-            const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
-            for(;pIter != pEnd;++pIter)
+            ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessServiceFactory() );
+            const uno::Sequence< ::rtl::OUString > aPatterns = aDriverConfig.getURLs();
+            for (   const ::rtl::OUString* pattern = aPatterns.getConstArray();
+                    pattern != aPatterns.getConstArray() + aPatterns.getLength();
+                    ++pattern
+                )
             {
-                AdvancedSettingsSupport aInit;
-                const uno::Sequence< beans::NamedValue> aProperties = aDriverConfig.getFeatures(*pIter).getNamedValues();
-                const beans::NamedValue* pPropertiesIter = aProperties.getConstArray();
-                const beans::NamedValue* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
-                for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter)
+                FeatureSet aCurrentSet;
+                const ::comphelper::NamedValueCollection aCurrentFeatures( aDriverConfig.getFeatures( *pattern ).getNamedValues() );
+
+                const FeatureMapping* pFeatureMapping = lcl_getFeatureMappings();
+                while ( pFeatureMapping->pAsciiFeatureName )
                 {
-                    if ( pPropertiesIter->Name.equalsAscii("GeneratedValues") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bGeneratedValues;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("UseSQL92NamingConstraints") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bUseSQL92NamingConstraints;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("AppendTableAliasInSelect") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bAppendTableAliasInSelect;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("UseKeywordAsBeforeAlias") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bUseKeywordAsBeforeAlias;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("UseBracketedOuterJoinSyntax") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bUseBracketedOuterJoinSyntax;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("IgnoreDriverPrivileges") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bIgnoreDriverPrivileges;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("ParameterNameSubstitution") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bParameterNameSubstitution;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("DisplayVersionColumns") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bDisplayVersionColumns;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("UseCatalogInSelect") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bUseCatalogInSelect;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("UseSchemaInSelect") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bUseSchemaInSelect;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("UseIndexDirectionKeyword") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bUseIndexDirectionKeyword;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("UseDOSLineEnds") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bUseDOSLineEnds;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("BooleanComparisonMode") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bBooleanComparisonMode;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("FormsCheckRequiredFields") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bFormsCheckRequiredFields;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("IgnoreCurrency") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bIgnoreCurrency;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("EscapeDateTime") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bEscapeDateTime;
-                    }
-                    else if ( pPropertiesIter->Name.equalsAscii("PrimaryKeySupport") )
-                    {
-                        pPropertiesIter->Value >>= aInit.bPrimaryKeySupport;
-                    }
+                    if ( aCurrentFeatures.has( pFeatureMapping->pAsciiFeatureName ) )
+                        aCurrentSet.put( pFeatureMapping->nItemID );
+                    ++pFeatureMapping;
                 }
-                s_aSupport.insert(AdvancedSupport::value_type(*pIter,aInit));
+
+                s_aFeatureSets[ *pattern ] = aCurrentSet;
             }
         }
-        OSL_ENSURE(s_aSupport.find(_sURL) != s_aSupport.end(),"Illegal URL!");
-        return s_aSupport[ _sURL ];
+
+        OSL_ENSURE( s_aFeatureSets.find( _rURL ) != s_aFeatureSets.end(), "invalid URL/pattern!" );
+        return s_aFeatureSets[ _rURL ];
     }
 
     //--------------------------------------------------------------------
@@ -227,9 +200,9 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    const AdvancedSettingsSupport& DataSourceMetaData::getAdvancedSettingsSupport() const
+    const FeatureSet& DataSourceMetaData::getFeatureSet() const
     {
-        return ::dbaui::getAdvancedSettingsSupport( m_pImpl->getType() );
+        return lcl_getFeatureSet( m_pImpl->getType() );
     }
 
     //--------------------------------------------------------------------

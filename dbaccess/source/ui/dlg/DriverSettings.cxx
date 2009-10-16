@@ -32,12 +32,12 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "DriverSettings.hxx"
-#include "dsitems.hxx"
-#include "datasourceui.hxx"
-#include <connectivity/DriversConfig.hxx>
+#include "dsmeta.hxx"
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
+
+#include <connectivity/DriversConfig.hxx>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::NamedValue;
@@ -47,35 +47,23 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
 {
     // for a number of settings, we do not need to use hard-coded here, but can ask a
     // central DataSourceUI instance.
-    // TODO: isn't DataSourceUI obsolete, now that this is in the configuration?
-    DataSourceMetaData aMeta(_sURLPrefix);
-    DataSourceUI aDSUI( aMeta );
-    const USHORT nGenericKnownSettings[] =
+    DataSourceMetaData aMeta( _sURLPrefix );
+    const FeatureSet& rFeatures( aMeta.getFeatureSet() );
+    for (   FeatureSet::const_iterator feature = rFeatures.begin();
+            feature != rFeatures.end();
+            ++feature
+        )
     {
-         DSID_SQL92CHECK,
-         DSID_APPEND_TABLE_ALIAS,
-         DSID_AS_BEFORE_CORRNAME,
-         DSID_ENABLEOUTERJOIN,
-         DSID_IGNOREDRIVER_PRIV,
-         DSID_PARAMETERNAMESUBST,
-         DSID_SUPPRESSVERSIONCL,
-         DSID_CATALOG,
-         DSID_SCHEMA,
-         DSID_INDEXAPPENDIX,
-         DSID_CHECK_REQUIRED_FIELDS,
-         DSID_AUTORETRIEVEENABLED,
-         DSID_AUTOINCREMENTVALUE,
-         DSID_AUTORETRIEVEVALUE,
-         DSID_BOOLEANCOMPARISON,
-         DSID_ESCAPE_DATETIME,
-         DSID_PRIMARY_KEY_SUPPORT,
-         0
-    };
-    for ( const USHORT* pGenericKnowSetting = nGenericKnownSettings; *pGenericKnowSetting; ++pGenericKnowSetting )
-        if ( aDSUI.hasSetting( *pGenericKnowSetting ) )
-            _out_rDetailsIds.push_back( *pGenericKnowSetting );
+        _out_rDetailsIds.push_back( *feature );
+    }
 
     // the rest is configuration-based
+    // TODO: that's not really true: *everything* is configuration-based nowadays, even the FeatureSet obtained
+    // from the DataSourceMetaData has been initialized from the configuration. So in fact, we could consolidate
+    // the two blocks.
+    // The best approach would be to extend the FeatureSet to contain *all* known data source features, not only
+    // the ones from the "Advanced settings" UI.
+
     ::connectivity::DriversConfig aDriverConfig(_xFactory);
     const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(_sURLPrefix);
 #if OSL_DEBUG_LEVEL > 0
@@ -118,7 +106,11 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
                             ,TProperties(0,::rtl::OUString())
     };
     // TODO: This mapping between IDs and property names already exists - in ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper.
-    // We should not duplicate it here.
+    // Another mapping (which is also duplicated in ODbDataSourceAdministrationHelper) exists in dsmeta.cxx. We should
+    // consolidate those three places into one.
+    // However, care has to be taken: We need to distinguish between "features" and "properties" of a data source (resp. driver).
+    // That is, a driver can support a certain property, but not allow to change it in the UI, which means it would
+    // not have the respective "feature".
     for ( TProperties* pProps = aProps; pProps->first; ++pProps )
     {
         if ( aProperties.has(pProps->second) )
