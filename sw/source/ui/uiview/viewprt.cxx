@@ -270,6 +270,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                 rReq.RemoveItem(FN_QRY_MERGE);
             BOOL bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : FALSE;
             SwMiscConfig aMiscConfig;
+            bool bPrintSelection = false;
             if(!bSilent && !bFromMerge &&
                     SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
@@ -284,12 +285,29 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                     return;
                 }
             }
+            else if( rReq.GetSlot() == SID_PRINTDOCDIRECT && ! bSilent )
+            {
+                if( /*!bIsAPI && */
+                   ( pSh->IsSelection() || pSh->IsFrmSelected() || pSh->IsObjSelected() ) )
+                {
+                    short nBtn = SvxPrtQryBox(&GetEditWin()).Execute();
+                    if( RET_CANCEL == nBtn )
+                        return;;
+
+                    if( RET_OK == nBtn )
+                        bPrintSelection = true;
+                }
+            }
+
             //#i61455# if master documentes are printed silently without loaded links then update the links now
             if( bSilent && pSh->IsGlobalDoc() && !pSh->IsGlblDocSaveLinks() )
             {
                 pSh->GetLinkManager().UpdateAllLinks( sal_False, sal_False, sal_False, 0 );
             }
-            SfxViewShell::ExecuteSlot( rReq, SfxViewShell::GetInterface() );
+            SfxRequest aReq( rReq );
+            SfxBoolItem aBool(SID_SELECTION, bPrintSelection);
+            aReq.AppendItem( aBool );
+            SfxViewShell::ExecuteSlot( aReq, SfxViewShell::GetInterface() );
             return;
         }
         default:

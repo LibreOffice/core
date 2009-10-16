@@ -335,6 +335,7 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.bPrintHiddenText       = pOpt->getBoolValue( "PrintHiddenText",       rOptions.bPrintHiddenText );
     rOptions.bPrintTextPlaceholder  = pOpt->getBoolValue( "PrintTextPlaceholder",  rOptions.bPrintTextPlaceholder );
     rOptions.nPrintPostIts          = static_cast< sal_Int16 >(pOpt->getIntValue( "PrintAnnotationMode", rOptions.nPrintPostIts ));
+    rOptions.bPrintSelection       |= pOpt->getBoolValue( "PrintSelectionOnly",    false );
 
     //! needs to be set after MakeOptions since the assignment operation in that
     //! function will destroy the pointers
