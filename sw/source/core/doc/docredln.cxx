@@ -309,7 +309,8 @@ Verhalten von Delete-Redline:
 
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
-#ifndef PRODUCT
+#if 0
+// #i93179# disabled: ASSERT in ~SwIndexReg     #ifndef PRODUCT
     SwRedline aCopy( *pNewRedl );
 #endif
     _CHECK_REDLINE( this )
