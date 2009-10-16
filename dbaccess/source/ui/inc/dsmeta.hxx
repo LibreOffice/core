@@ -109,27 +109,29 @@ namespace dbaui
         bool    bFormsCheckRequiredFields;
         bool    bIgnoreCurrency;
         bool    bEscapeDateTime;
+        bool    bPrimaryKeySupport;
 
         // Note: If you extend this list, you need to adjust the ctor (of course)
         // and (maybe) the implementation of supportsAnySpecialSetting
 
         AdvancedSettingsSupport()
-            :bGeneratedValues               ( true )
-            ,bUseSQL92NamingConstraints     ( true )
-            ,bAppendTableAliasInSelect      ( true )
-            ,bUseKeywordAsBeforeAlias       ( true )
-            ,bUseBracketedOuterJoinSyntax   ( true )
-            ,bIgnoreDriverPrivileges        ( true )
-            ,bParameterNameSubstitution     ( true )
-            ,bDisplayVersionColumns         ( true )
-            ,bUseCatalogInSelect            ( true )
-            ,bUseSchemaInSelect             ( true )
-            ,bUseIndexDirectionKeyword      ( true )
-            ,bUseDOSLineEnds                ( true )
-            ,bBooleanComparisonMode         ( true )
-            ,bFormsCheckRequiredFields      ( true )
+            :bGeneratedValues               ( false )
+            ,bUseSQL92NamingConstraints     ( false )
+            ,bAppendTableAliasInSelect      ( false )
+            ,bUseKeywordAsBeforeAlias       ( false )
+            ,bUseBracketedOuterJoinSyntax   ( false )
+            ,bIgnoreDriverPrivileges        ( false )
+            ,bParameterNameSubstitution     ( false )
+            ,bDisplayVersionColumns         ( false )
+            ,bUseCatalogInSelect            ( false )
+            ,bUseSchemaInSelect             ( false )
+            ,bUseIndexDirectionKeyword      ( false )
+            ,bUseDOSLineEnds                ( false )
+            ,bBooleanComparisonMode         ( false )
+            ,bFormsCheckRequiredFields      ( false )
             ,bIgnoreCurrency                ( false )
             ,bEscapeDateTime                ( false )
+            ,bPrimaryKeySupport             ( false )
         {
         }
 
@@ -157,6 +159,7 @@ namespace dbaui
             ||  ( bFormsCheckRequiredFields     == true )
             ||  ( bIgnoreCurrency               == true )
             ||  ( bEscapeDateTime               == true )
+            ||  ( bPrimaryKeySupport            == true )
             ;
     }
 

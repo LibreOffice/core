@@ -92,6 +92,7 @@
 #define DSID_CONN_SOCKET            56
 #define DSID_ESCAPE_DATETIME        57
 #define DSID_NAMED_PIPE             58
+#define DSID_PRIMARY_KEY_SUPPORT    59
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 
@@ -99,7 +100,7 @@
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_NAMED_PIPE
+#define DSID_LAST_ITEM_ID   DSID_PRIMARY_KEY_SUPPORT
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 

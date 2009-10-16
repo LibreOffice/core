@@ -38,7 +38,7 @@
 #include "DbAdminImpl.hxx"
 #include "DriverSettings.hxx"
 #include "datasourceui.hxx"
-
+#include "optionalboolitem.hxx"
 #include "dbu_resource.hrc"
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
@@ -98,6 +98,7 @@ namespace dbaui
         ,m_pCheckRequiredFields( NULL )
         ,m_pIgnoreCurrency(NULL)
         ,m_pEscapeDateTime(NULL)
+        ,m_pPrimaryKeySupport(NULL)
         ,m_pBooleanComparisonModeLabel( NULL )
         ,m_pBooleanComparisonMode( NULL )
         ,m_aControlDependencies()
@@ -116,9 +117,14 @@ namespace dbaui
             USHORT nItemId = setting->nItemId;
             if ( aDSUI.hasSetting( nItemId ) )
             {
-                USHORT nID = setting->nControlResId;
-                (*setting->ppControl) = new CheckBox( this, ModuleRes( nID ) );
+                USHORT nResourceId = setting->nControlResId;
+                (*setting->ppControl) = new CheckBox( this, ModuleRes( nResourceId ) );
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
+
+                // check whether this must be a tristate check box
+                const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
+                if ( rItem.ISA( OptionalBoolItem ) )
+                    (*setting->ppControl)->EnableTriState( TRUE );
             }
         }
 
@@ -185,6 +191,7 @@ namespace dbaui
         DELETEZ( m_pCheckRequiredFields );
         DELETEZ( m_pIgnoreCurrency );
         DELETEZ( m_pEscapeDateTime );
+        DELETEZ( m_pPrimaryKeySupport );
         DELETEZ( m_pBooleanComparisonModeLabel );
         DELETEZ( m_pBooleanComparisonMode );
     }
@@ -210,13 +217,12 @@ namespace dbaui
             { &m_pCheckRequiredFields,      CB_CHECK_REQUIRED,      DSID_CHECK_REQUIRED_FIELDS, false },
             { &m_pIgnoreCurrency,           CB_IGNORECURRENCY,      DSID_IGNORECURRENCY,        false },
             { &m_pEscapeDateTime,           CB_ESCAPE_DATETIME,     DSID_ESCAPE_DATETIME,       false },
+            { &m_pPrimaryKeySupport,        CB_PRIMARY_KEY_SUPPORT, DSID_PRIMARY_KEY_SUPPORT,   false },
             { NULL,                         0,                      0,                          false }
         };
 
         for ( const BooleanSettingDesc* pCopy = aSettings; pCopy->nItemId != 0; ++pCopy )
         {
-            USHORT nID = pCopy->nItemId;
-            (void) nID;
             m_aBooleanSettings.push_back( *pCopy );
         }
     }
@@ -270,12 +276,31 @@ namespace dbaui
             if ( !*setting->ppControl )
                 continue;
 
-            SFX_ITEMSET_GET( _rSet, pItem, SfxBoolItem, setting->nItemId, sal_True );
-            bool bValue = pItem->GetValue();
-            if ( setting->bInvertedDisplay )
-                bValue = !bValue;
+            ::boost::optional< bool > aValue;
 
-            (*setting->ppControl)->Check( bValue );
+            SFX_ITEMSET_GET( _rSet, pItem, SfxPoolItem, setting->nItemId, sal_True );
+            if ( pItem->ISA( SfxBoolItem ) )
+            {
+                aValue.reset( PTR_CAST( SfxBoolItem, pItem )->GetValue() );
+            }
+            else if ( pItem->ISA( OptionalBoolItem ) )
+            {
+                aValue = PTR_CAST( OptionalBoolItem, pItem )->GetFullValue();
+            }
+            else
+                DBG_ERROR( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
+
+            if ( !aValue )
+            {
+                (*setting->ppControl)->SetState( STATE_DONTKNOW );
+            }
+            else
+            {
+                BOOL bValue = *aValue;
+                if ( setting->bInvertedDisplay )
+                    bValue = !bValue;
+                (*setting->ppControl)->Check( bValue );
+            }
         }
 
         // the non-boolean items

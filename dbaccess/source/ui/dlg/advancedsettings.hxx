@@ -74,6 +74,7 @@ namespace dbaui
         CheckBox*           m_pCheckRequiredFields;
         CheckBox*           m_pIgnoreCurrency;
         CheckBox*           m_pEscapeDateTime;
+        CheckBox*           m_pPrimaryKeySupport;
 
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;

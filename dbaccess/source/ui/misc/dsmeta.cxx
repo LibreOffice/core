@@ -47,32 +47,6 @@ namespace dbaui
     using namespace ::com::sun::star;
     /** === end UNO using === **/
 
-    struct InitAdvanced : public AdvancedSettingsSupport
-    {
-        enum Special { All, AllButIgnoreCurrency, None };
-
-        InitAdvanced( Special _eType )
-            :AdvancedSettingsSupport()
-        {
-            bGeneratedValues               = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bUseSQL92NamingConstraints     = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bAppendTableAliasInSelect      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bUseKeywordAsBeforeAlias       = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bUseBracketedOuterJoinSyntax   = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bIgnoreDriverPrivileges        = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bParameterNameSubstitution     = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bDisplayVersionColumns         = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bUseCatalogInSelect            = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bUseSchemaInSelect             = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bUseIndexDirectionKeyword      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bUseDOSLineEnds                = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bBooleanComparisonMode         = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bFormsCheckRequiredFields      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-            bIgnoreCurrency                = ( _eType == All );
-            bEscapeDateTime                = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
-        }
-    };
-
     struct FeatureSupport
     {
         // authentication mode of the data source
@@ -105,7 +79,7 @@ namespace dbaui
             const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
             for(;pIter != pEnd;++pIter)
             {
-                InitAdvanced aInit(InitAdvanced::None);
+                AdvancedSettingsSupport aInit;
                 const uno::Sequence< beans::NamedValue> aProperties = aDriverConfig.getFeatures(*pIter).getNamedValues();
                 const beans::NamedValue* pPropertiesIter = aProperties.getConstArray();
                 const beans::NamedValue* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
@@ -175,10 +149,14 @@ namespace dbaui
                     {
                         pPropertiesIter->Value >>= aInit.bEscapeDateTime;
                     }
-                } // for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter)
+                    else if ( pPropertiesIter->Name.equalsAscii("PrimaryKeySupport") )
+                    {
+                        pPropertiesIter->Value >>= aInit.bPrimaryKeySupport;
+                    }
+                }
                 s_aSupport.insert(AdvancedSupport::value_type(*pIter,aInit));
             }
-        } // if ( s_aSupport.empty() )
+        }
         OSL_ENSURE(s_aSupport.find(_sURL) != s_aSupport.end(),"Illegal URL!");
         return s_aSupport[ _sURL ];
     }
@@ -208,8 +186,8 @@ namespace dbaui
                         aInit = AuthPwd;
                 }
                 s_aSupport.insert(Supported::value_type(*pIter,aInit));
-            } // for(;pIter != pEnd;++pIter)
-        } // if ( s_aSupport.empty() )
+            }
+        }
         OSL_ENSURE(s_aSupport.find(_sURL) != s_aSupport.end(),"Illegal URL!");
         return s_aSupport[ _sURL ].eAuthentication;
     }

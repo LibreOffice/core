@@ -87,6 +87,7 @@ namespace dbaui
         case DSID_AUTORETRIEVEVALUE:    return rAdvancedSupport.bGeneratedValues;
         case DSID_IGNORECURRENCY:       return rAdvancedSupport.bIgnoreCurrency;
         case DSID_ESCAPE_DATETIME:      return rAdvancedSupport.bEscapeDateTime;
+        case DSID_PRIMARY_KEY_SUPPORT:  return rAdvancedSupport.bPrimaryKeySupport;
         }
 
         OSL_ENSURE( false, "DataSourceUI::hasSetting: this item id is currently not supported!" );

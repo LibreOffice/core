@@ -30,143 +30,62 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBUI_TABLECONTROLLER_HXX
-#include "TableController.hxx"
-#endif
 
-#ifndef _DBAU_REGHELPER_HXX_
-#include "dbu_reghelper.hxx"
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-#include <tools/diagnose_ex.h>
-#ifndef _SFXSIDS_HRC
-#include <sfx2/sfxsids.hrc>
-#endif
-#ifndef _DBU_TBL_HRC_
-#include "dbu_tbl.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
-#include "browserids.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
-#include "defaultobjectnamecheck.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef DBAUI_DLGSAVE_HXX
-#include "dlgsave.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
-#include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
-#include <com/sun/star/sdbcx/XDrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XALTERTABLE_HPP_
-#include <com/sun/star/sdbcx/XAlterTable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
-#include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XINDEXESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
-#endif
-#include <com/sun/star/frame/XTitleChangeListener.hpp>
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
-#ifndef _COMPHELPER_STREAMSECTION_HXX_
-#include <comphelper/streamsection.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef DBAUI_TABLEDESIGNVIEW_HXX
-#include "TableDesignView.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef DBAUI_TABLEROW_HXX
-#include "TableRow.hxx"
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
-#include "TypeInfo.hxx"
-#endif
-#ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #include "TEditControl.hxx"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
-#include "sqlmessage.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBAUI_INDEXDIALOG_HXX_
-#include "indexdialog.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
+#include "TableController.hxx"
+#include "TableDesignView.hxx"
+#include "TableRow.hxx"
+#include "TypeInfo.hxx"
 #include "UITools.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#include <boost/mem_fn.hpp>
-
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
-#include <cppuhelper/exc_hlp.hxx>
-#endif
+#include "browserids.hxx"
+#include "dbu_reghelper.hxx"
+#include "dbu_tbl.hrc"
+#include "dbustrings.hrc"
+#include "defaultobjectnamecheck.hxx"
+#include "dlgsave.hxx"
 #include "dsmeta.hxx"
+#include "indexdialog.hxx"
+#include "sqlmessage.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XTitleChangeListener.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#include <com/sun/star/sdbcx/XAlterTable.hpp>
+#include <com/sun/star/sdbcx/XAppend.hpp>
+#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
+#include <com/sun/star/sdbcx/XDrop.hpp>
+#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/extract.hxx>
+#include <comphelper/streamsection.hxx>
+#include <comphelper/types.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbmetadata.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <tools/diagnose_ex.h>
+#include <tools/string.hxx>
+#include <vcl/msgbox.hxx>
+
+#include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
+
 #include <algorithm>
 #include <functional>
 
@@ -1089,7 +1008,8 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
 {
     sal_Bool bOk = sal_True;
     sal_Bool bFoundPKey = sal_False;
-    Reference< XDatabaseMetaData> xMetaData = getMetaData( );
+    Reference< XDatabaseMetaData > xMetaData = getMetaData( );
+    DatabaseMetaData aMetaData( getConnection() );
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
@@ -1115,39 +1035,38 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             }
         }
     }
-    if(!bFoundPKey)
+    if ( _bNew && !bFoundPKey && aMetaData.supportsPrimaryKeys() )
     {
-        if(_bNew && xMetaData.is() && xMetaData->supportsCoreSQLGrammar())
+        String sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
+        String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
+        OSQLMessageBox aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
+
+        switch ( aBox.Execute() )
         {
-            String sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
-            String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
-            OSQLMessageBox aBox(getView(), sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
+        case RET_YES:
+        {
+            ::boost::shared_ptr<OTableRow>  pNewRow(new OTableRow());
+            TOTypeInfoSP pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
+            if ( !pTypeInfo.get() )
+                break;
 
-            INT16 nReturn = aBox.Execute();
+            pNewRow->SetFieldType( pTypeInfo );
+            OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
 
-            if (nReturn == RET_YES)
-            {
-                ::boost::shared_ptr<OTableRow>  pNewRow(new OTableRow());
-                TOTypeInfoSP pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
+            pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
+            pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
-                if ( pTypeInfo.get() )
-                {
-                    pNewRow->SetFieldType( pTypeInfo );
-                    OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
+            pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
+            pActFieldDescr->SetPrimaryKey( sal_True );
+            m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
-                    pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
-                    pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
-
-                    pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
-                    pActFieldDescr->SetPrimaryKey( sal_True );
-                    m_vRowList.insert(m_vRowList.begin(),pNewRow);
-
-                    static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
-                    static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->RowInserted(0);
-                } // if ( pTypeInfo.get() )
-            }
-            else if (nReturn == RET_CANCEL)
-                bOk = sal_False;
+            static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
+            static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->RowInserted(0);
+        }
+        break;
+        case RET_CANCEL:
+            bOk = sal_False;
+            break;
         }
     }
     return bOk;

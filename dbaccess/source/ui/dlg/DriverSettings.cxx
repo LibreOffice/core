@@ -68,6 +68,7 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
          DSID_AUTORETRIEVEVALUE,
          DSID_BOOLEANCOMPARISON,
          DSID_ESCAPE_DATETIME,
+         DSID_PRIMARY_KEY_SUPPORT,
          0
     };
     for ( const USHORT* pGenericKnowSetting = nGenericKnownSettings; *pGenericKnowSetting; ++pGenericKnowSetting )
