@@ -261,20 +261,20 @@ namespace dbtools
     {
         lcl_checkConnected( *m_pImpl );
 
-        bool supportsPrimaryKeys = false;
+        bool doesSupportPrimaryKeys = false;
         try
         {
             Any setting;
             if  (   !( lcl_getConnectionSetting( "PrimaryKeySupport", *m_pImpl, setting ) )
-                ||  !( setting >>= supportsPrimaryKeys )
+                ||  !( setting >>= doesSupportPrimaryKeys )
                 )
-                supportsPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar();
+                doesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar();
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return supportsPrimaryKeys;
+        return doesSupportPrimaryKeys;
     }
 
     //--------------------------------------------------------------------
