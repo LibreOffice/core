@@ -6,6 +6,7 @@ Group: dummy
 License: LGPL
 BuildArch: noarch
 AutoReqProv: no
+%define _tmppath /tmp
 #BuildRoot: %{_tmppath}/%{name}-root
 Provides: libgnomevfs-2.so.0
 Provides: libgconf-2.so.4
