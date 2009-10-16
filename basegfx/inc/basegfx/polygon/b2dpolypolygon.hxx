@@ -129,7 +129,7 @@ namespace basegfx
         // apply transformation given in matrix form to the polygon
         void transform(const basegfx::B2DHomMatrix& rMatrix);
 
-        // polygon iterators
+        // polygon iterators (same iterator validity conditions as for vector)
         const B2DPolygon* begin() const;
         const B2DPolygon* end() const;
         B2DPolygon* begin();

@@ -83,7 +83,7 @@ namespace basegfx
         sal_uInt32 count() const;
 
         /// Coordinate interface
-        const basegfx::B2DPoint& getB2DPoint(sal_uInt32 nIndex) const;
+        basegfx::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
         void setB2DPoint(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue);
 
         /// Coordinate insert/append
@@ -201,7 +201,7 @@ namespace basegfx
             @return
             The outer range of the bezier curve/polygon
         */
-        const B2DRange& getB2DRange() const;
+        B2DRange getB2DRange() const;
 
         /** insert other 2D polygons
 
@@ -262,7 +262,7 @@ namespace basegfx
         /// apply transformation given in matrix form
         void transform(const basegfx::B2DHomMatrix& rMatrix);
 
-        // point iterators
+        // point iterators (same iterator validity conditions as for vector)
         const B2DPoint* begin() const;
         const B2DPoint* end() const;
         B2DPoint* begin();

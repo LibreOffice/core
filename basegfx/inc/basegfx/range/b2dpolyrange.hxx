@@ -131,7 +131,7 @@ namespace basegfx
          */
         B2DPolyPolygon solveCrossovers() const;
 
-        // element iterators
+        // element iterators (same iterator validity conditions as for vector)
         const B2DRange* begin() const;
         const B2DRange* end() const;
         B2DRange* begin();

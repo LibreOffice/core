@@ -210,22 +210,34 @@ public:
 
     const basegfx::B2DPoint* begin() const
     {
-        return &maVector.front();
+        if(maVector.empty())
+            return 0;
+        else
+            return &maVector.front();
     }
 
     const basegfx::B2DPoint* end() const
     {
-        return &maVector[maVector.size()];
+        if(maVector.empty())
+            return 0;
+        else
+            return (&maVector.back())+1;
     }
 
     basegfx::B2DPoint* begin()
     {
-        return &maVector.front();
+        if(maVector.empty())
+            return 0;
+        else
+            return &maVector.front();
     }
 
     basegfx::B2DPoint* end()
     {
-        return &maVector[maVector.size()];
+        if(maVector.empty())
+            return 0;
+        else
+            return (&maVector.back())+1;
     }
 };
 
@@ -1201,7 +1213,7 @@ namespace basegfx
         return mpPolygon->count();
     }
 
-    const B2DPoint& B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
+    B2DPoint B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
@@ -1460,7 +1472,7 @@ namespace basegfx
         return mpPolygon->getDefaultAdaptiveSubdivision(*this);
     }
 
-    const B2DRange& B2DPolygon::getB2DRange() const
+    B2DRange B2DPolygon::getB2DRange() const
     {
         return mpPolygon->getB2DRange(*this);
     }

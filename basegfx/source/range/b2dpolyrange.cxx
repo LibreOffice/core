@@ -229,22 +229,34 @@ namespace basegfx
 
         const B2DRange* begin() const
         {
-            return &maRanges.front();
+            if(maRanges.empty())
+                return 0;
+            else
+                return &maRanges.front();
         }
 
         const B2DRange* end() const
         {
-            return &maRanges[maRanges.size()];
+            if(maRanges.empty())
+                return 0;
+            else
+                return (&maRanges.back())+1;
         }
 
         B2DRange* begin()
         {
-            return &maRanges.front();
+            if(maRanges.empty())
+                return 0;
+            else
+                return &maRanges.front();
         }
 
         B2DRange* end()
         {
-            return &maRanges[maRanges.size()];
+            if(maRanges.empty())
+                return 0;
+            else
+                return (&maRanges.back())+1;
         }
 
     private:
