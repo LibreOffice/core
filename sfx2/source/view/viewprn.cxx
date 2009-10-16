@@ -685,6 +685,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( bDetectHidden && pDoc->QueryHiddenInformation( WhenPrinting, NULL ) != RET_YES )
                 break;
 
+            SFX_REQUEST_ARG(rReq, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE);
+            sal_Bool bSelection = pSelectItem && pSelectItem->GetValue();
+            if( pSelectItem && rReq.GetArgs()->Count() == 1 )
+                bIsAPI = FALSE;
+
             uno::Sequence < beans::PropertyValue > aProps;
             if ( bIsAPI )
             {
@@ -722,7 +727,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     }
                 }
             }
-
+            sal_Int32 nLen = aProps.getLength();
+            aProps.realloc( nLen + 1 );
+            aProps[nLen].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) );
+            aProps[nLen].Value = makeAny( bSelection );
+            
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );
 
             // FIXME: Recording
