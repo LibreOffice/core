@@ -36,7 +36,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
-//#include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <unotools/localfilehelper.hxx>

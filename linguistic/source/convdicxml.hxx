@@ -77,7 +77,7 @@ public:
     void _ExportAutoStyles()    {}
     void _ExportMasterStyles()  {}
     void _ExportContent();
-//    sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
+    sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass );
 
     sal_Bool    Export();
 };
