@@ -33,7 +33,7 @@
 #include <weighhdl.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 #include <tools/solar.h>
 
 #ifndef _INC_LIMITS

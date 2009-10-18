@@ -58,14 +58,13 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 /** === end UNO includes === **/
 
-#include <vcl/wintypes.hxx>     // for check states
+#include <tools/wintypes.hxx>       // for check states
 #include <xmloff/txtprmap.hxx>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <tools/urlobj.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <vcl/wintypes.hxx>     // for check states
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>

@@ -58,7 +58,7 @@
 #include "XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

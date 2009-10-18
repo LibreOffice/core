@@ -469,9 +469,9 @@
 #include "unotools/processfactory.hxx"
 #include "unotools/streamwrap.hxx"
 
-#include "vcl/fldunit.hxx"
+#include "tools/fldunit.hxx"
 #include "vcl/fontcvt.hxx"
-#include "vcl/mapunit.hxx"
+#include "tools/mapunit.hxx"
 
 #include "vos/mutex.hxx"
 #include "vos/ref.hxx"

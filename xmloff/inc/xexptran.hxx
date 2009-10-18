@@ -38,7 +38,7 @@
 #include <com/sun/star/drawing/FlagSequenceSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 
 #include <vector>
 

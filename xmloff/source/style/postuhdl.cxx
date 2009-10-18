@@ -36,7 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include <xmloff/xmlelement.hxx>

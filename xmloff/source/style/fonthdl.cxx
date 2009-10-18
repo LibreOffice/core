@@ -38,7 +38,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include <xmloff/xmlelement.hxx>

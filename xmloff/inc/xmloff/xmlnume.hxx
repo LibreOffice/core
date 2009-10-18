@@ -32,7 +32,7 @@
 #define _XMLOFF_XMLNUME_HXX
 
 #include <rtl/ustring.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <xmloff/XMLStringVector.hxx>
 #include <xmloff/attrlist.hxx>
 

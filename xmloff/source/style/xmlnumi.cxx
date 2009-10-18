@@ -33,7 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>

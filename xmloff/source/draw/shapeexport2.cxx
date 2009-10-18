@@ -55,7 +55,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "XMLImageMapExport.hxx"
 #include "xexptran.hxx"
-#include <vcl/salbtype.hxx>     // FRound
+#include <tools/gen.hxx>        // FRound
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 

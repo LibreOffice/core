@@ -32,7 +32,7 @@
 #define _XMLOFF_VISAREACONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 
 class Rectangle;
 
