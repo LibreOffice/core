@@ -99,17 +99,4 @@ public:
                     ~ImplPolyPolygon();
 };
 
-inline long MinMax( long nVal, long nMin, long nMax )
-{
-    return( nVal >= nMin ? ( nVal <= nMax ? nVal : nMax ) : nMin );
-}
-
-// ------------------------------------------------------------------
-
-inline long FRound( double fVal )
-{
-    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
-}
-
-
 #endif // _SV_POLY_H

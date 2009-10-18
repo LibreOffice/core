@@ -28,9 +28,17 @@
  *
  ************************************************************************/
 
-#ifndef _VCL_FLDUNIT_HXX
-#define _VCL_FLDUNIT_HXX
+#ifndef _TOOLS_FLDUNIT_HXX
+#define _TOOLS_FLDUNIT_HXX
 
-#include <tools/fldunit.hxx>
+// --------------
+// - FieldTypes -
+// --------------
 
-#endif // _VCL_FLDUNIT_HXX
+// By changes you must also change: rsc/vclrsc.hxx
+enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
+                 FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
+                 FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CUSTOM,
+                 FUNIT_PERCENT, FUNIT_100TH_MM };
+
+#endif // _TOOLS_FLDUNIT_HXX

@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fldunit.hxx,v $
+ * $RCSfile: mapunit.hxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -28,9 +28,17 @@
  *
  ************************************************************************/
 
-#ifndef _VCL_FLDUNIT_HXX
-#define _VCL_FLDUNIT_HXX
+#ifndef _TOOLS_MAPUNIT_HXX
+#define _TOOLS_MAPUNIT_HXX
 
-#include <tools/fldunit.hxx>
+// -----------------
+// - MapMode-Types -
+// -----------------
 
-#endif // _VCL_FLDUNIT_HXX
+// By changes you must also change: rsc/vclrsc.hxx
+enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
+               MAP_1000TH_INCH, MAP_100TH_INCH, MAP_10TH_INCH, MAP_INCH,
+               MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,
+               MAP_RELATIVE, MAP_REALAPPFONT, MAP_LASTENUMDUMMY };
+
+#endif  // _TOOLS_MAPUNIT_HXX
