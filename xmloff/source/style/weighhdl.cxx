@@ -42,10 +42,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/awt/FontWeight.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -55,24 +53,24 @@ using namespace ::xmloff::token;
 
 struct FontWeightMapper
 {
-    FontWeight eWeight;
+    float fWeight;
     USHORT nValue;
 };
 
 FontWeightMapper const aFontWeightMap[] =
 {
-    { WEIGHT_DONTKNOW,              0 },
-    { WEIGHT_THIN,                  100 },
-    { WEIGHT_ULTRALIGHT,            150 },
-    { WEIGHT_LIGHT,                 250 },
-    { WEIGHT_SEMILIGHT,             350 },
-    { WEIGHT_NORMAL,                400 },
-    { WEIGHT_MEDIUM,                450 },
-    { WEIGHT_SEMIBOLD,              600 },
-    { WEIGHT_BOLD,                  700 },
-    { WEIGHT_ULTRABOLD,             800 },
-    { WEIGHT_BLACK,                 900 },
-    { (FontWeight)USHRT_MAX,       1000 }
+    { ::com::sun::star::awt::FontWeight::DONTKNOW,              0 },
+    { ::com::sun::star::awt::FontWeight::THIN,                  100 },
+    { ::com::sun::star::awt::FontWeight::ULTRALIGHT,            150 },
+    { ::com::sun::star::awt::FontWeight::LIGHT,                 250 },
+    { ::com::sun::star::awt::FontWeight::SEMILIGHT,             350 },
+    { ::com::sun::star::awt::FontWeight::NORMAL,                400 },
+    { ::com::sun::star::awt::FontWeight::NORMAL,                450 },
+    { ::com::sun::star::awt::FontWeight::SEMIBOLD,              600 },
+    { ::com::sun::star::awt::FontWeight::BOLD,                  700 },
+    { ::com::sun::star::awt::FontWeight::ULTRABOLD,             800 },
+    { ::com::sun::star::awt::FontWeight::BLACK,                 900 },
+    { ::com::sun::star::awt::FontWeight::DONTKNOW,             1000 }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,8 +109,8 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     if( bRet )
     {
         bRet = sal_False;
-
-        for( int i = 0; aFontWeightMap[i].eWeight != USHRT_MAX; i++ )
+        static int nCount = sizeof(aFontWeightMap)/sizeof(FontWeightMapper);
+        for( int i=0; i<nCount; i++ )
         {
             if( (nWeight >= aFontWeightMap[i].nValue) && (nWeight <= aFontWeightMap[i+1].nValue) )
             {
@@ -120,9 +118,9 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
                 sal_uInt16 nDiff2 = aFontWeightMap[i+1].nValue - nWeight;
 
                 if( nDiff1 < nDiff2 )
-                    rValue <<= (float)( VCLUnoHelper::ConvertFontWeight( aFontWeightMap[i].eWeight ) );
+                    rValue <<= aFontWeightMap[i].fWeight;
                 else
-                    rValue <<= (float)( VCLUnoHelper::ConvertFontWeight( aFontWeightMap[i+1].eWeight ) );
+                    rValue <<= aFontWeightMap[i+1].fWeight;
 
                 bRet = sal_True;
                 break;
@@ -136,7 +134,6 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
 sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Bool bRet = sal_False;
-    FontWeight eWeight;
 
     float fValue = float();
     if( !( rValue >>= fValue ) )
@@ -151,15 +148,13 @@ sal_Bool XMLFontWeightPropHdl::exportXML( OUString& rStrExpValue, const Any& rVa
     else
         bRet = sal_True;
 
-    eWeight = VCLUnoHelper::ConvertFontWeight( fValue );
-
     if( bRet )
     {
         sal_uInt16 nWeight = 0;
-
-        for( int i = 0; aFontWeightMap[i].eWeight != -1; i++ )
+        static int nCount = sizeof(aFontWeightMap)/sizeof(FontWeightMapper);
+        for( int i=0; i<nCount; i++ )
         {
-            if( aFontWeightMap[i].eWeight == eWeight )
+            if( fValue <= aFontWeightMap[i].fWeight )
             {
                  nWeight = aFontWeightMap[i].nValue;
                  break;
