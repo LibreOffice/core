@@ -919,7 +919,7 @@
 #include "vcl/fixed.hxx"
 #include "vcl/fldunit.hxx"
 #include "vcl/font.hxx"
-#include "vcl/fontcvt.hxx"
+#include "unotools/fontcvt.hxx"
 #include "vcl/graph.hxx"
 #include "vcl/group.hxx"
 #include "vcl/help.hxx"
