@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+
 #include <uielement/langselectionmenucontroller.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -66,7 +67,7 @@
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <map>
+
 #include <i18npool/mslangid.hxx>
 #include <svtools/languageoptions.hxx>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
@@ -80,6 +81,9 @@
 
 #include "helper/mischelper.hxx"
 
+#include <map>
+#include <set>
+
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
@@ -91,6 +95,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
+using ::rtl::OUString;
 
 namespace framework
 {
@@ -105,8 +110,8 @@ DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} 
 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     PopupMenuControllerBase( xServiceManager ),
-    m_bShowMenu( sal_True )
-    ,m_aLangGuessHelper(xServiceManager)
+    m_bShowMenu( sal_True ),
+    m_aLangGuessHelper(xServiceManager)
 {
 }
 
@@ -139,25 +144,21 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
         return;
 
     m_bShowMenu = sal_True;
-    m_nScriptType=7;//set the default value
+    m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
 
-    rtl::OUString               aStrValue;
-    Sequence< ::rtl::OUString > aSeq;
+    OUString               aStrValue;
+    Sequence< OUString > aSeq;
 
-    if ( Event.State >>= aStrValue )
-    {
-        m_aCurrentLanguage=aStrValue;
-    }
-    else if ( Event.State >>= aSeq )
+    if ( Event.State >>= aSeq )
     {
         if ( aSeq.getLength() == 4 )
         {
             // Retrieve all other values from the sequence and
             // store it members!
-            m_aCurLang=aSeq[0];
-            m_nScriptType= static_cast< sal_Int16 >(aSeq[1].toInt32());
-            m_aKeyboardLang=aSeq[2];
-            m_aGuessedText=aSeq[3];
+            m_aCurLang          = aSeq[0];
+            m_nScriptType       = static_cast< sal_Int16 >(aSeq[1].toInt32());
+            m_aKeyboardLang     = aSeq[2];
+            m_aGuessedTextLang  = aSeq[3];
         }
     }
     else if ( !Event.State.hasValue() )
@@ -188,14 +189,14 @@ void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& 
     {
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( xDispatchProvider.is() )
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
     }
 
     if ( xDispatch.is() )
     {
         Sequence<PropertyValue>      aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("LanguageSelectionMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+            UiEventLogHelper( OUString::createFromAscii("LanguageSelectionMenuController")).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs );
         xDispatch->dispatch( aTargetURL, aArgs );
     }
 }
@@ -210,22 +211,22 @@ void LanguageSelectionMenuController::impl_setPopupMenu()
     // Register for language updates
     aTargetURL.Complete = m_aLangStatusCommandURL;
     m_xURLTransformer->parseStrict( aTargetURL );
-    m_xLanguageDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    m_xLanguageDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
     // Register for setting languages and opening language dialog
     aTargetURL.Complete = m_aMenuCommandURL_Lang;
     m_xURLTransformer->parseStrict( aTargetURL );
-    m_xMenuDispatch_Lang = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    m_xMenuDispatch_Lang = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
     // Register for opening character dialog
     aTargetURL.Complete = m_aMenuCommandURL_Font;
     m_xURLTransformer->parseStrict( aTargetURL );
-    m_xMenuDispatch_Font = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    m_xMenuDispatch_Font = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
     // Register for opening character dialog with preselected paragraph
     aTargetURL.Complete = m_aMenuCommandURL_CharDlgForParagraph;
     m_xURLTransformer->parseStrict( aTargetURL );
-    m_xMenuDispatch_CharDlgForParagraph = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    m_xMenuDispatch_CharDlgForParagraph = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
 void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu , const Mode eMode )
@@ -247,137 +248,77 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     String aCmd_Language;
     if( eMode == MODE_SetLanguageSelectionMenu )
     {
-        aCmd_Dialog+=String::CreateFromAscii(".uno:FontDialog?Language:string=*");
-        aCmd_Language+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=Current_");
+        aCmd_Dialog.AppendAscii(".uno:FontDialog?Language:string=*");
+        aCmd_Language.AppendAscii(".uno:LanguageStatus?Language:string=Current_");
     }
     else if ( eMode == MODE_SetLanguageParagraphMenu )
     {
-        aCmd_Dialog+=String::CreateFromAscii(".uno:FontDialogForParagraph");
-        aCmd_Language+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=Paragraph_");
+        aCmd_Dialog.AppendAscii(".uno:FontDialogForParagraph");
+        aCmd_Language.AppendAscii(".uno:LanguageStatus?Language:string=Paragraph_");
     }
     else if ( eMode == MODE_SetLanguageAllTextMenu )
     {
-        aCmd_Dialog+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=*");
-        aCmd_Language+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=Default_");
+        aCmd_Dialog.AppendAscii(".uno:LanguageStatus?Language:string=*");
+        aCmd_Language.AppendAscii(".uno:LanguageStatus?Language:string=Default_");
     }
 
-    //Reference< awt::XMenuExtended > m_xMenuExtended( m_xPopupMenu, UNO_QUERY );
-    std::map< ::rtl::OUString, ::rtl::OUString > LangItems;
+    SvtLanguageTable    aLanguageTable;
 
-    SvtLanguageTable aLanguageTable;
-    USHORT nItemId = 1;
+    // get languages to be displayed in the menu
+    std::set< OUString > aLangItems;
+    FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
+            m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
-    //1--add current language
-    if(m_aCurLang.getLength())
+    //
+    // now add menu entries
+    // the different menues purpose will be handled by the different string
+    // for aCmd_Dialog and aCmd_Language
+    //
+
+    sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
+    const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection
+    const OUString sEmpty;  // 'no language found' from language guessing
+    std::map< sal_Int16, OUString > aLangMap;
+    std::set< OUString >::const_iterator it;
+    for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
-        LangItems[m_aCurLang]=m_aCurLang;
-    }
-
-    SvtLanguageTable aLangTable;
-    //2--System
-    const AllSettings& rAllSettings=Application::GetSettings();
-    LanguageType rSystemLanguage = rAllSettings.GetLanguage();
-    if(rSystemLanguage!=LANGUAGE_DONTKNOW)
-    {
-        if (IsScriptTypeMatchingToLanguage(m_nScriptType,rSystemLanguage ))
-            LangItems[::rtl::OUString(aLangTable.GetString(rSystemLanguage))]=::rtl::OUString(aLangTable.GetString(rSystemLanguage));
-    }
-
-    //3--UI
-    LanguageType rUILanguage = rAllSettings.GetUILanguage();
-    if(rUILanguage!=LANGUAGE_DONTKNOW)
-    {
-        if (IsScriptTypeMatchingToLanguage(m_nScriptType, rUILanguage ))
-            LangItems[::rtl::OUString(aLangTable.GetString(rUILanguage))]=::rtl::OUString(aLangTable.GetString(rUILanguage));
-    }
-
-    //4--guessed language
-    uno::Reference< linguistic2::XLanguageGuessing > xLangGuesser( m_aLangGuessHelper.GetGuesser() );
-    if (xLangGuesser.is() && m_aGuessedText.getLength() > 0)
-    {
-        ::com::sun::star::lang::Locale aLocale(xLangGuesser->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
-        LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
-        if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_NONE && nLang != LANGUAGE_SYSTEM
-            && IsScriptTypeMatchingToLanguage( m_nScriptType, nLang ))
-            LangItems[aLangTable.GetString(nLang)]=aLangTable.GetString(nLang);
-    }
-
-    //5--keyboard language
-    if(m_aKeyboardLang!=::rtl::OUString::createFromAscii(""))
-    {
-        if (IsScriptTypeMatchingToLanguage(m_nScriptType, aLanguageTable.GetType(m_aKeyboardLang)))
-            LangItems[m_aKeyboardLang] = m_aKeyboardLang;
-    }
-
-    //6--all languages used in current document
-    Reference< com::sun::star::frame::XModel > xModel;
-    if ( m_xFrame.is() )
-    {
-       Reference< com::sun::star::frame::XController > xController( m_xFrame->getController(), UNO_QUERY );
-       if ( xController.is() )
-           xModel = xController->getModel();
-    }
-    Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, UNO_QUERY );
-    /*the description of m_nScriptType
-      LATIN : 1
-      ASIAN : 2
-      COMPLEX:4
-      LATIN  + ASIAN : 3
-      LATIN  + COMPLEX : 5
-      ASIAN + COMPLEX : 6
-      LATIN + ASIAN + COMPLEX : 7
-    */
-
-    sal_Int16 nCount=7;
-    if(xDocumentLanguages.is())
-    {
-        Sequence< Locale > rLocales(xDocumentLanguages->getDocumentLanguages(m_nScriptType,nCount));
-        if(rLocales.getLength()>0)
+        const OUString & rStr( *it );
+        if (rStr != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
+            rStr != sAsterix &&
+            rStr != sEmpty)
         {
-            for(USHORT i = 0; i<rLocales.getLength();++i)
-            {
-                if (LangItems.size()==7)
-                    break;
-                const Locale& rLocale=rLocales[i];
-                if(IsScriptTypeMatchingToLanguage(m_nScriptType, aLanguageTable.GetType(rLocale.Language)))
-                    LangItems[rLocale.Language] = rLocale.Language;
-            }
-        }
-    }
-    std::map< sal_Int16, ::rtl::OUString > LangTable;
-
-    const ::rtl::OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));
-    for(std::map< ::rtl::OUString, ::rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
-    {
-        if(it->first != ::rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
-           it->first != sAsterix &&
-           it->first.getLength())
-        {
-            ++nItemId;
-            pPopupMenu->InsertItem( nItemId,it->first);
-            LangTable[nItemId] = it->first;
-            if(it->first == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
+            pPopupMenu->InsertItem( nItemId, rStr );
+            aCmd = aCmd_Language;
+            aCmd += String( rStr );
+            pPopupMenu->SetItemCommand( nItemId, aCmd );
+            if (rStr == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
                 //make a sign for the current language
-                pPopupMenu->CheckItem(nItemId,TRUE);
+                pPopupMenu->CheckItem( nItemId, TRUE );
             }
-            aCmd=aCmd_Language;
-            aCmd+=(String)it->first;
-            pPopupMenu->SetItemCommand(nItemId,aCmd);
+            aLangMap[ nItemId ] = rStr;
+            ++nItemId;
         }
     }
 
-    //7--none
-    nItemId++;
+    // entry for LANGUAGE_NONE
+    ++nItemId;
     pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_NONE )) );
     aCmd=aCmd_Language;
-    aCmd+=String::CreateFromAscii("LANGUAGE_NONE");
-    pPopupMenu->SetItemCommand(nItemId,aCmd);
+    aCmd.AppendAscii("LANGUAGE_NONE");
+    pPopupMenu->SetItemCommand( nItemId, aCmd );
 
-    //More...
-    nItemId++;
+    // entry for 'Reset to default language'
+    ++nItemId;
+    pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_RESET_TO_DEFAULT_LANGUAGE )) );
+    aCmd=aCmd_Language;
+    aCmd.AppendAscii("RESET_LANGUAGES");
+    pPopupMenu->SetItemCommand( nItemId, aCmd );
+
+    // entry for opening the Format/Character dialog
+    ++nItemId;
     pPopupMenu->InsertItem( nItemId, String(FwlResId( STR_LANGSTATUS_MORE )));
-    pPopupMenu->SetItemCommand(nItemId,aCmd_Dialog);
+    pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
 }
 
 
@@ -427,10 +368,10 @@ void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >
 
         if ( m_bInitialized )
         {
-            m_aLangStatusCommandURL               = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LanguageStatus" ));
+            m_aLangStatusCommandURL               = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LanguageStatus" ));
             m_aMenuCommandURL_Lang                = m_aLangStatusCommandURL;
-            m_aMenuCommandURL_Font                = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialog" ));
-            m_aMenuCommandURL_CharDlgForParagraph = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialogForParagraph" ));
+            m_aMenuCommandURL_Font                = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialog" ));
+            m_aMenuCommandURL_CharDlgForParagraph = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontDialogForParagraph" ));
         }
     }
 }

@@ -102,11 +102,10 @@ namespace framework
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_Font;
             ::rtl::OUString                                                        m_aMenuCommandURL_CharDlgForParagraph;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_CharDlgForParagraph;
-            ::rtl::OUString     m_aCurrentLanguage;
             ::rtl::OUString     m_aCurLang;
             sal_Int16           m_nScriptType;
             ::rtl::OUString     m_aKeyboardLang;
-            ::rtl::OUString     m_aGuessedText;
+            ::rtl::OUString     m_aGuessedTextLang;
             LanguageGuessingHelper      m_aLangGuessHelper;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const Mode rMode );

@@ -119,6 +119,8 @@ SHL1STDLIBS=    \
                 $(UNOTOOLSLIB)      \
                 $(CPPUHELPERLIB)    \
                 $(TOOLSLIB)         \
+                $(SVTOOLLIB)        \
+                $(I18NISOLANGLIB)   \
                 $(VOSLIB)           \
                 $(VCLLIB)           \
                 $(TKLIB)            \
@@ -210,7 +212,6 @@ SHL3STDLIBS=    \
                 $(SVTOOLLIB)                        \
                 $(UNOTOOLSLIB)                      \
                 $(TOOLSLIB)                         \
-                $(I18NISOLANGLIB)                   \
                 $(COMPHELPERLIB)                    \
                 $(CPPUHELPERLIB)                    \
                 $(COMPHELPERLIB)                    \
