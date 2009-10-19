@@ -862,7 +862,7 @@
 #include "vcl/field.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/font.hxx"
-#include "vcl/fontcvt.hxx"
+#include "unotools/fontcvt.hxx"
 #include "vcl/gdimtf.hxx"
 #include "vcl/gfxlink.hxx"
 #include "vcl/gradient.hxx"

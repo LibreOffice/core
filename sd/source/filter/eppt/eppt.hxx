@@ -38,7 +38,7 @@
 #include <sot/storage.hxx>
 #include <tools/gen.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <tools/string.hxx>
 #include "pptexanimations.hxx"
 #include <pptexsoundcollection.hxx>
