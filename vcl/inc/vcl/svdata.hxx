@@ -114,7 +114,8 @@ class DockingManager;
 
 namespace vos { class OMutex; }
 namespace vos { class OCondition; }
-namespace vcl { class DisplayConnection; class FontSubstConfiguration; class SettingsConfigItem; class DefaultFontConfiguration; class DeleteOnDeinitBase; }
+namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
+namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 
 // -----------------
 // - ImplSVAppData -
@@ -203,8 +204,8 @@ struct ImplSVGDIData
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
     BOOL                    mbFontSubChanged;   // TRUE: FontSubstitution wurde zwischen Begin/End geaendert
-    vcl::DefaultFontConfiguration* mpDefaultFontConfiguration;
-    vcl::FontSubstConfiguration* mpFontSubstConfiguration;
+    utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
+    utl::FontSubstConfiguration* mpFontSubstConfiguration;
     bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects

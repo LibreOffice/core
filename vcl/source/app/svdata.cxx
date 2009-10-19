@@ -47,7 +47,7 @@
 #include <uno/current_context.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <tools/debug.hxx>
-#include <vcl/fontcfg.hxx>
+#include <unotools/fontcfg.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/window.h>

@@ -59,8 +59,9 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/bitmap3.obj 	\
             $(SLO)$/bitmap4.obj 	\
             $(SLO)$/alpha.obj		\
+            $(SLO)$/configsettings.obj 	\
             $(SLO)$/bitmapex.obj	\
-            $(SLO)$/imgcons.obj 	\
+            $(SLO)$/imgcons.obj	\
             $(SLO)$/bmpacc.obj		\
             $(SLO)$/bmpacc2.obj 	\
             $(SLO)$/bmpacc3.obj 	\
@@ -96,13 +97,11 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/outdev5.obj 	\
             $(SLO)$/outdev6.obj 	\
             $(SLO)$/virdev.obj      \
-            $(SLO)$/fontcvt.obj		\
             $(SLO)$/print.obj		\
             $(SLO)$/print2.obj		\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
             $(SLO)$/wall.obj		\
-            $(SLO)$/fontcfg.obj		\
             $(SLO)$/base14.obj		\
             $(SLO)$/pdfwriter.obj	\
             $(SLO)$/pdfwriter_impl.obj	\

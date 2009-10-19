@@ -37,7 +37,7 @@
 #include "vcl/event.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/i18nhelp.hxx"
-#include "vcl/fontcfg.hxx"
+#include "unotools/fontcfg.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/unohelp.hxx"
@@ -549,7 +549,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( vcl::DefaultFontConfiguration::get()->getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
+    aStdFont.SetName( utl::DefaultFontConfiguration::get()->getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;

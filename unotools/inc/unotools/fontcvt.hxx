@@ -28,10 +28,10 @@
  *
  ************************************************************************/
 
-#ifndef _SV_FONTCVT_HXX
-#define _SV_FONTCVT_HXX
+#ifndef _UNOTOOLS_FONTCVT_HXX
+#define _UNOTOOLS_FONTCVT_HXX
 
-#include <vcl/dllapi.h>
+#include <unotools/unotoolsdllapi.h>
 #include <tools/string.hxx>
 
 // ------------------
@@ -43,37 +43,16 @@
 #define FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS     ((ULONG)0x00000004)
 
 typedef void* FontToSubsFontConverter;
-VCL_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const String& rFontName, ULONG nFlags );
-VCL_DLLPUBLIC void                        DestroyFontToSubsFontConverter( FontToSubsFontConverter hConverter );
-VCL_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
-VCL_DLLPUBLIC String                      GetFontToSubsFontName( FontToSubsFontConverter hConverter );
-
-// ----------------
-// - SubsFontName -
-// ----------------
-
-#define SUBSFONT_ONLYONE    ((ULONG)0x00000001)
-#define SUBSFONT_MS         ((ULONG)0x00000002)
-#define SUBSFONT_PS         ((ULONG)0x00000004)
-#define SUBSFONT_HTML       ((ULONG)0x00000008)
-VCL_DLLPUBLIC String GetSubsFontName( const String& rName, ULONG nFlags );
-
-// -----------------
-// - FontTokenName -
-// -----------------
-
-VCL_DLLPUBLIC String GetFontToken( const String& rName, xub_StrLen nToken, xub_StrLen& rIndex );
-inline String GetFontToken( const String& rName, xub_StrLen nToken )
-{
-    xub_StrLen nTempIndex = 0;
-    return GetFontToken( rName, nToken, nTempIndex );
-}
+UNOTOOLS_DLLPUBLIC FontToSubsFontConverter     CreateFontToSubsFontConverter( const String& rFontName, ULONG nFlags );
+UNOTOOLS_DLLPUBLIC void                        DestroyFontToSubsFontConverter( FontToSubsFontConverter hConverter );
+UNOTOOLS_DLLPUBLIC sal_Unicode                 ConvertFontToSubsFontChar( FontToSubsFontConverter hConverter, sal_Unicode c );
+UNOTOOLS_DLLPUBLIC String                      GetFontToSubsFontName( FontToSubsFontConverter hConverter );
 
 // ---------------------------
 // - StarSymbolToMSMultiFont -
 // ---------------------------
 
-class VCL_DLLPUBLIC StarSymbolToMSMultiFont
+class UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont
 {
 public:
     //Returns the name of the best windows symbol font which this char can be
@@ -99,5 +78,5 @@ public:
 //recognizably similiar. Even in this mode there will be characters that fail.
 //The users of this might want to make a distinction between failed characters
 //which were inside and those outside the unicode private area.
-VCL_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);
-#endif // _SV_FONTCVT_HXX
+UNOTOOLS_DLLPUBLIC StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly=false);
+#endif // _UNOTOOLS_FONTCVT_HXX

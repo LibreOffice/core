@@ -45,6 +45,7 @@
 #include <tools/poly.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <unotools/fontdefs.hxx>
 
 #include <vector>
 
@@ -259,31 +260,6 @@ struct KerningPair
 // AddFontSubstitute
 #define FONT_SUBSTITUTE_ALWAYS          ((USHORT)0x0001)
 #define FONT_SUBSTITUTE_SCREENONLY      ((USHORT)0x0002)
-
-// Default-Font
-#define DEFAULTFONT_SANS_UNICODE        ((USHORT)1)
-#define DEFAULTFONT_SANS                ((USHORT)2)
-#define DEFAULTFONT_SERIF               ((USHORT)3)
-#define DEFAULTFONT_FIXED               ((USHORT)4)
-#define DEFAULTFONT_SYMBOL              ((USHORT)5)
-#define DEFAULTFONT_UI_SANS             ((USHORT)1000)
-#define DEFAULTFONT_UI_FIXED            ((USHORT)1001)
-#define DEFAULTFONT_LATIN_TEXT          ((USHORT)2000)
-#define DEFAULTFONT_LATIN_PRESENTATION  ((USHORT)2001)
-#define DEFAULTFONT_LATIN_SPREADSHEET   ((USHORT)2002)
-#define DEFAULTFONT_LATIN_HEADING       ((USHORT)2003)
-#define DEFAULTFONT_LATIN_DISPLAY       ((USHORT)2004)
-#define DEFAULTFONT_LATIN_FIXED         ((USHORT)2005)
-#define DEFAULTFONT_CJK_TEXT            ((USHORT)3000)
-#define DEFAULTFONT_CJK_PRESENTATION    ((USHORT)3001)
-#define DEFAULTFONT_CJK_SPREADSHEET     ((USHORT)3002)
-#define DEFAULTFONT_CJK_HEADING         ((USHORT)3003)
-#define DEFAULTFONT_CJK_DISPLAY         ((USHORT)3004)
-#define DEFAULTFONT_CTL_TEXT            ((USHORT)4000)
-#define DEFAULTFONT_CTL_PRESENTATION    ((USHORT)4001)
-#define DEFAULTFONT_CTL_SPREADSHEET     ((USHORT)4002)
-#define DEFAULTFONT_CTL_HEADING         ((USHORT)4003)
-#define DEFAULTFONT_CTL_DISPLAY         ((USHORT)4004)
 
 #define DEFAULTFONT_FLAGS_ONLYONE       ((ULONG)0x00000001)
 

@@ -62,6 +62,7 @@ SLOFILES=\
     $(SLO)$/eventcfg.obj                \
     $(SLO)$/extendedsecurityoptions.obj \
         $(SLO)$/fltrcfg.obj                             \
+    $(SLO)$/fontcfg.obj \
     $(SLO)$/fontoptions.obj				\
         $(SLO)$/historyoptions.obj                         \
     $(SLO)$/inetoptions.obj				\

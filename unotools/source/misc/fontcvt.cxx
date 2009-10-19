@@ -29,9 +29,9 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
-#include <vcl/fontcvt.hxx>
-#include <vcl/outdev.h>
+#include "precompiled_unotools.hxx"
+#include <unotools/fontcvt.hxx>
+#include <unotools/fontdefs.hxx>
 
 #ifndef _STLP_MAP
 #include <map>
@@ -1350,13 +1350,13 @@ StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont(bool bPerfectOnly)
 
 //=======================================================================
 
-sal_Unicode ImplRecodeChar( const ImplCvtChar* pConversion, sal_Unicode cChar )
+sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 {
     sal_Unicode cRetVal = 0;
-    if( pConversion->mpCvtFunc )
+    if( mpCvtFunc )
     {
         // use a conversion function for recoding
-        cRetVal = pConversion->mpCvtFunc( cChar );
+        cRetVal = mpCvtFunc( cChar );
     }
     else
     {
@@ -1367,7 +1367,7 @@ sal_Unicode ImplRecodeChar( const ImplCvtChar* pConversion, sal_Unicode cChar )
             cIndex -= 0xF000;
         // recode the symbol
         if( cIndex>=0x0020 && cIndex<=0x00FF )
-            cRetVal = pConversion->mpCvtTab[ cIndex - 0x0020 ];
+            cRetVal = mpCvtTab[ cIndex - 0x0020 ];
     }
 
     return cRetVal ? cRetVal : cChar;
@@ -1377,8 +1377,7 @@ sal_Unicode ImplRecodeChar( const ImplCvtChar* pConversion, sal_Unicode cChar )
 
 // recode the string assuming the character codes are symbol codes
 // from an traditional symbol font (i.e. U+F020..U+F0FF)
-void ImplRecodeString( const ImplCvtChar* pConversion, String& rStr,
-           xub_StrLen nIndex, xub_StrLen nLen )
+void ConvertChar::RecodeString( String& rStr, xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     ULONG nLastIndex = (ULONG)nIndex + nLen;
     if( nLastIndex > rStr.Len() )
@@ -1393,7 +1392,7 @@ void ImplRecodeString( const ImplCvtChar* pConversion, String& rStr,
             continue;
 
         // recode a symbol
-        sal_Unicode cNew = ImplRecodeChar( pConversion, cOrig );
+        sal_Unicode cNew = RecodeChar( cOrig );
         if( cOrig != cNew )
             rStr.SetChar( nIndex, cNew );
     }
@@ -1401,7 +1400,7 @@ void ImplRecodeString( const ImplCvtChar* pConversion, String& rStr,
 
 //=======================================================================
 
-struct RecodeTable { const char* pOrgName; ImplCvtChar aCvt;};
+struct RecodeTable { const char* pOrgName; ConvertChar aCvt;};
 
 static RecodeTable aRecodeTable[] =
 {
@@ -1427,22 +1426,17 @@ static RecodeTable aRecodeTable[] =
     {"mtextra",         {aMTExtraTab, "StarSymbol", NULL}}
 };
 
-static ImplCvtChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
-#if 0
-// not used
-static ImplCvtChar aImplDingBatsCvt   = { aMonotypeSortsTab, "StarSymbol", NULL };
-#endif
+static ConvertChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStarBats };
 
 // -----------------------------------------------------------------------
 
-const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
-                                      const String& rMapFontName )
+const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const String& rMapFontName )
 {
-    const ImplCvtChar* pCvt = NULL;
+    const ConvertChar* pCvt = NULL;
     String aOrgName( rOrgFontName );
-    ImplGetEnglishSearchFontName( aOrgName );
+    GetEnglishSearchFontName( aOrgName );
     String aMapName( rMapFontName );
-    ImplGetEnglishSearchFontName( aMapName );
+    GetEnglishSearchFontName( aMapName );
 
     if( aMapName.EqualsAscii( "starsymbol" )
      || aMapName.EqualsAscii( "opensymbol" ) )
@@ -1471,10 +1465,10 @@ const ImplCvtChar* ImplGetRecodeData( const String& rOrgFontName,
 FontToSubsFontConverter CreateFontToSubsFontConverter(
     const String& rOrgName, ULONG nFlags )
 {
-    const ImplCvtChar* pCvt = NULL;
+    const ConvertChar* pCvt = NULL;
 
     String aName = rOrgName;
-    ImplGetEnglishSearchFontName( aName );
+    GetEnglishSearchFontName( aName );
 
     if ( nFlags & FONTTOSUBSFONT_IMPORT )
     {
@@ -1511,7 +1505,7 @@ sal_Unicode ConvertFontToSubsFontChar(
     FontToSubsFontConverter hConverter, sal_Unicode cChar )
 {
     if ( hConverter )
-        return ImplRecodeChar( (ImplCvtChar*)hConverter, cChar );
+        return ((ConvertChar*)hConverter)->RecodeChar( cChar );
     else
         return cChar;
 }
@@ -1523,6 +1517,7 @@ String GetFontToSubsFontName( FontToSubsFontConverter hConverter )
     if ( !hConverter )
         return String();
 
-    const char* pName = ((ImplCvtChar*)hConverter)->mpSubsFontName;
+    const char* pName = ((ConvertChar*)hConverter)->mpSubsFontName;
     return String::CreateFromAscii( pName );
 }
+

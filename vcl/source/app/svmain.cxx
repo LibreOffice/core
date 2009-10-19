@@ -80,7 +80,7 @@
 #include "com/sun/star/lang/XComponent.hpp"
 #include "rtl/logfile.hxx"
 #include <unotools/syslocaleoptions.hxx>
-#include "vcl/fontcfg.hxx"
+#include "unotools/fontcfg.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/lazydelete.hxx"
 

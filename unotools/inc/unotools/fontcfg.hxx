@@ -27,14 +27,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _VCL_FONTCFG_HXX
-#define _VCL_FONTCFG_HXX
+#ifndef _UNOTOOLS_FONTCFG_HXX
+#define _UNOTOOLS_FONTCFG_HXX
 
-#include "dllapi.h"
+#include <unotools/unotoolsdllapi.h>
 #include <tools/string.hxx>
-#ifndef _VCL_ENUM_HXX
-#include <vcl/vclenum.hxx>
-#endif
+#include <tools/fontenum.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -60,7 +58,7 @@ inline bool operator==( const com::sun::star::lang::Locale& rLeft, const com::su
 }
 }}}}
 
-namespace vcl
+namespace utl
 {
 
 struct LocaleHash
@@ -74,7 +72,7 @@ struct LocaleHash
     }
 };
 
-class DefaultFontConfiguration
+class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
             m_xConfigProvider;
@@ -92,7 +90,7 @@ class DefaultFontConfiguration
 
     std::hash_map< com::sun::star::lang::Locale,
                    LocaleAccess,
-                   vcl::LocaleHash >
+                   utl::LocaleHash >
             m_aConfig;
 
     rtl::OUString tryLocale( const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rType ) const;
@@ -165,7 +163,7 @@ class DefaultFontConfiguration
                                       IMPL_FONT_ATTR_GOTHIC | IMPL_FONT_ATTR_SCHOOLBOOK |\
                                       IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_OUTLINE)
 
-struct FontNameAttr
+struct UNOTOOLS_DLLPUBLIC FontNameAttr
 {
     String                              Name;
     ::std::vector< String >             Substitutions;
@@ -177,7 +175,7 @@ struct FontNameAttr
     unsigned long                       Type; // bitfield of IMPL_FONT_ATTR_*
 };
 
-class VCL_DLLPUBLIC FontSubstConfiguration
+class UNOTOOLS_DLLPUBLIC FontSubstConfiguration
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
@@ -196,7 +194,7 @@ private:
 
         LocaleSubst() : bConfigRead( false ) {}
     };
-    std::hash_map< com::sun::star::lang::Locale, LocaleSubst, vcl::LocaleHash > m_aSubst;
+    std::hash_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
     typedef std::hash_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
@@ -227,6 +225,6 @@ public:
     static void getMapName( const String& rOrgName, String& rShortName, String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ULONG& rType );
 };
 
-} // namespace vcl
+} // namespace utl
 
-#endif // _VCL_FONTCFG_HXX
+#endif // _UNOTOOLS_FONTCFG_HXX
