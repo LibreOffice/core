@@ -42,7 +42,7 @@
 #include "tokenarray.hxx"
 #include "formularesult.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include "scdllapi.h"
 
 #define USE_MEMPOOL

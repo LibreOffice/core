@@ -43,7 +43,7 @@
 #include <svx/shaditem.hxx>
 #include <svl/poolcach.hxx>
 #include <svx/fontitem.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 
 #include "attarray.hxx"
 #include "global.hxx"

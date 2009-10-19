@@ -52,7 +52,7 @@
 #include <svl/itemset.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 
