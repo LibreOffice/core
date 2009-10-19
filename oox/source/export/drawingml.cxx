@@ -60,7 +60,7 @@
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <vcl/graph.hxx>
 #include <goodies/grfmgr.hxx>
 #include <rtl/strbuf.hxx>
