@@ -232,8 +232,10 @@ namespace vcl
 
         std::list< Window* >                    maControls;
         std::map< Window*, rtl::OUString >      maControlToPropertyMap;
-        std::multimap< rtl::OUString, Window* > maPropertyToWindowMap;
+        std::map< rtl::OUString, std::vector< Window* > >
+                                                maPropertyToWindowMap;
         std::map< Window*, sal_Int32 >          maControlToNumValMap;
+        std::set< rtl::OUString >               maReverseDependencySet;
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
@@ -258,6 +260,8 @@ namespace vcl
         void updatePrinterText();
         void checkControlDependencies();
         void checkOptionalControlDependencies();
+        void makeEnabled( Window* );
+        void updateWindowFromProperty( const rtl::OUString& );
         void setupOptionalUI();
         void readFromSettings();
         void storeToSettings();

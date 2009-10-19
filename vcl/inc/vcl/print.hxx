@@ -477,6 +477,18 @@ public:
     */
     void enableUIOption( const rtl::OUString& rPropName, bool bEnable );
     bool isUIOptionEnabled( const rtl::OUString& rPropName ) const;
+    /* returns the property name rPropName depends on or an empty string
+       if no dependency exists.
+    */
+    rtl::OUString getDependency( const rtl::OUString& rPropName ) const;
+    /* makeEnabled will chage the property rPropName depends on to the value
+       that makes rPropName enabled. If the dependency itself is also disabled,
+       no action will be performed.
+
+       returns the property name rPropName depends on or an empty string
+       if no change was made.
+    */
+    rtl::OUString makeEnabled( const rtl::OUString& rPropName );
 
     virtual int  getPageCount() const = 0; // must be overloaded by the app
     /* get the page parameters, namely the jobsetup that should be active for the page

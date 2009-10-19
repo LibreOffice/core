@@ -334,7 +334,7 @@ PrintDialog::NUpTabPage::~NUpTabPage()
 
 void PrintDialog::NUpTabPage::enableNupControls( bool bEnable )
 {
-    maNupPagesBox.Enable( bEnable );
+    maNupPagesBox.Enable( TRUE );
     maNupNumPagesTxt.Enable( bEnable );
     maNupColEdt.Enable( bEnable );
     maNupTimesTxt.Enable( bEnable );
@@ -1114,6 +1114,9 @@ void PrintDialog::setupOptionalUI()
             }
         }
 
+        // bUseDependencyRow should only be true if a dependency exists
+        bUseDependencyRow = bUseDependencyRow && (aDependsOnName.getLength() != 0);
+
         // is it necessary to switch between static and dynamic pages ?
         bool bSwitchPage = false;
         if( aGroupingHint.getLength() )
@@ -1236,7 +1239,7 @@ void PrintDialog::setupOptionalUI()
             maNUpPage.maBrochureBtn.Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
             maNUpPage.maBrochureBtn.SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
 
-            maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, &maNUpPage.maBrochureBtn ) );
+            maPropertyToWindowMap[ aPropertyName ].push_back( &maNUpPage.maBrochureBtn );
             maControlToPropertyMap[&maNUpPage.maBrochureBtn] = aPropertyName;
 
             aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, vcl::RowOrColumn* >( aPropertyName, maNUpPage.mxBrochureDep.get() ) );
@@ -1245,7 +1248,7 @@ void PrintDialog::setupOptionalUI()
         {
             vcl::RowOrColumn* pSaveCurColumn = pCurColumn;
 
-            if( bUseDependencyRow && aDependsOnName.getLength() )
+            if( bUseDependencyRow )
             {
                 // find the correct dependency row (if any)
                 std::pair< std::multimap< rtl::OUString, vcl::RowOrColumn* >::iterator,
@@ -1261,6 +1264,7 @@ void PrintDialog::setupOptionalUI()
                     if( aDepRange.first != aPropertyToDependencyRowMap.end() )
                     {
                         pCurColumn = aDepRange.first->second;
+                        maReverseDependencySet.insert( aPropertyName );
                     }
                 }
             }
@@ -1277,10 +1281,9 @@ void PrintDialog::setupOptionalUI()
                 if( pVal )
                     pVal->Value >>= bVal;
                 pNewBox->Check( bVal );
-                pNewBox->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
                 pNewBox->SetToggleHdl( LINK( this, PrintDialog, UIOption_CheckHdl ) );
 
-                maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pNewBox ) );
+                maPropertyToWindowMap[ aPropertyName ].push_back( pNewBox );
                 maControlToPropertyMap[pNewBox] = aPropertyName;
 
                 // set help id
@@ -1336,10 +1339,9 @@ void PrintDialog::setupOptionalUI()
                     maControls.push_front( pBtn );
                     pBtn->SetText( aChoices[m] );
                     pBtn->Check( m == nSelectVal );
-                    pBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
                     pBtn->Show();
-                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pBtn ) );
+                    maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
                     maControlToPropertyMap[pBtn] = aPropertyName;
                     maControlToNumValMap[pBtn] = m;
 
@@ -1394,7 +1396,6 @@ void PrintDialog::setupOptionalUI()
                     if( pVal && pVal->Value.hasValue() )
                         pVal->Value >>= nSelectVal;
                     pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
-                    pList->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
                     pList->SetDropDownLineCount( static_cast<USHORT>(aChoices.getLength()) );
                     pList->Show();
@@ -1404,7 +1405,7 @@ void PrintDialog::setupOptionalUI()
                     // set help text
                     setHelpText( pList, aHelpTexts, 0 );
 
-                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
+                    maPropertyToWindowMap[ aPropertyName ].push_back( pList );
                     maControlToPropertyMap[pList] = aPropertyName;
 
                     // finish the pair
@@ -1429,8 +1430,6 @@ void PrintDialog::setupOptionalUI()
                     if( pVal && pVal->Value.hasValue() )
                         pVal->Value >>= nCurVal;
                     pField->SetValue( nCurVal );
-
-                    pField->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
                     pField->Show();
 
@@ -1439,7 +1438,7 @@ void PrintDialog::setupOptionalUI()
                     // set help text
                     setHelpText( pField, aHelpTexts, 0 );
 
-                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
+                    maPropertyToWindowMap[ aPropertyName ].push_back( pField );
                     maControlToPropertyMap[pField] = aPropertyName;
 
                     // add to row
@@ -1458,7 +1457,6 @@ void PrintDialog::setupOptionalUI()
                     if( pVal && pVal->Value.hasValue() )
                         pVal->Value >>= aCurVal;
                     pField->SetText( aCurVal );
-                    pField->Enable( maPController->isUIOptionEnabled( aPropertyName ) );
                     pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
                     pField->Show();
 
@@ -1467,7 +1465,7 @@ void PrintDialog::setupOptionalUI()
                     // set help text
                     setHelpText( pField, aHelpTexts, 0 );
 
-                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
+                    maPropertyToWindowMap[ aPropertyName ].push_back( pField );
                     maControlToPropertyMap[pField] = aPropertyName;
 
                     // add to row
@@ -1485,6 +1483,9 @@ void PrintDialog::setupOptionalUI()
             pCurColumn = pSaveCurColumn;
         }
     }
+
+    // update enable states
+    checkOptionalControlDependencies();
 
     // print range empty (currently math only) -> hide print range and spacer line
     if( maJobPage.mxPrintRange->countElements() == 0 )
@@ -1608,6 +1609,24 @@ void PrintDialog::checkOptionalControlDependencies()
          it != maControlToPropertyMap.end(); ++it )
     {
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
+        if( ! bShouldbeEnabled )
+        {
+            // enable controls that are directly attached to a dependency anyway
+            // if the normally disabled controls get modified, change the dependency
+            // so the control would be enabled
+            // example: in print range "Print All" is selected, "Page Range" is then of course
+            // not selected and the Edit for the Page Range would be disabled
+            // as a convenience we should enable the Edit anyway and automatically select
+            // "Page Range" instead of "Print All" if the Edit gets modified
+            if( maReverseDependencySet.find( it->second ) != maReverseDependencySet.end() )
+            {
+                rtl::OUString aDep( maPController->getDependency( it->second ) );
+                // if the dependency is at least enabled, then enable this control anyway
+                if( aDep.getLength() && maPController->isUIOptionEnabled( aDep ) )
+                    bShouldbeEnabled = true;
+            }
+        }
+
         bool bIsEnabled = it->first->IsEnabled();
         // Enable does not do a change check first, so can be less cheap than expected
         if( bShouldbeEnabled != bIsEnabled )
@@ -1888,6 +1907,8 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
     }
     else if( pBox == &maNUpPage.maNupPagesBox )
     {
+        if( !maNUpPage.maPagesBtn.IsChecked() )
+            maNUpPage.maPagesBtn.Check();
         updateNupFromPages();
     }
 
@@ -2057,11 +2078,76 @@ PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
     return pVal;
 }
 
+void PrintDialog::updateWindowFromProperty( const rtl::OUString& i_rProperty )
+{
+    beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
+    std::map< rtl::OUString, std::vector< Window* > >::const_iterator it = maPropertyToWindowMap.find( i_rProperty );
+    if( pValue && it != maPropertyToWindowMap.end() )
+    {
+        const std::vector< Window* >& rWindows( it->second );
+        if( ! rWindows.empty() )
+        {
+            sal_Bool bVal = sal_False;
+            sal_Int32 nVal = -1;
+            if( pValue->Value >>= bVal )
+            {
+                // we should have a CheckBox for this one
+                CheckBox* pBox = dynamic_cast< CheckBox* >( rWindows.front() );
+                if( pBox )
+                {
+                    pBox->Check( bVal );
+                }
+                else if( i_rProperty.equalsAscii( "PrintProspect" ) )
+                {
+                    // EVIL special case
+                    if( bVal )
+                        maNUpPage.maBrochureBtn.Check();
+                    else
+                        maNUpPage.maPagesBtn.Check();
+                }
+                else
+                {
+                    DBG_ASSERT( 0, "missing a checkbox" );
+                }
+            }
+            else if( pValue->Value >>= nVal )
+            {
+                // this could be a ListBox or a RadioButtonGroup
+                ListBox* pList = dynamic_cast< ListBox* >( rWindows.front() );
+                if( pList )
+                {
+                    pList->SelectEntryPos( static_cast< USHORT >(nVal) );
+                }
+                else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
+                {
+                    RadioButton* pBtn = dynamic_cast< RadioButton* >( rWindows[nVal] );
+                    DBG_ASSERT( pBtn, "unexpected control for property" );
+                    if( pBtn )
+                        pBtn->Check();
+                }
+            }
+        }
+    }
+}
+
+void PrintDialog::makeEnabled( Window* i_pWindow )
+{
+    std::map< Window*, rtl::OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    if( it != maControlToPropertyMap.end() )
+    {
+        rtl::OUString aDependency( maPController->makeEnabled( it->second ) );
+        if( aDependency.getLength() )
+            updateWindowFromProperty( aDependency );
+    }
+}
+
 IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
 {
     PropertyValue* pVal = getValueForWindow( i_pBox );
     if( pVal )
     {
+        makeEnabled( i_pBox );
+
         sal_Bool bVal = i_pBox->IsChecked();
         pVal->Value <<= bVal;
 
@@ -2084,6 +2170,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
         std::map< Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
         if( pVal && it != maControlToNumValMap.end() )
         {
+            makeEnabled( i_pBtn );
 
             sal_Int32 nVal = it->second;
             pVal->Value <<= nVal;
@@ -2102,6 +2189,8 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
     PropertyValue* pVal = getValueForWindow( i_pBox );
     if( pVal )
     {
+        makeEnabled( i_pBox );
+
         sal_Int32 nVal( i_pBox->GetSelectEntryPos() );
         pVal->Value <<= nVal;
 
@@ -2118,6 +2207,8 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
     PropertyValue* pVal = getValueForWindow( i_pBox );
     if( pVal )
     {
+        makeEnabled( i_pBox );
+
         NumericField* pNum = dynamic_cast<NumericField*>(i_pBox);
         MetricField* pMetric = dynamic_cast<MetricField*>(i_pBox);
         if( pNum )

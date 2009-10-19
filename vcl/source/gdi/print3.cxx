@@ -1237,6 +1237,58 @@ bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) co
     return bEnabled;
 }
 
+rtl::OUString PrinterController::getDependency( const rtl::OUString& i_rProperty ) const
+{
+    rtl::OUString aDependency;
+
+    vcl::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
+        mpImplData->maControlDependencies.find( i_rProperty );
+    if( it != mpImplData->maControlDependencies.end() )
+        aDependency = it->second.maDependsOnName;
+
+    return aDependency;
+}
+
+rtl::OUString PrinterController::makeEnabled( const rtl::OUString& i_rProperty )
+{
+    rtl::OUString aDependency;
+
+    vcl::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
+        mpImplData->maControlDependencies.find( i_rProperty );
+    if( it != mpImplData->maControlDependencies.end() )
+    {
+        if( isUIOptionEnabled( it->second.maDependsOnName ) )
+        {
+           aDependency = it->second.maDependsOnName;
+           const com::sun::star::beans::PropertyValue* pVal = getValue( aDependency );
+           OSL_ENSURE( pVal, "unknown property in dependency" );
+           if( pVal )
+           {
+               sal_Int32 nDepVal = 0;
+               sal_Bool bDepVal = sal_False;
+               if( pVal->Value >>= nDepVal )
+               {
+                   if( it->second.mnDependsOnEntry != -1 )
+                   {
+                       setValue( aDependency, makeAny( sal_Int32( it->second.mnDependsOnEntry ) ) );
+                   }
+               }
+               else if( pVal->Value >>= bDepVal )
+               {
+                   setValue( aDependency, makeAny( sal_Bool( it->second.mnDependsOnEntry != 0 ) ) );
+               }
+               else
+               {
+                   // if the type does not match something is awry
+                   OSL_ENSURE( 0, "strange type in control dependency" );
+               }
+           }
+        }
+    }
+
+    return aDependency;
+}
+
 void PrinterController::setOptionChangeHdl( const Link& i_rHdl )
 {
     mpImplData->maOptionChangeHdl = i_rHdl;
