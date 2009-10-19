@@ -470,7 +470,7 @@
 #include "unotools/streamwrap.hxx"
 
 #include "tools/fldunit.hxx"
-#include "vcl/fontcvt.hxx"
+#include "unotools/fontcvt.hxx"
 #include "tools/mapunit.hxx"
 
 #include "vos/mutex.hxx"

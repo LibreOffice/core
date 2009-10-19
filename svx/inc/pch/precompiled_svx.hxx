@@ -927,7 +927,7 @@
 #include "vcl/dndhelp.hxx"
 #include "vcl/fldunit.hxx"
 #include "vcl/fntstyle.hxx"
-#include "vcl/fontcvt.hxx"
+#include "unotools/fontcvt.hxx"
 #include "vcl/gdimtf.hxx"
 #include "vcl/help.hxx"
 #include "vcl/image.hxx"

@@ -47,7 +47,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include "svx/svxdllapi.h"
 
 class SvxBrushItem;

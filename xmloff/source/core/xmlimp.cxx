@@ -69,7 +69,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>

@@ -51,7 +51,7 @@
 #include <svx/brshitem.hxx>
 #include <vcl/graph.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 
 DBG_NAME( EE_EditTextObject )
