@@ -341,6 +341,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     const String aParagraphLangPrefix( String::CreateFromAscii("Paragraph_") );
                     const String aDocumentLangPrefix( String::CreateFromAscii("Default_") );
                     const String aStrNone( String::CreateFromAscii("LANGUAGE_NONE") );
+                    const String aStrResetLangs( String::CreateFromAscii("RESET_LANGUAGES") );
 
                     SfxItemSet aCoreSet( GetPool(),
                             RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -379,10 +380,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.SelAll();
                         rWrtSh.ExtendedSelectAll();
                     }
-                    if (aNewLangTxt != aStrNone)
-                        SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
-                    else
+                    if (aNewLangTxt == aStrNone)
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
+                    else if (aNewLangTxt == aStrResetLangs)
+                        SwLangHelper::ResetLanguages( rWrtSh, bForSelection );
+                    else
+                        SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
                 }
 
                 // restore selection...
