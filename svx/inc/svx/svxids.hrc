@@ -398,6 +398,7 @@
 #define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hard space */
 #define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)   /* hyphen withou break*/
 
+//!! be aware to not overwrite something that is used in sw/inc/cmdid.h already !!
 #define FN_FORMAT               (SID_SW_START +  400)
 #define FN_SET_JUSTIFY_PARA     (FN_FORMAT + 21)
 #define FN_FORMAT_RESET         (FN_FORMAT + 69)
