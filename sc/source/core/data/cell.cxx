@@ -1851,7 +1851,8 @@ void ScFormulaCell::SetDirty()
 
 void ScFormulaCell::SetDirtyAfterLoad()
 {
-    if ( bDirty && !pDocument->GetHardRecalcState() )
+    bDirty = TRUE;
+    if ( !pDocument->GetHardRecalcState() )
         pDocument->PutInFormulaTree( this );
 }
 
