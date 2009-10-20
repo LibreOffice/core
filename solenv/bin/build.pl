@@ -1890,7 +1890,7 @@ sub BuildDependent {
                 start_child($child_nick, $dependencies_hash) if ($child_nick);
                 return 1 if ($BuildAllParents);
                 $child_nick = pick_prj_to_build($dependencies_hash);
-            } while (scalar keys %$dependencies_hash);
+            } while (scalar keys %$dependencies_hash || $child_nick);
             while (children_number()) {
 #                print "#### 1902: Starting waiting for dead child\n";
                 handle_dead_children(1);
