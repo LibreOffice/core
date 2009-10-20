@@ -101,8 +101,8 @@ VS_VERSION_INFO versioninfo
 		}
 	}
 
-2 ICON "icons\\oasis-writer.ico"
-3 ICON "icons\\oasis-writer-template.ico"
+2 ICON "icons\\oasis-text.ico"
+3 ICON "icons\\oasis-text-template.ico"
 4 ICON "icons\\oasis-spreadsheet.ico"
 5 ICON "icons\\oasis-spreadsheet-template.ico"
 6 ICON "icons\\oasis-drawing.ico"
@@ -127,8 +127,8 @@ VS_VERSION_INFO versioninfo
 25 ICON "icons\\so9_math_app.ico"
 26 ICON "icons\\so9_base_app.ico"
 27 ICON "icons\\oasis-empty-document.ico"
-28 ICON "icons\\writer.ico"
-29 ICON "icons\\writer-template.ico"
+28 ICON "icons\\text.ico"
+29 ICON "icons\\text-template.ico"
 30 ICON "icons\\spreadsheet.ico"
 31 ICON "icons\\spreadsheet-template.ico"
 32 ICON "icons\\drawing.ico"
