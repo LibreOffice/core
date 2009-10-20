@@ -696,7 +696,16 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
 
     ClearItem( SDRATTR_TEXTDIRECTION ); //SJ: vertical writing is not required, by removing this item no outliner is created
 
-    // For primitive rendering, shadow handling is done completely based on the geometry, so i removed it here
+    // #i105323# For 2D AtoShapes, the shadow attirbute does not need to be applied to any
+    // of the constucted helper SdrObjects. This would lead to problems since the shadow
+    // of one helper object would fall on one helper object behind it (e.g. with the
+    // eyes of the smiley shape). This is not wanted; instead a single shadow 'behind'
+    // the AutoShape visualisation is wanted. This is done with primitive functionailty
+    // now in SdrCustomShapePrimitive2D::create2DDecomposition, but only for 2D objects
+    // (see there and in EnhancedCustomShape3d::Create3DObject to read more).
+    // This exception may be removed later when AutoShapes will create primitives directly.
+    // So, currently remove the ShadowAttribute from the ItemSet to not apply it to any
+    // 2D helper shape.
     ClearItem(SDRATTR_SHADOW);
 
     Point aP( pCustomShapeObj->GetSnapRect().Center() );

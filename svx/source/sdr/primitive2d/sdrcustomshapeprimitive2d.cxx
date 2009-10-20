@@ -67,7 +67,20 @@ namespace drawinglayer
             // add shadow
             if(aRetval.hasElements() && getSdrSTAttribute().getShadow())
             {
-                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrSTAttribute().getShadow());
+                // #i105323# add generic shadow only for 2D shapes. For
+                // 3D shapes shadow will be set at the individual created
+                // visualisation objects and be visualized by the 3d renderer
+                // as a single shadow.
+                //
+                // The shadow for AutoShapes could be handled uniformely by not setting any
+                // shadow items at the helper model objects and only adding shadow here for
+                // 2D and 3D (and it works, too), but this would lead to two 3D scenes for
+                // the 3D object; one for the shadow aond one for the content. The one for the
+                // shadow will be correct (using ColorModifierStack), but expensive.
+                if(!get3DShape())
+                {
+                    aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrSTAttribute().getShadow());
+                }
             }
 
             return aRetval;
@@ -78,13 +91,15 @@ namespace drawinglayer
             const Primitive2DSequence& rSubPrimitives,
             const basegfx::B2DHomMatrix& rTextBox,
             bool bWordWrap,
-            bool bForceTextClipToTextRange)
+            bool bForceTextClipToTextRange,
+            bool b3DShape)
         :   BasePrimitive2D(),
             maSdrSTAttribute(rSdrSTAttribute),
             maSubPrimitives(rSubPrimitives),
             maTextBox(rTextBox),
             mbWordWrap(bWordWrap),
-            mbForceTextClipToTextRange(bForceTextClipToTextRange)
+            mbForceTextClipToTextRange(bForceTextClipToTextRange),
+            mb3DShape(b3DShape)
         {
         }
 
@@ -98,7 +113,8 @@ namespace drawinglayer
                     && getSubPrimitives() == rCompare.getSubPrimitives()
                     && getTextBox() == rCompare.getTextBox()
                     && getWordWrap() == rCompare.getWordWrap()
-                    && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange());
+                    && isForceTextClipToTextRange() == rCompare.isForceTextClipToTextRange()
+                    && get3DShape() == rCompare.get3DShape());
             }
 
             return false;
