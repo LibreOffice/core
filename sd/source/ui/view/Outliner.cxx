@@ -334,6 +334,9 @@ void Outliner::EndSpelling (void)
 {
     if (mbViewShellValid)
     {
+        // Keep old view shell alive until we release the outliner view.
+        ::boost::shared_ptr<ViewShell> pOldViewShell (mpViewShell);
+
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
             mpViewShell = pBase->GetMainViewShell();
