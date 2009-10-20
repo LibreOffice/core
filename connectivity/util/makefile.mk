@@ -1,14 +1,13 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2008 by Sun Microsystems, Inc.
+#
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
+# $RCSfile: makefile,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,55 +25,39 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ     = ..
-TARGET  = connectivity
+PRJ = ..
 PRJNAME = connectivity
+TARGET = connectivity
 
-# -----------------------------------------------------------------------------
-# include global settings
-# -----------------------------------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-DIR_FILTERCFGOUT := $(MISC)$/drivers
-DIR_LANGPACK     := $(DIR_FILTERCFGOUT)
-.IF "$(WITH_LANG)"!=""
-DIR_LANG_SOURCE  := $(MISC)$/merge
-.ELSE
-DIR_LANG_SOURCE  := $(MISC)$/registry$/data
-.ENDIF
-DRIVER_MERGE_XCU := $(shell -@$(FIND) $(DIR_LANG_SOURCE)$/org$/openoffice$/Office$/DataAccess -name "*.xcu")
-   
-REALFILTERPACKAGES_FILTERS_UI_LANGPACKS = \
-    $(foreach,i,$(alllangiso) $(foreach,j,$(DRIVER_MERGE_XCU) $(DIR_LANGPACK)$/$i$/org$/openoffice$/Office$/DataAccess$/$(j:f)))
-
+.INCLUDE: settings.mk
 .INCLUDE: target.mk
 
-PACKLANG := $(XSLTPROC) --nonet
-PACKLANG_IN :=
-PACKLANG_PARAM := --stringparam
-PACKLANG_XSL :=
-    
-$(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS) : 
-      @echo ===================================================================
-      @echo Building language package for driver $(@:b:s/Filter_//) 
-      @echo ===================================================================
-      +-$(MKDIRHIER) $(@:d)
-      $(PACKLANG) $(PACKLANG_PARAM) lang $(@:d:d:d:d:d:d:d:d:d:d:b) $(PACKLANG_XSL) langfilter.xsl $(PACKLANG_IN) $(DIR_LANG_SOURCE)$/org$/openoffice$/Office$/DataAccess$/$(@:f) > $@
+# For any given platform, for each driver .xcu (in $(MY_XCUS)) built on that
+# platform (in $(MISC)/registry/data/org/openoffice/Office/DataAccess) there are
+# corresponding language-specific .xcu files (in
+# $(MISC)/registry/res/%/org/openoffice/Office/DataAccess).  For each language,
+# all language-specific .xcu files for that language are assembled into
+# $(BIN)$/fcfg_drivers_%.zip.  To meet the requirements of dmake percent rules,
+# the first item from $(MY_XCUS) is arbitrarily taken to be the main
+# prerequisite while all the items from $(MY_XCUS) are made into indirect
+# prerequisites (harmlessly doubling the first item).
 
-$(MISC)$/$(TARGET)_delzip :
-    -$(RM) $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip	
+MY_XCUS := \
+    $(shell cd $(MISC)/registry/data/org/openoffice/Office/DataAccess && \
+    ls *.xcu)
 
-$(BIN)$/fcfg_drivers_{$(alllangiso)}.zip : $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS)
-    cd $(DIR_FILTERCFGOUT)$/$(@:b:s/fcfg_drivers_//) && zip -ru ..$/..$/..$/bin$/fcfg_drivers_$(@:b:s/fcfg_drivers_//).zip org/*
-.IF "$(USE_SHELL)"!="4nt"
-    $(PERL) -w $(SOLARENV)$/bin$/cleanzip.pl $@
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+.IF "$(MY_XCUS)" != ""
 
-ALLTAR: \
-    $(MISC)$/$(TARGET)_delzip \
-    $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip
+ALLTAR: $(BIN)/fcfg_drivers_{$(alllangiso)}.zip
 
+$(BIN)/fcfg_drivers_%.zip: \
+        $(MISC)/registry/res/%/org/openoffice/Office/DataAccess/$(MY_XCUS:1) \
+        $(foreach,i,$(MY_XCUS) \
+            '$(MISC)/registry/res/%/org/openoffice/Office/DataAccess/$i')
+    zip -j $@ \
+        $(foreach,i,$(MY_XCUS) \
+            $(MISC)/registry/res/$*/org/openoffice/Office/DataAccess/$i)
+
+.ENDIF
