@@ -1216,8 +1216,8 @@ sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException)
     {
         return maEffectRewinder.rewind(
             maScreenUpdater.createLock(false),
-            ::boost::bind(&SlideShowImpl::redisplayCurrentSlide, this),
-            ::boost::bind(&SlideShowImpl::rewindEffectToPreviousSlide, this));
+            ::boost::bind<void>(&SlideShowImpl::redisplayCurrentSlide, this),
+            ::boost::bind<void>(&SlideShowImpl::rewindEffectToPreviousSlide, this));
     }
 }
 
@@ -2080,10 +2080,10 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
                  // GIF) will not be stopped.
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
-        boost::bind(
+        boost::bind<void>(
             &presentation::XSlideShowListener::slideEnded,
             _1,
-            bReverse));
+            sal_Bool(bReverse)));
 }
 
 bool SlideShowImpl::notifyHyperLinkClicked( rtl::OUString const& hyperLink )
