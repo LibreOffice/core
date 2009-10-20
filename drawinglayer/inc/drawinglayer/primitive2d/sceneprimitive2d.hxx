@@ -41,6 +41,7 @@
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -70,9 +71,13 @@ namespace drawinglayer
             double                                              mfOldDiscreteSizeY;
             basegfx::B2DRange                                   maOldUnitVisiblePart;
 
+            // the last created BitmapEx, e.g. for fast HitTest. This does not really need
+            // memory since BitmapEx is internally RefCounted
+            BitmapEx                                            maOldRenderedBitmap;
+
             // private helpers
             bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
-            void calculateDsicreteSizes(
+            void calculateDiscreteSizes(
                 const geometry::ViewInformation2D& rViewInformation,
                 basegfx::B2DRange& rDiscreteRange,
                 basegfx::B2DRange& rVisibleDiscreteRange,
@@ -87,7 +92,18 @@ namespace drawinglayer
             // Geometry extractor. Shadow will be added as in createLocalDecomposition, but
             // the 3D content is not converted to a bitmap visualisation but to projected 2D gemetry. This
             // helper is useful e.g. for Contour extraction or HitTests.
-            Primitive2DSequence getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const;
+            Primitive2DSequence getGeometry2D() const;
+            Primitive2DSequence getShadow2D(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // Fast HitTest which uses the last buffered BitmapEx from the last
+            // rendered area if available. The return value describes if the check
+            // could be done with the current information, so do NOT use o_rResult
+            // when it returns false. o_rResult will be changed on return true and
+            // then contains a definitive answer if content of this scene is hit or
+            // not. On return false, it is normally necessary to use the geometric
+            // HitTest (see CutFindProcessor usages). The given HitPoint
+            // has to be in logic coordinates in scene's ObjectCoordinateSystem.
+            bool tryToCheckLastVisualisationDirectHit(const basegfx::B2DPoint& rLogicHitPoint, bool& o_rResult) const;
 
             // constructor/destructor
             ScenePrimitive2D(

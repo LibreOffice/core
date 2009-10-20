@@ -81,11 +81,17 @@ namespace drawinglayer
             basegfx::B2DRange                           maDiscreteViewport;
 
             // the DrawPage which is target of visualisation. This is needed e.g. for
-            // the view-dependent decomposition of PageNumber TextFields
+            // the view-dependent decomposition of PageNumber TextFields.
+            // This parameter is buffered here, but mainly resides in mxExtendedInformation,
+            // so it will be interpreted, but held there. It will also not be added
+            // to mxExtendedInformation in impFillViewInformationFromContent (it's there already)
             uno::Reference< drawing::XDrawPage >        mxVisualizedPage;
 
             // the point in time
             double                                      mfViewTime;
+
+            // bitfield
+            bool                                        mbReducedDisplayQuality : 1;
 
             // the complete PropertyValue representation (if already created)
             uno::Sequence< beans::PropertyValue >       mxViewInformation;
@@ -125,6 +131,12 @@ namespace drawinglayer
                 return s_sNameProperty;
             }
 
+            const ::rtl::OUString& getNamePropertyReducedDisplayQuality()
+            {
+                static ::rtl::OUString s_sNameProperty(RTL_CONSTASCII_USTRINGPARAM("ReducedDisplayQuality"));
+                return s_sNameProperty;
+            }
+
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             {
                 if(rViewParameters.hasElements())
@@ -139,7 +151,17 @@ namespace drawinglayer
                     {
                         const beans::PropertyValue& rProp = rViewParameters[a];
 
-                        if(rProp.Name == getNamePropertyObjectTransformation())
+                        if(rProp.Name == getNamePropertyReducedDisplayQuality())
+                        {
+                            // extra information; add to filtered information
+                            mxExtendedInformation[nExtendedInsert++] = rProp;
+
+                            // for performance reasons, also cache content locally
+                            sal_Bool bSalBool;
+                            rProp.Value >>= bSalBool;
+                            mbReducedDisplayQuality = bSalBool;
+                        }
+                        else if(rProp.Name == getNamePropertyObjectTransformation())
                         {
                             com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
                             rProp.Value >>= aAffineMatrix2D;
@@ -185,6 +207,7 @@ namespace drawinglayer
                 const bool bViewportUsed(!maViewport.isEmpty());
                 const bool bTimeUsed(0.0 < mfViewTime);
                 const bool bVisualizedPageUsed(mxVisualizedPage.is());
+                const bool bReducedDisplayQualityUsed(true == mbReducedDisplayQuality);
                 const bool bExtraInformation(mxExtendedInformation.hasElements());
                 sal_uInt32 nIndex(0);
                 const sal_uInt32 nCount(
@@ -193,6 +216,7 @@ namespace drawinglayer
                     (bViewportUsed ? 1 : 0) +
                     (bTimeUsed ? 1 : 0) +
                     (bVisualizedPageUsed ? 1 : 0) +
+                    (bReducedDisplayQualityUsed ? 1 : 0) +
                     (bExtraInformation ? mxExtendedInformation.getLength() : 0));
 
                 mxViewInformation.realloc(nCount);
@@ -265,6 +289,7 @@ namespace drawinglayer
                 maDiscreteViewport(),
                 mxVisualizedPage(rxDrawPage),
                 mfViewTime(fViewTime),
+                mbReducedDisplayQuality(false),
                 mxViewInformation(),
                 mxExtendedInformation()
             {
@@ -281,6 +306,7 @@ namespace drawinglayer
                 maDiscreteViewport(),
                 mxVisualizedPage(),
                 mfViewTime(),
+                mbReducedDisplayQuality(false),
                 mxViewInformation(rViewParameters),
                 mxExtendedInformation()
             {
@@ -353,6 +379,11 @@ namespace drawinglayer
             const uno::Reference< drawing::XDrawPage >& getVisualizedPage() const
             {
                 return mxVisualizedPage;
+            }
+
+            bool getReducedDisplayQuality() const
+            {
+                return mbReducedDisplayQuality;
             }
 
             const uno::Sequence< beans::PropertyValue >& getViewInformationSequence() const
@@ -499,6 +530,11 @@ namespace drawinglayer
         const basegfx::B2DRange& ViewInformation2D::getDiscreteViewport() const
         {
             return mpViewInformation2D->getDiscreteViewport();
+        }
+
+        bool ViewInformation2D::getReducedDisplayQuality() const
+        {
+            return mpViewInformation2D->getReducedDisplayQuality();
         }
 
         const uno::Sequence< beans::PropertyValue >& ViewInformation2D::getViewInformationSequence() const
