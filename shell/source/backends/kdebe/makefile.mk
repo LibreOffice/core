@@ -77,11 +77,11 @@ SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 SHL1IMPLIB=i$(SHL1TARGET)
+SHL1LINKFLAGS+=$(KDE_LIBS) -lkio
 SHL1STDLIBS=    \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(SALLIB) \
-        $(KDE_LIBS) -lkio
+        $(SALLIB)
         
 SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
