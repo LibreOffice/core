@@ -47,6 +47,7 @@
 #include <tools/rc.h>
 #endif
 #include <vcl/svapp.hxx>
+#include <vcl/bmpacc.hxx>
 
 // ------------
 // - BitmapEx -
@@ -757,6 +758,78 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
                      const Point& rSrcPtPixel, const Size& rSrcSizePixel ) const
 {
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, *this );
+}
+
+// ------------------------------------------------------------------
+
+sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
+{
+    sal_uInt8 nTransparency(0xff);
+
+    if(!aBitmap.IsEmpty())
+    {
+        if(nX >= 0 && nX < aBitmapSize.Width() && nY >= 0 && nY < aBitmapSize.Height())
+        {
+            switch(eTransparent)
+            {
+                case TRANSPARENT_NONE:
+                {
+                    // not transparent, ergo all covered
+                    nTransparency = 0x00;
+                    break;
+                }
+                case TRANSPARENT_COLOR:
+                {
+                    Bitmap aTestBitmap(aBitmap);
+                    BitmapReadAccess* pRead = aTestBitmap.AcquireReadAccess();
+
+                    if(pRead)
+                    {
+                        const Color aColor(Color(pRead->GetColor(nY, nX)));
+
+                        // if color is not equal to TransparentColor, we are not transparent
+                        if(aColor != aTransparentColor)
+                        {
+                            nTransparency = 0x00;
+                        }
+
+                        aTestBitmap.ReleaseAccess(pRead);
+                    }
+                    break;
+                }
+                case TRANSPARENT_BITMAP:
+                {
+                    if(!aMask.IsEmpty())
+                    {
+                        Bitmap aTestBitmap(aMask);
+                        BitmapReadAccess* pRead = aTestBitmap.AcquireReadAccess();
+
+                        if(pRead)
+                        {
+                            const BitmapColor aBitmapColor(pRead->GetPixel(nY, nX));
+
+                            if(bAlpha)
+                            {
+                                nTransparency = aBitmapColor.GetIndex();
+                            }
+                            else
+                            {
+                                if(0x00 != aBitmapColor.GetIndex())
+                                {
+                                    nTransparency = 0x00;
+                                }
+                            }
+
+                            aTestBitmap.ReleaseAccess(pRead);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    return nTransparency;
 }
 
 // ------------------------------------------------------------------
