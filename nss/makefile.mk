@@ -45,9 +45,9 @@ all:
     @echo "NSS will not be built. ENABLE_NSS_MODULE is '$(ENABLE_NSS_MODULE)'"
 .ENDIF	
 
-TARFILE_NAME=nss_3_12_3
+TARFILE_NAME=nss_3_12_4
 TARFILE_ROOTDIR=mozilla
-PATCH_FILES=nss_3_12_3.patch
+PATCH_FILES=nss.patch
 
 .IF "$(debug)" != ""
 .ELSE
@@ -58,9 +58,6 @@ BUILD_OPT=1
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
-#LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
-.EXPORT: LDFLAGS
-
 .IF "$(BUILD64)"=="1"
 # force 64-bit buildmode
 USE_64:=1
@@ -90,7 +87,7 @@ BUILD_ACTION= $(GNUMAKE) nss_build_all
 
 .IF "$(COM)"=="GCC"
 
-PATCH_FILES+=nss_3_12_3.patch.mingw
+PATCH_FILES+=nss.patch.mingw
 
 moz_build:=$(shell cygpath -p $(MOZILLABUILD))
 PATH!:=$(moz_build)/bin:$(PATH)
