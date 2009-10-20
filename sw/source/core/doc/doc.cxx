@@ -1283,11 +1283,22 @@ void SwDoc::CalculatePagesForPrinting(
     else
     {
         // PageContent :
-        // 0 -> print all pages
+        // 0 -> print all pages (default if aPageRange is empty)
         // 1 -> print range according to PageRange
         // 2 -> print selection
-        if (1 == rOptions.getIntValue( "PrintContent", 0 ))
+        const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
+        if (1 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange", OUString() );
+        if (2 == nContent)
+        {
+            // note that printing selections is actually implemented by copying
+            // the selection to a new temporary document and printing all of that one.
+            // Thus for Writer "PrintContent" must never be 2.
+            // See SwXTextDocument::GetRenderDoc for evaluating if a selection is to be
+            // printed and for creating the temporary document.
+        }
+
+        // please note
     }
     if (aPageRange.getLength() == 0)    // empty string -> print all
     {
