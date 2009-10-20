@@ -95,7 +95,8 @@ public:
                           const Any& i_rViewProp,
                           const Reference< view::XRenderable >& i_xRender,
                           sal_Bool i_bApi, sal_Bool i_bDirect,
-                          SfxViewShell* pView
+                          SfxViewShell* pView,
+                          const uno::Sequence< beans::PropertyValue >& rProps
                         );
     
     virtual ~SfxPrinterController();
@@ -113,7 +114,8 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
                                             const Any& i_rViewProp,
                                             const Reference< view::XRenderable >& i_xRender,
                                             sal_Bool i_bApi, sal_Bool i_bDirect,
-                                            SfxViewShell* pView
+                                            SfxViewShell* pView,
+                                            const uno::Sequence< beans::PropertyValue >& rProps
                                           )
     : maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
@@ -157,6 +159,9 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
     // initialize extra ui options
     if( mxRenderable.is() )
     {
+        for (sal_Int32 nProp=0; nProp<rProps.getLength(); nProp++)
+            setValue( rProps[nProp].Name, rProps[nProp].Value );
+
         Sequence< beans::PropertyValue > aRenderOptions( 3 );
         aRenderOptions[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
         aRenderOptions[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) );
@@ -205,10 +210,14 @@ SfxPrinterController::~SfxPrinterController()
 const Any& SfxPrinterController::getSelectionObject() const
 {
     sal_Int32 nChoice = 0;
+    sal_Bool bSel = sal_False;
     const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
     if( pVal )
         pVal->Value >>= nChoice;
-    return nChoice > 1 ? maSelection : maCompleteSelection;
+    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) ) );
+    if( pVal )
+        pVal->Value >>= bSel;
+    return (nChoice > 1 || bSel) ? maSelection : maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
@@ -630,11 +639,9 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                                                                                GetRenderable(),
                                                                                bIsAPI,
                                                                                bIsDirect,
-                                                                               this
+                                                                               this,
+                                                                               rProps
                                                                                ) );
-    for (sal_Int32 nProp=0; nProp<rProps.getLength(); nProp++)
-        pController->setValue( rProps[nProp].Name, rProps[nProp].Value );
-
     SfxObjectShell *pObjShell = GetObjectShell();
     pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
