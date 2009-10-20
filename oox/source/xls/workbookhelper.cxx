@@ -250,6 +250,15 @@ TimeCount& WorkbookHelper::getTimeCount( TimerType eType ) const
 
 // ============================================================================
 
+bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
+{
+    // there is no wrapper in rtl::OUString, TODO: compare with collator
+    return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
+        rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
+}
+
+// ============================================================================
+
 class WorkbookData
 #if OSL_DEBUG_LEVEL > 0
     : public dbg::WorkbookData

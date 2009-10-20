@@ -221,7 +221,7 @@ OUString lclReadPivotString( const WorkbookHelper& rHelper, BiffInputStream& rSt
 {
     if( nLen == BIFF_PT_NOSTRING )
         return OUString();
-    return (rHelper.getBiff() == BIFF8) ? rStrm.readUniString( nLen ) : rStrm.readCharArrayUC( nLen, rHelper.getTextEncoding() );
+    return (rHelper.getBiff() == BIFF8) ? rStrm.readUniStringBody( nLen ) : rStrm.readCharArrayUC( nLen, rHelper.getTextEncoding() );
 }
 
 } // namespace
