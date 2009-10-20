@@ -431,7 +431,6 @@ oslSocket osl_receiveResourcePipe(oslPipe pPipe)
 
 static void ChildStatusProc(void *pData)
 {
-    int   i;
     pid_t pid = -1;
     int   status = 0;
     int   channel[2];
@@ -489,6 +488,7 @@ static void ChildStatusProc(void *pData)
 
            if (chstatus == 0 && ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid()))))
         {
+            int i;
             for (i = 0; data.m_pszEnv[i] != NULL; i++)
                  putenv(data.m_pszEnv[i]);
 
@@ -544,6 +544,7 @@ static void ChildStatusProc(void *pData)
     }
     else
     {   /* Parent  */
+        int i = -1;
         if (channel[1] != -1) close(channel[1]);
 
         /* Close unused pipe ends */
