@@ -39,20 +39,12 @@
 
 testcase tBasicPackageImport
 
-    '///<h1>Import BASIC library as UNO package via Package Manager UI</h1>
-
     ' Assumption: All actions take place in the user/work directory
     ' macro taken from global/input/macros.txt::tBasicLibraryExport
+    
+    printlog( "Import BASIC library via Package Manager GUI as UNO Package" )
 
-    dim package_name as string
-
-    ' CWS jl44 introduced .oxt for extensions   
-    if ( gBuild < 9075 ) then
-        package_name = "tBasicExport.uno.pkg"
-        qaerrorlog( "Using old extension naming scheme" )
-    else
-        package_name = "tBasicExport.oxt"
-    endif
+    dim package_name as string : package_name = "tBasicExport.oxt"
 
     const LIBRARY_NAME = "tBasicExport"
     
@@ -65,14 +57,15 @@ testcase tBasicPackageImport
     
     dim cFile as string
         cFile = hGetWorkPath() & package_name 
+        
+    if ( Not FileExists( cFile ) or ( FileLen( cFile ) = 0 ) ) then
+        warnlog( "#i105719# - Test extension is missing or has zero size. This is most likely" & _
+                 " a follow-up error from the prior test case. Test stopped." )
+        goto endsub
+    endif
     
-    '///<ul>  
     gApplication = "WRITER"
     
-    '///+<li>Open the package manager ui</li>
-    '///+<li>Add a package</li>
-    '///+<li>Select &quot;tBasicLibraryExportAsPackage.oxt&quot;, import it</li>
-    '///+<li>Close the package manager ui</li>
     iStatus = hExtensionAddGUI( cFile, "InstallForUser,NoLicense,NoUpdate" )
     
     ' Evaluate the returncode. Anything different from 0 causes the test to end.
@@ -81,10 +74,8 @@ testcase tBasicPackageImport
         goto endsub
     endif
     
-    '///+<li>Run the macro via Macro Organizer</li>
     hMacroOrganizerRunMacro( LIBRARY_NAME )
     
-    '///+<li>The macro triggers a dialog, close it</li>
     kontext "active"
     if ( active.exists( 5 ) ) then
         active.ok()
@@ -92,24 +83,18 @@ testcase tBasicPackageImport
         warnlog( "The macro was not executed" )
     endif
     
-    '///+<li>Go to Tools/Macros/Organize Macros/OpenOffice.org Basic</li>
     ToolsMacro_uno
     
-    '///+<li>Select the first node (My Macros)</li>
     kontext "Makro"
     MakroAus.select( 1 )
     
-    '///+<li>Click to open the organizer</li>
     Verwalten.click()
     
-    '///+<li>Switch to the libraries-tab</li>
     hSelectBasicObjectOrganizerTab( 3 )
     
-    '///+<li>Select My Macros & Dialogs</li>
     kontext "TabBibliotheken"
     Bibliothek.select( 1 )
     
-    '///+<li>Find the new library, select it</li>
     printlog( "Select the new library" )
     kontext "TabBibliotheken"
     for iCurrentLib = 1 to Bibliotheksliste.getItemCount()
@@ -120,18 +105,15 @@ testcase tBasicPackageImport
     next iCurrentLib
     cLibraryName = BibliotheksListe.getSelText()
     
-    '///+<li>Click to import -> #i64007</li>
     try
         Hinzufuegen.click()
     catch
         warnlog( "#i64007 - Office crashes on clicking import button" )
     endcatch
     
-    '///+<li>Cancel the FileOpen dialog</li>
     kontext "OeffnenDlg"
     OeffnenDlg.cancel()
     
-    '///+<li>Cleanup: Delete the library</li>
     printlog( "Cleanup: Delete Library, close dialogs and remove package" )
 
     ' Note: It is assumed that the library is selected
@@ -151,18 +133,14 @@ testcase tBasicPackageImport
     endif    
     
     
-    '///+<li>Cleanup: Close Libraries organizer</li>
     kontext "TabBibliotheken"
     TabBibliotheken.cancel()
     
-    '///+<li>Cleanup: Close Macro Organizer</li>
     kontext "Makro"
     Makro.cancel()
     
-    '///+<li>Remove package via package manager</li>
     hExtensionRemoveGUI( package_name )
     
-    '///</ul>
     
 endcase
 

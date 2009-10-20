@@ -44,10 +44,6 @@ testcase tLabelTypes()
         goto endsub
     endif
 
-    '///<h1>Localization test for labels: Branding and types</h1>
-    '///<i>This test opens the labels dialog and compares the list of labels
-    '///+ with their brands and associated types agains a reference list.</i><br>
-    '///<ul>
     
     dim iBrandCount as integer
     dim iCurrentBrand as integer
@@ -75,61 +71,43 @@ testcase tLabelTypes()
         sFileOut = hGetWorkPath() & sFile
        
     
-    '///+<li>Open the labels-dialog (suggested way: File->New->Labels)</li>
     hCreateLabels()
 
-    '///+<li>Switch to the Labels-Tab (which is the default)</li>
     kontext
     Active.SetPage TabEtiketten
     
     kontext "TabEtiketten"
 
-    '///+<li>Find out how many brands are listed (might be language dependent)</li>
     iBrandCount = Marke.getItemCount()
 
-    '///+<li>Collect the types for each brand</li>
-    '///<ul>
     for iCurrentBrand = 1 to iBrandCount
     
-        '///+<li>Select brand</li>
         Marke.select( iCurrentBrand )
         
-        '///+<li>Retrieve brand name</li>
         cBrandName = Marke.getSelText()
         
-        '///+<li>Count the number of types for the current brand</li>
         iTypeCount = Typ.getItemCount()
         
-        '///+<li>Retrieve the list of types</li>
-        '///<ul>
         for iCurrentType = 1 to iTypeCount
         
-            '///+<li>Select the next type</li>
             Typ.select( iCurrentType )
         
-            '///+<li>Get the name of the current type</li>
             cTypeName = Typ.getSelText()
             
-            '///+<li>Build the list - format is: &quot;Brand:Type&quot;</li>
             cBrandType = cBrandName & ":" & cTypeName
             ListAppend( al_UI_Labels() , cBrandType )
             
         next iCurrentType
-        '///</ul>
     
     next iCurrentBrand
-    '///</ul>
 
-    '///+<li>Close the label dialog</li>    
     TabEtiketten.Cancel()
 
-    '///+<li>Compare the list against the reference list</li>
     irc = hManageComparisionList( sFileIn, sFileOut, al_UI_Labels() )
     if ( irc <> 0 ) then
         warnlog( "The list of labels (Brand/Types) has changed, please review." )
     else
         printlog( "The lists of labels are unchanged. Good." )
     endif
-    '///</ul>
     
 endcase

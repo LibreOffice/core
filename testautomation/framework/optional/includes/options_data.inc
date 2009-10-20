@@ -47,16 +47,12 @@ testcase tDatasourceConnections
 
    iCounter = 9          ' sorry only hard coded the number of entries, it gives no way to get the real count ( GetText crashes )
 qaerrorLog "GetTextCrasjhes??? TBO"
-'///check if all settings are saved in configuration ( Datasources / Connections )
 
-'///open a new document
-'///+open options 'Datasources' / 'Connections'
 
    hNewDocument
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
 
-'///+save raw data
  printlog " - save raw data"
    bSave = ConnectionPoolingEnabled.IsChecked
    ConnectionPoolingEnabled.Check
@@ -87,18 +83,14 @@ qaerrorLog "GetTextCrasjhes??? TBO"
    next i
    if bSave = TRUE then ConnectionPoolingEnabled.UnCheck
 
-'///+close options dialog with OK, close all documents and exit StarOffice
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
    hCloseDocument
 
-'///+wait until StarOffice is out of memory and restart it
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///+open options 'Datasources' / 'Connections'
-'///+check all changes
  printlog " - check all changes"
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
@@ -120,7 +112,6 @@ qaerrorLog "GetTextCrasjhes??? TBO"
       Sleep (1)
    next i
 
-'///+second changes
  printlog " - make second changes"
    DriverList.TypeKeys "<Up>", 20
    for i=1 to iCounter
@@ -139,13 +130,10 @@ qaerrorLog "GetTextCrasjhes??? TBO"
       Sleep (1)
    next i
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Datasources' / 'Connections'
-'///+check all changes
  printlog " - check all changes"
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
@@ -169,7 +157,6 @@ qaerrorLog "GetTextCrasjhes??? TBO"
       Sleep (1)
    next i
 
-'///+reset to raw data
  printlog " - reset all settings"
    DriverList.TypeKeys "<Up>", 20
    for i=1 to iCounter
@@ -180,13 +167,10 @@ qaerrorLog "GetTextCrasjhes??? TBO"
    next i
    if bSave = TRUE then ConnectionPoolingEnabled.Check else ConnectionPoolingEnabled.UnCheck
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+open options 'Datasources' / 'Connections'
-'///+check the raw data
  printlog " - check the raw data"
    ToolsOptions
    hToolsOptions ( "Datasources", "Connections" )
@@ -203,7 +187,6 @@ qaerrorLog "GetTextCrasjhes??? TBO"
    next i
    ConnectionPoolingEnabled.unCheck
 
-'///+close options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
