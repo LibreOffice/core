@@ -128,16 +128,16 @@ const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
     35, // RES_CHRATR_OVERLINE,                  // 38
      0, // RES_CHRATR_DUMMY1,                    // 39
      0, // RES_CHRATR_DUMMY2,                    // 40
-     0, // RES_TXTATR_AUTOFMT,                   // 41
-     0, // RES_TXTATR_INETFMT                    // 42
-    36, // RES_TXTATR_REFMARK,                   // 43
-    37, // RES_TXTATR_TOXMARK,                   // 44
-     0, // RES_TXTATR_CHARFMT,                   // 45
-     0, // RES_TXTATR_DUMMY5                     // 46
-    38, // RES_TXTATR_CJK_RUBY,                  // 47
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 48
-    39, // RES_TXTATR_META,                      // 49
-    39  // RES_TXTATR_METAFIELD,                 // 50
+    36, // RES_TXTATR_REFMARK,                   // 41
+    37, // RES_TXTATR_TOXMARK,                   // 42
+    38, // RES_TXTATR_META,                      // 43
+    38, // RES_TXTATR_METAFIELD,                 // 44
+     0, // RES_TXTATR_AUTOFMT,                   // 45
+     0, // RES_TXTATR_INETFMT                    // 46
+     0, // RES_TXTATR_CHARFMT,                   // 47
+    39, // RES_TXTATR_CJK_RUBY,                  // 48
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 49
+     0, // RES_TXTATR_DUMMY5                     // 50
 };
 
 /*************************************************************************

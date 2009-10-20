@@ -469,9 +469,10 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         // --> OD 2008-02-25 #refactorlists#
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
         // <--
-        RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
         RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-        RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+        RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+        RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         0
     };
@@ -753,7 +754,8 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // TEST_TEMP ToDo: AutoFmt!
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
-                                RES_TXTATR_DUMMY5, RES_TXTATR_WITHEND_END-1,
+                                RES_TXTATR_META, RES_TXTATR_METAFIELD,
+                                RES_TXTATR_CJK_RUBY, RES_TXTATR_WITHEND_END-1,
                                 0 );
 
             aTxtSet.Put( rChgSet );
