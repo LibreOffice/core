@@ -46,13 +46,9 @@ testcase tOOoPrint
   Dim lsSaveFile ( 3 ) as String
   Dim lbSaveFile ( 13 ) as Boolean
 
-'///check if all settings are saved in configuration ( StarOffice / Print )
-'///open options 'StarOffice' / 'Print'
    ToolsOptions
    hToolsOptions ( "StarOffice", "Print" )
 
-'///save old settings
-'///- save the settings for printer-section
  printlog " - save old settings"
  printlog "    - save settings for 'printer'"
   Printer.Check
@@ -82,7 +78,6 @@ testcase tOOoPrint
 
    lbSavePrinter (12) = ConvertColorsToGrayscale.IsChecked
 
-'///- save settings for 'print to file'
  printlog "    - save settings for 'print to file'"
   PrintToFile.Check
   Sleep (2)
@@ -109,13 +104,10 @@ testcase tOOoPrint
 
    lbSaveFile (12) = ConvertColorsToGrayscale.IsChecked
 
-'///- save general settings
  printlog "    - save general settings "
    lbSave(1) = PaperOrientation.IsChecked
    lbSave(2) = PaperSize.IsChecked
 
-'///invert/change settings
-'///- changes for 'printer'
  printlog " - invert/change settings"
  printlog "    - changes for 'printer'"
   Printer.Check
@@ -141,7 +133,6 @@ testcase tOOoPrint
 
    if lbSavePrinter (12) = FALSE then ConvertColorsToGrayscale.Check else ConvertColorsToGrayscale.UnCheck
 
-'///- changes for 'print to file'
  printlog "    - changes for 'print to file'"
   PrintToFile.Check
   Sleep (2)
@@ -164,27 +155,21 @@ testcase tOOoPrint
 
    if lbSaveFile (12) = FALSE then ConvertColorsToGrayscale.Check else ConvertColorsToGrayscale.UnCheck
 
-'///- changes for general settings
  printlog "    - changes for general settings"
    if lbSave(1) = FALSE then PaperOrientation.Check else PaperOrientation.UnCheck
    if lbSave(2) = FALSE then PaperSize.Check else PaperSize.UnCheck
 
-'///close options-dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///exit/restart StarOffice
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///open options 'StarOffice' / 'Print'
  printlog " - check invertation/changes"
    ToolsOptions
    hToolsOptions ( "StarOffice", "Print" )
 
-'///check invertation/changes
-'///- check for 'printer'
  printlog "    - check for 'printer'"
   Printer.Check
   Sleep (2)
@@ -213,7 +198,6 @@ testcase tOOoPrint
 
    if ConvertColorsToGrayscale.IsChecked = lbSavePrinter (12) then Warnlog "Convert Colors To Grayscale => changes not saved!"
 
-'///- check for 'print to file'
  printlog "    - check for 'print to file'"
   PrintToFile.Check
   Sleep (2)
@@ -239,13 +223,10 @@ testcase tOOoPrint
 
    if ConvertColorsToGrayscale.IsChecked = lbSaveFile (12) then warnlog "Convert colors to grayscale => changes not saved!"
 
-'///check for general settings
  printlog "    - check for general settings"
    if PaperOrientation.IsChecked = lbSave(1)           then warnlog "Paper orientation => changes not saved! #i29960"
    if PaperSize.IsChecked        = lbSave(2)           then Warnlog "Paper size => changes not saved! #i29960"
 
-'///2. changes
-'///- changes for 'printer'
  printlog " - 2. changes"
  printlog "    - 'printer'"
   Printer.Check
@@ -259,7 +240,6 @@ testcase tOOoPrint
     IncludeTransparentObjects.Check
    ConvertColorsToGrayscale.UnCheck
 
-'///- changes for 'print to file'
  printlog "    - 'print to file'"
   PrintToFile.Check
    ReduceTransparency.Check
@@ -268,23 +248,18 @@ testcase tOOoPrint
    ReduceBitmaps.UnCheck
    ConvertColorsToGrayscale.Check
 
-'///- changes for general settings
  printlog "    - general settings"
    PaperOrientation.UnCheck
    PaperSize.Check
 
-'///close the options-dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///open options 'StarOffice' / 'Print'
-'///check 2. changes
  printlog " - check 2. changes"
    ToolsOptions
    hToolsOptions ( "StarOffice", "Print" )
 
-'///- check for 'printer'
  printlog "    - check for 'printer'"
   Printer.Check
   Sleep (2)
@@ -306,7 +281,6 @@ testcase tOOoPrint
    end if
    if ConvertColorsToGrayscale.IsChecked <> FALSE    then Warnlog "Convert Colors To Grayscale => changes not saved!"
 
-'///- check 'print to file'
  printlog "    - check 'print to file'"
   PrintToFile.Check
   Sleep (2)
@@ -319,12 +293,10 @@ testcase tOOoPrint
    if ReduceBitmaps.IsChecked <> FALSE then Warnlog "Reduce bitmaps => changes not saved!"
    if ConvertColorsToGrayscale.IsChecked <> TRUE then Warnlog "Convert colors to grayscale => changes not saved!"
 
-'///- check for general settings
  printlog "    - check general settings"
    if PaperOrientation.IsChecked <> FALSE then warnlog "Paper orientation => changes not saved!"
    if PaperSize.IsChecked        <> TRUE  then Warnlog "Paper size => changes not saved! #i29960"
 
-'///reset to saved settings
  printlog " - reset to saved settings"
  printlog "    - 'printer'"
   Printer.Check
@@ -385,18 +357,14 @@ testcase tOOoPrint
    if lbSave(1) = TRUE then PaperOrientation.check else PaperOrientation.Uncheck
    if lbSave(2) = TRUE then PaperSize.Check else PaperSize.UnCheck
 
-'///close options-dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///open options 'StarOffice' / 'Print'
-'///check changes
  printlog " - check changes"
    ToolsOptions
    hToolsOptions ( "StarOffice", "Print" )
 
-'///- check for 'printer'
  printlog "    - check for 'printer'"
   Printer.Check
   Sleep (2)
@@ -432,7 +400,6 @@ testcase tOOoPrint
 
    if ConvertColorsToGrayscale.IsChecked  <> lbSavePrinter (12) then Warnlog "Convert colors to grayscale => changes not saved!"
 
-'///- check for 'print to file'
  printlog "    - 'print to file'"
   PrintToFile.Check
   Sleep (2)
@@ -466,12 +433,10 @@ testcase tOOoPrint
 
    if ConvertColorsToGrayscale.IsChecked  <> lbSaveFile (12) then Warnlog "Convert colors to grayscale => changes not saved!"
 
-'///- check for general settings
  printlog "    - general settings"
    if PaperOrientation.Ischecked          <> lbSave(1)       then Warnlog "Paper orientation => changes not saved!"
    if PaperSize.IsChecked                 <> lbSave(2)       then Warnlog "Paper size. => changes not saved!"
 
-'///close options-dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)

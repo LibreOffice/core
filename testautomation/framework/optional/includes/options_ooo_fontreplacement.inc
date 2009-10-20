@@ -40,22 +40,16 @@
 testcase tOOoFontReplacement
    Dim i, il as Integer
 
-'///check if all settings are saved in configuration ( StarOffice / Font Replacement )
-'///creat a new document and open tools/options/staroffice/font replacement
    ToolsOptions
    hToolsOptions ( "StarOffice", "Fontreplacement" )
 
-'///change settings
  printlog " - change settings"
-'///if 'Apply replacement table' is check as default => BUG
    if Anwenden.IsChecked then
       Warnlog "The default for this page is wrong. 'Apply replacement table' has top be unchecked!"
    else
       Anwenden.Check
    end if
 
-'///check 'Apply replacement table'
-'///insert 2 new replacements ( Font / Replace with : 4 / 6 and 10 / 5 )
    Schriftart.Select 4
    ErsetzenDurch.Select 6
    Uebernehmen.Click
@@ -64,29 +58,23 @@ testcase tOOoFontReplacement
    ErsetzenDurch.Select 5
    Uebernehmen.Click
 
-'///close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
  printlog " - exit/restart StarOffice"
-'///exit and restart StarOffice
    ExitRestartTheOffice
 
  printlog " - check changes"
-'///check changes
-'///open tools/options/staroffice/font replacement
    ToolsOptions
    hToolsOptions ( "StarOffice", "Fontreplacement" )
 
-'///if 'Apply replacement table' is not check => BUG
    if Anwenden.IsChecked = FALSE then
       Warnlog "Apply replacement table' => changes not saved!"
    else
       Anwenden.Check
    end if
 
-'///check the 2 replacements
    il = Liste.GetItemCount
    if il <> 2 then Warnlog "Not all entries are saved!"
 
@@ -106,7 +94,6 @@ testcase tOOoFontReplacement
       end if
    next i
 
-'///reset to defaut and delete the 2 new replacements
  printlog " - reset to default"
    for i=1 to il
       Liste.TypeKeys "<Down><Up>"
@@ -115,12 +102,10 @@ testcase tOOoFontReplacement
    next i
    Anwenden.Uncheck
 
-'///close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check the reset
  printlog " - check the default"
    ToolsOptions
    hToolsOptions ( "StarOffice", "Fontreplacement" )
@@ -133,7 +118,6 @@ testcase tOOoFontReplacement
    if Liste.GetItemCount <> 0 then Warnlog "Not all deleted entries are realy deleted!"
    Anwenden.UnCheck
 
-'///close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)

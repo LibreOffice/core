@@ -39,20 +39,13 @@
 
 testcase tScripting
 
-    '///<h1>Very short test to verify that the scripting framework is present</h1>
-    '///<i>Additionally we verify that the document &quot;Untitled1&quot; is present
-    '///+ in the organizers</i><br><br>
-    '///<ul>
     
     const ORGANIZER_ITEMS = 2
     
-    '///+<li>Make sure we are on the backing window</li>
     hInitBackingMode()
 
-    '///+<li>Open Script Organizer for Beanshell</li>
     ToolsMacrosOrganizeMacrosBeanShell
     
-    '///+<li>Access the TreeList  and close the dialog  with cancel</li>
     Kontext "ScriptOrganizer"
     if ( ScriptOrganizer.exists( 5 ) ) then
         printlog( "Beanshell Script Organizer is present. Good" )
@@ -65,10 +58,8 @@ testcase tScripting
         warnlog( "Script Organizer for Beanshell is missing" )
     endif
     
-    '///+<li>Open Script Organizer for JavaScript</li>
     ToolsMacrosOrganizeMacrosJavaScript
     
-    '///+<li>Access the TreeList  and close the dialog  with cancel</li>
     Kontext "ScriptOrganizer"
     if ( ScriptOrganizer.exists( 5 ) ) then
         printlog( "JavaScript Script Organizer is present. Good" )
@@ -81,7 +72,6 @@ testcase tScripting
         warnlog( "Script Organizer for JavaScript is missing" )
     endif
     
-    '///</ul>
     
 endcase
     

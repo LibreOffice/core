@@ -58,6 +58,7 @@ sub main
     
     gApplication = "WRITER"
     call tToolsOptionsTestFirst
+    call tToolsOptionsImprovementProgram
     call tDatabaseCheck
     call tHelpRegistration
     call hStatusOut   
@@ -70,6 +71,9 @@ sub LoadIncludeFiles
 
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
+    
+    use "global\required\includes\g_option.inc"
+    
     use "global\tools\includes\optional\t_ui_filters.inc"
     use "global\tools\includes\optional\t_filetools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"

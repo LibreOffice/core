@@ -39,8 +39,6 @@
 
 testcase tMacroUsertemplate
 
-    '///<H1>My Macros/standard execution with user defined template</H1>
-    '///<ul>
 
     ' requires: Default template path, default security level (medium)
     
@@ -67,18 +65,14 @@ testcase tMacroUsertemplate
     sPathOut = convertpath( gOfficePath & "user\template\" )
     hDeleteFile( sPathOut & FILEOUT & ".ott" )
     
-    '///+<li>Create one single document with identification string</li>
     hInitSingleDoc()
     kontext "DocumentWriter"
     DocumentWriter.typeKeys( DOC_IDENTIFIER )
 
-    '///+<li>Open a plain new document</li>
     brc = hCreateDocument()
     
-    '///+<li>Open Basic Organizer</li>
     brc = hOpenBasicOrganizerFromDoc()
 
-    '///+<li>Select My Macros/Standard/Module1/main</li>
     iCurrentNode = hSelectNodeByName( MakroAus, "Module1" )
     if ( iCurrentNode = 0 ) then    
         warnlog( "#i73521# - The expected node could not be found. Aborting test" )
@@ -107,25 +101,18 @@ testcase tMacroUsertemplate
     	goto endsub
     endif
         
-    '///+<li>Open Basic Ide by clicking Edit...</li>
     Bearbeiten.click()
 
-    '///+<li>Overwrite existing macro: Insert macro that prints messagebox</li>
     hInsertMacro( 3 )
 
-    '///+<li>Close IDE</li>
     hCloseBasicIde()
 
-    '///+<li>Close document</li>
     hDestroyDocument()
 
-    '///+<li>Open a plain new document</li>
     hCreateDocument
 
-    '///+<li>Open Run Macro-Dialog</li>
     ToolsMacrosRunMacro
     
-    '///+<li>Execute the macro - this should work</li>
     cMacroName = hExecScript_tMacroUserTemplate() ' local function, see below
     if ( lcase( cMacroName ) <> "main" ) then
         warnlog( "Test abort: Incorrect macro is selected: " & cMacroName )
@@ -138,7 +125,6 @@ testcase tMacroUsertemplate
     ' run
     ScriptSelector.ok()
 
-    '///+<li>Close the Macro-dialog</li>
     kontext "Active"
     if ( active.exists( 3 ) ) then
         printlog( "Messagebox: " & active.getText() )
@@ -147,37 +133,28 @@ testcase tMacroUsertemplate
         warnlog( "The Macro has not been executed" )
     endif
     
-    '///+<li>Close document</li>
     brc = hDestroyDocument()
 
-    '///+<li>Open a plain new document</li>
     brc = hCreateDocument() 
     
-    '///+<li>Save it as {...work/user/template/MyTemplate} (template, autosuffix)</li>
     printlog( "" )
     printlog( "Save as template" )
     hFileSaveAsWithFilterKill( sPathOut & FILEOUT, FILTER )
     
-    '///+<li>Close document</li>
     hDestroyDocument()
     
-    '///+<li>Open &quot;Templates and Documents&quot;</li>
     printlog( "" )
     printlog( "File New from Template" )
     FileNewFromTemplate
     
-    '///+<li>Find MyTemplate (note: No suffix displayed)</li>
     irc = hFindTemplate( FILEOUT )
         
-    '///+<li>Create a new document based ton this template</li>
     hSelectDocumentObject( irc, 1 )
     
-    '///+<li>Open Run Macro-Dialog</li>
     printlog( "" )
     printlog( "Run Macro..." )
     ToolsMacrosRunMacro
     
-    '///+<li>Execute the macro - this should work</li>
     cMacroName = hExecScript_tMacroUserTemplate() ' local function, see below
     if ( lcase( cMacroName ) <> "main" ) then
         warnlog( "Test abort: Incorrect macro is selected: " & cMacroName )
@@ -191,7 +168,6 @@ testcase tMacroUsertemplate
     printlog( "Run" )
     ScriptSelector.ok()
     
-    '///#i58527 - com.sun.star...
     kontext "Active"
     if ( active.exists( 3 ) ) then
     
@@ -210,14 +186,11 @@ testcase tMacroUsertemplate
         warnlog( "Macro not executed / no warning" )
     endif
     
-    '///+<li>Close document</li>
     hDestroyDocument()
     hDestroyDocument()
     
-    '///+<li>Cleanup: Delete the template</li>
     hDeleteFile( sPathOut & FILEOUT & ".ott" )
 
-    '///</ul>
 
 endcase
 
