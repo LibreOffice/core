@@ -115,7 +115,7 @@ VS_VERSION_INFO versioninfo
 13 ICON "icons\\oasis-empty-document.ico"
 14 ICON "icons\\oasis-database.ico"
 15 ICON "icons\\oasis-formula.ico"
-16 ICON "icons\\oasis-empty-template.ico"
+16 ICON "icons\\empty-template.ico"
 17 ICON "icons\\empty-document.ico"
 18 ICON "icons\\so8-configuration.ico"
 19 ICON "icons\\so8-open.ico"
