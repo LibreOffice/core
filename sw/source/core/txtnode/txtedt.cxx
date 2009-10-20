@@ -1676,6 +1676,7 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 void SwTxtNode::CountWords( SwDocStat& rStat,
                             xub_StrLen nStt, xub_StrLen nEnd ) const
 {
+    ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
     if( nStt < nEnd )
     {
         if ( !IsHidden() )

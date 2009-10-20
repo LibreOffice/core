@@ -33,12 +33,6 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
-///////////////////////////////////////////////////////////////////////////
-// PRODUCT: struct SwInternStat ist nur fuer CORE Interne Statistics und
-//          hat nichts in einer ProductVersion zu suchen.
-///////////////////////////////////////////////////////////////////////////
-
-struct SwInternStat;
 
 struct SW_DLLPUBLIC SwDocStat
 {
@@ -46,11 +40,14 @@ struct SW_DLLPUBLIC SwDocStat
     USHORT          nGrf;
     USHORT          nOLE;
     ULONG           nPage;
+    /// paragraphs for document statistic: non-empty and non-hidden ones
     ULONG           nPara;
+    /// all paragraphs, including empty/hidden ones
+    ULONG           nAllPara;
     ULONG           nWord;
     ULONG           nChar;
     BOOL            bModified;
-    SwInternStat*   pInternStat;
+
     SwDocStat();
     void Reset();
 };

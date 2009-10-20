@@ -41,13 +41,9 @@
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#ifndef _XMLGRHLP_HXX
-#ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
-#endif
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-#endif
 #include <svx/eeitem.hxx>
 #include <svx/svddef.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -66,9 +62,7 @@
 #include <xmltexte.hxx>
 #include <xmlexp.hxx>
 #include <sfx2/viewsh.hxx>
-#ifndef _COMPHELPER_PROCESSFACTORYHXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #include <docary.hxx>
 #include <svx/unolingu.hxx>
 #include <svx/forbiddencharacterstable.hxx>
@@ -326,13 +320,15 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             // figures given above
             // The styles in pDoc also count the default style that never
             // gets exported -> subtract one.
-            sal_Int32 nRef = 1;
+            sal_Int32 nRef = 1; // meta.xml
             nRef += pDoc->GetCharFmts()->Count() - 1;
             nRef += pDoc->GetFrmFmts()->Count() - 1;
             nRef += pDoc->GetTxtFmtColls()->Count() - 1;
 //          nRef += pDoc->GetPageDescCnt();
-            nRef += aDocStat.nPara;
-            pProgress->SetReference( 2*nRef );
+            nRef *= 2; // for the above styles, xmloff will increment by 2!
+            // #i93174#: count all paragraphs for the progress bar
+            nRef += aDocStat.nAllPara; // 1: only content, no autostyle
+            pProgress->SetReference( nRef );
             pProgress->SetValue( 0 );
         }
     }

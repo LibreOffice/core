@@ -548,6 +548,8 @@ public:
     const OutlinerParaObject*   GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );
 
+    sal_uInt32 GetNumberOfParagraphs() const;
+
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
     virtual String      GetDescription() const;

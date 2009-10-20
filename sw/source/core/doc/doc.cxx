@@ -106,6 +106,8 @@
 #include <SwUndoFmt.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>
+#include <docufld.hxx>
+
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -1063,6 +1065,24 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             case ND_GRFNODE:        ++rStat.nGrf;   break;
             case ND_OLENODE:        ++rStat.nOLE;   break;
             case ND_SECTIONNODE:    break;
+            }
+        }
+
+        // #i93174#: notes contain paragraphs that are not nodes
+        {
+            SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
+            SwClientIter aIter(*pPostits);
+            SwFmtFld const * pFmtFld =
+                static_cast<SwFmtFld const*>(aIter.First( TYPE(SwFmtFld) ));
+            while (pFmtFld)
+            {
+                if (pFmtFld->IsFldInDoc())
+                {
+                    SwPostItField const * const pField(
+                        static_cast<SwPostItField const*>(pFmtFld->GetFld()));
+                    rStat.nAllPara += pField->GetNumberOfParagraphs();
+                }
+                pFmtFld = static_cast<SwFmtFld const*>(aIter.Next());
             }
         }
 

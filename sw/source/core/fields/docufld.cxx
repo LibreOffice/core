@@ -1870,6 +1870,11 @@ void SwPostItField::SetTextObject( OutlinerParaObject* pText )
     mpText = pText;
 }
 
+sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
+{
+    return (mpText) ? mpText->Count() : 1;
+}
+
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
