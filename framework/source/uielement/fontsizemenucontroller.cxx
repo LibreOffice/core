@@ -326,7 +326,9 @@ void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatc
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         UiEventLogHelper(::rtl::OUString::createFromAscii("FontSizeMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-    _xDispatch->dispatch( aTargetURL, aArgs );
+    OSL_ENSURE(_xDispatch.is(),"FontSizeMenuController::impl_select: No dispatch");
+    if ( _xDispatch.is() )
+        _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 // XPopupMenuController
