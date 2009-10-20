@@ -242,9 +242,10 @@ class GtkSalFrame : public SalFrame
     bool isFloatGrabWindow() const
     {
         return
-            (m_nStyle & SAL_FRAME_STYLE_FLOAT) &&       // only a float can be floatgrab
-            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP) &&    // tool tips are not
-            !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION); // toolbars are also not
+            (m_nStyle & SAL_FRAME_STYLE_FLOAT) &&                // only a float can be floatgrab
+            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP) &&             // tool tips are not
+            !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) && // toolbars are also not
+            !(m_nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE);       // focusable floats are not
     }
 
     bool isChild( bool bPlug = true, bool bSysChild = true )

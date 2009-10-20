@@ -772,7 +772,10 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     m_aForeignTopLevelWindow = None;
     m_nStyle = nStyle;
 
-    GtkWindowType eWinType = ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+    GtkWindowType eWinType = (  (nStyle & SAL_FRAME_STYLE_FLOAT) &&
+                              ! (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|
+                                           SAL_FRAME_STYLE_FLOAT_FOCUSABLE))
+                              )
         ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL;
 
     if( nStyle & SAL_FRAME_STYLE_SYSTEMCHILD )
@@ -801,7 +804,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     bool bDecoHandling =
         ! isChild() &&
         ( ! (nStyle & SAL_FRAME_STYLE_FLOAT) ||
-          (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) );
+          (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE) ) );
 
     /* #i100116# metacity has a peculiar behavior regarding WM_HINT accept focus and _NET_WM_USER_TIME
         at some point that may be fixed in metacity and we will have to revisit this
@@ -832,6 +835,11 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
             bNoDecor = true;
         }
+        else if( (nStyle & SAL_FRAME_STYLE_FLOAT_FOCUSABLE) )
+        {
+            eType = GDK_WINDOW_TYPE_HINT_UTILITY;
+        }
+
         if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
@@ -869,7 +877,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     if( bDecoHandling )
     {
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? TRUE : FALSE );
-        if( ( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) || bMetaCityToolWindowHack )
+        if( ( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ) || bMetaCityToolWindowHack )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, false );
     }
 
@@ -2072,7 +2080,7 @@ void GtkSalFrame::ToTop( USHORT nFlags )
              *  to our window - which it of course won't since our input hint
              *  is set to false.
              */
-            if( (m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+            if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_FLOAT_FOCUSABLE)) )
                 XSetInputFocus( getDisplay()->GetDisplay(), GDK_WINDOW_XWINDOW( m_pWindow->window ), RevertToParent, CurrentTime );
         }
         else
