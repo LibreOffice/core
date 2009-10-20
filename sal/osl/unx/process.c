@@ -432,9 +432,8 @@ oslSocket osl_receiveResourcePipe(oslPipe pPipe)
 static void ChildStatusProc(void *pData)
 {
     int   i;
-/*  int   first = 0;*/
-    pid_t pid;
-/*  int   status;*/
+    pid_t pid = -1;
+    int   status = 0;
     int   channel[2];
     ProcessData  data;
     ProcessData *pdata;
@@ -447,23 +446,26 @@ static void ChildStatusProc(void *pData)
        in our child process */
     memcpy(&data, pData, sizeof(data));
 
-    socketpair(AF_UNIX, SOCK_STREAM, 0, channel);
+    if (socketpair(AF_UNIX, SOCK_STREAM, 0, channel) == -1)
+        status = errno;
 
     fcntl(channel[0], F_SETFD, FD_CLOEXEC);
     fcntl(channel[1], F_SETFD, FD_CLOEXEC);
 
     /* Create redirected IO pipes */
+    if ( status == 0 && data.m_pInputWrite )
+        if (pipe( stdInput ) == -1)
+            status = errno;
 
-    if ( data.m_pInputWrite )
-        pipe( stdInput );
+    if ( status == 0 && data.m_pOutputRead )
+        if (pipe( stdOutput ) == -1)
+            status = errno;
 
-    if ( data.m_pOutputRead )
-        pipe( stdOutput );
+    if ( status == 0 && data.m_pErrorRead )
+        if (pipe( stdError ) == -1)
+            status = errno;
 
-    if ( data.m_pErrorRead )
-        pipe( stdError );
-
-    if ((pid = fork()) == 0)
+    if ( (status == 0) && ((pid = fork()) == 0) )
     {
         /* Child */
         if (channel[0] != -1) close(channel[0]);
@@ -481,12 +483,12 @@ static void ChildStatusProc(void *pData)
 #endif
         }
 
-           if ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid())))
+          int chstatus = 0;
+          if (data.m_pszDir)
+              chstatus = chdir(data.m_pszDir);
 
+           if (chstatus == 0 && ((data.m_uid == (uid_t)-1) || ((data.m_uid == getuid()) && (data.m_gid == getgid()))))
         {
-              if (data.m_pszDir)
-                  chdir(data.m_pszDir);
-
             for (i = 0; data.m_pszEnv[i] != NULL; i++)
                  putenv(data.m_pszEnv[i]);
 
@@ -532,7 +534,9 @@ static void ChildStatusProc(void *pData)
         OSL_TRACE("ChildStatusProc : starting '%s' failed",data.m_pszArgs[0]);
 
         /* if we reach here, something went wrong */
-        write(channel[1], &errno, sizeof(errno));
+        sal_Int32 nWrote = write(channel[1], &errno, sizeof(errno));
+        if (nWrote != sizeof(errno))
+            OSL_TRACE("sendFdPipe : sending failed (%s)",strerror(errno));
 
         if (channel[1] != -1) close(channel[1]);
 
@@ -540,8 +544,6 @@ static void ChildStatusProc(void *pData)
     }
     else
     {   /* Parent  */
-        int   status;
-
         if (channel[1] != -1) close(channel[1]);
 
         /* Close unused pipe ends */
@@ -549,14 +551,16 @@ static void ChildStatusProc(void *pData)
         if (stdOutput[1] != -1) close( stdOutput[1] );
         if (stdError[1] != -1) close( stdError[1] );
 
-        while (((i = read(channel[0], &status, sizeof(status))) < 0))
+        if (pid > 0)
         {
-            if (errno != EINTR)
-                break;
+            while (((i = read(channel[0], &status, sizeof(status))) < 0))
+            {
+                if (errno != EINTR)
+                    break;
+            }
         }
 
         if (channel[0] != -1) close(channel[0]);
-
 
         if ((pid > 0) && (i == 0))
         {

@@ -263,11 +263,8 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 
     pProfile->m_Stamp = OslProfile_getFileStamp(pFile);
     bRet=loadProfile(pFile, pProfile);
+    bRet &= realpath(pszProfileName, pProfile->m_FileName) != NULL;
     OSL_ASSERT(bRet);
-
-    /* #109261# using osl profiles is deprecated */
-    /* OSL_VERIFY(NULL != realpath(pszProfileName, pProfile->m_FileName)); */
-    realpath(pszProfileName, pProfile->m_FileName);
 
     if (pProfile->m_pFile == NULL)
         closeFileImpl(pFile,pProfile->m_Flags);
@@ -1338,6 +1335,7 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
 
 static sal_Bool OslProfile_rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 {
+    sal_Bool bRet = sal_True;
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_OslProfile_rewindFile\n");
 #endif
@@ -1349,14 +1347,14 @@ static sal_Bool OslProfile_rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 #ifdef DEBUG_OSL_PROFILE
         OSL_TRACE("rewinding\n");
 #endif
-        lseek(pFile->m_Handle, SEEK_SET, 0L);
+        bRet = (lseek(pFile->m_Handle, SEEK_SET, 0L) == 0L);
 
         if (bTruncate)
         {
 #ifdef DEBUG_OSL_PROFILE
             OSL_TRACE("truncating\n");
 #endif
-            ftruncate(pFile->m_Handle, 0L);
+            bRet &= (ftruncate(pFile->m_Handle, 0L) == 0);
         }
 
     }
@@ -1364,7 +1362,7 @@ static sal_Bool OslProfile_rewindFile(osl_TFile* pFile, sal_Bool bTruncate)
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("Out osl_OslProfile_rewindFile [ok]\n");
 #endif
-    return (sal_True);
+    return bRet;
 }
 
 
