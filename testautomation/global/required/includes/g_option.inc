@@ -699,6 +699,12 @@ testcase tToolsOptionsImprovementProgram
 
     printlog( "Update test for the tools/options dialog of the OOo Improvement Program" )
 
+    if (gOOO AND NOT gOOoImprovementIsEnabled) then
+        'In StarOffice this test should always work - but on OOo contributet builds the function is not available - only on OOo builds provided by Sun Microsystems
+        qaErrorlog ("This build does not participate in the OOo Improvement Program - test exit")
+        goto endsub
+    endif
+
     dim cLogFile as string
         cLogFile = gOfficePath & "user\temp\feedback\Current.csv"
         cLogFile = convertpath( cLogFile )
