@@ -38,10 +38,14 @@ MY_MOD = $(SOLARXMLDIR)/registry/spool
 MY_XCDS = \
     $(MISC)/base.xcd \
     $(MISC)/brand.xcd \
+    $(MISC)/c01.xcd \
     $(MISC)/calc.xcd \
+    $(MISC)/cjk.xcd \
+    $(MISC)/ctl.xcd \
     $(MISC)/draw.xcd \
     $(MISC)/graphicfilter.xcd \
     $(MISC)/impress.xcd \
+    $(MISC)/korea.xcd \
     $(MISC)/lingucomponent.xcd \
     $(MISC)/main.xcd \
     $(MISC)/math.xcd \
@@ -51,6 +55,7 @@ MY_XCDS = \
     $(MISC)/pocketexcel.xcd \
     $(MISC)/pocketword.xcd \
     $(MISC)/pyuno.xcd \
+    $(MISC)/w4w.xcd \
     $(MISC)/writer.xcd \
     $(MISC)/xsltfilter.xcd
 
@@ -72,6 +77,11 @@ MY_FILES_brand += \
     $(MY_MOD)/org/openoffice/Office/Jobs/Jobs-registration.xcu
 .END
 
+MY_FILES_c01 = \
+    $(MY_MOD)/org/openoffice/Inet-defaultsearchengine.xcu \
+    $(MY_MOD)/org/openoffice/Office/Writer-defaultfontarial.xcu \
+    $(MY_MOD)/org/openoffice/Office/Writer-directcursor.xcu
+
 MY_DEPS_calc = main
 MY_FILES_calc = \
     $(MY_XCS)/Office/UI/CalcCommands.xcs \
@@ -84,6 +94,15 @@ MY_FILES_calc = \
     $(MY_MOD)/org/openoffice/Office/Common-calc.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-calc.xcu \
     $(MY_MOD)/org/openoffice/Setup-calc.xcu
+
+MY_DEPS_cjk = main
+MY_FILES_cjk = \
+    $(MY_MOD)/org/openoffice/Office/Common-cjk.xcu \
+    $(MY_MOD)/org/openoffice/Office/Writer-cjk.xcu
+
+MY_DEPS_ctl = main
+MY_FILES_ctl = \
+    $(MY_MOD)/org/openoffice/Office/Common-ctl.xcu
 
 MY_DEPS_draw = main
 MY_FILES_draw = \
@@ -113,6 +132,10 @@ MY_FILES_impress = \
     $(MY_MOD)/org/openoffice/Office/Common-impress.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-impress.xcu \
     $(MY_MOD)/org/openoffice/Setup-impress.xcu
+
+MY_DEPS_korea = main
+MY_FILES_korea = \
+    $(MY_MOD)/org/openoffice/Office/Common-korea.xcu
 
 MY_DEPS_lingucomponent = main
 MY_FILES_lingucomponent = \
@@ -372,6 +395,11 @@ MY_DEPS_pyuno = main
 MY_FILES_pyuno = \
     $(MY_MOD)/org/openoffice/Office/Scripting-python.xcu
 
+MY_DEPS_w4w = main
+MY_FILES_w4w = \
+    $(MY_MOD)/fcfg_w4w_filters.xcu \
+    $(MY_MOD)/fcfg_w4w_types.xcu
+
 MY_DEPS_writer = main
 MY_FILES_writer = \
     $(MY_XCS)/Office/UI/WriterCommands.xcs \
@@ -423,17 +451,31 @@ MY_FILES_binfilter = \
     $(MY_MOD)/fcfg_web_bf_types.xcu \
     $(MY_MOD)/fcfg_writer_bf_filters.xcu \
     $(MY_MOD)/fcfg_writer_bf_types.xcu
-.ENDIF
+.END
 
-.IF "$(GUIBASE)" == "unx" && "$(ENABLE_GCONF)" == "TRUE" && \
-        "$(ENABLE_LOCKDOWN)" == "YES"
-MY_XCDS += $(MISC)/gconflockdown.xcd
-MY_DEPS_gconflockdown = main
-MY_FILES_gconflockdown = \
+.IF "$(GUIBASE)" == "unx" && \
+        (("$(ENABLE_GCONF)" == "TRUE" && "$(ENABLE_LOCKDOWN)" == "YES") || \
+         "$(ENABLE_GIO)" == "TRUE")
+MY_XCDS += $(MISC)/gnome.xcd
+MY_DEPS_gnome = main
+.IF "$(ENABLE_GCONF)" == "TRUE" && "$(ENABLE_LOCKDOWN)" == "YES"
+MY_FILES_gnome += \
     $(MY_MOD)/org/openoffice/Office/Common-gconflockdown.xcu \
     $(MY_MOD)/org/openoffice/Office/Recovery-gconflockdown.xcu \
     $(MY_MOD)/org/openoffice/UserProfile-gconflockdown.xcu \
     $(MY_MOD)/org/openoffice/VCL-gconflockdown.xcu
+.END
+.IF "$(ENABLE_GIO)" == "TRUE"
+MY_FILES_gnome += \
+    $(MY_MOD)/org/openoffice/ucb/Configuration-gio.xcu
+.END
+.END
+
+.IF "$(ENABLE_OPENGL)" == "TRUE"
+MY_XCDS += $(MISC)/ogltrans.xcd
+MY_DEPS_ogltrans = main
+MY_FILES_ogltrans = \
+    $(MY_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
 .END
 
 .INCLUDE: settings.mk
@@ -441,10 +483,9 @@ MY_FILES_gconflockdown = \
 
 ALLTAR: \
     $(MY_XCDS) \
-    $(MISC)/lang1/Langpack-{$(alllangiso)}.xcd \
-    $(MISC)/lang2/fcfg_drivers_{$(alllangiso)}.xcd \
-    $(MISC)/lang2/fcfg_langpack_{$(alllangiso)}.xcd \
-    $(MISC)/lang2/registry_{$(alllangiso)}.xcd
+    $(MISC)/lang/Langpack-{$(alllangiso)}.xcd \
+    $(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd \
+    $(MISC)/lang/registry_{$(alllangiso)}.xcd
 
 $(MY_XCDS): packregistry.xslt
 
@@ -456,14 +497,14 @@ $(MISC)/%.list: makefile.mk
     echo '<list>' $(foreach,i,$(MY_DEPS_$(@:b)) '<dependency file="$i"/>') \
         $(foreach,i,$(MY_FILES_$(@:b)) '<filename>$i</filename>') '</list>' > $@
 
-$(MISC)/lang1/Langpack-{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
+$(MISC)/lang/Langpack-%.xcd .ERRREMOVE: 'packregistry.xslt'
     $(MKDIRHIER) $(@:d)
     - $(RM) $(MISC)/$(@:b).list
     echo '<list><dependency file="main"/>\
         <filename>$(MY_MOD)/$(@:b).xcu</filename></list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)/$(@:b).list
 
-$(MISC)/lang2/%_{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
+$(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE: 'packregistry.xslt'
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
@@ -471,5 +512,20 @@ $(MISC)/lang2/%_{$(alllangiso)}.xcd .ERRREMOVE: packregistry.xslt
     - $(RM) $(MISC)/$(@:b).list
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
         find $(@:b).unzip -name \*.xcu -print) \
+        '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
+    $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)/$(@:b).list
+
+$(MISC)/lang/registry_%.xcd .ERRREMOVE: packregistry.xslt
+    $(MKDIRHIER) $(@:d)
+    rm -rf $(MISC)/$(@:b).unzip
+    mkdir $(MISC)/$(@:b).unzip
+    cd $(MISC)/$(@:b).unzip && unzip $(SOLARPCKDIR)/$(@:b).zip
+    rm -rf $(MISC)/fcfg_drivers_$*.unzip
+    mkdir $(MISC)/fcfg_drivers_$*.unzip
+    cd $(MISC)/fcfg_drivers_$*.unzip && \
+        unzip $(SOLARPCKDIR)/fcfg_drivers_$*.zip
+    - $(RM) $(MISC)/$(@:b).list
+    echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
+        find $(@:b).unzip fcfg_drivers_$*.unzip -name \*.xcu -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)/$(@:b).list
