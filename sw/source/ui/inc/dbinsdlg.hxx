@@ -165,7 +165,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     DECL_LINK( HeaderHdl, Button* );
 
     BOOL SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, BOOL bInsField );
-
+        using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();
     void                    Load();

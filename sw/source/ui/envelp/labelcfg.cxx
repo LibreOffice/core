@@ -66,7 +66,7 @@ void    SwLabelConfig::Commit()
     // the config item is not writable yet
 }
 
-void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 /* -----------------------------15.01.01 11:42--------------------------------
 

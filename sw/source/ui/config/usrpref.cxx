@@ -428,7 +428,7 @@ void SwLayoutViewConfig::Load()
     }
 }
 
-void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 /* -----------------------------19.01.01 13:07--------------------------------
 
@@ -534,7 +534,7 @@ void SwGridConfig::Load()
     }
 }
 
-void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 /* -----------------------------19.01.01 13:07--------------------------------
 
@@ -627,7 +627,7 @@ void SwCursorConfig::Load()
     }
 }
 
-void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
@@ -663,7 +663,7 @@ void SwWebColorConfig::Commit()
     PutProperties(aPropNames, aValues);
 }
 
-void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 /*-- 28.09.00 09:55:34---------------------------------------------------
 

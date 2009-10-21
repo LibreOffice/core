@@ -336,7 +336,7 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     return nRet;
 }
 //-----------------------------------------------------------------------------
-void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwRevisionConfig::Commit()
 {
@@ -693,7 +693,7 @@ void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_
     }
 }
 //-----------------------------------------------------------------------------
-void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwInsertConfig::Commit()
 {
@@ -1211,7 +1211,7 @@ SwTableConfig::~SwTableConfig()
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwTableConfig::Commit()
 {
@@ -1324,7 +1324,7 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
 /*-- 18.01.01 17:02:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwMiscConfig::Commit()
 {

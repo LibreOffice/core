@@ -410,7 +410,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
 /* -----------------------------25.09.00 16:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames ) {}
+void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void    SwLabCfgItem::Commit()
 {
