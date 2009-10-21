@@ -43,7 +43,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-using namespace ::rtl;
+
 /*-- 16.02.2009 10:03:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -262,7 +262,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
 /* -----------------------------06.06.01 12:32--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SfxItemPropertySet::getPropertyValue( const OUString &rName,
+void SfxItemPropertySet::getPropertyValue( const rtl::OUString &rName,
             const SfxItemSet& rSet, Any& rAny ) const
                         throw(RuntimeException, UnknownPropertyException)
 {
@@ -275,7 +275,7 @@ void SfxItemPropertySet::getPropertyValue( const OUString &rName,
 /* -----------------------------21.02.00 11:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
+Any SfxItemPropertySet::getPropertyValue( const rtl::OUString &rName,
             const SfxItemSet& rSet ) const
                         throw(RuntimeException, UnknownPropertyException)
 {
@@ -327,7 +327,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
 /* -----------------------------21.02.00 11:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SfxItemPropertySet::setPropertyValue( const OUString &rName,
+void SfxItemPropertySet::setPropertyValue( const rtl::OUString &rName,
                                             const Any& aVal,
                                             SfxItemSet& rSet ) const
                                             throw(RuntimeException,
@@ -360,7 +360,7 @@ PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEn
     return eRet;
 }
 PropertyState   SfxItemPropertySet::getPropertyState(
-                                const OUString& rName, const SfxItemSet& rSet) const
+    const rtl::OUString& rName, const SfxItemSet& rSet) const
                                     throw(UnknownPropertyException)
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
@@ -489,7 +489,7 @@ Sequence< Property > SAL_CALL
 
  ---------------------------------------------------------------------------*/
 Property SAL_CALL
-        SfxExtItemPropertySetInfo::getPropertyByName( const OUString& rPropertyName )
+SfxExtItemPropertySetInfo::getPropertyByName( const rtl::OUString& rPropertyName )
             throw(UnknownPropertyException, RuntimeException)
 {
     return aExtMap.getPropertyByName( rPropertyName );
@@ -498,7 +498,7 @@ Property SAL_CALL
 
  ---------------------------------------------------------------------------*/
 sal_Bool SAL_CALL
-        SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
+SfxExtItemPropertySetInfo::hasPropertyByName( const rtl::OUString& rPropertyName )
             throw(RuntimeException)
 {
     return aExtMap.hasPropertyByName( rPropertyName );

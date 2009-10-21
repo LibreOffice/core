@@ -101,7 +101,7 @@ Options::~Options()
 {
 }
 
-void Options::ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint )
+void Options::ConfigurationChanged( ConfigurationBroadcaster*, sal_uInt32 nHint )
 {
     NotifyListeners( nHint );
 }

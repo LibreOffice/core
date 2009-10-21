@@ -27,6 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
+
 #ifdef _MSC_VER
 #pragma hdrstop
 #endif

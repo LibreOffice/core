@@ -33,7 +33,7 @@
 
 namespace utl {
   class FontSubstConfiguration;
-  class FontNameAttr;
+  struct FontNameAttr;
 }
 
 // ----------------
