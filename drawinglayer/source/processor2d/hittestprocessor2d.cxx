@@ -449,8 +449,8 @@ namespace drawinglayer
                 {
                     if(!getHitTextOnly())
                     {
-                        const primitive2d::ScenePrimitive2D& rCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
-                        check3DHit(rCandidate);
+                        const primitive2d::ScenePrimitive2D& rSceneCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
+                        check3DHit(rSceneCandidate);
                     }
 
                     break;
