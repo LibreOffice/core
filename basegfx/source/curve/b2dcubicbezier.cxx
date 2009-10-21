@@ -1045,6 +1045,54 @@ namespace basegfx
             impCheckExtremumResult(fCY / (2 * fBY), rResults);
         }
     }
+
+    int B2DCubicBezier::getMaxDistancePositions( double pResult[2]) const
+    {
+        // the distance from the bezier to a line through start and end
+        // is proportional to (ENDx-STARTx,ENDy-STARTy)*(+BEZIERy(t),-BEZIERx(t))
+        // this distance becomes zero for at least t==0 and t==1
+        // its extrema that are between 0..1 are interesting as split candidates
+        // its derived function has the form dD/dt = fA*t^2 + 2*fB*t + fC
+        const B2DPoint aRelativeEndPoint(maEndPoint-maStartPoint);
+        const double fA = 3 * (maEndPoint.getX() - maControlPointB.getX()) * aRelativeEndPoint.getY()
+                - 3 * (maEndPoint.getY() - maControlPointB.getY()) * aRelativeEndPoint.getX();
+        const double fB = (maControlPointB.getX() - maControlPointA.getX()) * aRelativeEndPoint.getY()
+                - (maControlPointB.getY() - maControlPointA.getY()) * aRelativeEndPoint.getX();
+        const double fC = (maControlPointA.getX() - maStartPoint.getX()) * aRelativeEndPoint.getY()
+                - (maControlPointA.getY() - maStartPoint.getY()) * aRelativeEndPoint.getX();
+
+        if( fTools::equalZero(fA) )
+        {
+            // test for degenerated case: straight line
+            if( fTools::equalZero(fB) )
+                return 0;
+
+            // degenerated case: quadratic bezier
+            pResult[0] = -fC / (2*fB);
+            if( pResult[0] < 0 || pResult[0]>1)
+                return 0;
+            return 1;
+        }
+
+        // derivative is polynomial of order 2 => use binomial formula
+        const double fD = fB*fB - fA*fC;
+        if( fD >= 0.0 )
+        {
+            const double fS = sqrt(fD);
+            const double fQ = fB + ((fB >= 0) ? +fS : -fS);
+            pResult[0] = fQ / fA;
+            pResult[1] = fC / fQ;
+            int nCount = 2;
+            if( pResult[1] < 0 || pResult[1]>1)
+                --nCount;
+            if( pResult[0] < 0 || pResult[0]>1)
+                { --nCount; pResult[0] = pResult[0]; }
+            return nCount;
+        }
+
+        return 0;
+    }
+
 } // end of namespace basegfx
 
 // eof
