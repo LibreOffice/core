@@ -2427,7 +2427,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "in",         3.9370078740157480E01,  CDC_Length ); // Inch               39,37007874015748031496062992126
     NEWD( "ft",         3.2808398950131234E00,  CDC_Length ); // Foot               3,2808398950131233595800524934383
     NEWD( "yd",         1.0936132983377078E00,  CDC_Length ); // Yard               1,0936132983377077865266841644794
-    NEWD( "ang",        1.0000000000000000E10,  CDC_Length ); // Angstroem
+    NEWDP( "ang",       1.0000000000000000E10,  CDC_Length ); // Angstroem
     NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); // Pica (1/72 Inch)   2834,6456692913385826771653543307
     NEWD( "ell",        8.748906E-01,           CDC_Length ); // *** Ell
     NEWDP( "parsec",    3.240779E-17,           CDC_Length ); // *** Parsec
@@ -2519,7 +2519,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); // *** Cubic Inch
     NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); // *** Cubic Foot
     NEWD( "yd3",        1.3079506193143922E-03, CDC_Volume ); // *** Cubic Yard
-    NEWD( "ang3",       1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
+    NEWDP( "ang3",      1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
     NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica
     NEWD( "barrel",     6.289811E-03,           CDC_Volume ); // *** Barrel (=42gal?)
     NEWD( "bushel",     2.837759E-02,           CDC_Volume ); // *** Bushel
@@ -2557,8 +2557,8 @@ ConvertDataList::ConvertDataList( void )
     // SPEED: 1 Meter per Second is...
     NEWDP( "m/s",   1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second
     NEWDP( "m/sec", 1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second also
-    NEWD( "m/h",    3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour
-    NEWD( "m/hr",   3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour also
+    NEWDP( "m/h",   3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour
+    NEWDP( "m/hr",  3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour also
     NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); // *** Britsh Miles per Hour
     NEWD( "kn",     1.9438444924406048E00,  CDC_Speed ); // *** Knot = Nautical Miles per Hour
     NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed ); // *** Admiralty Knot
