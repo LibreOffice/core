@@ -192,6 +192,9 @@ namespace basegfx
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
 
+                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    aRetval.reserve(nPointCount*4);
+
                     // add start point (always)
                     aRetval.append(aBezier.getStartPoint());
 
@@ -272,6 +275,9 @@ namespace basegfx
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
 
+                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    aRetval.reserve(nPointCount*4);
+
                     // add start point (always)
                     aRetval.append(aBezier.getStartPoint());
 
@@ -341,6 +347,9 @@ namespace basegfx
                     const sal_uInt32 nEdgeCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1);
                     B2DCubicBezier aBezier;
                     aBezier.setStartPoint(rCandidate.getB2DPoint(0));
+
+                    // perf: try to avoid too many realloctions by guessing the result's pointcount
+                    aRetval.reserve(nPointCount*4);
 
                     // add start point (always)
                     aRetval.append(aBezier.getStartPoint());

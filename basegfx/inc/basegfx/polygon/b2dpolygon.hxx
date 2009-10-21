@@ -89,6 +89,7 @@ namespace basegfx
         /// Coordinate insert/append
         void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
         void append(const basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
+        void reserve(sal_uInt32 nCount);
 
         /// Basic ControlPoint interface
         basegfx::B2DPoint getPrevControlPoint(sal_uInt32 nIndex) const;

@@ -123,6 +123,11 @@ public:
         maVector[nIndex].setCoordinate(rValue);
     }
 
+    void reserve(sal_uInt32 nCount)
+    {
+        maVector.reserve(nCount);
+    }
+
     void insert(sal_uInt32 nIndex, const CoordinateData2D& rValue, sal_uInt32 nCount)
     {
         if(nCount)
@@ -741,6 +746,11 @@ public:
         maPoints.setCoordinate(nIndex, rValue);
     }
 
+    void reserve(sal_uInt32 nCount)
+    {
+        maPoints.reserve(nCount);
+    }
+
     void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
@@ -1188,6 +1198,11 @@ namespace basegfx
         {
             mpPolygon->setPoint(nIndex, rValue);
         }
+    }
+
+    void B2DPolygon::reserve(sal_uInt32 nCount)
+    {
+        mpPolygon->reserve(nCount);
     }
 
     void B2DPolygon::insert(sal_uInt32 nIndex, const B2DPoint& rPoint, sal_uInt32 nCount)
