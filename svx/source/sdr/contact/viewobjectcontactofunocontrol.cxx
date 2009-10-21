@@ -75,6 +75,52 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 
+/*
+
+Form controls (more precise: UNO Controls) in the drawing layer are ... prone to breakage, since they have some
+specialities which the drawing layer currently doesn't capture too well. In particular, having a living VCL
+window as child of the document window, and coupling this Window to a drawing layer object, makes things
+difficult sometimes.
+
+Below is a list of issues which existed in the past. Whenever you change code here, you're encouraged to
+verify those issues are still fixed. (Whenever you have some additional time, you're encouraged to write
+an automatic test for one or more of those issues for which this is possible :)
+
+http://www.openoffice.org/issues/show_bug.cgi?id=105992
+zooming documents containg (alive) form controls improperly positions the controls
+
+http://www.openoffice.org/issues/show_bug.cgi?id=104362
+crash when copy a control
+
+http://www.openoffice.org/issues/show_bug.cgi?id=104544
+Gridcontrol duplicated after design view on/off
+
+http://www.openoffice.org/issues/show_bug.cgi?id=102089
+print preview shows control elements with property printable=false
+
+http://www.openoffice.org/issues/show_bug.cgi?id=102090
+problem with setVisible on TextControl
+
+http://www.openoffice.org/issues/show_bug.cgi?id=103138
+loop when insert a control in draw
+
+http://www.openoffice.org/issues/show_bug.cgi?id=101398
+initially-displaying a document with many controls is very slow
+
+http://www.openoffice.org/issues/show_bug.cgi?id=72429
+repaint error in form wizard in bugdoc database
+
+http://www.openoffice.org/issues/show_bug.cgi?id=72694
+form control artifacts when scrolling a text fast
+
+
+issues in the old (Sun-internal) bug tracking system:
+
+#110592#
+form controls being in redlining or in hidden section are visible in alive-mode
+
+*/
+
 //........................................................................
 namespace sdr { namespace contact {
 //........................................................................
@@ -841,11 +887,6 @@ namespace sdr { namespace contact {
 
     protected:
         virtual ::drawinglayer::primitive2d::Primitive2DSequence
-            get2DDecomposition(
-                const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
-            ) const;
-
-        virtual ::drawinglayer::primitive2d::Primitive2DSequence
             createLocalDecomposition(
                 const ::drawinglayer::geometry::ViewInformation2D& rViewInformation
             ) const;
@@ -1588,19 +1629,6 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::get2DDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
-    {
-    #if OSL_DEBUG_LEVEL > 1
-        ::basegfx::B2DVector aScale, aTranslate;
-        double fRotate, fShearX;
-        _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
-    #endif
-        if ( m_pVOCImpl->hasControl() )
-            impl_positionAndZoomControl( _rViewInformation );
-        return BasePrimitive2D::get2DDecomposition( _rViewInformation );
-    }
-
-    //--------------------------------------------------------------------
     ::drawinglayer::primitive2d::Primitive2DSequence LazyControlCreationPrimitive2D::createLocalDecomposition( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
     {
     #if OSL_DEBUG_LEVEL > 1
@@ -1741,6 +1769,17 @@ namespace sdr { namespace contact {
 
         ::drawinglayer::primitive2d::Primitive2DReference xPrimitive( new LazyControlCreationPrimitive2D( m_pImpl ) );
         return ::drawinglayer::primitive2d::Primitive2DSequence( &xPrimitive, 1 );
+    }
+
+    //--------------------------------------------------------------------
+    bool ViewObjectContactOfUnoControl::isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const
+    {
+        VOCGuard aGuard( *m_pImpl );
+
+        if ( m_pImpl->hasControl() )
+            m_pImpl->positionAndZoomControl( GetObjectContact().getViewInformation2D().getObjectToViewTransformation() );
+
+        return ViewObjectContactOfSdrObj::isPrimitiveVisible( _rDisplayInfo );
     }
 
     //--------------------------------------------------------------------
