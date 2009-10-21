@@ -1171,7 +1171,7 @@ End
 
 File gid_File_Share_Registry_Main_Xcd
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Dir_Share_Registry;
     Name = "main.xcd";
 End
