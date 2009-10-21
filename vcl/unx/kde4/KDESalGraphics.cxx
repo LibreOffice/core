@@ -513,10 +513,12 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_FRAME)
     {
+        pixmap.fill(KApplication::palette().color(QPalette::Window));
         lcl_drawFrame( widgetRect, painter, QStyle::PE_Frame, nControlState, value );
     }
     else if (type == CTRL_FIXEDBORDER)
     {
+        pixmap.fill(KApplication::palette().color(QPalette::Window));
         lcl_drawFrame( widgetRect, painter, QStyle::PE_FrameWindow, nControlState, value );
     }
     else if (type == CTRL_WINDOW_BACKGROUND)
