@@ -131,6 +131,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mnQuality                   ( 90 ),
     mnFormsFormat               ( 0 ),
     mbExportFormFields          ( sal_True ),
+    mbAllowDuplicateFieldNames  ( sal_False ),
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( sal_False ),
     mbWatermark                 ( sal_False ),
@@ -462,6 +463,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbExportFormFields;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ) )
+                    rFilterData[ nData ].Value >>= mbAllowDuplicateFieldNames;
 //viewer properties
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ) )
                     rFilterData[ nData ].Value >>= mbHideViewerToolbar;
@@ -707,6 +710,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aContext.SubmitFormat = PDFWriter::FDF;
                     break;
             }
+            aContext.AllowDuplicateFieldNames = mbAllowDuplicateFieldNames;
 
             //get model
             Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );

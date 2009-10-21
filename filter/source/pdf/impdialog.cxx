@@ -79,6 +79,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbIsSkipEmptyPages( sal_True ),
     mnFormsType( 0 ),
     mbExportFormFields( sal_True ),
+    mbAllowDuplicateFieldNames( sal_False ),
     mbExportBookmarks( sal_True ),
     mnOpenBookmarkLevels( -1 ),
 
@@ -192,6 +193,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbExportFormFields = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
     if ( ( mnFormsType < 0 ) || ( mnFormsType > 3 ) )
         mnFormsType = 0;
+    mbAllowDuplicateFieldNames = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ), sal_False );
 
 //prepare values for the Viewer tab page
     mbHideViewerToolbar = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ), sal_False );
@@ -323,6 +325,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     */
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), mnFormsType );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), mbExportFormFields );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ), mbAllowDuplicateFieldNames );
 
     if( GetTabPage( RID_PDF_TAB_VPREFER ) )
         ( ( ImpPDFTabViewerPage* )GetTabPage( RID_PDF_TAB_VPREFER ) )->GetFilterConfigItem( this );
@@ -432,6 +435,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     mbExportFormFieldsUserSelection( sal_False ),
     maFtFormsFormat( this, ResId( FT_FORMSFORMAT, *paResMgr ) ),
     maLbFormsFormat( this, ResId( LB_FORMSFORMAT, *paResMgr ) ),
+    maCbAllowDuplicateFieldNames( this, ResId( CB_ALLOWDUPLICATEFIELDNAMES, *paResMgr ) ),
 
     maCbExportBookmarks( this, ResId( CB_EXPORTBOOKMARKS, *paResMgr ) ),
     maCbExportNotes( this, ResId( CB_EXPORTNOTES, *paResMgr ) ),
@@ -531,6 +535,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
     maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
     maLbFormsFormat.Enable( paParent->mbExportFormFields );
+    maCbAllowDuplicateFieldNames.Check( paParent->mbAllowDuplicateFieldNames );
+    maCbAllowDuplicateFieldNames.Enable( paParent->mbExportFormFields );
 
     if ( mbIsPresentation )
         maCbExportNotes.Check( paParent->mbExportNotesBoth );
@@ -605,6 +611,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     * ever be an additional form submit format this could get invalid.
     */
     paParent->mnFormsType = (sal_Int32) maLbFormsFormat.GetSelectEntryPos();
+    paParent->mbAllowDuplicateFieldNames = maCbAllowDuplicateFieldNames.IsChecked();
 }
 
 // -----------------------------------------------------------------------------
@@ -628,6 +635,7 @@ IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, EMPTYARG )
 IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, void*, EMPTYARG )
 {
     maLbFormsFormat.Enable( maCbExportFormFields.IsChecked() );
+    maCbAllowDuplicateFieldNames.Enable( maCbExportFormFields.IsChecked() );
     return 0;
 }
 
@@ -680,6 +688,7 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
     sal_Bool bPDFA1Sel = maCbPDFA1b.IsChecked();
     maFtFormsFormat.Enable( !bPDFA1Sel );
     maLbFormsFormat.Enable( !bPDFA1Sel );
+    maCbAllowDuplicateFieldNames.Enable( !bPDFA1Sel );
     if(bPDFA1Sel)
     {
 //store the values of subordinate controls
