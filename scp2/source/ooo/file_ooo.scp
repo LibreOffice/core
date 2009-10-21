@@ -1218,7 +1218,7 @@ End
 File gid_File_Registry_Lang
     Dir = gid_Dir_Share_Registry_Res;
     TXT_FILE_BODY;
-    EXTRA_ALL_LANG(registry,xcd);
+    EXTRA_ALL_LANG_BUT_EN_US(registry,xcd);
 End
 
 File gid_File_Registry_Filter_Zip
