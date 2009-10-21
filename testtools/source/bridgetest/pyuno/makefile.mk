@@ -57,7 +57,6 @@ PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
 .ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
 .IF "$(GUI)"=="WNT"
 PYTHONPATH:=$(SOLARLIBDIR)$/pyuno;$(PWD);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
-
 .ELSE                   # "$(GUI)"=="WNT"
 PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
 .ENDIF                  # "$(GUI)"=="WNT"
@@ -98,7 +97,7 @@ PYCOMPONENTS = \
 ALL : 	\
     $(PYFILES)				\
     $(DLLDEST)$/pyuno_regcomp.rdb		\
-    runtest					\
+    doc					\
     ALLTAR
 .ENDIF # L10N_framework
 
@@ -117,7 +116,10 @@ $(DLLDEST)$/pyuno_regcomp.rdb: $(DLLDEST)$/uno_types.rdb $(SOLARBINDIR)$/pyuno_s
     -rm -f $@
     $(WRAPCMD) $(REGMERGE) $(DLLDEST)$/pyuno_regcomp.rdb / $(DLLDEST)$/uno_types.rdb $(SOLARBINDIR)$/pyuno_services.rdb
 
-runtest : $(DLLDEST)$/pyuno_regcomp.rdb $(PYFILES)
+doc .PHONY:
+    @echo start test with  dmake runtest
+
+runtest : ALL
     cd $(DLLDEST) && $(TEST_ENV) && $(PYTHON) main.py
     cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
             -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))

@@ -201,42 +201,6 @@ Public Class VBBridgeTestObject
         Return m_testDataElements
     End Function
 
-    Public Overridable Function  echoSmallStruct( _
-        smallStruct As SmallStruct) As SmallStruct _
-        Implements XBridgeTest2.echoSmallStruct
-#if DEBUG
-        'Console.WriteLine( "##### " + GetType().FullName + ".echoSmallStruct" )
-#endif
-        Return smallStruct
-    End Function
-
-    Public Overridable Function  echoMediumStruct( _
-        mediumStruct As MediumStruct) As MediumStruct _
-        Implements XBridgeTest2.echoMediumStruct
-#if DEBUG
-        'Console.WriteLine( "##### " + GetType().FullName + ".echoMediumStruct" )
-#endif
-        Return mediumStruct
-    End Function
-
-    Public Overridable Function  echoBigStruct( _
-        bigStruct As BigStruct) As BigStruct _
-        Implements XBridgeTest2.echoBigStruct
-#if DEBUG
-        'Console.WriteLine( "##### " + GetType().FullName + ".echoBigStruct" )
-#endif
-        Return bigStruct
-    End Function
-
-    Public Overridable Function  echoAllFloats( _
-        allFloats As AllFloats) As AllFloats _
-        Implements XBridgeTest2.echoAllFloats
-#if DEBUG
-        'Console.WriteLine( "##### " + GetType().FullName + ".echoAllFloats" )
-#endif
-        Return allFloats
-    End Function
-   
     ' Attributes ---------------------------------------------------------
     Public Overridable Property Bool As Boolean _
         Implements XBridgeTest2.Bool
