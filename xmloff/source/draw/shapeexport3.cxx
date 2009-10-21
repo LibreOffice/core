@@ -59,12 +59,6 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-//////////////////////////////////////////////////////////////////////////////
-
-inline sal_Int32 FRound( double fVal )
-{
-    return( fVal > 0.0 ? (sal_Int32) ( fVal + 0.5 ) : -(sal_Int32) ( -fVal + 0.5 ) );
-}
 
 //////////////////////////////////////////////////////////////////////////////
 

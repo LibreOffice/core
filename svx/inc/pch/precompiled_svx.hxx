@@ -753,7 +753,7 @@
 #include <vector>
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/accessibilityoptions.hxx"
-#include "unotools/adrparse.hxx"
+#include "svl/adrparse.hxx"
 #include "svtools/apearcfg.hxx"
 #include "svl/brdcst.hxx"
 #include "unotools/cacheoptions.hxx"

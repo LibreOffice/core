@@ -149,17 +149,17 @@ namespace svxform
         return m_xColumn->getBytes();
     }
 
-    Date DataColumn::getDate() throw( SQLException, RuntimeException )
+    com::sun::star::util::Date DataColumn::getDate() throw( SQLException, RuntimeException )
     {
         return m_xColumn->getDate();
     }
 
-    Time DataColumn::getTime() throw( SQLException, RuntimeException )
+    com::sun::star::util::Time DataColumn::getTime() throw( SQLException, RuntimeException )
     {
         return m_xColumn->getTime();
     }
 
-    DateTime DataColumn::getTimestamp() throw( SQLException, RuntimeException )
+    com::sun::star::util::DateTime DataColumn::getTimestamp() throw( SQLException, RuntimeException )
     {
         return m_xColumn->getTimestamp();
     }
@@ -255,12 +255,12 @@ namespace svxform
         m_xColumnUpdate->updateDate(x);
     }
 
-    void DataColumn::updateTime(const Time& x) throw( SQLException, RuntimeException )
+    void DataColumn::updateTime(const com::sun::star::util::Time& x) throw( SQLException, RuntimeException )
     {
         m_xColumnUpdate->updateTime(x);
     }
 
-    void DataColumn::updateTimestamp(const DateTime& x) throw( SQLException, RuntimeException )
+    void DataColumn::updateTimestamp(const com::sun::star::util::DateTime& x) throw( SQLException, RuntimeException )
     {
         m_xColumnUpdate->updateTimestamp(x);
     }
