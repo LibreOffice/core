@@ -45,15 +45,10 @@ testcase tOOoMemory
     
     dim bHasQuickstarter as boolean
     
-    '///short test if 'StarOffice / Momory' is saved in configuration
-    '///open a new document
-    '///open options 'StarOffice' / 'Memory'
     hNewDocument
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check platform dependences
-    '///- 'Load StarOffice at system-startup' has to exist
     printlog " - check platform dependences "
     
     if ( LoadQuickstarter.exists() and LoadQuickstarter.isVisible() and LoadQuickstarter.isEnabled() ) then
@@ -64,7 +59,6 @@ testcase tOOoMemory
         printlog( "Quickstarter is NOT available on this platform" )
     endif
     
-    '///save old data
     printlog " - save old data"
     lsSave(1) = UndoSteps.GetText
     lsSave(2) = StarOffice.GetText
@@ -75,7 +69,6 @@ testcase tOOoMemory
         lbSave = LoadQuickstarter.IsChecked
     endif
     
-    '///invert/change data
     printlog " - invert/change data"
     UndoSteps.SetText "80"
     StarOffice.SetText "50"
@@ -91,24 +84,22 @@ testcase tOOoMemory
         LoadQuickstarter.UnCheck
     endif
     
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
     
-    '///close document
     hCloseDocument
     
-    '///exit/restart StarOffice
     printlog " - exit/restart StarOffice"
     ExitRestartTheOffice
     
-    '///open options 'StarOffice' / 'Memory'
     printlog " - check data"
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check data
     if UndoSteps.GetText             <> "80" then
         Warnlog "Undo steps => changes not saved!"
     endif
@@ -132,7 +123,6 @@ testcase tOOoMemory
         end if
     endif
     
-    '///make 2. changes
     printlog " - 2. change data"
     UndoSteps.SetText "5"
     StarOffice.SetText "11"
@@ -148,16 +138,16 @@ testcase tOOoMemory
         LoadQuickstarter.Check
     endif
         
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
     
-    '///open options 'StarOffice' / 'Memory'
     printlog " - check data"
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check data
     if UndoSteps.GetText             <> "5" then
         Warnlog "Undo steps => changes not saved!"
     endif
@@ -179,7 +169,6 @@ testcase tOOoMemory
         end if
     endif
     
-    '///reset to saved data
     printlog " - reset to saved data"
     UndoSteps.SetText lsSave(1)
     StarOffice.SetText lsSave(2)
@@ -193,15 +182,15 @@ testcase tOOoMemory
         endif
     endif
     
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
     
-    '///open options 'StarOffice' / 'Memory'
     ToolsOptions
     hToolsOptions ( "StarOffice", "Memory" )
     
-    '///check data
     printlog " - check the reset data"
     if UndoSteps.GetText             <> lsSave(1) then
         Warnlog "Undo steps => changes not saved!"
@@ -224,9 +213,11 @@ testcase tOOoMemory
         endif
     endif
     
-    '///close options-dialog with OK
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+   if ( ExtrasOptionenDlg.notExists( 3 ) ) then
+        printlog( "Options closed" )
+    endif
 
 endcase
 

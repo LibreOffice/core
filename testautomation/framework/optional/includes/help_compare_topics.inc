@@ -45,9 +45,6 @@ testcase tCompareHelpTopics()
     endif
 
 
-    '///<h1>Compare list of help topics against a reference file</h1>
-    '///<h2>help_compare_topics::tCompareHelpTopics</h2>
-    '///<ul>
 
     ' NOTE: As some of the entries might exists twice or multiple times it is quite
     '       possible that the results are inaccurate. The new implementation of
@@ -83,7 +80,6 @@ testcase tCompareHelpTopics()
     
     aTopicsFromUI( 0 ) = "0"    
     
-    '///+<li>Go to the Index-Page of the Help-Viewer</li>
     brc = hOpenHelp()
     if ( not brc ) then
         warnlog( "Help not open, aborting test" )
@@ -92,21 +88,17 @@ testcase tCompareHelpTopics()
 
     hSelectHelpTab( "index" )
     
-    '///+<li>Find out how many About-Items we have - usually this is 7 = Applications</li>
     ' NOTE: This testcase will not warn about missing About-Items, this is done
     '       by the update-test. But you will get an enormous list of missing
     '       Items.
     iAboutItems = HelpAbout.getItemCount()
     
-    '///+<li>cycle through all applications listed in the About-List</li>
     for iCurrentApp = 1 to iAboutItems
     
-        '///+<li>select and print the name of the current item</li>
         HelpAbout.select( icurrentApp )
         sleep( 5 )
         cAboutItem = HelpAbout.getSeltext()
     
-        '///+<li>copy the strings from the ListBox into an array</li>
         iCurrentItem = 1
         bNextItem = true
         
@@ -133,12 +125,10 @@ testcase tCompareHelpTopics()
     printlog( "" )
     printlog( "Beginning comparision. This will take a while ..." )
     
-    '///+<li>Compare the items to the reference list</li>
     irc = hManageComparisionList( sFileIn, sFileOut, aTopicsFromUI() )    
     if ( irc <> 0 ) then
 	    warnlog( "The list has changed, please review" )
     endif
-    '///</ul>
     
 endcase
 

@@ -38,22 +38,20 @@
 '\******************************************************************************
 
 testcase tAllNew
-    '/// Open all document types and check the default filter name.
+
+    printlog( "Open all available document types" )
+    
     Dim lsList (20) as string
     
-    if (gUseSysDlg = TRUE) then
+    if ( gUseSysDlg ) then
         warnlog("Only check, if the documents will be opened; no " & _
         "check for the defaultfilter (system file-dialog)!")
     end if
     
-    '///+<ul><li>Create a new text document (Writer)</li>
-    '///+<li>Type some text</li>
-    '///+<li>Check the default filter name (fDocumentCheck)</li>
-    '///+<li>Close the document window without saving it</li></ul>
     printlog ""
     try
         gApplication = "WRITER"
-        printlog "  - " +  gApplication
+        printlog "  - " & gApplication
         
         hNewDocument()
         
@@ -71,13 +69,9 @@ testcase tAllNew
         ResetApplication
     endcatch
     
-    '///+<ul><li>Create a new spreadsheet document</li>
-    '///+<li>Type some text in a cell</li>
-    '///+<li>Check the default filter name (fDocumentCheck)</li>
-    '///+<li>Close the document window without saving it</li></ul>
     try
         gApplication = "CALC"
-        printlog "  - " +  gApplication
+        printlog "  - " & gApplication
         
         hNewDocument
         Kontext "DocumentCalc"
@@ -95,13 +89,9 @@ testcase tAllNew
         ResetApplication
     endcatch
     
-    '///+<ul><li>Create a new (empty) presentation</li>
-    '///+<li>Insert a new slide with <i>Insert</i> / <i>Duplicate slide</i></li>
-    '///+<li>Check the default filter name (fDocumentCheck)</li>
-    '///+<li>Close the document window without saving it</li></ul>
     try
         gApplication = "IMPRESS"
-        printlog "  - " +  gApplication
+        printlog "  - " & gApplication
         
         hNewDocument()
         sleep(3)
@@ -119,13 +109,9 @@ testcase tAllNew
         ResetApplication
     endcatch
     
-    '///+<ul><li>Create a new drawing document</li>
-    '///+<li><i>Insert</i> / <i>slide</i></li>
-    '///+<li>Check the default filter name (fDocumentCheck)</li>
-    '///+<li>Close the document window without saving it</li></ul>
     try
         gApplication = "DRAW"
-        printlog "  - " +  gApplication
+        printlog "  - " & gApplication
         hNewDocument()
         InsertSlide
         if gUseSysDlg = FALSE then
@@ -140,32 +126,24 @@ testcase tAllNew
     endcatch
     try
         gApplication = "HTML"
-        printlog "  - " +  gApplication
-        '///+<ul><li>Create a new HTML document</li>
+        printlog "  - " & gApplication
         hNewDocument()
         Kontext "DocumentWriter"
-        '///+<li>Type some text</li>
         DocumentWriter.TypeKeys "This is a HTML-Document!"
-        '///+<li>Check the default filter name (fDocumentCheck)</li>
         if gUseSysDlg = FALSE then
             if (fDocumentCheck (gHTMLFilter) = FALSE) then
                 warnlog("The filter name (saving) is not correct! Please check if a HTML document will be opened! -> #i30867")
             end if
         end if
-        '///+<li>Close the document window without saving it</li></ul>
         hCloseDocument()
     catch
         Exceptlog
         ResetApplication
     endcatch
     
-    '///+<ul><li>Create a new Math document</li>
-    '///+<li>Type formula: <i>a over b</i></li>
-    '///+<li>Check the default filter name (fDocumentCheck)</li>
-    '///+<li>Close the document window without saving it</li></ul>
     try
         gApplication = "MATH"
-        printlog "  - " +  gApplication
+        printlog "  - " & gApplication
         hNewDocument()
         Call SchreibenInMathDok("a over b")
         if gUseSysDlg = FALSE then
@@ -179,14 +157,10 @@ testcase tAllNew
         ResetApplication
     endcatch
     
-    '///+<ul><li>Crate a new Master document</li>
-    '///+<li>Type some text</li>
-    '///+<li>Check the default filter name (fDocumentCheck)</li>
-    '///+<li>Close the document window without saving it</li></ul>
     
     try
         gApplication = "MASTERDOCUMENT"
-        printlog "  - " +  gApplication
+        printlog "  - " & gApplication
         hNewDocument()
         Kontext "DocumentWriter"
         DocumentWriter.TypeKeys "This is a master document!"
@@ -206,19 +180,11 @@ testcase tAllNew
     endcatch
 endcase
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 testcase tJava
-    '/// Check a HTML-page with Java crashes.
-    '///+<ul><li>Enable the internal file dialog:
-    '///+<ul><li><i>Tools</i></li>
-    '///+<li><i>Options</i></li>
-    '///+<li><i>OpenOffice.org</i></li>
-    '///+<li><i>General</i></li>
-    '///+<li>Check <i>Use OpenOffice.org dialogs</i></li></ul></li>
-    '///+<li>Insert <b><i>TesttoolPath</i>/global/input/java/java.htm</b></li>
-    '///+<li>Wait 5 seconds</li>
-    '///+<li>Close the document</li></ul>
+
+    printlog( "Load a Java applet. It should *not* be executed, applets are disabled by default" )
     
     Dim iTryLoadingJava as integer
     Dim cPath as string
@@ -231,7 +197,7 @@ testcase tJava
         Kontext "OeffnenDlg"
         Dateiname.settext(ConvertPath(gTestToolPath & "global\input\java\java.htm")
         Oeffnen.Click()
-        sleep(5)
+        hFileWait( false ) ' Wait but do not warn.
         for iTryLoadingJava = 1 to 10
             
             'Sometimes it needs time to bring up the Java Runtime on the system.
@@ -244,14 +210,11 @@ testcase tJava
             ' outside the loop, it comes up right after the first one.
             try
                 Kontext "Messagebox"
-                if ( MessageBox.exists()) then
-                    if (gPlatGroup = "unx") then
-                        sleep(2)
-                    endif
+                if ( MessageBox.exists( 1 )) then
                     warnlog(Messagebox.GetText())
                     try
                         Messagebox.Cancel()
-                        sleep( 2 )
+                        MessageBox.notExists( 2 ) ' wait till it's gone, timing related
                     catch
                         Messagebox.OK() ' if "OK" works, we are in an undefined state
                         warnlog( "The dialog has been closed by OK -> BUG" )
@@ -259,7 +222,6 @@ testcase tJava
                     exit for
                 end if
             catch
-                sleep(1)
                 printlog "... wait another second ..."
             endcatch
         next iTryLoadingJava
@@ -277,25 +239,24 @@ testcase tJava
             endcatch
         endif
         
-        sleep(5)
+        messageBox.notExists( 5 )
         Call hCloseDocument()
     end if
 endcase
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 testcase tDatabaseCheck
-    '/// Open bibliography Database.
-    printlog ""
+
+    printlog( "Minimal test for Database functionality" )
+    
     try
         gApplication = "WRITER"
         hFileOpen( ConvertPath(gOfficePath & "user\database\biblio.odb" )
-        '/// Check if database is open
         printlog "check if database is open"
         Kontext "DATABASE"
         if (Database.exists()) then
             printlog "Database open"
-            '/// Click on the table icon and check if tables are displayed
             printlog "click on the table icon and check if tables are displayed"
             ViewTables
             WaitSlot()
@@ -314,7 +275,7 @@ testcase tDatabaseCheck
     endcatch
 endcase
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 function fDocumentCheck (SollFilter as String) as boolean
     ' Check the name of the file type in the Save dialog and validate
@@ -336,36 +297,42 @@ function fDocumentCheck (SollFilter as String) as boolean
     SpeichernDlg.Cancel()
 end function
 
-'-------------------------------------------------------------------------
+'*******************************************************************************
 
 testcase tHelpRegistration
+
     ' Check i69670 which was a showstopper in OOo 2.0.4
     ' Menu-entry "Help / Registration" is disabled
-    dim i,a as integer
+
+    dim iCurrentMenuEntry as integer
+    dim iMenuEntryCount as integer
     
-    printlog " - Check if all entries in Help Menu are enabled"
+    printlog "Check if all entries in Help Menu are enabled"
     call hNewDocument
-    printlog "   open menu"
+
+    printlog "Open menu"
     hUseMenu()
-    a = hMenuItemGetCount
-    printlog "   select the last entry 'Help'"
-    hMenuSelectNr(a)
-    a = hMenuItemGetCount
-    for i = 1 to a
-        if hMenuItemIsEnabled(i) then
-            printlog "("+i+"/"+a+"): Menu entry is enabled:     Help-> " + hMenuItemGetText(i)
+    iMenuEntryCount = hMenuItemGetCount
+
+    printlog "Select the last entry 'Help'"
+    hMenuSelectNr( iMenuEntryCount )
+    iMenuEntryCount = hMenuItemGetCount
+    for iCurrentMenuEntry = 1 to iMenuEntryCount
+        if ( hMenuItemIsEnabled( iCurrentMenuEntry ) ) then
+            printlog "(" & iCurrentMenuEntry & "/" & iMenuEntryCount & _
+            "): Menu entry is enabled:     Help-> " & hMenuItemGetText( iCurrentMenuEntry )
         else
-	    if (lcase(gPlatform) = "osx") then
-	        warnlog "#i86247# Help->Registration is disabled on MacOS X"
-	    else
-                warnlog "("+i+"/"+a+"): Menu entry is not enabled: Help-> " + hMenuItemGetText(i)
-	    endif
+	        if (lcase(gPlatform) = "osx") then
+	            warnlog "#i86247# Help->Registration is disabled on MacOS X"
+	        else
+                warnlog "(" & iCurrentMenuEntry & "/" & iMenuEntryCount & _
+                "): Menu entry is not enabled: Help-> " & hMenuItemGetText( iCurrentMenuEntry )
+	        endif
         endif
-    next i
+    next iCurrentMenuEntry
     hMenuClose()
     call hCloseDocument
 endcase
 
-'-------------------------------------------------------------------------
 
 

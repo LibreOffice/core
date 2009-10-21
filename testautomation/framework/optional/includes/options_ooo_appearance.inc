@@ -44,10 +44,8 @@ testcase tOOoAppearance
   Dim bIsError as Boolean
   dim i as integer
 
-'///check if all settings are saved in configuration ( StarOffice / Appearance )
 
  printlog " - save settings"
-'///save settings of schemes
 'tools / options / staroffice / appearance
    ToolsOptions
    hToolsOptions ( "StarOffice", "Appearance" )
@@ -78,11 +76,9 @@ testcase tOOoAppearance
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///exit and restart StarOffice
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///check the new scheme
  printlog " - check settings"
 'tools / options / staroffice / appearance
    ToolsOptions
@@ -101,7 +97,6 @@ testcase tOOoAppearance
       bIsError = TRUE
    endcatch
 
-   '///delete the new scheme ( if all works correctly until now )
    printlog " - delete the new scheme"
 
    'select 'TT-Scheme'
@@ -139,7 +134,6 @@ testcase tOOoAppearance
       ExtrasOptionenDlg.OK
       Sleep (3)
 
-'///check if the scheme is deleted and the saved base state is current
  printlog " - check if the scheme is deleted and the saved base state is current"
       ToolsOptions
       hToolsOptions ( "StarOffice", "Appearance" )
@@ -154,17 +148,14 @@ testcase tOOoAppearance
          end if
       next i
 
-'///set the selected scheme to default
  printlog " - set the selected scheme to default"
       Scheme.Select sCurScheme
 
-'///press OK at the options dialog
  printlog " - press OK at the options dialog"
       Kontext "ExtrasOptionenDlg"
       ExtrasOptionenDlg.OK
       Sleep (3)
 
-'///check if the default scheme is selected after restarting the options dialog
  printlog " - check if the default setting is active, after deleting a scheme and a restart of the options dialog"
       ToolsOptions
       hToolsOptions ( "StarOffice", "Appearance" )
@@ -175,7 +166,6 @@ testcase tOOoAppearance
 
    end if
 
-   '///press OK at the options dialog
    printlog " - press OK at the options dialog"
       Kontext "ExtrasOptionenDlg"
       ExtrasOptionenDlg.OK

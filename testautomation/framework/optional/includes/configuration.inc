@@ -76,7 +76,6 @@ sub sToolsCustomizeKeyboardFunction
 end sub
 
 testcase tToolsCustomizeKeyboardFunction(lList())
-    '/// idea from AS find .uno: in Keyboard Function list ///'
     dim sKeys(300,2) as string
     dim i,a,b,c,d as integer
     dim sTemp, sTemp2 as string
@@ -108,22 +107,19 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 	i96322 = ".uno:ActivateStyleApply"
 	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage"
     
-    '/// open application ///'
     Call hNewDocument
     sleep 2
-    '/// Tools->Configure ///'
     ToolsCustomize
     sleep 3
     Kontext
-    '/// switch to tabpage 'Keyboard' ///'
     Messagebox.SetPage TabTastatur         ' 2 ------------------
     Kontext "TabTastatur"
     for c = 1 to 2
         select case c
-        case 1: '/// Check Checkbox 'StarOffice' ///'
+        case 1:
             StarOffice.Check
             Printlog ("-------------------- Keylist for StarOpenOfficeSuite.org --------------------")
-        case 2: '/// Check Checkbox '$APPLICATION' ///'
+        case 2:
             Application.Check
             Printlog ("-------------------- Keylist for "+gApplication+" ------------------------")
         end select
@@ -201,9 +197,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
         next a
     next c
     '    if (iBugCount(3) > 0) then WarnLog ""+iBugCount(3)+": Missing Name for funktion; is .uno:..."
-    '/// cancel dialog 'Customize' ///'
     TabTastatur.cancel
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
@@ -224,18 +218,14 @@ testcase tToolsOptionsAPIConfiguration
     
     try
         ToolsOptions
-        '///+<li>Tools / Language Settings / Languages
         call hToolsOptions ("Languagesettings", "Languages")
-        '///+ Check if Asian language support is enabled and verify <i>gAsianSup</i> variable.
         if (gAsianSup <> Aktivieren.IsChecked) then
             warnlog "gAsianSup differs from UI"
         endif
-        '///+ Check if CTL (=complex text layout) is enabled amd set <i>gCTLSup</i> variable TRUE or FALSE.
         if (gCTLSup <> ComplexScriptEnabled.IsChecked) then
             warnlog "gCTLSup differs from UI"
         endif
         
-        '///+<li>Check <i>gAccessibility</i> for Win32 (from Options UI)</li>
         call hToolsOptions ("STAROFFICE", "ACCESSIBILITY")
         try
             if (gPlatGroup <> "unx") then
@@ -249,7 +239,6 @@ testcase tToolsOptionsAPIConfiguration
             endif
         endcatch
         
-        '///+ <li>Check the switch to the <i>system</i> dialogs to &quot;internal&quot; dialogs.
         call hToolsOptions ("StarOffice", "General")
         if StarOfficeDialogeBenutzen.Exists then
             if (NOT StarOfficeDialogeBenutzen.isChecked) then
@@ -257,14 +246,12 @@ testcase tToolsOptionsAPIConfiguration
             endif
         end if
         
-        '///+<li>Checking the <i>bubble help</i>.
         call hToolsOptions ("StarOffice", "General")
         if (Tips.isChecked) then
             warnlog "Help Tip is checked"
         endif
         
         
-        '///+<li>Checking the <i>work</i> directory in Tools / Options,
         call hToolsOptions ("StarOffice", "Paths")
         select case iSprache
         case 01   : iJump =  6      ' English (USA)
@@ -323,7 +310,6 @@ testcase tToolsOptionsAPIConfiguration
             endif
         end if
         
-        '///+<li>Checking the directory for temporary files (=temp-path).
         select case iSprache
         case 01   : iJump = 8      ' English (USA)
         case 03   : iJump =  3      ' Portuguese
@@ -386,7 +372,6 @@ testcase tToolsOptionsAPIConfiguration
     catch
         warnlog "Error during walking through optionsdialog"
     endcatch
-    '///+</ul>
 endcase
 
 

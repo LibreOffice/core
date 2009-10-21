@@ -702,7 +702,9 @@ sub doInstall {
                     if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
                         next;
                     }
-                    $Command = "rpm --define \"_dbpath $rpmdir\" --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt $installsetpath$file";
+                    $Command = "rpm ";
+                    $Command .= "--ignorearch " if (defined $ENV{HOSTTYPE} && ($ENV{HOSTTYPE} eq 'x86_64-linux'));
+                    $Command .= "--define \"_dbpath $rpmdir\" --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt $installsetpath$file";
                     execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
                 }
                 $ENV{LD_LIBRARY_PATH}=$ld_library_backup;

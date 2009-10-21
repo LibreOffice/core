@@ -39,13 +39,10 @@
 
 testcase tOOoAccessibility
 
-'///</b>check if all settings are saved in configuration ( StarOffice / Accessibility )
    Dim lbSave ( 10 ) as Boolean
    Dim sSave as String
 
  printlog " - save default setting"
-'///save settings
-'///tools / options / staroffice / accessibility
    ToolsOptions
    hToolsOptions ( "StarOffice", "Accessibility" )
 
@@ -63,7 +60,6 @@ testcase tOOoAccessibility
    end if
 
 
-'///revers/change settings
  printlog " - revers/change settings"
    if lbSave (9) = TRUE then AutomaticDetectHC.UnCheck else AutomaticDetectHC.Check
    if lbSave (2) = TRUE then ForPagePreviews.Uncheck else ForPagePreviews.Check
@@ -76,9 +72,6 @@ testcase tOOoAccessibility
    'if lbSave (7) = TRUE then UseSystemFont.Uncheck else UseSystemFont.Check
    if lbSave (10) = TRUE then UseTextSelectionCursor.Uncheck else UseTextSelectionCursor.Check
    if SupportAssistiveTechnologyTools.Exists and SupportAssistiveTechnologyTools.IsVisible then
-   '/// - 'Support assistive technology tools' is only available on windows platform ///'
-   '/// - if you enable it, and you have not the right / or none version of teh Java Access Bridge a system dialog comes up ///'
-   '/// - this is a wanted behaviour! but can't be handled by testtool. so this option won't be checked! ///'
       if (gPlatgroup <> "unx") then
          Printlog "'Support assistive technology tools' won't be tested due to system dialog could come up and look the test out :-("
       else
@@ -91,19 +84,15 @@ testcase tOOoAccessibility
       endif
    end if
 
-'///press OK at the options dialog
  printlog " - press OK at the options dialog"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///exit and restart StarOffice
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///check the changes
  printlog " - check settings"
-'///tools / options / staroffice / accessibility
    ToolsOptions
    hToolsOptions ( "StarOffice", "Accessibility" )
 
@@ -122,7 +111,6 @@ testcase tOOoAccessibility
 '   end if
 
  printlog " - second settings"
-'///second changes
    AutomaticDetectHC.UnCheck
    ForPagePreviews.Check
    HelpTips.Check
@@ -136,15 +124,12 @@ testcase tOOoAccessibility
       SupportAssistiveTechnologyTools.Uncheck
    end if
 
-'///press OK at the options dialog
  printlog " - press OK at the options dialog"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check the changes
  printlog " - check changes"
-'///tools / options / staroffice / accessibility
    ToolsOptions
    hToolsOptions ( "StarOffice", "Accessibility" )
 
@@ -161,7 +146,6 @@ testcase tOOoAccessibility
       if SupportAssistiveTechnologyTools.IsChecked <> FALSE then warnlog "Support Assistive Technology Tools : => changes not saved!"
    end if
 
-'///reset to default
    if lbSave (9) = TRUE then AutomaticDetectHC.Check else AutomaticDetectHC.UnCheck
    if lbSave (2) = TRUE then ForPagePreviews.Check else ForPagePreviews.UnCheck
    HelpTips.Check
@@ -176,15 +160,12 @@ testcase tOOoAccessibility
       if lbSave (8) = TRUE then SupportAssistiveTechnologyTools.Check else SupportAssistiveTechnologyTools.UnCheck
    end if
 
-'///press OK at the options dialog
  printlog " - press OK at the options dialog"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check the reset
  printlog " - check reset"
-'///tools / options / staroffice / accessibility
    ToolsOptions
    hToolsOptions ( "StarOffice", "Accessibility" )
 
@@ -201,7 +182,6 @@ testcase tOOoAccessibility
    if SupportAssistiveTechnologyTools.Exists and SupportAssistiveTechnologyTools.IsVisible then
       if SupportAssistiveTechnologyTools.IsChecked <> lbSave (8) then warnlog "Support Assistive Technology Tools : => changes not saved!"
    end if
-'///press OK at the options dialog
  printlog " - press OK at the options dialog"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK

@@ -39,13 +39,7 @@
 
 testcase tUpdtDialogExport
 
-
-    '///<h3>Update test for the dialog export feature</h3>
-    
-    if ( gBuild < 9196 ) then
-        printlog( "Test disabled for Build-Id < 9196" )
-        goto endsub
-    endif
+    printlog( "Update test for the dialog export feature" )
 
     dim brc as boolean
     dim cMsg as string
@@ -54,16 +48,9 @@ testcase tUpdtDialogExport
         cDlgName = hGetWorkPath() & "DialogTest"
         
     const DLG_SUFFIX = ".xdl"
-        
     
-    '///<ul>
-    '///+<li>Create a new document</li>
     hCreateDocument()
 
-    '///+<li>Open the Macro Organizer</li>
-    '///+<li>Create a new module for the document</li>
-    '///+<li>Open the BASIC IDE</li>
-    '///+<li>Create a new Dialog via the tabbar at the bottom of the IDE</li>
     printlog( "Test init: Setting up environment" )
     brc = hInitFormControls( "DialogExport" )
     if ( not brc ) then
@@ -71,7 +58,6 @@ testcase tUpdtDialogExport
         goto endsub
     endif
     
-    '///+<li>Access the DialogBar, it should be visible by default</li>
     printlog( "Test begin" )
     kontext "DialogBar"
     if ( not DialogBar.exists() ) then
@@ -81,12 +67,10 @@ testcase tUpdtDialogExport
         goto endsub
     endif
     
-    '///+<li>Just click the export button to open the Export dialog</li>
     printlog( "Click the Export button on the DialogBar" )
     kontext "DialogBar"
     Export.click()
     
-    '///+<li>Verify that the Export Dialog comes up</li>
     kontext "ExportierenDlg"
     if ( not ExportierenDlg.exists( 1 ) ) then
         warnlog( "Export dialog is not open, aborting" )
@@ -97,7 +81,6 @@ testcase tUpdtDialogExport
     
     printlog( "Export dialog is open. Good." )
     
-    '///+<li>Save the dialog without providing an extension</li>
     kontext "ExportierenDlg"
     DateiName.setText( cDlgName )
     Speichern.click()
@@ -110,7 +93,6 @@ testcase tUpdtDialogExport
         Active.Yes()
     endif
     
-    '///+<li>Verify that we are back on the BASIC IDE</li>
     kontext "DialogBar"
     if ( not DialogBar.exists() ) then
         warnlog( "DialogBar is not visible, please check." )
@@ -118,8 +100,6 @@ testcase tUpdtDialogExport
     
     printlog( "Back on the Basic IDE / Dialog Editor. Good." )
         
-    '///+<li>Verify that the file has been saved (on filesystem level)</li>
-    '///+<li>Delete it if found</li>
     cDlgName = cDlgName & DLG_SUFFIX
     if ( dir( cDlgName ) = "" ) then
         warnlog( "The dialog was not saved to the expected location" )
@@ -128,11 +108,9 @@ testcase tUpdtDialogExport
         printlog( "Dialog was exported and deleted. Good." )
     endif
     
-    '///+<li>Close the BASIC IDE and the document</li>
     printlog( "Test end. Cleanup" )
     hCloseBasicIDE()
     hDestroyDocument()    
-    '///</ul>
 
 endcase
 

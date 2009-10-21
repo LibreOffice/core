@@ -39,34 +39,18 @@
 
 testcase NewCloseDok
    PrintLog "    open and close all documenttypes"
-    '///open all applications and close the document
-    '///file/new/textdocument => file/close
    Call hNewCloseDocument ("WRITER")
-    '///file/new/spreadsheet => file/close
    Call hNewCloseDocument ("CALC")
-    '///file/new/presentation => file/close
    Call hNewCloseDocument ("IMPRESS")
-    '///file/new/drawing => file/close
    Call hNewCloseDocument ("DRAW")
-    '///file/new/formular => file/close
    Call hNewCloseDocument ("MATH")
-    '///file/new/HTML document => file/close
    Call hNewCloseDocument ("HTML")
-    '///file/new/master document => file/close
    Call hNewCloseDocument ("MASTERDOCUMENT")
 endcase
 
 testcase NewDok
   Dim i%
    PrintLog "   open all applications and close all one by one"
-    '///open all document types and close all one by one
-    '///create a new Writer-doc
-    '///+a new Calc-doc
-    '///+a new Impress-doc
-    '///+a new Draw-doc
-    '///+a new HTML-doc
-    '///+a new Master-doc
-    '///+a new Math-doc
    Call NewDocument ("WRITER")
    Call NewDocument ("CALC")
    Call NewDocument ("IMPRESS")
@@ -75,7 +59,6 @@ testcase NewDok
    Call NewDocument ("HTML")
    Call NewDocument ("MASTERDOCUMENT")
 
-    '///close one by one with file/close
    PrintLog "   Close all documents ( file/close )"
    for i%=1 to 7
       Kontext "Navigator"

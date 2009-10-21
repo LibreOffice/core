@@ -42,19 +42,14 @@ testcase tLoadSaveMSOffice
    Dim lbSave1 ( 9 ) as Boolean
    Dim lbSave2 ( 9 ) as Boolean
    Dim i as Integer
-'///!!!!This routine works only with default settings (all checkboxes are checked, or all boxes are unchecked)
    printlog "If you get errors in this test, please check the settings."
    printlog "This test can only run without an error, when all checkboxes are checked or all are unchecked."
-'///check if all settings are saved in configuration ( Load & Save / Microsoft Office )
 
 
-'///open a new document
    hNewDocument
-'///+open tools / options / load & save / Microsoft Office
    ToolsOptions
    hToolsOptions ( "LoadSave", "MicrosoftOffice" )
 
-'///save old settings ( only the state of the first checkbox can be saved )
  printlog " - save old settings"
    Auswahl.TypeKeys "<PageUp>"
    for i=1 to 4
@@ -63,7 +58,6 @@ testcase tLoadSaveMSOffice
       Auswahl.TypeKeys "<Down>"
    next i
 
-'///inverted first checkbox for all entries
  
    Auswahl.TypeKeys "<PageUp>"
    for i=1 to 4
@@ -82,21 +76,16 @@ testcase tLoadSaveMSOffice
       
    next i
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+close document
    hCloseDocument
 
-'///exit and restart StarOffice
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///check inverting
  printlog " - check inverting"
-'///+open tools / options / load & save / Microsoft Office
    ToolsOptions
    hToolsOptions ( "LoadSave", "MicrosoftOffice" )
 
@@ -107,7 +96,6 @@ testcase tLoadSaveMSOffice
       Auswahl.TypeKeys( "<Down>" )
    next i
 
-'///reset changes
  printlog " - reset to saved settings"
    Auswahl.TypeKeys "<PageUp>"
    for i=1 to 4
@@ -125,14 +113,11 @@ testcase tLoadSaveMSOffice
    next i
 
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check the reset
  printlog " - check default settings"
-'///+open tools / options / load & save / Microsoft Office
    ToolsOptions
    hToolsOptions ( "LoadSave", "MicrosoftOffice" )
 
@@ -142,7 +127,6 @@ testcase tLoadSaveMSOffice
       Auswahl.TypeKeys "<Down>"
    next i
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    

@@ -39,10 +39,6 @@
 
 testcase tUpOneLevel2
     
-    '///<h1>Enter &quot;..&quot; until we are at filesystem root level, verify</h1>
-    '///+This test verifies that each &quot;..&quot; moves one level up in the filesystem.
-    '///+Furthermore it is verified that the Level-Up button does not get disabled under way.
-    '///<ul>
     
     dim iParentDir as integer
     
@@ -74,29 +70,21 @@ testcase tUpOneLevel2
     dim sExpectedDir as string
     
     
-    '///+<li>Click FileOpen</li>
     FileOpen
     
-    '///+<li>Open [Testtoolpath]\framework\filedlg\input\filetest\level1\level2\level3</li>
     Kontext "OeffnenDlg"
     Dateiname.SetText( cStartDir )
     Oeffnen.Click()
     
-    '///+<li>Enter &quot;..&quot; and press &quot;Open&quot; until we are at filesystem root</li>
-    '///<ul>
     printlog "Enter '..' until we are in the filesystem root"
     for iParentDir = 1 to iDirLevels
     
-        '///+<li>Enter &quot;..&quot;</li>
         Dateiname.setText( ".." )
         
-        '///+<li>Click &quot;Open&quot;</li>
         Oeffnen.click()               
 
-        '///+<li>Get the name of the first item in the filepicker (excluding CVS)</li>
         sCurrentDir = hGetFirstNameFromFileList()
         
-        '///+<li>Verify that the name of the first item is correct. The names of the first six dirs are known</li>
         select case iParentDir
         case 1 : sExpectedDir = "level3"
         case 2 : sExpectedDir = "level2"
@@ -116,25 +104,19 @@ testcase tUpOneLevel2
             endif
         endif
     next iParentDir
-    '///</ul>
     
-    '///+<li>We should now be at the top of the tree, the &quot;Level-Up&quot; button should be disabled</li>
     kontext "OeffnenDlg"
     
-    '///+<li>Verify that the button exists</li>
     if ( UebergeordneterOrdner.exists() ) then
     
-        '///+<li>Check that the button is not enabled</li>
         if ( not UebergeordneterOrdner.isEnabled() ) then
             printlog( "Level-Up button is disabled, good" )
         else
-            '///+<li>Warn if the button is enabled</li>    
             warnlog( "The Level-up button should not be enabled for filesystem root" )
         endif
     else
         warnlog( "Level-Up button does not exist" )
     endif    
-    '///</ul>
 
     OeffnenDlg.Cancel()
     

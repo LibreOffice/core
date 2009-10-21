@@ -42,9 +42,6 @@ testcase tBasicSpecTemplate
     qaerrorlog( "#i89554# Macro dialog not displayed / document not loaded" )
     goto endsub
 
-    '///<h1>Load the spec template via http and enable macros</h1>
-    '///<i>Required: Macro Security Level must be Default (Medium)</i>
-    '///<ul>
     
     const cFile = "http://specs.openoffice.org/collaterals/template/2.0/OpenOffice-org-Specification-Template.ott"
     dim brc as boolean
@@ -56,10 +53,8 @@ testcase tBasicSpecTemplate
     cWorkFile = hGetWorkPath() & "SpecTemplate" & hGetSuffix( "current" )
 
 
-    '///+<li>Retrieve the http-proxy from private environment</li>    
     hGetPrivateHttpServer( cProxy, cPort )
 
-    '///+<li>Set HTTP-Proxy to access a website outside SWAN (not for OOo)</li>
     printlog( "Init: Set proxy (requires private environment to be set)" )
     hSetProxies( cProxy, cPort, "", "", "" )
     if ( WaitSlot() <> WSFinished ) then
@@ -68,11 +63,9 @@ testcase tBasicSpecTemplate
         printlog( "Slot free in less than 1000 msec." )
     endif
     
-    '///+<li>Open the file (using slot)</li>
     printlog( "FileOpen" )
     hFileOpen( cFile )
     
-    '///+<li>Intercept a possible &quot;General Internet error&quot;</li>
     kontext "Active"
     if ( Active.exists( 2 ) ) then
         warnlog( "Unexpected errormessage: " & active.getText()
@@ -87,15 +80,12 @@ testcase tBasicSpecTemplate
         goto endsub
     endif
     
-    '///+<li>Handle security warning (allow execution of macros)</li>
     printlog( "Accept to execute macros" )
     brc = hAllowMacroExecution()
     if ( not brc ) then 
         warnlog( "Missing Macro execution dialog. Please check the file/security settings" )
     endif
     
-    '///+<li>Wait until the document is loaded</li>
-    '///+<li>Check for possible warning dialog: Could not resolve host -> Fatal error</li>
     kontext "Active"
     if ( Active.exists( 5 ) ) then
         warnlog( "Fatal: Unexpected active: " & Active.getText() )
@@ -108,42 +98,32 @@ testcase tBasicSpecTemplate
         endif
     endif
     
-    '///+<li>Go to the end of the document, write some text</li>
     printlog( "Change the document")
     kontext "DocumentWriter"
     DocumentWriter.typeKeys( "<MOD1 END>" )
     DocumentWriter.typeKeys( "Changing the document" )
     
-    '///+<li>Disable the help item from the Spectemplate-menu</li>
     printlog( "Disable Help Entry from Spec-Template Menu")
     hUseMenu()
     hMenuSelectNr( 10 )
     hMenuSelectNr( 2 )
     
     
-    '///+<li>Save the file</li>
     hFileSaveAsKill( cWorkFile )
     
-    '///+<li>Close the document</li>
     hDestroyDocument()
     
-    '///+<li>Reload the file</li>
     hFileOpen( cWorkFile )
     
-    '///+<li>Allow Macro execution</li>
     hAllowMacroExecution()
     
-    '///+<li>Close the document</li>
     printlog( "Cleanup: Close the document" )
     hDestroyDocument()
     
-    '///+<li>Reset proxies (delete all proxies, if changed)</li>
     printlog( "Cleanup: Delete proxy settings" )
     hSetProxies( "", "", "", "", "" )
     
-    '///+<li>Remove the workfile</li>
     hDeleteFile( cWorkFile )
-    '///</ul>
 
 endcase
 
