@@ -52,7 +52,6 @@ Module gid_Module_Root_Files_2
  	gid_File_Profile_Gengal,
 	gid_File_Bin_Spadmin_Bin,
 	gid_File_Bin_Uri_Encode,
-	gid_File_Exe_Msfontextract,
 	gid_File_Exe_Nsplugin,
 	gid_File_Lib_Npsoplugin,
         gid_File_Lib_Soffice,
@@ -902,6 +901,17 @@ Module gid_Module_Root_Extension_Dictionary_Gl
 	PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Root_Extension_Dictionary_He
+    Name = "gid_Module_Root_Extension_Dictionary_He";
+    Description = "gid_Module_Root_Extension_Dictionary_He";
+    Files = (gid_File_Extension_Dictionary_He);
+    InstallOrder = "2000";
+    Spellcheckerlanguage = "he";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Root;
+    Styles = (HIDDEN_ROOT);
 End
 
 Module gid_Module_Root_Extension_Dictionary_Hu

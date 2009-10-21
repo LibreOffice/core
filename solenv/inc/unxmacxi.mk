@@ -52,5 +52,12 @@ CFLAGSENABLESYMBOLS=-g1
 .ELSE
 CFLAGSENABLESYMBOLS=-g
 .ENDIF
+
+.IF "$(SNOW_LEOPARD_10_4)"!=""
+JAVACOMPILER+=-target 1.5
+DYLD_INSERT_LIBRARIES=/usr/lib/libsqlite3.dylib
+.EXPORT: DYLD_INSERT_LIBRARIES
+.ENDIF # "$(SNOW_LEOPARD_10_4)"!=""
+
 # Include generic Mac OS X makefile
 .INCLUDE : unxmacx.mk

@@ -1596,7 +1596,7 @@ End
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
     #ifdef _gcc3
-      Name = "libxmlsec1-1.dll";
+      Name = "libxmlsec1.dll";
     #else
       Name = "libxmlsec.dll";
     #endif
@@ -1607,7 +1607,7 @@ End
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
   #ifdef _gcc3
-    Name = "libxmlsec1-mscrypto-1.dll";
+    Name = "libxmlsec1-mscrypto.dll";
   #else
     Name = "libxmlsec-mscrypto.dll";
   #endif

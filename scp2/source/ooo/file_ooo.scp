@@ -178,17 +178,6 @@ End
 
 #endif
 
-#ifndef WITHOUT_FONTOOO
-
-File gid_File_Exe_Msfontextract
-        BIN_FILE_BODY;
-        Dir             = gid_Dir_Program;
-        Name            = EXENAME(msfontextract);
-        Styles          = (PACKED);
-End
-
-#endif
-
 #ifdef UNX
 
 File gid_File_Bin_Open_Url
@@ -1965,6 +1954,15 @@ File gid_File_Extension_Dictionary_Gl
 	Name = "dict-gl.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_He
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-he.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
 End
 #endif
 
