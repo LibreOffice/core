@@ -520,15 +520,18 @@ printf( "khg\n" );
         }
     };
 
-    pTC->pEH->StdOut( "Files: " );
-    pFName = pTC->aFileTab.First();
-    while( pFName )
+    if ( pTC->pEH->GetVerbosity() >= RscVerbosityVerbose )
     {
-        pTC->pEH->StdOut( pFName->aFileName.GetBuffer() );
-        pTC->pEH->StdOut( " " );
-        pFName = pTC->aFileTab.Next();
-    };
-    pTC->pEH->StdOut( "\n" );
+        pTC->pEH->StdOut( "Files: " );
+        pFName = pTC->aFileTab.First();
+        while( pFName )
+        {
+            pTC->pEH->StdOut( pFName->aFileName.GetBuffer() );
+            pTC->pEH->StdOut( " " );
+            pFName = pTC->aFileTab.Next();
+        };
+        pTC->pEH->StdOut( "\n" );
+    }
 
     if( aError.IsOk() )
         aError = Link();
@@ -554,9 +557,9 @@ void RscCompiler::EndCompile()
 {
     if( pCL->aOutputSrs.Len() && (pCL->nCommands & NOLINK_FLAG) )
     {
-        pTC->pEH->StdOut( "Writing file " );
-        pTC->pEH->StdOut( pCL->aOutputSrs.GetBuffer() );
-        pTC->pEH->StdOut( ".\n" );
+        pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputSrs.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
         unlink( pCL->aOutputSrs.GetBuffer() );   // Zieldatei loeschen
@@ -588,9 +591,9 @@ void RscCompiler::EndCompile()
 
     if ( aTmpOutputHxx.Len() )
     {
-        pTC->pEH->StdOut( "Writing file " );
-        pTC->pEH->StdOut( pCL->aOutputHxx.GetBuffer() );
-        pTC->pEH->StdOut( ".\n" );
+        pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputHxx.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
         unlink( pCL->aOutputHxx.GetBuffer() );   // Zieldatei loeschen
@@ -601,9 +604,9 @@ void RscCompiler::EndCompile()
 
     if( aTmpOutputCxx.Len() )
     {
-        pTC->pEH->StdOut( "Writing file " );
-        pTC->pEH->StdOut( pCL->aOutputCxx.GetBuffer() );
-        pTC->pEH->StdOut( ".\n" );
+        pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputCxx.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
         unlink( pCL->aOutputCxx.GetBuffer() );   // Zieldatei loeschen
@@ -614,9 +617,9 @@ void RscCompiler::EndCompile()
 
     if( aTmpOutputRcCtor.Len() )
     {
-        pTC->pEH->StdOut( "Writing file " );
-        pTC->pEH->StdOut( pCL->aOutputRcCtor.GetBuffer() );
-        pTC->pEH->StdOut( ".\n" );
+        pTC->pEH->StdOut( "Writing file ", RscVerbosityVerbose );
+        pTC->pEH->StdOut( pCL->aOutputRcCtor.GetBuffer(), RscVerbosityVerbose );
+        pTC->pEH->StdOut( ".\n", RscVerbosityVerbose );
 
         // kopiere von TMP auf richtigen Namen
         unlink( pCL->aOutputRcCtor.GetBuffer() );   // Zieldatei loeschen
@@ -776,14 +779,14 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
             {
                 RscFileInst aFileInst( pTC, lFileKey, lFileKey, finput );
 
-                pTC->pEH->StdOut( "reading file " );
-                pTC->pEH->StdOut( aParseFile.GetBuffer() );
-                pTC->pEH->StdOut( " " );
+                pTC->pEH->StdOut( "reading file ", RscVerbosityVerbose );
+                pTC->pEH->StdOut( aParseFile.GetBuffer(), RscVerbosityVerbose );
+                pTC->pEH->StdOut( " ", RscVerbosityVerbose );
 
                 aError = ::parser( &aFileInst );
                 if( aError.IsError() )
                     pTC->Delete( lFileKey );//Resourceobjekte loeschen
-                pTC->pEH->StdOut( "\n" );
+                pTC->pEH->StdOut( "\n", RscVerbosityVerbose );
                 fclose( finput );
             };
 
