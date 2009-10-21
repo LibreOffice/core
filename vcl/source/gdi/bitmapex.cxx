@@ -785,7 +785,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
 
                     if(pRead)
                     {
-                        const Color aColor(Color(pRead->GetColor(nY, nX)));
+                        const Color aColor = pRead->GetColor(nY, nX);
 
                         // if color is not equal to TransparentColor, we are not transparent
                         if(aColor != aTransparentColor)
