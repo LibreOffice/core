@@ -497,6 +497,11 @@ namespace basegfx
             const B2DCubicBezier& rCubicA,
             sal_uInt32 nInd, temporaryPointVector& rTempPoints)
         {
+            double fDummy;
+            const bool bHasAnyExtremum = rCubicA.getMinimumExtremumPosition( fDummy );
+            if( !bHasAnyExtremum )
+                return;
+
             // find all self-intersections on the given bezier segment. Add an entry to the tempPoints
             // for each self intersection point with the cut value describing the relative position on given
             // bezier segment.
