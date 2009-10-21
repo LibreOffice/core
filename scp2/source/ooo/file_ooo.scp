@@ -1234,25 +1234,25 @@ File gid_File_Registry_Spool_Langpack_Lang
     FILE_ALL_LANG_LETTER(Langpack-,xcd);
 End
 
-File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
+File gid_File_Share_Registry_Ctl_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name (th) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (hi-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (pa-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (ta-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (ar) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (he) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (lo) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (dz) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (km) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (ne) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (fa) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (my) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name (th) = "ctl.xcd";
+    Name (hi-IN) = "ctl.xcd";
+    Name (pa-IN) = "ctl.xcd";
+    Name (ta-IN) = "ctl.xcd";
+    Name (gu-IN) = "ctl.xcd";
+    Name (ar) = "ctl.xcd";
+    Name (he) = "ctl.xcd";
+    Name (lo) = "ctl.xcd";
+    Name (dz) = "ctl.xcd";
+    Name (km) = "ctl.xcd";
+    Name (gu-IN) = "ctl.xcd";
+    Name (or) = "ctl.xcd";
+    Name (ne) = "ctl.xcd";
+    Name (fa) = "ctl.xcd";
+    Name (my) = "ctl.xcd";
 End
 
 File gid_File_Scripts_Beanshell

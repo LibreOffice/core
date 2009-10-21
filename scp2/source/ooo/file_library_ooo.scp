@@ -1005,12 +1005,6 @@ End
 STD_UNO_LIB_FILE(gid_File_Lib_Mysql,mysql)
 STD_UNO_LIB_FILE(gid_File_Lib_Odbc,odbc)
 
-File gid_File_Registry_Drivers_Zip
-    Dir = gid_Dir_Share_Registry_Res;
-    TXT_FILE_BODY;
-    EXTRA_ALL_LANG(fcfg_drivers,xcd);
-End
-
 // STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Offacc, offacc)

@@ -30,15 +30,6 @@
 
 #include "macros.inc"
 
-#ifdef ENABLE_GIO
-File gid_File_Registry_Spool_Oo_Ucb_Configuration_GIOContentProvider_Xcu
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Ucb_Configuration;
-    Name = "/registry/spool/org/openoffice/ucb/Configuration-gio.xcu";
-    Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
 Module gid_Module_Optional_Gnome
     ParentID = gid_Module_Optional;
     Default = YES;
@@ -57,13 +48,13 @@ Module gid_Module_Optional_Gnome
       gid_File_Lib_Gnomevfs, gid_File_Bin_Gnome_Set_Default_Application,
 #endif
 #ifdef ENABLE_GIO
-      gid_File_Lib_GIO, gid_File_Registry_Spool_Oo_Ucb_Configuration_GIOContentProvider_Xcu
+      gid_File_Lib_GIO,
 #endif
 #ifdef ENABLE_GCONF
       gid_File_Lib_Gconfbe
 #endif
-#if defined ENABLE_GNOMEVFS && defined ENABLE_LOCKDOWN
-      gid_File_Share_Registry_Gconflockdown_Xcd
+#if (defined ENABLE_GNOMEVFS && defined ENABLE_LOCKDOWN) || defined ENABLE_GIO
+      gid_File_Share_Registry_Gnome_Xcd
 #endif
     );
 End
