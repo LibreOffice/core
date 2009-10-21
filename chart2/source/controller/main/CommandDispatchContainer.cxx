@@ -145,12 +145,12 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
         // Note, that the chart dispatcher must be queried first, because
         // the chart dispatcher is the default dispatcher for all context
         // sensitive commands.
-        else if ( m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported( rURL ) )
+        else if ( m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported( rURL.Complete ) )
         {
             xResult.set( m_pDrawCommandDispatch );
             m_aCachedDispatches[ rURL.Complete ].set( xResult );
         }
-        else if ( m_pShapeController && m_pShapeController->isFeatureSupported( rURL ) )
+        else if ( m_pShapeController && m_pShapeController->isFeatureSupported( rURL.Complete ) )
         {
             xResult.set( m_pShapeController );
             m_aCachedDispatches[ rURL.Complete ].set( xResult );

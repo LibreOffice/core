@@ -57,9 +57,9 @@ void FeatureCommandDispatchBase::initialize()
     fillSupportedFeatures();
 }
 
-bool FeatureCommandDispatchBase::isFeatureSupported( const util::URL& rURL ) const
+bool FeatureCommandDispatchBase::isFeatureSupported( const ::rtl::OUString& rCommandURL )
 {
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( rURL.Complete );
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( rCommandURL );
     if ( aIter != m_aSupportedFeatures.end() )
     {
         return true;

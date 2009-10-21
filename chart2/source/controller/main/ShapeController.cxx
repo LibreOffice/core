@@ -54,7 +54,6 @@
 #include <svx/orphitem.hxx>
 #include <svx/spltitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/svxids.hrc>
 #include <svx/widwitem.hxx>
 
 #include <boost/scoped_ptr.hpp>
@@ -113,49 +112,52 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand )
         }
     }
 
-    sal_uInt16 nFeatureId = m_aSupportedFeatures[ rCommand ].nFeatureId;
-
-    switch ( nFeatureId )
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( rCommand );
+    if ( aIter != m_aSupportedFeatures.end() )
     {
-        case COMMAND_ID_FORMAT_LINE:
-        case COMMAND_ID_FORMAT_AREA:
-        case COMMAND_ID_TEXT_ATTRIBUTES:
-        case COMMAND_ID_TRANSFORM_DIALOG:
-        case COMMAND_ID_OBJECT_TITLE_DESCRIPTION:
-        case COMMAND_ID_RENAME_OBJECT:
-            {
-                aReturn.bEnabled = bWritable;
-                aReturn.aState <<= false;
-            }
-            break;
-        case COMMAND_ID_BRING_TO_FRONT:
-        case COMMAND_ID_FORWARD:
-            {
-                aReturn.bEnabled = ( bWritable && isForwardPossible() );
-                aReturn.aState <<= false;
-            }
-            break;
-        case COMMAND_ID_BACKWARD:
-        case COMMAND_ID_SEND_TO_BACK:
-            {
+        sal_uInt16 nFeatureId = aIter->second.nFeatureId;
+        switch ( nFeatureId )
+        {
+            case COMMAND_ID_FORMAT_LINE:
+            case COMMAND_ID_FORMAT_AREA:
+            case COMMAND_ID_TEXT_ATTRIBUTES:
+            case COMMAND_ID_TRANSFORM_DIALOG:
+            case COMMAND_ID_OBJECT_TITLE_DESCRIPTION:
+            case COMMAND_ID_RENAME_OBJECT:
+                {
+                    aReturn.bEnabled = bWritable;
+                    aReturn.aState <<= false;
+                }
+                break;
+            case COMMAND_ID_BRING_TO_FRONT:
+            case COMMAND_ID_FORWARD:
+                {
+                    aReturn.bEnabled = ( bWritable && isForwardPossible() );
+                    aReturn.aState <<= false;
+                }
+                break;
+            case COMMAND_ID_BACKWARD:
+            case COMMAND_ID_SEND_TO_BACK:
+                {
 
-                aReturn.bEnabled = ( bWritable && isBackwardPossible() );
-                aReturn.aState <<= false;
-            }
-            break;
-        case COMMAND_ID_FONT_DIALOG:
-        case COMMAND_ID_PARAGRAPH_DIALOG:
-            {
-                aReturn.bEnabled = bWritable;
-                aReturn.aState <<= false;
-            }
-            break;
-        default:
-            {
-                aReturn.bEnabled = false;
-                aReturn.aState <<= false;
-            }
-            break;
+                    aReturn.bEnabled = ( bWritable && isBackwardPossible() );
+                    aReturn.aState <<= false;
+                }
+                break;
+            case COMMAND_ID_FONT_DIALOG:
+            case COMMAND_ID_PARAGRAPH_DIALOG:
+                {
+                    aReturn.bEnabled = bWritable;
+                    aReturn.aState <<= false;
+                }
+                break;
+            default:
+                {
+                    aReturn.bEnabled = false;
+                    aReturn.aState <<= false;
+                }
+                break;
+        }
     }
 
     return aReturn;
@@ -165,62 +167,65 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
 {
     (void)rArgs;
 
-    sal_uInt16 nFeatureId = m_aSupportedFeatures[ rCommand ].nFeatureId;
-
-    switch ( nFeatureId )
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( rCommand );
+    if ( aIter != m_aSupportedFeatures.end() )
     {
-        case COMMAND_ID_FORMAT_LINE:
-            {
-                executeDispatch_FormatLine();
-            }
-            break;
-        case COMMAND_ID_FORMAT_AREA:
-            {
-                executeDispatch_FormatArea();
-            }
-            break;
-        case COMMAND_ID_TEXT_ATTRIBUTES:
-            {
-                executeDispatch_TextAttributes();
-            }
-            break;
-        case COMMAND_ID_TRANSFORM_DIALOG:
-            {
-                executeDispatch_TransformDialog();
-            }
-            break;
-        case COMMAND_ID_OBJECT_TITLE_DESCRIPTION:
-            {
-                executeDispatch_ObjectTitleDescription();
-            }
-            break;
-        case COMMAND_ID_RENAME_OBJECT:
-            {
-                executeDispatch_RenameObject();
-            }
-            break;
-        case COMMAND_ID_BRING_TO_FRONT:
-        case COMMAND_ID_FORWARD:
-        case COMMAND_ID_BACKWARD:
-        case COMMAND_ID_SEND_TO_BACK:
-            {
-                executeDispatch_ChangeZOrder( nFeatureId );
-            }
-            break;
-        case COMMAND_ID_FONT_DIALOG:
-            {
-                executeDispatch_FontDialog();
-            }
-            break;
-        case COMMAND_ID_PARAGRAPH_DIALOG:
-            {
-                executeDispatch_ParagraphDialog();
-            }
-            break;
-        default:
-            {
-            }
-            break;
+        sal_uInt16 nFeatureId = aIter->second.nFeatureId;
+        switch ( nFeatureId )
+        {
+            case COMMAND_ID_FORMAT_LINE:
+                {
+                    executeDispatch_FormatLine();
+                }
+                break;
+            case COMMAND_ID_FORMAT_AREA:
+                {
+                    executeDispatch_FormatArea();
+                }
+                break;
+            case COMMAND_ID_TEXT_ATTRIBUTES:
+                {
+                    executeDispatch_TextAttributes();
+                }
+                break;
+            case COMMAND_ID_TRANSFORM_DIALOG:
+                {
+                    executeDispatch_TransformDialog();
+                }
+                break;
+            case COMMAND_ID_OBJECT_TITLE_DESCRIPTION:
+                {
+                    executeDispatch_ObjectTitleDescription();
+                }
+                break;
+            case COMMAND_ID_RENAME_OBJECT:
+                {
+                    executeDispatch_RenameObject();
+                }
+                break;
+            case COMMAND_ID_BRING_TO_FRONT:
+            case COMMAND_ID_FORWARD:
+            case COMMAND_ID_BACKWARD:
+            case COMMAND_ID_SEND_TO_BACK:
+                {
+                    executeDispatch_ChangeZOrder( nFeatureId );
+                }
+                break;
+            case COMMAND_ID_FONT_DIALOG:
+                {
+                    executeDispatch_FontDialog();
+                }
+                break;
+            case COMMAND_ID_PARAGRAPH_DIALOG:
+                {
+                    executeDispatch_ParagraphDialog();
+                }
+                break;
+            default:
+                {
+                }
+                break;
+        }
     }
 }
 

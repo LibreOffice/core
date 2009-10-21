@@ -68,7 +68,7 @@ public:
     // late initialisation, especially for adding as listener
     virtual void initialize();
 
-    virtual bool isFeatureSupported( const ::com::sun::star::util::URL& rURL ) const;
+    virtual bool isFeatureSupported( const ::rtl::OUString& rCommandURL );
 
 protected:
     // XDispatch

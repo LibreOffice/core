@@ -451,8 +451,6 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
                     // #i12587# support for shapes in chart
                     xLayoutManager->createElement(  C2U( "private:resource/toolbar/drawbar" ) );
                     xLayoutManager->requestElement( C2U( "private:resource/toolbar/drawbar" ) );
-                    //xLayoutManager->createElement(  C2U( "private:resource/toolbar/basicshapes" ) );
-                    //xLayoutManager->requestElement( C2U( "private:resource/toolbar/basicshapes" ) );
 
                     xLayoutManager->requestElement( C2U( "private:resource/statusbar/statusbar" ) );
                     xLayoutManager->unlock();

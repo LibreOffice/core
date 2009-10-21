@@ -596,6 +596,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
                 if ( pObj && m_pDrawModelWrapper && pDrawCommandDispatch )
                 {
                     SfxItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
+                    pDrawCommandDispatch->setAttributes( pObj );
                     pDrawCommandDispatch->setLineEnds( aSet );
                     pObj->SetMergedItemSet( aSet );
                 }
@@ -1638,6 +1639,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                         }
                         break;
                     case OBJ_RECT:
+                    case OBJ_CUSTOMSHAPE:
                         {
                             ePointerStyle = POINTER_DRAW_RECT;
                         }

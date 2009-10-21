@@ -40,12 +40,16 @@
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <svtools/itempool.hxx>
+#include <svx/adjitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/fmmodel.hxx>
+#include <svx/gallery.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svxids.hrc>
 #include <svx/unoapi.hxx>
 #include <svx/xlnedit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -106,6 +110,14 @@ void DrawCommandDispatch::initialize()
     FeatureCommandDispatchBase::initialize();
 }
 
+bool DrawCommandDispatch::isFeatureSupported( const ::rtl::OUString& rCommandURL )
+{
+    sal_uInt16 nFeatureId = 0;
+    ::rtl::OUString aBaseCommand;
+    ::rtl::OUString aCustomShapeType;
+    return parseCommandURL( rCommandURL, &nFeatureId, &aBaseCommand, &aCustomShapeType );
+}
+
 ::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel& rModel )
 {
     ::basegfx::B2DPolyPolygon aReturn;
@@ -125,6 +137,75 @@ void DrawCommandDispatch::initialize()
         }
     }
     return aReturn;
+}
+
+void DrawCommandDispatch::setAttributes( SdrObject* pObj )
+{
+    if ( m_pChartController )
+    {
+        DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawModelWrapper && pDrawViewWrapper && pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_CUSTOMSHAPE )
+        {
+            sal_Bool bAttributesAppliedFromGallery = sal_False;
+            if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
+            {
+                ::std::vector< ::rtl::OUString > aObjList;
+                if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
+                {
+                    for ( sal_uInt16 i = 0; i < aObjList.size(); ++i )
+                    {
+                        if ( aObjList[ i ].equalsIgnoreAsciiCase( m_aCustomShapeType ) )
+                        {
+                            FmFormModel aModel;
+                            SfxItemPool& rPool = aModel.GetItemPool();
+                            rPool.FreezeIdRanges();
+                            if ( GalleryExplorer::GetSdrObj( GALLERY_THEME_POWERPOINT, i, &aModel ) )
+                            {
+                                const SdrObject* pSourceObj = aModel.GetPage( 0 )->GetObj( 0 );
+                                if ( pSourceObj )
+                                {
+                                    const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
+                                    SfxItemSet aDest( pObj->GetModel()->GetItemPool(),          // ranges from SdrAttrObj
+                                        SDRATTR_START, SDRATTR_SHADOW_LAST,
+                                        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
+                                        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                                        // Graphic Attributes
+                                        SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
+                                        // 3d Properties
+                                        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                                        // CustomShape properties
+                                        SDRATTR_CUSTOMSHAPE_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
+                                        // range from SdrTextObj
+                                        EE_ITEMS_START, EE_ITEMS_END,
+                                        // end
+                                        0, 0);
+                                    aDest.Set( rSource );
+                                    pObj->SetMergedItemSet( aDest );
+                                    sal_Int32 nAngle = pSourceObj->GetRotateAngle();
+                                    if ( nAngle )
+                                    {
+                                        double a = nAngle * F_PI18000;
+                                        pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                    }
+                                    bAttributesAppliedFromGallery = sal_True;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            if ( !bAttributesAppliedFromGallery )
+            {
+                pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, 0 ) );
+                pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+                pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+                pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+                ( dynamic_cast< SdrObjCustomShape* >( pObj ) )->MergeDefaultAttributes( &m_aCustomShapeType );
+            }
+        }
+    }
 }
 
 void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
@@ -181,29 +262,40 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand )
     FeatureState aReturn;
     aReturn.bEnabled = false;
     aReturn.aState <<= false;
-    sal_uInt16 nFeatureId = m_aSupportedFeatures[ rCommand ].nFeatureId;
 
-    switch ( nFeatureId )
+    sal_uInt16 nFeatureId = 0;
+    ::rtl::OUString aBaseCommand;
+    ::rtl::OUString aCustomShapeType;
+    if ( parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
     {
-        case SID_OBJECT_SELECT:
-        case SID_DRAW_LINE:
-        case COMMAND_ID_LINE_ARROW_END:
-        case SID_DRAW_RECT:
-        case SID_DRAW_ELLIPSE:
-        case SID_DRAW_FREELINE_NOFILL:
-        case SID_DRAW_TEXT:
-        case SID_DRAW_CAPTION:
-            {
-                aReturn.bEnabled = true;
-                aReturn.aState <<= false;
-            }
-            break;
-        default:
-            {
-                aReturn.bEnabled = false;
-                aReturn.aState <<= false;
-            }
-            break;
+        switch ( nFeatureId )
+        {
+            case COMMAND_ID_OBJECT_SELECT:
+            case COMMAND_ID_DRAW_LINE:
+            case COMMAND_ID_LINE_ARROW_END:
+            case COMMAND_ID_DRAW_RECT:
+            case COMMAND_ID_DRAW_ELLIPSE:
+            case COMMAND_ID_DRAW_FREELINE_NOFILL:
+            case COMMAND_ID_DRAW_TEXT:
+            case COMMAND_ID_DRAW_CAPTION:
+            case COMMAND_ID_DRAWTBX_CS_BASIC:
+            case COMMAND_ID_DRAWTBX_CS_SYMBOL:
+            case COMMAND_ID_DRAWTBX_CS_ARROW:
+            case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
+            case COMMAND_ID_DRAWTBX_CS_CALLOUT:
+            case COMMAND_ID_DRAWTBX_CS_STAR:
+                {
+                    aReturn.bEnabled = true;
+                    aReturn.aState <<= false;
+                }
+                break;
+            default:
+                {
+                    aReturn.bEnabled = false;
+                    aReturn.aState <<= false;
+                }
+                break;
+        }
     }
 
     return aReturn;
@@ -216,100 +308,118 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
     ChartDrawMode eDrawMode = CHARTDRAW_SELECT;
     SdrObjKind eKind = OBJ_NONE;
     bool bCreate = false;
-    sal_uInt16 nFeatureId = m_aSupportedFeatures[ rCommand ].nFeatureId;
-    m_nFeatureId = nFeatureId;
 
-    switch ( nFeatureId )
+    sal_uInt16 nFeatureId = 0;
+    ::rtl::OUString aBaseCommand;
+    ::rtl::OUString aCustomShapeType;
+    if ( parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
     {
-        case SID_OBJECT_SELECT:
-            {
-                eDrawMode = CHARTDRAW_SELECT;
-                eKind = OBJ_NONE;
-            }
-            break;
-        case SID_DRAW_LINE:
-        case COMMAND_ID_LINE_ARROW_END:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_LINE;
-            }
-            break;
-        case SID_DRAW_RECT:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_RECT;
-            }
-            break;
-        case SID_DRAW_ELLIPSE:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_CIRC;
-            }
-            break;
-        case SID_DRAW_FREELINE_NOFILL:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_FREELINE;
-            }
-            break;
-        case SID_DRAW_TEXT:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_TEXT;
-                bCreate = true;
-            }
-            break;
-        case SID_DRAW_CAPTION:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_CAPTION;
-            }
-            break;
-        default:
-            {
-                eDrawMode = CHARTDRAW_SELECT;
-                eKind = OBJ_NONE;
-            }
-            break;
-    }
+        m_nFeatureId = nFeatureId;
+        m_aCustomShapeType = aCustomShapeType;
 
-    if ( m_pChartController )
-    {
-        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawViewWrapper )
+        switch ( nFeatureId )
         {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            m_pChartController->setDrawMode( eDrawMode );
-            setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
-            if ( bCreate )
-            {
-                pDrawViewWrapper->SetCreateMode();
-            }
-
-            const ::rtl::OUString sKeyModifier( C2U( "KeyModifier" ) );
-            const beans::PropertyValue* pIter = rArgs.getConstArray();
-            const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
-            const beans::PropertyValue* pKeyModifier = ::std::find_if(
-                pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), boost::cref( sKeyModifier ) ) );
-            sal_Int16 nKeyModifier = 0;
-            if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
-            {
-                if ( eDrawMode == CHARTDRAW_INSERT )
+            case COMMAND_ID_OBJECT_SELECT:
                 {
-                    SdrObject* pObj = createDefaultObject( nFeatureId );
-                    if ( pObj )
+                    eDrawMode = CHARTDRAW_SELECT;
+                    eKind = OBJ_NONE;
+                }
+                break;
+            case COMMAND_ID_DRAW_LINE:
+            case COMMAND_ID_LINE_ARROW_END:
+                {
+                    eDrawMode = CHARTDRAW_INSERT;
+                    eKind = OBJ_LINE;
+                }
+                break;
+            case COMMAND_ID_DRAW_RECT:
+                {
+                    eDrawMode = CHARTDRAW_INSERT;
+                    eKind = OBJ_RECT;
+                }
+                break;
+            case COMMAND_ID_DRAW_ELLIPSE:
+                {
+                    eDrawMode = CHARTDRAW_INSERT;
+                    eKind = OBJ_CIRC;
+                }
+                break;
+            case COMMAND_ID_DRAW_FREELINE_NOFILL:
+                {
+                    eDrawMode = CHARTDRAW_INSERT;
+                    eKind = OBJ_FREELINE;
+                }
+                break;
+            case COMMAND_ID_DRAW_TEXT:
+                {
+                    eDrawMode = CHARTDRAW_INSERT;
+                    eKind = OBJ_TEXT;
+                    bCreate = true;
+                }
+                break;
+            case COMMAND_ID_DRAW_CAPTION:
+                {
+                    eDrawMode = CHARTDRAW_INSERT;
+                    eKind = OBJ_CAPTION;
+                }
+                break;
+            case COMMAND_ID_DRAWTBX_CS_BASIC:
+            case COMMAND_ID_DRAWTBX_CS_SYMBOL:
+            case COMMAND_ID_DRAWTBX_CS_ARROW:
+            case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
+            case COMMAND_ID_DRAWTBX_CS_CALLOUT:
+            case COMMAND_ID_DRAWTBX_CS_STAR:
+                {
+                    eDrawMode = CHARTDRAW_INSERT;
+                    eKind = OBJ_CUSTOMSHAPE;
+                }
+                break;
+            default:
+                {
+                    eDrawMode = CHARTDRAW_SELECT;
+                    eKind = OBJ_NONE;
+                }
+                break;
+        }
+
+        if ( m_pChartController )
+        {
+            DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+            if ( pDrawViewWrapper )
+            {
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                m_pChartController->setDrawMode( eDrawMode );
+                setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
+                if ( bCreate )
+                {
+                    pDrawViewWrapper->SetCreateMode();
+                }
+
+                const ::rtl::OUString sKeyModifier( C2U( "KeyModifier" ) );
+                const beans::PropertyValue* pIter = rArgs.getConstArray();
+                const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
+                const beans::PropertyValue* pKeyModifier = ::std::find_if(
+                    pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), boost::cref( sKeyModifier ) ) );
+                sal_Int16 nKeyModifier = 0;
+                if ( pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
+                {
+                    if ( eDrawMode == CHARTDRAW_INSERT )
                     {
-                        SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
-                        pDrawViewWrapper->InsertObjectAtView( pObj, *pPageView );
-                        Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
-                        if ( xShape.is() )
+                        SdrObject* pObj = createDefaultObject( nFeatureId );
+                        if ( pObj )
                         {
-                            m_pChartController->m_aSelection.setSelection( xShape );
-                            m_pChartController->m_aSelection.applySelection( pDrawViewWrapper );
-                        }
-                        if ( nFeatureId == SID_DRAW_TEXT )
-                        {
-                            m_pChartController->StartTextEdit();
+                            SdrPageView* pPageView = pDrawViewWrapper->GetSdrPageView();
+                            pDrawViewWrapper->InsertObjectAtView( pObj, *pPageView );
+                            Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
+                            if ( xShape.is() )
+                            {
+                                m_pChartController->m_aSelection.setSelection( xShape );
+                                m_pChartController->m_aSelection.applySelection( pDrawViewWrapper );
+                            }
+                            if ( nFeatureId == SID_DRAW_TEXT )
+                            {
+                                m_pChartController->StartTextEdit();
+                            }
                         }
                     }
                 }
@@ -320,20 +430,24 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
 
 void DrawCommandDispatch::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:SelectObject",      SID_OBJECT_SELECT,          CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",              SID_DRAW_LINE,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:LineArrowEnd",      COMMAND_ID_LINE_ARROW_END,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",              SID_DRAW_RECT,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Ellipse",           SID_DRAW_ELLIPSE,           CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Freeline_Unfilled", SID_DRAW_FREELINE_NOFILL,   CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",          SID_DRAW_TEXT,              CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawCaption",       SID_DRAW_CAPTION,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SelectObject",      COMMAND_ID_OBJECT_SELECT,           CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Line",              COMMAND_ID_DRAW_LINE,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:LineArrowEnd",      COMMAND_ID_LINE_ARROW_END,          CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Rect",              COMMAND_ID_DRAW_RECT,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Ellipse",           COMMAND_ID_DRAW_ELLIPSE,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:Freeline_Unfilled", COMMAND_ID_DRAW_FREELINE_NOFILL,    CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawText",          COMMAND_ID_DRAW_TEXT,               CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DrawCaption",       COMMAND_ID_DRAW_CAPTION,            CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:BasicShapes",       COMMAND_ID_DRAWTBX_CS_BASIC,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:SymbolShapes",      COMMAND_ID_DRAWTBX_CS_SYMBOL,       CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:ArrowShapes",       COMMAND_ID_DRAWTBX_CS_ARROW,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:FlowChartShapes",   COMMAND_ID_DRAWTBX_CS_FLOWCHART,    CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:CalloutShapes",     COMMAND_ID_DRAWTBX_CS_CALLOUT,      CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:StarShapes",        COMMAND_ID_DRAWTBX_CS_STAR,         CommandGroup::INSERT );
 }
 
-void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType )
+void DrawCommandDispatch::setInsertObj( USHORT eObj )
 {
-    (void)rShapeType;
-
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
     if ( pDrawViewWrapper )
     {
@@ -369,7 +483,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
 
                 switch ( nID )
                 {
-                    case SID_DRAW_LINE:
+                    case COMMAND_ID_DRAW_LINE:
                     case COMMAND_ID_LINE_ARROW_END:
                         {
                             if ( pObj->ISA( SdrPathObj ) )
@@ -387,7 +501,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                             }
                         }
                         break;
-                    case SID_DRAW_FREELINE_NOFILL:
+                    case COMMAND_ID_DRAW_FREELINE_NOFILL:
                         {
                             if ( pObj->ISA( SdrPathObj ) )
                             {
@@ -407,8 +521,8 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                             }
                         }
                         break;
-                    case SID_DRAW_TEXT:
-                    case SID_DRAW_TEXT_VERTICAL:
+                    case COMMAND_ID_DRAW_TEXT:
+                    case COMMAND_ID_DRAW_TEXT_VERTICAL:
                         {
                             if ( pObj->ISA( SdrTextObj ) )
                             {
@@ -431,8 +545,8 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                             }
                         }
                         break;
-                    case SID_DRAW_CAPTION:
-                    case SID_DRAW_CAPTION_VERTICAL:
+                    case COMMAND_ID_DRAW_CAPTION:
+                    case COMMAND_ID_DRAW_CAPTION_VERTICAL:
                         {
                             if ( pObj->ISA( SdrCaptionObj ) )
                             {
@@ -463,6 +577,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         {
                             pObj->SetLogicRect( aRect );
                             SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
+                            setAttributes( pObj );
                             pObj->SetMergedItemSet( aSet );
                         }
                         break;
@@ -472,6 +587,89 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
     }
 
     return pObj;
+}
+
+bool DrawCommandDispatch::parseCommandURL( const ::rtl::OUString& rCommandURL, sal_uInt16* pnFeatureId,
+    ::rtl::OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType )
+{
+    bool bFound = true;
+    sal_uInt16 nFeatureId = 0;
+    ::rtl::OUString aBaseCommand;
+    ::rtl::OUString aType;
+
+    sal_Int32 nIndex = 1;
+    ::rtl::OUString aToken = rCommandURL.getToken( 0, '.', nIndex );
+    if ( nIndex == -1 || !aToken.getLength() )
+    {
+        aBaseCommand = rCommandURL;
+        SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( aBaseCommand );
+        if ( aIter != m_aSupportedFeatures.end() )
+        {
+            nFeatureId = aIter->second.nFeatureId;
+
+            switch ( nFeatureId )
+            {
+                case COMMAND_ID_DRAWTBX_CS_BASIC:
+                    {
+                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "diamond" ) );
+                    }
+                    break;
+                case COMMAND_ID_DRAWTBX_CS_SYMBOL:
+                    {
+                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "smiley" ) );
+                    }
+                    break;
+                case COMMAND_ID_DRAWTBX_CS_ARROW:
+                    {
+                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "left-right-arrow" ) );
+                    }
+                    break;
+                case COMMAND_ID_DRAWTBX_CS_FLOWCHART:
+                    {
+                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "flowchart-internal-storage" ) );
+                    }
+                    break;
+                case COMMAND_ID_DRAWTBX_CS_CALLOUT:
+                    {
+                        aType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "round-rectangular-callout" ) );
+                    }
+                    break;
+                case COMMAND_ID_DRAWTBX_CS_STAR:
+                    {
+                        aType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "star5" ) );
+                    }
+                    break;
+                default:
+                    {
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            bFound = false;
+        }
+    }
+    else
+    {
+        aBaseCommand = rCommandURL.copy( 0, nIndex - 1 );
+        SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( aBaseCommand );
+        if ( aIter != m_aSupportedFeatures.end() )
+        {
+            nFeatureId = aIter->second.nFeatureId;
+            aType = rCommandURL.getToken( 0, '.', nIndex );
+        }
+        else
+        {
+            bFound = false;
+        }
+    }
+
+    *pnFeatureId = nFeatureId;
+    *pBaseCommand = aBaseCommand;
+    *pCustomShapeType = aType;
+
+    return bFound;
 }
 
 //.............................................................................

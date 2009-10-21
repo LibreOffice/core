@@ -30,8 +30,6 @@
 #include "MenuResIds.hrc"
 #include "ShapeController.hrc"
 
-#include <svx/svxids.hrc>
-
 
 Menu RID_CONTEXTMENU_SHAPE
 {

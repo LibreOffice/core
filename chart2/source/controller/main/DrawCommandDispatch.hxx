@@ -56,6 +56,9 @@ public:
     // late initialisation, especially for adding as listener
     virtual void initialize();
 
+    virtual bool isFeatureSupported( const ::rtl::OUString& rCommandURL );
+
+    void setAttributes( SdrObject* pObj );
     void setLineEnds( SfxItemSet& rAttr );
 
 protected:
@@ -76,10 +79,13 @@ protected:
     virtual void describeSupportedFeatures();
 
 private:
-    void setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType = ::rtl::OUString() );
+    void setInsertObj( USHORT eObj );
     SdrObject* createDefaultObject( const sal_uInt16 nID );
 
+    bool parseCommandURL( const ::rtl::OUString& rCommandURL, sal_uInt16* pnFeatureId, ::rtl::OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType );
+
     ChartController* m_pChartController;
+    ::rtl::OUString m_aCustomShapeType;
 };
 
 //.............................................................................
