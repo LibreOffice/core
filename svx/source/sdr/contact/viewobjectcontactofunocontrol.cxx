@@ -1767,6 +1767,12 @@ namespace sdr { namespace contact {
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
             return drawinglayer::primitive2d::Primitive2DSequence();
 
+        // ignore existing controls which are in alive mode and manually switched to "invisible"
+        // #102090# / 2009-06-05 / frank.schoenheit@sun.com
+        const ControlHolder& rControl( m_pImpl->getExistentControl() );
+        if ( rControl.is() && !rControl.isDesignMode() && !rControl.isVisible() )
+            return drawinglayer::primitive2d::Primitive2DSequence();
+
         ::drawinglayer::primitive2d::Primitive2DReference xPrimitive( new LazyControlCreationPrimitive2D( m_pImpl ) );
         return ::drawinglayer::primitive2d::Primitive2DSequence( &xPrimitive, 1 );
     }
