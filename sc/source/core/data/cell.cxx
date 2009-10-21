@@ -1641,8 +1641,9 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                     if ( eOld == svHybridCell )     // string result from SetFormulaResultString?
                         eOld = svString;            // ScHybridCellToken has a valid GetString method
 
+                    // #i106045# use approxEqual to compare with stored value
                     bContentChanged = (eOld != eNew ||
-                            (eNew == svDouble && aResult.GetDouble() != aNewResult.GetDouble()) ||
+                            (eNew == svDouble && !rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() )) ||
                             (eNew == svString && aResult.GetString() != aNewResult.GetString()));
                 }
             }
@@ -1662,7 +1663,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             if ( bChanged && !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
             {
                 if ( ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) ) ||
-                     ( eOld == svHybridCell && eNew == svString && aResult.GetString() == aNewResult.GetString() ) )
+                     ( eOld == svHybridCell && eNew == svString && aResult.GetString() == aNewResult.GetString() ) ||
+                     ( eOld == svDouble && eNew == svDouble && rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() ) ) )
                 {
                     // no change, see above
                 }
