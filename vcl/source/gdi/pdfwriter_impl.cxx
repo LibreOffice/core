@@ -667,26 +667,29 @@ OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
     }
 
     OString aRet = aBuffer.makeStringAndClear();
-    std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aRet );
-
-    if( it != m_aFieldNameMap.end() ) // not unique
+    if( ! m_aContext.AllowDuplicateFieldNames )
     {
-        std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
-        OString aTry;
-        do
+        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aRet );
+
+        if( it != m_aFieldNameMap.end() ) // not unique
         {
-            OStringBuffer aUnique( aRet.getLength() + 16 );
-            aUnique.append( aRet );
-            aUnique.append( '_' );
-            aUnique.append( it->second );
-            it->second++;
-            aTry = aUnique.makeStringAndClear();
-            check_it = m_aFieldNameMap.find( aTry );
-        } while( check_it != m_aFieldNameMap.end() );
-        aRet = aTry;
+            std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
+            OString aTry;
+            do
+            {
+                OStringBuffer aUnique( aRet.getLength() + 16 );
+                aUnique.append( aRet );
+                aUnique.append( '_' );
+                aUnique.append( it->second );
+                it->second++;
+                aTry = aUnique.makeStringAndClear();
+                check_it = m_aFieldNameMap.find( aTry );
+            } while( check_it != m_aFieldNameMap.end() );
+            aRet = aTry;
+        }
+        else
+            m_aFieldNameMap[ aRet ] = 2;
     }
-    else
-        m_aFieldNameMap[ aRet ] = 2;
     return aRet;
 }
 

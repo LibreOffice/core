@@ -546,6 +546,7 @@ The following structure describes the permissions used in PDF security
             will be submitted.
          */
         PDFWriter::ExportDataFormat     SubmitFormat;
+        bool                            AllowDuplicateFieldNames;
         /* the following data members are used to customize the PDF viewer
            preferences
          */
@@ -590,6 +591,7 @@ The following structure describes the permissions used in PDF security
                 Tagged( false ),
                 EmbedStandardFonts( false ),
                 SubmitFormat( PDFWriter::FDF ),
+                AllowDuplicateFieldNames( false ),
                 PDFDocumentMode( PDFWriter::ModeDefault ),
                 PDFDocumentAction( PDFWriter::ActionDefault ),
                 Zoom( 100 ),
