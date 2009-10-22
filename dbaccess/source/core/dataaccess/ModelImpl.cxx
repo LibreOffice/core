@@ -1327,7 +1327,7 @@ void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation,
         if ( m_pDBContext )
         {
             if ( m_sDocumentURL.getLength() )
-                m_pDBContext->nameChangePrivate( m_sDocumentURL, _rDocumentURL );
+                m_pDBContext->nameChangePrivate( m_sName,m_sDocumentURL, _rDocumentURL );
             else
                 m_pDBContext->registerPrivate( _rDocumentURL, this );
         }

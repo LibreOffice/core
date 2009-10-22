@@ -212,7 +212,7 @@ public:
     void registerPrivate(const ::rtl::OUString& _sName
                         ,const ::rtl::Reference<ODatabaseModelImpl>& _pModelImpl);
     void deregisterPrivate(const ::rtl::OUString& _sName);
-    void nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
+    void nameChangePrivate(const ::rtl::OUString& _sRegisteredName,const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
     void storeTransientProperties( ODatabaseModelImpl& _rModelImpl);
     void appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);
     void removeFromTerminateListener(const ODatabaseModelImpl& _rDataSourceModel);

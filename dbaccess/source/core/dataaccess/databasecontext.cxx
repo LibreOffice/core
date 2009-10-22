@@ -766,11 +766,30 @@ void ODatabaseContext::deregisterPrivate(const ::rtl::OUString& _sName)
     m_aDatabaseObjects.erase(_sName);
 }
 // -----------------------------------------------------------------------------
-void ODatabaseContext::nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName)
+void ODatabaseContext::nameChangePrivate(const ::rtl::OUString& _sRegisteredName,const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName)
 {
     ObjectCache::iterator aFind = m_aDatabaseObjects.find(_sOldName);
     registerPrivate(_sNewName,aFind->second);
     m_aDatabaseObjects.erase(aFind);
+    if ( _sRegisteredName != _sOldName )
+    {
+        OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+                ::comphelper::getProcessServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
+
+        if ( aDbRegisteredNamesRoot.isValid() )
+        {
+            OConfigurationNode oDataSourceRegistration;
+            // the sub-node for the concrete registration
+            if (aDbRegisteredNamesRoot.hasByName(_sRegisteredName))
+            {
+                oDataSourceRegistration = aDbRegisteredNamesRoot.openNode(_sRegisteredName);
+
+                // set the values
+                oDataSourceRegistration.setNodeValue(getDbLocationNodeName(), makeAny(_sNewName));
+                aDbRegisteredNamesRoot.commit();
+            }
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
