@@ -567,7 +567,14 @@ namespace basegfx
                                 const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // only overlapping segments need to be tested
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     if(bEdgeAIsCurve && bEdgeBIsCurve)
                                     {
@@ -609,7 +616,13 @@ namespace basegfx
                                 const B2DPoint aNextB(rCandidate.getB2DPoint(b + 1L == nPointCount ? 0L : b + 1L));
                                 const B2DRange aRangeB(aCurrB, aNextB);
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     findEdgeCutsTwoEdges(aCurrA, aNextA, aCurrB, aNextB, a, b, rTempPoints, rTempPoints);
                                 }
@@ -806,7 +819,13 @@ namespace basegfx
                                 const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     if(bEdgeAIsCurve && bEdgeBIsCurve)
                                     {
@@ -848,7 +867,13 @@ namespace basegfx
                                 const B2DPoint aNextB(rCandidateB.getB2DPoint(b + 1L == nPointCountB ? 0L : b + 1L));
                                 const B2DRange aRangeB(aCurrB, aNextB);
 
-                                if(aRangeA.overlaps(aRangeB))
+                                // consecutive segments touch of course
+                                bool bOverlap = false;
+                                if( b > a+1)
+                                    bOverlap = aRangeA.overlaps(aRangeB);
+                                else
+                                    bOverlap = aRangeA.overlapsMore(aRangeB);
+                                if( bOverlap)
                                 {
                                     // test for simple edge-edge cuts
                                     findEdgeCutsTwoEdges(aCurrA, aNextA, aCurrB, aNextB, a, b, rTempPointsA, rTempPointsB);
