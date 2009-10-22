@@ -610,7 +610,7 @@ public:
                                         UINT32& nMappedFontId, Font& rFont, char nDefault ) const;
     const PptDocumentAtom&              GetDocumentAtom() const { return aDocAtom; }
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const;
-    SdrObject*  CreateTable( SdrObject* pGroupObject, sal_uInt32* pTableArry, SvxMSDffSolverContainer* ) const;
+    SdrObject*  CreateTable( SdrObject* pGroupObject, sal_uInt32* pTableArry, SvxMSDffSolverContainer* );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

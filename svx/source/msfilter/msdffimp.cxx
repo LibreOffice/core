@@ -8124,6 +8124,7 @@ void SvxMSDffManager::removeShapeId( SdrObject* pShape )
             maShapeIdContainer.erase( aIter );
             break;
         }
+        aIter++;
     }
 }
 
