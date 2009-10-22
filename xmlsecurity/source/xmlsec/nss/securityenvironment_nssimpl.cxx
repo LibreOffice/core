@@ -58,7 +58,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <svtools/docpasswdrequest.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <xmlsecurity/biginteger.hxx>
 #include <rtl/logfile.h>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -94,7 +94,8 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
         if ( xInteractionHandler.is() )
         {
             task::PasswordRequestMode eMode = bRetry ? task::PasswordRequestMode_PASSWORD_REENTER : task::PasswordRequestMode_PASSWORD_ENTER;
-            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword( eMode, ::rtl::OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
+            ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
+                ::comphelper::DocPasswordRequestType_STANDARD, eMode, ::rtl::OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
 
             uno::Reference< task::XInteractionRequest > xRequest( pPasswordRequest );
             xInteractionHandler->handle( xRequest );

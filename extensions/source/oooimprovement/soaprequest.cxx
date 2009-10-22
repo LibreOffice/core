@@ -153,11 +153,7 @@ namespace
 
     static const OString getSoapOfficeversion(const Reference<XMultiServiceFactory>& sf)
     {
-        OStringBuffer buf =
-            "<Officeversion Productname=\""
-            + ::rtl::OUStringToOString(oooimprovement::Config(sf).getCompleteProductname(), RTL_TEXTENCODING_ASCII_US)
-            + "\"/>\n";
-        return buf.makeStringAndClear();
+        return ::rtl::OUStringToOString(oooimprovement::Config(sf).getCompleteProductname(), RTL_TEXTENCODING_ASCII_US);
     };
 
     static const OString getSoapSoapId(const Reference<XMultiServiceFactory>& sf, const OString& soap_id)
@@ -165,7 +161,7 @@ namespace
         OStringBuffer buf;
         buf.append("<body xsi:type=\"xsd:string\">");
         buf.append(xmlEncode(soap_id)).append("\n");
-        buf.append(getSoapOfficeversion(sf));
+        buf.append(xmlEncode(getSoapOfficeversion(sf))).append("\n");
         buf.append("</body>\n");
         return buf.makeStringAndClear();
     };

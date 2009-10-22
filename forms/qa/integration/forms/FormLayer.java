@@ -310,7 +310,27 @@ public class FormLayer
     }
 
     /* ------------------------------------------------------------------ */
-    /** retrieves a control model with a given access path
+    /** retrieves a control model with a given (integer) access path
+     */
+    public XPropertySet getControlModel( int[] _accessPath ) throws com.sun.star.uno.Exception
+    {
+        XIndexAccess indexAcc = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
+            m_document.getFormComponentTreeRoot() );
+        XPropertySet controlModel = null;
+        int i=0;
+        while ( ( indexAcc != null ) && ( i < _accessPath.length ) )
+        {
+            controlModel = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+                indexAcc.getByIndex( _accessPath[i] ) );
+            indexAcc = (XIndexAccess)UnoRuntime.queryInterface( XIndexAccess.class,
+                controlModel );
+            ++i;
+        }
+        return controlModel;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** retrieves a control model with a given (string) access path
      */
     public XPropertySet getControlModel( String[] _accessPath ) throws com.sun.star.uno.Exception
     {
