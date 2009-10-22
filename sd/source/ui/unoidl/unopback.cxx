@@ -194,10 +194,8 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                             setPropertyValue( aPropertyName, *pAny );
                     }
                 }
-                    else
-                        setPropertyValue( aIt->sName, *pAny );
-            }
                 ++aIt;
+            }
         }
     }
 

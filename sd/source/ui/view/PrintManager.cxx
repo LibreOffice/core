@@ -162,6 +162,10 @@ USHORT PrintManager::SetPrinterOptDlg (
     USHORT nDiffFlags,
     BOOL _bShowDialog)
 {
+    SfxPrinter* pOld = mrBase.GetDocShell()->GetPrinter( FALSE );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     mrBase.GetDocShell()->SetPrinter(pNewPrinter);
 
     if ( (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ||
@@ -369,12 +373,12 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
 
             if( pPrintOpts->GetOptionsPrint().IsDate() )
             {
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getDate( Date() );
+                aTimeDateStr += GetSdrGlobalData().GetLocaleData()->getDate( Date() );
                 aTimeDateStr += (sal_Unicode)' ';
             }
 
             if( pPrintOpts->GetOptionsPrint().IsTime() )
-                aTimeDateStr += GetSdrGlobalData().pLocaleData->getTime( Time(), FALSE, FALSE );
+                aTimeDateStr += GetSdrGlobalData().GetLocaleData()->getTime( Time(), FALSE, FALSE );
 
             if( pPrintOpts->GetOptionsPrint().IsOutline() )
                 bPrintOutline = TRUE;

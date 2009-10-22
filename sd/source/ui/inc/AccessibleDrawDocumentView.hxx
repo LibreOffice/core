@@ -166,6 +166,9 @@ protected:
     virtual void Deactivated (void);
 
     virtual void impl_dispose (void);
+
+private:
+    void UpdateAccessibleName (void);
 };
 
 } // end of namespace accessibility

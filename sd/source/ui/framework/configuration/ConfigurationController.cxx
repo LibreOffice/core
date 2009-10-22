@@ -59,7 +59,7 @@ using rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 #undef VERBOSE
-//#define VERBOSE 3
+#define VERBOSE 3
 
 
 namespace sd { namespace framework {

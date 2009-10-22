@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -41,6 +41,7 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 
 # --- Files --------------------------------------------------------
 
@@ -55,17 +56,18 @@ SVSDI1DEPEND= \
     _docsh.sdi \
     docshell.sdi \
     drtxtob.sdi \
-    drbezob.sdi \
-    drgrfob.sdi \
+        drbezob.sdi \
+        drgrfob.sdi \
     _drvwsh.sdi \
     drviewsh.sdi \
-    mediaob.sdi \
-    tables.sdi\
+        mediaob.sdi \
+        tables.sdi\
     outlnvsh.sdi \
     SlideSorterController.sdi \
     ViewShellBase.sdi \
     TaskPaneViewShell.sdi \
     sdslots.hrc \
+        $(SOLARINCXDIR)$/svxslots.ilb   \
     $(PRJ)$/inc$/app.hrc
 
 SVSDI2DEPEND= \
@@ -74,17 +76,18 @@ SVSDI2DEPEND= \
     _docsh.sdi \
     grdocsh.sdi \
     drtxtob.sdi \
-    drbezob.sdi \
-    drgrfob.sdi \
+        drbezob.sdi \
+        drgrfob.sdi \
     _drvwsh.sdi \
     grviewsh.sdi \
-    mediaob.sdi \
+        mediaob.sdi \
     outlnvsh.sdi \
     ViewShellBase.sdi \
     TaskPaneViewShell.sdi \
     sdslots.hrc \
+        $(SOLARINCXDIR)$/svxslots.ilb   \
     $(PRJ)$/inc$/app.hrc
 
 # --- Targets -------------------------------------------------------
-
+.ENDIF
 .INCLUDE :  target.mk

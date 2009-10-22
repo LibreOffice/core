@@ -444,20 +444,23 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // get font attributes; use normally scaled font
                             const basegfx::BColor aFontColor(aRGBColor);
                             Font aVclFont;
-                            basegfx::B2DVector aSize;
+                            basegfx::B2DVector aTextSizeAttribute;
 
                             aVclFont.SetHeight( 500 );
 
-                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-                                aSize,
-                                aVclFont,
-                                false,
-                                false));
+                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(
+                                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                                    aTextSizeAttribute,
+                                    aVclFont,
+                                    false,
+                                    false));
 
                             // fill text matrix
                             const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                                aSize.getX(), aSize.getY(),
-                                fShearX, fRotate, fPosX, fPosY));
+                                aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
+                                fShearX,
+                                fRotate,
+                                fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
                             const ::std::vector< double > aDXArray;
@@ -466,15 +469,16 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             const ::com::sun::star::lang::Locale aLocale;
 
                             // create primitive and add
-                            const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                aTextMatrix,
-                                aObjectString,
-                                0,
-                                nTextLength,
-                                aDXArray,
-                                aFontAttributes,
-                                aLocale,
-                                aFontColor));
+                            const drawinglayer::primitive2d::Primitive2DReference xRef(
+                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    aTextMatrix,
+                                    aObjectString,
+                                    0,
+                                    nTextLength,
+                                    aDXArray,
+                                    aFontAttributes,
+                                    aLocale,
+                                    aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                         }
                     }
