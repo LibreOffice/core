@@ -35,7 +35,7 @@
 #define EVENT_RESIZE                0x00000001
 
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <tools/resmgr.hxx>
 #include <bootstrp/sstring.hxx>
 #include <vcl/event.hxx>

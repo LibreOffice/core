@@ -51,11 +51,11 @@ ULONG ObjectWin::msnGlobalViewMask = 0;
 
 
 UINT32 aColorMap[] = {
-    COL_TRANSPARENT,        //MARKMODE_DEFAULT    0
+    RGB_COLORDATA( 0xFF, 0xFF, 0x80 ),             //MARKMODE_DEFAULT    0
     COL_GREEN,              //MARKMODE_DEPENDING  1
     COL_RED,                //MARKMODE_NEEDED     2
     COL_MAGENTA,            //1+2
-    COL_YELLOW,             //MARKMODE_ACTIVATED  4
+    COL_GRAY,               //MARKMODE_ACTIVATED  4
     COL_LIGHTGREEN,         //1+4
     COL_LIGHTRED,           //2+4
     COL_LIGHTMAGENTA,       //1+2+4
@@ -90,7 +90,7 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
                 mnHeadDist( 0 ),
                 mbFixed( FALSE )
 {
-    SetBackground( Wallpaper( Color( COL_WHITE )));
+    SetBackground( Wallpaper( aColorMap[0] ));
 
     aTipTimer.SetTimeout( 500 );
     aTipTimer.SetTimeoutHdl(
