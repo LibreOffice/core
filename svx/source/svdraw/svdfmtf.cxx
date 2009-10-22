@@ -72,6 +72,8 @@
 #include <vcl/salbtype.hxx>     // FRound
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/xlinjoit.hxx>
+#include <svx/xlndsit.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -80,6 +82,8 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     pLineAttr(NULL),pFillAttr(NULL),pTextAttr(NULL),
     pPage(NULL),pModel(NULL),nLayer(0),
     nLineWidth(0),
+    maLineJoin(basegfx::B2DLINEJOIN_NONE),
+    maDash(XDASH_RECT, 0, 0, 0, 0, 0),
     bFntDirty(TRUE),
     bLastObjWasPolyWithoutLine(FALSE),bNoLine(FALSE),bNoFill(FALSE),bLastObjWasLine(FALSE)
 {
@@ -273,6 +277,9 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
     {
         if ( nLineWidth )
             pLineAttr->Put( XLineWidthItem( nLineWidth ) );
+        else
+            pLineAttr->Put( XLineWidthItem( 0 ) );
+
         aOldLineColor = aVD.GetLineColor();
         if( aVD.IsLineColor() )
         {
@@ -281,6 +288,34 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
         }
         else
             pLineAttr->Put(XLineStyleItem(XLINE_NONE));
+
+        switch(maLineJoin)
+        {
+            default : // basegfx::B2DLINEJOIN_NONE
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_NONE));
+                break;
+            case basegfx::B2DLINEJOIN_MIDDLE:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_MIDDLE));
+                break;
+            case basegfx::B2DLINEJOIN_BEVEL:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_BEVEL));
+                break;
+            case basegfx::B2DLINEJOIN_MITER:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_MITER));
+                break;
+            case basegfx::B2DLINEJOIN_ROUND:
+                pLineAttr->Put(XLineJointItem(XLINEJOINT_ROUND));
+                break;
+        }
+
+        if(((maDash.GetDots() && maDash.GetDotLen()) || (maDash.GetDashes() && maDash.GetDashLen())) && maDash.GetDistance())
+        {
+            pLineAttr->Put(XLineDashItem(String(), maDash));
+        }
+        else
+        {
+            pLineAttr->Put(XLineDashItem(String(), XDash(XDASH_RECT)));
+        }
     }
     else
         bNoLine = TRUE;
@@ -396,12 +431,19 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
             bCreateLineObject = false;
         }
 
-        nLineWidth = nNewLineWidth;
-
         if(bCreateLineObject)
         {
             SdrPathObj* pPath = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aLine));
+            nLineWidth = nNewLineWidth;
+            maLineJoin = rLineInfo.GetLineJoin();
+            maDash = XDash(XDASH_RECT,
+                rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
+                rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
+                rLineInfo.GetDistance());
             SetAttributes(pPath);
+            nLineWidth = 0;
+            maLineJoin = basegfx::B2DLINEJOIN_NONE;
+            maDash = XDash();
             InsertObj(pPath, false);
         }
     }
@@ -592,12 +634,21 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
         bCreateLineObject = false;
     }
 
-    nLineWidth = nNewLineWidth;
-
     if(bCreateLineObject)
     {
-        SdrPathObj* pPath = new SdrPathObj(OBJ_PLIN, basegfx::B2DPolyPolygon(aSource));
+        SdrPathObj* pPath = new SdrPathObj(
+            aSource.isClosed() ? OBJ_POLY : OBJ_PLIN,
+            basegfx::B2DPolyPolygon(aSource));
+        nLineWidth = nNewLineWidth;
+        maLineJoin = rLineInfo.GetLineJoin();
+        maDash = XDash(XDASH_RECT,
+            rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
+            rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
+            rLineInfo.GetDistance());
         SetAttributes(pPath);
+        nLineWidth = 0;
+        maLineJoin = basegfx::B2DLINEJOIN_NONE;
+        maDash = XDash();
         InsertObj(pPath, false);
     }
 }
