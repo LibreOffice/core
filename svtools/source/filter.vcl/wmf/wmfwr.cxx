@@ -42,8 +42,9 @@
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
 #endif
 
-
 #include <vcl/metric.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //====================== MS-Windows-defines ===============================
 
@@ -1145,6 +1146,49 @@ void WMFWriter::SetAllAttr()
 }
 
 
+void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
+{
+    if(rLinePolygon.count())
+    {
+        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+        basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+        if(aLinePolyPolygon.count())
+        {
+            aSrcLineInfo = rInfo;
+            SetLineAndFillAttr();
+
+            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+            {
+                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+                WMFRecord_PolyLine(Polygon(aCandidate));
+            }
+        }
+
+        if(aFillPolyPolygon.count())
+        {
+            const Color aOldLineColor(aSrcLineColor);
+            const Color aOldFillColor(aSrcFillColor);
+
+            aSrcLineColor = Color( COL_TRANSPARENT );
+            aSrcFillColor = aOldLineColor;
+            SetLineAndFillAttr();
+
+            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            {
+                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                WMFRecord_Polygon(Polygon(aPolygon));
+            }
+
+            aSrcLineColor = aOldLineColor;
+            aSrcFillColor = aOldFillColor;
+            SetLineAndFillAttr();
+        }
+    }
+}
+
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
     ULONG       nA, nACount;
@@ -1185,10 +1229,21 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_LINE_ACTION:
                 {
                     const MetaLineAction* pA = (const MetaLineAction *) pMA;
-                    aSrcLineInfo = pA->GetLineInfo();
-                    SetLineAndFillAttr();
-                    WMFRecord_MoveTo( pA->GetStartPoint() );
-                    WMFRecord_LineTo( pA->GetEndPoint() );
+                    if(pA->GetLineInfo().IsDefault())
+                    {
+                        aSrcLineInfo = pA->GetLineInfo();
+                        SetLineAndFillAttr();
+                        WMFRecord_MoveTo( pA->GetStartPoint() );
+                        WMFRecord_LineTo( pA->GetEndPoint() );
+                    }
+                    else
+                    {
+                        // LineInfo used; handle Dash/Dot and fat lines
+                        basegfx::B2DPolygon aPolygon;
+                        aPolygon.append(basegfx::B2DPoint(pA->GetStartPoint().X(), pA->GetStartPoint().Y()));
+                        aPolygon.append(basegfx::B2DPoint(pA->GetEndPoint().X(), pA->GetEndPoint().Y()));
+                        HandleLineInfoPolyPolygons(pA->GetLineInfo(), aPolygon);
+                    }
                 }
                 break;
 
@@ -1250,9 +1305,22 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_POLYLINE_ACTION:
                 {
                     const MetaPolyLineAction* pA = (const MetaPolyLineAction*) pMA;
-                    aSrcLineInfo = pA->GetLineInfo();
-                    SetLineAndFillAttr();
-                    WMFRecord_PolyLine( pA->GetPolygon() );
+                    const Polygon&              rPoly = pA->GetPolygon();
+
+                    if( rPoly.GetSize() )
+                    {
+                        if(pA->GetLineInfo().IsDefault())
+                        {
+                            aSrcLineInfo = pA->GetLineInfo();
+                            SetLineAndFillAttr();
+                            WMFRecord_PolyLine( rPoly );
+                        }
+                        else
+                        {
+                            // LineInfo used; handle Dash/Dot and fat lines
+                            HandleLineInfoPolyPolygons(pA->GetLineInfo(), rPoly.getB2DPolygon());
+                        }
+                    }
                 }
                 break;
 

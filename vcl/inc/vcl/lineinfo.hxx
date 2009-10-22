@@ -41,6 +41,7 @@
 // ----------------
 
 class SvStream;
+namespace basegfx { class B2DPolyPolygon; }
 
 struct ImplLineInfo
 {
@@ -116,6 +117,19 @@ public:
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo );
+
+    // helper to check if line width or DashDot is used
+    bool isDashDotOrFatLineUsed() const;
+
+    // helper to get decomposed polygon data with the LineInfo applied. The source
+    // hairline polygon is given in io_rLinePolyPolygon. Both given polygons may
+    // contain results; e.g. when no fat line but DasDot is defined, the resut will
+    // be in io_rLinePolyPolygon while o_rFillPolyPolygon will be empty. When fat line
+    // is defined, it will be vice-versa. If none is defined, io_rLinePolyPolygon will
+    // not be changed (but o_rFillPolyPolygon will be freed)
+    void applyToB2DPolyPolygon(
+        basegfx::B2DPolyPolygon& io_rLinePolyPolygon,
+        basegfx::B2DPolyPolygon& o_rFillPolyPolygon) const;
 };
 
 #endif  // _SV_LINEINFO_HXX

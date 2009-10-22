@@ -86,6 +86,8 @@
 #define GDI_UNICODE_COMMENT             1032
 
 #define GDI_LINEJOIN_ACTION             1033
+#define GDI_EXTENDEDPOLYGON_ACTION      1034
+#define GDI_LINEDASHDOT_ACTION          1035
 
 // ----------------
 // - SVMConverter -

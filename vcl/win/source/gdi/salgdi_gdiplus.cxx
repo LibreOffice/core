@@ -243,7 +243,7 @@ bool WinSalGraphics::drawPolyLine(const basegfx::B2DPolygon& rPolygon, const bas
             impAddB2DPolygonToGDIPlusGraphicsPathReal(aPath, rPolygon, bNoLineJoin);
         }
 
-        if(rPolygon.isClosed())
+        if(rPolygon.isClosed() && !bNoLineJoin)
         {
             // #i101491# needed to create the correct line joins
             aPath.CloseFigure();

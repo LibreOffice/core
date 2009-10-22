@@ -34,6 +34,10 @@
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
 #include <vcl/lineinfo.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
+#include <numeric>
 
 DBG_NAME( LineInfo )
 
@@ -283,3 +287,78 @@ SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo )
 {
     return( rOStm << *rLineInfo.mpImplLineInfo );
 }
+
+// -----------------------------------------------------------------------
+
+bool LineInfo::isDashDotOrFatLineUsed() const
+{
+    return (LINE_DASH == GetStyle() || GetWidth() > 1);
+}
+
+// -----------------------------------------------------------------------
+
+void LineInfo::applyToB2DPolyPolygon(
+    basegfx::B2DPolyPolygon& io_rLinePolyPolygon,
+    basegfx::B2DPolyPolygon& o_rFillPolyPolygon) const
+{
+    o_rFillPolyPolygon.clear();
+
+    if(io_rLinePolyPolygon.count())
+    {
+        if(LINE_DASH == GetStyle())
+        {
+            ::std::vector< double > fDotDashArray;
+            const double fDashLen(GetDashLen());
+            const double fDotLen(GetDotLen());
+            const double fDistance(GetDistance());
+
+            for(sal_uInt16 a(0); a < GetDashCount(); a++)
+            {
+                fDotDashArray.push_back(fDashLen);
+                fDotDashArray.push_back(fDistance);
+            }
+
+            for(sal_uInt16 b(0); b < GetDotCount(); b++)
+            {
+                fDotDashArray.push_back(fDotLen);
+                fDotDashArray.push_back(fDistance);
+            }
+
+            const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
+
+            if(fAccumulated > 0.0)
+            {
+                basegfx::B2DPolyPolygon aResult;
+
+                for(sal_uInt32 c(0); c < io_rLinePolyPolygon.count(); c++)
+                {
+                    basegfx::B2DPolyPolygon aLineTraget;
+                    basegfx::tools::applyLineDashing(
+                        io_rLinePolyPolygon.getB2DPolygon(c),
+                        fDotDashArray,
+                        &aLineTraget);
+                    aResult.append(aLineTraget);
+                }
+
+                io_rLinePolyPolygon = aResult;
+            }
+        }
+
+        if(GetWidth() > 1 && io_rLinePolyPolygon.count())
+        {
+            const double fHalfLineWidth((GetWidth() * 0.5) + 0.5);
+
+            for(sal_uInt32 a(0); a < io_rLinePolyPolygon.count(); a++)
+            {
+                o_rFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
+                    io_rLinePolyPolygon.getB2DPolygon(a),
+                    fHalfLineWidth,
+                    GetLineJoin()));
+            }
+
+            io_rLinePolyPolygon.clear();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------

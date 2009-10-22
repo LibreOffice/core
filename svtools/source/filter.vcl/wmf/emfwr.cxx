@@ -33,6 +33,8 @@
 
 #include "emfwr.hxx"
 #include <vcl/salbtype.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 // -----------
 // - Defines -
@@ -829,6 +831,46 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
 
 // -----------------------------------------------------------------------------
 
+void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
+{
+    if(rLinePolygon.count())
+    {
+        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+        basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+        if(aLinePolyPolygon.count())
+        {
+            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+            {
+                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+                ImplWritePolygonRecord( Polygon(aCandidate), FALSE );
+            }
+        }
+
+        if(aFillPolyPolygon.count())
+        {
+            const Color aOldLineColor(maVDev.GetLineColor());
+            const Color aOldFillColor(maVDev.GetFillColor());
+
+            maVDev.SetLineColor();
+            maVDev.SetFillColor(aOldLineColor);
+
+            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            {
+                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                ImplWritePolyPolygonRecord(PolyPolygon(Polygon(aPolygon)));
+            }
+
+            maVDev.SetLineColor(aOldLineColor);
+            maVDev.SetFillColor(aOldFillColor);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 {
     for( ULONG j = 0, nActionCount = rMtf.GetActionCount(); j < nActionCount; j++ )
@@ -871,20 +913,31 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 {
                     const MetaLineAction* pA = (const MetaLineAction*) pAction;
 
-                    ImplCheckLineAttr();
+                    if(pA->GetLineInfo().IsDefault())
+                    {
+                        ImplCheckLineAttr();
 
-                    ImplBeginRecord( WIN_EMR_MOVETOEX );
-                    ImplWritePoint( pA->GetStartPoint() );
-                    ImplEndRecord();
+                        ImplBeginRecord( WIN_EMR_MOVETOEX );
+                        ImplWritePoint( pA->GetStartPoint() );
+                        ImplEndRecord();
 
-                    ImplBeginRecord( WIN_EMR_LINETO );
-                    ImplWritePoint( pA->GetEndPoint() );
-                    ImplEndRecord();
+                        ImplBeginRecord( WIN_EMR_LINETO );
+                        ImplWritePoint( pA->GetEndPoint() );
+                        ImplEndRecord();
 
-                    ImplBeginRecord( WIN_EMR_SETPIXELV );
-                    ImplWritePoint( pA->GetEndPoint() );
-                    ImplWriteColor( maVDev.GetLineColor() );
-                    ImplEndRecord();
+                        ImplBeginRecord( WIN_EMR_SETPIXELV );
+                        ImplWritePoint( pA->GetEndPoint() );
+                        ImplWriteColor( maVDev.GetLineColor() );
+                        ImplEndRecord();
+                    }
+                    else
+                    {
+                        // LineInfo used; handle Dash/Dot and fat lines
+                        basegfx::B2DPolygon aPolygon;
+                        aPolygon.append(basegfx::B2DPoint(pA->GetStartPoint().X(), pA->GetStartPoint().Y()));
+                        aPolygon.append(basegfx::B2DPoint(pA->GetEndPoint().X(), pA->GetEndPoint().Y()));
+                        Impl_handleLineInfoPolyPolygons(pA->GetLineInfo(), aPolygon);
+                    }
                 }
             }
             break;
@@ -983,7 +1036,23 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_POLYLINE_ACTION ):
             {
                 if( maVDev.IsLineColor() )
-                    ImplWritePolygonRecord( ( (const MetaPolyLineAction*) pAction )->GetPolygon(), FALSE );
+                {
+                    const MetaPolyLineAction*   pA = (const MetaPolyLineAction*) pAction;
+                    const Polygon&              rPoly = pA->GetPolygon();
+
+                    if( rPoly.GetSize() )
+                    {
+                        if(pA->GetLineInfo().IsDefault())
+                        {
+                            ImplWritePolygonRecord( rPoly, FALSE );
+                        }
+                        else
+                        {
+                            // LineInfo used; handle Dash/Dot and fat lines
+                            Impl_handleLineInfoPolyPolygons(pA->GetLineInfo(), rPoly.getB2DPolygon());
+                        }
+                    }
+                }
             }
             break;
 

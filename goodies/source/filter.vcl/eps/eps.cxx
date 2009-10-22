@@ -701,7 +701,40 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 Polygon aPoly( ( (const MetaPolyLineAction*) pMA )->GetPolygon() );
                 const LineInfo& rLineInfo = ( ( const MetaPolyLineAction*)pMA )->GetLineInfo();
                 ImplWriteLineInfo( rLineInfo );
-                ImplPolyLine( aPoly );
+
+                if(basegfx::B2DLINEJOIN_NONE == rLineInfo.GetLineJoin()
+                    && rLineInfo.GetWidth() > 1)
+                {
+                    // emulate B2DLINEJOIN_NONE by creating single edges
+                    const sal_uInt16 nPoints(aPoly.GetSize());
+                    const bool bCurve(aPoly.HasFlags());
+
+                    for(sal_uInt16 a(0); a + 1 < nPoints; a++)
+                    {
+                        if(bCurve
+                            && POLY_NORMAL != aPoly.GetFlags(a + 1)
+                            && a + 2 < nPoints
+                            && POLY_NORMAL != aPoly.GetFlags(a + 2)
+                            && a + 3 < nPoints)
+                        {
+                            const Polygon aSnippet(4,
+                                aPoly.GetConstPointAry() + a,
+                                aPoly.GetConstFlagAry() + a);
+                            ImplPolyLine(aSnippet);
+                            a += 2;
+                        }
+                        else
+                        {
+                            const Polygon aSnippet(2,
+                                aPoly.GetConstPointAry() + a);
+                            ImplPolyLine(aSnippet);
+                        }
+                    }
+                }
+                else
+                {
+                    ImplPolyLine( aPoly );
+                }
             }
             break;
 
@@ -2343,8 +2376,29 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
     SvtGraphicStroke::DashArray l_aDashArray;
     if ( rLineInfo.GetStyle() == LINE_DASH )
         l_aDashArray.push_back( 2 );
-    double fLWidth = ( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5;
-    ImplWriteLineInfo( fLWidth, 10.0, SvtGraphicStroke::capButt, SvtGraphicStroke::joinMiter, l_aDashArray );
+    const double fLWidth(( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5);
+    const double fMiterLimit(15.0);
+    SvtGraphicStroke::JoinType aJoinType(SvtGraphicStroke::joinMiter);
+
+    switch(rLineInfo.GetLineJoin())
+    {
+        default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE
+            // do NOT use SvtGraphicStroke::joinNone here
+            // since it will be written as numerical value directly
+            // and is NOT a valid EPS value
+            break;
+        case basegfx::B2DLINEJOIN_MITER:
+            aJoinType = SvtGraphicStroke::joinMiter;
+            break;
+        case basegfx::B2DLINEJOIN_BEVEL:
+            aJoinType = SvtGraphicStroke::joinBevel;
+            break;
+        case basegfx::B2DLINEJOIN_ROUND:
+            aJoinType = SvtGraphicStroke::joinRound;
+            break;
+    }
+
+    ImplWriteLineInfo( fLWidth, fMiterLimit, SvtGraphicStroke::capButt, aJoinType, l_aDashArray );
 }
 
 //---------------------------------------------------------------------------------
