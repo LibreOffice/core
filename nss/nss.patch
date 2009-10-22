@@ -1,5 +1,5 @@
 --- misc/mozilla/nsprpub/config/rules.mk	2009-05-02 01:08:01.000000000 +0200
-+++ misc/build/mozilla/nsprpub/config/rules.mk	2009-09-17 10:29:39.823155149 +0200
++++ misc/build/mozilla/nsprpub/config/rules.mk	2009-10-20 17:03:24.733286198 +0200
 @@ -350,7 +350,12 @@
  ifdef NS_USE_GCC
  	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
@@ -15,7 +15,7 @@
  	@echo $(RES) finished
  endif
 --- misc/mozilla/nsprpub/configure	2009-05-08 15:12:31.000000000 +0200
-+++ misc/build/mozilla/nsprpub/configure	2009-09-17 10:31:55.064081763 +0200
++++ misc/build/mozilla/nsprpub/configure	2009-10-20 17:03:24.759501457 +0200
 @@ -3898,7 +3898,7 @@
      PR_MD_CSRCS=linux.c
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
@@ -26,7 +26,7 @@
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
                                     # combo is not yet good at debugging inlined
 --- misc/mozilla/security/coreconf/Darwin.mk	2009-07-30 23:36:02.000000000 +0200
-+++ misc/build/mozilla/security/coreconf/Darwin.mk	2009-09-17 11:11:36.442683705 +0200
++++ misc/build/mozilla/security/coreconf/Darwin.mk	2009-10-20 17:03:24.767804881 +0200
 @@ -39,8 +39,12 @@
  
  DEFAULT_COMPILER = cc
@@ -43,7 +43,7 @@
  
  ifndef CPU_ARCH
 --- misc/mozilla/security/coreconf/Linux.mk	2009-07-30 01:43:41.000000000 +0200
-+++ misc/build/mozilla/security/coreconf/Linux.mk	2009-09-17 10:39:40.372245066 +0200
++++ misc/build/mozilla/security/coreconf/Linux.mk	2009-10-20 17:04:09.972612751 +0200
 @@ -46,8 +46,11 @@
  	IMPL_STRATEGY = _PTH
  endif
@@ -67,8 +67,22 @@
  DSO_LDFLAGS		=
  LDFLAGS			+= $(ARCHFLAG)
  
+@@ -161,8 +164,13 @@
+ #
+ CPU_TAG = _$(CPU_ARCH)
+ 
++ifeq ($(SYSTEM_ZLIB),YES)  
++# Currently (3.12.4) only the tools modutil and signtool are linked with libz
++# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
++# is also build in nss.
+ USE_SYSTEM_ZLIB = 1
+ ZLIB_LIBS = -lz
++endif
+ 
+ # The -rpath '$$ORIGIN' linker option instructs this library to search for its
+ # dependencies in the same directory where it resides.
 --- misc/mozilla/security/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
-+++ misc/build/mozilla/security/coreconf/SunOS5.mk	2009-09-17 10:42:17.845459669 +0200
++++ misc/build/mozilla/security/coreconf/SunOS5.mk	2009-10-20 17:03:24.786509911 +0200
 @@ -89,8 +89,12 @@
  	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
  	endif
@@ -85,7 +99,7 @@
  	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
  	ifndef BUILD_OPT
 --- misc/mozilla/security/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
-+++ misc/build/mozilla/security/coreconf/arch.mk	2009-09-17 10:45:27.710858021 +0200
++++ misc/build/mozilla/security/coreconf/arch.mk	2009-10-20 17:03:24.807236644 +0200
 @@ -324,7 +324,12 @@
  # IMPL_STRATEGY may be defined too.
  #
@@ -101,7 +115,7 @@
  ifeq (,$(filter-out WIN%,$(OS_TARGET)))
  ifndef BUILD_OPT
 --- misc/mozilla/security/coreconf/rules.mk	2009-08-11 05:23:39.000000000 +0200
-+++ misc/build/mozilla/security/coreconf/rules.mk	2009-09-17 10:48:07.361462582 +0200
++++ misc/build/mozilla/security/coreconf/rules.mk	2009-10-20 17:03:24.815121351 +0200
 @@ -355,7 +355,12 @@
  ifdef NS_USE_GCC
  	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
@@ -117,7 +131,7 @@
  	@echo $(RES) finished
  endif
 --- misc/mozilla/security/nss/cmd/platlibs.mk	2009-06-18 01:01:48.000000000 +0200
-+++ misc/build/mozilla/security/nss/cmd/platlibs.mk	2009-09-17 11:08:16.697236076 +0200
++++ misc/build/mozilla/security/nss/cmd/platlibs.mk	2009-10-20 17:03:24.831220397 +0200
 @@ -41,27 +41,28 @@
  ifeq ($(OS_ARCH), SunOS) 
  ifeq ($(BUILD_SUN_PKG), 1)
