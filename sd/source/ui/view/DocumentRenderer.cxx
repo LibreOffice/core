@@ -1034,7 +1034,7 @@ namespace {
             // Hide outlines for objects that have pages attached.
             if (nHangoverCount > 0)
             {
-                int nSkip = maPageIndices.size() - nHangoverCount;
+                int nSkip = aHandoutPageObjects.size() - nHangoverCount;
                 aShapeIter.Reset();
                 while (aShapeIter.IsMore())
                 {
@@ -1879,8 +1879,9 @@ private:
         SdrObjListIter aShapeIter (rHandoutPage);
         while (aShapeIter.IsMore())
         {
-            ++nShapeCount;
-            aShapeIter.Next();
+            SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(aShapeIter.Next());
+            if (pPageObj)
+                ++nShapeCount;
         }
 
         // Distribute pages to handout pages.
