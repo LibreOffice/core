@@ -260,8 +260,6 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId,
     const OUString& rsTitle)
 {
-    (void)rsTitle;
-
     if ( ! rxPaneId.is())
         return NULL;
 

@@ -32,7 +32,7 @@
 #ifndef SDEXT_PRESENTER_COMPONENT_HXX
 #define SDEXT_PRESENTER_COMPONENT_HXX
 
-#include <comphelper/componentmodule.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace css = ::com::sun::star;
 

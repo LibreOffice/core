@@ -49,7 +49,7 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <rtl/ref.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -67,6 +67,8 @@ namespace sdext { namespace presenter {
 
 class PresenterButton;
 class PresenterScrollBar;
+class PresenterTextView;
+
 
 /** A drawing framework view of the notes of a slide.  At the moment this is
     a simple text view that does not show the original formatting of the
@@ -97,6 +99,9 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxNotesPage);
 
     void ChangeFontSize (const sal_Int32 nSizeChange);
+
+    ::boost::shared_ptr<PresenterTextView> GetTextView (void) const;
+
 
     // lang::XEventListener
 
@@ -152,16 +157,11 @@ public:
     virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent)
         throw (css::uno::RuntimeException);
 
-    class BitmapContainer;
-    class BitmapFactory;
-
 private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    ::boost::scoped_ptr<BitmapContainer> mpBitmapContainer;
-    ::boost::shared_ptr<BitmapFactory> mpBitmapFactory;
     css::uno::Reference<css::drawing::XDrawPage> mxCurrentNotesPage;
     ::rtl::Reference<PresenterScrollBar> mpScrollBar;
     css::uno::Reference<css::awt::XWindow> mxToolBarWindow;
@@ -173,7 +173,8 @@ private:
     css::geometry::RealRectangle2D maTextBoundingBox;
     SharedBitmapDescriptor mpBackground;
     double mnTop;
-    sal_Int32 mnFontSize;
+    PresenterTheme::SharedFontDescriptor mpFont;
+    ::boost::shared_ptr<PresenterTextView> mpTextView;
 
     void CreateToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -186,6 +187,7 @@ private:
     void Scroll (const double nDistance);
     void SetTop (const double nTop);
     void UpdateScrollBar (void);
+    void MoveCaret (const sal_Int32 nDistance);
 
     /** This method throws a DisposedException when the object has already been
         disposed.

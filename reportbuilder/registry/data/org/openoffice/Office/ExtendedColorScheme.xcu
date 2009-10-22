@@ -133,67 +133,56 @@
     <node oor:name="EntryNames">
         <node oor:name="SunReportBuilder" oor:op="replace">
             <prop oor:name="DisplayName">
-                <value xml:lang="de">Sun Report Builder</value>
                 <value xml:lang="en-US">Sun Report Builder</value>
             </prop>
             <node oor:name="Entries">
                 <node oor:name="ReportHeader" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Berichtskopf</value>
                         <value xml:lang="en-US">Report Header</value>
                     </prop>
                 </node>
                 <node oor:name="ReportFooter" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Berichtsfuß</value>
                         <value xml:lang="en-US">Report Footer</value>
                     </prop>
                 </node>
                 <node oor:name="PageHeader" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Seitenkopf</value>
                         <value xml:lang="en-US">Page Header</value>
                     </prop>
                 </node>
                 <node oor:name="PageFooter" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Seitenfuß</value>
                         <value xml:lang="en-US">Page Footer</value>
                     </prop>
                 </node>
                 <node oor:name="GroupHeader" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Gruppenkopf</value>
                         <value xml:lang="en-US">Group Header</value>
                     </prop>
                 </node>
                 <node oor:name="GroupFooter" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Gruppenfuß</value>
                         <value xml:lang="en-US">Group Footer</value>
                     </prop>
                 </node>
                 <node oor:name="ColumnHeader" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Spaltenkopf</value>
                         <value xml:lang="en-US">Column Header</value>
                     </prop>
                 </node>
                 <node oor:name="ColumnFooter" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Spaltenfuß</value>
                         <value xml:lang="en-US">Column Footer</value>
                     </prop>
                 </node>
                 <node oor:name="Detail" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Detail</value>
                         <value xml:lang="en-US">Detail</value>
                     </prop>
                 </node>
                 <node oor:name="OverlappedControl" oor:op="replace">
                     <prop oor:name="DisplayName">
-                        <value xml:lang="de">Überlappende Steuerelemente</value>
                         <value xml:lang="en-US">Overlapped Control</value>
                     </prop>
                 </node>

@@ -310,6 +310,11 @@
             title means that no title is displayed.</desc></info>
         <value></value>
       </prop>
+      <prop oor:name="AccessibleTitle" oor:type="xs:string">
+        <info><desc>Title displayed for the component when accessibility support is active.
+            An empty or missing title means that no title is displayed.</desc></info>
+        <value></value>
+      </prop>
       <prop oor:name="IsOpaque" oor:type="xs:boolean">
         <info><desc>When the value is false then the background is painted before the
             view is painted.</desc></info>
@@ -455,6 +460,13 @@
         <info><desc>Name of the current layout.  An empty name or the
             string "DefaultLayout" specify the default layout.</desc></info>
         <value>DefaultLayout</value>
+      </prop>
+      <set oor:name="Accessibility" oor:node-type="PresenterString">
+        <info><desc>Strings that are used make the presenter console accessible.</desc></info>
+      </set>
+      <prop oor:name="InitialViewMode" oor:type="xs:int">
+        <info><desc>The view mode on start up of the extension.  Valid values are 0 for the Preview-only mode, 1 for the notes view, 2 for the slide overview.</desc></info>
+        <value>0</value>
       </prop>
     </group>
   </component>

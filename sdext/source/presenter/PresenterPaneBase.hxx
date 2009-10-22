@@ -51,11 +51,13 @@
 #include <boost/noncopyable.hpp>
 
 namespace css = ::com::sun::star;
+namespace cssu = ::com::sun::star::uno;
 
 
 namespace sdext { namespace presenter {
 
 class PresenterController;
+class PresenterTextView;
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper4 <
@@ -89,9 +91,12 @@ public:
     css::uno::Reference<css::awt::XWindow> GetBorderWindow (void) const;
     void SetBackground (const SharedBitmapDescriptor& rpBackground);
     void SetTitle (const ::rtl::OUString& rsTitle);
+    ::rtl::OUString GetTitle (void) const;
     css::uno::Reference<css::drawing::framework::XPaneBorderPainter> GetPaneBorderPainter (void) const;
     void SetCalloutAnchor (const css::awt::Point& rAnchorPosition);
     css::awt::Point GetCalloutAnchor (void) const;
+
+    ::boost::shared_ptr<PresenterTextView> GetTextViewForTitle (void);
 
     // XInitialization
 
@@ -124,8 +129,10 @@ public:
 
 
     // lang::XEventListener
+
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
+
 
 protected:
     ::rtl::Reference<PresenterController> mpPresenterController;

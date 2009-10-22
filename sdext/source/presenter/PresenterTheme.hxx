@@ -108,6 +108,14 @@ public:
         css::uno::Reference<css::rendering::XCanvasFont> mxFont;
 
         bool PrepareFont (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+
+    private:
+        css::uno::Reference<css::rendering::XCanvasFont> CreateFont (
+            const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+            const double nCellSize) const;
+        double GetCellSizeForDesignSize (
+            const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+            const double nDesignSize) const;
     };
     typedef ::boost::shared_ptr<FontDescriptor> SharedFontDescriptor;
 
