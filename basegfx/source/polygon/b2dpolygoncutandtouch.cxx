@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygoncutandtouch.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -430,6 +429,7 @@ namespace basegfx
 
             // create subdivided polygons and find cuts between them
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygonA.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             aTempPolygonEdge.append(rCurrB);
@@ -470,8 +470,10 @@ namespace basegfx
 
             // create subdivided polygons and find cuts between them
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygonA.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygonA.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
+            aTempPolygonB.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygonB.append(rCubicB.getStartPoint());
             rCubicB.adaptiveSubdivideByCount(aTempPolygonB, SUBDIVIDE_FOR_CUT_TEST_COUNT);
 
@@ -497,6 +499,8 @@ namespace basegfx
             const B2DCubicBezier& rCubicA,
             sal_uInt32 nInd, temporaryPointVector& rTempPoints)
         {
+            // avoid expensive part of this method if possible
+            // TODO: use hasAnyExtremum() method instead when it becomes available
             double fDummy;
             const bool bHasAnyExtremum = rCubicA.getMinimumExtremumPosition( fDummy );
             if( !bHasAnyExtremum )
@@ -510,6 +514,7 @@ namespace basegfx
 
             // create subdivided polygon and find cuts on it
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygon.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findCuts(aTempPolygon, aTempPointVector);
