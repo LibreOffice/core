@@ -1783,7 +1783,17 @@ namespace sdr { namespace contact {
         VOCGuard aGuard( *m_pImpl );
 
         if ( m_pImpl->hasControl() )
-            m_pImpl->positionAndZoomControl( GetObjectContact().getViewInformation2D().getObjectToViewTransformation() );
+        {
+            const ::drawinglayer::geometry::ViewInformation2D& rViewInformation( GetObjectContact().getViewInformation2D() );
+        #if OSL_DEBUG_LEVEL > 1
+            ::basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+            rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
+        #endif
+
+            if ( !rViewInformation.getViewport().isEmpty() )
+                m_pImpl->positionAndZoomControl( rViewInformation.getObjectToViewTransformation() );
+        }
 
         return ViewObjectContactOfSdrObj::isPrimitiveVisible( _rDisplayInfo );
     }
