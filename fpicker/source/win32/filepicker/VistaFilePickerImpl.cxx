@@ -781,7 +781,7 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
     // Note further: we must react different if dialog is in execute or not .-(
     ComPtr< IShellItem >      iItem;
     ComPtr< IShellItemArray > iItems;
-    HRESULT                   hResult;
+    HRESULT                   hResult = E_FAIL;
 
     if (iOpen.is())
     {
@@ -877,7 +877,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 if (nIndex != aFileURL.getLength()-1)
                     aFileURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/"));
                 aFileURL += m_sFilename;
-                
+
                 TFileDialogCustomize iCustom = impl_getCustomizeInterface();
 
                 BOOL bValue = FALSE;
@@ -889,8 +889,9 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                     hResult = iDialog->GetFileTypeIndex(&nFileType);
                     if ( SUCCEEDED(hResult) )
                     {
+                        ::sal_Int32 nRealIndex = (nFileType-1); // COM dialog base on 1 ... filter container on 0 .-)
                         ::std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
-                        LPCWSTR lpFilterExt = lFilters[nFileType].pszSpec;
+                        LPCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;
 
                         lpFilterExt = wcsrchr( lpFilterExt, '.' );
                         if ( lpFilterExt )
@@ -917,7 +918,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     }
 
 
-    HRESULT hResult;
+    HRESULT hResult = E_FAIL;
     try
     {
         // show dialog and wait for user decision

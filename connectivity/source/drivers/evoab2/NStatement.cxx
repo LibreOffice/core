@@ -463,7 +463,7 @@ rtl::OUString OCommonStatement::getTableName()
 
         if( m_aSQLIterator.isTableNode( pAllTableNames->getChild( 0 ) ) )
             OSQLParseNode::getTableComponents( pAllTableNames->getChild( 0 ),
-                                               aCatalog,aSchema, aTableName );
+                                               aCatalog,aSchema, aTableName,NULL );
 
         else if( SQL_ISRULE( pAllTableNames->getChild( 0 ), table_ref ) )
         {
@@ -472,7 +472,7 @@ rtl::OUString OCommonStatement::getTableName()
             {
                 aTableName = OSQLParseNode::getTableRange(pAllTableNames->getChild( 0 ));
                 if( !aTableName.getLength() )
-                    OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName);
+                    OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName,NULL);
             }
             else
                 OSL_ENSURE( false,  "odd table layout" );

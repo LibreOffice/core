@@ -52,7 +52,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <vector>
 
@@ -60,10 +60,7 @@ namespace framework
 {
 
 class ConstItemContainer;
-class ItemContainer :   public ::com::sun::star::lang::XTypeProvider           ,
-                        public ::com::sun::star::container::XIndexContainer    ,
-                        public ::com::sun::star::lang::XUnoTunnel              ,
-                        public ::cppu::OWeakObject
+class ItemContainer :   public ::cppu::WeakImplHelper1< ::com::sun::star::container::XIndexContainer>
 {
     friend class ConstItemContainer;
 
@@ -76,9 +73,6 @@ class ItemContainer :   public ::com::sun::star::lang::XTypeProvider           ,
         //---------------------------------------------------------------------------------------------------------
         //  XInterface, XTypeProvider
         //---------------------------------------------------------------------------------------------------------
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
-
         // XUnoTunnel
         static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
         static ItemContainer*                                       GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();

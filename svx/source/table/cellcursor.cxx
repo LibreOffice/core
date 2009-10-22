@@ -269,7 +269,9 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
         throw DisposedException();
 
     SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
-    if( pModel )
+    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
+
+    if( bUndo )
         pModel->BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
 
     try
@@ -283,8 +285,11 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
         DBG_ERROR("sdr::table::CellCursor::merge(), exception caught!");
     }
 
-    if( pModel )
+    if( bUndo )
         pModel->EndUndo();
+
+    if( pModel )
+        pModel->SetChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -530,7 +535,8 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
         throw DisposedException();
 
     SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
-    if( pModel )
+    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
+    if( bUndo )
         pModel->BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
 
     try
@@ -550,8 +556,11 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
         throw NoSupportException();
     }
 
-    if( pModel )
+    if( bUndo )
         pModel->EndUndo();
+
+    if( pModel )
+        pModel->SetChanged();
 }
 
 // -----------------------------------------------------------------------------

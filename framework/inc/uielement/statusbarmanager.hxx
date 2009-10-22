@@ -46,6 +46,7 @@
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/frame/XStatusbarController.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -120,14 +121,15 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         void CreateControllers();
         void UpdateControllers();
         void AddFrameActionListener();
+        void MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL ::com::sun::star::frame::XStatusbarController::*_pMethod )(const ::com::sun::star::awt::MouseEvent&));
 
     protected:
         typedef std::vector< ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > StatusBarControllerVector;
 
         sal_Bool                                                                                        m_bDisposed : 1,
-                                                                                                        m_bModuleIdentified : 1,
                                                                                                         m_bFrameActionRegistered : 1,
                                                                                                         m_bUpdateControllers : 1;
+        sal_Bool                                                                                        m_bModuleIdentified;
         StatusBar*                                                                                      m_pStatusBar;
         rtl::OUString                                                                                   m_aModuleIdentifier;
         rtl::OUString                                                                                   m_aResourceName;

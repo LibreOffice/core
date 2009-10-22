@@ -71,49 +71,63 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace
+{
+    // adapts fontScale for usage with TextLayouter. Input is rScale which is the extracted
+    // scale from a text transformation. A copy is modified so that it contains only positive
+    // scalings and XY-equal scalings to allow to get a non-X-scaled Vcl-Font for TextLayouter.
+    // rScale is adapted accordingly to contain the corrected scale which would need to be
+    // applied to e.g. outlines received from TextLayouter under usage of fontScale. This
+    // includes Y-Scale, X-Scale-correction and mirrorings.
+    basegfx::B2DVector getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale)
+    {
+        // copy input value
+        basegfx::B2DVector aFontScale(rScale);
+
+        // correct FontHeight settings
+        if(basegfx::fTools::equalZero(aFontScale.getY()))
+        {
+            // no font height; choose one and adapt scale to get back to original scaling
+            static double fDefaultFontScale(100.0);
+            rScale.setY(1.0 / fDefaultFontScale);
+            aFontScale.setY(fDefaultFontScale);
+        }
+        else if(basegfx::fTools::less(aFontScale.getY(), 0.0))
+        {
+            // negative font height; invert and adapt scale to get back to original scaling
+            aFontScale.setY(-aFontScale.getY());
+            rScale.setY(-1.0);
+        }
+        else
+        {
+            // positive font height; adapt scale; scaling will be part of the polygons
+            rScale.setY(1.0);
+        }
+
+        // correct FontWidth settings
+        if(basegfx::fTools::equal(aFontScale.getX(), aFontScale.getY()))
+        {
+            // no FontScale, adapt scale
+            rScale.setX(1.0);
+        }
+        else
+        {
+            // If FontScale is used, force to no FontScale to get a non-scaled VCL font.
+            // Adapt scaling in X accordingly.
+            rScale.setX(aFontScale.getX() / aFontScale.getY());
+            aFontScale.setX(aFontScale.getY());
+        }
+
+        return aFontScale;
+    }
+} // end of anonymous namespace
+
+//////////////////////////////////////////////////////////////////////////////
+
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        void TextSimplePortionPrimitive2D::getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale, basegfx::B2DVector& rFontScale) const
-        {
-            // copy input value
-            rFontScale = rScale;
-
-            if(basegfx::fTools::equalZero(rFontScale.getY()))
-            {
-                // no font height; choose one and adapt scale to get back to original scaling
-                static double fDefaultFontScale(100.0);
-                rScale.setY(1.0 / fDefaultFontScale);
-                rFontScale.setY(fDefaultFontScale);
-            }
-            else if(basegfx::fTools::less(rFontScale.getY(), 0.0))
-            {
-                // negative font height; invert and adapt scale to get back to original scaling
-                rFontScale.setY(-rFontScale.getY());
-                rScale.setY(-1.0);
-            }
-            else
-            {
-                // positive font height; adapt scale; scaling will be part of the polygons
-                rScale.setY(1.0);
-            }
-
-            if(basegfx::fTools::equal(rFontScale.getX(), rFontScale.getY()))
-            {
-                // adapt scale in X
-                rScale.setX(1.0);
-            }
-            else
-            {
-                // If font scale is different in X and Y, force font scale to equal
-                // in X and Y to get a non-scaled VCL font.
-                // Adapt scaling in X accordingly. FontScaleY cannot be zero here.
-                rScale.setX(rFontScale.getX()/rFontScale.getY());
-                rFontScale.setX(rFontScale.getY());
-            }
-        }
-
         void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const
         {
             if(getTextLength())
@@ -138,33 +152,47 @@ namespace drawinglayer
                     // the font size. Since we want to extract polygons here, it is okay to
                     // work just with scaling and to ignore shear, rotation and translation,
                     // all that can be applied to the polygons later
-#ifdef WIN32
-                    const bool bCorrectScale(!basegfx::fTools::equal(fabs(aScale.getX()), fabs(aScale.getY())));
-#endif
-                    basegfx::B2DVector aFontScale;
-                    getCorrectedScaleAndFontScale(aScale, aFontScale);
+                    const basegfx::B2DVector aFontScale(getCorrectedScaleAndFontScale(aScale));
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
-#ifdef WIN32
-                    // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
-                    if(bCorrectScale)
+                    aTextLayouter.setFontAttributes(
+                        getFontAttributes(),
+                        aFontScale.getX(),
+                        aFontScale.getY(),
+                        getLocale());
+
+                    // When getting outlines from stretched text (aScale.getX() != 1.0) it
+                    // is necessary to inverse-scale the DXArray (if used) to not get the
+                    // outlines already aligned to given, but wrong DXArray
+                    if(getDXArray().size() && !basegfx::fTools::equal(aScale.getX(), 1.0))
                     {
-                        const double fFontRelation(aTextLayouter.getCurrentFontRelation());
-                        aScale.setX(aScale.getX() * fFontRelation);
-                        aFontScale.setX(aFontScale.getX() / fFontRelation);
+                        ::std::vector< double > aScaledDXArray = getDXArray();
+                        const double fDXArrayScale(1.0 / aScale.getX());
+
+                        for(sal_uInt32 a(0); a < aScaledDXArray.size(); a++)
+                        {
+                            aScaledDXArray[a] *= fDXArrayScale;
+                        }
+
+                        // get the text outlines
+                        aTextLayouter.getTextOutlines(
+                            rTarget,
+                            getText(),
+                            getTextPosition(),
+                            getTextLength(),
+                            aScaledDXArray);
                     }
-#endif
-                    // get the text outlines. No DXArray is given (would contain integers equal to unit vector
-                    // transformed by object's transformation), let VCL do the job
-                    aTextLayouter.getTextOutlines(
-                        rTarget, getText(),
-                        getTextPosition(),
-                        getTextLength(),
-                        // #i89784# added support for DXArray for justified text
-                        getDXArray(),
-                        aFontScale.getX());
+                    else
+                    {
+                        // get the text outlines
+                        aTextLayouter.getTextOutlines(
+                            rTarget,
+                            getText(),
+                            getTextPosition(),
+                            getTextLength(),
+                            getDXArray());
+                    }
 
                     // create primitives for the outlines
                     const sal_uInt32 nCount(rTarget.size());
@@ -298,29 +326,22 @@ namespace drawinglayer
                     // the font size. Since we want to extract polygons here, it is okay to
                     // work just with scaling and to ignore shear, rotation and translation,
                     // all that can be applied to the polygons later
-#ifdef WIN32
-                    const bool bCorrectScale(!basegfx::fTools::equal(fabs(aScale.getX()), fabs(aScale.getY())));
-#endif
-                    basegfx::B2DVector aFontScale;
-                    getCorrectedScaleAndFontScale(aScale, aFontScale);
+                    const basegfx::B2DVector aFontScale(getCorrectedScaleAndFontScale(aScale));
 
                     // prepare textlayoutdevice
                     TextLayouterDevice aTextLayouter;
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY(), getLocale());
+                    aTextLayouter.setFontAttributes(
+                        getFontAttributes(),
+                        aFontScale.getX(),
+                        aFontScale.getY(),
+                        getLocale());
 
                     // get basic text range
                     basegfx::B2DRange aNewRange(aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength()));
 
-                    // #i102556# take empty results into account
+                    // #i104432#, #i102556# take empty results into account
                     if(!aNewRange.isEmpty())
                     {
-#ifdef WIN32
-                        // when under Windows and the font is unequally scaled, need to correct font X-Scaling factor
-                        if(bCorrectScale)
-                        {
-                            aScale.setX(aScale.getX() * aTextLayouter.getCurrentFontRelation());
-                        }
-#endif
                         // prepare object transformation for range
                         const basegfx::B2DHomMatrix aRangeTransformation(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                             aScale, fShearX, fRotate, aTranslate));

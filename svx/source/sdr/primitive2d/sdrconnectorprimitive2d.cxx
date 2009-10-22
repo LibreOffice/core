@@ -72,7 +72,7 @@ namespace drawinglayer
             // add text
             if(getSdrLSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(getUnitPolygon()), aEmptyMatrix, *getSdrLSTAttribute().getText(), getSdrLSTAttribute().getLine(), false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(::basegfx::B2DPolyPolygon(getUnitPolygon()), aEmptyMatrix, *getSdrLSTAttribute().getText(), getSdrLSTAttribute().getLine(), false, false, false));
             }
 
             // add shadow

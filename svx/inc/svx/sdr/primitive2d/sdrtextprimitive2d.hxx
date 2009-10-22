@@ -40,6 +40,7 @@
 #include <tools/color.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <tools/weakbase.hxx>
+#include <svx/sdtaitm.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -82,11 +83,6 @@ namespace drawinglayer
             Color                                   maLastTextBackgroundColor;
 
             // bitfield
-            // remember if last decomposition was with or without spell checker. In this special
-            // case the get2DDecomposition implementation has to take care of this aspect. This is
-            // needed since different views do different text decompositons regarding spell checking.
-            unsigned                                mbLastSpellCheck : 1;
-
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
             unsigned                                mbContainsPageField : 1;
             unsigned                                mbContainsPageCountField : 1;
@@ -95,9 +91,6 @@ namespace drawinglayer
         protected:
             // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
             Primitive2DSequence encapsulateWithTextHierarchyBlockPrimitive2D(const Primitive2DSequence& rCandidate) const;
-
-            bool getLastSpellCheck() const { return (bool)mbLastSpellCheck; }
-            void setLastSpellCheck(bool bNew) { mbLastSpellCheck = bNew; }
 
         public:
             SdrTextPrimitive2D(
@@ -217,10 +210,16 @@ namespace drawinglayer
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
             basegfx::B2DHomMatrix                   maTextRangeTransform;
 
+            // text alignments
+            SdrTextHorzAdjust                       maSdrTextHorzAdjust;
+            SdrTextVertAdjust                       maSdrTextVertAdjust;
+
             // bitfield
+            unsigned                                mbFixedCellHeight : 1;
             unsigned                                mbUnlimitedPage : 1;    // force layout with no text break
             unsigned                                mbCellText : 1;         // this is a cell text as block text
             unsigned                                mbWordWrap : 1;         // for CustomShapes text layout
+            unsigned                                mbClipOnBounds : 1;     // for CustomShapes text layout
 
         protected:
             // local decomposition.
@@ -231,15 +230,23 @@ namespace drawinglayer
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
                 const basegfx::B2DHomMatrix& rTextRangeTransform,
+                SdrTextHorzAdjust aSdrTextHorzAdjust,
+                SdrTextVertAdjust aSdrTextVertAdjust,
+                bool bFixedCellHeight,
                 bool bUnlimitedPage,
                 bool bCellText,
-                bool bWordWrap);
+                bool bWordWrap,
+                bool bClipOnBounds);
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
+            SdrTextHorzAdjust getSdrTextHorzAdjust() const { return maSdrTextHorzAdjust; }
+            SdrTextVertAdjust getSdrTextVertAdjust() const { return maSdrTextVertAdjust; }
+            bool isFixedCellHeight() const { return mbFixedCellHeight; }
             bool getUnlimitedPage() const { return mbUnlimitedPage; }
             bool getCellText() const { return mbCellText; }
             bool getWordWrap() const { return mbWordWrap; }
+            bool getClipOnBounds() const { return mbClipOnBounds; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -265,6 +272,9 @@ namespace drawinglayer
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
             basegfx::B2DHomMatrix                   maTextRangeTransform;
 
+            // bitfield
+            unsigned                                mbFixedCellHeight : 1;
+
         protected:
             // local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
@@ -273,10 +283,12 @@ namespace drawinglayer
             SdrStretchTextPrimitive2D(
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
-                const basegfx::B2DHomMatrix& rTextRangeTransform);
+                const basegfx::B2DHomMatrix& rTextRangeTransform,
+                bool bFixedCellHeight);
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
+            bool isFixedCellHeight() const { return mbFixedCellHeight; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

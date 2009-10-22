@@ -185,7 +185,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     // a) no interceptor at all - set this instance as master for given interceptor
     //    and set our slave as it's slave - and put this interceptor to the list.
     //    It's place there doesn matter. Because this list is currently empty.
-    if (m_lInterceptionRegs.size()<1)
+    if (m_lInterceptionRegs.empty())
     {
         xInterceptor->setMasterDispatchProvider(xThis   );
         xInterceptor->setSlaveDispatchProvider (m_xSlave);
@@ -333,7 +333,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     #if OSL_DEBUG_LEVEL > 0
     // SAFE ->
     aReadLock.lock();
-    if (m_lInterceptionRegs.size() > 0)
+    if (!m_lInterceptionRegs.empty() )
         OSL_ENSURE(sal_False, "There are some pending interceptor objects, which seams to be registered during (!) the destruction of a frame.");
     aReadLock.unlock();
     // <- SAFE

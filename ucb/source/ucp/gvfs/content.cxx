@@ -1609,7 +1609,8 @@ extern "C" {
         }
 
         rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-            = new ucbhelper::SimpleAuthenticationRequest (aHostName, eDomain, aDomain,
+            = new ucbhelper::SimpleAuthenticationRequest (GnomeToOUString(in->uri),
+                                                          aHostName, eDomain, aDomain,
                                                           eUserName, aUserName,
                                                           ePassword, aPassword);
 

@@ -369,7 +369,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     try
     {
-        Any a = getByName( rResourceURL );
+        getByName( rResourceURL );
     }
     catch ( NoSuchElementException& )
     {
@@ -761,7 +761,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
                                 nMask |= WINDOWSTATE_MASK_DOCKPOS;
                             }
 
-                            a = makeAny( aPos );
+                            a <<= aPos;
                             bAddToSeq = true;
                         }
                     }
@@ -792,7 +792,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const rt
                                 nMask |= WINDOWSTATE_MASK_DOCKSIZE;
                             }
 
-                            a = makeAny( aSize );
+                            a <<= aSize;
                             bAddToSeq = true;
                         }
                     }
@@ -1312,11 +1312,11 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
     try
     {
         aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
-        aPropValue.Value = makeAny( m_aConfigWindowAccess );
-        aArgs[0] = makeAny( aPropValue );
+        aPropValue.Value <<= m_aConfigWindowAccess;
+        aArgs[0] <<= aPropValue;
         aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lazywrite" ));
-        aPropValue.Value = makeAny( sal_True );
-        aArgs[1] = makeAny( aPropValue );
+        aPropValue.Value <<= sal_True;
+        aArgs[1] <<= aPropValue;
 
         m_xConfigAccess = Reference< XNameAccess >( m_xConfigProvider->createInstanceWithArguments(
                                                         SERVICENAME_CFGUPDATEACCESS, aArgs ),
@@ -1383,8 +1383,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
         aModuleIdentifier = aElementNames[i];
-        Any a = xNameAccess->getByName( aModuleIdentifier );
-        if ( a >>= aSeq )
+        if ( xNameAccess->getByName( aModuleIdentifier ) >>= aSeq )
         {
             ::rtl::OUString aWindowStateFileStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
@@ -1439,7 +1438,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 ConfigurationAccess_WindowState* pModuleWindowState = new ConfigurationAccess_WindowState( aWindowStateConfigFile, m_xServiceManager );
                 xResourceURLWindowState = Reference< XNameAccess >( static_cast< cppu::OWeakObject* >( pModuleWindowState ),UNO_QUERY );
                 pModuleIter->second = xResourceURLWindowState;
-                a = makeAny( xResourceURLWindowState );
+                a <<= xResourceURLWindowState;
             }
 
             return a;

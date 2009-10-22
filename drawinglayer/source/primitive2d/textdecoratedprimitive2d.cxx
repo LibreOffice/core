@@ -276,15 +276,16 @@ namespace drawinglayer
             const FontAttributes& rFontAttributes) const
         {
             // create the SimpleTextPrimitive needed in any case
-            rTarget.push_back(Primitive2DReference(new TextSimplePortionPrimitive2D(
-                rDecTrans.getB2DHomMatrix(),
-                rText,
-                aTextPosition,
-                aTextLength,
-                rDXArray,
-                rFontAttributes,
-                getLocale(),
-                getFontColor())));
+            rTarget.push_back(Primitive2DReference(
+                new TextSimplePortionPrimitive2D(
+                    rDecTrans.getB2DHomMatrix(),
+                    rText,
+                    aTextPosition,
+                    aTextLength,
+                    rDXArray,
+                    rFontAttributes,
+                    getLocale(),
+                    getFontColor())));
 
             // see if something else needs to be done
             const bool bOverlineUsed(FONT_UNDERLINE_NONE != getFontOverline());
@@ -302,7 +303,11 @@ namespace drawinglayer
 
                 // TextLayouterDevice is needed to get metrics for text decorations like
                 // underline/strikeout/emphasis marks from it. For setup, the font size is needed
-                aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY(), getLocale());
+                aTextLayouter.setFontAttributes(
+                    getFontAttributes(),
+                    rDecTrans.getScale().getX(),
+                    rDecTrans.getScale().getY(),
+                    getLocale());
 
                 // get text width
                 double fTextWidth(0.0);
@@ -314,6 +319,14 @@ namespace drawinglayer
                 else
                 {
                     fTextWidth = rDXArray.back() * rDecTrans.getScale().getX();
+                    const double fFontScaleX(rDecTrans.getScale().getX());
+
+                    if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                        && !basegfx::fTools::equalZero(fFontScaleX))
+                    {
+                        // need to take FontScaling out of the DXArray
+                        fTextWidth /= fFontScaleX;
+                    }
                 }
 
                 if(bOverlineUsed)
@@ -340,28 +353,26 @@ namespace drawinglayer
                         const String aSingleCharString(aStrikeoutChar);
                         const double fStrikeCharWidth(aTextLayouter.getTextWidth(aSingleCharString, 0, 1));
                         const double fStrikeCharCount(fabs(fTextWidth/fStrikeCharWidth));
-                        const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.9));
-                        const double fScaleX(rDecTrans.getScale().getX());
-                        const double fStrikeCharWidthUnscaled(basegfx::fTools::equalZero(fScaleX) ? fStrikeCharWidth : fStrikeCharWidth/fScaleX);
-
+                        const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.5));
                         std::vector<double> aDXArray(nStrikeCharCount);
                         String aStrikeoutString;
 
                         for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
                         {
                             aStrikeoutString += aSingleCharString;
-                            aDXArray[a] = (a + 1) * fStrikeCharWidthUnscaled;
+                            aDXArray[a] = (a + 1) * fStrikeCharWidth;
                         }
 
-                        rTarget.push_back(Primitive2DReference(new TextSimplePortionPrimitive2D(
-                            rDecTrans.getB2DHomMatrix(),
-                            aStrikeoutString,
-                            0,
-                            aStrikeoutString.Len(),
-                            aDXArray,
-                            rFontAttributes,
-                            getLocale(),
-                            getFontColor())));
+                        rTarget.push_back(Primitive2DReference(
+                            new TextSimplePortionPrimitive2D(
+                                rDecTrans.getB2DHomMatrix(),
+                                aStrikeoutString,
+                                0,
+                                aStrikeoutString.Len(),
+                                aDXArray,
+                                rFontAttributes,
+                                getLocale(),
+                                getFontColor())));
                     }
                     else
                     {
@@ -480,17 +491,15 @@ namespace drawinglayer
                 xLocalBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
             }
 
-            if(xLocalBreakIterator.is())
+            if(xLocalBreakIterator.is() && getTextLength())
             {
                 // init word iterator, get first word and truncate to possibilities
                 ::com::sun::star::i18n::Boundary aNextWordBoundary(xLocalBreakIterator->getWordBoundary(
                     getText(), getTextPosition(), getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True));
 
-                if(aNextWordBoundary.endPos == getTextPosition() && getTextLength() > 0)
+                if(aNextWordBoundary.endPos == getTextPosition())
                 {
-                    // #i96474#
-                    // a word before was found (this can happen when search starts on a whitespace and a word
-                    // in front of it exists), force to look one position further
+                    // backward hit, force next word
                     aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
                         getText(), getTextPosition() + 1, getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
                 }
@@ -523,7 +532,11 @@ namespace drawinglayer
                     if(bNoDXArray)
                     {
                         // ..but only completely when no DXArray
-                        aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY(),getLocale());
+                        aTextLayouter.setFontAttributes(
+                            getFontAttributes(),
+                            rDecTrans.getScale().getX(),
+                            rDecTrans.getScale().getY(),
+                            getLocale());
                     }
 
                     // do iterate over single words
@@ -563,12 +576,25 @@ namespace drawinglayer
                                 fOffset = getDXArray()[nIndex - 1];
                             }
 
+                            // need offset without FontScale for building the new transformation. The
+                            // new transformation will be multiplied with the current text transformation
+                            // so FontScale would be double
+                            double fOffsetNoScale(fOffset);
+                            const double fFontScaleX(rDecTrans.getScale().getX());
+
+                            if(!basegfx::fTools::equal(fFontScaleX, 1.0)
+                                && !basegfx::fTools::equalZero(fFontScaleX))
+                            {
+                                fOffsetNoScale /= fFontScaleX;
+                            }
+
                             // apply needed offset to transformation
-                            aNewTransform.translate(fOffset, 0.0);
+                            aNewTransform.translate(fOffsetNoScale, 0.0);
 
                             if(!bNoDXArray)
                             {
-                                // DXArray values need to be corrected with the offset, too
+                                // DXArray values need to be corrected with the offset, too. Here,
+                                // take the scaled offset since the DXArray is scaled
                                 const sal_uInt32 nArraySize(aNewDXArray.size());
 
                                 for(sal_uInt32 a(0); a < nArraySize; a++)
@@ -588,12 +614,30 @@ namespace drawinglayer
                         impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
                             nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttributes);
 
-                        // prepare next word and truncate to possibilities
-                        aNextWordBoundary = xLocalBreakIterator->nextWord(
-                            getText(), aNextWordBoundary.endPos, getLocale(),
-                            ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+                        if(aNextWordBoundary.endPos >= getTextPosition() + getTextLength())
+                        {
+                            // end reached
+                            aNextWordBoundary.startPos = aNextWordBoundary.endPos;
+                        }
+                        else
+                        {
+                            // get new word portion
+                            const sal_Int32 nLastEndPos(aNextWordBoundary.endPos);
 
-                        impCorrectTextBoundary(aNextWordBoundary);
+                            aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
+                                getText(), aNextWordBoundary.endPos, getLocale(),
+                                ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
+
+                            if(nLastEndPos == aNextWordBoundary.endPos)
+                            {
+                                // backward hit, force next word
+                                aNextWordBoundary = xLocalBreakIterator->getWordBoundary(
+                                    getText(), nLastEndPos + 1, getLocale(),
+                                    ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
+                            }
+
+                            impCorrectTextBoundary(aNextWordBoundary);
+                        }
                     }
                 }
             }

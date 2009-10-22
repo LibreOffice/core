@@ -293,6 +293,10 @@ namespace sdr
                         pSdrText,
                         *pOPO,
                         aTextRangeTransform,
+                        SDRTEXTHORZADJUST_LEFT,
+                        SDRTEXTVERTADJUST_TOP,
+                        false,
+                        false,
                         false,
                         false,
                         false);

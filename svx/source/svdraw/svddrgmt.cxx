@@ -1168,11 +1168,20 @@ void SdrDragObjOwn::createSdrDragEntries()
 
 void SdrDragObjOwn::TakeSdrDragComment(XubString& rStr) const
 {
-    const SdrObject* pObj = GetDragObj();
-
-    if(pObj)
+    // #i103058# get info string from the clone preferred, the original will
+    // not be changed. For security, use original as fallback
+    if(mpClone)
     {
-        rStr = pObj->getSpecialDragComment(DragStat());
+        rStr = mpClone->getSpecialDragComment(DragStat());
+    }
+    else
+    {
+        const SdrObject* pObj = GetDragObj();
+
+        if(pObj)
+        {
+            rStr = pObj->getSpecialDragComment(DragStat());
+        }
     }
 }
 

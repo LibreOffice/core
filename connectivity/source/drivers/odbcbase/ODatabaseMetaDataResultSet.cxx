@@ -112,7 +112,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
         m_pConnection->freeStatementHandle(m_aStatementHandle);
 
     m_aStatement    = NULL;
-    m_xMetaData     = NULL;
+m_xMetaData.clear();
     m_pConnection->release();
 }
 // -------------------------------------------------------------------------
@@ -434,7 +434,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     columnIndex = mapColumn(columnIndex);
     ::rtl::OUString aVal;
     if(columnIndex <= m_nDriverColumnCount)
-        aVal = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+        aVal = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,(SWORD)SQL_C_WCHAR,m_bWasNull,**this,m_nTextEncoding);
     else
         m_bWasNull = sal_True;
 
@@ -880,7 +880,8 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
     else
         pSchemaPat = NULL;
 
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1179,8 +1180,10 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
     m_bFreeHandle = sal_True;
 
     ::rtl::OString aPKQ,aPKO,aPKN, aFKQ, aFKO, aFKN;
-    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
-    aFKQ = ::rtl::OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
+    if ( catalog.hasValue() )
+        aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    if ( catalog2.hasValue() )
+        aFKQ = ::rtl::OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = schema && schema->getLength() ? ::rtl::OUStringToOString(*schema,m_nTextEncoding).getStr() : NULL,

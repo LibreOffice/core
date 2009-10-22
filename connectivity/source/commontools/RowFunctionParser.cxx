@@ -40,7 +40,7 @@
 #include <typeinfo>
 #define BOOST_SPIRIT_DEBUG
 #endif
-#include <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 #include "RowFunctionParser.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/fract.hxx>

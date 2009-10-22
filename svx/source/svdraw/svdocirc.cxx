@@ -575,23 +575,56 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 
 String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
 
-    if(bWink)
+    if(bCreateComment)
     {
         XubString aStr;
-        const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartWink : nEndWink);
+        ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
+        const sal_uInt32 nPntAnz(rDrag.GetPointAnz());
 
-        ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
-        aStr.AppendAscii(" (");
-        aStr += GetWinkStr(nWink,FALSE);
-        aStr += sal_Unicode(')');
+        if(OBJ_CIRC != meCircleKind && nPntAnz > 2)
+        {
+            ImpCircUser* pU = (ImpCircUser*)rDrag.GetUser();
+            sal_Int32 nWink;
+
+            aStr.AppendAscii(" (");
+
+            if(3 == nPntAnz)
+            {
+                nWink = pU->nStart;
+            }
+            else
+            {
+                nWink = pU->nEnd;
+            }
+
+            aStr += GetWinkStr(nWink,FALSE);
+            aStr += sal_Unicode(')');
+        }
 
         return aStr;
     }
     else
     {
-        return SdrTextObj::getSpecialDragComment(rDrag);
+        const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+
+        if(bWink)
+        {
+            XubString aStr;
+            const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartWink : nEndWink);
+
+            ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
+            aStr.AppendAscii(" (");
+            aStr += GetWinkStr(nWink,FALSE);
+            aStr += sal_Unicode(')');
+
+            return aStr;
+        }
+        else
+        {
+            return SdrTextObj::getSpecialDragComment(rDrag);
+        }
     }
 }
 
@@ -684,6 +717,14 @@ FASTBOOL SdrCircObj::MovCreate(SdrDragStat& rStat)
     SetBoundRectDirty();
     bSnapRectDirty=TRUE;
     SetXPolyDirty();
+
+    // #i103058# push current angle settings to ItemSet to
+    // allow FullDrag visualisation
+    if(rStat.GetPointAnz() >= 4)
+    {
+        ImpSetCircInfoToAttr();
+    }
+
     return TRUE;
 }
 

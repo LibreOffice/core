@@ -40,10 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(GUIBASE)"=="aqua"
-CFLAGS+=-x objective-c++
-.ENDIF
-
 .IF "$(ENABLE_GNOMEVFS)"=="TRUE"
 CFLAGS+=-DGNOME_VFS_ENABLED
 .ENDIF

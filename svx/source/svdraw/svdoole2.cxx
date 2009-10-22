@@ -1867,6 +1867,14 @@ void SdrOle2Obj::NbcSetSnapRect(const Rectangle& rRect)
     SdrRectObj::NbcSetSnapRect(rRect);
     if( pModel && !pModel->isLocked() )
         ImpSetVisAreaSize();
+
+    if ( xObjRef.is() && IsChart() )
+    {
+        //#i103460# charts do not necessaryly have an own size within ODF files,
+        //for this case they need to use the size settings from the surrounding frame,
+        //which is made available with this method as there is no other way
+        xObjRef.SetDefaultSizeForChart( Size( rRect.GetWidth(), rRect.GetHeight() ) );
+    }
 }
 
 // -----------------------------------------------------------------------------

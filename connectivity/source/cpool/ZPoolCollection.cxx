@@ -507,7 +507,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (Run
             {
                 if ( xProp.is() )
                     xProp->removePropertyChangeListener(getEnablePoolingNodeName(),this);
-                m_xConfigNode = NULL;
+            m_xConfigNode.clear();
             }
             else if ( xProp.is() )
                 xProp->removePropertyChangeListener(getEnableNodeName(),this);
@@ -577,7 +577,7 @@ void OPoolCollection::clearDesktop()
     clearConnectionPools(sal_True);
     if ( m_xDesktop.is() )
         m_xDesktop->removeTerminateListener(this);
-    m_xDesktop = NULL;
+m_xDesktop.clear();
 }
 // -----------------------------------------------------------------------------
 

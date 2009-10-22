@@ -38,9 +38,10 @@
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "fmobj.hxx"
+#include "formcontrolfactory.hxx"
 #include "svditer.hxx"
 #include "fmresids.hrc"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -551,18 +552,12 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
 
             Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
-            ::rtl::OUString aName;
 
-            if ((CommandType::TABLE == nCommandType) || (CommandType::QUERY == nCommandType))
-            {
-                // Namen der ::com::sun::star::form ueber den Titel der CursorSource setzen
-                aName = getUniqueName(rCursorSource, xNamedSet);
-            }
-            else
-                // ansonsten StandardformName verwenden
-                aName = getUniqueName(::rtl::OUString(String(SVX_RES(RID_STR_STDFORMNAME))), xNamedSet);
+            const bool bTableOrQuery = ( CommandType::TABLE == nCommandType ) || ( CommandType::QUERY == nCommandType );
+            ::rtl::OUString sName = FormControlFactory::getUniqueName( xNamedSet,
+                bTableOrQuery ? rCursorSource : ::rtl::OUString( String( SVX_RES( RID_STR_STDFORMNAME ) ) ) );
 
-            xFormProps->setPropertyValue(FM_PROP_NAME, makeAny(aName));
+            xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
             if( bUndo )
             {
@@ -574,7 +569,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
                                                          xContainer->getCount()));
             }
 
-            getForms()->insertByName(aName, makeAny(xForm));
+            getForms()->insertByName( sName, makeAny( xForm ) );
 
             if( bUndo )
                 pModel->EndUndo();
@@ -672,7 +667,6 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 //------------------------------------------------------------------------------
 ::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::setUniqueName" );
 #if OSL_DEBUG_LEVEL > 0
     try
     {
@@ -696,9 +690,10 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             // setzen eines default Namens ueber die ClassId
             sal_Int16 nClassId( FormComponentType::CONTROL );
             xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
-            Reference< XServiceInfo > xSI( xSet, UNO_QUERY );
 
-            ::rtl::OUString sDefaultName = getDefaultName( nClassId, xControls, xSI );
+            ::rtl::OUString sDefaultName = FormControlFactory::getDefaultUniqueName_ByComponentType(
+                Reference< XNameAccess >( xControls, UNO_QUERY ), xSet );
+
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
             if (!sName.getLength() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
@@ -708,78 +703,6 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             sName = sDefaultName;
         }
     }
-    return sName;
-}
-
-
-UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultName" );
-    sal_uInt16 nResId;
-
-    switch (_nClassId)
-    {
-        case FormComponentType::COMMANDBUTTON:  nResId = RID_STR_BUTTON_CLASSNAME;      break;
-        case FormComponentType::RADIOBUTTON:    nResId = RID_STR_RADIOBUTTON_CLASSNAME; break;
-        case FormComponentType::CHECKBOX:       nResId = RID_STR_CHECKBOX_CLASSNAME;    break;
-        case FormComponentType::LISTBOX:        nResId = RID_STR_LISTBOX_CLASSNAME;     break;
-        case FormComponentType::COMBOBOX:       nResId = RID_STR_COMBOBOX_CLASSNAME;    break;
-        case FormComponentType::GROUPBOX:       nResId = RID_STR_GROUPBOX_CLASSNAME;    break;
-        case FormComponentType::IMAGEBUTTON:    nResId = RID_STR_IMAGE_CLASSNAME;       break;
-        case FormComponentType::FIXEDTEXT:      nResId = RID_STR_FIXEDTEXT_CLASSNAME;   break;
-        case FormComponentType::GRIDCONTROL:    nResId = RID_STR_GRID_CLASSNAME;        break;
-        case FormComponentType::FILECONTROL:    nResId = RID_STR_FILECONTROL_CLASSNAME; break;
-        case FormComponentType::DATEFIELD:      nResId = RID_STR_DATEFIELD_CLASSNAME;   break;
-        case FormComponentType::TIMEFIELD:      nResId = RID_STR_TIMEFIELD_CLASSNAME;   break;
-        case FormComponentType::NUMERICFIELD:   nResId = RID_STR_NUMERICFIELD_CLASSNAME;    break;
-        case FormComponentType::CURRENCYFIELD:  nResId = RID_STR_CURRENCYFIELD_CLASSNAME;   break;
-        case FormComponentType::PATTERNFIELD:   nResId = RID_STR_PATTERNFIELD_CLASSNAME;    break;
-        case FormComponentType::IMAGECONTROL:   nResId = RID_STR_IMAGECONTROL_CLASSNAME;    break;
-        case FormComponentType::HIDDENCONTROL:  nResId = RID_STR_HIDDEN_CLASSNAME;      break;
-        case FormComponentType::SCROLLBAR:      nResId = RID_STR_CLASSNAME_SCROLLBAR;   break;
-        case FormComponentType::SPINBUTTON:     nResId = RID_STR_CLASSNAME_SPINBUTTON;  break;
-        case FormComponentType::NAVIGATIONBAR:  nResId = RID_STR_NAVBAR_CLASSNAME;      break;
-
-        case FormComponentType::TEXTFIELD:
-            nResId = RID_STR_EDIT_CLASSNAME;
-            if ( _rxObject.is() && _rxObject->supportsService( FM_SUN_COMPONENT_FORMATTEDFIELD ) )
-                nResId = RID_STR_FORMATTED_CLASSNAME;
-            break;
-
-        default:
-            nResId = RID_STR_CONTROL_CLASSNAME;     break;
-    }
-
-    return SVX_RES(nResId);
-}
-
-//------------------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::getDefaultName(
-    sal_Int16 _nClassId, const Reference< XForm >& _rxControls, const Reference< XServiceInfo >& _rxObject ) const
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultName" );
-    ::rtl::OUString aClassName=getDefaultName( _nClassId, _rxObject );
-
-    Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( _rxControls, UNO_QUERY );
-    return getUniqueName(aClassName, xNamedSet);
-}
-
-//------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::getUniqueName(const ::rtl::OUString& rName, const Reference< ::com::sun::star::container::XNameAccess > & xNamedSet) const
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getUniqueName" );
-    Reference< ::com::sun::star::container::XIndexAccess >  xIndexSet(xNamedSet, UNO_QUERY);
-    ::rtl::OUString sName( rName );
-
-    if ( !xIndexSet.is() )
-        return sName;
-
-    sal_Int32 n = 0;
-    ::rtl::OUString sClassName = rName;
-
-    while ( xNamedSet->hasByName( sName ) )
-        sName = sClassName + ::rtl::OUString::valueOf(++n);
-
     return sName;
 }
 

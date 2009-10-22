@@ -173,7 +173,8 @@ namespace drawinglayer
             const attribute::SdrTextAttribute& rText,
             const attribute::SdrLineAttribute* pStroke,
             bool bCellText,
-            bool bWordWrap)
+            bool bWordWrap,
+            bool bClipOnBounds)
         {
             basegfx::B2DHomMatrix aAnchorTransform(rObjectTransform);
             SdrTextPrimitive2D* pNew = 0;
@@ -279,7 +280,8 @@ namespace drawinglayer
                     pNew = new SdrStretchTextPrimitive2D(
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),
-                        aAnchorTransform);
+                        aAnchorTransform,
+                        rText.isFixedCellHeight());
                 }
                 else // text in range
                 {
@@ -288,9 +290,13 @@ namespace drawinglayer
                         &rText.getSdrText(),
                         rText.getOutlinerParaObject(),
                         aAnchorTransform,
+                        rText.getSdrTextHorzAdjust(),
+                        rText.getSdrTextVertAdjust(),
+                        rText.isFixedCellHeight(),
                         rText.isScroll(),
                         bCellText,
-                        bWordWrap);
+                        bWordWrap,
+                        bClipOnBounds);
                 }
             }
 

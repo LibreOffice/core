@@ -1062,7 +1062,7 @@ OUString SAL_CALL SvxUnoTextField::getImplementationName() throw(uno::RuntimeExc
     return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextField"));
 }
 
-static const sal_Char* pServiceNames[] =
+static const sal_Char* pOldServiceNames[] =
 {
     "com.sun.star.text.TextField.DateTime",
     "com.sun.star.text.TextField.URL",
@@ -1081,14 +1081,34 @@ static const sal_Char* pServiceNames[] =
     "com.sun.star.presentation.TextField.DateTime"
 };
 
+static const sal_Char* pNewServiceNames[] =
+{
+    "com.sun.star.text.textfield.DateTime",
+    "com.sun.star.text.textfield.URL",
+    "com.sun.star.text.textfield.PageNumber",
+    "com.sun.star.text.textfield.PageCount",
+    "com.sun.star.text.textfield.DateTime",
+    "com.sun.star.text.textfield.docinfo.Title",    // SvxFileField is used for title
+    "com.sun.star.text.textfield.SheetName",
+    "com.sun.star.text.textfield.DateTime",
+    "com.sun.star.text.textfield.FileName",
+    "com.sun.star.text.textfield.Author",
+    "com.sun.star.text.textfield.Measure",
+    "com.sun.star.text.textfield.DateTime",
+    "com.sun.star.presentation.textfield.Header",
+    "com.sun.star.presentation.textfield.Footer",
+    "com.sun.star.presentation.textfield.DateTime"
+};
+
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq( 3 );
+    uno::Sequence< OUString > aSeq( 4 );
     OUString* pServices = aSeq.getArray();
-    pServices[0] = OUString::createFromAscii( pServiceNames[mnServiceId] );
-    pServices[1] = OUString::createFromAscii( "com.sun.star.text.TextContent" ),
-    pServices[2] = OUString::createFromAscii( "com.sun.star.text.TextField" );
+    pServices[0] = OUString::createFromAscii( pNewServiceNames[mnServiceId] );
+    pServices[1] = OUString::createFromAscii( pOldServiceNames[mnServiceId] );
+    pServices[2] = OUString::createFromAscii( "com.sun.star.text.TextContent" ),
+    pServices[3] = OUString::createFromAscii( "com.sun.star.text.TextField" );
 
     return aSeq;
 }

@@ -80,17 +80,6 @@ static const ::rtl::OUString PROP_CHECKEXITCODE = ::rtl::OUString::createFromAsc
 
 //-----------------------------------------------
 
-DEFINE_XINTERFACE_3(ShellJob                                   ,
-                    OWeakObject                                ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo  ),
-                    DIRECT_INTERFACE(css::task::XJob          ))
-
-DEFINE_XTYPEPROVIDER_3(ShellJob                 ,
-                       css::lang::XTypeProvider ,
-                       css::lang::XServiceInfo  ,
-                       css::task::XJob          )
-
 DEFINE_XSERVICEINFO_MULTISERVICE(ShellJob                   ,
                                  ::cppu::OWeakObject        ,
                                  SERVICENAME_JOB            ,

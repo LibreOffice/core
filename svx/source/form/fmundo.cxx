@@ -55,7 +55,7 @@
 #include <rtl/logfile.hxx>
 #include <svx/dialmgr.hxx>
 #include "fmpgeimp.hxx"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include <svtools/macitem.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>

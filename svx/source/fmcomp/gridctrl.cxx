@@ -36,7 +36,7 @@
 #endif
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "fmtools.hxx"
 #include <svtools/stringtransfer.hxx>
 
@@ -698,25 +698,6 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
             else
                 pWnd->SetText(aText);
 
-            {
-                vos::OGuard aPaintSafety(Application::GetSolarMutex());
-                // we want to update only the window, not our parent, so lock the latter
-                // (In fact, if we are in DbGridControl::RecalcRows, perhaps as a result of an setDataSource or
-                // a VisibleRowsChanged, the grid will be frozen and a SeekRow triggered implicitly by the update
-                // of pWnd will fail.)
-                // (the SetUpdateMode call goes to the data window : it's sufficient to prevent SeekRow's, but it
-                // avoids the Invalidate which would be triggered by BrowseBox::SetUpdateMode (which lead to massive
-                // flicker when scrolling))
-                // FS - 06.10.99
-
-                // don't use SetUpdateMode in those situations as all necessary paints get lost DG
-                // so update only if necessary (DG)
-                if (pParent->IsPaintEnabled())
-                {
-                    pWnd->Update();
-                    pWnd->Flush();
-                }
-            }
             pParent->SetRealRowCount(aText);
         }   break;
     }
@@ -782,12 +763,18 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
             Fraction aZoom = GetZoom();
 
             // not all of these controls need to know the new zoom, but to be sure ...
-            Font aFont( IsControlFont() ? GetControlFont() : GetPointFont());
+            Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
+            if ( IsControlFont() )
+                aFont.Merge( GetControlFont() );
+
             for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
             {
                 pWindows[i]->SetZoom(aZoom);
                 pWindows[i]->SetZoomedPointFont(aFont);
             }
+
+            SetZoomedPointFont( aFont );
+
             // rearrange the controls
             m_nDefaultWidth = ArrangeControls();
         }
@@ -1094,18 +1081,13 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         if ( m_bNavigationBar )
         {
-            m_aBar.SetZoom( GetZoom() );
-
             Font aFont = m_aBar.GetSettings().GetStyleSettings().GetFieldFont();
             if ( IsControlFont() )
-            {
                 m_aBar.SetControlFont( GetControlFont() );
-                aFont.Merge( GetControlFont() );
-            }
             else
                 m_aBar.SetControlFont();
 
-            m_aBar.SetZoomedPointFont( aFont );
+            m_aBar.SetZoom( GetZoom() );
         }
     }
 

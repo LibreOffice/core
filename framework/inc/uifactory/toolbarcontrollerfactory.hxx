@@ -53,27 +53,23 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
 
-class ConfigurationAccess_ToolbarControllerFactory;
-class ToolbarControllerFactory :  public com::sun::star::lang::XTypeProvider                        ,
-                                  public com::sun::star::lang::XServiceInfo                         ,
-                                  public com::sun::star::lang::XMultiComponentFactory               ,
-                                  public ::com::sun::star::frame::XUIControllerRegistration   ,
-                                  private ThreadHelpBase                                            ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                  public ::cppu::OWeakObject
+class ConfigurationAccess_ControllerFactory;
+class ToolbarControllerFactory :  protected ThreadHelpBase                                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                  public ::cppu::WeakImplHelper3<   com::sun::star::lang::XServiceInfo,
+                                                                    com::sun::star::lang::XMultiComponentFactory,
+                                                                    com::sun::star::frame::XUIControllerRegistration>
 {
     public:
         ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~ToolbarControllerFactory();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XMultiComponentFactory
@@ -86,10 +82,11 @@ class ToolbarControllerFactory :  public com::sun::star::lang::XTypeProvider    
         virtual void SAL_CALL registerController( const ::rtl::OUString& aCommandURL, const rtl::OUString& aModuleName, const ::rtl::OUString& aControllerImplementationName ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL deregisterController( const ::rtl::OUString& aCommandURL, const rtl::OUString& aModuleName ) throw (::com::sun::star::uno::RuntimeException);
 
-    private:
+    protected:
+        ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool  );
         sal_Bool                                                                         m_bConfigRead;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-        ConfigurationAccess_ToolbarControllerFactory*                                    m_pConfigAccess;
+        ConfigurationAccess_ControllerFactory*                                           m_pConfigAccess;
 };
 
 } // namespace framework
