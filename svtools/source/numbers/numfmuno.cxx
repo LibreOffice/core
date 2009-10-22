@@ -774,7 +774,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         else if (aString.EqualsAscii( PROPERTYNAME_LOCALE ))
         {
             lang::Locale aLocale( MsLangId::convertLanguageToLocale(
-                        pFormat->GetLanguage()));
+                            pFormat->GetLanguage()));
             aRet <<= aLocale;
         }
         else if (aString.EqualsAscii( PROPERTYNAME_TYPE ))

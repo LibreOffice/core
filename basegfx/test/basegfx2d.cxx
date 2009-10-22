@@ -43,6 +43,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2dmultirange.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/color/bcolor.hxx>
+#include <basegfx/color/bcolortools.hxx>
 
 #include <basegfx/tools/debugplotter.hxx>
 
@@ -1443,6 +1445,178 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dvector
 
+class bcolor : public CppUnit::TestFixture
+{
+    BColor maWhite;
+    BColor maBlack;
+    BColor maRed;
+    BColor maGreen;
+    BColor maBlue;
+    BColor maYellow;
+    BColor maMagenta;
+    BColor maCyan;
+
+public:
+    bcolor() :
+        maWhite(1,1,1),
+        maBlack(0,0,0),
+        maRed(1,0,0),
+        maGreen(0,1,0),
+        maBlue(0,0,1),
+        maYellow(1,1,0),
+        maMagenta(1,0,1),
+        maCyan(0,1,1)
+    {}
+
+
+    // initialise your test code values here.
+    void setUp()
+    {
+    }
+
+    void tearDown()
+    {
+    }
+
+    // insert your test code here.
+    void hslTest()
+    {
+        CPPUNIT_ASSERT_MESSAGE("white",
+                               tools::rgb2hsl(maWhite) == BColor(0,0,1));
+        CPPUNIT_ASSERT_MESSAGE("black",
+                               tools::rgb2hsl(maBlack) == BColor(0,0,0));
+        CPPUNIT_ASSERT_MESSAGE("red",
+                               tools::rgb2hsl(maRed) == BColor(0,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("green",
+                               tools::rgb2hsl(maGreen) == BColor(120,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("blue",
+                               tools::rgb2hsl(maBlue) == BColor(240,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("yellow",
+                               tools::rgb2hsl(maYellow) == BColor(60,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("magenta",
+                               tools::rgb2hsl(maMagenta) == BColor(300,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("cyan",
+                               tools::rgb2hsl(maCyan) == BColor(180,1,0.5));
+
+        CPPUNIT_ASSERT_MESSAGE("roundtrip white",
+                               tools::hsl2rgb(tools::rgb2hsl(maWhite)) == maWhite);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip black",
+                               tools::hsl2rgb(tools::rgb2hsl(maBlack)) == maBlack);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip red",
+                               tools::hsl2rgb(tools::rgb2hsl(maRed)) == maRed);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip green",
+                               tools::hsl2rgb(tools::rgb2hsl(maGreen)) == maGreen);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip blue",
+                               tools::hsl2rgb(tools::rgb2hsl(maBlue)) == maBlue);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip yellow",
+                               tools::hsl2rgb(tools::rgb2hsl(maYellow)) == maYellow);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip magenta",
+                               tools::hsl2rgb(tools::rgb2hsl(maMagenta)) == maMagenta);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip cyan",
+                               tools::hsl2rgb(tools::rgb2hsl(maCyan)) == maCyan);
+
+        CPPUNIT_ASSERT_MESSAGE("grey10",
+                               tools::rgb2hsl(maWhite*.1) == BColor(0,0,.1));
+        CPPUNIT_ASSERT_MESSAGE("grey90",
+                               tools::rgb2hsl(maWhite*.9) == BColor(0,0,.9));
+        CPPUNIT_ASSERT_MESSAGE("red/2",
+                               tools::rgb2hsl(maRed*.5) == BColor(0,1,0.25));
+        CPPUNIT_ASSERT_MESSAGE("green/2",
+                               tools::rgb2hsl(maGreen*.5) == BColor(120,1,0.25));
+        CPPUNIT_ASSERT_MESSAGE("blue/2",
+                               tools::rgb2hsl(maBlue*.5) == BColor(240,1,0.25));
+        CPPUNIT_ASSERT_MESSAGE("yellow/2",
+                               tools::rgb2hsl(maYellow*.5) == BColor(60,1,0.25));
+        CPPUNIT_ASSERT_MESSAGE("magenta/2",
+                               tools::rgb2hsl(maMagenta*.5) == BColor(300,1,0.25));
+        CPPUNIT_ASSERT_MESSAGE("cyan/2",
+                               tools::rgb2hsl(maCyan*.5) == BColor(180,1,0.25));
+
+        CPPUNIT_ASSERT_MESSAGE("pastel",
+                               tools::rgb2hsl(BColor(.75,.25,.25)) == BColor(0,.5,.5));
+    }
+
+    // insert your test code here.
+    void hsvTest()
+    {
+        CPPUNIT_ASSERT_MESSAGE("white",
+                               tools::rgb2hsv(maWhite) == BColor(0,0,1));
+        CPPUNIT_ASSERT_MESSAGE("black",
+                               tools::rgb2hsv(maBlack) == BColor(0,0,0));
+        CPPUNIT_ASSERT_MESSAGE("red",
+                               tools::rgb2hsv(maRed) == BColor(0,1,1));
+        CPPUNIT_ASSERT_MESSAGE("green",
+                               tools::rgb2hsv(maGreen) == BColor(120,1,1));
+        CPPUNIT_ASSERT_MESSAGE("blue",
+                               tools::rgb2hsv(maBlue) == BColor(240,1,1));
+        CPPUNIT_ASSERT_MESSAGE("yellow",
+                               tools::rgb2hsv(maYellow) == BColor(60,1,1));
+        CPPUNIT_ASSERT_MESSAGE("magenta",
+                               tools::rgb2hsv(maMagenta) == BColor(300,1,1));
+        CPPUNIT_ASSERT_MESSAGE("cyan",
+                               tools::rgb2hsv(maCyan) == BColor(180,1,1));
+
+        CPPUNIT_ASSERT_MESSAGE("roundtrip white",
+                               tools::hsv2rgb(tools::rgb2hsv(maWhite)) == maWhite);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip black",
+                               tools::hsv2rgb(tools::rgb2hsv(maBlack)) == maBlack);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip red",
+                               tools::hsv2rgb(tools::rgb2hsv(maRed)) == maRed);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip green",
+                               tools::hsv2rgb(tools::rgb2hsv(maGreen)) == maGreen);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip blue",
+                               tools::hsv2rgb(tools::rgb2hsv(maBlue)) == maBlue);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip yellow",
+                               tools::hsv2rgb(tools::rgb2hsv(maYellow)) == maYellow);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip magenta",
+                               tools::hsv2rgb(tools::rgb2hsv(maMagenta)) == maMagenta);
+        CPPUNIT_ASSERT_MESSAGE("roundtrip cyan",
+                               tools::hsv2rgb(tools::rgb2hsv(maCyan)) == maCyan);
+
+        CPPUNIT_ASSERT_MESSAGE("grey10",
+                               tools::rgb2hsv(maWhite*.1) == BColor(0,0,.1));
+        CPPUNIT_ASSERT_MESSAGE("grey90",
+                               tools::rgb2hsv(maWhite*.9) == BColor(0,0,.9));
+        CPPUNIT_ASSERT_MESSAGE("red/2",
+                               tools::rgb2hsv(maRed*.5) == BColor(0,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("green/2",
+                               tools::rgb2hsv(maGreen*.5) == BColor(120,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("blue/2",
+                               tools::rgb2hsv(maBlue*.5) == BColor(240,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("yellow/2",
+                               tools::rgb2hsv(maYellow*.5) == BColor(60,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("magenta/2",
+                               tools::rgb2hsv(maMagenta*.5) == BColor(300,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("cyan/2",
+                               tools::rgb2hsv(maCyan*.5) == BColor(180,1,0.5));
+
+        CPPUNIT_ASSERT_MESSAGE("pastel",
+                               tools::rgb2hsv(BColor(.5,.25,.25)) == BColor(0,.5,.5));
+    }
+
+    void ciexyzTest()
+    {
+        tools::rgb2ciexyz(maWhite);
+        tools::rgb2ciexyz(maBlack);
+        tools::rgb2ciexyz(maRed);
+        tools::rgb2ciexyz(maGreen);
+        tools::rgb2ciexyz(maBlue);
+        tools::rgb2ciexyz(maYellow);
+        tools::rgb2ciexyz(maMagenta);
+        tools::rgb2ciexyz(maCyan);
+    }
+
+    // Change the following lines only, if you add, remove or rename
+    // member functions of the current class,
+    // because these macros are need by auto register mechanism.
+
+    CPPUNIT_TEST_SUITE(bcolor);
+    CPPUNIT_TEST(hslTest);
+    CPPUNIT_TEST(hsvTest);
+    CPPUNIT_TEST(ciexyzTest);
+    CPPUNIT_TEST_SUITE_END();
+}; // class b2dvector
+
 // -----------------------------------------------------------------------------
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dmultirange, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dsvgdimpex, "basegfx2d");
@@ -1458,6 +1632,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dquadraticbezier, "basegfx2d"
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2drange, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dtuple, "basegfx2d");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::b2dvector, "basegfx2d");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(basegfx2d::bcolor, "basegfx2d");
 } // namespace basegfx2d
 
 

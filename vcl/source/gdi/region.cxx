@@ -154,7 +154,8 @@ void ImplAddMissingBands (
     // We still have to cover two cases:
     // 1. The region does not yet contain any bands.
     // 2. The intervall nTop->nBottom extends past the bottom most band.
-    if (nCurrentTop < nBottom && (pBand==NULL || nBottom>pBand->mnYBottom))
+    if (nCurrentTop <= nBottom
+        && (pBand==NULL || nBottom>pBand->mnYBottom))
     {
         // When there is no previous band then the new one will be the
         // first.  Otherwise the new band is inserted behind the last band.
@@ -233,8 +234,9 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
             ImplRegionBand* pTopBand = pBand;
             // If necessary split the band at nTop so that nTop is contained
             // in the lower band.
-            if (   // Prevent the current band from becoming 0 pixel high
-                pBand->mnYTop<nTop
+            if (pBand!=NULL
+                   // Prevent the current band from becoming 0 pixel high
+                && pBand->mnYTop<nTop
                    // this allows the lowest pixel of the band to be split off
                 && pBand->mnYBottom>=nTop
                    // do not split a band that is just one pixel high
@@ -249,8 +251,9 @@ ImplRegion* ImplRectilinearPolygonToBands (const PolyPolygon& rPolyPoly)
                 pBand = pBand->mpNextBand;
             // The lowest band may have to be split at nBottom so that
             // nBottom itself remains in the upper band.
-            if (   // allow the current band becoming 1 pixel high
-                pBand->mnYTop<=nBottom
+            if (pBand!=NULL
+                   // allow the current band becoming 1 pixel high
+                && pBand->mnYTop<=nBottom
                    // prevent splitting off a band that is 0 pixel high
                 && pBand->mnYBottom>nBottom
                    // do not split a band that is just one pixel high

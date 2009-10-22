@@ -491,6 +491,8 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
         if ( j < NF_MAX_DEFAULT_COLORS )
             i = j;
     }
+
+    Color* pResult = NULL;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
         const String& rColorWord = pKeyword[NF_KEY_COLOR];
@@ -516,15 +518,9 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
             {
                 long nIndex = sString.ToInt32();
                 if (nIndex > 0 && nIndex <= 64)
-                    return pFormatter->GetUserDefColor((USHORT)nIndex-1);
-                else
-                    return NULL;
+                    pResult = pFormatter->GetUserDefColor((USHORT)nIndex-1);
             }
-            else
-                return NULL;
         }
-        else
-            return NULL;
     }
     else
     {
@@ -538,8 +534,9 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
         else
             sStr = pKeyword[NF_KEY_FIRSTCOLOR+i];
 
-        return &(StandardColor[i]);
+        pResult = &(StandardColor[i]);
     }
+    return pResult;
 }
 
 

@@ -1176,11 +1176,11 @@ typedef std::multiset< int, TrapezoidYCompare > VerticalTrapSet;
 } // end of anonymous namespace
 
 // draw a poly-polygon
-bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)
+bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency)
 {
     // nothing to do for empty polypolygons
-    const int nPolygonCount = rPolyPoly.count();
-    if( nPolygonCount <= 0 )
+    const int nOrigPolyCount = rOrigPolyPoly.count();
+    if( nOrigPolyCount <= 0 )
         return TRUE;
 
     // nothing to do if everything is transparent
@@ -1209,28 +1209,22 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
+    const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rOrigPolyPoly );
     const bool bNeedViewClip = !aPolyRange.isInside( aViewRange );
     if( !aPolyRange.overlaps( aViewRange ) )
         return true;
 
     // convert the polypolygon to trapezoids
 
-    // first convert the B2DPolyPolygon to HalfTrapezoids
-    // #i100922# try to prevent priority-queue reallocations by reservering enough
+    // prepare the polypolygon for the algorithm below:
+    // - clip it against the view range
+    // - make sure it contains no self-intersections
+    // while we are at it guess the number of involved polygon points
     int nHTQueueReserve = 0;
-    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
+    basegfx::B2DPolyPolygon aGoodPolyPoly;
+    for( int nOrigPolyIdx = 0; nOrigPolyIdx < nOrigPolyCount; ++nOrigPolyIdx )
     {
-        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
-        const int nPointCount = aOuterPolygon.count();
-        nHTQueueReserve += aOuterPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
-    }
-    nHTQueueReserve = ((4*nHTQueueReserve) | 0x1FFF) + 1;
-    HTQueue aHTQueue;
-    aHTQueue.reserve( nHTQueueReserve );
-    for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
-    {
-        const ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
+        const ::basegfx::B2DPolygon aOuterPolygon = rOrigPolyPoly.getB2DPolygon( nOrigPolyIdx );
 
         // render-trapezoids should be inside the view => clip polygon against view range
         basegfx::B2DPolyPolygon aClippedPolygon( aOuterPolygon );
@@ -1238,33 +1232,55 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
         {
             aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
             DBG_ASSERT( aClippedPolygon.count(), "polygon confirmed to overlap with view should not get here" );
-            if( !aClippedPolygon.count() )
-                continue;
         }
+        const int nClippedPolyCount = aClippedPolygon.count();
+        if( !nClippedPolyCount )
+            continue;
+
+        // #i103259# polypoly.solveCrossover() fails to remove self-intersections
+        // but polygon.solveCrossover() works. Use it to build the intersection-free polypolygon
+        // TODO: if the self-intersection prevention is too expensive make the trap-algorithm tolerate intersections
+        for( int nClippedPolyIdx = 0; nClippedPolyIdx < nClippedPolyCount; ++nClippedPolyIdx )
+        {
+            ::basegfx::B2DPolygon aUnsolvedPolygon = aClippedPolygon.getB2DPolygon( nClippedPolyIdx );
+            basegfx::B2DPolyPolygon aSolvedPolyPoly( basegfx::tools::solveCrossovers( aUnsolvedPolygon) );
+            const int nSolvedPolyCount = aSolvedPolyPoly.count();
+            for( int nSolvedPolyIdx = 0; nSolvedPolyIdx < nSolvedPolyCount; ++nSolvedPolyIdx )
+            {
+                // build the intersection-free polypolygon one by one
+                const ::basegfx::B2DPolygon aSolvedPolygon = aSolvedPolyPoly.getB2DPolygon( nSolvedPolyIdx );
+                aGoodPolyPoly.append( aSolvedPolygon );
+                // and while we are at it use the conviently available point count to guess the number of needed half-traps
+                const int nPointCount = aSolvedPolygon.count();
+                nHTQueueReserve += aSolvedPolygon.areControlPointsUsed() ? 8 * nPointCount : nPointCount;
+            }
+        }
+    }
+    // #i100922# try to prevent priority-queue reallocations by reservering enough
+    nHTQueueReserve = ((4*nHTQueueReserve) | 0x1FFF) + 1;
+    HTQueue aHTQueue;
+    aHTQueue.reserve( nHTQueueReserve );
+
+    // first convert the B2DPolyPolygon to HalfTrapezoids
+    const int nGoodPolyCount = aGoodPolyPoly.count();
+    for( int nGoodPolyIdx = 0; nGoodPolyIdx < nGoodPolyCount; ++nGoodPolyIdx )
+    {
+        ::basegfx::B2DPolygon aInnerPolygon = aGoodPolyPoly.getB2DPolygon( nGoodPolyIdx );
 
         // render-trapezoids have linear edges => get rid of bezier segments
-        if( aClippedPolygon.areControlPointsUsed() )
-            aClippedPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aClippedPolygon, 0.125 );
+        if( aInnerPolygon.areControlPointsUsed() )
+            aInnerPolygon = ::basegfx::tools::adaptiveSubdivideByDistance( aInnerPolygon, 0.125 );
 
-        // test and remove self intersections
-        // TODO: make code intersection save, then remove this test
-        basegfx::B2DPolyPolygon aInnerPolyPoly(basegfx::tools::solveCrossovers( aClippedPolygon));
-        const int nInnerPolyCount = aInnerPolyPoly.count();
-        for( int nInnerPolyIdx = 0; nInnerPolyIdx < nInnerPolyCount; ++nInnerPolyIdx )
+        const int nPointCount = aInnerPolygon.count();
+        if( nPointCount >= 3 )
         {
-            ::basegfx::B2DPolygon aInnerPolygon = aInnerPolyPoly.getB2DPolygon( nInnerPolyIdx );
-            const int nPointCount = aInnerPolygon.count();
-            if( !nPointCount )
-                continue;
-
-            aHTQueue.reserve( aHTQueue.size() + 8 * nPointCount );
-
             // convert polygon point pairs to HalfTrapezoids
             // connect the polygon point with the first one if needed
             XPointFixed aOldXPF = { 0, 0 };
             XPointFixed aNewXPF;
             for( int nPointIdx = 0; nPointIdx <= nPointCount; ++nPointIdx, aOldXPF = aNewXPF )
             {
+                // auto-close the polygon if needed
                 const int k = (nPointIdx < nPointCount) ? nPointIdx : 0;
                 const ::basegfx::B2DPoint& aPoint = aInnerPolygon.getB2DPoint( k );
 
@@ -1550,3 +1566,4 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, const :
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
