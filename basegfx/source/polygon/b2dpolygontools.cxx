@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.cxx,v $
- * $Revision: 1.29.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3277,6 +3276,9 @@ namespace basegfx
                 B2DPolygon aRetval;
                 B2DCubicBezier aBezier;
                 aBezier.setStartPoint(rCandidate.getB2DPoint(0));
+
+                // try to avoid costly reallocations
+                aRetval.reserve( nEdgeCount+1);
 
                 // add start point
                 aRetval.append(aBezier.getStartPoint());

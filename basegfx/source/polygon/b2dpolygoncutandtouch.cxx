@@ -711,6 +711,7 @@ namespace basegfx
 
             // create subdivided polygon and find cuts on it
             // Keep adaptiveSubdivideByCount due to needed quality
+            aTempPolygon.reserve(SUBDIVIDE_FOR_CUT_TEST_COUNT + 8);
             aTempPolygon.append(rCubicA.getStartPoint());
             rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findTouches(aTempPolygon, rPointPolygon, aTempPointVector);
