@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygon.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +125,11 @@ public:
     void reserve(sal_uInt32 nCount)
     {
         maVector.reserve(nCount);
+    }
+
+    void append(const CoordinateData2D& rValue)
+    {
+        maVector.push_back(rValue);
     }
 
     void insert(sal_uInt32 nIndex, const CoordinateData2D& rValue, sal_uInt32 nCount)
@@ -383,6 +387,17 @@ public:
                 mnUsedVectors++;
             }
         }
+    }
+
+    void append(const ControlVectorPair2D& rValue)
+    {
+        maVector.push_back(rValue);
+
+        if(!rValue.getPrevVector().equalZero())
+            mnUsedVectors += 1;
+
+        if(!rValue.getNextVector().equalZero())
+            mnUsedVectors += 1;
     }
 
     void insert(sal_uInt32 nIndex, const ControlVectorPair2D& rValue, sal_uInt32 nCount)
@@ -749,6 +764,19 @@ public:
     void reserve(sal_uInt32 nCount)
     {
         maPoints.reserve(nCount);
+    }
+
+    void append(const basegfx::B2DPoint& rPoint)
+    {
+        mpBufferedData.reset(); // TODO: is this needed?
+        const CoordinateData2D aCoordinate(rPoint);
+        maPoints.append(aCoordinate);
+
+        if(mpControlVector)
+        {
+            const ControlVectorPair2D aVectorPair;
+            mpControlVector->append(aVectorPair);
+        }
     }
 
     void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount)
@@ -1221,6 +1249,11 @@ namespace basegfx
         {
             mpPolygon->insert(mpPolygon->count(), rPoint, nCount);
         }
+    }
+
+    void B2DPolygon::append(const B2DPoint& rPoint)
+    {
+        mpPolygon->append(rPoint);
     }
 
     B2DPoint B2DPolygon::getPrevControlPoint(sal_uInt32 nIndex) const
