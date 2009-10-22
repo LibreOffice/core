@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dcubicbezier.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1086,7 +1085,8 @@ namespace basegfx
             if( pResult[1] < 0 || pResult[1]>1)
                 --nCount;
             if( pResult[0] < 0 || pResult[0]>1)
-                { --nCount; pResult[0] = pResult[0]; }
+                if( --nCount)
+                    pResult[0] = pResult[1];
             return nCount;
         }
 
