@@ -3030,7 +3030,7 @@ xub_StrLen SwHTMLParser::StripTrailingLF()
 
                 nPos = nLen - nLFCount;
                 SwIndex nIdx( pTxtNd, nPos );
-                pTxtNd->Erase( nIdx, nLFCount );
+                pTxtNd->EraseText( nIdx, nLFCount );
                 nStripped = nLFCount;
             }
         }
@@ -5495,7 +5495,8 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                         pNd = pTblStNd->EndOfSectionNode();
                     SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
 
-                    pDoc->Move( aSrcRg, aDstIdx, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    pDoc->MoveNodeRange( aSrcRg, aDstIdx,
+                        IDocumentContentOperations::DOC_MOVEDEFAULT );
 
                     // Wenn die Caption vor der Tabelle eingefuegt wurde muss
                     // eine an der Tabelle gestzte Seitenvorlage noch in den

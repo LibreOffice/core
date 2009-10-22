@@ -54,7 +54,7 @@ String STR_SPLITNODE_UNDO
 };
 String STR_MOVE_UNDO
 {
-    Text [ en-US ] = "Move: $1" ;
+    Text [ en-US ] = "Move" ;
 };
 String STR_INSATTR_UNDO
 {
@@ -612,7 +612,7 @@ String STR_CHART
 };
 String STR_NOTE
 {
-    Text [ en-US ] = "note";
+    Text [ en-US ] = "comment";
 };
 String STR_REFERENCE
 {

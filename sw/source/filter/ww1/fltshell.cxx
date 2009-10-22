@@ -492,7 +492,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 {
                             // XRefs und Bookmarks sind bereits geUpcased
                     MakeBookRegionOrPoint(pEntry, pDoc, aRegion, TRUE);
-                    pDoc->Insert(aRegion, SwFmtRefMark(rName), 0);
+                    pDoc->InsertPoolItem(aRegion, SwFmtRefMark(rName), 0);
                 }
                 else if( !pB->IsOnlyRef() )
                 {
@@ -506,7 +506,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                         pB->GetValSys());
                     aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
                     MakePoint(pEntry, pDoc, aRegion);
-                    pDoc->Insert(aRegion, SwFmtFld(aFld), 0);
+                    pDoc->InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
                     MoveAttrs( *(aRegion.GetPoint()) );
                 }
             }
@@ -564,8 +564,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     case RES_FLTR_SECTION:
         MakePoint(pEntry, pDoc, aRegion);   // bislang immer Point==Mark
-        pDoc->Insert(aRegion, *((SwFltSection*)pEntry->pAttr)->GetSection(),
-                     0, FALSE);
+        pDoc->InsertSwSection(aRegion,
+                *(static_cast<SwFltSection*>(pEntry->pAttr))->GetSection(),
+                0, false);
         delete(((SwFltSection*)pEntry->pAttr)->GetSection());
         break;
     case RES_FLTR_REDLINE:
@@ -602,7 +603,9 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
         break;
     default:
         if (pEntry->MakeRegion(pDoc, aRegion, FALSE))
-            pDoc->Insert(aRegion, *pEntry->pAttr, 0);
+        {
+            pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+        }
         break;
     }
 }
@@ -1006,7 +1009,7 @@ SwFltShell::~SwFltShell()
 SwFltShell& SwFltShell::operator << ( const String& rStr )
 {
     ASSERT(eSubMode != Style, "char insert while in style-mode");
-    GetDoc().Insert( *pPaM, rStr, true );
+    GetDoc().InsertString( *pPaM, rStr );
     return *this;
 }
 
@@ -1043,7 +1046,7 @@ String SwFltShell::QuoteStr( const String& rIn )
 SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 {
     ASSERT( eSubMode != Style, "char insert while in style-mode");
-    GetDoc().Insert( *pPaM, c );
+    GetDoc().InsertString( *pPaM, c );
     return *this;
 }
 
@@ -1060,7 +1063,7 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
     SwSetExpField aFld( (SwSetExpFieldType*)pFT,
                         String::CreateFromAscii( pErr ));
     //, VVF_INVISIBLE
-    GetDoc().Insert(*pPaM, SwFmtFld(aFld), 0);
+    GetDoc().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return *this;
 }
 
@@ -1079,7 +1082,8 @@ void SwFltShell::NextParagraph()
 void SwFltShell::NextPage()
 {
     NextParagraph();
-    GetDoc().Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+    GetDoc().InsertPoolItem(*pPaM,
+        SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
 }
 
 SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
@@ -1170,7 +1174,7 @@ SwFltShell& SwFltShell::EndItem( USHORT nAttrId )
 
 SwFltShell& SwFltShell::operator << (const SwField& rField)
 {
-    GetDoc().Insert(*pPaM, SwFmtFld(rField), 0);
+    GetDoc().InsertPoolItem(*pPaM, SwFmtFld(rField), 0);
     return *this;
 }
 
@@ -1931,7 +1935,7 @@ void SwFltShell::BeginFootnote()
 //  Fussnoten im PMW uebernommen werden
 
     SwFmtFtn aFtn;
-    GetDoc().Insert(*pPaM, aFtn, 0);
+    GetDoc().InsertPoolItem(*pPaM, aFtn, 0);
     ASSERT(pSavedPos == NULL, "SwFltShell");
     pSavedPos = new SwPosition(*pPaM->GetPoint());
     pPaM->Move(fnMoveBackward, fnGoCntnt);
@@ -2031,7 +2035,9 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
         pNewPD->SetFollow(pNewPD);
     }
     else
-        GetDoc().Insert( *pPaM, SwFmtPageDesc( pNewPD ), 0 );
+    {
+        GetDoc().InsertPoolItem( *pPaM, SwFmtPageDesc( pNewPD ), 0 );
+    }
     pNewPD->WriteUseOn( // alle Seiten
      (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE));
     return pNewPD;

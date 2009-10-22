@@ -1124,8 +1124,8 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( !bRet && ( SwContentAtPos::SW_FIELD | SwContentAtPos::SW_CLICKFIELD )
                     & rCntntAtPos.eCntntAtPos && !aTmpState.bFtnNoInfo )
                 {
-                    pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent.GetIndex(),
-                                                    RES_TXTATR_FIELD );
+                    pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
+                            aPos.nContent.GetIndex(), RES_TXTATR_FIELD );
                     const SwField* pFld = pTxtAttr
                                             ? pTxtAttr->GetFld().GetFld()
                                             : 0;
@@ -1190,7 +1190,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         if( bRet )
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_FTN;
                     }
-                    else if( 0 != ( pTxtAttr = pTxtNd->GetTxtAttr(
+                    else if ( 0 != ( pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
                                 aPos.nContent.GetIndex(), RES_TXTATR_FTN )) )
                     {
                         bRet = TRUE;
@@ -1526,9 +1526,8 @@ const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
         const SwTxtNode* pTxtNd = pCursorPos->nNode.GetNode().GetTxtNode();
         if ( pTxtNd )
         {
-            SwTxtAttr* pTxtAttr =
-                        pTxtNd->GetTxtAttr( pCursorPos->nContent.GetIndex(),
-                                            RES_TXTATR_FIELD );
+            SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
+                    pCursorPos->nContent.GetIndex(), RES_TXTATR_FIELD );
             const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
             if ( pFld && pFld->Which()== RES_POSTITFLD )
             {
@@ -1766,7 +1765,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 if( n < aFPos.nColumnCnt )
                 {
                     *pCurCrsr->GetPoint() = aPos;
-                    GetDoc()->Insert( *pCurCrsr,
+                    GetDoc()->InsertPoolItem( *pCurCrsr,
                             SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
                 }
             }
@@ -1792,7 +1791,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
 
-                    GetDoc()->Insert( *pCurCrsr, aSet, 0 );
+                    GetDoc()->InsertItemSet( *pCurCrsr, aSet, 0 );
                 }
                 else {
                     ASSERT( !this, "wo ist mein CntntNode?" );
@@ -1812,7 +1811,9 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                         sInsert += sSpace;
                     }
                     if( sInsert.Len() )
-                        GetDoc()->Insert( *pCurCrsr, sInsert, true );
+                    {
+                        GetDoc()->InsertString( *pCurCrsr, sInsert );
+                    }
                 }
                 // kein break - Ausrichtung muss noch gesetzt werden
             case FILL_MARGIN:
@@ -1830,7 +1831,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     default:
                         break;
                     }
-                    GetDoc()->Insert( *pCurCrsr, aAdj, 0 );
+                    GetDoc()->InsertPoolItem( *pCurCrsr, aAdj, 0 );
                 }
                 break;
             }

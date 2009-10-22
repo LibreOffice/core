@@ -153,7 +153,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GOTO                 (FN_EDIT + 11)    /* Gehe zu */
 
 #define FN_PASTE                (FN_EDIT + 13)    /* Einfuegen */
-#define FN_PASTESPECIAL         (FN_EDIT + 14)    /* Verknuepfung einfuegen */
 #define FN_PASTESPECIAL_DLG     (FN_EDIT + 15)    /* Verknuepfung einfuegen */
 #define FN_NUMBER_BULLETS       (FN_EDIT + 21)    /* Bullets */
 #define FN_REPEAT               (FN_EDIT + 22)    /* Letzten Befehl wiederholen */
@@ -911,6 +910,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_PARA_CONT_PREV_SUBTREE       (FN_EXTRA2 + 109)
 #define FN_UNO_PARA_NUM_STRING              (FN_EXTRA2 + 110)
 #define FN_UNO_TABLE_NAME                   (FN_EXTRA2 + 111)
+#define FN_UNO_META                         (FN_EXTRA2 + 112)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe

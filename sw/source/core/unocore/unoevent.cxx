@@ -73,93 +73,6 @@ const sal_Char sAPI_SwHyperlinkEventDescriptor[] =
 const sal_Char sAPI_SwAutoTextEventDescriptor[] =
                                     "SwAutoTextEventDescriptor";
 
-
-// //
-// // tables of all known events handled by this class
-// //
-
-// // careful: keep aKnownEventIDs and aKnownEventNames in sync!
-
-// const USHORT aKnownEventIDs[] =
-// {
-//  SW_EVENT_OBJECT_SELECT,
-//  SW_EVENT_START_INS_GLOSSARY,
-//  SW_EVENT_END_INS_GLOSSARY,
-//  SW_EVENT_MAIL_MERGE,
-//  SW_EVENT_FRM_KEYINPUT_ALPHA,
-//  SW_EVENT_FRM_KEYINPUT_NOALPHA,
-//  SW_EVENT_FRM_RESIZE,
-//  SW_EVENT_FRM_MOVE,
-//  SW_EVENT_PAGE_COUNT,
-//  SFX_EVENT_MOUSEOVER_OBJECT,
-//  SFX_EVENT_MOUSECLICK_OBJECT,
-//  SFX_EVENT_MOUSEOUT_OBJECT,
-//      SFX_EVENT_OPENDOC,
-//      SFX_EVENT_CLOSEDOC,
-//      SFX_EVENT_STARTAPP,
-//      SFX_EVENT_CLOSEAPP,
-//      SFX_EVENT_CREATEDOC,
-//      SFX_EVENT_SAVEDOC,
-//      SFX_EVENT_SAVEASDOC,
-//      SFX_EVENT_ACTIVATEDOC,
-//      SFX_EVENT_DEACTIVATEDOC,
-//      SFX_EVENT_PRINTDOC,
-//      SFX_EVENT_ONERROR,
-//      SFX_EVENT_LOADFINISHED,
-//      SFX_EVENT_SAVEFINISHED,
-//      SFX_EVENT_MODIFYCHANGED,
-//      SFX_EVENT_PREPARECLOSEDOC,
-//      SFX_EVENT_NEWMESSAGE,
-//      SFX_EVENT_TOGGLEFULLSCREENMODE,
-//      SFX_EVENT_SAVEDOCDONE,
-//      SFX_EVENT_SAVEASDOCDONE,
-//  SVX_EVENT_IMAGE_LOAD,
-//  SVX_EVENT_IMAGE_ABORT,
-//  SVX_EVENT_IMAGE_ERROR,
-//  0
-// };
-
-// const sal_Char* aKnownEventNames[] =
-// {
-//  "OnSelect",                 // SW_EVENT_OBJECT_SELECT
-//  "OnInsertStart",            // SW_EVENT_START_INS_GLOSSARY
-//  "OnInsertDone",             // SW_EVENT_END_INS_GLOSSARY
-//  "OnMailMerge",              // SW_EVENT_MAIL_MERGE
-//  "OnAlphaCharInput",         // SW_EVENT_FRM_KEYINPUT_ALPHA
-//  "OnNonAlphaCharInput",      // SW_EVENT_FRM_KEYINPUT_NOALPHA
-//  "OnResize",                 // SW_EVENT_FRM_RESIZE
-//  "OnMove",                   // SW_EVENT_FRM_MOVE
-//  "PageCountChange",          // SW_EVENT_PAGE_COUNT
-//  "OnMouseOver",              // SFX_EVENT_MOUSEOVER_OBJECT
-//  "OnClick",                  // SFX_EVENT_MOUSECLICK_OBJECT
-//  "OnMouseOut",               // SFX_EVENT_MOUSEOUT_OBJECT
-//  "OnLoad",                   // SFX_EVENT_OPENDOC,
-//  "OnUnload",                 // SFX_EVENT_CLOSEDOC,
-//  "OnStartApp",               // SFX_EVENT_STARTAPP,
-//  "OnCloseApp",               // SFX_EVENT_CLOSEAPP,
-//  "OnNew",                    // SFX_EVENT_CREATEDOC,
-//  "OnSave",                   // SFX_EVENT_SAVEDOC,
-//  "OnSaveAs",                 // SFX_EVENT_SAVEASDOC,
-//  "OnFocus",                  // SFX_EVENT_ACTIVATEDOC,
-//  "OnUnfocus",                // SFX_EVENT_DEACTIVATEDOC,
-//  "OnPrint",                  // SFX_EVENT_PRINTDOC,
-//  "OnError",                  // SFX_EVENT_ONERROR,
-//  "OnLoadFinished",           // SFX_EVENT_LOADFINISHED,
-//  "OnSaveFinished",           // SFX_EVENT_SAVEFINISHED,
-//  "OnModifyChanged",          // SFX_EVENT_MODIFYCHANGED,
-//  "OnPrepareUnload",          // SFX_EVENT_PREPARECLOSEDOC,
-//  "OnNewMail",                // SFX_EVENT_NEWMESSAGE,
-//  "OnToggleFullscreen",       // SFX_EVENT_TOGGLEFULLSCREENMODE,
-//  "OnSaveDone",               // SFX_EVENT_SAVEDOCDONE,
-//  "OnSaveAsDone",             // SFX_EVENT_SAVEASDOCDONE,
-//  "OnLoadError",              // SVX_EVENT_IMAGE_LOAD,
-//  "OnLoadCancel",             // SVX_EVENT_IMAGE_ABORT,
-//  "OnLoadDone",               // SVX_EVENT_IMAGE_ERROR,
-
-//  NULL
-// };
-
-
 //
 // tables of allowed events for specific objects
 //
@@ -228,40 +141,6 @@ const struct SvEventDescription aFrameStyleEvents[] =
     { SVX_EVENT_IMAGE_ERROR,        "OnLoadError" },
     { 0, NULL }
 };
-
-const struct SvEventDescription aDocumentEvents[] =
-{
-     { SFX_EVENT_STARTAPP,      "OnStartApp" },
-     { SFX_EVENT_CLOSEAPP,      "OnCloseApp" },
-     { SFX_EVENT_CREATEDOC,     "OnNew" },
-     { SFX_EVENT_OPENDOC,       "OnLoad" },
-     { SFX_EVENT_SAVEDOC,       "OnSave" },
-     { SFX_EVENT_SAVEASDOC,     "OnSaveAs" },
-// ??? cf. SAVEDOCDONE, SAVEASDOCDONE
-     { SFX_EVENT_SAVEFINISHED,  "OnSaveFinished" },
-     { SFX_EVENT_CLOSEDOC,      "OnUnload" },
-     { SFX_EVENT_ACTIVATEDOC,   "OnFocus" },
-     { SFX_EVENT_DEACTIVATEDOC, "OnUnfocus" },
-     { SFX_EVENT_ONERROR,       "OnError" },
-    { SFX_EVENT_NEWMESSAGE,     "OnNewMail" },
-     { SFX_EVENT_PRINTDOC,      "OnPrint" },
-     { SW_EVENT_MAIL_MERGE,     "OnMailMerge" },
-     { SW_EVENT_PAGE_COUNT,     "PageCountChange" },
-    { SW_EVENT_FIELD_MERGE,     "OnFieldMerge" },
-    { SW_EVENT_FIELD_MERGE_FINISHED,     "OnFieldMergeFinished" },
-//  SFX_EVENT_LOADFINISHED,
-//  SFX_EVENT_MODIFYCHANGED,
-//  SFX_EVENT_PREPARECLOSEDOC,
-//  SFX_EVENT_TOGGLEFULLSCREENMODE,
-//  SFX_EVENT_SAVEDOCDONE,
-//  SFX_EVENT_SAVEASDOCDONE,
-
-    { 0, NULL }
-};
-
-
-
-
 
 //
 // SwHyperlinkEventDescriptor

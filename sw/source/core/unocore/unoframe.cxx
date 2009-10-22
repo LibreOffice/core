@@ -2028,7 +2028,7 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
                 const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
                 SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
                 const xub_StrLen nIdx = rPos.nContent.GetIndex();
-                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
             else
                 pFmt->GetDoc()->DelLayoutFmt(pFmt);

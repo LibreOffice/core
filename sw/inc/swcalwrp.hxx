@@ -34,6 +34,7 @@
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 #include <unotools/calendarwrapper.hxx>
+#include <salhelper/singletonref.hxx>
 
 class SwCalendarWrapper : public CalendarWrapper
 {
@@ -42,7 +43,7 @@ class SwCalendarWrapper : public CalendarWrapper
 
 public:
     SwCalendarWrapper( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory > & xMSF )
+                    ::com::sun::star::lang::XMultiServiceFactory > & xMSF = ::comphelper::getProcessServiceFactory() )
         : CalendarWrapper( xMSF ), nLang( LANGUAGE_SYSTEM )
     {}
 
@@ -50,7 +51,7 @@ public:
 };
 
 
-extern SwCalendarWrapper* pCalendarWrapper;
+salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper();
 
 
 #endif

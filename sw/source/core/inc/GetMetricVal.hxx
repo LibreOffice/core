@@ -39,7 +39,7 @@
 inline USHORT GetMetricVal( int n )
 {
 #ifdef USE_MEASUREMENT
-    USHORT nVal = MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum()
+    USHORT nVal = MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                     ? 567       // 1 cm
                     : 770;      // 1/2 Inch
 #else

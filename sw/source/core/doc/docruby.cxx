@@ -147,16 +147,20 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     {
                         // set/reset the attribut
                         if( pEntry->GetRubyAttr().GetText().Len() )
-                            Insert( aPam, pEntry->GetRubyAttr(), 0 );
+                        {
+                            InsertPoolItem( aPam, pEntry->GetRubyAttr(), 0 );
+                        }
                         else
+                        {
                             ResetAttrs( aPam, TRUE, &aDelArr );
+                        }
                     }
 
                     if( aCheckEntry.GetText() != pEntry->GetText() &&
                         pEntry->GetText().Len() )
                     {
                         // text is changed, so replace the original
-                        Replace( aPam, pEntry->GetText(), FALSE );
+                        ReplaceRange( aPam, pEntry->GetText(), false );
                     }
                     aPam.DeleteMark();
                 }
@@ -176,10 +180,11 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         if( pEntry->GetRubyAttr().GetText().Len() &&
                             pEntry->GetText().Len() )
                         {
-                            Insert( aPam, pEntry->GetText(), true );
+                            InsertString( aPam, pEntry->GetText() );
                             aPam.SetMark();
                             aPam.GetMark()->nContent -= pEntry->GetText().Len();
-                            Insert( aPam, pEntry->GetRubyAttr(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                            InsertPoolItem( aPam, pEntry->GetRubyAttr(),
+                                    nsSetAttrMode::SETATTR_DONTEXPAND );
                         }
                         else
                             break;
@@ -246,7 +251,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
     if( !bHasMark && nStart && ( !pAttr || nStart != *pAttr->GetStart()) )
     {
         // skip to the word begin!
-        long nWordStt = pBreakIt->xBreak->getWordBoundary(
+        long nWordStt = pBreakIt->GetBreakIter()->getWordBoundary(
                             *pTxt, nStart,
                             pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
@@ -335,10 +340,10 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
         {
             rPam.SetMark();
             bAlphaNum = bIsAlphaNum;
-            if( bChkNxtWrd && pBreakIt->xBreak.is() )
+            if( bChkNxtWrd && pBreakIt->GetBreakIter().is() )
             {
                 // search the end of this word
-                nWordEnd = pBreakIt->xBreak->getWordBoundary(
+                nWordEnd = pBreakIt->GetBreakIter()->getWordBoundary(
                             *pTxt, nStart,
                             pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,

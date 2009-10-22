@@ -74,18 +74,18 @@ SwBreakIt::SwBreakIt(
       aForbiddenLang( LANGUAGE_DONTKNOW)
 {
     DBG_ASSERT( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
-    if ( m_xMSF.is() )
-    {
-        xBreak = uno::Reference< i18n::XBreakIterator >(
-            m_xMSF->createInstance(
-                rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
-            uno::UNO_QUERY);
+    //if ( m_xMSF.is() )
+    //{
+ //       xBreak = uno::Reference< i18n::XBreakIterator >(
+    //      m_xMSF->createInstance(
+    //          rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+ //           uno::UNO_QUERY);
 
-        xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
-            m_xMSF->createInstance(
-                 rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) ),
-            uno::UNO_QUERY);
-    }
+ //       xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
+ //           m_xMSF->createInstance(
+ //                rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) ),
+ //           uno::UNO_QUERY);
+ //   }
 }
 
 SwBreakIt::~SwBreakIt()
@@ -93,7 +93,16 @@ SwBreakIt::~SwBreakIt()
     delete m_pLocale;
     delete m_pForbidden;
 }
-
+void SwBreakIt::createBreakIterator() const
+{
+    if ( m_xMSF.is() && !xBreak.is() )
+        xBreak.set(m_xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),uno::UNO_QUERY);
+}
+void SwBreakIt::createScriptTypeDetector()
+{
+    if ( m_xMSF.is() && !xCTLDetect.is() )
+        xCTLDetect.set(m_xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ))),uno::UNO_QUERY);
+}
 void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;
@@ -113,6 +122,7 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
 USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
                                         xub_StrLen nPos ) const
 {
+    createBreakIterator();
     USHORT nScript = i18n::ScriptType::WEAK;
     if( xBreak.is() && rTxt.Len() )
     {
@@ -151,6 +161,7 @@ USHORT SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
     const USHORT coAllScripts = ( SCRIPTTYPE_LATIN |
                                   SCRIPTTYPE_ASIAN |
                                   SCRIPTTYPE_COMPLEX );
+    createBreakIterator();
     USHORT nRet = 0, nScript;
     if( !xBreak.is() )
         nRet = coAllScripts;

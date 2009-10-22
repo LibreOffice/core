@@ -2177,8 +2177,10 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                 pDoc->DeleteRedline(aTemp, true, USHRT_MAX);
             }
 
-            pTNd->Erase( aIdx, n, INS_EMPTYEXPAND );
-            pTNd->Insert( rTxt, aIdx, INS_EMPTYEXPAND );
+            pTNd->EraseText( aIdx, n,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
+            pTNd->InsertText( rTxt, aIdx,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
 
             if( pDoc->IsRedlineOn() )
             {
@@ -2222,8 +2224,10 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
                 //             zuruecksetzen, damit sie wieder aufgespannt werden
                 pTNd->DontExpandFmt( aIdx, FALSE, FALSE );
                 aIdx = 0;
-                pTNd->Erase( aIdx, STRING_LEN, INS_EMPTYEXPAND );
-                pTNd->Insert( sTmp, aIdx, INS_EMPTYEXPAND );
+                pTNd->EraseText( aIdx, STRING_LEN,
+                        IDocumentContentOperations::INS_EMPTYEXPAND );
+                pTNd->InsertText( sTmp, aIdx,
+                        IDocumentContentOperations::INS_EMPTYEXPAND );
             }
         }
 

@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fmthbsh.hxx,v $
- * $Revision: 1.5 $
+ * $RCSfile: $
+ * $Revision:$
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,48 +27,46 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FMTHBSH_HXX
-#define _FMTHBSH_HXX
+#ifndef INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
+#define INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
 
+#include <hash_map>
+#include <boost/shared_ptr.hpp>
 
-#include <svtools/poolitem.hxx>
-
-// ATT_SOFTHYPH ******************************
-// Attribut fuer benutzerdefinierte Trennstellen.
-
-class SwFmtSoftHyph : public SfxPoolItem
+namespace sw
 {
-public:
-    SwFmtSoftHyph();
+enum tExternalDataType { FIB, STTBF_ASSOC };
 
-    // "pure virtual Methoden" vom SfxPoolItem
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-
-    inline SwFmtSoftHyph& operator=(const SwFmtSoftHyph&) {
-            return *this;
-        }
+struct ExternalDataTypeHash
+{
+    size_t operator()(tExternalDataType eType) const { return eType; }
 };
 
-// ATT_HARDBLANK ******************************
-// Attribut fuer geschuetzte Leerzeichen.
-
-class SW_DLLPUBLIC SwFmtHardBlank : public SfxPoolItem
+class ExternalData
 {
-    sal_Unicode cChar;
 public:
-    SwFmtHardBlank( sal_Unicode cCh, BOOL bCheck = TRUE );
-
-    // "pure virtual Methoden" vom SfxPoolItem
-    virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-
-
-    inline sal_Unicode GetChar() const { return cChar; }
-    inline SwFmtHardBlank& operator=(const SwFmtHardBlank& rHB)
-    { cChar = rHB.GetChar(); return *this; }
+    ExternalData() {}
+    virtual ~ExternalData() {}
 };
 
+typedef ::boost::shared_ptr<ExternalData> tExternalDataPointer;
+}
 
-#endif
 
+class IDocumentExternalData
+{
+protected:
+    typedef ::std::hash_map<sw::tExternalDataType, sw::tExternalDataPointer, sw::ExternalDataTypeHash>
+    tExternalData;
+
+    tExternalData m_externalData;
+
+    virtual ~IDocumentExternalData() {};
+
+public:
+    virtual void setExternalData(sw::tExternalDataType eType,
+                                 sw::tExternalDataPointer pPayload) = 0;
+    virtual sw::tExternalDataPointer getExternalData(sw::tExternalDataType eType) = 0;
+};
+
+#endif //INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX

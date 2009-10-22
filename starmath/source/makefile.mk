@@ -73,7 +73,6 @@ SLO1FILES =  \
         $(SLO)$/smmod.obj \
         $(SLO)$/types.obj \
         $(SLO)$/view.obj \
-        $(SLO)$/viewhdl.obj \
         $(SLO)$/edit.obj \
         $(SLO)$/rect.obj \
         $(SLO)$/unomodel.obj \
@@ -99,7 +98,6 @@ EXCEPTIONSFILES =   \
         $(SLO)$/mathmlexport.obj \
         $(SLO)$/mathtype.obj \
         $(SLO)$/view.obj \
-        $(SLO)$/viewhdl.obj \
         $(SLO)$/unomodel.obj \
         $(SLO)$/smdetect.obj \
         $(SLO)$/symbol.obj \
