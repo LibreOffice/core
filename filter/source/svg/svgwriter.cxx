@@ -330,7 +330,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
 
 // -----------------------------------------------------------------------------
 
-NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, const Color& rFillColor )
+NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo )
 {
     FastString aStyle;
 
@@ -356,6 +356,68 @@ NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, c
             aStyle += B2UCONST( ";" );
             aStyle += B2UCONST( "stroke-opacity:" );
             aStyle += NMSP_RTL::OUString::valueOf( ( 255 - (double) rLineColor.GetTransparency() ) / 255.0 );
+        }
+
+        if(pLineInfo)
+        {
+            // more infos for line needed
+            if(pLineInfo->GetWidth() > 1)
+            {
+                aStyle += B2UCONST( ";" );
+                aStyle += B2UCONST( "stroke-width:" );
+                aStyle += NMSP_RTL::OUString::valueOf(pLineInfo->GetWidth());
+            }
+
+            if(LINE_DASH == pLineInfo->GetStyle())
+            {
+                aStyle += B2UCONST( ";" );
+                aStyle += B2UCONST( "stroke-dasharray:" );
+                const long nDashLen(pLineInfo->GetDashLen());
+                const long nDotLen(pLineInfo->GetDotLen());
+                const long nDistance(pLineInfo->GetDistance());
+                bool bIsFirst(true);
+
+                for(sal_uInt16 a(0); a < pLineInfo->GetDashCount(); a++)
+                {
+                    if(bIsFirst)
+                        aStyle += B2UCONST(" "), bIsFirst = false;
+                    else
+                        aStyle += B2UCONST(",");
+                    aStyle += NMSP_RTL::OUString::valueOf(nDashLen);
+                    aStyle += B2UCONST(",");
+                    aStyle += NMSP_RTL::OUString::valueOf(nDistance);
+                }
+
+                for(sal_uInt16 b(0); b < pLineInfo->GetDotCount(); b++)
+                {
+                    if(bIsFirst)
+                        aStyle += B2UCONST(" "), bIsFirst = false;
+                    else
+                        aStyle += B2UCONST(",");
+                    aStyle += NMSP_RTL::OUString::valueOf(nDotLen);
+                    aStyle += B2UCONST(",");
+                    aStyle += NMSP_RTL::OUString::valueOf(nDistance);
+                }
+            }
+
+            if(basegfx::B2DLINEJOIN_MITER != pLineInfo->GetLineJoin())
+            {
+                aStyle += B2UCONST( ";" );
+                aStyle += B2UCONST( "stroke-linejoin:" );
+
+                switch(pLineInfo->GetLineJoin())
+                {
+                    default: // B2DLINEJOIN_NONE, B2DLINEJOIN_MIDDLE, B2DLINEJOIN_MITER
+                        aStyle += B2UCONST( "miter" );
+                        break;
+                    case basegfx::B2DLINEJOIN_ROUND:
+                        aStyle += B2UCONST( "round" );
+                        break;
+                    case basegfx::B2DLINEJOIN_BEVEL:
+                        aStyle += B2UCONST( "bevel" );
+                        break;
+                }
+            }
         }
     }
 
@@ -403,12 +465,12 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
 
 // -----------------------------------------------------------------------------
 
-void SVGAttributeWriter::SetPaintAttr( const Color& rLineColor, const Color& rFillColor )
+void SVGAttributeWriter::SetPaintAttr( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo )
 {
     if( !mpElemPaint || ( rLineColor != maCurLineColor ) || ( rFillColor != maCurFillColor ) )
     {
         delete mpElemPaint;
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, GetPaintStyle( maCurLineColor = rLineColor, maCurFillColor = rFillColor ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, GetPaintStyle( maCurLineColor = rLineColor, maCurFillColor = rFillColor, pLineInfo ) );
         mpElemPaint = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
     }
 }
@@ -456,6 +518,48 @@ Point SVGActionWriter::ImplMap( const Point& rPt ) const
 Size SVGActionWriter::ImplMap( const Size& rSz ) const
 {
     return mpVDev->LogicToLogic( rSz, mpVDev->GetMapMode(), maTargetMapMode );
+}
+
+// -----------------------------------------------------------------------------
+
+LineInfo SVGActionWriter::ImplMap( const LineInfo& rLineInfo ) const
+{
+    LineInfo aInfo(rLineInfo);
+    long aTemp(0);
+
+    if(aInfo.GetStyle() == LINE_DASH)
+    {
+        if(aInfo.GetDotCount() && aInfo.GetDotLen())
+        {
+            aTemp = aInfo.GetDotLen();
+            mpVDev->LogicToLogic(&aTemp, 1, &mpVDev->GetMapMode(), &maTargetMapMode);
+            aInfo.SetDotLen(Max(aTemp, 1L));
+        }
+        else
+            aInfo.SetDotCount(0);
+
+        if(aInfo.GetDashCount() && aInfo.GetDashLen())
+        {
+            aTemp = aInfo.GetDashLen();
+            mpVDev->LogicToLogic(&aTemp, 1, &mpVDev->GetMapMode(), &maTargetMapMode);
+            aInfo.SetDashLen(Max(aTemp, 1L));
+        }
+        else
+            aInfo.SetDashCount(0);
+
+        aTemp = aInfo.GetDistance();
+        mpVDev->LogicToLogic(&aTemp, 1, &mpVDev->GetMapMode(), &maTargetMapMode);
+        aInfo.SetDistance(aTemp);
+
+        if((!aInfo.GetDashCount() && !aInfo.GetDotCount()) || !aInfo.GetDistance())
+            aInfo.SetStyle(LINE_SOLID);
+    }
+
+    aTemp = aInfo.GetWidth();
+    mpVDev->LogicToLogic(&aTemp, 1, &mpVDev->GetMapMode(), &maTargetMapMode);
+    aInfo.SetWidth(aTemp);
+
+    return aInfo;
 }
 
 // -----------------------------------------------------------------------------
@@ -620,7 +724,7 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
         {
             const Polygon&  rPoly = rPolyPoly[ i ];
             const USHORT    nSize = rPoly.GetSize();
-            Polygon         aMappedPoly( nSize );
+            Polygon         aMappedPoly(rPoly); // do copy the flag values, too
 
             for( USHORT n = 0; n < nSize; n++ )
                 aMappedPoly[ n ] = ImplMap( rPoly[ n ] );
@@ -1009,7 +1113,16 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaLineAction* pA = (const MetaLineAction*) pAction;
 
-                    mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
+                    if(pA->GetLineInfo().IsDefault())
+                    {
+                        mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor() );
+                    }
+                    else
+                    {
+                        const LineInfo aMappedLineInfo(ImplMap(pA->GetLineInfo()));
+                        mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetLineColor(), &aMappedLineInfo );
+                    }
+
                     ImplWriteLine( pA->GetStartPoint(), pA->GetEndPoint(), NULL, pStyle );
                 }
             }
@@ -1105,8 +1218,51 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( rPoly.GetSize() )
                     {
-                        mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
-                        ImplWritePolyPolygon( rPoly, sal_True, pStyle );
+                        bool bNoLineJoin(false);
+
+                        if(pA->GetLineInfo().IsDefault())
+                        {
+                            mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                        }
+                        else
+                        {
+                            const LineInfo aMappedLineInfo(ImplMap(pA->GetLineInfo()));
+                            bNoLineJoin = basegfx::B2DLINEJOIN_NONE == aMappedLineInfo.GetLineJoin();
+                            mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor(), &aMappedLineInfo );
+                        }
+
+                        if(bNoLineJoin)
+                        {
+                            // emulate B2DLINEJOIN_NONE by creating single edges
+                            const sal_uInt16 nPoints(rPoly.GetSize());
+                            const bool bCurve(rPoly.HasFlags());
+
+                            for(sal_uInt16 a(0); a + 1 < nPoints; a++)
+                            {
+                                if(bCurve
+                                    && POLY_NORMAL != rPoly.GetFlags(a + 1)
+                                    && a + 2 < nPoints
+                                    && POLY_NORMAL != rPoly.GetFlags(a + 2)
+                                    && a + 3 < nPoints)
+                                {
+                                    const Polygon aSnippet(4,
+                                        rPoly.GetConstPointAry() + a,
+                                        rPoly.GetConstFlagAry() + a);
+                                    ImplWritePolyPolygon( aSnippet, sal_True, pStyle );
+                                    a += 2;
+                                }
+                                else
+                                {
+                                    const Polygon aSnippet(2,
+                                        rPoly.GetConstPointAry() + a);
+                                    ImplWritePolyPolygon( aSnippet, sal_True, pStyle );
+                                }
+                            }
+                        }
+                        else
+                        {
+                            ImplWritePolyPolygon( rPoly, sal_True, pStyle );
+                        }
                     }
                 }
             }

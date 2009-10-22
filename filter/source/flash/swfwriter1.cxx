@@ -41,11 +41,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/metric.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <svtools/filter.hxx>
 #include <vcl/graphictools.hxx>
-#include <numeric>
 
 #ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB
@@ -54,7 +51,10 @@
 #include <external/zlib/zlib.h>
 #endif
 #endif
+
 #include <vcl/salbtype.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 using namespace ::swf;
 using namespace ::std;
@@ -1401,90 +1401,39 @@ bool Writer::Impl_writePageField( Rectangle& rTextBounds )
 
 void Writer::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
 {
-    basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
-    basegfx::B2DPolyPolygon aFillPolyPolygon;
-    const bool bDashUsed(LINE_DASH == rInfo.GetStyle());
-    const bool bLineWidthUsed(rInfo.GetWidth() > 1);
-
-    if(bDashUsed && aLinePolyPolygon.count())
+    if(rLinePolygon.count())
     {
-        ::std::vector< double > fDotDashArray;
-        const double fDashLen(rInfo.GetDashLen());
-        const double fDotLen(rInfo.GetDotLen());
-        const double fDistance(rInfo.GetDistance());
+        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+        basegfx::B2DPolyPolygon aFillPolyPolygon;
 
-        for(sal_uInt16 a(0); a < rInfo.GetDashCount(); a++)
+        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+        if(aLinePolyPolygon.count())
         {
-            fDotDashArray.push_back(fDashLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
-        for(sal_uInt16 b(0); b < rInfo.GetDotCount(); b++)
-        {
-            fDotDashArray.push_back(fDotLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
-        const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
-
-        if(fAccumulated > 0.0)
-        {
-            basegfx::B2DPolyPolygon aResult;
-
-            for(sal_uInt32 c(0); c < aLinePolyPolygon.count(); c++)
+            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
-                basegfx::B2DPolyPolygon aLineTraget;
-                basegfx::tools::applyLineDashing(
-                    aLinePolyPolygon.getB2DPolygon(c),
-                    fDotDashArray,
-                    &aLineTraget);
-                aResult.append(aLineTraget);
+                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+                Impl_writePolygon(Polygon(aCandidate), sal_False );
+            }
+        }
+
+        if(aFillPolyPolygon.count())
+        {
+            const Color aOldLineColor(mpVDev->GetLineColor());
+            const Color aOldFillColor(mpVDev->GetFillColor());
+
+            mpVDev->SetLineColor();
+            mpVDev->SetFillColor(aOldLineColor);
+
+            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            {
+                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                Impl_writePolyPolygon(PolyPolygon(Polygon(aPolygon)), sal_True );
             }
 
-            aLinePolyPolygon = aResult;
+            mpVDev->SetLineColor(aOldLineColor);
+            mpVDev->SetFillColor(aOldFillColor);
         }
-    }
-
-    if(bLineWidthUsed && aLinePolyPolygon.count())
-    {
-        const double fHalfLineWidth((rInfo.GetWidth() * 0.5) + 0.5);
-
-        for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
-        {
-            aFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
-                aLinePolyPolygon.getB2DPolygon(a),
-                fHalfLineWidth,
-                rInfo.GetLineJoin()));
-        }
-
-        aLinePolyPolygon.clear();
-    }
-
-    if(aLinePolyPolygon.count())
-    {
-        for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
-        {
-            const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-            Impl_writePolygon(Polygon(aCandidate), sal_False );
-        }
-    }
-
-    if(aFillPolyPolygon.count())
-    {
-        const Color aOldLineColor(mpVDev->GetLineColor());
-        const Color aOldFillColor(mpVDev->GetFillColor());
-
-        mpVDev->SetLineColor();
-        mpVDev->SetFillColor(aOldLineColor);
-
-        for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
-        {
-            const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-            Impl_writePolyPolygon(PolyPolygon(Polygon(aPolygon)), sal_True );
-        }
-
-        mpVDev->SetLineColor(aOldLineColor);
-        mpVDev->SetFillColor(aOldFillColor);
     }
 }
 

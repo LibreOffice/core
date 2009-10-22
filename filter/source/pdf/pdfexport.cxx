@@ -1388,7 +1388,8 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                     }
                                     aInfo.m_aDashArray = aDashArray;
 
-                                    if(SvtGraphicStroke::joinNone == aStroke.getJoinType())
+                                    if(SvtGraphicStroke::joinNone == aStroke.getJoinType()
+                                        && fStrokeWidth > 0.0)
                                     {
                                         // emulate no edge rounding by handling single edges
                                         const sal_uInt16 nPoints(aPath.GetSize());
