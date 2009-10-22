@@ -32,10 +32,12 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
+#include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/unitconverter.hxx"
 
@@ -45,6 +47,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::util::Date;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::sheet::XCalculatable;
+using ::oox::core::CodecHelper;
 
 namespace oox {
 namespace xls {
@@ -70,6 +73,14 @@ const sal_Int16 API_SHOWMODE_HIDE               = 1;        /// Hide drawing obj
 const sal_Int16 API_SHOWMODE_PLACEHOLDER        = 2;        /// Show placeholders for drawing objects.
 
 } // namespace
+
+// ============================================================================
+
+FileSharingModel::FileSharingModel() :
+    mnPasswordHash( 0 ),
+    mbRecommendReadOnly( false )
+{
+}
 
 // ============================================================================
 
@@ -113,6 +124,13 @@ WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
 {
 }
 
+void WorkbookSettings::importFileSharing( const AttributeList& rAttribs )
+{
+    maFileSharing.maUserName          = rAttribs.getXString( XML_userName, OUString() );
+    maFileSharing.mnPasswordHash      = CodecHelper::getPasswordHash( rAttribs, XML_reservationPassword );
+    maFileSharing.mbRecommendReadOnly = rAttribs.getBool( XML_readOnlyRecommended, false );
+}
+
 void WorkbookSettings::importWorkbookPr( const AttributeList& rAttribs )
 {
     maBookSettings.maCodeName          = rAttribs.getString( XML_codePage, OUString() );
@@ -136,6 +154,12 @@ void WorkbookSettings::importCalcPr( const AttributeList& rAttribs )
     maCalcSettings.mbFullPrecision = rAttribs.getBool( XML_fullPrecision, true );
     maCalcSettings.mbIterate       = rAttribs.getBool( XML_iterate, false );
     maCalcSettings.mbConcurrent    = rAttribs.getBool( XML_concurrentCalc, true );
+}
+
+void WorkbookSettings::importFileSharing( RecordInputStream& rStrm )
+{
+    maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
+    rStrm >> maFileSharing.mnPasswordHash >> maFileSharing.maUserName;
 }
 
 void WorkbookSettings::importWorkbookPr( RecordInputStream& rStrm )
@@ -168,6 +192,23 @@ void WorkbookSettings::importCalcPr( RecordInputStream& rStrm )
 void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
 {
     maBookSettings.mbSaveExtLinkValues = bSaveExtLinks;
+}
+
+void WorkbookSettings::importFileSharing( BiffInputStream& rStrm )
+{
+    maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
+    rStrm >> maFileSharing.mnPasswordHash;
+    if( getBiff() == BIFF8 )
+    {
+        sal_uInt16 nStrLen = rStrm.readuInt16();
+        // there is no string flags field if string is empty
+        if( nStrLen > 0 )
+            maFileSharing.maUserName = rStrm.readUniStringBody( nStrLen );
+    }
+    else
+    {
+        maFileSharing.maUserName = rStrm.readByteStringUC( false, getTextEncoding() );
+    }
 }
 
 void WorkbookSettings::importBookBool( BiffInputStream& rStrm )
@@ -253,6 +294,12 @@ void WorkbookSettings::finalizeImport()
         case FILTER_UNKNOWN:
         break;
     }
+
+    // write protection
+    if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) )
+        getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "ReadOnly" ) ] <<= true;
+    if( maFileSharing.mnPasswordHash != 0 )
+        aPropSet.setProperty( PROP_WriteProtectionPassword, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
 
     // calculation settings
     Date aNullDate = getNullDate();

@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include "properties.hxx"
+#include "oox/token/propertylist.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -59,7 +60,7 @@ namespace oox {
 namespace {
 
 /** Thread-save singleton of a vector of all supported property names. */
-struct PropertyNamesPool : public ::rtl::Static< PropertyNamesList, PropertyNamesPool > {};
+struct StaticPropertyList : public ::rtl::Static< PropertyList, StaticPropertyList > {};
 
 // ----------------------------------------------------------------------------
 
@@ -103,7 +104,7 @@ GenericPropertySet::GenericPropertySet()
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
-    const PropertyNamesList& rPropNames = PropertyNamesPool::get();
+    const PropertyList& rPropNames = StaticPropertyList::get();
     for( PropertyMap::const_iterator aIt = rPropMap.begin(), aEnd = rPropMap.end(); aIt != aEnd; ++aIt )
         maPropMap[ rPropNames[ aIt->first ] ] = aIt->second;
 }
@@ -170,10 +171,19 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
 
 // ============================================================================
 
-const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
+PropertyMap::PropertyMap() :
+    mpPropNames( &StaticPropertyList::get() )
+{
+}
+
+PropertyMap::~PropertyMap()
+{
+}
+
+/*static*/ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 {
     OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );
-    return PropertyNamesPool::get()[ nPropId ];
+    return StaticPropertyList::get()[ nPropId ];
 }
 
 const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const
@@ -187,12 +197,11 @@ Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
     Sequence< PropertyValue > aSeq( static_cast< sal_Int32 >( size() ) );
     if( !empty() )
     {
-        const PropertyNamesList& rPropNames = PropertyNamesPool::get();
         PropertyValue* pValues = aSeq.getArray();
         for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt, ++pValues )
         {
             OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
-            pValues->Name = rPropNames[ aIt->first ];
+            pValues->Name = (*mpPropNames)[ aIt->first ];
             pValues->Value = aIt->second;
             pValues->State = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
         }
@@ -206,13 +215,12 @@ void PropertyMap::fillSequences( Sequence< OUString >& rNames, Sequence< Any >& 
     rValues.realloc( static_cast< sal_Int32 >( size() ) );
     if( !empty() )
     {
-        const PropertyNamesList& rPropNames = PropertyNamesPool::get();
         OUString* pNames = rNames.getArray();
         Any* pValues = rValues.getArray();
         for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt, ++pNames, ++pValues )
         {
             OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
-            *pNames = rPropNames[ aIt->first ];
+            *pNames = (*mpPropNames)[ aIt->first ];
             *pValues = aIt->second;
         }
     }

@@ -1,4 +1,4 @@
-/*_***********************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: MalformedCommandLineException.java,v $
- * $Revision: 1.4 $
+ * $RCSfile: propertylist.hxx,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,21 +26,28 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- **********************************************************************_*/
+ ************************************************************************/
 
-package com.sun.star.filter.config.tools.utils;
+#ifndef OOX_TOKEN_PROPERTYLIST_HXX
+#define OOX_TOKEN_PROPERTYLIST_HXX
 
+#include <vector>
+#include <rtl/ustring.hxx>
 
-//___________________________________________
-// types
+namespace oox {
 
-/** indicates a malformed command line.
- *
- *  E.g. it must be thrown if the command line contains one item more then once,
- *  or use unsupported format.
- */
-public class MalformedCommandLineException extends java.lang.Exception
+// ============================================================================
+
+/** A vector that contains all predefined property names used in the filters. */
+struct PropertyList : public ::std::vector< ::rtl::OUString >
 {
-    public MalformedCommandLineException() {}
-    public MalformedCommandLineException(java.lang.String sMsg) { super(sMsg); }
-}
+    explicit            PropertyList();
+                        ~PropertyList();
+};
+
+// ============================================================================
+
+} // namespace oox
+
+#endif
+
