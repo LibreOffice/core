@@ -1615,17 +1615,17 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                         rOStm << (INT32) 6;
                         rOStm << (INT16) rInfo.GetLineJoin();
                     }
+                }
 
-                    if(bLineDashDot)
-                    {
-                        rOStm << (INT16) GDI_LINEDASHDOT_ACTION;
-                        rOStm << (INT32) 4 + 16;
-                        rOStm << (INT16)rInfo.GetDashCount();
-                        rOStm << (INT32)rInfo.GetDashLen();
-                        rOStm << (INT16)rInfo.GetDotCount();
-                        rOStm << (INT32)rInfo.GetDotLen();
-                        rOStm << (INT32)rInfo.GetDistance();
-                    }
+                if(bLineDashDot)
+                {
+                    rOStm << (INT16) GDI_LINEDASHDOT_ACTION;
+                    rOStm << (INT32) 4 + 16;
+                    rOStm << (INT16)rInfo.GetDashCount();
+                    rOStm << (INT32)rInfo.GetDashLen();
+                    rOStm << (INT16)rInfo.GetDotCount();
+                    rOStm << (INT32)rInfo.GetDotLen();
+                    rOStm << (INT32)rInfo.GetDistance();
                 }
 
                 rOStm << (INT16) GDI_POLYLINE_ACTION;
@@ -1654,11 +1654,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     {
                         nCount += 1;
                     }
+                }
 
-                    if(bLineDashDot)
-                    {
-                        nCount += 1;
-                    }
+                if(bLineDashDot)
+                {
+                    nCount += 1;
                 }
             }
             break;
