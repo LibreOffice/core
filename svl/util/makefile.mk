@@ -61,6 +61,7 @@ LIB1FILES=	\
         $(SLB)$/items.lib	\
         $(SLB)$/misc.lib	\
         $(SLB)$/notify.lib	\
+                $(SLB)$/unoiface.lib      \
         $(SLB)$/svarray.lib \
         $(SLB)$/svsql.lib
 
