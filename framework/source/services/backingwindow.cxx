@@ -231,6 +231,13 @@ BackingWindow::~BackingWindow()
     delete mpAccExec;
 }
 
+void BackingWindow::GetFocus()
+{
+    if( IsVisible() )
+        maWriterButton.GrabFocus();
+    Window::GetFocus();
+}
+
 class ImageContainerRes : public Resource
 {
     public:
