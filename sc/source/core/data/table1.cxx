@@ -239,8 +239,7 @@ void ScTable::SetName( const String& rNewName )
     aName = rNewName;
     aUpperName.Erase();         // invalidated if the name is changed
 
-    if (IsStreamValid())
-        SetStreamValid(FALSE);
+    // SetStreamValid is handled in ScDocument::RenameTab
 }
 
 const String& ScTable::GetUpperName() const
