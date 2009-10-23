@@ -307,7 +307,7 @@ Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException)
 {
     throw NoSupportException( ::rtl::OUString(), *this );
 }
@@ -319,13 +319,13 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  ) throw (
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException)
 {
     OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException)
 {
     OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
 }
