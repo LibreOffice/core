@@ -63,7 +63,7 @@
 +			$(SLO_X64)$/trees.obj		\
 +			$(SLO_X64)$/zutil.obj       \
 +			$(SLO_X64)$/unzip.obj		\
-+			$(SLO)$/ioapi.obj
++			$(SLO_X64)$/ioapi.obj
 +
 +LIB1TARGET_X64=$(SLB_X64)$/$(TARGET).lib
 +LIB1OBJFILES_X64=$(SLOFILES_X64)
