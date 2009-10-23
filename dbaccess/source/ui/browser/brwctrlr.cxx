@@ -312,7 +312,7 @@ Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController:
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& _context ) throw (RuntimeException)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ ) throw (RuntimeException)
 {
     OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
 }
@@ -325,7 +325,7 @@ Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControl
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& _interactionHandler ) throw (RuntimeException)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ ) throw (RuntimeException)
 {
     OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
 }
