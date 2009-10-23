@@ -1060,6 +1060,7 @@ namespace basegfx
         const double fC = (maControlPointA.getX() - maStartPoint.getX()) * aRelativeEndPoint.getY()
                 - (maControlPointA.getY() - maStartPoint.getY()) * aRelativeEndPoint.getX();
 
+        // test for degenerated case: non-cubic curve
         if( fTools::equalZero(fA) )
         {
             // test for degenerated case: straight line
@@ -1068,25 +1069,34 @@ namespace basegfx
 
             // degenerated case: quadratic bezier
             pResult[0] = -fC / (2*fB);
-            if( pResult[0] < 0 || pResult[0]>1)
-                return 0;
-            return 1;
+
+            // test root: ignore it when it is outside the curve
+            int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
+            return nCount;
         }
 
-        // derivative is polynomial of order 2 => use binomial formula
+        // derivative is polynomial of order 2
+        // check if the polynomial has non-imaginary roots
         const double fD = fB*fB - fA*fC;
-        if( fD >= 0.0 )
+        if( fD >= 0.0 ) // TODO: is this test needed? geometrically not IMHO
         {
+            // calculate the first root
             const double fS = sqrt(fD);
             const double fQ = fB + ((fB >= 0) ? +fS : -fS);
             pResult[0] = fQ / fA;
-            pResult[1] = fC / fQ;
-            int nCount = 2;
-            if( pResult[1] < 0 || pResult[1]>1)
-                --nCount;
-            if( pResult[0] < 0 || pResult[0]>1)
-                if( --nCount)
-                    pResult[0] = pResult[1];
+            // test root: ignore it when it is outside the curve
+            int nCount = ((pResult[0] > 0) && (pResult[0] < 1));
+
+            // ignore multiplicit roots
+            if( !fTools::equalZero(fD) )
+            {
+                 // calculate the second root
+                const double fRoot = fC / fQ;
+                pResult[ nCount ] = fC / fQ;
+                // test root: ignore it when it is outside the curve
+                nCount += ((fRoot > 0) && (fRoot < 1));
+            }
+
             return nCount;
         }
 
