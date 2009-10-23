@@ -2514,6 +2514,88 @@ bool SvxTableController::PasteObject( SdrTableObj* pPasteTableObj )
     return true;
 }
 
+bool SvxTableController::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& /*rFormatSet*/  )
+{
+    // SdrView::TakeFormatPaintBrush() is enough
+    return false;
+}
+
+bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
+{
+    if( mbCellSelectionMode )
+    {
+        SdrTextObj* pTableObj = dynamic_cast<SdrTextObj*>( mxTableObj.get() );
+        if( !pTableObj )
+            return false;
+
+        const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+
+        if( bUndo )
+            mpModel->BegUndo( ImpGetResStr(STR_TABLE_NUMFORMAT) );
+
+        CellPos aStart, aEnd;
+        getSelectedCells( aStart, aEnd );
+
+        SfxItemSet aAttr(*rFormatSet.GetPool(), rFormatSet.GetRanges());
+        aAttr.Put(rFormatSet, TRUE);
+
+        const bool bFrame = (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER ) == SFX_ITEM_SET) || (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SFX_ITEM_SET);
+
+        if( bFrame )
+        {
+            aAttr.ClearItem( SDRATTR_TABLE_BORDER );
+            aAttr.ClearItem( SDRATTR_TABLE_BORDER_INNER );
+        }
+
+        const USHORT* pRanges = rFormatSet.GetRanges();
+        bool bTextOnly = true;
+
+        while( *pRanges )
+        {
+            if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
+            {
+                bTextOnly = true;
+                break;
+            }
+            pRanges += 2;
+        }
+
+        const bool bReplaceAll = false;
+        for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
+        {
+            for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
+            {
+                CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+                if( xCell.is() )
+                {
+                    if( bUndo )
+                        xCell->AddUndo();
+                    if( !bTextOnly )
+                        xCell->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
+
+                    SdrText* pText = static_cast< SdrText* >( xCell.get() );
+                    mpView->ApplyFormatPaintBrushToText( rFormatSet, *pTableObj, pText, bNoCharacterFormats, bNoParagraphFormats );
+                }
+            }
+        }
+
+        if( bFrame )
+        {
+            ApplyBorderAttr( rFormatSet );
+        }
+
+        UpdateTableShape();
+
+        if( bUndo )
+            mpModel->EndUndo();
+
+        return true;
+
+    }
+    return false;
+}
+
+
 // --------------------------------------------------------------------
 
 IMPL_LINK( SvxTableController, UpdateHdl, void *, EMPTYARG )
