@@ -139,6 +139,8 @@ testcase tFormatCharacter3
     Dim Vergleich4 as string
     Dim vLink as integer
 
+    printlog "New document"
+    Call hNewDocument
 	printlog "add some text to document => 	'formatted text with hyperlink'"
 	Call wTypeKeys ("formatted text with hyperlink")
 	printlog "select text"
