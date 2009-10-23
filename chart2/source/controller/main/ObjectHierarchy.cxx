@@ -452,7 +452,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                         rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
                         aChildParticle+=(C2U("="));
                         aSeriesSubContainer.push_back(
-                                    ObjectIdetnifier( ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle ) ) );
+                                    ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle ) ) );
                     }
 
                     // Statistics

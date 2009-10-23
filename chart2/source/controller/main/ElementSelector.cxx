@@ -74,20 +74,21 @@ SelectorListBox::~SelectorListBox()
 {
 }
 
-void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const ObjectHierarchy::tCID & rParent, std::vector< ListBoxEntryData >& rEntries
+void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const ObjectHierarchy::tOID & rParent, std::vector< ListBoxEntryData >& rEntries
                           , const sal_Int32 nHierarchyDepth, const Reference< chart2::XChartDocument >& xChartDoc )
 {
     ObjectHierarchy::tChildContainer aChildren( rHierarchy.getChildren(rParent) );
     ObjectHierarchy::tChildContainer::const_iterator aIt( aChildren.begin());
     while( aIt != aChildren.end() )
     {
-        ::rtl::OUString aCID = *aIt;
+        ObjectHierarchy::tOID aOID = *aIt;
+        ::rtl::OUString aCID = aOID.getObjectCID();
         ListBoxEntryData aEntry;
         aEntry.CID = aCID;
         aEntry.UIName += ObjectNameProvider::getNameForCID( aCID, xChartDoc );
         aEntry.nHierarchyDepth = nHierarchyDepth;
         rEntries.push_back(aEntry);
-        lcl_addObjectsToList( rHierarchy, aCID, rEntries, nHierarchyDepth+1, xChartDoc );
+        lcl_addObjectsToList( rHierarchy, aOID, rEntries, nHierarchyDepth+1, xChartDoc );
         ++aIt;
     }
 }
@@ -106,12 +107,16 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
     if( xChartController.is() )
     {
         Reference< view::XSelectionSupplier > xSelectionSupplier( xChartController, uno::UNO_QUERY);
+        ObjectHierarchy::tOID aSelectedOID;
         rtl::OUString aSelectedCID;
         if( xSelectionSupplier.is() )
-            xSelectionSupplier->getSelection() >>= aSelectedCID;
+        {
+            aSelectedOID = ObjectIdentifier( xSelectionSupplier->getSelection() );
+            aSelectedCID = aSelectedOID.getObjectCID();
+        }
 
         Reference< chart2::XChartDocument > xChartDoc( xChartController->getModel(), uno::UNO_QUERY );
-        ObjectType eType( ObjectIdentifier::getObjectType( aSelectedCID ));
+        ObjectType eType( ObjectIdentifier::getObjectType( aSelectedOID.getObjectCID() ));
         bool bAddSelectionToList = false;
         if( eType == OBJECTTYPE_DATA_POINT || eType == OBJECTTYPE_DATA_LABEL )
             bAddSelectionToList = true;
@@ -122,7 +127,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
         ExplicitValueProvider* pExplicitValueProvider = 0;//ExplicitValueProvider::getExplicitValueProvider(xChartView); dies erzeugt alle sichtbaren datenpinkte, das ist zu viel
         ObjectHierarchy aHierarchy( xChartDoc, pExplicitValueProvider, true /*bFlattenDiagram*/, true /*bOrderingForElementSelector*/ );
-        lcl_addObjectsToList( aHierarchy, aHierarchy.getRootNodeCID(), m_aEntries, 0, xChartDoc );
+        lcl_addObjectsToList( aHierarchy, aHierarchy.getRootNodeOID(), m_aEntries, 0, xChartDoc );
 
         std::vector< ListBoxEntryData >::iterator aIt( m_aEntries.begin() );
         if( bAddSelectionToList )
