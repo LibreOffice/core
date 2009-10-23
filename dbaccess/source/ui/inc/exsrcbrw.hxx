@@ -31,18 +31,11 @@
 #ifndef _SBA_EXTCTRLR_HXX
 #define _SBA_EXTCTRLR_HXX
 
-#ifndef _SBA_BWRCTRLR_HXX
 #include "brwctrlr.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
-#include <com/sun/star/form/XFormController.hpp>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
+
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
+
 //==============================================================================
 //= SbaExternalSourceBrowser
 //==============================================================================

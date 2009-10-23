@@ -32,187 +32,72 @@
 #include "precompiled_dbaccess.hxx"
 
 
-#ifndef _SBA_BWRCTRLR_HXX
-#include "brwctrlr.hxx"
-#endif
-#ifndef _SBX_BRWVIEW_HXX
-#include "brwview.hxx"
-#endif
-#ifndef _OSL_MUTEX_HXX_ //autogen wg. MutexGuard
-#include <osl/mutex.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen wg. SFX_APP
-#include <sfx2/app.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_TYPECLASS_HPP_
-#include <com/sun/star/uno/TypeClass.hpp>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
-#include "sqlmessage.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
-#include <com/sun/star/form/XFormController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
-#include <com/sun/star/sdbc/XRowSetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLERRORBROADCASTER_HPP_
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
-#include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
-#include <com/sun/star/form/FormButtonType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XCHANGELISTENER_HPP_
-#include <com/sun/star/form/XChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMSUBMITENCODING_HPP_
-#include <com/sun/star/form/FormSubmitEncoding.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMSUBMITMETHOD_HPP_
-#include <com/sun/star/form/FormSubmitMethod.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XSUBMITLISTENER_HPP_
-#include <com/sun/star/form/XSubmitListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
-#include <com/sun/star/form/XReset.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XSUBMIT_HPP_
-#include <com/sun/star/form/XSubmit.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XAPPROVEACTIONBROADCASTER_HPP_
-#include <com/sun/star/form/XApproveActionBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
-#include <com/sun/star/form/XChangeBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESETLISTENER_HPP_
-#include <com/sun/star/form/XResetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
-#include <com/sun/star/util/XCancellable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XDATABASEPARAMETERBROADCASTER_HPP_
-#include <com/sun/star/form/XDatabaseParameterBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XBOUNDCONTROL_HPP_
-#include <com/sun/star/form/XBoundControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
-#include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
-#include <cppuhelper/exc_hlp.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _FMSEARCH_HXX
-#include <svx/fmsearch.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
-#include <vcl/waitobj.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
-#include <tools/color.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _DBU_BRW_HRC_
-#include "dbu_brw.hrc"
-#endif
-#ifndef _SFX_HRC
-#include <sfx2/sfx.hrc>
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
-#include "browserids.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _COMPHELPER_INTERACTION_HXX_
-#include <comphelper/interaction.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef CONNECTIVITY_SQLERROR_HXX
-#include <connectivity/sqlerror.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
-#include <com/sun/star/sdb/ParametersRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef INCLUDED_COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
-#ifndef INCLUDED_COM_SUN_STAR_SDB_ERRORCONDITION_HPP
-#include <com/sun/star/sdb/ErrorCondition.hpp>
-#endif
-#ifndef DBAUI_QUERYFILTER_HXX
-#include "queryfilter.hxx"
-#endif
-#ifndef DBAUI_QUERYORDER_HXX
-#include "queryorder.hxx"
-#endif
-#include <rtl/logfile.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-//#include <svx/fmresids.hrc> //CHINA001
+#include "browserids.hxx"
+#include "brwctrlr.hxx"
+#include "brwview.hxx"
+#include "dbu_brw.hrc"
+#include "dbustrings.hrc"
+#include "queryfilter.hxx"
+#include "queryorder.hxx"
+#include "sqlmessage.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/form/FormButtonType.hpp>
+#include <com/sun/star/form/FormSubmitEncoding.hpp>
+#include <com/sun/star/form/FormSubmitMethod.hpp>
+#include <com/sun/star/form/XApproveActionBroadcaster.hpp>
+#include <com/sun/star/form/XBoundControl.hpp>
+#include <com/sun/star/form/XChangeBroadcaster.hpp>
+#include <com/sun/star/form/XChangeListener.hpp>
+#include <com/sun/star/form/XDatabaseParameterBroadcaster.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/form/XResetListener.hpp>
+#include <com/sun/star/form/XSubmit.hpp>
+#include <com/sun/star/form/XSubmitListener.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#include <com/sun/star/sdbc/XRowSetListener.hpp>
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/uno/TypeClass.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/interaction.hxx>
+#include <comphelper/sequence.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/sqlerror.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/logfile.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/sfx.hrc>
+#include <svx/fmsearch.hxx>
+#include <svx/svxdlg.hxx>
+#include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/msgbox.hxx>
+#include <vcl/waitobj.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -280,12 +165,12 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
 
 
 //==============================================================================
-// a helper class implementing a ::com::sun::star::form::XFormController, will be aggregated by SbaXDataBrowserController
-// (we can't derive from ::com::sun::star::form::XFormController as it's base class is ::com::sun::star::awt::XTabController and the ::com::sun::star::awt::XTabController::getModel collides
-// with the ::com::sun::star::frame::XController::getModel implemented in our base class SbaXDataBrowserController)
+// a helper class implementing a runtime::XFormController, will be aggregated by SbaXDataBrowserController
+// (we can't derive from XFormController as it's base class is XTabController and the XTabController::getModel collides
+// with the XController::getModel implemented in our base class SbaXDataBrowserController)
 class SbaXDataBrowserController::FormControllerImpl
-    : public ::cppu::WeakAggImplHelper2< ::com::sun::star::form::XFormController,
-                                         ::com::sun::star::frame::XFrameActionListener>
+    : public ::cppu::WeakAggImplHelper2< ::com::sun::star::form::runtime::XFormController,
+                                         ::com::sun::star::frame::XFrameActionListener >
 {
     friend class SbaXDataBrowserController;
     ::cppu::OInterfaceContainerHelper   m_aActivateListeners;
@@ -294,12 +179,63 @@ class SbaXDataBrowserController::FormControllerImpl
 public:
     FormControllerImpl(SbaXDataBrowserController* pOwner);
 
-    // ::com::sun::star::form::XFormController
+    // XFormController
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations > SAL_CALL getFormOperations() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
 
-    // ::com::sun::star::awt::XTabController
+    // XChild, base of XFormController
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
+    // XComponent, base of XFormController
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XIndexAccess, base of XFormController
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XElementAccess, base of XIndexAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XEnumerationAccess, base of XElementAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XModifyBroadcaster, base of XFormController
+    virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XConfirmDeleteBroadcaster, base of XFormController
+    virtual void SAL_CALL addConfirmDeleteListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XConfirmDeleteListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeConfirmDeleteListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XConfirmDeleteListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XSQLErrorBroadcaster, base of XFormController
+    virtual void SAL_CALL addSQLErrorListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSQLErrorListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XRowSetApproveBroadcaster, base of XFormController
+    virtual void SAL_CALL addRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XDatabaseParameterBroadcaster2, base of XFormController
+    virtual void SAL_CALL addDatabaseParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeDatabaseParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XDatabaseParameterBroadcaster, base of XDatabaseParameterBroadcaster2
+    virtual void SAL_CALL addParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XModeSelector, base of XFormController
+    virtual void SAL_CALL setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XTabController, base of XFormController
     virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( ::com::sun::star::uno::RuntimeException );
@@ -310,10 +246,10 @@ public:
     virtual void SAL_CALL activateFirst(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL activateLast(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    // ::com::sun::star::frame::XFrameActionListener
+    // XFrameActionListener
     virtual void SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
-    // ::com::sun::star::lang::XEventListener
+    // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
@@ -340,6 +276,13 @@ SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
 }
 
 //------------------------------------------------------------------
+Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations() throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getFormOperations: not supported!" );
+    return NULL;
+}
+
+//------------------------------------------------------------------
 Reference< ::com::sun::star::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::getCurrentControl(void) throw( RuntimeException )
 {
     return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< ::com::sun::star::awt::XControl > ();
@@ -355,6 +298,168 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException )
 {
     m_aActivateListeners.removeInterface(l);
+}
+
+Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getParent(  ) throw (RuntimeException)
+{
+    // don't have any parent form controllers
+    return NULL;
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
+{
+    throw NoSupportException( ::rtl::OUString(), *this );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::dispose: no, you do *not* want to do this!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
+}
+
+//------------------------------------------------------------------
+::sal_Int32 SAL_CALL SbaXDataBrowserController::FormControllerImpl::getCount(  ) throw (RuntimeException)
+{
+    // no sub controllers, never
+    return 0;
+}
+
+//------------------------------------------------------------------
+Any SAL_CALL SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+{
+    // no sub controllers, never
+    throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+}
+
+//------------------------------------------------------------------
+Type SAL_CALL SbaXDataBrowserController::FormControllerImpl::getElementType(  ) throw (RuntimeException)
+{
+    return ::cppu::UnoType< runtime::XFormController >::get();
+}
+
+//------------------------------------------------------------------
+::sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::hasElements(  ) throw (RuntimeException)
+{
+    // no sub controllers, never
+    return false;
+}
+
+//------------------------------------------------------------------
+Reference< XEnumeration > SAL_CALL SbaXDataBrowserController::FormControllerImpl::createEnumeration(  ) throw (RuntimeException)
+{
+    return new ::comphelper::OEnumerationByIndex( this );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addModifyListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeModifyListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::addParameterListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::removeParameterListener: no support!" );
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const ::rtl::OUString& _rMode ) throw (NoSupportException, RuntimeException)
+{
+    if ( !supportsMode( _rMode ) )
+        throw NoSupportException();
+}
+
+//------------------------------------------------------------------
+::rtl::OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  ) throw (RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+}
+
+//------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  ) throw (RuntimeException)
+{
+    Sequence< ::rtl::OUString > aModes(1);
+    aModes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+    return aModes;
+}
+
+//------------------------------------------------------------------
+::sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const ::rtl::OUString& aMode ) throw (RuntimeException)
+{
+    return aMode.compareToAscii( "DataMode" ) == 0;
 }
 
 //------------------------------------------------------------------
@@ -465,7 +570,6 @@ Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  )
 //------------------------------------------------------------------
 Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::queryInterface" );
     // check for our additional interfaces
     Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
 
