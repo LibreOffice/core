@@ -30,89 +30,87 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "gridcols.hxx"
-#include <svx/obj3d.hxx>
-#include "fmvwimp.hxx"
-#include "fmshimp.hxx"
-#include "fmtextcontrolshell.hxx"
-#include <svx/svdpagv.hxx>
-#include <svx/fmpage.hxx>
-#include <svx/dialmgr.hxx>
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
+
 #include "fmitems.hxx"
 #include "fmobj.hxx"
-#include "formtoolbars.hxx"
-#include <svx/fmglob.hxx>
-#include "svditer.hxx"
-#include "fmservs.hxx"
 #include "fmpgeimp.hxx"
-#include "fmtools.hxx"
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
-#include <svx/fmshell.hxx>
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#include <svx/fmmodel.hxx>
+#include "fmresids.hrc"
+#include "fmservs.hxx"
+#include "fmshimp.hxx"
+#include "fmtextcontrolshell.hxx"
+#include "fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmurl.hxx"
+#include "fmvwimp.hxx"
 #include "formcontrolling.hxx"
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XContainer.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XListBox.hpp>
+#include "formtoolbars.hxx"
+#include "gridcols.hxx"
+#include "svditer.hxx"
+#include "svx/dialmgr.hxx"
+#include "svx/dialogs.hrc"
+#include "svx/fmglob.hxx"
+#include "svx/fmmodel.hxx"
+#include "svx/fmpage.hxx"
+#include "svx/fmshell.hxx"
+#include "svx/obj3d.hxx"
+#include "svx/sdrpagewindow.hxx"
+#include "svx/svdpagv.hxx"
+#include "svx/svxdlg.hxx"
+#include "svx/svxids.hrc"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/awt/XCheckBox.hpp>
-#include <com/sun/star/form/XBoundComponent.hpp>
-#include <com/sun/star/form/ListSourceType.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/script/XEventAttacherManager.hpp>
-#include <com/sun/star/form/XBoundControl.hpp>
-#include <com/sun/star/form/XReset.hpp>
-#include <com/sun/star/form/XGrid.hpp>
-#include <com/sun/star/form/XGridPeer.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/util/XModeSelector.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XCancellable.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/form/ListSourceType.hpp>
+#include <com/sun/star/form/XBoundComponent.hpp>
+#include <com/sun/star/form/XBoundControl.hpp>
+#include <com/sun/star/form/XGrid.hpp>
+#include <com/sun/star/form/XGridPeer.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <osl/mutex.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/frame.hxx>
-#include <vcl/waitobj.hxx>
-#include <tools/shl.hxx>
-#include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfile.hxx>
-#include <tools/color.hxx>
-#include <tools/urlobj.hxx>
-#include <comphelper/property.hxx>
-#include <connectivity/dbtools.hxx>
-#include <comphelper/stl_types.hxx>
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
+#include <com/sun/star/util/XCancellable.hpp>
+#include <com/sun/star/util/XModeSelector.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+/** === end UNO includes === **/
+
 #include <comphelper/extract.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <svx/sdrpagewindow.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/stl_types.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/servicefactory.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/color.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/shl.hxx>
+#include <tools/urlobj.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/waitobj.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -675,7 +673,8 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
 
     if (e.Source == m_xExternalViewController)
     {
-        Reference< XFormController> xFormController(m_xExternalViewController, UNO_QUERY);
+        Reference< runtime::XFormController > xFormController( m_xExternalViewController, UNO_QUERY );
+        OSL_ENSURE( xFormController.is(), "FmXFormShell::disposing: invalid external view controller!" );
         if (xFormController.is())
             xFormController->removeActivateListener((XFormControllerListener*)this);
 
@@ -765,7 +764,7 @@ void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( Runt
     if ( impl_checkDisposed() )
         return;
 
-    Reference< XFormController > xController( rEvent.Source, UNO_QUERY_THROW );
+    Reference< runtime::XFormController > xController( rEvent.Source, UNO_QUERY_THROW );
     m_pTextShell->formActivated( xController );
     setActiveController( xController );
 }
@@ -777,7 +776,7 @@ void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( Ru
     if ( impl_checkDisposed() )
         return;
 
-    Reference< XFormController > xController( rEvent.Source, UNO_QUERY_THROW );
+    Reference< runtime::XFormController > xController( rEvent.Source, UNO_QUERY_THROW );
     m_pTextShell->formDeactivated( xController );
 }
 
@@ -1703,7 +1702,7 @@ Reference< XResultSet> FmXFormShell::getInternalForm(const Reference< XResultSet
     if ( impl_checkDisposed() )
         return NULL;
 
-    Reference< XFormController> xExternalCtrlr(m_xExternalViewController, UNO_QUERY);
+    Reference< runtime::XFormController> xExternalCtrlr(m_xExternalViewController, UNO_QUERY);
     if (xExternalCtrlr.is() && (_xForm == xExternalCtrlr->getModel()))
     {
         DBG_ASSERT(m_xExternalDisplayedForm.is(), "FmXFormShell::getInternalForm : invalid external form !");
@@ -1719,7 +1718,7 @@ Reference< XForm> FmXFormShell::getInternalForm(const Reference< XForm>& _xForm)
     if ( impl_checkDisposed() )
         return NULL;
 
-    Reference< XFormController> xExternalCtrlr(m_xExternalViewController, UNO_QUERY);
+    Reference< runtime::XFormController > xExternalCtrlr(m_xExternalViewController, UNO_QUERY);
     if (xExternalCtrlr.is() && (_xForm == xExternalCtrlr->getModel()))
     {
         DBG_ASSERT(m_xExternalDisplayedForm.is(), "FmXFormShell::getInternalForm : invalid external form !");
@@ -1808,7 +1807,7 @@ void FmXFormShell::impl_switchActiveControllerListening( const bool _bListen )
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::setActiveController( const Reference< XFormController>& xController, sal_Bool _bNoSaveOldContent )
+void FmXFormShell::setActiveController( const Reference< runtime::XFormController >& xController, sal_Bool _bNoSaveOldContent )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::setActiveController" );
     if ( impl_checkDisposed() )
@@ -2103,11 +2102,11 @@ void FmXFormShell::startListening()
                     {
                         // suchen des Controllers, ueber den eine Navigation moeglich ist
                         Reference< XChild> xChild(m_xActiveController, UNO_QUERY);
-                        Reference< XFormController> xParent;
+                        Reference< runtime::XFormController > xParent;
                         while (xChild.is())
                         {
                             xChild = Reference< XChild>(xChild->getParent(), UNO_QUERY);
-                            xParent  = Reference< XFormController>(xChild, UNO_QUERY);
+                            xParent  = Reference< runtime::XFormController >(xChild, UNO_QUERY);
                             Reference< XPropertySet> xParentSet;
                             if (xParent.is())
                                 xParentSet = Reference< XPropertySet>(xParent->getModel(), UNO_QUERY);
@@ -2936,8 +2935,8 @@ void FmXFormShell::startFiltering()
     FmWinRecList::iterator i = pXView->findWindow(xContainer);
     if (i != pXView->getWindowList().end())
     {
-        const ::std::vector< Reference< XFormController> >& rControllerList = (*i)->GetList();
-        for (::std::vector< Reference< XFormController> >::const_iterator j = rControllerList.begin();
+        const ::std::vector< Reference< runtime::XFormController> >& rControllerList = (*i)->GetList();
+        for (::std::vector< Reference< runtime::XFormController> >::const_iterator j = rControllerList.begin();
              j != rControllerList.end(); ++j)
         {
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
@@ -2953,14 +2952,14 @@ void FmXFormShell::startFiltering()
 }
 
 //------------------------------------------------------------------------------
-void saveFilter(const Reference< XFormController>& _rxController)
+void saveFilter(const Reference< runtime::XFormController >& _rxController)
 {
     Reference< XPropertySet> xFormAsSet(_rxController->getModel(), UNO_QUERY);
     Reference< XPropertySet> xControllerAsSet(_rxController, UNO_QUERY);
     Reference< XIndexAccess> xControllerAsIndex(_rxController, UNO_QUERY);
 
     // call the subcontroller
-    Reference< XFormController> xController;
+    Reference< runtime::XFormController > xController;
     for (sal_Int32 i = 0, nCount = xControllerAsIndex->getCount(); i < nCount; ++i)
     {
         xControllerAsIndex->getByIndex(i) >>= xController;
@@ -3004,13 +3003,13 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
     FmWinRecList::iterator i = pXView->findWindow(xContainer);
     if (i != pXView->getWindowList().end())
     {
-        const ::std::vector< Reference< XFormController> >& rControllerList = (*i)->GetList();
+        const ::std::vector< Reference< runtime::XFormController > >& rControllerList = (*i)->GetList();
         ::std::vector < ::rtl::OUString >   aOriginalFilters;
         ::std::vector < sal_Bool >          aOriginalApplyFlags;
 
         if (bSave)
         {
-            for (::std::vector< Reference< XFormController> > ::const_iterator j = rControllerList.begin();
+            for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
                  j != rControllerList.end(); ++j)
             {
                 if (bSave)
@@ -3035,7 +3034,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 saveFilter(*j);
             }
         }
-        for (::std::vector< Reference< XFormController> > ::const_iterator j = rControllerList.begin();
+        for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
              j != rControllerList.end(); ++j)
         {
 
@@ -3045,8 +3044,8 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
         }
         if (bSave)  // execute the filter
         {
-            const ::std::vector< Reference< XFormController> > & rControllers = (*i)->GetList();
-            for (::std::vector< Reference< XFormController> > ::const_iterator j = rControllers.begin();
+            const ::std::vector< Reference< runtime::XFormController > > & rControllers = (*i)->GetList();
+            for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllers.begin();
                  j != rControllers.end(); ++j)
             {
                 Reference< XLoadable> xReload((*j)->getModel(), UNO_QUERY);
@@ -3087,13 +3086,13 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
 }
 
 //------------------------------------------------------------------------------
-void clearFilter(const Reference< XFormController>& _rxController)
+void clearFilter(const Reference< runtime::XFormController >& _rxController)
 {
     Reference< XPropertySet> xControllerAsSet(_rxController, UNO_QUERY);
     Reference< XIndexAccess> xControllerAsIndex(_rxController, UNO_QUERY);
 
     // call the subcontroller
-    Reference< XFormController> xController;
+    Reference< runtime::XFormController > xController;
     for (sal_Int32 i = 0, nCount = xControllerAsIndex->getCount();
          i < nCount; i++)
     {
@@ -3141,8 +3140,8 @@ void FmXFormShell::clearFilter()
     FmWinRecList::iterator i = pXView->findWindow(xContainer);
     if (i != pXView->getWindowList().end())
     {
-        const ::std::vector< Reference< XFormController> > & rControllerList = (*i)->GetList();
-        for (::std::vector< Reference< XFormController> > ::const_iterator j = rControllerList.begin();
+        const ::std::vector< Reference< runtime::XFormController > > & rControllerList = (*i)->GetList();
+        for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
              j != rControllerList.end(); ++j)
         {
             ::clearFilter(*j);
@@ -3253,7 +3252,7 @@ void FmXFormShell::restoreControlLocks()
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::DoAsyncCursorAction(const Reference< XFormController>& _xController, CURSOR_ACTION _eWhat)
+void FmXFormShell::DoAsyncCursorAction(const Reference< runtime::XFormController >& _xController, CURSOR_ACTION _eWhat)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::DoAsyncCursorAction" );
     if ( impl_checkDisposed() )
@@ -3329,7 +3328,7 @@ sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< XResultSet>& _xFo
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< XFormController>& xController) const
+sal_Bool FmXFormShell::HasPendingCursorAction(const Reference< runtime::XFormController >& xController) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::HasPendingCursorAction" );
     if ( impl_checkDisposed() )
@@ -3471,7 +3470,7 @@ void FmXFormShell::CreateExternalView()
     ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
     sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
 
-    Reference< XFormController> xCurrentNavController( getNavController());
+    Reference< runtime::XFormController > xCurrentNavController( getNavController());
         // the creation of the "partwindow" may cause a deactivate of the document which will result in our nav controller to be set to NULL
 
     // _first_ check if we have any valid fields we can use for the grid view
@@ -3538,12 +3537,12 @@ void FmXFormShell::CreateExternalView()
         {
             if ( m_xExternalViewController == getActiveController() )
             {
-                Reference< XFormController > xAsFormController( m_xExternalViewController, UNO_QUERY );
+                Reference< runtime::XFormController > xAsFormController( m_xExternalViewController, UNO_QUERY );
                 ControllerFeatures aHelper( ::comphelper::getProcessServiceFactory(), xAsFormController, NULL );
                 aHelper->commitCurrentControl();
             }
 
-            Reference< XFormController> xNewController(m_xExtViewTriggerController);
+            Reference< runtime::XFormController > xNewController(m_xExtViewTriggerController);
             CloseExternalFormViewer();
             setActiveController(xNewController);
             return;
@@ -3876,7 +3875,8 @@ void FmXFormShell::CreateExternalView()
 
             // we want to know modifications done in the external view
             // if the external controller is a XFormController we can use all our default handlings for it
-            Reference< XFormController> xFormController(m_xExternalViewController, UNO_QUERY);
+            Reference< runtime::XFormController > xFormController( m_xExternalViewController, UNO_QUERY );
+            OSL_ENSURE( xFormController.is(), "FmXFormShell::CreateExternalView:: invalid external view controller!" );
             if (xFormController.is())
                 xFormController->addActivateListener((XFormControllerListener*)this);
         }

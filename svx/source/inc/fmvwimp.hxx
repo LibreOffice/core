@@ -37,7 +37,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -73,7 +73,9 @@ FORWARD_DECLARE_INTERFACE(awt,XWindow)
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 FORWARD_DECLARE_INTERFACE(util,XNumberFormats)
 
-class FmXFormController;
+namespace svxform {
+    class FormController;
+}
 class FmXFormView;
 
 namespace svx {
@@ -88,9 +90,9 @@ class FmXPageViewWinRec : public ::cppu::WeakImplHelper1< ::com::sun::star::cont
 {
     friend class FmXFormView;
 
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >    m_aControllerList;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                    m_xControlContainer;
-    ::comphelper::ComponentContext                                                                  m_aContext;
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > >   m_aControllerList;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                            m_xControlContainer;
+    ::comphelper::ComponentContext                                                                          m_aContext;
     FmXFormView*                m_pViewImpl;
     Window*                     m_pWindow;
 
@@ -113,12 +115,12 @@ public:
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 _Index) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    const ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > >& GetList() {return m_aControllerList;}
+    const ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm ) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm ) const;
     void setController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
-                        FmXFormController* pParent = NULL);
+                        ::svxform::FormController* pParent = NULL);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
     void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
     void dispose();
@@ -213,7 +215,7 @@ public:
     FmWinRecList::const_iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC ) const;
     const FmWinRecList& getWindowList() const {return m_aWinList;}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >
             getFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // activation handling

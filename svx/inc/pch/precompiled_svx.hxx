@@ -263,7 +263,7 @@
 #include "com/sun/star/form/XDatabaseParameterListener.hpp"
 #include "com/sun/star/form/XForm.hpp"
 #include "com/sun/star/form/XFormComponent.hpp"
-#include "com/sun/star/form/XFormController.hpp"
+#include "com/sun/star/form/runtime/XFormController.hpp"
 #include "com/sun/star/form/XFormControllerListener.hpp"
 #include "com/sun/star/form/XFormsSupplier.hpp"
 #include "com/sun/star/form/XFormsSupplier2.hpp"

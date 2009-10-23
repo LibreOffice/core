@@ -827,7 +827,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                         bReopenNavigator = sal_True;
                     }
 
-                Reference< XFormController >  xController( GetImpl()->getActiveController() );
+                Reference< runtime::XFormController >  xController( GetImpl()->getActiveController() );
 
                 if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
                         // closing the window was denied, for instance because of a invalid criterion
@@ -1400,7 +1400,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
 }
 
 //------------------------------------------------------------------------
-Reference< XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
+Reference< runtime::XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
 {
     const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
     if ( !pFormView )

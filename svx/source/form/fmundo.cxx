@@ -35,7 +35,6 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/form/XFormController.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>

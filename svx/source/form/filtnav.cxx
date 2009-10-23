@@ -30,50 +30,42 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
-#include "fmctrler.hxx"
+
+
 #include "filtnav.hxx"
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/form/XFormController.hpp>
-#include <fmexch.hxx>
-#include "fmitems.hxx"
-
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
-
-#ifndef _SVX_FMHELP_HRC
+#include "fmctrler.hxx"
+#include "fmexch.hxx"
 #include "fmhelp.hrc"
-#endif
-#include <svx/dialmgr.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/objitem.hxx>
-#include <sfx2/request.hxx>
-#include <tools/shl.hxx>
+#include "fmitems.hxx"
+#include "fmprop.hrc"
+#include "fmresids.hrc"
+#include "gridcell.hxx"
 
-#ifndef _WRKWIN_HXX //autogen
-#include <vcl/wrkwin.hxx>
-#endif
-#include <svx/fmshell.hxx>
-#include <fmshimp.hxx>
-#include <fmservs.hxx>
-#include <fmtools.hxx>
-#include <cppuhelper/implbase1.hxx>
+/** === begin UNO includes === **/
+#include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <comphelper/sequence.hxx>
-#include "gridcell.hxx"
+#include <cppuhelper/implbase1.hxx>
+#include <fmservs.hxx>
+#include <fmshimp.hxx>
+#include <fmtools.hxx>
 #include <rtl/logfile.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/objitem.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/request.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/fmshell.hxx>
+#include <svx/svxids.hrc>
+#include <tools/shl.hxx>
+#include <vcl/wrkwin.hxx>
 
 #include <functional>
 
@@ -85,11 +77,6 @@
 #define DROP_ACTION_TIMER_TICK_BASE         10
     // das ist die Basis, mit der beide Angaben multipliziert werden (in ms)
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 using namespace ::connectivity;
@@ -99,6 +86,31 @@ using namespace ::connectivity;
 namespace svxform
 {
 //........................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::awt::XTextComponent;
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::awt::XTextListener;
+    using ::com::sun::star::awt::TextEvent;
+    using ::com::sun::star::container::XIndexAccess;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::form::runtime::XFormController;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::form::XForm;
+    using ::com::sun::star::container::XChild;
+    using ::com::sun::star::awt::XControl;
+    using ::com::sun::star::sdbc::XConnection;
+    using ::com::sun::star::util::XNumberFormatsSupplier;
+    using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::util::XNumberFormatter;
+    using ::com::sun::star::sdbc::XRowSet;
+    using ::com::sun::star::lang::Locale;
+    using ::com::sun::star::sdb::SQLContext;
+    using ::com::sun::star::uno::XInterface;
+    /** === end UNO using === **/
 
 //========================================================================
 OFilterItemExchange::OFilterItemExchange()
@@ -168,7 +180,7 @@ Image FmFormItem::GetImage( BmpColorMode _eMode ) const
 //========================================================================
 TYPEINIT1(FmFilterItems, FmParentData);
 //------------------------------------------------------------------------
-FmFilterItem* FmFilterItems::Find(const Reference< ::com::sun::star::awt::XTextComponent > & _xText) const
+FmFilterItem* FmFilterItems::Find(const Reference< XTextComponent > & _xText) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterItems::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
@@ -203,11 +215,11 @@ Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
 //========================================================================
 TYPEINIT1(FmFilterItem, FmFilterData);
 //------------------------------------------------------------------------
-FmFilterItem::FmFilterItem(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+FmFilterItem::FmFilterItem(const Reference< XMultiServiceFactory >& _rxFactory,
                            FmFilterItems* pParent,
                      const ::rtl::OUString& aFieldName,
                      const ::rtl::OUString& aText,
-                     const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
+                     const Reference< XTextComponent > & _xText)
           :FmFilterData(_rxFactory,pParent, aText)
           ,m_aFieldName(aFieldName)
           ,m_xText(_xText)
@@ -315,36 +327,36 @@ TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 //========================================================================
 // class FmFilterAdapter, Listener an den FilterControls
 //========================================================================
-class FmFilterAdapter : public ::cppu::WeakImplHelper1< ::com::sun::star::awt::XTextListener >
+class FmFilterAdapter : public ::cppu::WeakImplHelper1< XTextListener >
 {
     FmFilterControls        m_aFilterControls;
     FmFilterModel*          m_pModel;
 
 public:
-    FmFilterAdapter(FmFilterModel* pModel, const Reference< ::com::sun::star::container::XIndexAccess >& xControllers);
+    FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers);
 
-// ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException );
+// XEventListener
+    virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException );
 
-// ::com::sun::star::awt::XTextListener
-    virtual void SAL_CALL textChanged(const ::com::sun::star::awt::TextEvent& e) throw( ::com::sun::star::uno::RuntimeException );
+// XTextListener
+    virtual void SAL_CALL textChanged(const TextEvent& e) throw( RuntimeException );
 
 // helpers
     void dispose() throw( RuntimeException );
 
-    void InsertElements(const Reference< ::com::sun::star::container::XIndexAccess >& xControllers);
-    void RemoveElement(const Reference< ::com::sun::star::awt::XTextComponent > & xText);
+    void InsertElements(const Reference< XIndexAccess >& xControllers);
+    void RemoveElement(const Reference< XTextComponent > & xText);
 
-    Reference< ::com::sun::star::beans::XPropertySet > getField(const Reference< ::com::sun::star::awt::XTextComponent > & xText) const;
+    Reference< XPropertySet > getField(const Reference< XTextComponent > & xText) const;
     void setText(sal_Int32 nPos,
         const FmFilterItem* pFilterItem,
         const ::rtl::OUString& rText);
-    void DeleteItemsByText(::std::vector<FmFilterData*>& rItems, const Reference< ::com::sun::star::awt::XTextComponent > & xText);
-    Reference< ::com::sun::star::form::XForm > findForm(const Reference< ::com::sun::star::container::XChild >& xChild);
+    void DeleteItemsByText(::std::vector<FmFilterData*>& rItems, const Reference< XTextComponent > & xText);
+    Reference< XForm > findForm(const Reference< XChild >& xChild);
 };
 
 //------------------------------------------------------------------------
-FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< ::com::sun::star::container::XIndexAccess >& xControllers)
+FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers)
                  :m_pModel(pModel)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::FmFilterAdapter" );
@@ -371,7 +383,7 @@ void FmFilterAdapter::dispose() throw( RuntimeException )
 //------------------------------------------------------------------------------
 // delete all items relate to the control
 void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& _rItems,
-                                        const Reference< ::com::sun::star::awt::XTextComponent > & xText)
+                                        const Reference< XTextComponent > & xText)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::DeleteItemsByText" );
     for (::std::vector<FmFilterData*>::reverse_iterator i = _rItems.rbegin();
@@ -399,19 +411,19 @@ void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& _rItems,
 }
 
 //------------------------------------------------------------------------
-void FmFilterAdapter::InsertElements(const Reference< ::com::sun::star::container::XIndexAccess >& xControllers)
+void FmFilterAdapter::InsertElements(const Reference< XIndexAccess >& xControllers)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::InsertElements" );
     for (sal_Int32 i = 0, nLen = xControllers->getCount(); i < nLen; ++i)
     {
-        Reference< ::com::sun::star::container::XIndexAccess > xElement;
+        Reference< XIndexAccess > xElement;
         xControllers->getByIndex(i) >>= xElement;
 
         // Insert the Elements of the controller
         InsertElements(xElement);
 
         // store the filter controls
-        FmXFormController* pController = FmXFormController::getImplementation( xElement.get() );
+        FormController* pController = FormController::getImplementation( xElement );
         DBG_ASSERT( pController, "FmFilterAdapter::InsertElements: no controller!" );
 
         const FmFilterControls& rControls = pController->getFilterControls();
@@ -421,7 +433,7 @@ void FmFilterAdapter::InsertElements(const Reference< ::com::sun::star::containe
 }
 
 //------------------------------------------------------------------------------
-void FmFilterAdapter::RemoveElement(const Reference< ::com::sun::star::awt::XTextComponent > & xText)
+void FmFilterAdapter::RemoveElement(const Reference< XTextComponent > & xText)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::RemoveElement" );
     if (xText.is())
@@ -437,10 +449,10 @@ void FmFilterAdapter::RemoveElement(const Reference< ::com::sun::star::awt::XTex
 }
 
 //------------------------------------------------------------------------
-Reference< ::com::sun::star::beans::XPropertySet >  FmFilterAdapter::getField(const Reference< ::com::sun::star::awt::XTextComponent > & xText) const
+Reference< XPropertySet >   FmFilterAdapter::getField(const Reference< XTextComponent > & xText) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::getField" );
-    Reference< ::com::sun::star::beans::XPropertySet >  xField;
+    Reference< XPropertySet >   xField;
     FmFilterControls::const_iterator i = m_aFilterControls.find(xText);
     if (i != m_aFilterControls.end())
         xField = (*i).second;
@@ -455,12 +467,12 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::setText" );
     // set the text for the text component
-    Reference< ::com::sun::star::awt::XTextComponent > xText(pFilterItem->GetTextComponent());
+    Reference< XTextComponent > xText(pFilterItem->GetTextComponent());
     xText->setText(rText);
 
     // get the controller of the text component and its filter rows
     FmFormItem* pFormItem = PTR_CAST(FmFormItem,pFilterItem->GetParent()->GetParent());
-    FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+    FormController* pController = FormController::getImplementation( pFormItem->GetController() );
     DBG_ASSERT( pController, "FmFilterAdapter::setText: no controller!" );
     FmFilterRows& rRows = pController->getFilterRows();
 
@@ -482,49 +494,49 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 }
 
 
-// ::com::sun::star::lang::XEventListener
+// XEventListener
 //------------------------------------------------------------------------
-void SAL_CALL FmFilterAdapter::disposing(const ::com::sun::star::lang::EventObject& e) throw( RuntimeException )
+void SAL_CALL FmFilterAdapter::disposing(const EventObject& e) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::disposing" );
-    Reference< ::com::sun::star::awt::XTextComponent >  xText(e.Source,UNO_QUERY);
+    Reference< XTextComponent > xText(e.Source,UNO_QUERY);
     if (xText.is())
         RemoveElement(xText);
 }
 
 // XTextListener
 //------------------------------------------------------------------------
-Reference< ::com::sun::star::form::XForm > FmFilterAdapter::findForm(const Reference< ::com::sun::star::container::XChild >& xChild)
+Reference< XForm > FmFilterAdapter::findForm(const Reference< XChild >& xChild)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::findForm" );
-    Reference< ::com::sun::star::form::XForm > xForm;
+    Reference< XForm > xForm;
     if (xChild.is())
     {
-        xForm = Reference< ::com::sun::star::form::XForm >(xChild->getParent(), UNO_QUERY);
+        xForm = Reference< XForm >(xChild->getParent(), UNO_QUERY);
         if (!xForm.is())
-            xForm = findForm(Reference< ::com::sun::star::container::XChild >(xChild->getParent(), UNO_QUERY));
+            xForm = findForm(Reference< XChild >(xChild->getParent(), UNO_QUERY));
     }
     return xForm;
 }
 
 // XTextListener
 //------------------------------------------------------------------------
-void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e) throw( ::com::sun::star::uno::RuntimeException )
+void FmFilterAdapter::textChanged(const TextEvent& e) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::textChanged" );
     // Find the according formitem in the
-    Reference< ::com::sun::star::awt::XControl > xControl(e.Source, UNO_QUERY);
+    Reference< XControl > xControl(e.Source, UNO_QUERY);
     if (!m_pModel || !xControl.is())
         return;
 
-    Reference< ::com::sun::star::form::XForm > xForm(findForm(Reference< ::com::sun::star::container::XChild >(xControl->getModel(), UNO_QUERY)));
+    Reference< XForm > xForm(findForm(Reference< XChild >(xControl->getModel(), UNO_QUERY)));
     if (!xForm.is())
         return;
 
     FmFormItem* pFormItem = m_pModel->Find(m_pModel->m_aChilds, xForm);
     if (pFormItem)
     {
-        Reference< ::com::sun::star::awt::XTextComponent > xText(e.Source, UNO_QUERY);
+        Reference< XTextComponent > xText(e.Source, UNO_QUERY);
         FmFilterItems* pFilter = PTR_CAST(FmFilterItems, pFormItem->GetChilds()[pFormItem->GetCurrentPosition()]);
         FmFilterItem* pFilterItem = pFilter->Find(xText);
         if (pFilterItem)
@@ -545,7 +557,7 @@ void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e) thr
         else
         {
             // searching the component by field name
-            ::rtl::OUString aFieldName = getLabelName(Reference< ::com::sun::star::beans::XPropertySet > (Reference< ::com::sun::star::awt::XControl > (xText, UNO_QUERY)->getModel(),UNO_QUERY));
+            ::rtl::OUString aFieldName = getLabelName(Reference< XPropertySet > (Reference< XControl > (xText, UNO_QUERY)->getModel(),UNO_QUERY));
 
             pFilterItem = new FmFilterItem(m_pModel->getORB(),pFilter, aFieldName, xText->getText(), xText);
             m_pModel->Insert(pFilter->GetChilds().end(), pFilterItem);
@@ -559,7 +571,7 @@ void FmFilterAdapter::textChanged(const ::com::sun::star::awt::TextEvent& e) thr
 //========================================================================
 TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
-FmFilterModel::FmFilterModel(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+FmFilterModel::FmFilterModel(const Reference< XMultiServiceFactory >& _rxFactory)
               :FmParentData(_rxFactory,NULL, ::rtl::OUString())
               ,OSQLParserClient(_rxFactory)
               ,m_xORB(_rxFactory)
@@ -603,10 +615,10 @@ void FmFilterModel::Clear()
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const Reference< ::com::sun::star::form::XFormController > & xCurrent)
+void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Update" );
-    if ((::com::sun::star::form::XFormController*) xCurrent.get() == (::com::sun::star::form::XFormController*) m_xController.get())
+    if ((XFormController*) xCurrent.get() == (XFormController*) m_xController.get())
         return;
 
     if (!xControllers.is())
@@ -616,7 +628,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
     }
 
     // there is only a new current controller
-    if ((::com::sun::star::container::XIndexAccess*)m_xControllers.get() != (::com::sun::star::container::XIndexAccess*)xControllers.get())
+    if ((XIndexAccess*)m_xControllers.get() != (XIndexAccess*)xControllers.get())
     {
         Clear();
 
@@ -637,15 +649,15 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, FmParentData* pParent)
+void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmParentData* pParent)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Update" );
     sal_Int32 nCount = xControllers->getCount();
     for (sal_Int32 i = 0; i < nCount; i++)
     {
-        Reference< ::com::sun::star::form::XFormController >  xController;
+        Reference< XFormController >  xController;
         xControllers->getByIndex(i) >>= xController;
-        Reference< ::com::sun::star::beans::XPropertySet >  xModelAsSet(xController->getModel(), UNO_QUERY);
+        Reference< XPropertySet >   xModelAsSet(xController->getModel(), UNO_QUERY);
         ::rtl::OUString aName = ::comphelper::getString(xModelAsSet->getPropertyValue(FM_PROP_NAME));
 
         // Insert a new ::com::sun::star::form
@@ -653,7 +665,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
         Insert(pParent->GetChilds().end(), pFormItem);
 
         // And now insert the filters for the form
-        FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+        FormController* pController = FormController::getImplementation( pFormItem->GetController() );
         DBG_ASSERT( pController, "FmFilterAdapter::Update: no controller!" );
 
         INT32 nPos = pController->getCurrentFilterPosition();
@@ -672,7 +684,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
             for (FmFilterRow::const_iterator iter1 = rRow.begin(); iter1 != rRow.end(); ++iter1)
             {
                 // insert new and conditons
-                ::rtl::OUString aFieldName = getLabelName(Reference< ::com::sun::star::beans::XPropertySet > (Reference< ::com::sun::star::awt::XControl > ((*iter1).first, UNO_QUERY)->getModel(),UNO_QUERY));
+                ::rtl::OUString aFieldName = getLabelName(Reference< XPropertySet > (Reference< XControl > ((*iter1).first, UNO_QUERY)->getModel(),UNO_QUERY));
                 FmFilterItem* pANDCondition = new FmFilterItem(m_xORB,pFilterItems, aFieldName, (*iter1).second, (*iter1).first);
                 Insert(pFilterItems->GetChilds().end(), pANDCondition);
             }
@@ -681,13 +693,13 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
         }
 
         // now add dependent controllers
-        Reference< ::com::sun::star::container::XIndexAccess >  xControllerAsIndex(xController, UNO_QUERY);
+        Reference< XIndexAccess >   xControllerAsIndex(xController, UNO_QUERY);
         Update(xControllerAsIndex, pFormItem);
     }
 }
 
 //------------------------------------------------------------------------
-FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< ::com::sun::star::form::XFormController > & xController) const
+FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XFormController > & xController) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
@@ -696,7 +708,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
         FmFormItem* pForm = PTR_CAST(FmFormItem,*i);
         if (pForm)
         {
-            if ((::com::sun::star::form::XFormController*)xController.get() == (::com::sun::star::form::XFormController*)pForm->GetController().get())
+            if ((XFormController*)xController.get() == (XFormController*)pForm->GetController().get())
                 return pForm;
             else
             {
@@ -710,7 +722,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 }
 
 //------------------------------------------------------------------------
-FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< ::com::sun::star::form::XForm >& xForm) const
+FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XForm >& xForm) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
@@ -733,10 +745,10 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::SetCurrentController(const Reference< ::com::sun::star::form::XFormController > & xCurrent)
+void FmFilterModel::SetCurrentController(const Reference< XFormController > & xCurrent)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::SetCurrentController" );
-    if ((::com::sun::star::form::XFormController*) xCurrent.get() == (::com::sun::star::form::XFormController*) m_xController.get())
+    if ((XFormController*) xCurrent.get() == (XFormController*) m_xController.get())
         return;
 
     m_xController = xCurrent;
@@ -771,7 +783,7 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
     Insert(i, pFilterItems);
 
     // do we need a new row
-    FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+    FormController* pController = FormController::getImplementation( pFormItem->GetController() );
     DBG_ASSERT( pController, "FmFilterAdapter::AppendFilterItems: no controller!" );
     FmFilterRows& rRows = pController->getFilterRows();
 
@@ -808,7 +820,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     if (pData->ISA(FmFilterItems))
     {
         FmFormItem* pFormItem = (FmFormItem*)pParent;
-        FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+        FormController* pController = FormController::getImplementation( pFormItem->GetController() );
         DBG_ASSERT( pController, "FmFilterAdapter::Remove: no controller!" );
         FmFilterRows& rRows = pController->getFilterRows();
 
@@ -929,9 +941,9 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
 
     OStaticDataAccessTools aStaticTools;
     Reference< XConnection > xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet > (m_xController->getModel(), UNO_QUERY)));
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
+    Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
 
-    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
+    Reference< XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     ::rtl::OUString aErr, aTxt(rText);
@@ -941,7 +953,7 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
     if (xParseNode.is())
     {
         ::rtl::OUString aPreparedText;
-        ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
+        Locale aAppLocale = Application::GetSettings().GetUILocale();
         xParseNode->parseNodeToPredicateStr(
             aPreparedText, xConnection, xFormatter, xField, aAppLocale, '.', getParseContext() );
         rText = aPreparedText;
@@ -997,12 +1009,12 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
         {
             // determine the filter position
             sal_Int32 nPos = i - rItems.begin();
-            FmXFormController* pController = FmXFormController::getImplementation( pFormItem->GetController().get() );
+            FormController* pController = FormController::getImplementation( pFormItem->GetController() );
             DBG_ASSERT( pController, "FmFilterAdapter::SetCurrentItems: no controller!" );
             pController->setCurrentFilterPosition(nPos);
             pFormItem->SetCurrentPosition(nPos);
 
-            if ((::com::sun::star::form::XFormController*)m_xController.get() != (::com::sun::star::form::XFormController*)pFormItem->GetController().get())
+            if ((XFormController*)m_xController.get() != (XFormController*)pFormItem->GetController().get())
                 // calls SetCurrentItems again
                 SetCurrentController(pFormItem->GetController());
             else
@@ -1216,7 +1228,7 @@ void FmFilterNavigator::Clear()
 }
 
 //------------------------------------------------------------------------
-void FmFilterNavigator::UpdateContent(const Reference< ::com::sun::star::container::XIndexAccess > & xControllers, const Reference< ::com::sun::star::form::XFormController > & xCurrent)
+void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::UpdateContent" );
     if (xCurrent == m_pModel->GetCurrentController())
@@ -1293,7 +1305,6 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
         else
         {
             // display the error and return sal_False
-
             SQLContext aError;
             aError.Message = String(SVX_RES(RID_STR_SYNTAXERROR));
             aError.Details = aErrorMsg;
@@ -1972,17 +1983,17 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
         m_pNavigator->UpdateContent( NULL, NULL );
     else
     {
-        Reference< ::com::sun::star::form::XFormController >  xController(pFormShell->GetImpl()->getActiveInternalController());
-        Reference< ::com::sun::star::container::XIndexAccess >  xContainer;
+        Reference< XFormController >  xController(pFormShell->GetImpl()->getActiveInternalController());
+        Reference< XIndexAccess >   xContainer;
         if (xController.is())
         {
-            Reference< ::com::sun::star::container::XChild >  xChild(xController, UNO_QUERY);
+            Reference< XChild >  xChild(xController, UNO_QUERY);
             for (Reference< XInterface >  xParent(xChild->getParent());
                  xParent.is();
                  xParent = xChild.is() ? xChild->getParent() : Reference< XInterface > ())
             {
-                xContainer = Reference< ::com::sun::star::container::XIndexAccess > (xParent, UNO_QUERY);
-                xChild = Reference< ::com::sun::star::container::XChild > (xParent, UNO_QUERY);
+                xContainer = Reference< XIndexAccess > (xParent, UNO_QUERY);
+                xChild = Reference< XChild > (xParent, UNO_QUERY);
             }
         }
         m_pNavigator->UpdateContent(xContainer, xController);

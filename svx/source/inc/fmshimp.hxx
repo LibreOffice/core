@@ -40,7 +40,7 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XForm.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/NavigationBarMode.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -243,9 +243,9 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
 
     // aktuelle Form, Controller
     // nur im alive mode verfuegbar
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>  m_xActiveController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>  m_xNavigationController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>            m_xActiveForm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xActiveController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xNavigationController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                       m_xActiveForm;
 
     // Aktueller container einer Page
     // nur im designmode verfuegbar
@@ -266,9 +266,9 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
      // the frame we live in
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>              m_xAttachedFrame;
     // Administration of external form views (see the SID_FM_VIEW_AS_GRID-slot)
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>         m_xExternalViewController;      // the controller for the external form view
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>      m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xExternalDisplayedForm;       // the form which the external view is based on
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >                m_xExternalViewController;      // the controller for the external form view
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >                  m_xExternalDisplayedForm;       // the form which the external view is based on
 
     FmXDispatchInterceptorImpl*     m_pExternalViewInterceptor;
 
@@ -399,11 +399,11 @@ protected:
 
 public:
     // methode fuer nicht designmode (alive mode)
-    void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController, sal_Bool _bNoSaveOldContent = sal_False );
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getActiveController() const {return m_xActiveController;}
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
+    void setActiveController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController, sal_Bool _bNoSaveOldContent = sal_False );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveController() const {return m_xActiveController;}
+    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getActiveInternalController() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getActiveForm() const {return m_xActiveForm;}
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& getNavController() const {return m_xNavigationController;}
+    const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& getNavController() const {return m_xNavigationController;}
 
     inline const ::svx::ControllerFeatures& getActiveControllerFeatures() const
         { return m_aActiveControllerFeatures; }
@@ -568,13 +568,13 @@ private:
 
 public:
     enum CURSOR_ACTION { CA_MOVE_TO_LAST, CA_MOVE_ABSOLUTE };
-    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController, CURSOR_ACTION _eWhat);
+    void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController, CURSOR_ACTION _eWhat);
     void DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, CURSOR_ACTION _eWhat);
 
     sal_Bool HasAnyPendingCursorAction() const;
     void CancelAnyPendingCursorAction();
 
-    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController) const;
+    sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController>& _xController) const;
     sal_Bool HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const;
 
     /** execute the given form slot

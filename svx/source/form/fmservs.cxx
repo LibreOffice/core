@@ -49,7 +49,8 @@
 
 
     DECL_SERVICE( FmXGridControl )
-    DECL_SERVICE( FmXFormController )
+    DECL_SERVICE( FormController )
+    DECL_SERVICE( LegacyFormController );
 
 
 // ------------------------------------------------------------------------
@@ -91,7 +92,8 @@ namespace svxform
 
         // ------------------------------------------------------------------------
         // FormController
-        REGISTER_SERVICE(FmXFormController, FM_FORM_CONTROLLER);
+        REGISTER_SERVICE( FormController, FM_FORM_CONTROLLER );
+        REGISTER_SERVICE( LegacyFormController, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.FormController" ) ) );
 
         // ------------------------------------------------------------------------
         // FormController
@@ -102,9 +104,6 @@ namespace svxform
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRID);  // compatibility
         REGISTER_SERVICE(FmXGridControl, FM_CONTROL_GRIDCONTROL);
         REGISTER_SERVICE(FmXGridControl, FM_SUN_CONTROL_GRIDCONTROL);
-
-
     };
-
 
 }   // namespace svxform

@@ -98,7 +98,8 @@ LIB1OBJFILES= \
     $(SLO)$/fmscriptingenv.obj \
     $(SLO)$/stringlistresource.obj \
     $(SLO)$/delayedevent.obj \
-    $(SLO)$/formcontrolfactory.obj
+    $(SLO)$/formcontrolfactory.obj \
+    $(SLO)$/legacyformcontroller.obj
 
 LIB2TARGET= $(SLB)$/$(TARGET).lib
 LIB2OBJFILES= \
