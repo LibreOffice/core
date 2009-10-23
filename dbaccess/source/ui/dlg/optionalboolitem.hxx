@@ -53,7 +53,7 @@ namespace dbaui
         bool    HasValue() const                { return !!m_aValue; }
         void    ClearValue()                    { m_aValue.reset(); }
         bool    GetValue() const                { return *m_aValue; }
-        bool    SetValue( const bool _bValue )  { m_aValue.reset( _bValue ); }
+        void    SetValue( const bool _bValue )  { m_aValue.reset( _bValue ); }
 
         const ::boost::optional< bool >&
             GetFullValue() const { return m_aValue; }
