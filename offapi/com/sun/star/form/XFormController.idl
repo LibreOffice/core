@@ -49,57 +49,14 @@
 
 //=============================================================================
 
-/** provides functionality to control the activation of forms controls.
-
-    <p>There is a duality of forms (<type scope="com::sun::star::form::component">DataForm</type>)
-    and form controllers. In a document view, for every loaded form there is a form controller which is
-    responsible for exactly the controls which's models are direct children of the form.<br/>
-
-    In some sense, a form controller is the view representation of a form, like a <em>form control</em> is the
-    view representation of a <em>form control model</em>.<br/>
-
-    This is also reflected in this interface: If you call
-    <method scope="com::sun::star::awt">XTabController::getModel</method> on a form controller, the form which
-    the controller is responsible for will be returned.<br/>
-
-    As always in the model-view-paradigm, there is no way from a model to its controller, mostly, because for
-    <em>one</em> given form, there is one controller for <em>every</em> view of the document.</p>
-
-    <p>A controller is called <em>active</em> if one of the controls it is responsible for has the focus,
-    else inactive. To be notified whenever this activation state of a given controller changes, you can
-    add listeners.</p>
-
-    @see com::sun::star::form::component::Form
+/** is superseded by <type scope="com::sun::star::form::runtime">XFormController</type>.
+    @deprecated
  */
 published interface XFormController: com::sun::star::awt::XTabController
 {
-    //-------------------------------------------------------------------------
-
-    /** access to the currently active control
-
-        @returns
-            the currently active control, or <NULL/> if there is no such control
-     */
-    com::sun::star::awt::XControl getCurrentControl();
-
-    //-------------------------------------------------------------------------
-
-    /** adds the specified listener to receive notifications whenever the activation state of
-        the controller changes.
-
-        @param l
-            the listener to add.
-     */
-    [oneway] void addActivateListener( [in] com::sun::star::form::XFormControllerListener l );
-
-    //-------------------------------------------------------------------------
-
-    /** removes the specified listener
-
-        @param l
-            the listener to remove.
-     */
-    [oneway] void removeActivateListener( [in] com::sun::star::form::XFormControllerListener l );
+    ::com::sun::star::awt::XControl getCurrentControl();
+    [oneway] void addActivateListener( [in] ::com::sun::star::form::XFormControllerListener l );
+    [oneway] void removeActivateListener( [in] ::com::sun::star::form::XFormControllerListener l );
 
 };
 

@@ -1,0 +1,342 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __offapi_com_sun_star_form_runtime_XFormController_idl__
+#define __offapi_com_sun_star_form_runtime_XFormController_idl__
+
+#include <com/sun/star/awt/XTabController.idl>
+#include <com/sun/star/container/XChild.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/container/XIndexAccess.idl>
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#include <com/sun/star/util/XModeSelector.idl>
+#include <com/sun/star/form/XConfirmDeleteBroadcaster.idl>
+#include <com/sun/star/sdb/XSQLErrorBroadcaster.idl>
+#include <com/sun/star/sdb/XRowSetApproveBroadcaster.idl>
+#include <com/sun/star/form/XDatabaseParameterBroadcaster2.idl>
+#include <com/sun/star/form/XFormControllerListener.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module form { module runtime {
+
+interface XFormOperations;
+
+//=============================================================================
+
+/** specifies a component controlling the interaction between the user and form functionality.
+
+    <p>As soon as a form (containing controls) is to be presented to the user,
+    there is a need for an instance controlling the user interaction.<br/>
+    Such a <code>FormController</code> is responsible for dialog processing,
+    like controlling the tab order and the grouping of controls.</p>
+
+    <p>As a form may contain one or many subforms, a <type>FormController</type> may
+    contain one or more other <type>FormController</type>s, so the form model structure or hierarchy
+    is reflected in the structure of <type>FormController</type>s. That is, retrieving the parent of
+    the model of a controller will give you the same object as retrieving the model of the parent of
+    the controller. Similarly, retrieving the model of the <code>n</code><sup>th</sup> child of
+    a controller gives you the same object as retrieving the <code>n</code><sup>th</sup> child of
+    the model of the controller.</p>
+
+    <p>A controller is called <em>active</em> if one of the controls it is responsible for has the focus,
+    else inactive. To be notified whenever this activation state of a given controller changes, you can
+    add listeners.</p>
+
+    <p>This interface supersedes the <type scope="com::sun::star::form">FormController</type>.</p>
+
+    <h3>Responsibilities</h3>
+    <p>A <type>FormController</type> is responsible for a <type scope="com::sun::star::awt">UnoControlContainer</type>,
+    and all controls therein.</p>
+
+    <p>Furthermore, a form controller is responsible for preventing invalid user input. That is, if the form
+    contains controls bound to a database, or to an external validator, then the form controller will
+    check their current value when the current record is to be saved to the database.</p>
+
+    <p>First, it will check whether any controls with an external validator exist. If so, those validators
+    will be asked to validate the current control content. If this fails, the message provided by the validator
+    is displayed to the user, the control is focused, and the update of the record is vetoed.</p>
+
+    <p>Second, the controls are examined for NULL values. If a control is bound to a database field which
+    is declared to be <code>NOT NULL</code>, no auto-increment field, but still <NULL/>, then an error
+    message is shown to the user saying that input is required, the respective control is focused, and
+    the update of the record is vetoed.</p>
+
+    <p>Note that you can precent the second check - for database fields containing <NULL/> values - on
+    a per-form and a per-database basis.<br/>
+    For the former, you need to add a boolean property <code>FormsCheckRequiredFields</code> to the form
+    (aka the <code>FormController</code>'s model), using its
+    <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> method, with a value
+    of <FALSE/>.<br/>
+    For the latter, you need to set the respective property of the data source's <code>Settings</code>
+    (also named <code>FormsCheckRequiredFields</code>) to <FALSE/>.</p>
+
+    <p>Alternatively, you can prevent the check on a per-control basis, using the
+    <member>DataAwareControlModel::InputRequired</member> property of a single control model.</p>
+
+    <p>If a control which the controller is responsible for supports the <type scope="com::sun::star::frame">XDispatchProviderInterception</type>
+    interface, the controller registers a dispatch interceptor. Then, the control can try to delegate part of its
+    functionality to the controller by querying the dispatch interceptor for it.</p>
+
+    <p>Below, there's a list of URLs which have a defined meaning - if an implementation supports one of them,
+    there must be a guaranteed semantices. However, concrete implementations may support an arbitrary sub or super
+    set of these URLs.</p>
+
+    <p>In general, all URLs start with the same prefix, namely <em>.uno:FormController/</em>. To this, a suffix is
+    appended which describes the requested functionality.<br/>
+    Example: The URL suffix for deleting the current record is <em>deleteRecord</em>, so the complete URL for
+    requesting a dispatcher for this functionality is <em>.uno:FormController/deleteRecord</em>.</p>
+
+    <p>Some URLs may require parameters. For this, the sequence of <type scope="com::sun::star::beans">PropertyValue</type>s
+    passed to the <member scope="com::sun::star::frame">XDispatch::dispatch</member> call is used - every property value is
+    used as one named parameter.</p>
+
+    <p>For all URLs, interested parties can register as status listeners (<type scope="com::sun::star::frame">XStatusListener</type>)
+    at the dispatchers, and be notified whenever the functionality associated with the URL becomes enabled or
+    disabled.<br/>
+    For instance, the URL with the suffix <em>moveToFirst</em> is associated with moving the form to the first
+    record, and it will be disabled in case the form is already positioned on the first record.</p>
+
+    <table style="width:100%;" border="0" cellpadding="2" cellspacing="2"><tbody>
+
+      <tr style="vertical-align: top;">
+        <td><b>URL suffix</b></td>
+        <td><b>functionality</b></td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>positionForm</em></td>
+        <td>positions the form on a record given by absolute number.<br/>
+        There's one parameter for this functionality, named <em>Position</em>, which must be a long
+        value specifying the absolute position to which the form should be moved</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>RecordCount</em></td>
+        <td>This is a passive functionality: It cannot be dispatched, instead, interested parties may
+        use the dispatcher to add as <type scope="com::sun::star::frame">XStatusListener</type>, and be
+        notified when the record count changes.<br/>
+        The status value which is being notified (<member scope="com::sun::star::frame">FeatureStateEvent::State</member>)
+        is a string which can be used to display the record count. In particular, if the record count is not yet known
+        (<member scope="com::sun::star::sdb">RowSet::IsRowCountFinal</member> is <FALSE/>), this is indicated in the
+        string, too.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>moveToFirst</em></td>
+        <td>moves the form to the first record</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>moveToPrev</em></td>
+        <td>moves the form to the record preceding the current one</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>moveToNext</em></td>
+        <td>moves the form to the record after the current one</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>moveToLast</em></td>
+        <td>moves the form to the last record</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>moveToNew</em></td>
+        <td>moves the form to the virtual "insert row", where new records can be inserted</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>saveRecord</em></td>
+        <td>Commits any potentially pending changes in the current control, and saves the current record to
+        the database, or inserts a new record if the form is currently positioned on the virtual insertion row.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>undoRecord</em></td>
+        <td>reverts the changes done to the current record. Basically, this means refreshing the
+        current row from the database, and updating all controls with the new content.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>deleteRecord</em></td>
+        <td>deletes the current record, after asking the user for confirmation.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>refreshForm</em></td>
+        <td>reloads the complete form. After this, the form is positioned on the first record</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>sortUp</em></td>
+        <td>Adds an order clause to the form, to sort it ascending by the field which the current control is bound to,
+        and then reloads the form.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>sortDown</em></td>
+        <td>Adds an order clause to the form, to sort it descending by the field which the current control is bound to,
+        and then reloads the form.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>sort</em></td>
+        <td>opens an dialog, which allows the user to manipulate the current sorting order of the form. If the dialog
+        is closed with OK, the form is reloaded after setting the new sorting order.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>autoFilter</em></td>
+        <td>creates, from the current control, a filter for the form. This is, if the current control is bound to
+        the field, say, "customer", and contains the value "Furs, Inc.", then a filter "customer = 'Furs, Inc.'"
+        is created and set at the form. After this, the form is reloaded.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>filter</em></td>
+        <td>opens an dialog, which allows the user to manipulate the current filter of the form. If the dialog
+        is closed with OK, the form is reloaded after setting the new filter.</td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>applyFilter</em></td>
+        <td><p>Toggles the <member scope="com::sun::star::sdb">RowSet::ApplyFilter</member> property
+        of the form.</p>
+        <p>Additionally, status listeners will be provided with the current (boolean) state of this property
+        in the <member scope="com::sun::star::frame">FeatureStateEvent::State</member> member of the event
+        notified by the dispatcher.</p></td>
+      </tr>
+
+      <tr style="vertical-align: top;">
+        <td><em>removeFilterOrder</em></td>
+        <td>completely removes any filter and sorting order from the form, and reloads it.</td>
+      </tr>
+
+    </tbody></table>
+
+    @see ::com::sun::star::form::component:Form
+    @see ::com::sun::star::form::binding::BindableControlModel
+    @see ::com::sun::star::sdb::DataSource::Settings
+ */
+interface XFormController
+{
+    /** is used for tab controlling and grouping of the controls.
+
+        <p>The model obtained via <member scope="com::sun::star::awt">XTabController::getModel</member> is the form for which the
+        controller is responsible.</p>
+     */
+    interface ::com::sun::star::awt::XTabController;
+
+    /** allows access to the parent controller.
+     */
+    interface ::com::sun::star::container::XChild;
+
+    /** allows access to the sub controllers.
+     */
+    interface ::com::sun::star::container::XIndexAccess;
+
+    /** allows enumerating sub controllers
+     */
+    interface ::com::sun::star::container::XEnumerationAccess;
+
+    /** allows life time control of the controller.
+     */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** allows to register as listener for modifications in the controls which the controller is responsible
+        for.
+     */
+    interface ::com::sun::star::util::XModifyBroadcaster;
+
+    /** used to notify deletions of data in the form before they happen.
+
+        <p>A form controller listens for deletion events at the form it is responsible for. If and only if no
+        <type scope="com::sun::star::form">XConfirmDeleteListener</type> is registered at
+        the controller, it uses an own dialog to ask the user for confirmation.</p>
+    */
+    interface ::com::sun::star::form::XConfirmDeleteBroadcaster;
+
+    /** is used to notify errors which happen in the form the controller is responsible for.
+
+        <p>A form controller listens for error events at the form it is responsible for. If and only if no
+        <type scope="com::sun::star::sdb">XSQLErrorListener</type> is registered at the controller, it
+        uses an own dialog to notify the user of the error.</p>
+
+    */
+    interface ::com::sun::star::sdb::XSQLErrorBroadcaster;
+
+    /** is used for multiplexing row set events happening on the form which the controller is responsible for.
+    */
+    interface ::com::sun::star::sdb::XRowSetApproveBroadcaster;
+
+    /** is used broadcasting parameter events in the form.
+
+        <p>A form controller listens for parameter events at the form it is responsible for. If and only if no
+        <type scope="com::sun::star::form">XDatabaseParameterListener</type> is registered at the controller, it
+        uses an own dialog to ask the user for parameter values.</p>
+    */
+    interface ::com::sun::star::form::XDatabaseParameterBroadcaster2;
+
+    /** allows switching the form controller to different operation modes.
+
+        <p>The two modes usually (but not necessarily) supported by a form controller are the <code>DataMode</code>
+        and the <code>FilterMode</code>, where the former is the usual modus operandi for displaying and modifying
+        data, and the latter is a special mode to enter a filter for the database form which the controller is
+        responsible for.</p>
+    */
+    interface ::com::sun::star::util::XModeSelector;
+
+    /** denotes the instance which is used to implement operations on the form which the controller
+        works for.
+
+        <p>This instance can be used, for instance, to determine the current state of certain form features.</p>
+    */
+    [attribute, readonly] XFormOperations FormOperations;
+
+    /** provicdes access to the currently active control
+      */
+    [attribute, readonly] ::com::sun::star::awt::XControl CurrentControl;
+
+    /** adds the specified listener to receive notifications whenever the activation state of
+        the controller changes.
+     */
+    void addActivateListener( [in] com::sun::star::form::XFormControllerListener _Listener );
+
+    /** removes the specified listener from the list of components to receive notifications whenever the activation
+        state of the controller changes.
+     */
+    void removeActivateListener( [in] com::sun::star::form::XFormControllerListener _Listener );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
