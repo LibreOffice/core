@@ -61,10 +61,13 @@
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -831,8 +834,16 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 // -----------------------------------------------------------------------------
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL ) const
 {
+    Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess;
+    m_pImpl->m_aContext.createComponent( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ,xTempAccess);
+    Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
+    Reference< io::XTruncate > xTruncate(xStream,UNO_QUERY);
+    if ( xTruncate.is() )
+    {
+        xTruncate->truncate();
+    }
     Sequence<Any> aParam(2);
-    aParam[0] <<= _rURL;
+    aParam[0] <<= xStream;
     aParam[1] <<= ElementModes::READWRITE | ElementModes::TRUNCATE;
 
     Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory(), UNO_SET_THROW );
