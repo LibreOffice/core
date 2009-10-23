@@ -38,6 +38,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormControllerContext.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -49,7 +50,7 @@
 #include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/componentcontext.hxx>
@@ -86,7 +87,11 @@ namespace svx {
 //==================================================================
 // FmXPageViewWinRec
 //==================================================================
-class FmXPageViewWinRec : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess>
+typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::container::XIndexAccess
+                                ,   ::com::sun::star::form::runtime::XFormControllerContext
+                                >   FmXPageViewWinRec_Base;
+
+class FmXPageViewWinRec : public FmXPageViewWinRec_Base
 {
     friend class FmXFormView;
 
@@ -96,24 +101,27 @@ class FmXPageViewWinRec : public ::cppu::WeakImplHelper1< ::com::sun::star::cont
     FmXFormView*                m_pViewImpl;
     Window*                     m_pWindow;
 
+protected:
+    ~FmXPageViewWinRec();
+
 public:
     FmXPageViewWinRec(  const ::comphelper::ComponentContext& _rContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
-    ~FmXPageViewWinRec();
 
-// UNO Anbindung
-
-// ::com::sun::star::container::XElementAccess
+    // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::container::XEnumerationAccess
+    // XEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration() throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::container::XIndexAccess
+    // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 _Index) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XFormControllerContext
+    virtual void SAL_CALL makeVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _Control ) throw (::com::sun::star::uno::RuntimeException);
 
     const ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
 

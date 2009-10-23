@@ -76,7 +76,6 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -101,9 +100,9 @@
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -128,7 +127,7 @@ namespace svxform
     class ControlBorderManager;
     struct FmFieldInfo;
 
-    typedef ::comphelper::WeakComponentImplHelper22 <   ::com::sun::star::form::runtime::XFormController
+    typedef ::comphelper::WeakComponentImplHelper21 <   ::com::sun::star::form::runtime::XFormController
                                                     ,   ::com::sun::star::awt::XFocusListener
                                                     ,   ::com::sun::star::form::XLoadListener
                                                     ,   ::com::sun::star::beans::XPropertyChangeListener
@@ -148,7 +147,6 @@ namespace svxform
                                                     ,   ::com::sun::star::awt::XMouseListener
                                                     ,   ::com::sun::star::form::validation::XFormComponentValidityListener
                                                     ,   ::com::sun::star::task::XInteractionHandler
-                                                    ,   ::com::sun::star::lang::XInitialization
                                                     ,   ::com::sun::star::form::XGridControlListener
                                                     >   FormController_BASE;
 
@@ -176,8 +174,9 @@ namespace svxform
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
         // Composer used for checking filter conditions
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >         m_xInteractionHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >       m_xComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >             m_xInteractionHandler;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > m_xContext;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >   m_aControls;
         ::cppu::OInterfaceContainerHelper
@@ -195,8 +194,6 @@ namespace svxform
         Timer                       m_aTabActivationTimer;
         Timer                       m_aFeatureInvalidationTimer;
 
-        FmFormView*                 m_pView;
-        Window*                     m_pWindow;
         ::svxform::ControlBorderManager*
                                     m_pControlBorderManager;
 
@@ -236,19 +233,18 @@ namespace svxform
         DECLARE_STL_VECTOR(FmXDispatchInterceptorImpl*, Interceptors);
         Interceptors    m_aControlDispatchInterceptors;
 
-    public:
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
-            getInteractionHandler() const
-        {
-            const_cast< FormController* >( this )->ensureInteractionHandler();
-            return m_xInteractionHandler;
-        }
-
-    public:
-        FormController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB,
-                          FmFormView* _pView = NULL, Window* _pWindow = NULL );
+    protected:
         ~FormController();
 
+    public:
+        FormController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB );
+
+    // XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+        SVX_DLLPUBLIC static FormController* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+
+    protected:
     // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL acquire() throw ();
@@ -258,20 +254,14 @@ namespace svxform
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-        SVX_DLLPUBLIC static FormController* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
-
     // XDispatch
         virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& _rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::container::XChild
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL getParent(void) throw( ::com::sun::star::uno::RuntimeException ) {return m_xParent;}
-        virtual void SAL_CALL setParent(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Parent) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException )
-        {m_xParent = Parent;}
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL getParent(void) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL setParent(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Parent) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
@@ -341,9 +331,6 @@ namespace svxform
     // XInteractionHandler
         virtual void SAL_CALL handle( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& Request ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
     // XGridControlListener
         virtual void SAL_CALL columnChanged( const ::com::sun::star::lang::EventObject& _event ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -364,6 +351,11 @@ namespace svxform
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l) throw( ::com::sun::star::uno::RuntimeException );
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setContext( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext >& _context ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _interactionHandler ) throw (::com::sun::star::uno::RuntimeException);
 
     // XTabController
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> > SAL_CALL getControls(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -437,6 +429,7 @@ namespace svxform
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
             ) const;
 
+    public:
     // access to the controls for filtering
         const FmFilterControls& getFilterControls() const {return m_aFilterControls;}
 
@@ -454,7 +447,7 @@ namespace svxform
         SVX_DLLPUBLIC void setCurrentFilterPosition(sal_Int32 nPos);
         sal_Int32 getCurrentFilterPosition() const {return m_nCurrentFilterPosition;}
 
-        void addChild( FormController* pChild );
+        void addChild( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxChildController );
 
     protected:
         // FmDispatchInterceptor
@@ -552,7 +545,7 @@ namespace svxform
         sal_Bool determineLockState() const;
 
         Window* getDialogParentWindow();
-            // returns m_pWindow or - if m_pWindow is NULL - the window of the currently set container
+            // returns the window which should be used as parent window for dialogs
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>    createInterceptor(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _xInterception);
             // create a new interceptor, register it on the given object

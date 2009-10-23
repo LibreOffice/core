@@ -200,6 +200,8 @@ namespace svxform
     using ::com::sun::star::task::XInteractionRequest;
     using ::com::sun::star::util::URL;
     using ::com::sun::star::frame::FeatureStateEvent;
+    using ::com::sun::star::form::runtime::XFormControllerContext;
+    using ::com::sun::star::task::XInteractionHandler;
     /** === end UNO using === **/
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
@@ -546,8 +548,7 @@ IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisP
 
 DBG_NAME( FormController )
 //------------------------------------------------------------------
-FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB,
-                                     FmFormView* _pView, Window* _pWindow )
+FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB )
                   :FormController_BASE( m_aMutex )
                   ,OPropertySetHelper( FormController_BASE::rBHelper )
                   ,OSQLParserClient(_rxORB)
@@ -558,8 +559,6 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB,
                   ,m_aDeleteListeners(m_aMutex)
                   ,m_aRowSetApproveListeners(m_aMutex)
                   ,m_aParameterListeners(m_aMutex)
-                  ,m_pView(_pView)
-                  ,m_pWindow(_pWindow)
                   ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
                   ,m_aControllerFeatures( _rxORB, this )
                   ,m_aMode( DATA_MODE )
@@ -978,13 +977,12 @@ Any SAL_CALL FormController::getByIndex(sal_Int32 Index) throw( IndexOutOfBounds
 }
 
 //-----------------------------------------------------------------------------
-void FormController::addChild(FormController* pChild)
+void FormController::addChild( const Reference< XFormController >& _rxChildController )
 {
-    Reference< XFormController >  xController(pChild);
-    m_aChilds.push_back(xController);
-    pChild->setParent( *this );
+    m_aChilds.push_back( _rxChildController );
+    _rxChildController->setParent( *this );
 
-    Reference< XFormComponent >  xForm(pChild->getModel(), UNO_QUERY);
+    Reference< XFormComponent >  xForm( _rxChildController->getModel(),  UNO_QUERY);
 
     // search the position of the model within the form
     sal_uInt32 nPos = m_xModelAsIndex->getCount();
@@ -992,10 +990,10 @@ void FormController::addChild(FormController* pChild)
     for( ; nPos; )
     {
         m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
-        if ((XFormComponent*)xForm.get() == (XFormComponent*)xTemp.get())
+        if ( xForm.get() == xTemp.get() )
         {
-            Reference< XInterface >  xIfc(xController, UNO_QUERY);
-            m_xModelAsManager->attach( nPos, xIfc, makeAny( xController) );
+            Reference< XInterface >  xIfc( _rxChildController, UNO_QUERY );
+            m_xModelAsManager->attach( nPos, xIfc, makeAny( _rxChildController) );
             break;
         }
     }
@@ -1039,7 +1037,7 @@ void FormController::disposeAllFeaturesAndDispatchers() SAL_THROW(())
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormController::disposeAllFeaturesAndDispatchers: caught an exception while disposing a dispatcher!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     m_aFeatureDispatchers.clear();
@@ -1248,7 +1246,7 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
     }
     catch( const Exception& )
     {
-      OSL_ENSURE( sal_False, "FormController::replaceControl: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     Reference< XControl > xDisposeIt( bSuccess ? _rxExistentControl : _rxNewControl );
@@ -1461,12 +1459,13 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException )
 {
     TRACE_RANGE( "FormController::focusGained" );
 
+    // SYNCHRONIZED -->
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    Reference< XControl >  xControl(e.Source, UNO_QUERY);
 
     m_pControlBorderManager->focusGained( e.Source );
 
+    Reference< XControl >  xControl(e.Source, UNO_QUERY);
     if (m_bDBConnection)
     {
         // do we need to keep the locking of the commit
@@ -1570,18 +1569,17 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException )
     if ( m_bDBConnection && !m_bFiltering )
         implInvalidateCurrentControlDependentFeatures();
 
-    if (m_xCurrentControl.is())
-    {
-        // Control erhaelt Focus, dann eventuell in den sichtbaren Bereich
-        Reference< XWindow >  xWindow(xControl, UNO_QUERY);
-        if (xWindow.is() && m_pView && m_pWindow)
-        {
-            ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
-            ::Rectangle aNewRect(aRect.X,aRect.Y,aRect.X+aRect.Width,aRect.Y+aRect.Height);
-            aNewRect = m_pWindow->PixelToLogic(aNewRect);
-            m_pView->MakeVisible( aNewRect, *const_cast< Window* >( m_pWindow ) );
-        }
-    }
+    if ( !m_xCurrentControl.is() )
+        return;
+
+    // Control erhaelt Focus, dann eventuell in den sichtbaren Bereich
+    Reference< XFormControllerContext > xContext( m_xContext );
+    Reference< XControl > xCurrentControl( m_xCurrentControl );
+    aGuard.clear();
+    // <-- SYNCHRONIZED
+
+    if ( xContext.is() )
+        xContext->makeVisible( xCurrentControl );
 }
 
 //------------------------------------------------------------------------------
@@ -1758,7 +1756,7 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model) th
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormController::setModel: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -2560,7 +2558,7 @@ void FormController::startFormListening( const Reference< XPropertySet >& _rxFor
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormController::startFormListening: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -2592,7 +2590,7 @@ void FormController::stopFormListening( const Reference< XPropertySet >& _rxForm
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormController::stopFormListening: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -2788,6 +2786,42 @@ void SAL_CALL FormController::removeActivateListener(const Reference< XFormContr
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     m_aActivateListeners.removeInterface(l);
+}
+
+//------------------------------------------------------------------------------
+Reference< XFormControllerContext > SAL_CALL FormController::getContext() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( impl_isDisposed_nofail() )
+        throw DisposedException( ::rtl::OUString(), *this );
+    return m_xContext;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FormController::setContext( const Reference< XFormControllerContext >& _context ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( impl_isDisposed_nofail() )
+        throw DisposedException( ::rtl::OUString(), *this );
+    m_xContext = _context;
+}
+
+//------------------------------------------------------------------------------
+Reference< XInteractionHandler > SAL_CALL FormController::getInteractionHandler() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( impl_isDisposed_nofail() )
+        throw DisposedException( ::rtl::OUString(), *this );
+    return m_xInteractionHandler;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FormController::setInteractionHandler( const Reference< XInteractionHandler >& _interactionHandler ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( impl_isDisposed_nofail() )
+        throw DisposedException( ::rtl::OUString(), *this );
+    m_xInteractionHandler = _interactionHandler;
 }
 
 //------------------------------------------------------------------------------
@@ -3270,21 +3304,18 @@ sal_Bool SAL_CALL FormController::supportsMode(const ::rtl::OUString& Mode) thro
 Window* FormController::getDialogParentWindow()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    Window* pParent = m_pWindow;
-    if ( !pParent )
+    Window* pParentWindow = NULL;
+    try
     {
-        try
-        {
-            Reference< XControl > xContainerControl( getContainer(), UNO_QUERY_THROW );
-            Reference< XWindowPeer > xContainerPeer( xContainerControl->getPeer(), UNO_QUERY_THROW );
-            pParent = VCLUnoHelper::GetWindow( xContainerPeer );
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "FormController::getDialogParentWindow: caught an exception!" );
-        }
+        Reference< XControl > xContainerControl( getContainer(), UNO_QUERY_THROW );
+        Reference< XWindowPeer > xContainerPeer( xContainerControl->getPeer(), UNO_QUERY_THROW );
+        pParentWindow = VCLUnoHelper::GetWindow( xContainerPeer );
     }
-    return pParent;
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return pParentWindow;
 }
 //------------------------------------------------------------------------------
 bool FormController::checkFormComponentValidity( ::rtl::OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel ) SAL_THROW(())
@@ -3323,7 +3354,7 @@ bool FormController::checkFormComponentValidity( ::rtl::OUString& /* [out] */ _r
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormController::checkFormComponentValidity: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     return true;
 }
@@ -3350,7 +3381,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FormController::locateControl: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     return NULL;
 }
@@ -3693,7 +3724,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
         }
         catch(Exception&)
         {
-            DBG_ERROR("FormController::approveParameter: caught an Exception (tried to let the InteractionHandler handle it)!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     return sal_True;
@@ -3847,6 +3878,18 @@ void SAL_CALL FormController::addStatusListener( const Reference< XStatusListene
 }
 
 //------------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL FormController::getParent() throw( RuntimeException )
+{
+    return m_xParent;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FormController::setParent( const Reference< XInterface >& Parent) throw( NoSupportException, RuntimeException )
+{
+    m_xParent = Parent;
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL FormController::removeStatusListener( const Reference< XStatusListener >& /*_rxListener*/, const URL& _rURL ) throw (RuntimeException)
 {
     (void)_rURL;
@@ -3928,16 +3971,6 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
 
     // remove the interceptor from our array
     m_aControlDispatchInterceptors.erase(aIter);
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL FormController::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
-{
-    DBG_ASSERT( !m_xInteractionHandler.is(), "FormController::initialize: already initialized!" );
-        // currently, we only initialize our interaction handler here, so it's sufficient to assert this
-
-    ::comphelper::NamedValueCollection aArgs( aArguments );
-    m_xInteractionHandler = aArgs.getOrDefault( "InteractionHandler", m_xInteractionHandler );
 }
 
 //--------------------------------------------------------------------

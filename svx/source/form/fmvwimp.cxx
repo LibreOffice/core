@@ -294,6 +294,21 @@ Any SAL_CALL FmXPageViewWinRec::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBo
 }
 
 //------------------------------------------------------------------------
+void SAL_CALL FmXPageViewWinRec::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+
+    Reference< XWindow >  xWindow( _Control, UNO_QUERY );
+    if ( xWindow.is() && m_pViewImpl->getView() && m_pWindow )
+    {
+        awt::Rectangle aRect = xWindow->getPosSize();
+        ::Rectangle aNewRect( aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height );
+        aNewRect = m_pWindow->PixelToLogic( aNewRect );
+        m_pViewImpl->getView()->MakeVisible( aNewRect, *m_pWindow );
+    }
+}
+
+//------------------------------------------------------------------------
 Reference< XFormController >  getControllerSearchChilds( const Reference< XIndexAccess > & xIndex, const Reference< XTabControllerModel > & xModel)
 {
     if (xIndex.is() && xIndex->getCount())
@@ -348,50 +363,41 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FormCon
     Reference< XTabControllerModel >  xTabOrder(xForm, UNO_QUERY);
 
     // create a form controller
-    FormController* pController = new FormController( m_aContext.getLegacyServiceFactory(), m_pViewImpl->getView(), m_pWindow );
+    FormController* pController = new FormController( m_aContext.getLegacyServiceFactory() );
     Reference< XFormController > xController( pController );
 
+    Reference< XFormController > xParentController( _pParent );
     Reference< XInteractionHandler > xHandler;
-    if ( _pParent )
-        xHandler = _pParent->getInteractionHandler();
+    if ( xParentController.is() )
+        xHandler = xParentController->getInteractionHandler();
     else
     {
         // TODO: should we create a default handler? Not really necessary, since the
         // FormController itself has a default fallback
     }
     if ( xHandler.is() )
-    {
-        Reference< XInitialization > xInitController( xController, UNO_QUERY );
-        DBG_ASSERT( xInitController.is(), "FmXPageViewWinRec::setController: can't initialize the controller!" );
-        if ( xInitController.is() )
-        {
-            Sequence< Any > aInitArgs( 1 );
-            aInitArgs[ 0 ] <<= NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ), makeAny( xHandler ) );
-            xInitController->initialize( aInitArgs );
-        }
-    }
+        xController->setInteractionHandler( xHandler );
 
-    pController->setModel(xTabOrder);
-    pController->setContainer( m_xControlContainer );
-    pController->activateTabOrder();
-    pController->addActivateListener(m_pViewImpl);
+    xController->setContext( this );
+
+    xController->setModel( xTabOrder );
+    xController->setContainer( m_xControlContainer );
+    xController->activateTabOrder();
+    xController->addActivateListener( m_pViewImpl );
 
     if ( _pParent )
-        _pParent->addChild(pController);
+        _pParent->addChild( xController );
     else
     {
-        //  Reference< XFormController >  xController(pController);
         m_aControllerList.push_back(xController);
 
-        pController->setParent(*this);
+        xController->setParent( xParentController );
 
         // attaching the events
-        Reference< XEventAttacherManager >  xEventManager(xForm->getParent(), UNO_QUERY);
+        Reference< XEventAttacherManager > xEventManager( xForm->getParent(), UNO_QUERY );
         Reference< XInterface >  xIfc(xController, UNO_QUERY);
         xEventManager->attach(m_aControllerList.size() - 1, xIfc, makeAny(xController) );
     }
-
-
 
     // jetzt die Subforms durchgehen
     sal_uInt32 nLength = xFormCps->getCount();
