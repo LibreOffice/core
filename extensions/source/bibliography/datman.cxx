@@ -1801,13 +1801,13 @@ void BibDataManager::SetToolbar(BibToolBar* pSet)
 /* -----------------------------08.05.2002 09:26------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Reference< form::XFormController > BibDataManager::GetFormController()
+uno::Reference< form::runtime::XFormController > BibDataManager::GetFormController()
 {
     if(!m_xFormCtrl.is())
     {
         Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-        m_xFormCtrl = uno::Reference< form::XFormController > (
-            xMgr->createInstance(C2U("com.sun.star.form.FormController")), UNO_QUERY);
+        m_xFormCtrl = uno::Reference< form::runtime::XFormController > (
+            xMgr->createInstance(C2U("com.sun.star.form.runtime.FormController")), UNO_QUERY);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
         // #100312# -------------
         m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);
