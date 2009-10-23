@@ -342,7 +342,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_VSCROLL );
     aForbiddenProperties.insert( PROPERTY_CONTROLLABEL );
     aForbiddenProperties.insert( PROPERTY_RICH_TEXT );
-    aForbiddenProperties.insert( PROPERTY_VERTICALALIGN );
+    aForbiddenProperties.insert( PROPERTY_VERTICAL_ALIGN );
     aForbiddenProperties.insert( PROPERTY_IMAGE_URL );
     aForbiddenProperties.insert( PROPERTY_IMAGE_POSITION );
     aForbiddenProperties.insert( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableVisible" ) ) );

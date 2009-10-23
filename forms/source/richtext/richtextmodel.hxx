@@ -74,6 +74,7 @@ namespace frm
         ::com::sun::star::uno::Any  m_aTabStop;
         ::com::sun::star::uno::Any  m_aBackgroundColor;
         ::com::sun::star::uno::Any  m_aBorderColor;
+        ::com::sun::star::uno::Any  m_aVerticalAlignment;
         ::rtl::OUString             m_sDefaultControl;
         ::rtl::OUString             m_sHelpText;
         ::rtl::OUString             m_sHelpURL;
