@@ -38,12 +38,14 @@
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.idl>
 #include <com/sun/star/form/XDatabaseParameterBroadcaster2.idl>
 #include <com/sun/star/form/XFormControllerListener.idl>
+#include <com/sun/star/task/XInteractionHandler.idl>
 
 //=============================================================================
 
 module com { module sun { module star { module form { module runtime {
 
 interface XFormOperations;
+interface XFormControllerContext;
 
 //=============================================================================
 
@@ -321,6 +323,14 @@ interface XFormController
     /** provicdes access to the currently active control
       */
     [attribute, readonly] ::com::sun::star::awt::XControl CurrentControl;
+
+    /** allows to delegate certain tasks to the context of the form controller
+    */
+    [attribute] XFormControllerContext  Context;
+
+    /** used (if not <NULL/>) for user interactions triggered by the form controller.
+    */
+    [attribute] ::com::sun::star::task::XInteractionHandler InteractionHandler;
 
     /** adds the specified listener to receive notifications whenever the activation state of
         the controller changes.

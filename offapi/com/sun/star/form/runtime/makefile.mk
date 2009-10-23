@@ -48,6 +48,7 @@ IDLFILES=\
     FormController.idl \
     XFeatureInvalidation.idl \
     XFormController.idl \
+    XFormControllerContext.idl \
     XFormOperations.idl \
 
 # ------------------------------------------------------------------
