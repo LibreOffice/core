@@ -184,6 +184,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setContext( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext >& _context ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _interactionHandler ) throw (::com::sun::star::uno::RuntimeException);
 
     // XChild, base of XFormController
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -300,6 +304,33 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListe
     m_aActivateListeners.removeInterface(l);
 }
 
+//------------------------------------------------------------------
+Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext() throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
+    return NULL;
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& _context ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
+}
+
+//------------------------------------------------------------------
+Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getInteractionHandler() throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
+    return NULL;
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& _interactionHandler ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
+}
+
+//------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getParent(  ) throw (RuntimeException)
 {
     // don't have any parent form controllers
