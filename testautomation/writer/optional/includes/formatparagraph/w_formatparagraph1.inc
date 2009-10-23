@@ -1162,58 +1162,60 @@ endcase
 
 testcase tParagraphIndent17
 
-  Dim sTestFile1 as String
-  Dim sTestFile2 as String
-
-  sTestFile1 = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\AddSpacingShouldCheck.doc")
-  sTestFile2 = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\AddSpacingShouldNotCheck.doc")
-
-  PrintLog "- Test 'Add spacing between paragarph and talbes' when importing from MS-Word"
-  '/// <b>Test 'Add spacing between paragarph and talbes' when importing from MS-Word</b>
-
-   Call hNewDocument
-
-   '/// 1.Open the test file - AddSpacingShouldCheck.doc
-   '///   In Tools/Optionis/Text Document/Compatibility,
-   '/// + the 'Add spacing between paragarph and talbes'
-   '/// + should be checked
-    Call hFileOpen(sTestFile1)
-    Call sMakeReadOnlyDocumentEditable
-
-    ToolsOptions
-    Call hToolsOptions("WRITER","COMPATIBILITY")
-        Kontext "TabCompatibility"
-        Sleep 2
-        Options.TypeKeys "<Down>"
-        if Options.IsChecked <> TRUE then
-            warnlog "'Add spacing between paragarph and talbes' should be checked"
-        end if
-        Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
-
-   Call hCloseDocument
-
-   Call hNewDocument
-
-   '/// 2.Open the test file - AddSpacingShouldNotCheck.doc
-   '///   In Tools/Optionis/Text Document/Compatibility,
-   '/// + the 'Add spacing between paragarph and talbes'
-   '/// + should NOT be checked
-    Call hFileOpen(sTestFile2)
-    Call sMakeReadOnlyDocumentEditable
-
-    ToolsOptions
-    Call hToolsOptions("WRITER","COMPATIBILITY")
-        Kontext "TabCompatibility"
-        Sleep 2
-        Options.TypeKeys "<Down>"
-        if Options.IsChecked = TRUE then
-            warnlog "'Add spacing between paragarph and talbes' should NOT be checked"
-        end if
-        Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
-
-   Call hCloseDocument
+	Dim sTestFile1 as String
+	Dim sTestFile2 as String
+	
+	sTestFile1 = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\AddSpacingShouldCheck.doc")
+	sTestFile2 = Convertpath (gTesttoolpath + "writer\optional\input\formatparagraph\AddSpacingShouldNotCheck.doc")
+	
+	PrintLog "- Test 'Add spacing between paragarph and talbes' when importing from MS-Word"
+	'/// <b>Test 'Add spacing between paragarph and talbes' when importing from MS-Word</b>
+	
+	Call hNewDocument
+	
+	'/// 1.Open the test file - AddSpacingShouldCheck.doc
+	'///   In Tools/Optionis/Text Document/Compatibility,
+	'/// + the 'Add spacing between paragarph and talbes'
+	'/// + should be checked
+	Call hFileOpen(sTestFile1)
+	Call sMakeReadOnlyDocumentEditable
+	
+	ToolsOptions
+	Call hToolsOptions("WRITER","COMPATIBILITY")
+	Kontext "TabCompatibility"
+	Sleep 2
+	Options.TypeKeys "<Down>"
+	if Options.IsChecked <> TRUE then
+		warnlog "'Add spacing between paragarph and talbes' should be checked"
+	end if
+	Kontext "ExtrasOptionenDlg"
+	ExtrasOptionenDlg.OK
+	
+	Call hCloseDocument
+	
+	Call hNewDocument
+	
+	'/// 2.Open the test file - AddSpacingShouldNotCheck.doc
+	'///   In Tools/Optionis/Text Document/Compatibility,
+	'/// + the 'Add spacing between paragarph and talbes'
+	'/// + should NOT be checked
+	Call hFileOpen(sTestFile2)
+	Call sMakeReadOnlyDocumentEditable
+	
+	ToolsOptions
+	Call hToolsOptions("WRITER","COMPATIBILITY")
+	Kontext "TabCompatibility"
+	Sleep 2
+	Options.TypeKeys "<Down>"
+	if Options.IsChecked = TRUE then
+		warnlog "'Add spacing between paragarph and talbes' should NOT be checked"
+	end if
+	Kontext "ExtrasOptionenDlg"
+	ExtrasOptionenDlg.OK
+	
+	Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
