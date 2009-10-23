@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -123,17 +123,16 @@ SHL1STDLIBS_X64+=\
     $(SHELL32LIB_X64)\
     $(KERNEL32LIB_X64)\
     $(GDI32LIB_X64)\
-    $(MSVCRT_X64) \
-    $(MSVCPRT_X64) \
     $(USER32LIB_X64) \
-    $(OLDNAMESLIB_X64) \
-    $(GDIPLUSLIB_X64)
+    $(GDIPLUSLIB_X64) \
+    $(MSVCRT_X64)   \
+    $(MSVCPRT_X64)  \
+    $(OLDNAMESLIB_X64)
 
 SHL1LIBS_X64+=$(SLB_X64)$/util.lib\
     $(SLB_X64)$/ooofilereader.lib
 SHL1OBJS_X64=$(SLOFILES_X64)
 SHL1DEF_X64=$(MISC_X64)$/$(SHL1TARGET).def
-SHL1RES_X64=$(RES_X64)$/$(TARGET)_x64.res
 
 DEF1NAME_X64=$(SHL1TARGET_X64)
 DEF1EXPORTFILE_X64=exports.dxp
@@ -144,3 +143,4 @@ DEF1EXPORTFILE_X64=exports.dxp
 .INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_wntx64.mk
+
