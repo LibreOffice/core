@@ -519,7 +519,7 @@ testcase tPDF_Creator
     gApplication = "WRITER"
     sleep 5 ' wait for document to be loaded
     ' /Creator
-    bTemp = hFindeImDokument ("<</Creator<",true)
+    bTemp = hFindeImDokument ("<</Creator<",true,true)
     if (bTemp = TRUE) then
         Printlog "OK"
     else
@@ -569,22 +569,7 @@ testcase tPDF_Creator
             endif
         endif
     endif
-    ' /CreationDate (
-    bTemp = hFindeImDokument ("/CreationDate(")
-    if (bTemp = TRUE) then
-        Printlog "OK"
-    else
-        warnlog " /CreationDate not found in pdf file :-("
-    endif
-    hTypeKeys("<left><right><shift end>")
-    editcopy
-    sTemp = getClipboardText()
-    sTemp = left(sTemp, inStr(sTemp, ")")-1)
-    printlog sTemp + " -- " + len(sTemp)
-    iCreatorOffset = iCreatorOffset + (len(sTemp) - 23)
-    if (len(sTemp) <> 23) then
-        warnlog "Date is longer than expected; is: '" + sTemp2 + "'"
-    endif
+    
     gApplication = sApp
     call hCloseDocument
     call hCloseDocument
@@ -785,7 +770,7 @@ qaerrorlog
       else
          warnlog "File didn't get saved :-("
       endif
-     
+    hCloseDocument ()
       sleep 5
       hNewDocument()
       sleep 5
@@ -867,7 +852,7 @@ qaerrorlog
 
    call hCloseDocument
 
-endcase
+endcase 'tBMP
 '-------------------------------------------------------------------------------
 testcase tEMF
 
