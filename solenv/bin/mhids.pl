@@ -138,7 +138,9 @@ $filename =~ s/\\/\//g;
 $filebase = $filename;
 $filebase =~ s/.*[\\\/]//;
 $filebase =~ s/\..*?$//;
-$workfile = "$tmpdir/${filebase}_".$$;
+# now stript it to something that doesn't togger vista execution prevention :(
+$flbs =~ s/[aeiou]//g;
+$workfile = "$tmpdir/${flbs}_".$$;
 #$workfile =~ s/setup/set_up/;
 
 # now get $workfile ready for shell usage...
