@@ -1579,10 +1579,32 @@ namespace
                     _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
                 }
             }
+            else
+            {
+                // Funktions-Bedingung parsen
+                ::rtl::OUString sCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,1);
+                Reference< XConnection> xConnection = rController.getConnection();
+                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                    // the international doesn't matter I have a string
+                ::rtl::OUString sName;
+                pCondition->getChild(0)->parseNodeToPredicateStr(sName,
+                                                    xConnection,
+                                                    rController.getNumberFormatter(),
+                                                    aLocale,
+                                                    static_cast<sal_Char>(sDecimal.toChar()),
+                                                    &rController.getParser().getContext());
+
+                OTableFieldDescRef aDragLeft = new OTableFieldDesc();
+                aDragLeft->SetField(sName);
+                aDragLeft->SetFunctionType(FKT_OTHER);
+
+                if ( bHaving )
+                    aDragLeft->SetGroupBy(sal_True);
+                _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
+            }
         }
         else if( SQL_ISRULEOR2(pCondition,existence_test,unique_test) )
         {
-
             // Funktions-Bedingung parsen
             ::rtl::OUString aCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,0);
 
