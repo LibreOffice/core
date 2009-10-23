@@ -111,7 +111,6 @@ BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if(mpView&&mpWindow)
     {
-
         BOOL bTextEdit = FALSE;
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -147,23 +146,19 @@ BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
                 MouseEvent aMEvt( rMEvt.GetPosPixel(), rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), 0 );
                 return FuText::MouseButtonDown(aMEvt);
             }
-            else
-            {
-                unmarkimpl( mpView );
 
-            }
+            if( aVEvt.pObj == 0 )
+                aVEvt.pObj = pPickObj;
         }
-        else
-        {
-            unmarkimpl( mpView );
 
-            if( aVEvt.pObj && !aVEvt.pObj->IsEmptyPresObj() )
-            {
-                USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-                BOOL bToggle = FALSE;
-                mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, FALSE);
-                return TRUE;
-            }
+        unmarkimpl( mpView );
+
+        if( aVEvt.pObj )
+        {
+            USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+            BOOL bToggle = FALSE;
+            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, FALSE);
+            return TRUE;
         }
     }
     return FALSE;
@@ -186,7 +181,7 @@ BOOL FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
             SdrPageView* pPV=0;
             BOOL bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SDRSEARCH_PICKMARKABLE);
 
-            if(bOverMarkableObject && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) && !pObj->IsEmptyPresObj() )
+            if(bOverMarkableObject && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
                 mpWindow->SetPointer(Pointer(POINTER_FILL));
             else
                 mpWindow->SetPointer(Pointer(POINTER_ARROW));
