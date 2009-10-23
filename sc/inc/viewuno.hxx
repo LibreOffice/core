@@ -124,7 +124,7 @@ public:
                             getReferredCells() throw(::com::sun::star::uno::RuntimeException);
 
                             // XFormLayerAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL
                             getFormController( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::form::XForm >& Form )
                                     throw (::com::sun::star::uno::RuntimeException);

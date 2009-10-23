@@ -337,11 +337,11 @@ namespace
 }
 
 // XFormLayerAccess
-uno::Reference< form::XFormController > SAL_CALL ScViewPaneBase::getFormController( const uno::Reference< form::XForm >& _Form ) throw (uno::RuntimeException)
+uno::Reference< form::runtime::XFormController > SAL_CALL ScViewPaneBase::getFormController( const uno::Reference< form::XForm >& _Form ) throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
-    uno::Reference< form::XFormController > xController;
+    uno::Reference< form::runtime::XFormController > xController;
 
     Window* pWindow( NULL );
     SdrView* pSdrView( NULL );
