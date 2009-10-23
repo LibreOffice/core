@@ -92,7 +92,6 @@
 #include "FrameView.hxx"
 #endif
 #include "unomodel.hxx"
-#include "formatclipboard.hxx"
 #include "undo/undomanager.hxx"
 #include "undo/undofactory.hxx"
 #include "OutlineView.hxx"
@@ -169,7 +168,6 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType,BOOL bScriptSupport) :
     SfxObjectShell( eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
-    mpFormatClipboard(new SdFormatClipboard()),
     mpDoc(NULL),
     mpUndoManager(NULL),
     mpPrinter(NULL),
@@ -196,7 +194,6 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
                                BOOL bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
-    mpFormatClipboard(new SdFormatClipboard()),
     mpDoc(pDoc),
     mpUndoManager(NULL),
     mpPrinter(NULL),
@@ -234,9 +231,6 @@ DrawDocShell::~DrawDocShell()
     if( mpDoc )
         mpDoc->SetSdrUndoManager( 0 );
     delete mpUndoManager;
-
-    if(mpFormatClipboard)
-        delete mpFormatClipboard;
 
     if (mbOwnPrinter)
         delete mpPrinter;

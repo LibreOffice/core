@@ -31,15 +31,19 @@
 #ifndef SD_FU_FORMATPAINTBRUSH_HXX
 #define SD_FU_FORMATPAINTBRUSH_HXX
 
-#include "fupoor.hxx"
+#include "futext.hxx"
 
 // header for class SfxItemSet
 #include <svtools/itemset.hxx>
+#include <boost/scoped_ptr.hpp>
+
+class SfxItemSet;
 
 namespace sd {
 
-class FuFormatPaintBrush
-    : public FuPoor
+class DrawViewShell;
+
+class FuFormatPaintBrush : public FuText
 {
 public:
     TYPEINFO();
@@ -54,14 +58,21 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
-private:
-        FuFormatPaintBrush (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
+    static void GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet );
+    static bool CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier );
 
+private:
+    FuFormatPaintBrush ( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
+
+    void DoExecute( SfxRequest& rReq );
+
+    bool HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
+    void Paste( bool, bool );
+
+    void implcancel();
+
+    ::boost::shared_ptr<SfxItemSet> mpItemSet;
+    bool   mbPermanent;
 };
 
 } // end of namespace sd
