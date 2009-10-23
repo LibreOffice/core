@@ -1174,6 +1174,7 @@ void ImpPDFTabSecurityPage::ImplPwdPushButton( const String & i_rDlgTitle, Strin
     aPwdDialog.SetMinLen( 0 );
     aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM );
     aPwdDialog.SetText( i_rDlgTitle );
+    aPwdDialog.AllowAsciiOnly();
     if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
         io_rDestPassword = aPwdDialog.GetPassword();
     enablePermissionControls();
