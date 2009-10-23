@@ -41,6 +41,8 @@
 //   Vorausdeklarationen
 //************************************************************
 
+#include <boost/shared_ptr.hpp>
+
 class SdrOutliner;
 class OutlinerView;
 class EditStatus;
@@ -281,6 +283,21 @@ public:
     virtual void MarkListHasChanged();
 
     rtl::Reference< sdr::SelectionController > getSelectionController() const { return mxSelectionController; }
+
+    /** returns true if the shape identified by its inventor and identifier supports format paint brush operation */
+    virtual bool SupportsFormatPaintbrush( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
+
+    /** returns a format paint brush set from the current selection */
+    virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  );
+
+    /** applies a format paint brush set from the current selection.
+        if bNoCharacterFormats is true, no character attributes are changed.
+        if bNoParagraphFormats is true, no paragraph attributes are changed.
+    */
+    virtual void ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
+
+    /** helper function for selections with multiple SdrText for one SdrTextObj (f.e. tables ) */
+    void ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
