@@ -1324,7 +1324,9 @@ void Desktop::Main()
         }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
-
+/*
+        // locale and UI locale in AppSettings are now retrieved from configuration or system directly via SvtSysLocale
+        // no reason to set while starting
         // set UI language and locale
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
         //LanguageSelection langselect;
@@ -1340,7 +1342,7 @@ void Desktop::Main()
         aSettings.SetLanguage( eLanguage );
         Application::SetSettings( aSettings );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
-
+*/
 
         // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
         OUString aTitleString( aTitle );

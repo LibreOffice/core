@@ -1460,6 +1460,11 @@ void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[]
 
 BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 {
+    // lock configuration broadcasters so that we can coordinate the notifications
+    pLangConfig->aSysLocaleOptions.BlockBroadcasts( TRUE );
+    pLangConfig->aLanguageOptions.BlockBroadcasts( TRUE );
+    pLangConfig->aLinguConfig.BlockBroadcasts( TRUE );
+
     if(aCTLSupportCB.IsChecked() &&
             (aCTLSupportCB.GetSavedValue() != aCTLSupportCB.IsChecked()) ||
             (aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos()))
@@ -1523,8 +1528,6 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         OSL_ENSURE(sal_False, aMsg.getStr());
     }
 
-    pLangConfig->aSysLocaleOptions.BlockBroadcasts( TRUE );
-
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     LanguageType eOldLocale = (sLang.getLength() ?
         lcl_LangStringToLangType( sLang ) : LANGUAGE_SYSTEM);
@@ -1544,22 +1547,18 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
                 sNewLang += aLocale.Country;
             }
         }
-        // Set application settings before options, so listeners at the
-        // options will access the new locale.
-        AllSettings aSettings( Application::GetSettings() );
-        aSettings.SetLanguage( eNewLocale );
-        Application::SetSettings( aSettings );
+
+        // locale nowadays get to AppSettings via notification
+        // this will happen after releasing the lock on the ConfigurationBroadcaster at
+        // the end of this method
         pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
         rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, TRUE ) );
     }
 
-    //
     if(aDecimalSeparatorCB.GetSavedValue() != aDecimalSeparatorCB.IsChecked())
         pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(aDecimalSeparatorCB.IsChecked());
 
-    // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for
-    // locale default. This must be set _after_ the locale above in order to
-    // have a valid locale for broadcasting the currency change.
+    // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     USHORT nCurrPos = aCurrencyLB.GetSelectEntryPos();
     const NfCurrencyEntry* pCurr = (const NfCurrencyEntry*)
@@ -1647,19 +1646,19 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     {
         sal_Bool bChecked = aAsianSupportCB.IsChecked();
         pLangConfig->aLanguageOptions.SetAll(bChecked);
+
         //iterate over all bindings to invalidate vertical text direction
+        const sal_uInt16 STATE_COUNT = 2;
 
-      const sal_uInt16 STATE_COUNT = 2;
+        SfxBoolItem* pBoolItems[STATE_COUNT];
+        pBoolItems[0] = new SfxBoolItem(SID_VERTICALTEXT_STATE, FALSE);
+        pBoolItems[1] = new SfxBoolItem(SID_TEXT_FITTOSIZE_VERTICAL, FALSE);
 
-      SfxBoolItem* pBoolItems[STATE_COUNT];
-      pBoolItems[0] = new SfxBoolItem(SID_VERTICALTEXT_STATE, FALSE);
-      pBoolItems[1] = new SfxBoolItem(SID_TEXT_FITTOSIZE_VERTICAL, FALSE);
+        SfxVoidItem* pInvalidItems[STATE_COUNT];
+        pInvalidItems[0] = new SfxVoidItem(SID_VERTICALTEXT_STATE);
+        pInvalidItems[1] = new SfxVoidItem(SID_TEXT_FITTOSIZE_VERTICAL);
 
-      SfxVoidItem* pInvalidItems[STATE_COUNT];
-      pInvalidItems[0] = new SfxVoidItem(SID_VERTICALTEXT_STATE);
-      pInvalidItems[1] = new SfxVoidItem(SID_TEXT_FITTOSIZE_VERTICAL);
-
-    lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
+        lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
     if ( aCTLSupportCB.GetSavedValue() != aCTLSupportCB.IsChecked() )
@@ -1674,11 +1673,15 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
-
-
     if ( pLangConfig->aSysLocaleOptions.IsModified() )
         pLangConfig->aSysLocaleOptions.Commit();
+
+    // first release the lock on the ConfigurationBroadcaster for Locale changes
+    // it seems that our code relies on the fact that before other changes like e.g. currency
+    // are broadcasted locale changes have been done
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( FALSE );
+    pLangConfig->aLanguageOptions.BlockBroadcasts( FALSE );
+    pLangConfig->aLinguConfig.BlockBroadcasts( FALSE );
 
     return FALSE;
 }

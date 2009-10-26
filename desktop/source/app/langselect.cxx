@@ -143,6 +143,18 @@ bool LanguageSelection::prepareLanguage()
             xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
 
+            MsLangId::setConfiguredSystemUILanguage( MsLangId::convertLocaleToLanguage(loc) );
+
+            OUString sLocale;
+            xProp->getPropertyValue(OUString::createFromAscii("ooSetupSystemLocale")) >>= sLocale;
+            if ( sLocale.getLength() )
+            {
+                loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+                MsLangId::setConfiguredSystemLanguage( MsLangId::convertLocaleToLanguage(loc) );
+            }
+            else
+                MsLangId::setConfiguredSystemLanguage( MsLangId::getSystemLanguage() );
+
             bSuccess = sal_True;
         }
         catch ( PropertyVetoException& )
