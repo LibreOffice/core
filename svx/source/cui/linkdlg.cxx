@@ -224,7 +224,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 
         String aFileName;
         pLinkMgr->GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
-
+        aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
         FileName().SetText( aFileName );
         SourceName().SetText( sLink );
         TypeName().SetText( sType );
@@ -530,7 +530,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
     USHORT nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
 
-    if ( pLink != _pLink && _pLink && _pLink->WasLastEditOK() )
+    if( _pLink && _pLink->WasLastEditOK() )
     {
         // JP 09.01.98:
         // StarImpress/Draw tauschen die LinkObjecte selbst aus!
@@ -563,10 +563,6 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         }
         if( pLinkMgr->GetPersist() )
             pLinkMgr->GetPersist()->SetModified();
-    }
-    else if ( pLink == _pLink )
-    {
-        DBG_ERRORFILE( "SvBaseLinksDlg::EndEditHdl(): wrong link" );
     }
     return 0;
 }
@@ -643,6 +639,8 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, USHORT nPos, sal_Bool
     XubString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
     INetURLObject aPath( sFileNm, INET_PROT_FILE );
     String aFileName = aPath.getName();
+    aFileName = INetURLObject::decode(aFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS);
+
     if( aFileName.Len() > aTxt.Len() )
         aTxt = aFileName;
     else if( aTxt.Search( aFileName, aTxt.Len() - aFileName.Len() ) == STRING_NOTFOUND )
