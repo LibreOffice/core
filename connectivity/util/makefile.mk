@@ -31,8 +31,8 @@ PRJ = ..
 PRJNAME = connectivity
 TARGET = connectivity
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
+.INCLUDE : settings.mk
+.INCLUDE : target.mk
 
 # For any given platform, for each driver .xcu (in $(MY_XCUS)) built on that
 # platform (in $(MISC)/registry/data/org/openoffice/Office/DataAccess) there are
@@ -50,12 +50,13 @@ MY_XCUS := \
 
 .IF "$(MY_XCUS)" != ""
 
-ALLTAR: $(BIN)/fcfg_drivers_{$(alllangiso)}.zip
+ALLTAR : $(BIN)/fcfg_drivers_{$(alllangiso)}.zip
 
-$(BIN)/fcfg_drivers_%.zip: \
-        $(MISC)/registry/res/%/org/openoffice/Office/DataAccess/$(MY_XCUS:1) \
-        $(foreach,i,$(MY_XCUS) \
-            '$(MISC)/registry/res/%/org/openoffice/Office/DataAccess/$i')
+$(BIN)/fcfg_drivers_{$(alllangiso)}.zip : \
+        $(MISC)/registry/res/$$(@:b:s/fcfg_drivers_//)/org/openoffice/Office/DataAccess/{$(MY_XCUS)}
+
+$(BIN)/fcfg_drivers_%.zip : \
+        $(MISC)/registry/res/%/org/openoffice/Office/DataAccess/$(MY_XCUS:1)
     zip -j $@ \
         $(foreach,i,$(MY_XCUS) \
             $(MISC)/registry/res/$*/org/openoffice/Office/DataAccess/$i)
