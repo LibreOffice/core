@@ -272,9 +272,11 @@ namespace drawinglayer
                 // {
                 //     // empty 3D scene; Check for border hit
                 //     const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                //     basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
-                //
-                //     mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
+                //     if(!aRange.isEmpty())
+                //     {
+                //          const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                //          mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
+                //     }
                 // }
             }
         }
@@ -474,9 +476,12 @@ namespace drawinglayer
                 {
                     // for text use the BoundRect of the primitive itself
                     const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                    basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
 
-                    mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                    if(!aRange.isEmpty())
+                    {
+                        const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                        mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                    }
 
                     break;
                 }
@@ -496,9 +501,12 @@ namespace drawinglayer
                         // - For Bitamps, the mask and/or alpha information may be used
                         // - For MetaFiles, the MetaFile content may be used
                         const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
 
-                        mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                        if(!aRange.isEmpty())
+                        {
+                            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                            mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                        }
                     }
 
                     break;
