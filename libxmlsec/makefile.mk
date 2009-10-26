@@ -46,26 +46,37 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 # --- Files --------------------------------------------------------
 
-XMLSEC1VERSION=1.2.6
+XMLSEC1VERSION=1.2.12
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
-PATCH_FILES=$(TARFILE_NAME).patch xmlsec1-1.2.6-mingwport24.patch
+
+#xmlsec1-configure.patch: Set up the build. Straightforward
+#configuration
+#xmlsec1-customkeymanage.patch: Could we do this alternatively outside xmlsec
+#xmlsec1-nssmangleciphers.patch: Dubious, do we still need this ?
+#xmlsec1-nssdisablecallbacks.patch: Dubious, do we still need this ?
+#xmlsec1-noverify.patch: As per readme.txt. 
+#xmlsec1-mingw32.patch: Mingw32 support. 
+#xmlsec1-mingw-customkeymanage-addmscrypto.patch builds the custom keymanager on mingw
+PATCH_FILES=\
+   xmlsec1-configure.patch \
+   xmlsec1-customkeymanage.patch \
+   xmlsec1-nssmangleciphers.patch \
+   xmlsec1-nssdisablecallbacks.patch \
+   xmlsec1-noverify.patch \
+   xmlsec1-mingw32.patch \
+   xmlsec1-mingw-keymgr-mscrypto.patch
 
 
 ADDITIONAL_FILES= \
+    include$/xmlsec$/mscrypto$/akmngr.h \
+    src$/mscrypto$/akmngr.c \
     include$/xmlsec$/nss$/akmngr.h \
     include$/xmlsec$/nss$/ciphers.h \
     include$/xmlsec$/nss$/tokens.h \
-    include$/xmlsec$/mscrypto$/akmngr.h \
     src$/nss$/akmngr.c \
-    src$/mscrypto$/akmngr.c \
-    src$/nss$/keytrans.c \
     src$/nss$/keywrapers.c \
-    src$/nss$/tokens.c \
-    xmlsec-mscrypto.pc.in \
-    include$/xmlsec$/mscrypto$/Makefile.in \
-    src$/mscrypto$/Makefile.in \
-    libxml2-config
+    src$/nss$/tokens.c
 
 .IF "$(GUI)"=="WNT"
 CRYPTOLIB=mscrypto
@@ -87,8 +98,9 @@ xmlsec_LIBS=-lmingwthrd
 xmlsec_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=
-CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_ACTION=.$/configure
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --enable-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xmlsec_CC)" CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xmlsec_LIBS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
@@ -141,7 +153,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 
 .ENDIF
 CONFIGURE_DIR=
-CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+CONFIGURE_ACTION=.$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 CONFIGURE_FLAGS=--with-pic --disable-shared --with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)"
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
@@ -165,7 +177,7 @@ OUTDIR2INC=include$/xmlsec
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=src$/.libs$/libxmlsec1.dll.a src$/nss$/.libs$/libxmlsec1-nss.dll.a src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll.a
-OUT2BIN+=src$/.libs$/libxmlsec1-1.dll src$/nss$/.libs$/libxmlsec1-nss-1.dll src$/mscrypto$/.libs$/libxmlsec1-mscrypto-1.dll
+OUT2BIN+=src$/.libs$/libxmlsec1.dll src$/nss$/.libs$/libxmlsec1-nss.dll src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll
 .ELSE
 OUT2LIB+=win32$/binaries$/*.lib
 OUT2BIN+=win32$/binaries$/*.dll

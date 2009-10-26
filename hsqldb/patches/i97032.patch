@@ -1,0 +1,10 @@
+--- misc/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java	2008-03-17 17:05:41.000000000 +0100
++++ misc/build/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java	2009-01-21 13:09:24.493470142 +0100
+@@ -429,6 +429,7 @@
+             setProperty(hsqldb_log_size, 10);
+             setProperty(sql_enforce_strict_size, true);
+             setProperty(hsqldb_nio_data_file, false);
++			setProperty(hsqldb_lock_file, true);
+         }
+ 
+         // OOo end
