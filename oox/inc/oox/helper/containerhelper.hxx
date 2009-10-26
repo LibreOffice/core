@@ -211,6 +211,38 @@ public:
                             forEach( ::boost::bind( pFunc, _1, aParam1, aParam2 ) );
                         }
 
+    /** Calls the passed functor for every contained object. Passes the key as
+        first argument and the object reference as second argument to rFunctor. */
+    template< typename FunctorType >
+    inline void         forEachWithKey( const FunctorType& rFunctor ) const
+                        {
+                            ::std::for_each( this->begin(), this->end(), ForEachFunctorWithKey< FunctorType >( rFunctor ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the object key as argument to the member function. */
+    template< typename FuncType >
+    inline void         forEachMemWithKey( FuncType pFunc ) const
+                        {
+                            forEachWithKey( ::boost::bind( pFunc, _2, _1 ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the object key as first argument to the member function. */
+    template< typename FuncType, typename ParamType >
+    inline void         forEachMemWithKey( FuncType pFunc, ParamType aParam ) const
+                        {
+                            forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam ) );
+                        }
+
+    /** Calls the passed member function of ObjType on every contained object.
+        Passes the object key as first argument to the member function. */
+    template< typename FuncType, typename ParamType1, typename ParamType2 >
+    inline void         forEachMemWithKey( FuncType pFunc, ParamType1 aParam1, ParamType2 aParam2 ) const
+                        {
+                            forEachWithKey( ::boost::bind( pFunc, _2, _1, aParam1, aParam2 ) );
+                        }
+
 private:
     template< typename FunctorType >
     struct ForEachFunctor
@@ -218,6 +250,14 @@ private:
         const FunctorType&  mrFunctor;
         inline explicit     ForEachFunctor( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
         inline void         operator()( const value_type& rValue ) const { if( rValue.second.get() ) mrFunctor( *rValue.second ); }
+    };
+
+    template< typename FunctorType >
+    struct ForEachFunctorWithKey
+    {
+        const FunctorType&  mrFunctor;
+        inline explicit     ForEachFunctorWithKey( const FunctorType& rFunctor ) : mrFunctor( rFunctor ) {}
+        inline void         operator()( const value_type& rValue ) const { if( rValue.second.get() ) mrFunctor( rValue.first, *rValue.second ); }
     };
 
     inline const mapped_type* getRef( key_type nKey ) const

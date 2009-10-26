@@ -304,6 +304,17 @@ protected:
      */
     BiffFragmentType    startFragment( BiffType eBiff );
 
+    /** Starts a new fragment at a specific position in the workbbok stream and
+        returns the fragment type.
+
+        The passed record handle must specify the stream position of the BOF
+        record of the fragment substream. The function will try to start the
+        next record and read the contents of the BOF record, if extant.
+
+        @return  Fragment type according to the imported BOF record.
+     */
+    BiffFragmentType    startFragment( BiffType eBiff, sal_Int64 nRecHandle );
+
     /** Skips the current fragment up to its trailing EOF record.
 
         Skips all records until next EOF record. When this function returns,
@@ -316,6 +327,10 @@ protected:
         @return  True = stream points to the EOF record of the current fragment.
      */
     bool                skipFragment();
+
+private:
+    /** Implementation helper for the startFragment() functions. */
+    BiffFragmentType    implStartFragment( BiffType eBiff );
 };
 
 // ============================================================================
