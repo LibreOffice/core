@@ -87,7 +87,6 @@ import java.util.logging.Logger;
 public class DatabaseDocument extends TestCase implements com.sun.star.document.XDocumentEventListener
 {
 
-    private static final String ONLOAD = "OnLoad";
     private static final String _BLANK = "_blank";
     private XComponent m_callbackFactory = null;
     private final ArrayList m_documentEvents = new ArrayList();
@@ -537,7 +536,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         final String macroURI = "vnd.sun.star.script:EventHandlers.all.OnLoad?language=Basic&location=document";
         final XEventsSupplier eventsSupplier = (XEventsSupplier) UnoRuntime.queryInterface(XEventsSupplier.class,
                 databaseDoc);
-        eventsSupplier.getEvents().replaceByName(ONLOAD, new PropertyValue[]
+        eventsSupplier.getEvents().replaceByName("OnLoad", new PropertyValue[]
                 {
                     new PropertyValue("EventType", 0, "Script", PropertyState.DIRECT_VALUE),
                     new PropertyValue("Script", 0, macroURI, PropertyState.DIRECT_VALUE)
@@ -567,13 +566,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         // here) is called before the OnLoad notification is received - since the latter happens from within
         // a Basic macro which is bound to the OnLoad event of the document.
 
-        final String context = ONLOAD;
+        final String context = "OnLoad";
         impl_startObservingEvents(context);
         databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
                 loader.loadComponentFromURL(documentURL, _BLANK, 0, impl_getMacroExecLoadArgs()));
         impl_stopObservingEvents(m_documentEvents, new String[]
                 {
-                    ONLOAD
+                    "OnLoad"
                 }, context);
 
         assureEquals("our provided interaction handler was not called", STATE_ON_LOAD_RECEIVED, m_loadDocState);
@@ -659,7 +658,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_stopObservingEvents(m_globalEvents,
                 new String[]
                 {
-                    "OnLoadFinished", "OnViewCreated", "OnFocus", ONLOAD
+                    "OnLoadFinished", "OnViewCreated", "OnFocus", "OnLoad"
                 }, context);
 
         // closing a document by API
@@ -679,7 +678,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_startObservingEvents("prepare for '" + context + "'");
         databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
                 loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
-        impl_waitForEvent(m_globalEvents, ONLOAD, 5000);
+        impl_waitForEvent(m_globalEvents, "OnLoad", 5000);
         // wait for all events to arrive - OnLoad should be the last one
 
         final XDispatchProvider dispatchProvider = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class,
@@ -716,12 +715,12 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_startObservingEvents("prepare for '" + context + "'");
         databaseDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
                 loader.loadComponentFromURL(newURL, _BLANK, 0, impl_getDefaultLoadArgs()));
-        final int previousOnLoadEventPos = impl_waitForEvent(m_globalEvents, ONLOAD, 5000);
+        final int previousOnLoadEventPos = impl_waitForEvent(m_globalEvents, "OnLoad", 5000);
         // ... and another document ...
         final String otherURL = copyToTempFile(databaseDoc.getURL());
         final XModel otherDoc = (XModel) UnoRuntime.queryInterface(XModel.class,
                 loader.loadComponentFromURL(otherURL, _BLANK, 0, impl_getDefaultLoadArgs()));
-        impl_waitForEvent(m_globalEvents, ONLOAD, 5000, previousOnLoadEventPos + 1);
+        impl_waitForEvent(m_globalEvents, "OnLoad", 5000, previousOnLoadEventPos + 1);
         impl_raise(otherDoc);
 
         // ... and switch between the two
@@ -764,7 +763,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     // --------------------------------------------------------------------------------------------------------
     private void impl_startObservingEvents(String _context)
     {
-        log.println(" " + _context);
+        log.println(" " + _context + " {");
         synchronized (m_documentEvents)
         {
             m_documentEvents.clear();
@@ -778,39 +777,46 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     // --------------------------------------------------------------------------------------------------------
     private void impl_stopObservingEvents(ArrayList _actualEvents, String[] _expectedEvents, String _context)
     {
-        synchronized (_actualEvents)
+        try
         {
-            int actualEventCount = _actualEvents.size();
-            while (actualEventCount < _expectedEvents.length)
+            synchronized (_actualEvents)
             {
-                // well, it's possible not all events already arrived, yet - finally, some of them
-                // are notified asynchronously
-                // So, wait a few seconds.
-                try
+                int actualEventCount = _actualEvents.size();
+                while (actualEventCount < _expectedEvents.length)
                 {
-                    _actualEvents.wait(5000);
-                }
-                catch (InterruptedException ex)
-                {
+                    // well, it's possible not all events already arrived, yet - finally, some of them
+                    // are notified asynchronously
+                    // So, wait a few seconds.
+                    try
+                    {
+                        _actualEvents.wait(5000);
+                    }
+                    catch (InterruptedException ex)
+                    {
+                    }
+
+                    if (actualEventCount == _actualEvents.size())
+                    // the above wait was left because of the timeout, *not* because an event
+                    // arrived. Okay, we won't wait any longer, this is a failure.
+                    {
+                        break;
+                    }
+                    actualEventCount = _actualEvents.size();
                 }
 
-                if (actualEventCount == _actualEvents.size())
-                // the above wait was left because of the timeout, *not* because an event
-                // arrived. Okay, we won't wait any longer, this is a failure.
+                assureEquals("wrong event count for '" + _context + "'",
+                        _expectedEvents.length, _actualEvents.size());
+
+                for (int i = 0; i < _expectedEvents.length; ++i)
                 {
-                    break;
+                    assureEquals("wrong event at positon " + (i + 1) + " for '" + _context + "'",
+                            _expectedEvents[i], _actualEvents.get(i));
                 }
-                actualEventCount = _actualEvents.size();
             }
-
-            assureEquals("wrong event count for '" + _context + "'",
-                    _expectedEvents.length, _actualEvents.size());
-
-            for (int i = 0; i < _expectedEvents.length; ++i)
-            {
-                assureEquals("wrong event at positon " + (i + 1) + " for '" + _context + "'",
-                        _expectedEvents[i], _actualEvents.get(i));
-            }
+        }
+        finally
+        {
+            log.println(" }");
         }
     }
 
@@ -867,7 +873,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             return;
         }
 
-        if ((_Event.EventName.equals(ONLOAD)) && (m_loadDocState != STATE_NOT_STARTED))
+        if ((_Event.EventName.equals("OnLoad")) && (m_loadDocState != STATE_NOT_STARTED))
         {
             assureEquals("OnLoad event must come *after* invocation of the interaction handler / user!",
                     m_loadDocState, STATE_MACRO_EXEC_APPROVED);

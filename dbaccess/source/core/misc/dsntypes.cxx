@@ -41,7 +41,7 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <comphelper/documentconstants.hxx>
-#include <connectivity/DriversConfig.hxx>
+
 //.........................................................................
 namespace dbaccess
 {
@@ -70,20 +70,20 @@ namespace dbaccess
 DBG_NAME(ODsnTypeCollection)
 //-------------------------------------------------------------------------
 ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory)
-:m_xFactory(_xFactory)
+:m_aDriverConfig(_xFactory)
+,m_xFactory(_xFactory)
 #ifdef DBG_UTIL
 ,m_nLivingIterators(0)
 #endif
 {
     DBG_CTOR(ODsnTypeCollection,NULL);
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
+    const uno::Sequence< ::rtl::OUString > aURLs = m_aDriverConfig.getURLs();
     const ::rtl::OUString* pIter = aURLs.getConstArray();
     const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
     for(;pIter != pEnd;++pIter )
     {
         m_aDsnPrefixes.push_back(*pIter);
-        m_aDsnTypesDisplayNames.push_back(aDriverConfig.getDriverTypeDisplayName(*pIter));
+        m_aDsnTypesDisplayNames.push_back(m_aDriverConfig.getDriverTypeDisplayName(*pIter));
     }
 
     DBG_ASSERT(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
@@ -99,8 +99,7 @@ ODsnTypeCollection::~ODsnTypeCollection()
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeDisplayName(const ::rtl::OUString& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    return aDriverConfig.getDriverTypeDisplayName(_sURL);
+    return m_aDriverConfig.getDriverTypeDisplayName(_sURL);
 }
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::cutPrefix(const ::rtl::OUString& _sURL) const
@@ -180,21 +179,19 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const ::rtl::OUString& _sURL) c
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getMediaType(const ::rtl::OUString& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("MediaType",::rtl::OUString());
 }
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUString& _sMediaType,const ::rtl::OUString& _sExtension)
 {
     String sURL;
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
+    const uno::Sequence< ::rtl::OUString > aURLs = m_aDriverConfig.getURLs();
     const ::rtl::OUString* pIter = aURLs.getConstArray();
     const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
     for(;pIter != pEnd;++pIter )
     {
-        const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(*pIter);
+        const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(*pIter);
         if ( aFeatures.getOrDefault("MediaType",::rtl::OUString()) == _sMediaType )
         {
             const ::rtl::OUString sFileExtension = aFeatures.getOrDefault("Extension",::rtl::OUString());
@@ -268,51 +265,44 @@ void ODsnTypeCollection::extractHostNamePort(const ::rtl::OUString& _rDsn,String
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getJavaDriverClass(const ::rtl::OUString& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getProperties(_sURL);
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getProperties(_sURL);
     return aFeatures.getOrDefault("JavaDriverClass",::rtl::OUString());
 }
 //-------------------------------------------------------------------------
 sal_Bool ODsnTypeCollection::isFileSystemBased(const ::rtl::OUString& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("FileSystemBased",sal_False);
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODsnTypeCollection::supportsTableCreation(const ::rtl::OUString& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsTableCreation",sal_False);
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODsnTypeCollection::supportsBrowsing(const ::rtl::OUString& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("SupportsBrowsing",sal_False);
 }
 // -----------------------------------------------------------------------------
 bool ODsnTypeCollection::needsJVM(const String& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("UseJava",sal_False);
 }
 // -----------------------------------------------------------------------------
 Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const ::rtl::OUString& _sURL ) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(_sURL);
+    const ::comphelper::NamedValueCollection& aProperties = m_aDriverConfig.getProperties(_sURL);
     return aProperties.getPropertyValues();
 }
 
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeExtension(const ::rtl::OUString& _sURL) const
 {
-    ::connectivity::DriversConfig aDriverConfig(m_xFactory);
-    const ::comphelper::NamedValueCollection& aFeatures = aDriverConfig.getMetaData(_sURL);
+    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
     return aFeatures.getOrDefault("Extension",::rtl::OUString());
 }
 //-------------------------------------------------------------------------

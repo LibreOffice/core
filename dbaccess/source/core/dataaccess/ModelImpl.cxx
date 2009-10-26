@@ -1006,6 +1006,8 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
     OSL_PRECOND( !xModel.is(), "ODatabaseModelImpl::createNewModel_deliverOwnership: not to be called if there already is a model!" );
     if ( !xModel.is() )
     {
+        bool bHadModelBefore = m_bDocumentInitialized;
+
         xModel = ODatabaseDocument::createDatabaseDocument( this, ODatabaseDocument::FactoryAccess() );
         m_xModel = xModel;
 
@@ -1018,6 +1020,17 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
+        }
+
+        if ( bHadModelBefore )
+        {
+            // do an attachResources
+            // In case the document is loaded regularly, this is not necessary, as our loader will do it.
+            // However, in case that the document is implicitly created by asking the data source for the document,
+            // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
+            // state, fires all events, and so on.
+            // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
+            xModel->attachResource( xModel->getURL(), m_aArgs );
         }
 
         if ( _bInitialize )

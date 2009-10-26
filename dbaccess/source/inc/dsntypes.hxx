@@ -37,6 +37,7 @@
 #include <comphelper/stl_types.hxx>
 #include "dbadllapi.hxx"
 #include <tools/string.hxx>
+#include <connectivity/DriversConfig.hxx>
 
 //.........................................................................
 namespace dbaccess
@@ -121,6 +122,7 @@ protected:
 
     StringVector    m_aDsnTypesDisplayNames;    /// user readable names for the datasource types
     StringVector    m_aDsnPrefixes;             /// DSN prefixes which determine the type of a datasource
+    ::connectivity::DriversConfig m_aDriverConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
 #ifdef DBG_UTIL
