@@ -87,6 +87,8 @@ sub setcompiler
         $outobj_flag = "-Fo";
         $objext = ".obj";
         $preprocess_flag = "-EP"; # preprocess to stdout
+        $solarincludes =~ s/\/stl/\/xstlx/g;
+        $defs =~ s/\/stl/\/xstlx/g;
     } elsif ( "$whichcom" eq "C52" ) {
         $appext = ""; # windows for now
         $compiler = "cc";
