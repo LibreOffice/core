@@ -111,6 +111,11 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
     return aDbgOutResult.GetBuffer();
 }
 
+SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
+{
+    return OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr();
+}
+
 
 struct CompareUShort
 {
@@ -1084,9 +1089,9 @@ String lcl_dbg_out(const SwNodeRange & rRange)
 {
     String aStr("[", RTL_TEXTENCODING_ASCII_US);
 
-    aStr += lcl_dbg_out(rRange.aStart);
+    aStr += lcl_dbg_out(SwPosition(rRange.aStart));
     aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-    aStr += lcl_dbg_out(rRange.aEnd);
+    aStr += lcl_dbg_out(SwPosition(rRange.aEnd));
 
     aStr += String("]" , RTL_TEXTENCODING_ASCII_US);
 

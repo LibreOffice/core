@@ -615,7 +615,7 @@ SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
 
 SwFmtMeta::~SwFmtMeta()
 {
-    if (m_pMeta->GetFmtMeta() == this)
+    if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
     {
         m_pMeta->SetFmtMeta(0);
     }
@@ -631,7 +631,8 @@ int SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
 SfxPoolItem * SwFmtMeta::Clone( SfxItemPool * /*pPool*/ ) const
 {
     // if this is indeed a copy, then DoCopy must be called later!
-    return new SwFmtMeta( m_pMeta, Which() );
+    return (m_pMeta) // #i105148# pool default may be cloned also!
+        ? new SwFmtMeta( m_pMeta, Which() ) : new SwFmtMeta( Which() );
 }
 
 void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)

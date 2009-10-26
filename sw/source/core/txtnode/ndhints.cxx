@@ -125,8 +125,8 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 < (long)&rHt2;
             }
-            // the order must ensure that META is inside RUBY!
-            return ( nWhich1 < nWhich2 );
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 > nWhich2 );
         }
         return ( nHt1 > nHt2 );
     }
@@ -161,8 +161,8 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
                 return (long)&rHt1 > (long)&rHt2;
             }
-            // the order must ensure that META is inside RUBY!
-            return ( nWhich1 > nWhich2 );
+            // order is important! for requirements see hintids.hxx
+            return ( nWhich1 < nWhich2 );
         }
         else
             return ( *rHt1.GetStart() > *rHt2.GetStart() );

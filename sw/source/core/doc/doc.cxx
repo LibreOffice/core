@@ -2007,3 +2007,13 @@ void SwDoc::ChkCondColls()
      }
 }
 
+void SwDoc::setExternalData(::sw::tExternalDataType eType,
+                            ::sw::tExternalDataPointer pPayload)
+{
+    m_externalData[eType] = pPayload;
+}
+
+::sw::tExternalDataPointer SwDoc::getExternalData(::sw::tExternalDataType eType)
+{
+    return m_externalData[eType];
+}
