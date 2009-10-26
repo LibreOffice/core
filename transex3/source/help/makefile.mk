@@ -112,7 +112,7 @@ JAVACLASSFILES = \
 
 #JARFILES  = ridl.jar jurt.jar unoil.jar juh.jar
 .IF "$(SYSTEM_LUCENE)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
+CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(LUCENE_CORE_JAR)$(PATH_SEPERATOR)$(LUCENE_ANALYZERS_JAR)
 COMP=fix_system_lucene
 .ELSE
 JARFILES += lucene-core-2.3.jar lucene-analyzers-2.3.jar
@@ -136,4 +136,4 @@ $(JARTARGETN) : $(COMP)
 fix_system_lucene:
     @echo "Fix Java Class-Path entry for Lucene libraries from system."
     @$(SED) -r -e "s#^(Class-Path:).*#\1 file://$(LUCENE_CORE_JAR) file://$(LUCENE_ANALYZERS_JAR)#" \
-    -i ../../../../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF
+    -i ../../$(INPATH)/class/HelpLinker/META-INF/MANIFEST.MF

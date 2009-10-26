@@ -39,7 +39,7 @@
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
-
+#include <osl/file.hxx>
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 #include <wincomp.hxx>
@@ -66,11 +66,13 @@
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
+#pragma warning( disable: 4917 )
 #endif
 
 #include <GdiPlus.h>
 #include <GdiPlusEnums.h>
 #include <GdiPlusColor.h>
+#include <Shlobj.h>
 
 #if defined _MSC_VER
 #pragma warning(pop)
@@ -1088,6 +1090,26 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     rReturnedBytes  = 1;
     rReturnedType   = AsciiCString;
     return const_cast<char *>("");
+}
+
+// -----------------------------------------------------------------------
+
+/** Add a file to the system shells recent document list if there is any.
+      This function may have no effect under Unix because there is no
+      standard API among the different desktop managers.
+
+      @param aFileUrl
+                The file url of the document.
+*/
+void WinSalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& /*rMimeType*/)
+{
+    rtl::OUString system_path;
+    osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(rFileUrl, system_path);
+
+    OSL_ENSURE(osl::FileBase::E_None == rc, "Invalid file url");
+
+    if (osl::FileBase::E_None == rc)
+        SHAddToRecentDocs(SHARD_PATHW, system_path.getStr());
 }
 
 // -----------------------------------------------------------------------
