@@ -46,7 +46,6 @@
 #include <tools/tools.h>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-#include <i18npool/mslangid.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/settings.hxx>
 #ifndef _ACCMGR_HXX
@@ -705,8 +704,6 @@ bool Application::ValidateSystemFont()
 
 void Application::SetSettings( const AllSettings& rSettings )
 {
-    MsLangId::setConfiguredSystemLanguage( rSettings.GetLanguage());
-    MsLangId::setConfiguredSystemUILanguage( rSettings.GetUILanguage());
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {

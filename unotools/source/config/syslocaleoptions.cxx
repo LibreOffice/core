@@ -62,8 +62,32 @@ namespace
         : public rtl::Static<Link, CurrencyChangeLink> {};
 }
 
+com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rStr )
+{
+    com::sun::star::lang::Locale aRet;
+    if ( rStr.getLength() )
+    {
+        aRet = com::sun::star::lang::Locale();
+        sal_Int32 nSep = rStr.indexOf('-');
+        if (nSep < 0)
+            aRet.Language = rStr;
+        else
+        {
+            aRet.Language = rStr.copy(0, nSep);
+            if (nSep < rStr.getLength())
+                aRet.Country = rStr.copy(nSep+1, rStr.getLength() - (nSep+1));
+        }
+    }
+
+    return aRet;
+}
+
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 {
+        Locale                  m_aRealLocale;
+        Locale                  m_aRealUILocale;
+        LanguageType            m_eRealLanguage;
+        LanguageType            m_eRealUILanguage;
         OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
         OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
@@ -75,7 +99,9 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         sal_Bool                m_bROCurrency;
         sal_Bool                m_bRODecimalSeparator;
 
-    static  const Sequence< /* const */ OUString >  GetPropertyNames();
+        static  const Sequence< /* const */ OUString >  GetPropertyNames();
+        void                    MakeRealLocale();
+        void                    MakeRealUILocale();
 
 public:
                                 SvtSysLocaleOptions_Impl();
@@ -100,6 +126,10 @@ public:
             void                SetDecimalSeparatorAsLocale( sal_Bool bSet);
 
             sal_Bool            IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const;
+            const Locale&       GetRealLocale() { return m_aRealLocale; }
+            const Locale&       GetRealUILocale() { return m_aRealUILocale; }
+            LanguageType        GetRealLanguage() { return m_eRealLanguage; }
+            LanguageType        GetRealUILanguage() { return m_eRealUILanguage; }
 };
 
 
@@ -217,6 +247,9 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
 //        UpdateMiscSettings_Impl();
         EnableNotification( aNames );
     }
+
+    MakeRealLocale();
+    MakeRealUILocale();
 }
 
 
@@ -226,6 +259,37 @@ SvtSysLocaleOptions_Impl::~SvtSysLocaleOptions_Impl()
         Commit();
 }
 
+void SvtSysLocaleOptions_Impl::MakeRealLocale()
+{
+    m_aRealLocale = lcl_str_to_locale( m_aLocaleString );
+    if ( m_aRealLocale.Language.getLength() )
+    {
+        m_eRealLanguage = MsLangId::convertLocaleToLanguage( m_aRealLocale );
+    }
+    else
+    {
+        m_eRealLanguage = MsLangId::getSystemLanguage();
+        MsLangId::convertLanguageToLocale( m_eRealLanguage, m_aRealLocale );
+    }
+}
+
+void SvtSysLocaleOptions_Impl::MakeRealUILocale()
+{
+    if ( !m_aRealUILocale.Language.getLength() )
+    {
+        // as we can't switch UILocale at runtime, we only store changes in the configuration
+        m_aRealUILocale = lcl_str_to_locale( m_aUILocaleString );
+        if ( m_aRealUILocale.Language.getLength() )
+        {
+            m_eRealUILanguage = MsLangId::convertLocaleToLanguage( m_aRealUILocale );
+        }
+        else
+        {
+            m_eRealUILanguage = MsLangId::getSystemUILanguage();
+            MsLangId::convertLanguageToLocale( m_eRealUILanguage, m_aRealUILocale );
+        }
+    }
+}
 
 sal_Bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption ) const
 {
@@ -322,6 +386,8 @@ void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )
     if (!m_bROLocale && rStr != m_aLocaleString )
     {
         m_aLocaleString = rStr;
+        MakeRealLocale();
+        MsLangId::setConfiguredSystemLanguage( m_eRealLanguage );
         SetModified();
         ULONG nHint = SYSLOCALEOPTIONS_HINT_LOCALE;
         if ( !m_aCurrencyString.getLength() )
@@ -335,8 +401,13 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
     if (!m_bROUILocale && rStr != m_aUILocaleString )
     {
         m_aUILocaleString = rStr;
+/*
+        // as we can't switch UILocale at runtime, we only store changes in the configuration
+        MakeRealUILocale();
+        MsLangId::setConfiguredSystemLanguage( m_eRealUILanguage );
         SetModified();
         NotifyListeners( SYSLOCALEOPTIONS_HINT_UILOCALE );
+*/
     }
 }
 
@@ -376,6 +447,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
             nHint |= SYSLOCALEOPTIONS_HINT_LOCALE;
             if ( !m_aCurrencyString.getLength() )
                 nHint |= SYSLOCALEOPTIONS_HINT_CURRENCY;
+            MakeRealLocale();
         }
         if( seqPropertyNames[nProp] == PROPERTYNAME_UILOCALE )
         {
@@ -383,6 +455,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPrope
             seqValues[nProp] >>= m_aUILocaleString;
             m_bROUILocale = seqROStates[nProp];
             nHint |= SYSLOCALEOPTIONS_HINT_UILOCALE;
+            MakeRealUILocale();
         }
         else if( seqPropertyNames[nProp] == PROPERTYNAME_CURRENCY )
         {
@@ -599,26 +672,6 @@ void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p
     ::utl::detail::Options::ConfigurationChanged( p, nHint );
 }
 
-com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rStr )
-{
-    com::sun::star::lang::Locale aRet;
-    if ( rStr.getLength() )
-    {
-        aRet = com::sun::star::lang::Locale();
-        sal_Int32 nSep = rStr.indexOf('-');
-        if (nSep < 0)
-            aRet.Language = rStr;
-        else
-        {
-            aRet.Language = rStr.copy(0, nSep);
-            if (nSep < rStr.getLength())
-                aRet.Country = rStr.copy(nSep+1, rStr.getLength() - (nSep+1));
-        }
-    }
-
-    return aRet;
-}
-
 com::sun::star::lang::Locale SvtSysLocaleOptions::GetLocale() const
 {
     return lcl_str_to_locale( GetLocaleConfigString() );
@@ -627,4 +680,24 @@ com::sun::star::lang::Locale SvtSysLocaleOptions::GetLocale() const
 com::sun::star::lang::Locale SvtSysLocaleOptions::GetUILocale() const
 {
     return lcl_str_to_locale( GetUILocaleConfigString() );
+}
+
+com::sun::star::lang::Locale SvtSysLocaleOptions::GetRealLocale() const
+{
+    return pOptions->GetRealLocale();
+}
+
+com::sun::star::lang::Locale SvtSysLocaleOptions::GetRealUILocale() const
+{
+    return pOptions->GetRealUILocale();
+}
+
+LanguageType SvtSysLocaleOptions::GetRealLanguage() const
+{
+    return pOptions->GetRealLanguage();
+}
+
+LanguageType SvtSysLocaleOptions::GetRealUILanguage() const
+{
+    return pOptions->GetRealUILanguage();
 }

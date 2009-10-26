@@ -107,11 +107,15 @@ public:
             const ::rtl::OUString&  GetLocaleConfigString() const;
             void                SetLocaleConfigString( const ::rtl::OUString& rStr );
             com::sun::star::lang::Locale GetLocale() const;
+            com::sun::star::lang::Locale GetRealLocale() const;
+            LanguageType        GetRealLanguage() const;
 
     /// The config string may be empty to denote the SYSTEM locale
             const ::rtl::OUString&  GetUILocaleConfigString() const;
             void                SetUILocaleConfigString( const ::rtl::OUString& rStr );
             com::sun::star::lang::Locale GetUILocale() const;
+            com::sun::star::lang::Locale GetRealUILocale() const;
+            LanguageType        GetRealUILanguage() const;
 
     /// The config string may be empty to denote the default currency of the locale
             const ::rtl::OUString&  GetCurrencyConfigString() const;
