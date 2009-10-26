@@ -5954,7 +5954,7 @@ SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ShowAnnotation SID_SHOW_POSTIT
+SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
 ()
 [
     /* flags: */

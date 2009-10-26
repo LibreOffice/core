@@ -800,24 +800,32 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const bool bVerticalWritintg(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
+    // check if block text is used (only one of them can be true)
+    const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
+    const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
+
+    // set minimal paper size hor/ver if needed
+    if(bHorizontalIsBlock)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
+    }
+    else if(bVerticalIsBlock)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
+    }
+
     if(bIsCell)
     {
         // cell text is formated neither like a text object nor like a object
         // text, so use a special setup here
-        rOutliner.SetMinAutoPaperSize(aNullSize);
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
         rOutliner.SetPaperSize(aAnchorTextSize);
-        rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
-        rOutliner.SetUpdateMode(TRUE);
+        rOutliner.SetUpdateMode(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
-        rOutliner.SetUpdateMode(TRUE);
         rOutliner.SetControlWord(nOriginalControlWord);
     }
     else
     {
-        // check if block text is used (only one of them can be true)
-        const bool bHorizontalIsBlock(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg);
-        const bool bVerticalIsBlock(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg);
 
         if((rSdrBlockTextPrimitive.getWordWrap() || IsTextFrame()) && !rSdrBlockTextPrimitive.getUnlimitedPage())
         {
@@ -841,16 +849,6 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             }
 
             rOutliner.SetMaxAutoPaperSize(aMaxAutoPaperSize);
-        }
-
-        // set minimal paper size hor/ver if needed
-        if(bHorizontalIsBlock)
-        {
-            rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
-        }
-        else if(bVerticalIsBlock)
-        {
-            rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
         }
 
         rOutliner.SetPaperSize(aNullSize);
@@ -931,7 +929,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // as the master shape we are working on. For vertical, use the top-right
     // corner
     const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
-    aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
+    const basegfx::B2DTuple aAdjOffset(fStartInX, aAdjustTranslate.getY());
+    aNewTransformA.translate(aAdjOffset.getX(), aAdjOffset.getY());
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
@@ -948,10 +947,10 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // #SJ# create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
 
-    if(bIsCell)
+    if(rSdrBlockTextPrimitive.getClipOnBounds())
     {
-        aClipRange.expand(basegfx::B2DTuple(0.0, 0.0));
-        aClipRange.expand(basegfx::B2DTuple(aAnchorTextSize.Width(), aAnchorTextSize.Height()));
+        aClipRange.expand(-aAdjOffset);
+        aClipRange.expand(basegfx::B2DTuple(aAnchorTextSize.Width(), aAnchorTextSize.Height()) - aAdjOffset);
     }
 
     // now break up text primitives.

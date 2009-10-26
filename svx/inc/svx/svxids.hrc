@@ -1351,7 +1351,6 @@
 #define SID_ATTR_PARA_OUTLINE_LEVEL                     (SID_SVX_START+1092)
 #define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
-#define SID_INSERT_POSTIT                               (SID_SVX_START+1093)
 #define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
 #define SID_NEXT_POSTIT                                 (SID_SVX_START+1095)
 #define SID_PREVIOUS_POSTIT                             (SID_SVX_START+1096)
@@ -1359,9 +1358,10 @@
 #define SID_SHOW_POSTIT                                 (SID_SVX_START+1098)
 #define SID_REPLYTO_POSTIT                              (SID_SVX_START+1099)
 #define SID_DELETEALLBYAUTHOR_POSTIT                    (SID_SVX_START+1100)
+#define SID_INSERT_POSTIT                               (SID_SVX_START+1101)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               SID_DELETEALLBYAUTHOR_POSTIT + 1
+#define SID_SVX_FIRSTFREE                               SID_INSERT_POSTIT + 1
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

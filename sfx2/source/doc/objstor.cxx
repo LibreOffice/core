@@ -99,7 +99,6 @@
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <shell/systemshell.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -830,7 +829,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( aUrl.GetProtocol() == INET_PROT_FILE )
                 {
                     const SfxFilter* pOrgFilter = pMedium->GetOrigFilter();
-                    SystemShell::AddToRecentDocumentList(
+                    Application::AddToRecentDocumentList(
                         aUrl.GetURLNoPass( INetURLObject::NO_DECODE ),
                         (pOrgFilter) ? pOrgFilter->GetMimeType() : String() );
                 }

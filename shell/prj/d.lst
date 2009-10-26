@@ -1,8 +1,3 @@
-mkdir: %_DEST%\inc%_EXT%\shell
-
-..\inc\*.hxx %_DEST%\inc%_EXT%\shell\*.hxx
-..\inc\*.h %_DEST%\inc%_EXT%\shell\*.h
-
 ..\%__SRC%\slb\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\slb\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%

@@ -91,7 +91,6 @@ SHL1STDLIBS+=\
         $(TOOLSLIB) \
         $(I18NISOLANGLIB) \
         $(SAXLIB) \
-        $(SYSSHELLLIB) \
         $(COMPHELPERLIB) \
         $(UCBHELPERLIB) \
         $(CPPUHELPERLIB) \
