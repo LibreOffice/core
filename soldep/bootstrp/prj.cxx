@@ -72,6 +72,8 @@
 #endif
 #endif
 
+//static const char * XML_ALL  =    "all";
+
 //
 //  class SimpleConfig
 //
@@ -1110,7 +1112,7 @@ Star::Star()
 }
 
 /*****************************************************************************/
-Star::Star( String aFileName, USHORT nMode )
+Star::Star(String aFileName, USHORT nMode )
 /*****************************************************************************/
                 : nStarMode( nMode ),
                 sFileName( aFileName ),
@@ -1121,7 +1123,7 @@ Star::Star( String aFileName, USHORT nMode )
 }
 
 /*****************************************************************************/
-Star::Star( SolarFileList *pSolarFiles )
+Star::Star(SolarFileList *pSolarFiles )
 /*****************************************************************************/
                 : nStarMode( STAR_MODE_MULTIPLE_PARSE ),
                 pDepMode (NULL),
@@ -1132,7 +1134,7 @@ Star::Star( SolarFileList *pSolarFiles )
 }
 
 /*****************************************************************************/
-Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
+Star::Star(GenericInformationList *pStandLst, ByteString &rVersion,
     BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
                 : pDepMode (NULL),
@@ -1222,6 +1224,12 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sPath = rVersion;
+                            sPath += "/settings/SHORTPATH";
+                            GenericInformation *pShortPath = pStandLst->GetInfo( sPath, TRUE );
+                            BOOL bShortPath = FALSE;
+                            if (pShortPath && (pShortPath->GetValue() == "_TRUE"))
+                                bShortPath = TRUE;
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -1235,7 +1243,11 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                                     GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
                                     if (pDir) {
                                         ByteString aDir = pDir->GetValue();
-                                        DirEntry aRootEntry = aEntry.GetPath() + DirEntry(aDir);
+                                        DirEntry aRootEntry;
+                                        if (bShortPath)
+                                            aRootEntry = aEntry + DirEntry(aDir);
+                                        else
+                                            aRootEntry = aEntry.GetPath() + DirEntry(aDir);
                                         sLocalSourceRoot = aRootEntry.GetFull();
                                     }
 
@@ -1266,6 +1278,18 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
         else
             GenerateFileLoadList( pFileList );
     }
+}
+
+/*****************************************************************************/
+void Star::FullReload( GenericInformationList *pStandLst, ByteString &rVersion,
+    BOOL bRead, BOOL bLocal, const char *pSourceRoot )
+/*****************************************************************************/
+{
+    ClearAvailableDeps();
+    ClearCurrentDeps();
+    ClearLoadedFilesList();
+    RemoveAllPrj();
+    UpdateFileList( pStandLst, rVersion, bRead, bLocal, pSourceRoot );
 }
 
 /*****************************************************************************/
@@ -1385,9 +1409,14 @@ void Star::Read( String &rFileName )
         ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName );
         if ( pFile->Exists()) {
+//          if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+//          {
+//                ReadXmlBuildList(sFileName_l);
+//            } else {
                 SimpleConfig aSolarConfig( ssFileName );
                 while (( aString = aSolarConfig.GetNext()) != "" )
                     InsertToken (( char * ) aString.GetBuffer());
+//          }
         }
         aMutex.acquire();
         ReplaceFileEntry (&aLoadedFilesList, pFile);
@@ -1446,11 +1475,15 @@ void Star::Read( SolarFileList *pSolarFiles )
         ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName );
 
-        if ( pFile->Exists())
-        {
-            SimpleConfig aSolarConfig( ssFileName );
-            while (( aString = aSolarConfig.GetNext()) != "" )
-                InsertToken (( char * ) aString.GetBuffer());
+        if ( pFile->Exists()) {
+//          if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+//          {
+//                ReadXmlBuildList(sFileName_l);
+//            } else {
+                SimpleConfig aSolarConfig( ssFileName );
+                while (( aString = aSolarConfig.GetNext()) != "" )
+                    InsertToken (( char * ) aString.GetBuffer());
+//          }
 
             DirEntry aEntry( pFile->GetName() );
             DirEntry aEntryPrj = aEntry.GetPath().GetPath();
@@ -1483,6 +1516,7 @@ String Star::CreateFileName( String& rProject, String& rSourceRoot )
     // this method is used to find solarlist parts of nabours (other projects)
     String sPrjDir( String::CreateFromAscii( "prj" ));
     String sBuildList( String::CreateFromAscii( "build.lst" ));
+//  String sXmlBuildList( String::CreateFromAscii( "build.xlist" ));
 
     DirEntry aEntry( rSourceRoot );
     aEntry += DirEntry( rProject );
@@ -1501,9 +1535,16 @@ String Star::CreateFileName( String& rProject, String& rSourceRoot )
 
     aEntry += DirEntry( sPrjDir );
 
+//  DirEntry aPossibleEntry(aEntry);
+//  aPossibleEntry += DirEntry( sXmlBuildList );
+
     aEntry += DirEntry( sBuildList );
 
     DirEntry& aActualEntry = aEntry;
+/*
+    if (aPossibleEntry.Exists()) {
+        aActualEntry = aPossibleEntry;
+    } else */
     if ( !aActualEntry.Exists() && aDBNotFoundHdl.IsSet())
         aDBNotFoundHdl.Call( &rProject );
     return aActualEntry.GetFull();
@@ -1962,6 +2003,164 @@ void Star::SetCurrentDeps (SByteStringList* pDepList)
     Expand_Impl();
 }
 
+///*****************************************************************************/
+//void Star::ReadXmlBuildList(const ByteString& sBuildLstPath) {
+///*****************************************************************************/
+//  if (mpXmlBuildList) {
+//      Prj* pPrj = NULL;
+//
+//      try {
+//          mpXmlBuildList->loadXMLFile(sBuildLstPath);
+//      }
+//      catch (XmlBuildListException) {
+//          DirEntry aDirEntry (sBuildLstPath);
+//          String ssPrjName = aDirEntry.GetPath().GetPath().GetBase();
+//          ByteString sPrjName = ByteString(ssPrjName, RTL_TEXTENCODING_ASCII_US);
+//          pPrj = GetPrj( sPrjName );
+//          if (pPrj)
+//          {
+//              //remove old Project
+//              RemovePrj (pPrj);
+//          }
+//          return;
+//      }
+//
+//      try {
+//          ByteString sProjectName = mpXmlBuildList->getModuleName();
+//          pPrj = GetPrj( sProjectName );
+//          if (pPrj)
+//          {
+//              //remove old Project
+//              RemovePrj (pPrj);
+//          }
+//
+//          // insert new Project
+//          pPrj = new Prj ( sProjectName );
+//          pPrj->SetPreFix( sProjectName ); // use ProjectName as Prefix
+//          Insert(pPrj,LIST_APPEND);
+//
+//          // get global dependencies
+//          FullByteStringListWrapper aProducts = mpXmlBuildList->getProducts();
+//          ByteString aDepType = ByteString(DEP_MD_ALWAYS_STR);
+//          if (mpXmlBuildList->hasModuleDepType(aProducts, aDepType))
+//              pPrj->HasHardDependencies( TRUE );
+//
+//          aDepType = ByteString(DEP_MD_FORCE_STR);
+//          if (mpXmlBuildList->hasModuleDepType(aProducts, aDepType))
+//          {
+//              pPrj->HasHardDependencies( TRUE );
+//              pPrj->HasFixedDependencies( TRUE );
+//          }
+//
+//          // modul dependencies
+//          ByteString sModulDepType = ByteString();
+//          FullByteStringListWrapper aModulDeps = mpXmlBuildList->getModuleDependencies(aProducts, sModulDepType);
+//          ByteString * pModulDep = aModulDeps.First();
+//          while (pModulDep)
+//          {
+//              FullByteStringListWrapper aModulProducts = mpXmlBuildList->getModuleProducts(*pModulDep);
+//              ByteString *pModulePoduct = aModulProducts.First();
+//              while (pModulePoduct)
+//              {
+//                  if (*pModulePoduct == XML_ALL)
+//                      pPrj->AddDependencies( *pModulDep );
+//                  else
+//                      pPrj->AddDependencies( *pModulDep, *pModulePoduct);
+//
+//                  pModulePoduct = aModulProducts.Next();
+//              }
+//              pModulDep = aModulDeps.Next();
+//          }
+//
+//          // job dirs
+//          ByteString sJobType = ByteString();
+//          ByteString sJobPlatforms = ByteString();
+//          FullByteStringListWrapper aJobDirs = mpXmlBuildList->getJobDirectories(sJobType, sJobPlatforms); // all dirs
+//          ByteString* pJobDir = aJobDirs.First();
+//          while (pJobDir)
+//          {
+//              FullByteStringListWrapper aJobPlatforms = mpXmlBuildList->getJobPlatforms (*pJobDir);
+//              ByteString* pJobPlatform = aJobPlatforms.First();
+//              while (pJobPlatform)
+//              {
+//                  ByteString sJobRestriction = ByteString();
+//                  FullByteStringListWrapper aJobReq = mpXmlBuildList->getJobBuildReqs (*pJobDir, *pJobPlatform);
+//                  // nur ein Req pro Platform wird zur Zeit unterstützt
+//                  // mehr geht wegen der Struktur zur Zeit nicht!
+//                  // lese sie trotzdem kommasepariert ein, wenn nötig
+//                  if (aJobReq.Count() > 0)
+//                  {
+//                      ByteString* pRestriction = aJobReq.First();
+//                      sJobRestriction = ByteString (*pRestriction);
+//                      pRestriction = aJobReq.Next();
+//                      while (pRestriction)
+//                      {
+//                          sJobRestriction += ByteString (",");
+//                          sJobRestriction += ByteString (*pRestriction);
+//                          pRestriction = aJobReq.Next();
+//                      }
+//                  }
+//
+//                  FullByteStringListWrapper aJobTypes = mpXmlBuildList->getJobTypes (*pJobDir);
+//                  ByteString * pJobType = aJobTypes.First();
+//                  while(pJobType)
+//                  {
+//                      FullByteStringListWrapper aDirDependencies = mpXmlBuildList->getDirDependencies(*pJobDir, *pJobType, *pJobPlatform);
+//                      SByteStringList *pDepList = NULL;
+//                      if (aDirDependencies.Count() > 0)
+//                      {
+//                          pDepList = new SByteStringList;
+//                          ByteString* pDirDep = aDirDependencies.First();
+//                          while (pDirDep)
+//                          {
+//                              ByteString sFullDir = sProjectName;
+//                              sFullDir += *pDirDep;
+//                              sFullDir.SearchAndReplaceAll('/', '\\');
+//                              *pDirDep = sFullDir;
+//                              pDepList->PutString(pDirDep);   // String wird übergeben
+//                              aDirDependencies.Remove();      // Zeiger aus alter Liste löschen
+//                              pDirDep = aDirDependencies.First();
+//                          }
+//                      }
+//                      // insert CommandData
+//                      CommandData * pCmdData = new CommandData;
+//                      ByteString sRequiredPath = sProjectName;
+//                      sRequiredPath += *pJobDir;
+//                      sRequiredPath.SearchAndReplaceAll('/', '\\');
+//                      pCmdData->SetPath(sRequiredPath);
+//                      pCmdData->SetCommandType( GetJobType(*pJobType) );
+//                      pCmdData->SetCommandPara( ByteString() );
+//                      pCmdData->SetOSType( GetOSType(*pJobPlatform) );
+//                      ByteString sLogFileName = sProjectName;
+//                      sLogFileName += ByteString::CreateFromInt64( pPrj->Count() );
+//                      pCmdData->SetLogFile( sLogFileName );
+//                      pCmdData->SetClientRestriction( sJobRestriction );
+//                      if ( pDepList )
+//                          pCmdData->SetDependencies( pDepList );
+//
+//                      pPrj->Insert ( pCmdData, LIST_APPEND );
+//
+//                      pJobType = aJobTypes.Next();
+//                  }
+//
+//                  pJobPlatform = aJobPlatforms.Next();
+//              }
+//
+//              pJobDir = aJobDirs.Next();
+//          }
+//          pPrj->ExtractDependencies();
+//      }
+//      catch (XmlBuildListException) {
+//          if (pPrj)
+//          {
+//              RemovePrj (pPrj);
+//              delete pPrj;
+//          }
+//
+//      }
+//  }
+//}
+
 /*****************************************************************************/
 int Star::GetOSType ( ByteString& aWhatOS ) {
 /*****************************************************************************/
@@ -2096,6 +2295,7 @@ Star& Star::operator<<  ( SvStream& rStream )
 /*****************************************************************************/
 StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
 /*****************************************************************************/
+                : Star ()
 {
     sFileName = aFileName;
     Read ( aFileName, bReadComments, nMode );
@@ -2104,6 +2304,7 @@ StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
 /*****************************************************************************/
 StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 /*****************************************************************************/
+                : Star ()
 {
     Read( pSolarFiles, bReadComments );
 }
@@ -2112,6 +2313,7 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
     ByteString &rMinor, BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
+                : Star ()
 {
     ByteString sPath( rVersion );
     if ( pSourceRoot )
@@ -2193,6 +2395,12 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sPath = rVersion;
+                            sPath += "/settings/SHORTPATH";
+                            GenericInformation *pShortPath = pStandLst->GetInfo( sPath, TRUE );
+                            BOOL bShortPath = FALSE;
+                            if (pShortPath && (pShortPath->GetValue() == "_TRUE"))
+                                bShortPath = TRUE;
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -2210,7 +2418,11 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                     GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
                                     if (pDir) {
                                         ByteString aDir = pDir->GetValue();
-                                        aPrjEntry = aEntry.GetPath() + DirEntry(aDir);
+                                        if (bShortPath)
+                                            aPrjEntry = aEntry;
+                                        else
+                                            aPrjEntry = aEntry.GetPath();
+                                        aPrjEntry += DirEntry(aDir);
                                     }
 
                                     aPrjEntry += DirEntry( ssProject );
@@ -2260,12 +2472,16 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
         String ssFileName = *aFileList.GetObject(( ULONG ) 0 );
         ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName );
-        if ( pFile->Exists())
-        {
-            SimpleConfig aSolarConfig( ssFileName );
-            while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
-                InsertTokenLine ( aString );
-        }
+        if ( pFile->Exists()) {
+//          if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+//          {
+//                ReadXmlBuildList(sFileName_l);
+//            } else {
+                SimpleConfig aSolarConfig( ssFileName );
+                while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
+                    InsertTokenLine ( aString );
+            }
+//      }
 
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
@@ -2292,11 +2508,17 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
         String ssFileName = *pSolarFiles->GetObject(( ULONG ) 0 );
         ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName);
-        if ( pFile->Exists())
-        {
-            SimpleConfig aSolarConfig( ssFileName );
-            while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
-                InsertTokenLine ( aString );
+        if ( pFile->Exists()) {
+//          if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+//          {
+//              ReadXmlBuildList(sFileName_l);
+//          }
+//          else
+//          {
+                SimpleConfig aSolarConfig( ssFileName );
+                while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
+                    InsertTokenLine ( aString );
+//          }
         }
 
         aMutex.acquire();

@@ -43,8 +43,8 @@
 .ENDIF # "$(COMEX)" == "10"
 .ENDIF # "$(OS)$(COM)$(CPU)" == "WNTMSCI"
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341WNTI"
-.INCLUDE : wntgcci6.mk
+.IF "$(COM)$(OS)$(CPU)" == "GCCWNTI"
+.INCLUDE : wntgcci.mk
 .ENDIF
 
 # --- changes for W32-tcsh - should move into settings.mk ---

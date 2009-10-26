@@ -39,6 +39,8 @@
 #include <vos/mutex.hxx>
 #include <tools/string.hxx>
 
+#define XML_EXT "xlist"
+
 #define OS_NONE             0x0000
 #define OS_WIN16            0x0001
 #define OS_WIN32            0x0002
@@ -385,10 +387,11 @@ protected:
     ULONG           SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
 
 public:
-                    Star( );
+                    Star();
                     Star( String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
                     Star( SolarFileList *pSolarFiles );
-                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
+                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
+                        const char *pSourceRoot = NULL  );
 
                     ~Star();
 
@@ -398,6 +401,8 @@ public:
     ByteString      GetName(){ return aStarName; }; // dummy function of VG
     void            Read( String &rFileName );
     void            Read( SolarFileList *pSOlarFiles );
+//  void            ReadXmlBuildList(const ByteString& sBuildLstPath);
+
 
     BOOL            HasProject( ByteString aProjectName );
     Prj*            GetPrj( ByteString aProjectName );
@@ -410,6 +415,8 @@ public:
     SolarFileList*  NeedsFilesForUpdate();
     void            ReplaceFileEntry( StarFileList *pStarFiles, StarFile* pFile );
     void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
+                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
+    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
                         BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
     void            GenerateFileLoadList( SolarFileList *pSolarFiles );
     BOOL            CheckFileLoadList(SolarFileList *pSolarFiles);

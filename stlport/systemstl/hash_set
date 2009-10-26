@@ -31,21 +31,25 @@
 #ifndef SYSTEM_STL_HASHSET
 #define SYSTEM_STL_HASHSET
 
-#define _BACKWARD_BACKWARD_WARNING_H 1
-#include <ext/hash_set>
-#undef _BACKWARD_BACKWARD_WARNING_H 
-
 #ifdef GCC
+
+# include <functional>
+
+# define _BACKWARD_BACKWARD_WARNING_H 1
+# include <ext/hash_set>
+# undef _BACKWARD_BACKWARD_WARNING_H 
+
 namespace std
 {
+# ifndef __GXX_EXPERIMENTAL_CXX0X__
 	using __gnu_cxx::hash;
+# endif
 	using __gnu_cxx::hash_set;
 	using __gnu_cxx::hash_multiset;
 }
 #else
-#error UNSUPPORTED COMPILER
+# error UNSUPPORTED COMPILER
 #endif
-
 
 #endif
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

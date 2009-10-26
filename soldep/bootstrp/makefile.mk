@@ -37,7 +37,6 @@ ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  $(PRJ)$/util$/perl.mk
 .INCLUDE :  settings.mk
 
 # fixme, code is not yet 64 bit clean
@@ -69,8 +68,7 @@ SHL1STDLIBS=\
             $(TOOLSLIB) \
             $(BTSTRPLIB)		\
             $(VOSLIB)			\
-            $(SALLIB)   \
-                $(PERL_LIB)
+            $(SALLIB)   
 
 DEF1NAME    =$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt
