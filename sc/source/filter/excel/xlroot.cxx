@@ -54,7 +54,7 @@
 #include "xlstyle.hxx"
 #include "xlchart.hxx"
 #include "xltracer.hxx"
-
+#include <unotools/useroptions.hxx>
 #include "root.hxx"
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
