@@ -154,35 +154,33 @@ endcase
 
 sub sAllWindowTitle
 
-    '///<h3>Update test: Check the window titles for all applications</h3>
-    '///<ul>
+    printlog( "Window titles for the applications" )
     
-
-    '///+<li>writer</li>
+    printlog( "Writer" )
     gApplication = "WRITER"
     call tCheckWindowTitle("swriter","Writer")
 
-    '///+<li>MasterDoc</li>
+    printlog( "Master Document" )
     gApplication = "MASTERDOCUMENT"
     call tCheckWindowTitle("sglobal","Writer")
 
-    '///+<li>HTML document</li>
+    printlog( "HTML" )
     gApplication = "HTML"
     call tCheckWindowTitle("sweb","Writer/Web")
 
-    '///+<li>Calc</li>
+    printlog( "Spreadsheet" )
     gApplication = "CALC"
     call tCheckWindowTitle("scalc","Calc")
 
-    '///+<li>Impress</li>
+    printlog( "Presentation" )
     gApplication = "IMPRESS"
     call tCheckWindowTitle("simpress","Impress")
 
-    '///+<li>Draw</li>
+    printlog( "Drawing" )
     gApplication = "DRAW"
     call tCheckWindowTitle("sdraw","Draw")
 
-    '///+<li>Math</li>
+    printlog( "Formula" )
     gApplication = "MATH"
     call tCheckWindowTitle("smath","Math")
 
@@ -193,47 +191,46 @@ sub sAllWindowTitle
 
     'fileclose
     'call tCheckWindowTitle("soffice","")
-    '///</ul>
+
 end sub
 
 '*******************************************************************************
 
 testcase tCheckWindowTitle(sApplication as string, sReference as string)
 
-    '///<h1>Update test for the office window titles</h1>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Name of application (string), case sensitive. Valid options are:</li>
-    '///<ol>
-    '///+<li>&quot;swriter&quot;</li>
-    '///+<li>&quot;sglobal&quot;</li>
-    '///+<li>&quot;sweb&quot;</li>
-    '///+<li>&quot;scalc&quot;</li>
-    '///+<li>&quot;simpress&quot;</li>
-    '///+<li>&quot;sdraw&quot;</li>
-    '///+<li>&quot;smath&quot;</li>
-    '///+<li>&quot;insight&quot; * Currently disabled</li>
-    '///+<li>&quot;soffice&quot; * Currently disabled</li>
-    '///</ol>
-    '///+<li>Reference name (string), matches name of application</li>
-    '///<ol>
-    '///+<li>&quot;Writer&quot;</li>
-    '///+<li>&quot;Writer&quot;</li>
-    '///+<li>&quot;Writer/Web&quot;</li>
-    '///+<li>&quot;Calc&quot;</li>
-    '///+<li>&quot;Impress&quot;</li>
-    '///+<li>&quot;Draw&quot;</li>
-    '///+<li>&quot;Math&quot;</li>
-    '///+<li>&quot;Base&quot; * Currently disabled</li>
-    '///+<li>&quot;&quot; * Currently disabled</li>
-    '///</ol>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
+    printlog( "Update test for the office window titles" )
+    '<u>Input</u>:
+    '<ol>
+    '+<li>Name of application (string), case sensitive. Valid options are:</li>
+    '<ol>
+    '+<li>&quot;swriter&quot;</li>
+    '+<li>&quot;sglobal&quot;</li>
+    '+<li>&quot;sweb&quot;</li>
+    '+<li>&quot;scalc&quot;</li>
+    '+<li>&quot;simpress&quot;</li>
+    '+<li>&quot;sdraw&quot;</li>
+    '+<li>&quot;smath&quot;</li>
+    '+<li>&quot;insight&quot; * Currently disabled</li>
+    '+<li>&quot;soffice&quot; * Currently disabled</li>
+    '</ol>
+    '+<li>Reference name (string), matches name of application</li>
+    '<ol>
+    '+<li>&quot;Writer&quot;</li>
+    '+<li>&quot;Writer/Web&quot;</li>
+    '+<li>&quot;Calc&quot;</li>
+    '+<li>&quot;Impress&quot;</li>
+    '+<li>&quot;Draw&quot;</li>
+    '+<li>&quot;Math&quot;</li>
+    '+<li>&quot;Base&quot; * Currently disabled</li>
+    '+<li>&quot;&quot; * Currently disabled</li>
+    '</ol>
+    '</ol>
+    '<u>Returns</u>:
+    '<ol>
+    '+<li>Nothing</li>
+    '</ol>
+    '<u>Description</u>:
+    '<ul>
     
 
     dim sTemp as string
@@ -241,13 +238,14 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
     dim brc as boolean
     gApplication = UCase (gApplication)
     printlog " - Application: " + sApplication + "; Title should be: " + sReference
-    '///+<li>Make sure exactly one document is open</li>
-    hInitSingleDoc()
     
-    '///+<li>Open a new document</li>
+    printlog( "Ensure that exactly one document is open" )
+    hInitSingleDoc()
+
+    printlog( "Open another document as specified by gApplication" )    
     hCreateDocument()
 
-    '///+<li>Ensure the correct window is open (e.g. goto Basic IDE)</li>
+    printlog( "Verify that the correct window is open" )
     select case sApplication
         case"swriter":
         case"sglobal":
@@ -270,14 +268,13 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
                     kontext "basicide"
 
                     if BasicIDE.exists(5) then
-                        ' OK :-) here we want to stay
-                        printlog "OK :-)"
+                        printlog( "Basic IDE open. Good." )
                     else
-                        ' qaErrorlog "Unexpected 2"
+                        warnlog( "Basic IDE not open. This is unexpected" )
                     endif
 
                 else
-                    qaErrorlog "Unexpected 1"
+                    warnlog( "New-button is unexpectedly disabled." )
                 endif
 
 
@@ -288,14 +285,15 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
                     if NeuesModul.exists(5) then
                         NeuesModul.OK
                     else
-                        qaErrorlog "Unexpected 3"
+                        warnlog( "New module naming dialog is not open" )
                     endif
 
                 catch
+                    warnlog( "Accessing <New module> dialog failed" )
                 endcatch
 
             else
-                qaErrorlog "Couldn't open Tools->Macros->Organize Macros...->StarOffice Basic..."
+                warnlog( "Couldn't open Tools->Macros->Organize Macros...->StarOffice Basic..." )
             endif
 
         case"chart":
@@ -304,29 +302,27 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
             brc = hDestroyDocument()
     end select
 
-    '    sTemp = hWindowGetText("")   ' was a wOrkAround until the next line worked
-    '///+<li>Retrieve the caption</li>
+    printlog( "Retrieve the caption from the window" )
     sTemp = hGetWindowCaption(sApplication)
-    '    printlog sTemp
-    ' seperate each part of the title
+    printlog( "Caption is: " & sTemp )
     
-    '///+<li>Split up the string, we just need a s mall part of the string</li>
+    printlog( "Split up the string to isolate the desired part" )
     saTemp() = fSplitWindowTitle(sTemp)
-    printlog "Filename/Untitled: '" + saTemp(0) + "'"
+    printlog "Filename/Untitled: '" & saTemp(0) & "'"
 
-    '///+<li>Compare the string to the reference, warn on error</li>
+    printlog( "Compare the string to a reference" )
     if (ubound(saTemp()) > 0) then
 
         if (saTemp(1) <> sReference) then
-            warnlog "Applicationname not as expected. Sould be: '" + sReference + "', is: '" + saTemp(1) + "'"
+            warnlog "Applicationname not as expected. Sould be: '" & sReference & "', is: '" & saTemp(1) & "'"
         endif
 
-        printlog "Productname: '" + saTemp(2) + "'"
+        printlog "Productname: '" & saTemp(2) & "'"
     else
-        warnlog "#i36173# - Applicationname not as expected. Should be: '" + sReference + "', is: '"+"'"
+        warnlog "#i36173# - Applicationname not as expected. Should be: '" & sReference & "', is: '" & "'"
     endif
 
-    '///+<li>Cleanup</li>
+    printlog( "Cleanup after test" )
     select case sApplication
         case"swriter":
         case"sglobal":
@@ -344,11 +340,8 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
             hCreateDocument()
     end select
 
-    '///+<li>Close the document</li>
-    while( getDocumentCount > 0 ) 
-        hDestroyDocument()
-    wend
-    '///</ul>
+    printlog( "Close all open documents" )
+    hFileCloseAll()
     
 endcase
 

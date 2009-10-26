@@ -201,7 +201,6 @@ end function
 sub DialogTestForViewOptions
 
     FormatParagraph
-    '///Dialog test for view options
 
     Kontext
     active.SetPage TabEinzuegeUndAbstaende
@@ -230,57 +229,6 @@ end sub
 
 '*******************************************************************************
 
-sub DialogTextForViewOptions_move
-
-    Dim xPos, yPos, xSize, ySize
-    '///Dialog test for view options
-
-    Kontext "NavigatorWriter"
-
-    if Not NavigatorWriter.Exists then
-        ViewNavigator
-    endif
-
-    Kontext "Navigator"
-    xPos = Navigator.GetPosX
-    yPos = Navigator.GetPosY
-    xSize = Navigator.GetSizeX
-    ySize = Navigator.GetSizeY
-    Navigator.Move 10, 10
-    Sleep 1
-    Navigator.Move 50, 50
-    Sleep 1
-    Navigator.Size 200, 150
-    Sleep 1
-    Navigator.Size 150, 80
-    Sleep 1
-    Navigator.Size xSize, ySize
-    Sleep 1
-    Navigator.Move xPos, yPos
-    Sleep 1
-    Navigator.Close
-
-end sub
-
-'*******************************************************************************
-
-sub MouseTestForViewOptions
-
-    '///mouse test for view options
-
-    Kontext "DocumentWriter"
-    DocumentWriter.MouseMove( 50, 50 )
-    DocumentWriter.OpenContextMenu()
-    Sleep( 1 )
-
-    Kontext "DocumentWriter"
-    DocumentWriter.MouseMove 50, 70
-    hMenuClose()
-
-end sub
-
-'*******************************************************************************
-
 sub Make3D
 
     '///test with 3D-objects when 3D-options are changed ( view page )
@@ -297,22 +245,6 @@ sub Make3D
     call hCloseDocument()
     gApplication = "WRITER"
 
-end sub
-
-'*******************************************************************************
-
-sub hResetAutosave()
-    ' this sub resets the autosave feature to 15 minutes with confirmation and
-    ' disables the feature entirely afterwards.
-    printlog( " * Resetting autosave feature to defaults" )
-    ToolsOptions
-    hToolsOptions( "LoadSave" , "General" )
-    AutomatischSpeichern.check
-    Minuten.setText( "15" )
-    AutomatischSpeichern.unCheck
-
-    Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
 end sub
 
 '*******************************************************************************

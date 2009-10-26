@@ -72,7 +72,7 @@ testcase tframes
     '/// Saving document as OOo XML 1.0 file.
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\frames.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)
         '/// Unpacking the file (ZIP archieve) into a seperate directory. 
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\frames.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\frames") )
@@ -565,7 +565,7 @@ testcase tschina
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\zh_cn_text.sxw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_cn_text.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_cn_text.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_cn_text") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_cn_text\meta.xml")) = FALSE then
@@ -600,7 +600,7 @@ testcase ttchina
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\zh_tw_text.sxw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_tw_text.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_tw_text.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_tw_text") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\zh_tw_text\meta.xml")) = FALSE then
@@ -635,7 +635,7 @@ testcase tkorean
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\ko_text.sxw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\ko_text.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\ko_text.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\ko_text") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\ko_text\meta.xml")) = FALSE then
@@ -670,7 +670,7 @@ testcase tjapan
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\writer\jp_text.sxw"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\jp_text.sxw") , "StarOffice XML (Writer)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\jp_text.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\jp_text") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\writer\level1\jp_text\meta.xml")) = FALSE then

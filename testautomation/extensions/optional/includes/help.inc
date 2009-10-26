@@ -39,6 +39,9 @@
 
 testcase tExtensibleHelp
 
+    warnlog( "#i105760# - Extensible help not displayed" )
+    goto endsub
+
     '///<h1>Extensible help</h1>
 
     '///<u><pre>Synopsis</pre></u>Beginning with CWS ab38 extensions can extend the help application with index entries and content<br>
@@ -175,7 +178,7 @@ testcase tExtensibleHelp
             kontext "HelpContent"
             HelpContent.typeKeys( "<MOD1 HOME>" )
             HelpContent.typeKeys( "<SHIFT RIGHT>" , len( cHead ) )
-            EditCopy
+            hUseAsyncSlot( "EditCopy" )
             cLine = GetClipBoardText
             
             '///+<li>Compare the config string with the header</li>

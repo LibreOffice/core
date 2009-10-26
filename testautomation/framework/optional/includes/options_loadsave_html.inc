@@ -44,15 +44,11 @@ testcase tLoadSaveHTML
    Dim lsSave ( 10 ) as String
    Dim i as Integer
 
-'///check if all settings are saved in configuration ( Load & Save / HTML Compatibility )
 
-'///open a new document
    hNewDocument
-'///+open tools / options / load & save / HTML Compatibility
    ToolsOptions
    hToolsOptions ( "LoadSave", "HTMLCompatibility" )
 
-'///save old settings
  printlog " - save old settings"
    lsSave ( 1 ) = Groesse1.GetText
    lsSave ( 2 ) = Groesse2.GetText
@@ -71,7 +67,6 @@ testcase tLoadSaveHTML
    lsSave ( 9 ) = Zeichensatz.GetSelText
    lbSave ( 7 ) = UseEnglishlocaleForNumbers.isChecked
 
-'///change and invert all settings
  printlog " - change/invert settings"
    Groesse1.More 1 : lsSave2 (1) = Groesse1.GetText
    Groesse2.More 2 : lsSave2 (2) = Groesse2.GetText
@@ -92,21 +87,16 @@ testcase tLoadSaveHTML
    Export.Select 1
    Zeichensatz.Select 10
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+close the document
    hCloseDocument
 
-'///exit and restart StarOffice
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///check inverting and changes
  printlog " - check inverting / changes"
-'///+open tools / options / load & save / HTML Compatibility
    ToolsOptions
    hToolsOptions ( "LoadSave", "HTMLCompatibility" )
 
@@ -131,7 +121,6 @@ testcase tLoadSaveHTML
    if Export.GetSelIndex      <> 1  then Warnlog "Export => changes not saved!"
    if Zeichensatz.GetSelIndex <> 10 then Warnlog "Font => changes not saved!"
 
-'///make 2. changes
  printlog " - 2. changes"
    Groesse1.SetText "6"
    Groesse2.SetText "9"
@@ -150,14 +139,11 @@ testcase tLoadSaveHTML
    UseEnglishlocaleForNumbers.Check
    Zeichensatz.Select 2
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check 2. changes
  printlog " - check 2. changes"
-'///+open tools / options / load & save / HTML Compatibility
    ToolsOptions
    hToolsOptions ( "LoadSave", "HTMLCompatibility" )
 
@@ -183,7 +169,6 @@ testcase tLoadSaveHTML
    if Export.GetSelIndex      <> 2 then Warnlog "Export => changes not saved!"
    if Zeichensatz.GetSelIndex <> 2 then Warnlog "Font => changes not saved!"
 
-'///reset to default settings
  printlog " - reset to saved settings"
    Groesse1.SetText lsSave (1)
    Groesse2.SetText lsSave (2)
@@ -205,13 +190,11 @@ testcase tLoadSaveHTML
    Export.Select      lsSave ( 8 )
    Zeichensatz.Select lsSave ( 9 )
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
  printlog " - check default settings"
-'///+open tools / options / load & save / HTML Compatibility
    ToolsOptions
    hToolsOptions ( "LoadSave", "HTMLCompatibility" )
 
@@ -237,7 +220,6 @@ testcase tLoadSaveHTML
    if Export.GetSeltext      <> lsSave (8) then Warnlog "Export => changes not saved!"
    if Zeichensatz.GetSeltext <> lsSave (9) then Warnlog "Font => changes not saved!"
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
 

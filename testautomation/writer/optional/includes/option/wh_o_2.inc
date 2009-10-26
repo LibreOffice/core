@@ -130,7 +130,7 @@ testcase tToolsOptionsHTMLPrint
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
-	sleep (2)
+	sleep (4)
     Call hFileSaveAsKill(gOfficepath + "user\work\printtest.html")
     Call hCloseDocument
 

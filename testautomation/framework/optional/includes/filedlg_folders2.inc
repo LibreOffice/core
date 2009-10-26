@@ -39,56 +39,40 @@
 
 testcase tFolder2
 
-   '///<h1>Level 1 test: Create folders with duplicate names</h1>
 
    dim FULLPATH as string
        FULLPATH = gOfficePath + "user\work\"
 
    Dim VerList(50) as String
    
-   '///<ul>
 
-   '///+<li>Delete all directories in [home/Office-dir/user/work]</li>
    GetDirList ( ConvertPath ( FULLPATH ), "*" , VerList() )
    KillDirList ( VerList() )
 
-   '///+<li>Either click on &quot;FileOpen&quot; or use the menu to get there</li>
    FileOpen
 
-	'///+<li>Change to the local workdirectory (if necessary)</li>
    Kontext "OeffnenDlg"
    Dateiname.SetText( ConvertPath ( FULLPATH ))
    Oeffnen.Click()
 
-   '///+<li>Click on &quot;New Folder&quot; name it &quot;aaa&quot;, repeat the two steps<br>
-   '///+ There should be a warning that the folder exist and it should not be possible to create it</li>
    printlog( CHR$(13) + " - Create a folder named 'aaa' twice" )
    CheckDirectoryName( "aaa" ) 
 
-	'///+<li>Click on &quot;New Folder&quot; name it &quot;123&quot;, repeat the two steps<br>
-   '///+ There should be a warning that the folder exist and it should not be possible to create it</li>
    printlog( CHR$(13) + " - Create a folder named '123' twice" )
    CheckDirectoryName( "123" )     
 
-	'///+<li>Click on &quot;New Folder&quot; name it &quot;yayayaya&quot;, repeat the two steps<br>
-   '///+ There should be a warning that the folder exist and it should not be possible to create it</li>
    printlog( CHR$(13) + " - Create a folder named 'yayayaya' twice" )
    CheckDirectoryName( "yayayaya" )
 
-	'///+<li>Click on &quot;New Folder&quot; name it &quot;ycycycyc.aaa&quot;, repeat the two steps<br>
-   '///+ There should be a warning that the folder exist and it should not be possible to create it</li>
    printlog( CHR$(13) + " - Create a folder named 'ycycycyc.aaa' twice" )
    CheckDirectoryName( "ycycycyc.aaa" )
    
-   '///+<li>If we hang on the &quot;New Folder&quot; dialog: Close it</li>
    Kontext "NeuerOrdner"
    if NeuerOrdner.Exists() then
       NeuerOrdner.Cancel()
    endif
 
-   '///+<li>Cancel the FileOpen dialog</li>
    Kontext "OeffnenDlg"
    OeffnenDlg.Cancel()
-   '///</ul>
 
 endcase

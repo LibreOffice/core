@@ -39,14 +39,6 @@
 
 testcase tBasicDialogI18nDefaults
 
-    '///<h1>Test correct handling of the default language</h1>
-    '///<i>This test verifies that - if the user adds localization to the dialogs - 
-    '///+ these are handled in a sensible way. This means that a) the first 
-    '///+ language automatically becomes default, b) the languages really make it
-    '///+ from the language selection to the Manage UI Languages dialog and the
-    '///+ the listbox of the translation toolbar in the BASIC IDE. Switching 
-    '///+ languages is tested, as well as the states of the three action buttons on
-    '///+ the Manage UI Languages dialog.</i><br>
 
     const MODULE_NAME = "defmod"
     const FILE_NAME   = "basic_defaults.odt"
@@ -65,24 +57,17 @@ testcase tBasicDialogI18nDefaults
     
     dim iLangCount as integer
     
-    '///<ul>
     printlog( "Preparing testenvironment" )
     printlog( "Workfile is: " & cWorkPath )
 
-    '///+<li>Create a new document</li>
     brc = hCreateDocument()
     if ( not brc ) then
         warnlog( "Failed to create a new document, aborting" )
         goto endsub
     endif
 
-    '///+<li>Save the file, overwrite existing if found</li>
     brc = hFileSaveAsWithFilterKill( cWorkPath , "writer8" )
 
-    '///+<li>Open the basic organizer</li>
-    '///+<li>Create a new module for the current document</li>
-    '///+<li>Click to edit the module</li>
-    '///+<li>Create a dialog, switch to it and ensure that the ToolsCollectionBar is open</li>
     brc = hInitFormControls( MODULE_NAME )
     if ( not brc ) then
         warnlog( "Ups, bad again..." )
@@ -93,7 +78,6 @@ testcase tBasicDialogI18nDefaults
     printlog( "" )
     printlog( "Starting test (check control states, add default language)" )
 
-    '///+<li>Verify that the Translation Bar is hidden by default"</li>
     kontext "TranslationBar"
     if ( TranslationBar.exists( 1 ) ) then
 	warnlog( "The TranslationBar should not be exist/visible by default" )
@@ -104,7 +88,6 @@ testcase tBasicDialogI18nDefaults
     Kontext "ToolsCollectionBar"
     ManageLanguage.click()
 
-    '///+<li>On the now open Language dialog test the default states of the controls</li>
     kontext "ManageUILanguages"
     if ( not ManageUILanguages.exists( 2 ) ) then
         warnlog( "ManageUILanguages Dialog is not open, aborting test" )
@@ -113,55 +96,42 @@ testcase tBasicDialogI18nDefaults
 
     printlog( "ManageUILanguages Dialog is open" )
 
-    '///<ul>
-    '///+<li>There should be no languages listed yet but a hint on how to continue</li>
     iLangCount = PresentLanguages.getItemCount()
     if ( iLangCount <> 1 ) then
         warnlog( "There should only be one single entry in the languages listbox" )
         printlog( "Currently " & iLangCount & " entries are listed" )
     endif
 
-    '///+<li>&quot;Add...&quot; should be enabled</li>
     if ( not add.isEnabled() ) then
         warnlog( "Add button should be enabled" )
     endif
 
-    '///+<li>&quot;Delete&quot; should be disabled</li>
     if ( delete.isEnabled() ) then  
         warnlog( "Delete button should be disabled" )
     endif
 
 
-    '///+<li>&quot;Default&quot; should be disabled</li>
     if ( Default.isEnabled() ) then  
         warnlog( "Default button should be disabled" )
     endif
 
-    '///</ul>
     
-    '///+<li>Select the first and only entry in the list, it should not change the button states</li>
     printlog( "Select the first/only entry to see whether the button states change" )
     PresentLanguages.select( 1 )
     printlog( "Entry is: " & PresentLanguages.getSelText() )
-    '///<ul>
     
-    '///+<li>&quot;Add...&quot; should be enabled</li>
     if ( not add.isEnabled() ) then
         warnlog( "Add button should be enabled" )
     endif
 
-    '///+<li>&quot;Delete&quot; should be disabled</li>
     if ( Delete.isEnabled() ) then  
         warnlog( "Delete button should be disabled" )
     endif
 
-    '///+<li>&quot;Default&quot; should be disabled</li>
     if ( Default.isEnabled() ) then  
         warnlog( "Default button should be disabled" )
     endif
-    '///</ul>
 
-    '///+<li>Click &quot;Add...&quot; to add a default language</li>
     printlog( "Add default language" )
     kontext "ManageUILanguage"
     Add.click()
@@ -182,10 +152,7 @@ testcase tBasicDialogI18nDefaults
     SetDefaultLanguage.ok()
 
 
-    '///+<li>Test the language string and the states of the buttons on the dialog</li>
     kontext "ManageUILanguages"
-    '///<ul>
-    '///+<li>There should be exactly one language listed</li>
     iLangCount = PresentLanguages.getItemCount()
     if ( iLangCount <> 1 ) then
         warnlog( "There should only be one single entry in the languages listbox" )
@@ -203,12 +170,10 @@ testcase tBasicDialogI18nDefaults
     printlog( "Dialog.: " & cDefLangDialog )
     
 
-    '///+<li>&quot;Add...&quot; should be enabled</li>
     if ( not add.isEnabled() ) then
         warnlog( "Add button should be enabled" )
     endif
 
-    '///+<li>&quot;Delete&quot; should be enabled</li>
     if ( not Delete.isEnabled() ) then  
         warnlog( "Delete button should be enabled" )
         Delete.click()
@@ -221,34 +186,26 @@ testcase tBasicDialogI18nDefaults
         endif
     endif
 
-    '///+<li>&quot;Default&quot; should be disabled</li>
     if ( Default.isEnabled() ) then  
         warnlog( "Default button should be disabled" )
     endif
-    '///</ul>
     
-    '///+<li>Close the Manage UI Languages Dialog</li>
     kontext "ManageUILanguages"
     ManageUILanguages.close()
     
     
     
-    '///+<li>Test the Translation Bar</li>
-    '///<ul>
     kontext "TranslationBar"
     printlog( "Testing the TranslationBar ..." )
     if ( TranslationBar.exists() ) then
         printlog( "TranslationBar exists." )
         
-        '///+<li>Verify that the translation bar is visible</li>
         if ( TranslationBar.isVisible() ) then
             printlog( "TranslationBar is visible." )
             
-            '///+<li>Verify that the languages listbox is enabled</li>
             if ( currentLanguage.isEnabled() ) then
                 printlog( "Languages list is enabled." )
                             
-                '///+<li>Verify that the default language is the only item in the listbox</li>
                 if ( CurrentLanguage.getItemCount() = 1 ) then
                     printlog( "Exactly one item in listed in the listbox, good." )
                     
@@ -283,29 +240,24 @@ testcase tBasicDialogI18nDefaults
     else
         warnlog( "The Translation Bar does not exist." )
     endif
-    '///</ul> 
     
     
-    '///+<li>Reopen ManageUILanguages dialog - this time by clicking the icon on the TranslationBar</li>
     printlog( "Click ManageLanguages-button on the TranslationBar" )
     kontext "TranslationBar" 
     wait( 100 )
     ManageLanguage.click()
     
-    '///+<li>The Manage UI Languages dialog should pop open</li>
     kontext "ManageUILanguages"
     if ( not ManageUILanguages.exists( 2 ) ) then
     	warnlog( "Failed to open Manage Languages dialog" )
     endif
     
-    '///+<li>Verify that exactly one language is listed</li>
     iLangCount = PresentLanguages.getItemCount()
     if ( iLangCount <> 1 ) then
         warnlog( "There should only be one single entry in the languages listbox" )
         printlog( "Currently " & iLangCount & " entries are listed" )
     endif    
     
-    '///+<li>Verify that it is marked as the default language</li>
     PresentLanguages.select( 1 )
     cTmpLangString = Presentlanguages.getSeltext()
     if ( cTmpLangString <> cDefLangDialog ) then
@@ -316,7 +268,6 @@ testcase tBasicDialogI18nDefaults
     printlog( "Expected: " & cDefLangDialog )
     printlog( "Found...: " & cTmpLangString )
     
-    '///+<li>Add another language, click on &quot;Add...&quot;</li>
     kontext "ManageUILanguages"
     Add.click()
     
@@ -328,13 +279,11 @@ testcase tBasicDialogI18nDefaults
         goto TestExit
     endif
         
-    '///+<li>Select the first language from the list (Check the Checkbox)</li>
     AddNewControl.select( 1 )
     cAdditionalLanguage = AddNewControl.getSelText()
     printlog( "Adding language: " & cAdditionalLanguage )
     AddNewControl.check()
     
-    '///+<li>Click OK to add the language</li>
     AddUserInterface.ok()
     
     kontext "ManageUILanguages"
@@ -343,7 +292,6 @@ testcase tBasicDialogI18nDefaults
         goto TestExit
     endif
     
-    '///+<li>Verify that the language shows up in the Manage UI Languages dialog" )
     kontext "ManageUILanguages"
     iLangCount = PresentLanguages.getItemCount()
     if ( iLangCount <> 2 ) then
@@ -354,7 +302,6 @@ testcase tBasicDialogI18nDefaults
         printlog( "Two languages listed in Manage UI Languages dialog. Good." )
     endif    
     
-    '///+<li>Verify that additional language is at position 2 (default is first)</li>
     printlog( "Verify language in Manage UI Language dialog" )
     PresentLanguages.select( 2 )
     cTmpLangString = Presentlanguages.getSelText()
@@ -366,18 +313,15 @@ testcase tBasicDialogI18nDefaults
     printlog( "Expected: " & cAdditionalLanguage )
     printlog( "Found...: " & cTmpLangString )   
     
-    '///+<li>Switch the default to the newly added language</li>
     printlog( "Select second language and make it default" )
     PresentLanguages.select( 2 )
     Default.click() 
     cAdditionalLanguage = PresentLanguages.getSelText()
 
-   '///+<li>Close the Manage UI Languages dialog</li>
     printlog( "Close the Manage UI Languages dialog" )
     kontext "ManageUILanguages"
     ManageUILanguages.close()     
     
-    '///+<li>Verify that the change in default makes it to the translation bar</li>
     printlog( "Verify that the new default is on pos 2 in the TranslationBar list" )
     kontext "TranslationBar"
     CurrentLanguage.select( 2 )
@@ -390,7 +334,6 @@ testcase tBasicDialogI18nDefaults
     printlog( "Expected: " & cAdditionalLanguage )
     printlog( "Found...: " & cDefLangToolbar )      
     
-    '///+<li>The new default should be at pos 2 of the Manage UI Language dialog</li>
     printlog( "Verify that the list on the Manage UI Language is still unsorted" )
     printlog( "The dafault language should be at pos 2" )
     ManageLanguage.click()
@@ -405,11 +348,9 @@ testcase tBasicDialogI18nDefaults
     printlog( "Expected: " & cAdditionalLanguage )
     printlog( "Found...: " & cTmpLangString )
     
-    '///+<li>Delete the default language</li>
     printlog( "Delte the current default language" )
     Delete.click()
     
-    '///+<li>Handle the warning</li>
     printlog( "There should be a deletion warning" )
     kontext "Active"
     if ( Active.exists( 2 ) ) then
@@ -421,7 +362,6 @@ testcase tBasicDialogI18nDefaults
         warnlog( "Deletion Warning missing" )
     endif
     
-    '///+<li>Verify that there is only one item left</li>
     printlog( "Verify deletion, the remaining language must be default now" )
     kontext "ManageUILanguages"
     iLangCount = PresentLanguages.getItemCount()
@@ -430,7 +370,6 @@ testcase tBasicDialogI18nDefaults
         printlog( "Currently " & iLangCount & " entries are listed" )
     endif         
     
-    '///+<li>Verify that this is the first language and that it is default</li>    
     PresentLanguages.select( 1 )
     cTmpLangString = Presentlanguages.getSeltext()
     if ( cTmpLangString <> cDefLangDialog ) then
@@ -441,46 +380,32 @@ testcase tBasicDialogI18nDefaults
     printlog( "Expected: " & cDefLangDialog )
     printlog( "Found...: " & cTmpLangString )        
     
-    '///+<li>Select the first and only entry in the list, it should not change the button states</li>
     printlog( "verify button states" )
-    '///<ul>
     
-    '///+<li>&quot;Add...&quot; should be enabled</li>
     if ( not add.isEnabled() ) then
         warnlog( "Add button should be enabled" )
     endif
 
-    '///+<li>&quot;Delete&quot; should be disabled</li>
     if ( not Delete.isEnabled() ) then  
         warnlog( "Delete button should be enabled" )
     endif
 
-    '///+<li>&quot;Default&quot; should be disabled</li>
     if ( Default.isEnabled() ) then  
         warnlog( "Default button should be disabled" )
     endif
-    '///</ul>    
     
-    '///+<li>Test exit, cleanup</li>
-    '///<ul>
     TestExit:
     printlog( "" )
     printlog( "Test exit, cleanup" )
 
-    '///+<li>Close Manage UI Languages dialog" )
     kontext "ManageUILanguages"
     if ( ManageUILanguages.exists() ) then
         ManageUILanguages.close()     
     endif
     
-    '///+<li>Close the BASIC IDE</li>
     hCloseBasicIde()
-    '///+<li>Close the document</li>
     hCloseDocument()
-    '///+<li>Delete the workfile</li>
     hDeleteFile( cWorkPath )
-    '///</ul>
-    '///</ul>
 
 endcase
 

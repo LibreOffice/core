@@ -39,7 +39,7 @@
 
 testcase tHelpRessourceTest( iCurrentAboutItem as integer )
 
-    '///<h1>Ressourcetest for OpenOffice.org help viewer</h1>
+    printlog( "Resource test for help topics - display all topics" )
 
     dim iTopicCount as integer
     dim iCurrentTopic as integer
@@ -48,48 +48,35 @@ testcase tHelpRessourceTest( iCurrentAboutItem as integer )
     dim cCurrentAboutItem as string
     dim brc as boolean
    
-    '///<i>help.bas::tHelpRessourceTest</i><br>
-    '///<ul>
-    '///+<li>Open help</li>
     brc = hOpenHelp()
     if ( not brc ) then
         warnlog( "Help not open, aborting test" )
         goto endsub
     endif
 
-    '///+<li>Switch to the index tabpage</li>
     brc = hSelectHelpTab( "index" )
     if ( not brc ) then
         warnlog( "There was a problem switching to the index tabpage" )
     endif
 
-    '///+<li>Set and printout the current application for which to display the index</li>
     Kontext "IndexPage"
     HelpAbout.select( iCurrentAboutItem )
     sleep( 3 )
 
-    '///+<li>Retrieve the text from the Multilistbox</li>
     cCurrentAboutItem = HelpAbout.getSelText()
     printlog( " " )
     printlog( " * Current Application: " & cCurrentAboutItem )
 
-    '///+<li>Get number of entries in combo-box (help topics)</li>
     iTopicCount = SearchIndex.getItemcount()
     printlog( "For this application " & iTopicCount & " pages will be loaded." )
     printlog( " " )
 
-    '///+<li>Open every item in the index, one by one, give enough time to load</li>
-    '///<ul>
     cPreviousTopic = "<not yet set>"
     for iCurrentTopic = 1 to iTopicCount 
 
         try
-            '///+<li>select one item from the list</li>
             SearchIndex.Select( iCurrentTopic )
-            
-            '///+<li>Retrieve the name of the entry</li>
             cCurrentTopic = SearchIndex.getSelText() 
-            'printlog( " - " & cCurrentTopic )    
         catch
             warnlog( "Failed to select entry at " & iCurrentTopic )
             printlog( "Previous entry: " & cPreviousTopic )
@@ -97,33 +84,27 @@ testcase tHelpRessourceTest( iCurrentAboutItem as integer )
         endcatch
 
         try
-            '///+<li>Click the "Display" button</li>
             DisplayIndex.click()
             WaitSlot( 5000 )
         catch
-            warnlog( "Failed to display index item (fatal):" )
+            warnlog( "#i105476# - Failed to display index item (fatal):" )
             printlog( " - Index...........: " & iCurrentTopic  )
             printlog( " - Topic (current).: " & cCurrentTopic  )
             printlog( " - Topic (previous): " & cPreviousTopic )
-            call ExitRestartTheOffice
+            call ExitRestartTheOffice()
             goto endsub
         endcatch
-      
        
         cPreviousTopic = cCurrentTopic
 
     next iCurrentTopic
-    '///</ul>
 
-    '///+<li>Close the help-viewer</li>
     brc =  hCloseHelp()
     if ( not brc ) then
         warnlog( "There was a problem closing the help viewer" )
     endif
    
-    '///+<li>Exit and restart the office</li>
     call ExitRestartTheOffice()
-    '///</ul>
    
 endcase
 
