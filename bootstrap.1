@@ -21,15 +21,12 @@ if test "$BUILD_DMAKE" != "NO"; then
 
         # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
         # but we need a cygwin/gcc build dmake to understand the posix paths
-        if test "$GUI" = "WNT" -a "$USE_SHELL" != "4nt"; then
+        if test "$GUI" = "WNT"; then
             CC=""
             CXX=""
             export CC
             export CXX
         fi
-
-        # For the W32/4nt case
-        rm -rf objects
 
         # For normal unixy systems
         if test -f "Makefile" ; then
