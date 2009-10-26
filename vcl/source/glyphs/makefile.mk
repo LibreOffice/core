@@ -42,9 +42,6 @@ ENABLE_EXCEPTIONS=true
 .INCLUDE :  $(PRJ)$/util$/makefile2.pmk
 
 CFLAGS+= $(FREETYPE_CFLAGS)
-.IF "$(USE_FT_EMBOLDEN)" == "YES"
-CFLAGS+=-DUSE_FT_EMBOLDEN
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
