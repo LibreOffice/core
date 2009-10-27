@@ -67,6 +67,9 @@
   
   <xsl:include href="factorytools.xsl"/>
   
+  <xsl:key name="resources-with-kind" match="//resource[kind]" use="kind/@name"/>
+  <xsl:key name="sprms-with-code" match="//resource/element[@tokenid]" use="@tokenid"/>
+
 <xsl:template name="factorycreatecontextfromfactory">
     <xsl:text>
 uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastChildContextFromFactory
