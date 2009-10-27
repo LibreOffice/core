@@ -37,6 +37,6 @@ Module gid_Module_Optional_Onlineupdate
     ParentID = gid_Module_Optional;
     Default = YES;
     Styles = (DONTSHOWINUSERINSTALL);
-    Files = (gid_File_Lib_Updchk, gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu, gid_File_Registry_Spool_Oo_Office_Jobs_Onlineupdate_Xcu, gid_File_Bin_UnpackUpdate);
+    Files = (gid_File_Lib_Updchk, gid_File_Share_Registry_Onlineupdate_Xcd, gid_File_Bin_UnpackUpdate);
     Dirs = (gid_Dir_Share_Registry_Modules_Oo_Office_Addons, gid_Dir_Share_Registry_Modules_Oo_Office_Jobs);
 End

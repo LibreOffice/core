@@ -57,7 +57,7 @@ export OOO_DISABLE_RECOVERY=1
 $program_dir = 'program';
 $program_dir = 'MacOS' if ($ENV{OS} eq 'MACOSX');
 
-my @exceptions = ( 'cppuhelper', 'configmgr2', 'sunjavaplugin', 'libjvmfwk' );
+my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
 %replaceable = (
 	$program_dir => '\.so',
@@ -297,9 +297,6 @@ sub link_soffice_bin_files()
     do_link ($src, $dest, 'bootstraprc', 'bootstraprc', 1);
     do_link ($src, $dest, 'intro.bmp', 'intro.bmp', 1);
     do_link ("$OOO_INSTALL", "$OOO_BUILD/desktop/$TARGET", 'share', 'share', 1);
-
-    $dest = "$OOO_BUILD/configmgr/$TARGET/lib";
-    do_link ($src, $dest, 'configmgrrc', 'configmgrrc', 1);
 
     print "\n";
 }

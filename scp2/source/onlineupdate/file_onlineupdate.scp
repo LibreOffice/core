@@ -32,18 +32,11 @@
 
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updchk , updchk.uno )
 
-File gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu
+File gid_File_Share_Registry_Onlineupdate_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Addons;
-    Name = "/registry/spool/org/openoffice/Office/Addons/Addons-onlineupdate.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Office_Jobs_Onlineupdate_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Jobs;
-    Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-onlineupdate.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "onlineupdate.xcd";
 End
 
 #if defined LINUX || defined SOLARIS

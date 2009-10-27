@@ -46,10 +46,7 @@ Module gid_Module_Prg_Base_Bin
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (
-        gid_File_Registry_Spool_Oo_Setup_Base_Xcu,gid_File_Registry_Spool_Oo_Common_Base_Xcu
-        ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
-        ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
-        ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
+        gid_File_Share_Registry_Base_Xcd
         ,gid_File_Lib_Abp
         ,gid_File_Lib_Dbp
         ,gid_File_Lib_Dbu

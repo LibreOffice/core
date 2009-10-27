@@ -60,21 +60,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Jar_Email, 
     gid_File_Jar_Mail, 
     gid_File_Jar_Activation,
-    gid_File_Oo_Office_Ui_Writercommands_Xcs,
-    gid_File_Oo_Office_Ui_Writercommands_Xcu,
-    gid_File_Registry_Spool_Oo_Common_Writer_Xcu,
-    gid_File_Registry_Spool_Oo_Setup_Writer_Xcu,
-    gid_File_Registry_Spool_Oo_Common_Dicooo_Xcu,
-    gid_File_Oo_Office_Ui_Writerwindowstate_Xcs,
-    gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcs,
-    gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcs,
-    gid_File_Oo_Office_Ui_Writerwindowstate_Xcu,
-    gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcu,
-    gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu,
+    gid_File_Share_Registry_Writer_Xcd,
     gid_File_Tmp_Userinstall_Wrt_Inf);
 End
 

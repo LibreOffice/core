@@ -34,7 +34,7 @@ Module gid_Module_Optional_OGLTrans
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_OGLTRANS);
     ParentID = gid_Module_Optional;
-    Files = ( gid_File_Lib_OpenGLTransitions, gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml, gid_File_Registry_Spool_Oo_Office_Impress_OGLTrans_Xcu );
+    Files = ( gid_File_Lib_OpenGLTransitions, gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml, gid_File_Share_Registry_Ogltrans_Xcd );
     Minimal = NO;
     Default = NO;
 End
@@ -58,9 +58,9 @@ File gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml
     Name = "transitions-ogl.xml";
 End
 
-File gid_File_Registry_Spool_Oo_Office_Impress_OGLTrans_Xcu
+File gid_File_Share_Registry_Ogltrans_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Impress;
-    Name = "registry/spool/org/openoffice/Office/Impress-ogltrans.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "ogltrans.xcd";
 End

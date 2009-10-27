@@ -37,6 +37,5 @@ Module gid_Module_Optional_Grfflt
     ParentID = gid_Module_Optional;
     Default = YES;
     Files = (gid_File_Lib_Svg, gid_File_Lib_Flash,
-    		 gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Filters_Xcu,
-    		 gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Filters_Xcu);
+    		 gid_File_Share_Registry_Graphicfilter_Xcd);
 End

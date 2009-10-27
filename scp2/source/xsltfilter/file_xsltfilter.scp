@@ -30,18 +30,11 @@
 
 #include "macros.inc"
 
-File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Types_Xcu
+File gid_File_Share_Registry_Xsltfilter_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_xslt_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_xslt_filters.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "xsltfilter.xcd";
 End
 
 File gid_File_Stw_Docbooktemplate

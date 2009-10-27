@@ -46,8 +46,7 @@ Module gid_Module_Optional_Xsltfiltersamples
     gid_File_Xsl_Export_Xhtml_Master_Usability_Links,
     gid_File_Xsl_Export_Xhtml_Ooo2xhtml,
     gid_File_Xsl_Export_Xhtml_Table,
-    gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Types_Xcu,
-    gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Filters_Xcu );
+    gid_File_Share_Registry_Xsltfilter_Xcd );
     Minimal = NO;
     Default = NO;
     Styles = ( );
