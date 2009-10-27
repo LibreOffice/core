@@ -86,27 +86,29 @@ class ZipPackage : public cppu::WeakImplHelper7
 protected:
     SotMutexHolderRef m_aMutexHolder;
 
-    ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
-    FolderHash       aRecent;
-    ::rtl::OUString  sURL;
-    sal_Bool         bHasEncryptedEntries;
-    sal_Bool         bUseManifest;
-    sal_Bool         bForceRecovery;
+    ::com::sun::star::uno::Sequence < sal_Int8 > m_aEncryptionKey;
+    FolderHash       m_aRecent;
+    ::rtl::OUString  m_aURL;
+    sal_Bool         m_bHasEncryptedEntries;
+    sal_Bool         m_bHasNonEncryptedEntries;
+    sal_Bool         m_bInconsistent;
+    sal_Bool         m_bUseManifest;
+    sal_Bool         m_bForceRecovery;
 
     sal_Bool        m_bMediaTypeFallbackUsed;
     sal_Int16       m_nFormat;
     sal_Bool        m_bAllowRemoveOnInsert;
 
-    InitialisationMode eMode;
+    InitialisationMode m_eMode;
 
-    ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
-    ::com::sun::star::uno::Reference < com::sun::star::io::XStream > xStream;
-    ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
-    ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xContentSeek;
-    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;
+    ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > m_xRootFolder;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XStream > m_xStream;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > m_xContentStream;
+    ::com::sun::star::uno::Reference < com::sun::star::io::XSeekable > m_xContentSeek;
+    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    ZipPackageFolder *pRootFolder;
-    ZipFile          *pZipFile;
+    ZipPackageFolder *m_pRootFolder;
+    ZipFile          *m_pZipFile;
 
     void parseManifest();
     void parseContentType();
@@ -124,8 +126,8 @@ protected:
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
     virtual ~ZipPackage( void );
-    ZipFile& getZipFile() { return *pZipFile;}
-    const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return aEncryptionKey;}
+    ZipFile& getZipFile() { return *m_pZipFile;}
+    const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return m_aEncryptionKey;}
     sal_Int16 getFormat() const { return m_nFormat; }
 
     SotMutexHolderRef GetSharedMutexRef() { return m_aMutexHolder; }

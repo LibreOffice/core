@@ -45,6 +45,8 @@ NO_BSYMBOLIC=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(L10N_framework)"==""
+
 # --- General ----------------------------------------------------
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -70,6 +72,8 @@ SHL1STDLIBS=\
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)
 DEF1NAME=$(SHL1TARGET)
+
+.ENDIF # L10N_framework
 
 # --- Targets ----------------------------------------------------------
 

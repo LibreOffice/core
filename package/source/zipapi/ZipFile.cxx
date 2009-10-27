@@ -608,7 +608,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     throw(IOException, ZipException, RuntimeException)
 {
     sal_Int32 nTestSig, nTime, nCRC, nSize, nCompressedSize;
-    sal_Int16 nVersion, nFlag, nHow, nNameLen, nExtraLen;
+    sal_Int16 nVersion, nFlag, nHow, nPathLen, nExtraLen;
     sal_Int32 nPos = -rEntry.nOffset;
 
     aGrabber.seek(nPos);
@@ -623,18 +623,32 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nCRC;
     aGrabber >> nCompressedSize;
     aGrabber >> nSize;
-    aGrabber >> nNameLen;
+    aGrabber >> nPathLen;
     aGrabber >> nExtraLen;
-    rEntry.nOffset = static_cast < sal_Int32 > (aGrabber.getPosition()) + nNameLen + nExtraLen;
+    rEntry.nOffset = static_cast < sal_Int32 > (aGrabber.getPosition()) + nPathLen + nExtraLen;
 
-    if ( rEntry.nNameLen == -1 ) // the file was created
-        rEntry.nNameLen = nNameLen;
+    // read always in UTF8, some tools seem not to set UTF8 bit
+    uno::Sequence < sal_Int8 > aNameBuffer( nPathLen );
+    sal_Int32 nRead = aGrabber.readBytes( aNameBuffer, nPathLen );
+    if ( nRead < aNameBuffer.getLength() )
+            aNameBuffer.realloc( nRead );
+
+    ::rtl::OUString sLOCPath = rtl::OUString::intern( (sal_Char *) aNameBuffer.getArray(),
+                                                        aNameBuffer.getLength(),
+                                                        RTL_TEXTENCODING_UTF8 );
+
+    if ( rEntry.nPathLen == -1 ) // the file was created
+    {
+        rEntry.nPathLen = nPathLen;
+        rEntry.sPath = sLOCPath;
+    }
 
     // the method can be reset for internal use so it is not checked
     sal_Bool bBroken = rEntry.nVersion != nVersion
                     || rEntry.nFlag != nFlag
                     || rEntry.nTime != nTime
-                    || rEntry.nNameLen != nNameLen;
+                    || rEntry.nPathLen != nPathLen
+                    || !rEntry.sPath.equals( sLOCPath );
 
     if ( bBroken && !bRecoveryMode )
         throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
@@ -749,7 +763,7 @@ sal_Int32 ZipFile::readCEN()
             aMemGrabber >> aEntry.nCrc;
             aMemGrabber >> aEntry.nCompressedSize;
             aMemGrabber >> aEntry.nSize;
-            aMemGrabber >> aEntry.nNameLen;
+            aMemGrabber >> aEntry.nPathLen;
             aMemGrabber >> aEntry.nExtraLen;
             aMemGrabber >> nCommentLen;
             aMemGrabber.skipBytes ( 8 );
@@ -758,7 +772,7 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nOffset += nLocPos;
             aEntry.nOffset *= -1;
 
-            if ( aEntry.nNameLen < 0 || aEntry.nNameLen > ZIP_MAXNAMELEN )
+            if ( aEntry.nPathLen < 0 || aEntry.nPathLen > ZIP_MAXNAMELEN )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
 
             if ( nCommentLen < 0 || nCommentLen > ZIP_MAXNAMELEN )
@@ -768,15 +782,15 @@ sal_Int32 ZipFile::readCEN()
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds ZIP_MAXEXTRA bytes") ), Reference < XInterface > () );
 
             // read always in UTF8, some tools seem not to set UTF8 bit
-            aEntry.sName = rtl::OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
-                                                   aEntry.nNameLen,
+            aEntry.sPath = rtl::OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
+                                                   aEntry.nPathLen,
                                                    RTL_TEXTENCODING_UTF8 );
 
-            if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sName, sal_True ) )
+            if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aEntry.sPath, sal_True ) )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "Zip entry has an invalid name.") ), Reference < XInterface > () );
 
-            aMemGrabber.skipBytes( aEntry.nNameLen + aEntry.nExtraLen + nCommentLen );
-            aEntries[aEntry.sName] = aEntry;
+            aMemGrabber.skipBytes( aEntry.nPathLen + aEntry.nExtraLen + nCommentLen );
+            aEntries[aEntry.sPath] = aEntry;
         }
 
         if (nCount != nTotal)
@@ -830,7 +844,7 @@ sal_Int32 ZipFile::recover()
                             aMemGrabber >> aEntry.nCrc;
                             aMemGrabber >> aEntry.nCompressedSize;
                             aMemGrabber >> aEntry.nSize;
-                            aMemGrabber >> aEntry.nNameLen;
+                            aMemGrabber >> aEntry.nPathLen;
                             aMemGrabber >> aEntry.nExtraLen;
 
                             sal_Int32 nDescrLength =
@@ -842,32 +856,32 @@ sal_Int32 ZipFile::recover()
                             // For OOo2.0 the whole package must be switched to unsigned values
                             if ( aEntry.nCompressedSize < 0 ) aEntry.nCompressedSize = 0x7FFFFFFF;
                             if ( aEntry.nSize < 0 ) aEntry.nSize = 0x7FFFFFFF;
-                            if ( aEntry.nNameLen < 0 ) aEntry.nNameLen = 0x7FFF;
+                            if ( aEntry.nPathLen < 0 ) aEntry.nPathLen = 0x7FFF;
                             if ( aEntry.nExtraLen < 0 ) aEntry.nExtraLen = 0x7FFF;
                             // End of quick fix
 
 
-                            sal_Int32 nBlockLength = aEntry.nSize + aEntry.nNameLen + aEntry.nExtraLen + 30 + nDescrLength;
-                            if ( aEntry.nNameLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
+                            sal_Int32 nBlockLength = aEntry.nSize + aEntry.nPathLen + aEntry.nExtraLen + 30 + nDescrLength;
+                            if ( aEntry.nPathLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {
                                 // read always in UTF8, some tools seem not to set UTF8 bit
-                                if( nPos + 30 + aEntry.nNameLen <= nBufSize )
-                                    aEntry.sName = OUString ( (sal_Char *) &pBuffer[nPos + 30],
-                                                                  aEntry.nNameLen,
+                                if( nPos + 30 + aEntry.nPathLen <= nBufSize )
+                                    aEntry.sPath = OUString ( (sal_Char *) &pBuffer[nPos + 30],
+                                                                  aEntry.nPathLen,
                                                                 RTL_TEXTENCODING_UTF8 );
                                 else
                                 {
                                     Sequence < sal_Int8 > aFileName;
                                     aGrabber.seek( nGenPos + nPos + 30 );
-                                    aGrabber.readBytes( aFileName, aEntry.nNameLen );
-                                    aEntry.sName = OUString ( (sal_Char *) aFileName.getArray(),
+                                    aGrabber.readBytes( aFileName, aEntry.nPathLen );
+                                    aEntry.sPath = OUString ( (sal_Char *) aFileName.getArray(),
                                                                 aFileName.getLength(),
                                                                 RTL_TEXTENCODING_UTF8 );
-                                    aEntry.nNameLen = static_cast< sal_Int16 >(aFileName.getLength());
+                                    aEntry.nPathLen = static_cast< sal_Int16 >(aFileName.getLength());
                                 }
 
-                                aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nNameLen + aEntry.nExtraLen;
+                                aEntry.nOffset = nGenPos + nPos + 30 + aEntry.nPathLen + aEntry.nExtraLen;
 
                                 if ( ( aEntry.nSize || aEntry.nCompressedSize ) && !checkSizeAndCRC( aEntry ) )
                                 {
@@ -876,8 +890,8 @@ sal_Int32 ZipFile::recover()
                                     aEntry.nSize = 0;
                                 }
 
-                                if ( aEntries.find( aEntry.sName ) == aEntries.end() )
-                                    aEntries[aEntry.sName] = aEntry;
+                                if ( aEntries.find( aEntry.sPath ) == aEntries.end() )
+                                    aEntries[aEntry.sPath] = aEntry;
                             }
                         }
                     }

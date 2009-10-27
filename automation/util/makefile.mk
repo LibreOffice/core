@@ -157,7 +157,6 @@ APP1STDLIBS+= \
             $(SVLLIB) \
             $(VCLLIB) \
             $(SALLIB) \
-            $(SJLIB) \
             $(VOSLIB) \
             $(UCBHELPERLIB) \
             $(COMPHELPERLIB) \
@@ -221,8 +220,7 @@ APP3STDLIBS= \
             $(SALLIB) \
             $(TOOLSLIB) \
             $(SVTOOLLIB) \
-            $(VCLLIB) \
-            $(SJLIB)
+            $(VCLLIB)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"

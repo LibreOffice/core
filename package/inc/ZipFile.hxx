@@ -65,7 +65,6 @@ class EncryptionData;
 class ZipFile
 {
 protected:
-    ::rtl::OUString sName;          /* zip file name */
     ::rtl::OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
