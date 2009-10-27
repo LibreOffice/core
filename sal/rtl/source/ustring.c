@@ -558,7 +558,12 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                "rtl_string2UString_status() - Wrong TextEncoding" );
 
     if ( !nLen )
+    {
         rtl_uString_new( ppThis );
+        if (pInfo != NULL) {
+            *pInfo = 0;
+        }
+    }
     else
     {
         if ( *ppThis )
@@ -589,6 +594,9 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                 nLen--;
             }
             while ( nLen );
+            if (pInfo != NULL) {
+                *pInfo = 0;
+            }
         }
         else
         {
