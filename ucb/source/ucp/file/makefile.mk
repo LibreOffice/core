@@ -39,6 +39,7 @@ NO_BSYMBOLIC=TRUE
 UCPFILE_MAJOR=1
 
 .INCLUDE: settings.mk
+.IF "$(L10N_framework)"==""
 
 SLOFILES=\
     $(SLO)$/prov.obj      \
@@ -77,6 +78,7 @@ DEF1EXPORTFILE=exports2.dxp
 .ENDIF
 
 DEF1NAME=$(SHL1TARGET)
+.ENDIF # L10N_framework
 
 .INCLUDE: target.mk
 

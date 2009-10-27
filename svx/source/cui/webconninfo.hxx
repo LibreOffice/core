@@ -65,6 +65,7 @@ namespace svx
         FixedLine           m_aButtonsFL;
         CancelButton        m_aCloseBtn;
         HelpButton          m_aHelpBtn;
+        sal_Int32           m_nPos;
 
     DECL_LINK( HeaderBarClickedHdl, SvxSimpleTable* );
     DECL_LINK( RemovePasswordHdl, PushButton* );

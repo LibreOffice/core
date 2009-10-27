@@ -311,7 +311,7 @@ sal_uInt32 CheckPasswd_Impl
 
     if( ( !pFile->GetFilter() || pFile->IsStorage() ) )
     {
-        uno::Reference< embed::XStorage > xStorage = pFile->GetStorage();
+        uno::Reference< embed::XStorage > xStorage = pFile->GetStorage( sal_True );
         if( xStorage.is() )
         {
             uno::Reference< beans::XPropertySet > xStorageProps( xStorage, uno::UNO_QUERY );
@@ -392,7 +392,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     const SfxFilter* pFilter = NULL;
     SfxMedium aMedium( rFileName,  ( STREAM_READ | STREAM_SHARE_DENYNONE ), FALSE );
 
-    if ( !aMedium.GetStorage().is() )
+    if ( !aMedium.GetStorage( sal_True ).is() )
         aMedium.GetInStream();
 
     if ( aMedium.GetError() )

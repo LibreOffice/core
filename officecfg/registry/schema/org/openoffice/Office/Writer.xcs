@@ -1097,8 +1097,8 @@
 					<!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
 					<info>
 						<author>OS</author>
-						<desc>Specifies if notes are displayed.</desc>
-						<label>Notes</label>
+						<desc>Specifies if comments are displayed.</desc>
+						<label>Comments</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2145,7 +2145,7 @@
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Notes -->
 					<info>
 						<author>OS</author>
-						<desc>Specifies if and how notes are printed.</desc>
+						<desc>Specifies if and how comments are printed.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -2155,7 +2155,7 @@
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc>Notes only</desc>
+								<desc>Comments only</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -5659,13 +5659,13 @@
 		</group>
 		<group oor:name="Notes">
                 	<info>
-                        	<desc>Contains settings for notes</desc>
+                        	<desc>Contains settings for comments</desc>
                 	</info>
                 	<prop oor:name="ShowAnkor" oor:type="xs:boolean">
                		<info>
                         	<author>mod</author>
-                        	<desc>configures if note anchor should be shown or hidden when display is off</desc>
-                        	<label>Notes Ankor on/off</label>
+                        	<desc>configures if comment anchor should be shown or hidden when display is off</desc>
+                        	<label>Comments Ankor on/off</label>
                 	</info>
                 	<value>false</value>
                 	</prop>
@@ -6983,7 +6983,7 @@
 				</prop>
 				<prop oor:type="xs:boolean" oor:name="ShowNotes">
 					<info>
-						<desc>Show the "notes" heading ? </desc>
+						<desc>Show the "comments" heading ? </desc>
 					</info>
 				</prop>
 

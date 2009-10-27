@@ -36,8 +36,10 @@ AUTOSEG=true
 ENABLE_EXCEPTIONS=true
 
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 
 SLOFILES=\
     $(SLO)$/regexp.obj
+.ENDIF	# L10N_framework
 
 .INCLUDE : target.mk

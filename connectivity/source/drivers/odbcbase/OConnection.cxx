@@ -108,7 +108,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     SQLRETURN nSQLRETURN = 0;
     SDB_ODBC_CHAR szConnStrOut[4096];
     SDB_ODBC_CHAR szConnStrIn[2048];
-    SWORD cbConnStrOut;
+    SQLSMALLINT cbConnStrOut;
     memset(szConnStrOut,'\0',4096);
     memset(szConnStrIn,'\0',2048);
     ::rtl::OString aConStr(::rtl::OUStringToOString(aConnectStr,getTextEncoding()));

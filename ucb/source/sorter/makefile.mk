@@ -38,6 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 UCB_MAJOR=1
 
 .INCLUDE: settings.mk
+.IF "$(L10N_framework)"==""
 
 SLOFILES=\
     $(SLO)$/sortdynres.obj \
@@ -60,6 +61,7 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
 DEF1NAME=$(SHL1TARGET)
+.ENDIF # L10N_framework
 
 .INCLUDE: target.mk
 

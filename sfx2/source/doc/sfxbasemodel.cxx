@@ -1614,7 +1614,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
         SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
         TransformParameters( SID_SAVEDOC, aSeqArgs, *pParams );
 
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, m_pData->m_pObjectShell ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOC), m_pData->m_pObjectShell ) );
 
         sal_Bool bRet = sal_False;
 
@@ -1645,14 +1645,12 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
                                                                     : ERRCODE_IO_CANTWRITE;
         m_pData->m_pObjectShell->ResetError();
 
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEFINISHED, m_pData->m_pObjectShell ) );
-
         if ( bRet )
         {
             m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "successful saving." ) ) );
             m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
 
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, m_pData->m_pObjectShell ) );
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCDONE), m_pData->m_pObjectShell ) );
         }
         else
         {
@@ -1660,7 +1658,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
             m_pData->m_pObjectShell->StoreLog();
 
             // write the contents of the logger to the file
-            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, m_pData->m_pObjectShell ) );
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOCFAILED), m_pData->m_pObjectShell ) );
 
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
         }
@@ -2546,7 +2544,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 impl_getPrintHelper();
             }
 
-            postEvent_Impl( pNamedHint->GetEventId() );
+            postEvent_Impl( pNamedHint->GetEventName() );
         }
 
         if ( pSimpleHint )
@@ -2555,11 +2553,11 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 ::rtl::OUString aTitle = m_pData->m_pObjectShell->GetTitle();
                 addTitle_Impl( m_pData->m_seqArguments, aTitle );
-                postEvent_Impl( pSimpleHint->GetId() );
+                postEvent_Impl( GlobalEventConfig::GetEventName( STR_EVENT_TITLECHANGED ) );
             }
             if ( pSimpleHint->GetId() == SFX_HINT_MODECHANGED )
             {
-                postEvent_Impl( pSimpleHint->GetId() );
+                postEvent_Impl( GlobalEventConfig::GetEventName( STR_EVENT_MODECHANGED ) );
             }
 /*
             else if ( pSimpleHint->GetId() == SFX_HINT_DYING
@@ -2760,7 +2758,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 
     if ( !bSaved && m_pData->m_pObjectShell )
     {
-        SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,
+        SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOC : STR_EVENT_SAVEASDOC ),
                                                 m_pData->m_pObjectShell ) );
 
         SfxAllItemSet *aParams = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -2850,19 +2848,9 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     // TODO/LATER: a general way to set the error context should be available
                     SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
 
-                    ::com::sun::star::uno::Any aInteraction;
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
-                    ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
-                    lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >(static_cast< ::com::sun::star::task::XInteractionContinuation* >(pApprove), uno::UNO_QUERY);
-
                     ::com::sun::star::task::ErrorCodeRequest aErrorCode;
                     aErrorCode.ErrCode = nErrCode;
-                    aInteraction <<= aErrorCode;
-
-                    ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest(static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), uno::UNO_QUERY);
-
-                    xHandler->handle(xRequest);
+                    SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), sal_False );
                 }
             }
 
@@ -2870,11 +2858,11 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
             if ( !bSaveTo )
             {
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
-                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, m_pData->m_pObjectShell ) );
+                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEASDOCDONE), m_pData->m_pObjectShell ) );
             }
             else
             {
-                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, m_pData->m_pObjectShell ) );
+                SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVETODOCDONE), m_pData->m_pObjectShell ) );
             }
         }
         else
@@ -2883,7 +2871,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
             m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Storing failed!" ) ) );
             m_pData->m_pObjectShell->StoreLog();
 
-            SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED,
+            SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOCFAILED : STR_EVENT_SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell ) );
 
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
@@ -2893,10 +2881,14 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 
 //********************************************************************************************************
 
-void SfxBaseModel::postEvent_Impl( ULONG nEventID )
+void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
 {
     // object already disposed?
     if ( impl_isDisposed() )
+        return;
+
+    DBG_ASSERT( aName.getLength(), "Empty event name!" );
+    if (!aName.getLength())
         return;
 
     ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
@@ -2904,7 +2896,11 @@ void SfxBaseModel::postEvent_Impl( ULONG nEventID )
     if( pIC )
 
     {
-        ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( nEventID );
+#ifdef DBG_UTIL
+        ByteString aTmp( "SfxEvent: ");
+        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+        DBG_TRACE( aTmp.GetBuffer() );
+#endif
         document::EventObject aEvent( (frame::XModel *)this, aName );
         ::cppu::OInterfaceContainerHelper aIC( m_aMutex );
         uno::Sequence < uno::Reference < uno::XInterface > > aElements = pIC->getElements();
