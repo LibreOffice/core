@@ -359,8 +359,9 @@ sal_Bool StringResourceImpl::isReadOnly()
     return m_bReadOnly;
 }
 
-void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
-    throw (IllegalArgumentException, RuntimeException)
+void StringResourceImpl::implSetCurrentLocale( const Locale& locale,
+    sal_Bool FindClosestMatch, sal_Bool bUseDefaultIfNoMatch )
+        throw (IllegalArgumentException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -370,6 +371,9 @@ void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindCl
     else
         pLocaleItem = getItemForLocale( locale, true );
 
+    if( pLocaleItem == NULL && bUseDefaultIfNoMatch )
+        pLocaleItem = m_pDefaultLocaleItem;
+
     if( pLocaleItem != NULL )
     {
         loadLocale( pLocaleItem );
@@ -378,6 +382,13 @@ void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindCl
         // Only notify without modifying
         implNotifyListeners();
     }
+}
+
+void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindClosestMatch )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    sal_Bool bUseDefaultIfNoMatch = false;
+    implSetCurrentLocale( locale, FindClosestMatch, bUseDefaultIfNoMatch );
 }
 
 void StringResourceImpl::setDefaultLocale( const Locale& locale )
@@ -500,7 +511,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
         LocaleItem* pCopyFromItem = m_pDefaultLocaleItem;
         if( pCopyFromItem == NULL )
             pCopyFromItem = m_pCurrentLocaleItem;
-        if( pCopyFromItem != NULL )
+        if( pCopyFromItem != NULL && loadLocale( pCopyFromItem ) )
         {
             const IdToStringMap& rSourceMap = pCopyFromItem->m_aIdToStringMap;
             IdToStringMap& rTargetMap = pLocaleItem->m_aIdToStringMap;
@@ -863,7 +874,8 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     implScanLocales();
 
     sal_Bool FindClosestMatch = true;
-    setCurrentLocale( aCurrentLocale, FindClosestMatch );
+    sal_Bool bUseDefaultIfNoMatch = true;
+    implSetCurrentLocale( aCurrentLocale, FindClosestMatch, bUseDefaultIfNoMatch );
 }
 
 // -----------------------------------------------------------------------------

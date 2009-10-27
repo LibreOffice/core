@@ -444,11 +444,11 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     checkParameterIndex(parameterIndex);
 
     sal_Int8* lenBuf = getLengthBuf (parameterIndex);
-    *(SDWORD*)lenBuf = SQL_NULL_DATA;
+    *(SQLLEN*)lenBuf = SQL_NULL_DATA;
 
 
-    SQLINTEGER  prec = 0;
-    SQLUINTEGER nColumnSize = 0;
+    SQLLEN prec = 0;
+    SQLULEN nColumnSize = 0;
     if (sqlType == SQL_CHAR || sqlType == SQL_VARCHAR || sqlType == SQL_LONGVARCHAR)
     {
         prec = 1;
@@ -474,7 +474,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
                                             nDecimalDigits,
                                             NULL,
                                             prec,
-                                            (SDWORD*)lenBuf
+                                            (SQLLEN*)lenBuf
                                             );
     OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -865,7 +865,7 @@ void OPreparedStatement::setStream (
 
     // Bind the parameter with SQL_LEN_DATA_AT_EXEC
     SQLSMALLINT   Ctype = SQL_C_CHAR;
-    SDWORD  atExec = SQL_LEN_DATA_AT_EXEC (length);
+    SQLLEN  atExec = SQL_LEN_DATA_AT_EXEC (length);
     memcpy (dataBuf, &ParameterIndex, sizeof(ParameterIndex));
     memcpy (lenBuf, &atExec, sizeof (atExec));
 
@@ -876,14 +876,14 @@ void OPreparedStatement::setStream (
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLBindParameter(m_aStatementHandle,
                         (SQLUSMALLINT)ParameterIndex,
-                        (SQLSMALLINT)SQL_PARAM_INPUT,
+                        (SQLUSMALLINT)SQL_PARAM_INPUT,
                         Ctype,
                         (SQLSMALLINT)SQLtype,
-                        (SQLUINTEGER)length,
+                        (SQLULEN)length,
                         0,
                         dataBuf,
                         sizeof(ParameterIndex),
-                        (SDWORD*)lenBuf);
+                        (SQLLEN*)lenBuf);
 
     // Save the input stream
     boundParams[ParameterIndex - 1].setInputStream (x, length);

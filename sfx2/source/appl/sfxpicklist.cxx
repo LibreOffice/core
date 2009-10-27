@@ -43,8 +43,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <shell/systemshell.hxx>
-
 // ----------------------------------------------------------------------------
 
 #include <sfx2/app.hxx>
@@ -470,7 +468,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
-                    SystemShell::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
+                    Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
             }
             break;
         }

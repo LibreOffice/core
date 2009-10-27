@@ -749,8 +749,8 @@ fileMatch(const char * URI) {
 }
 
 static int
-pkgMatch(const char * URI) {
-    if ((URI != NULL) && !strncmp(URI, "vnd.sun.star.pkg:/", 18))
+zipMatch(const char * URI) {
+    if ((URI != NULL) && !strncmp(URI, "vnd.sun.star.zip:/", 18))
         return 1;
     return 0;
 }
@@ -770,7 +770,7 @@ fileOpen(const char *URI) {
 }
 
 static void *
-pkgOpen(const char * /*URI*/) {
+zipOpen(const char * /*URI*/) {
     rtl::OUString language,jar,path;
 
     if( ugblData->m_pInitial->get_eid().getLength() )
@@ -855,7 +855,7 @@ helpRead(void * context, char * buffer, int len) {
 }
 
 static int
-pkgRead(void * context, char * buffer, int len) {
+zipRead(void * context, char * buffer, int len) {
     if( ugblData->m_pInitial->get_eid().getLength() )
     {
         ugblData->m_pDatabases->popupDocument( ugblData->m_pInitial,&buffer,&len);
@@ -1080,7 +1080,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         ugblData = &userData;
 
-        xmlRegisterInputCallbacks(pkgMatch, pkgOpen, pkgRead, uriClose);
+        xmlRegisterInputCallbacks(zipMatch, zipOpen, zipRead, uriClose);
         xmlRegisterInputCallbacks(helpMatch, helpOpen, helpRead, uriClose);
         xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
         //xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
@@ -1088,7 +1088,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         xsltStylesheetPtr cur =
             xsltParseStylesheetFile((const xmlChar *)xslURLascii.getStr());
 
-        xmlDocPtr doc = xmlParseFile("vnd.sun.star.pkg:/");
+        xmlDocPtr doc = xmlParseFile("vnd.sun.star.zip:/");
 
         xmlDocPtr res = xsltApplyStylesheet(cur, doc, parameter);
         if (res)
@@ -1101,7 +1101,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         }
         xmlPopInputCallbacks(); //filePatch
         xmlPopInputCallbacks(); //helpPatch
-        xmlPopInputCallbacks(); //pkgMatch
+        xmlPopInputCallbacks(); //zipMatch
         xmlFreeDoc(res);
         xmlFreeDoc(doc);
         xsltFreeStylesheet(cur);

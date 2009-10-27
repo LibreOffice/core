@@ -60,8 +60,9 @@ namespace drawinglayer
                     getTextBox(),
                     *getSdrSTAttribute().getText(),
                     0,
-                    isForceTextClipToTextRange(), // #SJ# use CellText mode; text upper-left
-                    getWordWrap()));
+                    false,
+                    getWordWrap(),
+                    isForceTextClipToTextRange()));
             }
 
             // add shadow

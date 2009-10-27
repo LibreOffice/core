@@ -49,6 +49,10 @@
     if(!x)                                                              \
         ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 
+#ifdef max
+#   undef max
+#endif
+
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using namespace connectivity::ado;

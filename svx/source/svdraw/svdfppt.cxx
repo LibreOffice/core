@@ -39,6 +39,11 @@
 #include <sot/storinfo.hxx>
 #include <sot/stg.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <unotools/streamwrap.hxx>
 
@@ -2563,9 +2568,11 @@ sal_Bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStre
     sal_uInt32  nOldPos = rSt.Tell();
 
     DffRecordHeader aProgTagsHd, aProgTagBinaryDataHd;
-
     rSourceHd.SeekToContent( rSt );
-    if ( SeekToRec( rSt, PPT_PST_ProgTags, rSourceHd.GetRecEndFilePos(), &aProgTagsHd ) )
+    sal_Bool bFound = rSourceHd.nRecType == PPT_PST_ProgTags;
+    if ( !bFound )
+        bFound = SeekToRec( rSt, PPT_PST_ProgTags, rSourceHd.GetRecEndFilePos(), &aProgTagsHd );
+    if ( bFound )
     {
         while( SeekToRec( rSt, PPT_PST_ProgBinaryTag, aProgTagsHd.GetRecEndFilePos(), &aProgTagBinaryDataHd ) )
         {
@@ -2860,6 +2867,75 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
     return pRet;
 }
 
+void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, DffRecordHeader& rComment10Hd )
+{
+    rtl::OUString   sAuthor;
+    rtl::OUString   sText;
+    rtl::OUString   sInitials;
+
+    sal_Int32       nIndex = 0;
+    util::DateTime  aDateTime;
+    sal_Int32       nPosX = 0;
+    sal_Int32       nPosY = 0;
+
+    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < rComment10Hd.GetRecEndFilePos() ) )
+    {
+        DffRecordHeader aCommentHd;
+        rStCtrl >> aCommentHd;
+        switch( aCommentHd.nRecType )
+        {
+            case PPT_PST_CString :
+            {
+                String aString;
+                SvxMSDffManager::MSDFFReadZString( rStCtrl, aString, aCommentHd.nRecLen, TRUE );
+                switch ( aCommentHd.nRecInstance )
+                {
+                    case 0 : sAuthor = aString;     break;
+                    case 1 : sText = aString;       break;
+                    case 2 : sInitials = aString;   break;
+                }
+            }
+            break;
+
+            case PPT_PST_CommentAtom10 :
+            {
+                rStCtrl >> nIndex
+                        >> aDateTime.Year
+                        >> aDateTime.Month
+                        >> aDateTime.Day    // DayOfWeek
+                        >> aDateTime.Day
+                        >> aDateTime.Hours
+                        >> aDateTime.Minutes
+                        >> aDateTime.Seconds
+                        >> aDateTime.HundredthSeconds
+                        >> nPosX
+                        >> nPosY;
+
+                aDateTime.HundredthSeconds /= 10;
+            }
+            break;
+        }
+        aCommentHd.SeekToEndOfRecord( rStCtrl );
+    }
+    Point aPosition( nPosX, nPosY );
+    rMan.Scale( aPosition );
+
+    try
+    {
+        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( pPage->getUnoPage(), UNO_QUERY_THROW );
+        uno::Reference< office::XAnnotation > xAnnotation( xAnnotationAccess->createAndInsertAnnotation() );
+        xAnnotation->setPosition( geometry::RealPoint2D( aPosition.X() / 100.0, aPosition.Y() / 100.0 ) );
+        xAnnotation->setAuthor( sAuthor );
+        xAnnotation->setDateTime( aDateTime );
+        uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
+        xText->setString( sText );
+    }
+    catch( uno::Exception& )
+    {
+
+    }
+}
+
 
 // be sure not to import masterpages with this method
 // be sure not to import masterpages with this method
@@ -2893,6 +2969,21 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                 case PPT_PST_HeadersFooters :
                 {
                     ImportHeaderFooterContainer( aHd, *rSlidePersist.pHeaderFooterEntry );
+                }
+                break;
+
+                case PPT_PST_ProgTags :
+                {
+                    DffRecordHeader aContentDataHd;
+                    if ( SeekToContentOfProgTag( 10, rStCtrl, aHd, aContentDataHd ) )
+                    {
+                        DffRecordHeader aComment10Hd;
+                        while( ( rStCtrl.GetError() == 0 ) && SeekToRec( rStCtrl, PPT_PST_Comment10, aContentDataHd.GetRecEndFilePos(), &aComment10Hd ) )
+                        {
+                            ImportComment10( *this, rStCtrl, pRet, aComment10Hd );
+                            aComment10Hd.SeekToEndOfRecord( rStCtrl );
+                        }
+                    }
                 }
                 break;
 
@@ -3881,7 +3972,7 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
         aFont.SetFamily( pAtom->eFamily );
         aFont.SetPitch( pAtom->ePitch );
     }
-    Color aCol( rManager.MSO_CLR_ToColor( nBulletColor ) );
+    Color aCol( rManager.MSO_TEXT_CLR_ToColor( nBulletColor ) );
     aFont.SetColor( aCol );
 
     sal_uInt16 nBuChar = (sal_uInt16)nBulletChar;
@@ -5795,14 +5886,14 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     {
         if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nDestinationInstance ) )  // Textfarbe (4Byte-Arg)
         {
-            Color aCol( rManager.MSO_CLR_ToColor( nVal ) );
+            Color aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
             rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
             if ( nDestinationInstance == 0xffffffff )
                 mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
         }
         else if ( nVal & 0x0f000000 )   // this is not a hard attribute, but maybe the page has a different colerscheme,
         {                               // so that in this case we must use a hard color attribute
-            Color   aCol( rManager.MSO_CLR_ToColor( nVal ) );
+            Color   aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
             Color&  aColorInSheet = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet;
             if ( aColorInSheet != aCol )
                 rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
@@ -6224,7 +6315,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
                                 nColor = rParaLevel.mnBulletColor;
                             else
                                 nColor = rCharLevel.mnFontColor;
-                            aNumberFormat2.SetBulletColor( rManager.MSO_CLR_ToColor( nColor ) );
+                            aNumberFormat2.SetBulletColor( rManager.MSO_TEXT_CLR_ToColor( nColor ) );
                             pRule->SetLevel( i, aNumberFormat2 );
                         }
                     }
@@ -7520,8 +7611,8 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
                 {
                     Color aLineColor( ((XLineColorItem&)pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
-                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() );
-                    aBorderLine.InnerLineWidth = 0;
+                    aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
+                    aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( ((const XLineWidthItem&)(pLine->GetMergedItem(XATTR_LINEWIDTH))).GetValue() / 4 );
                     aBorderLine.LineDistance = 0;
                 }
                 break;

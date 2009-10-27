@@ -1337,6 +1337,8 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
 
 #define PPT_PST_NewlyAddedAtomByXP11008     11008
 #define PPT_PST_NewlyAddedAtomByXP11010     11010
+#define PPT_PST_Comment10                   12000
+#define PPT_PST_CommentAtom10               12001
 #define PPT_PST_NewlyAddedAtomByXP12004     12004
 #define PPT_PST_NewlyAddedAtomByXP12010     12010
 #define PPT_PST_NewlyAddedAtomByXP12011     12011

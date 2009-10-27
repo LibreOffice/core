@@ -316,7 +316,7 @@ SHL4OBJS=       \
                 $(SLO)$/statusindicatorfactory.obj  \
                 $(SLO)$/statusindicatorinterfacewrapper.obj \
                 $(SLO)$/statusindicator.obj         \
-                $(SLO)$/stillinteraction.obj        \
+                $(SLO)$/quietinteraction.obj        \
                 $(SLO)$/storageholder.obj           \
                 $(SLO)$/substitutepathvars.obj      \
                 $(SLO)$/tagwindowasmodified.obj     \
@@ -334,7 +334,6 @@ SHL4OBJS=       \
                 $(SLO)$/uicategorydescription.obj   \
                 $(SLO)$/uicommanddescription.obj    \
                 $(SLO)$/uiconfigurationmanager.obj  \
-                $(SLO)$/uiconfigurationmanagerimpl.obj  \
                 $(SLO)$/uielementfactorymanager.obj \
                 $(SLO)$/urltransformer.obj          \
                 $(SLO)$/vclstatusindicator.obj      \

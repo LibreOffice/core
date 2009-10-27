@@ -401,26 +401,35 @@ bool SdrCaptionObj::applySpecialDrag(SdrDragStat& rDrag)
 
 String SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    const SdrHdl* pHdl = rDrag.GetHdl();
+    const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
 
-    if(pHdl && 0 == pHdl->GetPolyNum())
+    if(bCreateComment)
     {
-        return SdrRectObj::getSpecialDragComment(rDrag);
+        return String();
     }
     else
     {
-        XubString aStr;
+        const SdrHdl* pHdl = rDrag.GetHdl();
 
-        if(!pHdl)
+        if(pHdl && 0 == pHdl->GetPolyNum())
         {
-            ImpTakeDescriptionStr(STR_DragCaptFram, aStr);
+            return SdrRectObj::getSpecialDragComment(rDrag);
         }
         else
         {
-            ImpTakeDescriptionStr(STR_DragCaptTail, aStr);
-        }
+            XubString aStr;
 
-        return aStr;
+            if(!pHdl)
+            {
+                ImpTakeDescriptionStr(STR_DragCaptFram, aStr);
+            }
+            else
+            {
+                ImpTakeDescriptionStr(STR_DragCaptTail, aStr);
+            }
+
+            return aStr;
+        }
     }
 }
 

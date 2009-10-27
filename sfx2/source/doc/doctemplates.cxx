@@ -72,6 +72,7 @@
 #include "sfxurlrelocator.hxx"
 #include "doctemplateslocal.hxx"
 #include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
 #include "doc.hrc"
 
 //-----------------------------------------------------------------------------
@@ -909,7 +910,8 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const ::rtl::OU
 
        Content aParent;
 
-       if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), maCmdEnv, aParent ) )
+    uno::Reference< XCommandEnvironment > aQuietEnv;
+    if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), aQuietEnv, aParent ) )
        {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
@@ -1919,7 +1921,11 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         aStoreArgs[1].Name = ::rtl::OUString::createFromAscii( "DocumentTitle" );
         aStoreArgs[1].Value <<= rTemplateName;
 
-        rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
+        ::rtl::OUString aCurrentDocumentURL = rStorable->getLocation();
+        if( !SfxMedium::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
+            rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
+        else
+            rStorable->store();
 
         // the storing was successful, now the old template with the same name can be removed if it existed
         if ( aTemplateToRemoveTargetURL.getLength() )

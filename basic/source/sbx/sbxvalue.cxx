@@ -1470,7 +1470,7 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         bRes = TRUE;
     }
     else if( GetType() == SbxEMPTY && rOp.GetType() == SbxEMPTY )
-        bRes = TRUE;
+        bRes = !bVBAInterop ? TRUE : ( eOp == SbxEQ ? TRUE : FALSE );
     // Sonderregel 1: Ist ein Operand Null, ist das Ergebnis FALSE
     else if( GetType() == SbxNULL || rOp.GetType() == SbxNULL )
         bRes = FALSE;

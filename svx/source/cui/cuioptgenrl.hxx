@@ -80,6 +80,7 @@ private:
     SvxUserEdit         aCompanyEdit;
     FixedText           aNameLbl;
     FixedText           aNameLblRuss;
+    FixedText           aNameLblEastern;
     SvxUserEdit         aFirstName;
     SvxUserEdit         aFatherName;
     SvxUserEdit         aName;
