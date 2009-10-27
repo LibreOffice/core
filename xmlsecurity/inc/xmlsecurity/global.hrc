@@ -47,8 +47,6 @@
 #define RID_XMLSECTP_LOCK                   1011
 #define RID_XMLSECTP_LOCK_HC                1012
 #define RID_XMLSECWB_NO_MOZILLA_PROFILE     1013
-#define RID_XMLSECDLG_OLD_ODF_FORMAT        1014
-
 
 #endif
 
