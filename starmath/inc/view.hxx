@@ -228,9 +228,8 @@ class SmViewShell: public SfxViewShell
     SmViewShell_Impl*   pImpl;
     BOOL                bPasteState;
 
-    void AddRemoveClipboardListener( BOOL bAdd );
-
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 protected:
 

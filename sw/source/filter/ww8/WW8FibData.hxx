@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: wdocsh.sdi,v $
- * $Revision: 1.5 $
+ * $RCSfile:$
+ * $Revision:$
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,37 +27,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+#ifndef INCLUDED_WW8_FIB_DATA_HXX
+#define INCLUDED_WW8_FIB_DATA_HXX
+#include <IDocumentExternalData.hxx>
 
-interface WebDocument : BaseTextDocument
-[
-    uuid = "B47F0DE4-1E1F-11d1-89CA-008029E4B0B1"
-]
+namespace ww8
 {
-    // hier nur Slots, die der vollstaendige Writer nicht braucht
-    SID_SOURCEVIEW
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        Asynchron = TRUE;
-    ]
+class WW8FibData : public ::sw::ExternalData
+{
+    bool m_bReadOnlyRecommended;
+    bool m_bWriteReservation;
 
-    SID_HTML_MODE
-    [
-        StateMethod = GetState ;
-    ]
+public:
+    WW8FibData();
+    virtual ~WW8FibData();
+
+    void setReadOnlyRecommended(bool bReadOnlyRecommended);
+    void setWriteReservation(bool bWriteReservation);
+
+    bool getReadOnlyRecommended() const;
+    bool getWriteReservation() const;
+};
 }
 
-shell SwWebDocShell : SfxObjectShell
-{
-        import WebDocument[Automation];
-}
-
-shell SwWebGlosDocShell : SwWebDocShell
-{
-    SID_SAVEDOC  // status()
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-}
-
+#endif // INCLUDED_WW8_FIB_DATA_HXX

@@ -153,7 +153,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GOTO                 (FN_EDIT + 11)    /* Gehe zu */
 
 #define FN_PASTE                (FN_EDIT + 13)    /* Einfuegen */
-#define FN_PASTESPECIAL         (FN_EDIT + 14)    /* Verknuepfung einfuegen */
 #define FN_PASTESPECIAL_DLG     (FN_EDIT + 15)    /* Verknuepfung einfuegen */
 #define FN_NUMBER_BULLETS       (FN_EDIT + 21)    /* Bullets */
 #define FN_REPEAT               (FN_EDIT + 22)    /* Letzten Befehl wiederholen */

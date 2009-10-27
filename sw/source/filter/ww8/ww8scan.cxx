@@ -5488,7 +5488,8 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
         cQuickSaves = ( aBits1 & 0xf0 ) >> 4;
         fEncrypted  =   aBits2 & 0x01       ;
         fWhichTblStm= ( aBits2 & 0x02 ) >> 1;
-        // dummy    = ( aBits2 & 0x0e ) >> 1;
+        fReadOnlyRecommended = (aBits2 & 0x4) >> 2;
+        fWriteReservation = (aBits2 & 0x8) >> 3;
         fExtChar    = ( aBits2 & 0x10 ) >> 4;
         // dummy    = ( aBits2 & 0x20 ) >> 5;
         fFarEast    = ( aBits2 & 0x40 ) >> 6; // #i90932#
@@ -5661,6 +5662,12 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     nBits16 |= (0xf0 & ( cQuickSaves << 4 ));
     if( fEncrypted )    nBits16 |= 0x0100;
     if( fWhichTblStm )  nBits16 |= 0x0200;
+
+    if (fReadOnlyRecommended)
+        nBits16 |= 0x0400;
+    if (fWriteReservation)
+        nBits16 |= 0x0800;
+
     if( fExtChar )      nBits16 |= 0x1000;
     if( fFarEast )      nBits16 |= 0x4000;  // #i90932#
     if( fObfuscated )   nBits16 |= 0x8000;

@@ -35,6 +35,8 @@
 #include <cmdid.h>          // Funktion-Ids
 #endif
 
+#include <com/sun/star/i18n/ScriptType.hpp>
+
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
@@ -54,6 +56,7 @@
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <i18npool/mslangid.hxx>
 #include <fontcfg.hxx>
 #include <optload.hxx>
 #include <optcomp.hxx>
@@ -191,19 +194,25 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));*/
 
         SvtLinguConfig aLinguCfg;
+        Locale aLocale;
+        LanguageType nLang;
+
+        using namespace ::com::sun::star::i18n::ScriptType;
 
         Any aLang = aLinguCfg.GetProperty(C2U("DefaultLocale"));
-        Locale aLocale;
         aLang >>= aLocale;
-        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_LANGUAGE));
+        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), LATIN);
+        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_LANGUAGE));
 
         aLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CJK"));
         aLang >>= aLocale;
-        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_CHAR_CJK_LANGUAGE));
+        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), ASIAN);
+        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CJK_LANGUAGE));
 
         aLang = aLinguCfg.GetProperty(C2U("DefaultLocale_CTL"));
         aLang >>= aLocale;
-        pRet->Put(SvxLanguageItem(SvxLocaleToLanguage( aLocale ), SID_ATTR_CHAR_CTL_LANGUAGE));
+        nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aLocale), COMPLEX);
+        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CTL_LANGUAGE));
     }
     if(bTextDialog)
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));

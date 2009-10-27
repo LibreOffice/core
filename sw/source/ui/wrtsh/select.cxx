@@ -73,6 +73,13 @@ using namespace ::com::sun::star::util;
 static long nStartDragX = 0, nStartDragY = 0;
 static BOOL  bStartDrag = FALSE;
 
+void SwWrtShell::Invalidate()
+{
+    // to avoid making the slot volatile, invalidate it everytime if something could have been changed
+    // this is still much cheaper than asking for the state every 200 ms (and avoid background processing)
+    GetView().GetViewFrame()->GetBindings().Invalidate( FN_STAT_SELMODE );
+}
+
 BOOL SwWrtShell::SelNearestWrd()
 {
     MV_KONTEXT(this);
@@ -375,6 +382,7 @@ long SwWrtShell::ResetSelect(const Point *,BOOL)
         */
         GetChgLnk().Call(this);
     }
+    Invalidate();
     SwTransferable::ClearSelection( *this );
     return 1;
 }
@@ -409,6 +417,7 @@ void SwWrtShell::SttSelect()
     fnKillSel = &SwWrtShell::Ignore;
     fnSetCrsr = &SwWrtShell::SetCrsr;
     bInSelect = TRUE;
+    Invalidate();
     SwTransferable::CreateSelection( *this );
 }
 /*
@@ -577,6 +586,7 @@ void SwWrtShell::EnterStdMode()
             fnKillSel = &SwWrtShell::ResetSelect;
         }
     }
+    Invalidate();
     SwTransferable::ClearSelection( *this );
 }
 
@@ -655,6 +665,7 @@ void SwWrtShell::EnterAddMode()
     bExtMode = FALSE;
     if(SwCrsrShell::HasSelection())
         CreateCrsr();
+    Invalidate();
 }
 
 
@@ -665,6 +676,7 @@ void SwWrtShell::LeaveAddMode()
     fnKillSel = &SwWrtShell::ResetSelect;
     fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     bAddMode = FALSE;
+    Invalidate();
 }
 
 /*
@@ -677,6 +689,7 @@ void SwWrtShell::EnterBlockMode()
     EnterStdMode();
     bBlockMode = TRUE;
     CrsrToBlockCrsr();
+    Invalidate();
 }
 
 
@@ -686,6 +699,7 @@ void SwWrtShell::LeaveBlockMode()
     bBlockMode = FALSE;
     BlockCrsrToCrsr();
     EndSelect();
+    Invalidate();
 }
 
 // Einfuegemodus
@@ -700,6 +714,7 @@ void SwWrtShell::SetInsMode( BOOL bOn )
     GetView().GetViewFrame()->GetBindings().SetState( aTmp );
     StartAction();
     EndAction();
+    Invalidate();
 }
 //Overwrite mode is incompatible with red-lining
 void SwWrtShell::SetRedlineModeAndCheckInsMode( USHORT eMode )
@@ -744,6 +759,7 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
     fnDrag          = &SwWrtShell::BeginFrmDrag;
     fnEndDrag       = &SwWrtShell::UpdateLayoutFrm;
     SwBaseShell::SetFrmMode( FLY_DRAG_START, this );
+    Invalidate();
 }
 
 
@@ -756,6 +772,7 @@ void SwWrtShell::LeaveSelFrmMode()
     bStartDrag = FALSE;
     Edit();
     SwBaseShell::SetFrmMode( FLY_DRAG_END, this );
+    Invalidate();
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Rahmengebundenes Macro ausfuehren
@@ -799,6 +816,7 @@ long SwWrtShell::UpdateLayoutFrm(const Point *pPt, BOOL )
 long SwWrtShell::ToggleAddMode()
 {
     bAddMode ? LeaveAddMode(): EnterAddMode();
+    Invalidate();
     return !bAddMode;
 }
 
@@ -806,6 +824,7 @@ long SwWrtShell::ToggleAddMode()
 long SwWrtShell::ToggleBlockMode()
 {
     bBlockMode ? LeaveBlockMode(): EnterBlockMode();
+    Invalidate();
     return !bBlockMode;
 }
 
@@ -813,6 +832,7 @@ long SwWrtShell::ToggleBlockMode()
 long SwWrtShell::ToggleExtMode()
 {
     bExtMode ? LeaveExtMode() : EnterExtMode();
+    Invalidate();
     return !bExtMode;
 }
 /*
