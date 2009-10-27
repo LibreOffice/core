@@ -194,14 +194,6 @@ void SlideSorter::Init (void)
         // Set view pointer of base class.
         SetupControls(pParentWindow);
 
-        // For accessibility we have to shortly hide the content window.
-        // This triggers the construction of a new accessibility object for
-        // the new view shell.  (One is created earlier while the construtor
-        // of the base class is executed.  At that time the correct
-        // accessibility object can not be constructed.)
-        pWindow->Hide();
-        pWindow->Show();
-
         mbIsValid = true;
     }
 }

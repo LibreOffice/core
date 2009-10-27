@@ -161,6 +161,10 @@ USHORT PrintManager::SetPrinterOptDlg (
     USHORT nDiffFlags,
     BOOL _bShowDialog)
 {
+    SfxPrinter* pOld = mrBase.GetDocShell()->GetPrinter( FALSE );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     mrBase.GetDocShell()->SetPrinter(pNewPrinter);
 
     if ( (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ||

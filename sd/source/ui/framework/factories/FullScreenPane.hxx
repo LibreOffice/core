@@ -35,6 +35,7 @@
 #include "FrameWindowPane.hxx"
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <vcl/vclevent.hxx>
 #include <boost/scoped_ptr.hpp>
 
 namespace css = ::com::sun::star;
@@ -68,6 +69,26 @@ public:
     virtual ~FullScreenPane (void) throw();
 
     virtual void SAL_CALL disposing (void);
+
+    //----- XPane -------------------------------------------------------------
+
+    virtual sal_Bool SAL_CALL isVisible (void)
+        throw (cssu::RuntimeException);
+
+    virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
+        throw (cssu::RuntimeException);
+
+    virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
+        throw (cssu::RuntimeException);
+
+    virtual void SAL_CALL setAccessible (
+        const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
+        throw (cssu::RuntimeException);
+
+
+    //-------------------------------------------------------------------------
+
+    DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
 protected:
     virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>

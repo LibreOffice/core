@@ -47,6 +47,8 @@
 // #107844#
 #include <svx/svdundo.hxx>
 
+#include <vector>
+
 #ifndef INCLUDED_MEMORY
 #include <memory>
 #define INCLUDED_MEMORY
@@ -208,6 +210,8 @@ private:
                         DECL_LINK(WorkStartupHdl, Timer*);
                         DECL_LINK(OnlineSpellingHdl, Timer*);
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
+
+    std::vector< rtl::OUString > maAnnotationAuthors;
 
 protected:
 
@@ -590,6 +594,10 @@ public:
     SD_DLLPUBLIC SdStyleSheetPool* GetSdStyleSheetPool() const;
 
        void UpdatePageRelativeURLs(const String& rOldName, const String& rNewName);
+
+    void SetCalcFieldValueHdl( ::Outliner* pOutliner);
+
+    sal_uInt16 GetAnnotationAuthorIndex( const rtl::OUString& rAuthor );
 
 private:
     /** This member stores the printer independent layout mode.  Please

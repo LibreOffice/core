@@ -107,7 +107,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::sd::framework::FrameworkHelper;
 
-
 namespace sd { namespace toolpanel {
 
 SFX_IMPL_INTERFACE(TaskPaneViewShell, SfxShell, SdResId(STR_TASKPANEVIEWSHELL))
