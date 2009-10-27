@@ -116,7 +116,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         }
 
         Reference< chart2::XChartDocument > xChartDoc( xChartController->getModel(), uno::UNO_QUERY );
-        ObjectType eType( ObjectIdentifier::getObjectType( aSelectedOID.getObjectCID() ));
+        ObjectType eType( ObjectIdentifier::getObjectType( aSelectedCID ));
         bool bAddSelectionToList = false;
         if( eType == OBJECTTYPE_DATA_POINT || eType == OBJECTTYPE_DATA_LABEL )
             bAddSelectionToList = true;
