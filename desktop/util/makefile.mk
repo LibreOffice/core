@@ -79,6 +79,7 @@ RESLIB1SRSFILES=	$(SRS)$/desktop.srs \
                     $(SRS)$/wizard.srs
 
 .IF "$(L10N_framework)"==""
+.IF "$(LINK_SO)"=="TRUE"
 .IF "$(GUI)" != "OS2"
 APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
@@ -142,6 +143,8 @@ APP1STACK=10000000
 .ENDIF # WNT
 
 .ENDIF # "$(GUI)" != "OS2"
+
+.ENDIF # "$(LINK_SO)"=="TRUE"
 
 APP5TARGET=soffice
 APP5NOSAL=TRUE
