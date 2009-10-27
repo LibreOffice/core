@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/valueset.hxx>
 #include "valueimp.hxx"
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
@@ -92,7 +93,8 @@ void ValueSetItem::ClearAccessible()
 ValueSetAcc::ValueSetAcc( ValueSet* pParent, bool bIsTransientChildrenDisabled ) :
     ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent ),
-    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled )
+    mbIsTransientChildrenDisabled( bIsTransientChildrenDisabled ),
+    mbIsFocused(false)
 {
 }
 
@@ -164,6 +166,35 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
     {
         return NULL;
     }
+}
+
+
+// -----------------------------------------------------------------------------
+
+void ValueSetAcc::GetFocus (void)
+{
+    mbIsFocused = true;
+
+    // Boradcast the state change.
+    ::com::sun::star::uno::Any aOldState, aNewState;
+    aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    FireAccessibleEvent(
+        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        aOldState, aNewState);
+}
+
+// -----------------------------------------------------------------------------
+
+void ValueSetAcc::LoseFocus (void)
+{
+    mbIsFocused = false;
+
+    // Boradcast the state change.
+    ::com::sun::star::uno::Any aOldState, aNewState;
+    aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+    FireAccessibleEvent(
+        ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED,
+        aOldState, aNewState);
 }
 
 // -----------------------------------------------------------------------------
@@ -321,6 +352,9 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAc
     pStateSet->AddState (accessibility::AccessibleStateType::VISIBLE);
     if ( !mbIsTransientChildrenDisabled )
         pStateSet->AddState (accessibility::AccessibleStateType::MANAGES_DESCENDANTS);
+    pStateSet->AddState (accessibility::AccessibleStateType::FOCUSABLE);
+    if (mbIsFocused)
+        pStateSet->AddState (accessibility::AccessibleStateType::FOCUSED);
 
     return pStateSet;
 }

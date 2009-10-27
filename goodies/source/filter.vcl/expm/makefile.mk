@@ -45,7 +45,7 @@ DEPTARGET=vexpm
 .IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
 CDEFS+= -DEDITDEBUG
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/expm.obj
 
 # ==========================================================================
@@ -64,7 +64,7 @@ SHL1OBJS=		$(SLO)$/expm.obj
 SHL1VERSIONMAP=exports.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :	target.mk

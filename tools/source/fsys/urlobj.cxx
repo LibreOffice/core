@@ -4825,9 +4825,8 @@ bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
             break;
     }
 
-    rtl::OUStringBuffer aSynAbsURIRef(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://"),
-        RTL_TEXTENCODING_ASCII_US));
+    rtl::OUStringBuffer aSynAbsURIRef(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://")));
+
     switch (eStyle)
     {
         case FSYS_VOS:

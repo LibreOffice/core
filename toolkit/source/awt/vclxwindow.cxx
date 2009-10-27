@@ -2506,7 +2506,14 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
     ::vos::OGuard aGuard( GetMutex() );
 
     if ( GetWindow() )
-        GetWindow()->SetZoom( Fraction( fZoomX ) );
+    {
+        // Fraction::Fraction takes a double, but we have a float only.
+        // The implicit conversion from float to double can result in a precision loss, i.e. 1.2 is converted to
+        // 1.200000000047something. To prevent this, we convert explicitly to double, and round it.
+        double nZoom( fZoomX );
+        nZoom = ::rtl::math::round( nZoom, 4 );
+        GetWindow()->SetZoom( Fraction( nZoom ) );
+    }
 }
 
 // ::com::sun::star::lang::XEventListener
