@@ -169,7 +169,8 @@ do_again:
       * text lines on input.  The maximum size of this is governened by
       * Buffer_size */
         if( q != p && q[-1] == CONTINUATION_CHAR ) {
-           strcpy( q, q+1 );
+           size_t len = strlen(q+1)+1;
+           memmove( q, q+1, len );
            q--;
            cont = FALSE;
         }
@@ -290,7 +291,8 @@ int  keep;
    while( (c = strchr(c, COMMENT_CHAR)) != NIL(char) ) {
       if( Comment || State == NORMAL_SCAN )
      if( c != str && c[-1] == ESCAPE_CHAR ) {
-        strcpy( c-1, c );        /* copy it left, due to \# */
+        size_t len = strlen(c)+1;
+        memmove( c-1, c, len );  /* copy it left, due to \# */
         if( pend ) (*pend)--;    /* shift tail pointer left */
      }
      else {

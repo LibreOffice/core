@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.303.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -818,17 +817,6 @@ End
 
 #endif
 
-File gid_File_Lib_J
-    TXT_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT5(lib,j,DLLPOSTFIX,_g,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT4(j,DLLPOSTFIX,_g,.dll));
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
 #ifdef SOLAR_JAVA
 
 STD_UNO_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
@@ -1213,6 +1201,12 @@ STD_UNO_LIB_FILE( gid_File_Lib_Preload, preload)
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistration.uno )
 
 #if defined(UNX) && ! defined(QUARTZ)
+File gid_File_Lib_Desktop_Detector
+    Name = LIBNAME(desktop_detector);
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = SCP2_OOO_BIN_DIR;
+End
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
     TXT_FILE_BODY;
@@ -1492,21 +1486,15 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
 
 STD_LIB_FILE_PATCH( gid_File_Lib_Msword, msword )
 
+#if ! defined UNX
 File gid_File_Lib_Sysdtrans
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    #ifdef QUARTZ
-      Name = STRING(CONCAT3(libdtransaqua,DLLPOSTFIX,UNXSUFFIX));
-    #else
-      Name = STRING(CONCAT3(libdtransX11,DLLPOSTFIX,UNXSUFFIX));
-    #endif
-  #else
     Name = "sysdtrans.dll";
-  #endif
 End
+#endif
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Localebe, localebe1.uno )
@@ -1732,7 +1720,7 @@ End
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
     #ifdef _gcc3
-      Name = "libxmlsec1-1.dll";
+      Name = "libxmlsec1.dll";
     #else
       Name = "libxmlsec.dll";
     #endif
@@ -1743,7 +1731,7 @@ End
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
   #ifdef _gcc3
-    Name = "libxmlsec1-mscrypto-1.dll";
+    Name = "libxmlsec1-mscrypto.dll";
   #else
     Name = "libxmlsec-mscrypto.dll";
   #endif

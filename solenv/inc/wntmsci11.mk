@@ -115,6 +115,9 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-EHa
 CFLAGS_NO_EXCEPTIONS=
 
+# enable boost support for __cdecl (SAL_CALL) C++-UNO interface methods
+CDEFS+=-DBOOST_MEM_FN_ENABLE_CDECL
+
 # with the current debug switches PCH won't work
 # anyway. so keep the existing .pch intact and don't
 # touch it
@@ -186,6 +189,8 @@ CFLAGSOUTOBJ=-Fo
 # - "warning C4820: padding added after member".
 # - "warning C4503: 'identifier' : decorated name length exceeded, name was truncated"
 #   (http://msdn2.microsoft.com/en-us/library/074af4b6.aspx)
+# - "warning C4180: qualifier applied to function type has no meaning; ignored"
+#   (frequently seen with a recent boost)
 # For C, certain warnings from system headers (stdlib.h etc.) have to be
 # disabled globally (for C++, this is not necessary, as the system headers are
 # wrapped by STLport):
@@ -196,7 +201,8 @@ CFLAGSOUTOBJ=-Fo
 CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4250 -wd4251 -wd4275 \
     -wd4290 -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 \
     -wd4640 -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619 \
-    -wd4365 -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005
+    -wd4365 -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005 \
+    -wd4180
 CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)

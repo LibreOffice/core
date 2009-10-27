@@ -178,17 +178,6 @@ End
 
 #endif
 
-#ifndef WITHOUT_FONTOOO
-
-File gid_File_Exe_Msfontextract
-        BIN_FILE_BODY;
-        Dir             = gid_Dir_Program;
-        Name            = EXENAME(msfontextract);
-        Styles          = (PACKED);
-End
-
-#endif
-
 #ifdef UNX
 
 File gid_File_Bin_Open_Url
@@ -453,12 +442,6 @@ End
 #ifndef SYSTEM_BSH
 STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
 #endif
-#endif
-
-#ifdef SOLAR_JAVA
-
-STD_JAR_FILE( gid_File_Jar_Classes, classes )
-
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1393,7 +1376,6 @@ File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     Name = "/registry/schema/org/openoffice/Office/ExtendedColorScheme.xcs";
 End
 
-
 File gid_File_Oo_Office_Paths_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2252,6 +2234,17 @@ File gid_File_Registry_Spool_Oo_Accelerators_System_Xcu
 #endif
 End
 
+File gid_File_Oo_Office_Paths_System_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Paths;
+#ifdef MACOSX
+    Name = "/registry/spool/org/openoffice/Office/Paths-macosx.xcu";
+#else
+    Name = "/registry/spool/org/openoffice/Office/Paths-unxwnt.xcu";
+#endif
+End
+
 File gid_File_Registry_Spool_Oo_Common_System_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -3039,6 +3032,15 @@ File gid_File_Extension_Dictionary_Gl
 	Name = "dict-gl.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_He
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-he.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
 End
 #endif
 

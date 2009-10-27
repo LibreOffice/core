@@ -132,7 +132,7 @@ COPYRECURSE=-r
 AWK*=nawk
 GNUCOPY*=gnucp
 GNUPATCH*=gnupatch
-GNUTAR*=gtar
+GNUTAR*=/usr/sfw/bin/gtar
 DEREFERENCE=
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk

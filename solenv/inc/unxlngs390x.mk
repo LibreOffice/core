@@ -28,8 +28,10 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-# mk file for linux s390x, inherit from s390 and add some flags
 
-.INCLUDE : unxlngs3904.mk
+# mk file for Unix Linux 64bit s390x using GCC, inherit from s390 and add some flags
+
+.INCLUDE : unxlngs390.mk
 
 CDEFS+=-DS390X
+BUILD64=1

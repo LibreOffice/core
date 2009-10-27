@@ -115,9 +115,9 @@ clean:
 $(MISC)/%.unpack : $(PRJ)/download/%.tar.bz2
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := bzip2 -cd $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -125,28 +125,28 @@ $(MISC)/%.unpack : $(PRJ)/download/%.tar.bz2
 $(MISC)/%.unpack : $(PRJ)/download/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.Z | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := uncompress -c $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.Z | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := uncompress -c $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.Z | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(PRJ)/download/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(PRJ)/download/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(PRJ)/download/%.tar
     @-$(RM) $@
-    noop $(assign UNPACKCMD := $(TAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar)
+    noop $(assign UNPACKCMD := $(GNUTAR) $(TAR_EXCLUDE_SWITCH) -x$(tar_verbose_switch)f $(BACK_PATH)$(fake_back)download/$(TARFILE_NAME).tar)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
