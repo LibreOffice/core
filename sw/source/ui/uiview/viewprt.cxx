@@ -248,7 +248,10 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
             QueryBox aBox( &GetEditWin(), SW_RES( DLG_PRT_FIELDNAME ) );
             USHORT nRet = aBox.Execute();
             if( RET_CANCEL == nRet)
+            {
+                   delete pProgress;
                 return ERRCODE_IO_ABORT;
+            }
             // disable field commands
             if( RET_NO != nRet )
             {
