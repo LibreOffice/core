@@ -144,6 +144,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssreport.db \
     $(UCR)$/cssrptins.db \
     $(UCR)$/cssrptmeta.db \
+    $(UCR)$/cssoffice.db \
     $(UCR)$/cssrdf.db
 
 

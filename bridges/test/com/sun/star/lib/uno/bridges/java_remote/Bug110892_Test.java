@@ -71,7 +71,7 @@ public final class Bug110892_Test extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTest test = (XTest) UnoRuntime.queryInterface(
+            XTest test = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));
             test.start(new ClientObject());
             synchronized (lock) {

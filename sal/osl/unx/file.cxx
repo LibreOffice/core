@@ -110,6 +110,7 @@ struct FileHandle_Impl
     oslFileError setPos (sal_uInt64 uPos);
 
     sal_uInt64   getSize() const;
+    oslFileError setSize (sal_uInt64 uSize);
 
     oslFileError readAt (
         off_t        nOffset,
@@ -269,6 +270,47 @@ sal_uInt64 FileHandle_Impl::getSize() const
 {
     off_t const bufend = std::max((off_t)(0), m_bufptr) + m_buflen;
     return std::max(m_size, sal::static_int_cast< sal_uInt64 >(bufend));
+}
+
+oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
+{
+    off_t const nSize = sal::static_int_cast< off_t >(uSize);
+    if (-1 == ftruncate (m_fd, nSize))
+    {
+        /* Failure. Save original result. Try fallback algorithm */
+        oslFileError result = oslTranslateFileError (OSL_FET_ERROR, errno);
+
+        /* Check against current size. Fail upon 'shrink' */
+        if (uSize <= getSize())
+        {
+            /* Failure upon 'shrink'. Return original result */
+            return (result);
+        }
+
+        /* Save current position */
+        off_t const nCurPos = (off_t)lseek (m_fd, (off_t)0, SEEK_CUR);
+        if (nCurPos == (off_t)(-1))
+            return (result);
+
+        /* Try 'expand' via 'lseek()' and 'write()' */
+        if (-1 == lseek (m_fd, (off_t)(nSize - 1), SEEK_SET))
+            return (result);
+
+        if (-1 == write (m_fd, (char*)"", (size_t)1))
+        {
+            /* Failure. Restore saved position */
+            (void) lseek (m_fd, (off_t)(nCurPos), SEEK_SET);
+            return (result);
+        }
+
+        /* Success. Restore saved position */
+        if (-1 == lseek (m_fd, (off_t)nCurPos, SEEK_SET))
+            return (result);
+    }
+
+    OSL_FILE_TRACE("osl_setFileSize(%d, %lld) => %ld", m_fd, getSize(), nSize);
+    m_size = sal::static_int_cast< sal_uInt64 >(nSize);
+    return osl_File_E_None;
 }
 
 oslFileError FileHandle_Impl::readAt (
@@ -1282,62 +1324,11 @@ SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize )
     static sal_uInt64 const g_limit_off_t = std::numeric_limits< off_t >::max();
     if (g_limit_off_t < uSize)
         return osl_File_E_OVERFLOW;
-    off_t const nSize = sal::static_int_cast< off_t >(uSize);
 
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return (result);
+    pImpl->m_bufptr = -1, pImpl->m_buflen = 0;
 
-    if (-1 == ftruncate (pImpl->m_fd, nSize))
-    {
-        /* Failure. Try fallback algorithm */
-        off_t nCurPos;
-
-        /* Save original result */
-        result = oslTranslateFileError (OSL_FET_ERROR, errno);
-        PERROR("ftruncate", "Try osl_setFileSize [fallback]\n");
-
-        /* Check against current size. Fail upon 'shrink' */
-        if (uSize <= pImpl->getSize())
-        {
-            /* Failure upon 'shrink'. Return original result */
-            return (result);
-        }
-
-        /* Save current position *//* @@@ pImpl->m_offset @@@ */
-        nCurPos = (off_t)lseek (pImpl->m_fd, (off_t)0, SEEK_CUR);
-        if (nCurPos == (off_t)(-1))
-        {
-            PERROR("ftruncate: lseek", "Out osl_setFileSize [error]\n");
-            return (result);
-        }
-
-        /* Try 'expand' via 'lseek()' and 'write()' */
-        if (lseek (pImpl->m_fd, (off_t)(nSize - 1), SEEK_SET) < 0)
-        {
-            PERROR("ftruncate: lseek", "Out osl_setFileSize [error]\n");
-            return (result);
-        }
-        if (write (pImpl->m_fd, (char*)"", (size_t)1) < 0)
-        {
-            /* Failure. Restore saved position */
-            PERROR("ftruncate: write", "Out osl_setFileSize [error]\n");
-            if (lseek (pImpl->m_fd, (off_t)nCurPos, SEEK_SET) < 0)
-            {
-                PERROR("ftruncate: lseek", "ignoring");
-            }
-            return (result);
-        }
-
-        /* Success. Restore saved position */
-        if (lseek (pImpl->m_fd, (off_t)nCurPos, SEEK_SET) < 0)
-        {
-            PERROR("ftruncate: lseek", "Out osl_setFileSize [error]");
-            return (result);
-        }
-    }
-
-    OSL_FILE_TRACE("osl_setFileSize(%d, %lld) => %ld", pImpl->m_fd, pImpl->getSize(), nSize);
-    pImpl->m_size = sal::static_int_cast< sal_uInt64 >(nSize);
-    return osl_File_E_None;
+    return pImpl->setSize (uSize);
 }

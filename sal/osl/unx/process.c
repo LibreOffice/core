@@ -466,7 +466,7 @@ static void ChildStatusProc(void *pData)
     if ((pid = fork()) == 0)
     {
         /* Child */
-        close(channel[0]);
+        if (channel[0] != -1) close(channel[0]);
 
         if ((data.m_uid != (uid_t)-1) && ((data.m_uid != getuid()) || (data.m_gid != getgid())))
         {
@@ -500,32 +500,32 @@ static void ChildStatusProc(void *pData)
             /* Connect std IO to pipe ends */
 
             /* Write end of stdInput not used in child process */
-            close( stdInput[1] );
+            if (stdInput[1] != -1) close( stdInput[1] );
 
             /* Read end of stdOutput not used in child process */
-            close( stdOutput[0] );
+            if (stdOutput[0] != -1) close( stdOutput[0] );
 
             /* Read end of stdError not used in child process */
-            close( stdError[0] );
+            if (stdError[0] != -1) close( stdError[0] );
 
             /* Redirect pipe ends to std IO */
 
             if ( stdInput[0] != STDIN_FILENO )
             {
                 dup2( stdInput[0], STDIN_FILENO );
-                close( stdInput[0] );
+                if (stdInput[0] != -1) close( stdInput[0] );
             }
 
             if ( stdOutput[1] != STDOUT_FILENO )
             {
                 dup2( stdOutput[1], STDOUT_FILENO );
-                close( stdOutput[1] );
+                if (stdOutput[1] != -1) close( stdOutput[1] );
             }
 
             if ( stdError[1] != STDERR_FILENO )
             {
                 dup2( stdError[1], STDERR_FILENO );
-                close( stdError[1] );
+                if (stdError[1] != -1) close( stdError[1] );
             }
 
             pid=execv(data.m_pszArgs[0], (sal_Char **)data.m_pszArgs);
@@ -539,7 +539,7 @@ static void ChildStatusProc(void *pData)
         /* if we reach here, something went wrong */
         write(channel[1], &errno, sizeof(errno));
 
-        close(channel[1]);
+        if (channel[1] != -1) close(channel[1]);
 
         _exit(255);
     }
@@ -547,12 +547,12 @@ static void ChildStatusProc(void *pData)
     {   /* Parent  */
         int   status;
 
-        close(channel[1]);
+        if (channel[1] != -1) close(channel[1]);
 
         /* Close unused pipe ends */
-        close( stdInput[0] );
-        close( stdOutput[1] );
-        close( stdError[1] );
+        if (stdInput[0] != -1) close( stdInput[0] );
+        if (stdOutput[1] != -1) close( stdOutput[1] );
+        if (stdError[1] != -1) close( stdError[1] );
 
         while (((i = read(channel[0], &status, sizeof(status))) < 0))
         {
@@ -560,7 +560,7 @@ static void ChildStatusProc(void *pData)
                 break;
         }
 
-        close(channel[0]);
+        if (channel[0] != -1) close(channel[0]);
 
 
         if ((pid > 0) && (i == 0))
@@ -646,9 +646,9 @@ static void ChildStatusProc(void *pData)
             if ( pdata->m_pErrorRead )
                 *pdata->m_pErrorRead = NULL;
 
-            close( stdInput[1] );
-            close( stdOutput[0] );
-            close( stdError[0] );
+            if (stdInput[1] != -1) close( stdInput[1] );
+            if (stdOutput[0] != -1) close( stdOutput[0] );
+            if (stdError[0] != -1) close( stdError[0] );
 
             //if pid > 0 then a process was created, even if it later failed
             //e.g. bash searching for a command to execute, and we still
@@ -1124,15 +1124,6 @@ struct osl_procStat
     unsigned long nswap;      /* ? */
     unsigned long cnswap;     /* ? */
 
-    /* from 'statm' */
-    long size;                /* numbers of pages in memory */
-    long resident;            /* number of resident pages */
-    long share;               /* number of shared pages */
-    long trs;                 /* text resident size */
-    long lrs;                 /* library resident size */
-    long drs;                 /* data resident size */
-    long dt;                  /* ditry pages */
-
     /* from 'status' */
     int ruid;                 /* real uid */
     int euid;                 /* effective uid */
@@ -1155,9 +1146,10 @@ struct osl_procStat
  osl_getProcStat
  *********************************************/
 
-void osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
+sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
+    sal_Bool bRet = sal_False;
     char name[PATH_MAX + 1];
     snprintf(name, sizeof(name), "/proc/%u/stat", pid);
 
@@ -1166,11 +1158,13 @@ void osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
         char* tmp=0;
         char prstatbuf[512];
         memset(prstatbuf,0,512);
-        read(fd,prstatbuf,511);
+        bRet = read(fd,prstatbuf,511) == 511;
 
         close(fd);
         /*printf("%s\n\n",prstatbuf);*/
 
+        if (!bRet)
+            return sal_False;
 
         tmp = strrchr(prstatbuf, ')');
         *tmp = '\0';
@@ -1198,56 +1192,34 @@ void osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
                &procstat->wchan,     &procstat->nswap,   &procstat->cnswap
             );
     }
-}
-
-/**********************************************
- osl_getProcStatm
- *********************************************/
-
-void osl_getProcStatm(pid_t pid, struct osl_procStat* procstat)
-{
-    int fd = 0;
-    char name[PATH_MAX + 1];
-    snprintf(name, sizeof(name), "/proc/%u/statm", pid);
-
-    if ((fd = open(name,O_RDONLY)) >=0 )
-    {
-        char prstatmbuf[512];
-        memset(prstatmbuf,0,512);
-        read(fd,prstatmbuf,511);
-
-        close(fd);
-
-        /*      printf("\n\n%s\n\n",prstatmbuf);*/
-
-        sscanf(prstatmbuf,"%li %li %li %li %li %li %li",
-               &procstat->size, &procstat->resident, &procstat->share,
-               &procstat->trs,  &procstat->lrs,      &procstat->drs,
-               &procstat->dt
-            );
-    }
+    return bRet;
 }
 
 /**********************************************
  osl_getProcStatus
  *********************************************/
 
-void osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
+sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];
     snprintf(name, sizeof(name), "/proc/%u/status", pid);
+
+    sal_Bool bRet = sal_False;
 
     if ((fd = open(name,O_RDONLY)) >=0 )
     {
         char* tmp=0;
         char prstatusbuf[512];
         memset(prstatusbuf,0,512);
-        read(fd,prstatusbuf,511);
+        bRet = read(fd,prstatusbuf,511) == 511;
 
         close(fd);
 
         /*      printf("\n\n%s\n\n",prstatusbuf);*/
+
+        if (!bRet)
+            return sal_False;
 
         tmp = strstr(prstatusbuf,"Uid:");
         if(tmp)
@@ -1290,6 +1262,7 @@ void osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
                 );
         }
     }
+    return bRet;
 }
 
 #endif
@@ -1439,56 +1412,54 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
 #elif defined(LINUX)
 
-/*      int fd = 0;*/
-        struct osl_procStat procstat;
-        memset(&procstat,0,sizeof(procstat));
-
-        osl_getProcStat(pid, &procstat);
-        osl_getProcStatm(pid, &procstat);
-        osl_getProcStatus(pid, &procstat);
-
-        if ( Fields & osl_Process_CPUTIMES)
+        if ( (Fields & osl_Process_CPUTIMES) || (Fields & osl_Process_HEAPUSAGE) )
         {
-            /*
-             *  mfe:
-             *  We calculate only time of the process proper.
-             *  Threads are processes, we do not consider their time here!
-             *  (For this, cutime and cstime should be used, it seems not
-             *   to work in 2.0.36)
-             */
+            struct osl_procStat procstat;
+            memset(&procstat,0,sizeof(procstat));
 
-            long clktck;
-            unsigned long hz;
-            unsigned long userseconds;
-            unsigned long systemseconds;
+            if ( (Fields & osl_Process_CPUTIMES) && osl_getProcStat(pid, &procstat) )
+            {
+                /*
+                 *  mfe:
+                 *  We calculate only time of the process proper.
+                 *  Threads are processes, we do not consider their time here!
+                 *  (For this, cutime and cstime should be used, it seems not
+                 *   to work in 2.0.36)
+                 */
 
-            clktck = sysconf(_SC_CLK_TCK);
-            if (clktck < 0) {
-                return osl_Process_E_Unknown;
+                long clktck;
+                unsigned long hz;
+                unsigned long userseconds;
+                unsigned long systemseconds;
+
+                clktck = sysconf(_SC_CLK_TCK);
+                if (clktck < 0) {
+                    return osl_Process_E_Unknown;
+                }
+                hz = (unsigned long) clktck;
+
+                userseconds = procstat.utime/hz;
+                systemseconds = procstat.stime/hz;
+
+                 pInfo->UserTime.Seconds   = userseconds;
+                pInfo->UserTime.Nanosec   = procstat.utime - (userseconds * hz);
+                pInfo->SystemTime.Seconds = systemseconds;
+                pInfo->SystemTime.Nanosec = procstat.stime - (systemseconds * hz);
+
+                pInfo->Fields |= osl_Process_CPUTIMES;
             }
-            hz = (unsigned long) clktck;
 
-            userseconds = procstat.utime/hz;
-            systemseconds = procstat.stime/hz;
+            if ( (Fields & osl_Process_HEAPUSAGE) && osl_getProcStatus(pid, &procstat) )
+            {
+                /*
+                 *  mfe:
+                 *  vm_data (found in status) shows the size of the data segment
+                 *  it a rough approximation of the core heap size
+                 */
+                pInfo->HeapUsage = procstat.vm_data*1024;
 
-            pInfo->UserTime.Seconds   = userseconds;
-            pInfo->UserTime.Nanosec   = procstat.utime - (userseconds * hz);
-            pInfo->SystemTime.Seconds = systemseconds;
-            pInfo->SystemTime.Nanosec = procstat.stime - (systemseconds * hz);
-
-            pInfo->Fields |= osl_Process_CPUTIMES;
-        }
-
-        if (Fields & osl_Process_HEAPUSAGE)
-        {
-            /*
-             *  mfe:
-             *  vm_data (found in status) shows the size of the data segment
-             *  it a rough approximation of the core heap size
-             */
-            pInfo->HeapUsage = procstat.vm_data*1024;
-
-            pInfo->Fields |= osl_Process_HEAPUSAGE;
+                pInfo->Fields |= osl_Process_HEAPUSAGE;
+            }
         }
 
         return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;

@@ -103,6 +103,7 @@ struct FileHandle_Impl
     oslFileError  setPos (sal_uInt64 uPos);
 
     sal_uInt64    getSize() const;
+    oslFileError  setSize (sal_uInt64 uPos);
 
     oslFileError readAt (
         LONGLONG     nOffset,
@@ -251,6 +252,23 @@ sal_uInt64 FileHandle_Impl::getSize() const
 {
     LONGLONG bufend = std::max((LONGLONG)(0), m_bufptr) + m_buflen;
     return std::max(m_size, sal::static_int_cast< sal_uInt64 >(bufend));
+}
+
+oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
+{
+    LARGE_INTEGER nDstPos; nDstPos.QuadPart = sal::static_int_cast< LONGLONG >(uSize);
+    if (!::SetFilePointerEx(m_hFile, nDstPos, 0, FILE_BEGIN))
+        return oslTranslateFileError( GetLastError() );
+
+    if (!::SetEndOfFile(m_hFile))
+        return oslTranslateFileError( GetLastError() );
+    m_size = uSize;
+
+    nDstPos.QuadPart = m_offset;
+    if (!::SetFilePointerEx(m_hFile, nDstPos, 0, FILE_BEGIN))
+        return oslTranslateFileError( GetLastError() );
+
+    return osl_File_E_None;
 }
 
 oslFileError FileHandle_Impl::readAt (
@@ -1049,20 +1067,9 @@ SAL_CALL osl_setFileSize (oslFileHandle Handle, sal_uInt64 uSize)
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return (result);
+    pImpl->m_bufptr = -1, pImpl->m_buflen = 0;
 
-    LARGE_INTEGER nDstPos; nDstPos.QuadPart = sal::static_int_cast< LONGLONG >(uSize);
-    if (!::SetFilePointerEx(pImpl->m_hFile, nDstPos, 0, FILE_BEGIN))
-        return oslTranslateFileError( GetLastError() );
-
-    if (!::SetEndOfFile(pImpl->m_hFile))
-        return oslTranslateFileError( GetLastError() );
-    pImpl->m_size = uSize;
-
-    nDstPos.QuadPart = pImpl->m_offset;
-    if (!::SetFilePointerEx(pImpl->m_hFile, nDstPos, 0, FILE_BEGIN))
-        return oslTranslateFileError( GetLastError() );
-
-    return osl_File_E_None;
+    return pImpl->setSize (uSize);
 }
 
 //##################################################################
