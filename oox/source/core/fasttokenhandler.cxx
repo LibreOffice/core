@@ -28,32 +28,68 @@
  *
  ************************************************************************/
 
-#include "oox/token/propertylist.hxx"
-#include "properties.hxx"
+#include "oox/core/fasttokenhandler.hxx"
+#include <osl/mutex.hxx>
+#include "oox/token/tokenmap.hxx"
+
+using ::rtl::OUString;
+using ::osl::Mutex;
+using ::osl::MutexGuard;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::RuntimeException;
 
 namespace oox {
+namespace core {
+
+// ============================================================================
 
 namespace {
 
-// include auto-generated property name lists
-#include "propertywords.inc"
+Mutex& lclGetTokenMutex()
+{
+    static Mutex aMutex;
+    return aMutex;
+}
 
 } // namespace
 
 // ============================================================================
 
-PropertyList::PropertyList()
+FastTokenHandler::FastTokenHandler() :
+    mrTokenMap( StaticTokenMap::get() )
 {
-    reserve( static_cast< size_t >( PROP_COUNT ) );
-    for( sal_Int32 nIdx = 0; nIdx < PROP_COUNT; ++nIdx )
-        push_back( ::rtl::OUString::createFromAscii( propertywordlist[ nIdx ] ) );
 }
 
-PropertyList::~PropertyList()
+FastTokenHandler::~FastTokenHandler()
 {
+}
+
+sal_Int32 FastTokenHandler::getToken( const OUString& rIdentifier ) throw( RuntimeException )
+{
+    MutexGuard aGuard( lclGetTokenMutex() );
+    return mrTokenMap.getTokenFromUnicode( rIdentifier );
+}
+
+OUString FastTokenHandler::getIdentifier( sal_Int32 nToken ) throw( RuntimeException )
+{
+    MutexGuard aGuard( lclGetTokenMutex() );
+    return mrTokenMap.getUnicodeTokenName( nToken );
+}
+
+Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken ) throw( RuntimeException )
+{
+    MutexGuard aGuard( lclGetTokenMutex() );
+    return mrTokenMap.getUtf8TokenName( nToken );
+}
+
+sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdentifier ) throw( RuntimeException )
+{
+    MutexGuard aGuard( lclGetTokenMutex() );
+    return mrTokenMap.getTokenFromUtf8( rIdentifier );
 }
 
 // ============================================================================
 
+} // namespace core
 } // namespace oox
 

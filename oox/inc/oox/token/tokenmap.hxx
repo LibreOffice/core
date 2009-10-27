@@ -28,40 +28,56 @@
  *
  ************************************************************************/
 
-#ifndef OOX_CORE_FASTTOKENHANDLER_HXX
-#define OOX_CORE_FASTTOKENHANDLER_HXX
+#ifndef OOX_TOKEN_TOKENMAP_HXX
+#define OOX_TOKEN_TOKENMAP_HXX
 
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <cppuhelper/implbase1.hxx>
-
-namespace oox { class TokenMap; }
+#include <vector>
+#include <rtl/instance.hxx>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace oox {
-namespace core {
 
 // ============================================================================
 
-/** Wrapper implementing the com.sun.star.xml.sax.XFastTokenHandler API interface
-    that provides access to the tokens generated from the internal token name list.
- */
-class FastTokenHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastTokenHandler >
+class TokenMap
 {
 public:
-    explicit            FastTokenHandler();
-    virtual             ~FastTokenHandler();
+    explicit            TokenMap();
+                        ~TokenMap();
 
-    virtual sal_Int32 SAL_CALL getToken( const ::rtl::OUString& rIdentifier ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getIdentifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const ::com::sun::star::uno::Sequence< sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException);
+    /** Returns the Unicode name of the passed token identifier. */
+    ::rtl::OUString     getUnicodeTokenName( sal_Int32 nToken ) const;
+
+    /** Returns the token identifier for the passed Unicode token name. */
+    sal_Int32           getTokenFromUnicode( const ::rtl::OUString& rUnicodeName ) const;
+
+    /** Returns the UTF8 name of the passed token identifier as byte sequence. */
+    ::com::sun::star::uno::Sequence< sal_Int8 >
+                        getUtf8TokenName( sal_Int32 nToken ) const;
+
+    /** Returns the token identifier for the passed UTF8 token name. */
+    sal_Int32           getTokenFromUtf8(
+                            const ::com::sun::star::uno::Sequence< sal_Int8 >& rUtf8Name ) const;
 
 private:
-    const TokenMap&     mrTokenMap;     /// Reference to global token map singleton.
+    struct TokenName
+    {
+        ::rtl::OUString maUniName;
+        ::com::sun::star::uno::Sequence< sal_Int8 > maUtf8Name;
+    };
+    typedef ::std::vector< TokenName > TokenNameVector;
+
+    TokenNameVector     maTokenNames;
+
 };
 
 // ============================================================================
 
-} // namespace core
+struct StaticTokenMap : public ::rtl::Static< TokenMap, StaticTokenMap > {};
+
+// ============================================================================
+
 } // namespace oox
 
 #endif

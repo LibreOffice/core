@@ -52,7 +52,7 @@ OoxWorkbookFragmentBase::OoxWorkbookFragmentBase(
 // ============================================================================
 
 OoxWorksheetFragmentBase::OoxWorksheetFragmentBase( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        const OUString& rFragmentPath, ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
     WorksheetHelperRoot( rHelper, xProgressBar, eSheetType, nSheet )
 {
@@ -143,68 +143,12 @@ BiffFragmentHandler::BiffFragmentHandler( const BiffFragmentHandler& rHandler ) 
 
 BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff )
 {
-    BiffFragmentType eFragment = BIFF_FRAGMENT_UNKNOWN;
-    if( mrStrm.startNextRecord() )
-    {
-        /*  #i23425# Don't rely on BOF record ID to read BOF contents, but on
-            the detected BIFF version. */
-        if( isBofRecord() )
-        {
-            // BOF is always written unencrypted
-            mrStrm.enableDecoder( false );
-            mrStrm.skip( 2 );
-            sal_uInt16 nType = mrStrm.readuInt16();
+    return mrStrm.startNextRecord() ? implStartFragment( eBiff ) : BIFF_FRAGMENT_UNKNOWN;
+}
 
-            // decide which fragment types are valid for current BIFF version
-            switch( eBiff )
-            {
-                case BIFF2: switch( nType )
-                {
-                    case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
-                    // #i51490# Excel interprets invalid types as worksheet
-                    default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
-                }
-                break;
-
-                case BIFF3: switch( nType )
-                {
-                    case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
-                    case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_UNKNOWN;      break;
-                    // #i51490# Excel interprets invalid types as worksheet
-                    default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
-                };
-                break;
-
-                case BIFF4: switch( nType )
-                {
-                    case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
-                    case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_WORKSPACE;    break;
-                    // #i51490# Excel interprets invalid types as worksheet
-                    default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
-                };
-                break;
-
-                case BIFF5:
-                case BIFF8: switch( nType )
-                {
-                    case BIFF_BOF_GLOBALS:  eFragment = BIFF_FRAGMENT_GLOBALS;      break;
-                    case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_CHARTSHEET;   break;
-                    case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
-                    case BIFF_BOF_MODULE:   eFragment = BIFF_FRAGMENT_MODULESHEET;  break;
-                    case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_UNKNOWN;      break;
-                    // #i51490# Excel interprets invalid types as worksheet
-                    default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
-                };
-                break;
-
-                case BIFF_UNKNOWN: break;
-            }
-        }
-    }
-    return eFragment;
+BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff, sal_Int64 nRecHandle )
+{
+    return mrStrm.startRecordByHandle( nRecHandle ) ? implStartFragment( eBiff ) : BIFF_FRAGMENT_UNKNOWN;
 }
 
 bool BiffFragmentHandler::skipFragment()
@@ -213,6 +157,69 @@ bool BiffFragmentHandler::skipFragment()
         if( isBofRecord() )
             skipFragment();
     return !mrStrm.isEof() && (mrStrm.getRecId() == BIFF_ID_EOF);
+}
+
+BiffFragmentType BiffFragmentHandler::implStartFragment( BiffType eBiff )
+{
+    BiffFragmentType eFragment = BIFF_FRAGMENT_UNKNOWN;
+    /*  #i23425# Don't rely on BOF record ID to read BOF contents, but on
+        the detected BIFF version. */
+    if( isBofRecord() )
+    {
+        // BOF is always written unencrypted
+        mrStrm.enableDecoder( false );
+        mrStrm.skip( 2 );
+        sal_uInt16 nType = mrStrm.readuInt16();
+
+        // decide which fragment types are valid for current BIFF version
+        switch( eBiff )
+        {
+            case BIFF2: switch( nType )
+            {
+                case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
+                case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
+                // #i51490# Excel interprets invalid types as worksheet
+                default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
+            }
+            break;
+
+            case BIFF3: switch( nType )
+            {
+                case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
+                case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
+                case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_UNKNOWN;      break;
+                // #i51490# Excel interprets invalid types as worksheet
+                default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
+            };
+            break;
+
+            case BIFF4: switch( nType )
+            {
+                case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_EMPTYSHEET;   break;
+                case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
+                case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_WORKSPACE;    break;
+                // #i51490# Excel interprets invalid types as worksheet
+                default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
+            };
+            break;
+
+            case BIFF5:
+            case BIFF8: switch( nType )
+            {
+                case BIFF_BOF_GLOBALS:  eFragment = BIFF_FRAGMENT_GLOBALS;      break;
+                case BIFF_BOF_CHART:    eFragment = BIFF_FRAGMENT_CHARTSHEET;   break;
+                case BIFF_BOF_MACRO:    eFragment = BIFF_FRAGMENT_MACROSHEET;   break;
+                case BIFF_BOF_MODULE:   eFragment = BIFF_FRAGMENT_MODULESHEET;  break;
+                case BIFF_BOF_WORKSPACE:eFragment = BIFF_FRAGMENT_UNKNOWN;      break;
+                // #i51490# Excel interprets invalid types as worksheet
+                default:                eFragment = BIFF_FRAGMENT_WORKSHEET;
+            };
+            break;
+
+            case BIFF_UNKNOWN: break;
+        }
+    }
+    return eFragment;
 }
 
 // ============================================================================
@@ -228,7 +235,7 @@ BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelpe
 // ============================================================================
 
 BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragmentBase& rParent,
-        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     BiffFragmentHandler( rParent ),
     WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
 {
@@ -237,7 +244,7 @@ BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragment
 // ============================================================================
 
 BiffSkipWorksheetFragment::BiffSkipWorksheetFragment(
-        const BiffWorkbookFragmentBase& rParent, ISegmentProgressBarRef xProgressBar, sal_Int32 nSheet ) :
+        const BiffWorkbookFragmentBase& rParent, ISegmentProgressBarRef xProgressBar, sal_Int16 nSheet ) :
     BiffWorksheetFragmentBase( rParent, xProgressBar, SHEETTYPE_EMPTYSHEET, nSheet )
 {
 }

@@ -1541,6 +1541,7 @@ dashLongHeavy
 dashSmallGap
 dashUpDiag
 dashVert
+dashdot
 dashed
 dashedHeavy
 dashedSmall
@@ -3063,6 +3064,9 @@ long
 longCurve
 longFileNames
 longText
+longdash
+longdashdot
+longdashdotdot
 loop
 low
 lowKashida
@@ -4448,6 +4452,10 @@ shininess
 shorebirdTracks
 short
 shortcutKey
+shortdash
+shortdashdot
+shortdashdotdot
+shortdot
 show
 showAll
 showAnimation
