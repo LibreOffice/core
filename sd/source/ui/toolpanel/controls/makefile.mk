@@ -66,7 +66,6 @@ SLOFILES =      							\
     $(SLO)$/TableDesignPanel.obj			\
     $(SLO)$/AnimationSchemesPanel.obj
 
-
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk

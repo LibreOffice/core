@@ -265,6 +265,24 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXParseException& r )
     {
+        // sax parser sends wrapped exceptions,
+        // try to find the original one
+        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        sal_Bool bTryChild = sal_True;
+
+        while( bTryChild )
+        {
+            xml::sax::SAXException aTmp;
+            if ( aSaxEx.WrappedException >>= aTmp )
+                aSaxEx = aTmp;
+            else
+                bTryChild = sal_False;
+        }
+
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( aSaxEx.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -295,7 +313,10 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXException& r )
     {
-        (void)r;
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( r.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
