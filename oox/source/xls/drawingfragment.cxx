@@ -43,7 +43,9 @@
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 #include "oox/vml/vmlshape.hxx"
+#include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/xls/formulaparser.hxx"
+#include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
@@ -537,10 +539,50 @@ void OoxDrawingFragment::onEndElement( const OUString& rChars )
 
 // ============================================================================
 
+namespace {
+
+class VmlFindNoteFunc
+{
+public:
+    explicit            VmlFindNoteFunc( const CellAddress& rPos );
+    bool                operator()( const ::oox::vml::ShapeBase& rShape ) const;
+
+private:
+    sal_Int32           mnCol;
+    sal_Int32           mnRow;
+};
+
+VmlFindNoteFunc::VmlFindNoteFunc( const CellAddress& rPos ) :
+    mnCol( rPos.Column ),
+    mnRow( rPos.Row )
+{
+}
+
+bool VmlFindNoteFunc::operator()( const ::oox::vml::ShapeBase& rShape ) const
+{
+    const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = rShape.getShapeModel().mxClientData;
+    return rxClientData.get() && (rxClientData->mnCol == mnCol) && (rxClientData->mnRow == mnRow);
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
 VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
     ::oox::vml::Drawing( rHelper.getOoxFilter(), rHelper.getDrawPage(), ::oox::vml::VMLDRAWING_EXCEL ),
     WorksheetHelper( rHelper )
 {
+}
+
+const ::oox::vml::ShapeBase* VmlDrawing::getNoteShape( const CellAddress& rPos ) const
+{
+    return getShapes().findShape( VmlFindNoteFunc( rPos ) );
+}
+
+bool VmlDrawing::isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const
+{
+    const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = rShape.getShapeModel().mxClientData;
+    return !rxClientData.get() || (rxClientData->mnObjType != XML_Note);
 }
 
 bool VmlDrawing::convertShapeClientAnchor( Rectangle& orShapeRect, const OUString& rShapeAnchor ) const

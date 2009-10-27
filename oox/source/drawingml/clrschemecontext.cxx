@@ -30,6 +30,7 @@
 
 #include "oox/drawingml/clrschemecontext.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "tokens.hxx"
 
 using namespace ::oox::core;

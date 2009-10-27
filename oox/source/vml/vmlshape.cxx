@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
@@ -75,57 +74,6 @@ namespace vml {
 
 namespace {
 
-sal_Int32 lclGetMeasure( const XmlFilterBase& /*rFilter*/, const OUString& rValue, sal_Int32 nRefValue )
-{
-    // default for missing values is 0
-    if( rValue.getLength() == 0 )
-        return 0;
-
-    // TODO: according to spec, value may contain "auto"
-    if( rValue.equalsAscii( "auto" ) )
-        return nRefValue;
-
-    // extract the double value and find start position of unit characters
-    rtl_math_ConversionStatus eConvStatus = rtl_math_ConversionStatus_Ok;
-    sal_Int32 nEndPos = 0;
-    double fValue = ::rtl::math::stringToDouble( rValue, '.', '\0', &eConvStatus, &nEndPos );
-    if( (eConvStatus != rtl_math_ConversionStatus_Ok) || (fValue == 0.0) )
-        return 0;
-
-    // process trailing unit, convert to 1/100 mm
-    static const OUString saPx = CREATE_OUSTRING( "px" );
-    OUString aUnit = ((0 < nEndPos) && (nEndPos < rValue.getLength())) ? rValue.copy( nEndPos ) : saPx;
-    if( aUnit.getLength() == 2 )
-    {
-        sal_Unicode cChar1 = aUnit[ 0 ];
-        sal_Unicode cChar2 = aUnit[ 1 ];
-        if( (cChar1 == 'i') && (cChar2 == 'n') )        // 1 inch = 2540 1/100mm
-            fValue *= 2540.0;
-        else if( (cChar1 == 'c') && (cChar2 == 'm') )   // 1 cm = 1000 1/100mm
-            fValue *= 1000.0;
-        else if( (cChar1 == 'm') && (cChar2 == 'm') )   // 1 mm = 100 1/100mm
-            fValue *= 100.0;
-        else if( (cChar1 == 'p') && (cChar2 == 't') )   // 1 point = 1/72 inch
-            fValue *= 2540.0 / 72.0;
-        else if( (cChar1 == 'p') && (cChar2 == 'c') )   // 1 pica = 1/6 inch
-            fValue *= 2540.0 / 6.0;
-        else if( (cChar1 == 'e') && (cChar2 == 'm') )   // relative to refvalue
-            fValue *= nRefValue;
-        else if( (cChar1 == 'p') && (cChar2 == 'x') )   // 1 pixel, dependent on output device
-            fValue *= 1.0;
-    }
-    else if( (aUnit.getLength() == 1) && (aUnit[ 0 ] == '%') )
-    {
-        fValue *= nRefValue / 100.0;
-    }
-    else
-    {
-        OSL_ENSURE( false, "lclGetMeasure - unknown measure unit" );
-        fValue = nRefValue;
-    }
-    return static_cast< sal_Int32 >( fValue + 0.5 );
-}
-
 Point lclGetAbsPoint( const Point& rRelPoint, const Rectangle& rShapeRect, const Rectangle& rCoordSys )
 {
     double fWidthRatio = static_cast< double >( rShapeRect.Width ) / rCoordSys.Width;
@@ -164,7 +112,7 @@ Reference< XShape > lclCreateXShape( const XmlFilterBase& rFilter, const OUStrin
     return xShape;
 }
 
-void lclInsertXShape( const Reference< XShapes >& rxShapes, const Reference< XShape >& rxShape, const Rectangle& rShapeRect )
+void lclInsertXShape( const Reference< XShapes >& rxShapes, const Reference< XShape >& rxShape )
 {
     OSL_ENSURE( rxShapes.is(), "lclInsertXShape - missing XShapes container" );
     OSL_ENSURE( rxShape.is(), "lclInsertXShape - missing XShape" );
@@ -172,12 +120,19 @@ void lclInsertXShape( const Reference< XShapes >& rxShapes, const Reference< XSh
     {
         // insert shape into passed shape collection (maybe drawpage or group shape)
         rxShapes->add( rxShape );
-        // set position/size
-        rxShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
-        rxShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
     }
     catch( Exception& )
     {
+    }
+}
+
+void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rShapeRect )
+{
+    OSL_ENSURE( rxShape.is(), "lclSetXShapeRect - missing XShape" );
+    if( rxShape.is() )
+    {
+        rxShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+        rxShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
     }
 }
 
@@ -185,7 +140,8 @@ Reference< XShape > lclCreateAndInsertXShape( const XmlFilterBase& rFilter,
         const Reference< XShapes >& rxShapes, const OUString& rService, const Rectangle& rShapeRect )
 {
     Reference< XShape > xShape = lclCreateXShape( rFilter, rService );
-    lclInsertXShape( rxShapes, xShape, rShapeRect );
+    lclInsertXShape( rxShapes, xShape );
+    lclSetXShapeRect( xShape, rShapeRect );
     return xShape;
 }
 
@@ -199,17 +155,13 @@ ShapeTypeModel::ShapeTypeModel()
 
 void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
 {
-    monShapeType.assignIfUsed( rSource.monShapeType );
-    monCoordLeft.assignIfUsed( rSource.monCoordLeft );
-    monCoordTop.assignIfUsed( rSource.monCoordTop );
-    monCoordWidth.assignIfUsed( rSource.monCoordWidth );
-    monCoordHeight.assignIfUsed( rSource.monCoordHeight );
+    moShapeType.assignIfUsed( rSource.moShapeType );
+    moCoordPos.assignIfUsed( rSource.moCoordPos );
+    moCoordSize.assignIfUsed( rSource.moCoordSize );
     /*  The style properties position, left, top, width, height, margin-left,
         margin-top are not derived from shape template to shape. */
-    mobStroked.assignIfUsed( rSource.mobStroked );
-    moStrokeColor.assignIfUsed( rSource.moStrokeColor );
-    mobFilled.assignIfUsed( rSource.mobFilled );
-    moFillColor.assignIfUsed( rSource.moFillColor );
+    maStrokeModel.assignUsed( rSource.maStrokeModel );
+    maFillModel.assignUsed( rSource.maFillModel );
     moGraphicPath.assignIfUsed( rSource.moGraphicPath );
     moGraphicTitle.assignIfUsed( rSource.moGraphicTitle );
 }
@@ -232,11 +184,9 @@ OUString ShapeType::getGraphicPath() const
 
 Rectangle ShapeType::getCoordSystem() const
 {
-    return Rectangle(
-        maTypeModel.monCoordLeft.get( 0 ),
-        maTypeModel.monCoordTop.get( 0 ),
-        maTypeModel.monCoordWidth.get( 1000 ),
-        maTypeModel.monCoordHeight.get( 1000 ) );
+    Int32Pair aCoordPos = maTypeModel.moCoordPos.get( Int32Pair( 0, 0 ) );
+    Int32Pair aCoordSize = maTypeModel.moCoordSize.get( Int32Pair( 1000, 1000 ) );
+    return Rectangle( aCoordPos.first, aCoordPos.second, aCoordSize.first, aCoordSize.second );
 }
 
 Rectangle ShapeType::getRectangle( const ShapeParentAnchor* pParentAnchor ) const
@@ -250,10 +200,10 @@ Rectangle ShapeType::getAbsRectangle() const
 {
     const XmlFilterBase& rFilter = mrDrawing.getFilter();
     return Rectangle(
-        lclGetMeasure( rFilter, maTypeModel.maLeft, 0 ) + lclGetMeasure( rFilter, maTypeModel.maMarginLeft, 0 ),
-        lclGetMeasure( rFilter, maTypeModel.maTop, 0 ) + lclGetMeasure( rFilter, maTypeModel.maMarginTop, 0 ),
-        lclGetMeasure( rFilter, maTypeModel.maWidth, 0 ),
-        lclGetMeasure( rFilter, maTypeModel.maHeight, 0 ) );
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maMarginLeft, 0, true, true ),
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maMarginTop, 0, false, true ),
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maWidth, 0, true, true ),
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maHeight, 0, false, true ) );
 }
 
 Rectangle ShapeType::getRelRectangle() const
@@ -269,7 +219,10 @@ Rectangle ShapeType::getRelRectangle() const
 
 ShapeClientData::ShapeClientData() :
     mnObjType( XML_TOKEN_INVALID ),
-    mbPrintObject( true )
+    mnCol( -1 ),
+    mnRow( -1 ),
+    mbPrintObject( true ),
+    mbVisible( false )
 {
 }
 
@@ -313,27 +266,55 @@ const ShapeBase* ShapeBase::getChildById( const OUString& ) const
 Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxShapes, const ShapeParentAnchor* pParentAnchor ) const
 {
     Reference< XShape > xShape;
+    if( mrDrawing.isShapeSupported( *this ) )
+    {
+        /*  Calculate shape rectangle. Applications may do something special
+            according to some imported shape client data (e.g. Excel cell anchor). */
+        Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
+        // convert the shape, if the calculated rectangle is not empty
+        if( ((aShapeRect.Width > 0) || (aShapeRect.Height > 0)) && rxShapes.is() )
+            xShape = implConvertAndInsert( rxShapes, aShapeRect );
+    }
+    return xShape;
+}
+
+void ShapeBase::convertFormatting( const Reference< XShape >& rxShape, const ShapeParentAnchor* pParentAnchor ) const
+{
+    if( rxShape.is() )
+    {
+        /*  Calculate shape rectangle. Applications may do something special
+            according to some imported shape client data (e.g. Excel cell anchor). */
+        Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
+        // convert the shape, if the calculated rectangle is not empty
+        if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
+        {
+            lclSetXShapeRect( rxShape, aShapeRect );
+            convertShapeProperties( rxShape );
+        }
+    }
+}
+
+// protected ------------------------------------------------------------------
+
+Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor ) const
+{
     /*  Calculate shape rectangle. Applications may do something special
         according to some imported shape client data (e.g. Excel cell anchor). */
     Rectangle aShapeRect;
     if( !maShapeModel.mxClientData.get() || !mrDrawing.convertShapeClientAnchor( aShapeRect, maShapeModel.mxClientData->maAnchor ) )
         aShapeRect = getRectangle( pParentAnchor );
-    // convert the shape, if the calculated rectangle is not empty
-    if( ((aShapeRect.Width > 0) || (aShapeRect.Height > 0)) && rxShapes.is() )
-        xShape = implConvertAndInsert( rxShapes, aShapeRect );
-    return xShape;
+    return aShapeRect;
 }
-
-// protected ------------------------------------------------------------------
 
 void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
 {
-    // shape properties
-    PropertySet aPropSet( rxShape );
+    PropertyMap aPropMap;
 
-    // fill style
-    bool bFilled = maTypeModel.mobFilled.get( true );
-    aPropSet.setProperty( PROP_FillStyle, bFilled ? ::com::sun::star::drawing::FillStyle_SOLID : ::com::sun::star::drawing::FillStyle_NONE );
+    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, mrDrawing.getFilter() );
+    maTypeModel.maFillModel.pushToPropMap( aPropMap, mrDrawing.getFilter() );
+
+    PropertySet aPropSet( rxShape );
+    aPropSet.setProperties( aPropMap );
 }
 
 // ============================================================================
@@ -405,7 +386,7 @@ Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes 
     {
         // create the custom shape geometry
         Reference< XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY_THROW );
-        xDefaulter->createCustomShapeDefaults( OUString::valueOf( maTypeModel.monShapeType.get( 0 ) ) );
+        xDefaulter->createCustomShapeDefaults( OUString::valueOf( maTypeModel.moShapeType.get( 0 ) ) );
         // convert common properties
         convertShapeProperties( xShape );
     }
@@ -537,21 +518,27 @@ const ShapeBase* GroupShape::getChildById( const OUString& rShapeId ) const
 
 Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    Reference< XShape > xShape;
+    Reference< XShape > xGroupShape;
     // check that this shape contains children and a valid coordinate system
     ShapeParentAnchor aParentAnchor;
     aParentAnchor.maShapeRect = rShapeRect;
     aParentAnchor.maCoordSys = getCoordSystem();
     if( !mxChildren->empty() && (aParentAnchor.maCoordSys.Width > 0) && (aParentAnchor.maCoordSys.Height > 0) ) try
     {
-        xShape = lclCreateAndInsertXShape( mrDrawing.getFilter(), rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" ), rShapeRect );
-        Reference< XShapes > xShapes( xShape, UNO_QUERY_THROW );
-        mxChildren->convertAndInsert( xShapes, &aParentAnchor );
+        xGroupShape = lclCreateAndInsertXShape( mrDrawing.getFilter(), rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" ), rShapeRect );
+        Reference< XShapes > xChildShapes( xGroupShape, UNO_QUERY_THROW );
+        mxChildren->convertAndInsert( xChildShapes, &aParentAnchor );
+        // no child shape has been created - delete the group shape
+        if( !xChildShapes->hasElements() )
+        {
+            rxShapes->remove( xGroupShape );
+            xGroupShape.clear();
+        }
     }
     catch( Exception& )
     {
     }
-    return xShape;
+    return xGroupShape;
 }
 
 // ============================================================================

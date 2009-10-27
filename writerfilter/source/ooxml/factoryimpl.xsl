@@ -66,7 +66,7 @@
   <xsl:param name="prefix"/>
   
   <xsl:include href="factorytools.xsl"/>
-
+  
 <xsl:template name="factorycreatecontextfromfactory">
     <xsl:text>
 uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastChildContextFromFactory
@@ -256,6 +256,7 @@ string fastTokenToId(sal_uInt32 nToken)
 
       @param kind     the sprm kind for which to generate the case labels
   -->
+  
   <xsl:template name="sprmkindcase">
     <xsl:param name="kind"/>
     <xsl:for-each select="key('resources-with-kind', $kind)/element">

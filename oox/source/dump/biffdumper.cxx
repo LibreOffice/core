@@ -685,12 +685,12 @@ sal_uInt16 BiffObjectBase::dumpRepeatedRecId()
 
 void BiffObjectBase::dumpFrHeader( bool bWithFlags, bool bWithRange )
 {
-    dumpHex< sal_uInt16 >( "rec-id", getRecNames() );
-    sal_Int16 nFlags = bWithFlags ? dumpHex< sal_uInt16 >( "flags", "FR-FLAGS" ) : 0x0001;
+    dumpHex< sal_uInt16 >( "fr-rec-id", getRecNames() );
+    sal_Int16 nFlags = bWithFlags ? dumpHex< sal_uInt16 >( "fr-flags", "FR-FLAGS" ) : 0x0001;
     if( bWithRange )
     {
         if( getFlag< sal_uInt16 >( nFlags, 0x0001 ) )
-            dumpRange( "range" );
+            dumpRange( "fr-range" );
         else
             dumpUnused( 8 );
     }
@@ -1864,6 +1864,18 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff >= BIFF8 ) dumpHex< sal_uInt16 >( "flags", "CHPIE-FLAGS" );
         break;
 
+        case BIFF_ID_CHPIVOTFLAGS:
+            dumpRepeatedRecId();
+            dumpUnused( 2 );
+            dumpHex< sal_uInt16 >( "flags", "CHPIVOTFLAGS-FLAGS" );
+        break;
+
+        case BIFF8_ID_CHPIVOTREF:
+            dumpRepeatedRecId();
+            dumpUnused( 4 );
+            dumpUniString( "ref", BIFF_STR_8BITLENGTH );
+        break;
+
         case BIFF_ID_CHPLOTGROWTH:
             dumpFix< sal_Int32 >( "horizontal-growth" );
             dumpFix< sal_Int32 >( "vertical-growth" );
@@ -2698,12 +2710,21 @@ void WorkbookStreamObject::implDumpRecordBody()
             sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "STYLE-FLAGS" );
             if( getFlag( nFlags, BIFF_STYLE_BUILTIN ) )
             {
-                dumpDec< sal_uInt8 >( "builtin-idx", "STYLE-BUILTIN" );
-                dumpDec< sal_uInt8 >( "outline-level" );
+                dumpDec< sal_Int8 >( "builtin-idx", "STYLE-BUILTIN" );
+                dumpDec< sal_Int8 >( "outline-level" );
             }
             else
                 dumpString( "style-name", BIFF_STR_8BITLENGTH );
         }
+        break;
+
+        case BIFF_ID_STYLEEXT:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt8 >( "flags", "STYLEEXT-FLAGS" );
+            dumpDec< sal_uInt8 >( "category", "STYLEEXT-CATEGORY" );
+            dumpDec< sal_Int8 >( "builtin-idx", "STYLEEXT-BUILTIN" );
+            dumpDec< sal_Int8 >( "outline-level" );
+            dumpUnicodeArray( "style-name", rStrm.readuInt16() );
         break;
 
         case BIFF_ID_SXEXT:
@@ -2775,6 +2796,10 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
             else
                 dumpColorABGR( "grid-color" );
+        break;
+
+        case BIFF_ID_WRITEACCESS:
+            dumpString( "user-name", BIFF_STR_8BITLENGTH );
         break;
 
         case BIFF_ID_XCT:
@@ -2855,7 +2880,7 @@ OUString WorkbookStreamObject::dumpPivotString( const String& rName, sal_uInt16 
     if( nStrLen != BIFF_PT_NOSTRING )
     {
         aString = (getBiff() == BIFF8) ?
-            getBiffStream().readUniString( nStrLen ) :
+            getBiffStream().readUniStringBody( nStrLen ) :
             getBiffStream().readCharArrayUC( nStrLen, getBiffData().getTextEncoding() );
         writeStringItem( rName, aString );
     }

@@ -1369,7 +1369,7 @@ void PivotCache::importDConUrl( BiffInputStream& rStrm )
 void PivotCache::finalizeInternalSheetSource()
 {
     // resolve sheet name to sheet index
-    sal_Int32 nSheet = getWorksheets().getCalcSheetIndex( maSheetSrcModel.maSheet );
+    sal_Int16 nSheet = getWorksheets().getCalcSheetIndex( maSheetSrcModel.maSheet );
 
     // if cache is based on a defined name or table, try to resolve to cell range
     if( maSheetSrcModel.maDefName.getLength() > 0 )
@@ -1393,7 +1393,7 @@ void PivotCache::finalizeInternalSheetSource()
     else if( nSheet >= 0 )
     {
         // insert sheet index into the range, range address will be checked below
-        maSheetSrcModel.maRange.Sheet = static_cast< sal_Int16 >( nSheet );
+        maSheetSrcModel.maRange.Sheet = nSheet;
         mbValidSource = true;
     }
     // else sheet has been deleted, generate the source data from cache
