@@ -85,7 +85,9 @@ public class _XComponent extends MultiMethodTest {
     XEventListener listener2 = new MyEventListener2();
 
     /**
-     * For the cfgmgr2.OSetElement tests: dispose the owner element.
+     * For the (no longer existing) cfgmgr2.OSetElement tests: dispose the owner
+     * element.  TODO: Is this needed for anything else, too, or should it be
+     * removed?
      */
     protected void before() {
         // do not dispose this component, but parent instead

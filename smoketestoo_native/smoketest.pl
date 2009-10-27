@@ -488,7 +488,7 @@ sub doTest {
 
     # patch config (error 3)
 
-    $Command = "$PERL config.pl \"$basisdir \" \"$branddir \" \"$userinstallpath \" \"$DATA \" \"$buildid\"";
+    $Command = "$PERL config.pl \"$branddir\" \"$userinstallpath\" \"$buildid\"";
     execute_Command ($Command, $error_patchConfig, $show_Message, $command_normal );
 
     # copy basicscripts (error 9)

@@ -426,8 +426,6 @@ public class CheckModuleAPI extends ComplexTestCase
      * fwk -> framework
      * fwl -> framework
      * sch -> chart2
-     * sysmgr1 -> configmgr
-     * cfgmgr2 -> configmgr
      * lnn -> lingu
      * lng -> linguistic
      * sfx -> sfx2
@@ -441,8 +439,6 @@ public class CheckModuleAPI extends ComplexTestCase
         aModuleHashMap.put("fwk", "framework");
         aModuleHashMap.put("fwl", "framework");
         aModuleHashMap.put("sch", "chart2");
-        aModuleHashMap.put("sysmgr1", "configmgr");
-        aModuleHashMap.put("cfgmag2", "configmgr");
         aModuleHashMap.put("lnn", "lingu");
         aModuleHashMap.put("lng", "linguistic");
         aModuleHashMap.put("sfx", "sfx2");
