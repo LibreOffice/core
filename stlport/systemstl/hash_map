@@ -31,11 +31,14 @@
 #ifndef SYSTEM_STL_HASHMAP
 #define SYSTEM_STL_HASHMAP
 
-#define _BACKWARD_BACKWARD_WARNING_H 1
-#include <ext/hash_map>
-#undef _BACKWARD_BACKWARD_WARNING_H
-
 #ifdef GCC
+
+# include <functional>
+
+# define _BACKWARD_BACKWARD_WARNING_H 1
+# include <ext/hash_map>
+# undef _BACKWARD_BACKWARD_WARNING_H
+
 namespace __gnu_cxx
 {
     template<> struct hash < std::string >
@@ -62,14 +65,18 @@ namespace __gnu_cxx
         } 
     };
 }
+
 namespace std
 {
+# ifndef __GXX_EXPERIMENTAL_CXX0X__
 	using __gnu_cxx::hash;
+# endif
 	using __gnu_cxx::hash_map;
 	using __gnu_cxx::hash_multimap;
 }
+
 #else
-#error UNSUPPORTED COMPILER
+# error UNSUPPORTED COMPILER
 #endif
 
 

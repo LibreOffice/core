@@ -1352,8 +1352,10 @@ CELLPTR cp;
        * Nothing in Expand() should be able to change dynamic macros. */
       cmnd = Expand( rp->st_string );
 
-      if( new_attr && (p = DmStrSpn(cmnd," \t\n+-@%")) != cmnd )
-     strcpy(cmnd,p);
+      if( new_attr && (p = DmStrSpn(cmnd," \t\n+-@%")) != cmnd ) {
+     size_t len = strlen(p)+1;
+     memmove(cmnd,p,len);
+      }
 
       /* COMMAND macro is set to "$(CMNDNAME) $(CMNDARGS)" by default, it is
        * possible for the user to reset it to, for example
@@ -1381,8 +1383,10 @@ CELLPTR cp;
      shell  = ((l_attr & A_SHELL) != 0);
 
      /* clean up the attributes that we may have just added. */
-     if( (p = DmStrSpn(cmnd," \t\n+-@%")) != cmnd )
-        strcpy(cmnd,p);
+     if( (p = DmStrSpn(cmnd," \t\n+-@%")) != cmnd ) {
+        size_t len = strlen(p)+1;
+        memmove(cmnd,p,len);
+     }
       }
 
 #if defined(MSDOS)
@@ -1477,8 +1481,9 @@ int  map;
    for( p=cmnd; *(n = DmStrPbrk(p,tmp)) != '\0'; )
       /* Remove the \<nl> sequences. */
       if(*n == CONTINUATION_CHAR && n[1] == '\n') {
+     size_t len = strlen(n+2)+1;
      DB_PRINT( "make", ("fixing [%s]", p) );
-     strcpy( n, n+2 );
+     memmove( n, n+2, len );
      p = n;
       }
       /* Look for an escape sequence and replace it by it's corresponding

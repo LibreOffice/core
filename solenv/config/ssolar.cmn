@@ -116,7 +116,6 @@ common
 		GCRINC
 		GCRLIB
 		GCRPATH
-		GLIBC
 		GNUCOPY
 		GXX_INCLUDE_PATH
 		HBTOOLKIT
@@ -270,7 +269,6 @@ common
         NO_HIDS
         PAM_LINK
         PAM
-        PYTHONHOME
         PYTHONPATH
         SOLAR_PLUGIN
         URE_BOOTSTRAP
