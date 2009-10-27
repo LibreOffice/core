@@ -220,7 +220,7 @@ SmFilterDetect::~SmFilterDetect()
             if ( bIsStorage )
             {
                 //TODO/LATER: factor this out!
-                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
+                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium

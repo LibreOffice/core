@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: wdocsh.sdi,v $
- * $Revision: 1.5 $
+ * $RCSfile: $
+ * $Revision:$
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,37 +27,46 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
+#define INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
 
-interface WebDocument : BaseTextDocument
-[
-    uuid = "B47F0DE4-1E1F-11d1-89CA-008029E4B0B1"
-]
+#include <hash_map>
+#include <boost/shared_ptr.hpp>
+
+namespace sw
 {
-    // hier nur Slots, die der vollstaendige Writer nicht braucht
-    SID_SOURCEVIEW
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        Asynchron = TRUE;
-    ]
+enum tExternalDataType { FIB, STTBF_ASSOC };
 
-    SID_HTML_MODE
-    [
-        StateMethod = GetState ;
-    ]
+struct ExternalDataTypeHash
+{
+    size_t operator()(tExternalDataType eType) const { return eType; }
+};
+
+class ExternalData
+{
+public:
+    ExternalData() {}
+    virtual ~ExternalData() {}
+};
+
+typedef ::boost::shared_ptr<ExternalData> tExternalDataPointer;
 }
 
-shell SwWebDocShell : SfxObjectShell
-{
-        import WebDocument[Automation];
-}
 
-shell SwWebGlosDocShell : SwWebDocShell
+class IDocumentExternalData
 {
-    SID_SAVEDOC  // status()
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-}
+protected:
+    typedef ::std::hash_map<sw::tExternalDataType, sw::tExternalDataPointer, sw::ExternalDataTypeHash>
+    tExternalData;
 
+    tExternalData m_externalData;
+
+    virtual ~IDocumentExternalData() {};
+
+public:
+    virtual void setExternalData(sw::tExternalDataType eType,
+                                 sw::tExternalDataPointer pPayload) = 0;
+    virtual sw::tExternalDataPointer getExternalData(sw::tExternalDataType eType) = 0;
+};
+
+#endif //INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX

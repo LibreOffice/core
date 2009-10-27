@@ -898,10 +898,20 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     const SwSpzFrmFmts* const pFmts = pDoc->GetSpzFrmFmts();
     if(!pFmts->Count())
         return;
-    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
+    // --> OD 2009-09-10 #i104937#
+//    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
+    const USHORT nSize = pFmts->Count();
+    // <--
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
-    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
+    // --> OD 2009-09-10 #i104937#
+    SwFrmFmt* pFmt( 0 );
+    for( USHORT i = 0; i < nSize; ++i )
+//    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
+    // <--
     {
+        // --> OD 2009-09-10 #i104937#
+        pFmt = (*pFmts)[i];
+        // <--
         if(pFmt->Which() != RES_FLYFRMFMT)
             continue;
         const SwNodeIndex* pIdx =  pFmt->GetCntnt().GetCntntIdx();
@@ -1017,6 +1027,7 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
         throw IndexOutOfBoundsException();
     return lcl_UnoWrapFrame(pFmt, eType);
 }
+
 uno::Any SwXFrames::getByName(const OUString& rName)
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
@@ -1028,10 +1039,13 @@ uno::Any SwXFrames::getByName(const OUString& rName)
     {
         case FLYCNTTYPE_GRF:
             pFmt = GetDoc()->FindFlyByName(rName, ND_GRFNODE);
+            break;
         case FLYCNTTYPE_OLE:
             pFmt = GetDoc()->FindFlyByName(rName, ND_OLENODE);
+            break;
         default:
             pFmt = GetDoc()->FindFlyByName(rName, ND_TEXTNODE);
+            break;
     }
     if(!pFmt)
         throw NoSuchElementException();

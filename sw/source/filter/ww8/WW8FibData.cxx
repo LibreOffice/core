@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: wdocsh.sdi,v $
- * $Revision: 1.5 $
+ * $RCSfile:$
+ * $Revision:$
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,37 +27,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-interface WebDocument : BaseTextDocument
-[
-    uuid = "B47F0DE4-1E1F-11d1-89CA-008029E4B0B1"
-]
+#include "WW8FibData.hxx"
+
+namespace ww8
 {
-    // hier nur Slots, die der vollstaendige Writer nicht braucht
-    SID_SOURCEVIEW
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-        Asynchron = TRUE;
-    ]
-
-    SID_HTML_MODE
-    [
-        StateMethod = GetState ;
-    ]
+WW8FibData::WW8FibData()
+  : m_bReadOnlyRecommended(false),
+    m_bWriteReservation(false)
+{
 }
 
-shell SwWebDocShell : SfxObjectShell
+WW8FibData::~WW8FibData()
 {
-        import WebDocument[Automation];
 }
 
-shell SwWebGlosDocShell : SwWebDocShell
+void WW8FibData::setReadOnlyRecommended(bool bReadOnlyRecommended)
 {
-    SID_SAVEDOC  // status()
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
+    m_bReadOnlyRecommended = bReadOnlyRecommended;
 }
 
+void WW8FibData::setWriteReservation(bool bWriteReservation)
+{
+    m_bWriteReservation = bWriteReservation;
+}
+
+bool WW8FibData::getReadOnlyRecommended() const
+{
+    return m_bReadOnlyRecommended;
+}
+
+bool WW8FibData::getWriteReservation() const
+{
+    return m_bWriteReservation;
+}
+}

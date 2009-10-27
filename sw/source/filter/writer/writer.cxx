@@ -340,10 +340,6 @@ ULONG Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
     // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
     // The microsoft format can write to storage but the storage will be based on the stream.
     return Write( rPam, *rMed.GetOutStream(), pFileName );
-
-    // return IsStgWriter()
-    //            ? Write( rPam, rMed.GetStorage(), pFileName )
-    //          : Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
 ULONG Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )

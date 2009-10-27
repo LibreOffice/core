@@ -441,26 +441,26 @@
     {\
         Identifier = FN_DELETE_NOTE ;\
         HelpID = FN_DELETE_NOTE ;\
-        Text [ en-US ] = "Delete ~Note" ;\
+        Text [ en-US ] = "Delete ~Comment" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_DELETE_NOTE_AUTHOR ;\
         HelpID = FN_DELETE_NOTE_AUTHOR ;\
-        Text [ en-US ] = "Delete ~All Notes by $1" ;\
+        Text [ en-US ] = "Delete ~All Comments by $1" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_DELETE_ALL_NOTES ;\
         HelpID = FN_DELETE_ALL_NOTES ;\
-        Text [ en-US ] = "~Delete All Notes" ;\
+        Text [ en-US ] = "~Delete All Comments" ;\
     };\
     /*
     MenuItem\
     {\
         Identifier = FN_HIDE_NOTE ;\
         HelpID = FN_HIDE_NOTE ;\
-        Text [ en-US ] = "~Hide note" ;\
+        Text [ en-US ] = "~Hide comment" ;\
     };\
     MenuItem\
     {\
@@ -472,7 +472,7 @@
     {\
         Identifier = FN_HIDE_ALL_NOTES ;\
         HelpID = FN_HIDE_ALL_NOTES ;\
-        Text [ en-US ] = "Hide all ~notes" ;\
+        Text [ en-US ] = "Hide all ~comments" ;\
     };
     */
 

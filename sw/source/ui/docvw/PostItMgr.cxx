@@ -154,14 +154,6 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
         mbWaitingForCalcRects = true;
         mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
     }
-
-    //#i#
-    if (HasNotes() && !mpWrtShell->GetViewOptions()->IsPostIts())
-        {
-                SfxRequest aRequest(mpView->GetViewFrame(),FN_VIEW_NOTES);
-                mpView->ExecViewOptions(aRequest);
-        }
-
 }
 
 SwPostItMgr::~SwPostItMgr()

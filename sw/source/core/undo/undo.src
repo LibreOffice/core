@@ -612,7 +612,7 @@ String STR_CHART
 };
 String STR_NOTE
 {
-    Text [ en-US ] = "note";
+    Text [ en-US ] = "comment";
 };
 String STR_REFERENCE
 {

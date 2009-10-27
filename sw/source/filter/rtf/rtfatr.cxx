@@ -4251,22 +4251,22 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_CHRATR_DUMMY1 */             0,
 /* RES_CHRATR_DUMMY2 */             0,
 
-/* RES_TXTATR_AUTOFMT   */          OutRTF_SwTxtAutoFmt,
-/* RES_TXTATR_INETFMT   */          OutRTF_SwTxtINetFmt, // Dummy
-/* RES_TXTATR_REFMARK*/             0, // NOT USED!! OutRTF_SwRefMark,
+/* RES_TXTATR_REFMARK */            0, // NOT USED!! OutRTF_SwRefMark,
 /* RES_TXTATR_TOXMARK */            0, // NOT USED!! OutRTF_SwTOXMark,
-/* RES_TXTATR_CHARFMT   */          OutRTF_SwTxtCharFmt,
-/* RES_TXTATR_TWO_LINES */          0,
+/* RES_TXTATR_META */               0,
+/* RES_TXTATR_METAFIELD */          0,
+/* RES_TXTATR_AUTOFMT */            OutRTF_SwTxtAutoFmt,
+/* RES_TXTATR_INETFMT */            OutRTF_SwTxtINetFmt,
+/* RES_TXTATR_CHARFMT */            OutRTF_SwTxtCharFmt,
 /* RES_TXTATR_CJK_RUBY */           OutRTF_SwTxtRuby,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
-/* RES_TXTATR_DUMMY6 */             0,
 
 /* RES_TXTATR_FIELD */              OutRTF_SwField,
 /* RES_TXTATR_FLYCNT */             OutRTF_SwFlyCntnt,
 /* RES_TXTATR_FTN */                OutRTF_SwFtn,
-/* RES_TXTATR_SOFTHYPH */           0,  // old attr. - coded now by character
-/* RES_TXTATR_HARDBLANK*/           0,
+/* RES_TXTATR_DUMMY4 */             0,
+/* RES_TXTATR_DUMMY3 */             0,
 /* RES_TXTATR_DUMMY1 */             0, // Dummy:
 /* RES_TXTATR_DUMMY2 */             0, // Dummy:
 
