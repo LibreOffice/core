@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -40,8 +36,8 @@ TARGET=ttf_dejavu
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=dejavu-ttf-2.21
-TARFILE_ROOTDIR=dejavu-ttf-2.21
+TARFILE_NAME=dejavu-fonts-ttf-2.30
+TARFILE_ROOTDIR=dejavu-fonts-ttf-2.30
 
 PATCH_FILES=
 
