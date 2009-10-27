@@ -33,7 +33,6 @@
 
 #include "ldapaccess.hxx"
 
-#include "ldapuserprof.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -49,6 +48,8 @@ t_ldap_init              LdapConnection::s_p_init = NULL;
 t_ldap_msgfree           LdapConnection::s_p_msgfree = NULL;
 t_ldap_get_dn            LdapConnection::s_p_get_dn = NULL;
 t_ldap_first_entry       LdapConnection::s_p_first_entry = NULL;
+t_ldap_first_attribute   LdapConnection::s_p_first_attribute = NULL;
+t_ldap_next_attribute    LdapConnection::s_p_next_attribute = NULL;
 t_ldap_search_s          LdapConnection::s_p_search_s = NULL;
 t_ldap_value_free        LdapConnection::s_p_value_free = NULL;
 t_ldap_get_values        LdapConnection::s_p_get_values = NULL;
@@ -191,12 +192,12 @@ void LdapConnection::initConnection()
     }
 }
 //------------------------------------------------------------------------------
- void LdapConnection::getUserProfile(const rtl::OUString& aUser,
-                                     const LdapUserProfileMap& aUserProfileMap,
-                                     LdapUserProfile& aUserProfile)
+ void LdapConnection::getUserProfile(
+     const rtl::OUString& aUser, LdapData * data)
     throw (lang::IllegalArgumentException,
             ldap::LdapConnectionException, ldap::LdapGenericException)
- {
+{
+    OSL_ASSERT(data != 0);
     if (!isValid()) { connectSimple(); }
 
     rtl::OString aUserDn =findUserDn( rtl::OUStringToOString(aUser, RTL_TEXTENCODING_ASCII_US));
@@ -206,18 +207,26 @@ void LdapConnection::initConnection()
                                       aUserDn,
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
-                                      const_cast<sal_Char **>(aUserProfileMap.getLdapAttributes()),
+                                      0,
                                       0, // Attributes + values
                                       &result.msg) ;
 
     checkLdapReturnCode("getUserProfile", retCode,mConnection) ;
 
-
-    aUserProfileMap.ldapToUserProfile(mConnection,
-                                        result.msg,
-                                      aUserProfile) ;
-
- }
+    void * ptr;
+    char * attr = (*s_p_first_attribute)(mConnection, result.msg, &ptr);
+    while (attr != 0) {
+        char ** values = (*s_p_get_values)(mConnection, result.msg, attr);
+        if (values != 0) {
+            data->insert(
+                LdapData::value_type(
+                    rtl::OStringToOUString(attr, RTL_TEXTENCODING_ASCII_US),
+                    rtl::OStringToOUString(*values, RTL_TEXTENCODING_UTF8)));
+            (*s_p_value_free)(values);
+        }
+        attr = (*s_p_next_attribute)(mConnection, result.msg, ptr);
+    }
+}
 //------------------------------------------------------------------------------
  rtl::OString LdapConnection::findUserDn(const rtl::OString& aUser)
     throw (lang::IllegalArgumentException,
@@ -267,47 +276,6 @@ void LdapConnection::initConnection()
 
     return userDn ;
 }
-//------------------------------------------------------------------------------
-rtl::OString LdapConnection::getSingleAttribute(
-    const rtl::OString& aDn,
-    const rtl::OString& aAttribute)
-    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
-{
-    if (!isValid()) { connectSimple(); }
-    const sal_Char *attributes [2] ;
-    rtl::OString value ;
-
-    attributes [0] = aAttribute ;
-    attributes [1] = 0 ;
-    LdapMessageHolder result ;
-    LdapErrCode retCode = (*s_p_search_s)(mConnection,
-                                      aDn,
-                                      LDAP_SCOPE_BASE,
-                                      "(objectclass=*)",
-                                      const_cast<sal_Char **>(attributes),
-                                      0, // Attributes + values
-                                      &result.msg) ;
-
-    if (retCode == LDAP_NO_SUCH_OBJECT)
-    {
-        return value ;
-    }
-    checkLdapReturnCode("GetSingleAttribute", retCode, mConnection) ;
-    LDAPMessage *entry = (*s_p_first_entry)(mConnection, result.msg) ;
-
-    if (entry != NULL)
-    {
-        sal_Char **values = (*s_p_get_values)(mConnection, entry,
-                                            aAttribute) ;
-
-        if (values != NULL)
-        {
-            if (*values != NULL) { value = *values ; }
-            (*s_p_value_free)(values) ;
-        }
-    }
-    return value ;
-}
 
 extern "C" { static void SAL_CALL thisModule() {} }
 void LdapConnection::loadModule()
@@ -339,6 +307,8 @@ void LdapConnection::loadModule()
             s_p_msgfree = (t_ldap_msgfree)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_msgfree").pData));
             s_p_get_dn = (t_ldap_get_dn)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_get_dn").pData));
             s_p_first_entry = (t_ldap_first_entry)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_first_entry").pData));
+            s_p_first_attribute = (t_ldap_first_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_first_attribute").pData));
+            s_p_next_attribute = (t_ldap_next_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_next_attribute").pData));
             s_p_search_s = (t_ldap_search_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_search_s").pData));
             s_p_value_free = (t_ldap_value_free)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_value_free").pData));
             s_p_get_values = (t_ldap_get_values)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_get_values").pData));

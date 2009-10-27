@@ -1,4 +1,4 @@
-fm	forms	:    l10n svx sfx2 ucb configmgr fileaccess QADEVOOO:qadevOOo NULL
+fm	forms	:    l10n svx sfx2 ucb fileaccess QADEVOOO:qadevOOo NULL
 fm  forms                                   usr1    -   all fm_mkofrm NULL
 fm	forms\inc								nmake	-	all	fm_inc NULL
 fm	forms\source\inc						get		-	all	fm_sinc NULL

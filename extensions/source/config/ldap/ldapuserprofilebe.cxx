@@ -31,8 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#include "ldapaccess.hxx"
 #include "ldapuserprofilebe.hxx"
-#include "ldapuserprofilelayer.hxx"
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <osl/process.h>
@@ -43,63 +43,18 @@
 #include <rtl/instance.hxx>
 #endif
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Optional.hpp>
 #include <osl/security.hxx>
 
 //==============================================================================
 namespace extensions { namespace config { namespace ldap {
 
-
-static void checkIOError(
-    osl::File::RC aErrorCode,
-    const rtl::OUString& aFileUrl)
-{
-    switch (aErrorCode)
-    {
-        case osl::File::E_None: // got it
-        {
-
-        }
-        break;
-        default:
-        {
-            rtl::OUStringBuffer sMsg;
-            sMsg.appendAscii("LdapUserProfileBe: Cannot Read Meta-Configuration file:");
-            sMsg.append(aFileUrl);
-            throw backend::BackendSetupException(sMsg.makeStringAndClear(),
-                NULL, uno::Any());
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-#if 0
-static rtl::OUString getCurrentModuleDirectory() // URL excluding terminating slash
-{
-    rtl::OUString aFileURL;
-    if ( !osl::Module::getUrlFromAddress((void*)&getCurrentModuleDirectory,aFileURL) )
-    {
-        OSL_TRACE(false, "Cannot locate current module - using executable instead");
-
-        OSL_VERIFY(osl_Process_E_None == osl_getExecutableFile(&aFileURL.pData));
-    }
-
-    OSL_ENSURE(0 < aFileURL.lastIndexOf('/'), "Cannot find directory for module URL");
-
-    return aFileURL.copy(0, aFileURL.lastIndexOf('/') );
-}
-#endif
-//------------------------------------------------------------------------------
 LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContext>& xContext)
-// throw (backend::BackendAccessException, backend::BackendSetupException, RuntimeException)
 : LdapProfileMutexHolder(),
-  BackendBase(mMutex),
-  mFactory(xContext->getServiceManager(),uno::UNO_QUERY_THROW),
-  mContext(xContext),
-  mLdapSource( new LdapUserProfileSource ),
-  mLoggedOnUser(),
-  mUserDN()
+  BackendBase(mMutex)
 {
     LdapDefinition aDefinition;
+    rtl::OUString loggedOnUser;
 
     // This whole rigmarole is to prevent an infinite recursion where reading
     // the configuration for the backend would create another instance of the
@@ -116,16 +71,20 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
             try
             {
                 bReentrantCall = true ;
-                if (! readLdapConfiguration(aDefinition) )
+                if (!readLdapConfiguration(
+                        css::uno::Reference< css::lang::XMultiServiceFactory >(
+                            xContext->getServiceManager(),
+                            css::uno::UNO_QUERY_THROW),
+                        &aDefinition, &loggedOnUser))
                 {
-                    throw backend::BackendSetupException(
+                    throw css::uno::RuntimeException(
                         rtl::OUString::createFromAscii("LdapUserProfileBe- LDAP not configured"),
-                        NULL, uno::Any());
+                        NULL);
                 }
 
                 bReentrantCall = false ;
             }
-            catch (uno::Exception&)
+            catch (...)
             {
                 bReentrantCall = false;
                 throw;
@@ -133,34 +92,10 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
         }
     }
 
-    try
-    {
-        mLdapSource->mConnection.loadModule();
-        mLdapSource->mConnection.connectSimple(aDefinition);
-        //Set the UserDN
-        mUserDN = mLdapSource->mConnection.findUserDn(
-            rtl::OUStringToOString(mLoggedOnUser, RTL_TEXTENCODING_ASCII_US));
-    }
-    catch (lang::IllegalArgumentException& exception)
-    {
-        throw backend::BackendSetupException(exception.Message, NULL,
-                                             uno::makeAny(exception)) ;
-    }
-    catch (ldap::LdapConnectionException& exception)
-    {
-        throw backend::CannotConnectException(exception.Message, NULL,
-                                             uno::makeAny(exception)) ;
-    }
-    catch(ldap::LdapGenericException& exception)
-    {
-        mapGenericException(exception) ;
-    }
-
-    initializeMappingTable(
-        rtl::OStringToOUString(aDefinition.mMapping,
-        RTL_TEXTENCODING_ASCII_US));
-
-    OSL_POSTCOND(mLdapSource->mConnection.isConnected(),"Erroneously constructed a LdapUserProfileBackend without a LDAP connection");
+    LdapConnection connection;
+    connection.loadModule();
+    connection.connectSimple(aDefinition);
+    connection.getUserProfile(loggedOnUser, &data_);
 }
 //------------------------------------------------------------------------------
 LdapUserProfileBe::~LdapUserProfileBe()
@@ -168,129 +103,11 @@ LdapUserProfileBe::~LdapUserProfileBe()
 }
 //------------------------------------------------------------------------------
 
-void LdapUserProfileBe::initializeMappingTable(const rtl::OUString& aFileMapName)
+bool LdapUserProfileBe::readLdapConfiguration(
+    css::uno::Reference< css::lang::XMultiServiceFactory > const & factory,
+    LdapDefinition * definition, rtl::OUString * loggedOnUser)
 {
-    rtl::OUString aMappingFileUrl = getMappingFileUrl(aFileMapName );
-
-    osl::File aFile (aMappingFileUrl);
-    checkIOError( aFile.open(OpenFlag_Read),  aMappingFileUrl);
-
-    sal_uInt64 nFileLength = 0;
-    checkIOError( aFile.getSize(nFileLength), aMappingFileUrl);
-
-    sal_uInt32 nDataLength = sal_uInt32(nFileLength);
-    if (nDataLength != nFileLength)
-    {
-        throw backend::BackendSetupException(rtl::OUString::createFromAscii
-            ("LdapUserProfileBe - can not read entire Mapping File: too big"),
-                NULL, uno::Any());
-    }
-
-    struct RawBuffer
-    {
-        RawBuffer(sal_Size size) : data(rtl_allocateMemory(size)) {}
-        ~RawBuffer() { rtl_freeMemory(data); }
-
-        void * data;
-    };
-    RawBuffer buffer( nDataLength );
-
-    sal_uInt64 nRead = 0;
-    osl::File::RC result = aFile.read (static_cast<sal_uInt8*>(buffer.data), nDataLength, nRead);
-    if (result != osl::File::E_None)
-    {
-        checkIOError( result, aMappingFileUrl );
-        OSL_ASSERT(!"unreached");
-    }
-
-    if (nRead != nDataLength)
-    {
-        throw backend::BackendSetupException(rtl::OUString::createFromAscii
-            ("LdapUserProfileBe - can not read entire Mapping File"),
-                NULL, uno::Any());
-    }
-
-    rtl::OString aStrBuffer ( static_cast<char*>(buffer.data), sal_uInt32(nDataLength) );
-    mLdapSource->mProfileMap.source(aStrBuffer);
-
-}
-//------------------------------------------------------------------------------
-
-static const rtl::OUString kMappingFileSuffix(RTL_CONSTASCII_USTRINGPARAM(
-    "-attr.map"));
-
-static const rtl::OUString kMappingUrl(
-    RTL_CONSTASCII_USTRINGPARAM("/modules/com.sun.star.configuration/bootstrap/LdapMappingUrl"));
-
-
-static const sal_Unicode kPathSeparator = '/' ;
-static const rtl::OUString  kBootstrapContextSingletonName(
-    RTL_CONSTASCII_USTRINGPARAM(
-    "/singletons/com.sun.star.configuration.bootstrap.theBootstrapContext"));
-
-rtl::OUString LdapUserProfileBe::getMappingFileUrl(const rtl::OUString& aFileMapName) const
-{
-    uno::Any aContext = mContext->getValueByName(kBootstrapContextSingletonName);
-    uno::Reference<uno::XComponentContext> aBootStrapContext;
-
-    rtl::OUString aFileUrl;
-    if (aContext >>= aBootStrapContext)
-        aBootStrapContext->getValueByName(kMappingUrl)  >>= aFileUrl;
-
-    if (aFileUrl.getLength() == 0 )
-    {
-#if 0
-        static const rtl::OUString kMappingDirectory(RTL_CONSTASCII_USTRINGPARAM( "/share/registry/ldap"));
-
-        rtl::OUString aModuleUrl = getCurrentModuleDirectory();
-        sal_Int32 nIndex = aModuleUrl.lastIndexOf('/');
-        if (nIndex == 0)
-        {
-            throw backend::BackendSetupException(rtl::OUString::createFromAscii
-                ("LdapUserProfileBe - can not access Mapping File"),
-                    NULL, uno::Any());
-        }
-        rtl::OUString aMappingFileUrl = aModuleUrl.copy(0, nIndex);
-        aMappingFileUrl += kMappingDirectory;
-        aFileUrl =  aMappingFileUrl;
-#else
-        throw backend::BackendSetupException(rtl::OUString::createFromAscii
-            ("LdapUserProfileBe - can not locate Mapping File"),
-                NULL, uno::Any());
-#endif
-    }
-
-    rtl::OUStringBuffer sFileBuffer(aFileUrl);
-    sFileBuffer.append(kPathSeparator);
-    sFileBuffer.append (aFileMapName);
-    sFileBuffer.append(kMappingFileSuffix);
-    return sFileBuffer.makeStringAndClear();
-}
-//------------------------------------------------------------------------------
-void LdapUserProfileBe::mapGenericException(ldap::LdapGenericException& aException)
-    throw (backend::InsufficientAccessRightsException,
-           backend::ConnectionLostException,
-           backend::BackendAccessException)
-{
-    switch (aException.ErrorCode)
-    {
-        case LDAP_INSUFFICIENT_ACCESS:
-            throw backend::InsufficientAccessRightsException(aException.Message,
-                                    NULL, uno::makeAny(aException)) ;
-
-        case LDAP_SERVER_DOWN:
-        case LDAP_CONNECT_ERROR:
-            throw backend::ConnectionLostException(aException.Message, NULL,
-                                                   uno::makeAny(aException)) ;
-        default:
-            throw backend::BackendAccessException(aException.Message, NULL,
-                                                  uno::makeAny(aException)) ;
-    }
-}
-//------------------------------------------------------------------------------
-
-bool LdapUserProfileBe::readLdapConfiguration(LdapDefinition& aDefinition)
-{
+    OSL_ASSERT(factory.is() && definition != 0 && loggedOnUser != 0);
     const rtl::OUString kConfigurationProviderService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ;
     const rtl::OUString kReadOnlyViewService( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")) ;
     const rtl::OUString kComponent( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.LDAP/UserDirectory"));
@@ -302,14 +119,12 @@ bool LdapUserProfileBe::readLdapConfiguration(LdapDefinition& aDefinition)
     const rtl::OUString kPassword(RTL_CONSTASCII_USTRINGPARAM("SearchPassword"));
     const rtl::OUString kUserObjectClass(RTL_CONSTASCII_USTRINGPARAM("UserObjectClass"));
     const rtl::OUString kUserUniqueAttr(RTL_CONSTASCII_USTRINGPARAM("UserUniqueAttribute"));
-    const rtl::OUString kMapping(RTL_CONSTASCII_USTRINGPARAM("Mapping"));
-    const rtl::OString kDefaultMappingFile("oo-ldap");
 
     uno::Reference< XInterface > xIface;
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
-                                                        mFactory->createInstance(kConfigurationProviderService),
+                                                        factory->createInstance(kConfigurationProviderService),
                                                         uno::UNO_QUERY);
         OSL_ENSURE(xCfgProvider.is(),"LdapUserProfileBe: could not create the configuration provider");
         if (!xCfgProvider.is())
@@ -327,26 +142,23 @@ bool LdapUserProfileBe::readLdapConfiguration(LdapDefinition& aDefinition)
 
         uno::Reference<container::XNameAccess > xChildAccess(xIface, uno::UNO_QUERY_THROW);
 
-        if (!getLdapStringParam(xChildAccess, kServer, aDefinition.mServer))
+        if (!getLdapStringParam(xChildAccess, kServer, definition->mServer))
             return false;
-        if (!getLdapStringParam(xChildAccess, kBaseDN, aDefinition.mBaseDN))
-            return false;
-
-        aDefinition.mPort=0;
-        xChildAccess->getByName(kPort) >>= aDefinition.mPort ;
-        if (aDefinition.mPort == 0)
+        if (!getLdapStringParam(xChildAccess, kBaseDN, definition->mBaseDN))
             return false;
 
-        if (!getLdapStringParam(xAccess, kUserObjectClass, aDefinition.mUserObjectClass))
-            return false;
-        if (!getLdapStringParam(xAccess, kUserUniqueAttr, aDefinition.mUserUniqueAttr))
+        definition->mPort=0;
+        xChildAccess->getByName(kPort) >>= definition->mPort ;
+        if (definition->mPort == 0)
             return false;
 
-        getLdapStringParam(xAccess, kUser, aDefinition.mAnonUser);
-        getLdapStringParam(xAccess, kPassword, aDefinition.mAnonCredentials);
+        if (!getLdapStringParam(xAccess, kUserObjectClass, definition->mUserObjectClass))
+            return false;
+        if (!getLdapStringParam(xAccess, kUserUniqueAttr, definition->mUserUniqueAttr))
+            return false;
 
-        if (!getLdapStringParam(xAccess, kMapping, aDefinition.mMapping))
-            aDefinition.mMapping =  kDefaultMappingFile;
+        getLdapStringParam(xAccess, kUser, definition->mAnonUser);
+        getLdapStringParam(xAccess, kPassword, definition->mAnonCredentials);
     }
     catch (uno::Exception & e)
     {
@@ -356,15 +168,15 @@ bool LdapUserProfileBe::readLdapConfiguration(LdapDefinition& aDefinition)
     }
 
     osl::Security aSecurityContext;
-    if (!aSecurityContext.getUserName(mLoggedOnUser))
+    if (!aSecurityContext.getUserName(*loggedOnUser))
         OSL_TRACE("LdapUserProfileBackend - could not get Logged on user from system");
 
-    sal_Int32 nIndex = mLoggedOnUser.indexOf('/');
+    sal_Int32 nIndex = loggedOnUser->indexOf('/');
     if (nIndex > 0)
-        mLoggedOnUser = mLoggedOnUser.copy(nIndex+1);
+        *loggedOnUser = loggedOnUser->copy(nIndex+1);
 
     //Remember to remove
-    OSL_TRACE("Logged on user is %s", rtl::OUStringToOString(mLoggedOnUser,RTL_TEXTENCODING_ASCII_US).getStr());
+    OSL_TRACE("Logged on user is %s", rtl::OUStringToOString(*loggedOnUser,RTL_TEXTENCODING_ASCII_US).getStr());
 
     return true;
 }
@@ -382,35 +194,48 @@ bool LdapUserProfileBe::getLdapStringParam(
     return aServerParameter.getLength() != 0;
 }
 //------------------------------------------------------------------------------
-uno::Reference<backend::XLayer> SAL_CALL LdapUserProfileBe::getLayer(
-        const rtl::OUString& /*aComponent*/, const rtl::OUString& /*aTimestamp*/)
-    throw (backend::BackendAccessException, lang::IllegalArgumentException,uno::RuntimeException)
+void LdapUserProfileBe::setPropertyValue(
+    rtl::OUString const &, css::uno::Any const &)
+    throw (
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
-    OSL_PRECOND(mLdapSource->mConnection.isConnected(), "LdapUserProfileBackend invoked without a connection");
-    if (!mLdapSource->mConnection.isConnected())
-        return NULL;
-
-    const rtl::OString kModificationAttribute = "modifyTimeStamp";
-
-    rtl::OString aTimeStamp = mLdapSource->mConnection.
-        getSingleAttribute( mUserDN, kModificationAttribute);
-
-    return new LdapUserProfileLayer(
-        mFactory, mLoggedOnUser, mLdapSource,
-        rtl::OStringToOUString(aTimeStamp, RTL_TEXTENCODING_ASCII_US));
+    throw css::lang::IllegalArgumentException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("setPropertyValue not supported")),
+        static_cast< cppu::OWeakObject * >(this), -1);
 }
 
-//------------------------------------------------------------------------------
-uno::Reference<backend::XUpdatableLayer> SAL_CALL
-LdapUserProfileBe::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
-    throw (backend::BackendAccessException,lang::NoSupportException,
-           lang::IllegalArgumentException,uno::RuntimeException)
+css::uno::Any LdapUserProfileBe::getPropertyValue(
+    rtl::OUString const & PropertyName)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
-   throw lang::NoSupportException(
-        rtl::OUString::createFromAscii(
-        "LdapUserProfileBe: No Update Operation allowed, Read Only access"),
-        *this) ;
+    for (sal_Int32 i = 0;;) {
+        sal_Int32 j = PropertyName.indexOf(',', i);
+        if (j == -1) {
+            j = PropertyName.getLength();
+        }
+        if (j == i) {
+            throw css::beans::UnknownPropertyException(
+                PropertyName, static_cast< cppu::OWeakObject * >(this));
+        }
+        LdapData::iterator k(data_.find(PropertyName.copy(i, j - i)));
+        if (k != data_.end()) {
+            return css::uno::makeAny(
+                css::beans::Optional< css::uno::Any >(
+                    true, css::uno::makeAny(k->second)));
+        }
+        if (j == PropertyName.getLength()) {
+            break;
+        }
+        i = j + 1;
+    }
+    return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
 }
+
 //------------------------------------------------------------------------------
 rtl::OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
     return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.backend.LdapUserProfileBe") ;
@@ -426,10 +251,8 @@ rtl::OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
 
 uno::Sequence<rtl::OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServices(2) ;
+    uno::Sequence<rtl::OUString> aServices(1) ;
     aServices[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.LdapUserProfileBe")) ;
-    aServices[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.backend.PlatformBackend")) ;
-
     return aServices ;
 }
 //------------------------------------------------------------------------------
