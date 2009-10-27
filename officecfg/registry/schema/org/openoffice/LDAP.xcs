@@ -57,7 +57,7 @@
 			</prop>
 			<prop oor:name="UserUniqueAttribute" oor:type="xs:string"><info><desc>Name of User entity unique attribute in LDAP repository</desc></info>
 			</prop>
-			<prop oor:name="Mapping" oor:type="xs:string"><info><desc>Name of OOo to LDAP mapping file</desc></info>
+			<prop oor:name="Mapping" oor:type="xs:string"><info><desc>Obsolete and unused</desc></info>
             </prop>
 			<node-ref oor:name="ServerDefinition" oor:node-type="ServerDefinition">
 				<info><desc>Specifies the LDAP related settings</desc></info>

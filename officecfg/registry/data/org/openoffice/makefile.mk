@@ -42,12 +42,16 @@ PACKAGE=org.openoffice
 XCUFILES= \
     Inet.xcu \
     Setup.xcu \
+    System.xcu \
     VCL.xcu \
     FirstStartWizard.xcu \
     UserProfile.xcu
 
 MODULEFILES= \
     Inet-defaultsearchengine.xcu \
+    Inet-macosx.xcu \
+    Inet-unixdesktop.xcu \
+    Inet-wnt.xcu \
     Setup-brand.xcu \
     Setup-writer.xcu   \
     Setup-calc.xcu   \
@@ -56,22 +60,15 @@ MODULEFILES= \
     Setup-base.xcu   \
     Setup-math.xcu \
     Setup-report.xcu \
-    Setup-start.xcu
+    Setup-start.xcu \
+    UserProfile-gconflockdown.xcu \
+    VCL-gconflockdown.xcu \
+    VCL-unixdesktop.xcu
 
 LOCALIZEDFILES=Setup.xcu
-
-SAMPLEFILES= \
-    LDAP.xcu.sample
 
 .INCLUDE :  target.mk
 
 LANGUAGEPACKS=$(MISC)$/registry$/spool$/Langpack-{$(alllangiso)}.xcu
-SAMPLETARGETS=$(MISC)$/registry$/data$/$(PACKAGEDIR)$/{$(SAMPLEFILES)}
 
 ALLTAR : $(LANGUAGEPACKS)
-ALLTAR : $(SAMPLETARGETS)
-
-$(SAMPLETARGETS) : $(SAMPLEFILES)
-    -$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-

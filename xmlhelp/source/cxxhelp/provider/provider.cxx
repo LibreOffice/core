@@ -48,7 +48,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -312,9 +311,6 @@ void ContentProvider::init()
      *  now determing
      *  productname,
      *  productversion,
-     *  vendorname,
-     *  vendorversion,
-     *  vendorshort
      */
 
     xHierAccess = getHierAccess( sProvider, "org.openoffice.Setup" );
@@ -333,20 +329,6 @@ void ContentProvider::init()
         setupversion +
         rtl::OUString::createFromAscii( " " ) +
         setupextension );
-
-    xHierAccess = getHierAccess( sProvider, "org.openoffice.Webtop.Common" );
-    rtl::OUString vendorname(
-        getKey( xHierAccess,"Product/ooName" ) );
-
-    setupversion = rtl::OUString(
-        getKey( xHierAccess,"Product/ooSetupVersion" ) );
-    setupextension = rtl::OUString(
-        getKey(  xHierAccess,"Product/ooSetupExtension") );
-    rtl::OUString vendorversion(
-        setupversion +
-        rtl::OUString::createFromAscii( " " ) +
-        setupextension );
-    rtl::OUString vendorshort = vendorname;
 
     uno::Sequence< rtl::OUString > aImagesZipPaths( 2 );
     xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
@@ -375,9 +357,6 @@ void ContentProvider::init()
                                   aImagesZipPaths,
                                   productname,
                                   productversion,
-                                  vendorname,
-                                  vendorversion,
-                                  vendorshort,
                                   stylesheet,
                                   xContext );
 }
@@ -388,17 +367,6 @@ ContentProvider::getConfiguration() const
     uno::Reference< lang::XMultiServiceFactory > sProvider;
     if( m_xSMgr.is() )
     {
-        uno::Any aAny;
-        aAny <<= rtl::OUString::createFromAscii( "plugin" );
-        beans::PropertyValue aProp(
-            rtl::OUString::createFromAscii( "servertype" ),
-            -1,
-            aAny,
-            beans::PropertyState_DIRECT_VALUE );
-
-        uno::Sequence< uno::Any > seq(1);
-        seq[0] <<= aProp;
-
         try
         {
             rtl::OUString sProviderService =
@@ -406,8 +374,7 @@ ContentProvider::getConfiguration() const
                     "com.sun.star.configuration.ConfigurationProvider" );
             sProvider =
                 uno::Reference< lang::XMultiServiceFactory >(
-                    m_xSMgr->createInstanceWithArguments(
-                        sProviderService,seq ),
+                    m_xSMgr->createInstance( sProviderService ),
                     uno::UNO_QUERY );
         }
         catch( const uno::Exception& )

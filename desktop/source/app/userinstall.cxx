@@ -246,7 +246,7 @@ namespace desktop {
             return UserInstall::E_InvalidBaseinstall;
 
         // create the user directory
-        FileBase::RC rc = Directory::create(aUserPath);
+        FileBase::RC rc = Directory::createPath(aUserPath);
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
             // copy data from shared data directory of base installation

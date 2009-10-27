@@ -682,22 +682,6 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     // replace anything like $(instpath);
     subst( xSMgr,instPath );
 
-
-    /**********************************************************************/
-    /*                       reading Webtop.Common                        */
-    /**********************************************************************/
-
-    xHierAccess = getHierAccess( sProvider,
-                                 "org.openoffice.Webtop.Common" );
-    rtl::OUString vendorName( getKey(  xHierAccess,"Product/ooName" ) );
-
-    rtl::OUString setupversion( getKey(  xHierAccess,"Product/ooSetupVersion" ) );
-    rtl::OUString setupextension( getKey(  xHierAccess,"Product/ooSetupExtension") );
-    rtl::OUString vendorVersion( setupversion +
-                                 rtl::OUString::createFromAscii( " " ) +
-                                 setupextension );
-    rtl::OUString vendorShort = vendorName;
-
     /**********************************************************************/
     /*                       reading setup                                */
     /**********************************************************************/
@@ -706,8 +690,8 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                                  "org.openoffice.Setup" );
 
     rtl::OUString productName( getKey(  xHierAccess,"Product/ooName" ) );
-    setupversion = getKey(  xHierAccess,"Product/ooSetupVersion" );
-    setupextension = rtl::OUString();
+    rtl::OUString setupversion( getKey( xHierAccess,"Product/ooSetupVersion" ) );
+    rtl::OUString setupextension;
     utl::ConfigManager * mgr = utl::ConfigManager::GetConfigManager();
     if (mgr != NULL) {
         mgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTEXTENSION) >>=
@@ -800,9 +784,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     configData.m_vAdd[4] = 12;
     configData.m_vReplacement[0] = productName;
     configData.m_vReplacement[1] = productVersion;
-    configData.m_vReplacement[2] = vendorName;
-    configData.m_vReplacement[3] = vendorVersion;
-    configData.m_vReplacement[4] = vendorShort;
+    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
 
        configData.system = system;
     configData.locale = locale;

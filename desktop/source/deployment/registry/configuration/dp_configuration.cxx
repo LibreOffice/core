@@ -31,6 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+//TODO: Large parts of this file were copied from dp_component.cxx; those parts
+// should be consolidated.
+
 #include "dp_configuration.hrc"
 #include "dp_backend.h"
 #include "dp_persmap.h"
@@ -41,16 +44,18 @@
 #include "rtl/uri.hxx"
 #include "rtl/memory.h"
 #include "osl/file.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/anytostring.hxx"
 #include "comphelper/servicedecl.hxx"
+#include "configmgr/update.hxx"
 #include "xmlscript/xml_helper.hxx"
 #include "svtools/inettype.hxx"
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/io/XActiveDataSink.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/util/XRefreshable.hpp"
-#include "com/sun/star/configuration/backend/XLayerImporter.hpp"
+#include <list>
 #include <memory>
 
 
@@ -64,6 +69,8 @@ namespace dp_registry {
 namespace backend {
 namespace configuration {
 namespace {
+
+typedef ::std::list<OUString> t_stringlist;
 
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -98,26 +105,35 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class PackageImpl;
 
-    Reference< ::com::sun::star::configuration::backend::XLayerImporter >
-    m_xMergeImporter;
-    OUString m_configLayer;
+    t_stringlist m_xcs_files;
+    t_stringlist m_xcu_files;
+    t_stringlist & getFiles( bool xcs ) {
+        return xcs ? m_xcs_files : m_xcu_files;
+    }
+
+    bool m_configmgrrc_inited;
+    bool m_configmgrrc_modified;
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         Reference<XCommandEnvironment> const & xCmdEnv );
 
-    void xcu_merge_in( OUString const & url,
-                       Reference< XCommandEnvironment > const & xCmdEnv );
-    void xcs_merge_in( OUString const & url,
-                       Reference< XCommandEnvironment > const & xCmdEnv );
-    ::std::auto_ptr<PersistentMap> m_registeredPackages;
-    OUString const & getConfigLayer();
-    Reference<util::XRefreshable> m_defaultProvider;
+    virtual void SAL_CALL disposing();
 
     const Reference<deployment::XPackageTypeInfo> m_xConfDataTypeInfo;
     const Reference<deployment::XPackageTypeInfo> m_xConfSchemaTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
+
+    void configmgrrc_verify_init(
+        Reference<XCommandEnvironment> const & xCmdEnv );
+    void configmgrrc_flush( Reference<XCommandEnvironment> const & xCmdEnv );
+
+    bool addToConfigmgrRc( bool isSchema, OUString const & url,
+                     Reference<XCommandEnvironment> const & xCmdEnv );
+    bool removeFromConfigmgrRc( bool isSchema, OUString const & url,
+                          Reference<XCommandEnvironment> const & xCmdEnv );
+    bool hasInConfigmgrRc( bool isSchema, OUString const & url );
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -126,17 +142,36 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+
+    using PackageRegistryBackend::disposing;
 };
+
+//______________________________________________________________________________
+void BackendImpl::disposing()
+{
+    try {
+        configmgrrc_flush( Reference<XCommandEnvironment>() );
+
+        PackageRegistryBackend::disposing();
+    }
+    catch (RuntimeException &) {
+        throw;
+    }
+    catch (Exception &) {
+        Any exc( ::cppu::getCaughtException() );
+        throw lang::WrappedTargetRuntimeException(
+            OUSTR("caught unexpected exception while disposing..."),
+            static_cast<OWeakObject *>(this), exc );
+    }
+}
 
 //______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
     : PackageRegistryBackend( args, xComponentContext ),
-      m_defaultProvider( xComponentContext->getValueByName(
-                             OUSTR("/singletons/com.sun.star."
-                                   "configuration.theDefaultProvider") ),
-                         UNO_QUERY ),
+      m_configmgrrc_inited( false ),
+      m_configmgrrc_modified( false ),
       m_xConfDataTypeInfo( new Package::TypeInfo(
                                OUSTR("application/"
                                      "vnd.sun.star.configuration-data"),
@@ -154,19 +189,13 @@ BackendImpl::BackendImpl(
     m_typeInfos[ 0 ] = m_xConfDataTypeInfo;
     m_typeInfos[ 1 ] = m_xConfSchemaTypeInfo;
 
-    OSL_ASSERT( m_defaultProvider.is() );
+    const Reference<XCommandEnvironment> xCmdEnv;
 
     if (transientMode()) {
-        m_registeredPackages.reset( new PersistentMap );
+        //TODO
     }
     else {
-        m_registeredPackages.reset(
-            new PersistentMap(
-                makeURL( getCachePath(), OUSTR("registered_packages.db") ),
-                m_readOnly ) );
-        if (! m_readOnly)
-            create_folder( 0, getConfigLayer(),
-                           Reference<XCommandEnvironment>() );
+        configmgrrc_verify_init( xCmdEnv );
     }
 }
 
@@ -239,102 +268,243 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//______________________________________________________________________________
-OUString const & BackendImpl::getConfigLayer()
-{
-    if (m_configLayer.getLength() == 0)
-    {
-        OUString path(
-            makeURL( expandUnoRcUrl( getCachePath() ), OUSTR("registry") ) );
-        ::osl::FileBase::RC rc = ::osl::File::getAbsoluteFileURL(
-            OUString(), path, m_configLayer );
-        if (rc != ::osl::FileBase::E_None)
-            throw RuntimeException(
-                OUSTR("making file URL absolute failed: ") + path,
-                static_cast<OWeakObject *>(this) );
-    }
-    return m_configLayer;
-}
-
-//==============================================================================
-class SchemaFileRoot : public ::dp_misc::XmlRootElement
-{
-public:
-    OUString m_name;
-    OUString m_package;
-
-    inline SchemaFileRoot()
-        : XmlRootElement( OUSTR("http://openoffice.org/2001/registry"),
-                          OUSTR("component-schema") )
-        {}
-
-    // XRoot
-    virtual Reference< xml::input::XElement > SAL_CALL startRootElement(
-        sal_Int32 uid, OUString const & localname,
-        Reference< xml::input::XAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException);
-};
+//##############################################################################
 
 //______________________________________________________________________________
-Reference< xml::input::XElement > SchemaFileRoot::startRootElement(
-    sal_Int32 uid, OUString const & localname,
-    Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-    // check root element:
-    XmlRootElement::startRootElement( uid, localname, xAttributes );
-
-    // "name" attribute
-    m_name = xAttributes->getValueByUidName( getUid(), OUSTR("name") );
-    if (m_name.getLength() == 0)
-        throw xml::sax::SAXException(
-            OUSTR("missing schema name attribute!"),
-            static_cast< OWeakObject * >(this), Any() );
-
-    // "package" attribute
-    m_package = xAttributes->getValueByUidName( getUid(), OUSTR("package") );
-    if (m_package.getLength() == 0)
-        throw xml::sax::SAXException(
-            OUSTR("missing schema package attribute!"),
-            static_cast<OWeakObject *>(this), Any() );
-
-    // don't go deeper...
-    return Reference<xml::input::XElement>();
-}
-
-//______________________________________________________________________________
-void BackendImpl::xcs_merge_in(
-    OUString const & url,
+void BackendImpl::configmgrrc_verify_init(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    // parse out schema package:
-    SchemaFileRoot * root = new SchemaFileRoot;
-    Reference<xml::input::XRoot> xRoot( root );
-    ::ucbhelper::Content ucb_content( url, xCmdEnv );
-    xml_parse( xRoot, ucb_content, getComponentContext() );
+    if (transientMode())
+        return;
+    const ::osl::MutexGuard guard( getMutex() );
+    if (! m_configmgrrc_inited)
+    {
+        // common rc:
+        ::ucbhelper::Content ucb_content;
+        if (create_ucb_content(
+                &ucb_content,
+                makeURL( getCachePath(), OUSTR("configmgrrc") ),
+                xCmdEnv, false /* no throw */ ))
+        {
+            OUString line;
+            if (readLine( &line, OUSTR("SCHEMA="), ucb_content,
+                          RTL_TEXTENCODING_UTF8 ))
+            {
+                sal_Int32 index = sizeof ("SCHEMA=") - 1;
+                do {
+                    OUString token( line.getToken( 0, ' ', index ).trim() );
+                    if (token.getLength() > 0) {
+                        // cleanup, check if existing:
+                        if (create_ucb_content(
+                                0, expandUnoRcTerm(token), xCmdEnv,
+                                false /* no throw */ )) {
+                            m_xcs_files.push_back( token );
+                        }
+                        else
+                            OSL_ENSURE(
+                                0, "### invalid SCHEMA entry!" );
+                    }
+                }
+                while (index >= 0);
+            }
+            if (readLine( &line, OUSTR("DATA="), ucb_content,
+                          RTL_TEXTENCODING_UTF8 )) {
+                sal_Int32 index = sizeof ("DATA=") - 1;
+                do {
+                    OUString token( line.getToken( 0, ' ', index ).trim() );
+                    if (token.getLength() > 0) {
+                        if (token[ 0 ] == '?')
+                            token = token.copy( 1 );
+                        // cleanup, check if existing:
+                        if (create_ucb_content(
+                                0, expandUnoRcTerm(token),
+                                xCmdEnv, false /* no throw */ )) {
+                            m_xcu_files.push_back( token );
+                        }
+                        else
+                            OSL_ENSURE( 0, "### invalid DATA entry!" );
+                    }
+                }
+                while (index >= 0);
+            }
+        }
+        m_configmgrrc_modified = false;
+        m_configmgrrc_inited = true;
+    }
+}
 
-    OUString dest_folder(
-        makeURL( getConfigLayer(), OUSTR("schema/") + ::rtl::Uri::encode(
-                     root->m_package, rtl_UriCharClassPchar,
-                     rtl_UriEncodeIgnoreEscapes,
-                     RTL_TEXTENCODING_UTF8 ).replace( '.', '/' ) ) );
-    OUString title( root->m_name + OUSTR(".xcs") );
-    OUString dest_url( makeURL( dest_folder, ::rtl::Uri::encode(
-                                    title, rtl_UriCharClassPchar,
-                                    rtl_UriEncodeIgnoreEscapes,
-                                    RTL_TEXTENCODING_UTF8 ) ) );
-    // assure dest folder is existing:
-    ::ucbhelper::Content ucb_dest_folder;
-    create_folder( &ucb_dest_folder, dest_folder, xCmdEnv );
-    if (! ucb_dest_folder.transferContent(
-            ::ucbhelper::Content( url, xCmdEnv ),
-            ::ucbhelper::InsertOperation_COPY,
-            title, NameClash::OVERWRITE ))
-        throw RuntimeException(
-            OUSTR("::ucb::Content::transferContent() failed!"), 0 );
+//______________________________________________________________________________
+void BackendImpl::configmgrrc_flush(
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    if (transientMode())
+        return;
+    if (!m_configmgrrc_inited || !m_configmgrrc_modified)
+        return;
+
+    ::rtl::OStringBuffer buf;
+    // UNO_USER_PACKAGES_CACHE, UNO_SHARED_PACKAGES_CACHE have to be resolved
+    // locally:
+    if (m_eContext == CONTEXT_USER) {
+        buf.append( RTL_CONSTASCII_STRINGPARAM(
+                        "UNO_USER_PACKAGES_CACHE=$ORIGIN/../..") );
+    }
+    else if (m_eContext == CONTEXT_SHARED) {
+        buf.append( RTL_CONSTASCII_STRINGPARAM(
+                        "UNO_SHARED_PACKAGES_CACHE=$ORIGIN/../..") );
+    }
+    else
+        OSL_ASSERT(0);
+    buf.append(LF);
+
+    if (! m_xcs_files.empty())
+    {
+        t_stringlist::const_iterator iPos( m_xcs_files.begin() );
+        t_stringlist::const_iterator const iEnd( m_xcs_files.end() );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("SCHEMA=") );
+        while (iPos != iEnd) {
+            // encoded ASCII file-urls:
+            const ::rtl::OString item(
+                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( item );
+            ++iPos;
+            if (iPos != iEnd)
+                buf.append( ' ' );
+        }
+        buf.append(LF);
+    }
+    if (! m_xcu_files.empty())
+    {
+        t_stringlist::const_iterator iPos( m_xcu_files.begin() );
+        t_stringlist::const_iterator const iEnd( m_xcu_files.end() );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("DATA=") );
+        while (iPos != iEnd) {
+            // encoded ASCII file-urls:
+            const ::rtl::OString item(
+                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( item );
+            ++iPos;
+            if (iPos != iEnd)
+                buf.append( ' ' );
+        }
+        buf.append(LF);
+    }
+
+    // write configmgrrc:
+    const Reference<io::XInputStream> xData(
+        ::xmlscript::createInputStream(
+            ::rtl::ByteSequence(
+                reinterpret_cast<sal_Int8 const *>(buf.getStr()),
+                buf.getLength() ) ) );
+    ::ucbhelper::Content ucb_content(
+        makeURL( getCachePath(), OUSTR("configmgrrc") ), xCmdEnv );
+    ucb_content.writeStream( xData, true /* replace existing */ );
+
+    m_configmgrrc_modified = false;
+}
+
+//------------------------------------------------------------------------------
+inline OUString makeRcTerm( OUString const & url )
+{
+    OSL_ASSERT( url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                                     "vnd.sun.star.expand:") ) );
+    if (url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:") )) {
+        // cut protocol:
+        OUString rcterm( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
+        // decode uric class chars:
+        rcterm = ::rtl::Uri::decode(
+            rcterm, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+        return rcterm;
+    }
+    else
+        return url;
+}
+
+//______________________________________________________________________________
+bool BackendImpl::addToConfigmgrRc( bool isSchema, OUString const & url_,
+                              Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    const OUString rcterm( makeRcTerm(url_) );
+    const ::osl::MutexGuard guard( getMutex() );
+    configmgrrc_verify_init( xCmdEnv );
+    t_stringlist & rSet = getFiles(isSchema);
+    if (::std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
+        rSet.push_front( rcterm ); // prepend to list, thus overriding
+        // write immediately:
+        m_configmgrrc_modified = true;
+        configmgrrc_flush( xCmdEnv );
+        return true;
+    }
+    else
+        return false;
+}
+
+//______________________________________________________________________________
+bool BackendImpl::removeFromConfigmgrRc(
+    bool isSchema, OUString const & url_,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    const OUString rcterm( makeRcTerm(url_) );
+    const ::osl::MutexGuard guard( getMutex() );
+    configmgrrc_verify_init( xCmdEnv );
+    getFiles(isSchema).remove( rcterm );
+    if (!isSchema) { //TODO: see replaceOrigin()
+        getFiles(isSchema).remove(
+            rcterm + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod")));
+    }
+    // write immediately:
+    m_configmgrrc_modified = true;
+    configmgrrc_flush( xCmdEnv );
+    return true;
+}
+
+//______________________________________________________________________________
+bool BackendImpl::hasInConfigmgrRc(
+    bool isSchema, OUString const & url_ )
+{
+    const OUString rcterm( makeRcTerm(url_) );
+    const ::osl::MutexGuard guard( getMutex() );
+    t_stringlist const & rSet = getFiles(isSchema);
+    return ::std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end()
+        || (!isSchema && //TODO: see replaceOrigin()
+            ::std::find(
+                rSet.begin(), rSet.end(),
+                rcterm + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod"))) !=
+            rSet.end());
 }
 
 //##############################################################################
+
+// Package
+//______________________________________________________________________________
+BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //May throw a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
+    }
+    return pBackend;
+}
+
+beans::Optional< beans::Ambiguous<sal_Bool> >
+BackendImpl::PackageImpl::isRegistered_(
+    ::osl::ResettableMutexGuard &,
+    ::rtl::Reference<AbortChannel> const &,
+    Reference<XCommandEnvironment> const & )
+{
+    BackendImpl * that = getMyBackend();
+    return beans::Optional< beans::Ambiguous<sal_Bool> >(
+        true /* IsPresent */,
+        beans::Ambiguous<sal_Bool>(
+            that->hasInConfigmgrRc( m_isSchema, getURL() ),
+            false /* IsAmbiguous */ ) );
+}
 
 //------------------------------------------------------------------------------
 OUString encodeForXml( OUString const & text )
@@ -370,7 +540,7 @@ OUString encodeForXml( OUString const & text )
 }
 
 //______________________________________________________________________________
-void BackendImpl::xcu_merge_in(
+OUString replaceOrigin(
     OUString const & url, Reference< XCommandEnvironment > const & xCmdEnv )
 {
     // looking for %origin%:
@@ -437,199 +607,50 @@ void BackendImpl::xcu_merge_in(
         rtl_copyMemory( filtered.getArray() + write_pos, pAdd, nAdd );
         write_pos += nAdd;
     }
-    if (use_filtered && write_pos < filtered.getLength())
+    if (!use_filtered)
+        return url;
+    if (write_pos < filtered.getLength())
         filtered.realloc( write_pos );
-
-    Reference<XComponentContext> const & xContext = getComponentContext();
-    if (! m_xMergeImporter.is()) {
-        m_xMergeImporter.set(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUSTR("com.sun.star.configuration.backend.MergeImporter"),
-                xContext ), UNO_QUERY_THROW );
-    }
-
-    Reference< ::com::sun::star::configuration::backend::XLayer > xLayer(
-        xContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.configuration.backend.xml.LayerParser"),
-            xContext ), UNO_QUERY_THROW );
-
-    Reference< io::XActiveDataSink > xActiveDataSink( xLayer, UNO_QUERY_THROW );
-    if (use_filtered)
-        xActiveDataSink->setInputStream( ::xmlscript::createInputStream(
-                                             filtered ) );
-    else
-        ucb_content.openStream( xActiveDataSink );
-
-    if (transientMode())
-        m_xMergeImporter->importLayer( xLayer );
-    else
-        m_xMergeImporter->importLayerForEntity( xLayer, getConfigLayer() );
-}
-
-//##############################################################################
-
-// Package
-//______________________________________________________________________________
-BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
-{
-    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
-    if (NULL == pBackend)
-    {
-        //May throw a DisposedException
-        check();
-        //We should never get here...
-        throw RuntimeException(
-            OUSTR("Failed to get the BackendImpl"),
-            static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
-    }
-    return pBackend;
-}
-
-beans::Optional< beans::Ambiguous<sal_Bool> >
-BackendImpl::PackageImpl::isRegistered_(
-    ::osl::ResettableMutexGuard &,
-    ::rtl::Reference<AbortChannel> const &,
-    Reference<XCommandEnvironment> const & )
-{
-    BackendImpl * that = getMyBackend();
-    return beans::Optional< beans::Ambiguous<sal_Bool> >(
-        true /* IsPresent */,
-        beans::Ambiguous<sal_Bool>(
-            that->m_registeredPackages->has(
-                rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) ),
-            false /* IsAmbiguous */ ) );
+    rtl::OUString newUrl(url + OUString(RTL_CONSTASCII_USTRINGPARAM(".mod")));
+        //TODO: unique name
+    ucbhelper::Content(newUrl, xCmdEnv).writeStream(
+        xmlscript::createInputStream(filtered), true);
+    return newUrl;
 }
 
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
-    ::rtl::Reference<AbortChannel> const & abortChannel,
+    ::rtl::Reference<AbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
+    OUString url( getURL() );
+
     if (doRegisterPackage)
     {
         if (m_isSchema)
         {
-            OSL_ENSURE( ! that->transientMode(),
-                        "### schema cannot be deployed transiently!" );
-            if (! that->transientMode()) {
-                that->xcs_merge_in( m_url, xCmdEnv );
-                that->m_registeredPackages->put(
-                    rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8),
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM(
-                            "vnd.sun.star.configuration-schema" ) ) );
-            }
+            configmgr::update::insertXcsFile(
+                that->m_eContext == CONTEXT_SHARED ? 9 : 13, //TODO
+                expandUnoRcUrl(url));
         }
         else
         {
-            that->xcu_merge_in( m_url, xCmdEnv );
-            that->m_registeredPackages->put(
-                rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ),
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM(
-                        "vnd.sun.star.configuration-data" ) ) );
+            url = replaceOrigin(url, xCmdEnv);
+            configmgr::update::insertXcuFile(
+                that->m_eContext == CONTEXT_SHARED ? 9 : 13, //TODO
+                expandUnoRcUrl(url));
         }
+
+        that->addToConfigmgrRc( m_isSchema, url, xCmdEnv );
     }
     else // revoke
     {
-        OSL_ASSERT(
-            that->m_registeredPackages->has(
-                rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) ) );
-        t_string2string_map entries( that->m_registeredPackages->getEntries() );
-        t_string2string_map::const_iterator iPos( entries.begin() );
-        t_string2string_map::const_iterator const iEnd( entries.end() );
+        that->removeFromConfigmgrRc( m_isSchema, url, xCmdEnv );
 
-        if (m_isSchema)
-        {
-            if (! that->transientMode())
-            {
-                ::ucbhelper::Content ucbSaveLayer(
-                    makeURL( that->getConfigLayer(), OUSTR("schema") ),
-                    xCmdEnv );
-                ucbSaveLayer.setPropertyValue(
-                    StrTitle::get(), Any( OUSTR("schema.bak") ) );
-                try {
-                    for ( ; iPos != iEnd; ++iPos )
-                    {
-                        checkAborted( abortChannel );
-                        if (iPos->second == "vnd.sun.star.configuration-schema")
-                        {
-                            OUString url(
-                                rtl::OStringToOUString(
-                                    iPos->first, RTL_TEXTENCODING_UTF8 ) );
-                            if (!url.equals( m_url )) {
-                                that->xcs_merge_in( url, xCmdEnv );
-                            }
-                        }
-                    }
-                }
-                catch (RuntimeException &) {
-                    throw;
-                }
-                catch (Exception &) {
-                    ucbSaveLayer.setPropertyValue(
-                        StrTitle::get(), Any( OUSTR("schema") ) );
-                    throw;
-                }
-                that->m_registeredPackages->erase(
-                    rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) );
-                ucbSaveLayer.executeCommand(
-                    OUSTR("delete"), Any( true /* delete physically */ ) );
-            }
-        }
-        else // data
-        {
-            if (! that->transientMode())
-            {
-                ::ucbhelper::Content ucbSaveLayer(
-                    makeURL( that->getConfigLayer(), OUSTR("data") ),
-                    xCmdEnv );
-                ucbSaveLayer.setPropertyValue(
-                    StrTitle::get(), Any( OUSTR("data.bak") ) );
-                try {
-                    for ( ; iPos != iEnd; ++iPos )
-                    {
-                        checkAborted( abortChannel );
-                        if (iPos->second == "vnd.sun.star.configuration-data") {
-                            OUString url(
-                                rtl::OStringToOUString(
-                                    iPos->first, RTL_TEXTENCODING_UTF8 ) );
-                            if (!url.equals( m_url )) {
-                                that->xcu_merge_in( url, xCmdEnv );
-                            }
-                        }
-                    }
-                }
-                catch (RuntimeException &) {
-                    throw;
-                }
-                catch (Exception &) {
-                    ucbSaveLayer.setPropertyValue(
-                        StrTitle::get(), Any( OUSTR("data") ) );
-                    throw;
-                }
-                that->m_registeredPackages->erase(
-                    rtl::OUStringToOString( m_url, RTL_TEXTENCODING_UTF8 ) );
-                ucbSaveLayer.executeCommand(
-                    OUSTR("delete"), Any( true /* delete physically */ ) );
-            }
-        }
-    }
-
-    if (!m_isSchema && getMyBackend()->m_defaultProvider.is()) {
-        // temp workaround for config bug:
-        try {
-            getMyBackend()->m_defaultProvider->refresh();
-        }
-        catch (lang::WrappedTargetRuntimeException & exc) {
-            (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
-                            ::comphelper::anyToString(exc.TargetException),
-                            RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
+        //TODO: revoking at runtime, possible, sensible?
     }
 }
 

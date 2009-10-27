@@ -58,8 +58,7 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
     $(SLO)$/macbecdef.obj \
-    $(SLO)$/macbackend.obj \
-    $(SLO)$/macbelayer.obj
+    $(SLO)$/macbackend.obj
 
 SHL1TARGET=$(TARGET)1.uno
 SHL1OBJS=$(SLOFILES)
