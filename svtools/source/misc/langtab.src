@@ -302,6 +302,14 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Maltese" ; LANGUAGE_MALTESE ; > ;
         < "Tok Pisin" ; LANGUAGE_USER_TOK_PISIN ; > ;
         < "Shuswap" ; LANGUAGE_USER_SHUSWAP ; > ;
+        < "Oromo" ; LANGUAGE_OROMO ; > ;
+        < "Greek, Ancient" ; LANGUAGE_USER_ANCIENT_GREEK ; > ;
+        < "Yiddish" ; LANGUAGE_YIDDISH ; > ;
+        < "Quechua (Ecuador)" ; LANGUAGE_QUECHUA_ECUADOR ; > ;
+        < "Uyghur" ; LANGUAGE_UIGHUR_CHINA ; > ;
+        < "Asturian" ; LANGUAGE_USER_ASTURIAN ; > ;
+        < "Sorbian, Upper" ; LANGUAGE_UPPER_SORBIAN_GERMANY ; > ;
+        < "Sorbian, Lower" ; LANGUAGE_LOWER_SORBIAN_GERMANY ; > ;
     };
 };
 

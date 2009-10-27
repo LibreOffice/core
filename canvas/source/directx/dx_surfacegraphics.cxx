@@ -34,6 +34,8 @@
 #include "dx_surfacegraphics.hxx"
 #include "dx_impltools.hxx"
 
+using namespace ::com::sun::star;
+
 namespace dxcanvas
 {
     namespace
@@ -75,11 +77,12 @@ namespace dxcanvas
                 tools::setupGraphics( *pGraphics );
                 pRet.reset(pGraphics,
                            GraphicsDeleter(rSurface, aHDC));
+                return pRet;
             }
             else
                 rSurface->ReleaseDC( aHDC );
         }
 
-        return pRet;
+        throw uno::RuntimeException();
     }
 }

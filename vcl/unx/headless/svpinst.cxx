@@ -504,6 +504,10 @@ void SvpSalInstance::StartTimer( ULONG nMS )
     }
 }
 
+void SvpSalInstance::AddToRecentDocumentList(const rtl::OUString&, const rtl::OUString&)
+{
+}
+
 SvpSalTimer::~SvpSalTimer()
 {
 }
