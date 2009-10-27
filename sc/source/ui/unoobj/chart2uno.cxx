@@ -500,6 +500,10 @@ void Chart2Positioner::glueState()
         ScRefTokenHelper::getDoubleRefDataFromToken(aData, *itr);
         SCCOLROW n1 = aData.Ref1.nCol;
         SCCOLROW n2 = aData.Ref2.nCol;
+        if (n1 > MAXCOL)
+            n1 = MAXCOL;
+        if (n2 > MAXCOL)
+            n2 = MAXCOL;
         SCCOLROW nTmp = n2 - n1 + 1;
         if (n1 < mnStartCol)
             mnStartCol = static_cast<SCCOL>(n1);
@@ -510,14 +514,18 @@ void Chart2Positioner::glueState()
 
         n1 = aData.Ref1.nRow;
         n2 = aData.Ref2.nRow;
+        if (n1 > MAXROW)
+            n1 = MAXROW;
+        if (n2 > MAXROW)
+            n2 = MAXROW;
         nTmp = n2 - n1 + 1;
 
         if (n1 < mnStartRow)
-            mnStartRow = static_cast<SCCOL>(n1);
+            mnStartRow = static_cast<SCROW>(n1);
         if (n2 > nEndRow)
-            nEndRow = static_cast<SCCOL>(n2);
+            nEndRow = static_cast<SCROW>(n2);
         if (nTmp > nMaxRows)
-            nMaxRows = static_cast<SCCOL>(nTmp);
+            nMaxRows = static_cast<SCROW>(nTmp);
     }
 
     // total column size ?
@@ -532,6 +540,14 @@ void Chart2Positioner::glueState()
     if (nR == 1)
     {
         meGlue = GLUETYPE_COLS;
+        return;
+    }
+    // #i103540# prevent invalid vector size
+    if ((nC <= 0) || (nR <= 0))
+    {
+        invalidateGlue();
+        mnStartCol = 0;
+        mnStartRow = 0;
         return;
     }
     sal_uInt32 nCR = static_cast<sal_uInt32>(nC*nR);

@@ -3902,7 +3902,7 @@ void ScXMLExport::WriteExternalRefCaches()
         return;
 
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-    pRefMgr->resetSrcFileData();
+    pRefMgr->resetSrcFileData(GetOrigFileName());
     sal_uInt16 nCount = pRefMgr->getExternalFileCount();
     for (sal_uInt16 nFileId = 0; nFileId < nCount; ++nFileId)
     {

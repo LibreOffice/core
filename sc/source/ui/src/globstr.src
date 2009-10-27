@@ -304,23 +304,23 @@ Resource RID_GLOBSTR
     };
     String STR_UNDO_INSERTNOTE
     {
-        Text [ en-US ] = "Insert Note" ;
+        Text [ en-US ] = "Insert Comment" ;
     };
     String STR_UNDO_DELETENOTE
     {
-        Text [ en-US ] = "Delete Note" ;
+        Text [ en-US ] = "Delete Comment" ;
     };
     String STR_UNDO_SHOWNOTE
     {
-        Text [ en-US ] = "Show Note" ;
+        Text [ en-US ] = "Show Comment" ;
     };
     String STR_UNDO_HIDENOTE
     {
-        Text [ en-US ] = "Hide note" ;
+        Text [ en-US ] = "Hide Comment" ;
     };
     String STR_UNDO_EDITNOTE
     {
-        Text [ en-US ] = "Edit Note" ;
+        Text [ en-US ] = "Edit Comment" ;
     };
     String STR_UNDO_DEC_INDENT
     {
@@ -1020,7 +1020,7 @@ Resource RID_GLOBSTR
     };
     String STR_NOTES
     {
-        Text [ en-US ] = "Notes" ;
+        Text [ en-US ] = "Comments" ;
     };
     String STR_QUERY_DELTAB
     {
@@ -1260,7 +1260,7 @@ Resource RID_GLOBSTR
     };
     String STR_SCATTR_PAGE_NOTES
     {
-        Text [ en-US ] = "Notes" ;
+        Text [ en-US ] = "Comments" ;
     };
     String STR_SCATTR_PAGE_GRID
     {

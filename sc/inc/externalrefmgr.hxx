@@ -422,10 +422,13 @@ public:
     /** Source document meta-data container. */
     struct SrcFileData
     {
-        String maFileName;
+        String maFileName;      /// original file name as loaded from the file.
+        String maRealFileName;  /// file name created from the relative name.
         String maRelativeName;
         String maFilterName;
         String maFilterOptions;
+
+        void maybeCreateRealFileName(const String& rOwnDocName);
     };
 
 public:
@@ -576,7 +579,21 @@ public:
      */
     void convertToAbsName(String& rFile) const;
     sal_uInt16 getExternalFileId(const String& rFile);
-    const String* getExternalFileName(sal_uInt16 nFileId) const;
+
+    /**
+     * It returns a pointer to the name of the URI associated with a given
+     * external file ID.  In case the original document has moved, it returns
+     * an URI adjusted for the relocation.
+     *
+     * @param nFileId file ID for an external document
+     * @param bForceOriginal If true, it always returns the original document
+     *                       URI even if the referring document has relocated.
+     *                       If false, it returns an URI adjusted for
+     *                       relocated document.
+     *
+     * @return const String* external document URI.
+     */
+    const String* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
     bool hasExternalFile(sal_uInt16 nFileId) const;
     bool hasExternalFile(const String& rFile) const;
     const SrcFileData* getExternalFileData(sal_uInt16 nFileId) const;
@@ -585,8 +602,15 @@ public:
     const String* getRealRangeName(sal_uInt16 nFileId, const String& rRangeName) const;
     void refreshNames(sal_uInt16 nFileId);
     void breakLink(sal_uInt16 nFileId);
-    void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile);
+    void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile, const String& rNewFilter);
 
+    /**
+     * Set a relative file path for the specified file ID.  Note that the
+     * caller must ensure that the passed URL is a valid relative URL.
+     *
+     * @param nFileId file ID for an external document
+     * @param rRelUrl relative URL
+     */
     void setRelativeFileName(sal_uInt16 nFileId, const String& rRelUrl);
 
     /**
@@ -607,8 +631,11 @@ public:
      * Re-generates relative names for all stored source files.  This is
      * necessary when exporting to an ods document, to ensure that all source
      * files have their respective relative names for xlink:href export.
+     *
+     * @param rBaseFileUrl Absolute URL of the content.xml fragment of the
+     *                     document being exported.
      */
-    void resetSrcFileData();
+    void resetSrcFileData(const String& rBaseFileUrl);
 
     /**
      * Update a single referencing cell position.
@@ -674,6 +701,19 @@ private:
     bool isFileLoadable(const String& rFile) const;
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
+
+    /**
+     * Try to create a "real" file name from the relative path.  The original
+     * file name may not point to the real document when the referencing and
+     * referenced documents have been moved.
+     *
+     * For the real file name to be created, the relative name should not be
+     * empty before calling this method, or the real file name will not be
+     * created.
+     *
+     * @param nFileId file ID for an external document
+     */
+    void maybeCreateRealFileName(sal_uInt16 nFileId);
 
     bool compileTokensByCell(const ScAddress& rCell);
 

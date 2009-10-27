@@ -442,7 +442,7 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 
         SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -452,7 +452,7 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 {
 // SID_PASTE
-// FID_PASTE_CONTENTS
+// SID_PASTE_SPECIAL
 // SID_CLIPBOARD_FORMAT_ITEMS
 
     if ( !pImpl->m_pClipEvtLstnr )
@@ -489,7 +489,7 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
     if (bDisable)
     {
         rSet.DisableItem( SID_PASTE );
-        rSet.DisableItem( FID_PASTE_CONTENTS );
+        rSet.DisableItem( SID_PASTE_SPECIAL );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SFX_ITEM_UNKNOWN )
