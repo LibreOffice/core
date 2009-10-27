@@ -1,6 +1,6 @@
---- misc/mozilla/nsprpub/config/rules.mk	Tue Mar 24 23:49:17 2009
-+++ misc/build/mozilla/nsprpub/config/rules.mk	Mon Jun 29 15:45:22 2009
-@@ -363,7 +363,11 @@
+--- misc/mozilla/nsprpub/config/rules.mk	2009-05-02 01:08:01.000000000 +0200
++++ misc/build/mozilla/nsprpub/config/rules.mk	2009-09-17 10:29:39.823155149 +0200
+@@ -350,7 +350,12 @@
  ifdef NS_USE_GCC
  	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
  else
@@ -10,12 +10,13 @@
 +        #rc will use the stl from the system if the path is in the INCLUDE
 +        #variable.
 +	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++
  endif # GCC
  	@echo $(RES) finished
  endif
---- misc/mozilla/nsprpub/configure	Fri Dec  5 01:46:50 2008
-+++ misc/build/mozilla/nsprpub/configure	Mon Jun 29 15:28:52 2009
-@@ -3905,7 +3905,7 @@
+--- misc/mozilla/nsprpub/configure	2009-05-08 15:12:31.000000000 +0200
++++ misc/build/mozilla/nsprpub/configure	2009-09-17 10:31:55.064081763 +0200
+@@ -3898,7 +3898,7 @@
      PR_MD_CSRCS=linux.c
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      DSO_CFLAGS=-fPIC
@@ -24,25 +25,25 @@
      _OPTIMIZE_FLAGS=-O2
      _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
                                     # combo is not yet good at debugging inlined
---- misc/mozilla/security/coreconf/Darwin.mk	Fri Mar 20 08:19:35 2009
-+++ misc/build/mozilla/security/coreconf/Darwin.mk	Mon Jun 29 15:28:52 2009
-@@ -38,9 +38,12 @@
- include $(CORE_DEPTH)/coreconf/UNIX.mk
+--- misc/mozilla/security/coreconf/Darwin.mk	2009-07-30 23:36:02.000000000 +0200
++++ misc/build/mozilla/security/coreconf/Darwin.mk	2009-09-17 11:11:36.442683705 +0200
+@@ -39,8 +39,12 @@
  
  DEFAULT_COMPILER = cc
+ 
+-CC		= cc
+-CCC		= c++
 +# CC is taken from environment automatically.
 +#CC		= cc
 +# Use CCC from environment.
 +#CCC		= c++
 +CCC		= $(CXX)
- 
--CC		= cc
--CCC		= c++
++
  RANLIB		= ranlib
  
  ifndef CPU_ARCH
---- misc/mozilla/security/coreconf/Linux.mk	Sat Sep  6 01:17:23 2008
-+++ misc/build/mozilla/security/coreconf/Linux.mk	Mon Jun 29 15:28:52 2009
+--- misc/mozilla/security/coreconf/Linux.mk	2009-07-30 01:43:41.000000000 +0200
++++ misc/build/mozilla/security/coreconf/Linux.mk	2009-09-17 10:39:40.372245066 +0200
 @@ -46,8 +46,11 @@
  	IMPL_STRATEGY = _PTH
  endif
@@ -57,18 +58,18 @@
  RANLIB			= ranlib
  
  DEFAULT_COMPILER = gcc
-@@ -174,7 +177,7 @@
- ARCH			= linux
- 
- DSO_CFLAGS		= -fPIC
--DSO_LDOPTS		= -shared $(ARCHFLAG) -Wl,-z,defs
-+DSO_LDOPTS		= -shared $(ARCHFLAG) -Wl,-z,defs  '-Wl,-rpath,$$ORIGIN'
+@@ -149,7 +152,7 @@
+ # incorrectly reports undefined references in the libraries we link with, so
+ # we don't use -z defs there.
+ ZDEFS_FLAG		= -Wl,-z,defs
+-DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
++DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) '-Wl,-rpath,$$ORIGIN'
  DSO_LDFLAGS		=
  LDFLAGS			+= $(ARCHFLAG)
  
---- misc/mozilla/security/coreconf/SunOS5.mk	Thu Nov 22 05:39:56 2007
-+++ misc/build/mozilla/security/coreconf/SunOS5.mk	Mon Jun 29 15:28:52 2009
-@@ -89,8 +89,11 @@
+--- misc/mozilla/security/coreconf/SunOS5.mk	2009-06-11 02:55:32.000000000 +0200
++++ misc/build/mozilla/security/coreconf/SunOS5.mk	2009-09-17 10:42:17.845459669 +0200
+@@ -89,8 +89,12 @@
  	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
  	endif
  else
@@ -79,12 +80,13 @@
 +# Use CXX from environment.
 +#	CCC        = CC
 +        CCC       = $(CXX)
++
  	ASFLAGS   += -Wa,-P
  	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
  	ifndef BUILD_OPT
---- misc/mozilla/security/coreconf/arch.mk	Wed Mar 11 19:54:24 2009
-+++ misc/build/mozilla/security/coreconf/arch.mk	Mon Jun 29 15:28:52 2009
-@@ -329,8 +329,14 @@
+--- misc/mozilla/security/coreconf/arch.mk	2009-06-05 04:14:49.000000000 +0200
++++ misc/build/mozilla/security/coreconf/arch.mk	2009-09-17 10:45:27.710858021 +0200
+@@ -324,7 +324,12 @@
  # IMPL_STRATEGY may be defined too.
  #
  
@@ -96,13 +98,11 @@
 +#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
 +OBJDIR_NAME = out
  
-+
  ifeq (,$(filter-out WIN%,$(OS_TARGET)))
  ifndef BUILD_OPT
- #
---- misc/mozilla/security/coreconf/rules.mk	Wed Jan 21 00:30:57 2009
-+++ misc/build/mozilla/security/coreconf/rules.mk	Mon Jun 29 15:47:42 2009
-@@ -359,7 +359,11 @@
+--- misc/mozilla/security/coreconf/rules.mk	2009-08-11 05:23:39.000000000 +0200
++++ misc/build/mozilla/security/coreconf/rules.mk	2009-09-17 10:48:07.361462582 +0200
+@@ -355,7 +355,12 @@
  ifdef NS_USE_GCC
  	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
  else
@@ -112,20 +112,45 @@
 +        #rc will use the stl from the system if the path is in the INCLUDE
 +        #variable.
 +	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++
  endif
  	@echo $(RES) finished
  endif
---- misc/mozilla/security/nss/cmd/platlibs.mk	Wed Dec  3 00:24:46 2008
-+++ misc/build/mozilla/security/nss/cmd/platlibs.mk	Mon Jun 29 15:28:52 2009
-@@ -52,9 +52,9 @@
+--- misc/mozilla/security/nss/cmd/platlibs.mk	2009-06-18 01:01:48.000000000 +0200
++++ misc/build/mozilla/security/nss/cmd/platlibs.mk	2009-09-17 11:08:16.697236076 +0200
+@@ -41,27 +41,28 @@
+ ifeq ($(OS_ARCH), SunOS) 
+ ifeq ($(BUILD_SUN_PKG), 1)
+ ifeq ($(USE_64), 1)
+-EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1/64:/usr/lib/mps/64'
++#In OOo we would probable put the executables next to libs
++EXTRA_SHARED_LIBS += -R '$$ORIGIN'
+ else
+-EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1:/usr/lib/mps'
++EXTRA_SHARED_LIBS += -R '$$ORIGIN'
+ endif
+ else
+-EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -R '$$ORIGIN'
+ endif
+ endif
  
  ifeq ($(OS_ARCH), Linux)
+ ifeq ($(BUILD_SUN_PKG), 1)
+ ifeq ($(USE_64), 1)
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:/opt/sun/private/lib64:$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
+ else
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib:/opt/sun/private/lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
+ endif
+ else
  ifeq ($(USE_64), 1)
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:$$ORIGIN/../lib'
-+EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN:$$ORIGIN'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
  else
 -EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib'
 +EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
  endif
  endif
- 
+ endif
