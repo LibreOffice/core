@@ -563,7 +563,7 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRec
     }
 #endif
 
-    if ( !mpControlData->mpReferenceDevice )
+    if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {
         _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, _rStr, _nStyle );
         _rTargetDevice.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
