@@ -957,9 +957,9 @@ public class ValueChanger {
         }
 
     } else
-   {
-     System.out.println("ValueChanger don't know type " + oldValue.getClass());
-   }
+    {
+        System.out.println("ValueChanger don't know type " + oldValue.getClass());
+    }
 
    return newValue;
 

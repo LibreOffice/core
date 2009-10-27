@@ -91,7 +91,9 @@ namespace framework
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
+#if 0
         DECL_STATIC_LINK( License, Terminate, void* );
+#endif
 
         /*
         XJob...

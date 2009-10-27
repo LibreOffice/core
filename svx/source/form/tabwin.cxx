@@ -52,7 +52,7 @@
 #endif
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include <svx/fmpage.hxx>
 
 #ifndef _SVX_FMPGEIMP_HXX

@@ -64,6 +64,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/unomod.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 //=====  namespaces ===========================================================
 
@@ -225,7 +227,14 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
     {
         Point aPnt( rPoint.X, rPoint.Y );
         mpControl->PixelToLogic( aPnt );
-        SdrObject * pObj = mpPage->CheckHit(aPnt, 1, NULL, false);
+
+        SdrObject* pObj = 0;
+
+        if(mpView && mpView->GetSdrPageView())
+        {
+            pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, 1, *mpView->GetSdrPageView(), 0, false);
+        }
+
         if( pObj )
             xAccessible = getAccessible( pObj );
     }

@@ -40,28 +40,28 @@ class SwDoc;
 
 class SwTxtTOXMark : public SwTxtAttrEnd
 {
-    xub_StrLen* pEnd;       // wenn AlternativText vom SwTOXMark dann 0 !!
-    SwTxtNode* pMyTxtNd;
+    SwTxtNode * m_pTxtNode;
+    xub_StrLen * m_pEnd;   // 0 if SwTOXMark without AlternativeText
+
 public:
-    SwTxtTOXMark( const SwTOXMark& rAttr,
-                    xub_StrLen nStart, xub_StrLen * pEnd = 0 );
+    SwTxtTOXMark( SwTOXMark& rAttr, xub_StrLen nStart, xub_StrLen * pEnd = 0 );
     virtual ~SwTxtTOXMark();
 
-    virtual xub_StrLen *GetEnd();                   // SwTxtAttr
-    inline const xub_StrLen* GetEnd() const { return pEnd; }
+    virtual xub_StrLen *GetEnd();     // SwTxtAttr
+    inline const xub_StrLen* GetEnd() const { return m_pEnd; }
 
     void CopyTOXMark( SwDoc* pDestDoc );
 
-    // erfrage und setze den TxtNode Pointer
-    inline const SwTxtNode* GetpTxtNd() const { return pMyTxtNd; }
+    // get and set TxtNode pointer
+    inline const SwTxtNode* GetpTxtNd() const { return m_pTxtNode; }
     inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 };
 
 inline const SwTxtNode& SwTxtTOXMark::GetTxtNode() const
 {
-    ASSERT( pMyTxtNd, "SwTxtTOXMark:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
+    ASSERT( m_pTxtNode, "SwTxtTOXMark: where is my TxtNode?" );
+    return *m_pTxtNode;
 }
 
 #endif

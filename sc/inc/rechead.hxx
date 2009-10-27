@@ -130,33 +130,6 @@ class SvStream;
 
 // -----------------------------------------------------------------------
 
-//  "Automatischer" Record-Header mit Groessenangabe
-
-class ScReadHeader
-{
-private:
-    SvStream&   rStream;
-    ULONG       nDataEnd;
-
-public:
-    ScReadHeader(SvStream& rNewStream);
-    ~ScReadHeader();
-
-    ULONG   BytesLeft() const;
-};
-
-class ScWriteHeader
-{
-private:
-    SvStream&   rStream;
-    ULONG       nDataPos;
-    sal_uInt32  nDataSize;
-
-public:
-    ScWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault = 0);
-    ~ScWriteHeader();
-};
-
         //  Header mit Groessenangaben fuer mehrere Objekte
 
 class ScMultipleReadHeader

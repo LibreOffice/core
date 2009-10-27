@@ -32,7 +32,7 @@
 
 #include "resids.hrc"
 #include "buttongroup.hrc"
-#include "chinese_direction.hrc"
+#include "chinese_direction_ids.hrc"
 
 #define PB_EDITTERMS        1
 

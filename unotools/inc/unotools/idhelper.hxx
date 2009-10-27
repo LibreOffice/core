@@ -125,9 +125,6 @@ public:                                                             \
     static void release();                                          \
                                                                     \
     static ::com::sun::star::uno::Sequence< sal_Int8 > getImplementationId( \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >& _rxProvider);  \
-                                                                    \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getImplementationId( \
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >& _rTypes); \
                                                                     \
 private:                                                            \
@@ -178,16 +175,6 @@ void classname::release()   \
         delete static_cast< ::utl::MapType2Id *>( s_pMap ); \
         s_pMap = NULL;  \
     }   \
-}   \
-    \
-/*-----------------------------------------------------------------------*/ \
-::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId( \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >& _rxProvider)   \
-{   \
-    ::osl::MutexGuard aGuard(s_aMutex); \
-    if (_rxProvider.is())   \
-        return getImplementationId(_rxProvider->getTypes());    \
-    return ::com::sun::star::uno::Sequence< sal_Int8 >();   \
 }   \
     \
 /*-----------------------------------------------------------------------*/ \

@@ -59,7 +59,12 @@ File gid_File_Exe_Simpress
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(simpress);
+  #ifdef WNT
+    FileDescription = "%PRODUCTNAME Impress";
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
 End
 
 // new user interface configuration files

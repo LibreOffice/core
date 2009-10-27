@@ -1630,7 +1630,7 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bMirror90Allowed  =TRUE;
     rInfo.bTransparenceAllowed = FALSE;
     rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed     =FALSE;
+    rInfo.bShearAllowed     =TRUE;
     rInfo.bEdgeRadiusAllowed=FALSE;
     rInfo.bNoContortion     =TRUE;
 
@@ -1965,19 +1965,56 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::Shear( const Point& /*rRef*/, long /*nWink*/, double /*tn*/, FASTBOOL /*bVShear*/)
+void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
-/*
     SdrTextObj::Shear( rRef, nWink, tn, bVShear );
     InvalidateRenderGeometry();
-*/
 }
-void SdrObjCustomShape::NbcShear( const Point& /*rRef*/, long /*nWink*/, double /*tn*/, FASTBOOL /*bVShear*/)
+void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
-/*
+    long nDrehWink = aGeo.nDrehWink;
+    if ( nDrehWink )
+    {
+        aGeo.nDrehWink = -nDrehWink;
+        aGeo.RecalcSinCos();
+        NbcRotate( rRef, aGeo.nDrehWink, aGeo.nSin, aGeo.nCos );
+    }
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
+    if ( nDrehWink )
+    {
+        aGeo.nDrehWink = nDrehWink;
+        aGeo.RecalcSinCos();
+        Rotate( rRef, aGeo.nDrehWink, aGeo.nSin, aGeo.nCos );
+    }
     InvalidateRenderGeometry();
-*/
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(USHORT nPosNum) const
+{
+    INT32 nWdt = ImpGetLineWdt(); // #i25616# ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+
+    // #i25616#
+    if(!LineIsOutsideGeometry())
+    {
+        nWdt++;
+        nWdt /= 2;
+    }
+
+    Point aPt;
+    switch (nPosNum) {
+        case 0: aPt=aRect.TopCenter();    aPt.Y()-=nWdt; break;
+        case 1: aPt=aRect.RightCenter();  aPt.X()+=nWdt; break;
+        case 2: aPt=aRect.BottomCenter(); aPt.Y()+=nWdt; break;
+        case 3: aPt=aRect.LeftCenter();   aPt.X()-=nWdt; break;
+    }
+    if (aGeo.nShearWink!=0) ShearPoint(aPt,aRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    aPt-=GetSnapRect().Center();
+    SdrGluePoint aGP(aPt);
+    aGP.SetPercent(FALSE);
+    return aGP;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2010,6 +2047,53 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     SdrGluePoint aCopy((*pSource)[a]);
                     aCopy.SetUserDefined(FALSE);
                     aNewList.Insert(aCopy);
+                }
+
+                sal_Bool bMirroredX = IsMirroredX();
+                sal_Bool bMirroredY = IsMirroredY();
+
+                long nShearWink = aGeo.nShearWink;
+                double fTan = aGeo.nTan;
+
+                if ( aGeo.nDrehWink || nShearWink || bMirroredX || bMirroredY )
+                {
+                    Polygon aPoly( aRect );
+                    if( nShearWink )
+                    {
+                        USHORT nPointCount=aPoly.GetSize();
+                        for (USHORT i=0; i<nPointCount; i++)
+                            ShearPoint(aPoly[i],aRect.Center(), fTan, FALSE );
+                    }
+                    if ( aGeo.nDrehWink )
+                        aPoly.Rotate( aRect.Center(), aGeo.nDrehWink / 10 );
+
+                    Rectangle aBoundRect( aPoly.GetBoundRect() );
+                    sal_Int32 nXDiff = aBoundRect.Left() - aRect.Left();
+                    sal_Int32 nYDiff = aBoundRect.Top() - aRect.Top();
+
+                    if (nShearWink&&(bMirroredX&&!bMirroredY)||(bMirroredY&&!bMirroredX))
+                    {
+                        nShearWink = -nShearWink;
+                        fTan = -fTan;
+                    }
+
+                    Point aRef( aRect.GetWidth() / 2, aRect.GetHeight() / 2 );
+                    for ( a = 0; a < aNewList.GetCount(); a++ )
+                    {
+                        SdrGluePoint& rPoint = aNewList[ a ];
+                        Point aGlue( rPoint.GetPos() );
+                        if ( nShearWink )
+                            ShearPoint( aGlue, aRef, fTan );
+
+                        RotatePoint( aGlue, aRef, sin( fObjectRotation * F_PI180 ), cos( fObjectRotation * F_PI180 ) );
+                        if ( bMirroredX )
+                            aGlue.X() = aRect.GetWidth() - aGlue.X();
+                        if ( bMirroredY )
+                            aGlue.Y() = aRect.GetHeight() - aGlue.Y();
+                        aGlue.X() -= nXDiff;
+                        aGlue.Y() -= nYDiff;
+                        rPoint.SetPos( aGlue );
+                    }
                 }
 
                 for(a = 0; a < pList->GetCount(); a++)
@@ -2162,12 +2246,13 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
 
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles( pObj ) );
 
+    GeoStat aGeoStat( pObj->GetGeoStat() );
     if ( aNewRect.TopLeft()!= pObj->aRect.TopLeft() &&
         ( pObj->aGeo.nDrehWink || pObj->aGeo.nShearWink ) )
     {
         Point aNewPos( aNewRect.TopLeft() );
-        if ( pObj->aGeo.nShearWink ) ShearPoint( aNewPos, aOld.TopLeft(), pObj->aGeo.nTan );
-        if ( pObj->aGeo.nDrehWink )  RotatePoint(aNewPos, aOld.TopLeft(), pObj->aGeo.nSin, pObj->aGeo.nCos );
+        if ( pObj->aGeo.nShearWink ) ShearPoint( aNewPos, aOld.TopLeft(), aGeoStat.nTan );
+        if ( pObj->aGeo.nDrehWink )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.nSin, aGeoStat.nCos );
         aNewRect.SetPos( aNewPos );
     }
     if ( aNewRect != pObj->aRect )
@@ -2180,7 +2265,6 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
             Point aTop( ( pObj->GetSnapRect().Left() + pObj->GetSnapRect().Right() ) >> 1, pObj->GetSnapRect().Top() );
             Point aBottom( aTop.X(), aTop.Y() + 1000 );
             pObj->NbcMirror( aTop, aBottom );
-
         }
         if ( rNewRect.Top() > rNewRect.Bottom() )
         {
@@ -2188,6 +2272,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
             Point aRight( aLeft.X() + 1000, aLeft.Y() );
             pObj->NbcMirror( aLeft, aRight );
         }
+
         std::vector< SdrCustomShapeInteraction >::iterator aIter( aInteractionHandles.begin() );
         while ( aIter != aInteractionHandles.end() )
         {
@@ -3008,91 +3093,12 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     rTextRect=Rectangle(aTextPos,aTextSiz);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
     SetBoundRectDirty();
     SetRectsDirty(TRUE);
     InvalidateRenderGeometry();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SdrObject* SdrObjCustomShape::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    SdrObject* pHitObj = NULL;
-    const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-    if ( pSdrObject )
-    {
-        SdrObjList* pOL = pSdrObject->GetSubList();
-        if ( pOL )
-        {
-            ULONG nObjNum = pOL->GetObjCount();
-            while ( ( pHitObj == NULL ) && nObjNum )
-            {
-                nObjNum--;
-                SdrObject* pObj = pOL->GetObj( nObjNum );
-                if ( pObj->CheckHit( rPnt, nTol, pVisiLayer ) )
-                    pHitObj = (SdrObject*)this;
-            }
-        }
-        else if ( pSdrObject->CheckHit( rPnt, nTol, pVisiLayer ) )
-            pHitObj = (SdrObject*)this;
-    }
-
-    if ( !pHitObj && HasText() )
-    {
-        // paint text over object
-        double fTextRotation = GetExtraTextRotation();
-        if ( fTextRotation != 0.0 )
-        {
-            GeoStat aOldGeoStat( aGeo );
-            Rectangle aOldRect( aRect );
-            Rectangle aTextBound( aRect );
-            GetTextBounds( aTextBound );
-
-            // determining the correct refpoint
-            Point aRef( aTextBound.Center() );
-            Rectangle aUnrotatedSnapRect( aOutRect );
-            RotatePoint( aRef, aUnrotatedSnapRect.Center(), -aGeo.nSin, -aGeo.nCos );
-
-            long dx = aRect.Right()-aRect.Left();
-            long dy = aRect.Bottom()-aRect.Top();
-            Point aP( aRect.TopLeft() );
-            double sn = sin( F_PI180 * fTextRotation );
-            double cs = cos( F_PI180 * fTextRotation );
-            RotatePoint( aP, aRef, sn, cs );
-            ((SdrObjCustomShape*)this)->aRect.Left()=aP.X();
-            ((SdrObjCustomShape*)this)->aRect.Top()=aP.Y();
-            ((SdrObjCustomShape*)this)->aRect.Right()=aRect.Left()+dx;
-            ((SdrObjCustomShape*)this)->aRect.Bottom()=aRect.Top()+dy;
-            if ( aGeo.nDrehWink == 0 )
-            {
-                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( (sal_Int32)( fTextRotation * 100.0 ) );
-                ((SdrObjCustomShape*)this)->aGeo.nSin = sn;
-                ((SdrObjCustomShape*)this)->aGeo.nCos = cs;
-            }
-            else
-            {
-                ((SdrObjCustomShape*)this)->aGeo.nDrehWink=NormAngle360( aGeo.nDrehWink + (sal_Int32)( fTextRotation * 100.0 ) );
-                ((SdrObjCustomShape*)this)->aGeo.RecalcSinCos();
-            }
-            pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
-            ((SdrObjCustomShape*)this)->aGeo = aOldGeoStat;
-            ((SdrObjCustomShape*)this)->aRect = aOldRect;
-
-        }
-        else
-            pHitObj = SdrTextObj::CheckHit( rPnt, nTol, pVisiLayer );
-    }
-
-    return pHitObj;
 }
 
 void SdrObjCustomShape::operator=(const SdrObject& rObj)
@@ -3301,13 +3307,13 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     SetSnapRect(aBaseRect);
 
     // shear?
-//  if(!basegfx::fTools::equalZero(fShearX))
-//  {
-//      GeoStat aGeoStat;
-//      aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
-//      aGeoStat.RecalcTan();
-//      Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
-//  }
+    if(!basegfx::fTools::equalZero(fShearX))
+    {
+        GeoStat aGeoStat;
+        aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
+        aGeoStat.RecalcTan();
+        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
+    }
 
     // rotation?
     if(!basegfx::fTools::equalZero(fRotate))

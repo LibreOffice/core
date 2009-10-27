@@ -15,7 +15,7 @@
 #include "event.hxx"
 #include "uievent.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 
 namespace DOM { namespace events {
 

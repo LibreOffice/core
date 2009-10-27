@@ -54,9 +54,9 @@ public interface InputRepository
      *
      * @return the repository id
      */
-    public Object getId();
+    Object getId();
 
-    public InputStream createInputStream(final String name) throws IOException;
+    InputStream createInputStream(final String name) throws IOException;
 
     /** allows to acces sub repositories inside this repository
      *
@@ -64,7 +64,7 @@ public interface InputRepository
      * @return the sub repository
      * @throws java.io.IOException when the sub repository doesn't exist.
      */
-    public InputRepository openInputRepository(final String name) throws IOException;
+    InputRepository openInputRepository(final String name) throws IOException;
 
     /**
      * This returns an version number for the given resource. Return zero, if
@@ -75,11 +75,11 @@ public interface InputRepository
      * @param name the name of the resource
      * @return the version number
      */
-    public long getVersion(final String name);
+    long getVersion(final String name);
 
-    public boolean exists(final String name);
+    boolean exists(final String name);
 
-    public boolean isReadable(final String name);
+    boolean isReadable(final String name);
 
-    public void closeInputRepository();
+    void closeInputRepository();
 }

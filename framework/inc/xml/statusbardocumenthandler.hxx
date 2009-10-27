@@ -48,7 +48,7 @@
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <hash_map>
 #include <stdtypes.h>
@@ -62,9 +62,8 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadStatusBarDocumentHandler :   public ::com::sun::star::xml::sax::XDocumentHandler,
-                                        private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
-                                        public ::cppu::OWeakObject
+class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+                                        public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         enum StatusBar_XML_Entry
@@ -91,14 +90,6 @@ class OReadStatusBarDocumentHandler :   public ::com::sun::star::xml::sax::XDocu
 
         OReadStatusBarDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& aStatusBarItems );
         virtual ~OReadStatusBarDocumentHandler();
-
-        // XInterface
-        virtual void SAL_CALL acquire() throw()
-            { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw()
-            { OWeakObject::release(); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)

@@ -28,9 +28,13 @@
  *
  ************************************************************************/
 
+#include "ResourceIds.hrc"
+
 #define CB_CLOCKWISE 1
+#define CB_INCLUDE_HIDDEN_CELLS_POLAR 2
 
 #define FL_STARTING_ANGLE 1
+#define FL_PLOT_OPTIONS_POLAR 2
 
 #define CT_ANGLE_DIAL 1
 

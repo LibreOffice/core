@@ -31,10 +31,9 @@
 #ifndef SVX_STRINGLISTRESOURCE_HXX
 #define SVX_STRINGLISTRESOURCE_HXX
 
-/** === begin UNO includes === **/
-/** === end UNO includes === **/
-
 #include <tools/rc.hxx>
+
+#include <svx/svxdllapi.h>
 
 #include <memory>
 
@@ -52,8 +51,8 @@ namespace svx
     class StringListResource : public Resource
     {
     public:
-        StringListResource( const ResId& _rResId );
-        ~StringListResource();
+        SVX_DLLPUBLIC StringListResource( const ResId& _rResId );
+        SVX_DLLPUBLIC ~StringListResource();
 
         inline void get( ::std::vector< String >& _rStrings )
         {

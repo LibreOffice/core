@@ -80,6 +80,48 @@ CBaseReader( DocumentName )
     }
 }
 
+CMetaInfoReader::CMetaInfoReader( void* stream, zlib_filefunc_def* fa) :
+CBaseReader( stream, fa)
+{
+try
+    {
+        m_pKeywords_Builder = new CKeywordsTag( );
+        m_pSimple_Builder = new CSimpleTag( );
+        m_pDummy_Builder   = new CDummyTag( );
+
+        //retrieve all infomation that is useful
+        m_AllMetaInfo[META_INFO_AUTHOR]               = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_TITLE]                = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_SUBJECT]              = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_KEYWORDS]             = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_DESCRIPTION]          = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_DOCUMENT_STATISTIC]   = EMPTY_XML_TAG;
+
+        m_AllMetaInfo[META_INFO_GENERATOR]            = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_CREATION]             = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_CREATOR]              = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_MODIFIED]             = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_LANGUAGE]             = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_DOCUMENT_NUMBER]      = EMPTY_XML_TAG;
+        m_AllMetaInfo[META_INFO_EDITING_TIME]         = EMPTY_XML_TAG;
+
+        Initialize( META_CONTENT_NAME );
+    }
+    catch(xml_parser_exception&
+    #if OSL_DEBUG_LEVEL > 0
+    ex
+    #endif
+    )
+    {
+        ENSURE(false, ex.what());
+    }
+    catch(...)
+    {
+        ENSURE(false, "Unknown error");
+    }
+
+}
+
 /** destructor.
 */
 

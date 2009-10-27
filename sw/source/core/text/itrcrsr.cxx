@@ -157,8 +157,10 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     GetInfo().SetFont( GetFnt() );
     const SwTxtNode *pNode = pFrm->GetTxtNode();
 
-    const SvxLRSpaceItem &rSpace =
-        pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
+    const SvxLRSpaceItem &rSpace = pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
+    // --> OD 2009-09-02 #i95907#
+    const bool bListLevelIndentsApplicable = pFrm->GetTxtNode()->AreListLevelIndentsApplicable();
+    // <--
 
     //
     // Carefully adjust the text formatting ranges.
@@ -181,8 +183,13 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                 pFrm->Prt().Left() +
                 nLMWithNum -
                 pNode->GetLeftMarginWithNum( sal_False ) -
-                rSpace.GetLeft() +
-                rSpace.GetTxtLeft();
+                // --> OD 2009-09-02 #i95907#
+//                rSpace.GetLeft() +
+//                rSpace.GetTxtLeft();
+                ( bListLevelIndentsApplicable
+                  ? 0
+                  : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
+                // <--
     }
     else
     {
@@ -193,8 +200,13 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                     pFrm->Prt().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum( sal_False ) -
-                    rSpace.GetLeft() +
-                    rSpace.GetTxtLeft();
+                    // --> OD 2009-09-02 #i95907#
+//                    rSpace.GetLeft() +
+//                    rSpace.GetTxtLeft();
+                    ( bListLevelIndentsApplicable
+                      ? 0
+                      : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
+                    // <--
         }
         else
         {

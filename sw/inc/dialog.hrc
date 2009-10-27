@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialog.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +54,7 @@
 #define STR_LINKEDIT_TEXT       (RC_DIALOG_BEGIN +  1)
 
 #define STR_CLOSELINKMSG        (RC_DIALOG_BEGIN +  3)
-#define STR_PATH_NOT_FOUND1     (RC_DIALOG_BEGIN +  4)
-#define STR_PATH_NOT_FOUND2     (RC_DIALOG_BEGIN +  5)
+#define STR_PATH_NOT_FOUND      (RC_DIALOG_BEGIN +  4)
 
 #define STR_FLT_SGV             (RC_DIALOG_BEGIN +  8)
 

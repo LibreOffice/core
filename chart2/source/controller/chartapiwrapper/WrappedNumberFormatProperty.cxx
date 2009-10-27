@@ -98,8 +98,15 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
     Any aRet( xInnerPropertySet->getPropertyValue( m_aInnerName ));
     if( !aRet.hasValue() )
     {
-        Reference< chart2::XAxis > xAxis( xInnerPropertySet, uno::UNO_QUERY );
-        sal_Int32 nKey = m_spChart2ModelContact->getExplicitNumberFormatKeyForAxis( xAxis );
+        sal_Int32 nKey = 0;
+        Reference< chart2::XDataSeries > xSeries( xInnerPropertySet, uno::UNO_QUERY );
+        if( xSeries.is() )
+            nKey = m_spChart2ModelContact->getExplicitNumberFormatKeyForSeries( xSeries );
+        else
+        {
+            Reference< chart2::XAxis > xAxis( xInnerPropertySet, uno::UNO_QUERY );
+            nKey = m_spChart2ModelContact->getExplicitNumberFormatKeyForAxis( xAxis );
+        }
         aRet <<= nKey;
     }
     return aRet;

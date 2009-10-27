@@ -33,13 +33,11 @@
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 
-#if !defined(UNX) && !defined(OS2)
+#ifdef WNT
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
-#endif
-
-#ifdef QUARTZ
+#elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"

@@ -245,6 +245,7 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
             default:                pButton = &aCharsGridRB;
         }
         pButton->Check();
+        aDisplayCB.Check(rGridItem.IsDisplayGrid());
         GridTypeHdl(pButton);
         aSnapToCharsCB.Check(rGridItem.IsSnapToChars());
         aLinesPerPageNF.SetValue(rGridItem.GetLines());
@@ -254,7 +255,6 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
         aRubySizeMF.SetValue(aRubySizeMF.Normalize(rGridItem.GetRubyHeight()), FUNIT_TWIP);
         aCharWidthMF.SetValue(aCharWidthMF.Normalize(rGridItem.GetBaseWidth()), FUNIT_TWIP);
         aRubyBelowCB.Check(rGridItem.IsRubyTextBelow());
-        aDisplayCB.Check(rGridItem.IsDisplayGrid());
         aPrintCB.Check(rGridItem.IsPrintGrid());
         aColorLB.SelectEntry(rGridItem.GetColor());
     }

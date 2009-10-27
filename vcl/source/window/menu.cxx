@@ -557,7 +557,7 @@ public:
 
     void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void    SetImages( long nMaxHeight = 0 );
+    void    SetImages( long nMaxHeight = 0, bool bForce = false );
 
     void    calcMinSize();
     Size    getMinSize();
@@ -591,7 +591,7 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         calcMinSize();
         SetBackground();
-        SetImages();
+        SetImages( 0, true);
     }
 }
 
@@ -625,7 +625,7 @@ Size DecoToolBox::getMinSize()
     return maMinSize;
 }
 
-void DecoToolBox::SetImages( long nMaxHeight )
+void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 {
     long border = getMinSize().Height() - maImage.GetSizePixel().Height();
 
@@ -635,13 +635,13 @@ void DecoToolBox::SetImages( long nMaxHeight )
     if( nMaxHeight < getMinSize().Height() )
         nMaxHeight = getMinSize().Height();
 
-    if( lastSize != nMaxHeight - border )
+    if( (lastSize != nMaxHeight - border) || bForce )
     {
         lastSize = nMaxHeight - border;
 
         Color       aEraseColor( 255, 255, 255, 255 );
         BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
-        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ?
+        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetHighContrastMode() ?
                               maImageHC.GetBitmapEx() : aBmpExDst );
 
         aEraseColor.SetTransparency( 255 );
@@ -2487,23 +2487,8 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     if( ! bNativeOk )
     {
         const StyleSettings& rSettings = i_pWindow->GetSettings().GetStyleSettings();
-        if( i_bHighlight )
-        {
-            i_pWindow->Push( PUSH_ALL );
-            Color aCol = rSettings.GetMenuHighlightTextColor();
-            i_pWindow->SetFillColor( rSettings.GetMenuHighlightTextColor() );
-            if( aCol.IsDark() )
-                aCol.IncreaseLuminance( 128 );
-            else
-                aCol.DecreaseLuminance( 128 );
-            i_pWindow->SetLineColor( aCol );
-            Polygon aPoly( i_rRect );
-            PolyPolygon aPolyPoly( aPoly );
-            i_pWindow->DrawTransparent( aPolyPoly, 20 );
-            i_pWindow->Pop();
-        }
-        else
-            i_pWindow->DrawSelectionBackground( i_rRect, 1, FALSE, TRUE, FALSE );
+        Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
+        i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, TRUE, FALSE, 2, NULL, &aColor );
     }
 }
 
@@ -2746,7 +2731,14 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 if ( pThisItemOnly && bHighlighted )
-                    pWin->SetTextColor( rSettings.GetMenuTextColor() );
+                {
+                    // This restores the normal menu or menu bar text
+                    // color for when it is no longer highlighted.
+            if ( bIsMenuBar )
+                pWin->SetTextColor( rSettings.GetMenuBarTextColor() );
+            else
+                pWin->SetTextColor( rSettings.GetMenuTextColor() );
+         }
             }
             if( bLayout )
             {
@@ -3495,11 +3487,6 @@ USHORT PopupMenu::Execute( Window* pExecWindow, const Rectangle& rRect, USHORT n
 
 USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupModeFlags, Menu* pSFrom, BOOL bPreSelectFirst )
 {
-
-    // #59614# Mit TH abgesprochen dass die ASSERTION raus kommt,
-    // weil es evtl. legitim ist...
-//  DBG_ASSERT( !PopupMenu::IsInExecute() || pSFrom, "PopupMenu::Execute() called in PopupMenu::Execute()" );
-
     if ( !pSFrom && ( PopupMenu::IsInExecute() || !GetItemCount() ) )
         return 0;
 
@@ -3675,7 +3662,15 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     {
         pWin->ImplAddDel( &aDelData );
 
+        ImplDelData aModalWinDel;
+        pW->ImplAddDel( &aModalWinDel );
+        pW->ImplIncModalCount();
+
         pWin->Execute();
+
+        DBG_ASSERT( ! aModalWinDel.IsDead(), "window for popup died, modal count incorrect !" );
+        if( ! aModalWinDel.IsDead() )
+            pW->ImplDecModalCount();
 
         if ( !aDelData.IsDelete() )
             pWin->ImplRemoveDel( &aDelData );
@@ -3799,7 +3794,10 @@ static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
             pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
     }
 
-    pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
+    if ( bMenuBar )
+        pWin->SetTextColor( rStyleSettings.GetMenuBarTextColor() );
+    else
+        pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
     pWin->SetTextFillColor();
     pWin->SetLineColor();
 }
@@ -5056,11 +5054,11 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
     if( pResMgr )
     {
-        Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        Bitmap aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, *pResMgr ) );
+        BitmapEx aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
+        BitmapEx aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, *pResMgr ) );
 
-        aCloser.maImage = Image( aBitmap, Color( COL_LIGHTMAGENTA ) );
-        aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
+        aCloser.maImage = Image( aBitmap );
+        aCloser.maImageHC = Image( aBitmapHC );
 
         aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
         aCloser.SetBackground();
@@ -5068,7 +5066,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
         aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
         aCloser.InsertItem( IID_DOCUMENTCLOSE,
-        GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
+        GetSettings().GetStyleSettings().GetHighContrastMode() ? aCloser.maImageHC : aCloser.maImage, 0 );
         aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
         aCloser.AddEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
         aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr ) ) );
@@ -5709,7 +5707,7 @@ void MenuBarWindow::Paint( const Rectangle& )
 
     // in high contrast mode draw a separating line on the lower edge
     if( ! IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) &&
-        GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+        GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         Push( PUSH_LINECOLOR | PUSH_MAPMODE );
         SetLineColor( Color( COL_WHITE ) );

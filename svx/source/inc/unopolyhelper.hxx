@@ -33,6 +33,8 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+#include <svx/svxdllapi.h>
+
 namespace com { namespace sun { namespace star { namespace drawing {
     struct PolyPolygonBezierCoords;
 } } } }
@@ -48,7 +50,7 @@ basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon( const com::
 
 /** convert a B2DPolyPolygon to a drawing::PolyPolygonBezierCoords
 */
-void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval );
+SVX_DLLPUBLIC void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, com::sun::star::drawing::PolyPolygonBezierCoords& rRetval );
 
 
 #endif

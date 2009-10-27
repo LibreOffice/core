@@ -221,6 +221,17 @@
           <value>com.sun.star.svx.FontHeightToolBoxController</value>
         </prop>
       </node>
+      <node oor:name="c3" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:ChartElementSelector</value>
+        </prop>
+        <prop oor:name="Module">
+            <value>com.sun.star.chart2.ChartDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sun.star.comp.chart.ElementSelectorToolbarController</value>
+        </prop>
+    </node>
     </node>
     <node oor:name="StatusBar">
       <node oor:name="c1" oor:op="replace">

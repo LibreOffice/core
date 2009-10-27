@@ -36,7 +36,7 @@
 #include <xml/xmlnamespaces.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <stack>
 
@@ -47,21 +47,12 @@
 namespace framework
 {
 
-class SaxNamespaceFilter : public ::com::sun::star::xml::sax::XDocumentHandler,
-                           public ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                           public ::cppu::OWeakObject
+class SaxNamespaceFilter : public ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                           public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
         SaxNamespaceFilter( ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rSax1DocumentHandler );
         virtual ~SaxNamespaceFilter();
-
-        // XInterface
-        virtual void SAL_CALL acquire() throw()
-            { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw()
-            { OWeakObject::release(); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument(void)

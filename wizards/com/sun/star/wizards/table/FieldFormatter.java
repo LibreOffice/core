@@ -227,7 +227,7 @@ public class FieldFormatter implements XItemListener
         boolean benableShiftUpButton = false;
         boolean benableShiftDownButton = false;
         boolean bfieldnameisselected = Helper.getUnoArrayPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems") != null;
-        int ilistcount = UnoDialog.getListBoxItemCount(xlstFieldNames);
+        int ilistcount = /* xlstFieldNames.getItemCount();*/ UnoDialog.getListBoxItemCount(xlstFieldNames);
         boolean blistispopulated = (ilistcount > 0);
         if (bfieldnameisselected)
         {
@@ -269,7 +269,7 @@ public class FieldFormatter implements XItemListener
         String fieldname = fieldnames[ipos];
         xlstFieldNames.removeItems(ipos, (short) 1);
         CurUnoDialog.fielditems.remove(fieldname);
-        int ilistcount = UnoDialog.getListBoxItemCount(xlstFieldNames);
+        int ilistcount = /* xlstFieldNames.getItemCount();*/ UnoDialog.getListBoxItemCount(xlstFieldNames);
         if ((ipos) < ilistcount)
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[]

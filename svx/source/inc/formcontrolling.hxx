@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -129,7 +129,7 @@ namespace svx
             @param _pInvalidationCallback
                 the callback for invalidating feature states
         */
-        ControllerFeatures( 
+        ControllerFeatures(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController,
             IControllerFeatureInvalidation* _pInvalidationCallback

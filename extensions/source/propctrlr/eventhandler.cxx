@@ -53,6 +53,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormController.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
@@ -146,6 +147,7 @@ namespace pcr
     /** === end UNO using === **/
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
+    namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
     //====================================================================
     //= EventDescription
@@ -538,6 +540,7 @@ namespace pcr
         ,m_aPropertyListeners( m_aMutex )
         ,m_bEventsMapInitialized( false )
         ,m_bIsDialogElement( false )
+        ,m_nGridColumnType( -1 )
     {
         DBG_CTOR( EventHandler, NULL );
     }
@@ -602,6 +605,7 @@ namespace pcr
         m_aEvents.swap( aEmpty );
 
         m_bIsDialogElement = false;
+        m_nGridColumnType = -1;
         try
         {
             Reference< XPropertySetInfo > xPSI( m_xComponent->getPropertySetInfo() );
@@ -610,6 +614,15 @@ namespace pcr
                               && xPSI->hasPropertyByName( PROPERTY_HEIGHT )
                               && xPSI->hasPropertyByName( PROPERTY_POSITIONX )
                               && xPSI->hasPropertyByName( PROPERTY_POSITIONY );
+
+            Reference< XChild > xAsChild( _rxIntrospectee, UNO_QUERY );
+            if ( xAsChild.is() && !Reference< XForm >( _rxIntrospectee, UNO_QUERY ).is() )
+            {
+                if ( FormComponentType::GRIDCONTROL == classifyComponent( xAsChild->getParent() ) )
+                {
+                    m_nGridColumnType = classifyComponent( _rxIntrospectee );
+                }
+            }
         }
         catch( const Exception& )
         {
@@ -827,10 +840,13 @@ namespace pcr
                     const ::rtl::OUString* pMethods = aMethods.getConstArray();
                     sal_uInt32 methodCount = aMethods.getLength();
 
-                    for (sal_uInt32 method = 0 ; method < methodCount ; method++,++pMethods )
+                    for (sal_uInt32 method = 0 ; method < methodCount ; ++method, ++pMethods )
                     {
                         EventDescription aEvent;
                         if ( !lcl_getEventDescriptionForMethod( *pMethods, aEvent ) )
+                            continue;
+
+                        if ( !impl_filterMethod_nothrow( aEvent ) )
                             continue;
 
                         const_cast< EventHandler* >( this )->m_aEvents.insert( EventMap::value_type(
@@ -1270,6 +1286,29 @@ namespace pcr
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+    }
+
+    //--------------------------------------------------------------------
+    bool EventHandler::impl_filterMethod_nothrow( const EventDescription& _rEvent ) const
+    {
+        // some (control-triggered) events do not make sense for certain grid control columns. However,
+        // our mechnism to retrieve control-triggered events does not know about this, so we do some
+        // late filtering here.
+        switch ( m_nGridColumnType )
+        {
+        case FormComponentType::COMBOBOX:
+            if ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+                return false;
+            break;
+        case FormComponentType::LISTBOX:
+            if  (   ( UID_BRWEVT_CHANGED == _rEvent.nUniqueBrowseId )
+                ||  ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+                )
+                return false;
+            break;
+        }
+
+        return true;
     }
 
 //........................................................................

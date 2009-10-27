@@ -49,11 +49,11 @@ class FilterHelper;
 - (void)setFilterHelper:(FilterHelper*)filterHelper;
 
 - (MacOSBOOL)panel:(id)sender shouldShowFilename:(NSString *)filename;
-
 - (void)panelSelectionDidChange:(id)sender;
 - (void)panel:(id)sender directoryDidChange:(NSString *)path;
 
 - (void)filterSelectedAtIndex:(id)sender;
+- (void)autoextensionChanged:(id)sender;
 
 @end
 

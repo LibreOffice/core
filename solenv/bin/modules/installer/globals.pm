@@ -134,6 +134,7 @@ BEGIN
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
@@ -183,6 +184,7 @@ BEGIN
     $englishlicenseset = 0;
     $englishlicense = "";
     $englishsolarislicensename = "LICENSE_en-US";
+    $solarisdontcompress = 0;
     $patharray = "";
 
     $is_special_epm = 0;
@@ -242,6 +244,11 @@ BEGIN
     $exitlog = "";
     $globalinfo_copied = 0;
     $quiet = 0;
+    $nodownload = 0;
+    $writetotemp = 0;
+    $useminor = 0;
+    $followme_from_directory = 0;
+    $internal_cabinet_signing = 0;
 
     $debug = 0;
     $debugfilename = "debug.txt";
@@ -332,6 +339,7 @@ BEGIN
     $patch = 0;
     $patchincludepath = "";
     $refresh_includepathes = 0;
+    $include_pathes_read = 0;
     $patchfilelistname = "patchfilelist.txt";
     @patchfilecollector = ();
     $nopatchfilecollector = "";
@@ -381,6 +389,7 @@ BEGIN
     $uredirgid = "";
     $sundirgid = "";
 
+    %sign_extensions = ("dll" => "1", "exe" => "1", "cab" => "1");
     %treestyles = ("UREDIRECTORY" => "INSTALLURE", "BASISDIRECTORY" => "INSTALLBASIS", "OFFICEDIRECTORY" => "INSTALLOFFICE");
     %installlocations = ("INSTALLLOCATION" => "1", "BASISINSTALLLOCATION" => "1", "OFFICEINSTALLLOCATION" => "1", "UREINSTALLLOCATION" => "1");
     %treelayername = ("UREDIRECTORY" => "URE", "BASISDIRECTORY" => "BASIS", "OFFICEDIRECTORY" => "BRAND");
@@ -389,7 +398,7 @@ BEGIN
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $unomaxservices = 25;
+    $unomaxservices = 1800; # regcomp -c argument length
     $javamaxservices = 15;
 
     $one_cab_file = 0;
@@ -440,6 +449,7 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";
+    $macinstallfilename = "macinstall.ulf";
     $nsis204 = 0;
     $nsis231 = 0;
     $unicodensis = 0;
@@ -469,38 +479,12 @@ BEGIN
     @emptypackages = ();
     %fontpackageexists = ();
 
+    $exithandler = undef;
+
     $plat = $^O;
 
-    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
+    if ( $plat =~ /cygwin/i )
     {
-        $unzippath = "unzip.exe";           # Has to be in the path: r:\btw\unzip.exe
-        $zippath= "zip.exe";                # Has to be in the path: r:\btw\zip.exe
-        $checksumfile = "so_checksum.exe";
-        $unopkgfile = "unopkg.exe";
-        if ( $plat =~ /cygwin/i )
-        {
-            $separator = "/";
-            $pathseparator = "\:";
-            $quote = "\'";
-        }
-        else
-        {
-            $separator = "\\";
-            $pathseparator = "\;";
-            $quote = "\"";
-        }
-        $libextension = "\.dll";
-        $isunix = 0;
-        $iswin = 1;
-                $archiveformat = ".zip";
-        %savedmapping = ();
-        %savedrevmapping = ();
-        %savedrev83mapping = ();
-        %saved83dirmapping = ();
-    }
-    elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
-    {
-        $unzippath = "unzip";               # Has to be in the path: /usr/bin/unzip
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
         $unopkgfile = "unopkg.exe";
@@ -518,7 +502,6 @@ BEGIN
     }
     else
     {
-        $unzippath = "unzip";               # Has to be in the path: /usr/bin/unzip
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
         $unopkgfile = "unopkg";

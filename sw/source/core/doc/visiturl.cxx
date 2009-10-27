@@ -41,9 +41,7 @@
 #include <hints.hxx>
 #include <ndtxt.hxx>
 #include <editsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 
 SwURLStateChanged::SwURLStateChanged( const SwDoc* pD )
@@ -92,7 +90,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                     bUnLockView = !pESh->IsViewLocked();
                     pESh->LockView( TRUE );
                 }
-                ((SwTxtINetFmt*)pTxtAttr)->SetValidVis( FALSE );
+                const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
                 const SwTxtAttr* pAttr = pTxtAttr;
                 SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
                                           *pAttr->GetEnd(),

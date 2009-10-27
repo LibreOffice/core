@@ -65,10 +65,8 @@ struct OOO_DLLPUBLIC_CHARTTOOLS CellRange
     ::rtl::OUString aTableName;
 };
 
-OOO_DLLPUBLIC_CHARTTOOLS
 CellRange getCellRangeFromXMLString( const ::rtl::OUString & rXMLString );
 
-OOO_DLLPUBLIC_CHARTTOOLS
 ::rtl::OUString getXMLStringFromCellRange( const CellRange & rRange );
 
 

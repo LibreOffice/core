@@ -184,6 +184,11 @@ namespace sdr
             // ClearItemAndBroadcast() and SetItemSetAndBroadcast(), see above.
             // But also from inside SdrObjects.
             void BroadcastItemChange(const ItemChangeBroadcaster& rChange);
+
+            // #i101556# add versioning mechanism; used from e.g. text attribute set to
+            // allow detection of e.g. style sheet or single text attribute changes. The
+            // default implementation returns 0 (zero)
+            virtual sal_uInt32 getVersion() const;
         };
     } // end of namespace properties
 } // end of namespace sdr

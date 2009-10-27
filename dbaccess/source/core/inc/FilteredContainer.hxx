@@ -35,9 +35,13 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 
-namespace dbaccess
+namespace dbtools
 {
     class IWarningsContainer;
+}
+
+namespace dbaccess
+{
     class IRefreshListener;
 
     class OFilteredContainer : public ::connectivity::sdbcx::OCollection
@@ -46,9 +50,9 @@ namespace dbaccess
         mutable sal_Bool m_bConstructed;        // late ctor called
 
     protected:
-        IWarningsContainer*     m_pWarningsContainer;
-        IRefreshListener*       m_pRefreshListener;
-        oslInterlockedCount&    m_nInAppend;
+        ::dbtools::IWarningsContainer*  m_pWarningsContainer;
+        IRefreshListener*               m_pRefreshListener;
+        oslInterlockedCount&            m_nInAppend;
 
         // holds the original container which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterContainer;
@@ -111,7 +115,7 @@ namespace dbaccess
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                             sal_Bool _bCase,
                             IRefreshListener*   _pRefreshListener,
-                            IWarningsContainer* _pWarningsContainer,
+                            ::dbtools::IWarningsContainer* _pWarningsContainer,
                             oslInterlockedCount& _nInAppend
                         );
 

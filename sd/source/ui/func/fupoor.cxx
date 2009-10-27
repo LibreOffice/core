@@ -506,6 +506,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEUP:
         {
+            if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
+                break;
+
             if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-up key switches layers or pages depending on the
@@ -551,6 +554,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEDOWN:
         {
+            if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
+                break;
             if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-down key switches layers or pages depending on the

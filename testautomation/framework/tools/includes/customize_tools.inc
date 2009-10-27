@@ -316,24 +316,29 @@ function hDeselectSeparator() as integer
     const CFN = "hDeselectSeparator::"
     
     kontext "ToolsCustomizeToolbars"
-    iCurrentItem = ToolbarContents.getSelIndex()
-    cString = ToolbarContents.getSelText()
+    if ( ToolbarContents.getItemCount > 0 ) then
     
-    '///+<li>Check whether the selected item contains a number of minus-chars (---)</li>
-    if ( instr( cString , "----" ) ) then
-    
-        '///+<li>If we are at the beginning of the list: Move up</li>
-        if ( iCurrentItem = 1 ) then
-            irc = 2
-            ToolbarContents.select( irc )
-            printlog( CFN & " Moved away from separator (up)" )
-        else
-        '///+<li>If we are somewhere else in the list, move down</li>
-            irc = iCurrentItem - 1
-            ToolbarContents.select( irc )
-            printlog( CFN & " Moved away from separator (down)" )
-        endif
+        iCurrentItem = ToolbarContents.getSelIndex()
+        cString = ToolbarContents.getSelText()
         
+        '///+<li>Check whether the selected item contains a number of minus-chars (---)</li>
+        if ( instr( cString , "----" ) ) then
+        
+            '///+<li>If we are at the beginning of the list: Move up</li>
+            if ( iCurrentItem = 1 ) then
+                irc = 2
+                ToolbarContents.select( irc )
+                printlog( CFN & " Moved away from separator (up)" )
+            else
+            '///+<li>If we are somewhere else in the list, move down</li>
+                irc = iCurrentItem - 1
+                ToolbarContents.select( irc )
+                printlog( CFN & " Moved away from separator (down)" )
+            endif
+            
+        endif
+    else
+        irc = 0
     endif
     
     hDeselectSeparator() = irc
@@ -341,85 +346,5 @@ function hDeselectSeparator() as integer
     
 end function
 
-
 '*******************************************************************************
 
-function hClickCommandButton( iItemToClick as integer ) as boolean
-
-
-    '///<h3>Click a given entry on the command button</h3><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-
-    '///+<li>Position of the item to click (Integer)</li>
-    '///<ul>
-    '///+<li>Only active items are selectable</li>
-    '///+<li>Position must be &gt; than 0 and &le; number of active items in menu</li>
-    '///+<li>Set context (kontext) before calling this function</li>
-    '///</ul>
-
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Success or failure (Boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on success</li>
-    '///+<li>FALSE on failure or unknown status</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "hClickCommandButton::"
-    printlog( CFN & "Enter" )
-    
-    dim brc as boolean 'a multi purpose boolean returnvalue
-    dim iMenuItems as integer
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Click the command button</li>
-    command.click()
-    
-    '///+<li>Verify that the menu is open</li>
-    try
-	    iMenuItems = hMenuItemGetCount()
-	catch
-		qaerrorlog( CFN & "Menu not open" )
-		hClickCommandButton() = false
-		exit function
-    endcatch
-    
-    '///+<li>Verify that the selected menuitem is valid</li>
-    printlog( CFN & "Found items: " & iMenuItems )
-    if ( iItemToClick > iMenuItems ) then
-    	warnlog( CFN & "#i90134# Selected item is not available: " & iItemToClick )
-		hClickCommandButton() = false
-		exit function
-    endif
-    
-    '///+<li>Now click on the requested item</li>
-    hMenuSelectNr( iItemToClick )
-    
-    '///+<li>Look for the Menu renaming dialog</li>
-    kontext "CustomizeMenuReName"
-    if ( CustomizeMenuReName.exists( 1 ) ) then
-    	printlog( CFN & "Opened dialog: Rename Menu" )
-    	hClickCommandButton() = true
-    	exit function
-    endif
-    
-    '///+<li>Look for the Toolbar renaming dialog</li>
-    kontext "CustomizeToolbarsRename"
-    if ( CustomizeToolbarsRename.exists() ) then
-    	printlog( CFN & "Opened dialog: Rename Toolbar" )
-    	hClickCommandButton() = true
-    	exit function
-    endif
-    '///</ul>
-
-    printlog( CFN & "Exit" )
-    hClickCommandButton() = true
-
-end function

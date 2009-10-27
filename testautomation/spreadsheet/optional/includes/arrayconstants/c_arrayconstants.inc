@@ -141,6 +141,15 @@ testcase tArrayconstants01
     '///Check that the cellvalue is "Err:533"
     printlog "Check that the cellvalue is ""Err:533"""
     call fCalcCompareCellValue ("A8",sError533)
+    
+    '///In cell A9 enter "={-1;2;3}"
+    printlog "In cell A9 enter ""={-1;2;3}"""
+    call fCalcSelectRange ("A9")
+    kontext "DocumentCalc"
+    DocumentCalc.TypeKeys ("={-1;2;3} <RETURN>")
+    '///Check that the cellvalue is "-1"
+    printlog "Check that the cellvalue is ""-1"""
+    call fCalcCompareCellValue ("A9",-1)
 
     '///Save document 
     printlog "Save document"
@@ -192,6 +201,11 @@ testcase tArrayconstants01
     printlog "  Check that the editline shows ""={1;2;{3;4;5}}"" for cell A8"
     scellcontent = "={1;2;{3;4;5}}"
     call fCalcCompareCellFormular ("A8",scellcontent)
+    
+    '///+Check that the editline shows "={-1;2;3}" for cell A9
+    printlog "  Check that the editline shows ""={-1;2;3}"" for cell A9"
+    scellcontent = "={-1;2;3}"
+    call fCalcCompareCellFormular ("A9",scellcontent)
     
     '///Close Document
     printlog "Close Document"

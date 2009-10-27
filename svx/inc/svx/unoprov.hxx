@@ -37,6 +37,7 @@
 #include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 
+class SvxItemPropertySet;
 /***********************************************************************
 * class UHashMap                                                       *
 ***********************************************************************/
@@ -95,17 +96,21 @@ public:
 #define SVXMAP_CUSTOMSHAPE          22
 #define SVXMAP_MEDIA                23
 #define SVXMAP_TABLE                24
-#define SVXMAP_END                  25  // last+1 !
+#define SVXMAP_PAGE                 25
+#define SVXMAP_END                  26  // last+1 !
 /***********************************************************************
 * SvxUnoPropertyMapProvider                                            *
 ***********************************************************************/
 class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
-    SfxItemPropertyMap* aMapArr[SVXMAP_END];
-    void Sort(USHORT nId);
+    SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
+    SvxItemPropertySet* aSetArr[SVXMAP_END];
+//  void Sort(USHORT nId);
 public:
     SvxUnoPropertyMapProvider();
-    SfxItemPropertyMap* GetMap(UINT16 nPropertyId);
+    ~SvxUnoPropertyMapProvider();
+    const SfxItemPropertyMapEntry* GetMap(UINT16 nPropertyId);
+    const SvxItemPropertySet* GetPropertySet(UINT16 nPropertyId);
 };
 
 /***********************************************************************
@@ -161,7 +166,7 @@ namespace comphelper { class PropertySetInfo; }
 class SvxPropertySetInfoPool
 {
 public:
-    static comphelper::PropertySetInfo* getOrCreate( sal_Int32 nServiceId ) throw();
+    SVX_DLLPUBLIC static comphelper::PropertySetInfo* getOrCreate( sal_Int32 nServiceId ) throw();
 
 private:
     static comphelper::PropertySetInfo* mpInfos[SVXUNO_SERVICEID_LASTID+1];

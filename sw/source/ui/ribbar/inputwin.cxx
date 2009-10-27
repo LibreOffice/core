@@ -461,8 +461,8 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
             aPam.Move( fnMoveForward, fnGoSection );
 
             IDocumentContentOperations* pIDCO = pWrtShell->getIDocumentContentOperations();
-            pIDCO->Delete( aPam );
-            pIDCO->Insert( aPam, sNew, true );
+            pIDCO->DeleteRange( aPam );
+            pIDCO->InsertString( aPam, sNew );
             pWrtShell->EndAllAction();
             sOldFml = sNew;
         }
@@ -499,7 +499,7 @@ IMPL_LINK( SwInputWindow, ModifyHdl, InputEdit*, EMPTYARG )
         sNew += CH_LRE;
         sNew += aEdit.GetText();
         sNew += CH_PDF;
-        pWrtShell->SwEditShell::Insert( sNew );
+        pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();
         sOldFml = sNew;
     }

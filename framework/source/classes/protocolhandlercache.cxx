@@ -56,6 +56,7 @@
 //_________________________________________________________________________________________________________________
 #include <tools/wldcrd.hxx>
 #include <unotools/configpathes.hxx>
+#include <rtl/ustrbuf.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -299,15 +300,13 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
     sal_Int32 nTarget=0;
     for( nSource=0; nSource<nSourceCount; ++nSource )
     {
-        ::rtl::OUString sPath;
+        ::rtl::OUStringBuffer sPath( SETNAME_HANDLER );
+        sPath.append(CFG_PATH_SEPERATOR);
+        sPath.append(lNames[nSource]);
+        sPath.append(CFG_PATH_SEPERATOR);
+        sPath.append(PROPERTY_PROTOCOLS);
 
-        sPath  = SETNAME_HANDLER    ;
-        sPath += CFG_PATH_SEPERATOR ;
-        sPath += lNames[nSource]    ;
-        sPath += CFG_PATH_SEPERATOR ;
-
-        lFullNames[nTarget]  = sPath;
-        lFullNames[nTarget] += PROPERTY_PROTOCOLS;
+        lFullNames[nTarget]  = sPath.makeStringAndClear();
         ++nTarget;
     }
 

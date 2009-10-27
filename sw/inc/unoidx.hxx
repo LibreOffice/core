@@ -60,7 +60,7 @@ class SwXDocumentIndex : public cppu::WeakImplHelper5
     friend class SwXIndexTokenAccess_Impl;
 
     SwEventListenerContainer    aLstnrCntnr;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropSet;
     SwDoc*                      m_pDoc;
     const SwTOXBaseSection*     pBase;
     TOXTypes                    eTOXType;
@@ -153,7 +153,7 @@ class SwXDocumentIndexMark : public cppu::WeakImplHelper4
     SwDepend                    aTypeDepend;
     SwDoc*                      m_pDoc;
     const SwTOXMark*            m_pTOXMark;
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropSet;
 
     sal_Bool                    bIsDescriptor;
     sal_Bool                    bMainEntry;

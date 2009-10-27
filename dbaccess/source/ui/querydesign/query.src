@@ -310,28 +310,6 @@ String STR_QRY_ILLEGAL_JOIN
     Text [ en-US ] = "Join could not be processed" ;
 };
 
-String STR_QUERY_SAVEMODIFIED
-{
-    Text [ en-US ] = "The $object$ has been changed.\nDo you want to save the changes?" ;
-    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource will be inserted.";
-};
-
-Resource RSC_QUERY_OBJECT_TYPE
-{
-    String 1
-    {
-        Text [ en-US ] = "table view";
-    };
-    String 2
-    {
-        Text [ en-US ] = "query";
-    };
-    String 3
-    {
-        Text [ en-US ] = "SQL statement";
-    };
-};
-
 String STR_SVT_SQL_SYNTAX_ERROR
 {
     Text [ en-US ] = "Syntax error in SQL statement" ;
@@ -401,18 +379,40 @@ String STR_VIEWDESIGN
     Text [ en-US ] = " - %PRODUCTNAME Base: View Design";
 };
 
+String STR_QUERY_SAVEMODIFIED
+{
+    Text [ en-US ] = "$object$ has been changed.\nDo you want to save the changes?" ;
+    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource will be inserted.";
+};
+
 String STR_ERROR_PARSING_STATEMENT
 {
-    Text [ en-US ] = "The SQL command which constitutes the $object$ could not be parsed.";
+    Text [ en-US ] = "$object$ is based on an SQL command which could not be parsed.";
     Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
         "(except \"SQL command\", which doesn't make sense here) will be inserted.";
 };
 
 String STR_INFO_OPENING_IN_SQL_VIEW
 {
-    Text [ en-US ] = "The $object$ will be opened in SQL view.";
+    Text [ en-US ] = "$object$ will be opened in SQL view.";
     Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
         "(except \"SQL command\", which doesn't make sense here) will be inserted.";
+};
+
+Resource RSC_QUERY_OBJECT_TYPE
+{
+    String 1
+    {
+        Text [ en-US ] = "The table view";
+    };
+    String 2
+    {
+        Text [ en-US ] = "The query";
+    };
+    String 3
+    {
+        Text [ en-US ] = "The SQL statement";
+    };
 };
 
 String STR_STATEMENT_WITHOUT_RESULT_SET

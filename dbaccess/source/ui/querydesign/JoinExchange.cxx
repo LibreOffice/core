@@ -92,8 +92,9 @@ namespace dbaui
     //------------------------------------------------------------------------
     sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
     {
+        DataFlavorExVector::const_iterator aCheckEnd = _rFormats.end();
         for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
-                aCheck != _rFormats.end();
+                aCheck != aCheckEnd;
                 ++aCheck
             )
         {

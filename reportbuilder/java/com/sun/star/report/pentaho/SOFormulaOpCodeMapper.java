@@ -44,16 +44,14 @@ public final class SOFormulaOpCodeMapper extends WeakBase
         implements com.sun.star.sheet.XFormulaOpCodeMapper, XServiceInfo
 {
 
-    private final XComponentContext m_xContext;
     private static final String __serviceName = "com.sun.star.report.pentaho.SOFormulaOpCodeMapper";
     private final SOFormulaParser parser;
     // attributes
     final private int m_OpCodeExternal = 0;
     final private int m_OpCodeUnknown = 0;
 
-    public SOFormulaOpCodeMapper(XComponentContext context, SOFormulaParser parser)
+    public SOFormulaOpCodeMapper(SOFormulaParser parser)
     {
-        m_xContext = context;
         this.parser = parser;
     }
 

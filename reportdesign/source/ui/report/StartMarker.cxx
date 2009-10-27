@@ -181,12 +181,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     {
         m_bCollapsed = !m_bCollapsed;
 
-        Image* pImage = NULL;
-        if ( GetDisplayBackground().GetColor().IsDark() )
-            pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
-        else
-            pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
-        m_aImage.SetImage(*pImage);
+        changeImage();
 
         m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
         if ( m_aCollapsedLink.IsSet() )
@@ -194,6 +189,16 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     m_pParent->showProperties();
+}
+// -----------------------------------------------------------------------------
+void OStartMarker::changeImage()
+{
+    Image* pImage = NULL;
+    if ( GetDisplayBackground().GetColor().IsDark() )
+        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
+    else
+        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    m_aImage.SetImage(*pImage);
 }
 // -----------------------------------------------------------------------
 void OStartMarker::initDefaultNodeImages()
@@ -311,6 +316,7 @@ void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
 {
     OColorListener::setCollapsed(_bCollapsed);
     showRuler(_bCollapsed);
+    changeImage();
 }
 // -----------------------------------------------------------------------
 void OStartMarker::zoom(const Fraction& _aZoom)

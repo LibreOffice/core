@@ -91,6 +91,8 @@
 #include <svx/svdundo.hxx>
 #include <avmedia/mediawindow.hxx>
 
+#include <svx/sdrhittesthelper.hxx>
+
 using namespace ::com::sun::star;
 
 namespace sd {
@@ -264,7 +266,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else
         {
-            if (!rMEvt.IsMod2() && mpView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKMACRO))
+            if (!rMEvt.IsMod2() && mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO))
             {
                 mpView->BegMacroObj(aMDPos, nHitLog, pObj, pPV, mpWindow);
                 bReturn = TRUE;
@@ -320,7 +322,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 && mpViewShell->ISA(DrawViewShell)
                 )
             {
-                if(mpView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                if(mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER))
                 {
                     // Animate object when not just selecting.
                     if ( ! bSelectionOnly)
@@ -331,7 +333,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         if(rMEvt.GetClicks() == 1)
                         {
                             // In die Gruppe hineinschauen
-                            if (mpView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                            if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                                 bReturn = AnimateObj(pObj, aMDPos);
                         }
                         else if( !bReadOnly && rMEvt.GetClicks() == 2)
@@ -796,7 +798,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(
                             pPool->GetActualStyleSheet());
-                        if (pStyleSheet != NULL)
+                        if (pStyleSheet != NULL && mpView->IsUndoEnabled() )
                         {
                             // #108981#
                             // Added UNDOs for the WaterCan mode. This was never done in
@@ -840,8 +842,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             pSingleObj = mpView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
         }
 
-        if ( nSlotId != SID_OBJECT_SELECT                            &&
-             (/* bTempRotation && */ nMarkCount==0)                    ||
+        if ( (nSlotId != SID_OBJECT_SELECT && nMarkCount==0)                    ||
              ( mpView->GetDragMode() == SDRDRAG_CROOK &&
               !mpView->IsCrookAllowed( mpView->IsCrookNoContortion() ) ) ||
              ( mpView->GetDragMode() == SDRDRAG_SHEAR &&
@@ -1212,10 +1213,10 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
     if ( !bClosed                                      ||
          !bFilled                                      ||
-         (pObj->IsHit( aHitPosR, nHitLog, pVisiLayer ) &&
-          pObj->IsHit( aHitPosL, nHitLog, pVisiLayer ) &&
-          pObj->IsHit( aHitPosT, nHitLog, pVisiLayer ) &&
-          pObj->IsHit( aHitPosB, nHitLog, pVisiLayer ) ) )
+         (SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+          SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+          SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+          SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) ) )
     {
         if ( mpDoc->GetIMapInfo( pObj ) )
         {
@@ -1254,7 +1255,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_BOOKMARK:
                 {
                      // Sprung zu Bookmark (Seite oder Objekt)
-                    SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->maBookmark);
+                    SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->GetBookmark());
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L);
                     bAnimated = TRUE;
@@ -1263,11 +1264,12 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_DOCUMENT:
                 {
+                    String sBookmark( pInfo->GetBookmark() );
                     // Sprung zu Dokument
-                    if (pInfo->maBookmark.Len())
+                    if (sBookmark.Len())
                     {
                         SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
-                        SfxStringItem aStrItem(SID_FILE_NAME, pInfo->maBookmark);
+                        SfxStringItem aStrItem(SID_FILE_NAME, sBookmark);
                         SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                         SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                         SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
@@ -1328,7 +1330,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                         try
                         {
-                            mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->maBookmark ), uno::UNO_QUERY_THROW );
+                            mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->GetBookmark()), uno::UNO_QUERY_THROW );
                             mxPlayer->start();
                         }
                         catch( uno::Exception& e )
@@ -1352,7 +1354,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_PROGRAM:
                 {
                    String aBaseURL = GetDocSh()->GetMedium()->GetBaseURL();
-                   INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->maBookmark,
+                   INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->GetBookmark(),
                                                 URIHelper::GetMaybeFileHdl(), true, false,
                                                 INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
 
@@ -1377,7 +1379,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_MACRO:
                 {
                     // Execute makro
-                    String aMacro = pInfo->maBookmark;
+                    String aMacro = pInfo->GetBookmark();
 
                     if ( SfxApplication::IsXScriptURL( aMacro ) )
                     {

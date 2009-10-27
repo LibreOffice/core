@@ -99,7 +99,6 @@ class VDataSeriesGroup
 public:
     VDataSeriesGroup();
     VDataSeriesGroup( VDataSeries* pSeries );
-    VDataSeriesGroup( const ::std::vector< VDataSeries* >& rSeriesVector );
     virtual ~VDataSeriesGroup();
 
     void addSeries( VDataSeries* pSeries );//takes ownership of pSeries
@@ -296,6 +295,8 @@ public:
     void    releaseShapes();
 
     virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
+
+    bool WantToPlotInFrontOfAxisLine();
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

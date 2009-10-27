@@ -39,11 +39,12 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+.IF "$(L10N_framework)"==""
 JDKINCS=
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 MOZFILES = $(SLO)$/npwin.obj
 .ELSE
 MOZFILES = $(SLO)$/npunix.obj
@@ -56,6 +57,7 @@ CDEFS+=-DNO_X11
 ALL: $(MOZFILES)
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
 
 .INCLUDE :	target.mk
 

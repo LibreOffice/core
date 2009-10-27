@@ -35,9 +35,14 @@
 #include <svx/unoedsrc.hxx>
 #include "svx/svxdllapi.h"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XInterface;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class XInterface;
+    }
+    namespace accessibility {
+        struct TextSegment;
+    }
+} } }
 
 class SvxTextForwarder;
 class SdrObject;
@@ -80,7 +85,7 @@ public:
 
 //  static sal_Bool hasLevels( const SdrObject* pObject );
 
-    // the viewforwarder interface
+    // the SvxViewForwarder interface
     virtual BOOL        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point&, const MapMode& ) const;

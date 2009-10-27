@@ -60,6 +60,8 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <svtools/urihelper.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/sfxecode.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
@@ -654,7 +656,10 @@ void SvxIMapDlg::DoOpen()
             aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT, String() );
 
             if( pIStm->GetError() )
+            {
+                SfxErrorContext eEC(ERRCODE_SFX_GENERAL,this);
                 ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
+            }
             else
                 pIMapWnd->SetImageMap( aLoadIMap );
 

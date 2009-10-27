@@ -143,13 +143,13 @@ public final class PropertySetMixin {
         idlClass = getReflection(type.getTypeName());
         XTypeDescription ifc;
         try {
-            ifc = (XTypeDescription) UnoRuntime.queryInterface(
+            ifc = UnoRuntime.queryInterface(
                 XTypeDescription.class,
-                (((XHierarchicalNameAccess) UnoRuntime.queryInterface(
-                      XHierarchicalNameAccess.class,
-                      context.getValueByName(
-                          "/singletons/com.sun.star.reflection."
-                          + "theTypeDescriptionManager"))).
+                (UnoRuntime.queryInterface(
+                    XHierarchicalNameAccess.class,
+                    context.getValueByName(
+                        "/singletons/com.sun.star.reflection."
+                        + "theTypeDescriptionManager")).
                  getByHierarchicalName(type.getTypeName())));
         } catch (NoSuchElementException e) {
             throw new RuntimeException(
@@ -585,7 +585,7 @@ public final class PropertySetMixin {
     private XIdlClass getReflection(String typeName) {
         XIdlReflection refl;
         try {
-            refl = (XIdlReflection) UnoRuntime.queryInterface(
+            refl = UnoRuntime.queryInterface(
                 XIdlReflection.class,
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.reflection.CoreReflection", context));
@@ -599,8 +599,7 @@ public final class PropertySetMixin {
         try {
             return refl.forName(typeName);
         } finally {
-            XComponent comp = (XComponent) UnoRuntime.queryInterface(
-                XComponent.class, refl);
+            XComponent comp = UnoRuntime.queryInterface(XComponent.class, refl);
             if (comp != null) {
                 comp.dispose();
             }
@@ -610,9 +609,8 @@ public final class PropertySetMixin {
     private void initProperties(
         XTypeDescription type, HashMap map, ArrayList handleNames, HashSet seen)
     {
-        XInterfaceTypeDescription2 ifc = (XInterfaceTypeDescription2)
-            UnoRuntime.queryInterface(
-                XInterfaceTypeDescription2.class, resolveTypedefs(type));
+        XInterfaceTypeDescription2 ifc = UnoRuntime.queryInterface(
+            XInterfaceTypeDescription2.class, resolveTypedefs(type));
         if (seen.add(ifc.getName())) {
             XTypeDescription[] bases = ifc.getBaseTypes();
             for (int i = 0; i < bases.length; ++i) {
@@ -622,11 +620,10 @@ public final class PropertySetMixin {
             for (int i = 0; i < members.length; ++i) {
                 if (members[i].getTypeClass() == TypeClass.INTERFACE_ATTRIBUTE)
                 {
-                    XInterfaceAttributeTypeDescription2 attr
-                        = ((XInterfaceAttributeTypeDescription2)
-                           UnoRuntime.queryInterface(
-                               XInterfaceAttributeTypeDescription2.class,
-                               members[i]));
+                    XInterfaceAttributeTypeDescription2 attr =
+                        UnoRuntime.queryInterface(
+                            XInterfaceAttributeTypeDescription2.class,
+                            members[i]);
                     short attrAttribs = 0;
                     if (attr.isBound()) {
                         attrAttribs |= PropertyAttribute.BOUND;
@@ -685,7 +682,7 @@ public final class PropertySetMixin {
                             break;
                         }
                         attrAttribs |= n;
-                        t = ((XStructTypeDescription) UnoRuntime.queryInterface(
+                        t = (UnoRuntime.queryInterface(
                                  XStructTypeDescription.class, t)).
                             getTypeArguments()[0];
                     }
@@ -747,14 +744,14 @@ public final class PropertySetMixin {
                 object, illegalArgumentPosition);
 
         }
-        XIdlField2 f = (XIdlField2) UnoRuntime.queryInterface(
+        XIdlField2 f = UnoRuntime.queryInterface(
             XIdlField2.class, idlClass.getField(name));
         Object[] o = new Object[] {
                 new Any(type, UnoRuntime.queryInterface(type, object)) };
         Object v = wrapValue(
             value,
-            ((XIdlField2) UnoRuntime.queryInterface(
-                XIdlField2.class, idlClass.getField(name))).getType(),
+            UnoRuntime.queryInterface(
+                XIdlField2.class, idlClass.getField(name)).getType(),
             (p.property.Attributes & PropertyAttribute.MAYBEAMBIGUOUS) != 0,
             isAmbiguous,
             (p.property.Attributes & PropertyAttribute.MAYBEDEFAULT) != 0,
@@ -807,7 +804,7 @@ public final class PropertySetMixin {
         if (p == null) {
             throw new UnknownPropertyException(name, object);
         }
-        XIdlField2 field = (XIdlField2) UnoRuntime.queryInterface(
+        XIdlField2 field = UnoRuntime.queryInterface(
             XIdlField2.class, idlClass.getField(name));
         Object value;
         try {
@@ -848,12 +845,12 @@ public final class PropertySetMixin {
                 XIdlClass ambiguous = getReflection(typeName);
                 try {
                     isAmbiguous = AnyConverter.toBoolean(
-                        ((XIdlField2) UnoRuntime.queryInterface(
+                        UnoRuntime.queryInterface(
                             XIdlField2.class,
-                            ambiguous.getField("IsAmbiguous"))).get(value));
-                    value = ((XIdlField2) UnoRuntime.queryInterface(
-                                 XIdlField2.class,
-                                 ambiguous.getField("Value"))).get(value);
+                            ambiguous.getField("IsAmbiguous")).get(value));
+                    value = UnoRuntime.queryInterface(
+                        XIdlField2.class,
+                        ambiguous.getField("Value")).get(value);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
                     throw new RuntimeException(
                         "unexpected"
@@ -867,12 +864,12 @@ public final class PropertySetMixin {
                 XIdlClass defaulted = getReflection(typeName);
                 try {
                     isDefaulted = AnyConverter.toBoolean(
-                        ((XIdlField2) UnoRuntime.queryInterface(
+                        UnoRuntime.queryInterface(
                             XIdlField2.class,
-                            defaulted.getField("IsDefaulted"))).get(value));
-                    value = ((XIdlField2) UnoRuntime.queryInterface(
-                                 XIdlField2.class,
-                                 defaulted.getField("Value"))).get(value);
+                            defaulted.getField("IsDefaulted")).get(value));
+                    value = UnoRuntime.queryInterface(
+                        XIdlField2.class,
+                        defaulted.getField("Value")).get(value);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
                     throw new RuntimeException(
                         "unexpected"
@@ -886,16 +883,16 @@ public final class PropertySetMixin {
                 XIdlClass optional = getReflection(typeName);
                 try {
                     boolean present = AnyConverter.toBoolean(
-                        ((XIdlField2) UnoRuntime.queryInterface(
+                        UnoRuntime.queryInterface(
                             XIdlField2.class,
-                            optional.getField("IsPresent"))).get(value));
+                            optional.getField("IsPresent")).get(value));
                     if (!present) {
                         value = Any.VOID;
                         break;
                     }
-                    value = ((XIdlField2) UnoRuntime.queryInterface(
-                                 XIdlField2.class,
-                                 optional.getField("Value"))).get(value);
+                    value = UnoRuntime.queryInterface(
+                        XIdlField2.class,
+                        optional.getField("Value")).get(value);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
                     throw new RuntimeException(
                         "unexpected"
@@ -932,15 +929,15 @@ public final class PropertySetMixin {
             Object[] strct = new Object[1];
             type.createObject(strct);
             try {
-                XIdlField2 field = (XIdlField2) UnoRuntime.queryInterface(
+                XIdlField2 field = UnoRuntime.queryInterface(
                     XIdlField2.class, type.getField("Value"));
                 field.set(
                     strct,
                     wrapValue(
                         value, field.getType(), false, false, wrapDefaulted,
                         isDefaulted, wrapOptional));
-                ((XIdlField2) UnoRuntime.queryInterface(
-                    XIdlField2.class, type.getField("IsAmbiguous"))).set(
+                UnoRuntime.queryInterface(
+                    XIdlField2.class, type.getField("IsAmbiguous")).set(
                         strct, new Boolean(isAmbiguous));
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 throw new RuntimeException(
@@ -959,15 +956,15 @@ public final class PropertySetMixin {
             Object[] strct = new Object[1];
             type.createObject(strct);
             try {
-                XIdlField2 field = (XIdlField2) UnoRuntime.queryInterface(
+                XIdlField2 field = UnoRuntime.queryInterface(
                     XIdlField2.class, type.getField("Value"));
                 field.set(
                     strct,
                     wrapValue(
                         value, field.getType(), wrapAmbiguous, isAmbiguous,
                         false, false, wrapOptional));
-                ((XIdlField2) UnoRuntime.queryInterface(
-                    XIdlField2.class, type.getField("IsDefaulted"))).set(
+                UnoRuntime.queryInterface(
+                    XIdlField2.class, type.getField("IsDefaulted")).set(
                         strct, new Boolean(isDefaulted));
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 throw new RuntimeException(
@@ -986,11 +983,11 @@ public final class PropertySetMixin {
             type.createObject(strct);
             boolean present = !AnyConverter.isVoid(value);
             try {
-                ((XIdlField2) UnoRuntime.queryInterface(
-                    XIdlField2.class, type.getField("IsPresent"))).set(
+                UnoRuntime.queryInterface(
+                    XIdlField2.class, type.getField("IsPresent")).set(
                         strct, new Boolean(present));
                 if (present) {
-                    XIdlField2 field = (XIdlField2) UnoRuntime.queryInterface(
+                    XIdlField2 field = UnoRuntime.queryInterface(
                         XIdlField2.class, type.getField("Value"));
                     field.set(
                         strct,
@@ -1018,9 +1015,8 @@ public final class PropertySetMixin {
 
     private static XTypeDescription resolveTypedefs(XTypeDescription type) {
         while (type.getTypeClass() == TypeClass.TYPEDEF) {
-            type = ((XIndirectTypeDescription) UnoRuntime.queryInterface(
-                        XIndirectTypeDescription.class, type)).
-                getReferencedType();
+            type = UnoRuntime.queryInterface(
+                XIndirectTypeDescription.class, type).getReferencedType();
         }
         return type;
     }

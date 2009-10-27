@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 ' #1 tiFormatLine
 ' #1 tLineConnect
 '\*************************************************************************************
-
 testcase tiFormatLine
+
     Dim ZaehlerStil
     Dim ZaehlerFarbe
     Dim ZaehlerTransp
@@ -318,8 +318,8 @@ testcase tiFormatLine
     
    ' FormatLine.Cancel
     Call hCloseDocument          '/// close document ///'
+    
 endcase 'tiFormatLine
-
 '-------------------------------------------------------------------------------'
 testcase tLineConnect
 
@@ -473,10 +473,15 @@ testcase tLineConnect
     '/// Go through the different Corner-styles ///'
     
     hOpenContextMenu
+    sleep 1
     hMenuSelectNr(2) 'Choose "Line"
     
     Kontext "TabLinie"
-    cfirst = CornerStyle.GetSelIndex
+    if TabLinie.Exists(2) then
+        cfirst = CornerStyle.GetSelIndex
+    else
+        sleep 1
+    endif
     
     For i = 1 to CornerStyle.GetItemCount
       Kontext "TabLinie"
@@ -528,6 +533,6 @@ testcase tLineConnect
     '/// Close the document ///'
     hCloseDocument
     '/// Endcase ///'
+    
 endcase 'tiLineConnect
-
 '-------------------------------------------------------------------------------'

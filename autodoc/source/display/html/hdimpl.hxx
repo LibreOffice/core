@@ -127,10 +127,6 @@ const char *        PathPerNamespace(
                                                 i_rEnv,
                         const char *            i_sPathFromNamespaceDir );
 
-csi::html::Table &  Create_ChildListTable(
-                        csi::xml::Element &     o_rParentElement,
-                        const char *            i_sTitle,
-                        const char *            i_sLabel );
 void                Create_ChildListLabel(
                         csi::xml::Element &     o_rParentElement,
                         const char *            i_sLabel );

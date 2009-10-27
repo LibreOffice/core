@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Fields - References Test
 '*
@@ -39,27 +39,29 @@
 
 sub w_fields3
 
-    Call tFieldsReferences       'Insert/Cross-reference
-    Call tSetReferences_1        'Set Reference - Cursor at any position
-    Call tSetReferences_2        'Set Reference - Select some text
-    Call tInsertReference_1      'Insert Reference - Page
-    Call tInsertReference_2      'Insert Reference - Chapter
-    Call tInsertReference_3      'Insert Reference - Reference
-    Call tInsertReference_4      'Insert Reference - Above/Below
-    Call tInsertReference_5      'Insert Reference - As Page Style
-    Call tInsertReference_6      'Insert Footnote
-    Call tInsertReference_7      'Insert Endnote
-    Call tInsertReference_8_1    'Insert Caption - Above
-    Call tInsertReference_8_2    'Insert Caption - Below
-    Call tInsertBookmark_1       'Insert Bookmark - Page
-    Call tInsertBookmark_2       'Insert Bookmark - Chapter
-    Call tInsertBookmark_3       'Insert Bookmark - Reference
-    Call tInsertBookmark_4       'Insert Bookmark - Above/Below
-    Call tInsertBookmark_5       'Insert Bookmark - As Page Style
+    Call tCrossReference
+    Call tSetReferenceNoSelection
+    Call tSetReferenceTextSelection
+    Call tInsertReferencePage
+    Call tInsertReferenceChapter
+    Call tInsertReferenceReference
+    Call tInsertReferenceAboveBelow
+    Call tInsertReferenceAsPageStyle
+    Call tInsertFootnote
+    Call tInsertEndnote
+    Call tInsertCaptionAbove
+    Call tInsertCaptionBelow
+    Call tInsertBookmarkPage
+    Call tInsertBookmarkChapter
+    Call tInsertBookmarkReference
+    Call tInsertBookmarkAboveBelow
+    Call tInsertBookmarkAsPageStyle
 
 end sub
 
-testcase tFieldsReferences
+'-----------------------------------------------------------------
+
+testcase tCrossReference
 
   printlog "Insert/Cross-reference"
  '/// <b> Insert/Cross-reference </b>
@@ -84,10 +86,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tSetReferences_1
+testcase tSetReferenceNoSelection
 
-  Dim  sReference  as String
-  Dim  sTestFile   as String
+  Dim sReference as String
+  Dim sTestFile  as String
 
   sReference = "myTest"
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
@@ -131,9 +133,9 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tSetReferences_2
+testcase tSetReferenceTextSelection
 
-  Dim  sReference  as String
+  Dim sReference as String
 
   sReference = "myTest"
 
@@ -172,10 +174,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_1
+testcase tInsertReferencePage
 
-  Dim  sReference  as String
-  Dim  sTestFile   as String
+  Dim sReference as String
+  Dim sTestFile  as String
 
   sReference = "myTest"
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
@@ -232,10 +234,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_2
+testcase tInsertReferenceChapter
 
-  Dim  sReference  as String
-  Dim  sTestFile   as String
+  Dim sReference as String
+  Dim sTestFile  as String
 
   sReference = "myTest"
   sTestFile  = Convertpath (gTesttoolpath + "writer\optional\input\fields\chapterTest.sxw")
@@ -292,10 +294,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_3
+testcase tInsertReferenceReference
 
-  Dim  sReference      as String
-  Dim  sReferenceName  as String
+  Dim sReference     as String
+  Dim sReferenceName as String
 
   sReference     = "est !"
   sReferenceName = "myTest"
@@ -353,15 +355,21 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_4
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
+testcase tInsertReferenceAboveBelow
 
-  Dim  sReference      as String
-  Dim  sAbove , sBelow as String
+  Dim sReference as String
+  Dim sAbove     as String
+  Dim sBelow     as String
 
-  sReference = "myTest"
-  sAbove = "above" : sBelow = "below"
+    sReference = "myTest"
+    Select Case iSystemSprache
+        Case 01 : sAbove = "above"  : sBelow = "below"
+        Case 35 : sAbove = "sur"    : sBelow = "sous"
+        Case 39 : sAbove = "sopra"  : sBelow = "sotto"
+        Case 49 : sAbove = "oben"   : sBelow = "unten"
+        Case 46 : sAbove = "ovan"   : sBelow = "under"
+        Case 55 : sAbove = "arriba" : sBelow = "abajo"
+    End Select
 
   printlog "Insert Reference - Above/Below"
  '/// <b> Insert Reference - Above/Below</b>
@@ -438,10 +446,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_5
+testcase tInsertReferenceAsPageStyle
 
-  Dim  sReference  as String
-  Dim  sTestSytle  as String
+  Dim sReference as String
+  Dim sTestSytle as String
 
   sReference = "myTest"
   sTestSytle = "A"
@@ -501,9 +509,9 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_6
+testcase tInsertFootnote
 
-  Dim  sFootnote   as String
+  Dim sFootnote as String
 
   sFootnote = "Test"
 
@@ -535,9 +543,9 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_7
+testcase tInsertEndnote
 
-  Dim  sEndnote   as String
+  Dim sEndnote as String
 
   sEndnote = "Test"
 
@@ -569,9 +577,11 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_8_1
+testcase tInsertCaptionAbove
 
-  Dim sCategory , sCaption , sSeparator as String
+  Dim sCategory  as String
+  Dim sCaption   as String
+  Dim sSeparator as String
 
   sCategory = "A" : sCaption = "B" : sSeparator = "*"
 
@@ -617,9 +627,11 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertReference_8_2
+testcase tInsertCaptionBelow
 
-  Dim sCategory , sCaption , sSeparator as String
+  Dim sCategory  as String
+  Dim sCaption   as String
+  Dim sSeparator as String
 
   sCategory = "A" : sCaption = "B" : sSeparator = "*"
 
@@ -665,10 +677,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_1
+testcase tInsertBookmarkPage
 
-  Dim  sBookmark   as String
-  Dim  sTestFile   as String
+  Dim sBookmark as String
+  Dim sTestFile as String
 
   sBookmark = "myTest"
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\pageTest.sxw")
@@ -723,10 +735,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_2
+testcase tInsertBookmarkChapter
 
-  Dim  sBookmark   as String
-  Dim  sTestFile   as String
+  Dim sBookmark as String
+  Dim sTestFile as String
 
   sBookmark = "myTest"
   sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\chapterTest.sxw")
@@ -780,10 +792,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_3
+testcase tInsertBookmarkReference
 
-  Dim  sReference   as String
-  Dim  sBookmark    as String
+  Dim sReference as String
+  Dim sBookmark  as String
 
   sReference  = "est !"
   sBookmark   = "myTest"
@@ -838,15 +850,21 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_4
-qaerrorlog "#i93906# - Testcase outcommented due to bug. 'Copied field-content not pastable outside Office'"
-goto endsub
+testcase tInsertBookmarkAboveBelow
 
-  Dim  sBookmark       as String
-  Dim  sAbove , sBelow as String
+  Dim sBookmark as String
+  Dim sAbove    as String
+  Dim sBelow    as String
 
   sBookmark = "myTest"
-  sAbove = "above" : sBelow = "below"
+    Select Case iSystemSprache
+        Case 01 : sAbove = "above"  : sBelow = "below"
+        Case 35 : sAbove = "sur"    : sBelow = "sous"
+        Case 39 : sAbove = "sopra"  : sBelow = "sotto"
+        Case 49 : sAbove = "oben"   : sBelow = "unten"
+        Case 46 : sAbove = "ovan"   : sBelow = "under"
+        Case 55 : sAbove = "arriba" : sBelow = "abajo"
+    End Select
 
   printlog "Insert Bookmark - Above/Below"
  '/// <b> Insert Bookmark - Above/Below</b>
@@ -920,10 +938,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tInsertBookmark_5
+testcase tInsertBookmarkAsPageStyle
 
-  Dim  sBookmark   as String
-  Dim  sTestSytle  as String
+  Dim sBookmark  as String
+  Dim sTestSytle as String
 
   sBookmark  = "myTest"
   sTestSytle = "A"
@@ -979,4 +997,3 @@ testcase tInsertBookmark_5
 endcase
 
 '-----------------------------------------------------------------
-

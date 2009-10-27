@@ -163,9 +163,10 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
         m_xReportComponent.set( xNameCont->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReportComponent" ) ) ), uno::UNO_QUERY );
         if ( m_xDataProvider.is() )
         {
+            ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
             TPropertyNamePair aPropertyMediation;
-            aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_MASTERFIELDS, PROPERTY_MASTERFIELDS ) );
-            aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_DETAILFIELDS, PROPERTY_DETAILFIELDS ) );
+            aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_MASTERFIELDS, TPropertyConverter(PROPERTY_MASTERFIELDS,aNoConverter) ) );
+            aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_DETAILFIELDS, TPropertyConverter(PROPERTY_DETAILFIELDS,aNoConverter) ) );
 
             m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
         }
@@ -488,7 +489,8 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
             xReceiver->setArguments( aArgs );
             if ( !bModified )
                 xReport->setModified(sal_False);
-        }
+        } // if ( NewValue != OldValue )
+        m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, InspectorUI, FirstTimeInit);
     } // if ( ActuatingPropertyName == PROPERTY_COMMAND )
     else if ( ActuatingPropertyName == PROPERTY_TITLE )
     {

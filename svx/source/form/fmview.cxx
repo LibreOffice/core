@@ -342,7 +342,7 @@ void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
 //------------------------------------------------------------------------
 SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
 {
-    OSL_TRACE( "--- FmFormView::ShowSdrPage      : ........, %p, %p\n", this, pPage );
+    OSL_TRACE( "--- FmFormView::ShowSdrPage      : ........, %p, %p", this, pPage );
 
     SdrPageView* pPV = E3dView::ShowSdrPage(pPage);
 
@@ -380,7 +380,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
 //------------------------------------------------------------------------
 void FmFormView::HideSdrPage()
 {
-    OSL_TRACE( "--- FmFormView::HideSdrPage      : ........, %p, %p\n", this, GetCurPage() );
+    OSL_TRACE( "--- FmFormView::HideSdrPage      : ........, %p, %p", this, GetCurPage() );
 
     // --- 1. deactivate controls
     if ( !IsDesignMode() )

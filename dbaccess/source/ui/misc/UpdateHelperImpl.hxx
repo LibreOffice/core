@@ -60,6 +60,18 @@ namespace dbaui
         {
             m_xRowUpdate->updateDouble(_nPos, _nValue);
         }
+        virtual void updateDate(sal_Int32 _nPos,const ::com::sun::star::util::Date& _nValue)
+        {
+            m_xRowUpdate->updateDate(_nPos, _nValue);
+        }
+        virtual void updateTime(sal_Int32 _nPos,const ::com::sun::star::util::Time& _nValue)
+        {
+            m_xRowUpdate->updateTime(_nPos, _nValue);
+        }
+        virtual void updateTimestamp(sal_Int32 _nPos,const ::com::sun::star::util::DateTime& _nValue)
+        {
+            m_xRowUpdate->updateTimestamp(_nPos, _nValue);
+        }
         virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue)
         {
             m_xRowUpdate->updateInt(_nPos, _nValue);
@@ -99,6 +111,21 @@ namespace dbaui
         {
             RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
             m_xParameters->setDouble(_nPos, _nValue);
+        }
+        virtual void updateDate(sal_Int32 _nPos,const ::com::sun::star::util::Date& _nValue)
+        {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
+            m_xParameters->setDate(_nPos, _nValue);
+        }
+        virtual void updateTime(sal_Int32 _nPos,const ::com::sun::star::util::Time& _nValue)
+        {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
+            m_xParameters->setTime(_nPos, _nValue);
+        }
+        virtual void updateTimestamp(sal_Int32 _nPos,const ::com::sun::star::util::DateTime& _nValue)
+        {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
+            m_xParameters->setTimestamp(_nPos, _nValue);
         }
         virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue)
         {

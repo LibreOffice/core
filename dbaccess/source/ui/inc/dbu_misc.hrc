@@ -34,9 +34,8 @@
 #include "dbu_resource.hrc"
 #endif
 
-
-#define STR_HTML_TITLE                      RID_STR_MISC_START
-#define STR_RTF_TITLE                       RID_STR_MISC_START +  1
+// free
+// free
 #define STR_WIZ_COLUMN_SELECT_TITEL         RID_STR_MISC_START +  2
 #define STR_WIZ_TYPE_SELECT_TITEL           RID_STR_MISC_START +  3
 #define STR_WIZ_PKEY_ALREADY_DEFINED        RID_STR_MISC_START +  4

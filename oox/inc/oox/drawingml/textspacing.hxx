@@ -51,6 +51,7 @@ namespace oox { namespace drawingml {
             : nUnit( POINTS ), nValue( 0 ), bHasValue( sal_False )
             {
             }
+        TextSpacing( sal_Int32 nPoints ) : nUnit( POINTS ), nValue( nPoints ), bHasValue( sal_True ){};
         ::com::sun::star::style::LineSpacing toLineSpacing() const
             {
                 ::com::sun::star::style::LineSpacing aSpacing;

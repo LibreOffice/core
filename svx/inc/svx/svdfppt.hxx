@@ -989,6 +989,18 @@ struct PPTStyleTextPropReader
     PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport&, const DffRecordHeader& rClientTextBoxHd,
         PPTTextRulerInterpreter& rInterpreter, const DffRecordHeader& rExtParaHd, sal_uInt32 nTextInstance );
 
+    void Init( SvStream& rIn, SdrPowerPointImport&, const DffRecordHeader& rClientTextBoxHd,
+               PPTTextRulerInterpreter& rInterpreter, const DffRecordHeader& rExtParaHd, sal_uInt32 nTextInstance );
+    void ReadParaProps( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
+                        const String& aString, PPTTextRulerInterpreter& rRuler,
+                        sal_uInt32& nCharCount, sal_Bool& bTextPropAtom );
+    void ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, const String& aString,
+                        sal_uInt32& nCharCount, sal_uInt32 nCharAnzRead,
+                        sal_Bool& bTextPropAtom, sal_uInt32 nExtParaPos,
+                        const std::vector< StyleTextProp9 >& aStyleTextProp9,
+                        sal_uInt32& nExtParaFlags, sal_uInt16& nBuBlip,
+                        sal_uInt16& nHasAnm, sal_uInt32& nAnmScheme );
+
     ~PPTStyleTextPropReader();
 };
 
@@ -1325,6 +1337,8 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
 
 #define PPT_PST_NewlyAddedAtomByXP11008     11008
 #define PPT_PST_NewlyAddedAtomByXP11010     11010
+#define PPT_PST_Comment10                   12000
+#define PPT_PST_CommentAtom10               12001
 #define PPT_PST_NewlyAddedAtomByXP12004     12004
 #define PPT_PST_NewlyAddedAtomByXP12010     12010
 #define PPT_PST_NewlyAddedAtomByXP12011     12011

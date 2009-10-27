@@ -765,6 +765,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         sal_Bool bFailure = sal_False;
         const SfxPoolItem* pItem = NULL;
         SfxShell* pShell( 0 );
+        // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
+        SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
         if ( pDispatcher->GetBindings() )
         {
             if ( !pDispatcher->IsLocked( GetId() ) )
@@ -783,6 +785,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         lNewArgs[nIndex].Value  = makeAny( SfxDispatchController_Impl::getSlaveCommand( aDispatchURL ));
                     }
 
+                    eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
                     SfxAllItemSet aSet( pShell->GetPool() );
                     TransformParameters( GetId(), lNewArgs, aSet, pSlot );
                     if ( aSet.Count() )
@@ -811,6 +814,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         }
         else
         {
+            eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), GetId() );
             // AppDispatcher
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             TransformParameters( GetId(), lNewArgs, aSet );
@@ -850,13 +854,6 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
             if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
             {
-                // Retrieve metric from pool to have correct sub ID when calling QueryValue
-                SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
-                if ( pShell )
-                    eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
-                else
-                    eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), GetId() );
-
                 USHORT nSubId( 0 );
                 if ( eMapUnit == SFX_MAPUNIT_TWIP )
                     nSubId |= CONVERT_TWIPS;

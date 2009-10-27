@@ -47,5 +47,6 @@ attribute_set_map_to_property_values(
     AtkAttributeSet* attribute_set,
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValueList );
 
+AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_set );
 
 #endif

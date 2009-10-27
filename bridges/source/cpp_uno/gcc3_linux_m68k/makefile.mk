@@ -61,8 +61,7 @@ CFLAGSNOOPT=-O0
 SLOFILES= \
     $(SLO)$/cpp2uno.obj \
     $(SLO)$/except.obj \
-    $(SLO)$/uno2cpp.obj \
-    $(SLO)$/m68khelper.obj
+    $(SLO)$/uno2cpp.obj
 
 SHL1TARGET= $(TARGET)
 
@@ -83,6 +82,3 @@ SHL1STDLIBS= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-$(SLO)$/%.obj: %.s
-       $(CXX) -c -o $(SLO)$/$(@:b).o $< -fPIC ; touch $@

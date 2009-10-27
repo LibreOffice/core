@@ -33,9 +33,11 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <connectivity/dbtools.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -46,16 +48,18 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XJob.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
-#include "corestrings.hrc"
-#endif
+
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
 #include <svtools/useroptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <comphelper/mimeconfighelper.hxx>
+
 #include "Tools.hxx"
-#include <comphelper/property.hxx>
+#include "corestrings.hrc"
+#include "core_resource.hrc"
+#include "core_resource.hxx"
+
 #include <connectivity/CommonTools.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/docfilt.hxx>
@@ -72,6 +76,7 @@ OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentCon
 :ReportEngineBase(m_aMutex)
 ,ReportEnginePropertySet(context,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
 ,m_xContext(context)
+,m_nMaxRows(0)
 {
     DBG_CTOR( rpt_OReportEngineJFree,NULL);
 }
@@ -197,18 +202,29 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
             }
             m_xReport->storeToStorage(xTemp,aEmpty); // store to temp file because it may contain information which aren't in the database yet.
 
-            uno::Sequence< beans::NamedValue > aConvertedProperties(7);
+            uno::Sequence< beans::NamedValue > aConvertedProperties(8);
             sal_Int32 nPos = 0;
             aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStorage"));
             aConvertedProperties[nPos++].Value <<= xTemp;
             aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStorage"));
 
-
+            ::rtl::OUString sFileURL;
             String sName = m_xReport->getCaption();
             if ( !sName.Len() )
                 sName = m_xReport->getName();
-            ::utl::TempFile aFile(sName,sal_False,&sExt);
-            uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(aFile.GetURL(),embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
+            {
+                ::utl::TempFile aTestFile(sName,sal_False,&sExt);
+                if ( !aTestFile.IsValid() )
+                {
+                    sName = RPT_RESSTRING(RID_STR_REPORT,m_xContext->getServiceManager());
+                    ::utl::TempFile aFile(sName,sal_False,&sExt);
+                    sFileURL = aFile.GetURL();
+                }
+                else
+                    sFileURL = aTestFile.GetURL();
+            }
+
+            uno::Reference< embed::XStorage > xOut = OStorageHelper::GetStorageFromURL(sFileURL,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,uno::Reference< lang::XMultiServiceFactory >(m_xContext->getServiceManager(),uno::UNO_QUERY));
             utl::DisposableComponent aOut(xOut);
             xStorageProp.set(xOut,uno::UNO_QUERY);
             if ( xStorageProp.is() )
@@ -223,6 +239,9 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
 
             aConvertedProperties[nPos].Name = PROPERTY_ACTIVECONNECTION;
             aConvertedProperties[nPos++].Value <<= m_xActiveConnection;
+
+            aConvertedProperties[nPos].Name = PROPERTY_MAXROWS;
+            aConvertedProperties[nPos++].Value <<= m_nMaxRows;
 
             // some meta data
             SvtUserOptions aUserOpts;
@@ -246,7 +265,7 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
                 if ( xStorageProp.is() )
                 {
                     //xStorageProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))) >>= sOutputName;
-                    sOutputName = aFile.GetURL();
+                    sOutputName = sFileURL;
                 }
             }
 
@@ -293,7 +312,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))
                                                     ,m_xContext)
                                                     ,uno::UNO_QUERY);
-            ::rtl::OUString sTarget = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+            ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
             sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
             uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY)->findFrame(sTarget,nFrameSearchFlag);
             xFrameLoad.set( xFrame,uno::UNO_QUERY);
@@ -316,7 +335,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
             }
 
             uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
-            ::comphelper::MimeConfigurationHelper aHelper(xFac);
+            /*::comphelper::MimeConfigurationHelper aHelper(xFac);*/
             xModel.set( xFrameLoad->loadComponentFromURL(
                 sOutputName,
                 ::rtl::OUString(), // empty frame name
@@ -393,6 +412,17 @@ void SAL_CALL OReportEngineJFree::setActiveConnection( const uno::Reference< sdb
     if ( !_activeconnection.is() )
         throw lang::IllegalArgumentException();
     set(PROPERTY_ACTIVECONNECTION,_activeconnection,m_xActiveConnection);
+}
+// -----------------------------------------------------------------------------
+::sal_Int32 SAL_CALL OReportEngineJFree::getMaxRows() throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_nMaxRows;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OReportEngineJFree::setMaxRows( ::sal_Int32 _MaxRows ) throw (uno::RuntimeException)
+{
+    set(PROPERTY_MAXROWS,_MaxRows,m_nMaxRows);
 }
 // =============================================================================
 } // namespace reportdesign

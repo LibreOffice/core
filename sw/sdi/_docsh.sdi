@@ -133,6 +133,7 @@ interface BaseTextDocument : OfficeDocument
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+
     FN_PRINT_LAYOUT
     [
         ExecMethod = Execute;

@@ -60,9 +60,6 @@ import org.pentaho.reporting.libraries.formula.lvalues.LValue;
 import org.pentaho.reporting.libraries.formula.lvalues.Term;
 import org.pentaho.reporting.libraries.formula.parser.FormulaParser;
 import org.pentaho.reporting.libraries.formula.parser.ParseException;
-import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
-import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
-import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.DefaultReportJob;
@@ -96,6 +93,7 @@ public class PentahoReportJob implements ReportJob
     private final ReportJobDefinition definition;
     private final List masterValues;
     private final List detailColumns;
+    private final Integer maxRows;
 
     public ReportJobDefinition getDefinition()
     {
@@ -147,6 +145,7 @@ public class PentahoReportJob implements ReportJob
 
         this.masterValues = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES);
         this.detailColumns = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
+        this.maxRows = (Integer) jobProperties.getProperty(ReportEngineParameterNames.MAXROWS);
 
         this.resourceManager = new ResourceManager();
         this.resourceManager.registerDefaults();
@@ -241,6 +240,8 @@ public class PentahoReportJob implements ReportJob
             {
                 final OfficeGroup group = (OfficeGroup) node;
                 final FormulaExpression exp = (FormulaExpression) group.getGroupingExpression();
+                if ( exp == null )
+                    continue;
 
                 try
                 {
@@ -343,10 +344,12 @@ public class PentahoReportJob implements ReportJob
             final String escapeProcessing = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, SDBCReportDataFactory.ESCAPE_PROCESSING);
             report.setQuery(command);
             parameters.put(SDBCReportDataFactory.COMMAND_TYPE, commandType);
-            parameters.put(SDBCReportDataFactory.ESCAPE_PROCESSING,new Boolean(!("false".equals(escapeProcessing))));
+            parameters.put(SDBCReportDataFactory.ESCAPE_PROCESSING,Boolean.valueOf(!("false".equals(escapeProcessing))));
 
             final String filter = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, "filter");
             parameters.put(SDBCReportDataFactory.UNO_FILTER, filter);
+
+            parameters.put(ReportEngineParameterNames.MAXROWS, report.getJobProperties().getProperty(ReportEngineParameterNames.MAXROWS));
 
             final long startTime = System.currentTimeMillis();
             final ReportProcessor rp = getProcessorForContentType(contentType);

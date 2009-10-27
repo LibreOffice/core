@@ -33,7 +33,6 @@
 #include "ServiceMacros.hxx"
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
-#include "ModifyListenerHelper.hxx"
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

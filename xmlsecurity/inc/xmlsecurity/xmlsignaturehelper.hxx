@@ -145,9 +145,10 @@ public:
     void        SetUriBinding( com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding >& rxUriBinding );
     com::sun::star::uno::Reference< com::sun::star::xml::crypto::XUriBinding > GetUriBinding() const;
 
-                // Set the storage which should be used by the default UriBinding
-                // Must be set before StatrtMission().
-    void        SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage );
+    // Set the storage which should be used by the default UriBinding
+    // Must be set before StatrtMission().
+    //sODFVersion indicates  the ODF version
+    void        SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage, ::rtl::OUString sODFVersion );
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.

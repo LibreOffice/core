@@ -223,6 +223,7 @@ public:
     void ShowBalance(BOOL bShow) {aBalanceColsCB.Show(bShow);}
     void SetInSection(BOOL bSet);
 
+    void ActivateColumnControl() {aCLNrEdt.GrabFocus();}
 };
 
 #endif

@@ -185,14 +185,15 @@ void SAL_CALL ScVbaControl::setEnabled( sal_Bool bVisible ) throw (uno::RuntimeE
 
 sal_Bool SAL_CALL ScVbaControl::getVisible() throw (uno::RuntimeException)
 {
-    uno::Reference< awt::XWindow2 > xWindow2( getWindowPeer(), uno::UNO_QUERY_THROW );
-    return xWindow2->isVisible();
+    sal_Bool bVisible = sal_False;
+    m_xProps->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableVisible" ) ) ) >>= bVisible;
+    return bVisible;
 }
 
 void SAL_CALL ScVbaControl::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
 {
-    uno::Reference< awt::XWindow2 > xWindow2( getWindowPeer(), uno::UNO_QUERY_THROW );
-    xWindow2->setVisible( bVisible );
+    m_xProps->setPropertyValue
+            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableVisible" ) ), uno::makeAny( bVisible ) );
 }
 double SAL_CALL ScVbaControl::getHeight() throw (uno::RuntimeException)
 {

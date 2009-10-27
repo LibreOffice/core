@@ -33,6 +33,7 @@ PRJ=..$/..$/..
 
 PRJNAME=svx
 TARGET=attribute
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -43,6 +44,8 @@ TARGET=attribute
 
 SLOFILES=\
         $(SLO)$/sdrallattribute.obj					\
-        $(SLO)$/sdrtextattribute.obj
+        $(SLO)$/sdrtextattribute.obj				\
+        $(SLO)$/sdrformtextattribute.obj			\
+        $(SLO)$/sdrformtextoutlineattribute.obj
 
 .INCLUDE :  target.mk

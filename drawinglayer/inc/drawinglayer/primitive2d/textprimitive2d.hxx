@@ -158,14 +158,6 @@ namespace drawinglayer
             // the necessary VCL outline extractins, scaling adaptions and other stuff.
             void getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const;
 
-            // adapts fontScale for usage with TextLayouter. Input is rScale which is the extracted
-            // scale from a text transformation. A copy goes to rFontScale and is modified so that
-            // it contains only positive scalings and XY-equal scalings to allow to get a non-X-scaled
-            // Vcl-Font for TextLayouter. rScale is adapted accordingly to contain the corrected scale
-            // which would need to be applied to e.g. outlines received from TextLayouter under
-            // usage of fontScale. This includes Y-Scale, X-Scale-correction and mirrorings.
-            void getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale, basegfx::B2DVector& rFontScale) const;
-
             // get data
             const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
             const String& getText() const { return maText; }

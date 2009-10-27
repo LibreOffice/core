@@ -401,6 +401,8 @@ testcase tInsertHyperlink
     '/// Open 'Hyperlink' – dialog via 'Insert – Hyperlink'
     printlog " Open 'Hyperlink' – dialog via 'Insert – Hyperlink'"
     InsertHyperlink
+    WaitSlot( 5000 )
+    
     Kontext "Hyperlink"
     '/// Switch to category 'Internet' (first one)
     printlog " Switch to category 'Internet'"

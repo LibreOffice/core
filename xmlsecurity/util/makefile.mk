@@ -152,7 +152,7 @@ SHL4STDLIBS=\
                 $(SALLIB)			\
                 $(SVLLIB)			\
                 $(XMLOFFLIB)		\
-                $(SVXLIB)
+                $(SVXCORELIB)
 
 SHL4VERSIONMAP = xmlsecurity.map
 SHL4DEPN=

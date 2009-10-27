@@ -33,9 +33,6 @@ stdout.WriteLine("\n" +
 var oo_sdk_name=WshSysEnv("OO_SDK_NAME");
 var stldebug="";
 var oo_sdk_home=getSdkHome();
-var oo_major=""; 
-var oo_minor=""; 
-var oo_version=getOOBaseVersion();
 var oo_user_sdk_dir=WshSysEnv("APPDATA") + "\\" + oo_sdk_name;
 var oo_user_sdk_env_script=oo_user_sdk_dir + "\\setsdkenv_windows.bat";
 
@@ -220,50 +217,23 @@ function getOfficeHome()
     }
 }
 
-function getOOBaseVersion()
-{
-	var ooversion = oo_sdk_home;
-	var major = "";
-	var minor = "";
-	var index= ooversion.lastIndexOf("\\");
-
-	ooversion = ooversion.substr(0, index);
-
-    if ((index = ooversion.lastIndexOf("Basis")) != -1)  
-	   ooversion = ooversion.substr(index+6);
-
-	index = ooversion.lastIndexOf(".");
-	oo_major = ooversion.substr(0, index);
-	oo_minor = ooversion.substr(index+1);
-
-	return ooversion;
-}
-
 function searchOffice()
 {
 	var tmp = oo_sdk_home;
 	var officepath ="";
-	var index=tmp.lastIndexOf("\\OpenOffice.org");
-	
-	tmp = tmp.substr(0, index);
+	var index=-1;
 
-	var sov = parseInt(oo_major) + 6;
-
-    if (aFileSystemObject.FileExists(tmp + "\\OpenOffice.org " + oo_version + "\\program\\soffice.exe")) {
-	   return tmp + "\\OpenOffice.org " + oo_version;
-	}
-    if (aFileSystemObject.FileExists(tmp + "\\OpenOffice.org " + oo_major + "\\program\\soffice.exe")) {
-	   return tmp + "\\OpenOffice.org " + oo_major;
-	}
-    if (aFileSystemObject.FileExists(tmp + "\\StarOffice " + sov + "\\program\\soffice.exe")) {
-	   return tmp + "\\StarOffice " + sov;
-	}
-    if (aFileSystemObject.FileExists(tmp + "\\StarSuite " + sov + "\\program\\soffice.exe")) {
-	   return tmp + "\\StarSuite " + sov;
+	if ((index = tmp.lastIndexOf("\\Basis")) != -1) {
+	   tmp = tmp.substr(0, index);
 	}
 
+	if (aFileSystemObject.FileExists(tmp + "\\program\\soffice.exe")) {
+	   return tmp;
+	}
+  
 	return "";
 }
+
 
 function getOfficeBaseHome()
 {

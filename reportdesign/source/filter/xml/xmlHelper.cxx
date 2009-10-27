@@ -43,6 +43,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <xmloff/prstylei.hxx>
 #include "xmlstrings.hrc"
 #include "xmlEnums.hxx"
@@ -59,7 +60,7 @@
 #include <com/sun/star/report/XReportControlFormat.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 
 #define XML_RPT_ALGINMENT   (XML_DB_TYPES_START+1)
@@ -85,21 +86,22 @@ OPropertyHandlerFactory::~OPropertyHandlerFactory()
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
 {
     const XMLPropertyHandler* pHandler = NULL;
+    sal_Int32 nType = _nType;
+    nType &= MID_FLAG_MASK;
 
-    switch(_nType)
+    switch(nType)
     {
         case XML_RPT_ALGINMENT:
             {
                 static SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
                 {
-                    { XML_TOP,          drawing::TextVerticalAdjust_TOP },
-                    { XML_MIDDLE,       drawing::TextVerticalAdjust_CENTER },
-                    { XML_BOTTOM,       drawing::TextVerticalAdjust_BOTTOM },
-                    { XML_JUSTIFY,      drawing::TextVerticalAdjust_BLOCK },
+                    { XML_TOP,          style::VerticalAlignment_TOP },
+                    { XML_MIDDLE,       style::VerticalAlignment_MIDDLE },
+                    { XML_BOTTOM,       style::VerticalAlignment_BOTTOM },
                     { XML_TOKEN_INVALID, 0 }
                 };
 
-                pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextVerticalAdjust*)0) );
+                pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::style::VerticalAlignment*)0) );
             }
             break;
         case (XML_SD_TYPES_START+34):
@@ -110,6 +112,8 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 
     if ( !pHandler )
         pHandler = OControlPropertyHandlerFactory::GetPropertyHandler(_nType);
+    else
+        PutHdlCache(nType, pHandler);
     return pHandler;
 }
 // -----------------------------------------------------------------------------
@@ -134,13 +138,13 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _
 
             MAP_CONST_C(      PROPERTY_CONTROLBACKGROUND,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+            MAP_CONST_C(      PROPERTY_VERTICALALIGN,   STYLE,    VERTICAL_ALIGN,       XML_RPT_ALGINMENT, 0 ),
             MAP_CONST_C(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
             MAP_CONST_P(      PROPERTY_CONTROLBACKGROUND,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_P(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-            GMAP(             PROPERTY_SCALEMODE,STYLE,REPEAT,       (XML_SD_TYPES_START+34)|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
@@ -159,7 +163,8 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_C(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-            GMAP(             PROPERTY_SCALEMODE,STYLE,REPEAT,       (XML_SD_TYPES_START+34)|MID_FLAG_MULTI_PROPERTY, 0 ),
+            MAP_CONST_C(      PROPERTY_VERTICALALIGN,
+                                                STYLE,    VERTICAL_ALIGN,       XML_RPT_ALGINMENT, 0 ),
             MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
@@ -230,26 +235,6 @@ const SvXMLEnumMapEntry* OXMLHelper::GetForceNewPageOptions()
     };
     return s_aXML_EnumMap;
 }
-// -----------------------------------------------------------------------------
-//// -----------------------------------------------------------------------------
-//const SvXMLEnumMapEntry* OXMLHelper::GetGroupOnOptions()
-//{
-//  static SvXMLEnumMapEntry s_aXML_EnumMap[] =
-//  {
-//      // { XML_DEFAULT ,report::GroupOn::DEFAULT }, // default
-//      { XML_PREFIX_CHARACTERS ,report::GroupOn::PREFIX_CHARACTERS },
-//      { XML_YEAR ,report::GroupOn::YEAR },
-//      { XML_QUARTAL , report::GroupOn::QUARTAL },
-//      { XML_MONTH ,   report::GroupOn::MONTH },
-//      { XML_WEEK ,    report::GroupOn::WEEK },
-//      { XML_DAY , report::GroupOn::DAY },
-//      { XML_HOUR ,    report::GroupOn::HOUR },
-//      { XML_MINUTE ,  report::GroupOn::MINUTE },
-//      { XML_INTERVAL ,    report::GroupOn::INTERVAL },
-//      { XML_TOKEN_INVALID, 0 }
-//  };
-//  return s_aXML_EnumMap;
-//}
 // -----------------------------------------------------------------------------
 const SvXMLEnumMapEntry* OXMLHelper::GetKeepTogetherOptions()
 {
@@ -352,33 +337,10 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
             xProp->getPropertyValue(PROPERTY_FONTTYPE) >>=          aFont.Type;
             uno::Reference<report::XReportControlFormat> xReportControlModel(_xProp,uno::UNO_QUERY);
             if ( xReportControlModel.is() && aFont.Name.getLength() )
-                try
-                {
-                    xReportControlModel->setFontDescriptor(aFont);
-                }
-                catch(beans::UnknownPropertyException){}
-
-            if ( xReportControlModel.is() )
             {
                 try
                 {
-                    sal_Int16 nTextAlign = xReportControlModel->getParaAdjust();
-                    switch(nTextAlign)
-                    {
-                        case style::ParagraphAdjust_LEFT:
-                            nTextAlign = awt::TextAlign::LEFT;
-                            break;
-                        case style::ParagraphAdjust_CENTER:
-                            nTextAlign = awt::TextAlign::CENTER;
-                            break;
-                        case style::ParagraphAdjust_RIGHT:
-                            nTextAlign = awt::TextAlign::RIGHT;
-                            break;
-                        default:
-                            OSL_ENSURE(0,"Illegal text alignment value!");
-                            break;
-                    }
-                    xReportControlModel->setParaAdjust(nTextAlign);
+                    xReportControlModel->setFontDescriptor(aFont);
                 }
                 catch(beans::UnknownPropertyException){}
             }
@@ -441,6 +403,19 @@ SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
     };
     return new SvXMLTokenMap( aElemTokenMap );
 }
+// -----------------------------------------------------------------------------
+const SvXMLEnumMapEntry* OXMLHelper::GetImageScaleOptions()
+{
+       static SvXMLEnumMapEntry s_aXML_EnumMap[] =
+       {
+               // { XML_NONE,          awt::ImageScaleMode::None }, // default
+               { XML_ISOTROPIC,        awt::ImageScaleMode::Isotropic },
+               { XML_ANISOTROPIC,      awt::ImageScaleMode::Anisotropic },
+               { XML_TOKEN_INVALID, 0 }
+       };
+       return s_aXML_EnumMap;
+}
+// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 } // rptxml
 // -----------------------------------------------------------------------------

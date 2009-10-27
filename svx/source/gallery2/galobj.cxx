@@ -134,7 +134,8 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
         else
             aSize.Height() = (sal_Int32)( S_THUMB / fFactor );
 
-        aThumbBmp = rGraphic.GetBitmap( &aSize );
+        const GraphicConversionParameters aParameters(aSize);
+        aThumbBmp = rGraphic.GetBitmap(aParameters);
 
         if( !aThumbBmp.IsEmpty() )
         {

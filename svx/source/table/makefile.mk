@@ -36,6 +36,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
 PRJNAME=svx
 TARGET=table
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE;
 
 # --- Settings -----------------------------------------------------
@@ -45,9 +46,9 @@ ENABLE_EXCEPTIONS=TRUE;
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	\
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
         $(SLO)$/propertyset.obj\
-        $(SLO)$/celleditsource.obj\
         $(SLO)$/cell.obj\
         $(SLO)$/cellrange.obj\
         $(SLO)$/cellcursor.obj\
@@ -61,12 +62,18 @@ SLOFILES=	\
         $(SLO)$/tablelayouter.obj\
         $(SLO)$/tablehandles.obj\
         $(SLO)$/tablecontroller.obj\
-        $(SLO)$/tabledesign.obj\
-        $(SLO)$/tableundo.obj\
-        $(SLO)$/accessibletableshape.obj\
+        $(SLO)$/tableundo.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+        $(SLO)$/celleditsource.obj \
+        $(SLO)$/tabledesign.obj \
+        $(SLO)$/accessibletableshape.obj \
         $(SLO)$/accessiblecell.obj \
         $(SLO)$/tablertfexporter.obj \
         $(SLO)$/tablertfimporter.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 SRS1NAME=table
 SRC1FILES= table.src

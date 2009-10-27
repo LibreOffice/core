@@ -205,6 +205,12 @@ class BackendImpl : public ImplBaseT
                 css::ucb::CommandAbortedException,
                 css::uno::RuntimeException);
 
+        virtual ::sal_Bool SAL_CALL checkDependencies(
+            const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+            throw (css::deployment::DeploymentException,
+                css::ucb::CommandFailedException,
+                css::uno::RuntimeException);
+
         virtual beans::Optional<OUString> SAL_CALL getIdentifier()
             throw (RuntimeException);
 
@@ -700,6 +706,22 @@ bool BackendImpl::PackageImpl::checkDependencies(
     return checkPlatform(xCmdEnv)
         && checkDependencies(xCmdEnv, *spDescription)
         && checkLicense(xCmdEnv, *spDescription, bInstalled, aContextName);
+}
+
+::sal_Bool BackendImpl::PackageImpl::checkDependencies(
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+        throw (css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
+            css::uno::RuntimeException)
+{
+    std::auto_ptr<ExtensionDescription> spDescription;
+    try {
+        spDescription.reset(
+            new ExtensionDescription( getMyBackend()->getComponentContext(), m_url_expanded, xCmdEnv ));
+    } catch (NoDescriptionException& ) {
+        return sal_True;
+    }
+    return checkDependencies(xCmdEnv, *spDescription);
 }
 
 beans::Optional<OUString> BackendImpl::PackageImpl::getIdentifier()

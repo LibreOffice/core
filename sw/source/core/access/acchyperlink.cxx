@@ -101,8 +101,8 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
                 const SwTxtINetFmt* pTxtAttr2 = rINetFmt.GetTxtINetFmt();
                 if( pTxtAttr2 )
                 {
-                    const_cast< SwTxtINetFmt* >( pTxtAttr2 )->SetVisited( sal_True );
-                    const_cast< SwTxtINetFmt* >( pTxtAttr2 )->SetValidVis( sal_True );
+                    const_cast<SwTxtINetFmt*>(pTxtAttr2)->SetVisited(true);
+                    const_cast<SwTxtINetFmt*>(pTxtAttr2)->SetVisitedValid(true);
                 }
                 bRet = sal_True;
             }

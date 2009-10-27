@@ -40,7 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 DLLPRE=
 
@@ -52,7 +51,7 @@ dummy:
     @echo "Nothing to build. GUIBASE == $(GUIBASE)"
 
 .ELSE # we build for aqua
-
+CFLAGSCXX+=$(OBJCXXFLAGS)
 
 # --- Files --------------------------------------------------------
 

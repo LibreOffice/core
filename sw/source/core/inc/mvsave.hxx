@@ -39,6 +39,10 @@
 #include <IDocumentMarkAccess.hxx>
 #include <vector>
 
+namespace sfx2 {
+    class MetadatableUndo;
+}
+
 class SvNumberFormatter;
 class SvULongs;
 class SwDoc;
@@ -80,6 +84,7 @@ namespace sw { namespace mark
             ULONG m_nNode2;
             xub_StrLen m_nCntnt1;
             xub_StrLen m_nCntnt2;
+            ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
 }}
 

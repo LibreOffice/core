@@ -41,15 +41,6 @@ namespace ary
 namespace cpp
 {
 
-
-Variable::Variable()
-    :   // aEssentials,
-           nType(0),
-        eProtection(PROTECT_global)
-        // aFlags
-{
-}
-
 Variable::Variable( const String  &     i_sLocalName,
                     Cid                 i_nOwner,
                     E_Protection        i_eProtection,

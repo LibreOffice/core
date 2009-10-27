@@ -36,7 +36,6 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.db.TableDescriptor;
-import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.*;
 
 public class Finalizer
@@ -164,7 +163,7 @@ public class Finalizer
                         String sSchema = "";
                         try
                         {
-                            sSchema = (String) curtabledescriptor.xDataSourcePropertySet.getPropertyValue("User");
+                            sSchema = (String) curtabledescriptor.getDataSourcePropertySet().getPropertyValue("User");
                         }
                         catch (Exception e1)
                         {

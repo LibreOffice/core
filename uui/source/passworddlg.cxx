@@ -92,7 +92,7 @@ PasswordDialog::PasswordDialog
     long nNewLabelHeight = 0;
     for( nNewLabelHeight = ( nTextWidth / nLabelWidth + 1 ) * nTextHeight;
         nNewLabelHeight < aRect.GetHeight();
-        nNewLabelHeight += nTextHeight ) ;
+        nNewLabelHeight += nTextHeight ) {} ;
 
     long nDelta = nNewLabelHeight - nLabelHeight;
 

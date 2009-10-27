@@ -80,14 +80,22 @@ class Type : public ary::Entity
     // INQUIRY
     Type_id             TypeId() const          { return Type_id(Id()); }
 
-    /// @descr Does NOT clear the output-parameters.
+    /** Does NOT clear the output-parameters.
+
+        @attention
+        If this is a sequence, the text of the first non-sequence, enclosed type
+        is returned.
+    */
     void                Get_Text(
                             StringVector &      o_module,
                             String &            o_name,
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequenceCount,
                             const Gate &        i_rGate ) const;
-    Type_id             TemplateParameterType() const;
+    const std::vector<Type_id> *
+                        TemplateParameters() const;
+    const Type &        FirstEnclosedNonSequenceType(   /// @return *this, if this is not a ->Sequence.
+                            const Gate &        i_rGate ) const;
 
   private:
     virtual void        inq_Get_Text(
@@ -96,7 +104,11 @@ class Type : public ary::Entity
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const = 0;
-    virtual Type_id     inq_TemplateParameterType() const;
+    virtual const std::vector<Type_id> *
+                        inq_TemplateParameters() const;
+    virtual const Type &
+                        inq_FirstEnclosedNonSequenceType(
+                            const Gate &        i_rGate ) const;
 };
 
 
@@ -113,10 +125,16 @@ Type::Get_Text( StringVector &      o_module,
     inq_Get_Text(o_module,o_name,o_nRelatedCe,o_nSequenceCount,i_rGate);
 }
 
-inline Type_id
-Type::TemplateParameterType() const
+inline const std::vector<Type_id> *
+Type::TemplateParameters() const
 {
-    return inq_TemplateParameterType();
+    return inq_TemplateParameters();
+}
+
+inline const Type &
+Type::FirstEnclosedNonSequenceType(const Gate & i_rGate) const
+{
+    return inq_FirstEnclosedNonSequenceType(i_rGate);
 }
 
 

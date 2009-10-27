@@ -40,7 +40,7 @@ COMP1TYPELIST=dtrans
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 
 SLOFILES= \
@@ -66,5 +66,6 @@ DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :	target.mk

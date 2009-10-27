@@ -35,7 +35,7 @@ import com.sun.star.wizards.ui.event.CommonListener;
 import com.sun.star.wizards.ui.event.EventNames;
 import com.sun.star.wizards.ui.event.MethodInvocation;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.awt.XItemEventBroadcaster;
+// import com.sun.star.awt.XItemEventBroadcaster;
 import com.sun.star.awt.*;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XInterface;
@@ -85,6 +85,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * "HID:(hid+3)" - the next button
      * "HID:(hid+4)" - the create button
      * "HID:(hid+5)" - the cancel button
+     * @param xMSF
+     * @param hid_
      */
     public WizardDialog(XMultiServiceFactory xMSF, int hid_)
     {
@@ -96,6 +98,10 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     //new Resource(xMSF,"Common","com");
     }
 
+    /**
+     *
+     * @return
+     */
     public Resource getResource()
     {
         return oWizardResource;
@@ -226,14 +232,29 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         {
             int iDialogHeight = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, "Height")).intValue();
 
+            // the roadmap control has got no real TabIndex ever
+            // that is not correct, but changing this would need time, so it is used
+            // without TabIndex as before
             oRoadmap = insertControlModel("com.sun.star.awt.UnoControlRoadmapModel", "rdmNavi",
                     new String[]
                     {
-                        "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        "Height",
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Tabstop",
+                        "Width"
                     },
                     new Object[]
                     {
-                        new Integer(iDialogHeight - 26), new Integer(0), new Integer(0), new Integer(0), new Short((short) 0), new Integer(85)
+                        new Integer(iDialogHeight - 26),
+                        new Integer(0),
+                        new Integer(0),
+                        new Integer(0),
+                        new Short((short)0),
+                        Boolean.TRUE,
+                        new Integer(85)
                     });
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
             xPSet.setPropertyValue("Name", "rdmNavi");
@@ -378,6 +399,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
      */
+    /**
+     *
+     * @param _ndialogpage
+     * @return
+     */
     public boolean iscompleted(int _ndialogpage)
     {
         return false;
@@ -386,6 +412,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * @see com.sun.star.wizards.ui.XCompletion#ismodified(int)
      */
 
+    /**
+     *
+     * @param _ndialogpage
+     * @return
+     */
     public boolean ismodified(int _ndialogpage)
     {
         return false;
@@ -394,6 +425,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
      */
 
+    /**
+     *
+     * @param _ndialogpage
+     * @param _biscompleted
+     */
     public void setcompleted(int _ndialogpage, boolean _biscompleted)
     {
     }
@@ -401,6 +437,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * @see com.sun.star.wizards.ui.XCompletion#setmodified(int, java.lang.Object, java.lang.Object)
      */
 
+    /**
+     *
+     * @param _ndialogpage
+     * @param ooldValue
+     * @param onewValue
+     */
     public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
     {
     }

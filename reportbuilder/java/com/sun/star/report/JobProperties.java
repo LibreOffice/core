@@ -32,10 +32,10 @@ package com.sun.star.report;
 public interface JobProperties
 {
 
-    public void setProperty(String key, Object value)
+    void setProperty(String key, Object value)
             throws JobDefinitionException;
 
-    public Object getProperty(String key);
+    Object getProperty(String key);
 
     /**
      * A type safe clone operation. We derive a copy of all properties,
@@ -44,5 +44,5 @@ public interface JobProperties
      *
      * @return a copy.
      */
-    public JobProperties copy();
+    JobProperties copy();
 }

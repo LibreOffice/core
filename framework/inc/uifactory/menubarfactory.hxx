@@ -56,30 +56,36 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 #include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
-    class MenuBarFactory :  public com::sun::star::lang::XTypeProvider                  ,
-                            public com::sun::star::lang::XServiceInfo                   ,
-                            public ::com::sun::star::ui::XUIElementFactory        ,
-                            protected ThreadHelpBase                                    ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                            public ::cppu::OWeakObject
+    class MenuBarFactory :  protected ThreadHelpBase                                    ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                            public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
+                                                            ::com::sun::star::ui::XUIElementFactory>
     {
         public:
             MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
             virtual ~MenuBarFactory();
 
             //  XInterface, XTypeProvider, XServiceInfo
-            FWK_DECLARE_XINTERFACE
             DECLARE_XSERVICEINFO
-            FWK_DECLARE_XTYPEPROVIDER
 
             // XUIElementFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-        private:
+            static void CreateUIElement(const ::rtl::OUString& ResourceURL
+                        , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args
+                        ,const char* _pExtraMode
+                        ,const char* _pAsciiName
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >& _xModuleManager
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager);
+
+        protected:
+            MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool );
+
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
     };

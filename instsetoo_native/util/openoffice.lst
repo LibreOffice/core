@@ -123,7 +123,7 @@ OpenOffice_wJRE
 			BASEPRODUCTVERSION 3.2
 			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -194,7 +194,7 @@ OpenOffice_Dev
 			SERVICETAG_URN urn:uuid:156a7974-f2fd-11dd-8c47-080020a9ed93
 			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -284,7 +284,7 @@ OpenOffice_SDK
 {
     Settings
     {
-        downloadname OOo-SDK_{productversion}_{os}_install_{languages}
+        downloadname OOo-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
             PRODUCTNAME OpenOffice.org
@@ -301,6 +301,55 @@ OpenOffice_SDK
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
             DATABASENAME openofficeorg32sdk
+            NO_README_IN_ROOTDIR 1
+            LICENSENAME LGPL
+            IGNOREDIRECTORYLAYER 1
+            NOVERSIONINDIRNAME 0
+            NOSPACEINDIRECTORYNAME 1
+            CHANGETARGETDIR 1
+            DOWNLOADBANNER ooosdkbanner.bmp
+            DOWNLOADBITMAP ooosdkbitmap.bmp
+            DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
+            RELATIVE_PATHES_IN_DDF 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+            STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/templates?cid=926383
+        }
+        active 1
+        compression 5
+        script sdkoo
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
+    }
+}
+
+OpenOffice_Dev_SDK
+{
+    Settings
+    {
+        downloadname OOo-Dev-SDK_{packageversion}_{os}_install_{languages}
+        variables
+        {
+            PRODUCTNAME OOo-dev
+            PRODUCTVERSION 3.2
+            PRODUCTEXTENSION
+            LONG_PRODUCTEXTENSION
+            SHORT_PRODUCTEXTENSION
+            BASISROOTNAME OOo-dev
+            UNIXBASISROOTNAME ooo-dev
+            POSTVERSIONEXTENSION SDK
+            POSTVERSIONEXTENSIONUNIX sdk
+            BRANDPACKAGEVERSION 3
+            PACKAGEVERSION 3.2.0
+            PACKAGEREVISION {milestone}
+            BASISPACKAGEPREFIX ooobasis-dev
+            UREPACKAGEPREFIX ooodev
+            SOLSUREPACKAGEPREFIX ooodev
+            REGISTRYLAYERNAME LayerDev
+            PACK_INSTALLED 1
+            POOLPRODUCT 0
+            DMG_VOLUMEEXTENSION SDK
+            DATABASENAME openofficeorg32devsdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
@@ -370,7 +419,7 @@ BrOffice
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.2.0
 			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE ooo_patchcodes.txt
+			PATCHCODEFILE bro_patchcodes.txt
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
@@ -412,7 +461,7 @@ BrOffice_wJRE
 			PROGRESSFRAMECOLOR 
 			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -437,7 +486,7 @@ BrOffice_wJRE
 			USE_FILEVERSION 1
 			LIBRARYVERSION 9.2.0
 			CODEFILENAME codes_broo.txt
-			PATCHCODEFILE ooo_patchcodes.txt
+			PATCHCODEFILE bro_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
@@ -487,7 +536,7 @@ BrOffice_Dev
 			SERVICETAG_URN urn:uuid:156a7974-f2fd-11dd-8c47-080020a9ed93
 			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -510,7 +559,7 @@ BrOffice_Dev
 			USE_FILEVERSION 1
 			JAVAPRODUCT 1
 			LIBRARYVERSION 9.2.0
-			PATCHCODEFILE ooo_patchcodes.txt
+			PATCHCODEFILE brodev_patchcodes.txt
 			CODEFILENAME codes_broodev.txt
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp

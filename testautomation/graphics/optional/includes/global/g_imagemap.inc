@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -67,11 +67,11 @@ testcase tEditImageMap
       endcatch
    end if
    Call  hCloseDocument             '/// close document ///'
-endcase
-
+   
+endcase 'tEditImageMap
 '------------------------------------------------------------------------------------------------------------------------------------
-
 testcase tEditImageMapProperties
+
     qaerrorlog "test not yet ready."
     goto endsub
     Call  hNewDocument                  '/// new document ///'
@@ -160,6 +160,6 @@ testcase tEditImageMapProperties
     sleep (1)
 
    Call  hCloseDocument             '/// close document ///'
+   
 endcase 'tEditImageMapProperties
-
 '------------------------------------------------------------------------------------------------------------------------------------

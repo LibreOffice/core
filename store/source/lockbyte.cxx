@@ -297,7 +297,7 @@ struct FileHandle
         if (result == osl_File_E_EXIST)
         {
             // Already existing (O_CREAT | O_EXCL).
-            result = osl_openFile (aFileUrl.pData, &m_handle, osl_File_OpenFlag_Write);
+            result = osl_openFile (aFileUrl.pData, &m_handle, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             if ((result == osl_File_E_None) && (eAccessMode == store_AccessCreate))
             {
                 // Truncate existing file.

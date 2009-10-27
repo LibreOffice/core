@@ -417,7 +417,7 @@ namespace dbaui
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        ::dbaccess::DATASOURCE_TYPE eType = m_pImpl->getDatasourceType(*_pItems);
+        const ::rtl::OUString eType = m_pImpl->getDatasourceType(*_pItems);
 
         DataSourceMetaData aMeta( eType );
         const AdvancedSettingsSupport& rAdvancedSupport( aMeta.getAdvancedSettingsSupport() );
@@ -443,9 +443,9 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( ::dbaccess::DATASOURCE_TYPE _eType )
+    bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const ::rtl::OUString& _sURL )
     {
-        DataSourceMetaData aMeta( _eType );
+        DataSourceMetaData aMeta( _sURL );
         const AdvancedSettingsSupport& rSupport( aMeta.getAdvancedSettingsSupport() );
         if ( rSupport.bGeneratedValues || rSupport.supportsAnySpecialSetting() )
             return true;
@@ -510,7 +510,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    ::dbaccess::DATASOURCE_TYPE AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
+    ::rtl::OUString AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }

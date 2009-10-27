@@ -45,7 +45,7 @@ public:
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             ISegmentProgressBarRef xProgressBar,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
@@ -76,7 +76,7 @@ public:
     explicit            BiffChartsheetFragment(
                             const BiffWorkbookFragmentBase& rParent,
                             ISegmentProgressBarRef xProgressBar,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
     /** Imports the entire sheet fragment, returns true, if EOF record has been reached. */
     virtual bool        importFragment();

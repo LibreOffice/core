@@ -85,20 +85,20 @@ public class ImageElementLayoutController
             // A static image is easy. At least at this level. Dont ask about the weird things we have to do in the
             // output targets ...
             final String linkTarget = imageElement.getImageData();
-            generateImage(target, linkTarget, imageElement.isScale(), imageElement.isPreserveIRI());
+            generateImage(target, linkTarget, imageElement.getScaleMode(), imageElement.isPreserveIRI());
         }
         else
         {
             final Object value =
                     LayoutControllerUtil.evaluateExpression(getFlowController(), imageElement, formulaExpression);
-            generateImage(target, value, imageElement.isScale(), imageElement.isPreserveIRI());
+            generateImage(target, value, imageElement.getScaleMode(), imageElement.isPreserveIRI());
         }
         return join(getFlowController());
     }
 
     private void generateImage(final ReportTarget target,
             final Object linkTarget,
-            final boolean scale,
+            final String scale,
             final boolean preserveIri)
             throws ReportProcessingException, DataSourceException
     {
@@ -110,7 +110,7 @@ public class ImageElementLayoutController
         final AttributeMap image = new AttributeMap();
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.NAMESPACE_ATTRIBUTE, JFreeReportInfo.REPORT_NAMESPACE);
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.TYPE_ATTRIBUTE, OfficeToken.IMAGE);
-        image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE, String.valueOf(scale));
+        image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE, scale);
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.PRESERVE_IRI, String.valueOf(preserveIri));
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "image-context", createContext());
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.IMAGE_DATA, linkTarget);

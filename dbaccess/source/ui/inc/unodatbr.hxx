@@ -130,7 +130,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xCurrentFrameParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xMainToolbar;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xCurrentDatabaseDocument;
 
         // ---------------------------
         struct ExternalFeature

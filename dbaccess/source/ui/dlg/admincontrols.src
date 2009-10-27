@@ -1,0 +1,130 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#include "AutoControls.hrc"
+#include "dbu_dlg.hrc"
+#include "admincontrols.hrc"
+
+#define LINE_HEIGHT             ( EDIT_HEIGHT + RELATED_CONTROLS )
+#define SETTINGS_CONTROL_WIDTH  ( WIZARD_PAGE_X - 2 * START_X )
+#define COLUMN_WIDTH_1      80
+#define COLUMN_WIDTH_2      ( SETTINGS_CONTROL_WIDTH - COLUMN_WIDTH_1 )
+
+Control RID_MYSQL_NATIVE_SETTINGS
+{
+    DialogControl = TRUE;
+    Size = MAP_APPFONT( SETTINGS_CONTROL_WIDTH, 5 * LINE_HEIGHT );
+    Hide = FALSE;
+
+    FixedText FT_MYSQL_DATABASE_NAME
+    {
+        Pos = MAP_APPFONT ( 0, 2 );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_1 - UNRELATED_CONTROLS, FIXEDTEXT_HEIGHT );
+         Text[ en-US ]  = "~Database name";
+    };
+
+    Edit ED_MYSQL_DATABASE_NAME
+    {
+        Pos = MAP_APPFONT ( COLUMN_WIDTH_1, 0 );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_2, EDIT_HEIGHT );
+        Border = TRUE;
+    };
+
+    RadioButton RB_MYSQL_HOST_PORT
+    {
+        Pos = MAP_APPFONT ( 0, LINE_HEIGHT );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_1, FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ]  = "Se~rver / Port" ;
+        Group = TRUE;
+    };
+
+#define OPTION_GROUP_START  ( LINE_HEIGHT + FIXEDTEXT_HEIGHT + RELATED_CONTROLS )
+
+    FixedText FT_COMMON_HOST_NAME
+    {
+        Pos = MAP_APPFONT ( INDENT_BELOW_RADIO, OPTION_GROUP_START + 2 );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_1 - RELATED_CONTROLS - INDENT_BELOW_RADIO, FIXEDTEXT_HEIGHT );
+        Text [ en-US ]  = "~Server" ;
+    };
+
+    Edit ED_COMMON_HOST_NAME
+    {
+        Pos = MAP_APPFONT ( COLUMN_WIDTH_1, OPTION_GROUP_START );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_2, EDIT_HEIGHT );
+        Border = TRUE;
+    };
+
+    FixedText FT_COMMON_PORT
+    {
+        Pos = MAP_APPFONT ( INDENT_BELOW_RADIO, OPTION_GROUP_START + LINE_HEIGHT + 2 );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_1 - RELATED_CONTROLS - INDENT_BELOW_RADIO, FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ]  = "~Port" ;
+        Group = TRUE;
+    };
+
+    NumericField NF_COMMON_PORT
+    {
+        Pos = MAP_APPFONT ( COLUMN_WIDTH_1, OPTION_GROUP_START + LINE_HEIGHT );
+        Size = MAP_APPFONT ( 25, EDIT_HEIGHT );
+        Border = TRUE;
+        NoThousandSep = TRUE;
+        Value = 3306;
+    };
+
+    FixedText FT_COMMON_PORT_DEFAULT
+    {
+        Pos = MAP_APPFONT ( COLUMN_WIDTH_1 + 25 + RELATED_CONTROLS, OPTION_GROUP_START + LINE_HEIGHT + 2 );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_2 - 25 - RELATED_CONTROLS, FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Default: 3306";
+    };
+
+    RadioButton RB_MYSQL_SOCKET
+    {
+        Pos = MAP_APPFONT ( 0, OPTION_GROUP_START + 2 * LINE_HEIGHT + 2 );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_1 - RELATED_CONTROLS, FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "So~cket";
+    };
+
+    Edit ED_MYSQL_SOCKET
+    {
+        Pos = MAP_APPFONT ( COLUMN_WIDTH_1, OPTION_GROUP_START + 2 * LINE_HEIGHT );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_2, EDIT_HEIGHT );
+        Border = TRUE ;
+    };
+
+    RadioButton RB_MYSQL_NAMED_PIPE
+    {
+        Pos = MAP_APPFONT ( 0, OPTION_GROUP_START + 2 * LINE_HEIGHT + 2 );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_1 - RELATED_CONTROLS, FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Named p~ipe";
+    };
+
+    Edit ED_MYSQL_NAMED_PIPE
+    {
+        Pos = MAP_APPFONT ( COLUMN_WIDTH_1, OPTION_GROUP_START + 2 * LINE_HEIGHT );
+        Size = MAP_APPFONT ( COLUMN_WIDTH_2, EDIT_HEIGHT );
+        Border = TRUE ;
+    };
+};

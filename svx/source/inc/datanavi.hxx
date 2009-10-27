@@ -307,10 +307,10 @@ namespace svxform
     };
 
     //========================================================================
-    class DataNavigatorManager : public SfxChildWindow
+    class SVX_DLLPUBLIC DataNavigatorManager : public SfxChildWindow
     {
     public:
-        DataNavigatorManager( Window* pParent, sal_uInt16 nId,
+        SVX_DLLPRIVATE DataNavigatorManager( Window* pParent, sal_uInt16 nId,
                               SfxBindings* pBindings, SfxChildWinInfo* pInfo );
         SFX_DECL_CHILDWINDOW( DataNavigatorManager );
     };

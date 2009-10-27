@@ -53,10 +53,11 @@
 #include <svtools/smplhint.hxx>
 #include "attrib.hxx"
 
+
 #include <vcl/svapp.hxx>    // GetSettings()
 
 #include "globstr.hrc"
-
+#include "sc.hrc"
 //------------------------------------------------------------------------
 
 TYPEINIT1(ScStyleSheet, SfxStyleSheet);
@@ -176,14 +177,8 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     if ( pDoc && pDoc->IsLoadingDone() )
                     {
                         // Setzen von sinnvollen Default-Werten:
-                        // SfxPrinter*      pPrinter = pDoc->GetPrinter();
                         SvxPageItem     aPageItem( ATTR_PAGE );
-                        // #50536# PaperBin auf Default lassen,
-                        // nicht auf aktuelle Drucker-Einstellung umsetzen
-                        // SvxSizeItem      aPaperSizeItem(ATTR_PAGE_SIZE,SvxPaperInfo::GetPaperSize(pPrinter) );
-
-                        SvxPaper        aDefaultPaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
-                        SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetPaperSize(aDefaultPaper) );
+                        SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
                         SvxSetItem      aHFSetItem(
                                             (const SvxSetItem&)
@@ -253,6 +248,18 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                 break;
         }
         bMySet = TRUE;
+    } // if ( !pSet )
+    if ( nHelpId == HID_SC_SHEET_CELL_ERG1 )
+    {
+        if ( !pSet->Count() )
+        {
+            ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
+            if ( pDoc )
+            {
+                ULONG nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,ScGlobal::eLnge );
+                pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
+            } // if ( pDoc && pDoc->IsLoadingDone() )
+        }
     }
 
     return *pSet;

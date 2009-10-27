@@ -45,11 +45,14 @@ namespace com { namespace sun { namespace star { namespace i18n {
 /**
  * Constructor.
  */
-BreakIterator_CTL::BreakIterator_CTL()
+BreakIterator_CTL::BreakIterator_CTL() :
+    cachedText(),
+    nextCellIndex( NULL ),
+    previousCellIndex( NULL ),
+    cellIndexSize( 512 )
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_CTL";
     // to improve performance, alloc big enough memory in construct.
-    cellIndexSize = 512;
     nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
     previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
     memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));

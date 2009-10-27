@@ -44,6 +44,7 @@ import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.layoutprocessor.AbstractLayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
+import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
 import org.jfree.report.structure.Element;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -150,13 +151,14 @@ public class VariablesDeclarationLayoutController
     String formula = FormatValueUtility.applyValueForVariable(value, variableSection);
     if ( formula == null )
         formula = "" + value;
-    if (value instanceof Date)
+    if (value instanceof java.sql.Date)
     {
         final Date date = (Date)value;
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy;MM;dd");
         formula = "Date(" + dateFormat.format(date) + ")";
     }
     variableSection.setAttribute(OfficeNamespaces.TEXT_NS, "formula", "ooow:" + formula);
+
     return variableSection;
   }
 

@@ -31,12 +31,11 @@
 #ifndef _TEXTCONVERSIONDLGS_CHINESE_DIRECTION_HRC
 #define _TEXTCONVERSIONDLGS_CHINESE_DIRECTION_HRC
 
+#include "chinese_direction_ids.hrc"
+
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
 #endif
-
-#define RB_TO_SIMPLIFIED    1
-#define RB_TO_TRADITIONAL   2
 
 #define DIRECTION_RADIOBUTTONS( D_XPOS, D_YPOS, D_FULLWIDTH ) \
 RadioButton RB_TO_SIMPLIFIED \

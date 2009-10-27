@@ -54,6 +54,7 @@ SLOFILES =	\
         $(SLO)$/commontimenodecontext.obj \
         $(SLO)$/conditioncontext.obj \
         $(SLO)$/customshowlistcontext.obj \
+        $(SLO)$/headerfootercontext.obj \
         $(SLO)$/layoutfragmenthandler.obj\
         $(SLO)$/pptfilterhelpers.obj\
         $(SLO)$/pptimport.obj\

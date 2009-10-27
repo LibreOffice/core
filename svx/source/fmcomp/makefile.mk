@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=fmcomp
+LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -48,25 +49,20 @@ SRC1FILES= \
     gridctrl.src	\
     showcols.src
 
-#SLOFILES= \
-#	$(SLO)$/dbaexchange.obj	\
-#	$(SLO)$/gridcols.obj	\
-#	$(SLO)$/gridctrl.obj	\
-#	$(SLO)$/gridcell.obj	\
-#	$(SLO)$/fmgridcl.obj	\
-#	$(SLO)$/fmgridif.obj	\
-#	$(SLO)$/trace.obj
-
-SLOFILES= \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
     $(SLO)$/dbaexchange.obj	\
-    $(SLO)$/dbaobjectex.obj	\
     $(SLO)$/gridcols.obj	\
     $(SLO)$/gridctrl.obj	\
     $(SLO)$/gridcell.obj	\
     $(SLO)$/fmgridcl.obj	\
     $(SLO)$/fmgridif.obj	\
-    $(SLO)$/trace.obj		\
+    $(SLO)$/trace.obj       \
     $(SLO)$/xmlexchg.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+    $(SLO)$/dbaobjectex.obj
 
 .INCLUDE :  target.mk
 

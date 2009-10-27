@@ -31,12 +31,11 @@
 
 
 
-$(CLASSDIR)$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.class .PHONY: $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java 
+$(CLASSDIR)/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.class .PHONY: $(MISC)/java/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.java 
 
-$(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java .PHONY:
-    @echo ------------------------------
-    @echo Making: $@
-    @-$(MKDIRHIER) $(MISC)$/java$/com$/sun$/star$/upd
+$(MISC)/java/com/sun/star/upd/$(VERSIONINFOFILE)_updversion.java .PHONY:
+    @echo "Making:   " $(@:f)
+    @-$(MKDIRHIER) $(MISC)/java/com/sun/star/upd
 .IF "$(GUI)"=="UNX"
     @echo package com.sun.star.upd\; > $@
     @echo 'public class $(VERSIONINFOFILE)_updversion { public static String Version = "$(RSCREVISION)";}' >> $@
@@ -47,11 +46,11 @@ $(MISC)$/java$/com$/sun$/star$/upd$/$(VERSIONINFOFILE)_updversion.java .PHONY:
 
 .IF "$(JAVATARGET)"!=""
 .IF "$(PACKAGE)"!=""
-$(CLASSDIR)$/$(IDLPACKAGE)$/%.class .NOINFER .IGNORE : %.java
+$(CLASSDIR)/$(IDLPACKAGE)/%.class .NOINFER .IGNORE : %.java
 #	echo $@
     @@-$(RM) $(JAVATARGET)
 .ELSE			# "$(PACKAGE)"!=""
-$(CLASSDIR)$/%.class .NOINFER .IGNORE : %.java
+$(CLASSDIR)/%.class .NOINFER .IGNORE : %.java
 #	echo $@
     @@-$(RM) $(JAVATARGET)
 .ENDIF			# "$(PACKAGE)"!=""
@@ -70,15 +69,11 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
     $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) $(JAVAFILES)
 .ELSE			# "$(JAVAFILES:d)"==""
     @@$(TOUCH) $(INPATH)_$(VCSID)_a_dummy.java
-    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) .$/*.java $(uniq $(JAVAFILES:d:+"*.java"))
+    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) ./*.java $(uniq $(JAVAFILES:d:+"*.java"))
     @@-$(RM) $(INPATH)_$(VCSID)_a_dummy.java
 .ENDIF			# "$(JAVAFILES:d)"==""
 .ELSE			# "$(javauno)"!=""
-.IF "$(USE_SHELL)"=="4nt"
-    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
-.ELSE			# "$(USE_SHELL)"=="4nt"
     $(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(javauno)"!=""
 .ENDIF			# "$(use_jdep)"!=""
 .ENDIF			# "$(JAVARESPONSE)"!=""

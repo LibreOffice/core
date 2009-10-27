@@ -163,7 +163,8 @@ static typelib_TypeClass cpp2uno_call(
     (*pThis->getUnoI()->pDispatcher)(
         pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, ">cpp2uno_call pUnoExc %x\n", pUnoExc);
+    if (pUnoExc != NULL)
+        fprintf( stderr, ">cpp2uno_call pUnoExc %x\n", pUnoExc);
 #endif
 
     // in case an exception occured...

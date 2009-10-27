@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner :  fredrik.haegg@sun.com
+'* owner :  helge.delfs@sun.com
 '*
 '* short description : Test Drop Down List Box
 '*
@@ -52,7 +52,7 @@ sub main
     printlog Chr(13) + "******* Writer - Level 1 - Test *******"
 
     Call hStatusIn ( "writer", "w_dropdownLB.bas","Dropdown listbox" )
-    Call wOptionenUndo ( "Alle" )        ' Sets all writer-options to default
+    Call wOptionsUndo ( "All" )        ' Sets all writer-options to default
 
     printlog Chr(13) + "      - Test Drop Down List Box"
 

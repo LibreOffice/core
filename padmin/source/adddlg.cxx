@@ -147,27 +147,31 @@ void APChooseDriverPage::fill( PrinterInfo& rInfo )
     }
 }
 
-void APChooseDriverPage::updateDrivers()
+void APChooseDriverPage::updateDrivers( bool bRefresh, const rtl::OUString& rSelectDriver )
 {
     for( int k = 0; k < m_aDriverBox.GetEntryCount(); k++ )
         delete (String*)m_aDriverBox.GetEntryData( k );
     m_aDriverBox.Clear();
 
     std::list< rtl::OUString > aDrivers;
-    psp::PPDParser::getKnownPPDDrivers( aDrivers );
+    psp::PPDParser::getKnownPPDDrivers( aDrivers, bRefresh );
 
+    rtl::OUString aSelectDriver( psp::PPDParser::getPPDPrinterName( rSelectDriver ) );
+
+    rtl::OUString aSelectedEntry;
     for( std::list< rtl::OUString >::const_iterator it = aDrivers.begin(); it != aDrivers.end(); ++it )
     {
-        String aDriver( ::psp::PPDParser::getPPDPrinterName( *it ) );
-        if( aDriver.Len() )
+        rtl::OUString aDriver( psp::PPDParser::getPPDPrinterName( *it ) );
+        if( aDriver.getLength() )
         {
             int nPos = m_aDriverBox.InsertEntry( aDriver );
             m_aDriverBox.SetEntryData( nPos, new String( *it ) );
-            if( it->equalsAscii( "SGENPRT" ) )
-                m_aDriverBox.SelectEntryPos( nPos );
+            if( aDriver == aSelectDriver )
+                aSelectedEntry = aDriver;
         }
     }
 
+    m_aDriverBox.SelectEntry( aSelectedEntry );
     m_aRemBtn.Enable( m_aDriverBox.GetEntryCount() > 0 );
 }
 
@@ -185,7 +189,13 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
     {
         PPDImportDialog aDlg( this );
         if( aDlg.Execute() )
-            updateDrivers();
+        {
+            const std::list< rtl::OUString >& rImported( aDlg.getImportedFiles() );
+            if( rImported.empty() )
+                updateDrivers( true );
+            else
+                updateDrivers( true, rImported.front() );
+        }
     }
     else if( pButton == &m_aRemBtn )
     {
@@ -259,11 +269,10 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         rPIManager.removePrinter( *it );
                 }
 
-                ::std::list< rtl::OUString > aDirs;
+                std::list< rtl::OUString > aDirs;
                 // get only psprint's directories, not eventual system dirs
                 psp::getPrinterPathList( aDirs, NULL );
-                ::std::list< rtl::OUString >::iterator dir;
-
+                std::list< rtl::OUString >::iterator dir;
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
                 {
                     ::std::list< String > aFiles;
@@ -271,10 +280,11 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                     OUStringBuffer aDir( *dir );
                     aDir.append( sal_Unicode( '/' ) );
                     aDir.appendAscii( PRINTER_PPDDIR );
-                    FindFiles( aDir.makeStringAndClear(), aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD;PS.GZ;PPD.GZ" ) ), true );
+                    rtl::OUString aPPDDir( aDir.makeStringAndClear() );
+                    FindFiles( aPPDDir, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD;PS.GZ;PPD.GZ" ) ), true );
                     for( file = aFiles.begin(); file != aFiles.end(); ++file )
                     {
-                        String aFile( *dir );
+                        String aFile( aPPDDir );
                         if( aFile.GetChar( aFile.Len() ) != '/' )
                             aFile.AppendAscii( "/" );
                         aFile.Append( *file );

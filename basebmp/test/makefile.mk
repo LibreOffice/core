@@ -65,6 +65,7 @@ CDEFS+=-xalias_level=compatible
 .ENDIF
 
 # --- Common ----------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:tests by codegen.pl 
@@ -85,7 +86,6 @@ SHL1OBJS=  \
 # here, because not yet delivered. Need the functionality to test, so
 # we're linking it in statically. Need to keep this in sync with
 # source/makefile.mk
-
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)		 \
                 $(CPPUNITLIB)	 \
@@ -95,7 +95,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = export.map 
-
+.ENDIF
 # END ------------------------------------------------------------------
 
 #APP2TARGET= bmpdemo
@@ -127,11 +127,13 @@ SLOFILES=$(SHL1OBJS)
 .INCLUDE : _cppunit.mk 
 
 # --- Enable test execution in normal build ------------------------
+.IF "$(L10N_framework)"==""
 
 unittest : $(SHL1TARGETN)
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-        $(AUGMENT_LIBRARY_PATH) testshl2 -sf $(mktmp ) $(SHL1TARGETN)
+        $(TESTSHL2) -sf $(mktmp ) $(SHL1TARGETN)
 
 ALLTAR : unittest
+.ENDIF

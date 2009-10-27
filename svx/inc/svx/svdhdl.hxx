@@ -58,7 +58,6 @@ class SdrHdlList;
 class SdrMarkView;
 class SdrObject;
 class SdrPageView;
-class SdrHdlBitmapSet;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -155,12 +154,6 @@ class SVX_DLLPUBLIC SdrHdl
     friend class                SdrMarkView; // fuer den Zugriff auf nObjHdlNum
     friend class                SdrHdlList;
 
-    static SdrHdlBitmapSet*     pSimpleSet;
-    static SdrHdlBitmapSet*     pModernSet;
-
-    // #101928#
-    static SdrHdlBitmapSet*     pHighContrastSet;
-
     // #101928#
     BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast);
 
@@ -245,7 +238,7 @@ public:
     sal_uInt32 GetSourceHdlNum() const { return nSourceHdlNum; }
 
     virtual Pointer GetPointer() const;
-    virtual bool IsHdlHit(const Point& rPnt) const;
+    bool IsHdlHit(const Point& rPnt) const;
 
     // #97016# II
     virtual BOOL IsFocusHdl() const;
@@ -363,7 +356,6 @@ public:
     virtual ~SdrHdlLine();
 
     virtual Pointer GetPointer() const;
-    virtual bool IsHdlHit(const Point& rPnt) const;
 };
 
 // Ein SdrHdlBezWgt hat Kenntnis von seinem "BasisHandle". Seine Draw-Methode

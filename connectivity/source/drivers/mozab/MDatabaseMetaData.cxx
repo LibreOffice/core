@@ -97,7 +97,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types) ) {
-        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId(),*this );
+        getOwnConnection()->throwSQLException( m_pDbMetaDataHelper->getError(), *this );
     }
 
     // ****************************************************
@@ -157,7 +157,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
                     // COLUMN_NAME
                     aRow[4] = new ORowSetValueDecorator( compare->first );
                     // ORDINAL_POSITION
-                    aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >( compare->second.eProgrammaticNameIndex ) + 1 );
+                    aRow[17] = new ORowSetValueDecorator( static_cast< sal_Int32 >( compare->second.columnPosition ) + 1 );
                     aRows.push_back(aRow);
                 }
             }
@@ -961,7 +961,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // pResultSet->setRows( aRows );
     ODatabaseMetaDataResultSet::ORows _rRows;
     if ( !m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern, types,_rRows ) ) {
-        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() ,*this);
+        getOwnConnection()->throwSQLException( m_pDbMetaDataHelper->getError(), *this );
     }
     pResultSet->setRows( _rRows );
 
@@ -979,7 +979,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types ) )
-        getOwnConnection()->throwGenericSQLException( m_pDbMetaDataHelper->getErrorResourceId() ,*this);
+        getOwnConnection()->throwSQLException( m_pDbMetaDataHelper->getError(), *this );
 
     ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
     ::connectivity::ODatabaseMetaDataResultSet::ORow aRow(8);

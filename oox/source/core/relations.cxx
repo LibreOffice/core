@@ -29,17 +29,36 @@
  ************************************************************************/
 
 #include "oox/core/relations.hxx"
+#include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace oox {
 namespace core {
 
 // ============================================================================
 
-Relations::Relations( const OUString& rBasePath ) :
-    maBasePath( rBasePath )
+namespace {
+
+OUString lclRemoveFileName( const OUString& rPath )
+{
+    return rPath.copy( 0, ::std::max< sal_Int32 >( rPath.lastIndexOf( '/' ), 0 ) );
+}
+
+OUString lclAppendFileName( const OUString& rPath, const OUString& rFileName )
+{
+    return (rPath.getLength() == 0) ? rFileName :
+        OUStringBuffer( rPath ).append( sal_Unicode( '/' ) ).append( rFileName ).makeStringAndClear();
+}
+
+} // namespace
+
+// ============================================================================
+
+Relations::Relations( const OUString& rFragmentPath ) :
+    maFragmentPath( rFragmentPath )
 {
 }
 
@@ -49,7 +68,7 @@ const Relation* Relations::getRelationFromRelId( const OUString& rId ) const
     return (aIt == end()) ? 0 : &aIt->second;
 }
 
-const Relation* Relations::getRelationFromType( const OUString& rType ) const
+const Relation* Relations::getRelationFromFirstType( const OUString& rType ) const
 {
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( aIt->second.maType == rType )
@@ -59,77 +78,68 @@ const Relation* Relations::getRelationFromType( const OUString& rType ) const
 
 RelationsRef Relations::getRelationsFromType( const OUString& rType ) const
 {
-    RelationsRef xRelations( new Relations( maBasePath ) );
+    RelationsRef xRelations( new Relations( maFragmentPath ) );
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
         if( aIt->second.maType == rType )
             (*xRelations)[ aIt->first ] = aIt->second;
     return xRelations;
 }
 
-OUString Relations::getTargetFromRelId( const OUString& rRelId ) const
+OUString Relations::getExternalTargetFromRelId( const OUString& rRelId ) const
 {
-    if( const Relation* pRelation = getRelationFromRelId( rRelId ) )
-        return pRelation->maTarget;
-    return OUString();
+    const Relation* pRelation = getRelationFromRelId( rRelId );
+    return (pRelation && pRelation->mbExternal) ? pRelation->maTarget : OUString();
 }
 
-OUString Relations::getTargetFromType( const OUString& rType ) const
+OUString Relations::getExternalTargetFromFirstType( const OUString& rType ) const
 {
-    if( const Relation* pRelation = getRelationFromType( rType ) )
-        return pRelation->maTarget;
-    return OUString();
+    const Relation* pRelation = getRelationFromFirstType( rType );
+    return (pRelation && pRelation->mbExternal) ? pRelation->maTarget : OUString();
 }
 
-OUString Relations::getFragmentPathFromTarget( const OUString& rTarget ) const
+OUString Relations::getFragmentPathFromRelation( const Relation& rRelation ) const
 {
-    const sal_Unicode cDirSep = '/';
-
     // no target, no fragment path
-    if( rTarget.getLength() == 0 )
+    if( rRelation.mbExternal || (rRelation.maTarget.getLength() == 0) )
         return OUString();
 
-    // absolute target, or empty fragment path -> return target
-    if( (rTarget[ 0 ] == cDirSep) || (maBasePath.getLength() == 0) )
-        return rTarget;
+    // absolute target: return it without leading slash (#i100978)
+    if( rRelation.maTarget[ 0 ] == '/' )
+        return rRelation.maTarget.copy( 1 );
 
-    sal_Int32 nLastSepPos = maBasePath.lastIndexOf( cDirSep );
-    OUString aPath = (nLastSepPos < 0) ? maBasePath : maBasePath.copy( 0, nLastSepPos );
+    // empty fragment path: return target
+    if( maFragmentPath.getLength() == 0 )
+        return rRelation.maTarget;
 
-    const OUString sBack = CREATE_OUSTRING( "../" );
-
-    // First, count the number of "../"'s found in relative path string.
-    sal_Int32 nCount = 0, nPos = 0;
-    while ( true )
+    // resolve relative target path according to base path
+    OUString aPath = lclRemoveFileName( maFragmentPath );
+    sal_Int32 nStartPos = 0;
+    while( nStartPos < rRelation.maTarget.getLength() )
     {
-        nPos = rTarget.indexOf(sBack, nCount*3);
-        if ( nPos != nCount*3 )
-            break;
-        ++nCount;
+        sal_Int32 nSepPos = rRelation.maTarget.indexOf( '/', nStartPos );
+        if( nSepPos < 0 ) nSepPos = rRelation.maTarget.getLength();
+        // append next directory name from aTarget to aPath, or remove last directory on '../'
+        if( (nStartPos + 2 == nSepPos) && (rRelation.maTarget[ nStartPos ] == '.') && (rRelation.maTarget[ nStartPos + 1 ] == '.') )
+            aPath = lclRemoveFileName( aPath );
+        else
+            aPath = lclAppendFileName( aPath, rRelation.maTarget.copy( nStartPos, nSepPos - nStartPos ) );
+        // move nStartPos to next directory name
+        nStartPos = nSepPos + 1;
     }
 
-    // Now, reduce the base path's directory level by the count.
-    for ( sal_Int32 i = 0; i < nCount; ++i )
-    {
-        sal_Int32 pos = aPath.lastIndexOf(cDirSep);
-        if ( pos < 0 )
-            // This is unexpected.  Bail out.
-            return rTarget;
-        aPath = aPath.copy( 0, pos );
-    }
-
-    aPath += OUString( cDirSep );
-    aPath += rTarget.copy( nCount*3 );
     return aPath;
 }
 
 OUString Relations::getFragmentPathFromRelId( const OUString& rRelId ) const
 {
-    return getFragmentPathFromTarget( getTargetFromRelId( rRelId ) );
+    const Relation* pRelation = getRelationFromRelId( rRelId );
+    return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
-OUString Relations::getFragmentPathFromType( const OUString& rType ) const
+OUString Relations::getFragmentPathFromFirstType( const OUString& rType ) const
 {
-    return getFragmentPathFromTarget( getTargetFromType( rType ) );
+    const Relation* pRelation = getRelationFromFirstType( rType );
+    return pRelation ? getFragmentPathFromRelation( *pRelation ) : OUString();
 }
 
 // ============================================================================

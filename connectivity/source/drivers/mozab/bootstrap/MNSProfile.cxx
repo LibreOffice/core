@@ -179,7 +179,8 @@ NS_IMETHODIMP nsProfile::ProfileExists(const PRUnichar *profileName, PRBool *exi
     NS_ENSURE_ARG_POINTER(profileName);
     NS_ENSURE_ARG_POINTER(exists);
 
-    *exists = xMozillaBootstrap->getProfileExists(xMozillaBootstrap->getCurrentProduct(),profileName);
+    // PRUnichar != sal_Unicode in mingw
+    *exists = xMozillaBootstrap->getProfileExists(xMozillaBootstrap->getCurrentProduct(),reinterpret_cast_mingw_only<const sal_Unicode *>(profileName));
     return NS_OK;
 }
 // Returns the name of the current profile i.e., the last used profile
@@ -463,10 +464,12 @@ NS_IMETHODIMP nsProfile::GetProfileDir(const PRUnichar *profileName, nsIFile **p
 
     nsresult rv = NS_OK;
 
-    rtl::OUString path = xMozillaBootstrap->getProfilePath(xMozillaBootstrap->getCurrentProduct(),profileName);
+    // PRUnichar != sal_Unicode in mingw
+    rtl::OUString path = xMozillaBootstrap->getProfilePath(xMozillaBootstrap->getCurrentProduct(),reinterpret_cast_mingw_only<const sal_Unicode *>(profileName));
 
     nsCOMPtr<nsILocalFile>  localFile;
-    nsAutoString filePath(path.getStr());
+    // PRUnichar != sal_Unicode in mingw
+    nsAutoString filePath(reinterpret_cast_mingw_only<const PRUnichar *>(path.getStr()));
 
     rv = NS_NewLocalFile(filePath, PR_TRUE,
                                    getter_AddRefs(localFile));

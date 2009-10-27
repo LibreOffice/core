@@ -419,7 +419,8 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
         "OJoinController::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
 
     OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();
-    for(;aIter != pTabWinList->end();++aIter)
+    OJoinTableView::OTableWindowMap::iterator aEnd = pTabWinList->end();
+    for(;aIter != aEnd;++aIter)
         SaveTabWinPosSize(aIter->second, nOffsetX, nOffsetY);
 }
 // -----------------------------------------------------------------------------

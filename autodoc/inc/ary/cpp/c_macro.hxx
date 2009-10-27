@@ -62,11 +62,6 @@ class Macro : public DefineEntity
                                                 i_definition,
                             loc::Le_id          i_declaringFile );
                         ~Macro();
-    // INQUIRY
-    void                GetText(
-                            csv::StreamStr &    o_rText,
-                            const StringVector &
-                                                i_rGivenArguments ) const;
     const StringVector &  Params() const          { return aParams; }
 
   private:

@@ -49,7 +49,7 @@ public interface ParameterMap
      * @return The stored value, or <code>null</code> if the key does not exist in this
      *         collection.
      */
-    public Object get(final String key);
+    Object get(final String key);
 
     /**
      * Retrieves the value stored for a key in this properties collection, and returning the
@@ -61,11 +61,11 @@ public interface ParameterMap
      * @return The stored value, or the default value if the key does not exist in this
      *         collection.
      */
-    public Object get(final String key, final Object defaultValue);
+    Object get(final String key, final Object defaultValue);
 
-    public String[] keys();
+    String[] keys();
 
-    public void clear();
+    void clear();
 
-    public int size();
+    int size();
 }

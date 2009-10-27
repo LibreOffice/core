@@ -32,11 +32,11 @@
 .INCLUDE .IGNORE : pkgroot.mk
 
 .IF "$(PKGCONFIG_ROOT)"!=""
-PKG_CONFIG=$(PKGCONFIG_ROOT)$/bin$/pkg-config
+PKG_CONFIG=$(PKGCONFIG_ROOT)/bin/pkg-config
 .IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
-PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/64$/pkgconfig
+PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)/lib/64/pkgconfig
 .ELSE
-PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
+PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)/lib/pkgconfig
 .ENDIF
 .EXPORT : PKG_CONFIG_PATH
 PKGCONFIG_PREFIX=--define-variable=prefix=$(PKGCONFIG_ROOT)

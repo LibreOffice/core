@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: protectiondlg.src,v $
+ * $Revision: 1.1.2.6 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "protectiondlg.hrc"
+
+ModalDialog RID_SCDLG_TABPROTECTION
+{
+    Text [ en-US ] = "Protect Sheet" ;
+    Size = MAP_APPFONT ( 220 , 135 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    CheckBox BTN_PROTECT
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 150 , 10 );
+
+        Text [ en-US ] = "P~rotect this sheet and the contents of locked cells" ;
+    };
+
+    FixedText FT_PASSWORD1
+    {
+        Pos = MAP_APPFONT ( 11, 23 );
+        Size = MAP_APPFONT ( 42, 10 );
+
+        Text [ en-US ] = "~Password" ;
+    };
+
+    Edit ED_PASSWORD1
+    {
+        Border = TRUE;
+        PassWord = TRUE;
+        Pos = MAP_APPFONT ( 56, 22 );
+        Size = MAP_APPFONT ( 75, 12 );
+    };
+
+    FixedText FT_PASSWORD2
+    {
+        Pos = MAP_APPFONT ( 11, 40 );
+        Size = MAP_APPFONT ( 42, 10 );
+
+        Text [ en-US ] = "~Confirm" ;
+    };
+
+    Edit ED_PASSWORD2
+    {
+        Border = TRUE;
+        PassWord = TRUE;
+        Pos = MAP_APPFONT ( 56, 39 );
+        Size = MAP_APPFONT ( 75, 12 );
+    };
+
+    FixedLine FL_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6, 60 );
+        Size = MAP_APPFONT ( 150, 8 );
+
+        Text [ en-US ] = "Options";
+    };
+
+    FixedText FT_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 11, 74 );
+        Size = MAP_APPFONT ( 140, 8 );
+
+        Text [ en-US ] = "Allow all users of this sheet to:";
+    };
+
+    Control CLB_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 11, 85 );
+        Size = MAP_APPFONT ( 140, 40 );
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    String ST_SELECT_LOCKED_CELLS
+    {
+        Text [ en-US ] = "Select locked cells";
+    };
+
+    String ST_SELECT_UNLOCKED_CELLS
+    {
+        Text [ en-US ] = "Select unlocked cells";
+    };
+};

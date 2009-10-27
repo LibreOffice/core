@@ -44,13 +44,13 @@
 ' #1 tViewSnapLines
 ' #1 tViewGrid
 '\**********************************************************************************
-
 testcase tiViewNavigator
-    '/// open application ///'
+
+    printlog " open application "
     Call hNewDocument
 
     Kontext "NavigatorDraw"
-        '/// if 'Navigator' isn't already open, open it (View->Navigator)///'
+        printlog " if 'Navigator' isn't already open, open it (View->Navigator)"
         if Not NavigatorDraw.Exists Then
             ViewNavigator
         end if
@@ -59,175 +59,175 @@ testcase tiViewNavigator
 
         try
             Kontext "Navigator"
-                '/// close 'Navigator' ///'
+                printlog " close 'Navigator' "
                 Navigator.Close
         catch
             Errorlog "  Navigator wasn't closed, second try with Menu"
             ViewNavigator
         endcatch
-    '/// close application ///'
+    printlog " close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiViewNavigator
 '-------------------------------------------------------------------------
-
 testcase tiViewZoom
-'/// open application ///'
-   Call  hNewDocument
-   UseBindings
-   ViewZoom
-   Kontext "Massstab"
-      DialogTest ( Massstab )
-      Massstab.Cancel
-'/// close application ///'
-   Call  hCloseDocument
-endcase
 
+    printlog " open application "
+    Call  hNewDocument
+    UseBindings
+    ViewZoom
+    Kontext "Massstab"
+    DialogTest ( Massstab )
+    Massstab.Cancel
+    printlog " close application "
+    Call  hCloseDocument
+   
+endcase 'tiViewZoom
 '-------------------------------------------------------------------------
-
 testcase tiViewToolbar
-'/// including ruler & statusbar ///'
-'/// open application ///'
+
+    printlog " including ruler & statusbar "
+    printlog " open application "
    Call  hNewDocument
 
-'/// View->Toolbars->ThreeDSettings ///'
+    printlog " View->Toolbars->ThreeDSettings "
     ViewToolbarsThreeDSettings
     WaitSlot (1000)
-'/// View->Toolbars->ThreeDSettings ///'
+    printlog " View->Toolbars->ThreeDSettings "
     ViewToolbarsThreeDSettings
     WaitSlot (1000)
 
-'/// View->Toolbars->Align ///'
+    printlog " View->Toolbars->Align "
     ViewToolbarsAlign
     WaitSlot (1000)
-'/// View->Toolbars->Align ///'
+    printlog " View->Toolbars->Align "
     ViewToolbarsAlign
     WaitSlot (1000)
 
-'/// View->Toolbars->Tools ///'
+    printlog " View->Toolbars->Tools "
     ViewToolbarsTools
     WaitSlot (1000)
-'/// View->Toolbars->Tools ///'
+    printlog " View->Toolbars->Tools "
     ViewToolbarsTools
     WaitSlot (1000)
 
-'/// View->Toolbars->Bezier ///'
+    printlog " View->Toolbars->Bezier "
     ViewToolbarsBezier
     WaitSlot (1000)
-'/// View->Toolbars->Bezier ///'
+    printlog " View->Toolbars->Bezier "
     ViewToolbarsBezier
     WaitSlot (1000)
 
-'/// View->Toolbars->Fontwork ///'
+    printlog " View->Toolbars->Fontwork "
     ViewToolbarsFontwork
     WaitSlot (1000)
-'/// View->Toolbars->Fontwork ///'
+    printlog " View->Toolbars->Fontwork "
     ViewToolbarsFontwork
     WaitSlot (1000)
 
     '   if gApplication = "IMPRESS" then
-    '/// View->Toolbars->Presentation ///'
+    printlog " View->Toolbars->Presentation "
     '      ViewToolbarsPresentation ' only in impress, not draw
-    '/// View->Toolbars->Presentation ///'
+    printlog " View->Toolbars->Presentation "
     '      ViewToolbarsPresentation
     '   endif
 
-'/// View->Toolbars->Form Controls ///'
+    printlog " View->Toolbars->Form Controls "
     ViewToolbarsFormControls
     WaitSlot (1000)
-'/// View->Toolbars->Form Controls ///'
+    printlog " View->Toolbars->Form Controls "
     ViewToolbarsFormControls
     WaitSlot (1000)
 
 '-----------------
-'/// View->Toolbars->Form Design ///'
+    printlog " View->Toolbars->Form Design "
     ViewToolbarsFormDesign
     WaitSlot (1000)
-'/// View->Toolbars->Form Design ///'
+    printlog " View->Toolbars->Form Design "
     ViewToolbarsFormDesign
     WaitSlot (1000)
 
-'/// View->Toolbars->FormNavigation ///'
+    printlog " View->Toolbars->FormNavigation "
     ViewToolbarsFormNavigation
     WaitSlot (1000)
-'/// View->Toolbars->FormNavigation ///'
+    printlog " View->Toolbars->FormNavigation "
     ViewToolbarsFormNavigation
     WaitSlot (1000)
 
-'/// View->Toolbars->Gluepoints ///'
+    printlog " View->Toolbars->Gluepoints "
     ViewToolbarsGluepoints
     WaitSlot (1000)
-'/// View->Toolbars->Gluepoints ///'
+    printlog " View->Toolbars->Gluepoints "
     ViewToolbarsGluepoints
     WaitSlot (1000)
-'/// View->Toolbars->Insert ///'
+    printlog " View->Toolbars->Insert "
     ViewToolbarsInsert
     WaitSlot (1000)
-'/// View->Toolbars->Insert ///'
+    printlog " View->Toolbars->Insert "
     ViewToolbarsInsert
     WaitSlot (1000)
 
-'/// View->Toolbars->Graphic ///'
+    printlog " View->Toolbars->Graphic "
     ViewToolbarsGraphic
     WaitSlot (1000)
-'/// View->Toolbars->Graphic ///'
+    printlog " View->Toolbars->Graphic "
     ViewToolbarsGraphic
     WaitSlot (1000)
 
-'/// View->Toolbars->MediaPlayback ///'
+    printlog " View->Toolbars->MediaPlayback "
     ViewToolbarsMediaPlayback
     WaitSlot (1000)
-'/// View->Toolbars->MediaPlayback ///'
+    printlog " View->Toolbars->MediaPlayback "
     ViewToolbarsMediaPlayback
     WaitSlot (1000)
 
-'/// View->Toolbars->Optionbar ///'
+    printlog " View->Toolbars->Optionbar "
     ViewToolbarsOptionbar
     WaitSlot (1000)
-'/// View->Toolbars->Optionbar ///'
+    printlog " View->Toolbars->Optionbar "
     ViewToolbarsOptionbar
     WaitSlot (1000)
 
-'/// View->Toolbars->Picture ///'
+    printlog " View->Toolbars->Picture "
     ViewToolbarsPicture
     WaitSlot (1000)
-'/// View->Toolbars->Picture ///'
+    printlog " View->Toolbars->Picture "
     ViewToolbarsPicture
     WaitSlot (1000)
 
-'/// View->Toolbars->Standard ///'
+    printlog " View->Toolbars->Standard "
     ViewToolbarsStandard
     WaitSlot (1000)
-'/// View->Toolbars->Standard ///'
+    printlog " View->Toolbars->Standard "
     ViewToolbarsStandard
     WaitSlot (1000)
 
-'/// View->Toolbars->Standard View ///'
+    printlog " View->Toolbars->Standard View "
     ViewToolbarsStandardView
     WaitSlot (1000)
-'/// View->Toolbars->Standard View ///'
+    printlog " View->Toolbars->Standard View "
     ViewToolbarsStandardView
     WaitSlot (1000)
 
-'/// View->Toolbars->Hyperlinkbar ///'
+    printlog " View->Toolbars->Hyperlinkbar "
     ViewToolbarsHyperlinkbar
     WaitSlot (1000)
-'/// View->Toolbars->Hyperlinkbar ///'
+    printlog " View->Toolbars->Hyperlinkbar "
     ViewToolbarsHyperlinkbar
     WaitSlot (1000)
 
-'/// View->Toolbars->ColorBar ///'
+    printlog " View->Toolbars->ColorBar "
     ViewToolbarsColorBar
     WaitSlot (1000)
-'/// View->Toolbars->ColorBar ///'
+    printlog " View->Toolbars->ColorBar "
     ViewToolbarsColorBar
     WaitSlot (1000)
 
-'/// View->Toolbars->Customize ///'
+    printlog " View->Toolbars->Customize "
     ViewToolbarsCustomize
     WaitSlot (1000)
     Kontext
-    '/// switch to tabpage 'Menus' ///'
+    printlog " switch to tabpage 'Menus' "
     try
         Messagebox.SetPage TabCustomizeMenu             ' 1 ------------------
     catch
@@ -239,13 +239,13 @@ testcase tiViewToolbar
         Menu.typeKeys("<down>")
         Entries.typeKeys("<down>")
         sleep 2
-        '/// click button 'new' ///'
+        printlog " click button 'new' "
         BtnNew.Click
         sleep 1
-        '/// Dialog 'New Menu' comes up ///'
+        printlog " Dialog 'New Menu' comes up "
         Kontext "MenuOrganiser"
         Call DialogTest ( MenuOrganiser )
-        '/// Cancel dialog 'New Menu' ///'
+        printlog " Cancel dialog 'New Menu' "
         MenuOrganiser.cancel
         sleep 1
         Kontext "TabCustomizeMenu"
@@ -253,21 +253,21 @@ testcase tiViewToolbar
     end if
     sleep (1)
 
-'/// close application ///'
-   Call  hCloseDocument
-endcase
-
+    printlog " close application "
+    Call  hCloseDocument
+   
+endcase 'tiViewToolbar
 '-------------------------------------------------------------------------
-
 testcase tiViewDisplayQuality
-    '/// open application ///'
+
+    printlog " open application "
     Call hNewDocument
 
-    '/// create a rectangle ///'
+    printlog " create a rectangle "
     Call hRechteckErstellen 20,20,40,40
 
     try
-    '/// View->Display Quality->Black and White ///'
+    printlog " View->Display Quality->Black and White "
         ViewQualityBlackWhite
         Printlog "- Quality set to black and white"
     catch
@@ -275,7 +275,7 @@ testcase tiViewDisplayQuality
     endcatch
     WaitSlot (1000)
     try
-        '/// View->Display Quality->Greyscale ///'
+        printlog " View->Display Quality->Greyscale "
         ViewQualityGreyscale
         Printlog "- View quality set to greyscale"
     catch
@@ -283,75 +283,75 @@ testcase tiViewDisplayQuality
     endcatch
     WaitSlot (1000)
     try
-        '/// View->Display Quality->Colour ///'
+        printlog " View->Display Quality->Colour "
         ViewQualityColour
         Printlog "- View quality set to colour"
     catch
         Warnlog "- View quality colour could not be accessed"
     endcatch
-    '/// close application ///'
+    printlog " close application "
     Call hClosedocument
-endcase
-
+    
+endcase 'tiViewDisplayQuality
 '-------------------------------------------------------------------------
-
 testcase tiViewLayer
-    '/// open application ///'
+
+    printlog " open application "
     Call hNewDocument
-    '/// Insert->Layer / in impress: ???? ///'
+    printlog " Insert->Layer / in impress: ???? "
 
-    '/// View->Layer ///'
+    printlog " View->Layer "
     ViewLayer
     WaitSlot (1000)
-    '/// View->Layer ///'
+    printlog " View->Layer "
     ViewLayer
-    '/// close application ///'
+    printlog " close application "
     Call hCloseDocument
-endcase
-
+    
+endcase 'tiViewLayer
 '-------------------------------------------------------------------------
-
 testcase tViewGrid
-    '/// open application ///'
+
+    printlog " open application "
     Call  hNewDocument
 
-    '/// View->Grid-> ///'
+    printlog " View->Grid-> "
     ViewGridVisible
-    '/// View->Grid-> ///'
+    printlog " View->Grid-> "
     ViewGridUse
-    '/// View->Grid-> ///'
+    printlog " View->Grid-> "
     ViewGridFront
-    '/// View->Grid-> ///'
+    printlog " View->Grid-> "
     ViewGridVisible
-    '/// View->Grid-> ///'
+    printlog " View->Grid-> "
     ViewGridUse
-    '/// View->Grid-> ///'
+    printlog " View->Grid-> "
     ViewGridFront
     WaitSlot (1000)
-    '/// close application ///'
+    printlog " close application "
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tViewGrid
 '-------------------------------------------------------------------------
-
 testcase tViewSnapLines
-    '/// open application ///'
+
+    printlog " open application "
     Call  hNewDocument
 
-    '/// View->Snap Lines-> ///'
+    printlog " View->Snap Lines-> "
     ViewSnapLinesVisible
-    '/// View->Snap Lines-> ///'
+    printlog " View->Snap Lines-> "
     ViewSnapLinesUse
-    '/// View->Snap Lines-> ///'
+    printlog " View->Snap Lines-> "
     ViewSnapLinesFront
-    '/// View->Snap Lines-> ///'
+    printlog " View->Snap Lines-> "
     ViewSnapLinesVisible
-    '/// View->Snap Lines-> ///'
+    printlog " View->Snap Lines-> "
     ViewSnapLinesUse
-    '/// View->Snap Lines-> ///'
+    printlog " View->Snap Lines-> "
     ViewSnapLinesFront
     WaitSlot (1000)
-    '/// close application ///'
+    printlog " close application "
     Call  hCloseDocument
-endcase
-
+    
+endcase 'tViewSnapLines

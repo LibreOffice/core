@@ -67,7 +67,7 @@ class SvxLinguConfigUpdate
 
 public:
 
-    static void UpdateAll( sal_Bool bForceCheck = sal_False );
+    SVX_DLLPUBLIC static void UpdateAll( sal_Bool bForceCheck = sal_False );
     static BOOL IsNeedUpdateAll( sal_Bool bForceCheck = sal_False );
 };
 

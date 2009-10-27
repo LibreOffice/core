@@ -31,7 +31,7 @@
  ************************************************************************/
 package com.sun.star.wizards.common;
 
-import com.sun.star.wizards.common.Resource;
+// import com.sun.star.wizards.common.Resource;
 import com.sun.star.lang.XMultiServiceFactory;
 
 public class TerminateWizardException extends Exception

@@ -196,7 +196,7 @@ testcase tTextBox
     endif  
     
     if fGetControlProperty("TextBox","AdditionalInfo") <> "my only friend the end." then
-        warnlog "the value: background is not saved"
+        warnlog "the AdditionalInfo value is not saved"
     endif
     call fSetControlProperty("TextBox","TextType","2")      'needed for activate scrollbar
     sleep(1)

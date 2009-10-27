@@ -171,7 +171,7 @@ static const sal_Char* pSN2 = "com.sun.star.comp.sd.RandomAnimationNode";
 
 // --------------------------------------------------------------------
 
-Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
+SD_DLLPUBLIC Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
 {
     Reference< XInterface > xInt( static_cast<XWeak*>( new RandomAnimationNode( nPresetClass ) ) );
     return xInt;

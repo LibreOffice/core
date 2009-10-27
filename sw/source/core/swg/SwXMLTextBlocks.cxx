@@ -641,6 +641,6 @@ void SwXMLTextBlocks::MakeBlockText( const String& rText )
         }
         SwIndex aIdx( pTxtNode );
         String sTemp(rText.GetToken( 0, '\015', nPos ) );
-        pTxtNode->Insert( sTemp, aIdx );
+        pTxtNode->InsertText( sTemp, aIdx );
     } while ( STRING_NOTFOUND != nPos );
 }

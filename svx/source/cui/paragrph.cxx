@@ -2356,7 +2356,7 @@ void lcl_SetBox(const SfxItemSet& rSet, USHORT nSlotId, TriStateBox& rBox)
 {
     USHORT _nWhich = rSet.GetPool()->GetWhich(nSlotId);
     SfxItemState eState = rSet.GetItemState(_nWhich, TRUE);
-    if(!eState)
+    if(!eState || eState == SFX_ITEM_DISABLED )
         rBox.Enable(FALSE);
     else if(eState >= SFX_ITEM_AVAILABLE)
     {

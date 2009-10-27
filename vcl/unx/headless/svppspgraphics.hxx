@@ -72,13 +72,6 @@ public:
     virtual ~PspGraphics();
 
     // helper methods for sharing with X11SalGraphics
-    static bool DoCreateFontSubset( const rtl::OUString& rToFile,
-                                    psp::fontID aFont,
-                                    sal_Int32* pGlyphIDs,
-                                    sal_uInt8* pEncoding,
-                                    sal_Int32* pWidths,
-                                    int nGlyphs,
-                                    FontSubsetInfo& rInfo );
     static const void* DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen );
     static void DoFreeEmbedFontData( const void* pData, long nLen );
     static const Ucs2SIntMap* DoGetFontEncodingVector( psp::fontID aFont, const Ucs2OStrMap** pNonEncoded );
@@ -194,7 +187,9 @@ public:
 
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
     virtual bool            filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop );
+
     virtual SystemGraphicsData      GetGraphicsData() const;
+    virtual SystemFontData          GetSysFontData( int nFallbacklevel ) const;
 };
 
 #endif // _SVP_PSPGRAPHICS_HXX

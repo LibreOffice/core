@@ -81,10 +81,10 @@ extern BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine, sal_Bool bConver
 
 // -----------------------------------------------------------------------------
 
-static const SfxItemPropertyMap* ImplGetSvxCellPropertyMap()
+static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
 {
     // Propertymap fuer einen Outliner Text
-    static const SfxItemPropertyMap aSvxCellPropertyMap[] =
+    static const SfxItemPropertyMapEntry aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
 //      { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
@@ -110,7 +110,8 @@ static const SfxItemPropertyMap* ImplGetSvxCellPropertyMap()
         {0,0,0,0,0,0}
     };
 
-    return aSvxCellPropertyMap;
+    static SvxItemPropertySet aSvxCellPropertySet( aSvxCellPropertyMap );
+    return &aSvxCellPropertySet;
 }
 
 namespace sdr
@@ -141,6 +142,8 @@ namespace sdr
             void ItemSetChanged(const SfxItemSet& rSet);
 
             void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
+
+            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
 
             sdr::table::CellRef mxCell;
         };
@@ -272,6 +275,10 @@ namespace sdr
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
 
+        void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        {
+            TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
+        }
     } // end of namespace properties
 } // end of namespace sdr
 
@@ -281,10 +288,23 @@ namespace sdr { namespace table {
 // Cell
 // -----------------------------------------------------------------------------
 
+rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject )
+{
+    rtl::Reference< Cell > xCell( new Cell( rTableObj, pOutlinerParaObject ) );
+    if( xCell->mxTable.is() )
+    {
+        Reference< XEventListener > xListener( xCell.get() );
+        xCell->mxTable->addEventListener( xListener );
+    }
+    return xCell;
+}
+
+// -----------------------------------------------------------------------------
+
 Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw()
 : SdrText( rTableObj, pOutlinerParaObject )
-, SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
-, maPropSet( ImplGetSvxCellPropertyMap() )
+, SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+, mpPropSet( ImplGetSvxCellPropertySet() )
 , mpProperties( new sdr::properties::CellProperties( rTableObj, this ) )
 , mnCellContentType( CellContentType_EMPTY )
 , mfValue( 0.0 )
@@ -309,7 +329,19 @@ Cell::~Cell() throw()
 
 void Cell::dispose()
 {
-    mxTable.clear();
+    if( mxTable.is() )
+    {
+        try
+        {
+            Reference< XEventListener > xThis( this );
+            mxTable->removeEventListener( xThis );
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("Cell::dispose(), exception caught!");
+        }
+        mxTable.clear();
+    }
 
     if( mpProperties )
     {
@@ -405,6 +437,11 @@ void Cell::cloneFrom( const CellRef& xCell )
         msFormula = xCell->msFormula;
         mfValue = xCell->mfValue;
         mnError = xCell->mnError;
+
+        mbMerged = xCell->mbMerged;
+        mnRowSpan = xCell->mnRowSpan;
+        mnColSpan = xCell->mnColSpan;
+
     }
     notifyModified();
 }
@@ -621,7 +658,7 @@ sal_Int32 Cell::getMinimumHeight()
         pEditOutliner->SetMaxAutoPaperSize(aSize);
         nMinimumHeight = pEditOutliner->GetTextHeight()+1;
     }
-    else
+    else /*if ( hasText() )*/
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
@@ -698,7 +735,7 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 void Cell::AddUndo()
 {
     SdrObject& rObj = GetObject();
-    if( rObj.IsInserted() && GetModel() )
+    if( rObj.IsInserted() && GetModel() && GetModel()->IsUndoEnabled() )
     {
         CellRef xCell( this );
         GetModel()->AddUndo( new CellUndo( &rObj, xCell ) );
@@ -736,6 +773,9 @@ Any SAL_CALL Cell::queryInterface( const Type & rType ) throw(RuntimeException)
 
     if( rType == XLayoutConstrains::static_type() )
         return Any( Reference< XLayoutConstrains >( this ) );
+
+    if( rType == XEventListener::static_type() )
+        return Any( Reference< XEventListener >( this ) );
 
     Any aRet( SvxUnoTextBase::queryAggregation( rType ) );
     if( aRet.hasValue() )
@@ -926,9 +966,9 @@ sal_Int32 SAL_CALL Cell::getError(  ) throw (RuntimeException)
 // XPropertySet
 // -----------------------------------------------------------------------------
 
-Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap )
+Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap )
 {
-    Any aAny( maPropSet.getPropertyValue( pMap, aSet ) );
+    Any aAny( mpPropSet->getPropertyValue( pMap, aSet ) );
 
     if( *pMap->pType != aAny.getValueType() )
     {
@@ -950,7 +990,7 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap )
 
 Reference< XPropertySetInfo > SAL_CALL Cell::getPropertySetInfo() throw(RuntimeException)
 {
-    return maPropSet.getPropertySetInfo();
+    return mpPropSet->getPropertySetInfo();
 }
 
 // -----------------------------------------------------------------------------
@@ -962,7 +1002,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(rPropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
     if( pMap )
     {
         if( (pMap->nFlags & PropertyAttribute::READONLY ) != 0 )
@@ -1084,7 +1124,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
                     if( aSet.GetItemState( pMap->nWID ) == SFX_ITEM_SET )
                     {
-                        maPropSet.setPropertyValue( pMap, rValue, aSet );
+                        mpPropSet->setPropertyValue( pMap, rValue, aSet );
                     }
                 }
             }
@@ -1107,7 +1147,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
     if( pMap )
     {
         switch( pMap->nWID )
@@ -1308,7 +1348,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( pMap )
     {
@@ -1451,7 +1491,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
     if( pMap )
     {
         switch( pMap->nWID )
@@ -1494,7 +1534,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
     if( (mpProperties == 0) || (GetModel() == 0) )
         throw DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
     if( pMap )
     {
         switch( pMap->nWID )
@@ -1695,6 +1735,79 @@ void SAL_CALL Cell::setString( const OUString& aString ) throw (RuntimeException
 {
     SvxUnoTextBase::setString( aString );
     notifyModified();
+}
+
+// XEventListener
+void SAL_CALL Cell::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+{
+    mxTable.clear();
+    dispose();
+}
+
+static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow )
+{
+    rtl::OUStringBuffer aBuf;
+
+    if (nCol < 26*26)
+    {
+        if (nCol < 26)
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        static_cast<sal_uInt16>(nCol)));
+        else
+        {
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        (static_cast<sal_uInt16>(nCol) / 26) - 1));
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        (static_cast<sal_uInt16>(nCol) % 26)));
+        }
+    }
+    else
+    {
+        String aStr;
+        while (nCol >= 26)
+        {
+            sal_Int32 nC = nCol % 26;
+            aStr += static_cast<sal_Unicode>( 'A' +
+                    static_cast<sal_uInt16>(nC));
+            nCol = nCol - nC;
+            nCol = nCol / 26 - 1;
+        }
+        aStr += static_cast<sal_Unicode>( 'A' +
+                static_cast<sal_uInt16>(nCol));
+        aStr.Reverse();
+        aBuf.append( aStr);
+    }
+    aBuf.append( OUString::valueOf(nRow+1) );
+    return aBuf.makeStringAndClear();
+}
+
+OUString Cell::getName()
+{
+    // todo: optimize!
+    OUString sName;
+    if( mxTable.is() ) try
+    {
+        Reference< XCell > xThis( static_cast< XCell* >( this ) );
+
+        sal_Int32 nRowCount = mxTable->getRowCount();
+        sal_Int32 nColCount = mxTable->getColumnCount();
+        for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
+        {
+            for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
+            {
+                Reference< XCell > xCell( mxTable->getCellByPosition( nCol, nRow ) );
+                if( xCell == xThis )
+                {
+                    return getCellName( nCol, nRow );
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+    }
+
+    return sName;
 }
 
 } }

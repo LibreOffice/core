@@ -503,6 +503,9 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
                 mnFieldValue = mnMin;
             mnLastValue = mnFieldValue;
         }
+
+        if ( NUMERICFORMATTER_NOTHOUSANDSEP & nMask )
+            SetUseThousandSep( !(BOOL)pMgr->ReadShort() );
     }
 }
 

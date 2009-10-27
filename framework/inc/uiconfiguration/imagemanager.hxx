@@ -38,6 +38,7 @@
 #include <vector>
 #include <list>
 #include <hash_map>
+#include <memory>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -68,7 +69,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>
 
@@ -80,16 +81,12 @@
 
 namespace framework
 {
-    class ImageManager :    public com::sun::star::lang::XTypeProvider                    ,
-                            public  css::lang::XServiceInfo                         ,
-                            public ::com::sun::star::ui::XImageManager              ,
-                            private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
-                            public ::cppu::OWeakObject
+    class ImageManagerImpl;
+    class ImageManager :    private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
+                            public ::cppu::WeakImplHelper2< ::com::sun::star::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
             //  XInterface, XTypeProvider, XServiceInfo
-            FWK_DECLARE_XINTERFACE
-            FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
             ImageManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager );
@@ -127,54 +124,7 @@ namespace framework
             void setStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage ) throw (::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef std::hash_map< rtl::OUString,
-                                   sal_Bool,
-                                   OUStringHashCode,
-                                   ::std::equal_to< ::rtl::OUString > > ImageNameMap;
-
-            // private data types
-            enum Layer
-            {
-                LAYER_DEFAULT,
-                LAYER_USERDEFINED,
-                LAYER_COUNT
-            };
-
-            enum NotifyOp
-            {
-                NotifyOp_Remove,
-                NotifyOp_Insert,
-                NotifyOp_Replace
-            };
-
-            typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-
-            // private methods
-            void                                      implts_initialize();
-            void                                      implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
-            ImageList*                                implts_getUserImageList( ImageType nImageType );
-            sal_Bool                                  implts_loadUserImages( ImageType nImageType,
-                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
-                                                                             const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
-            sal_Bool                                  implts_storeUserImages( ImageType nImageType,
-                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserImageStorage,
-                                                                              const com::sun::star::uno::Reference< com::sun::star::embed::XStorage >& xUserBitmapsStorage );
-
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserConfigStorage;
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserImageStorage;
-            com::sun::star::uno::Reference< com::sun::star::embed::XStorage >               m_xUserBitmapsStorage;
-            bool                                                                            m_bReadOnly;
-            bool                                                                            m_bInitialized;
-            bool                                                                            m_bModified;
-            bool                                                                            m_bConfigRead;
-            bool                                                                            m_bDisposed;
-            rtl::OUString                                                                   m_aXMLPostfix;
-            rtl::OUString                                                                   m_aModuleIdentifier;
-            rtl::OUString                                                                   m_aResourceString;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-            ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
-            ImageList*                                                                      m_pUserImageList[ImageType_COUNT];
-            bool                                                                            m_bUserImageListModified[ImageType_COUNT];
+            ::std::auto_ptr<ImageManagerImpl> m_pImpl;
    };
 }
 

@@ -675,7 +675,6 @@
 #define FILE_MENU_END           (SC_FUNCTION_START + 20)
 
 #define EDIT_MENU_START         (FILE_MENU_END)
-#define FID_PASTE_CONTENTS      (EDIT_MENU_START)
 #define FID_DELETE_CELLCONTENTS (EDIT_MENU_START + 1)
 #define FID_DELETE_CELL         (EDIT_MENU_START + 2)
 #define FID_DELETE_TABLE        (EDIT_MENU_START + 3)
@@ -832,6 +831,7 @@
 #define FID_TAB_APPEND          (TAB_POPUP_START+5)
 #define FID_TAB_INDEX           (TAB_POPUP_START+6)
 #define FID_TAB_RTL             (TAB_POPUP_START+7)
+#define FID_TAB_DESELECTALL     (TAB_POPUP_START+8)
 
 #define TAB_POPUP_END           (DATA_MENU_END + 20)
 
@@ -855,8 +855,6 @@
 #define RID_INPUTBAR_END        (RID_INPUTBAR_START+1)
 
 #define DRAW_BAR_START          (RID_INPUTBAR_END)
-//! SID_OBJECT_MIRROR wird sicher mal allgemein
-#define SID_OBJECT_MIRROR       (DRAW_BAR_START)
 #define SID_DRAWTOABOVE         (DRAW_BAR_START+15)
 #define SID_DRAWTOBELOW         (DRAW_BAR_START+16)
 //#define SID_GROUP             (DRAW_BAR_START+17)
@@ -1105,10 +1103,6 @@
 #define SID_DELETE_SCENARIO     (SID_NEW_SLOTS+95)
 #define SID_EDIT_SCENARIO       (SID_NEW_SLOTS+96)
 
-#define SID_GET_CLPBRD_FORMAT_COUNT     (SID_NEW_SLOTS+97)
-#define SID_GET_CLPBRD_FORMAT_BY_IDX    (SID_NEW_SLOTS+98)
-#define SID_GET_CLPBRD_FORMAT_NAME      (SID_NEW_SLOTS+99)
-
 // idl Parameter ---------------------------------------------------------
 
 //aus sfx: #define FN_PARAM_1               (SC_PARAM_START)
@@ -1305,6 +1299,8 @@
 #define SCSTR_DPFUNCLISTBOX         (STR_START + 92)
 #define STR_PRINT_NOTHING           (STR_START + 93)
 #define SCSTR_ALLFILTER             (STR_START + 94)
+#define SCSTR_MOREBTN_MOREOPTIONS   (STR_START + 95)
+#define SCSTR_MOREBTN_FEWEROPTIONS   (STR_START + 96)
 
 // Items
 
@@ -1627,8 +1623,13 @@
 
 #define RID_SCDLG_CONFLICTS             (SC_DIALOGS_START + 145)
 #define RID_SCDLG_SHAREDOCUMENT         (SC_DIALOGS_START + 146)
+#define RID_SCDLG_SORT_WARNING          (SC_DIALOGS_START + 147)
+#define RID_SCDLG_TABPROTECTION         (SC_DIALOGS_START + 148)
+#define RID_SCDLG_DOCPROTECTION         (SC_DIALOGS_START + 149)
+#define RID_SCDLG_RETYPEPASS            (SC_DIALOGS_START + 150)
+#define RID_SCDLG_RETYPEPASS_INPUT      (SC_DIALOGS_START + 151)
 
-#define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
+#define SC_DIALOGS_END          (SC_DIALOGS_START + 152)
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }

@@ -50,16 +50,17 @@ CDEFS+= -DEDITDEBUG
 SRS1NAME=$(TARGET)
 SRC1FILES =	dlgeps.src \
             epsstr.src
-
+.IF "$(L10N_framework)"==""
 EXCEPTIONSFILES=$(SLO)$/eps.obj
 SLOFILES =	$(SLO)$/eps.obj \
             $(SLO)$/dlgeps.obj
+.ENDIF
 
 # ==========================================================================
 
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
-
+.IF "$(L10N_framework)"==""
 SHL1TARGET= 	eps$(DLLPOSTFIX)
 SHL1IMPLIB= 	eps
 SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(VCLLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
@@ -75,6 +76,7 @@ SHL1OBJS=		$(SLO)$/eps.obj
 SHL1VERSIONMAP=exports.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
+.ENDIF
 
 # ==========================================================================
 

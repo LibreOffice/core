@@ -34,12 +34,10 @@
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase8.hxx>
 #include <cppuhelper/typeprovider.hxx>
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -47,6 +45,8 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
+
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include "AccessibleParaManager.hxx"
@@ -55,12 +55,13 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakComponentImplHelper7< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::WeakComponentImplHelper8< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEditableText,
                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                      ::com::sun::star::accessibility::XAccessibleTextAttributes,
+                                     ::com::sun::star::accessibility::XAccessibleMultiLineText,
                                      ::com::sun::star::lang::XServiceInfo >  AccessibleTextParaInterfaceBase;
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
@@ -128,7 +129,7 @@ namespace accessibility
         virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XAccessibleText (this comes implicitely inherited by XAccessibleEditableText)
+        // XAccessibleText (this comes implicitely inherited by XAccessibleEditableText AND by XAccessibleMultiLineText)
         virtual sal_Int32 SAL_CALL getCaretPosition() throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -162,6 +163,12 @@ namespace accessibility
         // XAccessibleTextAttributes
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( ::sal_Int32 Index, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+        // XAccessibleMultiLineText
+        virtual ::sal_Int32 SAL_CALL getLineNumberAtIndex( ::sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineNumber( ::sal_Int32 nLineNo ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineWithCaret(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getNumberOfLineWithCaret(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName (void) throw (::com::sun::star::uno::RuntimeException);

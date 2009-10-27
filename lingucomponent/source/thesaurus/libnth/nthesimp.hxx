@@ -55,7 +55,7 @@
 
 #include <lingutil.hxx>
 #include <linguistic/misc.hxx>
-#include "ntprophelp.hxx"
+#include <linguistic/lngprophelp.hxx>
 
 #include <osl/file.hxx>
 #include "mythes.hxx"
@@ -89,7 +89,7 @@ class Thesaurus :
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
-    PropertyHelper_Thes *                   pPropHelper;
+    linguistic::PropertyHelper_Thes *       pPropHelper;
     BOOL                                    bDisposing;
     CharClass **                            aCharSetInfo;
     MyThes **                               aThes;
@@ -107,8 +107,8 @@ class Thesaurus :
     Thesaurus(const Thesaurus &);
     Thesaurus & operator = (const Thesaurus &);
 
-    PropertyHelper_Thes &   GetPropHelper_Impl();
-    PropertyHelper_Thes &   GetPropHelper()
+    linguistic::PropertyHelper_Thes &   GetPropHelper_Impl();
+    linguistic::PropertyHelper_Thes &   GetPropHelper()
     {
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }

@@ -43,12 +43,9 @@ testcase tLoadSaveGeneral
     Dim AppCount as Integer
     dim i as Integer
 
-    '///check if all settings are saved in configuration ( Load & Save / General )
 
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions("LoadSave","General")
-    '///save old settings
     printlog " - save old settings"
     lbSave(13) = BenutzerspezifischeEinstellungen.IsChecked
     lbSave(1)  = DokumenteigenschaftenBearbeiten.IsChecked
@@ -78,7 +75,6 @@ testcase tLoadSaveGeneral
         lsSave(2+AppCount+i) = Filter.GetSelText
     next i
 
-    '///+invert and change all settings
     printlog " - invert/change settings"
     if lbSave(13) then BenutzerspezifischeEinstellungen.UnCheck else BenutzerspezifischeEinstellungen.Check
     if lbSave(1) then DokumenteigenschaftenBearbeiten.Uncheck else DokumenteigenschaftenBearbeiten.Check
@@ -98,19 +94,15 @@ testcase tLoadSaveGeneral
         printlog( "Doctype: " & Dokumenttyp.getSelText() & " has filter: " & Filter.getSelText() )
     next i
 
-    '///+close options dialog with OK
     printlog " - close options-dlg with OK"
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     sleep(3)
 
-    '///exit and restart StarOffice
     printlog " - exit/restart StarOffice"
     ExitRestartTheOffice
 
-    '///check inverting and changes
     printlog " - check inverting/changes"
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions ( "LoadSave", "General" )
 
@@ -151,7 +143,6 @@ testcase tLoadSaveGeneral
         endif
     next i
 
-    '///make other changes
     printlog " - make other changes"
     BenutzerspezifischeEinstellungen.Uncheck
     DokumenteigenschaftenBearbeiten.Check
@@ -167,13 +158,11 @@ testcase tLoadSaveGeneral
     next i
 
     printlog " - close options-dlg with OK"
-    '///+close options dialog with OK
 
     kontext "extrasoptionendlg"
     ExtrasOptionenDlg.OK
     Sleep (1)
 
-    '///+you must get for all applications a filter-changes-warning ( perhaps not for all )
     printlog "    - react on messageboxes for loosing settings after changing default-filters"
     kontext "FilterWarning"
     for i=1 to AppCount
@@ -185,9 +174,7 @@ testcase tLoadSaveGeneral
     next i
     Sleep (3)
 
-    '///check second changes
     printlog " - check second changes"
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions ( "LoadSave", "General" )
 
@@ -222,7 +209,6 @@ testcase tLoadSaveGeneral
         endif
     next i
 
-    '///reset to default settings
     printlog " - reset to saved settings"
     if lbSave ( 13 ) = FALSE then
         BenutzerspezifischeEinstellungen.UnCheck else BenutzerspezifischeEinstellungen.Check
@@ -255,14 +241,11 @@ testcase tLoadSaveGeneral
         Filter.Select(lsSave(2+AppCount+i))
     next i
 
-    '///+close options dialog with OK
     kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
     Sleep (3)
 
-    '///check the reset
     printlog " - check settings"
-    '///+open tools / options / load & save / general
     ToolsOptions
     hToolsOptions ( "LoadSave", "General" )
 
@@ -302,7 +285,6 @@ testcase tLoadSaveGeneral
         endif
     next i
 
-    '///+close options dialog with OK
     kontext "extrasoptionendlg"
     ExtrasOptionenDlg.OK
 endcase

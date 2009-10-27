@@ -46,6 +46,7 @@
 #include "oox/drawingml/customshapegeometry.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "tokens.hxx"
+#include "properties.hxx"
 
 using rtl::OUString;
 using namespace oox::core;
@@ -189,6 +190,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
     case NMSP_PPT|XML_txBody:
     {
         oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+        xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );
         mpShapePtr->setTextBody( xTextBody );
         xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
         break;

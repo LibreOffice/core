@@ -193,7 +193,7 @@ namespace connectivity
             else
             {
                 aProps.push_back( PropertyValue(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewURL"))
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PublicConnectionURL"))
                                     ,0
                                     ,makeAny(_sUrl)
                                     ,PropertyState_DIRECT_VALUE) );

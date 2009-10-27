@@ -68,6 +68,7 @@ SLOFILES =										\
         $(SLO)$/formulabase.obj					\
         $(SLO)$/formulaparser.obj				\
         $(SLO)$/numberformatsbuffer.obj			\
+        $(SLO)$/ooxformulaparser.obj			\
         $(SLO)$/pagesettings.obj				\
         $(SLO)$/pivotcachebuffer.obj			\
         $(SLO)$/pivotcachefragment.obj			\
@@ -76,6 +77,8 @@ SLOFILES =										\
         $(SLO)$/querytablefragment.obj			\
         $(SLO)$/richstring.obj					\
         $(SLO)$/richstringcontext.obj			\
+        $(SLO)$/scenariobuffer.obj				\
+        $(SLO)$/scenariocontext.obj				\
         $(SLO)$/sharedformulabuffer.obj			\
         $(SLO)$/sharedstringsbuffer.obj			\
         $(SLO)$/sharedstringsfragment.obj		\

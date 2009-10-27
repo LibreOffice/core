@@ -796,20 +796,14 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if( rPeer.GetVersion() < 0x02 )
         return false;
 
+    // create destination picture
+    Picture aDstPic = GetXRenderPicture();
+    if( !aDstPic )
+        return false;
+
     const SalDisplay* pSalDisp = GetDisplay();
     const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
     Display* pXDisplay = pSalDisp->GetDisplay();
-
-    // create destination picture
-    // TODO: scoped Pixmap and Pictures
-    Visual* pDstXVisual = rSalVis.GetVisual();
-    XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
-    if( !pDstVisFmt )
-        return false;
-
-    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, NULL );
-    if( !aDstPic )
-        return false;
 
     // create source Picture
     int nDepth = m_pVDev ? m_pVDev->GetDepth() : rSalVis.GetDepth();
@@ -829,7 +823,12 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if( !aSrcPM )
         return false;
 
-    XRenderPictFormat* pSrcVisFmt = pDstVisFmt;
+    // create source picture
+    // TODO: use scoped picture
+    Visual* pSrcXVisual = rSalVis.GetVisual();
+    XRenderPictFormat* pSrcVisFmt = rPeer.FindVisualFormat( pSrcXVisual );
+    if( !pSrcVisFmt )
+        return false;
     Picture aSrcPic = rPeer.CreatePicture( aSrcPM, pSrcVisFmt, 0, NULL );
     if( !aSrcPic )
         return false;
@@ -843,16 +842,16 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     // an XImage needs its data top_down
     // TODO: avoid wrongly oriented images in upper layers!
     const int nImageSize = pAlphaBuffer->mnHeight * pAlphaBuffer->mnScanlineSize;
-    const char* pSrc = (char*)pAlphaBuffer->mpBits;
+    const char* pSrcBits = (char*)pAlphaBuffer->mpBits;
     char* pAlphaBits = new char[ nImageSize ];
     if( BMP_SCANLINE_ADJUSTMENT( pAlphaBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
-        memcpy( pAlphaBits, pSrc, nImageSize );
+        memcpy( pAlphaBits, pSrcBits, nImageSize );
     else
     {
-        char* pDst = pAlphaBits + nImageSize;
+        char* pDstBits = pAlphaBits + nImageSize;
         const int nLineSize = pAlphaBuffer->mnScanlineSize;
-        for(; (pDst -= nLineSize) >= pAlphaBits; pSrc += nLineSize )
-            memcpy( pDst, pSrc, nLineSize );
+        for(; (pDstBits -= nLineSize) >= pAlphaBits; pSrcBits += nLineSize )
+            memcpy( pDstBits, pSrcBits, nLineSize );
     }
 
     // the alpha values need to be inverted for XRender
@@ -866,7 +865,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
         *pCDst = ~*pCDst;
 
     const XRenderPictFormat* pAlphaFormat = rPeer.GetStandardFormatA8();
-    XImage* pAlphaImg = XCreateImage( pXDisplay, pDstXVisual, 8, ZPixmap, 0,
+    XImage* pAlphaImg = XCreateImage( pXDisplay, pSrcXVisual, 8, ZPixmap, 0,
         pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,
         pAlphaFormat->depth, pAlphaBuffer->mnScanlineSize );
 
@@ -904,7 +903,6 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     rPeer.FreePicture( aAlphaPic );
     XFreePixmap(pXDisplay, aAlphaPM);
     rPeer.FreePicture( aSrcPic );
-    rPeer.FreePicture( aDstPic );
     return true;
 }
 
@@ -922,20 +920,10 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
         return false;
 
     XRenderPeer& rPeer = XRenderPeer::GetInstance();
-    if( rPeer.GetVersion() < 0x02 )
+    if( rPeer.GetVersion() < 0x02 ) // TODO: replace with better test
         return false;
 
-    const SalDisplay* pSalDisp = GetDisplay();
-    const SalVisual& rSalVis = pSalDisp->GetVisual( m_nScreen );
-
-    // create destination picture
-    // TODO: scoped Pixmap and Pictures
-    Visual* pDstXVisual = rSalVis.GetVisual();
-    XRenderPictFormat* pDstVisFmt = rPeer.FindVisualFormat( pDstXVisual );
-    if( !pDstVisFmt )
-        return false;
-
-    Picture aDstPic = rPeer.CreatePicture( hDrawable_, pDstVisFmt, 0, NULL );
+    Picture aDstPic = GetXRenderPicture();
     if( !aDstPic )
         return false;
 
@@ -947,9 +935,6 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                          &aRenderColor,
                          nX, nY,
                          nWidth, nHeight );
-
-    // cleanup
-    rPeer.FreePicture( aDstPic );
 
     return true;
 }

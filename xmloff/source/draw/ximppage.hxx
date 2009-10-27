@@ -35,6 +35,7 @@
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <tools/rtti.hxx>
 #include "ximpshap.hxx"
 
@@ -44,7 +45,8 @@
 class SdXMLGenericPageContext : public SvXMLImportContext
 {
     // the shape group this group is working on
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxShapes;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxShapes;
+    ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationAccess > mxAnnotationAccess;
 
 protected:
     rtl::OUString               maPageLayoutName;

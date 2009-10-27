@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package complex.dbaccess;
 
 import com.sun.star.beans.PropertyValue;
@@ -56,9 +55,10 @@ import java.io.IOException;
  */
 public class ApplicationController extends complexlib.ComplexTestCase
 {
-    private HsqlDatabase            m_database;
+
+    private HsqlDatabase m_database;
     private XOfficeDatabaseDocument m_databaseDocument;
-    private XDatabaseDocumentUI     m_documentUI;
+    private XDatabaseDocumentUI m_documentUI;
 
     public ApplicationController()
     {
@@ -66,11 +66,29 @@ public class ApplicationController extends complexlib.ComplexTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
+    protected final XComponentContext getComponentContext()
+    {
+        XComponentContext context = null;
+        try
+        {
+            final XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, getORB());
+            context = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class,
+                    orbProps.getPropertyValue("DefaultContext"));
+        }
+        catch (Exception ex)
+        {
+            failed("could not retrieve the ComponentContext");
+        }
+        return context;
+    }
+    // --------------------------------------------------------------------------------------------------------
+
     public String[] getTestMethodNames()
     {
-        return new String[] {
-            "checkSaveAs"
-        };
+        return new String[]
+                {
+                    "checkSaveAs"
+                };
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -82,30 +100,13 @@ public class ApplicationController extends complexlib.ComplexTestCase
     // --------------------------------------------------------------------------------------------------------
     protected final XMultiServiceFactory getORB()
     {
-        return (XMultiServiceFactory)param.getMSF();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    protected final XComponentContext getComponentContext()
-    {
-        XComponentContext context = null;
-        try
-        {
-            XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, getORB() );
-            context = (XComponentContext)UnoRuntime.queryInterface( XComponentContext.class,
-                orbProps.getPropertyValue( "DefaultContext" ) );
-        }
-        catch ( Exception ex )
-        {
-            failed( "could not retrieve the ComponentContext" );
-        }
-        return context;
+        return (XMultiServiceFactory) param.getMSF();
     }
 
     // --------------------------------------------------------------------------------------------------------
     private void impl_closeDocument()
     {
-        if ( m_database != null )
+        if (m_database != null)
         {
             m_database.close();
             m_database = null;
@@ -115,36 +116,36 @@ public class ApplicationController extends complexlib.ComplexTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private void impl_switchToDocument( String _documentURL ) throws java.lang.Exception
+    private void impl_switchToDocument(String _documentURL) throws java.lang.Exception
     {
         // close previous database document
         impl_closeDocument();
 
         // create/load the new database document
-        m_database = ( _documentURL == null )
-                ?   new HsqlDatabase( getORB() )
-                :   new HsqlDatabase( getORB(), _documentURL );
+        m_database = (_documentURL == null)
+                ? new HsqlDatabase(getORB())
+                : new HsqlDatabase(getORB(), _documentURL);
         m_databaseDocument = m_database.getDatabaseDocument();
 
         // load it into a frame
-        Object object = getORB().createInstance( "com.sun.star.frame.Desktop" );
-        XComponentLoader xComponentLoader = (XComponentLoader)UnoRuntime.queryInterface( XComponentLoader.class, object );
-        XComponent loadedComponent = xComponentLoader.loadComponentFromURL( m_database.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0] );
+        final Object object = getORB().createInstance("com.sun.star.frame.Desktop");
+        final XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, object);
+        final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(m_database.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
 
-        assure( "too many document instances!",
-            UnoRuntime.areSame( loadedComponent, m_databaseDocument ) );
+        assure("too many document instances!",
+                UnoRuntime.areSame(loadedComponent, m_databaseDocument));
 
         // get the controller, which provides access to various UI operations
-        XModel docModel = (XModel)UnoRuntime.queryInterface( XModel.class,
-            loadedComponent );
-        m_documentUI = (XDatabaseDocumentUI)UnoRuntime.queryInterface( XDatabaseDocumentUI.class,
-            docModel.getCurrentController() );
+        final XModel docModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                loadedComponent);
+        m_documentUI = (XDatabaseDocumentUI) UnoRuntime.queryInterface(XDatabaseDocumentUI.class,
+                docModel.getCurrentController());
     }
 
     // --------------------------------------------------------------------------------------------------------
     public void before() throws Exception, java.lang.Exception
     {
-        impl_switchToDocument( null );
+        impl_switchToDocument(null);
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -152,52 +153,54 @@ public class ApplicationController extends complexlib.ComplexTestCase
     {
         impl_closeDocument();
     }
-
     // --------------------------------------------------------------------------------------------------------
+
     public void checkSaveAs() throws Exception, IOException, java.lang.Exception
     {
         // issue 93737 describes the problem that when you save-as a database document, and do changes to it,
         // then those changes are saved in the old document, actually
-        String oldDocumentURL = m_database.getDocumentURL();
+        final String oldDocumentURL = m_database.getDocumentURL();
 
-        File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" );
+        final File documentFile = java.io.File.createTempFile(getTestObjectName(), ".odb");
         documentFile.deleteOnExit();
-        String newDocumentURL = URLHelper.getFileURLFromSystemPath( documentFile.getAbsoluteFile() );
+        final String newDocumentURL = URLHelper.getFileURLFromSystemPath(documentFile.getAbsoluteFile());
 
         // store the doc in a new location
-        XStorable storeDoc = (XStorable)UnoRuntime.queryInterface( XStorable.class,
-            m_databaseDocument );
-        storeDoc.storeAsURL( newDocumentURL, new PropertyValue[] {} );
+        final XStorable storeDoc = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+                m_databaseDocument);
+        storeDoc.storeAsURL(newDocumentURL, new PropertyValue[]
+                {
+                });
 
         // connect
         m_documentUI.connect();
-        assure( "could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected() );
+        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
 
         // create a table in the database
-        m_database.createTable( new HsqlTableDescriptor( "abc", new HsqlColumnDescriptor[] {
-                new HsqlColumnDescriptor( "a", "VARCHAR(50)" ),
-                new HsqlColumnDescriptor( "b", "VARCHAR(50)" ),
-                new HsqlColumnDescriptor( "c", "VARCHAR(50)" )
-            }
-        ) );
+        m_database.createTable(new HsqlTableDescriptor("abc", new HsqlColumnDescriptor[]
+                {
+                    new HsqlColumnDescriptor("a", "VARCHAR(50)"),
+                    new HsqlColumnDescriptor("b", "VARCHAR(50)"),
+                    new HsqlColumnDescriptor("c", "VARCHAR(50)")
+                }));
 
         // load the old document, and verify there is *no* table therein
-        impl_switchToDocument( oldDocumentURL );
+        impl_switchToDocument(oldDocumentURL);
         m_documentUI.connect();
-        assure( "could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected() );
-        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface( XTablesSupplier.class,
-            m_documentUI.getActiveConnection() );
+        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
+        XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
+                m_documentUI.getActiveConnection());
         XNameAccess tables = suppTables.getTables();
-        assure( "the table was created in the wrong database", !tables.hasByName( "abc" ) );
+        assure("the table was created in the wrong database", !tables.hasByName("abc"));
 
         // load the new document, and verify there *is* a table therein
-        impl_switchToDocument( newDocumentURL );
+        impl_switchToDocument(newDocumentURL);
         m_documentUI.connect();
-        assure( "could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected() );
+        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
 
-        suppTables = (XTablesSupplier)UnoRuntime.queryInterface( XTablesSupplier.class,
-            m_documentUI.getActiveConnection() );
+        suppTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class,
+                m_documentUI.getActiveConnection());
         tables = suppTables.getTables();
-        assure( "the newly created table has not been written", tables.hasByName( "abc" ) );
+        assure("the newly created table has not been written", tables.hasByName("abc"));
     }
 }

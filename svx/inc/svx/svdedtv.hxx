@@ -232,6 +232,7 @@ public:
     void SetUndoComment(const String& rComment);
     void SetUndoComment(const String& rComment, const String& rObjDescr);
 #endif
+    bool IsUndoEnabled() const;
 
     std::vector< SdrUndoAction* > CreateConnectorUndo( SdrObject& rO );
     void AddUndoActions( std::vector< SdrUndoAction* >& );

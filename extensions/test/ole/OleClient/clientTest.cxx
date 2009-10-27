@@ -86,7 +86,7 @@ void printResultVariantArray( VARIANT & var);
 void printVariant( VARIANT & var);
 void printSequence( Sequence<Any>& val);
 
-extern "C" int __cdecl main( int argc, char * argv[] )
+extern "C" int __cdecl main( int , char **)
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))
@@ -381,7 +381,7 @@ bool doPropertyTest(const Reference<XInvocation> & inv)
     Any inrefVariant, outrefVariant;
     Any inrefDecimal, outrefDecimal;
     Any inParamsLong, outParamsLong;
-    Reference<XInterface> xintUnknown = getComObject(L"AxTestComponents.Foo");
+    Reference<XInterface> xintUnknown(getComObject(L"AxTestComponents.Foo"));
 
     inBool <<= (sal_Bool) sal_True;
     inv->setValue(OUString(L"prpBool"), inBool);
@@ -391,7 +391,7 @@ bool doPropertyTest(const Reference<XInvocation> & inv)
     inv->setValue(OUString(L"prpByte"), inByte);
     outByte = inv->getValue(OUString(L"prpByte"));
 
-    inShort <<= ( sal_Int16) 0xffff;
+    inShort <<= static_cast<sal_Int16>( -1);
     inv->setValue(OUString(L"prpShort"), inShort);
     outShort = inv->getValue(OUString(L"prpShort"));
 
@@ -659,7 +659,7 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
     Any inrefVariant, outrefVariant;
     Any inrefDecimal, outrefDecimal;
 
-    Reference<XInterface> xIntFoo = getComObject(L"AxTestComponents.Foo");
+    Reference<XInterface> xIntFoo(getComObject(L"AxTestComponents.Foo"));
     //###################################################################################
     //  in and out parameter
     //###################################################################################
@@ -678,7 +678,7 @@ bool doSimpleTest(const Reference<XInvocation> & inv)
     inv->invoke(OUString(L"outByte"), Sequence< Any > ( & outByte, 1), seqIndices, seqOut);
     outByte <<= seqOut[0];
 
-    inShort <<= ( sal_Int16) 0xffff;
+    inShort <<= static_cast<sal_Int16>(-1);
     inv->invoke(OUString(L"inShort"), Sequence< Any > ( & inShort, 1), seqIndices, seqOut);
     seqIndices.realloc( 0);
     seqOut.realloc(0);
@@ -1221,7 +1221,7 @@ HRESULT doTest()
     //  invMfc->invoke( OUString(L"inByte"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
     if ( ! invMfc.is())
         return hr;
-    aAny <<= ( sal_Int16) 0xffff;
+    aAny <<= static_cast<sal_Int16>(-1);
     aAny= invMfc->invoke( OUString(L"inShort"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
 
 //

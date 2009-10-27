@@ -201,8 +201,6 @@ published service NumberingLevel
 
         /** position and space mode
 
-                @since OOo 3.0
-
                 <p>
                 Specifies the position and space mode of the numbering level.
                 For valid values see com::sun::star::text::PositionAndSpaceMode.
@@ -211,24 +209,24 @@ published service NumberingLevel
                 If it equals LABEL_ALIGNMENT, properties Adjust, LabelFollowedBy,
                 ListtabStopPosition, FirstLineIndent, IndentAt are used.
                 </p>
+
+                @since OOo 3.0
         */
         [optional, property] short PositionAndSpaceMode;
 
         /** character following the list label
-
-                @since OOo 3.0
 
                 <p>
                 Specifies the character following the list label.
                 For valid values see com::sun::star::text::LabelFollow.
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
+
+                @since OOo 3.0
         */
         [optional, property] short LabelFollowedBy;
 
         /** list tab position
-
-                @since OOo 3.0
 
                 <p>
                 Specifies the position of the list tab stop - only non-negative
@@ -236,28 +234,30 @@ published service NumberingLevel
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT
                 and LabelFollowedBy equal LABELFOLLOW_LISTTAB
                 </p>
+
+                @since OOo 3.0
         */
         [optional, property] long ListtabStopPosition;
 
         /** additional line indent for the first text line
 
-                @since OOo 3.0
-
                 <p>
                 Specifies the first line indent.
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
+
+                @since OOo 3.0
         */
         [optional, property] long FirstLineIndent;
 
         /** indentation of the text lines
 
-                @since OOo 3.0
-
                 <p>
                 Specifies the indent of the text lines
                 Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
                 </p>
+
+                @since OOo 3.0
         */
         [optional, property] long IndentAt;
 };

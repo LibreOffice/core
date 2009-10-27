@@ -32,6 +32,8 @@ package lib;
 
 import java.util.Hashtable;
 import util.PropertyName;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.XComponentContext;
 
 //import com.sun.star.lang.XMultiServiceFactory;
 
@@ -159,13 +161,13 @@ public class TestParameters extends Hashtable {
      * This parameter contains the timeout used<br>
      * by the watcher
      */
-    public Integer TimeOut = new Integer(30000);
+    public Integer TimeOut = new Integer(3000000);
 
     /*
      * This parameter contains the timeout used<br>
      * by the complex tests
      */
-    public Integer ThreadTimeOut = new Integer(30000);
+    public Integer ThreadTimeOut = new Integer(3000000);
 
     /*
      * This parameter contains the time which the office could use to close for
@@ -256,8 +258,11 @@ public class TestParameters extends Hashtable {
     public TestParameters() {
         //fill the propertyset
         String user = System.getProperty("user.name");
-        if ( user != null) {
-            ConnectionString = "pipe,name=" + user;
+        if ( user != null)
+        {
+            String PipeConnectionString = "pipe,name=" + user;
+            put(PropertyName.PIPE_CONNECTION_STRING,PipeConnectionString);
+            put(PropertyName.USE_PIPE_CONNECTION, Boolean.TRUE);
         }
         put(PropertyName.CONNECTION_STRING,ConnectionString);
         put(PropertyName.TEST_BASE,TestBase);
@@ -290,6 +295,24 @@ public class TestParameters extends Hashtable {
         Object ret = null;
         ret = get("ServiceFactory");
         return ret;
+    }
+
+    public XComponentContext getComponentContext() {
+        Object context = get( "ComponentContext" );
+        if ( context == null )
+        {
+            XPropertySet factoryProps = (XPropertySet)com.sun.star.uno.UnoRuntime.queryInterface(
+                XPropertySet.class, getMSF() );
+            try
+            {
+                context = com.sun.star.uno.UnoRuntime.queryInterface(
+                    XComponentContext.class, factoryProps.getPropertyValue( "DefaultContext" ) );
+                put( "ComponentContext", context );
+            }
+            catch( com.sun.star.beans.UnknownPropertyException e ) { }
+            catch( com.sun.star.lang.WrappedTargetException e ) { }
+        }
+        return (XComponentContext)context;
     }
 
     /**

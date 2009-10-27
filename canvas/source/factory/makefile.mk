@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE : settings.mk
 DLLPRE =
-
+.IF "$(L10N_framework)"==""
 SLOFILES = \
         $(SLO)$/cf_service.obj
 
@@ -55,6 +55,6 @@ SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME = $(SHL1TARGET)
-
+.ENDIF
 .INCLUDE : target.mk
 

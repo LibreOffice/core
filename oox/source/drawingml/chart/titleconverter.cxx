@@ -175,7 +175,7 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
             // frame rotation
             OSL_ENSURE( !mrModel.mxTextProp || !rText.mxTextBody, "TitleConverter::convertFromModel - multiple text properties" );
             ModelRef< TextBody > xTextProp = mrModel.mxTextProp.is() ? mrModel.mxTextProp : rText.mxTextBody;
-            getFormatter().convertTextRotation( aPropSet, xTextProp );
+            getFormatter().convertTextRotation( aPropSet, xTextProp, true );
         }
         catch( Exception& )
         {

@@ -51,13 +51,11 @@
 
 #include <string.h>
 
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-
 
 namespace DOM
 {
-
-
     void CDocument::addnode(xmlNodePtr aNode)
     {
         if (aNode != (xmlNodePtr)m_aDocPtr)
@@ -120,6 +118,17 @@ namespace DOM
             pNode->saxify(i_xHandler);
         }
         i_xHandler->endDocument();
+    }
+
+    void SAL_CALL CDocument::fastSaxify( Context& rContext ) {
+        rContext.mxDocHandler->startDocument();
+        for (xmlNodePtr pChild = m_aNodePtr->children;
+                        pChild != 0; pChild = pChild->next) {
+            CNode * pNode = CNode::get(pChild);
+            OSL_ENSURE(pNode != 0, "CNode::get returned 0");
+            pNode->fastSaxify(rContext);
+        }
+        rContext.mxDocHandler->endDocument();
     }
 
     void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
@@ -699,7 +708,47 @@ namespace DOM
             // eliminate duplicate namespace declarations
             _nscleanup(pRoot->children, pRoot);
         }
-        // serialize via SAX handler
         saxify(i_xHandler);
+    }
+
+    // ::com::sun::star::xml::sax::XFastSAXSerializable
+    void SAL_CALL CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler,
+                                            const Reference< XFastTokenHandler >& i_xTokenHandler,
+                                            const Sequence< beans::StringPair >& i_rNamespaces,
+                                            const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& i_rRegisterNamespaces )
+        throw (SAXException, RuntimeException)
+    {
+        // add new namespaces to root node
+        xmlNodePtr pRoot = _getDocumentRootPtr(m_aDocPtr);
+        if (0 != pRoot) {
+            const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
+            for (const beans::StringPair *pNsDef = pSeq;
+                 pNsDef < pSeq + i_rNamespaces.getLength(); ++pNsDef) {
+                OString prefix = OUStringToOString(pNsDef->First,
+                                    RTL_TEXTENCODING_UTF8);
+                OString href   = OUStringToOString(pNsDef->Second,
+                                    RTL_TEXTENCODING_UTF8);
+                // this will only add the ns if it does not exist already
+                xmlNewNs(pRoot, reinterpret_cast<const xmlChar*>(href.getStr()),
+                         reinterpret_cast<const xmlChar*>(prefix.getStr()));
+            }
+            // eliminate duplicate namespace declarations
+            _nscleanup(pRoot->children, pRoot);
+        }
+
+        Context aContext(i_xHandler,
+                         i_xTokenHandler);
+
+        // register namespace ids
+        const beans::Pair<OUString,sal_Int32>* pSeq = i_rRegisterNamespaces.getConstArray();
+        for (const beans::Pair<OUString,sal_Int32>* pNs = pSeq;
+             pNs < pSeq + i_rRegisterNamespaces.getLength(); ++pNs)
+        {
+            OSL_ENSURE(pNs->Second >= FastToken::NAMESPACE,
+                       "CDocument::fastSerialize(): invalid NS token id");
+            aContext.maNamespaceMap[ pNs->First ] = pNs->Second;
+        }
+
+        fastSaxify(aContext);
     }
 }

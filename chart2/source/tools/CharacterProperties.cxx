@@ -51,8 +51,10 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <comphelper/InlineContainer.hxx>
+
 
 // header for struct SvtLinguConfig
 #ifndef _SVTOOLS_LINGUCFG_HXX_
@@ -463,6 +465,13 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)), /*com::sun::star::text::WritingMode2*/
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "ParaIsCharacterDistance" ),
+                  PROP_PARA_IS_CHARACTER_DISTANCE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void CharacterProperties::AddDefaultsToMap(
@@ -471,16 +480,21 @@ void CharacterProperties::AddDefaultsToMap(
     const float fDefaultFontHeight = 13.0;
 
     SvtLinguConfig aLinguConfig;
-    lang::Locale aDefaultLocale( C2U( "en" ), C2U( "US" ), OUString() );
+    lang::Locale aDefaultLocale;
     aLinguConfig.GetProperty(C2U("DefaultLocale")) >>= aDefaultLocale;
     lang::Locale aDefaultLocale_CJK;
     aLinguConfig.GetProperty(C2U("DefaultLocale_CJK")) >>= aDefaultLocale_CJK;
     lang::Locale aDefaultLocale_CTL;
     aLinguConfig.GetProperty(C2U("DefaultLocale_CTL")) >>= aDefaultLocale_CTL;
 
-    Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, MsLangId::convertLocaleToLanguage( aDefaultLocale ), DEFAULTFONT_FLAGS_ONLYONE, 0 );
-    Font aFontCJK = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_SPREADSHEET, MsLangId::convertLocaleToLanguage( aDefaultLocale_CJK ), DEFAULTFONT_FLAGS_ONLYONE, 0 );
-    Font aFontCTL = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_SPREADSHEET, MsLangId::convertLocaleToLanguage( aDefaultLocale_CTL ), DEFAULTFONT_FLAGS_ONLYONE, 0 );
+    using namespace ::com::sun::star::i18n::ScriptType;
+    LanguageType nLang;
+    nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aDefaultLocale), LATIN);
+    Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
+    nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage( aDefaultLocale_CJK), ASIAN);
+    Font aFontCJK = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
+    nLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage( aDefaultLocale_CTL), COMPLEX);
+    Font aFontCTL = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_SPREADSHEET, nLang, DEFAULTFONT_FLAGS_ONLYONE, 0 );
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, OUString( aFont.GetName() ) );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_STYLE_NAME, OUString(aFont.GetStyleName()) );
@@ -541,6 +555,7 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_PITCH, sal_Int16(aFontCTL.GetPitch()) );
 
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_WRITING_MODE, sal_Int16( com::sun::star::text::WritingMode2::PAGE ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PARA_IS_CHARACTER_DISTANCE, sal_True );
 }
 
 bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )

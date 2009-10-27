@@ -55,19 +55,6 @@ namespace css = ::com::sun::star;
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3                (    UriAbbreviation                                                         ,
-                                        cppu::OWeakObject                                                       ,
-                                        DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
-                                        DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
-                                        DIRECT_INTERFACE(css::util::XStringAbbreviation                         )
-                                    )
-
-DEFINE_XTYPEPROVIDER_3              (   UriAbbreviation                                                         ,
-                                        css::lang::XTypeProvider                                                ,
-                                        css::lang::XServiceInfo                                                 ,
-                                        css::util::XStringAbbreviation
-                                    )
-
 DEFINE_XSERVICEINFO_MULTISERVICE_2 (    UriAbbreviation                                                         ,
                                         ::cppu::OWeakObject                                                     ,
                                         SERVICENAME_STRINGABBREVIATION                                          ,

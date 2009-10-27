@@ -138,7 +138,7 @@ class ScCellFieldObj : public ScMutexHelper,
                         public SfxListener
 {
 private:
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet*       pPropSet;
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
     SvxEditSource*          pEditSource;
@@ -337,7 +337,7 @@ class ScHeaderFieldObj : public ScMutexHelper,
                             public ::com::sun::star::lang::XServiceInfo
 {
 private:
-    SfxItemPropertySet          aPropSet;
+    const SfxItemPropertySet*   pPropSet;
     ScHeaderFooterContentObj*   pContentObj;
     USHORT                      nPart;
     UINT16                      nType;

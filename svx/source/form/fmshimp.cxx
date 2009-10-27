@@ -265,6 +265,7 @@ sal_Int16 nObjectTypes[] =
     OBJ_FM_NAVIGATIONBAR
 };
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -784,7 +785,7 @@ void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( Ru
 void FmXFormShell::disposing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::disposing" );
-    OSL_TRACE( "--- FmXFormShell::disposing      : %p, ........, ........\n", this );
+    OSL_TRACE( "--- FmXFormShell::disposing      : %p, ........, ........", this );
     impl_checkDisposed();
 
     FmXFormShell_BASE::disposing();
@@ -1214,8 +1215,14 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             // create an undo action
             FmFormModel* pModel = m_pShell->GetFormModel();
             DBG_ASSERT(pModel != NULL, "FmXFormShell::executeControlConversionSlot: my shell has no model !");
-            if (pModel)
+            if (pModel && pModel->IsUndoEnabled() )
+            {
                 pModel->AddUndo(new FmUndoModelReplaceAction(*pModel, pFormObject, xOldModel));
+            }
+            else
+            {
+                FmUndoModelReplaceAction::DisposeElement( xOldModel );
+            }
 
             return true;
         }
@@ -2059,7 +2066,7 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
     // propagate to the FormPage(Impl)
     FmFormPage* pPage = m_pShell->GetCurPage();
     if ( pPage )
-        pPage->GetImpl()->setCurForm( m_xCurrentForm );
+        pPage->GetImpl().setCurForm( m_xCurrentForm );
 
     // ensure the UI which depends on the current form is up-to-date
     for ( size_t i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
@@ -3929,7 +3936,7 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::viewDeactivated" );
-    OSL_TRACE( "--- FmXFormShell::viewDeactivated: %p, %p, ........\n", this, &_rCurrentView );
+    OSL_TRACE( "--- FmXFormShell::viewDeactivated: %p, %p, ........", this, &_rCurrentView );
 
     if ( _rCurrentView.GetImpl() && !_rCurrentView.IsDesignMode() )
     {
@@ -3962,10 +3969,10 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
     }
 
     // remove callbacks at the page
-    if ( pPage && pPage->GetImpl() )
+    if ( pPage )
     {
-        OSL_TRACE( "--- FmXFormShell::resetHandler   : %p, ........, %p\n", this, pPage );
-        pPage->GetImpl()->SetFormsCreationHdl( Link() );
+        OSL_TRACE( "--- FmXFormShell::resetHandler   : %p, ........, %p", this, pPage );
+        pPage->GetImpl().SetFormsCreationHdl( Link() );
     }
     UpdateForms( sal_True );
 }
@@ -4003,7 +4010,7 @@ IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
 void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::viewActivated" );
-    OSL_TRACE( "--- FmXFormShell::viewActivated  : %p, %p, ........\n", this, &_rCurrentView );
+    OSL_TRACE( "--- FmXFormShell::viewActivated  : %p, %p, ........", this, &_rCurrentView );
 
     FmFormPage* pPage = _rCurrentView.GetCurPage();
 
@@ -4014,9 +4021,9 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncActi
         // load forms for the page the current view belongs to
         if ( pPage )
         {
-            if ( !pPage->GetImpl()->hasEverBeenActivated() )
+            if ( !pPage->GetImpl().hasEverBeenActivated() )
                 loadForms( pPage, FORMS_LOAD | ( _bSyncAction ? FORMS_SYNC : FORMS_ASYNC ) );
-            pPage->GetImpl()->setHasBeenActivated( );
+            pPage->GetImpl().setHasBeenActivated( );
         }
 
         // first-time initializations for the views
@@ -4031,10 +4038,10 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncActi
     }
 
     // set callbacks at the page
-    if ( pPage && pPage->GetImpl() )
+    if ( pPage )
     {
-        OSL_TRACE( "--- FmXFormShell::setHandler     : %p, ........, %p\n", this, pPage );
-        pPage->GetImpl()->SetFormsCreationHdl( LINK( this, FmXFormShell, OnFormsCreated ) );
+        OSL_TRACE( "--- FmXFormShell::setHandler     : %p, ........, %p", this, pPage );
+        pPage->GetImpl().SetFormsCreationHdl( LINK( this, FmXFormShell, OnFormsCreated ) );
     }
 
     UpdateForms( sal_True );

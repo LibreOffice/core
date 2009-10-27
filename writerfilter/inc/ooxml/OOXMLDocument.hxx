@@ -45,7 +45,7 @@
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 /**
    @file OOXMLDocument.hxx
@@ -242,8 +242,8 @@ public:
 
     virtual void setModel(uno::Reference<frame::XModel> xModel) = 0;
     virtual uno::Reference<frame::XModel> getModel() = 0;
-    virtual void setShapes(uno::Reference<drawing::XShapes> xShapes) = 0;
-    virtual uno::Reference<drawing::XShapes> getShapes() = 0;
+    virtual void setDrawPage(uno::Reference<drawing::XDrawPage> xDrawPage) = 0;
+    virtual uno::Reference<drawing::XDrawPage> getDrawPage() = 0;
     virtual uno::Reference<io::XInputStream> getInputStream() = 0;
     virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
     virtual uno::Reference<io::XInputStream> getInputStreamForId

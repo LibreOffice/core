@@ -53,7 +53,7 @@ OView::OView(sal_Bool _bCase,
             sal_Int32 _CheckOption,
             const ::rtl::OUString& _Command,
             const ::rtl::OUString& _SchemaName,
-            const ::rtl::OUString& _CatalogName) : ODescriptor(OViewHelper::rBHelper,_bCase)
+            const ::rtl::OUString& _CatalogName) : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase)
             ,m_CatalogName(_CatalogName)
             ,m_SchemaName(_SchemaName)
             ,m_Command(_Command)
@@ -66,7 +66,7 @@ OView::OView(sal_Bool _bCase,
 }
 // -------------------------------------------------------------------------
 OView::OView(sal_Bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData)
-    : ODescriptor(OViewHelper::rBHelper,_bCase,sal_True)
+    : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase,sal_True)
     ,m_xMetaData(_xMetaData)
 {
     construct();
@@ -97,17 +97,12 @@ void OView::disposing(void)
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OView::getTypes(  ) throw(RuntimeException)
 {
-    Sequence< Type > aTypes(2);
-    aTypes.getArray()[0] = ::getCppuType(static_cast< Reference< ::com::sun::star::container::XNamed> *> (NULL));
-    aTypes.getArray()[1] = ::getCppuType(static_cast< Reference< XServiceInfo> *> (NULL));
-
-    return ::comphelper::concatSequences(ODescriptor::getTypes(),aTypes);
+    return ::comphelper::concatSequences(ODescriptor::getTypes(),OView_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::container::XNamed*> (this),
-                    static_cast< XServiceInfo*> (this));
+    Any aRet = OView_BASE::queryInterface( rType);
     return aRet.hasValue() ? aRet : ODescriptor::queryInterface( rType);
 }
 // -------------------------------------------------------------------------

@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/languageoptions.hxx>
+#include <svtools/useroptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
@@ -79,6 +80,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mrMedium( rMedium ),
     mxRootStrg( xRootStrg ),
     mrDoc( rDoc ),
+    maDefPassword( CREATE_STRING( "VelvetSweatshop" ) ),
     meTextEnc( eTextEnc ),
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
@@ -92,9 +94,13 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mxRD( new RootData ),//!
     mnCharWidth( 110 ),
     mnScTab( 0 ),
-    mbExport( bExport ),
-    mbHasPassw( false )
+    mbExport( bExport )
 {
+    // user name
+    maUserName = SvtUserOptions().GetLastName();
+    if( maUserName.Len() == 0 )
+        maUserName = CREATE_STRING( "Calc" );
+
     // default script type, e.g. for empty cells
     switch( ScGlobal::GetDefaultScriptType() )
     {
@@ -199,15 +205,11 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     }
 }
 
-const String& XclRoot::QueryPassword() const
+String XclRoot::RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
-    if( !mrData.mbHasPassw )
-    {
-        mrData.maPassw = ScfApiHelper::QueryPasswordForMedium( GetMedium() );
-        // set to true, even if dialog has been cancelled (never ask twice)
-        mrData.mbHasPassw = true;
-    }
-    return mrData.maPassw;
+    ::std::vector< OUString > aDefaultPasswords;
+    aDefaultPasswords.push_back( mrData.maDefPassword );
+    return ScfApiHelper::QueryPasswordForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
 }
 
 bool XclRoot::HasVbaStorage() const

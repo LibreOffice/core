@@ -58,9 +58,10 @@ void PrimeNumber(){
 }
 */
 
-SvIdlDataBase::SvIdlDataBase()
+SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( FALSE )
     , nUniqueId( 0 )
+    , nVerbosity( rCmd.nVerbosity )
     , bIsModified( FALSE )
     , aPersStream( *IDLAPP->pClassMgr, NULL )
     , pIdTable( NULL )
@@ -251,7 +252,7 @@ void SvIdlDataBase::SetError( const ByteString & rError, SvToken * pTok )
         aError.SetText( "hgchcg" );
 
     if( aError.nLine < pTok->GetLine()
-      || aError.nLine == pTok->GetLine() && aError.nColumn < pTok->GetColumn() )
+      || (aError.nLine == pTok->GetLine() && aError.nColumn < pTok->GetColumn()) )
     {
         aError = SvIdlError( pTok->GetLine(), pTok->GetColumn() );
         aError.SetText( rError );
@@ -700,6 +701,7 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
 void SvIdlDataBase::Write( const ByteString & rText )
 {
 #ifndef W31
+    if( nVerbosity != 0 )
         fprintf( stdout, "%s", rText.GetBuffer() );
 #endif
 }
@@ -803,7 +805,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 |*
 |*    Beschreibung
 *************************************************************************/
-SvIdlWorkingBase::SvIdlWorkingBase()
+SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 {
 }
 

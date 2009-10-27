@@ -50,20 +50,6 @@
 #include "adc_cmd_parse.hxx"
 #include "adc_cmds.hxx"
 
-
-namespace
-{
-ary::idl::Gate * G_pGate = 0;
-
-ary::idl::Gate &
-GetAryGate()
-{
-    csv_assert(G_pGate != 0);
-    return *G_pGate;
-}
-}   // anonymous namespace
-
-
 namespace autodoc
 {
 namespace command

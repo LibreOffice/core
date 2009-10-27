@@ -75,9 +75,9 @@ bool PowerPointImport::importDocument() throw()
         file:///<path-to-oox-module>/source/dump/pptxdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
-    OUString aFragmentPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
+    OUString aFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
     FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
-    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "tableStyles" ) );
+    maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "tableStyles" ) );
     return importFragment( xPresentationFragmentHandler );
 
 
@@ -88,12 +88,7 @@ bool PowerPointImport::exportDocument() throw()
     return false;
 }
 
-const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const
-{
-    return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : 0;
-}
-
-sal_Int32 PowerPointImport::getSchemeClr( sal_Int32 nColorSchemeToken ) const
+sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
 {
     sal_Int32 nColor = 0;
     if ( mpActualSlidePersist )
@@ -101,7 +96,7 @@ sal_Int32 PowerPointImport::getSchemeClr( sal_Int32 nColorSchemeToken ) const
         sal_Bool bColorMapped = sal_False;
         oox::drawingml::ClrMapPtr pClrMapPtr( mpActualSlidePersist->getClrMap() );
         if ( pClrMapPtr )
-            bColorMapped = pClrMapPtr->getColorMap( nColorSchemeToken );
+            bColorMapped = pClrMapPtr->getColorMap( nToken );
 
         if ( !bColorMapped )    // try masterpage mapping
         {
@@ -110,18 +105,18 @@ sal_Int32 PowerPointImport::getSchemeClr( sal_Int32 nColorSchemeToken ) const
             {
                 pClrMapPtr = pMasterPersist->getClrMap();
                 if ( pClrMapPtr )
-                    bColorMapped = pClrMapPtr->getColorMap( nColorSchemeToken );
+                    bColorMapped = pClrMapPtr->getColorMap( nToken );
             }
         }
         oox::drawingml::ClrSchemePtr pClrSchemePtr( mpActualSlidePersist->getClrScheme() );
         if ( pClrSchemePtr )
-            pClrSchemePtr->getColor( nColorSchemeToken, nColor );
+            pClrSchemePtr->getColor( nToken, nColor );
         else
         {
             ::oox::drawingml::ThemePtr pTheme = mpActualSlidePersist->getTheme();
             if( pTheme )
             {
-                pTheme->getClrScheme().getColor( nColorSchemeToken, nColor );
+                pTheme->getClrScheme().getColor( nToken, nColor );
             }
             else
             {
@@ -132,12 +127,14 @@ sal_Int32 PowerPointImport::getSchemeClr( sal_Int32 nColorSchemeToken ) const
     return nColor;
 }
 
-const oox::vml::DrawingPtr PowerPointImport::getDrawings()
+const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const
 {
-    oox::vml::DrawingPtr xRet;
-    if ( mpActualSlidePersist )
-        xRet = mpActualSlidePersist->getDrawing();
-    return xRet;
+    return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : 0;
+}
+
+::oox::vml::Drawing* PowerPointImport::getVmlDrawing()
+{
+    return mpActualSlidePersist ? mpActualSlidePersist->getDrawing() : 0;
 }
 
 const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()

@@ -101,6 +101,7 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
    
     use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\t_ole.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_stringtools.inc"
    

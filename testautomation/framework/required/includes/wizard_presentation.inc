@@ -39,51 +39,43 @@
 
 testcase tUpdtWizardPresentation
 
-    '///<H1>Update test for the presentation wizard</H1>
-    '///<ul>
+    printlog( "Resource test for the presentation wizard" )
+
     dim irc as integer
     dim brc as boolean
     
-    '///+<li>Make sure exactly one single writer document is open</li>
     hInitSingleDoc()
     
-    '///+<li>Open the presentation wizard</li>
     FileAutopilotPresentation
     kontext "AutopilotPraesentation1"
     if ( AutopilotPraesentation1.exists( 2 ) ) then
     
         
-        '///+<li>Look at page 1</li>
         printlog( "Page 1" )
         call Dialogtest( AutopilotPraesentation1 )
         
         hClickNextButton()
         
-        '///+<li>Look at page 2</li>
         printlog( "Page 2" )
         kontext "AutopilotPraesentation2"
         call DialogTest( AutopilotPraesentation2 )
         
         hClickNextButton()
         
-        '///+<li>Look at page 3</li>
         printlog( "Page 3" )
         kontext "AutopilotPraesentation3" 
         call DialogTest( AutopilotPraesentation3 )
         
-        '///+<li>Finish the wizard</li>
         hFinishWizard( 1 )
     else
         warnlog( "Presentation wizard not open/exceeded timeout" )
     endif
     
-    '///+<li>Close the document(s)</li>
     do while( getDocumentCount() > 0 )
         call hCloseDocument()
     loop
 
     gApplication = "WRITER"
-    '///</ul>
 
 endcase
 

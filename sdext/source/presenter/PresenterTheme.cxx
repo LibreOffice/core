@@ -649,24 +649,66 @@ bool PresenterTheme::FontDescriptor::PrepareFont (
     if ( ! rxCanvas.is())
         return false;
 
+
+    const double nCellSize (GetCellSizeForDesignSize(rxCanvas, mnSize));
+    mxFont = CreateFont(rxCanvas, nCellSize);
+
+    return mxFont.is();
+}
+
+
+
+
+Reference<rendering::XCanvasFont> PresenterTheme::FontDescriptor::CreateFont (
+    const Reference<rendering::XCanvas>& rxCanvas,
+    const double nCellSize) const
+{
     rendering::FontRequest aFontRequest;
     aFontRequest.FontDescription.FamilyName = msFamilyName;
     if (msFamilyName.getLength() == 0)
         aFontRequest.FontDescription.FamilyName = A2S("Tahoma");
     aFontRequest.FontDescription.StyleName = msStyleName;
-    aFontRequest.CellSize = mnSize;
+    aFontRequest.CellSize = nCellSize;
 
     // Make an attempt at translating the style name(s)into a corresponding
     // font description.
     if (msStyleName == A2S("Bold"))
         aFontRequest.FontDescription.FontDescription.Weight = rendering::PanoseWeight::HEAVY;
 
-    mxFont = rxCanvas->createFont(
+    return rxCanvas->createFont(
         aFontRequest,
         Sequence<beans::PropertyValue>(),
         geometry::Matrix2D(1,0,0,1));
+}
 
-    return mxFont.is();
+
+
+
+double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
+    const Reference<rendering::XCanvas>& rxCanvas,
+    const double nDesignSize) const
+{
+    // Use the given design size as initial value in calculating the cell
+    // size.
+    double nCellSize (nDesignSize);
+
+    if ( ! rxCanvas.is())
+    {
+        // We need the canvas to do the conversion.  Return the design size,
+        // it is the our best guess in this circumstance.
+        return nDesignSize;
+    }
+
+    Reference<rendering::XCanvasFont> xFont (CreateFont(rxCanvas, nCellSize));
+    if ( ! xFont.is())
+        return nDesignSize;
+
+    geometry::RealRectangle2D aBox (PresenterCanvasHelper::GetTextBoundingBox (xFont, A2S("X")));
+
+    const double nAscent (-aBox.Y1);
+    const double nDescent (aBox.Y2);
+    const double nScale = (nAscent+nDescent) / nAscent;
+    return nDesignSize * nScale;
 }
 
 

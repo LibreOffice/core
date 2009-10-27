@@ -41,15 +41,11 @@ testcase tLoadSaveVBA
 
    Dim lbSave ( 7 ) as Boolean
 
-'///check if all settings are saved in configuration ( Load & Save / VBA Settings )
 
-'///open a new document
    hNewDocument
-'///+open tools / options / load & save / VBA settings
    ToolsOptions
    hToolsOptions ( "LoadSave", "VBAProperties" )
 
-'///save old settings
  printlog " - save old settings"
    lbSave ( 1 ) = WinwordBasicLaden.IsChecked
    lbSave ( 2 ) = WinwordBasicSpeichern.IsChecked
@@ -58,7 +54,6 @@ testcase tLoadSaveVBA
    lbSave ( 5 ) = PowerpointBasicLaden.IsChecked
    lbSave ( 6 ) = PowerpointBasicSpeichern.IsChecked
 
-'///invert all settings
  printlog " - invert settings"
    if lbSave ( 1 ) = TRUE then WinwordBasicLaden.UnCheck else WinwordBasicLaden.Check
    if lbSave ( 2 ) = TRUE then WinwordBasicSpeichern.UnCheck else WinwordBasicSpeichern.Check
@@ -67,21 +62,16 @@ testcase tLoadSaveVBA
    if lbSave ( 5 ) = TRUE then PowerpointBasicLaden.UnCheck else PowerpointBasicLaden.Check
    if lbSave ( 6 ) = TRUE then PowerpointBasicSpeichern.UnCheck else PowerpointBasicSpeichern.Check
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///+close the document
    hCloseDocument
 
-'///exit and restart StarOffice
  printlog " - exit/restart StarOffice"
    ExitRestartTheOffice
 
-'///check the invitation
  printlog " - check inverting"
-'///+open tools / options / load & save / VBA settings
    ToolsOptions
    hToolsOptions ( "LoadSave", "VBAProperties" )
 
@@ -92,7 +82,6 @@ testcase tLoadSaveVBA
    if PowerpointBasicLaden.IsChecked     = lbSave ( 5 ) then Warnlog "'Load Powerpoint basic' => changes not saved!"
    if PowerpointBasicSpeichern.IsChecked = lbSave ( 6 ) then Warnlog "'Save Powerpoint basic' => changes not saved!"
 
-'///make other changes
  printlog " - make other changes"
    WinwordBasicLaden.Check
    WinwordBasicSpeichern.Uncheck
@@ -101,14 +90,11 @@ testcase tLoadSaveVBA
    PowerpointBasicLaden.Uncheck
    PowerpointBasicSpeichern.Check
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check 2. changes
  printlog " - check changes"
-'///+open tools / options / load & save / VBA settings
    ToolsOptions
    hToolsOptions ( "LoadSave", "VBAProperties" )
 
@@ -119,7 +105,6 @@ testcase tLoadSaveVBA
    if PowerpointBasicLaden.IsChecked     <> FALSE then Warnlog "'Load Powerpoint basic' => changes not saved!"
    if PowerpointBasicSpeichern.IsChecked <> TRUE  then Warnlog "'Save Powerpoint basic' => changes not saved!"
 
-'///reset to default settings
  printlog " - reset to saved settings"
 
    if lbSave ( 1 ) = TRUE then WinwordBasicLaden.Check else WinwordBasicLaden.UnCheck
@@ -129,14 +114,11 @@ testcase tLoadSaveVBA
    if lbSave ( 5 ) = TRUE then PowerpointBasicLaden.Check else PowerpointBasicLaden.UnCheck
    if lbSave ( 6 ) = TRUE then PowerpointBasicSpeichern.Check else PowerpointBasicSpeichern.UnCheck
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (3)
 
-'///check the reset
  printlog " - check settings"
-'///+open tools / options / load & save / VBA settings
    ToolsOptions
    hToolsOptions ( "LoadSave", "VBAProperties" )
 
@@ -147,7 +129,6 @@ testcase tLoadSaveVBA
    if PowerpointBasicLaden.IsChecked     <> lbSave ( 5 ) then Warnlog "'Load Powerpoint basic' => changes not saved!"
    if PowerpointBasicSpeichern.IsChecked <> lbSave ( 6 ) then Warnlog "'Save Powerpoint basic' => changes not saved!"
 
-'///+close options dialog with OK
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
 

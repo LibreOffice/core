@@ -34,44 +34,46 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "svx/svxdllapi.h"
+#include <svtools/itemprop.hxx>
 
 class SvxIDPropertyCombineList;
 class SdrItemPool;
-struct SfxItemPropertyMap;
 class SfxItemSet;
 class SvxShape;
 
 class SVX_DLLPUBLIC SvxItemPropertySet
 {
-    const SfxItemPropertyMap*   _pMap;
-    const SfxItemPropertyMap*   mpLastMap;
+    SfxItemPropertyMap          m_aPropertyMap;
+    mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
+    const SfxItemPropertyMapEntry*  _pMap;
     SvxIDPropertyCombineList*   pCombiList;
     sal_Bool                    mbConvertTwips;
 
 public:
-    SvxItemPropertySet( const SfxItemPropertyMap *pMap, sal_Bool bConvertTwips = sal_False );
+    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, sal_Bool bConvertTwips = sal_False );
     ~SvxItemPropertySet();
 
     // Methoden, die direkt mit dem ItemSet arbeiten
-    ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertyMap* pMap, const SfxItemSet& rSet ) const;
-    void setPropertyValue( const SfxItemPropertyMap* pMap, const ::com::sun::star::uno::Any& rVal, SfxItemSet& rSet ) const;
+    ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap, const SfxItemSet& rSet ) const;
+    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& rVal, SfxItemSet& rSet ) const;
 
     // Methoden, die stattdessen Any benutzen
-    ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertyMap* pMap ) const;
-    void setPropertyValue( const SfxItemPropertyMap* pMap, const ::com::sun::star::uno::Any& rVal ) const;
+    ::com::sun::star::uno::Any getPropertyValue( const SfxItemPropertySimpleEntry* pMap ) const;
+    void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const ::com::sun::star::uno::Any& rVal ) const;
 
     // Properties von einem anderen Set uebernehmen
-    void ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet,  SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xSet );
-    sal_Bool AreThereOwnUsrAnys() { return (pCombiList ? sal_True : sal_False); }
+    void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,  SfxItemSet& rSet, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xSet )const;
+    sal_Bool AreThereOwnUsrAnys() const { return (pCombiList ? sal_True : sal_False); }
     ::com::sun::star::uno::Any* GetUsrAnyForID(sal_uInt16 nWID) const;
     void AddUsrAnyForID(const ::com::sun::star::uno::Any& rAny, sal_uInt16 nWID);
 
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
-    const SfxItemPropertyMap* getPropertyMap() const {return _pMap;}
-    void setPropertyMap( const SfxItemPropertyMap *pMap ) { _pMap = pMap; }
-    const SfxItemPropertyMap* getPropertyMapEntry(const ::rtl::OUString &rName) const;
+    const SfxItemPropertyMapEntry* getPropertyMapEntries() const {return _pMap;}
+    //void setPropertyMap( const SfxItemPropertyMapEntry *pMap ) { _pMap = pMap; }
+    const SfxItemPropertyMap* getPropertyMap()const { return &m_aPropertyMap;}
+    const SfxItemPropertySimpleEntry* getPropertyMapEntry(const ::rtl::OUString &rName) const;
 
-    static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > getPropertySetInfo( const SfxItemPropertyMap* pMap );
+    static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > getPropertySetInfo( const SfxItemPropertyMapEntry* pMap );
 };
 
 #endif // _SVX_UNOIPSET_HXX_

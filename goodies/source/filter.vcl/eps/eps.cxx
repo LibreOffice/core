@@ -2639,7 +2639,8 @@ BOOL PSWriter::ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
             BOOL    bNegative = FALSE;
             BOOL    bValid = TRUE;
 
-            while ( ( --nSecurityCount ) && ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) pDest++;
+            while ( ( --nSecurityCount ) && ( ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) )
+                pDest++;
             BYTE nByte = *pDest;
             while ( nSecurityCount && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
             {

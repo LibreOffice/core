@@ -66,7 +66,6 @@ class Enum : public CodeEntity,
     };
 
     // LIFECYCLE
-                        Enum();
                         Enum(
                             const String  &     i_sLocalName,
                             Ce_id               i_nOwner,

@@ -104,7 +104,8 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     const OConnectionLine* pTopLine = NULL;
     const ::std::vector<OConnectionLine*>* pConnLineList = GetConnLineList();
     ::std::vector<OConnectionLine*>::const_iterator aIter = pConnLineList->begin();
-    for(;aIter != pConnLineList->end();++aIter)
+    ::std::vector<OConnectionLine*>::const_iterator aEnd = pConnLineList->end();
+    for(;aIter != aEnd;++aIter)
     {
         if( (*aIter)->IsValid() )
         {

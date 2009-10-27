@@ -31,13 +31,14 @@
 '*
 '/************************************************************************
 '*
-'* owner :  fredrik.haegg@sun.com
+'* owner :  helge.delfs@sun.com
 '*
 '* short description : Test the functionality of textframes
 '*
 '\*******************************************************************
 
-global gSeperator , gMeasurementUnit as String
+global gSeperator as String
+global gMeasurementUnit as String
 
 sub main
 
@@ -64,8 +65,6 @@ sub main
     gSeperator = GetDecimalSeperator()
     'Setting the measurementunit to 'cm'
     gMeasurementUnit = fSetMeasurementToCM()
-    'Sets all writer-options to default
-    Call wOptionenUndo ( "Alle" )    
     printlog Chr(13) + "      - Test of TextFrame function -"
     Call w_textframes1
 

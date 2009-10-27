@@ -42,6 +42,7 @@
 #include <svtools/smplhint.hxx>
 
 class SfxItemSet;
+class SwView;
 
 class SwRedlineExtraData
 {
@@ -297,16 +298,19 @@ class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 
     const SwRedline* pRedline;
     sal_Int16 nWhich;
+    const SwView* pView;
 
 public:
-    SwRedlineHint( const SwRedline* p, sal_Int16 n )
+    SwRedlineHint( const SwRedline* p, sal_Int16 n, const SwView* pV = 0)
         : pRedline(p)
         , nWhich(n)
-    {}
+        , pView(pV)
+        {}
 
     TYPEINFO();
     const SwRedline* GetRedline() const { return pRedline; }
     sal_Int16 Which() const { return nWhich; }
+        const SwView* GetView() const { return pView; }
 };
 
 

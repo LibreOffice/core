@@ -129,9 +129,10 @@ namespace dbaui
             nIndex = m_pLine->GetParent()->GetTabWinMap()->size();
             const ::std::vector<OTableConnection*>* pVec = m_pLine->GetParent()->getTableConnections();
             ::std::vector<OTableConnection*>::const_iterator aIter = pVec->begin();
-            for (; aIter != pVec->end() && (*aIter) != m_pLine; ++nIndex,++aIter)
+            ::std::vector<OTableConnection*>::const_iterator aEnd = pVec->end();
+            for (; aIter != aEnd && (*aIter) != m_pLine; ++nIndex,++aIter)
                 ;
-            nIndex = ( aIter != pVec->end() ) ? nIndex : -1;
+            nIndex = ( aIter != aEnd ) ? nIndex : -1;
         }
         return nIndex;
     }

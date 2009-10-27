@@ -82,7 +82,7 @@ public:
                                 ScComplexRefData& rRef, BOOL bWrap, BOOL bAbsolute );
 
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
-                                ScComplexRefData& rRef );
+                             SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );
 
     /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes UpdateTranspose( ScDocument* pDoc,
@@ -96,11 +96,6 @@ public:
     static ScRefUpdateRes UpdateGrow(
                                 const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                 ScComplexRefData& rRef );
-
-#if OLD_PIVOT_IMPLEMENTATION
-    static ScRefUpdateRes DoGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                ScRange& rRef );
-#endif
 };
 
 

@@ -48,7 +48,6 @@
 #include <fmtftn.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>      // SwField
-#include <fmthbsh.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <pagedesc.hxx> // SwPageDesc

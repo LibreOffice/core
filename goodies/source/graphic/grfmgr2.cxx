@@ -2321,11 +2321,11 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
         rBmpEx.Crop( rCropRect );
 
         // #104115# Negative crop sizes mean: enlarge bitmap and pad
-        if( bEnlarge &&
+        if( bEnlarge && (
             rCropLeftTop.Width() < 0 ||
             rCropLeftTop.Height() < 0 ||
             rCropRightBottom.Width() < 0 ||
-            rCropRightBottom.Height() < 0 )
+            rCropRightBottom.Height() < 0 ) )
         {
             Size aBmpSize( rBmpEx.GetSizePixel() );
             sal_Int32 nPadLeft( rCropLeftTop.Width() < 0 ? -rCropLeftTop.Width() : 0 );

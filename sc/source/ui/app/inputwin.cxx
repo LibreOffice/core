@@ -1699,7 +1699,7 @@ void ScPosWnd::DoEnter()
                         ScRangeName aNewRanges( *pNames );
                         ScAddress aCursor( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
                         String aContent;
-                        aSelection.Format( aContent, SCR_ABS_3D, pDoc );
+                        aSelection.Format( aContent, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
                         ScRangeData* pNew = new ScRangeData( pDoc, aText, aContent, aCursor );
                         if ( aNewRanges.Insert(pNew) )
                         {

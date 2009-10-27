@@ -63,7 +63,7 @@ public:
 
     ScStyleSheet*       FindCaseIns( const String& rName, SfxStyleFamily eFam );
 
-    void                SetForceStdName( const String* pSet );
+//UNUSED2009-05 void                SetForceStdName( const String* pSet );
     const String*       GetForceStdName() const { return pForceStdName; }
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,

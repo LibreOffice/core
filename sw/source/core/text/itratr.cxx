@@ -45,7 +45,6 @@
 #include <fmtflcnt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtftn.hxx>
-#include <fmthbsh.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <fmtfld.hxx>
@@ -65,9 +64,7 @@
 #include <itrtxt.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -128,19 +125,7 @@ SwAttrIter::~SwAttrIter()
 
 SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
 {
-    if( pHints )
-    {
-        for( MSHORT i = 0; i < pHints->Count(); ++i )
-        {
-            SwTxtAttr *pPos = pHints->GetHt(i);
-            xub_StrLen nStart = *pPos->GetStart();
-            if( nPosition < nStart )
-                return 0;
-            if( nPosition == nStart && !pPos->GetEnd() )
-                return pPos;
-        }
-    }
-    return 0;
+    return (m_pTxtNode) ? m_pTxtNode->GetTxtAttrForCharAt(nPosition) : 0;
 }
 
 /*************************************************************************
@@ -402,10 +387,10 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
         xub_StrLen nStop = nIdx;
         sal_Bool bClear;
         LanguageType eLang = pFnt->GetLanguage();
-        if( pBreakIt->xBreak.is() )
+        if( pBreakIt->GetBreakIter().is() )
         {
             bClear = CH_BLANK == rTxt.GetChar( nStop );
-            Boundary aBndry( pBreakIt->xBreak->getWordBoundary( rTxt, nIdx,
+            Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary( rTxt, nIdx,
                              pBreakIt->GetLocale( eLang ),
                              WordType::DICTIONARY_WORD, TRUE ) );
             nStop = (xub_StrLen)aBndry.endPos;
@@ -669,7 +654,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     xub_StrLen nIdx = 0;
     aIter.SeekAndChgAttrIter( nIdx, pOut );
-    xub_StrLen nLen = aText.Len();
+    xub_StrLen nLen = m_Text.Len();
     long nAktWidth = 0;
     MSHORT nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
@@ -683,7 +668,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
         xub_Unicode cChar = CH_BLANK;
         nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
-               CH_TAB != ( cChar = aText.GetChar( nStop ) ) &&
+               CH_TAB != ( cChar = m_Text.GetChar( nStop ) ) &&
                CH_BREAK != cChar && CHAR_HARDBLANK != cChar &&
                CHAR_HARDHYPHEN != cChar && CHAR_SOFTHYPHEN != cChar &&
                !pHint )
@@ -692,8 +677,10 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                 || ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
                 ++nStop;
         }
-        if( lcl_MinMaxString( aArg, aIter.GetFnt(), aText, nIdx, nStop ) )
+        if ( lcl_MinMaxString( aArg, aIter.GetFnt(), m_Text, nIdx, nStop ) )
+        {
             nAdd = 20;
+        }
         nIdx = nStop;
         aIter.SeekAndChgAttrIter( nIdx, pOut );
         switch( cChar )
@@ -870,7 +857,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
     if ( nStt == nEnd )
     {
-        if ( !pBreakIt->xBreak.is() )
+        if ( !pBreakIt->GetBreakIter().is() )
             return 100;
 
         SwScriptInfo aScriptInfo;
@@ -878,7 +865,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         aIter.SeekAndChgAttrIter( nStt, pOut );
 
         Boundary aBound =
-            pBreakIt->xBreak->getWordBoundary( GetTxt(), nStt,
+            pBreakIt->GetBreakIter()->getWordBoundary( GetTxt(), nStt,
             pBreakIt->GetLocale( aIter.GetFnt()->GetLanguage() ),
             WordType::DICTIONARY_WORD, sal_True );
 
@@ -933,7 +920,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         // stop at special characters in [ nIdx, nNextChg ]
         while( nStop < nEnd && nStop < nNextChg )
         {
-            cChar = aText.GetChar( nStop );
+            cChar = m_Text.GetChar( nStop );
             if( CH_TAB == cChar || CH_BREAK == cChar ||
                 CHAR_HARDBLANK == cChar || CHAR_HARDHYPHEN == cChar ||
                 CHAR_SOFTHYPHEN == cChar ||

@@ -1991,4 +1991,11 @@ XML_CONSTASCII_ACTION( sXML_readonly, "readonly" );
 
 XML_CONSTASCII_ACTION( sXML_page_continuation, "page-continuation" );
 
+XML_CONSTASCII_ACTION( sXML_contains, "contains" );
+XML_CONSTASCII_ACTION( sXML_does_not_contain, "does-not-contain" );
+XML_CONSTASCII_ACTION( sXML_begins_with, "begins-with" );
+XML_CONSTASCII_ACTION( sXML_does_not_begin_with, "does-not-begin-with" );
+XML_CONSTASCII_ACTION( sXML_ends_with, "ends-with" );
+XML_CONSTASCII_ACTION( sXML_does_not_end_with, "does-not-end-with" );
+
 #endif

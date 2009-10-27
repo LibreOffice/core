@@ -65,6 +65,7 @@ TYPEINIT1(OStopOperand, OOperandValue);
 
 TYPEINIT1(OOperator, OCode);
 TYPEINIT1(OBoolOperator,OOperator);
+TYPEINIT1(OOp_NOT, OBoolOperator);
 TYPEINIT1(OOp_AND, OBoolOperator);
 TYPEINIT1(OOp_OR, OBoolOperator);
 TYPEINIT1(OOp_ISNULL, OBoolOperator);
@@ -242,6 +243,29 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
     if (IS_TYPE(OOperandResult,pRight))
         delete pRight;
 }
+//------------------------------------------------------------------
+sal_Bool OOp_NOT::operate(const OOperand* pLeft, const OOperand* ) const
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_AND::operate" );
+    return !pLeft->isValid();
+}
+//------------------------------------------------------------------
+void OOp_NOT::Exec(OCodeStack& rCodeStack)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ISNULL::Exec" );
+    OOperand* pOperand = rCodeStack.top();
+    rCodeStack.pop();
+
+    rCodeStack.push(new OOperandResultBOOL(operate(pOperand)));
+    if (IS_TYPE(OOperandResult,pOperand))
+        delete pOperand;
+}
+//------------------------------------------------------------------
+sal_uInt16 OOp_NOT::getRequestedOperands() const
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_NOT::getRequestedOperands" );
+    return 1;
+}
 
 //------------------------------------------------------------------
 sal_Bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
@@ -331,6 +355,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
     {
         case DataType::CHAR:
         case DataType::VARCHAR:
+        case DataType::LONGVARCHAR:
         {
             rtl::OUString sLH = aLH, sRH = aRH;
             INT32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength

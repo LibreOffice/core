@@ -86,6 +86,8 @@ MODULEFILES= \
     Common-cjk.xcu   \
     Common-ctl.xcu   \
     Common-korea.xcu   \
+    Paths-macosx.xcu    \
+    Paths-unxwnt.xcu    \
     Writer-cjk.xcu \
     Writer-defaultfontarial.xcu \
     Writer-directcursor.xcu \

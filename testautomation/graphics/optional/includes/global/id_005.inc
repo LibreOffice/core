@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -59,768 +59,586 @@
 
 testcase tiFormatDefault
 
-    '/// open application ///'
     Call hNewDocument
-    '/// create rectangle ///'
     gMouseClick 50,50
     Call hRechteckErstellen ( 10, 10, 20, 40 )
-    '/// Format->Default ///'
     FormatStandardDraw
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiFormatLine
-    '/// open application ///'
     hNewDocument
-    '/// create rectangle ///'
     gMouseClick 50,50
     Call hRechteckErstellen ( 10, 10, 20, 40 )
-    '/// Format->Line ///'
     FormatLine
-    '/// switch to tabpage 'Line' ///'
     Kontext
     Messagebox.SetPage TabLinie
     kontext "TabLinie"
     Call DialogTest ( TabLinie )
 
-    '/// switch to tabpage 'Line Styles' ///'
     Kontext
     Messagebox.SetPage TabLinienstile
     kontext "TabLinienstile"
     Call DialogTest ( TabLinienstile )
-    '/// click 'add...' ///'
     Hinzufuegen.click
     Kontext "NameDLG"
-        Call DialogTest ( NameDlg )
-        '/// cancel dialog 'name' ///'
-        NameDlg.Cancel
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
 
     kontext "TabLinienstile"
-        '/// click 'modify...' ///'
-        Aendern.Click
-        Kontext "NameDlg"
-            Call DialogTest ( NameDlg )
-            '/// cancel dialog 'name' ///'
-            NameDlg.Cancel
+    Aendern.Click
+    Kontext "NameDlg"
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
     kontext "TabLinienstile"
-        '/// click 'delete...' ///'
-        Loeschen.Click
-        '/// say NO to messagebox ///'
-        Kontext "Messagebox"
-            Messagebox.no
+    Loeschen.Click
+    Kontext "Messagebox"
+    Messagebox.no
 
     kontext "TabLinienstile"
-        '/// click 'load line styles' ///'
-        Oeffnen.click
-        Kontext "OeffnenDLG"
-            call Dialogtest (OeffnenDLG)
-            '/// cancel dialog 'open' ///'
-            OeffnenDLG.Cancel
+    Oeffnen.click
+    Kontext "OeffnenDLG"
+    call Dialogtest (OeffnenDLG)
+    OeffnenDLG.Cancel
     kontext "TabLinienstile"
-        '/// click 'save line styles' ///'
-        Speichern.click
-        Kontext "SpeichernDLG"
-        call Dialogtest (SpeichernDLG)
-        '/// cancel dialog 'save' ///'
-        SpeichernDLG.Cancel
-        '/// switch to tabpage 'Arrow Styles' ///'
-        Kontext
-        Messagebox.SetPage TabLinienenden
-        kontext "TabLinienenden"
-        Call DialogTest ( TabLinienenden )
-        '/// click 'add...' ///'
-        Hinzufuegen.Click
-        Kontext "NameDLG"
-        Call DialogTest ( NameDlg )
-        '/// cancel dialog 'name' ///'
-        NameDlg.Cancel
-
-        kontext "TabLinienenden"
-            '/// click 'modify...' ///'
-            Aendern.Click
-            Kontext "Messagebox"
-                try
-                    '/// say OK to messagebox ///'
-                    Messagebox.OK
-                catch
-                    'print "TabLinienenden"
-                endcatch
-
-                kontext "NameDlg"
-                    Call DialogTest ( NameDlg )
-                    '/// cancel dialog 'name' ///'
-                    NameDlg.Cancel
+    Speichern.click
+    Kontext "SpeichernDLG"
+    call Dialogtest (SpeichernDLG)
+    SpeichernDLG.Cancel
+    Kontext
+    Messagebox.SetPage TabLinienenden
+    kontext "TabLinienenden"
+    Call DialogTest ( TabLinienenden )
+    Hinzufuegen.Click
+    Kontext "NameDLG"
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
 
     kontext "TabLinienenden"
-        '/// click 'delete...' ///'
-        Loeschen.Click
-        Kontext "Messagebox"
-        '/// say NO to messagebox ///'
-        Messagebox.no
+    Aendern.Click
+    Kontext "Messagebox"
+    try
+        Messagebox.OK
+    catch
+        'print "TabLinienenden"
+    endcatch
+
+    kontext "NameDlg"
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
 
     kontext "TabLinienenden"
-        '/// click 'load arrow styles' ///'
-        Oeffnen.click
-        Kontext "OeffnenDLG"
-            call Dialogtest (OeffnenDLG)
-            '/// cancel dialog 'open' ///'
-            OeffnenDLG.Cancel
-        kontext "TabLinienenden"
-            '/// click 'save arrow styles' ///'
-            Speichern.click
-        Kontext "SpeichernDLG"
-            call Dialogtest (SpeichernDLG)
-            '/// cancel dialog 'save' ///'
-            SpeichernDlg.Cancel
-        kontext "TabLinienenden"
-            '/// cancel dialog 'line' ///'
-            TabLinienenden.cancel
-    '/// close application ///'
+    Loeschen.Click
+    Kontext "Messagebox"
+    Messagebox.no
+
+    kontext "TabLinienenden"
+    Oeffnen.click
+    Kontext "OeffnenDLG"
+    call Dialogtest (OeffnenDLG)
+    OeffnenDLG.Cancel
+    kontext "TabLinienenden"
+    Speichern.click
+    Kontext "SpeichernDLG"
+    call Dialogtest (SpeichernDLG)
+    SpeichernDlg.Cancel
+    kontext "TabLinienenden"
+    TabLinienenden.cancel
     Call hCloseDocument
 endcase
 
 testcase tdFormatArea
-    '/// open application ///'
     Call hNewDocument
-    '/// create rectangle ///'
     gMouseClick 50,50
     Call hRechteckErstellen (15,15,65,65)
     gMouseClick 30,30
-    '/// Format->Area ///'
     FormatArea
     WaitSlot (1000)
     Kontext
-    '/// switch to tabpage 'Area' ///'
     Messagebox.SetPage TabArea
     Kontext "TabArea"
-        Call DialogTest ( TabArea )
-        Kontext
-        '/// switch to tabpage 'Shadow' ///'
-        Messagebox.SetPage TabSchatten
-    kontext "TabSchatten"
-        Anzeigen.Check
-        Call DialogTest ( TabSchatten )
-        '/// switch to tabpage 'Transparency' ///'
+    Call DialogTest ( TabArea )
     Kontext
-    '/// switch to tabpage 'Colors' ///'
+    Messagebox.SetPage TabSchatten
+    kontext "TabSchatten"
+    Anzeigen.Check
+    Call DialogTest ( TabSchatten )
+    Kontext
     Messagebox.SetPage TabFarben
     kontext "TabFarben"
-        '/// select the 1st 'color' in the listbox ///'
-        Farbe.select 1
-        '/// select the 1st 'color model' in the listbox ///'
-        Farbmodell.Select 1
-        Call DialogTest ( TabFarben,1 )
-        '/// select the 2nd 'color model' in the listbox ///'
-        Farbmodell.Select 2
-        Call DialogTest ( TabFarben,2 )
+    Farbe.select 1
+    Farbmodell.Select 1
+    Call DialogTest ( TabFarben,1 )
+    Farbmodell.Select 2
+    Call DialogTest ( TabFarben,2 )
 
-        '/// click button 'Add' ///'
-        Hinzufuegen.click
-        Kontext "Messagebox"
-            '/// say OK to the messagebox: the name already exists ///'
-            Messagebox.OK
-        kontext "NameDlg"
-            Call DialogTest ( NameDlg )
-            '/// cancel dialog 'Name' ///'
-            NameDlg.Cancel
-    kontext "TabFarben"
-        '/// click button 'Delete' ///'
-        Loeschen.click
+    Hinzufuegen.click
     Kontext "Messagebox"
-        '/// say NO to the messagebox: realy delete? ///'
-        Messagebox.no
+    Messagebox.OK
+    kontext "NameDlg"
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
+    kontext "TabFarben"
+    Loeschen.click
+    Kontext "Messagebox"
+    Messagebox.no
 
     kontext "TabFarben"
-        sleep 1
-        '/// click button 'Save color List' ///'
-        Speichern.click
-        Kontext "SpeichernDLG"
-            call Dialogtest (SpeichernDLG)
-            '/// cancel dialog 'save as' ///'
-            SpeichernDlg.Cancel
-            sleep 1
+    sleep 1
+    Speichern.click
+    Kontext "SpeichernDLG"
+    call Dialogtest (SpeichernDLG)
+    SpeichernDlg.Cancel
+    sleep 1
 
     kontext "TabFarben"
-        '/// click button 'Load color List' ///'
-        Oeffnen.click
-        Kontext "OeffnenDLG"
-        call Dialogtest (OeffnenDLG)
-        '/// cancel dialog 'open' ///'
-        OeffnenDLG.Cancel
+    Oeffnen.click
+    Kontext "OeffnenDLG"
+    call Dialogtest (OeffnenDLG)
+    OeffnenDLG.Cancel
     Kontext "TabFarben"
 
     Kontext
-    '/// switch to tabpage 'Gradients' ///'
     Messagebox.SetPage TabFarbverlaeufe
     kontext "TabFarbverlaeufe"
-        Call DialogTest ( TabFarbverlaeufe )
+    Call DialogTest ( TabFarbverlaeufe )
 
-        '/// click button 'Add' ///'
-        Hinzufuegen.click
-        Kontext "NameDlg"
-            Call DialogTest ( NameDlg )
-            '/// cancel dialog 'Name' ///'
-            NameDlg.Cancel
-
-        kontext "TabFarbverlaeufe"
-            '/// click button 'Mofify' ///'
-            Aendern.Click
-        Kontext "NameDlg"
-            Call DialogTest ( NameDlg )
-            '/// cancel dialog 'Name' ///'
-            NameDlg.Cancel
+    Hinzufuegen.click
+    Kontext "NameDlg"
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
 
     kontext "TabFarbverlaeufe"
-    '/// click button 'Delete' ///'
+    Aendern.Click
+    Kontext "NameDlg"
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
+
+    kontext "TabFarbverlaeufe"
     loeschen.click
     try
         kontext "Messagebox"
-        '/// say NO to the messagebox: realy delete? ///'
         Messagebox.no
     catch
         warnlog "nobody cares about deleting a gradient :-("
     endcatch
 
     kontext "TabFarbverlaeufe"
-    '/// click button 'Load gradients List' ///'
-        Oeffnen.click
-        Kontext "OeffnenDLG"
-            call Dialogtest (OeffnenDLG)
-            '/// cancel dialog 'open' ///'
-            OeffnenDLG.Cancel
-        kontext "TabFarbverlaeufe"
-            '/// click button 'Save gradients List' ///'
-            Speichern.click
-        Kontext "SpeichernDLG"
-            call Dialogtest (SpeichernDLG)
-            '/// cancel dialog 'save as' ///'
-            SpeichernDLG.Cancel
+    Oeffnen.click
+    Kontext "OeffnenDLG"
+    call Dialogtest (OeffnenDLG)
+    OeffnenDLG.Cancel
+    kontext "TabFarbverlaeufe"
+    Speichern.click
+    Kontext "SpeichernDLG"
+    call Dialogtest (SpeichernDLG)
+    SpeichernDLG.Cancel
 
     Kontext
-    '/// switch to tabpage 'Hatching'  - <Gesundheit!> ;-) ///'
     Messagebox.SetPage TabSchraffuren
-        kontext "TabSchraffuren"
-        Call DialogTest ( TabSchraffuren)
+    kontext "TabSchraffuren"
+    Call DialogTest ( TabSchraffuren)
 
-        '/// click button 'Add' ///'
-        Hinzufuegen.click
-        Kontext "NameDlg"
-            Call DialogTest ( NameDlg )
-            '/// cancel dialog 'Name' ///'
-            NameDlg.Cancel
+    Hinzufuegen.click
+    Kontext "NameDlg"
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
 
     kontext "TabSchraffuren"
-    '/// click button 'Modify' ///'
     Aendern.Click
     Kontext "NameDlg"
-        Call DialogTest ( NameDlg )
-        '/// cancel dialog 'Name' ///'
-        NameDlg.Cancel
+    Call DialogTest ( NameDlg )
+    NameDlg.Cancel
 
     kontext "TabSchraffuren"
-        '/// click button 'Delete' ///'
-        Loeschen.click
-        kontext "Messagebox"
-            '/// say NO to the messagebox: realy delete? ///'
-            Messagebox.no
+    Loeschen.click
+    kontext "Messagebox"
+    Messagebox.no
 
     kontext "TabSchraffuren"
-        '/// click button 'Load hatches List' ///'
-        Oeffnen.click
-        Kontext "OeffnenDLG"
-        call Dialogtest (OeffnenDLG)
-        '/// cancel dialog 'open' ///'
-        OeffnenDLG.Cancel
+    Oeffnen.click
+    Kontext "OeffnenDLG"
+    call Dialogtest (OeffnenDLG)
+    OeffnenDLG.Cancel
     kontext "TabSchraffuren"
-        '/// click button 'Save hatches List' ///'
-        Speichern.click
-        Kontext "SpeichernDLG"
-            call Dialogtest (SpeichernDLG)
-            '/// cancel dialog 'save as' ///'
-            SpeichernDLG.Cancel
+    Speichern.click
+    Kontext "SpeichernDLG"
+    call Dialogtest (SpeichernDLG)
+    SpeichernDLG.Cancel
 
     Kontext
-    '/// switch to tabpage 'Bitmaps' ///'
     Messagebox.SetPage TabBitmap
     kontext "TabBitmap"
-        Call DialogTest ( TabBitmap )
-        '/// click button 'Reset' ///'
-        zurueck.click
-        sleep 1
-        '/// click button 'Add' ///'
-        hinzufuegen.click
-        Kontext "NameDlg"
-            Call DialogTest ( NameDlg )
-            '/// cancel dialog 'Name' ///'
-            NameDlg.cancel
+    Call DialogTest ( TabBitmap )
+    zurueck.click
+    sleep 1
+    hinzufuegen.click
+    Kontext "NameDlg"
+    Call DialogTest ( NameDlg )
+    NameDlg.cancel
 
     kontext "TabBitmap"
     try
-        '/// click button 'Modify' ///'
         Aendern.Click
         Kontext "NameDlg"
-            Call DialogTest ( NameDlg )
-            '/// cancel dialog 'Name' ///'
-            NameDlg.cancel
+        Call DialogTest ( NameDlg )
+        NameDlg.cancel
     catch
         WarnLog "Control is disabled - modify bitmap"
     endcatch
     kontext "TabBitmap"
-        '/// click button 'Import' ///'
-        Import.Click
-        try
-            Kontext "GrafikEinfuegenDlg"
-            Call DialogTest ( GrafikEinfuegenDlg )
-            Kontext "GrafikEinfuegenDlg"
-                '/// cancel dialog 'Import' ///'
-                GrafikEinfuegenDlg.Cancel
-        catch
-            Warnlog "Insert graphic does not work"
-        endcatch
+    Import.Click
+    try
+        Kontext "GrafikEinfuegenDlg"
+        Call DialogTest ( GrafikEinfuegenDlg )
+        Kontext "GrafikEinfuegenDlg"
+        GrafikEinfuegenDlg.Cancel
+    catch
+        Warnlog "Insert graphic does not work"
+    endcatch
 
     kontext "TabBitmap"
-        '/// click button 'Delete' ///'
-        loeschen.click
-        kontext "Messagebox"
-            '/// say NO to the messagebox: realy delete? ///'
-            Messagebox.no
+    loeschen.click
+    kontext "Messagebox"
+    Messagebox.no
 
     kontext "TabBitmap"
-        '/// click button 'Load Bitmap List' ///'
-        Oeffnen.click
-        Kontext "OeffnenDLG"
-            call Dialogtest (OeffnenDLG)
-            '/// cancel dialog 'open' ///'
-            OeffnenDLG.Cancel
+    Oeffnen.click
+    Kontext "OeffnenDLG"
+    call Dialogtest (OeffnenDLG)
+    OeffnenDLG.Cancel
     kontext "TabBitmap"
-        '/// click button 'Save Bitmap List' ///'
-        Speichern.click
-        Kontext "SpeichernDLG"
-            call Dialogtest (SpeichernDLG)
-            '/// cancel dialog 'save as' ///'
-            SpeichernDLG.Cancel
+    Speichern.click
+    Kontext "SpeichernDLG"
+    call Dialogtest (SpeichernDLG)
+    SpeichernDLG.Cancel
     kontext "TabBitmap"
-        '/// cancel dialog 'Area' ///'
-        TabBitmap.Cancel
-    '/// close application ///'
+    TabBitmap.Cancel
     Call hCloseDocument
 endcase
 
 testcase tiFormatText
-    '/// open application ///'
     Call  hNewDocument
-    '/// Format->Text ///'
     FormatTextDraw
     Kontext
-    '/// switch to tabpage 'Text' ///'
     Messagebox.SetPage TabText
     Kontext "TabText"
-        DialogTest ( TabText )
-        Kontext
-        '/// switch to tabpage 'Text Animation' ///'
+    DialogTest ( TabText )
+    Kontext
     Messagebox.SetPage TabLauftext
     Kontext "TabLauftext"
-        DialogTest ( TabLauftext )
-        '/// cancel dialog 'text' ///'
-        TabLauftext.Cancel
-    '/// close application ///'
+    DialogTest ( TabLauftext )
+    TabLauftext.Cancel
     Call hCloseDocument
 endcase
 
 testcase tiFormatPositionAndSize
-    '/// open application ///'
     Call  hNewDocument
-    '/// create rectangle ///'
     Call hRechteckErstellen ( 10, 10, 20, 40 )
-    '/// Format->Position And Size ///'
     ContextPositionAndSize
     Kontext
-    '/// switch to tabpage 'Position' ///'
     Messagebox.setpage TabPositionAndSize
     Kontext "TabPositionAndSize"
-        call Dialogtest ( TabPositionAndSize )
-        '/// Type <right> two times in Position : Base Point ///'
-        kontext "PositionPosition"
-            PositionPosition.TypeKeys ("<right>", 2)
-            '/// Type <down> two times in Size : Base Point ///'
-        kontext "SizePosition"
-            SizePosition.TypeKeys ("<down>", 2)
-            Kontext
-    '/// switch to tabpage 'Rotation' ///'
+    call Dialogtest ( TabPositionAndSize )
+    kontext "PositionPosition"
+    PositionPosition.TypeKeys ("<right>", 2)
+    kontext "SizePosition"
+    SizePosition.TypeKeys ("<down>", 2)
+    Kontext
     Messagebox.setPage TabDrehung
     Kontext "TabDrehung"
-        call Dialogtest ( TabDrehung )
-        Kontext
-    '/// switch to tabpage 'Slant & Corner Radius' ///'
+    call Dialogtest ( TabDrehung )
+    Kontext
     Messagebox.setpage TabSchraegstellen
     Kontext "TabSchraegstellen"
-        call Dialogtest ( TabSchraegstellen )
-        '/// cancel dialog 'Position and Size' ///'
-        TabSchraegstellen.cancel
-    '/// close application ///'
+    call Dialogtest ( TabSchraegstellen )
+    TabSchraegstellen.cancel
     Call hCloseDocument
 endcase
 
 testcase tiFormatCharacter
-'/// open application ///'
-   Call  hNewDocument
-'/// Format->Character ///'
+    Call  hNewDocument
     FormatCharacter
     WaitSlot (1000)
     Kontext
-'/// switch to tabpage 'Font' ///'
-  Messagebox.SetPage TabFont
-   kontext "TabFont"
-   sleep 1
-   Call DialogTest ( TabFont )
-   Kontext
-'/// switch to tabpage 'Font Effects' ///'
-  Messagebox.SetPage TabFontEffects
-   kontext "TabFontEffects"
-   sleep 1
-   Call DialogTest ( TabFontEffects )
-   sleep 1
-   Kontext
-'/// switch to tabpage 'Position' ///'
-  Messagebox.SetPage TabFontPosition
-   Kontext "TabFontPosition"
-   sleep 1
-   Call DialogTest ( TabFontPosition )
-   sleep 2
-'/// cancel dialog 'Character' ///'
-   TabFontPosition.Cancel
-'/// close application ///'
-   Call hCloseDocument
+    Messagebox.SetPage TabFont
+    kontext "TabFont"
+    sleep 1
+    Call DialogTest ( TabFont )
+    Kontext
+    Messagebox.SetPage TabFontEffects
+    kontext "TabFontEffects"
+    sleep 1
+    Call DialogTest ( TabFontEffects )
+    sleep 1
+    Kontext
+    Messagebox.SetPage TabFontPosition
+    Kontext "TabFontPosition"
+    sleep 1
+    Call DialogTest ( TabFontPosition )
+    sleep 2
+    TabFontPosition.Cancel
+    Call hCloseDocument
 endcase
 
 testcase tiFormatControlForm
 
-    '/// testcase: check if controls are available
     printlog "testcase: check if controls are available"
-    
-    '/// open new document
+
     printlog "open new document"
     Call  hNewDocument
- 
+
     'click in the document to get the focus into the document
     if ( UCase(gApplication) = "DRAW" ) then
         Kontext "DocumentDraw"
-            DocumentDraw.MouseDown(50,50)
-            DocumentDraw.MouseUp(50,50)
+        DocumentDraw.MouseDown(50,50)
+        DocumentDraw.MouseUp(50,50)
     else 'Impress
         Kontext "DocumentImpress"
-            DocumentImpress.MouseDown(50,50)
-            DocumentImpress.MouseUp(50,50)
+        DocumentImpress.MouseDown(50,50)
+        DocumentImpress.MouseUp(50,50)
     endif
-    
-    '/// open the form controls toolbar
+
     printlog "open the form controls toolbar"
     call hToolbarSelect("FormControls",true)
-    
-    kontext "FormControls"    
-    '/// insert a PushButton
+
+    kontext "FormControls"
     printlog "insert a PushButton"
     Pushbutton.Click
     Sleep 1
     gMouseMove (50, 20,70, 40)
 
-    '/// open the control properties dialog
     printlog "open the control properties dialog"
     FormatControl
-    
+
     Kontext "ControlPropertiesDialog"
     WaitSlot (1000)
-    '/// close the control properties dialog
     printlog "close the control properties dialog"
     ControlPropertiesDialog.Close
-    
-    '/// open the form properties dialog
+
     printlog "open the form properties dialog"
     FormatForm
     Kontext "ControlPropertiesDialog"
     WaitSlot (1000)
-    '/// close the form properties dialog
     printlog "close the form properties dialog"
     ControlPropertiesDialog.Close
 
-    '/// close the form control toolbar
     printlog "close the form control toolbar"
     call hToolbarSelect("FormControls",false)
 
-    '/// close application
     printlog "close application"
     Call hCloseDocument
-    
+
 endcase
 
 testcase tiFormatDimensions
-'/// open application ///'
-   Call  hNewDocument
-'/// Format->Dimensions ///'
-   FormatDimensioning
-      Kontext "Bemassung"
-      DialogTest ( Bemassung )
-'/// cancel dialog 'Dimensioning' ///'
-      Bemassung.Cancel
-'/// close application ///'
-   Call hCloseDocument
+    Call  hNewDocument
+    FormatDimensioning
+    Kontext "Bemassung"
+    DialogTest ( Bemassung )
+    Bemassung.Cancel
+    Call hCloseDocument
 endcase
 
 testcase tiFormatConnector
-'/// open application ///'
-   Call  hNewDocument
-'/// Format->Connector ///'
-   FormatConnector
-      Kontext "Verbinder"
-      DialogTest ( Verbinder )
-'/// cancel dialog 'Connector' ///'
-      Verbinder.Cancel
-'/// close application ///'
-   Call hCloseDocument
+    Call  hNewDocument
+    FormatConnector
+    Kontext "Verbinder"
+    DialogTest ( Verbinder )
+    Verbinder.Cancel
+    Call hCloseDocument
 endcase
 
 testcase tiFormat3D_Effects
-'/// open application ///'
-   Call  hNewDocument
-'/// Format->3D_Effects ///'
+    Call  hNewDocument
     Format3D_Effects
-     Kontext "Drei_D_Effekte"
-     Call DialogTest ( Drei_D_Effekte,1 )
-'/// click button 'Geometry' ///'
-     Geometrie.Click
-     Call DialogTest ( Drei_D_Effekte,2 )
-     '/// click button 'Shading' ///'
-     Darstellung.Click
-     Call DialogTest ( Drei_D_Effekte,3 )
-     '/// click button 'Illumination' ///'
-     Beleuchtung.Click
-     Call DialogTest ( Drei_D_Effekte,4 )
-     '/// click button 'Textures' ///'
-     Texturen.Click
-     Call DialogTest ( Drei_D_Effekte,5 )
-     '/// click button 'Material' ///'
-     Material.Click
-     Call DialogTest ( Drei_D_Effekte,6 )
-     Kontext "Drei_D_Effekte"
-     '/// close dialog '3D Effects' ///'
-     Drei_D_Effekte.Close
-     '/// close application ///'
-   Call hCloseDocument
+    Kontext "Drei_D_Effekte"
+    Call DialogTest ( Drei_D_Effekte,1 )
+    Geometrie.Click
+    Call DialogTest ( Drei_D_Effekte,2 )
+    Darstellung.Click
+    Call DialogTest ( Drei_D_Effekte,3 )
+    Beleuchtung.Click
+    Call DialogTest ( Drei_D_Effekte,4 )
+    Texturen.Click
+    Call DialogTest ( Drei_D_Effekte,5 )
+    Material.Click
+    Call DialogTest ( Drei_D_Effekte,6 )
+    Kontext "Drei_D_Effekte"
+    Drei_D_Effekte.Close
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------
 
 testcase tiFormatNumberingBullets
-   '/// open application ///'
-   Call hNewDocument
+    Call hNewDocument
     WaitSlot (2000)
-    '/// Format->Numbering/Bullets ///'
     FormatNumberingBulletsDraw
     WaitSlot (2000)
-    '/// switch to tabpage 'Bullets' ///'
     Kontext
     Messagebox.SetPage TabBullet
     Kontext "TabBullet"
     Call DialogTest ( TabBullet )
     Kontext
-    '/// switch to tabpage 'Numbering Type' ///'
     Messagebox.SetPage TabNumerierungsart
     Kontext "TabNumerierungsart"
     Call DialogTest ( TabNumerierungsart )
     Kontext
-    '/// switch to tabpage 'Graphics' ///'
     Messagebox.SetPage TabGrafiken
     Kontext "TabGrafiken"
     Call DialogTest ( TabGrafiken )
     Kontext
-    '/// switch to tabpage 'Position' ///'
     Messagebox.SetPage TabPositionNumerierung
     Kontext "TabPositionNumerierung"
     Call DialogTest ( TabPositionNumerierung )
     Kontext
-    '/// switch to tabpage 'Customize' ///'
     Messagebox.SetPage TabOptionenNumerierung
     Kontext "TabOptionenNumerierung"
     Call DialogTest ( TabOptionenNumerierung )
-    '/// select 7th entry from the top in the listbox 'Numbering' ///'
     Numerierung.Select 9 ' last one always ? -> graphics
-      '/// click button graphics 'select' ///'
-      TabOptionenNumerierung.MouseDown 50,60
-      TabOptionenNumerierung.MouseUp 50,60
-      Auswahl.TypeKeys "<SPACE>"
-      '/// select 'From file' ///'
-      hMenuSelectNr (1)
-      sleep 3
-      '/// dialog 'link' with an grayed out & selected link checkbox ///'
-      Kontext "OeffnenDlg"
-      '/// cancel dialog 'link' ///'
-      OeffnenDlg.Cancel
-      sleep 1
-   sleep 1
-   Kontext
-   '/// switch to tabpage 'Customize' ///'
-   Messagebox.SetPage TabOptionenNumerierung
-   Kontext "TabOptionenNumerierung"
-   sleep 1
-   try
-      '/// click button graphics 'select' ///'
-      Auswahl.TypeKeys "<SPACE>"
-      '/// select 'Gallery' ///'
-      hMenuSelectNr (2)
-      '/// select 3rd element from the top 'blusquare.gif' ///'
-      hMenuSelectNr (3)
-      Sleep 2
-   catch
-      warnlog "couldn't do something :-) (1)"
-      Exceptlog
-      Call hMenuClose
-   endcatch
-   '/// cancel dialog 'Numbering/Bullets' ///'
-   TabOptionenNumerierung.Cancel
-   sleep 1
-   '/// close application ///'
-   Call hCloseDocument
+    TabOptionenNumerierung.MouseDown 50,60
+    TabOptionenNumerierung.MouseUp 50,60
+    Auswahl.TypeKeys "<SPACE>"
+    hMenuSelectNr (1)
+    sleep 3
+    Kontext "OeffnenDlg"
+    OeffnenDlg.Cancel
+    sleep 1
+    sleep 1
+    Kontext
+    Messagebox.SetPage TabOptionenNumerierung
+    Kontext "TabOptionenNumerierung"
+    sleep 1
+    try
+        Auswahl.TypeKeys "<SPACE>"
+        hMenuSelectNr (2)
+        hMenuSelectNr (3)
+        Sleep 2
+    catch
+        warnlog "couldn't do something :-) (1)"
+        Exceptlog
+        Call hMenuClose
+    endcatch
+    TabOptionenNumerierung.Cancel
+    sleep 1
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------
 
 testcase tiFormatCaseCharacter
-   '/// open application ///'
-   Call  hNewDocument
-   '/// create textbox with text ///'
-  Call hTextrahmenErstellen ("testit",20,20,50,30)
-  sleep 1
-   '/// move curser 1 time to the left ///'
-   hTypeKeys "<left>"
+    Call  hNewDocument
+    Call hTextrahmenErstellen ("testit",20,20,50,30)
+    sleep 1
+    hTypeKeys "<left>"
 
-    '/// Format->Case/Characters->Uppercase ///'
     FormatChangeCaseUpper
     WaitSlot (1000)
-    '/// Format->Case/Characters->Lowercase ///'
     FormatChangeCaseLower
     WaitSlot (2000)
     if bAsianLan then
         if not gAsianSup then
             qaerrorlog "This is an asian language-office, but asian support was disabled in a previous test?"
         end if
-        '/// if asian language (81/82/86/88): ///'
         try
-            '///+ Format->Case/Characters->Half-width ///'
             FormatChangeCaseHalfWidth
         catch
             Warnlog "Format / Change Case / Half Width does not work."
         endcatch
         WaitSlot (1000)
         try
-            '///+ Format->Case/Characters->Full-width ///'
             FormatChangeCaseFullWidth
         catch
             Warnlog "Format / Change Case / Full Width does not work!"
         endcatch
         sleep 1
         try
-            '///+ Format->Case/Characters->Hiragana ///'
             FormatChangeCaseHiragana
         catch
             Warnlog "Format / Change Case / Hiragana does not work."
         endcatch
         sleep 1
         try
-            '///+ Format->Case/Characters->Katatana ///'
             FormatChangeCaseKatagana
         catch
             Warnlog "Format / Change Case / Katagana does not work."
         endcatch
     end if
-      '/// close application ///'
- Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------
 
 testcase tiFormatParagraph
-   '/// open application ///'
-   Call  hNewDocument
-      '/// Format->Paragraph ///'
-   FormatParagraph
-   Kontext
-      '/// switch to tabpage 'Indents & Spacing' ///'
-   Messagebox.SetPage TabEinzuegeUndAbstaende
-      kontext "TabEinzuegeUndAbstaende"
-      Call DialogTest ( TabEinzuegeUndAbstaende )
-   Kontext
-      '/// switch to tabpage 'Alignment' ///'
-   Messagebox.SetPage TabAusrichtungAbsatz
-      Kontext "TabAusrichtungAbsatz"
-      Call DialogTest ( TabAusrichtungAbsatz )
-   Kontext
-      '/// switch to tabpage 'Tabs' ///'
-   Messagebox.SetPage TabTabulator
-      kontext "TabTabulator"
-      Call DialogTest ( TabTabulator )
-      '/// cancel dialog 'Paragraph' ///'
-      TabTabulator.Cancel
-      '/// close application ///'
-   Call hCloseDocument
+    Call  hNewDocument
+    FormatParagraph
+    Kontext
+    Messagebox.SetPage TabEinzuegeUndAbstaende
+    kontext "TabEinzuegeUndAbstaende"
+    Call DialogTest ( TabEinzuegeUndAbstaende )
+    Kontext
+    Messagebox.SetPage TabAusrichtungAbsatz
+    Kontext "TabAusrichtungAbsatz"
+    Call DialogTest ( TabAusrichtungAbsatz )
+    Kontext
+    Messagebox.SetPage TabTabulator
+    kontext "TabTabulator"
+    Call DialogTest ( TabTabulator )
+    TabTabulator.Cancel
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------
 
 testcase tiFormatPage
-   '/// open application ///'
-   Call hNewDocument
-   '/// Format->Page ///'
-   FormatSlideDraw
-   kontext
-   if Messagebox.exists (5) then
-      '/// switch to tabpage 'Page' ///'
-      Messagebox.SetPage TabSeite
-      Kontext "TabSeite"
-      if TabSeite.exists (5) then
-         Call Dialogtest (TabSeite)
-      else
-         warnlog "nope :-(1"
-      endif
-      sleep 1
-      kontext
-      '/// switch to tabpage 'Background' ///'
-      Messagebox.SetPage TabArea
-      sleep 1
-      kontext
-      if messagebox.GetRT = 304 then
-         printlog "active about pagesize != printersettings, will say NO: " + Messagebox.GetText
-         try
-            Messagebox.No
-         catch
-           warnlog messagebox.getText
-           Messagebox.ok ' should be Error loading BASIC of document ##?
-           kontext
-           if messagebox.GetRT = 304 then
-              try
-                 warnlog messagebox.getText
-                 Messagebox.ok
-              catch
-                 printlog "not expected state."
-              endcatch
-            endif
-         endcatch
-     endif
-      sleep 1
-      kontext
-      Messagebox.SetPage TabArea
-      Kontext "TabArea"
-      if TabArea.exists (5) then
-         Call Dialogtest (TabArea)
-      endif
-      sleep 1
-      '/// cancel dialog 'Page Setup' ///'
-      TabArea.Cancel
-   else
-      warnlog "FormatPage doesn't come up with dialog :-("
-   endif
-   '/// close application ///'
-   Call hCloseDocument
+    Call hNewDocument
+    FormatSlideDraw
+    kontext
+    if Messagebox.exists (5) then
+        Messagebox.SetPage TabSeite
+        Kontext "TabSeite"
+        if TabSeite.exists (5) then
+            Call Dialogtest (TabSeite)
+        else
+            warnlog "nope :-(1"
+        endif
+        sleep 1
+        kontext
+        Messagebox.SetPage TabArea
+        sleep 1
+        kontext
+        if messagebox.GetRT = 304 then
+            printlog "active about pagesize != printersettings, will say NO: " + Messagebox.GetText
+            try
+                Messagebox.No
+            catch
+                warnlog messagebox.getText
+                Messagebox.ok ' should be Error loading BASIC of document ##?
+                kontext
+                if messagebox.GetRT = 304 then
+                    try
+                        warnlog messagebox.getText
+                        Messagebox.ok
+                    catch
+                        printlog "not expected state."
+                    endcatch
+                endif
+            endcatch
+        endif
+        sleep 1
+        kontext
+        Messagebox.SetPage TabArea
+        Kontext "TabArea"
+        if TabArea.exists (5) then
+            Call Dialogtest (TabArea)
+        endif
+        sleep 1
+        TabArea.Cancel
+    else
+        warnlog "FormatPage doesn't come up with dialog :-("
+    endif
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------
@@ -831,9 +649,7 @@ testcase tiFormatStylesAndFormatting
     dim i as integer
     dim abctemp
 
-    '/// Open Application ///'
     Call  hNewDocument
-    '/// Create a Textframe with content ///'
     sleep 5
 
     hTextrahmenErstellen ("I love Wednesdays...",20,20,80,40)
@@ -841,7 +657,7 @@ testcase tiFormatStylesAndFormatting
     printlog "Checking if TextObjectBar is up"
     Kontext "TextObjectbar"
     if TextObjectbar.Exists Then
-    	printlog "TextObjectbar.Exists = " + TextObjectbar.Exists
+        printlog "TextObjectbar.Exists = " + TextObjectbar.Exists
     else
         ViewToolbarsTextFormatting
     endif
@@ -849,23 +665,21 @@ testcase tiFormatStylesAndFormatting
     WaitSlot (1000)
     Kontext "Stylist"
     if (Stylist.NotExists) then
-       qaErrorLog "There is no stylist open, trying again now"
-       FormatStylist
+        qaErrorLog "There is no stylist open, trying again now"
+        FormatStylist
     end if
     WaitSlot (1000)
     Vorlagenliste.TypeKeys "<End>"
     Vorlagenliste.TypeKeys "<Up>"
     Vorlagenliste.TypeKeys "<Up>"
     sleep 1
-    '/// open context menu, select first entry from top: 'New' ///'
     Vorlagenliste.OpenContextMenu
     sleep 1
     hMenuSelectNr (1)
     sleep 1
-    
+
     Kontext
     if Messagebox.exists (5) then
-        '/// switch to tabpage Organizer ///'
         try
             Messagebox.SetPage TabVerwalten
             Kontext "TabVerwalten"
@@ -874,7 +688,6 @@ testcase tiFormatStylesAndFormatting
             sTemp = VorlagenName.getText
             VerknuepftMit.getSelText
             Bereich.getSelText
-            '/// close dialog 'Graphics Styles' ///'
             TabVerwalten.OK
         catch
             warnlog "Under Gnome we have a focus problem here."
@@ -890,41 +703,37 @@ testcase tiFormatStylesAndFormatting
     sleep 1
     Kontext
     if Messagebox.exists (5) then
-        '/// switch to tabpage Organizer ///'
         try
             Messagebox.SetPage TabVerwalten
             Kontext "TabVerwalten"
             VorlagenName.setText("2Test")
-            '/// close dialog 'Graphics Styles' ///'
             TabVerwalten.OK
         catch
             warnlog "Under Gnome we have a focus problem here."
         endcatch
     end if
-    
+
     sleep 3
     Kontext "Stylist"
-    '/// Delete the style we created. ///'
     Vorlagenliste.TypeKeys "<Home>"  'to go to the style we've created ourselves.
     sleep 1
     try
-       Vorlagenliste.TypeKeys "<Delete>" 'To delete the style.
-       Kontext "Active" 'do you really wish to delete?
-       Active.YES
-       sleep 2
+        Vorlagenliste.TypeKeys "<Delete>" 'To delete the style.
+        Kontext "Active" 'do you really wish to delete?
+        Active.YES
+        sleep 2
     catch
-       Warnlog "Couldnt delete the new Style, or maybe wrong position?"
+        Warnlog "Couldnt delete the new Style, or maybe wrong position?"
     endcatch
     Kontext "Stylist"
     if (Stylist.NotExists) then
-       ErrorLog "There was no Stylist open, should be."
+        ErrorLog "There was no Stylist open, should be."
     else
-       '/// Close Stylist ///'
-       hTypekeys "<F11>"
-       Kontext "Stylist"
-       if (Stylist.Exists) then
-          ErrorLog "The Stylist should be closed now."
-       endif
+        hTypekeys "<F11>"
+        Kontext "Stylist"
+        if (Stylist.Exists) then
+            ErrorLog "The Stylist should be closed now."
+        endif
     endif
     Call hCloseDocument
 endcase
@@ -932,94 +741,70 @@ endcase
 '---------------------------------------------------------------------------------------
 
 testcase tiFormatFontwork
-'/// open application ///'
-   Call hNewDocument
-'/// create a textframe with text ///'
-   Call hTextrahmenErstellen ("Flightplanning via www.aua.com is hard!",20,20,50,30)
-   sleep 1
-'/// Format->Fontwork ///'
-   FormatFontwork
-   Kontext "FontWork"
-   if FontWork.exists (5) then
-      DialogTest ( FontWork )
-      sleep 1
-   '/// close dialog 'Fontwork' ///'
-      FontWork.Close
-   else
-      warnlog "FontWork didn't came up :-("
-   endif
-'/// close application ///'
-   Call hCloseDocument
+    Call hNewDocument
+    Call hTextrahmenErstellen ("Flightplanning via www.aua.com is hard!",20,20,50,30)
+    sleep 1
+    FormatFontwork
+    Kontext "FontWork"
+    if FontWork.exists (5) then
+        DialogTest ( FontWork )
+        sleep 1
+        FontWork.Close
+    else
+        warnlog "FontWork didn't came up :-("
+    endif
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------
 
 testcase tiFormatGroup
-'/// open application ///'
-   Call hNewDocument
-'/// create 2 rectangles ///'
-      hRechteckErstellen ( 10, 10, 20, 20 )
-      hRechteckErstellen ( 30, 30, 40, 40 )
-'/// select both objects with keys [strg]+[a] ///'
-      EditSelectAll
-'/// DRAW: in Modify menu ///'
-'///+ Impress in Format menu ///'
-'///+ Format->Group / Modify->Group ///'
-      FormatGroupDraw
+    Call hNewDocument
+    hRechteckErstellen ( 10, 10, 20, 20 )
+    hRechteckErstellen ( 30, 30, 40, 40 )
+    EditSelectAll
+    FormatGroupDraw
     WaitSlot (1000)
-'/// Format->Edit Group / Modify->Enter Group ///'
-      FormatEditGroupDraw
+    FormatEditGroupDraw
     WaitSlot (1000)
-'/// Format->Exit Group / Modify->Exit Group ///'
-      FormatExitGroupDraw
+    FormatExitGroupDraw
     WaitSlot (1000)
-'/// Format->Ungroup Group / Modify->Ungroup Group ///'
-      FormatUngroupDraw
+    FormatUngroupDraw
     WaitSlot (1000)
-'/// close application ///'
-   Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------
 
 testcase tiFormatStylesSlideDesign
-' create recktanglr; click outside ?
-'/// open application ///'
-   Call hNewDocument
+    ' create recktanglr; click outside ?
+    Call hNewDocument
     WaitSlot (3000)
-'/// Format->Styles->Slide Design ///'
-   FormatModifyLayout ' is OK : Format->Styles->Slide Design; 27064; SID_PRESENTATION_LAYOUT
+    FormatModifyLayout ' is OK : Format->Styles->Slide Design; 27064; SID_PRESENTATION_LAYOUT
     WaitSlot (1000)
-   Kontext "Seitenvorlage"
-   Call DialogTest ( Seitenvorlage )
-'/// check the checkboxes: ExchangeBackgroundPages and DeleteUnusedBackgrounds ///'
-      HintergrundseiteAustauschen.check
-      DeleteUnusedBackgrounds.check
-'/// click button 'Load...' ///'
-      Laden.Click
-      kontext "Neu"
-'/// click button 'more' ///'
-         Zusaetze.click
-         sleep 1
-      kontext "Neu"
-'/// check checkbox 'Preview' ///'
-   try
-         Vorschau.check
+    Kontext "Seitenvorlage"
+    Call DialogTest ( Seitenvorlage )
+    HintergrundseiteAustauschen.check
+    DeleteUnusedBackgrounds.check
+    Laden.Click
+    kontext "Neu"
+    Zusaetze.click
+    sleep 1
+    kontext "Neu"
+    try
+        Vorschau.check
     catch
-      printlog "Preview wasn't checkable :-( hopfully now:"
-         Zusaetze.click
-         sleep 1
-         Vorschau.check
-      printlog "... OK :-)"
+        printlog "Preview wasn't checkable :-( hopfully now:"
+        Zusaetze.click
+        sleep 1
+        Vorschau.check
+        printlog "... OK :-)"
     endcatch
-'/// cancel dialog 'Load Slide Design' ///'
-      Neu.cancel
-   Kontext "Seitenvorlage"
-'/// cancel dialog 'Slide Design' ///'
-   Seitenvorlage.Cancel
+    Neu.cancel
+    Kontext "Seitenvorlage"
+    Seitenvorlage.Cancel
     sleep 2
-'/// close application ///'
-   Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 '---------------------------------------------------------------------------------------

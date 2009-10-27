@@ -136,7 +136,7 @@ namespace chart
 DataSeries::DataSeries( const uno::Reference< uno::XComponentContext > & xContext ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
 }
 
@@ -145,7 +145,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
         impl::DataSeries_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     if( ! rOther.m_aDataSequences.empty())
     {
@@ -417,6 +417,31 @@ Reference< beans::XPropertySet >
 
     return aResult;
     // \--
+}
+
+void SAL_CALL DataSeries::resetDataPoint( sal_Int32 nIndex )
+        throw (uno::RuntimeException)
+{
+    MutexGuard aGuard( GetMutex() );
+    tDataPointAttributeContainer::iterator aIt( m_aAttributedDataPoints.find( nIndex ));
+    if( aIt != m_aAttributedDataPoints.end())
+    {
+        Reference< beans::XPropertySet > xDataPointProp( (*aIt).second );
+        Reference< util::XModifyBroadcaster > xBroadcaster( xDataPointProp, uno::UNO_QUERY );
+        if( xBroadcaster.is() && m_xModifyEventForwarder.is())
+            xBroadcaster->removeModifyListener( m_xModifyEventForwarder );
+        m_aAttributedDataPoints.erase(aIt);
+        fireModifyEvent();
+    }
+}
+
+void SAL_CALL DataSeries::resetAllDataPoints()
+        throw (uno::RuntimeException)
+{
+    MutexGuard aGuard( GetMutex() );
+    ModifyListenerHelper::removeListenerFromAllMapElements( m_aAttributedDataPoints, m_xModifyEventForwarder );
+    m_aAttributedDataPoints.clear();
+    fireModifyEvent();
 }
 
 // ____ XDataSink ____

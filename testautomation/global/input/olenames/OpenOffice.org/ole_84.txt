@@ -1,7 +1,0 @@
-CALC=Bảng tính OpenOffice.org 2.3
-CHART=Đồ thị OpenOffice.org 2.3
-DRAW=Bản vẽ OpenOffice.org 2.3
-IMPRESS=Trình diễn OpenOffice.org 2.3
-MATH=Công thức OpenOffice.org 2.3
-WRITER=Văn bản OpenOffice.org 2.3
-OTHER=Đối tượng thêm nữa

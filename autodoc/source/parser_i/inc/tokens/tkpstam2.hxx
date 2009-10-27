@@ -75,10 +75,6 @@ class StateMachin2
                             INT16               in_nBoundsStatus );
                         ~StateMachin2();
 
-
-        // FOR TESTS ONLY:
-        void            PrintOut();
-
         // OPERATIONS
         StmBoundsStatu2 &
                         GetCharChain(

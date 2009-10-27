@@ -29,8 +29,6 @@
  ************************************************************************/
 #include <sfx2/sfx.hrc>
 /* #define TAB_PRES_LAYOUT_TEMPLATE     RID_APP_START+??? */
-#define TAB_PRES_LAYOUT_TEMPLATE        844
-#define TAB_PRES_LAYOUT_TEMPLATE_1      845
-#define TAB_PRES_LAYOUT_TEMPLATE_2      846
-#define TAB_PRES_LAYOUT_TEMPLATE_3      847
+#define TAB_PRES_LAYOUT_TEMPLATE                844
+#define TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND     846
 #define TAB_CONTROL 1

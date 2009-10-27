@@ -78,6 +78,20 @@ namespace Dependencies {
     DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString name(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::dom::XElement > const & dependency);
+
+    /**
+       Obtain the (human-readable) error message of a failed dependency.
+
+       @param dependency
+       a dependency represented as a non-null XML element
+
+       @return
+       the name of the dependency; will never be empty, as a localized
+       &ldquo;unknown&rdquo; is substituted for an empty/missing name
+     */
+    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString getErrorText(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::dom::XElement > const & dependency);
 }
 
 }

@@ -39,7 +39,7 @@ File gid_File_Lib_Hwpreader
   #else
     Name = "hwp.dll";
   #endif
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED, UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
@@ -48,7 +48,12 @@ File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(swriter);
+  #ifdef WNT
+    FileDescription = "%PRODUCTNAME Writer";
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
 End
 
 #ifdef WNT
@@ -56,7 +61,8 @@ File gid_File_Exe_Sweb
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sweb);
-    Styles = (PACKED);
+    FileDescription = "%PRODUCTNAME Writer(Web)";
+    Styles = (PACKED, PATCH_SO_NAME);
 End
 #endif
 

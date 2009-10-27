@@ -32,6 +32,8 @@
 #define _BOOKMRK_HXX
 
 #include <IMark.hxx>
+#include <sfx2/Metadatable.hxx>
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -144,6 +146,7 @@ namespace sw { namespace mark
     class Bookmark
         : virtual public IBookmark
         , public DdeBookmark
+        , public ::sfx2::Metadatable
     {
         public:
             Bookmark(const SwPaM& rPaM,
@@ -160,6 +163,15 @@ namespace sw { namespace mark
                 { m_sShortName = rShortName; }
             virtual void SetKeyCode(const KeyCode& rCode)
                 { m_aCode = rCode; }
+
+            // ::sfx2::Metadatable
+            virtual ::sfx2::IXmlIdRegistry& GetRegistry();
+            virtual bool IsInClipboard() const;
+            virtual bool IsInUndo() const;
+            virtual bool IsInContent() const;
+            virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
+
         private:
             KeyCode m_aCode;
             ::rtl::OUString m_sShortName;

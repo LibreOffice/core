@@ -81,20 +81,20 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     FixedText RID_FT_PASS
     {
         Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "Pass Count:" ;
     };
     FixedText RID_FT_BRKPOINTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 110, 10 ) ;
         Text [ en-US ] = "Breakpoints" ;
     };
     NumericField RID_FLD_PASS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 41 , 100 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Pos = MAP_APPFONT ( 81 , 100 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Manage Breakpoints" ;

@@ -71,7 +71,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 readString( aLabel, getLength() - 7 );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, new ScStringCell( aLabel ), (BOOL) TRUE );
+                pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), (BOOL) TRUE );
                 }
                 break;
 
@@ -214,12 +214,6 @@ FltError ScQProReader::import( ScDocument *pDoc )
 bool ScQProReader::recordsLeft()
 {
     bool bValue = ScBiffReader::recordsLeft();
-    return bValue;
-}
-
-bool ScQProReader::IsEndOfFile()
-{
-    bool bValue = ScBiffReader::mbEndOfFile;
     return bValue;
 }
 

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -39,8 +39,8 @@
 ' #1 tCustomshapes
 ' #1 tFormatPaintbrush
 '\********************************************************************
-
 testcase tCustomshapes
+
    dim counter as Integer
    dim MakeInto3Dcounter as Integer
 
@@ -474,11 +474,11 @@ testcase tCustomshapes
 
      printlog "End of test. Close the document."
      Call hCloseDocument         '/// Close Document ///'
-endcase
-
-'************************************************************************
-
+     
+endcase 'tCustomshapes
+'---------------------------------------------------------
 testcase tFormatPaintbrush
+
    dim counter, ZaehlerVerlauf, j as Integer
    '/// Hatching ///'
    dim HatchingDistance as string
@@ -849,4 +849,5 @@ testcase tFormatPaintbrush
             sleep 1
       TabBitmap.OK
    Call hCloseDocument         '/// Close Document ///'
-endcase
+   
+endcase 'tFormatPaintbrush

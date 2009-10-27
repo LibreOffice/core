@@ -130,6 +130,7 @@ void lcl_SetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartD
 
             if( xLabel.is())
             {
+                // the range string must be in Calc A1 format.
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
 
@@ -145,6 +146,7 @@ void lcl_SetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartD
 
             if( xValues.is())
             {
+                // the range string must be in Calc A1 format.
                 uno::Reference< chart2::data::XDataSequence > xNewSeq(
                     xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
 
@@ -391,7 +393,7 @@ void ScDocument::GetChartRanges( const String& rChartName, ::std::vector< ScRang
         for( sal_Int32 nN=0; nN<aRangeStrings.getLength(); nN++ )
         {
             ScRangeList aRanges;
-            aRanges.Parse( aRangeStrings[nN], pSheetNameDoc );
+            aRanges.Parse( aRangeStrings[nN], pSheetNameDoc, SCA_VALID, pSheetNameDoc->GetAddressConvention() );
             rRangesVector.push_back(aRanges);
         }
     }
@@ -407,8 +409,8 @@ void ScDocument::SetChartRanges( const String& rChartName, const ::std::vector< 
         for( sal_Int32 nN=0; nN<nCount; nN++ )
         {
             ScRangeList aScRangeList( rRangesVector[nN] );
-            String sRangeStr;
-            aScRangeList.Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+            String sRangeStr; // This range must be in Calc A1 format.
+            aScRangeList.Format( sRangeStr, SCR_ABS_3D, this );
             aRangeStrings[nN]=sRangeStr;
         }
         lcl_SetChartRanges( xChartDoc, aRangeStrings );

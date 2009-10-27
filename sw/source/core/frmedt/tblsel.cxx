@@ -210,11 +210,7 @@ void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
     if ( !rShell.IsTableMode() )
         rShell.GetCrsr();
 
-    const SwShellCrsr *pCrsr = rShell.GetTableCrsr();
-    if( !pCrsr )
-        pCrsr = (SwShellCrsr*)*rShell.GetSwCrsr( FALSE );
-
-    GetTblSel( *pCrsr, rBoxes, eSearchType );
+    GetTblSel( *rShell.getShellCrsr(false), rBoxes, eSearchType );
 }
 
 void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
@@ -287,7 +283,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
     else
     {
         Point aPtPos, aMkPos;
-        const SwShellCrsr* pShCrsr = rCrsr;
+        const SwShellCrsr* pShCrsr = dynamic_cast<const SwShellCrsr*>(&rCrsr);
         if( pShCrsr )
         {
             aPtPos = pShCrsr->GetPtPos();
@@ -1466,7 +1462,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             if( pUndo )
                 pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
             else
-                pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            {
+                pDoc->MoveNodeRange( aRg, rInsPosNd,
+                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+            }
             // wo steht jetzt aInsPos ??
 
             if( bCalcWidth )
@@ -2066,11 +2065,7 @@ BOOL CheckSplitCells( const SwCrsrShell& rShell, USHORT nDiv,
     if( !rShell.IsTableMode() )
         rShell.GetCrsr();
 
-    const SwShellCrsr *pCrsr = rShell.GetTableCrsr();
-    if( !pCrsr )
-        pCrsr = (SwShellCrsr*)*rShell.GetSwCrsr( FALSE );
-
-    return CheckSplitCells( *pCrsr, nDiv, eSearchType );
+    return CheckSplitCells( *rShell.getShellCrsr(false), nDiv, eSearchType );
 }
 
 BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
@@ -2083,7 +2078,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
 
     //Start- und Endzelle besorgen und den naechsten fragen.
     Point aPtPos, aMkPos;
-    const SwShellCrsr* pShCrsr = rCrsr;
+    const SwShellCrsr* pShCrsr = dynamic_cast<const SwShellCrsr*>(&rCrsr);
     if( pShCrsr )
     {
         aPtPos = pShCrsr->GetPtPos();

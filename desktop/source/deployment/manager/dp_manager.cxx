@@ -314,6 +314,18 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             }
         }
 
+        //Workaround. See issue http://www.openoffice.org/issues/show_bug.cgi?id=99257
+        //This prevents the copying of the common.rdbf and native rdbs. It disables the
+        //feature to add shared extensions in a running office.
+        if (!that->m_readOnly && context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") ))
+        {
+            OUString sNoRdb;
+            ::rtl::Bootstrap::get(OUSTR("NORDBCOPY"), sNoRdb);
+            if (sNoRdb.equalsIgnoreAsciiCase(OUSTR("true"))
+                && dp_misc::office_is_running())
+                that->m_readOnly = true;
+        }
+
         if (!that->m_readOnly && logFile.getLength() > 0)
         {
             const Any any_logFile(logFile);
@@ -660,10 +672,15 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
 {
     check();
     if (m_readOnly)
+    {
+        OUString message;
+        if (m_context == OUSTR("shared"))
+            message = OUSTR("You need write permissions to install a shared extension!");
+        else
+            message = OUSTR("You need write permissions to install this extension!");
         throw deployment::DeploymentException(
-            OUSTR("operating on read-only context!"),
-            static_cast<OWeakObject *>(this), Any() );
-
+            message, static_cast<OWeakObject *>(this), Any() );
+    }
     Reference<XCommandEnvironment> xCmdEnv;
     if (m_xLogFile.is())
         xCmdEnv.set( new CmdEnvWrapperImpl( xCmdEnv_, m_xLogFile ) );
@@ -893,9 +910,15 @@ void PackageManagerImpl::removePackage(
 {
     check();
     if (m_readOnly)
+    {
+        OUString message;
+        if (m_context == OUSTR("shared"))
+            message = OUSTR("You need write permissions in order to remove a shared extension!");
+        else
+            message = OUSTR("You need write permissions in order to remove this extension!");
         throw deployment::DeploymentException(
-            OUSTR("operating on read-only context!"),
-            static_cast<OWeakObject *>(this), Any() );
+            message, static_cast<OWeakObject *>(this), Any() );
+    }
 
     Reference<XCommandEnvironment> xCmdEnv;
     if (m_xLogFile.is())
@@ -1117,9 +1140,15 @@ void PackageManagerImpl::reinstallDeployedPackages(
 {
     check();
     if (m_readOnly)
+    {
+        OUString message;
+        if (m_context == OUSTR("shared"))
+            message = OUSTR("You need write permissions in order to install shared extensions!");
+        else
+            message = OUSTR("You need write permissions in order to install extensions!");
         throw deployment::DeploymentException(
-            OUSTR("operating on read-only context!"),
-            static_cast<OWeakObject *>(this), Any() );
+            message, static_cast<OWeakObject *>(this), Any() );
+    }
 
     if (office_is_running())
         throw RuntimeException(

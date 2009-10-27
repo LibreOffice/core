@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.4 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -29,7 +25,7 @@
 #
 #*************************************************************************
 
-PRJ=../..
+PRJ=..$/..
 
 PRJNAME=bitstream_vera_fonts
 TARGET=ttf_liberation
@@ -40,8 +36,8 @@ TARGET=ttf_liberation
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=liberation-fonts-1.04
-TARFILE_ROOTDIR=liberation-fonts-1.04
+TARFILE_NAME=liberation-fonts-1.05
+TARFILE_ROOTDIR=liberation-fonts-1.05
 
 PATCH_FILES=
 

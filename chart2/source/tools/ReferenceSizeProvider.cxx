@@ -226,30 +226,16 @@ void ReferenceSizeProvider::getAutoResizeFromPropSet(
     }
 }
 
-void ReferenceSizeProvider::getAutoResizeFromTitle(
-    const Reference< XTitle > & xTitle,
-    ReferenceSizeProvider::AutoResizeState & rInOutState )
-{
-    Reference< beans::XPropertySet > xProp( xTitle, uno::UNO_QUERY );
-    if( xProp.is())
-        getAutoResizeFromPropSet( xProp, rInOutState );
-}
-
 void ReferenceSizeProvider::impl_getAutoResizeFromTitled(
     const Reference< XTitled > & xTitled,
     ReferenceSizeProvider::AutoResizeState & rInOutState )
 {
     if( xTitled.is())
     {
-        Reference< XTitle > xTitle( xTitled->getTitleObject());
-        if( xTitle.is())
-            getAutoResizeFromTitle( xTitle, rInOutState );
+        Reference< beans::XPropertySet > xProp( xTitled->getTitleObject(), uno::UNO_QUERY );
+        if( xProp.is())
+            getAutoResizeFromPropSet( xProp, rInOutState );
     }
-}
-
-ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState() const
-{
-    return getAutoResizeState( m_xChartDoc );
 }
 
 /** Retrieves the state auto-resize from all objects that support this

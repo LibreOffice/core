@@ -102,8 +102,11 @@ void loadFromStream(
     rtl::OUString const & path, BitmapEx & bitmap)
 {
     std::auto_ptr< SvStream > s(wrapStream(stream));
-    if (path.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(".png"))) {
-        bitmap = vcl::PNGReader(*s).Read();
+    if (path.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(".png")))
+    {
+        vcl::PNGReader aPNGReader( *s );
+        aPNGReader.SetIgnoreGammaChunk( sal_True );
+        bitmap = aPNGReader.Read();
     } else {
         *s >> bitmap;
     }
@@ -184,6 +187,17 @@ void ImplImageTree::setStyle(rtl::OUString const & style) {
 
 void ImplImageTree::resetZips() {
     m_zips.clear();
+    {
+        rtl::OUString url(
+            RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/edition/images.zip"));
+        rtl::Bootstrap::expandMacros(url);
+        INetURLObject u(url);
+        OSL_ASSERT(!u.HasError());
+        m_zips.push_back(
+            std::make_pair(
+                u.GetMainURL(INetURLObject::NO_DECODE),
+                css::uno::Reference< css::container::XNameAccess >()));
+    }
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/config"));

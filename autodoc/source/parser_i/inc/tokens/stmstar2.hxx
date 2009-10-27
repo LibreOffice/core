@@ -59,11 +59,6 @@ class StmArrayStatu2 : public StmStatu2
     // ACCESS
     virtual StmArrayStatu2 *
                         AsArray();
-    void                SetBranches(
-                            intt            in_nStartBranchIx,
-                            StmStatu2::Branch *
-                                            in_aBranchValues,
-                            intt            in_nNrofValues );
     bool                SetBranch(
                             intt            in_nBranchIx,
                             StmStatu2::Branch

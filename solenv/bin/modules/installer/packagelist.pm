@@ -453,6 +453,38 @@ sub resolve_packagevariables
 
     my $key;
 
+    # Special handling for dictionaries
+    if ( $$packagenameref =~ /-dict-/ )
+    {
+        if (exists($variableshashref->{'DICTIONARYUNIXPRODUCTNAME'}) ) { $$packagenameref =~ s/\%UNIXPRODUCTNAME/$variableshashref->{'DICTIONARYUNIXPRODUCTNAME'}/g; }
+        if (exists($variableshashref->{'DICTIONARYBRANDPACKAGEVERSION'}) ) { $$packagenameref =~ s/\%BRANDPACKAGEVERSION/$variableshashref->{'DICTIONARYBRANDPACKAGEVERSION'}/g; }
+    }
+
+    foreach $key (keys %{$variableshashref})
+    {
+        my $value = $variableshashref->{$key};
+        if ( $make_lowercase ) { $value = lc($value); }
+        $$packagenameref =~ s/\%$key/$value/g;
+    }
+}
+
+#####################################################################
+# Resolving all variables in the packagename.
+#####################################################################
+
+sub resolve_packagevariables2
+{
+    my ($packagenameref, $variableshashref, $make_lowercase, $isdict ) = @_;
+
+    my $key;
+
+    # Special handling for dictionaries
+    if ( $isdict )
+    {
+        if (exists($variableshashref->{'DICTIONARYUNIXPRODUCTNAME'}) ) { $$packagenameref =~ s/\%UNIXPRODUCTNAME/$variableshashref->{'DICTIONARYUNIXPRODUCTNAME'}/g; }
+        if (exists($variableshashref->{'DICTIONARYBRANDPACKAGEVERSION'}) ) { $$packagenameref =~ s/\%BRANDPACKAGEVERSION/$variableshashref->{'DICTIONARYBRANDPACKAGEVERSION'}/g; }
+    }
+
     foreach $key (keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};

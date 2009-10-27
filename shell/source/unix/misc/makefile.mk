@@ -72,7 +72,7 @@ APP1TARGET = gnome-open-url.bin
 APP1OBJS = \
     $(OBJ)$/gnome-open-url.obj
 APP1LIBS =
-.IF "$(OS)"!="FREEBSD"
+.IF "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD"
 APP1STDLIBS=-ldl
 .ENDIF
 

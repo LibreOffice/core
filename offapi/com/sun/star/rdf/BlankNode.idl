@@ -62,7 +62,7 @@ service BlankNode : XBlankNode
         another node that already exists in some repository.
         That may or may not be what you want.
         If you want to create a new blank node that is guaranteed to be unique,
-        use <method>XRepository::createBlankNode</method> instead.
+        use <member>XRepository::createBlankNode</member> instead.
         <p>
 
         @param NodeID

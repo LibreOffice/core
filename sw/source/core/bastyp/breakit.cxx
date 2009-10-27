@@ -32,6 +32,7 @@
 #include "precompiled_sw.hxx"
 
 #include "breakit.hxx"
+#include <unicode/uchar.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -73,18 +74,18 @@ SwBreakIt::SwBreakIt(
       aForbiddenLang( LANGUAGE_DONTKNOW)
 {
     DBG_ASSERT( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
-    if ( m_xMSF.is() )
-    {
-        xBreak = uno::Reference< i18n::XBreakIterator >(
-            m_xMSF->createInstance(
-                rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
-            uno::UNO_QUERY);
+    //if ( m_xMSF.is() )
+    //{
+ //       xBreak = uno::Reference< i18n::XBreakIterator >(
+    //      m_xMSF->createInstance(
+    //          rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+ //           uno::UNO_QUERY);
 
-        xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
-            m_xMSF->createInstance(
-                 rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) ),
-            uno::UNO_QUERY);
-    }
+ //       xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
+ //           m_xMSF->createInstance(
+ //                rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) ),
+ //           uno::UNO_QUERY);
+ //   }
 }
 
 SwBreakIt::~SwBreakIt()
@@ -92,7 +93,16 @@ SwBreakIt::~SwBreakIt()
     delete m_pLocale;
     delete m_pForbidden;
 }
-
+void SwBreakIt::createBreakIterator() const
+{
+    if ( m_xMSF.is() && !xBreak.is() )
+        xBreak.set(m_xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),uno::UNO_QUERY);
+}
+void SwBreakIt::createScriptTypeDetector()
+{
+    if ( m_xMSF.is() && !xCTLDetect.is() )
+        xCTLDetect.set(m_xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ))),uno::UNO_QUERY);
+}
 void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;
@@ -112,6 +122,7 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
 USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
                                         xub_StrLen nPos ) const
 {
+    createBreakIterator();
     USHORT nScript = i18n::ScriptType::WEAK;
     if( xBreak.is() && rTxt.Len() )
     {
@@ -119,6 +130,18 @@ USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
             --nPos;
         nScript = xBreak->getScriptType( rTxt, nPos );
         sal_Int32 nChgPos = 0;
+        if ( i18n::ScriptType::WEAK == nScript && nPos + 1 < rTxt.Len() )
+        {
+            // A weak character followed by a mark may be meant to combine with
+            // the mark, so prefer the following character's script
+            switch ( u_charType(rTxt.GetChar(nPos + 1) ) ) {
+            case U_NON_SPACING_MARK:
+            case U_ENCLOSING_MARK:
+            case U_COMBINING_SPACING_MARK:
+                nScript = xBreak->getScriptType( rTxt, nPos+1 );
+                break;
+            }
+        }
         if( i18n::ScriptType::WEAK == nScript && nPos &&
             0 < (nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript )) )
             nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
@@ -138,6 +161,7 @@ USHORT SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
     const USHORT coAllScripts = ( SCRIPTTYPE_LATIN |
                                   SCRIPTTYPE_ASIAN |
                                   SCRIPTTYPE_COMPLEX );
+    createBreakIterator();
     USHORT nRet = 0, nScript;
     if( !xBreak.is() )
         nRet = coAllScripts;

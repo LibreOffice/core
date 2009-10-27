@@ -60,7 +60,7 @@ private:
     static rtl::OUString getUserLanguage();
     static rtl::OUString getSystemLanguage();
     static void resetUserLanguage();
-    static void setDefaultLocale(const rtl::OUString&);
+    static void setDefaultLanguage(const rtl::OUString&);
 
 public:
     static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);

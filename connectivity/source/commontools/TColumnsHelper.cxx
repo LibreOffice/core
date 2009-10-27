@@ -37,6 +37,9 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <comphelper/types.hxx>
 #include "connectivity/dbtools.hxx"
 #include "TConnection.hxx"
@@ -51,7 +54,7 @@ using namespace connectivity;
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -114,17 +117,67 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
         bAutoIncrement  = aFind->second.first.first;
         bIsCurrency     = aFind->second.first.second;
         nDataType       = aFind->second.second;
+    } // if ( aFind != m_pImpl->m_aColumnInfo.end() )
+
+    sdbcx::ObjectType xRet;
+    const ColumnDesc* pColDesc = m_pTable->getColumnDescription(_rName);
+    if ( pColDesc )
+    {
+        Reference<XPropertySet> xPr = m_pTable;
+        Reference<XKeysSupplier> xKeysSup(xPr,UNO_QUERY);
+        Reference<XNameAccess> xPrimaryKeyColumns;
+        if ( xKeysSup.is() )
+        {
+            const Reference<XIndexAccess> xKeys = xKeysSup->getKeys();
+            if ( xKeys.is() )
+            {
+                ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+                const sal_Int32 nKeyCount = xKeys->getCount();
+                for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++nKeyIter)
+                {
+                    const Reference<XPropertySet> xKey(xKeys->getByIndex(nKeyIter),UNO_QUERY_THROW);
+                    sal_Int32 nType = 0;
+                    xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))   >>= nType;
+                    if ( nType == KeyType::PRIMARY )
+                    {
+                        const Reference<XColumnsSupplier> xColS(xKey,UNO_QUERY_THROW);
+                        xPrimaryKeyColumns = xColS->getColumns();
+                        break;
+                    }
+                } // for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++)
+            }
+        }
+        sal_Int32 nField11 = pColDesc->nField11;
+        if ( nField11 != ColumnValue::NO_NULLS && xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(_rName) )
+        {
+            nField11 = ColumnValue::NO_NULLS;
+        } // if ( xKeys.is() )
+        connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
+                                                pColDesc->aField6,
+                                                pColDesc->sField13,
+                                                nField11,
+                                                pColDesc->nField7,
+                                                pColDesc->nField9,
+                                                pColDesc->nField5,
+                                                bAutoIncrement,
+                                                sal_False,
+                                                bIsCurrency,
+                                                isCaseSensitive());
+
+        xRet = pRet;
     }
+    else
+    {
 
-
-    sdbcx::ObjectType xRet(::dbtools::createSDBCXColumn(    m_pTable,
-                                                            xConnection,
-                                                            _rName,
-                                                            isCaseSensitive(),
-                                                            bQueryInfo,
-                                                            bAutoIncrement,
-                                                            bIsCurrency,
-                                                            nDataType),UNO_QUERY);
+        xRet.set(::dbtools::createSDBCXColumn(  m_pTable,
+                                                xConnection,
+                                                _rName,
+                                                isCaseSensitive(),
+                                                bQueryInfo,
+                                                bAutoIncrement,
+                                                bIsCurrency,
+                                                nDataType),UNO_QUERY);
+    }
     return xRet;
 }
 

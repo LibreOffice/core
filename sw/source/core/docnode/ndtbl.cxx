@@ -50,9 +50,7 @@
 #include <fmtfordr.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
-#ifndef _FMTLSPLT_HXX
 #include <fmtlsplt.hxx>
-#endif
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <cellfrm.hxx>
@@ -92,9 +90,7 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-#ifndef _DOCSH_HXX
 #include "docsh.hxx"
-#endif
 #ifdef LINUX
 #include <tabcol.hxx>
 #endif
@@ -1038,7 +1034,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                             nChPos + 1 );
 
                     // Trennzeichen loeschen und SuchString korrigieren
-                    pTxtNd->Erase( aCntPos.nContent, 1 );
+                    pTxtNd->EraseText( aCntPos.nContent, 1 );
                     pTxt = pTxtNd->GetTxt().GetBuffer();
                     nChPos = 0;
                     --nChPos, --pTxt;           // for the ++ in the for loop !!!
@@ -1549,20 +1545,21 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
             0 != ( pCurTxtNd = aDelRg.aStart.GetNode().GetTxtNode() ))
         {
             // Join the current text node with the last from the previous box if possible
-            aDelRg.aStart--;
             ULONG nNdIdx = aDelRg.aStart.GetIndex();
+            aDelRg.aStart--;
             if( pDelPara->pLastNd == &aDelRg.aStart.GetNode() )
             {
                 // Inserting the seperator
                 SwIndex aCntIdx( pDelPara->pLastNd, pDelPara->pLastNd->GetTxt().Len());
-                pDelPara->pLastNd->Insert( pDelPara->cCh, aCntIdx );
+                pDelPara->pLastNd->InsertText( pDelPara->cCh, aCntIdx,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
                 if( pDelPara->pUndo )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
                 SvULongs aBkmkArr( 4, 4 );
                 xub_StrLen nOldTxtLen = aCntIdx.GetIndex();
-                _SaveCntntIdx( pDoc, nNdIdx + 1, pCurTxtNd->GetTxt().Len(),
+                _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().Len(),
                                 aBkmkArr );
 
                 pDelPara->pLastNd->JoinNext();
@@ -1575,7 +1572,6 @@ BOOL lcl_DelBox( const SwTableBox*& rpBox, void* pPara )
             else if( pDelPara->pUndo )
             {
                 aDelRg.aStart++;
-                nNdIdx = aDelRg.aStart.GetIndex();
                 pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex() );
             }
         }
@@ -2544,7 +2540,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
             return ;
 
         Point aPt;
-        const SwShellCrsr *pShCrsr = *pCrsr;
+        const SwShellCrsr *pShCrsr = dynamic_cast<const SwShellCrsr*>(pCrsr);
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
@@ -2769,7 +2765,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
             return ;
 
         Point aPt;
-        const SwShellCrsr *pShCrsr = *pCrsr;
+        const SwShellCrsr *pShCrsr = dynamic_cast<const SwShellCrsr*>(pCrsr);
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 

@@ -300,13 +300,9 @@ namespace dbaui
                         aURL.SetPass( sPassword );
 
                     if ( !sTitle.Len() )
-                        sTitle = aURL.getName();
+                        sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
 
                     String sDecodedURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
-
-//                    sTitle.AppendAscii( " (" );
-//                    sTitle += String( ::svt::OFileNotation( sDecodedURL ).get( ::svt::OFileNotation::N_SYSTEM ) );
-//                    sTitle.AppendAscii( ")" );
 
                     USHORT nPos = InsertEntry( sTitle );
                     m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );

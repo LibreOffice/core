@@ -187,7 +187,6 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
                                                            , ::com::sun::star::document::XEventListener
                                                            , ::com::sun::star::document::XDocumentEventListener
                                                            , ::com::sun::star::container::XSet >
-                           , public SfxListener
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xEvents;
@@ -196,8 +195,6 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
     OINTERFACECONTAINERHELPER m_aDocumentListeners;
     TModelList m_lModels;
     GlobalEventConfig* pImp;
-
-    void Notify( SfxBroadcaster& aBC, const SfxHint& aHint );
 
 public:
     SfxGlobalEvents_Impl(const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);

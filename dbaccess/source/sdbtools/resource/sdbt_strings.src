@@ -64,5 +64,5 @@ String STR_INVALID_COMPOSITION_TYPE
 
 String STR_INVALID_COMMAND_TYPE
 {
-    Text [ en-US ] = "Invalid command type - only TABLE and AND QUERY from com.sun.star.sdb.CommandType are allowed.";
+    Text [ en-US ] = "Invalid command type - only TABLE and QUERY from com.sun.star.sdb.CommandType are allowed.";
 };

@@ -82,6 +82,7 @@ namespace dbaccess
 
         inline void setName(const ::rtl::OUString& _sName) { m_sName = _sName; }
         void setDefinition(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest);
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getDefinition() const { return m_xDest;}
     };
 //........................................................................
 }   // namespace dbaccess

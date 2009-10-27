@@ -58,8 +58,6 @@ namespace com { namespace sun { namespace star {
 namespace chart
 {
 
-class InternalDataProvider;
-
 class ChartData
 {
 public:
@@ -93,15 +91,12 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
         m_xDataProvider;
-    /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
-        external data provider this pointer must be set to 0
-    */
-    InternalDataProvider * m_pInternalDataProvider;
 
-//     ::com::sun::star::uno::Reference<
-//             ::com::sun::star::embed::XEmbeddedClient > m_xInternalData;
-//     /// is only valid if m_xInternalData exists
-//     InternalData *                                     m_pInternalData;
+    /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
+        external data provider this reference must be set to 0
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
+        m_xInternalDataProvider;
 };
 
 } //  namespace chart

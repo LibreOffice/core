@@ -109,7 +109,18 @@ static MacOSBOOL isPopupMenuOpen = NO;
         // XAccessibleMultiLineText
         mpReferenceWrapper -> rAccessibleMultiLineText = Reference < XAccessibleMultiLineText > ( rxAccessibleContext, UNO_QUERY );
         // XAccessibleEventBroadcaster
-        if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) ) {
+        #if 0
+        /* #i102033# NSAccessibility does not seemt to know an equivalent for transient children.
+           That means we need to cache this, else e.g. tree list boxes are not accessible (moreover
+           it crashes by notifying dead objects - which would seemt o be another bug)
+           
+           FIXME:
+           Unfortunately this can increase memory consumption drastically until the non transient parent
+           is destroyed an finally all the transients are released.
+        */
+        if ( ! rxAccessibleContext -> getAccessibleStateSet() -> contains ( AccessibleStateType::TRANSIENT ) )
+        #endif
+        {
             Reference< XAccessibleEventBroadcaster > xBroadcaster(rxAccessibleContext, UNO_QUERY);
             if( xBroadcaster.is() ) {
                 /*
@@ -178,9 +189,11 @@ static MacOSBOOL isPopupMenuOpen = NO;
 
 -(Reference < XAccessible >)getFirstRadioButtonInGroup {
     Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
-    AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
-    if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
-        return Reference < XAccessible > ( relationMemberOf.TargetSet[0], UNO_QUERY );
+    if( rxAccessibleRelationSet.is() )
+    {
+        AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
+        if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() )
+            return Reference < XAccessible > ( relationMemberOf.TargetSet[0], UNO_QUERY );
     }
     return Reference < XAccessible > ();
 }
@@ -726,9 +739,15 @@ static MacOSBOOL isPopupMenuOpen = NO;
         if ( nativeSubrole != nil && ! [ nativeSubrole isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilitySubroleAttribute ];
         }
+        try
+        {
         if ( [ self accessibleContext ] -> getAccessibleChildCount() > 0 ) {
             [ attributeNames addObject: NSAccessibilityChildrenAttribute ];
         }
+        }
+        catch( DisposedException& ) {}
+        catch( RuntimeException& ) {}
+        
         if ( title != nil && ! [ title isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilityTitleAttribute ];
         }
@@ -984,7 +1003,7 @@ Reference < XAccessibleContext > hitTestRunner ( Point point, Reference < XAcces
     }
     Reference < XAccessibleContext > hitChild;
     NSRect screenRect = [ [ NSScreen mainScreen ] frame ];
-    Point hitPoint ( point.x , screenRect.size.height - point.y ); 
+    Point hitPoint ( static_cast<long>(point.x) , static_cast<long>(screenRect.size.height - point.y) ); 
     // check child windows first
     NSWindow * window = (NSWindow *) [ self accessibilityAttributeValue: NSAccessibilityWindowAttribute ];
     NSArray * childWindows = [ window childWindows ];

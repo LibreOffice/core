@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Library for automation of the 'Insert::Axes...' dialog
 '*

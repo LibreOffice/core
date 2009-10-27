@@ -78,7 +78,6 @@ using namespace ::com::sun::star::script;
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
 ////////////////////////////////////////
 //
@@ -359,8 +358,8 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return (
-            rServiceName == C2U("com.sun.star.document.OfficeDocument"  ) ||
-            rServiceName == C2U("com.sun.star.formula.FormulaProperties")
+            rServiceName == A2OU("com.sun.star.document.OfficeDocument"  ) ||
+            rServiceName == A2OU("com.sun.star.formula.FormulaProperties")
            );
 }
 /*-- 20.01.04 11:21:00---------------------------------------------------
@@ -377,8 +376,8 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.document.OfficeDocument");
-    pArray[1] = C2U("com.sun.star.formula.FormulaProperties");
+    pArray[0] = A2OU("com.sun.star.document.OfficeDocument");
+    pArray[1] = A2OU("com.sun.star.formula.FormulaProperties");
     return aRet;
 }
 
@@ -863,30 +862,6 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
     return 1;
 }
 
-
-static Size lcl_GuessPaperSize()
-{
-    Size aRes;
-    Reference< XMultiServiceFactory >  xMgr( getProcessServiceFactory() );
-    LocaleDataWrapper aLocWrp( xMgr, AllSettings().GetLocale() );
-    if( MEASURE_METRIC == aLocWrp.getMeasurementSystemEnum() )
-    {
-        // in Twip
-        aRes.Width()  = lA4Width;
-        aRes.Height() = lA4Height;
-    }
-    else
-    {
-        // in Twip
-        aRes.Width()  = lLetterWidth;
-        aRes.Height() = lLetterHeight;
-    }
-    aRes = OutputDevice::LogicToLogic( aRes, MapMode(MAP_TWIP),
-                                             MapMode(MAP_100TH_MM) );
-    return aRes;
-}
-
-
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& /*rSelection*/,
@@ -910,7 +885,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     // if paper size is 0 (usually if no 'real' printer is found),
     // guess the paper size
     if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
-        aPrtPaperSize = lcl_GuessPaperSize();
+        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MAP_100TH_MM);
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
@@ -979,7 +954,7 @@ void SAL_CALL SmModel::render(
                 // no real printer ??
                 if (aPrtPaperSize.Height() == 0 || aPrtPaperSize.Width() == 0)
                 {
-                    aPrtPaperSize = lcl_GuessPaperSize();
+                    aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MAP_100TH_MM);
                     // factors from Windows DIN A4
                     aOutputSize    = Size( (long)(aPrtPaperSize.Width()  * 0.941),
                                            (long)(aPrtPaperSize.Height() * 0.961));

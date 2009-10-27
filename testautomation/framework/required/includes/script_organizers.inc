@@ -39,6 +39,8 @@
 
 testcase tUpdtScriptCount
 
+    printlog( "Resource test for macros and scripts / related dialogs" )
+
     const SCRIPTING_DIALOGS = 5
     dim aScriptCount( SCRIPTING_DIALOGS )
         aScriptCount( 1 ) = 10
@@ -101,7 +103,6 @@ testcase tUpdtScriptCount
     
     hCloseDocument()
     
-    '///</ul>
 
 endcase
 

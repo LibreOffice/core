@@ -37,7 +37,7 @@
 
 #include <dispatch/popupmenudispatcher.hxx>
 #include <general.h>
-#include <classes/menuconfiguration.hxx>
+#include <xml/menuconfiguration.hxx>
 #include <classes/addonmenu.hxx>
 #include <services.h>
 #include <properties.h>
@@ -241,8 +241,7 @@ throw( css::uno::RuntimeException )
                 css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
 
                 // Find popup menu controller using the base URL
-                Any a = xPopupCtrlQuery->getByName( aBaseURL );
-                a >>= xDispatchProvider;
+                xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
                 aGuard.unlock();
 
                 // Ask popup menu dispatch provider for dispatch object
@@ -384,8 +383,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
             {
                 try
                 {
-                    Any a = xPropSet->getPropertyValue( FRAME_PROPNAME_LAYOUTMANAGER );
-                    a >>= xLayoutManager;
+                    xPropSet->getPropertyValue( FRAME_PROPNAME_LAYOUTMANAGER ) >>= xLayoutManager;
 
                     if ( xLayoutManager.is() )
                     {

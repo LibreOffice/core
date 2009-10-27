@@ -40,7 +40,7 @@
 #include <svtools/fltrcfg.hxx>
 
 #include "sdpptwrp.hxx"
-#include "pptin.hxx"
+#include "ppt/pptin.hxx"
 #include "drawdoc.hxx"
 #include <tools/urlobj.hxx>
 #include <svx/msfiltertracer.hxx>
@@ -59,6 +59,9 @@ typedef BOOL ( __LOADONCALLAPI *ExportPPT )( SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
+
+typedef sal_Bool ( SAL_CALL *ImportPPT )( const ::rtl::OUString&, Sequence< PropertyValue >*,
+                                          SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
 
 // ---------------
 // - SdPPTFilter -
@@ -107,18 +110,22 @@ sal_Bool SdPPTFilter::Import()
             aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentURL" ) );
             aConfigData[ 0 ] = aPropValue;
 
-            MSFilterTracer aTracer( aTraceConfigPath, &aConfigData );
-            aTracer.StartTracing();
-            SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
-            if ( ( bRet = pImport->Import() ) == sal_False )
+            if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
+                mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            else
             {
-                if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
-                    mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT );
-                else
-                    mrMedium.SetError( SVSTREAM_WRONGVERSION );
+                ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
+                if ( pLibrary )
+                {
+                    ImportPPT PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImportPPT" ) ) ) );
+                    if ( PPTImport )
+                        bRet = PPTImport( aTraceConfigPath, &aConfigData, &mrDocument, *pDocStream, *pStorage, mrMedium );
+
+                    if ( !bRet )
+                        mrMedium.SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                }
             }
-            aTracer.EndTracing();
-            delete pImport;
+
             delete pDocStream;
         }
     }

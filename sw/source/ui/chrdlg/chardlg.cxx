@@ -322,9 +322,16 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
 
 BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
-    String sURL = aURLED.GetText();
-    if(sURL.Len())
+   ::rtl::OUString sURL = aURLED.GetText();
+   if(sURL.getLength())
+    {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
+        // #i100683# file URLs should be normalized in the UI
+        static const sal_Char* pFile = "file:";
+       sal_Int32 nLength = ((sal_Int32)sizeof(pFile)-1);
+       if( sURL.copy(0, nLength ).equalsAsciiL( pFile, nLength ))
+            sURL = URIHelper::simpleNormalizedMakeRelative(::rtl::OUString(), sURL);
+    }
 
     SwFmtINetFmt aINetFmt(sURL, aTargetFrmLB.GetText());
     aINetFmt.SetName(aNameED.GetText());

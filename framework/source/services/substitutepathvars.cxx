@@ -295,7 +295,7 @@ void SubstitutePathVariables_Impl::GetSharePointsRules( SubstituteVariables& aSu
 
             SubstituteRuleVector aRuleSet;
             ReadSharePointRuleSetFromConfiguration( aSharePointNames[ nSharePoints ], aSharePointNodeName, aRuleSet );
-            if ( aRuleSet.size() > 0 )
+            if ( !aRuleSet.empty() )
             {
                 // We have at minimum one rule. Filter the correct rule out of the rule set
                 // and put into our SubstituteVariable map
@@ -409,10 +409,11 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
 {
     sal_Bool bResult = sal_False;
 
-    if ( aRuleSet.size() >= 1 )
+    if ( !aRuleSet.empty() )
     {
         sal_Int16   nPrioCurrentRule = aEnvPrioTable[ ET_UNKNOWN ];
-        for ( sal_Int32 nIndex = 0; nIndex < (sal_Int32)aRuleSet.size(); nIndex++ )
+        const sal_uInt32 nCount = aRuleSet.size();
+        for ( sal_uInt32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
             const SubstituteRule& aRule = aRuleSet[nIndex];
             EnvironmentType eEnvType    = aRule.aEnvType;
@@ -587,19 +588,6 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3                    (   SubstitutePathVariables                                  ,
-                                            OWeakObject                                             ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider              ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo               ),
-                                            DIRECT_INTERFACE( css::util::XStringSubstitution        )
-                                        )
-
-DEFINE_XTYPEPROVIDER_3                  (   SubstitutePathVariables             ,
-                                            css::lang::XTypeProvider            ,
-                                            css::lang::XServiceInfo             ,
-                                            css::util::XStringSubstitution
-                                        )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   SubstitutePathVariables                     ,
                                             ::cppu::OWeakObject                         ,
                                             SERVICENAME_SUBSTITUTEPATHVARIABLES         ,
@@ -616,6 +604,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiService
     m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
     m_xServiceManager( xServiceManager )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::SubstitutePathVariables" );
     int i;
 
     SetPredefinedPathVariables( m_aPreDefVars );
@@ -674,6 +663,7 @@ SubstitutePathVariables::~SubstitutePathVariables()
 rtl::OUString SAL_CALL SubstitutePathVariables::substituteVariables( const ::rtl::OUString& aText, sal_Bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::substituteVariables" );
     ResetableGuard aLock( m_aLock );
     return impl_substituteVariable( aText, bSubstRequired );
 }
@@ -681,6 +671,7 @@ throw ( NoSuchElementException, RuntimeException )
 rtl::OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const ::rtl::OUString& aText )
 throw ( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::reSubstituteVariables" );
     ResetableGuard aLock( m_aLock );
     return impl_reSubstituteVariables( aText );
 }
@@ -688,6 +679,7 @@ throw ( RuntimeException )
 rtl::OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const ::rtl::OUString& aVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::getSubstituteVariableValue" );
     ResetableGuard aLock( m_aLock );
     return impl_getSubstituteVariableValue( aVariable );
 }
@@ -707,6 +699,7 @@ IMPL_LINK( SubstitutePathVariables, implts_ConfigurationNotify, SubstitutePathNo
 
 rtl::OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const rtl::OUString& aOSLCompliantURL ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::ConvertOSLtoUCBURL" );
     String          aResult;
     rtl::OUString   aTemp;
 
@@ -722,27 +715,27 @@ rtl::OUString SubstitutePathVariables::ConvertOSLtoUCBURL( const rtl::OUString& 
 
 rtl::OUString SubstitutePathVariables::GetWorkPath() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkPath" );
     rtl::OUString aWorkPath;
-    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+    ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
                             ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
                             ::rtl::OUString::createFromAscii("Paths/Work"),
                             ::rtl::OUString::createFromAscii("WritePath"),
-                            ::comphelper::ConfigurationHelper::E_READONLY);
-    aVal >>= aWorkPath;
+                            ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
     return aWorkPath;
 }
 
 rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 {
-    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetWorkVariableValue" );
+    ::rtl::OUString aWorkPath;
+    ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xServiceManager,
                             ::rtl::OUString::createFromAscii("org.openoffice.Office.Paths"),
                             ::rtl::OUString::createFromAscii("Variables"),
                             ::rtl::OUString::createFromAscii("Work"),
-                            ::comphelper::ConfigurationHelper::E_READONLY);
-    ::rtl::OUString aWorkPath;
-    aVal >>= aWorkPath;
+                            ::comphelper::ConfigurationHelper::E_READONLY) >>= aWorkPath;
 
     // fallback to $HOME in  case platform dependend config layer does not return
     // an usuable work dir value.
@@ -756,6 +749,7 @@ rtl::OUString SubstitutePathVariables::GetWorkVariableValue() const
 
 rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetHomeVariableValue" );
     osl::Security   aSecurity;
     rtl::OUString   aHomePath;
 
@@ -765,6 +759,7 @@ rtl::OUString SubstitutePathVariables::GetHomeVariableValue() const
 
 rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::GetPathVariableValue" );
     const int PATH_EXTEND_FACTOR = 120;
 
     rtl::OUString aRetStr;
@@ -801,6 +796,7 @@ rtl::OUString SubstitutePathVariables::GetPathVariableValue() const
 rtl::OUString SubstitutePathVariables::impl_substituteVariable( const ::rtl::OUString& rText, sal_Bool bSubstRequired )
 throw ( NoSuchElementException, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_substituteVariable" );
     // This is maximal recursive depth supported!
     const sal_Int32 nMaxRecursiveDepth = 8;
 
@@ -928,7 +924,8 @@ throw ( NoSuchElementException, RuntimeException )
         else
         {
             // Check for recursion
-            for ( sal_Int32 i=0; i < (sal_Int32)aEndlessRecursiveDetector.size(); i++ )
+            const sal_uInt32 nCount = aEndlessRecursiveDetector.size();
+            for ( sal_uInt32 i=0; i < nCount; i++ )
             {
                 if ( aEndlessRecursiveDetector[i] == aWorkText )
                 {
@@ -992,6 +989,7 @@ throw ( NoSuchElementException, RuntimeException )
 rtl::OUString SubstitutePathVariables::impl_reSubstituteVariables( const ::rtl::OUString& rURL )
 throw ( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_reSubstituteVariables" );
     rtl::OUString aURL;
 
     INetURLObject aUrl( rURL );
@@ -1096,6 +1094,7 @@ throw ( RuntimeException )
 ::rtl::OUString SubstitutePathVariables::impl_getSubstituteVariableValue( const ::rtl::OUString& rVariable )
 throw ( NoSuchElementException, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::impl_getSubstituteVariableValue" );
     rtl::OUString aVariable;
 
     sal_Int32 nPos = rVariable.indexOf( m_aVarStart );
@@ -1148,6 +1147,7 @@ throw ( NoSuchElementException, RuntimeException )
 
 void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariables& aPreDefPathVariables )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::SetPredefinedPathVariables" );
     Any aAny;
     ::rtl::OUString aOfficePath;
     ::rtl::OUString aUserPath;
@@ -1204,9 +1204,8 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
 
     // Detect the language type of the current office
     aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
-    Any aLocale = utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( utl::ConfigManager::LOCALE );
     rtl::OUString aLocaleStr;
-    if ( aLocale >>= aLocaleStr )
+    if ( utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
         aPreDefPathVariables.m_eLanguageType = MsLangId::convertIsoStringToLanguage( aLocaleStr );
     else
     {

@@ -85,8 +85,7 @@ namespace framework
 {
 
 ToolBarWrapper::ToolBarWrapper( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    UIConfigElementWrapperBase( UIElementType::TOOLBAR ),
-    m_xServiceManager( xServiceManager )
+    UIConfigElementWrapperBase( UIElementType::TOOLBAR,xServiceManager )
 {
 }
 
@@ -185,7 +184,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
                     pToolBar = new ToolBar( pWindow, nStyles );
                     m_xToolBarWindow = VCLUnoHelper::GetInterface( pToolBar );
-                    pToolBarManager = new ToolBarManager( m_xServiceManager, xFrame, m_aResourceURL, pToolBar );
+                    pToolBarManager = new ToolBarManager( m_xServiceFactory, xFrame, m_aResourceURL, pToolBar );
                     pToolBar->SetToolBarManager( pToolBarManager );
                     m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
                     pToolBar->WillUsePopupMode( bPopupMode );
@@ -276,71 +275,12 @@ void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::Run
     }
 }
 
-Reference< XIndexAccess > SAL_CALL ToolBarWrapper::getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException)
+void ToolBarWrapper::impl_fillNewData()
 {
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( bWriteable )
-        return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
-    else
-        return m_xConfigData;
-}
-
-void SAL_CALL ToolBarWrapper::setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xSettings ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( xSettings.is() )
-    {
-        // Create a copy of the data if the container is not const
-        Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
-        if ( xReplace.is() )
-            m_xConfigData = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
-        else
-            m_xConfigData = xSettings;
-
-        if ( m_xConfigSource.is() && m_bPersistent )
-        {
-            ::rtl::OUString aResourceURL( m_aResourceURL );
-            Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
-
-            aLock.unlock();
-
-            try
-            {
-                xUICfgMgr->replaceSettings( aResourceURL, m_xConfigData );
-            }
-            catch( NoSuchElementException& )
-            {
-            }
-        }
-        else if ( !m_bPersistent )
-        {
-            // Transient toolbar => Fill toolbar with new data
-            ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-            if ( pToolBarManager )
-                pToolBarManager->FillToolbar( m_xConfigData );
-        }
-    }
-}
-
-//  XUIConfigurationListener
-void SAL_CALL ToolBarWrapper::elementInserted( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
-{
-}
-
-void SAL_CALL ToolBarWrapper::elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
-{
-}
-
-void SAL_CALL ToolBarWrapper::elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& ) throw (::com::sun::star::uno::RuntimeException)
-{
+    // Transient toolbar => Fill toolbar with new data
+    ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+    if ( pToolBarManager )
+        pToolBarManager->FillToolbar( m_xConfigData );
 }
 
 // XUIElement interface

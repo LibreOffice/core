@@ -32,6 +32,7 @@ package complex.dbaccess;
 
 public class FileHelper
 {
+    private FileHelper(){}
     static public String getOOoCompatibleFileURL( String _javaFileURL )
     {
         String returnURL = _javaFileURL;

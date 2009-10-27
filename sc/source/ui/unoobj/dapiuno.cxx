@@ -101,9 +101,9 @@ using ::com::sun::star::table::CellRangeAddress;
 
 namespace {
 
-const SfxItemPropertyMap* lcl_GetDataPilotDescriptorBaseMap()
+const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
 {
-    static SfxItemPropertyMap aDataPilotDescriptorBaseMap_Impl[] =
+    static SfxItemPropertyMapEntry aDataPilotDescriptorBaseMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
@@ -118,10 +118,10 @@ const SfxItemPropertyMap* lcl_GetDataPilotDescriptorBaseMap()
 
 // ----------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetDataPilotFieldMap()
+const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
 {
     using namespace ::com::sun::star::beans::PropertyAttribute;
-    static SfxItemPropertyMap aDataPilotFieldMap_Impl[] =
+    static SfxItemPropertyMapEntry aDataPilotFieldMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_AUTOSHOW),     0,  &getCppuType((DataPilotFieldAutoShowInfo*)0),   MAYBEVOID, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FUNCTION),     0,  &getCppuType((GeneralFunction*)0),              0, 0 },
@@ -146,9 +146,9 @@ const SfxItemPropertyMap* lcl_GetDataPilotFieldMap()
 
 // ----------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetDataPilotItemMap()
+const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
 {
-    static SfxItemPropertyMap aDataPilotItemMap_Impl[] =
+    static SfxItemPropertyMapEntry aDataPilotItemMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ISHIDDEN),     0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_POS),          0,  &getCppuType((sal_Int32*)0),    0, 0 },

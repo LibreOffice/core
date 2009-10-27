@@ -61,8 +61,8 @@ void lcl_setPageDesc(SwDoc*, const uno::Any&, SfxItemSet& ); // from unoobj.cxx
 
 
 SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
-    aPropSet( aSwMapProvider.GetPropertyMap ( PROPERTY_MAP_TEXT_DEFAULT ) ),
-    pDoc    ( pNewDoc )
+    m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_DEFAULT ) ),
+    m_pDoc   ( pNewDoc )
 {
 }
 
@@ -75,7 +75,7 @@ SwXTextDefaults::~SwXTextDefaults ()
 uno::Reference< XPropertySetInfo > SAL_CALL SwXTextDefaults::getPropertySetInfo(  )
         throw(RuntimeException)
 {
-    static uno::Reference < XPropertySetInfo > xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference < XPropertySetInfo > xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 
@@ -84,21 +84,21 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex());
-    if (!pDoc)
+    if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertyMap *pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
+    const SfxPoolItem& rItem = m_pDoc->GetDefault(pMap->nWID);
     if (RES_PAGEDESC == pMap->nWID && MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId)
     {
-        SfxItemSet aSet( pDoc->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
+        SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
         aSet.Put(rItem);
-        lcl_setPageDesc( pDoc, aValue, aSet );
-        pDoc->SetDefault(aSet.Get(RES_PAGEDESC));
+        lcl_setPageDesc( m_pDoc, aValue, aSet );
+        m_pDoc->SetDefault(aSet.Get(RES_PAGEDESC));
     }
     else if ((RES_PARATR_DROP == pMap->nWID && MID_DROPCAP_CHAR_STYLE_NAME == pMap->nMemberId) ||
              (RES_TXTATR_CHARFMT == pMap->nWID))
@@ -109,7 +109,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             String sStyle;
             SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
             SwDocStyleSheet* pStyle =
-                (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
+                (SwDocStyleSheet*)m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
             SwFmtDrop* pDrop = 0;
             SwFmtCharFmt *pCharFmt = 0;
             if(pStyle)
@@ -119,13 +119,13 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
                 {
                     pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem ist const...
                     pDrop->SetCharFmt(xStyle->GetCharFmt());
-                    pDoc->SetDefault(*pDrop);
+                    m_pDoc->SetDefault(*pDrop);
                 }
                 else // RES_TXTATR_CHARFMT == pMap->nWID
                 {
                     pCharFmt = (SwFmtCharFmt*)rItem.Clone();   // because rItem ist const...
                     pCharFmt->SetCharFmt(xStyle->GetCharFmt());
-                    pDoc->SetDefault(*pCharFmt);
+                    m_pDoc->SetDefault(*pCharFmt);
                 }
             }
             else
@@ -140,7 +140,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
     {
         SfxPoolItem * pNewItem = rItem.Clone();
         pNewItem->PutValue( aValue, pMap->nMemberId);
-        pDoc->SetDefault(*pNewItem);
+        m_pDoc->SetDefault(*pNewItem);
         delete pNewItem;
     }
 }
@@ -150,13 +150,13 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex());
-    if (!pDoc)
+    if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertyMap *pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
-    const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
+    const SfxPoolItem& rItem = m_pDoc->GetDefault(pMap->nWID);
     rItem.QueryValue( aRet, pMap->nMemberId );
     return aRet;
 }
@@ -196,13 +196,13 @@ PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPrope
 {
     vos::OGuard aGuard( Application::GetSolarMutex());
     PropertyState eRet = PropertyState_DIRECT_VALUE;
-    if (!pDoc)
+    if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertyMap *pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    const SfxPoolItem& rItem = pDoc->GetDefault(pMap->nWID);
+    const SfxPoolItem& rItem = m_pDoc->GetDefault(pMap->nWID);
     if (IsStaticDefaultItem ( &rItem ) )
         eRet = PropertyState_DEFAULT_VALUE;
     return eRet;
@@ -227,14 +227,14 @@ Sequence< PropertyState > SAL_CALL SwXTextDefaults::getPropertyStates( const Seq
 void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyName )
         throw(UnknownPropertyException, RuntimeException)
 {
-    if (!pDoc)
+    if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertyMap *pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
         throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertyToDefault: property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-    SfxItemPool& rSet (pDoc->GetAttrPool());
+    SfxItemPool& rSet (m_pDoc->GetAttrPool());
     rSet.ResetPoolDefaultItem ( pMap->nWID );
 }
 
@@ -242,13 +242,13 @@ void SAL_CALL SwXTextDefaults::setPropertyToDefault( const OUString& rPropertyNa
 Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    if (!pDoc)
+    if (!m_pDoc)
         throw RuntimeException();
-    const SfxItemPropertyMap *pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry *pMap = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
-    SfxItemPool& rSet (pDoc->GetAttrPool());
+    SfxItemPool& rSet (m_pDoc->GetAttrPool());
     const SfxPoolItem *pItem = rSet.GetPoolDefaultItem ( pMap->nWID );
     pItem->QueryValue( aRet, pMap->nMemberId );
     return aRet;

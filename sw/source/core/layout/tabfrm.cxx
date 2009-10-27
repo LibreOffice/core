@@ -129,6 +129,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab ):
         else
             delete pNew;
     }
+    ASSERT( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
 }
 
 SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
@@ -2102,6 +2103,11 @@ void SwTabFrm::MakeAll()
             {
                 bMovedFwd = TRUE;
                 bCalcLowers = TRUE;
+                // --> OD 2009-08-12 #i99267#
+                // reset <bSplit> after forward move to assure that follows
+                // can be joined, if further space is available.
+                bSplit = FALSE;
+                // <--
             }
 
         Point aOldPos( (Frm().*fnRect->fnGetPos)() );
@@ -2145,7 +2151,9 @@ void SwTabFrm::MakeAll()
 
         if ( !bValidSize || !bValidPrtArea )
         {
-            const BOOL bOptLower = (Frm().*fnRect->fnGetHeight)() == 0;
+            // HB #i101593# no optimization as it leeds to not layouting certain nested tables
+            // const BOOL bOptLower = (Frm().*fnRect->fnGetHeight)() == 0;
+            const BOOL bOptLower = FALSE;
 
             const long nOldPrtWidth = (Prt().*fnRect->fnGetWidth)();
             const long nOldFrmWidth = (Frm().*fnRect->fnGetWidth)();

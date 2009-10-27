@@ -37,6 +37,8 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+
 #include <svtools/itemprop.hxx>
 
 #ifndef _SVX_UNOPAGE_HXX
@@ -45,14 +47,14 @@
 #include <svx/fmdpage.hxx>
 #include <svx/svdpool.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "unosrch.hxx"
 
 class SdPage;
 class SvxShape;
 class SdrObject;
-struct SfxItemPropertyMap;
+struct SfxItemPropertySimpleEntry;
 
 #ifdef SVX_LIGHT
 #define SvxFmDrawPage SvxDrawPage
@@ -69,6 +71,7 @@ class SdGenericDrawPage : public SvxFmDrawPage,
                           public ::com::sun::star::beans::XPropertySet,
                           public ::com::sun::star::beans::XMultiPropertySet,
                           public ::com::sun::star::animations::XAnimationNodeSupplier,
+                             public ::com::sun::star::office::XAnnotationAccess,
                           public ::com::sun::star::document::XLinkTargetSupplier
 {
 private:
@@ -78,7 +81,7 @@ private:
 protected:
     friend class SdXImpressDocument;
 
-    SvxItemPropertySet  maPropSet;
+    const SvxItemPropertySet*   mpPropSet;
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
@@ -105,7 +108,7 @@ protected:
     void throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException );
 
 public:
-    SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SfxItemPropertyMap* pMap ) throw();
+    SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SvxItemPropertySet* pSet ) throw();
     virtual ~SdGenericDrawPage() throw();
 
     // intern
@@ -158,6 +161,11 @@ public:
 
     // XAnimationNodeSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > SAL_CALL getAnimationNode(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAnnotationAccess:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > SAL_CALL createAndInsertAnnotation() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeAnnotation(const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > & annotation) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationEnumeration > SAL_CALL createAnnotationEnumeration() throw (::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************

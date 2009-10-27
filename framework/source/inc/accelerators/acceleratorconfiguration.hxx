@@ -37,6 +37,7 @@
 #include <accelerators/istoragelistener.hxx>
 #include <accelerators/presethandler.hxx>
 #include <accelerators/acceleratorcache.hxx>
+#include <accelerators/keymapping.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -67,6 +68,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/locale.hxx>
+#include <salhelper/singletonref.hxx>
 
 //__________________________________________
 // definition
@@ -75,7 +77,7 @@ namespace framework
 {
 //-----------------------------------------------
 // Accelerators.xcu
-static const ::rtl::OUString CFG_ENTRY_ACCELERATORS = ::rtl::OUString::createFromAscii("org.openoffice.Office.Accelerators");
+
 static const ::rtl::OUString CFG_ENTRY_PRIMARY      = ::rtl::OUString::createFromAscii("PrimaryKeys");
 static const ::rtl::OUString CFG_ENTRY_SECONDARY    = ::rtl::OUString::createFromAscii("SecondaryKeys");
 
@@ -337,6 +339,8 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
 
         ::rtl::OUString m_sGlobalOrModules;
         ::rtl::OUString m_sModuleCFG;
+
+        ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
         //______________________________________
         // native interface!

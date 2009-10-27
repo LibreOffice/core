@@ -247,7 +247,7 @@ function hGetFilternameExtension ( vFilterName as string)
 
     const CFN = "global::tools:includes:required::t_filters.inc::hGetFilternameExtension(): "
 
-    'Initializize UNO comminication
+    'Initializize UNO communication
     oUno = hGetUNOService( TRUE )
 
     'Using the TypeDetection service

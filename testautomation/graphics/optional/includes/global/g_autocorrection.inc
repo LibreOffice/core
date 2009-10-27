@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -57,34 +57,30 @@ testcase tToolsAutocorrectReplace
     dim x as integer
     dim iTemp as integer
 
-    '/// open new application ///'
     Call hNewDocument
 
-    '/// Tools->Autocorrect... ///'
     ToolsAutocorrect
-        Kontext
-        '/// select tabpage 'Replace' ///'
-        active.SetPage TabErsetzung
-        Kontext "TabErsetzung"
-        iTemp = WelcheSprache.GetItemCount
-        for i = 1 to iTemp
-            WelcheSprache.select i
-            sleep 1
-            x = Liste.getItemCount
-'         results from an english version:
-'         - 28: English (UK): 807
-'         - 29: English (USA): 807
-'         - 38: French (France): 304
-'         - 43: German (Germany): 100
-'         - 102: Spanish (Spain): 353
-            if (x <> 0) then
-                printlog " - " + i + ": " + WelcheSprache.getSelText + ": " + x
- '               printlog "    " + Liste.getItemText (5,1) + " - " + Liste.getItemText (5,2)
-            endif
-        next i
+    Kontext
+    active.SetPage TabErsetzung
+    Kontext "TabErsetzung"
+    iTemp = WelcheSprache.GetItemCount
+    for i = 1 to iTemp
+        WelcheSprache.select i
+        sleep 1
+        x = Liste.getItemCount
+        '         results from an english version:
+        '         - 28: English (UK): 807
+        '         - 29: English (USA): 807
+        '         - 38: French (France): 304
+        '         - 43: German (Germany): 100
+        '         - 102: Spanish (Spain): 353
+        if (x <> 0) then
+            printlog " - " + i + ": " + WelcheSprache.getSelText + ": " + x
+            '               printlog "    " + Liste.getItemText (5,1) + " - " + Liste.getItemText (5,2)
+        endif
+    next i
     TabErsetzung.OK
 
-    '/// close application ///'
     hCloseDocument
 endcase
 
@@ -94,44 +90,40 @@ testcase tToolsAutocorrectExceptions
     dim y as integer
     dim iTemp as integer
 
-    '/// open new application ///'
     Call hNewDocument
 
-    '/// Tools->Autocorrect... ///'
     ToolsAutocorrect
-        Kontext
-        '/// select tabpage 'Replace' ///'
-        active.SetPage TabAusnahmen
-        Kontext "TabAusnahmen"
-        iTemp = WelcheSprache.GetItemCount
-        for i = 1 to iTemp
-            WelcheSprache.select i
-            sleep 1
-            x = AbkuerzungenListe.getItemCount
-'         results from an english version:
-'             - 28: English (UK): 120
-'             - 28: English (UK): 7
-'             - 29: English (USA): 120
-'             - 29: English (USA): 7
-'             - 38: French (France): 50
-'             - 38: French (France): 1
-'             - 43: German (Germany): 123
-'             - 43: German (Germany): 20
-'             - 102: Spanish (Spain): 115
-'             - 102: Spanish (Spain): 1
-            if (x <> 0) then
-                printlog " - " + i + ": " + WelcheSprache.getSelText + ": " + x
-'                printlog "    " + AbkuerzungenListe.getItemText (5)
-            endif
-            y = WoerterListe.getItemCount
-            if (y <> 0) then
-                printlog " - " + i + ": " + WelcheSprache.getSelText + ": " + y
-'                printlog "    " + WoerterListe.getItemText (5)
-            endif
-        next i
+    Kontext
+    active.SetPage TabAusnahmen
+    Kontext "TabAusnahmen"
+    iTemp = WelcheSprache.GetItemCount
+    for i = 1 to iTemp
+        WelcheSprache.select i
+        sleep 1
+        x = AbkuerzungenListe.getItemCount
+        '         results from an english version:
+        '             - 28: English (UK): 120
+        '             - 28: English (UK): 7
+        '             - 29: English (USA): 120
+        '             - 29: English (USA): 7
+        '             - 38: French (France): 50
+        '             - 38: French (France): 1
+        '             - 43: German (Germany): 123
+        '             - 43: German (Germany): 20
+        '             - 102: Spanish (Spain): 115
+        '             - 102: Spanish (Spain): 1
+        if (x <> 0) then
+            printlog " - " + i + ": " + WelcheSprache.getSelText + ": " + x
+            '                printlog "    " + AbkuerzungenListe.getItemText (5)
+        endif
+        y = WoerterListe.getItemCount
+        if (y <> 0) then
+            printlog " - " + i + ": " + WelcheSprache.getSelText + ": " + y
+            '                printlog "    " + WoerterListe.getItemText (5)
+        endif
+    next i
     TabAusnahmen.OK
 
-    '/// close application ///'
     hCloseDocument
 endcase
 
@@ -145,316 +137,253 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     dim sTemp as string
     dim sFileName as string
 
-    if (gApplication = "IMPRESS") then 
+    if (gApplication = "IMPRESS") then
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
     end if
 
-    '/// No matter the application and platform: open a file which has the same font selected. ///'
-       if iSprache = "1" OR iSprache = "33" OR iSprache = "34" OR iSprache = "36" OR iSprache = "39" OR iSprache = "46" OR iSprache = "48" OR iSprache = "49" OR iSprache = "55" then
-          sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont" & iSprache & "." + ExtensionString ))
-       elseif bAsianLan = true then 
-          Printlog "Language-file for Asian language " & iSprache & " is missing. Using standard instead."
-          sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont." + ExtensionString))
-       else
-          warnlog "Language-file for language " & iSprache & " is missing. Using standard instead."
-          sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont." + ExtensionString))
-       endif
+    if iSprache = "1" OR iSprache = "33" OR iSprache = "34" OR iSprache = "36" OR iSprache = "39" OR iSprache = "46" OR iSprache = "48" OR iSprache = "49" OR iSprache = "55" then
+        sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont" & iSprache & "." + ExtensionString ))
+    elseif bAsianLan = true then
+        Printlog "Language-file for Asian language " & iSprache & " is missing. Using standard instead."
+        sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont." + ExtensionString))
+    else
+        warnlog "Language-file for language " & iSprache & " is missing. Using standard instead."
+        sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont." + ExtensionString))
+    endif
 
     if hFileExists ( sFileName ) = FALSE then
-       warnlog "The language-file was not found or accessible! The test ends."
-       goto endsub
+        warnlog "The language-file was not found or accessible! The test ends."
+        goto endsub
     endif
 
     'HDE has same problems in w_106a.inc ;-) !!! migrate ?!?! ///'
-    '/// open new application ///'
     Call hNewDocument
 
-    '///  open file where the right font already is defined. ///'
     hFileOpen sFileName
     printlog "File opened: " + sFileName
     Sleep 3
 
     Call sMakeReadOnlyDocumentEditable
-    
-    '/// TBO TODO: put quotes in locale list !!!! (i love UTF8 :-)))///'
+
     if bSimple then
         Printlog "- Tools/Autocorrect -single quotes"
         Normal$ = Chr(39)
         select case iSprache
-            case 01 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
-            case 03 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
-            case 07 : qaerrorlog "Test impossible. No quotes in russian!"
-                      hCloseDocument
-                      goto endsub
-            case 31 : Vorn$ = Chr(8218) : Hinten$ = Chr(8216)
-            case 33 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
-            case 34 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
-            case 36 : Vorn$ = Chr(187)  : Hinten$ = Chr(171)
-            case 39 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
-            case 45 : Vorn$ = Chr(8217) : Hinten$ = Chr(8217)
-            case 46 : Vorn$ = Chr(8217) : Hinten$ = Chr(8217)
-            case 48 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
-            case 49 : Vorn$ = Chr(8218) : Hinten$ = Chr(8216)
-            case 55 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
-            case 81, 82, 86, 88 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217) ' Asian
+        case 01 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+        case 03 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+        case 07 : qaerrorlog "Test impossible. No quotes in russian!"
+            hCloseDocument
+            goto endsub
+        case 31 : Vorn$ = Chr(8218) : Hinten$ = Chr(8216)
+        case 33 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+        case 34 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+        case 36 : Vorn$ = Chr(187)  : Hinten$ = Chr(171)
+        case 39 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+        case 45 : Vorn$ = Chr(8217) : Hinten$ = Chr(8217)
+        case 46 : Vorn$ = Chr(8217) : Hinten$ = Chr(8217)
+        case 48 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+        case 49 : Vorn$ = Chr(8218) : Hinten$ = Chr(8216)
+        case 55 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+        case 81, 82, 86, 88 : Vorn$ = Chr(8216) : Hinten$ = Chr(8217) ' Asian
         case else : Warnlog "- Nothing prepared for this language, but I run: take the warnlogs an insert the numbers here.: "+iSprache
-                      Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
+            Vorn$ = Chr(8216) : Hinten$ = Chr(8217)
         end select
     else
         Printlog "- Tools/Autocorrect -double quotes"
         Normal$ = Chr(34)
         select case iSprache
-            case 01 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
-            case 03 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
-            case 07 : qaerrorlog "Test not possible. No quotes in russian !"
-                      Call hCloseDocument
-                      goto endsub
-            case 31 : Vorn$ = Chr(8222) : Hinten$ = Chr(8220)
-            case 33 : Vorn$ = Chr(171)  : Hinten$ = Chr(187)
-            case 34 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
-            case 36 : Vorn$ = Chr(8222) : Hinten$ = Chr(8221)
-            case 39 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
-            case 45 : Vorn$ = Chr(8221) : Hinten$ = Chr(8221)
-            case 46 : Vorn$ = Chr(8221) : Hinten$ = Chr(8221)
-            case 48 : Vorn$ = Chr(8222) : Hinten$ = Chr(8221)
-            case 49 : Vorn$ = Chr(8222) : Hinten$ = Chr(8220)
-            case 55 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
-            case 81, 82, 86, 88 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221) ' Asian
+        case 01 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
+        case 03 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
+        case 07 : qaerrorlog "Test not possible. No quotes in russian !"
+            Call hCloseDocument
+            goto endsub
+        case 31 : Vorn$ = Chr(8222) : Hinten$ = Chr(8220)
+        case 33 : Vorn$ = Chr(171)  : Hinten$ = Chr(187)
+        case 34 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
+        case 36 : Vorn$ = Chr(8222) : Hinten$ = Chr(8221)
+        case 39 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
+        case 45 : Vorn$ = Chr(8221) : Hinten$ = Chr(8221)
+        case 46 : Vorn$ = Chr(8221) : Hinten$ = Chr(8221)
+        case 48 : Vorn$ = Chr(8222) : Hinten$ = Chr(8221)
+        case 49 : Vorn$ = Chr(8222) : Hinten$ = Chr(8220)
+        case 55 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221)
+        case 81, 82, 86, 88 : Vorn$ = Chr(8220) : Hinten$ = Chr(8221) ' Asian
         case else : Warnlog "- Nothing prepared for this language: "+iSprache
-                  goto endsub
+            goto endsub
         end select
     endif
     Printlog "   - replace quotes" '------------------------------------------------------------------------------------------
-    '/// check default item for beginn and end. type them as normal and look how it get's replaced ///'
-    '/// Tools->Autocorrect... ///'
     ToolsAutocorrect
-        Kontext
-        '/// select tabpage 'Custom Quotes' ///'
-        active.SetPage TabTypografisch
-        Kontext "TabTypografisch"
-        '/// check checkbox 'Replace'; Simple: ; Double: click button 'Default'; ///'
-        if bSimple then
-            EinfacheErsetzen.Check
-        else
-           DoppelteErsetzen.Check
-           DoppeltStandard.Click
-        endif
-    '/// close dialog 'AutoCorrect' with OK ///'
+    Kontext
+    active.SetPage TabTypografisch
+    Kontext "TabTypografisch"
+    if bSimple then
+        EinfacheErsetzen.Check
+    else
+        DoppelteErsetzen.Check
+        DoppeltStandard.Click
+    endif
     TabTypografisch.OK
     sleep 5
     gMouseClick 50,50
     sleep 5
-    '/// create textframe with quotes; Simple: 39; Double: 34; ///'
     hTextrahmenErstellen ( Normal$ + "Hallo" + Normal$ + " ",20,20,60,30)
     sleep 5
-    '/// press keys [Home][Shift + Right] to select the start quote ///'
     hTypeKeys ("<Home><Shift Right>")
     sleep 5
-    '/// Edit->Copy ///'
     EditCopy
     sTemp = GetClipboardText
-    '/// compare quote to reference start quote ///'
     if (sTemp <> Vorn$) then
         Warnlog "The beginning quote seems wrong. Should be :'" + Vorn$ +"':"+ASC(vorn$)+ ":  but it is = :'" + sTemp +"':"+ASC(sTemp)+":"
     endif
     sleep 1
-    '/// press keys [End][Left][Shift + Left] to select the end quote ///'
     hTypeKeys "<End><Left><Shift Left>"
     Sleep 1
     EditCopy
     sTemp = GetClipboardText
-    '/// compare quote to reference end quote ///'
     if (sTemp <> Hinten$) then
         Warnlog "The end quote seems wrong. Should be :" + Hinten$ +":"+ASC(Hinten$) +":  but it is :" + sTemp + ":"+ASC(sTemp)+":"
     endif
 
-    '/// type keys [Home][Shift + End][Delete] to remove text
     hTypeKeys "<Home><Shift End><Delete>"
 
     Printlog "   - dont replace quotes" '------------------------------------------------------------------------------------------
-    '/// Tools->Autocorrect... ///'
     ToolsAutocorrect
     Kontext
-        '/// select tabpage 'Custom Quotes' ///'
-        Active.SetPage TabTypografisch
-        Kontext "TabTypografisch"
-        '/// UNcheck checkbox 'Replace' ///'
-        if bSimple then
-            EinfacheErsetzen.Uncheck
-        else
-            DoppelteErsetzen.Uncheck
-        endif
-    '/// close dialog 'AutoCorrect' with OK ///'
+    Active.SetPage TabTypografisch
+    Kontext "TabTypografisch"
+    if bSimple then
+        EinfacheErsetzen.Uncheck
+    else
+        DoppelteErsetzen.Uncheck
+    endif
     TabTypografisch.OK
     sleep 1
     gMouseClick 50,50
     sleep 1
-    '/// create textframe with quotes; Simple: 39; Double: 34; ///'
     hTextrahmenErstellen ( Normal$ + "Hello" + Normal$ + " ",20,20,60,30)
     sleep 1
-    '/// press keys [Home][Shift + Right] to select the start quote ///'
     hTypeKeys "<Home><Shift Right>"
     Sleep 1
-    '/// Edit->Copy ///'
     EditCopy
     sTemp = GetClipboardText
-    '/// check if quote got modified; it hasn't got. ///'
     if (sTemp <> Normal$) then
         Warnlog "The beginning quote seems wrong. Should be :'" + Vorn$ +"':"+ASC(vorn$)+ ":  but it is = :'" + sTemp +"':"+ASC(sTemp)+":"
     endif
 
-    '/// press keys [End][Left][Shift + Left] to select the end quote ///'
     hTypeKeys "<End><Left><Shift Left>"
     Sleep 1
-    '/// Edit->Copy ///'
     EditCopy
     sTemp = GetClipboardText
-    '/// check if quote got modified; it hasn't got. ///'
     if (sTemp <> Normal$) then
         Warnlog "The end quote seems wrong. Should be :" + Hinten$ +":"+ASC(Hinten$) +":  but it is :" + sTemp + ":"+ASC(sTemp)+":"
     endif
-    '/// type keys [Home][Shift + End][Delete] to remove text
     hTypeKeys "<Home><Shift End><Delete>"
 
     Printlog "   - replace quotes" '------------------------------------------------------------------------------------------
-    '/// set to a value, and check if that value is used///'
-    '/// Tools->Autocorrect... ///'
     ToolsAutocorrect
     Kontext
-        '/// select tabpage 'Custom Quotes' ///'
-        active.SetPage TabTypografisch
-        Kontext "TabTypografisch"
-        '/// check checkbox 'Replace'; click button Start quote: '"/'' ///'
-        if bSimple then
-            EinfacheErsetzen.Check
-            EinfachWortAnfang.Click
-        else
-            DoppelteErsetzen.Check
-            DoppeltWortAnfang.Click
-        endif
-                Kontext "Sonderzeichen"
-                sleep 1
-                '/// on dialog 'Start Quote' in character list press [Home] 91*[Right] ///'
-                Schriftliste.TypeKeys "<Home>"
-                Schriftliste.TypeKeys "<Right>", 91 '123
-                sleep 1
-            '/// close dialog 'Start Quote' with OK ///'
-            Sonderzeichen.OK
+    active.SetPage TabTypografisch
+    Kontext "TabTypografisch"
+    if bSimple then
+        EinfacheErsetzen.Check
+        EinfachWortAnfang.Click
+    else
+        DoppelteErsetzen.Check
+        DoppeltWortAnfang.Click
+    endif
+    Kontext "Sonderzeichen"
+    sleep 1
+    Schriftliste.TypeKeys "<Home>"
+    Schriftliste.TypeKeys "<Right>", 91 '123
+    sleep 1
+    Sonderzeichen.OK
 
-        Kontext "TabTypografisch"
-        '/// click button End Quote: '"/'' ///'
-        if bSimple then
-            EinfachWortEnde.Click
-        else
-            DoppeltWortEnde.Click
-        endif
-               Kontext "Sonderzeichen"
-               sleep 1
-                '/// on dialog 'End Quote' in character list press [Home] 93*[Right] ///'
-               Schriftliste.TypeKeys "<Home>"
-               Schriftliste.TypeKeys "<Right>", 93 '125
-               sleep 1
-            '/// close dialog 'End Quote' with OK ///'
-            Sonderzeichen.OK
+    Kontext "TabTypografisch"
+    if bSimple then
+        EinfachWortEnde.Click
+    else
+        DoppeltWortEnde.Click
+    endif
+    Kontext "Sonderzeichen"
+    sleep 1
+    Schriftliste.TypeKeys "<Home>"
+    Schriftliste.TypeKeys "<Right>", 93 '125
+    sleep 1
+    Sonderzeichen.OK
 
-        Kontext "TabTypografisch"
-    '/// close dialog 'AutoCorrect' with OK ///'
+    Kontext "TabTypografisch"
     TabTypografisch.OK
     sleep 5
     gMouseClick 50,50
     sleep 5
-    '/// create textframe with quotes; Simple: 39; Double: 34; ///'
     hTextrahmenErstellen ( Normal$ + "Hello" + Normal$ + " ",20,20,60,30)
     sleep 2
-    '/// press keys [Home][Shift + Right] to select the start quote ///'
     hTypeKeys "<Home><Shift Right>"
     Sleep 5
-    '/// Edit->Copy ///'
     EditCopy
     sTemp = GetClipboardText
-    '/// compare quote to selected start quote ///'
     if (sTemp <> Chr(123)) then
         Warnlog "Beginning quote is wrong. It should be :" + Chr (123) + ":123:  but it is = " + sTemp +":"+ASC(sTemp)+":"
     endif
 
-    '/// press keys [End][Left][Shift + Left] to select the end quote ///'
     hTypeKeys "<End><Left><Shift Left>"
     Sleep 1
-    '/// Edit->Copy ///'
     EditCopy
     sTemp = GetClipboardText
-    '/// compare quote to selected end quote ///'
     if (sTemp <> Chr(125)) then
         Warnlog "The end quote is wrong, it should be :" + Chr (125) + ":125:  but it is = " + sTemp +":"+ASC(sTemp)+":"
     endif
-    '/// type keys [Home][Shift + End][Delete] to remove text
     hTypeKeys "<Home><Shift End><Delete>"
 
     Printlog "   - back to standard" '------------------------------------------------------------------------------------------
-    '/// Tools->Autocorrect... ///'
     ToolsAutocorrect
     Kontext
-        '/// select tabpage 'Custom Quotes' ///'
-        active.SetPage TabTypografisch
-        Kontext "TabTypografisch"
-        '/// check checkbox 'Replace'; click button 'Default'; ///'
-        if bSimple then
-            EinfacheErsetzen.Check
-            EinfachStandard.Click
-        else
-            DoppelteErsetzen.Check
-            DoppeltStandard.Click
-        endif
+    active.SetPage TabTypografisch
+    Kontext "TabTypografisch"
+    if bSimple then
+        EinfacheErsetzen.Check
+        EinfachStandard.Click
+    else
+        DoppelteErsetzen.Check
+        DoppeltStandard.Click
+    endif
 
-    '/// close dialog 'AutoCorrect' with OK ///'
     TabTypografisch.OK
     sleep 1
-    '/// create textframe with quotes; Simple: 39; Double: 34; ///'
     hTextrahmenErstellen ( Normal$ + "Hello" + Normal$ + " ",20,20,60,30)
     sleep 2
-    '/// press keys [Home][Shift + Right] to select the start quote ///'
     hTypeKeys "<Home><Shift Right>"
     Sleep 1
-    '/// Edit->Copy ///'
     EditCopy
     sTemp = GetClipboardText
-    '/// compare quote to reference start quote ///'
     if (sTemp <> Vorn$) then
         Warnlog "The beginning quote seems wrong. Should be :" + Vorn$ +":"+ASC(vorn$)+ ":  but it is = :" + sTemp +":"+ASC(sTemp)+":"
     endif
 
-    '/// press keys [End][Left][Shift + Left] to select the end quote ///'
     hTypeKeys "<End><Left><Shift Left>"
     Sleep 1
-    '/// Edit->Copy ///'
     EditCopy
     sTemp = GetClipboardText
-    '/// compare quote to reference end quote ///'
     if (sTemp <> Hinten$) then
         Warnlog "The end quote seems wrong. Should be :" + Hinten$ +":"+ASC(Hinten$) +":  but it is :" + sTemp + ":"+ASC(sTemp)+":"
     endif
-    '/// type keys [Home][Shift + End][Delete] to remove text
     hTypeKeys "<Home><Shift End><Delete>"
 
-    '/// Tools->Autocorrect... ///'
     ToolsAutocorrect
     Kontext
-        '/// select tabpage 'Custom Quotes' ///'
-        active.SetPage TabTypografisch
-        Kontext "TabTypografisch"
-        '/// UNcheck checkbox 'Replace' ///'
-        if bSimple then
-            EinfacheErsetzen.UnCheck
-        else
-            DoppelteErsetzen.UnCheck
-        endif
-    '/// close dialog 'AutoCorrect' with OK ///'
+    active.SetPage TabTypografisch
+    Kontext "TabTypografisch"
+    if bSimple then
+        EinfacheErsetzen.UnCheck
+    else
+        DoppelteErsetzen.UnCheck
+    endif
     TabTypografisch.OK
     sleep 1
 
-    '/// close application ///'
     hCloseDocument
 endcase
 

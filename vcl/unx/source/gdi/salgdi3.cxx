@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salgdi3.cxx,v $
- * $Revision: 1.157.12.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -50,6 +47,7 @@
 #include "pspgraphics.h"
 #include "salvd.h"
 #include "xfont.hxx"
+#include <vcl/sysdata.hxx>
 #include "xlfd_attr.hxx"
 #include "xlfd_smpl.hxx"
 #include "xlfd_extd.hxx"
@@ -80,6 +78,11 @@
 #include "i18npool/mslangid.hxx"
 
 #include <hash_set>
+
+#ifdef ENABLE_GRAPHITE
+#include <vcl/graphite_layout.hxx>
+#include <vcl/graphite_serverfont.hxx>
+#endif
 
 struct cairo_surface_t;
 struct cairo_t;
@@ -797,7 +800,11 @@ CairoWrapper::CairoWrapper()
     if( !XQueryExtension( GetX11SalData()->GetDisplay()->GetDisplay(), "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
+#ifdef MACOSX
+    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.2.dylib" ));
+#else
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
+#endif
     mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpCairoLib )
         return;
@@ -1018,29 +1025,22 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
 void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 {
-    Display* pDisplay = GetXDisplay();
-    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-
-    // find a XRenderPictFormat compatible with the Drawable
-    XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
-    if( !pVisualFormat )
-    {
-        Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
-        pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
-        // cache the XRenderPictFormat
-        SetXRenderFormat( static_cast<void*>(pVisualFormat) );
-    }
-
-    DBG_ASSERT( pVisualFormat!=NULL, "no matching XRenderPictFormat for text" );
-    if( !pVisualFormat )
+    // get xrender target for this drawable
+    Picture aDstPic = GetXRenderPicture();
+    if( !aDstPic )
         return;
 
     // get a XRenderPicture for the font foreground
+    // TODO: move into own method
+    XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+    XRenderPictFormat* pVisualFormat = (XRenderPictFormat*)GetXRenderFormat();
+    DBG_ASSERT( pVisualFormat, "we already have a render picture, but XRenderPictFormat==NULL???");
     const int nVisualDepth = pVisualFormat->depth;
     SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ nVisualDepth ];
     if( !rEntry.m_aPicture )
     {
         // create and cache XRenderPicture for the font foreground
+        Display* pDisplay = GetXDisplay();
 #ifdef DEBUG
         int iDummy;
         unsigned uDummy;
@@ -1062,12 +1062,10 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
     XRenderColor aRenderColor = GetXRenderColor( nTextPixel_ );
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
-    // notify xrender of target drawable
-    Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
-
     // set clipping
+    // TODO: move into GetXRenderPicture()?
     if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDst, pClipRegion_ );
+        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
 
     ServerFont& rFont = rLayout.GetServerFont();
     X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
@@ -1091,12 +1089,9 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
         unsigned int aRenderAry[ MAXGLYPHS ];
         for( int i = 0; i < nGlyphs; ++i )
              aRenderAry[ i ] = rGlyphPeer.GetGlyphId( rFont, aGlyphAry[i] );
-        rRenderPeer.CompositeString32( rEntry.m_aPicture, aDst,
+        rRenderPeer.CompositeString32( rEntry.m_aPicture, aDstPic,
            aGlyphSet, aPos.X(), aPos.Y(), aRenderAry, nGlyphs );
     }
-
-    // cleanup
-    rRenderPeer.FreePicture( aDst );
 }
 
 //--------------------------------------------------------------------------
@@ -1457,21 +1452,17 @@ void X11SalGraphics::DrawStringUCS2MB( ExtendedFontStruct& rFont,
 ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 {
     // TODO: get ImplFontCharMap directly from fonts
-    int nPairCount = 0;
-    if( mpServerFont[0] )
-        nPairCount = mpServerFont[0]->GetFontCodeRanges( NULL );
-    else if( mXFont[0] )
-        nPairCount = mXFont[0]->GetFontCodeRanges( NULL );
-
-    if( !nPairCount )
+    if( !mpServerFont[0] )
+#if 0 // RIP XLFD fonts
+    if( mXFont[0] )
+        // TODO?: nPairCount = mXFont[0]->GetFontCodeRanges( NULL );
+#endif
         return NULL;
 
-    sal_uInt32* pCodePairs = new sal_uInt32[ 2 * nPairCount ];
-    if( mpServerFont[0] )
-        mpServerFont[0]->GetFontCodeRanges( pCodePairs );
-    else if( mXFont[0] )
-        mXFont[0]->GetFontCodeRanges( pCodePairs );
-    return new ImplFontCharMap( nPairCount, pCodePairs );
+    CmapResult aCmapResult;
+    if( !mpServerFont[0]->GetFontCodeRanges( aCmapResult ) )
+        return NULL;
+    return new ImplFontCharMap( aCmapResult );
 }
 
 // ----------------------------------------------------------------------------
@@ -1688,11 +1679,29 @@ BOOL X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
 
 SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    GenericSalLayout* pLayout = NULL;
+    SalLayout* pLayout = NULL;
 
     if( mpServerFont[ nFallbackLevel ]
     && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
-        pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+    {
+#ifdef ENABLE_GRAPHITE
+        // Is this a Graphite font?
+        if (!bDisableGraphite_ &&
+            GraphiteFontAdaptor::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))
+        {
+            sal_Int32 xdpi, ydpi;
+
+            xdpi = GetDisplay()->GetResolution().A();
+            ydpi = GetDisplay()->GetResolution().B();
+
+            GraphiteFontAdaptor * pGrfont = new GraphiteFontAdaptor( *mpServerFont[nFallbackLevel], xdpi, ydpi);
+            if (!pGrfont) return NULL;
+            pLayout = new GraphiteServerFontLayout(pGrfont);
+        }
+        else
+#endif
+            pLayout = new ServerFontLayout( *mpServerFont[ nFallbackLevel ] );
+    }
     else if( mXFont[ nFallbackLevel ] )
         pLayout = new X11FontLayout( *mXFont[ nFallbackLevel ] );
     else
@@ -1703,27 +1712,57 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 
 //--------------------------------------------------------------------------
 
+SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
+{
+    SystemFontData aSysFontData;
+    aSysFontData.nSize = sizeof( SystemFontData );
+    aSysFontData.nFontId = 0;
+
+    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
+    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+
+    if (mpServerFont[nFallbacklevel] != NULL)
+    {
+        ServerFont* rFont = mpServerFont[nFallbacklevel];
+        aSysFontData.nFontId = rFont->GetFtFace();
+        aSysFontData.nFontFlags = rFont->GetLoadFlags();
+        aSysFontData.bFakeBold = rFont->NeedsArtificialBold();
+        aSysFontData.bFakeItalic = rFont->NeedsArtificialItalic();
+        aSysFontData.bAntialias = rFont->GetAntialiasAdvice();
+        aSysFontData.bVerticalCharacterType = rFont->GetFontSelData().mbVertical;
+    }
+
+    return aSysFontData;
+}
+
+//--------------------------------------------------------------------------
+
 BOOL X11SalGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
                                    const ImplFontData* pFont,
                                    sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
-                                   int nGlyphs,
+                                   int nGlyphCount,
                                    FontSubsetInfo& rInfo
                                    )
 {
-#ifndef _USE_PRINT_EXTENSION_
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
     // export has filtered its list of subsettable fonts (for
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoCreateFontSubset( rToFile, aFont, pGlyphIDs, pEncoding, pWidths, nGlyphs, rInfo );
-#else
-    return FALSE;
-#endif
+
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    bool bSuccess = rMgr.createFontSubset( rInfo,
+                                 aFont,
+                                 rToFile,
+                                 pGlyphIDs,
+                                 pEncoding,
+                                 pWidths,
+                                 nGlyphCount );
+    return bSuccess;
 }
 
 //--------------------------------------------------------------------------

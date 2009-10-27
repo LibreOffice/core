@@ -36,6 +36,7 @@
 //----------------------------------------------------------------------------
 
 #include "pvlaydlg.hxx"
+#include "dbdocfun.hxx"
 
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
@@ -56,6 +57,7 @@
 #include "pivot.hrc"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "dpshttab.hxx"
 #include "scmod.hxx"
 
 #include "sc.hrc" //CHINA001
@@ -120,6 +122,11 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aFtInfo         ( this, ScResId( FT_INFO ) ),
 
         aFlAreas        ( this, ScResId( FL_OUTPUT ) ),
+
+        aFtInArea       ( this, ScResId( FT_INAREA) ),
+        aEdInPos        ( this, ScResId( ED_INAREA) ),
+        aRbInPos        ( this, ScResId( RB_INAREA ), &aEdInPos, this ),
+
         aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
         aFtOutArea      ( this, ScResId( FT_OUTAREA ) ),
         aEdOutPos       ( this, this, ScResId( ED_OUTAREA ) ),
@@ -142,6 +149,8 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aStrNewTable    ( ScResId( SCSTR_NEWTABLE ) ),
 
         bIsDrag         ( FALSE ),
+
+        pEditActive     ( NULL ),
 
         eLastActiveType ( TYPE_SELECT ),
         nOffset         ( 0 ),
@@ -204,6 +213,10 @@ void __EXPORT ScDPLayoutDlg::Init()
     for ( USHORT i = 0; i < FUNC_COUNT; ++i )
         aFuncNameArr.push_back( String( ScResId( i + 1 ) ) );
 
+    aBtnMore.AddWindow( &aFlAreas );
+    aBtnMore.AddWindow( &aFtInArea );
+    aBtnMore.AddWindow( &aEdInPos );
+    aBtnMore.AddWindow( &aRbInPos );
     aBtnMore.AddWindow( &aFtOutArea );
     aBtnMore.AddWindow( &aLbOutPos );
     aBtnMore.AddWindow( &aEdOutPos );
@@ -214,7 +227,6 @@ void __EXPORT ScDPLayoutDlg::Init()
     aBtnMore.AddWindow( &aBtnTotalRow );
     aBtnMore.AddWindow( &aBtnFilter );
     aBtnMore.AddWindow( &aBtnDrillDown );
-    aBtnMore.AddWindow( &aFlAreas );
     aBtnMore.SetClickHdl( LINK( this, ScDPLayoutDlg, MoreClickHdl ) );
 
     {
@@ -232,31 +244,35 @@ void __EXPORT ScDPLayoutDlg::Init()
     aRowArr.resize( MAX_FIELDS );
     aDataArr.resize( MAX_FIELDS );
 
-    InitWndSelect( thePivotData.ppLabelArr, static_cast<long>(thePivotData.nLabels) );
-    InitWnd( thePivotData.aPageArr, static_cast<long>(thePivotData.nPageCount), TYPE_PAGE );
-    InitWnd( thePivotData.aColArr,  static_cast<long>(thePivotData.nColCount),  TYPE_COL );
-    InitWnd( thePivotData.aRowArr,  static_cast<long>(thePivotData.nRowCount),  TYPE_ROW );
-    InitWnd( thePivotData.aDataArr, static_cast<long>(thePivotData.nDataCount), TYPE_DATA );
-
-    aSlider.SetPageSize( PAGE_SIZE );
-    aSlider.SetVisibleSize( PAGE_SIZE );
-    aSlider.SetLineSize( LINE_SIZE );
-    aSlider.SetRange( Range( 0, static_cast<long>(((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE) ) );
-
-    if ( thePivotData.nLabels > PAGE_SIZE )
+    ScRange inRange;
+    String inString;
+    if (xDlgDPObject->GetSheetDesc())
     {
-        aSlider.SetEndScrollHdl( LINK( this, ScDPLayoutDlg, ScrollHdl ) );
-        aSlider.Show();
+        aEdInPos.Enable();
+        aRbInPos.Enable();
+        aOldRange = xDlgDPObject->GetSheetDesc()->aSourceRange;
+        aOldRange.Format( inString, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+        aEdInPos.SetText(inString);
     }
     else
-        aSlider.Hide();
+    {
+        /* Data is not reachable, so could be a remote database */
+        aEdInPos.Disable();
+        aRbInPos.Disable();
+    }
 
-    // Ein-/Ausgabebereiche: ----------------------------------------------
+    InitFields();
 
     aLbOutPos .SetSelectHdl( LINK( this, ScDPLayoutDlg, SelAreaHdl ) );
     aEdOutPos .SetModifyHdl( LINK( this, ScDPLayoutDlg, EdModifyHdl ) );
+    aEdInPos  .SetModifyHdl( LINK( this, ScDPLayoutDlg, EdInModifyHdl ) );
     aBtnOk    .SetClickHdl ( LINK( this, ScDPLayoutDlg, OkHdl ) );
     aBtnCancel.SetClickHdl ( LINK( this, ScDPLayoutDlg, CancelHdl ) );
+    Link aLink = LINK( this, ScDPLayoutDlg, GetFocusHdl );
+    if ( aEdInPos.IsEnabled() )
+        // Once disabled it will never get enabled, so no need to handle focus.
+        aEdInPos.SetGetFocusHdl( aLink );
+    aEdOutPos.SetGetFocusHdl( aLink );
 
     if ( pViewData && pDoc )
     {
@@ -475,6 +491,27 @@ void ScDPLayoutDlg::InitFocus()
         aWndSelect.GrabFocus();
 }
 
+void ScDPLayoutDlg::InitFields()
+{
+    InitWndSelect( thePivotData.ppLabelArr, static_cast<long>(thePivotData.nLabels) );
+    InitWnd( thePivotData.aPageArr, static_cast<long>(thePivotData.nPageCount), TYPE_PAGE );
+    InitWnd( thePivotData.aColArr,  static_cast<long>(thePivotData.nColCount),  TYPE_COL );
+    InitWnd( thePivotData.aRowArr,  static_cast<long>(thePivotData.nRowCount),  TYPE_ROW );
+    InitWnd( thePivotData.aDataArr, static_cast<long>(thePivotData.nDataCount), TYPE_DATA );
+
+    aSlider.SetPageSize( PAGE_SIZE );
+    aSlider.SetVisibleSize( PAGE_SIZE );
+    aSlider.SetLineSize( LINE_SIZE );
+    aSlider.SetRange( Range( 0, static_cast<long>(((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE) ) );
+
+    if ( thePivotData.nLabels > PAGE_SIZE )
+    {
+        aSlider.SetEndScrollHdl( LINK( this, ScDPLayoutDlg, ScrollHdl ) );
+        aSlider.Show();
+    }
+    else
+        aSlider.Hide();
+}
 
 //----------------------------------------------------------------------------
 
@@ -1309,22 +1346,75 @@ BOOL ScDPLayoutDlg::GetPivotArrays(    PivotField*  pPageArr,
     return bFit;
 }
 
+void ScDPLayoutDlg::UpdateSrcRange()
+{
+    String  theCurPosStr = aEdInPos.GetText();
+    USHORT  nResult = ScRange().Parse(theCurPosStr, pDoc, pDoc->GetAddressConvention());
+
+    if ( SCA_VALID != (nResult & SCA_VALID) )
+        // invalid source range.
+        return;
+
+    ScRefAddress start, end;
+    ConvertDoubleRef(pDoc, theCurPosStr, 1,  start, end, pDoc->GetAddressConvention());
+    ScRange aNewRange(start.GetAddress(), end.GetAddress());
+    ScSheetSourceDesc inSheet = *xDlgDPObject->GetSheetDesc();
+
+    if (inSheet.aSourceRange == aNewRange)
+        // new range is identical to the current range.  Nothing to do.
+        return;
+
+    ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
+    inSheet.aSourceRange = aNewRange;
+    xDlgDPObject->SetSheetDesc(inSheet);
+    xDlgDPObject->FillOldParam( thePivotData, FALSE );
+    xDlgDPObject->FillLabelData(thePivotData);
+
+    pTabViewShell->SetDialogDPObject(xDlgDPObject.get());
+    aLabelDataArr.clear();
+    aWndSelect.ClearFields();
+    aWndData.ClearFields();
+    aWndRow.ClearFields();
+    aWndCol.ClearFields();
+    aWndPage.ClearFields();
+
+    for (size_t i = 0; i < MAX_LABELS; ++i)
+        aSelectArr[i].reset();
+
+    for (size_t i = 0; i < MAX_FIELDS; ++i)
+    {
+        aRowArr[i].reset();
+        aColArr[i].reset();
+        aDataArr[i].reset();
+    }
+
+    for (size_t i = 0; i < MAX_PAGEFIELDS; ++i)
+        aPageArr[i].reset();
+
+    InitFields();
+}
 
 //----------------------------------------------------------------------------
 
 void ScDPLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode )
+    if ( !bRefInputMode || !pEditActive )
+        return;
+
+    if ( rRef.aStart != rRef.aEnd )
+        RefInputStart( pEditActive );
+
+    if ( pEditActive == &aEdInPos )
     {
-        if ( rRef.aStart != rRef.aEnd )
-            RefInputStart( &aEdOutPos );
-/*
-        ScAddress   aAdr( nStartCol, nStartRow, nStartTab );
-        aAdr.PutInOrder( ScAddress( nEndCol, nEndRow, nEndTab ) );
-*/
+        String aRefStr;
+        rRef.Format( aRefStr, SCR_ABS_3D, pDocP, pDocP->GetAddressConvention() );
+        pEditActive->SetRefString( aRefStr );
+    }
+    else if ( pEditActive == &aEdOutPos )
+    {
         String aRefStr;
         rRef.aStart.Format( aRefStr, STD_FORMAT, pDocP, pDocP->GetAddressConvention() );
-        aEdOutPos.SetRefString( aRefStr );
+        pEditActive->SetRefString( aRefStr );
     }
 }
 
@@ -1335,7 +1425,12 @@ void ScDPLayoutDlg::SetActive()
 {
     if ( bRefInputMode )
     {
-        aEdOutPos.GrabFocus();
+        if ( pEditActive )
+            pEditActive->GrabFocus();
+
+        if ( pEditActive == &aEdInPos )
+            EdInModifyHdl( NULL );
+        else if ( pEditActive == &aEdOutPos )
         EdModifyHdl( NULL );
     }
     else
@@ -1374,7 +1469,7 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
     String      aOutPosStr( aEdOutPos.GetText() );
     ScAddress   aAdrDest;
     BOOL        bToNewTable = (aLbOutPos.GetSelectEntryPos() == 1);
-    USHORT      nResult     = !bToNewTable ? aAdrDest.Parse( aOutPosStr, pDoc ) : 0;
+    USHORT      nResult     = !bToNewTable ? aAdrDest.Parse( aOutPosStr, pDoc, pDoc->GetAddressConvention() ) : 0;
 
     if (   bToNewTable
         || ( (aOutPosStr.Len() > 0) && (SCA_VALID == (nResult & SCA_VALID)) ) )
@@ -1507,12 +1602,11 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScDPLayoutDlg, CancelHdl, CancelButton *, EMPTYARG )
+IMPL_LINK( ScDPLayoutDlg, CancelHdl, CancelButton *, EMPTYARG )
 {
     Close();
     return 0;
 }
-IMPL_LINK_INLINE_END( ScDPLayoutDlg, CancelHdl, CancelButton *, EMPTYARG )
 
 
 //----------------------------------------------------------------------------
@@ -1524,9 +1618,18 @@ IMPL_LINK( ScDPLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
         bRefInputMode = TRUE;
         //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
         //SFX_APPWINDOW->Enable();
+        if ( aEdInPos.IsEnabled() )
+        {
+            aEdInPos.Enable();
+            aEdInPos.GrabFocus();
+            aEdInPos.Enable();
+        }
+        else
+        {
         aEdOutPos.Enable();
         aEdOutPos.GrabFocus();
-        aRbOutPos.Enable();
+            aEdOutPos.Enable();
+        }
     }
     else
     {
@@ -1543,7 +1646,7 @@ IMPL_LINK( ScDPLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
 IMPL_LINK( ScDPLayoutDlg, EdModifyHdl, Edit *, EMPTYARG )
 {
     String  theCurPosStr = aEdOutPos.GetText();
-    USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc );
+    USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
     if ( SCA_VALID == (nResult & SCA_VALID) )
     {
@@ -1563,6 +1666,13 @@ IMPL_LINK( ScDPLayoutDlg, EdModifyHdl, Edit *, EMPTYARG )
         else
             aLbOutPos.SelectEntryPos( 0 );
     }
+    return 0;
+}
+
+
+IMPL_LINK( ScDPLayoutDlg, EdInModifyHdl, Edit *, EMPTYARG )
+{
+    UpdateSrcRange();
     return 0;
 }
 
@@ -1620,4 +1730,16 @@ IMPL_LINK( ScDPLayoutDlg, ScrollHdl, ScrollBar *, EMPTYARG )
     return 0;
 }
 
+//----------------------------------------------------------------------------
+
+IMPL_LINK( ScDPLayoutDlg, GetFocusHdl, Control*, pCtrl )
+{
+    pEditActive = NULL;
+    if ( pCtrl == &aEdInPos )
+        pEditActive = &aEdInPos;
+    else if ( pCtrl == &aEdOutPos )
+        pEditActive = &aEdOutPos;
+
+    return 0;
+}
 

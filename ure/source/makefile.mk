@@ -35,7 +35,7 @@ TARGET := $(PRJNAME)
 
 .INCLUDE: settings.mk
 
-.IF "$(OS)" == "WNT"
+.IF "$(OS)" == "WNT" || "$(OS)" == "OS2"
 MY_RC = .ini
 .ELSE
 MY_RC = rc

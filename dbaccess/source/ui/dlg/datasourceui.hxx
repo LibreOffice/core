@@ -52,7 +52,6 @@ namespace dbaui
     class DataSourceUI
     {
     public:
-        DataSourceUI( ::dbaccess::DATASOURCE_TYPE _eType );
         DataSourceUI( const DataSourceMetaData& _rDSMeta );
         ~DataSourceUI();
 

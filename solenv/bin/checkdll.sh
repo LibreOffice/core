@@ -77,7 +77,7 @@ if [ -x $checkdll ]; then
         export LD_LIBRARY_PATH;;
     esac
 
-    $checkdll "$*"
+    $checkdll "$@"
     if [ $? -ne 0 ]; then exit 1 ; fi
 
     for parameter in $*; do

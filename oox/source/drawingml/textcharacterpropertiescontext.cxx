@@ -116,7 +116,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
 //        break;
 
         case NMSP_DRAWINGML|XML_solidFill:  // EG_FillProperties
-            xRet.set( new colorChoiceContext( *this, mrTextCharacterProperties.maCharColor ) );
+            xRet.set( new ColorContext( *this, mrTextCharacterProperties.maCharColor ) );
         break;
 
         // EG_EffectProperties
@@ -125,7 +125,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
         break;
 
         case NMSP_DRAWINGML|XML_highlight:  // CT_Color
-            xRet.set( new colorChoiceContext( *this, mrTextCharacterProperties.maHighlightColor ) );
+            xRet.set( new ColorContext( *this, mrTextCharacterProperties.maHighlightColor ) );
         break;
 
         // EG_TextUnderlineLine
@@ -142,7 +142,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
             mrTextCharacterProperties.moUnderlineFillFollowText = true;
         break;
         case NMSP_DRAWINGML|XML_uFill:      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
-            xRet.set( new colorChoiceContext( *this, mrTextCharacterProperties.maUnderlineColor ) );
+            xRet.set( new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor ) );
         break;
 
         // CT_FontCollection

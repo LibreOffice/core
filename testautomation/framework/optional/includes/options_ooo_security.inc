@@ -38,34 +38,26 @@
 '\******************************************************************************
 
 testcase tOOoSecurity
-    '///Test the OpenOffice.org/Security-Tabpage in Tools/Options
-    '///<ul>    
     dim _file as string
     
-    '///<li>check defaults</li>
     if ( getDocumentCount() < 1 ) then call hNewDocument()
     _file = gTesttoolPath & "framework\optional\input\options\ooo_security_defaults.ref"
     checkSecurityPage( _file )
 
-    '///<li>change the settings</li>    
     if ( getDocumentCount() < 1 ) then call hNewDocument()
     _file = gTesttoolPath & "framework\optional\input\options\ooo_security_changed.ref"
     changeSecurityPage( _file )
     
-    '///<li>check the changes</li>
     if ( getDocumentCount() < 1 ) then call hNewDocument()
     checkSecurityPage( _file )
     
-    '///<li>revert to default settings</li>
     if ( getDocumentCount() < 1 ) then call hNewDocument()
     _file = gTesttoolPath & "framework\optional\input\options\ooo_security_defaults.ref"
     changeSecurityPage( _file )
     
-    '///<li>check the changes</li>
     if ( getDocumentCount() < 1 ) then call hNewDocument()
     checkSecurityPage( _file )
     
-    '///</ul>
     kontext "ExtrasOptionenDlg"
     if ( ExtrasOptionenDlg.exists() ) then
         ExtrasOptionenDlg.ok()

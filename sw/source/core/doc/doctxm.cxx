@@ -182,32 +182,35 @@ USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
      Beschreibung: Marke loeschen
  --------------------------------------------------------------------*/
 
-void SwDoc::Delete( SwTOXMark* pTOXMark )
+void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 {
     // hole den TextNode und
-    SwTxtTOXMark* pTxtTOXMark = pTOXMark->GetTxtTOXMark();
+    const SwTxtTOXMark* pTxtTOXMark = pTOXMark->GetTxtTOXMark();
     ASSERT( pTxtTOXMark, "Kein TxtTOXMark, kann nicht geloescht werden" );
 
-    SwTxtNode& rTxtNd = (SwTxtNode&)pTxtTOXMark->GetTxtNode();
+    SwTxtNode& rTxtNd = const_cast<SwTxtNode&>(pTxtTOXMark->GetTxtNode());
     ASSERT( rTxtNd.GetpSwpHints(), "kann nicht geloescht werden" );
 
     if( DoesUndo() )
     {
         // fuers Undo die Attribute sichern
         ClearRedo();
-        SwUndoRstAttr* pUndo = new SwUndoRstAttr( *this, SwPosition( rTxtNd,
-                            SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
-                                    RES_TXTATR_TOXMARK );
+        SwUndoResetAttr* pUndo = new SwUndoResetAttr(
+            SwPosition( rTxtNd, SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
+            RES_TXTATR_TOXMARK );
         AppendUndo( pUndo );
 
-        SwRegHistory aRHst( rTxtNd, pUndo->GetHistory() );
+        SwRegHistory aRHst( rTxtNd, &pUndo->GetHistory() );
         rTxtNd.GetpSwpHints()->Register( &aRHst );
-        rTxtNd.Delete( pTxtTOXMark, TRUE );
+    }
+
+    rTxtNd.DeleteAttribute( const_cast<SwTxtTOXMark*>(pTxtTOXMark) );
+
+    if ( DoesUndo() )
+    {
         if( rTxtNd.GetpSwpHints() )
             rTxtNd.GetpSwpHints()->DeRegister();
     }
-    else
-        rTxtNd.Delete( pTxtTOXMark, TRUE );
     SetModified();
 }
 
@@ -372,7 +375,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
     pNew->SetTOXName(sSectNm);
     pNew->SwSection::SetName(sSectNm);
     SwPaM aPam( rPos );
-    SwSection* pSect = Insert( aPam, *pNew, pSet, FALSE );
+    SwSection* pSect = InsertSwSection( aPam, *pNew, pSet, false );
     if( pSect )
     {
         SwSectionNode* pSectNd = pSect->GetFmt()->GetSectionNode();
@@ -956,7 +959,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
         SwTxtNode* pHeadNd = pDoc->GetNodes().MakeTxtNode( aIdx,
                                 GetTxtFmtColl( FORM_TITLE ) );
-        pHeadNd->Insert( GetTitle(), SwIndex( pHeadNd ));
+        pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
 
         String sNm( GetTOXName() );
 // ??Resource
@@ -1245,7 +1248,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 {
                     // Stichwortverzeichnismarkierung
                     lang::Locale aLocale;
-                    if ( pBreakIt->xBreak.is() )
+                    if ( pBreakIt->GetBreakIter().is() )
                     {
                         aLocale = pBreakIt->GetLocale(
                                         pTOXSrc->GetLang( *pTxtMark->GetStart() ) );
@@ -1939,9 +1942,12 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 else
                     pCharFmt = pDoc->FindCharFmtByName( aToken.sCharStyleName);
 
-                if(pCharFmt)
-                    pTOXNd->InsertItem( SwFmtCharFmt( pCharFmt ), nStartCharStyle,
-                                    rTxt.Len(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                if (pCharFmt)
+                {
+                    SwFmtCharFmt aFmt( pCharFmt );
+                    pTOXNd->InsertItem( aFmt, nStartCharStyle,
+                        rTxt.Len(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                }
             }
 
             aIt++; // #i21237#
@@ -2139,7 +2145,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 break;
             }
         }
-    pNd->Erase(aPos, nEndPos - nStartPos + 2);
+    pNd->EraseText(aPos, nEndPos - nStartPos + 2);
 
     for( i = 1; i < rNums.Count(); ++i)
     {
@@ -2213,7 +2219,8 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                                 GetNumType() ).GetNumStr( nBeg+nCount );
         }
     }
-    pNd->Insert( aNumStr, aPos, INS_EMPTYEXPAND );
+    pNd->InsertText( aNumStr, aPos,
+            IDocumentContentOperations::INS_EMPTYEXPAND );
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt( pPageNoCharFmt );

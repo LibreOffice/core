@@ -132,6 +132,32 @@ namespace accessibility
                         }
                     }
                     break;
+
+                // --> OD 2009-04-01 #i92103#
+                case VCLEVENT_LISTBOX_ENTRY_EXPANDED :
+                case VCLEVENT_LISTBOX_ENTRY_COLLAPSED :
+                {
+                    SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
+                    if ( pEntry )
+                    {
+                        AccessibleListBoxEntry* pAccListBoxEntry =
+                            new AccessibleListBoxEntry( *getListBox(), pEntry, this );
+                        Reference< XAccessible > xChild = pAccListBoxEntry;
+                        const short nAccEvent =
+                                ( rVclWindowEvent.GetId() == VCLEVENT_LISTBOX_ENTRY_EXPANDED )
+                                ? AccessibleEventId::LISTBOX_ENTRY_EXPANDED
+                                : AccessibleEventId::LISTBOX_ENTRY_COLLAPSED;
+                        uno::Any aListBoxEntry;
+                        aListBoxEntry <<= xChild;
+                        NotifyAccessibleEvent( nAccEvent, Any(), aListBoxEntry );
+                        if ( getListBox() && getListBox()->HasFocus() )
+                        {
+                            NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), aListBoxEntry );
+                        }
+                    }
+                    break;
+                }
+                // <--
                 }
                 default:
                     VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);

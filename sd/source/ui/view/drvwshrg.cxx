@@ -46,9 +46,7 @@
 #include <svx/svxids.hrc>
 #include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
-#ifndef _AVMEDIA_MEDIAPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 
 
 #include "app.hrc"
@@ -79,8 +77,6 @@ namespace sd {
 |* SFX-Slotmap und Standardinterface deklarieren
 |*
 \************************************************************************/
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))

@@ -39,23 +39,25 @@ class SwTxtNode;
 
 class SwTxtRefMark : public SwTxtAttrEnd
 {
-    SwTxtNode* pMyTxtNd;
-    USHORT* pEnd;       // fuer InhaltsReferenz / PositionRef. ohne Ende
+    SwTxtNode * m_pTxtNode;
+    xub_StrLen * m_pEnd; // end is optional (point reference)
+
 public:
-    SwTxtRefMark( const SwFmtRefMark& rAttr,
-                    xub_StrLen nStart, xub_StrLen * pEnd = 0 );
+    SwTxtRefMark( SwFmtRefMark& rAttr,
+        xub_StrLen nStart, xub_StrLen * pEnd = 0 );
 
-    virtual xub_StrLen *GetEnd();                   // SwTxtAttr
-    inline const xub_StrLen* GetEnd() const { return pEnd; }
+    virtual xub_StrLen * GetEnd();       // SwTxtAttr
+    inline const xub_StrLen * GetEnd() const { return m_pEnd; }
 
-    // erfrage und setze den TxtNode Pointer
+    // get and set TxtNode pointer
     inline const SwTxtNode& GetTxtNode() const;
-    void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
+    void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 };
+
 inline const SwTxtNode& SwTxtRefMark::GetTxtNode() const
 {
-    ASSERT( pMyTxtNd, "SwTxtRefMark:: wo ist mein TextNode?" );
-    return *pMyTxtNd;
+    ASSERT( m_pTxtNode, "SwTxtRefMark: where is my TxtNode?" );
+    return *m_pTxtNode;
 }
 
 #endif

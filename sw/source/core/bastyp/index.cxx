@@ -302,7 +302,7 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
             pArr->pFirst = pArr->pLast = this;
             nIndex = nIdx;
         }
-        else if( nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2) )
+        else if( pArr->pLast && (nIdx > ((pArr->pLast->nIndex - pArr->pFirst->nIndex) / 2)) )
             ChgValue( *pArr->pLast, nIdx );
         else
             ChgValue( *pArr->pFirst, nIdx );
@@ -328,10 +328,10 @@ SwIndexReg::~SwIndexReg()
 
 
 
-void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
-                         BOOL /* argument is only used in derived class*/ )
+void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
+    const bool bNeg, const bool /* argument is only used in derived class*/ )
 {
-    SwIndex* pStt = (SwIndex*)&rIdx;
+    SwIndex* pStt = const_cast<SwIndex*>(&rIdx);
     xub_StrLen nNewVal = rIdx.nIndex;
     if( bNeg )
     {

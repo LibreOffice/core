@@ -116,6 +116,7 @@ protected:
     virtual void deselect();
 
     void updatePathAttributes();
+    void selectionChanged();
 
 private:
     CustomAnimationPane& mrPane;

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -42,288 +42,249 @@
 '\*************************************************************************************
 
 testcase tEis1549
-'/// 1549: Activating Text Input directly, 1548: Start Text Edit mode with RETURN, ///'
-'///+ get into edit mode, with typing a 'printable' character, [F2] or [Return] ///'
-'/// open application ///'
-   call hNewDocument
-   '/// create a textbox, write text ///'
-   call hTextrahmenErstellen ("Sun",20,20,70,20)
+    call hNewDocument
+    call hTextrahmenErstellen ("Sun",20,20,70,20)
 
-   '/// get out of edit mode, by typing [esc][esc] ///'
-   hTypeKeys ("<escape><escape>")
-   hTypeKeys ("<end><shift home>")
-   try
-      EditCopy
-      if GetClipboardText <> "" then
-         warnlog "Leaving edit mode didn't work :-( '" + GetClipboardText + "'"
-      endif
-   catch
-      Printlog "Left text edit mode :-)"
-   endcatch
-   '/// put focus onto textobject/frame with [strg]+[a] ///'
-   EditSelectAll
-   '/// type a text -> the chars have to appear in the object ///'
-   hTypeKeys (" ")
-   sleep 1
-   hTypeKeys ("is")
-'   hTypeKeys ("<end><shift home>") '/// has to insert the text as default at the end ! eis:1550 !!!!!!!!!! Cursor position at Text Edit Mode activation ///'
-   hTypeKeys ("<shift home>")
-   try
-      EditCopy
-      if GetClipboardText = "Sun is" then
-         Printlog "Activating a textobject with 'printable' characters works :-)"
-      else
-         warnlog "Activating edit mode didn't work :-( '" + GetClipboardText + "' #99393#"
-      endif
-   catch
-      warnlog "Entering edit mode didn't work :-( '" + GetClipboardText + "'"
-   endcatch
+    hTypeKeys ("<escape><escape>")
+    hTypeKeys ("<end><shift home>")
+    try
+        EditCopy
+        if GetClipboardText <> "" then
+            warnlog "Leaving edit mode didn't work :-( '" + GetClipboardText + "'"
+        endif
+    catch
+        Printlog "Left text edit mode :-)"
+    endcatch
+    EditSelectAll
+    hTypeKeys (" ")
+    sleep 1
+    hTypeKeys ("is")
+    hTypeKeys ("<shift home>")
+    try
+        EditCopy
+        if GetClipboardText = "Sun is" then
+            Printlog "Activating a textobject with 'printable' characters works :-)"
+        else
+            warnlog "Activating edit mode didn't work :-( '" + GetClipboardText + "' #99393#"
+        endif
+    catch
+        warnlog "Entering edit mode didn't work :-( '" + GetClipboardText + "'"
+    endcatch
 
-   '/// get out of edit mode, by typing [esc][esc] ///'
-   hTypeKeys ("<escape><escape>")
-   hTypeKeys ("<end><shift home>")
-   try
-      EditCopy
-      if GetClipboardText <> "" then
-         warnlog "Leaving edit mode didn't work :-( '" + GetClipboardText + "'"
-      endif
-   catch
-      Printlog "Left text edit mode :-)"
-   endcatch
-   '/// put focus onto textobject/frame with [Tab] ///'
-   hTypeKeys ("<Tab>")
-   '/// go into edit mode with [F2] ///'
-   hTypeKeys ("<F2>")
-'   hTypeKeys ("<end><shift home>")
-   hTypeKeys ("<shift home>")
-   try
-      EditCopy
-      if GetClipboardText = "Sun is" then
-         Printlog "Activating a textobject with <F2> works :-)"
-      else
-         warnlog "Activating edit mode didn't work :-( '" + GetClipboardText + "' #99393#"
-      endif
-   catch
-      warnlog "Entering edit mode didn't work :-( '" + GetClipboardText + "'"
-   endcatch
+    hTypeKeys ("<escape><escape>")
+    hTypeKeys ("<end><shift home>")
+    try
+        EditCopy
+        if GetClipboardText <> "" then
+            warnlog "Leaving edit mode didn't work :-( '" + GetClipboardText + "'"
+        endif
+    catch
+        Printlog "Left text edit mode :-)"
+    endcatch
+    hTypeKeys ("<Tab>")
+    hTypeKeys ("<F2>")
+    '   hTypeKeys ("<end><shift home>")
+    hTypeKeys ("<shift home>")
+    try
+        EditCopy
+        if GetClipboardText = "Sun is" then
+            Printlog "Activating a textobject with <F2> works :-)"
+        else
+            warnlog "Activating edit mode didn't work :-( '" + GetClipboardText + "' #99393#"
+        endif
+    catch
+        warnlog "Entering edit mode didn't work :-( '" + GetClipboardText + "'"
+    endcatch
 
-   '/// get out of edit mode, by typing [esc][esc] ///'
-   hTypeKeys ("<escape><escape>")
-   hTypeKeys ("<end><shift home>")
-   try
-      EditCopy
-      if GetClipboardText <> "" then
-         warnlog "Leaving edit mode didn't work :-( '" + GetClipboardText + "'"
-      endif
-   catch
-      Printlog "Left text edit mode :-)"
-   endcatch
-   '/// put focus onto textobject/frame with [Tab] ///'
-   hTypeKeys ("<Tab>")
-   '/// go into edit mode with [Return] ///'
-   hTypeKeys ("<Return>")
-'   hTypeKeys ("<end><shift home>")
-   hTypeKeys ("<shift home>")
-   try
-      EditCopy
-      if GetClipboardText = "Sun is" then
-         Printlog "Activating a textobject with <Return> works :-)"
-      else
-         warnlog "Activating edit mode didn't work :-( '" + GetClipboardText + "' #99393#"
-      endif
-   catch
-      warnlog "Entering edit mode didn't work :-( '" + GetClipboardText + "'"
-   endcatch
+    hTypeKeys ("<escape><escape>")
+    hTypeKeys ("<end><shift home>")
+    try
+        EditCopy
+        if GetClipboardText <> "" then
+            warnlog "Leaving edit mode didn't work :-( '" + GetClipboardText + "'"
+        endif
+    catch
+        Printlog "Left text edit mode :-)"
+    endcatch
+    hTypeKeys ("<Tab>")
+    hTypeKeys ("<Return>")
+    '   hTypeKeys ("<end><shift home>")
+    hTypeKeys ("<shift home>")
+    try
+        EditCopy
+        if GetClipboardText = "Sun is" then
+            Printlog "Activating a textobject with <Return> works :-)"
+        else
+            warnlog "Activating edit mode didn't work :-( '" + GetClipboardText + "' #99393#"
+        endif
+    catch
+        warnlog "Entering edit mode didn't work :-( '" + GetClipboardText + "'"
+    endcatch
 
-'/// close application ///'
-   call hCloseDocument
+    call hCloseDocument
 endcase
 
 testcase tEis1523
-'/// 1523: CTRL-RETURN text object travelling  ///'
-'///+ get into edit mode, with typing a 'printable' character, [F2], [Return] ///'
-'/// open application ///'
-   call hNewDocument
-   '/// create 3 textboxes, write text ///'
-   call hTextrahmenErstellen ("A",20,20,30,30)
-   hTypeKeys ("<escape><escape>")
-   call hTextrahmenErstellen ("B",10,10,15,15)
-   hTypeKeys ("<escape><escape>")
-   call hTextrahmenErstellen ("C",40,40,50,50)
-   hTypeKeys ("<escape><escape>")
+    call hNewDocument
+    call hTextrahmenErstellen ("A",20,20,30,30)
+    hTypeKeys ("<escape><escape>")
+    call hTextrahmenErstellen ("B",10,10,15,15)
+    hTypeKeys ("<escape><escape>")
+    call hTextrahmenErstellen ("C",40,40,50,50)
+    hTypeKeys ("<escape><escape>")
 
-   '/// activate first text with [ctrl]+[Return]] ///'
-   hTypeKeys ("<mod1 Return>")
-'   hTypeKeys ("<end><shift home>")
-   hTypeKeys ("<shift home>")
-   try
-      EditCopy
-      if GetClipboardText <> "A" then
-         warnlog "First textbox not activated :-( instead '" + GetClipboardText + "'"
-      endif
-   catch
-      warnlog "Unexpected error :-("
-   endcatch
-   '///+ activate second text with [ctrl]+[Return]] ///'
-   hTypeKeys ("<mod1 Return>")
-'   hTypeKeys ("<end><shift home>")
-   hTypeKeys ("<shift home>")
-   try
-      EditCopy
-      if GetClipboardText <> "B" then
-         warnlog "First textbox not activated :-( instead '" + GetClipboardText + "'"
-      endif
-   catch
-      warnlog "Unexpected error :-("
-   endcatch
-   '///+ activate third text with [ctrl]+[Return]] ///'
-   hTypeKeys ("<mod1 Return>")
-   hTypeKeys ("<end><shift home>")
-   try
-      EditCopy
-      if GetClipboardText <> "C" then
-         warnlog "First textbox not activated :-( Instead '" + GetClipboardText + "'"
-      endif
-   catch
-      warnlog "Unexpected error :-("
-   endcatch
+    hTypeKeys ("<mod1 Return>")
+    '   hTypeKeys ("<end><shift home>")
+    hTypeKeys ("<shift home>")
+    try
+        EditCopy
+        if GetClipboardText <> "A" then
+            warnlog "First textbox not activated :-( instead '" + GetClipboardText + "'"
+        endif
+    catch
+        warnlog "Unexpected error :-("
+    endcatch
+    hTypeKeys ("<mod1 Return>")
+    '   hTypeKeys ("<end><shift home>")
+    hTypeKeys ("<shift home>")
+    try
+        EditCopy
+        if GetClipboardText <> "B" then
+            warnlog "First textbox not activated :-( instead '" + GetClipboardText + "'"
+        endif
+    catch
+        warnlog "Unexpected error :-("
+    endcatch
+    hTypeKeys ("<mod1 Return>")
+    hTypeKeys ("<end><shift home>")
+    try
+        EditCopy
+        if GetClipboardText <> "C" then
+            warnlog "First textbox not activated :-( Instead '" + GetClipboardText + "'"
+        endif
+    catch
+        warnlog "Unexpected error :-("
+    endcatch
 
-   '/// now, since there is no following textobject, insert new page with [ctrl]+[Return]] ///'
-   hTypeKeys ("<mod1 Return>")
-   hTypeKeys ("<PageDown>")
-   '/// create textbox, write text ///'
-   call hTextrahmenErstellen ("D",20,20,30,30)
-   hTypeKeys ("<escape><escape>")
-   hTypeKeys ("<mod1 Return>")
-   hTypeKeys ("<end><shift home>")
-   try
-      EditCopy
-      if GetClipboardText <> "D" then
-         warnlog "First textbox not activated :-( instead '" + GetClipboardText + "'"
-      endif
-   catch
-      warnlog "Unexpected error :-("
-   endcatch
+    hTypeKeys ("<mod1 Return>")
+    hTypeKeys ("<PageDown>")
+    call hTextrahmenErstellen ("D",20,20,30,30)
+    hTypeKeys ("<escape><escape>")
+    hTypeKeys ("<mod1 Return>")
+    hTypeKeys ("<end><shift home>")
+    try
+        EditCopy
+        if GetClipboardText <> "D" then
+            warnlog "First textbox not activated :-( instead '" + GetClipboardText + "'"
+        endif
+    catch
+        warnlog "Unexpected error :-("
+    endcatch
 
-   if (gApplication = "IMPRESS") then
-   '/// IMPRESS only ///'
-      '///+ check if Layout placeholders are inherited ///'
-      '///+ create new page with [ctrl]+[Return]] ///'
-      hTypeKeys ("<mod1 Return>")
-      FormatModifyPage ' ..Layout
-      sleep 2
-      Kontext "Slides"
-      hTypeKeys ("<PageDown>")
-      hTypeKeys ("<PageDown>")
-      kontext "Tasks"
-         LayoutsPreview.TypeKeys "<home>"
-         LayoutsPreview.TypeKeys "<down>"
-         LayoutsPreview.TypeKeys "<Return>"
-      '///+ go into the placeholder with [ctrl]+[Return]] ///'
-      hTypeKeys ("<mod1 Return>")
-      hTypeKeys ("<end><shift home>")
-      try
-         EditCopy
-         if GetClipboardText <> "" then
-            warnlog "No new layout :-( '" + GetClipboardText + "'"
-         endif
-      catch
-         Printlog "Layout accepted :-)"
-      endcatch
-      hTypeKeys "Great"
-      hTypeKeys ("<end><shift home>")
-      try
-         EditCopy
-         if GetClipboardText <> "Great" then
-            warnlog "No new layout 2:-( '" + GetClipboardText + "'"
-         endif
-      catch
-         Printlog "Layout accepted :-)"
-      endcatch
-   endif
+    if (gApplication = "IMPRESS") then
+        hTypeKeys ("<mod1 Return>")
+        FormatModifyPage ' ..Layout
+        sleep 2
+        Kontext "Slides"
+        hTypeKeys ("<PageDown>")
+        hTypeKeys ("<PageDown>")
+        kontext "Tasks"
+        LayoutsPreview.TypeKeys "<home>"
+        LayoutsPreview.TypeKeys "<down>"
+        LayoutsPreview.TypeKeys "<Return>"
+        hTypeKeys ("<mod1 Return>")
+        hTypeKeys ("<end><shift home>")
+        try
+            EditCopy
+            if GetClipboardText <> "" then
+                warnlog "No new layout :-( '" + GetClipboardText + "'"
+            endif
+        catch
+            Printlog "Layout accepted :-)"
+        endcatch
+        hTypeKeys "Great"
+        hTypeKeys ("<end><shift home>")
+        try
+            EditCopy
+            if GetClipboardText <> "Great" then
+                warnlog "No new layout 2:-( '" + GetClipboardText + "'"
+            endif
+        catch
+            Printlog "Layout accepted :-)"
+        endcatch
+    endif
 
-'/// close application ///'
-   call hCloseDocument
+    call hCloseDocument
 endcase
 
 testcase tEis1581
-   dim i as integer
-   '/// ############### IMPRESS only ################## ///'
-   '/// 1581: Activation of empty presentation object in Impress via Keyboard ///'
-   '///+ get into edit mode, with typing [Return] for ole's and graphics ///'
-   '/// open application ///'
-   call hNewDocument
+    dim i as integer
+    call hNewDocument
 
-   if (gApplication = "IMPRESS") then
-      '/// Format -> Layout ///'
-      FormatModifyPage
-      '/// choose layout with graphic ///'
-      sleep 1
-      kontext "Tasks"
-         LayoutsPreview.TypeKeys "<home>"
-      kontext "Pagelayout_UndoDeleteWarning"
-      if Pagelayout_UndoDeleteWarning.exists then
-         Pagelayout_UndoDeleteWarning.ok
-      endif
-      for i = 1 to 9
-         kontext "Tasks"
+    if (gApplication = "IMPRESS") then
+        FormatModifyPage
+        sleep 1
+        kontext "Tasks"
+        LayoutsPreview.TypeKeys "<home>"
+        kontext "Pagelayout_UndoDeleteWarning"
+        if Pagelayout_UndoDeleteWarning.exists then
+            Pagelayout_UndoDeleteWarning.ok
+        endif
+        for i = 1 to 9
+            kontext "Tasks"
             LayoutsPreview.TypeKeys "<RIGHT>"
-         kontext "Pagelayout_UndoDeleteWarning"
-         if Pagelayout_UndoDeleteWarning.exists then
+            kontext "Pagelayout_UndoDeleteWarning"
+            if Pagelayout_UndoDeleteWarning.exists then
+                warnlog "   Undo/Delete-Warning showed up. But it shouldn't have."
+                Pagelayout_UndoDeleteWarning.ok
+            endif
+        next i
+        kontext "Tasks"
+        LayoutsPreview.TypeKeys "<Return>"
+        sleep (1)
+        hTypeKeys ("<tab><tab>")
+        sleep (1)
+        hTypeKeys ("<Return>")
+        sleep (2)
+        kontext "GeneralFileDialog"
+        if GeneralFileDialog.exists then
+            sleep 1
+            GeneralFileDialog.cancel
+        else
+            warnlog "Graphic wasn't selected :-("
+        endif
+        kontext "Tasks"
+        LayoutsPreview.TypeKeys "<home>"
+        kontext "Pagelayout_UndoDeleteWarning"
+        if Pagelayout_UndoDeleteWarning.exists then
             warnlog "   Undo/Delete-Warning showed up. But it shouldn't have."
-	    Pagelayout_UndoDeleteWarning.ok
-         endif
-      next i
-      kontext "Tasks"
-      LayoutsPreview.TypeKeys "<Return>"
-      sleep (1)
-      '/// select the graphics placeholder and activate it with [Return] ///'
-      hTypeKeys ("<tab><tab>")
-      sleep (1)
-      hTypeKeys ("<Return>")
-      sleep (2)
-      kontext "GeneralFileDialog"
-      if GeneralFileDialog.exists then
-         sleep 1
-         GeneralFileDialog.cancel
-      else
-         warnlog "Graphic wasn't selected :-("
-      endif
-'/// choose layout with ole ///'
-      kontext "Tasks"
-         LayoutsPreview.TypeKeys "<home>"
-      kontext "Pagelayout_UndoDeleteWarning"
-      if Pagelayout_UndoDeleteWarning.exists then
-         warnlog "   Undo/Delete-Warning showed up. But it shouldn't have."
-         Pagelayout_UndoDeleteWarning.ok
-      endif
-      sleep (1)
-      for i = 1 to 17
-         kontext "Tasks"
-         LayoutsPreview.TypeKeys "<RIGHT>"
-         kontext "Pagelayout_UndoDeleteWarning"
-         if Pagelayout_UndoDeleteWarning.exists then
-         warnlog "   Undo/Delete-Warning showed up. But it shouldn't have."
-         Pagelayout_UndoDeleteWarning.ok
-         endif
-      next i
-      kontext "Tasks"
-      LayoutsPreview.TypeKeys "<Return>"
-      sleep (1)
-      '/// select the ole placeholder and activate it with [Return] ///'
-      hTypeKeys ("<tab><tab><tab>")
-      sleep (1)
-      hTypeKeys ("<Return>")
-      try
-         sleep 2
-'         InsertTitle *OLEObjektEinfuegen/OLEObjektInsert   SID_INSERT_OBJECT
-         kontext "OLEObjektInsert"
-         sleep 1
-         OLEObjektInsert.cancel
-      catch
-         warnlog "Ole wasn't selected :-("
-      endcatch
-   endif
-   '/// close application ///'
-   call hCloseDocument
+            Pagelayout_UndoDeleteWarning.ok
+        endif
+        sleep (1)
+        for i = 1 to 17
+            kontext "Tasks"
+            LayoutsPreview.TypeKeys "<RIGHT>"
+            kontext "Pagelayout_UndoDeleteWarning"
+            if Pagelayout_UndoDeleteWarning.exists then
+                warnlog "   Undo/Delete-Warning showed up. But it shouldn't have."
+                Pagelayout_UndoDeleteWarning.ok
+            endif
+        next i
+        kontext "Tasks"
+        LayoutsPreview.TypeKeys "<Return>"
+        sleep (1)
+        hTypeKeys ("<tab><tab><tab>")
+        sleep (1)
+        hTypeKeys ("<Return>")
+        try
+            sleep 2
+            '         InsertTitle *OLEObjektEinfuegen/OLEObjektInsert   SID_INSERT_OBJECT
+            kontext "OLEObjektInsert"
+            sleep 1
+            OLEObjektInsert.cancel
+        catch
+            warnlog "Ole wasn't selected :-("
+        endcatch
+    endif
+    call hCloseDocument
 endcase

@@ -177,33 +177,17 @@ void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, SvStringsDtor*& _rpURL
 {
     DBG_ASSERT( _pFileDlg, "DocumentInserter::fillURLList(): invalid file dialog" );
     DBG_ASSERT( !_rpURLList, "DocumentInserter::fillURLList(): URLList already exists" );
-    Sequence < ::rtl::OUString > aPathSeq = _pFileDlg->GetMPath();
+    Sequence < ::rtl::OUString > aPathSeq = _pFileDlg->GetSelectedFiles();
 
     if ( aPathSeq.getLength() )
     {
         _rpURLList = new SvStringsDtor;
 
-        if ( aPathSeq.getLength() == 1 )
+        for ( USHORT i = 0; i < aPathSeq.getLength(); ++i )
         {
-            ::rtl::OUString sFileURL( aPathSeq[0] );
-            String* pURL = new String( sFileURL );
-            _rpURLList->Insert( pURL, 0 );
-        }
-        else
-        {
-            INetURLObject aPathObj( aPathSeq[0] );
-            aPathObj.setFinalSlash();
-
-            for ( USHORT i = 1; i < aPathSeq.getLength(); ++i )
-            {
-                if ( i == 1 )
-                    aPathObj.Append( aPathSeq[i] );
-                else
-                    aPathObj.setName( aPathSeq[i] );
-
-                String* pURL = new String( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
-                _rpURLList->Insert( pURL, _rpURLList->Count() );
-            }
+            INetURLObject aPathObj( aPathSeq[i] );
+            String* pURL = new String( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            _rpURLList->Insert( pURL, _rpURLList->Count() );
         }
     }
 }

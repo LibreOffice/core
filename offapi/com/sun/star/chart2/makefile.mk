@@ -85,6 +85,7 @@ IDLFILES= \
     XDataInterpreter.idl \
     XDataSeries.idl \
     XDataSeriesContainer.idl \
+    XDefaultSizeTransmitter.idl \
     XDiagram.idl \
     XDiagramProvider.idl \
     XFastPropertyState.idl \

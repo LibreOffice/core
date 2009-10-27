@@ -229,6 +229,8 @@ namespace nsSetAttrMode
     const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020;  // nicht die NumRule veraendern
     const SetAttrMode SETATTR_APICALL        = 0x0040;  // called from API (all UI related
                                                         // functionality will be disabled)
+    /// force hint expand (only matters for hints with CH_TXTATR)
+    const SetAttrMode SETATTR_FORCEHINTEXPAND= 0x0080;
 }
 
 //Umrechnung Twip<-> 1/100 mm fuer UNO
@@ -259,7 +261,6 @@ namespace nsSetAttrMode
 
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
-SW_DLLPUBLIC LocaleDataWrapper& GetAppLocaleData();
 SW_DLLPUBLIC LanguageType GetAppLanguage();
 
 

@@ -38,10 +38,6 @@ import org.jfree.layouting.util.ColorUtil;
 public class BackgroundColorMapper implements StyleMapper
 {
 
-    public BackgroundColorMapper()
-    {
-    }
-
     public void updateStyle(final String uri,
             final String attrName,
             final String attrValue,

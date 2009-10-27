@@ -131,20 +131,9 @@
 #define PROPERTY_MAP_RUBY_AUTO_STYLE                    95
 #define PROPERTY_MAP_PARA_AUTO_STYLE                    96
 #define PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM              97
+#define PROPERTY_MAP_METAFIELD                          98
 
-#define PROPERTY_MAP_END                                98
-
-#define PROPERTY_SET_CHAR_STYLE             1
-#define PROPERTY_SET_PARA_STYLE             2
-#define PROPERTY_SET_FRAME_STYLE            3
-#define PROPERTY_SET_PAGE_STYLE             4
-#define PROPERTY_SET_NUM_STYLE              5
-// basically the same as PROPERTY_SET_PARA_STYLE with additional property
-// that is only available for conditional para styles
-#define PROPERTY_SET_CONDITIONAL_PARA_STYLE 6
-#define PROPERTY_SET_CHAR_AUTO_STYLE        7
-#define PROPERTY_SET_RUBY_AUTO_STYLE        8
-#define PROPERTY_SET_PARA_AUTO_STYLE        9
+#define PROPERTY_MAP_END                                99
 
 //S&E
 #define WID_WORDS                0
@@ -337,7 +326,7 @@ class SwItemPropertySet : public SfxItemPropertySet
 protected:
     virtual sal_Bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bool bGetProperty) const;
 public:
-    SwItemPropertySet( const SfxItemPropertyMap *pMap ) :
+    SwItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
         SfxItemPropertySet( pMap ){}
 };
 /* -----------------04.07.98 11:41-------------------
@@ -345,26 +334,16 @@ public:
  * --------------------------------------------------*/
 class SwUnoPropertyMapProvider
 {
-    SfxItemPropertyMap* aMapArr[PROPERTY_MAP_END];
+    SfxItemPropertyMapEntry*        aMapEntriesArr[PROPERTY_MAP_END];
+    SfxItemPropertySet*             aPropertySetArr[PROPERTY_MAP_END];
 
-    SfxItemPropertySet* pCharStyleMap;
-    SfxItemPropertySet* pParaStyleMap;
-    SfxItemPropertySet* pFrameStyleMap;
-    SfxItemPropertySet* pPageStyleMap;
-    SfxItemPropertySet* pNumStyleMap;
-    SfxItemPropertySet* pConditionalParaStyleMap;
-    SfxItemPropertySet* pCharAutoStyleMap;
-    SfxItemPropertySet* pParaAutoStyleMap;
-    SfxItemPropertySet* pRubyAutoStyleMap;
-
-    void            Sort(sal_uInt16 nId);
 public:
     SwUnoPropertyMapProvider();
     ~SwUnoPropertyMapProvider();
 
-    const SfxItemPropertyMap*       GetPropertyMap(sal_uInt16 PropertyId);
+    const SfxItemPropertyMapEntry*  GetPropertyMapEntries(sal_uInt16 PropertyId);
+    const SfxItemPropertySet*       GetPropertySet( sal_uInt16 PropertyId );
 
-    SfxItemPropertySet&             GetPropertySet(sal_Int8 nPropSetId);
 };
 
 extern SwUnoPropertyMapProvider aSwMapProvider;

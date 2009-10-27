@@ -126,7 +126,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
         if ( bNewHint )
         {
             const SwTxtAttr* pHt = (*pHts)[n];
-            if ( !pHt->GetEnd() && nStt >= nStart )
+            if ( pHt->HasDummyChar() && (nStt >= nStart) )
             {
                 //JP 17.05.00: Task 75806 ask for ">=" and not for ">"
                    switch( pHt->Which() )
@@ -136,7 +136,9 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                    case RES_TXTATR_FIELD:
                 case RES_TXTATR_REFMARK:
                    case RES_TXTATR_TOXMARK:
-                       {
+                case RES_TXTATR_META:
+                case RES_TXTATR_METAFIELD:
+                    {
                         // JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
                         //              mehr zum Wort dazu gehoerend.
                         // MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
@@ -161,9 +163,6 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                            }
                        }
                        break;
-                   case RES_TXTATR_HARDBLANK:
-                    rRet.SetChar( nAkt, ((SwTxtHardBlank*)pHt)->GetChar() );
-                    break;
                    default:
                     ASSERT( false, "unknown case in lcl_CleanStr" )
                     break;
@@ -456,7 +455,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     USHORT nCurrScript = 0;
 
     if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
-         pBreakIt->xBreak.is() )
+         pBreakIt->GetBreakIter().is() )
     {
         pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
         nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
@@ -593,7 +592,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     if( bFnd && bReplace )          // String ersetzen ??
     {
         // Replace-Methode vom SwDoc benutzen
-        int bRegExp = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
+        const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
         // damit die Region auch verschoben wird, in den Shell-Cursr-Ring
@@ -605,12 +604,11 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        String *pRepl = bRegExp ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0;
-        if( pRepl )
-            rCursor.GetDoc()->Replace( *pCrsr, *pRepl, bRegExp );
-        else
-            rCursor.GetDoc()->Replace( *pCrsr, rSearchOpt.replaceString, bRegExp );
-        delete pRepl;
+        ::std::auto_ptr<String> pRepl( (bRegExp)
+                ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0 );
+        rCursor.GetDoc()->ReplaceRange( *pCrsr,
+            (pRepl.get()) ? *pRepl : String(rSearchOpt.replaceString),
+            bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
@@ -623,7 +621,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
                 p->MoveTo( (Ring*)pRegion );
             } while( p != pPrev );
         }
-        rSttCntIdx = nSttCnt;
+        pCrsr->Start()->nContent = nSttCnt;
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;

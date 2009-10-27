@@ -37,7 +37,7 @@
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include "fmtools.hxx"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "fmservs.hxx"
 #include <svx/fmglob.hxx>
 #include <vcl/stdtext.hxx>
@@ -100,7 +100,6 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include "fmstatic.hxx"
 #include <comphelper/extract.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbexception.hxx>
@@ -108,14 +107,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <algorithm>
 #include <rtl/logfile.hxx>
-
-namespace svxform
-{
-
-    IMPLEMENT_CONSTASCII_USTRING(DATA_MODE,"DataMode");
-    IMPLEMENT_CONSTASCII_USTRING(FILTER_MODE,"FilterMode");
-
-}   // namespace svxform
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

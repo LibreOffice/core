@@ -37,6 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE :  $(PRJ)$/source$/minimizer$/minimizer.pmk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
@@ -122,8 +123,10 @@ EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
 
 .INCLUDE : extension_pre.mk
 
+.ENDIF # L10N_framework
 .INCLUDE : target.mk
 
+.IF "$(L10N_framework)"==""
 .INCLUDE : extension_post.mk
 
 $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
@@ -133,3 +136,5 @@ $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
 $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+.ENDIF # L10N_framework

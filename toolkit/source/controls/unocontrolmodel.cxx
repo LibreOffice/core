@@ -36,6 +36,7 @@
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
@@ -294,6 +295,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_IMAGEALIGN:           aDefault <<= (sal_Int16) 1 /*ImageAlign::TOP*/; break;
             case BASEPROPERTY_IMAGEPOSITION:        aDefault <<= (sal_Int16) 12 /*ImagePosition::Centered*/; break;
             case BASEPROPERTY_PUSHBUTTONTYPE:       aDefault <<= (sal_Int16) 0 /*PushButtonType::STANDARD*/; break;
+            case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:aDefault <<= (sal_Int16) awt::MouseWheelBehavior::SCROLL_FOCUS_ONLY; break;
 
             case BASEPROPERTY_DATEMAX:              aDefault <<= (sal_Int32) Date( 31, 12, 2200 ).GetDate();    break;
             case BASEPROPERTY_DATEMIN:              aDefault <<= (sal_Int32) Date( 1, 1, 1900 ).GetDate();  break;
@@ -338,13 +340,13 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_HARDLINEBREAKS:
             case BASEPROPERTY_NOLABEL:              aDefault <<= (sal_Bool) sal_False; break;
 
-            case BASEPROPERTY_WHEELWITHOUTFOCUS:
             case BASEPROPERTY_HIDEINACTIVESELECTION:
             case BASEPROPERTY_ENFORCE_FORMAT:
             case BASEPROPERTY_AUTOCOMPLETE:
             case BASEPROPERTY_SCALEIMAGE:
             case BASEPROPERTY_ENABLED:
             case BASEPROPERTY_PRINTABLE:
+            case BASEPROPERTY_ENABLEVISIBLE:
             case BASEPROPERTY_DECORATION:           aDefault <<= (sal_Bool) sal_True; break;
 
             case BASEPROPERTY_HELPTEXT:

@@ -38,7 +38,6 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
 #include <com/sun/star/sheet/FilterOperator.hpp>
 #include <com/sun/star/sheet/FilterConnection.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -719,7 +718,7 @@ void OoxAutoFilterContext::importCustomFilter( const AttributeList& rAttribs )
         case XML_equal:
         case XML_notEqual:
         {
-            Reference< XLocaleData > xLocale( getBaseFilter().getGlobalFactory()->createInstance(
+            Reference< XLocaleData > xLocale( getGlobalFactory()->createInstance(
                 CREATE_OUSTRING("com.sun.star.i18n.LocaleData") ), UNO_QUERY );
 
             if ( !xLocale.is() )

@@ -412,6 +412,18 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL EFormsPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !m_pHelper.get() )
+            return Sequence< ::rtl::OUString >();
+
+        Sequence< ::rtl::OUString > aReturn( 1 );
+        aReturn[ 0 ] = PROPERTY_INPUT_REQUIRED;
+        return aReturn;
+    }
+
+    //--------------------------------------------------------------------
     LineDescriptor SAL_CALL EFormsPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)

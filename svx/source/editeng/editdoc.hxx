@@ -285,7 +285,15 @@ public:
 };
 
 typedef ContentNode* ContentNodePtr;
-SV_DECL_PTRARR( ContentList, ContentNodePtr, 0, 4 )
+SV_DECL_PTRARR( DummyContentList, ContentNodePtr, 0, 4 )
+
+class ContentList : public DummyContentList
+{
+  USHORT nLastCache;
+public:
+  ContentList() : DummyContentList( 0, 4 ), nLastCache(0) {}
+  USHORT GetPos( const ContentNodePtr &rPtr ) const;
+};
 
 // -------------------------------------------------------------------------
 // class EditPaM
@@ -612,6 +620,7 @@ SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0, 4 )
 // -------------------------------------------------------------------------
 class ParaPortionList : public DummyParaPortionList
 {
+    USHORT nLastCache;
 public:
                     ParaPortionList();
                     ~ParaPortionList();
@@ -622,6 +631,8 @@ public:
 
     inline ParaPortion* SaveGetObject( USHORT nPos ) const
         { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
+
+    USHORT                  GetPos( const ParaPortionPtr &rPtr ) const;
 
     // temporaer:
     void            DbgCheck( EditDoc& rDoc );

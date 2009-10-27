@@ -34,7 +34,6 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cosv/tpl/processor.hxx>
-#include "i_strconst.hxx"
 
 
 

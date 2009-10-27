@@ -6,18 +6,21 @@ TARGET=odk
 .INCLUDE: settings.mk
 .INCLUDE: makefile.pmk
 # ------------------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 ZIP1TARGET=odkexamples
 ZIP1FLAGS=-u -r
 ZIP1DIR=$(PRJ)
 ZIP1LIST=examples -x "*.svn*" -x "*CVS*" -x "*makefile.mk" -x "*Inspector*" -x "*Container1*" -x "*Storage*" -x "*register_component*" -x "*examples.html"
 
-.INCLUDE :  target.mk
+.ENDIF
 
+.INCLUDE :  target.mk
+.IF "$(L10N_framework)"==""
 ALLTAR:\
     $(BIN)$/$(PRODUCTZIPFILE)
 #    $(BIN)$/odk_oo.zip
-
+.ENDIF
 
 $(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDK_CHECK_FLAGS)
     cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . $(CHECKZIPRESULT)

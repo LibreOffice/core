@@ -312,8 +312,8 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     sal_Bool bNeedsCJKProcessing = sal_False;
     if( sExpand.Len() )
     {
-        sal_uInt16 nScriptType = pBreakIt->xBreak->getScriptType( sExpand, 0 );
-        xub_StrLen nPos = (xub_StrLen)pBreakIt->xBreak->endOfScript( sExpand, 0,
+        sal_uInt16 nScriptType = pBreakIt->GetBreakIter()->getScriptType( sExpand, 0 );
+        xub_StrLen nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( sExpand, 0,
                                                           nScriptType );
 
         sal_uInt16 nScript =
@@ -361,10 +361,10 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
         xub_StrLen nPos = 0;
         do
         {
-            sal_uInt16 nScriptType = pBreakIt->xBreak->getScriptType( sExpand, nPos );
+            sal_uInt16 nScriptType = pBreakIt->GetBreakIter()->getScriptType( sExpand, nPos );
             sal_uInt16 nScript =
                 SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
-            xub_StrLen nEndPos = (xub_StrLen)pBreakIt->xBreak->endOfScript(
+            xub_StrLen nEndPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                     sExpand, nPos, nScriptType );
             if( nScript != CSS1_OUTMODE_ANY_SCRIPT &&
                 /* #108791# */ nScript != rHTMLWrt.nCSS1Script )

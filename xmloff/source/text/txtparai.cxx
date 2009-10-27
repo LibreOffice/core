@@ -190,6 +190,11 @@ public:
         const OUString& rLocalName,
         XMLHints_Impl& rHnts,
         const Reference<xml::sax::XAttributeList> & xAttrList);
+
+    static sal_Bool FindName(
+        SvXMLImport& rImport,
+        const Reference<xml::sax::XAttributeList> & xAttrList,
+        OUString& rName);
 };
 
 TYPEINIT1( XMLStartReferenceContext_Impl, SvXMLImportContext );
@@ -203,11 +208,8 @@ XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
         SvXMLImportContext(rImport, nPrefix, rLocalName)
 {
     OUString sName;
-    OUString dummy;
 
-    // borrow FindName from XMLTextMarkImportContext, where bookmarks
-    // and point references are handled.
-    if (XMLTextMarkImportContext::FindName(GetImport(), xAttrList, sName, dummy))
+    if (FindName(GetImport(), xAttrList, sName))
     {
         XMLHint_Impl* pHint = new XMLReferenceHint_Impl(
             sName, rImport.GetTextImport()->GetCursor()->getStart() );
@@ -217,6 +219,33 @@ XMLStartReferenceContext_Impl::XMLStartReferenceContext_Impl(
 
         rHints.Insert(pHint, rHints.Count());
     }
+}
+
+sal_Bool XMLStartReferenceContext_Impl::FindName(
+    SvXMLImport& rImport,
+    const Reference<xml::sax::XAttributeList> & xAttrList,
+    OUString& rName)
+{
+    sal_Bool bNameOK( sal_False );
+
+    // find name attribute first
+    const sal_Int16 nLength( xAttrList->getLength() );
+    for (sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
+    {
+        OUString sLocalName;
+        const sal_uInt16 nPrefix = rImport.GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                              &sLocalName );
+
+        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
+             IsXMLToken(sLocalName, XML_NAME)   )
+        {
+            rName = xAttrList->getValueByIndex(nAttr);
+            bNameOK = sal_True;
+        }
+    }
+
+    return bNameOK;
 }
 
 // ---------------------------------------------------------------------
@@ -247,10 +276,9 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
         SvXMLImportContext(rImport, nPrefix, rLocalName)
 {
     OUString sName;
-    OUString dummy;
 
-    // borrow from XMLTextMarkImportContext
-    if (XMLTextMarkImportContext::FindName(GetImport(), xAttrList, sName, dummy))
+    // borrow from XMLStartReferenceContext_Impl
+    if (XMLStartReferenceContext_Impl::FindName(GetImport(), xAttrList, sName))
     {
         // search for reference start
         sal_uInt16 nCount = rHints.Count();
@@ -511,73 +539,16 @@ void XMLImpRubyBaseContext_Impl::Characters( const OUString& rChars )
 
 // ---------------------------------------------------------------------
 
-class XMLImpRubyTextContext_Impl : public SvXMLImportContext
-{
-    XMLRubyHint_Impl    *pHint;
-
-public:
-
-    TYPEINFO();
-
-    XMLImpRubyTextContext_Impl(
-            SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
-            XMLRubyHint_Impl *pHint );
-
-    virtual ~XMLImpRubyTextContext_Impl();
-
-    virtual void Characters( const OUString& rChars );
-};
-
-TYPEINIT1( XMLImpRubyTextContext_Impl, SvXMLImportContext );
-
-XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
-        SvXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
-        XMLRubyHint_Impl *pHt ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    pHint( pHt )
-{
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rValue = xAttrList->getValueByIndex( i );
-
-        OUString aLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &aLocalName );
-        if( XML_NAMESPACE_TEXT == nPrefix &&
-            IsXMLToken( aLocalName, XML_STYLE_NAME ) )
-        {
-            pHint->SetTextStyleName( rValue );
-            break;
-        }
-    }
-}
-
-XMLImpRubyTextContext_Impl::~XMLImpRubyTextContext_Impl()
-{
-}
-
-void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
-{
-    pHint->AppendText( rChars );
-}
-
-// ---------------------------------------------------------------------
-
 class XMLImpRubyContext_Impl : public SvXMLImportContext
 {
     XMLHints_Impl&  rHints;
-    XMLRubyHint_Impl    *pHint;
 
     sal_Bool&       rIgnoreLeadingSpace;
+
+    Reference < XTextRange > m_xStart;
+    OUString        m_sStyleName;
+    OUString        m_sTextStyleName;
+    OUString        m_sText;
 
 public:
 
@@ -596,22 +567,43 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
+
+    void SetTextStyleName( const OUString& s ) { m_sTextStyleName = s; }
+    void AppendText( const OUString& s ) { m_sText += s; }
 };
 
-TYPEINIT1( XMLImpRubyContext_Impl, SvXMLImportContext );
+// ---------------------------------------------------------------------
 
-XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
+class XMLImpRubyTextContext_Impl : public SvXMLImportContext
+{
+    XMLImpRubyContext_Impl & m_rRubyContext;
+
+public:
+
+    TYPEINFO();
+
+    XMLImpRubyTextContext_Impl(
+            SvXMLImport& rImport,
+            sal_uInt16 nPrfx,
+            const OUString& rLName,
+            const Reference< xml::sax::XAttributeList > & xAttrList,
+            XMLImpRubyContext_Impl & rParent );
+
+    virtual ~XMLImpRubyTextContext_Impl();
+
+    virtual void Characters( const OUString& rChars );
+};
+
+TYPEINIT1( XMLImpRubyTextContext_Impl, SvXMLImportContext );
+
+XMLImpRubyTextContext_Impl::XMLImpRubyTextContext_Impl(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
-        XMLHints_Impl& rHnts,
-        sal_Bool& rIgnLeadSpace ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    rHints( rHnts ),
-    pHint( new XMLRubyHint_Impl(
-              GetImport().GetTextImport()->GetCursorAsRange()->getStart() ) ),
-    rIgnoreLeadingSpace( rIgnLeadSpace )
+        XMLImpRubyContext_Impl & rParent )
+    : SvXMLImportContext( rImport, nPrfx, rLName )
+    , m_rRubyContext( rParent )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -626,18 +618,66 @@ XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
         if( XML_NAMESPACE_TEXT == nPrefix &&
             IsXMLToken( aLocalName, XML_STYLE_NAME ) )
         {
-            pHint->SetStyleName( rValue );
+            m_rRubyContext.SetTextStyleName( rValue );
             break;
         }
     }
-    rHints.Insert( pHint, rHints.Count() );
+}
+
+XMLImpRubyTextContext_Impl::~XMLImpRubyTextContext_Impl()
+{
+}
+
+void XMLImpRubyTextContext_Impl::Characters( const OUString& rChars )
+{
+    m_rRubyContext.AppendText( rChars );
+}
+
+// ---------------------------------------------------------------------
+
+TYPEINIT1( XMLImpRubyContext_Impl, SvXMLImportContext );
+
+XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        XMLHints_Impl& rHnts,
+        sal_Bool& rIgnLeadSpace ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    rHints( rHnts ),
+    rIgnoreLeadingSpace( rIgnLeadSpace )
+    , m_xStart( GetImport().GetTextImport()->GetCursorAsRange()->getStart() )
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        if( XML_NAMESPACE_TEXT == nPrefix &&
+            IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+        {
+            m_sStyleName = rValue;
+            break;
+        }
+    }
 }
 
 XMLImpRubyContext_Impl::~XMLImpRubyContext_Impl()
 {
-    if( pHint )
-        pHint->SetEnd( GetImport().GetTextImport()
-                            ->GetCursorAsRange()->getStart() );
+    const UniReference < XMLTextImportHelper > xTextImport(
+        GetImport().GetTextImport());
+    const Reference < XTextCursor > xAttrCursor(
+        xTextImport->GetText()->createTextCursorByRange( m_xStart ));
+    xAttrCursor->gotoRange(xTextImport->GetCursorAsRange()->getStart(),
+            sal_True);
+    xTextImport->SetRuby( GetImport(), xAttrCursor,
+         m_sStyleName, m_sTextStyleName, m_sText );
 }
 
 SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
@@ -657,7 +697,7 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
             pContext = new XMLImpRubyTextContext_Impl( GetImport(), nPrefix,
                                                        rLocalName,
                                                        xAttrList,
-                                                       pHint );
+                                                       *this );
         else
             pContext = new SvXMLImportContext(
                 GetImport(), nPrefix, rLocalName );
@@ -671,128 +711,334 @@ SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
 
 // ---------------------------------------------------------------------
 
-/** text:meta and text:meta-field
-//FIXME neither finished nor tested
+/** for text:meta and text:meta-field
  */
-class XMLMetaImportContext : public SvXMLImportContext
+class XMLMetaImportContextBase : public SvXMLImportContext
 {
-    XMLHints_Impl&    mrHints;
-//    XMLStyleHint_Impl    *pHint;
+    XMLHints_Impl&    m_rHints;
 
-    sal_Bool& mrIgnoreLeadingSpace;
+    sal_Bool& m_rIgnoreLeadingSpace;
 
     /// start position
-    Reference<XTextRange> mxStart;
+    Reference<XTextRange> m_xStart;
 
-    OUString mXmlId;
+protected:
+    OUString m_XmlId;
+
+public:
+    TYPEINFO();
+
+    XMLMetaImportContextBase(
+        SvXMLImport& i_rImport,
+        const sal_uInt16 i_nPrefix,
+        const OUString& i_rLocalName,
+        XMLHints_Impl& i_rHints,
+        sal_Bool & i_rIgnoreLeadingSpace );
+
+    virtual ~XMLMetaImportContextBase();
+
+    virtual void StartElement(
+            const Reference<xml::sax::XAttributeList> & i_xAttrList);
+
+    virtual void EndElement();
+
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
+            const Reference< xml::sax::XAttributeList > & i_xAttrList);
+
+    virtual void Characters( const OUString& i_rChars );
+
+    virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
+        OUString const & i_rLocalName, OUString const & i_rValue);
+
+    virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange)
+        = 0;
+};
+
+TYPEINIT1( XMLMetaImportContextBase, SvXMLImportContext );
+
+XMLMetaImportContextBase::XMLMetaImportContextBase(
+        SvXMLImport& i_rImport,
+        const sal_uInt16 i_nPrefix,
+        const OUString& i_rLocalName,
+        XMLHints_Impl& i_rHints,
+        sal_Bool & i_rIgnoreLeadingSpace )
+    : SvXMLImportContext( i_rImport, i_nPrefix, i_rLocalName )
+    , m_rHints( i_rHints )
+    , m_rIgnoreLeadingSpace( i_rIgnoreLeadingSpace )
+    , m_xStart( GetImport().GetTextImport()->GetCursorAsRange()->getStart() )
+{
+}
+
+XMLMetaImportContextBase::~XMLMetaImportContextBase()
+{
+}
+
+void XMLMetaImportContextBase::StartElement(
+        const Reference<xml::sax::XAttributeList> & i_xAttrList)
+{
+    const sal_Int16 nAttrCount(i_xAttrList.is() ? i_xAttrList->getLength() : 0);
+    for ( sal_Int16 i = 0; i < nAttrCount; ++i )
+    {
+        const OUString& rAttrName( i_xAttrList->getNameByIndex( i ) );
+        const OUString& rValue( i_xAttrList->getValueByIndex( i ) );
+
+        OUString sLocalName;
+        const sal_uInt16 nPrefix(
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &sLocalName ));
+        ProcessAttribute(nPrefix, sLocalName, rValue);
+    }
+}
+
+void XMLMetaImportContextBase::EndElement()
+{
+    OSL_ENSURE(m_xStart.is(), "no mxStart?");
+    if (!m_xStart.is()) return;
+
+    const Reference<XTextRange> xEndRange(
+        GetImport().GetTextImport()->GetCursorAsRange()->getStart() );
+
+    // create range for insertion
+    const Reference<XTextCursor> xInsertionCursor(
+        GetImport().GetTextImport()->GetText()->createTextCursorByRange(
+            xEndRange) );
+    xInsertionCursor->gotoRange(m_xStart, sal_True);
+
+    const Reference<XTextRange> xInsertionRange(xInsertionCursor, UNO_QUERY);
+
+    InsertMeta(xInsertionRange);
+}
+
+SvXMLImportContext * XMLMetaImportContextBase::CreateChildContext(
+            sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
+            const Reference< xml::sax::XAttributeList > & i_xAttrList )
+{
+    const SvXMLTokenMap& rTokenMap(
+        GetImport().GetTextImport()->GetTextPElemTokenMap() );
+    const sal_uInt16 nToken( rTokenMap.Get( i_nPrefix, i_rLocalName ) );
+
+    return XMLImpSpanContext_Impl::CreateChildContext( GetImport(), i_nPrefix,
+        i_rLocalName, i_xAttrList, nToken, m_rHints, m_rIgnoreLeadingSpace );
+}
+
+void XMLMetaImportContextBase::Characters( const OUString& i_rChars )
+{
+    GetImport().GetTextImport()->InsertString(i_rChars, m_rIgnoreLeadingSpace);
+}
+
+void XMLMetaImportContextBase::ProcessAttribute(sal_uInt16 const i_nPrefix,
+    OUString const & i_rLocalName, OUString const & i_rValue)
+{
+    if ( (XML_NAMESPACE_XML == i_nPrefix) && IsXMLToken(i_rLocalName, XML_ID) )
+    {
+        m_XmlId = i_rValue;
+    }
+}
+
+
+// ---------------------------------------------------------------------
+
+/** text:meta */
+class XMLMetaImportContext : public XMLMetaImportContextBase
+{
+    // RDFa
+    bool m_bHaveAbout;
+    ::rtl::OUString m_sAbout;
+    ::rtl::OUString m_sProperty;
+    ::rtl::OUString m_sContent;
+    ::rtl::OUString m_sDatatype;
 
 public:
     TYPEINFO();
 
     XMLMetaImportContext(
         SvXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix,
+        const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
-        const Reference< xml::sax::XAttributeList > & i_xAttrList,
-//        enum XMLTextPElemTokens nTok,
         XMLHints_Impl& i_rHints,
         sal_Bool & i_rIgnoreLeadingSpace );
 
-    virtual ~XMLMetaImportContext();
+    virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
+        OUString const & i_rLocalName, OUString const & i_rValue);
 
-    virtual void EndElement();
-
-    virtual SvXMLImportContext *CreateChildContext(
-            sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-            const Reference< xml::sax::XAttributeList > & i_xAttrList );
-
-    virtual void Characters( const OUString& i_rChars );
+    virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange);
 };
 
-TYPEINIT1( XMLMetaImportContext , SvXMLImportContext );
+TYPEINIT1( XMLMetaImportContext, XMLMetaImportContextBase );
 
 XMLMetaImportContext::XMLMetaImportContext(
         SvXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix,
+        const sal_uInt16 i_nPrefix,
         const OUString& i_rLocalName,
-        const Reference< xml::sax::XAttributeList > & i_xAttrList,
         XMLHints_Impl& i_rHints,
         sal_Bool & i_rIgnoreLeadingSpace )
-    :   SvXMLImportContext( i_rImport, i_nPrefix, i_rLocalName ),
-        mrHints( i_rHints ),
-        mrIgnoreLeadingSpace( i_rIgnoreLeadingSpace ),
-        mxStart()
+    : XMLMetaImportContextBase( i_rImport, i_nPrefix, i_rLocalName,
+            i_rHints, i_rIgnoreLeadingSpace )
+    , m_bHaveAbout(false)
 {
-//FIXME: RDFa (text:meta)
-    const sal_Int16 nAttrCount(i_xAttrList.is() ? i_xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
-    {
-        const OUString& rAttrName( i_xAttrList->getNameByIndex( i ) );
-        const OUString& rValue( i_xAttrList->getValueByIndex( i ) );
+}
 
-        OUString sLocalName;
-        sal_uInt16 nPrefix =
-            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                            &sLocalName );
-// FIXME: only meta-field
-        if( XML_NAMESPACE_TEXT == nPrefix &&
-            IsXMLToken( sLocalName, XML_DATA_STYLE_NAME ) )
+void XMLMetaImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
+    OUString const & i_rLocalName, OUString const & i_rValue)
+{
+    if ( XML_NAMESPACE_XHTML == i_nPrefix )
+    {
+        // RDFa
+        if ( IsXMLToken( i_rLocalName, XML_ABOUT) )
         {
-//            pHint->SetStyleName( rValue );
-            break;
+            m_sAbout = i_rValue;
+            m_bHaveAbout = true;
         }
-        else if ( (XML_NAMESPACE_XML == nPrefix) &&
-             IsXMLToken(sLocalName, XML_ID)   )
+        else if ( IsXMLToken( i_rLocalName, XML_PROPERTY) )
         {
-            mXmlId = rValue;
+            m_sProperty = i_rValue;
+        }
+        else if ( IsXMLToken( i_rLocalName, XML_CONTENT) )
+        {
+            m_sContent = i_rValue;
+        }
+        else if ( IsXMLToken( i_rLocalName, XML_DATATYPE) )
+        {
+            m_sDatatype = i_rValue;
         }
     }
-    //FIXME meta-field xml:id mandatory
-    mxStart = GetImport().GetTextImport()->GetCursorAsRange()->getStart();
+    else
+    {
+        XMLMetaImportContextBase::ProcessAttribute(
+            i_nPrefix, i_rLocalName, i_rValue);
+    }
 }
 
-XMLMetaImportContext::~XMLMetaImportContext()
+void XMLMetaImportContext::InsertMeta(
+    const Reference<XTextRange> & i_xInsertionRange)
+{
+    OSL_ENSURE(!m_bHaveAbout == !m_sProperty.getLength(),
+        "XMLMetaImportContext::InsertMeta: invalid RDFa?");
+    if (m_XmlId.getLength() || (m_bHaveAbout && m_sProperty.getLength()))
+    {
+        // insert mark
+        const uno::Reference<rdf::XMetadatable> xMeta(
+            XMLTextMarkImportContext::CreateAndInsertMark(
+                GetImport(),
+                OUString::createFromAscii(
+                    "com.sun.star.text.InContentMetadata"),
+                OUString(),
+                i_xInsertionRange, m_XmlId),
+            uno::UNO_QUERY);
+        OSL_ENSURE(xMeta.is(), "cannot insert Meta?");
+
+        if (xMeta.is() && m_bHaveAbout)
+        {
+            GetImport().AddRDFa(xMeta,
+                m_sAbout, m_sProperty, m_sContent, m_sDatatype);
+        }
+    }
+    else
+    {
+        OSL_TRACE("invalid <text:meta>: no xml:id, no valid RDFa");
+    }
+}
+
+// ---------------------------------------------------------------------
+
+/** text:meta-field */
+class XMLMetaFieldImportContext : public XMLMetaImportContextBase
+{
+    OUString m_DataStyleName;
+
+public:
+    TYPEINFO();
+
+    XMLMetaFieldImportContext(
+        SvXMLImport& i_rImport,
+        const sal_uInt16 i_nPrefix,
+        const OUString& i_rLocalName,
+        XMLHints_Impl& i_rHints,
+        sal_Bool & i_rIgnoreLeadingSpace );
+
+    virtual void ProcessAttribute(sal_uInt16 const i_nPrefix,
+        OUString const & i_rLocalName, OUString const & i_rValue);
+
+    virtual void InsertMeta(const Reference<XTextRange> & i_xInsertionRange);
+};
+
+TYPEINIT1( XMLMetaFieldImportContext, XMLMetaImportContextBase );
+
+XMLMetaFieldImportContext::XMLMetaFieldImportContext(
+        SvXMLImport& i_rImport,
+        const sal_uInt16 i_nPrefix,
+        const OUString& i_rLocalName,
+        XMLHints_Impl& i_rHints,
+        sal_Bool & i_rIgnoreLeadingSpace )
+    : XMLMetaImportContextBase( i_rImport, i_nPrefix, i_rLocalName,
+            i_rHints, i_rIgnoreLeadingSpace )
 {
 }
 
-void XMLMetaImportContext::EndElement()
+void XMLMetaFieldImportContext::ProcessAttribute(sal_uInt16 const i_nPrefix,
+    OUString const & i_rLocalName, OUString const & i_rValue)
 {
-    OSL_ENSURE(mxStart.is(), "no mxStart?");
-
-    Reference<XTextRange> xEndRange(
-        GetImport().GetTextImport()->GetCursorAsRange()->getStart() );
-
-    // create range for insertion
-    Reference<XTextCursor> xInsertionCursor(
-        GetImport().GetTextImport()->GetText()->createTextCursorByRange(
-            xEndRange) );
-    xInsertionCursor->gotoRange(mxStart, sal_True);
-
-    Reference<XTextRange> xInsertionRange(xInsertionCursor, UNO_QUERY);
-
-    OUString sName;
-//FIXME
-    // insert bookmark
-//    XMLTextMarkImportContext::CreateAndInsertMark
+    if ( XML_NAMESPACE_STYLE == i_nPrefix &&
+         IsXMLToken( i_rLocalName, XML_DATA_STYLE_NAME ) )
+    {
+        m_DataStyleName = i_rValue;
+    }
+    else
+    {
+        XMLMetaImportContextBase::ProcessAttribute(
+            i_nPrefix, i_rLocalName, i_rValue);
+    }
 }
 
-SvXMLImportContext * XMLMetaImportContext::CreateChildContext(
-            sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-            const Reference< xml::sax::XAttributeList > & i_xAttrList )
+void XMLMetaFieldImportContext::InsertMeta(
+    const Reference<XTextRange> & i_xInsertionRange)
 {
-    const SvXMLTokenMap& rTokenMap =
-        GetImport().GetTextImport()->GetTextPElemTokenMap();
-    sal_uInt16 nToken = rTokenMap.Get( i_nPrefix, i_rLocalName );
+    if (m_XmlId.getLength()) // valid?
+    {
+        // insert mark
+        const Reference<XPropertySet> xPropertySet(
+            XMLTextMarkImportContext::CreateAndInsertMark(
+                GetImport(),
+                OUString::createFromAscii(
+                    "com.sun.star.text.textfield.MetadataField"),
+                OUString(),
+                i_xInsertionRange, m_XmlId),
+            UNO_QUERY);
+        OSL_ENSURE(xPropertySet.is(), "cannot insert MetaField?");
+        if (!xPropertySet.is()) return;
 
-    return XMLImpSpanContext_Impl::CreateChildContext( GetImport(), i_nPrefix,
-        i_rLocalName, i_xAttrList, nToken, mrHints, mrIgnoreLeadingSpace );
+        if (m_DataStyleName.getLength())
+        {
+            sal_Bool isDefaultLanguage(sal_True);
+
+            const sal_Int32 nKey( GetImport().GetTextImport()->GetDataStyleKey(
+                                   m_DataStyleName, & isDefaultLanguage) );
+
+            if (-1 != nKey)
+            {
+                static ::rtl::OUString sPropertyIsFixedLanguage(
+                    ::rtl::OUString::createFromAscii("IsFixedLanguage") );
+                Any any;
+                any <<= nKey;
+                xPropertySet->setPropertyValue(
+                    OUString::createFromAscii("NumberFormat"), any);
+                if ( xPropertySet->getPropertySetInfo()->
+                        hasPropertyByName( sPropertyIsFixedLanguage ) )
+                {
+                    any <<= static_cast<bool>(!isDefaultLanguage);
+                    xPropertySet->setPropertyValue( sPropertyIsFixedLanguage,
+                        any );
+                }
+            }
+        }
+    }
+    else
+    {
+        OSL_TRACE("invalid <text:meta-field>: no xml:id");
+    }
 }
 
-void XMLMetaImportContext::Characters( const OUString& i_rChars )
-{
-    //FIXME do we need to call ConvertStarFonts?
-    GetImport().GetTextImport()->InsertString( i_rChars, mrIgnoreLeadingSpace );
-}
 
 // ---------------------------------------------------------------------
 
@@ -1575,13 +1821,14 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_META:
-    case XML_TOK_TEXT_META_FIELD:
-// FIXME: should test before enabling...
-#if 0
         pContext = new XMLMetaImportContext(rImport, nPrefix, rLocalName,
-            xAttrList, rHints, rIgnoreLeadingSpace );
+            rHints, rIgnoreLeadingSpace );
         break;
-#endif
+
+    case XML_TOK_TEXT_META_FIELD:
+        pContext = new XMLMetaFieldImportContext(rImport, nPrefix, rLocalName,
+            rHints, rIgnoreLeadingSpace );
+        break;
 
     default:
         // none of the above? then it's probably  a text field!
@@ -1657,6 +1904,7 @@ XMLParaContext::XMLParaContext(
         sal_Bool bHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
+    m_bHaveAbout(false),
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
     pHints( 0 ),
     // --> OD 2007-07-25 #i73509#
@@ -1686,9 +1934,21 @@ XMLParaContext::XMLParaContext(
                                                             &aLocalName );
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
-//FIXME: RDFa
         case XML_TOK_TEXT_P_XMLID:
-            sXmlId = rValue;
+            m_sXmlId = rValue;
+            break;
+        case XML_TOK_TEXT_P_ABOUT:
+            m_sAbout = rValue;
+            m_bHaveAbout = true;
+            break;
+        case XML_TOK_TEXT_P_PROPERTY:
+            m_sProperty = rValue;
+            break;
+        case XML_TOK_TEXT_P_CONTENT:
+            m_sContent = rValue;
+            break;
+        case XML_TOK_TEXT_P_DATATYPE:
+            m_sDatatype = rValue;
             break;
         case XML_TOK_TEXT_P_STYLE_NAME:
             sStyleName = rValue;
@@ -1785,7 +2045,8 @@ XMLParaContext::~XMLParaContext()
     xAttrCursor->gotoRange( xEnd, sal_True );
 
     // xml:id for RDF metadata
-    if (sXmlId.getLength() > 0) {
+    if (m_sXmlId.getLength() || m_bHaveAbout || m_sProperty.getLength())
+    {
         try {
             const uno::Reference<container::XEnumerationAccess> xEA
                 (xAttrCursor, uno::UNO_QUERY_THROW);
@@ -1795,12 +2056,17 @@ XMLParaContext::~XMLParaContext()
             if (xEnum->hasMoreElements()) {
                 uno::Reference<rdf::XMetadatable> xMeta;
                 xEnum->nextElement() >>= xMeta;
-//FIXME not yet
-//                OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
-                GetImport().SetXmlId(xMeta, sXmlId);
+                OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
+                GetImport().SetXmlId(xMeta, m_sXmlId);
+                if (m_bHaveAbout)
+                {
+                    GetImport().AddRDFa(xMeta,
+                        m_sAbout, m_sProperty, m_sContent, m_sDatatype);
+                }
                 OSL_ENSURE(!xEnum->hasMoreElements(), "xml:id: > 1 paragraph?");
             }
         } catch (uno::Exception &) {
+            OSL_TRACE("XMLParaContext::~XMLParaContext: exception");
         }
     }
 
@@ -1928,17 +2194,6 @@ XMLParaContext::~XMLParaContext()
                                               pHHint->GetStyleName(),
                                               pHHint->GetVisitedStyleName(),
                                               pHHint->GetEventsContext() );
-                }
-                break;
-            case XML_HINT_RUBY:
-                {
-                    const XMLRubyHint_Impl *pRHint =
-                        (const XMLRubyHint_Impl *)pHint;
-                    xTxtImport->SetRuby( GetImport(),
-                                         xAttrCursor,
-                                         pRHint->GetStyleName(),
-                                         pRHint->GetTextStyleName(),
-                                         pRHint->GetText() );
                 }
                 break;
             case XML_HINT_INDEX_MARK:
@@ -2081,7 +2336,6 @@ XMLNumberedParaContext::XMLNumberedParaContext(
     m_xNumRules()
 {
     ::rtl::OUString StyleName;
-    bool ContinuteNumbering(false);
 
     const SvXMLTokenMap& rTokenMap(
         i_rImport.GetTextImport()->GetTextNumberedParagraphAttrTokenMap() );
@@ -2118,8 +2372,8 @@ XMLNumberedParaContext::XMLNumberedParaContext(
                 StyleName = rValue;
                 break;
             case XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING:
-                ContinuteNumbering = IsXMLToken(rValue, XML_TRUE);
-// ??? what in Fred's name is this supposed to do?
+                // this attribute is deprecated
+//                ContinuteNumbering = IsXMLToken(rValue, XML_TRUE);
                 break;
             case XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE:
                 {

@@ -37,10 +37,12 @@
 #include "OSubComponent.hxx"
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include "connectivity/CommonTools.hxx"
+#include "connectivity/warningscontainer.hxx"
 #include "TConnection.hxx"
 #include <cppuhelper/weakref.hxx>
 #include <osl/module.h>
 #include "EApi.h"
+
 namespace connectivity
 {
     namespace evoab
@@ -57,35 +59,29 @@ namespace connectivity
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
 
-        class OEvoabConnection : public OConnection_BASE,
-                     public connectivity::OSubComponent<OEvoabConnection, OConnection_BASE>
+        class OEvoabConnection  :public OConnection_BASE
+                                ,public connectivity::OSubComponent<OEvoabConnection, OConnection_BASE>
         {
-
             friend class connectivity::OSubComponent<OEvoabConnection, OConnection_BASE>;
 
         private:
-            OEvoabDriver   *m_pDriver;
-            ::rtl::OUString m_pCurrentTableName;
+            const OEvoabDriver&             m_rDriver;
             SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
+                                            m_xCatalog;
+            ::rtl::OString                  m_aPassword;
+            ::dbtools::WarningsContainer    m_aWarnings;
 
-        protected:
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>       m_xCatalog;
-            rtl::OString  m_aPassword;
-
-
-        public:
-            OEvoabConnection(OEvoabDriver*  _pDriver);
             virtual ~OEvoabConnection();
 
+        public:
+            OEvoabConnection( OEvoabDriver& _rDriver );
             virtual void construct(const ::rtl::OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             inline rtl::OString getPassword() { return m_aPassword; }
             inline void         setPassword( rtl::OString aStr ) { m_aPassword = aStr; }
-            inline rtl::OUString& getCurrentTableName() {return m_pCurrentTableName;}
-            inline void setCurrentTableName(::rtl::OUString _name) {m_pCurrentTableName=_name;}
             // own methods
-            inline const OEvoabDriver*  getDriver()             const { return static_cast< const OEvoabDriver* >( m_pDriver );         }
+            inline const OEvoabDriver& getDriver() const { return m_rDriver; }
 
             SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
             void setSDBCAddressType(SDBCAddress::sdbc_address_type _eSDBCAddressType) {m_eSDBCAddressType = _eSDBCAddressType;}
@@ -124,8 +120,6 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-
         };
     }
 }

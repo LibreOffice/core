@@ -86,17 +86,12 @@ struct DefinedNameModel
 class DefinedNameBase : public WorkbookHelper
 {
 public:
-    explicit            DefinedNameBase( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet );
-
-    /** Returns true, if this defined name is global in the document. */
-    inline bool         isGlobalName() const { return maModel.mnSheet < 0; }
+    explicit            DefinedNameBase( const WorkbookHelper& rHelper );
 
     /** Returns the original name as imported from or exported to the file. */
     inline const ::rtl::OUString& getModelName() const { return maModel.maName; }
     /** Returns the name as used in the Calc document. */
     inline const ::rtl::OUString& getCalcName() const { return maCalcName; }
-    /** Returns the 0-based sheet index for local names, or -1 for global names. */
-    inline sal_Int32    getSheetIndex() const { return maModel.mnSheet; }
 
     /** Returns the original name as imported from or exported to the file. */
     const ::rtl::OUString& getUpcaseModelName() const;
@@ -105,21 +100,19 @@ public:
 
 protected:
     /** Imports the OOX formula string, using the passed formula context. */
-    void                importOoxFormula( FormulaContext& rContext );
+    void                importOoxFormula( FormulaContext& rContext, sal_Int16 nBaseSheet );
     /** Imports the OOBIN formula, using the passed formula context. */
-    void                importOobFormula( FormulaContext& rContext, RecordInputStream& rStrm );
+    void                importOobFormula( FormulaContext& rContext, sal_Int16 nBaseSheet, RecordInputStream& rStrm );
     /** Imports the BIFF formula, using the passed formula context. */
-    void                importBiffFormula( FormulaContext& rContext, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
+    void                importBiffFormula( FormulaContext& rContext, sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
 
     /** Tries to convert the passed token sequence to a SingleReference or ComplexReference. */
-    void                setReference( const ApiTokenSequence& rTokens );
+    void                extractReference( const ApiTokenSequence& rTokens );
 
 protected:
     DefinedNameModel    maModel;            /// Model data for this defined name.
     mutable ::rtl::OUString maUpModelName;  /// Model name converted to uppercase ASCII.
     ::rtl::OUString     maCalcName;         /// Final name used in the Calc document.
-
-private:
     ::com::sun::star::uno::Any maRefAny;    /// Single cell/range reference.
 };
 
@@ -128,7 +121,7 @@ private:
 class DefinedName : public DefinedNameBase
 {
 public:
-    explicit            DefinedName( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet );
+    explicit            DefinedName( const WorkbookHelper& rHelper );
 
     /** Sets the attributes for this defined name from the passed attribute set. */
     void                importDefinedName( const AttributeList& rAttribs );
@@ -137,7 +130,7 @@ public:
     /** Imports the defined name from a DEFINEDNAME record in the passed stream. */
     void                importDefinedName( RecordInputStream& rStrm );
     /** Imports the defined name from a DEFINEDNAME record in the passed BIFF stream. */
-    void                importDefinedName( BiffInputStream& rStrm );
+    void                importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcSheet );
 
     /** Creates a defined name in the Calc document. */
     void                createNameObject();
@@ -148,9 +141,13 @@ public:
     inline bool         isBuiltinName() const { return mcBuiltinId != OOX_DEFNAME_UNKNOWN; }
     /** Returns true, if this defined name is a macro function call. */
     inline bool         isMacroFunction() const { return maModel.mbMacro && maModel.mbFunction; }
+    /** Returns true, if this defined name is global in the document. */
+    inline bool         isGlobalName() const { return mnCalcSheet < 0; }
 
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
+    /** Returns the 0-based sheet index for local names, or -1 for global names. */
+    inline sal_Int16    getLocalCalcSheet() const { return mnCalcSheet; }
     /** Tries to resolve the defined name to an absolute cell range. */
     bool                getAbsoluteRange( ::com::sun::star::table::CellRangeAddress& orRange ) const;
 
@@ -167,6 +164,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
                         mxNamedRange;       /// XNamedRange interface of the defined name.
     sal_Int32           mnTokenIndex;       /// Name index used in API token array.
+    sal_Int16           mnCalcSheet;        /// Calc sheet index for sheet-local names.
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.
     StreamDataSeqPtr    mxFormula;          /// Formula data for OOBIN import.
     BiffStreamPosPtr    mxBiffStrm;         /// Cached BIFF stream for formula import.
@@ -182,9 +180,9 @@ class DefinedNamesBuffer : public WorkbookHelper
 public:
     explicit            DefinedNamesBuffer( const WorkbookHelper& rHelper );
 
-    /** Sets the current sheet index for files with local defined names, e.g.
-        BIFF4 workspaces. All created names initially will contain this index. */
-    void                setLocalSheetIndex( sal_Int32 nLocalSheet );
+    /** Sets the sheet index for local names (BIFF2-BIFF4 only). */
+    void                setLocalCalcSheet( sal_Int16 nCalcSheet );
+
     /** Imports a defined name from the passed attribute set. */
     DefinedNameRef      importDefinedName( const AttributeList& rAttribs );
     /** Imports a defined name from a DEFINEDNAME record in the passed stream. */
@@ -203,7 +201,7 @@ public:
         @param nSheet  The sheet index for local names or -1 for global names.
             If no local name is found, tries to find a matching global name.
         @return  Reference to the defined name or empty reference. */
-    DefinedNameRef      getByModelName( const ::rtl::OUString& rModelName, sal_Int32 nSheet = -1 ) const;
+    DefinedNameRef      getByModelName( const ::rtl::OUString& rModelName, sal_Int16 nCalcSheet = -1 ) const;
 
 private:
     DefinedNameRef      createDefinedName();
@@ -213,8 +211,8 @@ private:
     typedef RefMap< sal_Int32, DefinedName >    DefNameMap;
 
     DefNameVector       maDefNames;         /// List of all defined names in insertion order.
-    DefNameMap          maDefNameMap;       /// Maps all defined names by API token index. */
-    sal_Int32           mnLocalSheet;       /// Current sheet index for import of BIFF sheet-local names.
+    DefNameMap          maDefNameMap;       /// Maps all defined names by API token index.
+    sal_Int16           mnCalcSheet;        /// Current sheet index for BIFF2-BIFF4 names (always sheet-local).
 };
 
 // ============================================================================

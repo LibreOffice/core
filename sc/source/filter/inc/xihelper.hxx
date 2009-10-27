@@ -89,24 +89,24 @@ public:
     bool                ConvertRange( ScRange& rScRange, const XclRange& rXclRange,
                             SCTAB nScTab1, SCTAB nScTab2, bool bWarn );
 
-    /** Returns a valid cell range by moving it into allowed dimensions.
-        @descr  The start and/or end position of the range may be modified.
-        @param rXclRange  The Excel cell range to convert.
-        @param bWarn  true = Sets the internal flag that produces a warning box
-            after loading/saving the file, if the cell range contains invalid cells.
-        @return  The converted Calc cell range. */
-    ScRange             CreateValidRange( const XclRange& rXclRange,
-                            SCTAB nScTab1, SCTAB nScTab2, bool bWarn );
+//UNUSED2009-05 /** Returns a valid cell range by moving it into allowed dimensions.
+//UNUSED2009-05     @descr  The start and/or end position of the range may be modified.
+//UNUSED2009-05     @param rXclRange  The Excel cell range to convert.
+//UNUSED2009-05     @param bWarn  true = Sets the internal flag that produces a warning box
+//UNUSED2009-05         after loading/saving the file, if the cell range contains invalid cells.
+//UNUSED2009-05     @return  The converted Calc cell range. */
+//UNUSED2009-05 ScRange             CreateValidRange( const XclRange& rXclRange,
+//UNUSED2009-05                         SCTAB nScTab1, SCTAB nScTab2, bool bWarn );
 
     // cell range list --------------------------------------------------------
 
-    /** Checks if the passed cell range list is valid.
-        @param rXclRanges  The Excel cell range list to check.
-        @param bWarn  true = Sets the internal flag that produces a warning box
-            after loading/saving the file, if the cell range list contains at
-            least one invalid range.
-        @return  true = Cell range list in rScRanges is completly valid. */
-    bool                CheckRangeList( const XclRangeList& rXclRanges, bool bWarn );
+//UNUSED2009-05 /** Checks if the passed cell range list is valid.
+//UNUSED2009-05     @param rXclRanges  The Excel cell range list to check.
+//UNUSED2009-05     @param bWarn  true = Sets the internal flag that produces a warning box
+//UNUSED2009-05         after loading/saving the file, if the cell range list contains at
+//UNUSED2009-05         least one invalid range.
+//UNUSED2009-05     @return  true = Cell range list in rScRanges is completly valid. */
+//UNUSED2009-05 bool                CheckRangeList( const XclRangeList& rXclRanges, bool bWarn );
 
     /** Converts the passed Excel cell range list to a Calc cell range list.
         @descr  The start position of the ranges will not be modified. Cell
@@ -139,11 +139,11 @@ public:
                             const XclImpRoot& rRoot,
                             const XclImpString& rString );
 
-    /** Returns a new edit engine text object for a cell note.
-        @param nXFIndex  Index to XF for first text portion (for escapement). */
-    static EditTextObject* CreateNoteObject(
-                            const XclImpRoot& rRoot,
-                            const XclImpString& rString );
+//UNUSED2009-05 /** Returns a new edit engine text object for a cell note.
+//UNUSED2009-05     @param nXFIndex  Index to XF for first text portion (for escapement). */
+//UNUSED2009-05 static EditTextObject* CreateNoteObject(
+//UNUSED2009-05                         const XclImpRoot& rRoot,
+//UNUSED2009-05                         const XclImpString& rString );
 
     /** Creates a new text cell or edit cell for a Calc document.
         @param nXFIndex  Index to XF for first text portion (for escapement). */

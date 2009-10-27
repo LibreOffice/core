@@ -75,7 +75,7 @@ JAVAFILES=							\
     common$/ConfigSet.java					\
     common$/XMLProvider.java				\
     common$/XMLHelper.java					\
-    common$/Renderer.java					\
+    common$/IRenderer.java					\
     common$/Indexable.java					\
     common$/TerminateWizardException.java			\
     common$/UCB.java					\
@@ -115,6 +115,7 @@ JAVAFILES=							\
     ui$/FilterComponent.java				\
     ui$/FieldSelection.java					\
     ui$/ImageList.java					\
+    ui$/ButtonList.java					\
     ui$/PathSelection.java					\
     ui$/PeerConfig.java					\
     ui$/SortingComponent.java				\

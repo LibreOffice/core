@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Chart2 Tool library
 '*
@@ -57,8 +57,9 @@ sub fInsertOLE as BOOLEAN
     if Objekttyp.getItemcount < 1 then
         warnlog "There are no OLE-Objects in the listbox"
     endif
-    '/// Select first entry in listbox (which should be the chart)
+    '/// Select 3rd entry in listbox (which should be the chart)
     Objekttyp.TypeKeys "<HOME>"
+	Objekttyp.TypeKeys "<Down>", 2
     '/// Quit dialog using OK
     OLEObjektEinfuegen.OK
     sleep(2)

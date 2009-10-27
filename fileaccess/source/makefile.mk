@@ -40,6 +40,7 @@ COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 
 SLOFILES= \
@@ -65,6 +66,7 @@ SHL1DEPN=
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :	target.mk
 

@@ -39,6 +39,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 #UNOUCRDEP=$(SOLARBINDIR)$/offapi.rdb
 #UNOUCRRDB=$(SOLARBINDIR)$/offapi.rdb
@@ -66,6 +67,7 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
 
+.ENDIF # L10N_framework
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk

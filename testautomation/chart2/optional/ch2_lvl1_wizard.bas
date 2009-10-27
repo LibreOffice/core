@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Level 1 functional test for Chart2 Wizard
 '*
@@ -49,11 +49,15 @@ sub main
     use "chart2\tools\ch_tools_tab_pages.inc"
     use "chart2\tools\ch_tools_select.inc"    
     use "chart2\optional\includes\wizard\ch2_lvl1_wizard.inc"
+	use "chart2\optional\includes\wizard\ch2_lvl1_wizard2.inc"
     
     Call hStatusIn ( "Chart2", "ch2_lvl1_wizard.bas" )
-        Call tCreateNew3DChart
-        Call tCreateNewLineChart
-    Call hStatusOut
+    Call tCreateNew3DChart
+    Call tCreateNewLineChart
+	Call tCreateNewBubbleChart
+	Call tCreateNewFilledNetChart
+    Call hStatusOut		
+	
 end sub
 '
 '-------------------------------------------------------------------------------

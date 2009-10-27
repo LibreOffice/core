@@ -270,7 +270,18 @@ sub get_path_for_library
     my ($includepatharrayref) = @_;
 
     my $getuidlibraryname = "getuid.so";
-    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
+
+    my $getuidlibraryref = "";
+
+    if ( $installer::globals::include_pathes_read )
+    {
+        $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
+    }
+    else
+    {
+        $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$getuidlibraryname, $includepatharrayref, 0);
+    }
+
     if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "get_path_for_library"); }
 
     return $$getuidlibraryref;
@@ -565,6 +576,7 @@ sub set_download_filename
     my $type = get_installation_type();
     my $language = get_downloadname_language($languagestringref);
     my $addon = get_downloadname_addon();
+
     if ( $installer::globals::product =~ /_Dev\s*$/ )
     {
         my $localminor = "";
@@ -647,6 +659,10 @@ sub resolve_variables_in_downloadname
     my $productversion = "";
     if ( $allvariables->{'PRODUCTVERSION'} ) { $productversion = $allvariables->{'PRODUCTVERSION'}; }
     $downloadname =~ s/\{productversion\}/$productversion/;
+
+    my $ppackageversion = "";
+    if ( $allvariables->{'PACKAGEVERSION'} ) { $packageversion = $allvariables->{'PACKAGEVERSION'}; }
+    $downloadname =~ s/\{packageversion\}/$packageversion/;
 
     my $extension = "";
     if ( $allvariables->{'SHORT_PRODUCTEXTENSION'} ) { $extension = $allvariables->{'SHORT_PRODUCTEXTENSION'}; }
@@ -777,11 +793,20 @@ sub put_banner_bmp_into_template
     if ( ! $allvariables->{'DOWNLOADBANNER'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBANNER not defined in product definition!", "put_banner_bmp_into_template"); }
     my $filename = $allvariables->{'DOWNLOADBANNER'};
 
-    my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+    my $completefilenameref = "";
 
-    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
+    if ( $installer::globals::include_pathes_read )
+    {
+        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+    }
+    else
+    {
+        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$filename, $includepatharrayref, 0);
+    }
 
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_banner_bmp_into_template"); }
+
+    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
 
     replace_one_variable($templatefile, "BANNERBMPPLACEHOLDER", $$completefilenameref);
 }
@@ -798,11 +823,20 @@ sub put_welcome_bmp_into_template
     if ( ! $allvariables->{'DOWNLOADBITMAP'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBITMAP not defined in product definition!", "put_welcome_bmp_into_template"); }
     my $filename = $allvariables->{'DOWNLOADBITMAP'};
 
-    my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+    my $completefilenameref = "";
 
-    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
+    if ( $installer::globals::include_pathes_read )
+    {
+        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+    }
+    else
+    {
+        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$filename, $includepatharrayref, 0);
+    }
 
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_welcome_bmp_into_template"); }
+
+    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
 
     replace_one_variable($templatefile, "WELCOMEBMPPLACEHOLDER", $$completefilenameref);
 }
@@ -819,11 +853,20 @@ sub put_setup_ico_into_template
     if ( ! $allvariables->{'DOWNLOADSETUPICO'} ) { installer::exiter::exit_program("ERROR: DOWNLOADSETUPICO not defined in product definition!", "put_setup_ico_into_template"); }
     my $filename = $allvariables->{'DOWNLOADSETUPICO'};
 
-    my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+    my $completefilenameref = "";
 
-    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
+    if ( $installer::globals::include_pathes_read )
+    {
+        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
+    }
+    else
+    {
+        $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$filename, $includepatharrayref, 0);
+    }
 
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_setup_ico_into_template"); }
+
+    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
 
     replace_one_variable($templatefile, "SETUPICOPLACEHOLDER", $$completefilenameref);
 }
@@ -957,6 +1000,7 @@ sub get_file_list
             my $onefile = ${$files}[$j];
 
             my $fileline = "  " . "File" . " " . "\"" . $onefile . "\"" . "\n";
+
             if ( $^O =~ /cygwin/i ) {
                 $fileline =~ s/\//\\/g;
             }
@@ -1487,7 +1531,7 @@ sub get_path_to_nsis_sdk
         # do we have nsis already in path ?
         @paths = split(/:/, $ENV{'PATH'});
         foreach $paths (@paths) {
-            $path =~ s/[\/\\]+$//; # remove trailing slashes;
+            $paths =~ s/[\/\\]+$//; # remove trailing slashes;
             $nsispath = $paths . "/nsis";
 
             if ( -x $nsispath ) {
@@ -1504,11 +1548,11 @@ sub get_path_to_nsis_sdk
         $nsispath = $ENV{'NSISSDK_SOURCE'}; # overriding the NSIS SDK with NSISSDK_SOURCE
     }
 
-    if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
-        # We need a POSIX path for W32-4nt-cygwin-perl
-        $nsispath =~ s/\\/\\\\/g;
-        chomp( $nsispath = qx{cygpath -u "$nsispath"} );
-    }
+#   if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
+#       # We need a POSIX path for W32-4nt-cygwin-perl
+#       $nsispath =~ s/\\/\\\\/g;
+#       chomp( $nsispath = qx{cygpath -u "$nsispath"} );
+#   }
 
     if ( $nsispath eq "" )
     {
@@ -1532,6 +1576,8 @@ sub call_nsis
     my $makensisexe = $nsispath . $installer::globals::separator . "makensis.exe";
 
     installer::logger::print_message( "... starting $makensisexe ... \n" );
+
+    if( $^O =~ /cygwin/i ) { $nsifile =~ s/\\/\//g; }
 
     my $systemcall = "$makensisexe $nsifile |";
 
@@ -1706,6 +1752,7 @@ sub create_download_sets
     # removing existing directory "_native_packed_inprogress" and "_native_packed_witherror" and "_native_packed"
 
     my $downloaddir = $firstdir . $lastdir;
+
     if ( -d $downloaddir ) { installer::systemactions::remove_complete_directory($downloaddir); }
 
     my $olddir = $downloaddir;
@@ -1742,7 +1789,18 @@ sub create_download_sets
         {
             # find and read setup script template
             my $scriptfilename = "downloadscript.sh";
-            my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
+
+            my $scriptref = "";
+
+            if ( $installer::globals::include_pathes_read )
+            {
+                $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfilename, $includepatharrayref, 0);
+            }
+            else
+            {
+                $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$scriptfilename, $includepatharrayref, 0);
+            }
+
             if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find script file $scriptfilename!", "create_download_sets"); }
             my $scriptfile = installer::files::read_file($$scriptref);
 
@@ -1797,7 +1855,18 @@ sub create_download_sets
 
         # find and read the nsi file template
         my $templatefilename = "downloadtemplate.nsi";
-        my $templateref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$templatefilename, $includepatharrayref, 0);
+
+        my $templateref = "";
+
+        if ( $installer::globals::include_pathes_read )
+        {
+            $templateref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$templatefilename, $includepatharrayref, 0);
+        }
+        else
+        {
+            $templateref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$templatefilename, $includepatharrayref, 0);
+        }
+
         if ($$templateref eq "") { installer::exiter::exit_program("ERROR: Could not find nsi template file $templatefilename!", "create_download_sets"); }
         my $templatefile = installer::files::read_file($$templateref);
 

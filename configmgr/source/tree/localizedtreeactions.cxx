@@ -178,8 +178,11 @@ namespace
 
     // -- -----------------------------
         OSL_ENSURE( aValueType != uno::Type(), "VOID result type found");
-        OSL_ENSURE( aValueType == parseTemplateName(_aSubtree.getElementTemplateName()),
+#if OSL_DEBUG_LEVEL > 0
+        uno::Type aTemplateType = parseTemplateName( _aSubtree.getElementTemplateName() );
+        OSL_ENSURE( ( aValueType == aTemplateType ) || ( aTemplateType.getTypeClass() == uno::TypeClass_ANY ),
                     "ERROR: Found Value Type doesn't match encoded value type in pseudo template name");
+#endif
         OSL_POSTCOND( static_cast<ValueNode&>(*pResult).getValueType() == aValueType,
                       "ERROR: Resulting Value Type doesn't match original value type" );
 

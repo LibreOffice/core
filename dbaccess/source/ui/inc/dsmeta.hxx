@@ -70,7 +70,7 @@ namespace dbaui
     class DataSourceMetaData
     {
     public:
-        DataSourceMetaData( ::dbaccess::DATASOURCE_TYPE _eType );
+        DataSourceMetaData( const ::rtl::OUString& _sURL );
         ~DataSourceMetaData();
 
         /// returns a struct describing this data source type's support for our known advanced settings
@@ -79,7 +79,7 @@ namespace dbaui
         /// determines whether or not the data source requires authentication
         AuthenticationMode  getAuthentication() const;
 
-        static  AuthenticationMode  getAuthentication( ::dbaccess::DATASOURCE_TYPE _eType );
+        static  AuthenticationMode  getAuthentication( const ::rtl::OUString& _sURL );
 
     private:
         ::boost::shared_ptr< DataSourceMetaData_Impl >  m_pImpl;
@@ -108,7 +108,6 @@ namespace dbaui
         bool    bBooleanComparisonMode;
         bool    bFormsCheckRequiredFields;
         bool    bIgnoreCurrency;
-        bool    bAutoIncrementIsPrimaryKey;
         bool    bEscapeDateTime;
 
         // Note: If you extend this list, you need to adjust the ctor (of course)
@@ -130,7 +129,6 @@ namespace dbaui
             ,bBooleanComparisonMode         ( true )
             ,bFormsCheckRequiredFields      ( true )
             ,bIgnoreCurrency                ( false )
-            ,bAutoIncrementIsPrimaryKey     ( false )
             ,bEscapeDateTime                ( false )
         {
         }
@@ -158,7 +156,6 @@ namespace dbaui
             ||  ( bBooleanComparisonMode        == true )
             ||  ( bFormsCheckRequiredFields     == true )
             ||  ( bIgnoreCurrency               == true )
-            ||  ( bAutoIncrementIsPrimaryKey    == true )
             ||  ( bEscapeDateTime               == true )
             ;
     }

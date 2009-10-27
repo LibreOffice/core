@@ -152,7 +152,9 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
         bool bExtension = false;
         int iDir = 0;
         vector< vector<HitItem>* > aIndexFolderResultVectorVector;
-        while( (idxDir = aIndexFolderIt.nextIndexFolder( bExtension )).getLength() > 0 )
+
+        bool bTemporary;
+        while( (idxDir = aIndexFolderIt.nextIndexFolder( bExtension, bTemporary )).getLength() > 0 )
         {
             vector<HitItem> aIndexFolderResultVector;
 
@@ -335,6 +337,9 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
             }
 
             ++iDir;
+
+            if( bTemporary )
+                aIndexFolderIt.deleteTempIndexFolder( idxDir );
 
         }   // Iterator
 

@@ -37,7 +37,7 @@
 
 using namespace rtl;
 
-Options::Options(): m_stdin(false)
+Options::Options(): m_stdin(false), m_verbose(false), m_quiet(false)
 {
 }
 
@@ -188,6 +188,22 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     if (m_options.count("-cid") == 0)
                         m_options["-cid"] = OString(av[j]);
                 } else
+                    throw IllegalArgument(OString(av[j]) + ", please check your input");
+                break;
+            case 'v':
+                if ( 0 == strcmp( &av[j][1], "verbose" ) )
+                {
+                    m_verbose = true;
+                }
+                else
+                    throw IllegalArgument(OString(av[j]) + ", please check your input");
+                break;
+            case 'q':
+                if ( 0 == strcmp( &av[j][1], "quiet" ) )
+                {
+                    m_quiet = true;
+                }
+                else
                     throw IllegalArgument(OString(av[j]) + ", please check your input");
                 break;
             case 'w':

@@ -49,7 +49,6 @@ using namespace ::xmloff::token;
 #define XML_HINT_STYLE 1
 #define XML_HINT_REFERENCE 2
 #define XML_HINT_HYPERLINK 3
-#define XML_HINT_RUBY 4
 #define XML_HINT_INDEX_MARK 5
 #define XML_HINT_TEXT_FRAME 6
 // --> DVO, OD 2004-07-14 #i26791#
@@ -209,28 +208,6 @@ public:
     const OUString& GetID() const { return sID; }
 };
 
-class XMLRubyHint_Impl : public XMLHint_Impl
-{
-    OUString                 sStyleName;
-    OUString                 sTextStyleName;
-    OUString                 sText;
-
-public:
-
-    XMLRubyHint_Impl( const Reference < XTextRange > & rPos ) :
-        XMLHint_Impl( XML_HINT_RUBY, rPos, rPos )
-    {
-    }
-
-    virtual ~XMLRubyHint_Impl() {}
-
-    void SetStyleName( const OUString& s ) { sStyleName = s; }
-    const OUString& GetStyleName() const { return sStyleName; }
-    void SetTextStyleName( const OUString& s ) { sTextStyleName = s; }
-    const OUString& GetTextStyleName() const { return sTextStyleName; }
-    void AppendText( const OUString& s ) { sText += s; }
-    const OUString& GetText() const { return sText; }
-};
 
 class XMLTextFrameHint_Impl : public XMLHint_Impl
 {

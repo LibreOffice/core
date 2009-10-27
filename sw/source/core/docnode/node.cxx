@@ -1249,13 +1249,13 @@ BOOL SwCntntNode::GoNext(SwIndex * pIdx, USHORT nMode ) const
         {
             const SwTxtNode& rTNd = *GetTxtNode();
             xub_StrLen nPos = pIdx->GetIndex();
-            if( pBreakIt->xBreak.is() )
+            if( pBreakIt->GetBreakIter().is() )
             {
                 sal_Int32 nDone = 0;
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = (xub_StrLen)pBreakIt->xBreak->nextCharacters( rTNd.GetTxt(), nPos,
+                nPos = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharacters( rTNd.GetTxt(), nPos,
                                    pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                    nItrMode, 1, nDone );
 
@@ -1297,13 +1297,13 @@ BOOL SwCntntNode::GoPrevious(SwIndex * pIdx, USHORT nMode ) const
         {
             const SwTxtNode& rTNd = *GetTxtNode();
             xub_StrLen nPos = pIdx->GetIndex();
-            if( pBreakIt->xBreak.is() )
+            if( pBreakIt->GetBreakIter().is() )
             {
                 sal_Int32 nDone = 0;
                 sal_uInt16 nItrMode = ( CRSR_SKIP_CELLS & nMode ) ?
                                         CharacterIteratorMode::SKIPCELL :
                                         CharacterIteratorMode::SKIPCONTROLCHARACTER;
-                nPos = (xub_StrLen)pBreakIt->xBreak->previousCharacters( rTNd.GetTxt(), nPos,
+                nPos = (xub_StrLen)pBreakIt->GetBreakIter()->previousCharacters( rTNd.GetTxt(), nPos,
                                    pBreakIt->GetLocale( rTNd.GetLang( nPos ) ),
                                    nItrMode, 1, nDone );
 

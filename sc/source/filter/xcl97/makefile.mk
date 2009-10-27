@@ -51,7 +51,6 @@ VISIBILITY_HIDDEN=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =									\
-        $(SLO)$/xcl97dum.obj				\
         $(SLO)$/xcl97esc.obj				\
         $(SLO)$/xcl97rec.obj				\
         $(SLO)$/XclImpChangeTrack.obj		\

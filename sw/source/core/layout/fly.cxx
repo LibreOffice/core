@@ -250,6 +250,18 @@ void SwFlyFrm::InsertCnt()
  // OD 2004-02-12 #110582#-2
  void SwFlyFrm::InsertColumns()
  {
+    // --> OD 2009-08-12 #i97379#
+    // Check, if column are allowed.
+    // Columns are not allowed for fly frames, which represent graphics or embedded objects.
+    const SwFmtCntnt& rCntnt = GetFmt()->GetCntnt();
+    ASSERT( rCntnt.GetCntntIdx(), "<SwFlyFrm::InsertColumns()> - no content prepared." );
+    SwNodeIndex aFirstCntnt( *(rCntnt.GetCntntIdx()), 1 );
+    if ( aFirstCntnt.GetNode().IsNoTxtNode() )
+    {
+        return;
+    }
+    // <--
+
     const SwFmtCol &rCol = GetFmt()->GetCol();
     if ( rCol.GetNumCols() > 1 )
     {

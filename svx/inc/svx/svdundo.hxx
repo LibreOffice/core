@@ -484,6 +484,35 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
+// --> OD 2009-07-09 #i73249#
+class SdrUndoObjStrAttr : public SdrUndoObj
+{
+public:
+    enum ObjStrAttrType
+    {
+        OBJ_NAME,
+        OBJ_TITLE,
+        OBJ_DESCRIPTION
+    };
+
+protected:
+    const ObjStrAttrType meObjStrAttr;
+    const String msOldStr;
+    const String msNewStr;
+
+public:
+    SdrUndoObjStrAttr( SdrObject& rNewObj,
+                       const ObjStrAttrType eObjStrAttr,
+                       const String& sOldStr,
+                       const String& sNewStr);
+
+    virtual void Undo();
+    virtual void Redo();
+
+    virtual String GetComment() const;
+};
+// <--
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //  @@     @@@@  @@  @@ @@@@@ @@@@@
@@ -754,7 +783,7 @@ protected:
     SdrUndoPageMasterPage(SdrPage& rChangedPage);
 
 public:
-    virtual ~SdrUndoPageMasterPage();
+    SVX_DLLPUBLIC virtual ~SdrUndoPageMasterPage();
 };
 
 //************************************************************
@@ -826,6 +855,13 @@ public:
     virtual SdrUndoAction* CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect = false );
     virtual SdrUndoAction* CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer );
     virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
+
+    // --> OD 2009-07-09 #i73249#
+    virtual SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
+                                                    SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
+                                                    String sOldStr,
+                                                    String sNewStr );
+    // <--
 
     // layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);

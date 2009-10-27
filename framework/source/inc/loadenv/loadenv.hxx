@@ -67,7 +67,7 @@
 namespace framework{
 
 namespace css = ::com::sun::star;
-
+class QuietInteraction;
 //_______________________________________________
 // definitions
 
@@ -231,6 +231,8 @@ class LoadEnv : private ThreadHelpBase
 
         /** TODO document me ... */
         void* m_pCheck;
+
+        QuietInteraction*   m_pQuietInteraction;
 
     //___________________________________________
     // native interface

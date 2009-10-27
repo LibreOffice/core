@@ -88,6 +88,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), sal_True );
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), sal_True );
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), sal_False );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
         aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
         aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ), sal_False );
         aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ), sal_False );
@@ -100,6 +101,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Magnification" ) ), 0 );
         aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), 0 );
         aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), sal_False );
+        aCfgItem.ReadBool(  String( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), sal_False );
 //
 // the encryption is not available when exporting directly, since the encryption is off by default and the selection
 // (encrypt or not) is not persistent; it's available through macro though,

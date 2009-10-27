@@ -45,7 +45,7 @@ DLLPRE =
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/null_canvasbitmap.obj \
             $(SLO)$/null_canvascustomsprite.obj \
             $(SLO)$/null_canvasfont.obj \
@@ -68,7 +68,7 @@ SHL1VERSIONMAP=exports.map
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :	target.mk

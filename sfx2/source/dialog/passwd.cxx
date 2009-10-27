@@ -112,6 +112,15 @@ void SfxPasswordDialog::SetMinLen( USHORT nLen )
 
 // -----------------------------------------------------------------------
 
+void SfxPasswordDialog::SetMaxLen( USHORT nLen )
+{
+    maPasswordED.SetMaxTextLen( nLen );
+    maConfirmED.SetMaxTextLen( nLen );
+    EditModifyHdl( NULL );
+}
+
+// -----------------------------------------------------------------------
+
 short SfxPasswordDialog::Execute()
 {
     if ( mnExtras < SHOWEXTRAS_ALL )

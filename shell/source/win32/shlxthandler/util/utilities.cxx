@@ -586,5 +586,4 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale )
         return GetSystemDefaultLCID();                    //System Default Locale
 
     return MAKELCID( MAKELANGID( usPrimaryLang, usSubLang ), SORT_DEFAULT );
-
 }

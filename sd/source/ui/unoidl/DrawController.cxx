@@ -879,7 +879,8 @@ void DrawController::ProvideFrameworkControllers (void)
     try
     {
         Reference<XController> xController (this);
-        Reference<XComponentContext> xContext (comphelper_getProcessComponentContext());
+        const Reference<XComponentContext> xContext (
+            ::comphelper::getProcessComponentContext() );
         mxConfigurationController = ConfigurationController::create(
             xContext,
             xController);

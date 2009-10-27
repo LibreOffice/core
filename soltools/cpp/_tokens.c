@@ -473,10 +473,12 @@ void
 
         if (wbp >= &wbuf[OBS])
         {
-            write(1, wbuf, OBS);
+            if ( write(1, wbuf, OBS) != -1 ) {
             if (wbp > &wbuf[OBS])
                 memcpy(wbuf, wbuf + OBS, wbp - &wbuf[OBS]);
             wbp -= OBS;
+        }
+        else exit(1);
         }
     }
     trp->tp = tp;
@@ -489,8 +491,10 @@ void
 {
     if (wbp > wbuf)
     {
-        write(1, wbuf, wbp - wbuf);
-        wbp = wbuf;
+        if ( write(1, wbuf, wbp - wbuf) != -1)
+            wbp = wbuf;
+    else
+        exit(1);
     }
 }
 

@@ -53,8 +53,6 @@ class Documentation : public csv::ConstProcessorClient
 {
   public:
                         Documentation();
-    explicit            Documentation(
-                            DYN Node &          pass_data);
                         ~Documentation();
     // OPERATIONS
     void                Clear();

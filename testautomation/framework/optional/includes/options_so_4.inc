@@ -42,22 +42,17 @@ testcase func_StarOfficeGeneral_1
   Dim sSave as String
   Dim ClipText as String
 
-'///StarOffice / General => 'Years ( two digits )'  - functionality test
 
  printlog " - other"
  printlog "   - years two digits => 1899"
-'///+open tools/option/StarOffice/general
-'///+save the default settings
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
    sSave = Zweistellig.GetText
-'///+insert 1899 in 'Interpret as years between' and click OK for the options dialog
    Zweistellig.SetText "1899"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+open a calc-doc and insert 04.03.00 <Return>
    gApplication = "CALC"
    hNewDocument
    DocumentCalc.TypeKeys "04.03.00<return>"
@@ -66,25 +61,20 @@ testcase func_StarOfficeGeneral_1
    Sleep (1)
    EditCopy
    DocumentCalc.TypeKeys "<Escape>"
-'///+select the cell and press F2 => now the correct date in the cell must be 04/03/1900
 
    ClipText = GetClipboardText
    if ClipText <> "04.03.1900" AND ClipText <> "04/03/1900" then Warnlog "Wrong date not 04.03.1900 or 04/03/1900 :  => '" + ClipText + "'"
 
-'///+close the calc doc
    hCloseDocument
 
  printlog "   - years two digits => 2050"
-'///open tools/option/StarOffice/general
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
-'///+insert 2050 in 'Interpret as years between' and click OK for the options dialog
    Zweistellig.SetText "2050"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+open a calc-doc and insert 04.03.00 <Return>
    gApplication = "CALC"
    hNewDocument
    DocumentCalc.TypeKeys "05.03.68<return>"
@@ -94,14 +84,11 @@ testcase func_StarOfficeGeneral_1
    EditCopy
    DocumentCalc.TypeKeys "<Escape>"
 
-'///+select the cell and press F2 => now the correct date in the cell must be 04/03/1900
    ClipText = GetClipboardText
    if ClipText <> "05.03.2068" AND ClipText <> "05/03/2068" then Warnlog "Wrong date not 05.03.2068 or 05/03/2068 :  => '" + ClipText + "'"
 
-'///+close the calc doc
    hCloseDocument
 
-'///open tools/option/StarOffice/general and reset all to the default data ( 1930 )
  printlog "   - reset to default"
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
@@ -122,10 +109,6 @@ testcase func_StarOfficeGeneral_2
 
   gApplication = "WRITER"
 
-'///StarOffice / General => 'Help Agent'
-'///check the maximum and the minimum of display duration ( 60sec and 5sec )
-'///+save the data for help agent
-'///+tools / options / staroffice / general -> help agent
  printlog "tools / options / staroffice / general -> help agent"
  printlog "- check the minimum and the maximum of display duration for help agent ( 60sec and 5sec )"
  printlog "   activate the help agent options-dialog -> OK"
@@ -137,16 +120,12 @@ testcase func_StarOfficeGeneral_2
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///working with activated HelpAgent
-'///+open a new writer-doc
  printlog "- working with activated HelpAgent"
  printlog "  - check display duration of 10sec"
  printlog "    new writer-doc"
   gApplication = "WRITER"
   hNewDocument
 
-'///+tools / options / staroffice / general -> help agent
-'///+activate the help agent for 10 seconds ( click reset to delete the ignore-list for helpagent )
  printlog "    tools / options / staroffice / general -> help agent -> duration to 10 -> "
  printlog "    click also reset to delete the ignore-list for help-agent -> options-dialog OK"
    ToolsOptions
@@ -156,8 +135,6 @@ testcase func_StarOfficeGeneral_2
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+open Format/Character - Font-Tabpage => help-agent must be activated ( 10seconds )
-'///+check if agent closed after ~10sec
  printlog "    Format/Character - Font-Tabpage => help-agent must be activated"
  printlog "    check if agent closed after ~10sec"
    FormatCharacter
@@ -186,14 +163,9 @@ testcase func_StarOfficeGeneral_2
 
    Kontext "TabFont"
    TabFont.Cancel
-'///+close the options-dialog and close the writer-doc
  printlog "    close options-dialog and close the writer-doc"
    hCloseDocument
 
-'///check display duration of 40sec
-'///+new writer-doc
-'///+tools / options / staroffice / general -> help agent
-'///+activate the help agent for 40 seconds
  printlog " - check another display duration of 40sec"
  printlog "    new writer-doc"
    hNewDocument
@@ -204,8 +176,6 @@ testcase func_StarOfficeGeneral_2
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
-'///+open Format/Character - Font-Tabpage => help-agent must be activated ( 40seconds )
-'///+check if agent closed after ~40sec
  printlog "    Format/Character - Font-Tabpage => help-agent must be activated"
  printlog "    check if agent closed after ~40sec"
    FormatCharacter
@@ -234,14 +204,9 @@ testcase func_StarOfficeGeneral_2
    Kontext "TabFont"
    TabFont.Cancel
 
-'///+close the options-dialog and close the writer-doc
  printlog "    close options-dialog and close the writer-doc"
    hCloseDocument
 
-'///check another display duration of 60sec
-'///+ new writer-doc
-'///+tools / options / staroffice / general -> help agent
-'///+activate the help agent for 60 seconds
  printlog " - check another display duration of 60sec"
  printlog "    new writer-doc"
    hNewDocument
@@ -252,8 +217,6 @@ testcase func_StarOfficeGeneral_2
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
-'///+open Format/Character - Font-Tabpage => help-agent must be activated ( 60seconds )
-'///+check if agent closed after ~60sec
  printlog "    Format/Character - Font-Tabpage => help-agent must be activated"
    FormatCharacter
    Kontext
@@ -282,14 +245,9 @@ testcase func_StarOfficeGeneral_2
    Kontext "TabFont"
    TabFont.Cancel
 
-'///+close the options-dialog and close the writer-doc
  printlog "    close options-dialog and close the writer-doc"
    hCloseDocument
 
-'///check if the help agent isn't active, when you ignore it 3 times ( inserted in the ignore-list )
-'///+ new writer-doc
-'///+tools / options / staroffice / general -> help agent
-'///+activate the help agent for 10 seconds
  printlog " - check if the help agent isn't active, when you ignore it 3 times ( inserted in the ignore-list )"
  printlog "    new writer-doc"
    hNewDocument
@@ -300,7 +258,6 @@ testcase func_StarOfficeGeneral_2
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
-'///+open Format/Character - Font-Tabpage => help-agent should not be activated
  printlog "    Format/Character - Font-Tabpage => help-agent should not be activated"
    FormatCharacter
    Kontext
@@ -314,14 +271,9 @@ testcase func_StarOfficeGeneral_2
    Kontext "TabFont"
    TabFont.Cancel
 
-'///+close the options-dialog and close the writer-doc
  printlog "    close options-dialog and close the writer-doc"
    hCloseDocument
 
-'///check if ignore-list can be deleted
-'///+ new writer-doc
-'///+tools / options / staroffice / general -> help agent
-'///+activate the help agent for 10 seconds and reset the ignore-list
  printlog " - check if ignore-list can be deleted"
  printlog "    new writer-doc"
    hNewDocument
@@ -333,7 +285,6 @@ testcase func_StarOfficeGeneral_2
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
-'///+open Format/Character - Font-Tabpage => help-agent should not be activated
  printlog "    Format/Character - Font-Tabpage => help-agent should not be activated"
    FormatCharacter
    Kontext
@@ -348,14 +299,9 @@ testcase func_StarOfficeGeneral_2
    Kontext "TabFont"
    TabFont.Cancel
 
-'///+close the options-dialog and close the writer-doc
  printlog "    close options-dialog and close the writer-doc"
    hCloseDocument
 
-'///working with deactivated HelpAgent
-'///+create a new writer-doc
-'///+tools / options / staroffice / general -> help agent
-'///+deactivate the help agent
  printlog " - working with deactivated the help agent"
  printlog "    new writer-doc"
    hNewDocument
@@ -367,7 +313,6 @@ testcase func_StarOfficeGeneral_2
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+open Format/Character - Font-Tabpage => help-agent ust be activated ( 10seconds )
  printlog "    Format/Character - Font-Tabpage => help-agent ust be activated"
    FormatCharacter
    Kontext
@@ -381,11 +326,9 @@ testcase func_StarOfficeGeneral_2
    Kontext "TabFont"
    TabFont.Cancel
 
-'///+close the options-dialog and close the writer-doc
  printlog "    close options-dialog and close the writer-doc"
    hCloseDocument
 
-'///reset help-agent-options
  printlog "  - reset help-agent-options"
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
@@ -405,8 +348,6 @@ testcase func_StarOfficeGeneral_3
 
   gApplication = "WRITER"
 
-'///StarOffice / General => 'printing sets 'document modified' status'
-'///+open a new writer-doc and save it
 
  printlog "StarOffice / General => 'printing sets 'document modified' status'"
  printlog "save a writer-doc"
@@ -418,8 +359,6 @@ testcase func_StarOfficeGeneral_3
 
  printlog "- open tools/option/StarOffice/general and save the state of the checkbox"
  printlog "- check it"
-'///+ open tools/option/StarOffice/general
-'///+'printing sets 'document modified' status' => checked
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
    bStatus = DruckenStatus.IsChecked
@@ -427,10 +366,8 @@ testcase func_StarOfficeGeneral_3
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
-'///+ close options dialog with OK
 
  printlog "- file/print and click OK at the print-dialog"
-'///+file / print and click OK at the print-dialog
    FilePrint
    
    Kontext "Active"
@@ -444,22 +381,18 @@ testcase func_StarOfficeGeneral_3
    endif
 
  printlog "- file/close"
-'///+file / close => a messagebox must warn about changes in the document
    FileClose
    Kontext "Active"
    if Active.Exists(2) <> TRUE then
       Warnlog "No warning, when this options is checked!"
    else
-'///+- cancel the messagebox
       Active.Cancel
    end if
 
  printlog "- file/save"
-'///+file / save
    FileSave
 
  printlog "- uncheck the checkbox"
-'///'printing sets 'document modified' status' => unchecked
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
    DruckenStatus.UnCheck
@@ -468,14 +401,12 @@ testcase func_StarOfficeGeneral_3
    Sleep (2)
 
  printlog "- file/print"
-'///+file / print
    FilePrint
    Kontext "DruckenDlg"
    DruckenDlg.OK
    Sleep (5)
 
  printlog "- file/close"
-'///+file / close => no modify of the document => no messagebox for warning
    FileClose
    Kontext "Active"
    if Active.Exists(2) then
@@ -484,7 +415,6 @@ testcase func_StarOfficeGeneral_3
    end if
 
  printlog "- reset this option"
-'///set this option to default
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
    if bStatus = TRUE then DruckenStatus.Check else DruckenStatus.UnCheck
@@ -501,27 +431,21 @@ testcase func_StarOfficeGeneral_4
 
   gApplication = "WRITER"
 
-'///StarOffice / General => 'use StarOffice dialogs' ( only on windows systems )
 
-'///check that system dialogs are used => state of the checkbox is unchecked
-'///+open a new writer-doc
    hNewDocument
  printlog "StarOffice / General => 'use StarOffice dialogs'"
    if gPlatgroup = "unx" then
       printlog "This feature is only available on windows systems"
    else
-'///+open tools/options/staroffice/general
  printlog "- open tools/options/staroffice/general and uncheck 'use StarOffice dialogs'"
       ToolsOptions
       hToolsOptions ( "StarOffice", "General" )
-'///+save state of 'use StarOffice dialogs' and uncheck it
       bStatus = StarOfficeDialogeBenutzen.IsChecked
       StarOfficeDialogeBenutzen.UnCheck
       Kontext "ExtrasOptionenDlg"
       ExtrasOptionenDlg.OK
       Sleep (2)
 
-'///+file/open and check if the file-dialog is a system-dialog
  printlog "- file/open and check if the file-dialog is a system-dialog"
       FileOpen
       if ExistsSysDialog ( FilePicker ) = FALSE then
@@ -532,19 +456,15 @@ testcase func_StarOfficeGeneral_4
          CloseSysDialog ( FilePicker )
       end if
 
-'///check that StarOffice dialogs are used => state of the checkbox is checked
-'///+open tools/options/staroffice/general
  printlog Chr(13) + "check that StarOffice dialogs are used => state of the checkbox is checked"
  printlog "- open tools/options/staroffice/general"
       ToolsOptions
       hToolsOptions ( "StarOffice", "General" )
-'///+save state of 'use StarOffice dialogs' and uncheck it
       StarOfficeDialogeBenutzen.Check
       Kontext "ExtrasOptionenDlg"
       ExtrasOptionenDlg.OK
       Sleep (2)
 
-'///+file/open and check if the file-dialog is a StarOffice-dialog
  printlog "- open tools/options/staroffice/general and check 'use StarOffice dialogs'"
       FileOpen
       Kontext "OeffnenDlg"
@@ -555,12 +475,9 @@ testcase func_StarOfficeGeneral_4
          OeffnenDlg.Cancel
       end if
 
-'///reset the state of 'use StarOffice dialogs' to default
-'///+open tools/options/staroffice/general
  printlog Chr(13) + "reset the state of 'use StarOffice dialogs' to default"
       ToolsOptions
       hToolsOptions ( "StarOffice", "General" )
-'///+save state of 'use StarOffice dialogs' and uncheck it
       if bStatus = TRUE then StarOfficeDialogeBenutzen.Check else StarOfficeDialogeBenutzen.UnCheck
       Kontext "ExtrasOptionenDlg"
       ExtrasOptionenDlg.OK
@@ -579,31 +496,24 @@ testcase func_StarOfficeMemory_1
    Dim i, ilast as Integer
    gApplication = "WRITER"
 
-'///StarOffice / Memory => 'Undo steps'
 
  printlog " - save"
  printlog "    - undo"
  printlog "    - set number of steps => 1"
 
-'///<b>undo-step = 1</b>
-'///+open a new writer-doc and tools/options/staroffice/memory
    hNewDocument
    ToolsOptions
    hToolsOptions ( "StarOffice", "Memory" )
-'///+save the default setting for 'Undo Steps' and set it to 1
    sSave = UndoSteps.GetText
    UndoSteps.SetText "1"
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+write two words in the writer doc
    Kontext "DocumentWriter"
    DocumentWriter.TypeKeys "Hello "
    DocumentWriter.TypeKeys "friends "
 
-'///+try edit/undo more than 1 times, after the first click the menu-item must be inactiv and the undo-button in the function bar too
    EditUndo
    try
       EditUndo
@@ -611,26 +521,20 @@ testcase func_StarOfficeMemory_1
    catch
    endcatch
 
-'///<b>undo-step = 15</b>
-'///+open tools/options/staroffice/memory
  printlog "    - set number of steps => 15"
    ToolsOptions
    hToolsOptions ( "StarOffice", "Memory" )
-'///+set 'Undo Steps' to 15
    UndoSteps.SetText "15"
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+write a short text with more than 20 words
    Kontext "DocumentWriter"
    for i=1 to 20
       DocumentWriter.TypeKeys "Hello<return>"
    next i
    Sleep (2)
 
-'///+check if you can use 'edit/undo' more than 15 times
    for i=1 to 20
       if i<16 then
          try
@@ -648,24 +552,19 @@ testcase func_StarOfficeMemory_1
       end if
    next i
 
-'///<b>undo-step = 99</b>
-'///+open tools/options/staroffice/memory
  printlog "    - set number of steps => 99"
    ToolsOptions
    hToolsOptions ( "StarOffice", "Memory" )
-'///+set 'Undo Steps' to 99
    UndoSteps.SetText "99"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+write a short text with more than 100 words
    Kontext "DocumentWriter"
    for i=1 to 102
       DocumentWriter.TypeKeys "Hello<return>"
    next i
 
-'///+check if you can use 'edit/undo' more than 99 times
    for i=1 to 102
       if i<100 then
          try
@@ -685,10 +584,8 @@ testcase func_StarOfficeMemory_1
       end if
    next i
 
-'///close the document
    hCloseDocument
 
-'///set this option to default
  printlog "    - reset the number of steps"
    ToolsOptions
    hToolsOptions ( "StarOffice", "Memory" )
@@ -706,55 +603,41 @@ testcase func_StarOfficeView_1
   Dim iSave as Integer
   Dim sSave as String
 
-'///StarOffice / View => 'Display : Look & Feel' and 'Scaling'
 hNewDocument
-'///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
  printlog " - view"
  printlog "   - display"
-'///scaling
  printlog "    - scaling"
-'///+save the default setting for scaling
    sSave = FontScale.GetText
-'///+set Scaling to 50
    FontScale.SetText "50"
    FontScale.More
    FontScale.Less
  printlog "      - " + FontScale.GetText
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+open some dialogs/tab dialogs and flyer to have a look at it ( testtool only can test, if this feature doesn't crash )
    Call DialogTestForViewOptions
 
-'///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
-'///+set Scaling to 150
    FontScale.SetText "150"
    FontScale.More
    FontScale.Less
  printlog "      - " + FontScale.GetText
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+open some dialogs/tab dialogs and flyer to have a look at it ( testtool only can test, if this feature doesn't crash )
    Call DialogTestForViewOptions
 
-'///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
-'///+set Scaling to default setting
    FontScale.SetText(sSave)
    FontScale.More
    FontScale.Less
  printlog "      - " + FontScale.GetText
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
@@ -769,77 +652,55 @@ testcase func_StarOfficeView_2
  printlog " - view"
  printlog "   - mouse positioning"
 
-'///StarOffice / View => 'mouse positioning'
-'///+open a new writer doc
    hNewDocument
 
-'///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
-'///+save the default setting for 'mouse positioning'
    iSave = MousePositioning.GetSelIndex
-'///+select the 1st entry for 'mouse positioning'
    MousePositioning.Select 1
  printlog "      - " + MousePositioning.GetSelText
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+move the mouse to position 1,1 on the writer doc
    Kontext "DocumentWriter"
    DocumentWriter.MouseMove 1, 1
 
-'///+open some dialogs/tab dialogs and flyer to have a look at the mouse position ( testtool only can test, if this feature doesn't crash )
    DialogTestForViewOptions
 
-'///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
-'///+select the 2nd entry for 'mouse positioning'
    MousePositioning.Select 2
  printlog "      - " + MousePositioning.GetSelText
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+move the mouse to position 1,1 on the writer doc
    Kontext "DocumentWriter"
    DocumentWriter.MouseMove 1, 1
 
-'///+open some dialogs/tab dialogs and flyer to have a look at the mouse position ( testtool only can test, if this feature doesn't crash )
    DialogTestForViewOptions
 
-'///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
-'///+select the 3rd entry for 'mouse positioning'
    MousePositioning.Select 3
  printlog "      - " + MousePositioning.GetSelText
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+move the mouse to position 1,1 on the writer doc
    Kontext "DocumentWriter"
    DocumentWriter.MouseMove 1, 1
 
-'///+open some dialogs/tab dialogs and flyer to have a look at the mouse position ( testtool only can test, if this feature doesn't crash )
    DialogTestForViewOptions
 
-'///+open tools/options/staroffice/view
    ToolsOptions
    hToolsOptions ( "StarOffice", "View" )
-'///+select the default setting for 'mouse positioning'
    MousePositioning.Select iSave
-'///+click OK for the options dialog
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
    Sleep (2)
 
-'///+close the writer doc
    hCloseDocument
 endcase
 

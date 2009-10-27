@@ -75,8 +75,10 @@ static void dl_init(pTHX)
         targ=sv_newmortal();
         FREETMPS;
 /* end Dynamic bootstrapping code */
-    *file=0;
+#ifdef MACOSX
+    *file=0; // how does this works???
     sp=0;
+#endif
 }
 
 FullByteStringList::FullByteStringList()

@@ -69,7 +69,7 @@
 #include "drawsh.hxx"
 
 #define SwDrawShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx" //CHINA001
 #include "misc.hrc"

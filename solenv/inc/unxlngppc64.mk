@@ -28,9 +28,11 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-# mk file for linux ppc64, inherit from ppc and add some flags
 
-.INCLUDE : unxlngppc4.mk
+# mk file for Unix Linux 64Bit PowerPC using GCC, inherit from ppc and add some flags
+
+.INCLUDE : unxlngppc.mk
 
 CDEFS+=-DPOWERPC64
 CFLAGSCXX+=-mminimal-toc
+BUILD64=1

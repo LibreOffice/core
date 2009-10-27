@@ -43,13 +43,14 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <comphelper/processfactory.hxx>
-#include <connectivity/dbcharset.hxx>
 #include <svx/txenctab.hxx>
+#include <svx/dbcharsethelper.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -104,6 +105,61 @@ using namespace com::sun::star;
 
 #define SC_ROWCOUNT_ERROR       (-1)
 
+namespace
+{
+    ULONG lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)
+    {
+        INetURLObject aURL;
+        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartURL( rFullFileName );
+        _rTabName = aURL.getBase( INetURLObject::LAST_SEGMENT, true,
+                INetURLObject::DECODE_UNAMBIGUOUS );
+        String aExtension = aURL.getExtension();
+        aURL.removeSegment();
+        aURL.removeFinalSlash();
+        String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+        uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
+        if (!xFactory.is()) return SCERR_EXPORT_CONNECT;
+
+        _rDrvMgr.set( xFactory->createInstance(
+                            rtl::OUString::createFromAscii( SC_SERVICE_DRVMAN ) ),
+                            uno::UNO_QUERY);
+        DBG_ASSERT( _rDrvMgr.is(), "can't get DriverManager" );
+        if (!_rDrvMgr.is()) return SCERR_EXPORT_CONNECT;
+
+        // get connection
+
+        String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
+        aConnUrl += aPath;
+
+        svxform::ODataAccessCharsetHelper aHelper;
+        ::std::vector< rtl_TextEncoding > aEncodings;
+        aHelper.getSupportedTextEncodings( aEncodings );
+        ::std::vector< rtl_TextEncoding >::iterator aIter = ::std::find(aEncodings.begin(),aEncodings.end(),(rtl_TextEncoding) eCharSet);
+        if ( aIter == aEncodings.end() )
+        {
+            DBG_ERRORFILE( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
+            return SCERR_IMPORT_CONNECT;
+        } // if ( aIter == aMap.end() )
+        rtl::OUString aCharSetStr;
+        if ( RTL_TEXTENCODING_DONTKNOW != *aIter )
+        {   // it's not the virtual "system charset"
+            const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( *aIter );
+            OSL_ENSURE( pIanaName, "invalid mime name!" );
+            if ( pIanaName )
+                aCharSetStr = ::rtl::OUString::createFromAscii( pIanaName );
+        }
+
+        uno::Sequence<beans::PropertyValue> aProps(2);
+        aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
+        aProps[0].Value <<= rtl::OUString( aExtension );
+        aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
+        aProps[1].Value <<= aCharSetStr;
+
+        _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
+        return 0L;
+    }
+}
 // -----------------------------------------------------------------------
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
@@ -201,48 +257,13 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
 
     try
     {
-        INetURLObject aURL;
-        aURL.SetSmartProtocol( INET_PROT_FILE );
-        aURL.SetSmartURL( rFullFileName );
-        String aTabName = aURL.getBase( INetURLObject::LAST_SEGMENT, true,
-                                        INetURLObject::DECODE_UNAMBIGUOUS );
-        String aExtension = aURL.getExtension();
-        aURL.removeSegment();
-        aURL.removeFinalSlash();
-        String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
-
-        uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
-        if (!xFactory.is())
-            return ERRCODE_IO_GENERAL;
-
-        uno::Reference<sdbc::XDriverManager> xDrvMan( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_DRVMAN ) ),
-                            uno::UNO_QUERY);
-        DBG_ASSERT( xDrvMan.is(), "can't get DriverManager" );
-        if (!xDrvMan.is()) return SCERR_IMPORT_CONNECT;
-
-        String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
-        aConnUrl += aPath;
-
-        dbtools::OCharsetMap aMap;
-        dbtools::OCharsetMap::CharsetIterator aIter = aMap.find( (rtl_TextEncoding) eCharSet );
-        if ( aIter == aMap.end() )
-        {
-            DBG_ERRORFILE( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
-            return SCERR_IMPORT_CONNECT;
-        }
-        rtl::OUString aCharSetStr = (*aIter).getIanaName();
-
-        uno::Sequence<beans::PropertyValue> aProps(2);
-        aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
-        aProps[0].Value <<= rtl::OUString( aExtension );
-        aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
-        aProps[1].Value <<= aCharSetStr;
-
-        uno::Reference<sdbc::XConnection> xConnection =
-                                xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
-        DBG_ASSERT( xConnection.is(), "can't get Connection" );
-        if (!xConnection.is()) return SCERR_IMPORT_CONNECT;
+        String aTabName;
+        uno::Reference<sdbc::XDriverManager> xDrvMan;
+        uno::Reference<sdbc::XConnection> xConnection;
+        ULONG nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
+        if ( !xConnection.is() || !xDrvMan.is() )
+            return nRet;
+        ::utl::DisposableComponent aConnectionHelper(xConnection);
 
         long nRowCount = 0;
         if ( nRowCount < 0 )
@@ -252,10 +273,11 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         }
 
         ScProgress aProgress( this, ScGlobal::GetRscString( STR_LOAD_DOC ), nRowCount );
-
+        uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
                             rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
                             uno::UNO_QUERY);
+        ::utl::DisposableComponent aRowSetHelper(xRowSet);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is()) return SCERR_IMPORT_CONNECT;
@@ -369,9 +391,6 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
             if ( nRowCount )
                 aProgress.SetStateOnPercent( nRow );
         }
-
-        comphelper::disposeComponent( xRowSet );
-        comphelper::disposeComponent( xConnection );
     }
     catch ( sdbc::SQLException& )
     {
@@ -733,91 +752,29 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                         aColNames.getArray(), aColTypes.getArray(),
                         aColLengths.getArray(), aColScales.getArray(),
                         bHasMemo, eCharSet );
-
-    INetURLObject aURL;
-    aURL.SetSmartProtocol( INET_PROT_FILE );
-    aURL.SetSmartURL( rFullFileName );
-    String aTabName = aURL.getBase( INetURLObject::LAST_SEGMENT, true,
-            INetURLObject::DECODE_UNAMBIGUOUS );
-    String aExtension = aURL.getExtension();
-    aURL.removeSegment();
-    aURL.removeFinalSlash();
-    String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
-
     // also needed for exception catch
     SCROW nDocRow = 0;
     ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
     String aString;
+    String aTabName;
 
     try
     {
-        uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
-        if (!xFactory.is()) return SCERR_EXPORT_CONNECT;
-
-        uno::Reference<sdbc::XDriverManager> xDrvMan( xFactory->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_DRVMAN ) ),
-                            uno::UNO_QUERY);
-        DBG_ASSERT( xDrvMan.is(), "can't get DriverManager" );
-        if (!xDrvMan.is()) return SCERR_EXPORT_CONNECT;
-
-        // get connection
-
-        String aConnUrl = String::CreateFromAscii("sdbc:dbase:");
-        aConnUrl += aPath;
-
-        dbtools::OCharsetMap aMap;
-        dbtools::OCharsetMap::CharsetIterator aIter = aMap.find( (rtl_TextEncoding) eCharSet );
-        if ( aIter == aMap.end() )
-        {
-            DBG_ERRORFILE( "DBaseExport: dbtools::OCharsetMap doesn't know text encoding" );
-            return SCERR_EXPORT_CONNECT;
-        }
-        rtl::OUString aCharSetStr = (*aIter).getIanaName();
-
-        uno::Sequence<beans::PropertyValue> aProps(2);
-        aProps[0].Name = rtl::OUString::createFromAscii(SC_DBPROP_EXTENSION);
-        aProps[0].Value <<= rtl::OUString( aExtension );
-        aProps[1].Name = rtl::OUString::createFromAscii(SC_DBPROP_CHARSET);
-        aProps[1].Value <<= aCharSetStr;
-
-        uno::Reference<sdbc::XConnection> xConnection =
-                                xDrvMan->getConnectionWithInfo( aConnUrl, aProps );
-        DBG_ASSERT( xConnection.is(), "can't get Connection" );
-        if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
+        uno::Reference<sdbc::XDriverManager> xDrvMan;
+        uno::Reference<sdbc::XConnection> xConnection;
+        ULONG nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
+        if ( !xConnection.is() || !xDrvMan.is() )
+            return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
 
         // get dBase driver
-
-        uno::Reference<sdbc::XDriver> xDriver;
-        BOOL bDriverFound = FALSE;
-
-        uno::Reference<container::XEnumerationAccess> xEnAcc( xDrvMan, uno::UNO_QUERY );
-        DBG_ASSERT( xEnAcc.is(), "can't get DriverManager EnumerationAccess" );
-        if (!xEnAcc.is()) return SCERR_EXPORT_CONNECT;
-
-        uno::Reference<container::XEnumeration> xEnum = xEnAcc->createEnumeration();
-        DBG_ASSERT( xEnum.is(), "can't get DriverManager Enumeration" );
-        if (!xEnum.is()) return SCERR_EXPORT_CONNECT;
-
-        while ( xEnum->hasMoreElements() && !bDriverFound )
-        {
-            uno::Any aElement = xEnum->nextElement();
-            if ( aElement >>= xDriver )
-                if ( xDriver.is() && xDriver->acceptsURL( aConnUrl ) )
-                    bDriverFound = TRUE;
-        }
-
-        DBG_ASSERT( bDriverFound, "can't get dBase driver" );
-        if (!bDriverFound) return SCERR_EXPORT_CONNECT;
+        uno::Reference< sdbc::XDriverAccess> xAccess(xDrvMan,uno::UNO_QUERY);
+        uno::Reference< sdbcx::XDataDefinitionSupplier > xDDSup( xAccess->getDriverByURL( xConnection->getMetaData()->getURL() ), uno::UNO_QUERY );
+        if ( !xDDSup.is() )
+            return SCERR_EXPORT_CONNECT;
 
         // create table
-
-        uno::Reference<sdbcx::XDataDefinitionSupplier> xDDSup( xDriver, uno::UNO_QUERY );
-        DBG_ASSERT( xDDSup.is(), "can't get XDataDefinitionSupplier" );
-        if (!xDDSup.is()) return SCERR_EXPORT_CONNECT;
-
-        uno::Reference<sdbcx::XTablesSupplier> xTablesSupp =
-                            xDDSup->getDataDefinitionByConnection( xConnection );
+        uno::Reference<sdbcx::XTablesSupplier> xTablesSupp =xDDSup->getDataDefinitionByConnection( xConnection );
         DBG_ASSERT( xTablesSupp.is(), "can't get Data Definition" );
         if (!xTablesSupp.is()) return SCERR_EXPORT_CONNECT;
 
@@ -893,7 +850,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
 //      if (!xConnection.is()) return SCERR_EXPORT_CONNECT;
 
         // get row set for writing
-
+        uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         uno::Reference<sdbc::XRowSet> xRowSet( xFactory->createInstance(
                             rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
                             uno::UNO_QUERY);

@@ -60,7 +60,6 @@ class Function : public CodeEntity
   public:
     enum E_ClassId { class_id = 1004 };
 
-                        Function();
                         Function(
                             const String  &     i_sLocalName,
                             Ce_id               i_nOwner,

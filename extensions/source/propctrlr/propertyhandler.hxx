@@ -298,6 +298,10 @@ namespace pcr
         /// determines whether our component has a given property
         bool impl_componentHasProperty_throw( const ::rtl::OUString& _rPropName ) const;
 
+        /** determines the default measure unit for the document in which our component lives
+        */
+        sal_Int16 impl_getDocumentMeasurementUnit_throw() const;
+
     private:
         PropertyHandler();                                    // never implemented
         PropertyHandler( const PropertyHandler& );            // never implemented

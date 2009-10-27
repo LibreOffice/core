@@ -69,7 +69,7 @@ RDB = $(SOLARBINDIR)$/offapi.rdb
 EXTRA_RDB = $(SOLARBINDIR)$/udkapi.rdb
 
 $(BIN)/cli_oootypes.dll : $(RDB) $(EXTRA_RDB) version.txt
-    $(WRAPCMD) $(SOLARBINDIR)$/climaker.exe $(CLIMAKERFLAGS) \
+        $(CLIMAKER) $(CLIMAKERFLAGS) \
         --out $@ \
          --assembly-version $(CLI_OOOTYPES_NEW_VERSION) \
         --assembly-company "OpenOffice.org" \

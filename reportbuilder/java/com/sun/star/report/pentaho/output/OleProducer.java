@@ -57,10 +57,11 @@ public class OleProducer {
     private final DefaultNameGenerator nameGenerator;
     private final DataSourceFactory dataSourceFactory;
     private final ImageService imageService;
+    private final Integer maxRows;
 
 
     public OleProducer(final InputRepository inputRepository,
-            final OutputRepository outputRepository,final ImageService imageService,final DataSourceFactory dataSourceFactory) {
+            final OutputRepository outputRepository,final ImageService imageService,final DataSourceFactory dataSourceFactory,final Integer maxRows) {
         if (inputRepository == null) {
             throw new NullPointerException();
         }
@@ -73,6 +74,7 @@ public class OleProducer {
         this.nameGenerator = new DefaultNameGenerator(outputRepository);
         this.dataSourceFactory = dataSourceFactory;
         this.imageService = imageService;
+        this.maxRows = maxRows;
     }
 
     String produceOle(final String source,final List masterColumns,final List masterValues,final List detailColumns) {
@@ -99,6 +101,7 @@ public class OleProducer {
                 procParms.setProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES, masterValues);
                 procParms.setProperty(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS, detailColumns);
                 procParms.setProperty(ReportEngineParameterNames.IMAGE_SERVICE, imageService);
+                procParms.setProperty(ReportEngineParameterNames.MAXROWS, maxRows);
 
                 engine.createJob(definition).execute();
             } catch (ReportExecutionException ex) {

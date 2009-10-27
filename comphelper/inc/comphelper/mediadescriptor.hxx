@@ -74,8 +74,10 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     does not work as expected under windows (under unix it works as well)
                     these way must be used :-(
           */
+        static const ::rtl::OUString& PROP_ABORTED();
         static const ::rtl::OUString& PROP_ASTEMPLATE();
         static const ::rtl::OUString& PROP_CHARACTERSET();
+        static const ::rtl::OUString& PROP_COMPONENTDATA();
         static const ::rtl::OUString& PROP_DEEPDETECTION();
         static const ::rtl::OUString& PROP_DETECTSERVICE();
         static const ::rtl::OUString& PROP_DOCUMENTSERVICE();

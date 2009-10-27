@@ -252,6 +252,7 @@ function hFindFirstDialog() as boolean
 
         if ( DialogWindow.Exists() ) then
             brc = true
+            DialogWindow.typeKeys( "<up>", 5 )
             exit for
         endif
 
@@ -544,16 +545,20 @@ function hNewDialog() as boolean
     
     '///+<li>Select the first item (insert)</li>
     hMenuSelectNr( 1 )
-    sleep( 1 )
+    WaitSlot( 1000 ) ' sleep( 1 )
     
     '///+<li>Select the second item (new dialog)</li>
     hMenuSelectNr( 2 )
-    sleep( 2 )
+    WaitSlot( 2000 ) ' sleep( 2 )
     
     '///+<li>Verify that a new dialog is opened and has the focus</li>
     if ( DialogWindow.Exists() ) then 
         printlog( CFN & "New dialog is open" )
-        hNewDialog() = true 
+        hNewDialog() = true
+		if ( DialogWindow.IsMax() = false ) then		
+			DialogWindow.Maximize()
+			Wait( 2000 )
+		end if		
     else
         warnlog( CFN & "New dialog is not open" )
         hNewDialog() = false
@@ -579,11 +584,11 @@ function hNewModule() as boolean
     
     '///+<li>Select the first item (insert)</li>
     hMenuSelectNr( 1 )
-    sleep( 1 )
+    WaitSlot( 1000 ) ' sleep( 1 )
     
     '///+<li>Select the first item (new module)</li>
     hMenuSelectNr( 1 )
-    sleep( 2 )
+    WaitSlot( 2000 ) ' sleep( 2 )
     
     '///+<li>Verify that a new module is opened and has the focus</li>
     if ( EditWindow.Exists() ) then 

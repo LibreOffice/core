@@ -89,12 +89,11 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
 
-        /** with this ctor, only the object descriptor format will be provided
-        */
         ODataClipboard(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLivingForm,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rSelectedRows,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxResultSet
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxResultSet,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
 
         DECLARE_XINTERFACE( )

@@ -57,7 +57,7 @@ sub hTabelleEinfuegen
         TextObjectbar.SetNextToolBox
     end if
 
-    Select Case gApplication
+    select case uCASE(gApplication)
     Case "WRITER"
         Kontext "DocumentWriter"
     Case "MASTERDOCUMENT"
@@ -127,6 +127,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
     ' no action was required (that is: Document was not read-only)
 
     dim iTry as integer
+    dim rc as integer
     const CFN = "sMakeReadOnlyDocumentEditable::"
     
     if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
@@ -136,31 +137,34 @@ function sMakeReadOnlyDocumentEditable() as boolean
         
         if ( Bearbeiten.getState( 2 ) = 0 ) then
             
-            Bearbeiten.Click()
+			rc = hUseAsyncSlot("editdoc")
 
-            for iTry = 1 to 2
-            
-                sleep( 2 )
-            
-                Kontext "Active"
-                if ( Active.exists( 5 ) ) then
+            if ( rc >= 0 ) then
+                for iTry = 1 to 2
                 
-                    printlog( CFN & "Messagebox: " & Active.getText() )
+                
+                    Kontext "Active"
+                    if ( Active.exists( 5 ) ) then
                     
-                    try
-                        if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
-                        Active.Yes()
-                        if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
-                    catch
-                        if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
-                        active.ok()
-                        warnlog( "#i100701 - Object not found message" )
-                    endcatch
-                else
-                    printlog( CFN & "No messagebox informing about a copy being used" )
-                endif
-                sMakeReadOnlyDocumentEditable() = TRUE
-            next iTry
+                        printlog( CFN & "Messagebox: " & Active.getText() )
+                        
+                        try
+                            if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
+                            Active.Yes()
+                            if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
+                        catch
+                            if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
+                            active.ok()
+                            qaerrorlog( "#i100701 - Object not found message" )
+                        endcatch
+                    else
+                        printlog( CFN & "No messagebox informing about a copy being used" )
+                    endif
+                    sMakeReadOnlyDocumentEditable() = TRUE
+                next iTry
+            else
+                printlog( CFN & "Document appears to be editable" )
+            endif
         else
             if ( VERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
             sMakeReadOnlyDocumentEditable() = FALSE
@@ -185,7 +189,7 @@ function fSelectFirstOLE() as integer
 
     fSelectFirstOLE = -1
 
-    select case gApplication
+    select case uCASE(gApplication)
     case "CALC"                     :   Kontext "NavigatorCalc"
         'First check if Navigator is visible and remember result
         if NavigatorCalc.exists (10) then
@@ -248,7 +252,7 @@ function fSelectFirstOLE() as integer
         end if
 
     case "WRITER" , "HTML" , "MASTERDOCUMENT" :
-        select case gApplication
+        select case uCASE(gApplication)
         case "MASTERDOCUMENT"    :   Kontext "NavigatorGlobalDoc"
             if NavigatorGlobalDoc.Exists(10) then
                 bNavigatorWasVisible = TRUE
@@ -282,6 +286,10 @@ function fSelectFirstOLE() as integer
         end select
         Kontext "NavigatorWriter"
         if NavigatorWriter.Exists(10) then
+			' Check if all content is visible
+			if Auswahlliste.GetItemCount < 2 then
+				Inhaltsansicht.Click
+			end if
             'Select first OLE in list
             Auswahlliste.TypeKeys "<HOME>"
             for iIndex = 1 to 13

@@ -48,6 +48,7 @@
 
 #include "boost/bind.hpp"
 #include "license_dialog.hxx"
+#include "dp_gui_dialog2.hxx"
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -271,27 +272,28 @@ void ServiceImpl::startExecuteModal(
 
     {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
-        ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
+        ::rtl::Reference< ::dp_gui::TheExtensionManager > myExtMgr(
             ::dp_gui::TheExtensionManager::get(
                 m_xComponentContext,
                 m_parent ? *m_parent : Reference<awt::XWindow>(),
                 m_extensionURL ? *m_extensionURL : OUString() ) );
+        myExtMgr->createDialog( false );
         if (m_initialTitle.getLength() > 0) {
-            dialog->SetText( m_initialTitle );
+            myExtMgr->SetText( m_initialTitle );
             m_initialTitle = OUString();
         }
         if ( m_bShowUpdateOnly )
         {
-            dialog->checkUpdates( true, !bCloseDialog );
+            myExtMgr->checkUpdates( true, !bCloseDialog );
             if ( bCloseDialog )
-                dialog->Close();
+                myExtMgr->Close();
             else
-                dialog->ToTop( TOTOP_RESTOREWHENMIN );
+                myExtMgr->ToTop( TOTOP_RESTOREWHENMIN );
         }
         else
         {
-            dialog->Show();
-            dialog->ToTop( TOTOP_RESTOREWHENMIN );
+            myExtMgr->Show();
+            myExtMgr->ToTop( TOTOP_RESTOREWHENMIN );
         }
     }
 
@@ -331,6 +333,12 @@ sdecl::ServiceDecl const licenseDecl(
     licenseSI,
     "com.sun.star.comp.deployment.ui.LicenseDialog",
     "com.sun.star.deployment.ui.LicenseDialog" );
+
+sdecl::class_<UpdateRequiredDialogService, sdecl::with_args<true> > updateSI;
+sdecl::ServiceDecl const updateDecl(
+    updateSI,
+    "com.sun.star.comp.deployment.ui.UpdateRequiredDialog",
+    "com.sun.star.deployment.ui.UpdateRequiredDialog" );
 } // namespace dp_gui
 
 extern "C" {
@@ -346,7 +354,7 @@ sal_Bool SAL_CALL component_writeInfo(
     registry::XRegistryKey * pRegistryKey )
 {
     return component_writeInfoHelper(
-        pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl );
+        pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
 }
 
 void * SAL_CALL component_getFactory(
@@ -355,7 +363,7 @@ void * SAL_CALL component_getFactory(
     registry::XRegistryKey * pRegistryKey )
 {
     return component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl );
+        pImplName, pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
 }
 
 } // extern "C"

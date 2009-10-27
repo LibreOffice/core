@@ -76,19 +76,6 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3                    (    ToolBoxFactory                                                  ,
-                                            OWeakObject                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                       ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementFactory )
-                                        )
-
-DEFINE_XTYPEPROVIDER_3                  (   ToolBoxFactory                                  ,
-                                            css::lang::XTypeProvider                        ,
-                                            css::lang::XServiceInfo                         ,
-                                            ::com::sun::star::ui::XUIElementFactory
-                                        )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolBoxFactory                                  ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TOOLBARFACTORY                      ,
@@ -98,15 +85,7 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolBoxFactory                      
 DEFINE_INIT_SERVICE                     (   ToolBoxFactory, {} )
 
 ToolBoxFactory::ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( xServiceManager->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
-                        UNO_QUERY )
-{
-}
-
-ToolBoxFactory::~ToolBoxFactory()
+    MenuBarFactory( xServiceManager,true )
 {
 }
 
@@ -116,94 +95,13 @@ Reference< XUIElement > SAL_CALL ToolBoxFactory::createUIElement(
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    // SAFE
     ResetableGuard aLock( m_aLock );
-
-    Reference< XUIConfigurationManager > xConfigSource;
-    Reference< XFrame >                  xFrame;
-    rtl::OUString                        aResourceURL( ResourceURL );
-    sal_Bool                             bPersistent( sal_True );
-    sal_Bool                             bPopupMode( sal_False );
-
-    for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
-    {
-        if ( Args[n].Name.equalsAscii( "ConfigurationSource" ))
-            Args[n].Value >>= xConfigSource;
-        else if ( Args[n].Name.equalsAsciiL( "Frame", 5 ))
-            Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAsciiL( "ResourceURL", 11 ))
-            Args[n].Value >>= aResourceURL;
-        else if ( Args[n].Name.equalsAsciiL( "Persistent", 10 ))
-            Args[n].Value >>= bPersistent;
-        else if ( Args[n].Name.equalsAsciiL( "PopupMode", 9 ))
-            Args[n].Value >>= bPopupMode;
-    }
-
-    Reference< XUIConfigurationManager > xCfgMgr;
-    if ( aResourceURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ))) != 0 )
-        throw IllegalArgumentException();
-    else
-    {
-        // Identify frame and determine document based ui configuration manager/module ui configuration manager
-        if ( xFrame.is() && !xConfigSource.is() )
-        {
-            bool bHasSettings( false );
-            Reference< XModel > xModel;
-
-            Reference< XController > xController = xFrame->getController();
-            if ( xController.is() )
-                xModel = xController->getModel();
-
-            if ( xModel.is() )
-            {
-                Reference< XUIConfigurationManagerSupplier > xUIConfigurationManagerSupplier( xModel, UNO_QUERY );
-                if ( xUIConfigurationManagerSupplier.is() )
-                {
-                    xCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
-                    bHasSettings = xCfgMgr->hasSettings( aResourceURL );
-                }
-            }
-
-            if ( !bHasSettings )
-            {
-                rtl::OUString aModuleIdentifier = m_xModuleManager->identify( Reference< XInterface >( xFrame, UNO_QUERY ));
-                if ( aModuleIdentifier.getLength() )
-                {
-                    Reference< ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
-                        m_xServiceManager->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
-                        UNO_QUERY );
-                    xCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
-                    bHasSettings = xCfgMgr->hasSettings( aResourceURL );
-                }
-            }
-        }
-    }
-
-    PropertyValue aPropValue;
-    Sequence< Any > aPropSeq( 5 );
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    aPropValue.Value <<= xFrame;
-    aPropSeq[0] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationSource" ));
-    aPropValue.Value <<= xCfgMgr;
-    aPropSeq[1] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" ));
-    aPropValue.Value <<= aResourceURL;
-    aPropSeq[2] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
-    aPropValue.Value <<= bPersistent;
-    aPropSeq[3] <<= aPropValue;
-    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PopupMode" ));
-    aPropValue.Value <<= bPopupMode;
-    aPropSeq[4] <<= aPropValue;
-
-    vos::OGuard aGuard( Application::GetSolarMutex() );
-    ToolBarWrapper* pToolBarWrapper = new ToolBarWrapper( m_xServiceManager );
-    Reference< ::com::sun::star::ui::XUIElement > xToolBar( (OWeakObject *)pToolBarWrapper, UNO_QUERY );
-    Reference< XInitialization > xInit( xToolBar, UNO_QUERY );
-    xInit->initialize( aPropSeq );
-    return xToolBar;
+    ToolBarWrapper* pWrapper = new ToolBarWrapper( m_xServiceManager );
+    Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
+    Reference< ::com::sun::star::frame::XModuleManager > xModuleManager = m_xModuleManager;
+    aLock.unlock();
+    CreateUIElement(ResourceURL,Args,"PopupMode","private:resource/toolbar/",xMenuBar,xModuleManager,m_xServiceManager);
+    return xMenuBar;
 }
 
 }

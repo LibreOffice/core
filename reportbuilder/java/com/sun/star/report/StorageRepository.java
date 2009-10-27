@@ -148,7 +148,7 @@ public class StorageRepository implements InputRepository, OutputRepository
         {
             LOGGER.error(REPORT_PROCESSING_FAILED, ex);
         }
-        catch (NoSuchElementException ex)
+        catch (NoSuchElementException e)
         {
         // We expect this exception, no need to log it.
         }

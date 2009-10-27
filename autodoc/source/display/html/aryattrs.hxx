@@ -59,15 +59,6 @@ const char *        Get_TypeKey(
 bool                Ce_IsInternal(
                         const ary::cpp::CodeEntity &
                                                 i_rCe );
-
-const char *        Namespace_DisplayName(
-                        const ary::cpp::Namespace &
-                                                i_rNsp );
-
-const char *        TypeText(
-                        ary::cpp::Type_id       i_nId,
-                        const ary::cpp::Gate &  i_rAryGate );
-
 const char *        SyntaxText_PreName(
                         const ary::cpp::Function &
                                                 i_rFunction,

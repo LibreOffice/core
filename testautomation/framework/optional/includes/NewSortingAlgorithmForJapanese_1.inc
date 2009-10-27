@@ -39,10 +39,8 @@
 
 testcase NewSortingForJapanese_1
 
-'///Check if editbox "Entry Phonetic Reading " appear or not -- insert/index and tables /entry
   call  hNewDocument
 
-  '/// turn off "Asian Language support" , check if editbox "Entry Phonetic Reading " appear is invisible
   if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
      Call CheckAsianLanguageSupport("Off")
      Sleep 1
@@ -58,7 +56,6 @@ testcase NewSortingForJapanese_1
       VerzeichniseintragEinfuegen.Close
   end if
 
-  '/// turn on "Asian Language support" , check if editbox "Entry Phonetic Reading " appear is visible
   Call CheckAsianLanguageSupport("On")
 
    Kontext
@@ -79,7 +76,6 @@ endcase
 
 testcase NewSortingForJapanese_2
 
-'/// Check if editbox "Entry Phonetic Reading " is enabled or not  -- insert/index and tables /entry
   call  hNewDocument
 
    InsertIndexesEntry
@@ -111,16 +107,13 @@ testcase NewSortingForJapanese_3
 
   if Len(sJapaneseLocation) = 0 then Goto endsub
 
-'/// Check the number of key type in sort area when choose japanese language
   call  hNewDocument
 
-'/// Open with Insert/Index and tables/Index and tables / tabpage index/table
     InsertIndexes
     Kontext
     Active.SetPage TabVerzeichnisseVerzeichnis
     Kontext "TabVerzeichnisseVerzeichnis"
 
-'/// choose Alphabetical index in type and choose Japanese Language
     VerzeichnisTyp.Select iTypeList
     try
         SortLanguage.Select (sJapaneseLocation)
@@ -137,7 +130,6 @@ testcase NewSortingForJapanese_3
     endcatch
     Sleep 1
 
-'/// Check the number of key type in sort area
     if SortKeyType.GetItemCount <> iNumberOfKeyType then
        warnlog "The number of key type is wrong, hope :" +iNumberOfKeyType + " but get:" +SortKeyType.GetItemCount
     end if
@@ -162,16 +154,13 @@ testcase NewSortingForJapanese_4
 
   if Len(sJapaneseLocation) = 0 then Goto endsub
 
-'/// Check the number of key type in data/sort
   call  hNewDocument
   DocumentWriter.TypeKeys "test"
   DocumentWriter.TypeKeys "<Shift Home>"
 
-'/// Open Tools/Sort
   ToolsSort
     Kontext "Sortieren"
 
-'/// choose Alphabetical index in type and choose Japanese Language
     try
         Sprache.Select  sJapaneseLocation
     catch
@@ -187,7 +176,6 @@ testcase NewSortingForJapanese_4
     endcatch
     Sleep 1
 
-'/// Check the number of key type in sort area
     if Schluesseltyp1.GetItemCount <> iNumberOfKeyType then
        warnlog "The number of key type is wrong, hope :" +iNumberOfKeyType + " but get:" +Schluesseltyp1.GetItemCount
     end if
@@ -210,16 +198,13 @@ testcase NewSortingForJapanese_5
 
   if Len(sJapaneseLocation) = 0 then Goto endsub
 
-'/// Check the number of key type in data/sort -- Calc
   call  hNewDocument
 
-'/// Open Data/Sort  ,tabpage option
    DataSort
    Kontext
    active.SetPage TabSortierenOptionen
    Kontext "TabSortierenOptionen"
 
-'/// choose Alphabetical index in type and choose Japanese Language
     try
         Sprache.Select  sJapaneseLocation
     catch
@@ -235,7 +220,6 @@ testcase NewSortingForJapanese_5
     endcatch
     Sleep 1
 
-'/// Check the number of key type in sort area
     if Optionen.GetItemCount <> iNumberOfOption then
        warnlog "The number of option is wrong, hope :" +iNumberOfOption + " but get:" +Optionen.GetItemCount
     end if

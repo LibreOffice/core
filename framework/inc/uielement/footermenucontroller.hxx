@@ -34,65 +34,26 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#include <helper/popupmenucontrollerbase.hxx>
-#include <stdtypes.h>
-
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/frame/status/Verb.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-#include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/weak.hxx>
-#include <rtl/ustring.hxx>
+#include <uielement/headermenucontroller.hxx>
 
 namespace framework
 {
-    class FooterMenuController :  public PopupMenuControllerBase
+    class FooterMenuController :  public HeaderMenuController
     {
         public:
             FooterMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
             virtual ~FooterMenuController();
 
             // XServiceInfo
-            DECLARE_XSERVICEINFO
-
-            // XPopupMenuController
-            virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
-
-            // XInitialization
-            virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-            // XStatusListener
-            virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
-
-            // XMenuListener
-            virtual void SAL_CALL highlight( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL activate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-
-            // XEventListener
-            virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
-
-        private:
-            void fillPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
+            virtual ::rtl::OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );
+            virtual sal_Bool                                               SAL_CALL supportsService                    ( const ::rtl::OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );
+            virtual css::uno::Sequence< ::rtl::OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );
+            /* Helper for XServiceInfo */
+            static css::uno::Sequence< ::rtl::OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
+            static ::rtl::OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );
+            /* Helper for registry */
+            static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+            static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
     };
 }
 

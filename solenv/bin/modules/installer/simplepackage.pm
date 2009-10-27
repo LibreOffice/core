@@ -31,7 +31,9 @@
 
 package installer::simplepackage;
 
+# use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Cwd;
+use File::Copy;
 use installer::download;
 use installer::exiter;
 use installer::globals;
@@ -86,6 +88,14 @@ sub register_extensions
 
     my $unopkgfile = $installer::globals::unopkgfile;
 
+    my $unopkgexists = 1;
+    if (( $installer::globals::languagepack ) && ( ! -f $unopkgfile ))
+    {
+        $unopkgexists = 0;
+        $infoline = "Language packs do not contain unopkg!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
     # my $extensiondir = $officedir . $installer::globals::separator . "share" .
     #           $installer::globals::separator . "extension" .
     #           $installer::globals::separator . "install";
@@ -94,7 +104,7 @@ sub register_extensions
 
     my $allextensions = installer::systemactions::find_file_with_file_extension("oxt", $extensiondir);
 
-    if ( $#{$allextensions} > -1)
+    if (( $#{$allextensions} > -1 ) && ( $unopkgexists ))
     {
         my $currentdir = cwd();
         print "... current dir: $currentdir ...\n";
@@ -114,7 +124,7 @@ sub register_extensions
 
             if ( $installer::globals::iswindowsbuild )
             {
-                if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
+                if ( $^O =~ /cygwin/i )
                 {
                     $localtemppath = $installer::globals::cyg_temppath;
                 }
@@ -135,7 +145,11 @@ sub register_extensions
             my @unopkgoutput = ();
 
             open (UNOPKG, $systemcall);
-            while (<UNOPKG>) {push(@unopkgoutput, $_); }
+            while (<UNOPKG>)
+            {
+                my $lastline = $_;
+                push(@unopkgoutput, $lastline);
+            }
             close (UNOPKG);
 
             for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
@@ -157,11 +171,188 @@ sub register_extensions
     }
     else
     {
-        $infoline = "No extensions located in directory $extensiondir.\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        if ( ! ( $#{$allextensions} > -1 ))
+        {
+            $infoline = "No extensions located in directory $extensiondir.\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
     }
 
     chdir($from);
+}
+
+########################################################################
+# Getting the translation file for the Mac Language Pack installer
+########################################################################
+
+sub get_mac_translation_file
+{
+    my $translationfilename = $installer::globals::maclangpackfilename;
+    # my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::maclangpackfilename;
+    # if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
+    # else { $translationfilename = $translationfilename . ".mlf"; }
+    if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_mac_translation_file"); }
+    my $translationfile = installer::files::read_file($translationfilename);
+
+    my $infoline = "Reading translation file: $translationfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    return $translationfile;
+}
+
+##################################################################
+# Collecting all identifier from ulf file
+##################################################################
+
+sub get_identifier
+{
+    my ( $translationfile ) = @_;
+
+    my @identifier = ();
+
+    for ( my $i = 0; $i <= $#{$translationfile}; $i++ )
+    {
+        my $oneline = ${$translationfile}[$i];
+
+        if ( $oneline =~ /^\s*\[(.+)\]\s*$/ )
+        {
+            my $identifier = $1;
+            push(@identifier, $identifier);
+        }
+    }
+
+    return \@identifier;
+}
+
+##############################################################
+# Returning the complete block in all languages
+# for a specified string
+##############################################################
+
+sub get_language_block_from_language_file
+{
+    my ($searchstring, $languagefile) = @_;
+
+    my @language_block = ();
+
+    for ( my $i = 0; $i <= $#{$languagefile}; $i++ )
+    {
+        if ( ${$languagefile}[$i] =~ /^\s*\[\s*$searchstring\s*\]\s*$/ )
+        {
+            my $counter = $i;
+
+            push(@language_block, ${$languagefile}[$counter]);
+            $counter++;
+
+            while (( $counter <= $#{$languagefile} ) && (!( ${$languagefile}[$counter] =~ /^\s*\[/ )))
+            {
+                push(@language_block, ${$languagefile}[$counter]);
+                $counter++;
+            }
+
+            last;
+        }
+    }
+
+    return \@language_block;
+}
+
+##############################################################
+# Returning a specific language string from the block
+# of all translations
+##############################################################
+
+sub get_language_string_from_language_block
+{
+    my ($language_block, $language) = @_;
+
+    my $newstring = "";
+
+    for ( my $i = 0; $i <= $#{$language_block}; $i++ )
+    {
+        if ( ${$language_block}[$i] =~ /^\s*$language\s*\=\s*\"(.*)\"\s*$/ )
+        {
+            $newstring = $1;
+            last;
+        }
+    }
+
+    if ( $newstring eq "" )
+    {
+        $language = "en-US";    # defaulting to english
+
+        for ( my $i = 0; $i <= $#{$language_block}; $i++ )
+        {
+            if ( ${$language_block}[$i] =~ /^\s*$language\s*\=\s*\"(.*)\"\s*$/ )
+            {
+                $newstring = $1;
+                last;
+            }
+        }
+    }
+
+    return $newstring;
+}
+
+########################################################################
+# Localizing the script for the Mac Language Pack installer
+########################################################################
+
+sub localize_scriptfile
+{
+    my ($scriptfile, $translationfile, $languagestringref) = @_;
+
+    # my $translationfile = get_mac_translation_file();
+
+    my $onelanguage = $$languagestringref;
+    if ( $onelanguage =~ /^\s*(.*?)_/ ) { $onelanguage = $1; }
+
+    # Analyzing the ulf file, collecting all Identifier
+    my $allidentifier = get_identifier($translationfile);
+
+    for ( my $i = 0; $i <= $#{$allidentifier}; $i++ )
+    {
+        my $identifier = ${$allidentifier}[$i];
+        my $language_block = get_language_block_from_language_file($identifier, $translationfile);
+        my $newstring = get_language_string_from_language_block($language_block, $onelanguage);
+
+        # removing mask
+        $newstring =~ s/\\\'/\'/g;
+
+        replace_one_variable_in_shellscript($scriptfile, $newstring, $identifier);
+    }
+}
+
+#################################################################################
+# Replacing one variable in Mac shell script
+#################################################################################
+
+sub replace_one_variable_in_shellscript
+{
+    my ($scriptfile, $variable, $searchstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    {
+        ${$scriptfile}[$i] =~ s/\[$searchstring\]/$variable/g;
+    }
+}
+
+#############################################
+# Replacing variables in Mac shell script
+#############################################
+
+sub replace_variables_in_scriptfile
+{
+    my ($scriptfile, $volume_name, $allvariables) = @_;
+
+    replace_one_variable_in_shellscript($scriptfile, $volume_name, "FULLPRODUCTNAME" );
+    replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTNAME'}, "PRODUCTNAME" );
+    replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTVERSION'}, "PRODUCTVERSION" );
+
+    my $scriptname = lc($allvariables->{'PRODUCTNAME'}) . "\.script";
+    if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) { $scriptname = "org.openoffice.script"; }
+
+    replace_one_variable_in_shellscript($scriptfile, $scriptname, "SEARCHSCRIPTNAME" );
 }
 
 #############################################
@@ -173,20 +364,21 @@ sub register_extensions
 
 sub create_package
 {
-    my ( $installdir, $packagename, $allvariables, $includepatharrayref ) = @_;
+    my ( $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref ) = @_;
 
     # moving dir into temporary directory
     my $pid = $$; # process id
     my $tempdir = $installdir . "_temp" . "." . $pid;
     my $systemcall = "";
     my $from = "";
+    my $makesystemcall = 1;
     my $return_to_start = 0;
     installer::systemactions::rename_directory($installdir, $tempdir);
 
     # creating new directory with original name
     installer::systemactions::create_directory($installdir);
 
-        my $archive =  $installdir . $installer::globals::separator . $packagename . $installer::globals::archiveformat;
+    my $archive =  $installdir . $installer::globals::separator . $packagename . $installer::globals::archiveformat;
 
     if ( $archive =~ /zip$/ )
     {
@@ -194,7 +386,12 @@ sub create_package
         $return_to_start = 1;
         chdir($tempdir);
         $systemcall = "$installer::globals::zippath -qr $archive .";
-        # $systemcall = "$installer::globals::zippath -r $archive .";
+
+        # Using Archive::Zip fails because of very long path names below "share/uno_packages/cache"
+        # my $packzip = Archive::Zip->new();
+        # $packzip->addTree(".");   # after changing into $tempdir
+        # $packzip->writeToFileNamed($archive);
+        # $makesystemcall = 0;
     }
      elsif ( $archive =~ /dmg$/ )
     {
@@ -214,8 +411,116 @@ sub create_package
         my $sla = 'sla.r';
         my $ref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
 
-        $systemcall = "cd $tempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && ";
-                if ($$ref ne "") {
+        my $localtempdir = $tempdir;
+
+        if (( $installer::globals::languagepack ) || ( $installer::globals::patch ))
+        {
+            $localtempdir = "$tempdir/$packagename";
+            if ( $installer::globals::languagepack ) { $volume_name = "$volume_name Language Pack"; }
+            if ( $installer::globals::patch ) { $volume_name = "$volume_name Patch"; }
+
+            # Create tar ball named tarball.tar.bz2
+            my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
+            my $contentsfolder = $appfolder . "/Contents";
+            my $tarballname = "tarball.tar.bz2";
+
+            my $localfrom = cwd();
+            chdir $appfolder;
+
+            $systemcall = "tar -cjf $tarballname Contents/";
+
+            print "... $systemcall ...\n";
+            my $localreturnvalue = system($systemcall);
+            $infoline = "Systemcall: $systemcall\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            if ($localreturnvalue)
+            {
+                $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+            else
+            {
+                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+
+            my $sourcefile = $appfolder . "/" . $tarballname;
+            my $destfile = $contentsfolder . "/" . $tarballname;
+
+            installer::systemactions::remove_complete_directory($contentsfolder);
+            installer::systemactions::create_directory($contentsfolder);
+
+            installer::systemactions::copy_one_file($sourcefile, $destfile);
+            unlink($sourcefile);
+
+            # Copy two files into installation set next to the tar ball
+            # 1. "osx_install.applescript"
+            # 2 "OpenOffice.org Languagepack"
+
+            my $scriptrealfilename = "osx_install.applescript";
+            my $scriptfilename = "";
+            if ( $installer::globals::languagepack ) { $scriptfilename = "osx_install_languagepack.applescript"; }
+            if ( $installer::globals::patch ) { $scriptfilename = "osx_install_patch.applescript"; }
+            my $scripthelpersolverfilename = "mac_install.script";
+            my $scripthelperrealfilename = $volume_name;
+            my $translationfilename = $installer::globals::macinstallfilename;
+
+            # Finding both files in solver
+
+            my $scriptref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$scriptfilename, $includepatharrayref, 0);
+            if ($$scriptref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script $scriptfilename!", "create_package"); }
+            my $scripthelperref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$scripthelpersolverfilename, $includepatharrayref, 0);
+            if ($$scripthelperref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script $scripthelpersolverfilename!", "create_package"); }
+            my $translationfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$translationfilename, $includepatharrayref, 0);
+            if ($$translationfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script translation file $translationfilename!", "create_package"); }
+
+            $scriptfilename = $contentsfolder . "/" . $scriptrealfilename;
+            $scripthelperrealfilename = $contentsfolder . "/" . $scripthelperrealfilename;
+
+            installer::systemactions::copy_one_file($$scriptref, $scriptfilename);
+            installer::systemactions::copy_one_file($$scripthelperref, $scripthelperrealfilename);
+
+            # Replacing variables in script $scriptfilename
+            # Localizing script $scriptfilename
+            my $scriptfilecontent = installer::files::read_file($scriptfilename);
+            my $translationfilecontent = installer::files::read_file($$translationfileref);
+            localize_scriptfile($scriptfilecontent, $translationfilecontent, $languagestringref);
+            replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
+            installer::files::save_file($scriptfilename, $scriptfilecontent);
+
+            $systemcall = "chmod 775 " . "\"" . $scriptfilename . "\"";
+            system($systemcall);
+            $systemcall = "chmod 775 " . "\"" . $scripthelperrealfilename . "\"";
+            system($systemcall);
+
+            # Copy also Info.plist and icon file
+            # Finding both files in solver
+            my $iconfile = "ooo3_installer.icns";
+            my $iconfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$iconfile, $includepatharrayref, 0);
+            if ($$iconfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script icon file $iconfile!", "create_package"); }
+            my $subdir = $contentsfolder . "/" . "Resources";
+            if ( ! -d $subdir ) { installer::systemactions::create_directory($subdir); }
+            $destfile = $subdir . "/" . $iconfile;
+            installer::systemactions::copy_one_file($$iconfileref, $destfile);
+
+            my $infoplistfile = "Info.plist.langpack";
+            my $installname = "Info.plist";
+            my $infoplistfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$infoplistfile, $includepatharrayref, 0);
+            if ($$infoplistfileref eq "") { installer::exiter::exit_program("ERROR: Could not find Apple script Info.plist: $infoplistfile!", "create_package"); }
+            $destfile = $contentsfolder . "/" . $installname;
+            installer::systemactions::copy_one_file($$infoplistfileref, $destfile);
+
+            # Replacing variables in Info.plist
+            $scriptfilecontent = installer::files::read_file($destfile);
+            replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
+            installer::files::save_file($destfile, $scriptfilecontent);
+
+            chdir $localfrom;
+        }
+
+        $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && ";
+        if ($$ref ne "") {
             $systemcall .= "hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
         }
         $systemcall .= "rm -f $installdir/tmp.dmg";
@@ -234,20 +539,23 @@ sub create_package
         $systemcall = "cd $tempdir; $ldpreloadstring tar -cf - . | gzip > $archive";
     }
 
-    print "... $systemcall ...\n";
-    my $returnvalue = system($systemcall);
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    if ( $makesystemcall )
+    {
+        print "... $systemcall ...\n";
+        my $returnvalue = system($systemcall);
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
 
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
     }
 
     if ( $return_to_start ) { chdir($from); }
@@ -296,6 +604,8 @@ sub create_simple_package
         else
         {
             $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
+            if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
+            if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
             $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, \$locallanguage);
         }
     }
@@ -319,7 +629,20 @@ sub create_simple_package
         if ( $onedir->{'HostName'} )
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
-            if ( ! -d $destdir ) { installer::systemactions::create_directory_structure($destdir); }
+            if ( ! -d $destdir )
+            {
+                if ( $^O =~ /cygwin/i ) # Cygwin performance check
+                {
+                    $infoline = "Try to create directory $destdir\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                    # Directories in $dirsref are sorted and all parents were added -> "mkdir" works without parent creation!
+                    if ( ! ( -d $destdir )) { mkdir($destdir, 0775); }
+                }
+                else
+                {
+                    installer::systemactions::create_directory_structure($destdir);
+                }
+            }
         }
     }
 
@@ -335,6 +658,7 @@ sub create_simple_package
         my $onefile = ${$filesref}[$i];
 
         if (( $onefile->{'Styles'} ) && ( $onefile->{'Styles'} =~ /\bBINARYTABLE_ONLY\b/ )) { next; }
+        if (( $installer::globals::patch ) && ( $onefile->{'Styles'} ) && ( ! ( $onefile->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
 
         my $source = $onefile->{'sourcepath'};
         my $destination = $onefile->{'destination'};
@@ -345,21 +669,38 @@ sub create_simple_package
         $source =~ s/\$\$/\$/;
         $destination =~ s/\$\$/\$/;
 
-        installer::systemactions::copy_one_file($source, $destination);
-
-        if (( ! $installer::globals::iswindowsbuild ) ||
-            (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" )))
+        if ( $^O =~ /cygwin/i ) # Cygwin performance, do not use copy_one_file. "chmod -R" at the end
         {
-            my $unixrights = "";
-            if ( $onefile->{'UnixRights'} )
+            my $copyreturn = copy($source, $destination);
+
+            if ($copyreturn)
             {
-                $unixrights = $onefile->{'UnixRights'};
+                $infoline = "Copy: $source to $destination\n";
+                $returnvalue = 1;
+            }
+            else
+            {
+                $infoline = "ERROR: Could not copy $source to $destination\n";
+                $returnvalue = 0;
+            }
 
-                # special unix rights "555" on cygwin
-                if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ) && ( $unixrights =~ /444/ )) { $unixrights = "555"; }
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            installer::systemactions::copy_one_file($source, $destination);
 
-                my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
-                system($localcall);
+            if ( ! $installer::globals::iswindowsbuild )
+            {
+                # see issue 102274
+                my $unixrights = "";
+                if ( $onefile->{'UnixRights'} )
+                {
+                    $unixrights = $onefile->{'UnixRights'};
+
+                    my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
+                    system($localcall);
+                }
             }
         }
     }
@@ -372,6 +713,9 @@ sub create_simple_package
     for ( my $i = 0; $i <= $#{$linksref}; $i++ )
     {
         my $onelink = ${$linksref}[$i];
+
+        if (( $installer::globals::patch ) && ( $onelink->{'Styles'} ) && ( ! ( $onelink->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
+
         my $destination = $onelink->{'destination'};
         $destination = $subfolderdir . $installer::globals::separator . $destination;
         my $destinationfile = $onelink->{'destinationfile'};
@@ -386,6 +730,9 @@ sub create_simple_package
     for ( my $i = 0; $i <= $#{$unixlinksref}; $i++ )
     {
         my $onelink = ${$unixlinksref}[$i];
+
+        if (( $installer::globals::patch ) && ( $onelink->{'Styles'} ) && ( ! ( $onelink->{'Styles'} =~ /\bPATCH\b/ ))) { next; }
+
         my $target = $onelink->{'Target'};
         my $destination = $subfolderdir . $installer::globals::separator . $onelink->{'destination'};
 
@@ -394,6 +741,17 @@ sub create_simple_package
 
         $infoline = "Creating Unix link: \"ln -sf $target $destination\"\n";
         push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    # Setting privileges for cygwin globally
+
+    if ( $^O =~ /cygwin/i )
+    {
+        installer::logger::print_message( "... changing privileges in $subfolderdir ...\n" );
+        installer::logger::include_header_into_logfile("Changing privileges in $subfolderdir:");
+
+        my $localcall = "chmod -R 755 " . "\"" . $subfolderdir . "\"";
+        system($localcall);
     }
 
     # Registering the extensions
@@ -418,7 +776,7 @@ sub create_simple_package
         # -> tar.gz for all other platforms
         installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
         installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
-        create_package($installdir, $packagename, $allvariables, $includepatharrayref);
+        create_package($installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref);
     }
 
     # Analyzing the log file

@@ -36,7 +36,9 @@
 #include "svtools/controldims.hrc"
 #include "svtools/svtools.hrc"
 
+#include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
+#include "dp_gui_extlistbox.hxx"
 #include "dp_gui_shared.hxx"
 #include "dp_gui_theextmgr.hxx"
 #include "dp_misc.h"
@@ -55,7 +57,7 @@
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/bootstrap.hxx"
 
 #include "comphelper/processfactory.hxx"
 #include "ucbhelper/content.hxx"
@@ -76,6 +78,8 @@
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 
+#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+
 #include <map>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -91,11 +95,7 @@ using ::rtl::OUString;
 namespace dp_gui {
 
 #define ICON_OFFSET         50
-#define ICON_HEIGHT         42
-#define SMALL_ICON_SIZE     16
-#define RIGHT_ICON_OFFSET    5
 #define TOP_OFFSET           3
-#define SPACE_BETWEEN        3
 #define LINE_SIZE            4
 #define PROGRESS_WIDTH      60
 #define PROGRESS_HEIGHT     14
@@ -113,112 +113,18 @@ struct StrAllFiles : public rtl::StaticWithInit< const OUString, StrAllFiles >
 };
 
 //------------------------------------------------------------------------------
-//                          struct Entry_Impl
-//------------------------------------------------------------------------------
-struct Entry_Impl;
-
-typedef ::boost::shared_ptr< Entry_Impl > TEntry_Impl;
-
-struct Entry_Impl
-{
-    bool            m_bActive;
-    bool            m_bLocked;
-    bool            m_bHasOptions;
-    bool            m_bShared;
-    bool            m_bNew;
-    bool            m_bChecked;
-    PackageState    m_eState;
-    String          m_sTitle;
-    String          m_sVersion;
-    String          m_sDescription;
-    String          m_sPublisher;
-    String          m_sPublisherURL;
-    String          m_sErrorText;
-    Image           m_aIcon;
-    Image           m_aIconHC;
-    svt::FixedHyperlink *m_pPublisher;
-
-    uno::Reference< deployment::XPackage> m_xPackage;
-    uno::Reference< deployment::XPackageManager> m_xPackageManager;
-
-    Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
-                const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                PackageState eState );
-   ~Entry_Impl();
-
-    StringCompare CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const;
-};
-
-//------------------------------------------------------------------------------
-Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
-                        const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                        PackageState eState ) :
-    m_bActive( false ),
-    m_bLocked( false ),
-    m_bHasOptions( false ),
-    m_bShared( false ),
-    m_bNew( false ),
-    m_bChecked( false ),
-    m_eState( eState ),
-    m_pPublisher( NULL ),
+UpdateListEntry::UpdateListEntry( const uno::Reference< deployment::XPackage > &xPackage,
+                                  const uno::Reference< deployment::XPackageManager > &xPackageManager ) :
     m_xPackage( xPackage ),
     m_xPackageManager( xPackageManager )
-{
-    m_sTitle = xPackage->getDisplayName();
-    m_sVersion = xPackage->getVersion();
-    m_sDescription = xPackage->getDescription();
-
-    beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
-    m_sPublisher = aInfo.First;
-    m_sPublisherURL = aInfo.Second;
-
-    // get the icons for the package if there are any
-    uno::Reference< graphic::XGraphic > xGraphic = xPackage->getIcon( false );
-    if ( xGraphic.is() )
-        m_aIcon = Image( xGraphic );
-
-    xGraphic = xPackage->getIcon( true );
-    if ( xGraphic.is() )
-        m_aIconHC = Image( xGraphic );
-    else
-        m_aIconHC = m_aIcon;
-
-    m_bLocked = m_xPackageManager->isReadOnly();
-
-    if ( eState == AMBIGUOUS )
-        m_sErrorText = ExtMgrDialog::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-}
+{}
 
 //------------------------------------------------------------------------------
-Entry_Impl::~Entry_Impl()
-{
-    delete m_pPublisher;
-}
+UpdateListEntry::~UpdateListEntry()
+{}
 
 //------------------------------------------------------------------------------
-StringCompare Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const
-{
-    StringCompare eCompare = (StringCompare) pCollator->compareString( m_sTitle, pEntry->m_sTitle );
-    if ( eCompare == COMPARE_EQUAL )
-    {
-        eCompare = m_sVersion.CompareTo( pEntry->m_sVersion );
-        if ( eCompare == COMPARE_EQUAL )
-        {
-            if ( m_xPackageManager != pEntry->m_xPackageManager )
-            {
-                sal_Int32 nCompare = m_xPackageManager->getContext().compareTo( pEntry->m_xPackageManager->getContext() );
-                if ( nCompare < 0 )
-                    eCompare = COMPARE_LESS;
-                else if ( nCompare > 0 )
-                    eCompare = COMPARE_GREATER;
-            }
-        }
-    }
-    return eCompare;
-}
-
-//------------------------------------------------------------------------------
-//                            ExtensionBox_Impl
+//                            ExtBoxWithBtns_Impl
 //------------------------------------------------------------------------------
 
 enum MENU_COMMAND
@@ -230,63 +136,21 @@ enum MENU_COMMAND
     CMD_UPDATE
 };
 
-class ExtensionBox_Impl : public ::svt::IExtensionListBox,
-                          public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
-    bool            m_bHasScrollBar;
-    bool            m_bHasActive;
-    bool            m_bNeedsRecalc;
-    bool            m_bHasNew;
-    bool            m_bInCheckMode;
-    bool            m_bInterfaceLocked;
-    //Must be guarded together with m_vEntries to ensure a valid index at all times.
-    //Use m_entriesMutex as guard.
-    long            m_nActive;
-    long            m_nTopIndex;
-    long            m_nStdHeight;
-    long            m_nActiveHeight;
-    long            m_nBtnHeight;
     Size            m_aOutputSize;
-    Image           m_aLockedImage;
-    Image           m_aLockedImageHC;
-    Image           m_aWarningImage;
-    Image           m_aWarningImageHC;
-    Image           m_aDefaultImage;
-    Image           m_aDefaultImageHC;
+    bool            m_bInterfaceLocked;
 
     PushButton     *m_pOptionsBtn;
     PushButton     *m_pEnableBtn;
     PushButton     *m_pRemoveBtn;
-    ScrollBar      *m_pScrollBar;
 
-    ExtMgrDialog             *m_pParent;
-    TheExtensionManager      *m_pManager;
-    //This mutex is used for synchronizing access to m_vEntries.
-    //Currently it is used to synchronize adding, removing entries and
-    //functions like getItemName, getItemDescription, etc. to prevent
-    //that m_vEntries is accessed at an invalid index.
-    //ToDo: There are many more places where m_vEntries is read and which may
-    //fail. For example the Paint method is probable called from the main thread
-    //while new entries are added / removed in a separate thread.
-    mutable ::osl::Mutex    m_entriesMutex;
-    std::vector< TEntry_Impl > m_vEntries;
+    ExtMgrDialog   *m_pParent;
 
-    lang::Locale    *m_pLocale;
-    CollatorWrapper *m_pCollator;
-
-    void            CalcActiveHeight( const long nPos );
-    long            GetTotalHeight() const;
-    Rectangle       GetEntryRect( const long nPos ) const;
     void            SetButtonPos( const Rectangle& rRect );
     void            SetButtonStatus( const TEntry_Impl pEntry );
-    void            SetupScrollBar();
-    void            DrawRow( const Rectangle& rRect, const TEntry_Impl pEntry );
     bool            HandleTabKey( bool bReverse );
-    bool            HandleCursorKey( USHORT nKeyCode );
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
-    void            RecalcAll();
-    bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
-    bool            isHCMode();
 
     //-----------------
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
@@ -296,115 +160,29 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox,
     DECL_DLLPRIVATE_LINK( HandleRemoveBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
 
-    //Index starts with 1.
-    //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
-    void checkIndex(sal_Int32 pos) const;
-
-
 public:
-                    ExtensionBox_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager );
-                   ~ExtensionBox_Impl();
+                    ExtBoxWithBtns_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager );
+                   ~ExtBoxWithBtns_Impl();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    Paint( const Rectangle &rPaintRect );
-    virtual void    Resize();
     virtual long    Notify( NotifyEvent& rNEvt );
 
     const Size      GetMinOutputSizePixel() const;
 
+    virtual void    RecalcAll();
+    virtual void    selectEntry( const long nPos );
     //-----------------
-    long            addEntry( const uno::Reference< deployment::XPackage > &xPackage,
-                              const uno::Reference< deployment::XPackageManager > &xPackageManager );
-    void            selectEntry( const long nPos );
     void            enableButtons( bool bEnable );
-
-    void            updateEntry( const uno::Reference< deployment::XPackage > &xPackage );
-
-    void            prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageMgr );
-    void            checkEntries();
-
-    TheExtensionManager*    getExtensionManager() const { return m_pManager; }
-
-    //===================================================================================
-    //These functions are used for automatic testing
-
-    /** @return  The count of the entries in the list box. */
-    virtual sal_Int32 getItemCount() const;
-
-    /** @return  The index of the first selected entry in the list box.
-        When nothing is selected, which is the case when getItemCount returns '0',
-        then this function returns EXTENSION_LISTBOX_ENTRY_NOTFOUND */
-    virtual sal_Int32 getSelIndex() const;
-
-    /** @return  The item name of the entry with the given index
-        The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemName( sal_Int32 index ) const;
-
-    /** @return  The version string of the entry with the given index
-        The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemVersion( sal_Int32 index ) const;
-
-    /** @return  The description string of the entry with the given index
-        The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual OUString getItemDescription( sal_Int32 index ) const;
-
-    /** @return  The publisher string of the entry with the given index
-        The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual ::rtl::OUString getItemPublisher( sal_Int32 index ) const;
-
-    /** @return  The link behind the publisher text of the entry with the given index
-        The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual ::rtl::OUString getItemPublisherLink( sal_Int32 index ) const;
-
-    /** The entry at the given position will be selected
-        Index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual void select( sal_Int32 pos );
-
-    /** The first found entry with the given name will be selected
-        When there was no entry found with the name, the selection doesn't change.
-        Please note that there might be more than one entry with the same
-        name, because:
-            1. the name is not unique
-            2. one extension can be installed as user and shared extension.
-    */
-    virtual void select( const OUString & sName );
-
-    //===================================================================================
-    // XEventListener
-    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException);
 };
 
 //------------------------------------------------------------------------------
-ExtensionBox_Impl::ExtensionBox_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager ) :
-    IExtensionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_CHILDDLGCTRL ),
-    m_bHasScrollBar( false ),
-    m_bHasActive( false ),
-    m_bNeedsRecalc( true ),
-    m_bHasNew( false ),
-    m_bInCheckMode( false ),
+ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager ) :
+    ExtensionBox_Impl( pParent, pManager ),
     m_bInterfaceLocked( false ),
-    m_nActive( 0 ),
-    m_nTopIndex( 0 ),
-    m_nActiveHeight( 0 ),
-    m_aLockedImage( ExtMgrDialog::getResId( RID_IMG_LOCKED ) ),
-    m_aLockedImageHC( ExtMgrDialog::getResId( RID_IMG_LOCKED_HC ) ),
-    m_aWarningImage( ExtMgrDialog::getResId( RID_IMG_WARNING ) ),
-    m_aWarningImageHC( ExtMgrDialog::getResId( RID_IMG_WARNING_HC ) ),
-    m_aDefaultImage( ExtMgrDialog::getResId( RID_IMG_EXTENSION ) ),
-    m_aDefaultImageHC( ExtMgrDialog::getResId( RID_IMG_EXTENSION_HC ) ),
     m_pOptionsBtn( NULL ),
     m_pEnableBtn( NULL ),
     m_pRemoveBtn( NULL ),
-    m_pScrollBar( NULL ),
-    m_pParent( pParent ),
-    m_pManager( pManager )
+    m_pParent( pParent )
 {
     m_pOptionsBtn = new PushButton( this, WB_TABSTOP );
     m_pEnableBtn = new PushButton( this, WB_TABSTOP );
@@ -415,17 +193,13 @@ ExtensionBox_Impl::ExtensionBox_Impl( ExtMgrDialog* pParent, TheExtensionManager
     m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
     m_pRemoveBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_REMOVE );
 
-    m_pOptionsBtn->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleOptionsBtn ) );
-    m_pEnableBtn->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleEnableBtn ) );
-    m_pRemoveBtn->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleRemoveBtn ) );
+    m_pOptionsBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleOptionsBtn ) );
+    m_pEnableBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleEnableBtn ) );
+    m_pRemoveBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleRemoveBtn ) );
 
-    m_pScrollBar = new ScrollBar( this, WB_VERT );
-    m_pScrollBar->SetScrollHdl( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
-    m_pScrollBar->EnableDrag();
-
-    m_pOptionsBtn->SetText( ExtMgrDialog::getResourceString( RID_CTX_ITEM_OPTIONS ) );
-    m_pEnableBtn->SetText( ExtMgrDialog::getResourceString( RID_CTX_ITEM_DISABLE ) );
-    m_pRemoveBtn->SetText( ExtMgrDialog::getResourceString( RID_CTX_ITEM_REMOVE ) );
+    m_pOptionsBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_OPTIONS ) );
+    m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+    m_pRemoveBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
 
     Size aSize = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ),
                                MapMode( MAP_APPFONT ) );
@@ -433,288 +207,69 @@ ExtensionBox_Impl::ExtensionBox_Impl( ExtMgrDialog* pParent, TheExtensionManager
     m_pEnableBtn->SetSizePixel( aSize );
     m_pRemoveBtn->SetSizePixel( aSize );
 
-    SetPaintTransparent( true );
-    SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
-    long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
-    long nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
-    if ( nIconHeight < nTitleHeight )
-        m_nStdHeight = nTitleHeight;
-    else
-        m_nStdHeight = nIconHeight;
-    m_nStdHeight += GetTextHeight() + TOP_OFFSET;
+    SetExtraSize( aSize.Height() + 2 * TOP_OFFSET );
 
-    nIconHeight = ICON_HEIGHT + 2*TOP_OFFSET + 1;
-    if ( m_nStdHeight < nIconHeight )
-        m_nStdHeight = nIconHeight;
-
-    m_nActiveHeight = m_nStdHeight;
-    m_nBtnHeight = aSize.Height() + 2 * TOP_OFFSET;
-
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if( IsControlBackground() )
-        SetBackground( GetControlBackground() );
-    else
-        SetBackground( rStyleSettings.GetFieldColor() );
-
-    m_pLocale = new lang::Locale( Application::GetSettings().GetLocale() );
-    m_pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
-    m_pCollator->loadDefaultCollator( *m_pLocale, i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
-
-    Show();
+    SetScrollHdl( LINK( this, ExtBoxWithBtns_Impl, ScrollHdl ) );
 }
 
 //------------------------------------------------------------------------------
-ExtensionBox_Impl::~ExtensionBox_Impl()
+ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 {
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-
-//    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-//        (*iIndex)->m_xPackage->removeEventListener( this );
-
-    m_vEntries.clear();
-
     delete m_pOptionsBtn;
     delete m_pEnableBtn;
     delete m_pRemoveBtn;
-    delete m_pScrollBar;
-
-    delete m_pLocale;
-    delete m_pCollator;
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 ExtensionBox_Impl::getItemCount() const
-{
-    return static_cast< sal_Int32 >( m_vEntries.size() );
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 ExtensionBox_Impl::getSelIndex() const
-{
-    if ( m_bHasActive )
-    {
-        OSL_ASSERT( m_nActive >= -1);
-        return static_cast< sal_Int32 >( m_nActive );
-    }
-    else
-        return static_cast< sal_Int32 >( EXTENSION_LISTBOX_ENTRY_NOTFOUND );
-}
-
-//------------------------------------------------------------------------------
-void ExtensionBox_Impl::checkIndex( sal_Int32 nIndex ) const
-{
-    if ( nIndex < 0 )
-        throw lang::IllegalArgumentException( OUSTR("The list index starts with 0"),0, 0 );
-    if ( static_cast< sal_uInt32 >( nIndex ) >= m_vEntries.size())
-        throw lang::IllegalArgumentException( OUSTR("There is no element at the provided position."
-        "The position exceeds the number of available list entries"),0, 0 );
-}
-
-//------------------------------------------------------------------------------
-OUString ExtensionBox_Impl::getItemName( sal_Int32 nIndex ) const
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-    checkIndex( nIndex );
-    return m_vEntries[ nIndex ]->m_sTitle;
-}
-
-//------------------------------------------------------------------------------
-OUString ExtensionBox_Impl::getItemVersion( sal_Int32 nIndex ) const
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-    checkIndex( nIndex );
-    return m_vEntries[ nIndex ]->m_sVersion;
-}
-
-//------------------------------------------------------------------------------
-OUString ExtensionBox_Impl::getItemDescription( sal_Int32 nIndex ) const
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-    checkIndex( nIndex );
-    return m_vEntries[ nIndex ]->m_sDescription;
-}
-
-//------------------------------------------------------------------------------
-OUString ExtensionBox_Impl::getItemPublisher( sal_Int32 nIndex ) const
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-    checkIndex( nIndex );
-    return m_vEntries[ nIndex ]->m_sPublisher;
-}
-
-//------------------------------------------------------------------------------
-OUString ExtensionBox_Impl::getItemPublisherLink( sal_Int32 nIndex ) const
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-    checkIndex( nIndex );
-    return m_vEntries[ nIndex ]->m_sPublisherURL;
-}
-
-//------------------------------------------------------------------------------
-void ExtensionBox_Impl::select( sal_Int32 nIndex )
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-    checkIndex( nIndex );
-    selectEntry( nIndex );
-}
-
-//------------------------------------------------------------------------------
-void ExtensionBox_Impl::select( const OUString & sName )
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-    typedef ::std::vector< TEntry_Impl >::const_iterator It;
-
-    for ( It iIter = m_vEntries.begin(); iIter < m_vEntries.end(); iIter++ )
-    {
-        if ( sName.equals( (*iIter)->m_sTitle ) )
-        {
-            long nPos = iIter - m_vEntries.begin();
-            selectEntry( nPos );
-            break;
-        }
-    }
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-// Title + description + buttons height
-void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
-{
-    // get title height
-    long aTextHeight;
-    long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
-    long nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
-    if ( nIconHeight < nTitleHeight )
-        aTextHeight = nTitleHeight;
-    else
-        aTextHeight = nIconHeight;
-
-    // calc description height
-    Size aSize = GetOutputSizePixel();
-    if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
-
-    aSize.Width() -= ICON_OFFSET;
-    aSize.Height() = 10000;
-
-    Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ),
-                                   m_vEntries[ nPos ]->m_sDescription,
-                                   TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-    aTextHeight += aRect.GetHeight();
-
-    if ( aTextHeight < m_nStdHeight )
-        aTextHeight = m_nStdHeight;
-
-    m_nActiveHeight = aTextHeight + m_nBtnHeight; // button bar height
-}
-
 //------------------------------------------------------------------------------
-const Size ExtensionBox_Impl::GetMinOutputSizePixel() const
+const Size ExtBoxWithBtns_Impl::GetMinOutputSizePixel() const
 {
-    long nHeight = m_nStdHeight;
+    Size aMinSize( ExtensionBox_Impl::GetMinOutputSizePixel() );
+    long nHeight = aMinSize.Height();
     nHeight += m_pOptionsBtn->GetSizePixel().Height();
     nHeight +=  2 * TOP_OFFSET;
     long nWidth = m_pOptionsBtn->GetSizePixel().Width();
     nWidth *= 3;
-    nWidth += 5*TOP_OFFSET;
-    nWidth += m_pScrollBar->GetSizePixel().Width();
+    nWidth += 5*TOP_OFFSET + 20;
 
     return Size( nWidth, nHeight );
 }
 
-//------------------------------------------------------------------------------
-Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
+// -----------------------------------------------------------------------
+void ExtBoxWithBtns_Impl::RecalcAll()
 {
-    Size aSize( GetOutputSizePixel() );
+    ExtensionBox_Impl::RecalcAll();
 
-    if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
+    const sal_Int32 nActive = getSelIndex();
 
-    if ( m_vEntries[ nPos ]->m_bActive )
-        aSize.Height() = m_nActiveHeight;
+    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+        SetButtonPos( GetEntryRect( nActive ) );
     else
-        aSize.Height() = m_nStdHeight;
-
-    Point aPos( 0, -m_nTopIndex + nPos * m_nStdHeight );
-    if ( m_bHasActive && ( nPos < m_nActive ) )
-        aPos.Y() += m_nActiveHeight - m_nStdHeight;
-
-    return Rectangle( aPos, aSize );
+    {
+        m_pOptionsBtn->Hide();
+        m_pEnableBtn->Hide();
+        m_pRemoveBtn->Hide();
+    }
 }
+
 
 //------------------------------------------------------------------------------
 //This function may be called with nPos < 0
-void ExtensionBox_Impl::selectEntry( long nPos )
+void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
 {
-    //ToDo whe should not use the guard at such a big scope here.
-    //Currently it is used to gard m_vEntries and m_nActive. m_nActive will be
-    //modified in this function.
-    //It would be probably best to always use a copy of m_vEntries
-    //and some other state variables from ExtensionBox_Impl for
-    //the whole painting operation. See issue i86993
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-
-    if ( m_bInCheckMode )
+    if ( HasActive() && ( nPos == getSelIndex() ) )
         return;
 
-    if ( m_bHasActive )
+    ExtensionBox_Impl::selectEntry( nPos );
+
+    if ( ( nPos >= 0 ) && ( nPos < GetEntryCount() ) )
     {
-        if ( nPos == m_nActive )
-            return;
-
-        m_bHasActive = false;
-        m_vEntries[ m_nActive ]->m_bActive = false;
-
-        if ( IsReallyVisible() )
-            Invalidate();
-    }
-
-    if ( ( nPos >= 0 ) && ( nPos < (long) m_vEntries.size() ) )
-    {
-        m_bHasActive = true;
-        m_nActive = nPos;
-        m_vEntries[ nPos ]->m_bActive = true;
-
         if ( IsReallyVisible() )
         {
-            Invalidate();
-            CalcActiveHeight( nPos );
-            SetupScrollBar();
-            Rectangle aEntryRect = GetEntryRect( nPos );
-
-            // If the top of the selected entry isn't visible, make it visible
-            if ( aEntryRect.Top() < 0 )
-            {
-                m_nTopIndex += aEntryRect.Top();
-                aEntryRect.Move( 0, -aEntryRect.Top() );
-            }
-
-            // If the bottom of the selected entry isn't visible, make it visible even if now the top
-            // isn't visible any longer ( the buttons are more important )
-            Size aOutputSize = GetOutputSizePixel();
-            if ( aEntryRect.Bottom() > aOutputSize.Height() )
-            {
-                m_nTopIndex += ( aEntryRect.Bottom() - aOutputSize.Height() );
-                aEntryRect.Move( 0, -( aEntryRect.Bottom() - aOutputSize.Height() ) );
-            }
-
-            // If there is unused space below the last entry but all entries don't fit into the box,
-            // move the content down to use the whole space
-            const long nTotalHeight = GetTotalHeight();
-            if ( m_bHasScrollBar && ( aOutputSize.Height() + m_nTopIndex > nTotalHeight ) )
-            {
-                long nOffset = m_nTopIndex;
-                m_nTopIndex = nTotalHeight - aOutputSize.Height();
-                nOffset -= m_nTopIndex;
-                aEntryRect.Move( 0, nOffset );
-            }
-
-            if ( m_bHasScrollBar )
-                m_pScrollBar->SetThumbPos( m_nTopIndex );
-
-            SetButtonPos( aEntryRect );
+            SetButtonPos( GetEntryRect( nPos ) );
         }
-        SetButtonStatus( m_vEntries[ nPos ] ); //dv
+        SetButtonStatus( GetEntryData( nPos) );
     }
     else
     {
@@ -722,12 +277,10 @@ void ExtensionBox_Impl::selectEntry( long nPos )
         m_pEnableBtn->Hide();
         m_pRemoveBtn->Hide();
     }
-    guard.clear();
-
 }
 
 // -----------------------------------------------------------------------
-void ExtensionBox_Impl::SetButtonPos( const Rectangle& rRect )
+void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 {
     Size  aBtnSize( m_pOptionsBtn->GetSizePixel() );
     Point aBtnPos( rRect.Left() + ICON_OFFSET,
@@ -741,20 +294,20 @@ void ExtensionBox_Impl::SetButtonPos( const Rectangle& rRect )
 }
 
 // -----------------------------------------------------------------------
-void ExtensionBox_Impl::SetButtonStatus( const TEntry_Impl pEntry )
+void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
 {
     if ( ( pEntry->m_eState == REGISTERED ) || ( pEntry->m_eState == NOT_AVAILABLE ) )
     {
-        m_pEnableBtn->SetText( ExtMgrDialog::getResourceString( RID_CTX_ITEM_DISABLE ) );
+        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
     }
     else
     {
-        m_pEnableBtn->SetText( ExtMgrDialog::getResourceString( RID_CTX_ITEM_ENABLE ) );
+        m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
 
-    if ( pEntry->m_eState == NOT_AVAILABLE )
+    if ( ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
         m_pEnableBtn->Hide();
     else
     {
@@ -775,183 +328,23 @@ void ExtensionBox_Impl::SetButtonStatus( const TEntry_Impl pEntry )
 }
 
 // -----------------------------------------------------------------------
-void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntry )
+bool ExtBoxWithBtns_Impl::HandleTabKey( bool bReverse )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    sal_Int32 nIndex = getSelIndex();
 
-    if ( pEntry->m_bActive )
-        SetTextColor( rStyleSettings.GetHighlightTextColor() );
-    else if ( ( pEntry->m_eState != REGISTERED ) && ( pEntry->m_eState != NOT_AVAILABLE ) )
-        SetTextColor( rStyleSettings.GetDisableColor() );
-    else if ( IsControlForeground() )
-        SetTextColor( GetControlForeground() );
-    else
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-
-    if ( pEntry->m_bActive )
-    {
-        SetLineColor();
-        SetFillColor( rStyleSettings.GetHighlightColor() );
-        DrawRect( rRect );
-    }
-    else
-    {
-        if( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( rStyleSettings.GetFieldColor() );
-
-        SetTextFillColor();
-        Erase( rRect );
-    }
-
-    // Draw extension icon
-    Point aPos( rRect.TopLeft() );
-    aPos += Point( TOP_OFFSET, TOP_OFFSET );
-    Image aImage;
-    if ( ! pEntry->m_aIcon )
-        aImage = isHCMode() ? m_aDefaultImageHC : m_aDefaultImage;
-    else
-        aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
-    Size aImageSize = aImage.GetSizePixel();
-    if ( ( aImageSize.Width() <= ICON_HEIGHT ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
-        DrawImage( Point( aPos.X()+((ICON_HEIGHT-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
-    else
-        DrawImage( aPos, Size( ICON_HEIGHT, ICON_HEIGHT ), aImage );
-
-    // Setup fonts
-    Font aStdFont( GetFont() );
-    Font aBoldFont( aStdFont );
-    aBoldFont.SetWeight( WEIGHT_BOLD );
-    SetFont( aBoldFont );
-    long aTextHeight = GetTextHeight();
-
-    // Init publisher link here
-    if ( !pEntry->m_pPublisher && pEntry->m_sPublisher.Len() )
-    {
-        pEntry->m_pPublisher = new svt::FixedHyperlink( this );
-        pEntry->m_pPublisher->SetBackground();
-        pEntry->m_pPublisher->SetPaintTransparent( true );
-        pEntry->m_pPublisher->SetURL( pEntry->m_sPublisherURL );
-        pEntry->m_pPublisher->SetDescription( pEntry->m_sPublisher );
-        Size aSize = FixedText::CalcMinimumTextSize( pEntry->m_pPublisher );
-        pEntry->m_pPublisher->SetSizePixel( aSize );
-        pEntry->m_pPublisher->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleHyperlink ) );
-    }
-
-    // Get max title width
-    long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
-    nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
-    if ( pEntry->m_pPublisher )
-    {
-        nMaxTitleWidth -= pEntry->m_pPublisher->GetSizePixel().Width() + (2*SPACE_BETWEEN);
-    }
-
-    long aVersionWidth = GetTextWidth( pEntry->m_sVersion );
-    long aTitleWidth = GetTextWidth( pEntry->m_sTitle ) + (aTextHeight / 3);
-
-    aPos = rRect.TopLeft() + Point( ICON_OFFSET, TOP_OFFSET );
-
-    if ( aTitleWidth > nMaxTitleWidth - aVersionWidth )
-    {
-        aTitleWidth = nMaxTitleWidth - aVersionWidth - (aTextHeight / 3);
-        String aShortTitle = GetEllipsisString( pEntry->m_sTitle, aTitleWidth );
-        DrawText( aPos, aShortTitle );
-        aTitleWidth += (aTextHeight / 3);
-    }
-    else
-        DrawText( aPos, pEntry->m_sTitle );
-
-    SetFont( aStdFont );
-    DrawText( Point( aPos.X() + aTitleWidth, aPos.Y() ), pEntry->m_sVersion );
-
-    long nIconHeight = TOP_OFFSET + SMALL_ICON_SIZE;
-    long nTitleHeight = TOP_OFFSET + GetTextHeight();
-    if ( nIconHeight < nTitleHeight )
-        aTextHeight = nTitleHeight;
-    else
-        aTextHeight = nIconHeight;
-
-    // draw description
-    String sDescription;
-    if ( pEntry->m_sErrorText.Len() )
-    {
-        if ( pEntry->m_bActive )
-            sDescription = pEntry->m_sErrorText + OUSTR("\n") + pEntry->m_sDescription;
-        else
-            sDescription = pEntry->m_sErrorText;
-    }
-    else
-        sDescription = pEntry->m_sDescription;
-
-    aPos.Y() += aTextHeight;
-    if ( pEntry->m_bActive )
-    {
-        DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - m_nBtnHeight ),
-                  sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-    }
-    else
-    {
-        const long nWidth = GetTextWidth( sDescription );
-        if ( nWidth > rRect.GetWidth() - aPos.X() )
-            sDescription = GetEllipsisString( sDescription, rRect.GetWidth() - aPos.X() );
-        DrawText( aPos, sDescription );
-    }
-
-    // Draw publisher link
-    if ( pEntry->m_pPublisher )
-    {
-        pEntry->m_pPublisher->Show();
-        aPos = rRect.TopLeft() + Point( ICON_OFFSET + nMaxTitleWidth + (2*SPACE_BETWEEN), TOP_OFFSET );
-        pEntry->m_pPublisher->SetPosPixel( aPos );
-    }
-
-    // Draw status icons
-    if ( pEntry->m_bShared )
-    {
-        aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
-    }
-    if ( pEntry->m_eState == AMBIGUOUS )
-    {
-        aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
-    }
-
-    SetLineColor( Color( COL_LIGHTGRAY ) );
-    DrawLine( rRect.BottomLeft(), rRect.BottomRight() );
-}
-
-// -----------------------------------------------------------------------
-void ExtensionBox_Impl::RecalcAll()
-{
-    if ( m_bHasActive )
-        CalcActiveHeight( m_nActive );
-
-    SetupScrollBar();
-
-    if ( m_bHasActive )
-        SetButtonPos( GetEntryRect( m_nActive ) );
-
-    m_bNeedsRecalc = false;
-}
-
-// -----------------------------------------------------------------------
-bool ExtensionBox_Impl::HandleTabKey( bool bReverse )
-{
-    if ( ! m_bHasActive )
+    if ( nIndex == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
         return false;
 
     PushButton *pNext = NULL;
 
     if ( m_pOptionsBtn->HasFocus() ) {
-        if ( !bReverse && !m_vEntries[ m_nActive ]->m_bLocked )
+        if ( !bReverse && !GetEntryData( nIndex )->m_bLocked )
             pNext = m_pEnableBtn;
     }
     else if ( m_pEnableBtn->HasFocus() ) {
         if ( !bReverse )
             pNext = m_pRemoveBtn;
-        else if ( m_vEntries[ m_nActive ]->m_bHasOptions )
+        else if ( GetEntryData( nIndex )->m_bHasOptions )
             pNext = m_pOptionsBtn;
     }
     else if ( m_pRemoveBtn->HasFocus() ) {
@@ -960,14 +353,14 @@ bool ExtensionBox_Impl::HandleTabKey( bool bReverse )
     }
     else {
         if ( !bReverse ) {
-            if ( m_vEntries[ m_nActive ]->m_bHasOptions )
+            if ( GetEntryData( nIndex )->m_bHasOptions )
                 pNext = m_pOptionsBtn;
-            else if ( ! m_vEntries[ m_nActive ]->m_bLocked )
+            else if ( ! GetEntryData( nIndex )->m_bLocked )
                 pNext = m_pEnableBtn;
         } else {
-            if ( ! m_vEntries[ m_nActive ]->m_bLocked )
+            if ( ! GetEntryData( nIndex )->m_bLocked )
                 pNext = m_pRemoveBtn;
-            else if ( m_vEntries[ m_nActive ]->m_bHasOptions )
+            else if ( GetEntryData( nIndex )->m_bHasOptions )
                 pNext = m_pOptionsBtn;
         }
     }
@@ -982,194 +375,67 @@ bool ExtensionBox_Impl::HandleTabKey( bool bReverse )
 }
 
 // -----------------------------------------------------------------------
-bool ExtensionBox_Impl::HandleCursorKey( USHORT nKeyCode )
+MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
 {
-    if ( m_vEntries.empty() )
-        return true;
-
-    long nSelect = 0;
-
-    if ( m_bHasActive )
-    {
-        long nPageSize = GetOutputSizePixel().Height() / m_nStdHeight;
-        if ( nPageSize < 2 )
-            nPageSize = 2;
-
-        if ( ( nKeyCode == KEY_DOWN ) || ( nKeyCode == KEY_RIGHT ) )
-            nSelect = m_nActive + 1;
-        else if ( ( nKeyCode == KEY_UP ) || ( nKeyCode == KEY_LEFT ) )
-            nSelect = m_nActive - 1;
-        else if ( nKeyCode == KEY_HOME )
-            nSelect = 0;
-        else if ( nKeyCode == KEY_END )
-            nSelect = m_vEntries.size() - 1;
-        else if ( nKeyCode == KEY_PAGEUP )
-            nSelect = m_nActive - nPageSize + 1;
-        else if ( nKeyCode == KEY_PAGEDOWN )
-            nSelect = m_nActive + nPageSize - 1;
-    }
-    else // when there is no selected entry, we will select the first or the last.
-    {
-        if ( ( nKeyCode == KEY_DOWN ) || ( nKeyCode == KEY_PAGEDOWN ) || ( nKeyCode == KEY_HOME ) )
-            nSelect = 0;
-        else if ( ( nKeyCode == KEY_UP ) || ( nKeyCode == KEY_PAGEUP ) || ( nKeyCode == KEY_END ) )
-            nSelect = m_vEntries.size() - 1;
-    }
-
-    if ( nSelect < 0 )
-        nSelect = 0;
-    if ( nSelect >= (long) m_vEntries.size() )
-        nSelect = m_vEntries.size() - 1;
-
-    selectEntry( nSelect );
-
-    return true;
-}
-
-// -----------------------------------------------------------------------
-MENU_COMMAND ExtensionBox_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
-{
-    if ( nPos >= (long) m_vEntries.size() )
+    if ( nPos >= (long) getItemCount() )
         return CMD_NONE;
 
     PopupMenu aPopup;
 
-    aPopup.InsertItem( CMD_UPDATE, ExtMgrDialog::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
+    aPopup.InsertItem( CMD_UPDATE, DialogHelper::getResourceString( RID_CTX_ITEM_CHECK_UPDATE ) );
 
-    if ( ! m_vEntries[ nPos ]->m_bLocked )
+    if ( ! GetEntryData( nPos )->m_bLocked )
     {
-        if ( m_vEntries[ nPos ]->m_eState == REGISTERED )
-            aPopup.InsertItem( CMD_DISABLE, ExtMgrDialog::getResourceString( RID_CTX_ITEM_DISABLE ) );
-        else if ( m_vEntries[ nPos ]->m_eState != NOT_AVAILABLE )
-            aPopup.InsertItem( CMD_ENABLE, ExtMgrDialog::getResourceString( RID_CTX_ITEM_ENABLE ) );
+        if ( GetEntryData( nPos )->m_eState == REGISTERED )
+            aPopup.InsertItem( CMD_DISABLE, DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
+        else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
+            aPopup.InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
 
-        aPopup.InsertItem( CMD_REMOVE, ExtMgrDialog::getResourceString( RID_CTX_ITEM_REMOVE ) );
+        aPopup.InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
     }
 
     return (MENU_COMMAND) aPopup.Execute( this, rPos );
 }
 
-// -----------------------------------------------------------------------
-void ExtensionBox_Impl::Paint( const Rectangle &/*rPaintRect*/ )
-{
-    if ( m_bNeedsRecalc )
-        RecalcAll();
-
-    Point aStart( 0, -m_nTopIndex );
-    Size aSize( GetOutputSizePixel() );
-
-    if ( m_bHasScrollBar )
-        aSize.Width() -= m_pScrollBar->GetSizePixel().Width();
-
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-    {
-        aSize.Height() = (*iIndex)->m_bActive ? m_nActiveHeight : m_nStdHeight;
-        Rectangle aEntryRect( aStart, aSize );
-//        if ( aEntryRect.IsOver( rPaintRect ) )
-            DrawRow( aEntryRect, *iIndex );
-        aStart.Y() += aSize.Height();
-    }
-}
-
-// -----------------------------------------------------------------------
-long ExtensionBox_Impl::GetTotalHeight() const
-{
-    long nHeight = m_vEntries.size() * m_nStdHeight;
-
-    if ( m_bHasActive )
-    {
-        nHeight += m_nActiveHeight - m_nStdHeight;
-    }
-
-    return nHeight;
-}
-
-// -----------------------------------------------------------------------
-void ExtensionBox_Impl::SetupScrollBar()
-{
-    const Size aSize = GetOutputSizePixel();
-    const long nScrBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    const long nTotalHeight = GetTotalHeight();
-    const bool bNeedsScrollBar = ( nTotalHeight > aSize.Height() );
-
-    if ( bNeedsScrollBar )
-    {
-        if ( m_nTopIndex + aSize.Height() > nTotalHeight )
-            m_nTopIndex = nTotalHeight - aSize.Height();
-
-        m_pScrollBar->SetPosSizePixel( Point( aSize.Width() - nScrBarSize, 0 ),
-                                       Size( nScrBarSize, aSize.Height() ) );
-        m_pScrollBar->SetRangeMax( nTotalHeight );
-        m_pScrollBar->SetVisibleSize( aSize.Height() );
-        m_pScrollBar->SetPageSize( ( aSize.Height() * 4 ) / 5 );
-        m_pScrollBar->SetLineSize( m_nStdHeight );
-        m_pScrollBar->SetThumbPos( m_nTopIndex );
-
-        if ( !m_bHasScrollBar )
-            m_pScrollBar->Show();
-    }
-    else if ( m_bHasScrollBar )
-    {
-        m_pScrollBar->Hide();
-        m_nTopIndex = 0;
-    }
-
-    m_bHasScrollBar = bNeedsScrollBar;
-}
-
-// -----------------------------------------------------------------------
-void ExtensionBox_Impl::Resize()
-{
-    RecalcAll();
-}
-
 //------------------------------------------------------------------------------
-void ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
+void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( m_bInterfaceLocked )
         return;
 
     const Point aMousePos( rMEvt.GetPosPixel() );
-    long nPos = ( aMousePos.Y() + m_nTopIndex ) / m_nStdHeight;
-    if ( m_bHasActive && ( nPos > m_nActive ) )
-    {
-        if ( aMousePos.Y() + m_nTopIndex <= m_nActive*m_nStdHeight + m_nActiveHeight )
-            nPos = m_nActive;
-        else
-            nPos = ( aMousePos.Y() + m_nTopIndex - (m_nActiveHeight - m_nStdHeight) ) / m_nStdHeight;
-    }
+    const long nPos = PointToPos( aMousePos );
 
     if ( rMEvt.IsRight() )
     {
         switch( ShowPopupMenu( aMousePos, nPos ) )
         {
             case CMD_NONE:      break;
-            case CMD_ENABLE:    m_pParent->enablePackage( m_vEntries[ nPos ]->m_xPackageManager,
-                                                          m_vEntries[ nPos ]->m_xPackage, true );
+            case CMD_ENABLE:    m_pParent->enablePackage( GetEntryData( nPos )->m_xPackageManager,
+                                                          GetEntryData( nPos )->m_xPackage, true );
                                 break;
-            case CMD_DISABLE:   m_pParent->enablePackage( m_vEntries[ nPos ]->m_xPackageManager,
-                                                          m_vEntries[ nPos ]->m_xPackage, false );
+            case CMD_DISABLE:   m_pParent->enablePackage( GetEntryData( nPos )->m_xPackageManager,
+                                                          GetEntryData( nPos )->m_xPackage, false );
                                 break;
-            case CMD_UPDATE:    m_pParent->updatePackage( m_vEntries[ nPos ]->m_xPackageManager,
-                                                          m_vEntries[ nPos ]->m_xPackage );
+            case CMD_UPDATE:    m_pParent->updatePackage( GetEntryData( nPos )->m_xPackageManager,
+                                                          GetEntryData( nPos )->m_xPackage );
                                 break;
-            case CMD_REMOVE:    m_pParent->removePackage( m_vEntries[ nPos ]->m_xPackageManager,
-                                                          m_vEntries[ nPos ]->m_xPackage );
+            case CMD_REMOVE:    m_pParent->removePackage( GetEntryData( nPos )->m_xPackageManager,
+                                                          GetEntryData( nPos )->m_xPackage );
                                 break;
         }
     }
     else if ( rMEvt.IsLeft() )
     {
-        if ( rMEvt.IsMod1() && m_bHasActive )
-            selectEntry( m_vEntries.size() );   // Selecting an not existing entry will deselect the current one
+        if ( rMEvt.IsMod1() && HasActive() )
+            selectEntry( EXTENSION_LISTBOX_ENTRY_NOTFOUND );   // Selecting an not existing entry will deselect the current one
         else
             selectEntry( nPos );
     }
 }
 
 //------------------------------------------------------------------------------
-long ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
+long ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
@@ -1181,229 +447,24 @@ long ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
 
         if ( nKeyCode == KEY_TAB )
             bHandled = HandleTabKey( aKeyCode.IsShift() );
-        else if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
-            bHandled = HandleCursorKey( nKeyCode );
-    }
-
-    if ( rNEvt.GetType() == EVENT_COMMAND )
-    {
-        if ( m_bHasScrollBar &&
-             ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) )
-        {
-            const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-            if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
-            {
-                long nThumbPos = m_pScrollBar->GetThumbPos();
-                if ( pData->GetDelta() < 0 )
-                    m_pScrollBar->DoScroll( nThumbPos + m_nStdHeight );
-                else
-                    m_pScrollBar->DoScroll( nThumbPos - m_nStdHeight );
-                bHandled = true;
-            }
-        }
     }
 
     if ( !bHandled )
-        return Control::Notify( rNEvt );
+        return ExtensionBox_Impl::Notify( rNEvt );
     else
         return true;
 }
 
 //------------------------------------------------------------------------------
-bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStart,
-                                      const long nEnd, long &nPos )
-{
-    nPos = nStart;
-    if ( nStart > nEnd )
-        return false;
-
-    StringCompare eCompare;
-
-    if ( nStart == nEnd )
-    {
-        eCompare = pEntry->CompareTo( m_pCollator, m_vEntries[ nStart ] );
-        if ( eCompare == COMPARE_LESS )
-            return false;
-        else if ( eCompare == COMPARE_EQUAL )
-        {
-            //Workaround. See i86963.
-            if (pEntry->m_xPackage != m_vEntries[nStart]->m_xPackage)
-                return false;
-
-            if ( m_bInCheckMode )
-                m_vEntries[ nStart ]->m_bChecked = true;
-            return true;
-        }
-        else
-        {
-            nPos = nStart + 1;
-            return false;
-        }
-    }
-
-    const long nMid = nStart + ( ( nEnd - nStart ) / 2 );
-    eCompare = pEntry->CompareTo( m_pCollator, m_vEntries[ nMid ] );
-
-    if ( eCompare == COMPARE_LESS )
-        return FindEntryPos( pEntry, nStart, nMid-1, nPos );
-    else if ( eCompare == COMPARE_GREATER )
-        return FindEntryPos( pEntry, nMid+1, nEnd, nPos );
-    else
-    {
-        //Workaround.See i86963.
-        if (pEntry->m_xPackage != m_vEntries[nMid]->m_xPackage)
-            return false;
-
-        if ( m_bInCheckMode )
-            m_vEntries[ nMid ]->m_bChecked = true;
-        nPos = nMid;
-        return true;
-    }
-}
-
-//------------------------------------------------------------------------------
-long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
-                                  const uno::Reference< deployment::XPackageManager > &xPackageManager )
-{
-    long nPos = 0;
-    PackageState eState = m_pManager->getPackageState( xPackage );
-
-    TEntry_Impl pEntry( new Entry_Impl( xPackage, xPackageManager, eState ) );
-    xPackage->addEventListener( this );
-
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-    if ( m_vEntries.empty() )
-    {
-        pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-        pEntry->m_bShared     = ( m_pManager->getSharedPkgMgr() == xPackageManager );
-        pEntry->m_bNew        = m_bInCheckMode;
-        m_vEntries.push_back( pEntry );
-    }
-    else
-    {
-        if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
-        {
-            pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-            pEntry->m_bShared     = ( m_pManager->getSharedPkgMgr() == xPackageManager );
-            pEntry->m_bNew        = m_bInCheckMode;
-            m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
-        }
-        else if ( !m_bInCheckMode )
-        {
-            OSL_ENSURE( 0, "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
-        }
-    }
-    //access to m_nActive must be guarded
-    if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
-        m_nActive += 1;
-
-    guard.clear();
-
-    if ( IsReallyVisible() )
-        Invalidate();
-
-    m_bNeedsRecalc = true;
-
-    return nPos;
-}
-
-//------------------------------------------------------------------------------
-void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage > &xPackage )
-{
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-    {
-        if ( (*iIndex)->m_xPackage == xPackage )
-        {
-            PackageState eState = m_pManager->getPackageState( xPackage );
-            (*iIndex)->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-            (*iIndex)->m_eState = eState;
-            (*iIndex)->m_sTitle = xPackage->getDisplayName();
-            (*iIndex)->m_sVersion = xPackage->getVersion();
-            (*iIndex)->m_sDescription = xPackage->getDescription();
-
-            if ( eState == AMBIGUOUS )
-                (*iIndex)->m_sErrorText = ExtMgrDialog::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-            else
-                (*iIndex)->m_sErrorText = String();
-
-            if ( IsReallyVisible() )
-                Invalidate();
-            break;
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-void ExtensionBox_Impl::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageMgr )
-{
-    m_bInCheckMode = true;
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-    {
-        if ( (*iIndex)->m_xPackageManager == xPackageMgr )
-            (*iIndex)->m_bChecked = false;
-        else
-            (*iIndex)->m_bChecked = true;
-        (*iIndex)->m_bNew = false;
-    }
-}
-
-//------------------------------------------------------------------------------
-void ExtensionBox_Impl::checkEntries()
-{
-    long nNewPos = -1;
-    long nPos = 0;
-    bool bNeedsUpdate = false;
-
-    ::osl::ClearableMutexGuard guard(m_entriesMutex);
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-    ITER iIndex = m_vEntries.begin();
-    while ( iIndex < m_vEntries.end() )
-    {
-        if ( (*iIndex)->m_bChecked == false )
-        {
-            bNeedsUpdate = true;
-            nPos = iIndex-m_vEntries.begin();
-            if ( (*iIndex)->m_bNew )
-            {
-                if ( nNewPos == - 1)
-                    nNewPos = nPos;
-                if ( nPos <= m_nActive )
-                    m_nActive += 1;
-            }
-        }
-        iIndex++;
-    }
-    guard.clear();
-
-    m_bInCheckMode = false;
-
-    if ( nNewPos != - 1)
-        selectEntry( nNewPos );
-
-    if ( bNeedsUpdate )
-    {
-        m_bNeedsRecalc = true;
-        if ( IsReallyVisible() )
-            Invalidate();
-    }
-}
-//------------------------------------------------------------------------------
-bool ExtensionBox_Impl::isHCMode()
-{
-    return (bool)GetDisplayBackground().GetColor().IsDark();
-}
-
-//------------------------------------------------------------------------------
-void ExtensionBox_Impl::enableButtons( bool bEnable )
+void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 {
     m_bInterfaceLocked = ! bEnable;
 
     if ( bEnable )
     {
-        if ( m_bHasActive )
-            SetButtonStatus( m_vEntries[ m_nActive ] );
+        sal_Int32 nIndex = getSelIndex();
+        if ( nIndex != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+            SetButtonStatus( GetEntryData( nIndex ) );
     }
     else
     {
@@ -1413,81 +474,36 @@ void ExtensionBox_Impl::enableButtons( bool bEnable )
     }
 }
 
-//------------------------------------------------------------------------------
-// XEventListener
-void ExtensionBox_Impl::disposing( lang::EventObject const & rEvt )
-    throw ( uno::RuntimeException )
-{
-    uno::Reference< deployment::XPackage > xPackage( rEvt.Source, uno::UNO_QUERY );
-
-    if ( xPackage.is() )
-    {
-        ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
-        typedef std::vector< TEntry_Impl >::iterator ITER;
-
-        for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-        {
-            if ( (*iIndex)->m_xPackage == xPackage )
-            {
-                long nPos = iIndex - m_vEntries.begin();
-
-                m_vEntries.erase( iIndex );
-
-                if ( IsReallyVisible() )
-                    Invalidate();
-
-                if ( m_bHasActive )
-                {
-                    if ( nPos < m_nActive )
-                        m_nActive -= 1;
-                    else if ( ( nPos == m_nActive ) &&
-                              ( nPos == (long) m_vEntries.size() ) )
-                        m_nActive -= 1;
-
-                    m_bHasActive = false;
-                    //clear before calling out of this method
-                    aGuard.clear();
-                    selectEntry( m_nActive );
-                }
-                break;
-            }
-        }
-    }
-}
-
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar )
+IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
 {
     long nDelta = pScrBar->GetDelta();
 
-    m_nTopIndex += nDelta;
     Point aNewOptPt( m_pOptionsBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewRemPt( m_pRemoveBtn->GetPosPixel() - Point( 0, nDelta ) );
     Point aNewEnPt( m_pEnableBtn->GetPosPixel() - Point( 0, nDelta ) );
-    Point aNewSBPt( m_pScrollBar->GetPosPixel() );
 
-    Rectangle aScrRect( Point(), GetOutputSizePixel() );
-    aScrRect.Right() -= pScrBar->GetSizePixel().Width();
-    Scroll( 0, -nDelta, aScrRect );
+    DoScroll( nDelta );
 
     m_pOptionsBtn->SetPosPixel( aNewOptPt );
     m_pRemoveBtn->SetPosPixel( aNewRemPt );
     m_pEnableBtn->SetPosPixel( aNewEnPt );
-    m_pScrollBar->SetPosPixel( aNewSBPt );
 
     return 1;
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtensionBox_Impl, HandleOptionsBtn, void*, EMPTYARG )
+IMPL_LINK( ExtBoxWithBtns_Impl, HandleOptionsBtn, void*, EMPTYARG )
 {
-    if ( m_bHasActive )
+    const sal_Int32 nActive = getSelIndex();
+
+    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
         if ( pFact )
         {
-            OUString sExtensionId = m_vEntries[ m_nActive ]->m_xPackage->getIdentifier().Value;
+            OUString sExtensionId = GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
             VclAbstractDialog* pDlg = pFact->CreateOptionsDialog( this, sExtensionId, rtl::OUString() );
 
             pDlg->Execute();
@@ -1500,14 +516,17 @@ IMPL_LINK( ExtensionBox_Impl, HandleOptionsBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtensionBox_Impl, HandleEnableBtn, void*, EMPTYARG )
+IMPL_LINK( ExtBoxWithBtns_Impl, HandleEnableBtn, void*, EMPTYARG )
 {
-    if ( m_bHasActive )
-    {
-        const bool bEnable( m_vEntries[ m_nActive ]->m_eState != REGISTERED );
+    const sal_Int32 nActive = getSelIndex();
 
-        m_pParent->enablePackage( m_vEntries[ m_nActive ]->m_xPackageManager,
-                                  m_vEntries[ m_nActive ]->m_xPackage,
+    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+    {
+        TEntry_Impl pEntry = GetEntryData( nActive );
+        const bool bEnable( pEntry->m_eState != REGISTERED );
+
+        m_pParent->enablePackage( pEntry->m_xPackageManager,
+                                  pEntry->m_xPackage,
                                   bEnable );
     }
 
@@ -1515,30 +534,172 @@ IMPL_LINK( ExtensionBox_Impl, HandleEnableBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtensionBox_Impl, HandleRemoveBtn, void*, EMPTYARG )
+IMPL_LINK( ExtBoxWithBtns_Impl, HandleRemoveBtn, void*, EMPTYARG )
 {
-    if ( m_bHasActive )
+    const sal_Int32 nActive = getSelIndex();
+
+    if ( nActive != EXTENSION_LISTBOX_ENTRY_NOTFOUND )
     {
-         m_pParent->removePackage( m_vEntries[ m_nActive ]->m_xPackageManager,
-                                   m_vEntries[ m_nActive ]->m_xPackage );
+        TEntry_Impl pEntry = GetEntryData( nActive );
+        m_pParent->removePackage( pEntry->m_xPackageManager,
+                                  pEntry->m_xPackage );
     }
 
     return 1;
 }
 
-// -----------------------------------------------------------------------
-IMPL_LINK( ExtensionBox_Impl, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
+//------------------------------------------------------------------------------
+//                             DialogHelper
+//------------------------------------------------------------------------------
+DialogHelper::DialogHelper( const uno::Reference< uno::XComponentContext > &xContext,
+                            Dialog *pWindow ) :
+    m_pVCLWindow( pWindow ),
+    m_nEventID(   0 ),
+    m_bIsBusy(    false )
 {
-    m_pParent->openWebBrowser( pHyperlink->GetURL() );
-    return 1;
+    m_xContext = xContext;
 }
 
+//------------------------------------------------------------------------------
+DialogHelper::~DialogHelper()
+{
+    if ( m_nEventID )
+        Application::RemoveUserEvent( m_nEventID );
+}
+
+//------------------------------------------------------------------------------
+ResId DialogHelper::getResId( USHORT nId )
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    return ResId( nId, *DeploymentGuiResMgr::get() );
+}
+
+//------------------------------------------------------------------------------
+String DialogHelper::getResourceString( USHORT id )
+{
+    // init with non-acquired solar mutex:
+    BrandName::get();
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    String ret( ResId( id, *DeploymentGuiResMgr::get() ) );
+    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
+        ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+    }
+    return ret;
+}
+
+//------------------------------------------------------------------------------
+bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+{
+    if ( xPackageManager->getContext().equals( OUSTR("shared") ) )
+        return true;
+    else
+        return false;
+}
+
+//------------------------------------------------------------------------------
+bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackageManager > &xPackageManager,
+                                              Window *pParent,
+                                              const USHORT nResID,
+                                              bool &bHadWarning )
+{
+    if ( !bHadWarning && IsSharedPkgMgr( xPackageManager ) )
+    {
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        WarningBox aInfoBox( pParent, getResId( nResID ) );
+        String aMsgText = aInfoBox.GetMessText();
+        aMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+        aInfoBox.SetMessText( aMsgText );
+
+        bHadWarning = true;
+
+        if ( RET_OK == aInfoBox.Execute() )
+            return true;
+        else
+            return false;
+    }
+    else
+        return true;
+}
+
+//------------------------------------------------------------------------------
+void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle ) const
+{
+    if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
+        return;
+
+    try
+    {
+        uno::Reference< XSystemShellExecute > xSystemShellExecute(
+            m_xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.system.SystemShellExecute" ), m_xContext), uno::UNO_QUERY_THROW);
+        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+        xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::DEFAULTS );
+    }
+    catch ( uno::Exception& )
+    {
+        uno::Any exc( ::cppu::getCaughtException() );
+        OUString msg( ::comphelper::anyToString( exc ) );
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        ErrorBox aErrorBox( NULL, WB_OK, msg );
+        aErrorBox.SetText( sTitle );
+        aErrorBox.Execute();
+    }
+}
+
+//------------------------------------------------------------------------------
+bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    WarningBox aInfo( m_pVCLWindow, getResId( RID_WARNINGBOX_INSTALL_EXTENSION ) );
+
+    String sText( aInfo.GetMessText() );
+    sText.SearchAndReplaceAllAscii( "%NAME", rExtensionName );
+    aInfo.SetMessText( sText );
+
+    return ( RET_OK == aInfo.Execute() );
+}
+
+//------------------------------------------------------------------------------
+bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    QueryBox aQuery( m_pVCLWindow, getResId( RID_QUERYBOX_INSTALL_FOR_ALL ) );
+
+    String sMsgText = aQuery.GetMessText();
+    sMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+    aQuery.SetMessText( sMsgText );
+
+    USHORT nYesBtnID = aQuery.GetButtonId( 0 );
+    USHORT nNoBtnID = aQuery.GetButtonId( 1 );
+
+    if ( nYesBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
+        aQuery.SetButtonText( nYesBtnID, getResourceString( RID_STR_INSTALL_FOR_ME ) );
+    if ( nNoBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
+        aQuery.SetButtonText( nNoBtnID, getResourceString( RID_STR_INSTALL_FOR_ALL ) );
+
+    short nRet = aQuery.Execute();
+
+    if ( nRet == RET_CANCEL )
+        return false;
+
+    bInstallForAll = ( nRet == RET_NO );
+    return true;
+}
+
+//------------------------------------------------------------------------------
+void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
+{
+    if ( m_nEventID )
+        Application::RemoveUserEvent( m_nEventID );
+
+    m_nEventID = Application::PostUserEvent( rLink, pCaller );
+}
 
 //------------------------------------------------------------------------------
 //                             ExtMgrDialog
 //------------------------------------------------------------------------------
 ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
     ModelessDialog( pParent, getResId( RID_DLG_EXTENSION_MANAGER ) ),
+    DialogHelper( pManager->getContext(), (Dialog*) this ),
     m_aAddBtn( this,        getResId( RID_EM_BTN_ADD ) ),
     m_aUpdateBtn( this,     getResId( RID_EM_BTN_CHECK_UPDATES ) ),
     m_aCloseBtn( this,      getResId( RID_EM_BTN_CLOSE ) ),
@@ -1557,14 +718,14 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
     m_bEnableWarning(       false ),
     m_bDisableWarning(      false ),
     m_bDeleteWarning(       false ),
-    m_bIsBusy(              false ),
     m_nProgress(            0 ),
     m_pManager( pManager )
 {
     // free local resources (RID < 256):
     FreeResource();
 
-    m_pExtensionBox = new ExtensionBox_Impl( this, pManager );
+    m_pExtensionBox = new ExtBoxWithBtns_Impl( this, pManager );
+    m_pExtensionBox->SetHyperlinkHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
 
     m_aAddBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
     m_aUpdateBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
@@ -1608,35 +769,6 @@ ExtMgrDialog::~ExtMgrDialog()
 }
 
 //------------------------------------------------------------------------------
-ResId ExtMgrDialog::getResId( USHORT id )
-{
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
-    return ResId( id, *DeploymentGuiResMgr::get() );
-}
-
-//------------------------------------------------------------------------------
-String ExtMgrDialog::getResourceString( USHORT id )
-{
-    // init with non-acquired solar mutex:
-    BrandName::get();
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
-    String ret( ResId( id, *DeploymentGuiResMgr::get() ) );
-    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
-        ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
-    }
-    return ret;
-}
-
-//------------------------------------------------------------------------------
-bool ExtMgrDialog::IsSharedPkgMgr( const uno::Reference< deployment::XPackageManager > &xPackageManager )
-{
-    if ( xPackageManager->getContext().equals( OUSTR("shared") ) )
-        return true;
-    else
-        return false;
-}
-
-//------------------------------------------------------------------------------
 void ExtMgrDialog::selectEntry( long nPos )
 {
     m_pExtensionBox->selectEntry( nPos );
@@ -1671,96 +803,6 @@ void ExtMgrDialog::checkEntries()
 }
 
 //------------------------------------------------------------------------------
-bool ExtMgrDialog::continueOnSharedExtension( const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                                              const USHORT nResID,
-                                              bool &bHadWarning ) const
-{
-    if ( IsSharedPkgMgr( xPackageManager ) && !bHadWarning )
-    {
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
-        WarningBox aInfoBox( const_cast< ExtMgrDialog* >(this), getResId( nResID ) );
-        String aMsgText = aInfoBox.GetMessText();
-        aMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
-        aInfoBox.SetMessText( aMsgText );
-
-        bHadWarning = true;
-
-        if ( RET_OK == aInfoBox.Execute() )
-            return true;
-        else
-            return false;
-    }
-    else
-        return true;
-}
-
-//------------------------------------------------------------------------------
-void ExtMgrDialog::openWebBrowser( OUString const & sURL ) const
-{
-    if ( ! sURL.getLength() ) // Nothing to do, when the URL is empty
-        return;
-
-    try
-    {
-        uno::Reference< uno::XComponentContext > xContext = m_pManager->getContext();
-
-        uno::Reference< XSystemShellExecute > xSystemShellExecute(
-            xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.system.SystemShellExecute" ), xContext), uno::UNO_QUERY_THROW);
-        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::DEFAULTS );
-    }
-    catch ( uno::Exception& )
-    {
-        uno::Any exc( ::cppu::getCaughtException() );
-        OUString msg( ::comphelper::anyToString( exc ) );
-        const ::vos::OGuard guard( Application::GetSolarMutex() );
-        ErrorBox aErrorBox( const_cast< ExtMgrDialog* >(this), WB_OK, msg );
-        aErrorBox.SetText( GetText() );
-        aErrorBox.Execute();
-    }
-}
-
-//------------------------------------------------------------------------------
-bool ExtMgrDialog::installForAllUsers( bool &bInstallForAll ) const
-{
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
-    QueryBox aQuery( const_cast< ExtMgrDialog* >(this), getResId( RID_QUERYBOX_INSTALL_FOR_ALL ) );
-
-    String sMsgText = aQuery.GetMessText();
-    sMsgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
-    aQuery.SetMessText( sMsgText );
-
-    USHORT nYesBtnID = aQuery.GetButtonId( 0 );
-    USHORT nNoBtnID = aQuery.GetButtonId( 1 );
-
-    if ( nYesBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
-        aQuery.SetButtonText( nYesBtnID, getResourceString( RID_STR_INSTALL_FOR_ME ) );
-    if ( nNoBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
-        aQuery.SetButtonText( nNoBtnID, getResourceString( RID_STR_INSTALL_FOR_ALL ) );
-
-    short nRet = aQuery.Execute();
-
-    if ( nRet == RET_CANCEL )
-        return false;
-
-    bInstallForAll = ( nRet == RET_NO );
-    return true;
-}
-
-//------------------------------------------------------------------------------
-bool ExtMgrDialog::installExtensionWarn( const OUString &rExtensionName ) const
-{
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
-    WarningBox aInfo( const_cast< ExtMgrDialog* >(this), getResId( RID_WARNINGBOX_INSTALL_EXTENSION ) );
-
-    String sText( aInfo.GetMessText() );
-    sText.SearchAndReplaceAllAscii( "%NAME", rExtensionName );
-    aInfo.SetMessText( sText );
-
-    return ( RET_OK == aInfo.Execute() );
-}
-
-//------------------------------------------------------------------------------
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
@@ -1783,12 +825,12 @@ bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackageMana
 
     if ( bEnable )
     {
-        if ( ! continueOnSharedExtension( xPackageManager, RID_WARNINGBOX_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
+        if ( ! continueOnSharedExtension( xPackageManager, this, RID_WARNINGBOX_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
             return false;
     }
     else
     {
-        if ( ! continueOnSharedExtension( xPackageManager, RID_WARNINGBOX_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
+        if ( ! continueOnSharedExtension( xPackageManager, this, RID_WARNINGBOX_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
             return false;
     }
 
@@ -1810,7 +852,7 @@ bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackageMana
             return false;
     }
 
-    if ( ! continueOnSharedExtension( xPackageManager, RID_WARNINGBOX_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
+    if ( ! continueOnSharedExtension( xPackageManager, this, RID_WARNINGBOX_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
         return false;
 
     m_pManager->removePackage( xPackageManager, xPackage );
@@ -1825,7 +867,11 @@ bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackageMana
     if ( !xPackageManager.is() || !xPackage.is() )
         return false;
 
-    m_pManager->updatePackage( xPackageManager, xPackage );
+    std::vector< TUpdateListEntry > vEntries;
+    TUpdateListEntry pEntry( new UpdateListEntry( xPackage, xPackageManager ) );
+    vEntries.push_back( pEntry );
+
+    m_pManager->updatePackages( vEntries );
 
     return true;
 }
@@ -1932,7 +978,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
         if ( m_aProgressBar.IsVisible() )
             m_aProgressBar.SetValue( 100 );
         m_xAbortChannel.clear();
-//        bLockInterface = false;
+
         OSL_TRACE( " startProgress handler: stop\n" );
     }
     else
@@ -1945,7 +991,8 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
     m_aUpdateBtn.Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
     m_pExtensionBox->enableButtons( !bLockInterface );
 
-//    pCond->set();
+    clearEventID();
+
     return 0;
 }
 
@@ -1969,10 +1016,7 @@ void ExtMgrDialog::showProgress( bool _bStart )
         OSL_TRACE( "showProgress stop!\n" );
     }
 
-    Application::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), (void*) bStart );
-//    ::osl::Condition cond;
-//    Application::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), &cond );
-//    cond.wait();
+    DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), (void*) bStart );
 }
 
 // -----------------------------------------------------------------------
@@ -2003,7 +1047,7 @@ void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage
 // -----------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, HandleAddBtn, void*, EMPTYARG )
 {
-    m_bIsBusy = true;
+    setBusy( true );
 
     uno::Reference< deployment::XPackageManager > xUserPkgMgr = m_pManager->getUserPkgMgr();
     uno::Sequence< OUString > aFileList = raiseAddPicker( xUserPkgMgr );
@@ -2013,7 +1057,7 @@ IMPL_LINK( ExtMgrDialog, HandleAddBtn, void*, EMPTYARG )
         m_pManager->installPackage( aFileList[0] );
     }
 
-    m_bIsBusy = false;
+    setBusy( false );
     return 1;
 }
 
@@ -2028,7 +1072,7 @@ IMPL_LINK( ExtMgrDialog, HandleUpdateBtn, void*, EMPTYARG )
 // -----------------------------------------------------------------------
 IMPL_LINK( ExtMgrDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
 {
-    openWebBrowser( pHyperlink->GetURL() );
+    openWebBrowser( pHyperlink->GetURL(), GetText() );
 
     return 1;
 }
@@ -2191,6 +1235,554 @@ BOOL ExtMgrDialog::Close()
     return bRet;
 }
 
+//------------------------------------------------------------------------------
+//                             UpdateRequiredDialog
+//------------------------------------------------------------------------------
+UpdateRequiredDialog::UpdateRequiredDialog( Window *pParent, TheExtensionManager *pManager ) :
+    ModalDialog( pParent,   getResId( RID_DLG_UPDATE_REQUIRED ) ),
+    DialogHelper( pManager->getContext(), (Dialog*) this ),
+    m_aUpdateNeeded( this,  getResId( RID_EM_FT_MSG ) ),
+    m_aUpdateBtn( this,     getResId( RID_EM_BTN_CHECK_UPDATES ) ),
+    m_aCloseBtn( this,      getResId( RID_EM_BTN_CLOSE ) ),
+    m_aHelpBtn( this,       getResId( RID_EM_BTN_HELP ) ),
+    m_aCancelBtn( this,     getResId( RID_EM_BTN_CANCEL ) ),
+    m_aDivider( this ),
+    m_aProgressText( this,  getResId( RID_EM_FT_PROGRESS ) ),
+    m_aProgressBar( this,   WB_BORDER + WB_3DLOOK ),
+    m_sAddPackages(         getResourceString( RID_STR_ADD_PACKAGES ) ),
+    m_sCloseText(           getResourceString( RID_STR_CLOSE_BTN ) ),
+    m_bHasProgress(         false ),
+    m_bProgressChanged(     false ),
+    m_bStartProgress(       false ),
+    m_bStopProgress(        false ),
+    m_bUpdateWarning(       false ),
+    m_bDisableWarning(      false ),
+    m_bHasLockedEntries(    false ),
+    m_nProgress(            0 ),
+    m_pManager( pManager )
+{
+    // free local resources (RID < 256):
+    FreeResource();
+
+    m_pExtensionBox = new ExtensionBox_Impl( this, pManager );
+    m_pExtensionBox->SetHyperlinkHdl( LINK( this, UpdateRequiredDialog, HandleHyperlink ) );
+
+    m_aUpdateBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
+    m_aCloseBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
+    m_aCancelBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );
+
+    String aText = m_aUpdateNeeded.GetText();
+    aText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+    m_aUpdateNeeded.SetText( aText );
+
+    // resize update button
+    Size aBtnSize = m_aUpdateBtn.GetSizePixel();
+    String sTitle = m_aUpdateBtn.GetText();
+    long nWidth = m_aUpdateBtn.GetCtrlTextWidth( sTitle );
+    nWidth += 2 * m_aUpdateBtn.GetTextHeight();
+    if ( nWidth > aBtnSize.Width() )
+        m_aUpdateBtn.SetSizePixel( Size( nWidth, aBtnSize.Height() ) );
+
+    // resize update button
+    aBtnSize = m_aCloseBtn.GetSizePixel();
+    sTitle = m_aCloseBtn.GetText();
+    nWidth = m_aCloseBtn.GetCtrlTextWidth( sTitle );
+    nWidth += 2 * m_aCloseBtn.GetTextHeight();
+    if ( nWidth > aBtnSize.Width() )
+        m_aCloseBtn.SetSizePixel( Size( nWidth, aBtnSize.Height() ) );
+
+    // minimum size:
+    SetMinOutputSizePixel(
+        Size( // width:
+              (5 * m_aHelpBtn.GetSizePixel().Width()) +
+              (5 * RSC_SP_DLG_INNERBORDER_LEFT ),
+              // height:
+              (1 * m_aHelpBtn.GetSizePixel().Height()) +
+              (1 * m_aUpdateNeeded.GetSizePixel().Height()) +
+              (1 * m_pExtensionBox->GetMinOutputSizePixel().Height()) +
+              (3 * RSC_SP_DLG_INNERBORDER_LEFT) ) );
+
+    m_aDivider.Show();
+    m_aProgressBar.Hide();
+    m_aUpdateBtn.Enable( false );
+    m_aCloseBtn.GrabFocus();
+
+    m_aTimeoutTimer.SetTimeout( 50 ); // mSec
+    m_aTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
+}
+
+//------------------------------------------------------------------------------
+UpdateRequiredDialog::~UpdateRequiredDialog()
+{
+    m_aTimeoutTimer.Stop();
+
+    delete m_pExtensionBox;
+}
+
+//------------------------------------------------------------------------------
+long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
+                                             const uno::Reference< deployment::XPackageManager > &xPackageManager )
+{
+    // We will only add entries to the list with unsatisfied dependencies
+    if ( !checkDependencies( xPackage ) )
+    {
+        m_bHasLockedEntries |= (bool) xPackageManager->isReadOnly();
+        m_aUpdateBtn.Enable( true );
+        return m_pExtensionBox->addEntry( xPackage, xPackageManager );
+    }
+    return 0;
+}
+
+//------------------------------------------------------------------------------
+void UpdateRequiredDialog::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageManager )
+{
+    if ( xPackageManager.is() )
+        m_pExtensionBox->prepareChecking( xPackageManager );
+}
+
+//------------------------------------------------------------------------------
+void UpdateRequiredDialog::checkEntries()
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    m_pExtensionBox->checkEntries();
+
+    if ( ! hasActiveEntries() )
+    {
+        m_aCloseBtn.SetText( m_sCloseText );
+        m_aCloseBtn.GrabFocus();
+    }
+}
+
+//------------------------------------------------------------------------------
+bool UpdateRequiredDialog::enablePackage( const uno::Reference< deployment::XPackageManager > &,
+                                  const uno::Reference< deployment::XPackage > &xPackage,
+                                  bool bEnable )
+{
+    m_pManager->enablePackage( xPackage, bEnable );
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK( UpdateRequiredDialog, HandleCancelBtn, void*, EMPTYARG )
+{
+    // m_dialog->m_cmdEnv->m_aborted = true;
+    if ( m_xAbortChannel.is() )
+    {
+        try
+        {
+            m_xAbortChannel->sendAbort();
+        }
+        catch ( uno::RuntimeException & )
+        {
+            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+        }
+    }
+    return 1;
+}
+
+// ------------------------------------------------------------------------------
+IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    bool bLockInterface = (bool) _bLockInterface;
+
+    if ( m_bStartProgress && !m_bHasProgress )
+        m_aTimeoutTimer.Start();
+
+    if ( m_bStopProgress )
+    {
+        if ( m_aProgressBar.IsVisible() )
+            m_aProgressBar.SetValue( 100 );
+        m_xAbortChannel.clear();
+        OSL_TRACE( " startProgress handler: stop\n" );
+    }
+    else
+    {
+        OSL_TRACE( " startProgress handler: start\n" );
+    }
+
+    m_aCancelBtn.Enable( bLockInterface );
+    m_aUpdateBtn.Enable( false );
+    clearEventID();
+
+    return 0;
+}
+
+// ------------------------------------------------------------------------------
+void UpdateRequiredDialog::showProgress( bool _bStart )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    bool bStart = _bStart;
+
+    if ( bStart )
+    {
+        m_nProgress = 0;
+        m_bStartProgress = true;
+        OSL_TRACE( "showProgress start\n" );
+    }
+    else
+    {
+        m_nProgress = 100;
+        m_bStopProgress = true;
+        OSL_TRACE( "showProgress stop!\n" );
+    }
+
+    DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), (void*) bStart );
+}
+
+// -----------------------------------------------------------------------
+void UpdateRequiredDialog::updateProgress( const long nProgress )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    m_nProgress = nProgress;
+}
+
+// -----------------------------------------------------------------------
+void UpdateRequiredDialog::updateProgress( const OUString &rText,
+                                           const uno::Reference< task::XAbortChannel > &xAbortChannel)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    m_xAbortChannel = xAbortChannel;
+    m_sProgressText = rText;
+    m_bProgressChanged = true;
+}
+
+//------------------------------------------------------------------------------
+void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
+{
+    // We will remove all updated packages with satisfied dependencies, but
+    // we will show all disabled entries so the user sees the result
+    // of the 'disable all' button
+    if ( isEnabled( xPackage ) && checkDependencies( xPackage ) )
+        m_pExtensionBox->removeEntry( xPackage );
+    else
+        m_pExtensionBox->updateEntry( xPackage );
+
+    if ( ! hasActiveEntries() )
+    {
+        m_aCloseBtn.SetText( m_sCloseText );
+        m_aCloseBtn.GrabFocus();
+    }
+}
+
+// -----------------------------------------------------------------------
+IMPL_LINK( UpdateRequiredDialog, HandleUpdateBtn, void*, EMPTYARG )
+{
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+    std::vector< TUpdateListEntry > vUpdateEntries;
+    sal_Int32 nCount = m_pExtensionBox->GetEntryCount();
+
+    for ( sal_Int32 i = 0; i < nCount; ++i )
+    {
+        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( i );
+        TUpdateListEntry pUpdateEntry( new UpdateListEntry( pEntry->m_xPackage,
+                                                            pEntry->m_xPackageManager ) );
+        vUpdateEntries.push_back( pUpdateEntry );
+    }
+
+    aGuard.clear();
+
+    m_pManager->updatePackages( vUpdateEntries );
+
+    return 1;
+}
+
+// -----------------------------------------------------------------------
+IMPL_LINK( UpdateRequiredDialog, HandleCloseBtn, void*, EMPTYARG )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( !isBusy() )
+    {
+        if ( m_bHasLockedEntries )
+            EndDialog( -1 );
+        else if ( hasActiveEntries() )
+            disableAllEntries();
+        else
+            EndDialog( 0 );
+    }
+
+    return 1;
+}
+
+// -----------------------------------------------------------------------
+IMPL_LINK( UpdateRequiredDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
+{
+    openWebBrowser( pHyperlink->GetURL(), GetText() );
+
+    return 1;
+}
+
+// -----------------------------------------------------------------------
+IMPL_LINK( UpdateRequiredDialog, TimeOutHdl, Timer*, EMPTYARG )
+{
+    if ( m_bStopProgress )
+    {
+        m_bHasProgress = false;
+        m_bStopProgress = false;
+        m_aProgressText.Hide();
+        m_aProgressBar.Hide();
+        m_aCancelBtn.Hide();
+    }
+    else
+    {
+        if ( m_bProgressChanged )
+        {
+            m_bProgressChanged = false;
+            m_aProgressText.SetText( m_sProgressText );
+        }
+
+        if ( m_bStartProgress )
+        {
+            m_bStartProgress = false;
+            m_bHasProgress = true;
+            m_aProgressBar.Show();
+            m_aProgressText.Show();
+            m_aCancelBtn.Enable();
+            m_aCancelBtn.Show();
+        }
+
+        if ( m_aProgressBar.IsVisible() )
+            m_aProgressBar.SetValue( (USHORT) m_nProgress );
+
+        m_aTimeoutTimer.Start();
+    }
+
+    return 1;
+}
+
+//------------------------------------------------------------------------------
+// VCL::Window / Dialog
+void UpdateRequiredDialog::Resize()
+{
+    Size aTotalSize( GetOutputSizePixel() );
+    Size aBtnSize( m_aHelpBtn.GetSizePixel() );
+
+    Point aPos( RSC_SP_DLG_INNERBORDER_LEFT,
+                aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM - aBtnSize.Height() );
+
+    m_aHelpBtn.SetPosPixel( aPos );
+
+    aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - m_aCloseBtn.GetSizePixel().Width();
+    m_aCloseBtn.SetPosPixel( aPos );
+
+    aPos.X() -= ( RSC_SP_CTRL_X + m_aUpdateBtn.GetSizePixel().Width() );
+    m_aUpdateBtn.SetPosPixel( aPos );
+
+    Size aDivSize( aTotalSize.Width(), LINE_SIZE );
+    aPos = Point( 0, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
+    m_aDivider.SetPosSizePixel( aPos, aDivSize );
+
+    // Calc fixed text size
+    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );
+    Size aFTSize = m_aUpdateNeeded.CalcMinimumSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - RSC_SP_DLG_INNERBORDER_LEFT );
+    m_aUpdateNeeded.SetPosSizePixel( aPos, aFTSize );
+
+    // Calc list box size
+    Size aSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
+                aTotalSize.Height() - 2*aBtnSize.Height() - LINE_SIZE -
+                2*RSC_SP_DLG_INNERBORDER_TOP - 3*RSC_SP_DLG_INNERBORDER_BOTTOM - aFTSize.Height() );
+    aPos.Y() += aFTSize.Height()+RSC_SP_DLG_INNERBORDER_TOP;
+
+    m_pExtensionBox->SetPosSizePixel( aPos, aSize );
+
+    aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
+    aPos.Y() += aSize.Height()+RSC_SP_DLG_INNERBORDER_TOP;
+    m_aCancelBtn.SetPosPixel( aPos );
+
+    // Calc progress height
+    aFTSize = m_aProgressText.GetSizePixel();
+    long nProgressHeight = aFTSize.Height();
+
+    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    {
+        ImplControlValue aValue;
+        bool bNativeOK;
+        Region aControlRegion( Rectangle( (const Point&)Point(), m_aProgressBar.GetSizePixel() ) );
+        Region aNativeControlRegion, aNativeContentRegion;
+        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                                 CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
+        {
+            nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+        }
+    }
+
+    if ( nProgressHeight < PROGRESS_HEIGHT )
+        nProgressHeight = PROGRESS_HEIGHT;
+
+    aPos.X() -= ( RSC_SP_CTRL_GROUP_Y + PROGRESS_WIDTH );
+    m_aProgressBar.SetPosSizePixel( Point( aPos.X(), aPos.Y() + ((aBtnSize.Height()-nProgressHeight)/2) ),
+                                    Size( PROGRESS_WIDTH, nProgressHeight ) );
+
+    aFTSize.Width() = aPos.X() - 2*RSC_SP_DLG_INNERBORDER_LEFT;
+    aPos.X() = RSC_SP_DLG_INNERBORDER_LEFT;
+    aPos.Y() += ( aBtnSize.Height() - aFTSize.Height() - 1 ) / 2;
+    m_aProgressText.SetPosSizePixel( aPos, aFTSize );
+}
+
+//------------------------------------------------------------------------------
+// VCL::Dialog
+short UpdateRequiredDialog::Execute()
+{
+    if ( m_bHasLockedEntries )
+    {
+        // Set other text, disable update btn, remove not shared entries from list;
+        m_aUpdateNeeded.SetText( DialogHelper::getResourceString( RID_STR_NO_ADMIN_PRIVILEGE ) );
+        m_aCloseBtn.SetText( DialogHelper::getResourceString( RID_STR_EXIT_BTN ) );
+        m_aUpdateBtn.Enable( false );
+        m_pExtensionBox->RemoveUnlocked();
+        Resize();
+    }
+
+    return Dialog::Execute();
+}
+
+//------------------------------------------------------------------------------
+// VCL::Dialog
+BOOL UpdateRequiredDialog::Close()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    if ( !isBusy() )
+    {
+        if ( m_bHasLockedEntries )
+            EndDialog( -1 );
+        else if ( hasActiveEntries() )
+            disableAllEntries();
+        else
+            EndDialog( 0 );
+    }
+
+    return false;
+}
+
+//------------------------------------------------------------------------------
+// Check dependencies of all packages
+//------------------------------------------------------------------------------
+bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage > &xPackage ) const
+{
+    bool bRegistered = false;
+    try {
+        beans::Optional< beans::Ambiguous< sal_Bool > > option( xPackage->isRegistered( uno::Reference< task::XAbortChannel >(),
+                                                                                        uno::Reference< ucb::XCommandEnvironment >() ) );
+        if ( option.IsPresent )
+        {
+            ::beans::Ambiguous< sal_Bool > const & reg = option.Value;
+            if ( reg.IsAmbiguous )
+                bRegistered = false;
+            else
+                bRegistered = reg.Value ? true : false;
+        }
+        else
+            bRegistered = false;
+    }
+    catch ( uno::RuntimeException & ) { throw; }
+    catch ( uno::Exception & exc) {
+        (void) exc;
+        OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        bRegistered = false;
+    }
+
+    return bRegistered;
+}
+
+//------------------------------------------------------------------------------
+bool UpdateRequiredDialog::checkDependencies( const uno::Reference< deployment::XPackage > &xPackage ) const
+{
+    if ( isEnabled( xPackage ) )
+    {
+        bool bDependenciesValid = false;
+        try {
+            bDependenciesValid = xPackage->checkDependencies( uno::Reference< ucb::XCommandEnvironment >() );
+        }
+        catch ( deployment::DeploymentException & ) {}
+        if ( ! bDependenciesValid )
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool UpdateRequiredDialog::hasActiveEntries()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    bool bRet = false;
+    long nCount = m_pExtensionBox->GetEntryCount();
+    for ( long nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
+
+        if ( !checkDependencies( pEntry->m_xPackage ) )
+        {
+            bRet = true;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
+//------------------------------------------------------------------------------
+void UpdateRequiredDialog::disableAllEntries()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    setBusy( true );
+
+    long nCount = m_pExtensionBox->GetEntryCount();
+    for ( long nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        TEntry_Impl pEntry = m_pExtensionBox->GetEntryData( nIndex );
+        enablePackage( pEntry->m_xPackageManager, pEntry->m_xPackage, false );
+    }
+
+    setBusy( false );
+
+    if ( ! hasActiveEntries() )
+        m_aCloseBtn.SetText( m_sCloseText );
+}
+
+//=================================================================================
+// UpdateRequiredDialogService
+//=================================================================================
+UpdateRequiredDialogService::UpdateRequiredDialogService( uno::Sequence< uno::Any > const&,
+                                                          uno::Reference< uno::XComponentContext > const& xComponentContext )
+    : m_xComponentContext( xComponentContext )
+{
+}
+
+//------------------------------------------------------------------------------
+// XExecutableDialog
+//------------------------------------------------------------------------------
+void UpdateRequiredDialogService::setTitle( OUString const & ) throw ( uno::RuntimeException )
+{
+}
+
+//------------------------------------------------------------------------------
+sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException )
+{
+    ::rtl::Reference< ::dp_gui::TheExtensionManager > xManager( TheExtensionManager::get(
+                                                              m_xComponentContext,
+                                                              uno::Reference< awt::XWindow >(),
+                                                              OUString() ) );
+    xManager->createDialog( true );
+    sal_Int16 nRet = xManager->execute();
+
+    return nRet;
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 SelectedPackage::~SelectedPackage() {}
 
 } //namespace dp_gui

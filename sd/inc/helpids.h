@@ -280,3 +280,5 @@
 #define HID_SD_CELL_STYLE_LAST_COLUMN                       (HID_SD_START + 199)
 
 #define HID_SD_TABLE_DESIGN                                 (HID_SD_START + 200)
+#define HID_SD_ANNOTATIONS                                  (HID_SD_START + 201)
+

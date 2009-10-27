@@ -83,7 +83,7 @@ LINKFLAGSDEBUG=/v
 LINKFLAGSOPT=/Oc
 .ENDIF
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=c02.obj
 STDSLOGUI=c02d.obj
 STDOBJCUI=c02.obj
@@ -189,7 +189,7 @@ LINKFLAGSOPT=
 LINKFLAGS+=/COD
 .ENDIF
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -292,7 +292,7 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=debug all op undefsok
 LINKFLAGSOPT=
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=libr clib3s.lib libr plib3s.lib libr math387s.lib
 STDSLOGUI=libr clib3s.lib libr os2386.lib libr plib3s.lib libr math387s.lib
 STDOBJCUI=libr clib3s.lib libr plib3s.lib libr math387s.lib

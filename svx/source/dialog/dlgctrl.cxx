@@ -173,24 +173,22 @@ void SvxRectCtl::InitRectBitmap( void )
     pBitmap = new Bitmap( SVX_RES( RID_SVXCTRL_RECTBTNS ) );
 
     // set bitmap-colors
-    long    aTempAry1[(7*sizeof(Color))/sizeof(long)];
-    long    aTempAry2[(7*sizeof(Color))/sizeof(long)];
-    Color*  pColorAry1 = (Color*)aTempAry1;
-    Color*  pColorAry2 = (Color*)aTempAry2;
-    pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );  // light-gray
-    pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );  // yellow
-    pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );  // white
-    pColorAry1[3] = Color( 0x80, 0x80, 0x80 );  // dark-gray
-    pColorAry1[4] = Color( 0x00, 0x00, 0x00 );  // black
-    pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );  // green
-    pColorAry1[6] = Color( 0x00, 0x00, 0xFF );  // blue
-    pColorAry2[0] = rStyles.GetDialogColor();       // background
-    pColorAry2[1] = rStyles.GetWindowColor();
-    pColorAry2[2] = rStyles.GetLightColor();
-    pColorAry2[3] = rStyles.GetShadowColor();
-    pColorAry2[4] = rStyles.GetDarkShadowColor();
-    pColorAry2[5] = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    pColorAry2[6] = rStyles.GetDialogColor();
+    Color   aColorAry1[7];
+    Color   aColorAry2[7];
+    aColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );  // light-gray
+    aColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );  // yellow
+    aColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );  // white
+    aColorAry1[3] = Color( 0x80, 0x80, 0x80 );  // dark-gray
+    aColorAry1[4] = Color( 0x00, 0x00, 0x00 );  // black
+    aColorAry1[5] = Color( 0x00, 0xFF, 0x00 );  // green
+    aColorAry1[6] = Color( 0x00, 0x00, 0xFF );  // blue
+    aColorAry2[0] = rStyles.GetDialogColor();       // background
+    aColorAry2[1] = rStyles.GetWindowColor();
+    aColorAry2[2] = rStyles.GetLightColor();
+    aColorAry2[3] = rStyles.GetShadowColor();
+    aColorAry2[4] = rStyles.GetDarkShadowColor();
+    aColorAry2[5] = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    aColorAry2[6] = rStyles.GetDialogColor();
 
 #ifdef DBG_UTIL
     static BOOL     bModify = FALSE;
@@ -205,11 +203,11 @@ void SvxRectCtl::InitRectBitmap( void )
         UINT8&          rr = r;
         UINT8&          rg = g;
         UINT8&          rb = b;
-        pColorAry2[ rn ] = Color( rr, rg, rb );
+        aColorAry2[ rn ] = Color( rr, rg, rb );
     }
 #endif
 
-    pBitmap->Replace( pColorAry1, pColorAry2, 7, NULL );
+    pBitmap->Replace( aColorAry1, aColorAry2, 7, NULL );
 }
 
 // -----------------------------------------------------------------------

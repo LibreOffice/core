@@ -63,6 +63,7 @@
 
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+#include "clipparam.hxx"
 
 struct AreaLink_Impl
 {
@@ -354,12 +355,12 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                 }
                 else
                     pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aOldRange, IDF_ALL, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
             }
             else        // ohne Einfuegen
             {
                 pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab );             // nur Zieltabelle
-                pDoc->CopyToDocument( aMaxRange, IDF_ALL, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( aMaxRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
             }
         }
 
@@ -369,7 +370,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         if (bDoInsert)
             pDoc->FitBlock( aOldRange, aNewRange );         // incl. loeschen
         else
-            pDoc->DeleteAreaTab( aMaxRange, IDF_ALL );
+            pDoc->DeleteAreaTab( aMaxRange, IDF_ALL & ~IDF_NOTE );
 
         //  Daten kopieren
 
@@ -389,9 +390,8 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
                     aSourceMark.SelectOneTable( nSrcTab );      // selektieren fuer CopyToClip
                     aSourceMark.SetMarkArea( aTokenRange );
 
-                    pSrcDoc->CopyToClip( aTokenRange.aStart.Col(), aTokenRange.aStart.Row(),
-                                         aTokenRange.aEnd.Col(), aTokenRange.aEnd.Row(),
-                                         FALSE, &aClipDoc, FALSE, &aSourceMark );
+                    ScClipParam aClipParam(aTokenRange, false);
+                    pSrcDoc->CopyToClip(aClipParam, &aClipDoc, &aSourceMark);
 
                     if ( aClipDoc.HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
                                             HASATTR_MERGED | HASATTR_OVERLAPPED ) )
@@ -426,7 +426,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
         {
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndo( pDoc, nDestTab, nDestTab );
-            pDoc->CopyToDocument( aNewRange, IDF_ALL, FALSE, pRedoDoc );
+            pDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, FALSE, pRedoDoc );
 
             pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoUpdateAreaLink( pImpl->m_pDocSh,

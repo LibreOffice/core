@@ -304,7 +304,10 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    my $onepropertyline = "IGNOREPREREQUIREDPATCH" . "\t" . "0" . "\n";
+    my $onepropertyline = "IGNOREPREREQUIREDPATCH" . "\t" . "1" . "\n";
+    push(@{$propertyfile}, $onepropertyline);
+
+    $onepropertyline = "DONTOPTIMIZELIBS" . "\t" . "0" . "\n";
     push(@{$propertyfile}, $onepropertyline);
 
     if ( $installer::globals::sundirexists )

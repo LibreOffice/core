@@ -218,11 +218,15 @@ namespace comphelper
     // public UiEventsLogger interface
     sal_Bool UiEventsLogger::isEnabled()
     {
-        try {
-            UiEventsLogger_Impl::prepareMutex();
-            Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
-            return UiEventsLogger_Impl::getInstance()->m_Active;
-        } catch(...) { return false; } // never throws
+        if ( UiEventsLogger_Impl::getEnabledFromCfg() )
+        {
+            try {
+                UiEventsLogger_Impl::prepareMutex();
+                Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
+                return UiEventsLogger_Impl::getInstance()->m_Active;
+            } catch(...) { return false; } // never throws
+        } // if ( )
+        return sal_False;
     }
 
     sal_Int32 UiEventsLogger::getSessionLogEventCount()
@@ -375,9 +379,10 @@ namespace comphelper
         }
         else
             logdata[2] = UNKNOWN_ORIGIN;
-        logdata[3] = url.Complete;
         if(url.Complete.match(URL_FILE))
             logdata[3] = URL_FILE;
+        else
+            logdata[3] = url.Main;
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
         m_SessionLogEventCount++;
     }

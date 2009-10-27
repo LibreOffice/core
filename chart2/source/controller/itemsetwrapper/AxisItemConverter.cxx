@@ -38,7 +38,6 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "SchWhichPairs.hxx"
 #include "macros.hxx"
-#include "Scaling.hxx"
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "CommonConverters.hxx"
@@ -180,45 +179,42 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
     {
         case SCHATTR_AXIS_AUTO_MAX:
             // if the any has no value => auto is on
-            rOutItemSet.Put( SfxBoolItem( nWhichId, ( ! aScale.Maximum.hasValue())));
+            rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aScale.Maximum) ) );
             break;
 
         case SCHATTR_AXIS_MAX:
-            if( aScale.Maximum.hasValue())
             {
-                OSL_ASSERT( aScale.Maximum.getValueTypeClass() == uno::TypeClass_DOUBLE );
-                rOutItemSet.Put(
-                    SvxDoubleItem(
-                        *reinterpret_cast< const double * >( aScale.Maximum.getValue()), nWhichId ));
-            }
-            else
-            {
-                double fExplicitMax = 10.0;
-                if( m_pExplicitScale )
-                    fExplicitMax = m_pExplicitScale->Maximum;
-
-                rOutItemSet.Put(
-                    SvxDoubleItem( fExplicitMax, nWhichId ));
+                double fMax = 10.0;
+                if( aScale.Maximum >>= fMax )
+                {
+                    rOutItemSet.Put( SvxDoubleItem( fMax, nWhichId ) );
+                }
+                else
+                {
+                    if( m_pExplicitScale )
+                        fMax = m_pExplicitScale->Maximum;
+                    rOutItemSet.Put( SvxDoubleItem( fMax, nWhichId ) );
+                }
             }
             break;
 
         case SCHATTR_AXIS_AUTO_MIN:
             // if the any has no value => auto is on
-            rOutItemSet.Put( SfxBoolItem( nWhichId, ( ! aScale.Minimum.hasValue())));
+            rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aScale.Minimum) ) );
             break;
 
         case SCHATTR_AXIS_MIN:
-            if( aScale.Minimum.hasValue())
             {
-                OSL_ASSERT( aScale.Minimum.getValueTypeClass() == uno::TypeClass_DOUBLE );
-                rOutItemSet.Put(
-                    SvxDoubleItem(
-                        *reinterpret_cast< const double * >( aScale.Minimum.getValue()), nWhichId ));
-            }
-            else
-            {
-                if( m_pExplicitScale )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, nWhichId ));
+                double fMin = 0.0;
+                if( aScale.Minimum >>= fMin )
+                {
+                    rOutItemSet.Put( SvxDoubleItem( fMin, nWhichId ) );
+                }
+                else
+                {
+                    if( m_pExplicitScale )
+                        rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, nWhichId ));
+                }
             }
             break;
 
@@ -236,21 +232,21 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
         // Increment
         case SCHATTR_AXIS_AUTO_STEP_MAIN:
             // if the any has no value => auto is on
-            rOutItemSet.Put( SfxBoolItem( nWhichId, ( ! aInc.Distance.hasValue())));
+            rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aInc.Distance) ) );
             break;
 
         case SCHATTR_AXIS_STEP_MAIN:
-            if( aInc.Distance.hasValue())
             {
-                OSL_ASSERT( aInc.Distance.getValueTypeClass() == uno::TypeClass_DOUBLE );
-                rOutItemSet.Put(
-                    SvxDoubleItem(
-                        *reinterpret_cast< const double * >( aInc.Distance.getValue()), nWhichId ));
-            }
-            else
-            {
-                if( m_pExplicitIncrement )
-                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->Distance, nWhichId ));
+                double fDistance = 1.0;
+                if( aInc.Distance >>= fDistance )
+                {
+                    rOutItemSet.Put( SvxDoubleItem(fDistance, nWhichId ));
+                }
+                else
+                {
+                    if( m_pExplicitIncrement )
+                        rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->Distance, nWhichId ));
+                }
             }
             break;
 
@@ -478,7 +474,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
                 // logarithm is true
                 if( ! bWasLogarithm )
                 {
-                    aScale.Scaling = new LogarithmicScaling( 10.0 );
+                    aScale.Scaling = AxisHelper::createLogarithmicScaling( 10.0 );
                     bSetScale = true;
                 }
             }
@@ -487,7 +483,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
                 // logarithm is false => linear scaling
                 if( bWasLogarithm )
                 {
-                    aScale.Scaling = new LinearScaling( 1.0, 0.0 );
+                    aScale.Scaling = AxisHelper::createLinearScaling();
                     bSetScale = true;
                 }
             }

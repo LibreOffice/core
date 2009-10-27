@@ -28,6 +28,54 @@ REM * <http://www.openoffice.org/license.html>
 REM * for a copy of the LGPLv3 License.
 REM ************************************************************************/
 
+
+SET DESTPATH=%USERNAME%
+SET DEBUG=false
+SET OOO=false
+SET PARAM=
+
+for %opt in (%&%) DO (
+    iff "%opt%" == "-d" THEN 
+        SET PARAM=%PARAM% -debug true
+        shift
+
+    elseiff "%opt%" == "-o" THEN 
+        SET PARAM=%PARAM% -ooo true
+        shift
+
+    elseiff "%opt%" == "-c" THEN 
+        SET PARAM=%PARAM% -cwscheckapi true
+        shift
+
+    elseiff "%opt%" == "-a" THEN 
+        SET PARAM=%PARAM% -autorun true
+        shift
+
+    elseiff "%opt%" == "-i" THEN
+        SET PARAM=%PARAM% -autoimpress true
+        shift
+
+    elseiff "%opt%" == "-t" THEN 
+        SET DESTPATH=%2
+        shift
+        shift
+
+    elseiff "%opt%" == "-h" THEN 
+        goto usage
+
+    elseiff "%opt%" == "/h" THEN 
+        goto usage
+
+    elseiff "%opt%" == "%DESTPATH%" THEN
+        shift
+
+    else 
+        echo wrong param: %opt%
+        goto usage
+    endiff
+)
+
+iff "%DESTPATH%" == "%USERNAME%" THEN
 iff EXIST e:\  then
     iff EXIST e:\temp then
         set temppath=e:\temp
@@ -44,25 +92,15 @@ elseiff EXIST c:\temp then
 else
     set temppath=%TMP%
 endiff
-
-SET DESTPATH=%temppath%\%USERNAME%
-SET DEBUG=false
-SET OOO=false
-SET PARAM=
-
-for %opt in (%&%) DO (
-    if "%opt%" == "-d" (SET PARAM=%PARAM% -debug true ^ shift)
-    if "%opt%" == "-o" (SET PARAM=%PARAM% -ooo true ^ shift)
-    if "%opt%" == "-c" (SET PARAM=%PARAM% -cwscheckapi true ^ shift)
-    if "%opt%" == "-a" (SET PARAM=%PARAM% -autorun true ^ shift)
-    if "%opt%" == "-t" (SET DESTPATH=%2  ^ shift ^ shift)
-    if "%opt%" == "-h" goto usage
-    if "%opt%" == "/h" goto usage
-)
+    DESTPATH=%temppath%\%USERNAME%
+endiff
 
 SET LOCALINSTALLDIR=%DESTPATH%\office
 SET LOCALUNPACKDIR=%DESTPATH%\unpack
+echo LOCALINSTALLDIR=%LOCALINSTALLDIR%
+echo LOCALUNPACKDIR=%LOCALUNPACKDIR%
 
+echo call perl5 %SOLARENV%\bin\installoffice.pl -dest %LOCALINSTALLDIR% %PARAM% -cleanup true %&
 call perl5 %SOLARENV%\bin\installoffice.pl -dest %LOCALINSTALLDIR% %PARAM% -cleanup true %&
 
 quit %?
@@ -75,8 +113,10 @@ quit %?
     echo. 
     echo [-o] force OpenOffice.org installation instead of StarOffice>&2
     echo. 
-    echo [-t] target path: path wehre tho office should installed to. The default is '%DESTPATH%'>&2
+    echo [-t] target path: path where the office should installed to. The default is '%DESTPATH%'>&2
     echo.
     echo [-a] the office will be patched to run without FirstStartWizard >&2
    echo. 
+    echo [-i] impress should open documents without autopilot
+    echo.
     quit 1

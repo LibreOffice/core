@@ -33,7 +33,7 @@
 File gid_File_Lib_GIO
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(ucpgio1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "ucpgio-ucd.txt";
@@ -44,7 +44,7 @@ End
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "ucpgvfs-ucd.txt";
@@ -55,7 +55,7 @@ End
 File gid_File_Lib_Gconfbe
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "gconfbe1-ucd.txt";

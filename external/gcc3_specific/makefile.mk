@@ -13,10 +13,28 @@ TARGET=gcc3_specific
 
 .IF "$(COM)" == "GCC"
 
-all : $(BIN)$/mingwm10.dll
+.IF "$(MINGW_SHARED_GCCLIB)" == "YES"
+MINGWGCCDLL=$(BIN)$/$(MINGW_GCCDLL)
+.ENDIF
+
+.IF "$(MINGW_SHARED_GXXLIB)" == "YES"
+MINGWGXXDLL=$(BIN)$/$(MINGW_GXXDLL)
+.ENDIF
+
+all : $(BIN)$/mingwm10.dll $(MINGWGCCDLL) $(MINGWGXXDLL)
 
 $(BIN)$/mingwm10.dll :
     $(COPY) -p $(COMPATH)$/bin$/mingwm10.dll $(BIN)$/
+
+.IF "$(MINGW_SHARED_GCCLIB)" == "YES"
+$(MINGWGCCDLL) :
+    $(COPY) -p $(COMPATH)$/bin$/$(MINGW_GCCDLL) $(BIN)$/
+.ENDIF
+
+.IF "$(MINGW_SHARED_GXXLIB)" == "YES"
+$(MINGWGXXDLL) :
+    $(COPY) -p $(COMPATH)$/bin$/$(MINGW_GXXDLL) $(BIN)$/
+.ENDIF
 
 .ENDIF
 

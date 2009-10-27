@@ -46,25 +46,25 @@
 #define STR_DBASE_HELPTEXT                  28
 #define STR_MSACCESS_HELPTEXT               29
 #define STR_TEXT_HELPTEXT                   30
-//#define STR_LDAP_HELPTEXT                 31
+    // FREE
 #define STR_ADO_HELPTEXT                    32
 #define STR_JDBC_HELPTEXT                   33
 #define STR_ODBC_HELPTEXT                   34
 #define STR_MYSQLJDBC_HELPTEXT              35
 #define STR_SPREADSHEET_HELPTEXT            36
-//#define STR_AUTHENTIFICATION_HELPTEXT     37
+    // FREE
 #define STR_FINAL_HELPTEXT                  38
 #define STR_ADABAS_HELPTEXT                 39
 #define STR_ORACLE_HELPTEXT                 40
-
 #define STR_DBASE_HEADERTEXT                41
 #define STR_MSACCESS_HEADERTEXT             42
 #define STR_TEXT_HEADERTEXT                 43
-//#define STR_LDAP_HEADERTEXT               44
+    // FREE
 #define STR_ADO_HEADERTEXT                  45
 #define STR_JDBC_HEADERTEXT                 46
 #define STR_ODBC_HEADERTEXT                 47
-#define STR_MYSQLJDBC_HEADERTEXT            49
+#define STR_MYSQLJDBC_HEADERTEXT            48
+    // FREE
 #define STR_SPREADSHEET_HEADERTEXT          50
 #define STR_FINAL_HEADERTEXT                52
 #define STR_ADABAS_HEADERTEXT               53
@@ -100,6 +100,7 @@
 #define STR_ORACLE_DRIVERCLASSTEXT      84
 #define STR_MYSQL_DRIVERCLASSTEXT       85
 #define STR_LDAP_DEFAULT                86
+#define STR_PAGETITLE_MYSQL_NATIVE      87
 
 
 #define FT_PORTNUMBERDEFAULT            1
@@ -116,6 +117,8 @@
 #define FT_FINALTEXT                    12
 #define FT_FINALHELPTEXT                13
 #define FT_ADDITIONALSETTINGS           14
+#define FT_SETUP_WIZARD_HEADER          15
+#define FT_SETUP_WIZARD_HELP            16
 
 #define ET_GENERALUSERNAME          1
 

@@ -182,7 +182,7 @@ void ORelationTableView::ReSync()
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
-        }
+        } // if ( !arrInvalidTables.empty() )
 
         addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
     }
@@ -207,7 +207,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
     ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections()->begin();
-    for(;aIter != getTableConnections()->end();++aIter)
+    ::std::vector<OTableConnection*>::const_iterator aEnd = getTableConnections()->end();
+    for(;aIter != aEnd;++aIter)
     {
         OTableConnection* pFirst = *aIter;
         if((pFirst->GetSourceWin() == pSourceWin && pFirst->GetDestWin() == pDestWin) ||

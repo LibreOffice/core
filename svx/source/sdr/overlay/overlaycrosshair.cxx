@@ -34,6 +34,8 @@
 #include <tools/gen.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/outdev.hxx>
+#include <svx/sdr/overlay/overlaytools.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -41,31 +43,33 @@ namespace sdr
 {
     namespace overlay
     {
-        void OverlayCrosshairStriped::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayCrosshairStriped::createOverlayObjectPrimitive2DSequence()
         {
-            const Point aEmptyPoint;
-            const Rectangle aVisiblePixel(aEmptyPoint, rOutputDevice.GetOutputSizePixel());
-            const Rectangle aVisibleLogic(rOutputDevice.PixelToLogic(aVisiblePixel));
+            drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
-            const basegfx::B2DPoint aStartA(aVisibleLogic.Left(), getBasePosition().getY());
-            const basegfx::B2DPoint aEndA(aVisibleLogic.Right(), getBasePosition().getY());
-            ImpDrawLineStriped(rOutputDevice, aStartA, aEndA);
+            if(getOverlayManager())
+            {
+                const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
+                const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
+                const double fStripeLengthPixel(getOverlayManager()->getStripeLengthPixel());
 
-            const basegfx::B2DPoint aStartB(getBasePosition().getX(), aVisibleLogic.Top());
-            const basegfx::B2DPoint aEndB(getBasePosition().getX(), aVisibleLogic.Bottom());
-            ImpDrawLineStriped(rOutputDevice, aStartB, aEndB);
+                const drawinglayer::primitive2d::Primitive2DReference aReference(
+                    new drawinglayer::primitive2d::OverlayCrosshairPrimitive(
+                        getBasePosition(),
+                        aRGBColorA,
+                        aRGBColorB,
+                        fStripeLengthPixel));
+
+                aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+            }
+
+            return aRetval;
         }
 
-        void OverlayCrosshairStriped::createBaseRange(OutputDevice& rOutputDevice)
+        void OverlayCrosshairStriped::stripeDefinitionHasChanged()
         {
-            // reset range and expand it
-            const Point aEmptyPoint;
-            const Rectangle aVisiblePixel(aEmptyPoint, rOutputDevice.GetOutputSizePixel());
-            const Rectangle aVisibleLogic(rOutputDevice.PixelToLogic(aVisiblePixel));
-
-            maBaseRange.reset();
-            maBaseRange.expand(basegfx::B2DPoint(aVisibleLogic.Left(), aVisibleLogic.Top()));
-            maBaseRange.expand(basegfx::B2DPoint(aVisibleLogic.Right(), aVisibleLogic.Bottom()));
+            // react on OverlayManager's stripe definition change
+            objectChange();
         }
 
         OverlayCrosshairStriped::OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos)
@@ -74,64 +78,6 @@ namespace sdr
         }
 
         OverlayCrosshairStriped::~OverlayCrosshairStriped()
-        {
-        }
-
-        sal_Bool OverlayCrosshairStriped::isHit(const basegfx::B2DPoint& rPos, double fTol) const
-        {
-            if(isHittable())
-            {
-                // test vertical
-                if(rPos.getY() >= (getBasePosition().getY() - fTol)
-                    && rPos.getY() <= (getBasePosition().getY() + fTol))
-                {
-                    return sal_True;
-                }
-
-                // test horizontal
-                if(rPos.getX() >= (getBasePosition().getX() - fTol)
-                    && rPos.getX() <= (getBasePosition().getX() + fTol))
-                {
-                    return sal_True;
-                }
-            }
-
-            return sal_False;
-        }
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        void OverlayCrosshair::drawGeometry(OutputDevice& rOutputDevice)
-        {
-            const Point aBasePos(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-            const Point aEmptyPoint;
-            const Rectangle aVisiblePixel(aEmptyPoint, rOutputDevice.GetOutputSizePixel());
-            const Rectangle aVisibleLogic(rOutputDevice.PixelToLogic(aVisiblePixel));
-
-            rOutputDevice.SetLineColor(getBaseColor());
-            rOutputDevice.SetFillColor();
-
-            rOutputDevice.DrawLine(Point(aVisibleLogic.Left(), aBasePos.Y()), Point(aVisibleLogic.Right(), aBasePos.Y()));
-            rOutputDevice.DrawLine(Point(aBasePos.X(), aVisibleLogic.Top()), Point(aBasePos.X(), aVisibleLogic.Bottom()));
-        }
-
-        OverlayCrosshair::OverlayCrosshair(
-            const basegfx::B2DPoint& rBasePos,
-            Color aLineColor)
-        :   OverlayCrosshairStriped(rBasePos)
-        {
-            // set base color here, OverlayCrosshairStriped constructor has set
-            // it to it's own default.
-            maBaseColor = aLineColor;
-        }
-
-        OverlayCrosshair::~OverlayCrosshair()
         {
         }
     } // end of namespace overlay

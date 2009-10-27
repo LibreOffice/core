@@ -74,10 +74,13 @@ private: //member
     CheckBox    aCBConnect;
     CheckBox    aCBAxisSideBySide;
 
-    FixedLine   m_aFL_EmptyCells;
+    FixedLine   m_aFL_PlotOptions;
+    FixedText   m_aFT_MissingValues;
     RadioButton m_aRB_DontPaint;
     RadioButton m_aRB_AssumeZero;
     RadioButton m_aRB_ContinueLine;
+
+    CheckBox    m_aCBIncludeHiddenCells;
 
     DECL_LINK(EnableHdl, RadioButton * );
 

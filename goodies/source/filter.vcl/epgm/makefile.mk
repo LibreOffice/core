@@ -50,15 +50,15 @@ CDEFS+= -DEDITDEBUG
 SRS1NAME=$(TARGET)
 SRC1FILES=	dlgepgm.src \
             epgmstr.src
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/epgm.obj \
             $(SLO)$/dlgepgm.obj
-
+.ENDIF
 # ==========================================================================
 
 RESLIB1NAME=$(TARGET2)
 RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
-
+.IF "$(L10N_framework)"==""
 SHL1TARGET= 	epg$(DLLPOSTFIX)
 SHL1IMPLIB= 	epgm
 SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(CPPULIB) $(SVTOOLLIB) $(SALLIB)
@@ -74,7 +74,7 @@ SHL1OBJS=		$(SLO)$/epgm.obj
 SHL1VERSIONMAP=exports.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :	target.mk

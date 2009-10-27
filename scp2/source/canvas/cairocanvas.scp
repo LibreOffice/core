@@ -34,7 +34,7 @@ File gid_File_Lib_CairoCanvas
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
     Name = STRING(CONCAT2(cairocanvas.uno,UNXSUFFIX));
   #else

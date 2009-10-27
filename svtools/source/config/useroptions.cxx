@@ -49,51 +49,45 @@
 #include <rtl/logfile.hxx>
 #include "itemholder2.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/util/ChangesEvent.hpp>
 #include <comphelper/configurationhelper.hxx>
-#endif
-
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
-#endif
-
-#ifndef _SVT_LOGHELPER_HXX
-#include "loghelper.hxx"
-#endif
+#include <loghelper.hxx>
 
 using namespace utl;
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 namespace css = ::com::sun::star;
 
 // class SvtUserOptions_Impl ---------------------------------------------
+class SvtUserOptions_Impl;
+class SvtUserConfigChangeListener_Impl : public cppu::WeakImplHelper1
+<
+    com::sun::star::util::XChangesListener
+>
+{
+        SvtUserOptions_Impl&    m_rParent;
+    public:
+        SvtUserConfigChangeListener_Impl(SvtUserOptions_Impl& rParent);
+        ~SvtUserConfigChangeListener_Impl();
 
-class SvtUserOptions_Impl
+    //XChangesListener
+    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& Event ) throw(RuntimeException);
+    //XEventListener
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw(RuntimeException);
+};
+
+class SvtUserOptions_Impl : public SfxBroadcaster
 {
 public:
     SvtUserOptions_Impl();
@@ -144,8 +138,10 @@ public:
 
     sal_Bool          IsTokenReadonly( USHORT nToken ) const;
     ::rtl::OUString   GetToken(USHORT nToken) const;
+    void              Notify();
 
 private:
+    uno::Reference< util::XChangesListener >           m_xChangeListener;
     css::uno::Reference< css::container::XNameAccess > m_xCfg;
     css::uno::Reference< css::beans::XPropertySet >    m_xData;
     ::rtl::OUString m_aLocale;
@@ -158,18 +154,47 @@ static sal_Int32            nRefCount = 0;
 
 #define READONLY_DEFAULT    sal_False
 
-// functions -------------------------------------------------------------
+/*-- 16.06.2009 14:22:56---------------------------------------------------
 
-namespace
+  -----------------------------------------------------------------------*/
+SvtUserConfigChangeListener_Impl::SvtUserConfigChangeListener_Impl(SvtUserOptions_Impl& rParent) :
+    m_rParent( rParent )
 {
-    struct PropertyNames
-        : public rtl::Static< Sequence< rtl::OUString >, PropertyNames> {};
+}
+/*-- 16.06.2009 14:22:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SvtUserConfigChangeListener_Impl::~SvtUserConfigChangeListener_Impl()
+{
+}
+/*-- 16.06.2009 14:22:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtUserConfigChangeListener_Impl::changesOccurred( const util::ChangesEvent& rEvent ) throw(RuntimeException)
+{
+    if(rEvent.Changes.getLength())
+        m_rParent.Notify();
+}
+/*-- 16.06.2009 14:22:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtUserConfigChangeListener_Impl::disposing( const lang::EventObject& rSource ) throw(RuntimeException)
+{
+    try
+    {
+        uno::Reference< util::XChangesNotifier > xChgNot( rSource.Source, UNO_QUERY_THROW);
+        xChgNot->removeChangesListener(this);
+    }
+    catch(Exception& )
+    {
+    }
 }
 
 // class SvtUserOptions_Impl ---------------------------------------------
 
 // -----------------------------------------------------------------------
-SvtUserOptions_Impl::SvtUserOptions_Impl()
+SvtUserOptions_Impl::SvtUserOptions_Impl() :
+    m_xChangeListener( new SvtUserConfigChangeListener_Impl(*this) )
 {
     try
     {
@@ -181,6 +206,14 @@ SvtUserOptions_Impl::SvtUserOptions_Impl()
             css::uno::UNO_QUERY );
 
         m_xData = css::uno::Reference< css::beans::XPropertySet >(m_xCfg, css::uno::UNO_QUERY);
+        uno::Reference< util::XChangesNotifier > xChgNot( m_xCfg, UNO_QUERY);
+        try
+        {
+            xChgNot->addChangesListener( m_xChangeListener );
+        }
+        catch(RuntimeException& )
+        {
+        }
     }
     catch(const css::uno::Exception& ex)
     {
@@ -743,6 +776,12 @@ void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
 
 // -----------------------------------------------------------------------
 
+void SvtUserOptions_Impl::Notify()
+{
+    Broadcast( SfxSimpleHint( SFX_HINT_USER_OPTIONS_CHANGED ) );
+}
+// -----------------------------------------------------------------------
+
 sal_Bool SvtUserOptions_Impl::IsTokenReadonly( USHORT nToken ) const
 {
     css::uno::Reference< css::beans::XPropertySet >     xData(m_xCfg, css::uno::UNO_QUERY);
@@ -906,7 +945,7 @@ SvtUserOptions::SvtUserOptions()
     }
     ++nRefCount;
     pImp = pOptions;
-    //StartListening( *pImp);
+    StartListening( *pImp);
 }
 
 // -----------------------------------------------------------------------

@@ -197,7 +197,14 @@ void ScannerThread::run()
 
 void ScannerManager::DestroyData()
 {
-    // unused
+    // was unused, now because of i99835: "Scanning interface not SANE API compliant"
+    // delete all SaneHolder to get Sane Dtor called
+    int i;
+    for ( i = allSanes.Count(); i > 0; i-- )
+    {
+        SaneHolder *pSaneHolder = allSanes.GetObject(i-1);
+        if ( pSaneHolder ) delete pSaneHolder;
+    }
 }
 
 // -----------------------------------------------------------------------------

@@ -32,6 +32,7 @@
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/chart/axiscontext.hxx"
 #include "oox/drawingml/chart/plotareamodel.hxx"
+#include "oox/drawingml/chart/seriescontext.hxx"
 #include "oox/drawingml/chart/titlecontext.hxx"
 #include "oox/drawingml/chart/typegroupcontext.hxx"
 
@@ -107,6 +108,8 @@ ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const A
         case C_TOKEN( sideWall ):
             switch( nElement )
             {
+                case C_TOKEN( pictureOptions ):
+                    return new PictureOptionsContext( *this, mrModel.mxPicOptions.create() );
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
             }

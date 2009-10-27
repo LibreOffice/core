@@ -481,6 +481,9 @@ void SdTransferable::AddSupportedFormats()
 
 sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 {
+    if (SD_MOD()==NULL)
+        return sal_False;
+
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool    bOK = sal_False;
 

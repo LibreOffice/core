@@ -51,10 +51,6 @@ public class ConditionalPrintExpressionReadHandler
 
     public ConditionalPrintExpressionReadHandler(final Element element)
     {
-        if (element == null)
-        {
-            throw new NullPointerException();
-        }
         this.element = element;
     }
 

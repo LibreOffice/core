@@ -53,7 +53,7 @@ namespace connectivity
                                         ::com::sun::star::sdbc::XMultipleResults,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
-        class OPreparedStatement :  public  OStatement_BASE2,
+        class OPreparedStatement :  public  OCommonStatement,
                                     public  OPreparedStatement_BASE
         {
         protected:
@@ -79,7 +79,7 @@ namespace connectivity
             ::rtl::OUString                             m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             sal_Bool                                    m_bPrepared;
-            OResultSet*                                 m_pResultSet;
+            ::rtl::Reference< OResultSet >              m_pResultSet;
             ::vos::ORef<connectivity::OSQLColumns>      m_xParamColumns;    // the parameter columns
             OValueRow                                   m_aParameterRow;
 
@@ -93,15 +93,17 @@ namespace connectivity
             virtual ~OPreparedStatement();
 
             virtual void SAL_CALL disposing();
-            virtual sal_Bool parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted = sal_False) throw (
-                           ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
 
-            virtual OResultSet* createResultSet();
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> initResultSet();
+            // OCommonStatement overridables
+            virtual StatementType
+                            parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted = sal_False) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
+            virtual void    initializeResultSet( OResultSet* _pResult );
+            virtual void    clearCachedResultSet();
+            virtual void    cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult );
+
 
             void checkAndResizeParameters(sal_Int32 parameterIndex);
             void setParameter(sal_Int32 parameterIndex, const ORowSetValue& x);
-
 
             sal_uInt32 AddParameter(connectivity::OSQLParseNode * pParameter,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
@@ -109,13 +111,11 @@ namespace connectivity
             void describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable);
             void describeParameter();
 
-            virtual void initializeResultSet( OResultSet* _pResult );
-
         public:
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql);
-            sal_Bool lateInit();
+            void lateInit();
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -153,8 +153,6 @@ namespace connectivity
             virtual void SAL_CALL setClob( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setArray( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XCloseable
-            virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XResultSetMetaDataSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XMultipleResults
@@ -163,9 +161,9 @@ namespace connectivity
             virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         public:
-            using OStatement_Base::executeQuery;
-            using OStatement_Base::executeUpdate;
-            using OStatement_Base::execute;
+            using OCommonStatement::executeQuery;
+            using OCommonStatement::executeUpdate;
+            using OCommonStatement::execute;
         protected:
             using OPropertySetHelper::getFastPropertyValue;
         };

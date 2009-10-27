@@ -75,8 +75,6 @@ class SetupAppX : public SetupApp
     LPTSTR      m_pAppTitle;
     LPTSTR      m_pCmdLine;
     LPTSTR      m_pDatabase;
-    LPTSTR      m_pInstMsiW;
-    LPTSTR      m_pInstMsiA;
     LPTSTR      m_pReqVersion;
     LPTSTR      m_pProductName;
     LPTSTR      m_pAdvertise;
@@ -123,7 +121,6 @@ private:
 
 
     boolean     GetCommandLine();
-    boolean     InstallMsi( LPCTSTR pInstaller );
 
     boolean     IsTerminalServerInstalled() const;
     void        AddFileToPatchList( TCHAR* pPath, TCHAR* pFile );

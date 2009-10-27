@@ -169,9 +169,14 @@ void MasterLayoutDialog::remove( PresObjKind eKind )
 
     if( pObject )
     {
-        mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
+        const bool bUndo = mpDoc->IsUndoEnabled();
+        if( bUndo )
+            mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
         SdrObjList* pOL =pObject->GetObjList();
         UINT32 nOrdNum=pObject->GetOrdNumDirect();
         pOL->RemoveObject(nOrdNum);
+
+        if( !bUndo )
+            SdrObject::Free(pObject);
     }
 }

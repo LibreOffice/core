@@ -6,23 +6,25 @@
 # Copyright (c) 2005 Sun Microsystems, Inc.
 #
 
-if($#ARGV != 2)
+if($#ARGV != 3)
 {
-    die "usage: checknewapi <new_type_library> <reference_type_library> <buildinfodescr>\n";
+    die "usage: checknewapi <new_type_library> <reference_type_library> <buildinfodescr> <fullpath_regview>\n";
 }
 
 -e "$ARGV[0]" || die "ERROR: type library \"$ARGV[0]\" does not exist\n";
 -e "$ARGV[1]" || die "ERROR: reference type library \"$ARGV[1]\" does not exist\n";
+-e "$ARGV[3]" || die "ERROR: invalid path to the regview tool \"$ARGV[3]\", please specify the full qualified path\n";
 
 # debug flag
 $DEBUG = 0;
 
 $main::buildinfo = "$ARGV[2]";
+$main::regview = "$ARGV[3]";
 %{$main::reftypes} = ();
 %{$main::currenttypes} = ();
 %{$main::removedtypes} = ();
 
-open ( FILEIN, "regview \"$ARGV[0]\" |" ) || die "could not use content of current typelibrary \"$ARGV[0]\", regview doesn't work\n";
+open ( FILEIN, "$main::regview \"$ARGV[0]\" |" ) || die "could not use content of current typelibrary \"$ARGV[0]\", regview doesn't work\n";
 
 if ($DEBUG == 1)
 {
@@ -74,7 +76,7 @@ while (<FILEIN>)
 close( FILEIN );
 close( CURRENT );
 
-open ( FILEIN, "regview \"$ARGV[1]\" |" ) || die "could not use content of reference type library \"$ARGV[1]\", regview doesn't work\n";
+open ( FILEIN, "$main::regview \"$ARGV[1]\" |" ) || die "could not use content of reference type library \"$ARGV[1]\", regview doesn't work\n";
 
 if ($DEBUG == 1)
 {

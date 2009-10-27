@@ -45,6 +45,7 @@
 #include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include "com/sun/star/style/VerticalAlignment.hpp"
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/util/SortFieldType.hpp>
 #include <com/sun/star/table/CellOrientation.hpp>
@@ -275,42 +276,89 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
-    switch ( (SvxCellVerJustify)GetValue() )
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
     {
-        case SVX_VER_JUSTIFY_STANDARD: eUno = table::CellVertJustify_STANDARD; break;
-        case SVX_VER_JUSTIFY_TOP:      eUno = table::CellVertJustify_TOP;       break;
-        case SVX_VER_JUSTIFY_CENTER:   eUno = table::CellVertJustify_CENTER;    break;
-        case SVX_VER_JUSTIFY_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;    break;
-        default: ; //prevent warning
+        case MID_HORJUST_ADJUST:
+            {
+                style::VerticalAlignment eUno = style::VerticalAlignment_TOP;
+                switch ( (SvxCellVerJustify)GetValue() )
+                {
+                    case SVX_VER_JUSTIFY_TOP:      eUno = style::VerticalAlignment_TOP;     break;
+                    case SVX_VER_JUSTIFY_CENTER:   eUno = style::VerticalAlignment_MIDDLE;  break;
+                    case SVX_VER_JUSTIFY_BOTTOM:   eUno = style::VerticalAlignment_BOTTOM;  break;
+                    default: ; //prevent warning
+                }
+                rVal <<= eUno;
+                break;
+            }
+        default:
+            {
+                table::CellVertJustify eUno = table::CellVertJustify_STANDARD;
+                switch ( (SvxCellVerJustify)GetValue() )
+                {
+                    case SVX_VER_JUSTIFY_STANDARD: eUno = table::CellVertJustify_STANDARD; break;
+                    case SVX_VER_JUSTIFY_TOP:      eUno = table::CellVertJustify_TOP;       break;
+                    case SVX_VER_JUSTIFY_CENTER:   eUno = table::CellVertJustify_CENTER;    break;
+                    case SVX_VER_JUSTIFY_BOTTOM:   eUno = table::CellVertJustify_BOTTOM;    break;
+                    default: ; //prevent warning
+                }
+                rVal <<= eUno;
+                break;
+            }
     }
-    rVal <<= eUno;
     return sal_True;
 }
 
-sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    table::CellVertJustify eUno;
-    if(!(rVal >>= eUno))
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
     {
-        sal_Int32 nValue = 0;
-        if(!(rVal >>= nValue))
-            return sal_False;
-        eUno = (table::CellVertJustify)nValue;
-    }
+        case MID_HORJUST_ADJUST:
+            {
+                //  property contains ParagraphAdjust values as sal_Int16
+                style::VerticalAlignment nVal = style::VerticalAlignment_TOP;
+                if(!(rVal >>= nVal))
+                    return sal_False;
 
-    SvxCellVerJustify eSvx = SVX_VER_JUSTIFY_STANDARD;
-    switch (eUno)
-    {
-        case table::CellVertJustify_STANDARD: eSvx = SVX_VER_JUSTIFY_STANDARD; break;
-        case table::CellVertJustify_TOP:       eSvx = SVX_VER_JUSTIFY_TOP;      break;
-        case table::CellVertJustify_CENTER:   eSvx = SVX_VER_JUSTIFY_CENTER;    break;
-        case table::CellVertJustify_BOTTOM:   eSvx = SVX_VER_JUSTIFY_BOTTOM;    break;
-        default: ; //prevent warning
+                SvxCellVerJustify eSvx = SVX_VER_JUSTIFY_STANDARD;
+                switch (nVal)
+                {
+                    case style::VerticalAlignment_TOP:      eSvx = SVX_VER_JUSTIFY_TOP;     break;
+                    case style::VerticalAlignment_MIDDLE:   eSvx = SVX_VER_JUSTIFY_CENTER;  break;
+                    case style::VerticalAlignment_BOTTOM:   eSvx = SVX_VER_JUSTIFY_BOTTOM;  break;
+                    default:;
+                }
+                SetValue( (USHORT)eSvx );
+                break;
+            }
+        default:
+            {
+                table::CellVertJustify eUno;
+                if(!(rVal >>= eUno))
+                {
+                    sal_Int32 nValue = 0;
+                    if(!(rVal >>= nValue))
+                        return sal_False;
+                    eUno = (table::CellVertJustify)nValue;
+                }
+
+                SvxCellVerJustify eSvx = SVX_VER_JUSTIFY_STANDARD;
+                switch (eUno)
+                {
+                    case table::CellVertJustify_STANDARD: eSvx = SVX_VER_JUSTIFY_STANDARD;  break;
+                    case table::CellVertJustify_TOP:      eSvx = SVX_VER_JUSTIFY_TOP;       break;
+                    case table::CellVertJustify_CENTER:   eSvx = SVX_VER_JUSTIFY_CENTER;    break;
+                    case table::CellVertJustify_BOTTOM:   eSvx = SVX_VER_JUSTIFY_BOTTOM;    break;
+                    default: ; //prevent warning
+                }
+                SetValue( (USHORT)eSvx );
+                break;
+            }
     }
-    SetValue( (USHORT)eSvx );
 
     return sal_True;
 }

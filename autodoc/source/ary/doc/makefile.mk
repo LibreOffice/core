@@ -52,25 +52,9 @@ PRJINC=$(PRJ)$/source
 OBJFILES= \
     $(OBJ)$/d_boolean.obj           \
     $(OBJ)$/d_docu.obj              \
-    $(OBJ)$/d_hypertext.obj         \
-    $(OBJ)$/d_namedlist.obj         \
     $(OBJ)$/d_node.obj              \
     $(OBJ)$/d_oldcppdocu.obj        \
-    $(OBJ)$/d_oldidldocu.obj        \
-    $(OBJ)$/d_summary.obj           \
-    $(OBJ)$/d_struct.obj            \
-    $(OBJ)$/d_unit.obj              \
-    $(OBJ)$/dht_component.obj       \
-    $(OBJ)$/dht_helper.obj          \
-    $(OBJ)$/dht_html.obj            \
-    $(OBJ)$/dht_link2ce.obj         \
-    $(OBJ)$/dht_link2param.obj      \
-    $(OBJ)$/dht_link2unknown.obj    \
-    $(OBJ)$/dht_link2url.obj        \
-    $(OBJ)$/dht_plain.obj           \
-    $(OBJ)$/dht_stream.obj          \
-    $(OBJ)$/dht_white.obj
-
+    $(OBJ)$/d_oldidldocu.obj
 
 
 # --- Targets ------------------------------------------------------

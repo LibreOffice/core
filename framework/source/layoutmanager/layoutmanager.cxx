@@ -86,6 +86,7 @@
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -107,7 +108,7 @@
 #include <svtools/cmdoptions.hxx>
 
 #include <algorithm>
-
+#include <boost/bind.hpp>
 // ______________________________________________
 //  using namespace
 
@@ -130,6 +131,26 @@ using namespace ::com::sun::star::frame;
 // This value is directly copied from the sfx2 project.
 // You have to change BOTH values, see sfx2/inc/sfx2/sfxsids.hrc (SID_DOCKWIN_START)
 static const sal_Int32 DOCKWIN_ID_BASE = 9800;
+
+bool lcl_checkUIElement(const Reference< XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize,Reference< css::awt::XWindow >& _xWindow)
+{
+    bool bRet = xUIElement.is();
+    if ( bRet )
+    {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        _xWindow.set( xUIElement->getRealInterface(), UNO_QUERY );
+        _rPosSize = _xWindow->getPosSize();
+
+        Window* pWindow = VCLUnoHelper::GetWindow( _xWindow );
+        if ( pWindow->GetType() == WINDOW_TOOLBOX )
+        {
+            ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
+            _rPosSize.Width = aSize.Width();
+            _rPosSize.Height = aSize.Height();
+        }
+    } // if ( xUIElement.is() )
+    return bRet;
+}
 
 // convert alignment constant to vcl's WindowAlign type
 static WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
@@ -200,15 +221,10 @@ bool LayoutManager::UIElement::operator< ( const LayoutManager::UIElement& aUIEl
                         bool bEqual = ( m_aDockedData.m_aPos.X() == aUIElement.m_aDockedData.m_aPos.X() );
                         if ( bEqual )
                         {
-                            if ( m_bUserActive && !aUIElement.m_bUserActive )
-                                return sal_True;
-                            else if ( !m_bUserActive && aUIElement.m_bUserActive )
-                                return sal_False;
-                            else
-                                return sal_False;
+                            return m_bUserActive && !aUIElement.m_bUserActive;
                         }
                         else
-                            return ( m_aDockedData.m_aPos.X() <= aUIElement.m_aDockedData.m_aPos.X() );
+                            return ( m_aDockedData.m_aPos.X() < aUIElement.m_aDockedData.m_aPos.X() );
                     }
                 }
                 else
@@ -220,15 +236,10 @@ bool LayoutManager::UIElement::operator< ( const LayoutManager::UIElement& aUIEl
                         bool bEqual = ( m_aDockedData.m_aPos.Y() == aUIElement.m_aDockedData.m_aPos.Y() );
                         if ( bEqual )
                         {
-                            if ( m_bUserActive && !aUIElement.m_bUserActive )
-                                return sal_True;
-                            else if ( !m_bUserActive && aUIElement.m_bUserActive )
-                                return sal_False;
-                            else
-                                return sal_False;
+                            return m_bUserActive && !aUIElement.m_bUserActive;
                         }
                         else
-                            return ( m_aDockedData.m_aPos.Y() <= aUIElement.m_aDockedData.m_aPos.Y() );
+                            return ( m_aDockedData.m_aPos.Y() < aUIElement.m_aDockedData.m_aPos.Y() );
                     }
                 }
             }
@@ -394,7 +405,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   ::cppu::OWeakObject         (                                                   )
         ,   m_xSMGR( xServiceManager )
         ,   m_xURLTransformer( Reference< XURLTransformer >( xServiceManager->createInstance(
-                                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
+                                                                SERVICENAME_URLTRANSFORMER),
                                                              UNO_QUERY ))
         ,   m_nLockCount( 0 )
         ,   m_bActive( sal_False )
@@ -493,8 +504,7 @@ void LayoutManager::impl_clearUpMenuBar()
                 {
                     try
                     {
-                        Any a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" )));
-                        a >>= xMenuBar;
+                        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
                     }
                     catch ( com::sun::star::beans::UnknownPropertyException )
                     {
@@ -821,7 +831,8 @@ void LayoutManager::implts_destroyDockingAreaWindows()
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    for ( sal_Int32 i=0; i < (sal_Int32)oldDockingAreaWindows.size(); i++ )
+    const sal_uInt32 nCount = oldDockingAreaWindows.size();
+    for ( sal_uInt32 i=0; i < nCount; i++ )
     {
         if ( oldDockingAreaWindows[i].is() )
         {
@@ -957,13 +968,13 @@ void LayoutManager::implts_createAddonsToolBars()
 
     Sequence< PropertyValue > aPropSeq( 2 );
     aPropSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
-    aPropSeq[0].Value = makeAny( xFrame );
+    aPropSeq[0].Value <<= xFrame;
     aPropSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ConfigurationData" ));
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         ::rtl::OUString aAddonToolBarName( aAddonsToolBarStaticName + m_pAddonOptions->GetAddonsToolbarResourceName(i) );
         aAddonToolBarData = m_pAddonOptions->GetAddonsToolBarPart( i );
-        aPropSeq[1].Value = makeAny( aAddonToolBarData );
+        aPropSeq[1].Value <<= aAddonToolBarData;
 
         aWriteLock.lock();
         UIElement aElement = impl_findElement( aAddonToolBarName );
@@ -1072,15 +1083,16 @@ void LayoutManager::implts_createNonContextSensitiveToolBars()
 
     try
     {
-        rtl::OUString aElementType;
-        rtl::OUString aElementName;
-        rtl::OUString aName;
-
-        Reference< ::com::sun::star::ui::XUIElement > xUIElement;
         Sequence< rtl::OUString > aToolbarNames = xPersistentWindowState->getElementNames();
 
         if ( aToolbarNames.getLength() > 0 )
         {
+            rtl::OUString aElementType;
+            rtl::OUString aElementName;
+            rtl::OUString aName;
+
+            Reference< ::com::sun::star::ui::XUIElement > xUIElement;
+            aMakeVisibleToolbars.reserve(aToolbarNames.getLength());
             WriteGuard aWriteLock( m_aLock );
 
             const rtl::OUString* pTbNames = aToolbarNames.getConstArray();
@@ -1120,12 +1132,10 @@ void LayoutManager::implts_createNonContextSensitiveToolBars()
     {
     }
 
-    if ( aMakeVisibleToolbars.size() > 0 )
+    if ( !aMakeVisibleToolbars.empty() )
     {
         implts_lock();
-        for ( sal_uInt32 i = 0; i < aMakeVisibleToolbars.size(); i++ )
-            requestElement( aMakeVisibleToolbars[i] );
-
+        ::std::for_each( aMakeVisibleToolbars.begin(), aMakeVisibleToolbars.end(),::boost::bind( &LayoutManager::requestElement, this,_1 ));
         implts_unlock();
     }
 }
@@ -1368,7 +1378,8 @@ void LayoutManager::implts_refreshContextToolbarsVisibility()
     aReadLock.unlock();
 
     UIElement aUIElement;
-    for ( sal_uInt32 i = 0; i < aToolbarVisibleVector.size(); i++ )
+    const sal_uInt32 nCount = aToolbarVisibleVector.size();
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         UIElementVisibility& rToolbar = aToolbarVisibleVector[i];
 
@@ -1411,10 +1422,8 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
 
         try
         {
-            Any a;
             Sequence< PropertyValue > aWindowState;
-            a = xPersistentWindowState->getByName( aName );
-            if ( a >>= aWindowState )
+            if ( xPersistentWindowState->getByName( aName ) >>= aWindowState )
             {
                 sal_Bool bValue( sal_False );
                 for ( sal_Int32 n = 0; n < aWindowState.getLength(); n++ )
@@ -1579,18 +1588,18 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
             aPos.X = rElementData.m_aDockedData.m_aPos.X();
             aPos.Y = rElementData.m_aDockedData.m_aPos.Y();
             aWindowState[3].Name    = m_aPropDockPos;
-            aWindowState[3].Value   = makeAny( aPos );
+            aWindowState[3].Value   <<= aPos;
 
             aPos.X = rElementData.m_aFloatingData.m_aPos.X();
             aPos.Y = rElementData.m_aFloatingData.m_aPos.Y();
             aWindowState[4].Name    = m_aPropPos;
-            aWindowState[4].Value   = makeAny( aPos );
+            aWindowState[4].Value   <<= aPos;
 
             css::awt::Size aSize;
             aSize.Width = rElementData.m_aFloatingData.m_aSize.Width();
             aSize.Height = rElementData.m_aFloatingData.m_aSize.Height();
             aWindowState[5].Name    = m_aPropSize;
-            aWindowState[5].Value   = makeAny( aSize );
+            aWindowState[5].Value   <<= aSize;
             aWindowState[6].Name    = m_aPropUIName;
             aWindowState[6].Value   = makeAny( rElementData.m_aUIName );
             aWindowState[7].Name    = m_aPropLocked;
@@ -1799,7 +1808,7 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
         {
             Reference< css::awt::XDockableWindow > xDockWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
             Reference< css::awt::XWindow > xWindow( xDockWindow, UNO_QUERY );
-            if ( xDockWindow.is() && xWindow.is() && xDockWindow->isFloating() )
+            if ( xDockWindow.is() && xDockWindow->isFloating() )
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -1864,7 +1873,8 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
 
     implts_getDockingAreaElementInfos( DockingArea, aRowColumnsWindowData );
     sal_Int32 nPixelPos( 0 );
-    for ( sal_Int32 i = 0; i < sal_Int32( aRowColumnsWindowData.size()); i++ )
+    const sal_uInt32 nCount = aRowColumnsWindowData.size();
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         SingleRowColumnWindowData& rRowColumnWindowData = aRowColumnsWindowData[i];
 
@@ -1877,7 +1887,8 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
         {
             // Check current row where we can find the needed space
             sal_Int32 nCurrPos( 0 );
-            for ( sal_Int32 j = 0; j < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size()); j++ )
+            const sal_uInt32 nWindowSizesCount = rRowColumnWindowData.aRowColumnWindowSizes.size();
+            for ( sal_uInt32 j = 0; j < nWindowSizesCount; j++ )
             {
                 css::awt::Rectangle rRect   = rRowColumnWindowData.aRowColumnWindowSizes[j];
                 sal_Int32&          rSpace  = rRowColumnWindowData.aRowColumnSpace[j];
@@ -1999,7 +2010,8 @@ void LayoutManager::implts_sortUIElements()
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
-        if ( pIter->m_bUserActive )
+        // why check, just set it to false
+        //if ( pIter->m_bUserActive )
             pIter->m_bUserActive = sal_False;
     }
 
@@ -2021,24 +2033,22 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
+    aWindowVector.reserve(m_aUIElements.size());
     xDockAreaWindow = m_xDockAreaWindows[eDockingArea];
     UIElementVector::iterator   pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
-        if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea )
+        if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea && pIter->m_bVisible && !pIter->m_bFloating )
         {
             Reference< XUIElement > xUIElement( pIter->m_xUIElement );
             if ( xUIElement.is() )
             {
                 Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
-                if ( xWindow.is() )
+                Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
+                if ( xDockWindow.is() )
                 {
-                    Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-                    if ( xDockWindow.is() && pIter->m_bVisible && !pIter->m_bFloating )
-                    {
-                        // docked windows
-                        aWindowVector.push_back( *pIter );
-                    }
+                    // docked windows
+                    aWindowVector.push_back( *pIter );
                 }
             }
         }
@@ -2068,29 +2078,15 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
     else
         nLastRowColPixelPos = aDockAreaRect.Width;
 
-    for ( j = 0; j < sal_Int32( aWindowVector.size()); j++ )
+    const sal_uInt32 nCount = aWindowVector.size();
+    for ( j = 0; j < sal_Int32( nCount); j++ )
     {
         const UIElement& rElement = aWindowVector[j];
         Reference< css::awt::XWindow > xWindow;
         Reference< XUIElement > xUIElement( rElement.m_xUIElement );
         css::awt::Rectangle aPosSize;
-        if ( xUIElement.is() )
-        {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            xWindow = Reference< css::awt::XWindow >( xUIElement->getRealInterface(), UNO_QUERY );
-            aPosSize = xWindow->getPosSize();
-
-            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if ( pWindow->GetType() == WINDOW_TOOLBOX )
-            {
-                ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
-                aPosSize.Width = aSize.Width();
-                aPosSize.Height = aSize.Height();
-            }
-        }
-        else
+        if ( !lcl_checkUIElement(xUIElement,aPosSize,xWindow) )
             continue;
-
         if (( eDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
             ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
         {
@@ -2225,7 +2221,8 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
     UIElementVector::iterator   pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    UIElementVector::iterator   pEnd = m_aUIElements.end();
+    for ( pIter = m_aUIElements.begin(); pIter != pEnd; pIter++ )
     {
         if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea )
         {
@@ -2268,33 +2265,21 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
     sal_Int32 j;
     sal_Int32 nLastPos( 0 );
 
-    for ( j = 0; j < sal_Int32( aWindowVector.size()); j++ )
+    const sal_uInt32 nCount = aWindowVector.size();
+    for ( j = 0; j < sal_Int32( nCount); j++ )
     {
         const UIElement& rElement = aWindowVector[j];
         Reference< css::awt::XWindow > xWindow;
         Reference< XUIElement > xUIElement( rElement.m_xUIElement );
         css::awt::Rectangle aPosSize;
-        if ( xUIElement.is() )
-        {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            xWindow = Reference< css::awt::XWindow >( xUIElement->getRealInterface(), UNO_QUERY );
-            aPosSize = xWindow->getPosSize();
-
-            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if ( pWindow->GetType() == WINDOW_TOOLBOX )
-            {
-                ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
-                aPosSize.Width = aSize.Width();
-                aPosSize.Height = aSize.Height();
-            }
-        }
-        else
+        if ( !lcl_checkUIElement(xUIElement,aPosSize,xWindow) )
             continue;
 
+        sal_Int32 nSpace;
         if (( eDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
             ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
         {
-            sal_Int32 nSpace( rElement.m_aDockedData.m_aPos.X() - nLastPos );
+            nSpace = ( rElement.m_aDockedData.m_aPos.X() - nLastPos );
 
             // Calc space before an element and store it
             if ( rElement.m_aDockedData.m_aPos.X() > nLastPos )
@@ -2302,11 +2287,9 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
             else
                 nSpace = 0;
 
-            rRowColumnWindowData.aRowColumnSpace.push_back( nSpace );
             nLastPos = rElement.m_aDockedData.m_aPos.X() + aPosSize.Width;
 
-            rRowColumnWindowData.aRowColumnWindows.push_back( xWindow );
-            rRowColumnWindowData.aUIElementNames.push_back( rElement.m_aName );
+
             rRowColumnWindowData.aRowColumnWindowSizes.push_back(
                 css::awt::Rectangle( rElement.m_aDockedData.m_aPos.X(),
                                      rElement.m_aDockedData.m_aPos.Y(),
@@ -2314,21 +2297,19 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
                                      aPosSize.Height ));
             if ( rRowColumnWindowData.nStaticSize < aPosSize.Height )
                 rRowColumnWindowData.nStaticSize = aPosSize.Height;
-            rRowColumnWindowData.nVarSize += aPosSize.Width + nSpace;
+            rRowColumnWindowData.nVarSize += aPosSize.Width;
         }
         else
         {
             // Calc space before an element and store it
-            sal_Int32 nSpace( rElement.m_aDockedData.m_aPos.Y() - nLastPos );
+            nSpace = ( rElement.m_aDockedData.m_aPos.Y() - nLastPos );
             if ( rElement.m_aDockedData.m_aPos.Y() > nLastPos )
                 rRowColumnWindowData.nSpace += nSpace;
             else
                 nSpace = 0;
-            rRowColumnWindowData.aRowColumnSpace.push_back( nSpace );
+
             nLastPos = rElement.m_aDockedData.m_aPos.Y() + aPosSize.Height;
 
-            rRowColumnWindowData.aRowColumnWindows.push_back( xWindow );
-            rRowColumnWindowData.aUIElementNames.push_back( rElement.m_aName );
             rRowColumnWindowData.aRowColumnWindowSizes.push_back(
                 css::awt::Rectangle( rElement.m_aDockedData.m_aPos.X(),
                                      rElement.m_aDockedData.m_aPos.Y(),
@@ -2336,8 +2317,13 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
                                      aPosSize.Height ));
             if ( rRowColumnWindowData.nStaticSize < aPosSize.Width )
                 rRowColumnWindowData.nStaticSize = aPosSize.Width;
-            rRowColumnWindowData.nVarSize += aPosSize.Height + nSpace;
+            rRowColumnWindowData.nVarSize += aPosSize.Height;
         }
+
+        rRowColumnWindowData.aUIElementNames.push_back( rElement.m_aName );
+        rRowColumnWindowData.aRowColumnWindows.push_back( xWindow );
+        rRowColumnWindowData.aRowColumnSpace.push_back( nSpace );
+        rRowColumnWindowData.nVarSize += nSpace;
     }
 }
 
@@ -2354,13 +2340,14 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
                               ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ));
 
     implts_getDockingAreaElementInfoOnSingleRowCol( eDockingArea, nRowCol, aRowColumnWindowData );
-    if ( aRowColumnWindowData.aRowColumnWindows.size() == 0 )
+    if ( aRowColumnWindowData.aRowColumnWindows.empty() )
         return rMovedElementRect;
     else
     {
         sal_Int32 nSpace( 0 );
         ::Rectangle aFrontDockingRect( rMovedElementRect );
-        for ( sal_uInt32 i = 0; i < aRowColumnWindowData.aRowColumnWindows.size(); i++ )
+        const sal_uInt32 nCount = aRowColumnWindowData.aRowColumnWindows.size();
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             if ( bHorzDockArea )
             {
@@ -2415,7 +2402,7 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
         ( DockingArea > DockingArea_DOCKINGAREA_RIGHT ))
         DockingArea = DockingArea_DOCKINGAREA_TOP;
 
-    if ( rRowColumnWindowData.aRowColumnWindows.size() == 0 )
+    if ( rRowColumnWindowData.aRowColumnWindows.empty() )
         return aWinRect;
     else
     {
@@ -2432,7 +2419,8 @@ void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea 
         Window* pDockingAreaWindow( VCLUnoHelper::GetWindow( xDockingAreaWindow ));
         if ( pDockingAreaWindow && pContainerWindow )
         {
-            for ( sal_uInt32 i = 0; i < rRowColumnWindowData.aRowColumnWindows.size(); i++ )
+            const sal_uInt32 nCount = rRowColumnWindowData.aRowColumnWindows.size();
+            for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
                 css::awt::Rectangle aWindowRect = rRowColumnWindowData.aRowColumnWindows[i]->getPosSize();
                 ::Rectangle aRect( aWindowRect.X, aWindowRect.Y, aWindowRect.X+aWindowRect.Width, aWindowRect.Y+aWindowRect.Height );
@@ -2660,7 +2648,8 @@ void LayoutManager::implts_calcDockingPosSize(
     // determine current first row/column and last row/column
     sal_Int32 nMaxRowCol( -1 );
     sal_Int32 nMinRowCol( SAL_MAX_INT32 );
-    for ( sal_uInt32 i = 0; i < aRowColumnsWindowData.size(); i++ )
+    const sal_uInt32 nCount = aRowColumnsWindowData.size();
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         if ( aRowColumnsWindowData[i].nRowColumn > nMaxRowCol )
             nMaxRowCol = aRowColumnsWindowData[i].nRowColumn;
@@ -2676,7 +2665,8 @@ void LayoutManager::implts_calcDockingPosSize(
         ::Rectangle aWindowRect;
         ::Rectangle aRowColumnRect;
 
-        for ( sal_uInt32 i = 0; i < aRowColumnsWindowData.size(); i++ )
+        const sal_uInt32 nWindowDataCount = aRowColumnsWindowData.size();
+        for ( sal_uInt32 i = 0; i < nWindowDataCount; i++ )
         {
             ::Rectangle aRect( aRowColumnsWindowData[i].aRowColumnRect.X,
                                aRowColumnsWindowData[i].aRowColumnRect.Y,
@@ -3078,11 +3068,6 @@ void LayoutManager::implts_renumberRowColumnData(
     return aSize;
 }
 
-void LayoutManager::implts_sortActiveElement( const UIElement&  )
-{
-    implts_sortUIElements();
-}
-
 Reference< XUIElement > LayoutManager::implts_createElement( const rtl::OUString& aName )
 {
     Reference< ::com::sun::star::ui::XUIElement > xUIElement;
@@ -3163,6 +3148,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     }
 
     ReadGuard aReadLock( m_aLock );
+    aWinVector.reserve(m_aUIElements.size());
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
@@ -3187,7 +3173,8 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     try
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
-        for ( sal_uInt32 i = 0; i < aWinVector.size(); i++ )
+        const sal_uInt32 nCount = aWinVector.size();
+        for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             Reference< css::awt::XWindow > xWindow( aWinVector[i] );
             if ( xWindow.is() )
@@ -3653,7 +3640,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Reference< XDispatchProvider > xDispatchProvider;
 
             MenuBar* pMenuBar = new MenuBar;
-            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
+            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, m_xURLTransformer,xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
@@ -3895,9 +3882,10 @@ throw ( RuntimeException )
     else
         implts_destroyElements(); // remove all elements
 
-    if ( oldDockingAreaWindows.size() > 0 )
+    if ( !oldDockingAreaWindows.empty() )
     {
-        for ( sal_Int32 i=0; i < (sal_Int32)oldDockingAreaWindows.size(); i++ )
+        const sal_uInt32 nCount = oldDockingAreaWindows.size();
+        for ( sal_uInt32 i = 0; i < nCount; ++i )
         {
             if ( oldDockingAreaWindows[i].is() )
             {
@@ -4079,7 +4067,8 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
                 aReadLock.unlock();
                 /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-                for ( sal_uInt32 i = 0; i < aListenerArray.size(); i++ )
+                const sal_uInt32 nCount = aListenerArray.size();
+                for ( sal_uInt32 i = 0; i < nCount; ++i )
                 {
                     try
                     {
@@ -4125,7 +4114,6 @@ throw (RuntimeException)
     ReadGuard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
     Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
-    Reference< XModel >          xModel;
     sal_Bool    bInPlaceMenu = m_bInplaceMenuSet;
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -4133,7 +4121,7 @@ throw (RuntimeException)
     if ( !xFrame.is() )
         return;
 
-    xModel = impl_getModelFromFrame( xFrame );
+    Reference< XModel >  xModel( impl_getModelFromFrame( xFrame ) );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
@@ -4147,7 +4135,7 @@ throw (RuntimeException)
     implts_findElement( aName, aElementType, aElementName, xUIElement );
     bFound = xUIElement.is();
 
-    if ( xFrame.is() && m_xContainerWindow.is() && !implts_isPreviewModel( xModel ) ) // no bars on preview mode
+    if ( /*xFrame.is() && */m_xContainerWindow.is() && !implts_isPreviewModel( xModel ) ) // no bars on preview mode
     {
         if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
         {
@@ -4243,8 +4231,7 @@ throw (RuntimeException)
                         {
                             try
                             {
-                                Any a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" )));
-                                a >>= xMenuBar;
+                                xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ))) >>= xMenuBar;
                             }
                             catch ( com::sun::star::beans::UnknownPropertyException )
                             {
@@ -4263,13 +4250,11 @@ throw (RuntimeException)
                                 if ( pMenuBar )
                                 {
                                     pSysWindow->SetMenuBar( pMenuBar );
+                                    pMenuBar->SetDisplayable( m_bMenuVisible );
                                     if ( m_bMenuVisible )
                                     {
-                                        pMenuBar->SetDisplayable( sal_True );
                                         bNotify = sal_True;
                                     }
-                                    else
-                                        pMenuBar->SetDisplayable( sal_False );
                                     implts_updateMenuBarClose();
                                 }
                             }
@@ -4304,8 +4289,7 @@ throw (RuntimeException)
     if ( bNotify )
     {
         // UI element is invisible - provide information to listeners
-        uno::Any a = uno::makeAny( aName );
-        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, a );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::makeAny( aName ) );
     }
 }
 
@@ -4362,7 +4346,7 @@ throw (RuntimeException)
             {
                 if ( pIter->m_aName == aName )
                 {
-                    xComponent = Reference< XComponent >( pIter->m_xUIElement, UNO_QUERY );
+                    xComponent.set( pIter->m_xUIElement, UNO_QUERY );
                     Reference< XUIElement > xUIElement( pIter->m_xUIElement );
                     if ( xUIElement.is() )
                     {
@@ -4444,8 +4428,7 @@ throw (RuntimeException)
     if ( bNotify )
     {
         // UI element is invisible - provide information to listeners
-        uno::Any a = uno::makeAny( aName );
-        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, a );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::makeAny( aName ) );
     }
 }
 
@@ -4530,7 +4513,7 @@ throw (::com::sun::star::uno::RuntimeException)
                             if ( xDockWindow.is() && xDockWindow->isFloating() )
                                 bShowElement = ( bShowElement && xContainerWindow->isActive() );
 
-                            if ( xWindow.is() && xDockWindow.is() && bShowElement )
+                            if ( xDockWindow.is() && bShowElement )
                             {
                                 pIter->m_bVisible = sal_True;
                                 aWriteLock.unlock();
@@ -4550,9 +4533,9 @@ throw (::com::sun::star::uno::RuntimeException)
                                 }
 
                                 bResult = sal_False;
-                                break;
                             }
-                        }
+                        } // if ( pIter->m_xUIElement.is() )
+                        break;
                     }
                 }
 
@@ -4597,8 +4580,7 @@ throw (::com::sun::star::uno::RuntimeException)
     if ( bNotify )
     {
         // UI element is visible - provide information to listeners
-        uno::Any a = uno::makeAny( ResourceURL );
-        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, a );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::makeAny( ResourceURL ) );
     }
 
     return bResult;
@@ -4723,7 +4705,7 @@ throw (RuntimeException)
                     implts_writeWindowStateData( aUIElement.m_aName, aUIElement );
                     implts_sortUIElements();
 
-                    if ( xWindow.is() && xDockWindow.is() && bShowElement )
+                    if ( xDockWindow.is() && bShowElement )
                     {
                         // we need VCL here to pass special flags to Show()
                         vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -4739,7 +4721,8 @@ throw (RuntimeException)
                             doLayout();
 
                         bResult = sal_True;
-                    }
+                    } // if ( xDockWindow.is() && bShowElement )
+                    break;
                 }
             }
         }
@@ -4757,8 +4740,7 @@ throw (RuntimeException)
     if ( bNotify )
     {
         // UI element is visible - provide information to listeners
-        uno::Any a = uno::makeAny( aName );
-        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, a );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::makeAny( aName ) );
     }
 
     return bResult;
@@ -4839,7 +4821,7 @@ throw (RuntimeException)
                     Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
                     Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
-                    if ( xWindow.is() && xDockWindow.is() )
+                    if ( xDockWindow.is() )
                     {
                         pIter->m_bVisible = sal_False;
                         aWriteLock.unlock();
@@ -4852,7 +4834,8 @@ throw (RuntimeException)
 
                         bResult = sal_True;
                         bNotify = sal_True;
-                    }
+                    } // if ( xDockWindow.is() )
+                    break;
                 }
             }
         }
@@ -4870,8 +4853,7 @@ throw (RuntimeException)
     if ( bNotify )
     {
         // UI element is visible - provide information to listeners
-        uno::Any a = uno::makeAny( aName );
-        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, a );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::makeAny( aName ) );
     }
 
     return sal_False;
@@ -4882,96 +4864,93 @@ throw (RuntimeException)
 {
     UIElement aUIElement;
 
-    if ( implts_findElement( aName, aUIElement ))
+    if ( implts_findElement( aName, aUIElement ) && aUIElement.m_xUIElement.is() )
     {
-        if ( aUIElement.m_xUIElement.is() )
+        try
         {
-            try
+            Reference< css::awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+            Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
+            if ( xDockWindow.is() )
             {
-                Reference< css::awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-                Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-                if ( xWindow.is() &&  xDockWindow.is() )
+                if ( DockingArea != DockingArea_DOCKINGAREA_DEFAULT )
+                    aUIElement.m_aDockedData.m_nDockedArea = sal_Int16( DockingArea );
+
+                if (( Pos.X != SAL_MAX_INT32 ) && ( Pos.Y != SAL_MAX_INT32 ))
+                    aUIElement.m_aDockedData.m_aPos = ::Point( Pos.X, Pos.Y );
+
+                if ( !xDockWindow->isFloating() )
                 {
-                    if ( DockingArea != DockingArea_DOCKINGAREA_DEFAULT )
-                        aUIElement.m_aDockedData.m_nDockedArea = sal_Int16( DockingArea );
+                    Window*     pWindow( 0 );
+                    ToolBox*    pToolBox( 0 );
 
-                    if (( Pos.X != SAL_MAX_INT32 ) && ( Pos.Y != SAL_MAX_INT32 ))
-                        aUIElement.m_aDockedData.m_aPos = ::Point( Pos.X, Pos.Y );
-
-                    if ( !xDockWindow->isFloating() )
                     {
-                        Window*     pWindow( 0 );
-                        ToolBox*    pToolBox( 0 );
-
+                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        pWindow = VCLUnoHelper::GetWindow( xWindow );
+                        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
                         {
-                            vos::OGuard aGuard( Application::GetSolarMutex() );
-                            pWindow = VCLUnoHelper::GetWindow( xWindow );
-                            if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
-                            {
-                                pToolBox = (ToolBox *)pWindow;
+                            pToolBox = (ToolBox *)pWindow;
 
-                                // We have to set the alignment of the toolbox. It's possible that the toolbox is moved from a
-                                // horizontal to a vertical docking area!
-                                pToolBox->SetAlign( ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ));
-                            }
-                        }
-
-                        if (( aUIElement.m_aDockedData.m_aPos.X() == SAL_MAX_INT32 ) ||
-                            ( aUIElement.m_aDockedData.m_aPos.Y() == SAL_MAX_INT32 ))
-                        {
-                            // Docking on its default position without a preset position -
-                            // we have to find a good place for it.
-                            ::Size      aSize;
-
-                            vos::OGuard aGuard( Application::GetSolarMutex() );
-                            {
-                                if ( pToolBox )
-                                    aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
-                                else
-                                    aSize = pWindow->GetSizePixel();
-                            }
-
-                            ::Point aPixelPos;
-                            ::Point aDockPos;
-                            implts_findNextDockingPos( (::com::sun::star::ui::DockingArea)aUIElement.m_aDockedData.m_nDockedArea,
-                                                    aSize,
-                                                    aDockPos,
-                                                    aPixelPos );
-                            aUIElement.m_aDockedData.m_aPos = aDockPos;
+                            // We have to set the alignment of the toolbox. It's possible that the toolbox is moved from a
+                            // horizontal to a vertical docking area!
+                            pToolBox->SetAlign( ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ));
                         }
                     }
 
-                    WriteGuard aWriteLock( m_aLock );
-                    UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
-                    if ( rUIElement.m_aName == aName )
+                    if (( aUIElement.m_aDockedData.m_aPos.X() == SAL_MAX_INT32 ) ||
+                        ( aUIElement.m_aDockedData.m_aPos.Y() == SAL_MAX_INT32 ))
                     {
-                        rUIElement.m_aDockedData.m_nDockedArea = aUIElement.m_aDockedData.m_nDockedArea;
-                        rUIElement.m_aDockedData.m_aPos        = aUIElement.m_aDockedData.m_aPos;
-                    }
-                    aWriteLock.unlock();
+                        // Docking on its default position without a preset position -
+                        // we have to find a good place for it.
+                        ::Size      aSize;
 
-                    if ( xDockWindow->isFloating() )
-                    {
-                        // Will call toggle floating mode which will do the rest!
-                        xWindow->setVisible( sal_False );
-                        xDockWindow->setFloatingMode( sal_False );
-                        xWindow->setVisible( sal_True );
-                    }
-                    else
-                    {
-                        implts_writeWindowStateData( aName, aUIElement );
-                        implts_sortUIElements();
+                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        {
+                            if ( pToolBox )
+                                aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
+                            else
+                                aSize = pWindow->GetSizePixel();
+                        }
 
-                        if ( aUIElement.m_bVisible )
-                            doLayout();
+                        ::Point aPixelPos;
+                        ::Point aDockPos;
+                        implts_findNextDockingPos( (::com::sun::star::ui::DockingArea)aUIElement.m_aDockedData.m_nDockedArea,
+                                                aSize,
+                                                aDockPos,
+                                                aPixelPos );
+                        aUIElement.m_aDockedData.m_aPos = aDockPos;
                     }
-
-                    return sal_True;
                 }
+
+                WriteGuard aWriteLock( m_aLock );
+                UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
+                if ( rUIElement.m_aName == aName )
+                {
+                    rUIElement.m_aDockedData.m_nDockedArea = aUIElement.m_aDockedData.m_nDockedArea;
+                    rUIElement.m_aDockedData.m_aPos        = aUIElement.m_aDockedData.m_aPos;
+                }
+                aWriteLock.unlock();
+
+                if ( xDockWindow->isFloating() )
+                {
+                    // Will call toggle floating mode which will do the rest!
+                    xWindow->setVisible( sal_False );
+                    xDockWindow->setFloatingMode( sal_False );
+                    xWindow->setVisible( sal_True );
+                }
+                else
+                {
+                    implts_writeWindowStateData( aName, aUIElement );
+                    implts_sortUIElements();
+
+                    if ( aUIElement.m_bVisible )
+                        doLayout();
+                }
+
+                return sal_True;
             }
-            catch ( DisposedException& )
-            {
-            }
+        }
+        catch ( DisposedException& )
+        {
         }
     }
 
@@ -5000,7 +4979,8 @@ throw (RuntimeException)
             }
         }
 
-        for ( sal_uInt32 i = 0; i < aToolBarNameVector.size(); i++ )
+        const sal_uInt32 nCount = aToolBarNameVector.size();
+        for ( sal_uInt32 i = 0; i < nCount; ++i )
         {
             ::com::sun::star::awt::Point aPoint;
             aPoint.X = aPoint.Y = SAL_MAX_INT32;
@@ -5164,42 +5144,39 @@ throw (RuntimeException)
 {
     UIElement aUIElement;
 
-    if ( implts_findElement( aName, aUIElement ))
+    if ( implts_findElement( aName, aUIElement ) && aUIElement.m_xUIElement.is() )
     {
-        if ( aUIElement.m_xUIElement.is() )
+        try
         {
-            try
+            Reference< css::awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+            Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
+
+            if ( xWindow.is() && xDockWindow.is() )
             {
-                Reference< css::awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-                Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-
-                if ( xWindow.is() && xDockWindow.is() )
+                if ( aUIElement.m_bFloating )
                 {
-                    if ( aUIElement.m_bFloating )
-                    {
-                        xWindow->setPosSize( aPos.X, aPos.Y, 0, 0, css::awt::PosSize::POS );
-                        implts_writeNewStateData( aName, xWindow );
-                    }
-                    else
-                    {
-                        WriteGuard aWriteLock( m_aLock );
-                        UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
-                        if ( rUIElement.m_aName == aName )
-                            rUIElement.m_aDockedData.m_aPos = ::Point( aPos.X, aPos.Y );
-                        aWriteLock.unlock();
+                    xWindow->setPosSize( aPos.X, aPos.Y, 0, 0, css::awt::PosSize::POS );
+                    implts_writeNewStateData( aName, xWindow );
+                }
+                else
+                {
+                    WriteGuard aWriteLock( m_aLock );
+                    UIElement& rUIElement = LayoutManager::impl_findElement( aUIElement.m_aName );
+                    if ( rUIElement.m_aName == aName )
+                        rUIElement.m_aDockedData.m_aPos = ::Point( aPos.X, aPos.Y );
+                    aWriteLock.unlock();
 
-                        aUIElement.m_aDockedData.m_aPos = ::Point( aPos.X, aPos.Y );
-                        implts_writeWindowStateData( aName, aUIElement );
-                        implts_sortUIElements();
+                    aUIElement.m_aDockedData.m_aPos = ::Point( aPos.X, aPos.Y );
+                    implts_writeWindowStateData( aName, aUIElement );
+                    implts_sortUIElements();
 
-                        if ( aUIElement.m_bVisible )
-                            doLayout();
-                    }
+                    if ( aUIElement.m_bVisible )
+                        doLayout();
                 }
             }
-            catch ( DisposedException& )
-            {
-            }
+        }
+        catch ( DisposedException& )
+        {
         }
     }
 }
@@ -5322,10 +5299,7 @@ throw (RuntimeException)
                     if ( xWindow.is() )
                     {
                         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                        if ( pWindow && pWindow->IsVisible() )
-                            return sal_True;
-                        else
-                            return sal_False;
+                        return pWindow && pWindow->IsVisible();
                     }
                 }
             }
@@ -5353,13 +5327,8 @@ throw (RuntimeException)
     {
         if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
         {
-            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xWindow.is() )
-            {
-                Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-                if ( xDockWindow.is() )
-                    return xDockWindow->isFloating();
-            }
+            Reference< css::awt::XDockableWindow > xDockWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
+            return xDockWindow.is() && xDockWindow->isFloating();
         }
     }
 
@@ -5376,13 +5345,8 @@ throw (RuntimeException)
     {
         if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
         {
-            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xWindow.is() )
-            {
-                Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-                if ( xDockWindow.is() )
-                    return !xDockWindow->isFloating();
-            }
+            Reference< css::awt::XDockableWindow > xDockWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
+            return xDockWindow.is() && !xDockWindow->isFloating();
         }
     }
 
@@ -5397,16 +5361,10 @@ throw (::com::sun::star::uno::RuntimeException)
     ReadGuard aReadLock( m_aLock );
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
-        if (( pIter->m_aName == ResourceURL ) &&
-            ( pIter->m_xUIElement.is() ))
+        if (( pIter->m_aName == ResourceURL ) && ( pIter->m_xUIElement.is() ))
         {
-            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xWindow.is() )
-            {
-                Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-                if ( xDockWindow.is() )
-                    return xDockWindow->isLocked();
-            }
+            Reference< css::awt::XDockableWindow > xDockWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
+            return xDockWindow.is() && !xDockWindow->isLocked();
         }
     }
 
@@ -5416,64 +5374,53 @@ throw (::com::sun::star::uno::RuntimeException)
 css::awt::Size SAL_CALL LayoutManager::getElementSize( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    UIElementVector::const_iterator pIter;
-
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    UIElement aElementData;
+    if ( implts_findElement( aName,aElementData  ) && aElementData.m_xUIElement.is() )
     {
-        if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
+        Reference< css::awt::XWindow > xWindow( aElementData.m_xUIElement->getRealInterface(), UNO_QUERY );
+        if ( xWindow.is() )
         {
-            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xWindow.is() )
+            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            if ( pWindow )
             {
-                Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if ( pWindow )
-                {
-                    ::Size aSize = pWindow->GetSizePixel();
-                    css::awt::Size aElementSize;
-                    aElementSize.Width  = aSize.Width();
-                    aElementSize.Height = aSize.Height();
-                    return aElementSize;
-                }
-                else
-                    break;
-            }
+                ::Size aSize = pWindow->GetSizePixel();
+                css::awt::Size aElementSize;
+                aElementSize.Width  = aSize.Width();
+                aElementSize.Height = aSize.Height();
+                return aElementSize;
+            } // if ( pWindow )
         }
     }
-
     return css::awt::Size();
 }
 
 css::awt::Point SAL_CALL LayoutManager::getElementPos( const ::rtl::OUString& aName )
 throw (RuntimeException)
 {
-    UIElementVector::const_iterator pIter;
-
     ReadGuard aReadLock( m_aLock );
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    UIElement aElementData;
+    if ( implts_findElement( aName,aElementData  ) && aElementData.m_xUIElement.is() )
     {
-        if ( pIter->m_aName == aName && pIter->m_xUIElement.is() )
+        Reference< css::awt::XWindow > xWindow( aElementData.m_xUIElement->getRealInterface(), UNO_QUERY );
+        Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
+        if ( xDockWindow.is() )
         {
-            Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-            if ( xWindow.is() && xDockWindow.is() )
+            css::awt::Point aPos;
+            if ( aElementData.m_bFloating )
             {
-                css::awt::Point aPos;
-                if ( pIter->m_bFloating )
-                {
-                    css::awt::Rectangle aRect = xWindow->getPosSize();
-                    aPos.X = aRect.X;
-                    aPos.Y = aRect.Y;
-                }
-                else
-                {
-                    ::Point aVirtualPos = pIter->m_aDockedData.m_aPos;
-                    aPos.X = aVirtualPos.X();
-                    aPos.Y = aVirtualPos.Y();
-                }
-
-                return aPos;
+                css::awt::Rectangle aRect = xWindow->getPosSize();
+                aPos.X = aRect.X;
+                aPos.Y = aRect.Y;
             }
+            else
+            {
+                ::Point aVirtualPos = aElementData.m_aDockedData.m_aPos;
+                aPos.X = aVirtualPos.X();
+                aPos.Y = aVirtualPos.Y();
+            }
+
+            return aPos;
         }
     }
 
@@ -5621,7 +5568,8 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
                 implts_getDockingAreaElementInfos( (DockingArea)i, aRowColumnsWindowData );
 
                 sal_Int32 nOffset( 0 );
-                for ( sal_Int32 j = 0; j < sal_Int32( aRowColumnsWindowData.size() ); j++ )
+                const sal_uInt32 nCount = aRowColumnsWindowData.size();
+                for ( sal_uInt32 j = 0; j < nCount; ++j )
                 {
                     implts_calcWindowPosSizeOnSingleRowColumn( i, nOffset, aRowColumnsWindowData[j], aContainerSize );
                     nOffset += aRowColumnsWindowData[j].nStaticSize;
@@ -5687,7 +5635,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
     sal_Int32   nBottomDockingAreaSize;
     sal_Int32   nContainerClientSize;
 
-    if ( rRowColumnWindowData.aRowColumnWindows.size() == 0 )
+    if ( rRowColumnWindowData.aRowColumnWindows.empty() )
         return;
 
     if (( nDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
@@ -5704,26 +5652,28 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
         nDiff = nContainerClientSize - rRowColumnWindowData.nVarSize;
     }
 
+    const sal_uInt32 nCount = rRowColumnWindowData.aRowColumnWindowSizes.size();
     if (( nDiff < 0 ) && ( nRCSpace > 0 ))
     {
         // First we try to reduce the size of blank space before/behind docked windows
-        sal_Int32 i = rRowColumnWindowData.aRowColumnWindowSizes.size()-1;
+        sal_Int32 i = nCount - 1;
         while ( i >= 0 )
         {
             sal_Int32 nSpace = rRowColumnWindowData.aRowColumnSpace[i];
             if ( nSpace >= -nDiff )
             {
+
                 if (( nDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
                     ( nDockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_Int32 j = i; j < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() ); j++ )
+                    for ( sal_uInt32 j = i; j < nCount ; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].X += nDiff;
                 }
                 else
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_Int32 j = i; j < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() ); j++ )
+                    for ( sal_uInt32 j = i; j < nCount ; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].Y += nDiff;
                 }
                 nDiff = 0;
@@ -5736,13 +5686,13 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
                     ( nDockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_Int32 j = i; j < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() ); j++ )
+                    for ( sal_uInt32 j = i; j < nCount; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].X -= nSpace;
                 }
                 else
                 {
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_Int32 j = i; j < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() ); j++ )
+                    for ( sal_uInt32 j = i; j < nCount; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].Y -= nSpace;
                 }
                 nDiff += nSpace;
@@ -5755,7 +5705,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
     if ( nDiff < 0 )
     {
         // Now we have to reduce the size of certain docked windows
-        sal_Int32 i = sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() - 1 );
+        sal_Int32 i = sal_Int32( nCount - 1 );
         while ( i >= 0 )
         {
             css::awt::Rectangle& rWinRect = rRowColumnWindowData.aRowColumnWindowSizes[i];
@@ -5787,7 +5737,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
                     }
 
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_Int32 j = i; j < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() ); j++ )
+                    for ( sal_uInt32 j = i; j < nCount; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].X += nDiff;
                 }
                 else
@@ -5805,7 +5755,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
                     }
 
                     // Try to move this and all user elements behind with the calculated difference
-                    for ( sal_Int32 j = i; j < sal_Int32( rRowColumnWindowData.aRowColumnWindowSizes.size() ); j++ )
+                    for ( sal_uInt32 j = i; j < nCount; j++ )
                         rRowColumnWindowData.aRowColumnWindowSizes[j].Y += nDiff;
                 }
             }
@@ -5831,7 +5781,7 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
         nStartOffset = pDockAreaWindow->GetSizePixel().Height() - rRowColumnWindowData.nStaticSize;
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    for ( sal_Int32 i = 0; i < sal_Int32( rRowColumnWindowData.aRowColumnWindows.size() ); i++ )
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         Reference< css::awt::XWindow > xWindow = rRowColumnWindowData.aRowColumnWindows[i];
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -5986,12 +5936,13 @@ css::awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
         }
 
         // Sum up max heights from every row/column
-        if ( aWindowVector.size() > 0 )
+        if ( !aWindowVector.empty() )
         {
             for ( sal_Int32 i = 0; i <= DockingArea_DOCKINGAREA_RIGHT; i++ )
             {
                 sal_Int32 nSize( 0 );
-                for ( sal_Int32 j = 0; j < sal_Int32( aRowColumnSizes[i].size() ); j++ )
+                const sal_uInt32 nCount = aRowColumnSizes[i].size();
+                for ( sal_uInt32 j = 0; j < nCount; j++ )
                     nSize += aRowColumnSizes[i][j];
 
                 if ( i == DockingArea_DOCKINGAREA_TOP )
@@ -7082,8 +7033,10 @@ IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
     return 0;
 }
 
+#ifdef DBG_UTIL
 void LayoutManager::implts_checkElementContainer()
 {
+#ifdef DBG_UTIL
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
 
@@ -7102,8 +7055,10 @@ void LayoutManager::implts_checkElementContainer()
             ::rtl::OString aName = ::rtl::OUStringToOString( pCheckIter->first, RTL_TEXTENCODING_ASCII_US );
             DBG_ASSERT( "More than one element (%s) with the same name found!", aName.getStr() );
         }
-    }
+    } // for ( ; pCheckIter != aUIElementHash.end(); pCheckIter++ )
+#endif
 }
+#endif
 
 //---------------------------------------------------------------------------------------------------------
 //  XFrameActionListener

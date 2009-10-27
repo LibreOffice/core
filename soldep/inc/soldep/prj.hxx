@@ -58,7 +58,6 @@
 
 class SByteStringList;
 class GenericInformationList;
-class XmlBuildList;
 
 /*
 // Pfade auf Konfigurationsdateien des Build-Servers
@@ -358,7 +357,7 @@ public:
 DECLARE_LIST( StarFileList, StarFile * )
 
 #define STAR_MODE_SINGLE_PARSE          0x0000
-#define STAR_MODE_RECURSIVE_PARSE       0x0001
+//#define STAR_MODE_RECURSIVE_PARSE     0x0001      it dosen't work anymore
 #define STAR_MODE_MULTIPLE_PARSE        0x0002
 
 class Star : public StarList
@@ -377,22 +376,21 @@ protected:
     String          sFileName;
     SByteStringList* pDepMode;
     SByteStringList* pAllDepMode;
-    XmlBuildList*   mpXmlBuildList;
 
     Link aFileIOErrorHdl; // called with &String as parameter!!!
 
     void InsertSolarList( String sProject );
-    String CreateFileName( String sProject );
+    String CreateFileName( String& rProject, String& rSourceRoot );
 
     void            Expand_Impl();
     void            ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj );
     ULONG           SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
 
 public:
-                    Star( XmlBuildList* pXmlBuildListObj );
-                    Star( XmlBuildList* pXmlBuildListObj, String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    Star( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles );
-                    Star( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
+                    Star();
+                    Star( String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    Star( SolarFileList *pSolarFiles );
+                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
                         const char *pSourceRoot = NULL  );
 
                     ~Star();
@@ -403,7 +401,7 @@ public:
     ByteString      GetName(){ return aStarName; }; // dummy function of VG
     void            Read( String &rFileName );
     void            Read( SolarFileList *pSOlarFiles );
-    void            ReadXmlBuildList(const ByteString& sBuildLstPath);
+//  void            ReadXmlBuildList(const ByteString& sBuildLstPath);
 
 
     BOOL            HasProject( ByteString aProjectName );
@@ -417,6 +415,8 @@ public:
     SolarFileList*  NeedsFilesForUpdate();
     void            ReplaceFileEntry( StarFileList *pStarFiles, StarFile* pFile );
     void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
+                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
+    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
                         BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
     void            GenerateFileLoadList( SolarFileList *pSolarFiles );
     BOOL            CheckFileLoadList(SolarFileList *pSolarFiles);
@@ -446,9 +446,9 @@ private:
     USHORT          WritePrj( Prj *pPrj, SvFileStream& rStream );
 
 public:
-                    StarWriter( XmlBuildList* pXmlBuildListObj, String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
+                    StarWriter( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
+                    StarWriter( GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
                         BOOL bReadComments = FALSE, BOOL bLocal = FALSE, const char *pSourceRoot = NULL );
 
     void            CleanUp();

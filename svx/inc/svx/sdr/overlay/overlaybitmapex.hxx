@@ -50,11 +50,7 @@ namespace sdr
             sal_uInt16                              mnCenterX;
             sal_uInt16                              mnCenterY;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayBitmapEx(
@@ -69,11 +65,6 @@ namespace sdr
             sal_uInt16 getCenterX() const { return mnCenterX; }
             sal_uInt16 getCenterY() const { return mnCenterY; }
             void setCenterXY(sal_uInt16 nNewX, sal_uInt16 nNewY);
-
-            // Zoom has changed. If the objects logical size
-            // depends on the MapMode of the used OutputDevice, use this call
-            // to invalidate the range in logical coordinates.
-            virtual void zoomHasChanged();
         };
     } // end of namespace overlay
 } // end of namespace sdr

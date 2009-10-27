@@ -112,6 +112,7 @@
 #include "newtabledlg.hxx"
 #include "macroass.hxx"
 #include "acccfg.hxx"
+#include "insrc.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -2384,4 +2385,9 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
     Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& /*rApplicationContext*/ )
 {
     return new VclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
+}
+
+SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId )
+{
+    return new SvxInsRowColDlg( pParent, bCol, nHelpId );
 }

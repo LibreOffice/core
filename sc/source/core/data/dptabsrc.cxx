@@ -991,16 +991,16 @@ void ScDPSource::CreateRes_Impl()
     }
 }
 
-void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
-{
-    CreateRes_Impl();
-
-    ScAddress aDocPos( rPos );
-
-    if (pColResRoot->GetChildDimension())
-        pColResRoot->GetChildDimension()->DumpState( NULL, pDoc, aDocPos );
-    pRowResRoot->DumpState( pColResRoot, pDoc, aDocPos );
-}
+//UNUSED2009-05 void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
+//UNUSED2009-05 {
+//UNUSED2009-05     CreateRes_Impl();
+//UNUSED2009-05
+//UNUSED2009-05     ScAddress aDocPos( rPos );
+//UNUSED2009-05
+//UNUSED2009-05     if (pColResRoot->GetChildDimension())
+//UNUSED2009-05         pColResRoot->GetChildDimension()->DumpState( NULL, pDoc, aDocPos );
+//UNUSED2009-05     pRowResRoot->DumpState( pColResRoot, pDoc, aDocPos );
+//UNUSED2009-05 }
 
 void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
 {
@@ -1133,7 +1133,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPSourceMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_COLGRAND), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DATADESC), 0,  &getCppuType((rtl::OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
@@ -1497,13 +1497,13 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
     return *pSelectedData;
 }
 
-BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
-{
-    if ( bHasSelectedPage )
-        return rData.IsCaseInsEqual( GetSelectedData() );
-
-    return TRUE;        // no selection -> all data
-}
+//UNUSED2009-05 BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
+//UNUSED2009-05 {
+//UNUSED2009-05     if ( bHasSelectedPage )
+//UNUSED2009-05         return rData.IsCaseInsEqual( GetSelectedData() );
+//UNUSED2009-05
+//UNUSED2009-05     return TRUE;        // no selection -> all data
+//UNUSED2009-05 }
 
 // XPropertySet
 
@@ -1512,7 +1512,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPDimensionMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
@@ -2197,7 +2197,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPLevelMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
         //! change type of AutoShow/Layout/Sorting to API struct when available
         {MAP_CHAR_LEN(SC_UNO_AUTOSHOW), 0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
@@ -2505,14 +2505,14 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
                 {
                     nVal = nIndex;              // DayOfWeek is 0-based
-                    aName = ScGlobal::pCalendar->getDisplayName(
+                    aName = ScGlobal::GetCalendar()->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::DAY,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
                 {
                     nVal = nIndex;              // Month is 0-based
-                    aName = ScGlobal::pCalendar->getDisplayName(
+                    aName = ScGlobal::GetCalendar()->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
@@ -2664,7 +2664,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPMemberMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },

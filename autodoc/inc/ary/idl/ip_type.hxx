@@ -61,7 +61,8 @@ class TypePilot
                             QualifiedName &     i_rFullName,
                             uintt               i_nSequenceCount,
                             Ce_id               i_nModuleOfOccurrence,
-                            Type_id             i_nTemplateType ) = 0;
+                            const std::vector<Type_id> *
+                                                i_templateParameters ) = 0;
     // INQUIRY
     virtual const Type &
                         Find_Type(

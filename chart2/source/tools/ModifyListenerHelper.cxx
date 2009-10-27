@@ -106,17 +106,17 @@ namespace chart
 namespace ModifyListenerHelper
 {
 
+uno::Reference< util::XModifyListener > createModifyEventForwarder()
+{
+    return new ModifyEventForwarder();
+}
+
 ModifyEventForwarder::ModifyEventForwarder() :
         ::cppu::WeakComponentImplHelper2<
         ::com::sun::star::util::XModifyBroadcaster,
         ::com::sun::star::util::XModifyListener >( m_aMutex ),
         m_aModifyListeners( m_aMutex )
 {
-}
-
-void ModifyEventForwarder::FireEvent( const Reference< uno::XWeak > & xSource )
-{
-    lcl_fireModifyEvent( m_aModifyListeners, xSource, 0 );
 }
 
 void ModifyEventForwarder::FireEvent( const lang::EventObject & rEvent )

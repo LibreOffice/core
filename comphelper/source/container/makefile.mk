@@ -50,7 +50,8 @@ SLOFILES=\
             $(SLO)$/containermultiplexer.obj \
             $(SLO)$/IndexedPropertyValuesContainer.obj	\
             $(SLO)$/embeddedobjectcontainer.obj      \
-            $(SLO)$/NamedPropertyValuesContainer.obj
+            $(SLO)$/NamedPropertyValuesContainer.obj \
+            $(SLO)$/enumerablemap.obj
 
 # --- Targets ----------------------------------
 

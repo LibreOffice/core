@@ -38,6 +38,7 @@
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/intitem.hxx>
+#include <svtools/svparser.hxx> // SvKeyValue
 #include <vos/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -64,6 +65,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 
 #include <com/sun/star/script/provider/XScript.hpp>
@@ -82,8 +84,11 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/configurationhelper.hxx>
 
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/task/DocumentMacroConfirmationRequest2.hpp>
+#include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
@@ -113,9 +118,11 @@ using namespace ::com::sun::star::container;
 #include <svtools/inettype.hxx>
 #include <svtools/sharecontrolfile.hxx>
 #include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/documentconstants.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -256,10 +263,15 @@ void SfxObjectShell::FlushDocInfo()
 
 //-------------------------------------------------------------------------
 
-void SfxObjectShell::SetError(sal_uInt32 lErr)
+void SfxObjectShell::SetError( sal_uInt32 lErr, const ::rtl::OUString& aLogMessage )
 {
     if(pImp->lErr==ERRCODE_NONE)
+    {
         pImp->lErr=lErr;
+
+        if( lErr != ERRCODE_NONE && aLogMessage.getLength() )
+            AddLog( aLogMessage );
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -276,8 +288,6 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
     sal_uInt32 lError=pImp->lErr;
     if(!lError && GetMedium())
         lError=GetMedium()->GetErrorCode();
-//REMOVE        if(!lError && HasStorage())
-//REMOVE            lError= GetStorage()->GetErrorCode();
     return lError;
 }
 
@@ -285,13 +295,13 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
 
 void SfxObjectShell::ResetError()
 {
+    if( pImp->lErr != ERRCODE_NONE )
+        AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Resetting Error." ) ) );
+
     pImp->lErr=0;
     SfxMedium * pMed = GetMedium();
     if( pMed )
         pMed->ResetError();
-//REMOVE        SvStorage *pStor= HasStorage() ? GetStorage() : 0;
-//REMOVE        if( pStor )
-//REMOVE            pStor->ResetError();
 }
 
 //-------------------------------------------------------------------------
@@ -413,7 +423,7 @@ void SfxObjectShell::ModifyChanged()
     Invalidate( SID_MACRO_SIGNATURE );
     Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );    // xmlsec05, signed state might change in title...
 
-    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, this ) );
+    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_MODIFYCHANGED, GlobalEventConfig::GetEventName(STR_EVENT_MODIFYCHANGED), this ) );
 }
 
 //-------------------------------------------------------------------------
@@ -669,7 +679,7 @@ void SfxObjectShell::DisconnectFromShared()
             SfxMedium* pTmpMedium = pMedium;
             ForgetMedium();
             if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL );
+                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             else
             {
                 // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
@@ -1127,8 +1137,10 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
         {
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
-            if ( nId )
-                pSfxApp->NotifyEvent(SfxEventHint( nId, this ), sal_False);
+            if ( nId == SFX_EVENT_OPENDOC )
+                pSfxApp->NotifyEvent(SfxEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_OPENDOC), this ), sal_False);
+            else if (nId == SFX_EVENT_CREATEDOC )
+                pSfxApp->NotifyEvent(SfxEventHint( nId, GlobalEventConfig::GetEventName(STR_EVENT_CREATEDOC), this ), sal_False);
         }
     }
 }
@@ -1222,10 +1234,52 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
     if ( GetMedium() )
         xInteraction = GetMedium()->GetInteractionHandler();
 
-    // check macro security
-    pImp->aMacroMode.checkMacrosOnLoading( xInteraction );
     // check if there is a broken signature...
     CheckForBrokenDocSignatures_Impl( xInteraction );
+
+    CheckEncryption_Impl( xInteraction );
+
+    // check macro security
+    pImp->aMacroMode.checkMacrosOnLoading( xInteraction );
+}
+
+//-------------------------------------------------------------------------
+void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
+{
+    ::rtl::OUString aVersion;
+    sal_Bool bIsEncrypted = sal_False;
+    sal_Bool bHasNonEncrypted = sal_False;
+
+    try
+    {
+        uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
+        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= aVersion;
+        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasEncryptedEntries" ) ) ) >>= bIsEncrypted;
+        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasNonEncryptedEntries" ) ) ) >>= bHasNonEncrypted;
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    if ( aVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
+    {
+        // this is ODF1.2 or later
+        if ( bIsEncrypted && bHasNonEncrypted )
+        {
+            if ( !pImp->m_bIncomplEncrWarnShown )
+            {
+                // this is an encrypted document with nonencrypted streams inside, show the warning
+                ::com::sun::star::task::ErrorCodeRequest aErrorCode;
+                aErrorCode.ErrCode = ERRCODE_SFX_INCOMPLETE_ENCRYPTION;
+
+                SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), sal_False );
+                pImp->m_bIncomplEncrWarnShown = sal_True;
+            }
+
+            // broken signatures imply no macro execution at all
+            pImp->aMacroMode.disallowMacroExecution();
+        }
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -1380,7 +1434,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         }
 
         pImp->bInitialized = sal_True;
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
+        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, GlobalEventConfig::GetEventName(STR_EVENT_LOADFINISHED), this ) );
 
         // Title is not available until loading has finished
         Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
@@ -1444,7 +1498,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
             ForgetMedium();
             if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL );
+                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             else
             {
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
@@ -1464,7 +1518,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
         {
             // some further initializations for templates
             SetTemplate_Impl( aName, aTemplateName, this );
-            pTmpMedium->CreateTempFile();
+            pTmpMedium->CreateTempFile( sal_True );
         }
 
         // templates are never readonly
@@ -2074,13 +2128,15 @@ void SfxObjectShell::Invalidate( USHORT nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-bool SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/, bool _bSuppressUI )
+bool SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/, bool bSuppressUI )
 {
     uno::Reference< task::XInteractionHandler > xInteraction;
-    if ( pMedium && !_bSuppressUI )
+    if ( pMedium && !bSuppressUI )
         xInteraction = pMedium->GetInteractionHandler();
 
     CheckForBrokenDocSignatures_Impl( xInteraction );
+
+    CheckEncryption_Impl( xInteraction );
 
     return pImp->aMacroMode.adjustMacroMode( xInteraction );
 }
@@ -2240,6 +2296,33 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
     return bResult;
 }
 
+sal_Bool SfxObjectShell_Impl::NeedsOfficeUpdateDialog()
+{
+    // if the configuration is not available for any reason, the default behavior is to show the message
+    sal_Bool bResult = sal_True;
+
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xCommonConfig(
+                        ::comphelper::ConfigurationHelper::openConfig(
+                            xServiceManager,
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD ),
+                        uno::UNO_SET_THROW );
+
+        ::comphelper::ConfigurationHelper::readRelativeKey(
+                        xCommonConfig,
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Load/" ) ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ShowOfficeUpdateDialog" ) ) ) >>= bResult;
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    return bResult;
+}
+
 sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
 {
     sal_Int16 nImposedExecMode( MacroExecMode::NEVER_EXECUTE );
@@ -2286,16 +2369,15 @@ sal_Bool SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
     return sLocation;
 }
 
-uno::Reference< embed::XStorage > SfxObjectShell_Impl::getLastCommitDocumentStorage()
+uno::Reference< embed::XStorage > SfxObjectShell_Impl::getZipStorageToSign()
 {
     Reference < embed::XStorage > xStore;
 
     SfxMedium* pMedium( rDocShell.GetMedium() );
     OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getLastCommitDocumentStorage: no medium!" );
     if ( pMedium )
-    {
-        xStore = pMedium->GetLastCommitReadStorage_Impl();
-    }
+        xStore = pMedium->GetZipStorageToSign_Impl();
+
     return xStore;
 }
 
@@ -2309,7 +2391,7 @@ Reference< XEmbeddedScripts > SfxObjectShell_Impl::getEmbeddedDocumentScripts() 
     return Reference< XEmbeddedScripts >( rDocShell.GetModel(), UNO_QUERY );
 }
 
-sal_Int16 SfxObjectShell_Impl::getScriptingSignatureState() const
+sal_Int16 SfxObjectShell_Impl::getScriptingSignatureState()
 {
     sal_Int16 nSignatureState( rDocShell.GetScriptingSignatureState() );
 
@@ -2322,6 +2404,72 @@ sal_Int16 SfxObjectShell_Impl::getScriptingSignatureState() const
     return nSignatureState;
 }
 
+sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToAddAuthor )
+{
+    sal_Bool bResult = sal_False;
+
+    try
+    {
+        ::rtl::OUString aVersion;
+        try
+        {
+            uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= aVersion;
+        }
+        catch( uno::Exception& )
+        {
+        }
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[0] <<= aVersion;
+
+        uno::Reference< security::XDocumentDigitalSignatures > xSigner( comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY_THROW );
+
+        if ( nScriptingSignatureState == SIGNATURESTATE_UNKNOWN
+          || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
+          || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+        {
+            uno::Sequence< security::DocumentSignatureInformation > aInfo = rDocShell.ImplAnalyzeSignature( sal_True, xSigner );
+
+            if ( aInfo.getLength() )
+            {
+                if ( nScriptingSignatureState == SIGNATURESTATE_UNKNOWN )
+                    nScriptingSignatureState = rDocShell.ImplCheckSignaturesInformation( aInfo );
+
+                if ( nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
+                  || nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+                {
+                    for ( sal_Int32 nInd = 0; !bResult && nInd < aInfo.getLength(); nInd++ )
+                    {
+                        bResult = xSigner->isAuthorTrusted( aInfo[nInd].Signer );
+                    }
+
+                    if ( !bResult && bAllowUIToAddAuthor )
+                    {
+                        uno::Reference< task::XInteractionHandler > xInteraction;
+                        if ( rDocShell.GetMedium() )
+                            xInteraction = rDocShell.GetMedium()->GetInteractionHandler();
+
+                        if ( xInteraction.is() )
+                        {
+                            task::DocumentMacroConfirmationRequest2 aRequest;
+                            aRequest.DocumentURL = getDocumentLocation();
+                            aRequest.DocumentZipStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
+                            aRequest.DocumentSignatureInformation = aInfo;
+                            aRequest.DocumentVersion = aVersion;
+                            aRequest.Classification = task::InteractionClassification_QUERY;
+                            bResult = SfxMedium::CallApproveHandler( xInteraction, uno::makeAny( aRequest ), sal_True );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {}
+
+    return bResult;
+}
+
 void SfxObjectShell_Impl::showBrokenSignatureWarning( const uno::Reference< task::XInteractionHandler >& _rxInteraction ) const
 {
     if  ( !bSignatureErrorIsShown )
@@ -2330,3 +2478,89 @@ void SfxObjectShell_Impl::showBrokenSignatureWarning( const uno::Reference< task
         const_cast< SfxObjectShell_Impl* >( this )->bSignatureErrorIsShown = sal_True;
     }
 }
+
+void SfxObjectShell::AddLog( const ::rtl::OUString& aMessage )
+{
+    if ( !pImp->m_xLogRing.is() )
+    {
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            if ( aContext.is() )
+                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    if ( pImp->m_xLogRing.is() )
+        pImp->m_xLogRing->logString( aMessage );
+}
+
+namespace {
+
+void WriteStringInStream( const uno::Reference< io::XOutputStream >& xOutStream, const ::rtl::OUString& aString )
+{
+    if ( xOutStream.is() )
+    {
+        ::rtl::OString aStrLog = ::rtl::OUStringToOString( aString, RTL_TEXTENCODING_UTF8 );
+        uno::Sequence< sal_Int8 > aLogData( (const sal_Int8*)aStrLog.getStr(), aStrLog.getLength() );
+        xOutStream->writeBytes( aLogData );
+
+        aLogData.realloc( 1 );
+        aLogData[0] = '\n';
+        xOutStream->writeBytes( aLogData );
+    }
+}
+
+}
+
+void SfxObjectShell::StoreLog()
+{
+    if ( !pImp->m_xLogRing.is() )
+    {
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            if ( aContext.is() )
+                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    if ( pImp->m_xLogRing.is() )
+    {
+        ::rtl::OUString aFileURL =
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
+        ::rtl::Bootstrap::expandMacros( aFileURL );
+
+        ::rtl::OUString aBuildID =
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
+        ::rtl::Bootstrap::expandMacros( aBuildID );
+
+        if ( aFileURL.getLength() )
+        {
+            aFileURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/temp/document_io_logring.txt" ) );
+            try
+            {
+                uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
+                uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess( xFactory->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< io::XStream > xStream( xSimpleFileAccess->openFileReadWrite( aFileURL ), uno::UNO_SET_THROW );
+                uno::Reference< io::XOutputStream > xOutStream( xStream->getOutputStream(), uno::UNO_SET_THROW );
+                uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY_THROW );
+                xTruncate->truncate();
+
+                if ( aBuildID.getLength() )
+                    WriteStringInStream( xOutStream, aBuildID );
+
+                uno::Sequence< ::rtl::OUString > aLogSeq = pImp->m_xLogRing->getCollectedLog();
+                for ( sal_Int32 nInd = 0; nInd < aLogSeq.getLength(); nInd++ )
+                    WriteStringInStream( xOutStream, aLogSeq[nInd] );
+            }
+            catch( uno::Exception& )
+            {}
+        }
+    }
+}
+

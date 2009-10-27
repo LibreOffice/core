@@ -121,7 +121,7 @@ public class testclient
 
 
                 XConnector xConnector =
-                    ( XConnector ) UnoRuntime.queryInterface( XConnector.class , x );
+                    UnoRuntime.queryInterface( XConnector.class , x );
 
                 XConnection xConnection = xConnector.connect(args[0]);
 
@@ -138,7 +138,7 @@ public class testclient
 
                     System.out.println( "after building bridge" );
 //                  Object rInitialObject = m_bridge.mapInterfaceFrom(rootOid, XInterface.class);
-//                  XTestFactory rFactory = (XTestFactory )
+//                  XTestFactory rFactory =
 //                      UnoRuntime.queryInterface(XTestFactory.class,rInitialObject );
 
 //                  XCallMe callMerFactory->

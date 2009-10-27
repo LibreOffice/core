@@ -254,8 +254,14 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // <--
              ( ( bRTL && nCurrentAbsPos > nTabLeft - nForced ) ||
                ( !bRTL && nCurrentAbsPos < nTabLeft + nForced ) ) &&
-             nNextPos > nForced )
-        // <--
+               // --> OD 2009-07-21 #i103685#
+               //  adjust condition:
+               // - back to pre OOo 3.0 condition, if tab stops are relative to indent
+               // - further checks needed, if tab stops are not relative to indent
+               ( nNextPos > 0 &&
+               ( bTabsRelativeToIndent ||
+                 ( !pTabStop || nNextPos > nForced ) ) ) )
+               // <--
         {
             eAdj = SVX_TAB_ADJUST_DEFAULT;
             cFill = 0;

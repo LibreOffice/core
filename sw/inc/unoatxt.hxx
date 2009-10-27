@@ -120,7 +120,7 @@ class SwXAutoTextGroup : public cppu::WeakImplHelper6
     ::com::sun::star::lang::XUnoTunnel
 >
 {
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet* pPropSet;
     SwGlossaries*           pGlossaries;
     rtl::OUString           sName;
     String                  m_sGroupName;   // prefix m_ to disambiguate from some local vars in the implementation

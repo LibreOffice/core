@@ -1403,6 +1403,436 @@ void GDIMetaFile::Rotate( long nAngle10 )
 
 // ------------------------------------------------------------------------
 
+static void ImplActionBounds( Rectangle& o_rOutBounds,
+                              const Rectangle& i_rInBounds,
+                              const std::vector<Rectangle>& i_rClipStack )
+{
+    Rectangle aBounds( i_rInBounds );
+    if( ! i_rInBounds.IsEmpty() && ! i_rClipStack.empty() && ! i_rClipStack.back().IsEmpty() )
+        aBounds.Intersection( i_rClipStack.back() );
+    if( ! aBounds.IsEmpty() )
+    {
+        if( ! o_rOutBounds.IsEmpty() )
+            o_rOutBounds.Union( aBounds );
+        else
+            o_rOutBounds = aBounds;
+    }
+}
+
+Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference )
+{
+    GDIMetaFile     aMtf;
+    VirtualDevice   aMapVDev( i_rReference );
+
+    aMapVDev.EnableOutput( FALSE );
+    aMapVDev.SetMapMode( GetPrefMapMode() );
+
+    std::vector<Rectangle> aClipStack( 1, Rectangle() );
+    std::vector<USHORT> aPushFlagStack;
+
+    Rectangle aBound;
+
+    for( MetaAction* pAction = (MetaAction*) First(); pAction; pAction = (MetaAction*) Next() )
+    {
+        const USHORT nActionType = pAction->GetType();
+
+        switch( nActionType )
+        {
+        case( META_PIXEL_ACTION ):
+            {
+                MetaPixelAction* pAct = (MetaPixelAction*) pAction;
+                ImplActionBounds( aBound,
+                                 Rectangle( aMapVDev.LogicToLogic( pAct->GetPoint(), aMapVDev.GetMapMode(), GetPrefMapMode() ),
+                                           aMapVDev.PixelToLogic( Size( 1, 1 ), GetPrefMapMode() ) ),
+                                 aClipStack );
+            }
+            break;
+
+        case( META_POINT_ACTION ):
+            {
+                MetaPointAction* pAct = (MetaPointAction*) pAction;
+                ImplActionBounds( aBound,
+                                 Rectangle( aMapVDev.LogicToLogic( pAct->GetPoint(), aMapVDev.GetMapMode(), GetPrefMapMode() ),
+                                           aMapVDev.PixelToLogic( Size( 1, 1 ), GetPrefMapMode() ) ),
+                                 aClipStack );
+            }
+            break;
+
+        case( META_LINE_ACTION ):
+            {
+                MetaLineAction* pAct = (MetaLineAction*) pAction;
+                Point aP1( pAct->GetStartPoint() ), aP2( pAct->GetEndPoint() );
+                Rectangle aRect( aP1, aP2 );
+                aRect.Justify();
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_RECT_ACTION ):
+            {
+                MetaRectAction* pAct = (MetaRectAction*) pAction;
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_ROUNDRECT_ACTION ):
+            {
+                MetaRoundRectAction*    pAct = (MetaRoundRectAction*) pAction;
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_ELLIPSE_ACTION ):
+            {
+                MetaEllipseAction*      pAct = (MetaEllipseAction*) pAction;
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_ARC_ACTION ):
+            {
+                MetaArcAction*  pAct = (MetaArcAction*) pAction;
+                // FIXME: this is imprecise
+                // e.g. for small arcs the whole rectangle is WAY too large
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_PIE_ACTION ):
+            {
+                MetaPieAction*  pAct = (MetaPieAction*) pAction;
+                // FIXME: this is imprecise
+                // e.g. for small arcs the whole rectangle is WAY too large
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_CHORD_ACTION ):
+            {
+                MetaChordAction*    pAct = (MetaChordAction*) pAction;
+                // FIXME: this is imprecise
+                // e.g. for small arcs the whole rectangle is WAY too large
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_POLYLINE_ACTION ):
+            {
+                MetaPolyLineAction* pAct = (MetaPolyLineAction*) pAction;
+                Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_POLYGON_ACTION ):
+            {
+                MetaPolygonAction* pAct = (MetaPolygonAction*) pAction;
+                Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_POLYPOLYGON_ACTION ):
+            {
+                MetaPolyPolygonAction* pAct = (MetaPolyPolygonAction*) pAction;
+                Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_TEXT_ACTION ):
+            {
+                MetaTextAction* pAct = (MetaTextAction*) pAction;
+                Rectangle aRect;
+                // hdu said base = index
+                aMapVDev.GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen() );
+                Point aPt( pAct->GetPoint() );
+                aRect.Move( aPt.X(), aPt.Y() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_TEXTARRAY_ACTION ):
+            {
+                MetaTextArrayAction* pAct = (MetaTextArrayAction*) pAction;
+                Rectangle aRect;
+                // hdu said base = index
+                aMapVDev.GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen(),
+                                           0, pAct->GetDXArray() );
+                Point aPt( pAct->GetPoint() );
+                aRect.Move( aPt.X(), aPt.Y() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_STRETCHTEXT_ACTION ):
+            {
+                MetaStretchTextAction* pAct = (MetaStretchTextAction*) pAction;
+                Rectangle aRect;
+                // hdu said base = index
+                aMapVDev.GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen(),
+                                           pAct->GetWidth(), NULL );
+                Point aPt( pAct->GetPoint() );
+                aRect.Move( aPt.X(), aPt.Y() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_TEXTLINE_ACTION ):
+            {
+                MetaTextLineAction* pAct = (MetaTextLineAction*) pAction;
+                // measure a test string to get ascend and descent right
+                static const sal_Unicode pStr[] = { 0xc4, 0x67, 0 };
+                String aStr( pStr );
+
+                Rectangle aRect;
+                aMapVDev.GetTextBoundRect( aRect, aStr, 0, 0, aStr.Len(), 0, NULL );
+                Point aPt( pAct->GetStartPoint() );
+                aRect.Move( aPt.X(), aPt.Y() );
+                aRect.Right() = aRect.Left() + pAct->GetWidth();
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_BMPSCALE_ACTION ):
+            {
+                MetaBmpScaleAction* pAct = (MetaBmpScaleAction*) pAction;
+                Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_BMPSCALEPART_ACTION ):
+            {
+                MetaBmpScalePartAction* pAct = (MetaBmpScalePartAction*) pAction;
+                Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_BMPEXSCALE_ACTION ):
+            {
+                MetaBmpExScaleAction*   pAct = (MetaBmpExScaleAction*) pAction;
+                Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_BMPEXSCALEPART_ACTION ):
+            {
+                MetaBmpExScalePartAction*   pAct = (MetaBmpExScalePartAction*) pAction;
+                Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_GRADIENT_ACTION ):
+            {
+                MetaGradientAction* pAct = (MetaGradientAction*) pAction;
+                Rectangle aRect( pAct->GetRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_GRADIENTEX_ACTION ):
+            {
+                MetaGradientExAction* pAct = (MetaGradientExAction*) pAction;
+                Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_COMMENT_ACTION ):
+            {
+                // nothing to do
+            };
+            break;
+
+        case( META_HATCH_ACTION ):
+            {
+                MetaHatchAction*    pAct = (MetaHatchAction*) pAction;
+                Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_TRANSPARENT_ACTION ):
+            {
+                MetaTransparentAction* pAct = (MetaTransparentAction*) pAction;
+                Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_FLOATTRANSPARENT_ACTION ):
+            {
+                MetaFloatTransparentAction* pAct = (MetaFloatTransparentAction*) pAction;
+                GDIMetaFile                 aTransMtf( pAct->GetGDIMetaFile() );
+                // get the bound rect of the contained metafile
+                Rectangle aRect( aTransMtf.GetBoundRect( i_rReference ) );
+                // scale the rect now on the assumption that the correct top left of the metafile
+                // (not its bounds !) is (0,0)
+                Size aPSize( aTransMtf.GetPrefSize() );
+                aPSize = aMapVDev.LogicToLogic( aPSize, aTransMtf.GetPrefMapMode(), aMapVDev.GetMapMode() );
+                Size aActSize( pAct->GetSize() );
+                double fX = double(aActSize.Width())/double(aPSize.Width());
+                double fY = double(aActSize.Height())/double(aPSize.Height());
+                aRect.Left()   = long(double(aRect.Left())*fX);
+                aRect.Right()  = long(double(aRect.Right())*fX);
+                aRect.Top()    = long(double(aRect.Top())*fY);
+                aRect.Bottom() = long(double(aRect.Bottom())*fY);
+
+                // transform the rect to current VDev state
+                aRect = aMapVDev.LogicToLogic( aRect, aTransMtf.GetPrefMapMode(), aMapVDev.GetMapMode() );
+
+                ImplActionBounds( aBound, aRect, aClipStack );
+            }
+            break;
+
+        case( META_EPS_ACTION ):
+            {
+                MetaEPSAction*  pAct = (MetaEPSAction*) pAction;
+                Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_CLIPREGION_ACTION ):
+            {
+                MetaClipRegionAction* pAct = (MetaClipRegionAction*) pAction;
+                if( pAct->IsClipping() )
+                    aClipStack.back() = aMapVDev.LogicToLogic( pAct->GetRegion().GetBoundRect(), aMapVDev.GetMapMode(), GetPrefMapMode() );
+                else
+                    aClipStack.back() = Rectangle();
+            }
+            break;
+
+        case( META_ISECTRECTCLIPREGION_ACTION ):
+            {
+                MetaISectRectClipRegionAction* pAct = (MetaISectRectClipRegionAction*) pAction;
+                Rectangle aRect( aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ) );
+                if( aClipStack.back().IsEmpty() )
+                    aClipStack.back() = aRect;
+                else
+                    aClipStack.back().Intersection( aRect );
+            }
+            break;
+
+        case( META_ISECTREGIONCLIPREGION_ACTION ):
+            {
+                MetaISectRegionClipRegionAction*    pAct = (MetaISectRegionClipRegionAction*) pAction;
+                Rectangle aRect( aMapVDev.LogicToLogic( pAct->GetRegion().GetBoundRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ) );
+                if( aClipStack.back().IsEmpty() )
+                    aClipStack.back() = aRect;
+                else
+                    aClipStack.back().Intersection( aRect );
+            }
+            break;
+
+        case( META_BMP_ACTION ):
+            {
+                MetaBmpAction* pAct = (MetaBmpAction*) pAction;
+                Rectangle aRect( pAct->GetPoint(), aMapVDev.PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_BMPEX_ACTION ):
+            {
+                MetaBmpExAction* pAct = (MetaBmpExAction*) pAction;
+                Rectangle aRect( pAct->GetPoint(), aMapVDev.PixelToLogic( pAct->GetBitmapEx().GetSizePixel() ) );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_MASK_ACTION ):
+            {
+                MetaMaskAction* pAct = (MetaMaskAction*) pAction;
+                Rectangle aRect( pAct->GetPoint(), aMapVDev.PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_MASKSCALE_ACTION ):
+            {
+                MetaMaskScalePartAction* pAct = (MetaMaskScalePartAction*) pAction;
+                Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_MASKSCALEPART_ACTION ):
+            {
+                MetaMaskScalePartAction* pAct = (MetaMaskScalePartAction*) pAction;
+                Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_WALLPAPER_ACTION ):
+            {
+                MetaWallpaperAction* pAct = (MetaWallpaperAction*) pAction;
+                Rectangle aRect( pAct->GetRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_TEXTRECT_ACTION ):
+            {
+                MetaTextRectAction* pAct = (MetaTextRectAction*) pAction;
+                Rectangle aRect( pAct->GetRect() );
+                ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack );
+            }
+            break;
+
+        case( META_MOVECLIPREGION_ACTION ):
+            {
+                MetaMoveClipRegionAction* pAct = (MetaMoveClipRegionAction*) pAction;
+                if( ! aClipStack.back().IsEmpty() )
+                {
+                    Size aDelta( pAct->GetHorzMove(), pAct->GetVertMove() );
+                    aDelta = aMapVDev.LogicToLogic( aDelta, aMapVDev.GetMapMode(), GetPrefMapMode() );
+                    aClipStack.back().Move( aDelta.Width(), aDelta.Width() );
+                }
+            }
+            break;
+
+        default:
+            {
+                pAction->Execute( &aMapVDev );
+
+                if( nActionType == META_PUSH_ACTION )
+                {
+                    MetaPushAction* pAct = (MetaPushAction*) pAction;
+                    aPushFlagStack.push_back( pAct->GetFlags() );
+                    if( (aPushFlagStack.back() & PUSH_CLIPREGION) != 0 )
+                    {
+                        Rectangle aRect( aClipStack.back() );
+                        aClipStack.push_back( aRect );
+                    }
+                }
+                else if( nActionType == META_POP_ACTION )
+                {
+                    // sanity check
+                    if( ! aPushFlagStack.empty() )
+                    {
+                        if( (aPushFlagStack.back() & PUSH_CLIPREGION) != 0 )
+                        {
+                            if( aClipStack.size() > 1 )
+                                aClipStack.pop_back();
+                        }
+                        aPushFlagStack.pop_back();
+                    }
+                }
+            }
+            break;
+        }
+    }
+    return aBound;
+}
+
+// ------------------------------------------------------------------------
+
 Color GDIMetaFile::ImplColAdjustFnc( const Color& rColor, const void* pColParam )
 {
     return Color( rColor.GetTransparency(),

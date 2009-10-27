@@ -100,12 +100,6 @@ PE_File::Handle_ChildFailure()
     return &pSpuIgnoreFailure->Child();
 }
 
-ary::cpp::Gate &
-PE_File::AryGate() const
-{
-     return const_cast< PE_File& >(*this).access_Env().AryGate();
-}
-
 void
 PE_File::Setup_StatusFunctions()
 {

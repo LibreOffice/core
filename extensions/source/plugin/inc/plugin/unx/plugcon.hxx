@@ -67,7 +67,9 @@ extern "C" {
 #  endif
 #endif
 #include <X11/Xatom.h>
-#define XP_UNIX
+#ifndef XP_UNIX
+#    define XP_UNIX
+#endif
 #define MOZ_X11
 #include <stdio.h>
 #ifdef SYSTEM_MOZILLA
@@ -102,7 +104,7 @@ extern "C" {
 extern "C" {
 #include <npsdk/npupp.h>
 }
-#include <npapi.h>
+#include <npsdk/npapi.h>
 
 #if NP_VERSION_MINOR < 17
 // compatibility hack: compile with older NPN api header, but define

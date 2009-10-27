@@ -99,7 +99,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
         if ( !aPageSize.Width() || !aPageSize.Height() )
         {
             DBG_ERRORFILE("PageSize Null ?!?!?");
-            aPageSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );
+            aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
         }
         aPageSize.Width() -= nLeftMargin + nRightMargin;
         aPageSize.Height() -= nTopMargin + nBottomMargin;
@@ -109,7 +109,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
     {
         DBG_ERRORFILE("kein StyleSheet?!?");
         aPageSize = pDefaultDev->LogicToPixel(
-            SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 ), MapMode( MAP_TWIP ) );
+            SvxPaperInfo::GetPaperSize( PAPER_A4 ), MapMode( MAP_TWIP ) );
     }
     if( bCalcWidthHeight )
         mpParser = new ScHTMLLayoutParser( mpEngine, rBaseURL, aPageSize, pDocP );

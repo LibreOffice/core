@@ -45,11 +45,91 @@
 #include "childlist.hxx"
 #include "attr.hxx"
 
+#include <com/sun/star/xml/sax/FastToken.hpp>
+
 #include "../events/eventdispatcher.hxx"
 #include "../events/mutationevent.hxx"
 
+#include <boost/bind.hpp>
+#include <algorithm>
+
 namespace DOM
 {
+    void pushContext(Context& io_rContext)
+    {
+        io_rContext.maNamespaces.push_back(
+            io_rContext.maNamespaces.back());
+    }
+
+    void popContext(Context& io_rContext)
+    {
+        io_rContext.maNamespaces.pop_back();
+    }
+
+    void addNamespaces(Context& io_rContext, xmlNodePtr pNode)
+    {
+        // add node's namespaces to current context
+        for (xmlNsPtr pNs = pNode->nsDef; pNs != 0; pNs = pNs->next) {
+            const xmlChar *pPrefix = pNs->prefix;
+            OString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
+                           strlen(reinterpret_cast<const char*>(pPrefix)));
+            const xmlChar *pHref = pNs->href;
+            OUString val(reinterpret_cast<const sal_Char*>(pHref),
+                strlen(reinterpret_cast<const char*>(pHref)),
+                RTL_TEXTENCODING_UTF8);
+
+            OSL_TRACE("Trying to add namespace %s (prefix %s)",
+                      (const char*)pHref, (const char*)pPrefix);
+
+            Context::NamespaceMapType::iterator aIter=
+                io_rContext.maNamespaceMap.find(val);
+            if( aIter != io_rContext.maNamespaceMap.end() )
+            {
+                Context::Namespace aNS;
+                aNS.maPrefix = prefix;
+                aNS.mnToken = aIter->second;
+                aNS.maNamespaceURL = val;
+
+                io_rContext.maNamespaces.back().push_back(aNS);
+
+                OSL_TRACE("Added with token 0x%x", aIter->second);
+            }
+        }
+    }
+
+    sal_Int32 getToken( const Context& rContext, const sal_Char* pToken )
+    {
+        const Sequence<sal_Int8> aSeq( (sal_Int8*)pToken, strlen( pToken ) );
+        return rContext.mxTokenHandler->getTokenFromUTF8( aSeq );
+    }
+
+    sal_Int32 getTokenWithPrefix( const Context& rContext, const sal_Char* pPrefix, const sal_Char* pName )
+    {
+        sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
+        OString prefix(pPrefix,
+                       strlen(reinterpret_cast<const char*>(pPrefix)));
+
+        OSL_TRACE("getTokenWithPrefix(): prefix %s, name %s",
+                  (const char*)pPrefix, (const char*)pName);
+
+        Context::NamespaceVectorType::value_type::const_iterator aIter;
+        if( (aIter=std::find_if(rContext.maNamespaces.back().begin(),
+                                rContext.maNamespaces.back().end(),
+                                boost::bind(std::equal_to<OString>(),
+                                            boost::bind(&Context::Namespace::getPrefix,
+                                                        _1),
+                                            boost::cref(prefix)))) != rContext.maNamespaces.back().end() )
+        {
+            nNamespaceToken = aIter->mnToken;
+            sal_Int32 nNameToken = getToken( rContext, pName );
+            if( nNameToken != FastToken::DONTKNOW )
+                nNamespaceToken |= nNameToken;
+        }
+
+        return nNamespaceToken;
+    }
+
+
     nodemap_t CNode::theNodeMap;
 
     void CNode::remove(const xmlNodePtr aNode)
@@ -167,14 +247,13 @@ namespace DOM
 
     xmlNodePtr CNode::getNodePtr(const Reference< XNode >& aNode)
     {
-      xmlNodePtr aNodePtr = 0;
       try {
-    Reference< XUnoTunnel > aTunnel(aNode, UNO_QUERY_THROW);
-    sal_Int64 rawPtr = aTunnel->getSomething(Sequence<sal_Int8>());
-    aNodePtr = reinterpret_cast<xmlNodePtr>(sal::static_int_cast<sal_IntPtr>(rawPtr));
-      } catch ( ... ) {
+          CNode* pNode=dynamic_cast<CNode*>(aNode.get());
+          if( pNode )
+              return pNode->m_aNodePtr;
       }
-      return aNodePtr;
+      catch(...) {}
+      return 0;
     }
 
     CNode::CNode()
@@ -277,6 +356,11 @@ namespace DOM
     void SAL_CALL CNode::saxify(
             const Reference< XDocumentHandler >& i_xHandler) {
         if (!i_xHandler.is()) throw RuntimeException();
+        // default: do nothing
+    }
+
+    void SAL_CALL CNode::fastSaxify(Context& io_rContext) {
+        if (!io_rContext.mxDocHandler.is()) throw RuntimeException();
         // default: do nothing
     }
 
@@ -893,14 +977,6 @@ namespace DOM
         }
 
     }
-
-    sal_Int64 SAL_CALL CNode::getSomething(const Sequence< sal_Int8 >& /*id*/) throw (RuntimeException)
-    {
-        // XXX check ID
-        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_aNodePtr));
-        // return (sal_Int64)m_aNodePtr;
-    }
-
 
         // --- XEventTarget
     void SAL_CALL CNode::addEventListener(const OUString& eventType,

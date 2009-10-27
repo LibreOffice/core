@@ -2127,7 +2127,7 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
             if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
                 nLeftKind == SV_ITEM_ID_LBOXSTRING )
             {
-                eCompare= (StringCompare) ScGlobal::pCaseCollator->compareString(
+                eCompare= (StringCompare) ScGlobal::GetCaseCollator()->compareString(
                                         ((SvLBoxString*)pLeftItem)->GetText(),
                                         ((SvLBoxString*)pRightItem)->GetText());
 

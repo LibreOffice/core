@@ -59,11 +59,7 @@ LoadXmlFile( Buffer &           o_rBuffer,
 
     // Read file:
     aXmlFile.read(o_rBuffer.Data(), (int) nBufferSize);
-#ifdef OS2 // YD eof&fail are set, so check for fail&bad
-    bool ret = aXmlFile.fail() != 0;
-#else
     bool ret = aXmlFile.good() != 0;
-#endif
     aXmlFile.close();
     return ret;
 }

@@ -56,6 +56,12 @@ static const OUString aSeriesPropName( RTL_CONSTASCII_USTRINGPARAM("Series"));
 
 namespace chart
 {
+
+uno::Reference< chart2::XColorScheme > createConfigColorScheme( const uno::Reference< uno::XComponentContext > & xContext )
+{
+    return new ConfigColorScheme( xContext );
+}
+
 namespace impl
 {
 class ChartConfigItem : public ::utl::ConfigItem

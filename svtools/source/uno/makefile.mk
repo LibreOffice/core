@@ -1,4 +1,4 @@
-
+#*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
@@ -55,6 +55,7 @@ SLOFILES= \
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/generictoolboxcontroller.obj \
             $(SLO)$/treecontrolpeer.obj \
+            $(SLO)$/unocontroltablemodel.obj \
             $(SLO)$/registerservices.obj\
             $(SLO)$/contextmenuhelper.obj
 

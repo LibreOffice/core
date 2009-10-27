@@ -55,8 +55,8 @@ class SdXShape : public SvxShapeMaster,
 
 private:
     SvxShape* mpShape;
-    SvxItemPropertySet  maPropSet;
-    const SfxItemPropertyMap* mpMap;
+    const SvxItemPropertySet*   mpPropSet;
+    const SfxItemPropertyMapEntry* mpMap;
     SdXImpressDocument* mpModel;
 
     void SetStyleSheet( const ::com::sun::star::uno::Any& rAny ) throw( ::com::sun::star::lang::IllegalArgumentException );

@@ -46,20 +46,71 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
+#include "cppuhelper/implbase1.hxx"
+
+#include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 #include "com/sun/star/util/XModifyListener.hpp"
 
 namespace dp_gui {
 
 //==============================================================================
+class ExtBoxWithBtns_Impl;
 class ExtensionBox_Impl;
 class TheExtensionManager;
 
 //==============================================================================
-class ExtMgrDialog : public ModelessDialog
+class DialogHelper
 {
-    ExtensionBox_Impl   *m_pExtensionBox;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    Dialog*         m_pVCLWindow;
+    ULONG           m_nEventID;
+    bool            m_bIsBusy;
+
+public:
+                    DialogHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &,
+                                  Dialog *pWindow );
+    virtual        ~DialogHelper();
+
+    void            openWebBrowser( const ::rtl::OUString & sURL, const ::rtl::OUString & sTitle ) const;
+    Dialog*         getWindow() const { return m_pVCLWindow; };
+    void            PostUserEvent( const Link& rLink, void* pCaller );
+    void            clearEventID() { m_nEventID = 0; }
+
+    virtual void    showProgress( bool bStart ) = 0;
+    virtual void    updateProgress( const ::rtl::OUString &rText,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel) = 0;
+    virtual void    updateProgress( const long nProgress ) = 0;
+
+    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) = 0;
+    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+                                      const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & ) = 0;
+
+    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager ) = 0;
+    virtual void    checkEntries() = 0;
+
+    static ResId    getResId( USHORT nId );
+    static String   getResourceString( USHORT id );
+    static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &);
+    static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &,
+                                               Window *pParent,
+                                               const USHORT nResID,
+                                               bool &bHadWarning );
+
+    void            setBusy( const bool bBusy ) { m_bIsBusy = bBusy; }
+    bool            isBusy() const { return m_bIsBusy; }
+    bool            installExtensionWarn( const ::rtl::OUString &rExtensionURL ) const;
+    bool            installForAllUsers( bool &bInstallForAll ) const;
+};
+
+//==============================================================================
+class ExtMgrDialog : public ModelessDialog,
+                     public DialogHelper
+{
+    ExtBoxWithBtns_Impl *m_pExtensionBox;
     PushButton           m_aAddBtn;
     PushButton           m_aUpdateBtn;
     OKButton             m_aCloseBtn;
@@ -81,16 +132,12 @@ class ExtMgrDialog : public ModelessDialog
     bool                 m_bEnableWarning;
     bool                 m_bDisableWarning;
     bool                 m_bDeleteWarning;
-    bool                 m_bIsBusy;
     long                 m_nProgress;
     Timer                m_aTimeoutTimer;
     TheExtensionManager *m_pManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;
 
-    bool continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &,
-                                    const USHORT nResID,
-                                    bool &bHadWarning ) const;
     bool removeExtensionWarn( const ::rtl::OUString &rExtensionTitle ) const;
 
     DECL_DLLPRIVATE_LINK( HandleAddBtn, void * );
@@ -108,9 +155,16 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual BOOL    Close();
 
+    virtual void    showProgress( bool bStart );
+    virtual void    updateProgress( const ::rtl::OUString &rText,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
+    virtual void    updateProgress( const long nProgress );
+
+    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+
     void            setGetExtensionsURL( const ::rtl::OUString &rURL );
     void            selectEntry( long nPos );
-    long            addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & );
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
@@ -120,27 +174,102 @@ public:
     bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    bool            isBusy() { return m_bIsBusy; }
+    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    virtual void    checkEntries();
 
-    void            showProgress( bool bStart );
-    void            updateProgress( const ::rtl::OUString &rText,
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+};
+
+//==============================================================================
+class UpdateRequiredDialog : public ModalDialog,
+                             public DialogHelper
+{
+    ExtensionBox_Impl   *m_pExtensionBox;
+    FixedText            m_aUpdateNeeded;
+    PushButton           m_aUpdateBtn;
+    PushButton           m_aCloseBtn;
+    HelpButton           m_aHelpBtn;
+    CancelButton         m_aCancelBtn;
+    FixedLine            m_aDivider;
+    FixedText            m_aProgressText;
+    ProgressBar          m_aProgressBar;
+    const String         m_sAddPackages;
+    const String         m_sCloseText;
+    String               m_sProgressText;
+    ::osl::Mutex         m_aMutex;
+    bool                 m_bHasProgress;
+    bool                 m_bProgressChanged;
+    bool                 m_bStartProgress;
+    bool                 m_bStopProgress;
+    bool                 m_bUpdateWarning;
+    bool                 m_bDisableWarning;
+    bool                 m_bHasLockedEntries;
+    long                 m_nProgress;
+    Timer                m_aTimeoutTimer;
+    TheExtensionManager *m_pManager;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;
+
+    DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
+    DECL_DLLPRIVATE_LINK( HandleCloseBtn, void * );
+    DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
+    DECL_DLLPRIVATE_LINK( TimeOutHdl, Timer* );
+    DECL_DLLPRIVATE_LINK( startProgress, void * );
+    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
+
+    bool            isEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
+    bool            checkDependencies( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
+    bool            hasActiveEntries();
+    void            disableAllEntries();
+
+public:
+                    UpdateRequiredDialog( Window * pParent, TheExtensionManager *pManager );
+    virtual        ~UpdateRequiredDialog();
+
+    virtual short   Execute();
+    virtual void    Resize();
+    virtual BOOL    Close();
+//    virtual long    Notify( NotifyEvent& rNEvt );
+
+    virtual void    showProgress( bool bStart );
+    virtual void    updateProgress( const ::rtl::OUString &rText,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
-    void            updateProgress( const long nProgress );
-    void            updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    virtual void    updateProgress( const long nProgress );
 
-    void            prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
-    void            checkEntries();
+    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+
+    void            selectEntry( long nPos );
+    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+                                      const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & );
+    bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+                        bool bEnable );
+    bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+
+    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    virtual void    checkEntries();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
 
-    void            openWebBrowser( ::rtl::OUString const &sURL ) const;
-
     bool            installForAllUsers( bool &bInstallForAll ) const;
     bool            installExtensionWarn( const ::rtl::OUString &rExtensionURL ) const;
+};
 
-    static ResId    getResId( USHORT id );
-    static String   getResourceString( USHORT id );
-    static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &);
+//==============================================================================
+class UpdateRequiredDialogService : public ::cppu::WeakImplHelper1< ::com::sun::star::ui::dialogs::XExecutableDialog >
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const m_xComponentContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xParent;
+    ::rtl::OUString m_sInitialTitle;
+
+public:
+    UpdateRequiredDialogService( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & args,
+                                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xComponentContext );
+
+    // XExecutableDialog
+    virtual void SAL_CALL         setTitle( rtl::OUString const & title ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int16 SAL_CALL    execute() throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 } // namespace dp_gui

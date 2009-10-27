@@ -164,11 +164,6 @@ public:
     UINT16                  GetStyleFamily() const { return mnStyleFamily; }
     void                    SetStyleFamily( UINT16 nSF ) { mnStyleFamily = nSF; }
 
-    BOOL                    HasSpecialProgress() const { return ( mpSpecialProgress != NULL && mpSpecialProgressHdl != NULL ); }
-    void                    ReleaseSpecialProgress() { mpSpecialProgress = NULL; mpSpecialProgressHdl = NULL; }
-    void                    SetSpecialProgress( SfxProgress* _pProgress, Link* pLink ) { mpSpecialProgress = _pProgress; mpSpecialProgressHdl = pLink; }
-    SfxProgress*            GetSpecialProgress() { return( HasSpecialProgress() ? mpSpecialProgress : NULL ); }
-
     sal_Bool                IsNewDocument() const;
 
     /** executes the SID_OPENDOC slot to let the framework open a document
@@ -234,9 +229,6 @@ protected:
     BOOL                    mbInDestruction;
     BOOL                    mbOwnPrinter;
     BOOL                    mbNewDocument;
-
-    static SfxProgress*     mpSpecialProgress;
-    static Link*            mpSpecialProgressHdl;
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);

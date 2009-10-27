@@ -112,8 +112,6 @@ int cdecl main ( int argc, char ** argv)
 {
 #endif
 
-    printf( "StarView Interface Definition Language (IDL) Compiler 3.0\n" );
-
 /*
     pStr = ::ResponseFile( &aCmdLine, argv, argc );
     if( pStr )
@@ -136,8 +134,12 @@ int cdecl main ( int argc, char ** argv)
     String aTmpDocuFile;
 
     SvCommand aCommand( argc, argv );
+
+    if( aCommand.nVerbosity != 0 )
+        printf( "StarView Interface Definition Language (IDL) Compiler 3.0\n" );
+
     Init();
-    SvIdlWorkingBase * pDataBase = new SvIdlWorkingBase();
+    SvIdlWorkingBase * pDataBase = new SvIdlWorkingBase(aCommand);
 
     int nExit = 0;
     if( aCommand.aExportFile.Len() )

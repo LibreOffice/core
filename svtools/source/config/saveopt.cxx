@@ -437,7 +437,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bRODoPrettyPrinting( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
-    , eODFDefaultVersion( SvtSaveOptions::ODFVER_012 )
+    , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -474,11 +474,16 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                     {
                         sal_Int16 nTmp = 0;
                         if ( pValues[nProp] >>= nTmp )
-                            eODFDefaultVersion = SvtSaveOptions::ODFDefaultVersion( nTmp );
+                        {
+                            if( nTmp == 3 )
+                                eODFDefaultVersion = SvtSaveOptions::ODFVER_LATEST;
+                            else
+                                eODFDefaultVersion = SvtSaveOptions::ODFDefaultVersion( nTmp );
+                        }
                         else {
                             DBG_ERRORFILE( "SvtSaveOptions_Impl::SvtSaveOptions_Impl(): Wrong Type!" );
                         };
-                        bROAutoSaveTime = pROStates[nProp];
+                        bROODFDefaultVersion = pROStates[nProp];
                         break;
                     }
 
@@ -729,7 +734,7 @@ void SvtSaveOptions_Impl::Commit()
             case ODFDEFAULTVERSION:
                 if (!bROODFDefaultVersion)
                 {
-                    pValues[nRealCount] <<= sal_Int16( eODFDefaultVersion );
+                    pValues[nRealCount] <<= (eODFDefaultVersion == SvtSaveOptions::ODFVER_LATEST) ? sal_Int16( 3 ) : sal_Int16( eODFDefaultVersion );
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }

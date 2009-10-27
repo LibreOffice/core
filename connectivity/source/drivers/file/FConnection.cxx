@@ -383,8 +383,8 @@ void OConnection::disposing()
     OConnection_BASE::disposing();
 
     m_bClosed   = sal_True;
-    m_xDir      = NULL;
-    m_xContent  = NULL;
+m_xDir.clear();
+m_xContent.clear();
     m_xCatalog  = WeakReference< XTablesSupplier>();
 
     dispose_ChildImpl();

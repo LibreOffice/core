@@ -36,8 +36,8 @@ import com.sun.star.uno.XComponentContext;
 import helper.FileTools;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -55,7 +55,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase
         XComponentContext context = null;
         try
         {
-            XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, getORB() );
+            final XPropertySet orbProps = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, getORB() );
             context = (XComponentContext)UnoRuntime.queryInterface( XComponentContext.class,
                 orbProps.getPropertyValue( "DefaultContext" ) );
         }
@@ -84,9 +84,10 @@ public abstract class TestCase extends complexlib.ComplexTestCase
      */
     protected final String createTempFileURL() throws IOException
     {
-        File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" );
-        documentFile.deleteOnExit();
-        return documentFile.getAbsoluteFile().toURL().toString();
+        final File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" ).getAbsoluteFile();
+        if ( documentFile.exists() )
+            documentFile.delete();
+        return FileHelper.getOOoCompatibleFileURL( documentFile.toURI().toURL().toString() );
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -97,7 +98,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase
      */
     protected final String copyToTempFile( String _sourceURL ) throws IOException
     {
-        String targetURL = createTempFileURL();
+        final String targetURL = createTempFileURL();
         try
         {
             FileTools.copyFile( new File( new URI( _sourceURL ) ), new File( new URI( targetURL ) ) );
@@ -108,42 +109,10 @@ public abstract class TestCase extends complexlib.ComplexTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    protected void verifyExpectedException( Object _object, Class _unoInterfaceClass, String _methodName, Object[] _methodArgs,
+    protected void assureException( Object _object, Class _unoInterfaceClass, String _methodName, Object[] _methodArgs,
         Class _expectedExceptionClass )
     {
-        verifyExpectedException( UnoRuntime.queryInterface( _unoInterfaceClass, _object ), _methodName,
+        assureException( UnoRuntime.queryInterface( _unoInterfaceClass, _object ), _methodName,
             _methodArgs, _expectedExceptionClass );
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    protected void verifyExpectedException( Object _object, String _methodName, Object[] _methodArgs,
-        Class _expectedExceptionClass )
-    {
-        Class objectClass = _object.getClass();
-        Class[] methodArgsClasses = new Class[ _methodArgs.length ];
-        for ( int i=0; i<_methodArgs.length; ++i )
-            methodArgsClasses[i] = _methodArgs[i].getClass();
-
-        boolean noExceptionAllowed = _expectedExceptionClass == null;
-
-        boolean caughtExpected = noExceptionAllowed ? true : false;
-        try
-        {
-            Method method = objectClass.getMethod( _methodName, methodArgsClasses );
-            method.invoke(_object, _methodArgs );
-        }
-        catch ( InvocationTargetException e )
-        {
-            caughtExpected =    noExceptionAllowed
-                            ?   false
-                            :   ( e.getTargetException().getClass().equals( _expectedExceptionClass ) );
-        }
-        catch( Exception e )
-        {
-            caughtExpected = false;
-        }
-        assure( "did not catch the expected exception (" +
-                ( noExceptionAllowed ? "none" : _expectedExceptionClass.getName() ) +
-                ") while calling " + _object.getClass().getName() + "." + _methodName, caughtExpected );
     }
 }

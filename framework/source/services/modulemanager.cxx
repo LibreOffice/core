@@ -53,6 +53,7 @@
 
 //_______________________________________________
 // other includes
+#include <rtl/logfile.hxx>
 
 namespace framework
 {
@@ -194,7 +195,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
            css::uno::RuntimeException            )
 {
     ::comphelper::SequenceAsHashMap lProps(aValue);
-    if (lProps.size() < 1)
+    if (lProps.empty() )
     {
         throw css::lang::IllegalArgumentException(
                 ::rtl::OUString::createFromAscii("No properties given to replace part of module."),
@@ -254,10 +255,8 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
 {
     // get access to the element
     css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
-    css::uno::Any aElement = xCFG->getByName(sName);
-
     css::uno::Reference< css::container::XNameAccess > xModule;
-    aElement >>= xModule;
+    xCFG->getByName(sName) >>= xModule;
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(

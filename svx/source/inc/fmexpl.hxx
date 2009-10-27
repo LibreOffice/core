@@ -595,10 +595,10 @@ namespace svxform
     };
 
     //========================================================================
-    class NavigatorFrameManager : public SfxChildWindow
+    class SVX_DLLPUBLIC NavigatorFrameManager : public SfxChildWindow
     {
     public:
-        NavigatorFrameManager( Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
+        SVX_DLLPRIVATE NavigatorFrameManager( Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
                           SfxChildWinInfo *pInfo );
         SFX_DECL_CHILDWINDOW( NavigatorFrameManager );
     };

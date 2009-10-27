@@ -50,9 +50,6 @@
 #include "tabdlg.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace beans {
-        class XPropertyContainer;
-    }
     namespace document {
         class XDocumentProperties;
     }
@@ -75,7 +72,7 @@ private:
     ::com::sun::star::util::DateTime    m_CreationDate;
     ::rtl::OUString                     m_ModifiedBy;
     ::com::sun::star::util::DateTime    m_ModificationDate;
-    String                              m_PrintedBy;
+    ::rtl::OUString                     m_PrintedBy;
     ::com::sun::star::util::DateTime    m_PrintDate;
     sal_Int16                           m_EditingCycles;
     sal_Int32                           m_EditingDuration;
@@ -83,11 +80,9 @@ private:
     ::rtl::OUString                     m_Keywords;
     ::rtl::OUString                     m_Subject;
     ::rtl::OUString                     m_Title;
-    ::rtl::OUString                     m_UserDefinedFieldTitles[4];
-    ::rtl::OUString                     m_UserDefinedFieldValues[4];
-    sal_Bool                            bHasTemplate;
-    sal_Bool                            bDeleteUserData;
-    sal_Bool                            bIsUseUserData;
+    sal_Bool                            m_bHasTemplate;
+    sal_Bool                            m_bDeleteUserData;
+    sal_Bool                            m_bUseUserData;
     std::vector< CustomProperty* >      m_aCustomProperties;
 
 public:
@@ -101,9 +96,10 @@ public:
     virtual ~SfxDocumentInfoItem();
 
     /// update i_xDocProps with the data in this object
-    void updateDocumentInfo(
+    void UpdateDocumentInfo(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XDocumentProperties> & i_xDocProps)
+            ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
+        bool i_bDoNotUpdateUserDefined = false)
         const;
 
     sal_Bool    isAutoloadEnabled() const { return m_isAutoloadEnabled; }
@@ -151,25 +147,21 @@ public:
     void        setSubject(::rtl::OUString i_val) { m_Subject = i_val; }
     ::rtl::OUString getTitle() const { return m_Title; }
     void        setTitle(::rtl::OUString i_val) { m_Title = i_val; }
-    ::rtl::OUString getUserDefinedFieldTitle(size_t i_ix) const;
-    void        setUserDefinedFieldTitle(size_t i_ix, ::rtl::OUString i_val);
-    ::rtl::OUString getUserDefinedFieldValue(size_t i_ix) const;
-    void        setUserDefinedFieldValue(size_t i_ix, ::rtl::OUString i_val);
 
     /// reset user-specific data (author, modified-by, ...)
     void        resetUserData(const ::rtl::OUString & i_rAuthor);
 
-    void                    SetTemplate( BOOL b ) { bHasTemplate = b; }
-    FASTBOOL                HasTemplate() const { return bHasTemplate; }
-    void                    SetDeleteUserData( BOOL bSet );
-    void                    SetUseUserData( BOOL bSet );
-    BOOL                    IsDeleteUserData() const;
-    BOOL                    IsUseUserData() const;
+    void        SetTemplate( sal_Bool b ) { m_bHasTemplate = b; }
+    sal_Bool    HasTemplate() const { return m_bHasTemplate; }
+    void        SetDeleteUserData( sal_Bool bSet );
+    void        SetUseUserData( sal_Bool bSet );
+    sal_Bool    IsDeleteUserData() const;
+    sal_Bool    IsUseUserData() const;
 
     std::vector< CustomProperty* >  GetCustomProperties() const;
-    void                            ClearCustomProperties();
-    void                            AddCustomProperty(  const ::rtl::OUString& sName,
-                                                        const com::sun::star::uno::Any& rValue );
+    void        ClearCustomProperties();
+    void        AddCustomProperty(  const ::rtl::OUString& sName,
+                                    const com::sun::star::uno::Any& rValue );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -260,41 +252,6 @@ protected:
 
 public:
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& );
-};
-
-// class SfxDocumentUserPage ---------------------------------------------
-
-class SfxDocumentUserPage : public SfxTabPage
-{
-private:
-    BOOL                    bLabelModified;
-
-    FixedText               aInfo1Ft;
-    Edit                    aInfo1Ed;
-    FixedText               aInfo2Ft;
-    Edit                    aInfo2Ed;
-    FixedText               aInfo3Ft;
-    Edit                    aInfo3Ed;
-    FixedText               aInfo4Ft;
-    Edit                    aInfo4Ed;
-    PushButton              aEditLabelBtn;
-    SfxDocumentInfoItem*    pInfoItem;
-
-#if _SOLAR__PRIVATE
-    DECL_LINK( EditLabelHdl, PushButton * );
-
-    String              GetLabelText_Impl( FixedText* pLabel );
-    void                SetLabelText_Impl( FixedText* pLabel, const String& rNewLabel );
-#endif
-
-protected:
-    SfxDocumentUserPage( Window* pParent, const SfxItemSet& );
-
-    virtual BOOL        FillItemSet( SfxItemSet& );
-    virtual void        Reset( const SfxItemSet& );
-
-public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
 // class SfxInternetPage -------------------------------------------------
@@ -460,12 +417,14 @@ private:
     ImageButton                         m_aRemoveButton;
 
     sal_Int32                           m_nLineHeight;
+    sal_Int32                           m_nScrollPos;
     SvtSysLocale                        m_aSysLocale;
     std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Timer                               m_aEditLoseFocusTimer;
     Timer                               m_aBoxLoseFocusTimer;
+    Link                                m_aRemovedHdl;
 
     DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
@@ -492,6 +451,7 @@ public:
     bool                DoesCustomPropertyExist( const String& rName ) const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
+    void                SetRemovedHdl( const Link& rLink ) { m_aRemovedHdl = rLink; }
 };
 
 // class CustomPropertiesControl -----------------------------------------
@@ -509,12 +469,13 @@ private:
     void                    Initialize();
 
     DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( RemovedHdl, void* );
 
 public:
     CustomPropertiesControl( Window* pParent, const ResId& rResId );
     ~CustomPropertiesControl();
 
-    void            AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny );
+    void            AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 
     inline bool     AreAllLinesValid() const { return m_aPropertiesWin.AreAllLinesValid(); }
     inline void     ClearAllLines() { m_aPropertiesWin.ClearAllLines(); }

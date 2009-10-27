@@ -1414,7 +1414,10 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                         if( pSrcDoc != pDoc ||
                             pCpyPam->Start()->nNode > rInsPos ||
                             rInsPos >= pCpyPam->End()->nNode )
-                            pSrcDoc->Copy( *pCpyPam, *pPam->GetPoint() );
+                        {
+                            pSrcDoc->CopyRange( *pCpyPam, *pPam->GetPoint(),
+                                    false );
+                        }
                         delete pCpyPam;
                     }
                     if( pCpyRg && pSrcDoc == pDoc &&
@@ -1443,7 +1446,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
                     SwTblNumFmtMerge aTNFM( *pSrcDoc, *pDoc );
 
-                    pSrcDoc->CopyWithFlyInFly( *pCpyRg, rInsPos, bCreateFrm );
+                    pSrcDoc->CopyWithFlyInFly( *pCpyRg, 0, rInsPos, bCreateFrm );
                     aSave++;
 
                     if( !bCreateFrm )

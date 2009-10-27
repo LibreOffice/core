@@ -37,7 +37,7 @@ namespace chart
 {
 
 
-class OOO_DLLPUBLIC_CHARTTOOLS PotentialRegressionCurveCalculator :
+class PotentialRegressionCurveCalculator :
         public RegressionCurveCalculator
 {
 public:

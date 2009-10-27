@@ -39,9 +39,6 @@
 
 testcase tBasicVBACompatImportEnabled()
 
-    warnlog( "#i92666# loading sample document crashes the office" )
-    goto endsub
-
     printlog( "Test VBA compatibility switch / executable Microsoft(R) Excel(R) Macros" )
     printlog( "Test case 3: Import macros and set them executable" )
     
@@ -49,8 +46,10 @@ testcase tBasicVBACompatImportEnabled()
     ' This test case is based on the use cases provided in issue #i88690
     ' Spec: http://specs.openoffice.org/appwide/options_settings/Option_Dialog.odt
     
+    dim cFile as string : cFile = "vba-test.xls"
+    
     dim cTestFile as string
-        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/vba-test.xls"
+        cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & cFile
         
     dim cNodeCount as integer
     
@@ -66,10 +65,11 @@ testcase tBasicVBACompatImportEnabled()
     dim iCurrentModule as integer  
     dim iCurrentScript as integer
     dim cCurrentModule as string
+    dim cTempString as string
     dim bFound as boolean  
     
     ' Depending on the mode of macro import we have differtent basic libraries listed
-    const NODE_COUNT = 76 
+    const NODE_COUNT = 74
  
     const DOCUMENT_POSITION_OFFSET = -3
     
@@ -92,15 +92,31 @@ testcase tBasicVBACompatImportEnabled()
     printlog( "Expand all nodes" )
     cNodeCount = hExpandAllNodes( MakroAus )
     
-    printlog( "Verify that we have the correct node count for the current mode" )
+    printlog( "Verify that we have the correct node count for the current mode." )
     if ( cNodeCount <> NODE_COUNT ) then
         warnlog( "The number of nodes is incorrect: " & cNodeCount )
+        printlog( "Expected were...................: " & NODE_COUNT )
     endif
     
-    printlog( "Verify position of the document node" )
+    printlog( "Verify position of the document node." )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
-    if ( MakroAus.getSelText() <> "vba-test" ) then
-        qaerrorlog( "The document node is not at the expected position" )
+    cTempString = MakroAus.getSelText()
+    if ( cTempString <> cFile ) then
+        qaerrorlog( "The filename does not match. File may be read-only." )
+        if ( instr( cTempString, cFile ) > 1 ) then
+            printlog( "Filename is contained in the UI string." )
+            select case ( getAttr( cTestFile ) )
+            case 0 : warnlog( "The file appears to be read-only but it is " & _
+                              "not write-protected on filesystem level." )
+            case 1 : printlog( "The file is read-only on filesystem level. Ok." )
+            case else
+                warnlog( "getAttr() returned unexpected value. 1 or 2 are allowed" )
+                printlog( "RC from getAttr() is: " &  getAttr( cTestFile ) )
+            end select
+        else
+            qaerrorlog( "The document node is not at the expected position." )
+            qaerrorlog( "Object at this position is: " & MakroAus.getSelText() )
+        endif
     endif
     
     for iCurrentModule = 2 to 3
@@ -120,7 +136,7 @@ testcase tBasicVBACompatImportEnabled()
                     warnlog( "Script for the current module not found" )
                     bFound = FALSE
                 else
-                    printlog( "Script(s) found." )
+                    printlog( "Script found at pos" & iCurrentScript )
                 endif
             next iCurrentScript
         endif

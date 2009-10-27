@@ -254,7 +254,7 @@ public:
     BOOL IsPaintInScroll() const { return bPaintInScroll; }
 
     // neues Interface fuer StarView Drawing
-    inline BOOL HasDrawView() const { return 0 != pDrawView; }
+    inline BOOL HasDrawView()       const { return 0 != pDrawView; }
           SwDrawView* GetDrawView()       { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
           SdrPageView*GetPageView()       { return pSdrPageView; }

@@ -86,6 +86,8 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
         GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
         mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
+        mrImpData.mxTabProtect.reset( new XclImpSheetProtectBuffer( GetRoot() ) );
+        mrImpData.mxDocProtect.reset( new XclImpDocProtectBuffer( GetRoot() ) );
     }
 
     mrImpData.mxPageSett.reset( new XclImpPageSettings( GetRoot() ) );
@@ -230,6 +232,18 @@ XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
 {
     DBG_ASSERT( mrImpData.mxPTableMgr.is(), "XclImpRoot::GetPivotTableManager - invalid call, wrong BIFF" );
     return *mrImpData.mxPTableMgr;
+}
+
+XclImpSheetProtectBuffer& XclImpRoot::GetSheetProtectBuffer() const
+{
+    DBG_ASSERT( mrImpData.mxTabProtect.is(), "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
+    return *mrImpData.mxTabProtect;
+}
+
+XclImpDocProtectBuffer& XclImpRoot::GetDocProtectBuffer() const
+{
+    DBG_ASSERT( mrImpData.mxDocProtect.is(), "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
+    return *mrImpData.mxDocProtect;
 }
 
 XclImpPageSettings& XclImpRoot::GetPageSettings() const

@@ -1,7 +1,0 @@
-CALC=OpenOffice.org 2.3 Spreadsheet
-CHART=OpenOffice.org 2.3 Chart
-DRAW=OpenOffice.org 2.3 Drawing
-IMPRESS=OpenOffice.org 2.3 Presentation
-MATH=OpenOffice.org 2.3 Formula
-WRITER=OpenOffice.org 2.3 Text
-OTHER=Further objects

@@ -167,7 +167,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         }
         break;
 
-        case SID_PASTE2:
+        case SID_PASTE_SPECIAL:
         {
             SetCurrentFunction( FuInsertClipboard::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();

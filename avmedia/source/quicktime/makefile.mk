@@ -45,7 +45,7 @@ CDEFS+= -DVERBOSE
 
 # --- Files ----------------------------------
 
-CFLAGSCXX += -x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
 
 SLOFILES= \
         $(SLO)$/quicktimeuno.obj  \

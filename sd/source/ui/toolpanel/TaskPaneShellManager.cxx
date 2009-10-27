@@ -79,8 +79,18 @@ void TaskPaneShellManager::ReleaseShell (SfxShell* )
     // Nothing to do.
 }
 
+// hack for annotation panel, better fix?
+void TaskPaneShellManager_AddSubShell ( TaskPaneShellManager* pManager, sal_Int32 nId, SfxShell* pShell, ::Window* pWindow )
+{
+    if( pManager != NULL )
+        pManager->AddSubShell( (ShellId)nId, pShell, pWindow );
+}
 
-
+void TaskPaneShellManager_RemoveSubShell ( TaskPaneShellManager* pManager, const SfxShell* pShell)
+{
+    if( pManager != NULL )
+        pManager->RemoveSubShell( pShell );
+}
 
 void TaskPaneShellManager::AddSubShell (
     ShellId nId,

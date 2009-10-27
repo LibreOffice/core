@@ -45,7 +45,7 @@ class SVX_DLLPUBLIC XFormTextShadowColorItem : public XColorItem
 public:
             TYPEINFO();
             XFormTextShadowColorItem() {}
-            XFormTextShadowColorItem(long nIndex, const Color& rTheColor);
+            XFormTextShadowColorItem(INT32 nIndex, const Color& rTheColor);
             XFormTextShadowColorItem(const String& rName, const Color& rTheColor);
             XFormTextShadowColorItem(SvStream& rIn);
 

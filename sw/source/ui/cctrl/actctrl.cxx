@@ -71,6 +71,15 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
  Beschreibung:  KeyInput fuer ShortName - Edits ohne Spaces
 ------------------------------------------------------------------------*/
 
+NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
+    : Edit(pParent, rResId),
+    sForbiddenChars(String::CreateFromAscii(" "))
+{
+}
+
+NoSpaceEdit::~NoSpaceEdit()
+{
+}
 
 void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
 {

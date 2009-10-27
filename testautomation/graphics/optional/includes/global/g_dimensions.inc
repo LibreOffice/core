@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -43,88 +43,80 @@
 
 Sub testFormatDimensioning
 
-call tdFormatDimensioning
+    call tdFormatDimensioning
 
 End Sub
 
 testcase tdFormatDimensioning
-   Dim ZaehlerMetrik
-   Dim i
+    Dim ZaehlerMetrik
+    Dim i
 
-   Call hNewDocument
+    Call hNewDocument
 
-   '/// Set min and max values for dimensioning ///'
-   FormatDimensioning
-   Kontext "Bemassung"
-      LinienDistanz.ToMin
-      PrintLog  LinienDistanz.GetText + " = minimum value"
-      LinienDistanz.ToMax
-      PrintLog  LinienDistanz.GetText + " = maximum value"
+    FormatDimensioning
+    Kontext "Bemassung"
+    LinienDistanz.ToMin
+    PrintLog  LinienDistanz.GetText + " = minimum value"
+    LinienDistanz.ToMax
+    PrintLog  LinienDistanz.GetText + " = maximum value"
 
-      HLUeberhang.ToMin
-      PrintLog HLUeberhang.GetText + " = minimum value"
-      HLUeberhang.ToMax
-      PrintLog HLUeberhang.GetText + " = maximum value"
+    HLUeberhang.ToMin
+    PrintLog HLUeberhang.GetText + " = minimum value"
+    HLUeberhang.ToMax
+    PrintLog HLUeberhang.GetText + " = maximum value"
 
-      HLDistanz.ToMin
-      PrintLog HLDistanz.GetText + " = minimum value"
-      HLDistanz.ToMax
-      PrintLog HLDistanz.GetText + " = maximum value"
+    HLDistanz.ToMin
+    PrintLog HLDistanz.GetText + " = minimum value"
+    HLDistanz.ToMax
+    PrintLog HLDistanz.GetText + " = maximum value"
 
-      LinkeHL.ToMin
-      PrintLog LinkeHL.GetText + " = minimum value"
-      LinkeHL.ToMax
-      PrintLog LinkeHL.GetText + " = maximum valuet"
+    LinkeHL.ToMin
+    PrintLog LinkeHL.GetText + " = minimum value"
+    LinkeHL.ToMax
+    PrintLog LinkeHL.GetText + " = maximum valuet"
 
-      RechteHL.ToMin
-      PrintLog RechteHL.GetText + " = minimum value"
-      RechteHL.ToMax
-      PrintLog RechteHL.GetText + " = maximum value"
+    RechteHL.ToMin
+    PrintLog RechteHL.GetText + " = minimum value"
+    RechteHL.ToMax
+    PrintLog RechteHL.GetText + " = maximum value"
 
-      '/// set every metric unit ///'
-      MetrikList.GetItemCount
-      ZaehlerMetrik=MetrikList.GetItemCount
-      for i = 1 to ZaehlerMetrik
-         MetrikList.Select i
-         PrintLog MetrikList.GetSelText + " set"
-      next i
-      '/// check show unit ///'
-      MetrikAnzeigen.Check
-      '/// check "below reference edge ///'
-      AnzeigeUnterhalb.Check
-      '/// check parallel ///'
-      AnzeigeParallel.Check
-      '/// check automatic vertical ///'
-      AutomatischHorizontal.Check
-      '/// check automatic horizontal ///'
-      AutomatischVertikal.Check
-      sleep 2
-   Bemassung.OK
+    MetrikList.GetItemCount
+    ZaehlerMetrik=MetrikList.GetItemCount
+    for i = 1 to ZaehlerMetrik
+        MetrikList.Select i
+        PrintLog MetrikList.GetSelText + " set"
+    next i
+    MetrikAnzeigen.Check
+    AnzeigeUnterhalb.Check
+    AnzeigeParallel.Check
+    AutomatischHorizontal.Check
+    AutomatischVertikal.Check
+    sleep 2
+    Bemassung.OK
 
-   '/// control value changes and checkbox states ///'
-   FormatDimensioning
-   Kontext "Bemassung"
-      MetrikAnzeigen.GetState
-      AnzeigeUnterhalb.GetState
-      AnzeigeParallel.GetState
-      AutomatischHorizontal.GetState
-      AutomatischVertikal.GetState
-      if MetrikAnzeigen.GetState = 1 Then
-         PrintLog "  show metric works"
-      else
-         WarnLog "  show metric does not work"
-      end if
-      if AnzeigeUnterhalb.GetState= 1 Then
-         PrintLog "  AnzeigeUnterhalb does work"
-      else
-         WarnLog "  TriStateBox AnzeigeUnterhalb does not work"
-      end if
-      if AnzeigeParallel.GetState= 1 Then
-         PrintLog "  AnzeigeParallel does work"
-      else
-         WarnLog "  TriStateBox AnzeigeParallel does not work properly"
-      end if
-   Bemassung.OK
-   Call hCloseDocument
+    FormatDimensioning
+    Kontext "Bemassung"
+    MetrikAnzeigen.GetState
+    AnzeigeUnterhalb.GetState
+    AnzeigeParallel.GetState
+    AutomatischHorizontal.GetState
+    AutomatischVertikal.GetState
+    if MetrikAnzeigen.GetState = 1 Then
+        PrintLog "  show metric works"
+    else
+        WarnLog "  show metric does not work"
+    end if
+    if AnzeigeUnterhalb.GetState= 1 Then
+        PrintLog "  AnzeigeUnterhalb does work"
+    else
+        WarnLog "  TriStateBox AnzeigeUnterhalb does not work"
+    end if
+    if AnzeigeParallel.GetState= 1 Then
+        PrintLog "  AnzeigeParallel does work"
+    else
+        WarnLog "  TriStateBox AnzeigeParallel does not work properly"
+    end if
+    Bemassung.OK
+    Call hCloseDocument
 endcase
 

@@ -157,14 +157,15 @@ void lcl_SaveAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
             // TextAttribut zerstoeren
             SwTxtNode *pTxtNd = pFmt->GetDoc()->GetNodes()[ rNodePos ]->GetTxtNode();
             ASSERT( pTxtNd, "Kein Textnode gefunden" );
-            SwTxtFlyCnt* pAttr = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr( nCntntPos );
+            SwTxtFlyCnt* pAttr = static_cast<SwTxtFlyCnt*>(
+                pTxtNd->GetTxtAttrForCharAt( nCntntPos, RES_TXTATR_FLYCNT ));
             // Attribut steht noch im TextNode, loeschen
             if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFmt )
             {
                 // Pointer auf 0, nicht loeschen
                 ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
                 SwIndex aIdx( pTxtNd, nCntntPos );
-                pTxtNd->Erase( aIdx, 1 );
+                pTxtNd->EraseText( aIdx, 1 );
             }
         }
         else if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
@@ -198,9 +199,9 @@ void lcl_RestoreAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
         if( FLY_IN_CNTNT == rAnchor.GetAnchorId() )
         {
             SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-            ASSERT( pTxtNd, "Kein Textnode gefunden" );
-            pTxtNd->InsertItem( SwFmtFlyCnt( (SwFrmFmt*)pFmt ),
-                                nCntntPos, nCntntPos );
+            ASSERT( pTxtNd, "no Text Node" );
+            SwFmtFlyCnt aFmt( pFmt );
+            pTxtNd->InsertItem( aFmt, nCntntPos, nCntntPos );
         }
     }
 }

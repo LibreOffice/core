@@ -90,7 +90,6 @@ public:
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
 
     virtual void operator = (const SdrObject& rObj);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -144,7 +143,7 @@ public:
     const String& GetUnoControlModelTypeName() const { return aUnoControlTypeName; }
     const String& GetUnoControlTypeName() const { return aUnoControlTypeName; }
 
-    void SetUnoControlModel(::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xModel);
+    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& xModel );
 
 protected:
     // SdrObject overridables

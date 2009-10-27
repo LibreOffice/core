@@ -114,6 +114,7 @@
 #include "progress.hxx"
 #include "hints.hxx"        // fuer Paint-Broadcast
 #include "prnsave.hxx"
+#include "tabprotection.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -132,7 +133,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     bPageSizeValid( FALSE ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
-    bProtected( FALSE ),
+    pTabProtection( NULL ),
     pColWidth( NULL ),
     pRowHeight( NULL ),
     pColFlags( NULL ),
@@ -140,6 +141,8 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     pOutlineTable( NULL ),
     bTableAreaValid( FALSE ),
     bVisible( TRUE ),
+    bStreamValid( FALSE ),
+    bPendingRowHeights( FALSE ),
     nTab( nNewTab ),
     nRecalcLvl( 0 ),
     pDocument( pDoc ),
@@ -246,7 +249,21 @@ const String& ScTable::GetUpperName() const
 
 void ScTable::SetVisible( BOOL bVis )
 {
+    if (bVisible != bVis && IsStreamValid())
+        SetStreamValid(FALSE);
+
     bVisible = bVis;
+}
+
+void ScTable::SetStreamValid( BOOL bSet, BOOL bIgnoreLock )
+{
+    if ( bIgnoreLock || !pDocument->IsStreamValidLocked() )
+        bStreamValid = bSet;
+}
+
+void ScTable::SetPendingRowHeights( BOOL bSet )
+{
+    bPendingRowHeights = bSet;
 }
 
 void ScTable::SetLayoutRTL( BOOL bSet )
@@ -863,6 +880,10 @@ BOOL ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     if (!ValidCol(nCol) || !ValidRow(nRow))
         return FALSE;
 
+    if (pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED))
+        // Skip an overlapped cell.
+        return false;
+
     if (bMarked && !rMark.IsCellMarked(nCol,nRow))
         return FALSE;
 
@@ -905,7 +926,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     {
         BOOL bUp = ( nMovY < 0 );
         nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-        while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
+        while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
+                pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
         {
             //  #53697# ausgeblendete ueberspringen (s.o.)
             nRow += nMovY;
@@ -934,7 +956,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
             else if (nRow > MAXROW)
                 nRow = 0;
             nRow = rMark.GetNextMarked( nCol, nRow, bUp );
-            while ( VALIDROW(nRow) && pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN) )
+            while ( VALIDROW(nRow) && ((pRowFlags && (pRowFlags->GetValue(nRow) & CR_HIDDEN)) ||
+                    pDocument->HasAttrib(nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_OVERLAPPED)) )
             {
                 //  #53697# ausgeblendete ueberspringen (s.o.)
                 nRow += nMovY;
@@ -1095,6 +1118,7 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
 {
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
     {
+        InitializeNoteCaptions();
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if ( eUpdateRefMode != URM_COPY && pDrawLayer )
         {
@@ -1233,6 +1257,9 @@ void ScTable::UpdateInsertTab(SCTAB nTable)
 {
     if (nTab >= nTable) nTab++;
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].UpdateInsertTab(nTable);
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 //UNUSED2008-05  void ScTable::UpdateInsertTabOnlyCells(SCTAB nTable)
@@ -1249,6 +1276,9 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, BOOL bIsMove, ScTable* pRefUndo )
         for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, &pRefUndo->aCol[i]);
     else
         for (i=0; i <= MAXCOL; i++) aCol[i].UpdateDeleteTab(nTable, bIsMove, NULL);
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
@@ -1260,6 +1290,9 @@ void ScTable::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo,
         aCol[i].UpdateMoveTab( nOldPos, nNewPos, nTabNo );
         rProgress.SetState( rProgress.GetState() + aCol[i].GetCodeCount() );
     }
+
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 void ScTable::UpdateCompile( BOOL bForceIfNameInUse )
@@ -1294,7 +1327,7 @@ void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
 void ScTable::ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
-                                    const ScIndexMap& rMap )
+                                    const ScRangeData::IndexMap& rMap )
 {
     for (SCCOL i = nCol1; i <= nCol2 && (ValidCol(i)); i++)
     {
@@ -1444,11 +1477,11 @@ void ScTable::AddPrintRange( const ScRange& rNew )
         aPrintRanges.push_back( rNew );
 }
 
-void ScTable::SetPrintRange( const ScRange& rNew )
-{
-    ClearPrintRanges();
-    AddPrintRange( rNew );
-}
+//UNUSED2009-05 void ScTable::SetPrintRange( const ScRange& rNew )
+//UNUSED2009-05 {
+//UNUSED2009-05     ClearPrintRanges();
+//UNUSED2009-05     AddPrintRange( rNew );
+//UNUSED2009-05 }
 
 void ScTable::SetPrintEntireSheet()
 {

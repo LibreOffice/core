@@ -28,21 +28,29 @@
  *
  ************************************************************************/
 
-#include <rtl/ustring.hxx>
+#include "oox/token/propertylist.hxx"
 #include "properties.hxx"
-#include "oox/helper/propertymap.hxx"
 
 namespace oox {
 
+namespace {
+
+// include auto-generated property name lists
 #include "propertywords.inc"
+
+} // namespace
 
 // ============================================================================
 
-PropertyNamesList::PropertyNamesList()
+PropertyList::PropertyList()
 {
     reserve( static_cast< size_t >( PROP_COUNT ) );
     for( sal_Int32 nIdx = 0; nIdx < PROP_COUNT; ++nIdx )
         push_back( ::rtl::OUString::createFromAscii( propertywordlist[ nIdx ] ) );
+}
+
+PropertyList::~PropertyList()
+{
 }
 
 // ============================================================================

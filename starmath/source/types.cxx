@@ -80,6 +80,7 @@ static MathConversionEntry aMathConvTbl[] =
     { MS_LEFTARROW,   0x2190,     0 },
     { MS_UPARROW,     0x2191,     0 },
     { MS_DOWNARROW,   0x2193,     0 },
+    { MS_PLACE,       0x2751,     0 },
 
     // predefined-user-defined symbols
     // (code-points on the left as defined in 'officecfg' for SO8,
@@ -201,7 +202,6 @@ sal_Unicode ConvertMathToMathType( sal_Unicode cChar )
     }
     return cRes;
 }
-#endif //TL_NOT_YET_USED
 
 sal_Unicode ConvertMathTypeToMath( sal_Unicode cChar )
 {
@@ -217,6 +217,7 @@ sal_Unicode ConvertMathTypeToMath( sal_Unicode cChar )
     }
     return cRes;
 }
+#endif //TL_NOT_YET_USED
 
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
 {

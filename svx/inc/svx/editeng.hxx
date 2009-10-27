@@ -219,6 +219,8 @@ public:
 
     USHORT          GetLineCount( USHORT nParagraph ) const;
     xub_StrLen      GetLineLen( USHORT nParagraph, USHORT nLine ) const;
+    void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
+    USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
     sal_uInt32      GetLineHeight( USHORT nParagraph, USHORT nLine = 0 );
     USHORT          GetFirstLineOffset( USHORT nParagraph );
     ParagraphInfos  GetParagraphInfos( USHORT nPara );

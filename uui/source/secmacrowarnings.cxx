@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <comphelper/sequence.hxx>
+#include "comphelper/documentconstants.hxx"
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/msgbox.hxx>
@@ -122,8 +123,10 @@ IMPL_LINK( MacroWarning, ViewSignsBtnHdl, void*, EMPTYARG )
 {
     DBG_ASSERT( mxCert.is(), "*MacroWarning::ViewSignsBtnHdl(): no certificate set!" );
 
+    uno::Sequence< uno::Any > aArgs( 1 );
+    aArgs[0] = uno::makeAny( maODFVersion );
     uno::Reference< security::XDocumentDigitalSignatures > xD(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+        comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY );
     if( xD.is() )
     {
         if( mxCert.is() )
@@ -139,8 +142,10 @@ IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
 {
     if( mbSignedMode && maAlwaysTrustCB.IsChecked() )
     {   // insert path into trusted path list
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[0] = uno::makeAny( maODFVersion );
         uno::Reference< security::XDocumentDigitalSignatures > xD(
-            comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+            comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ), aArgs ), uno::UNO_QUERY );
         if( xD.is() )
         {
             if( mxCert.is() )
@@ -337,21 +342,23 @@ void MacroWarning::FitControls()
 }
 
 void MacroWarning::SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore,
-                               const cssu::Sequence< security::DocumentSignatureInformation >& _rInfos )
+                               const ::rtl::OUString& aODFVersion,
+                               const cssu::Sequence< security::DocumentSignatureInformation >& rInfos )
 {
     mxStore = rxStore;
-    sal_Int32   nCnt = _rInfos.getLength();
+    maODFVersion = aODFVersion;
+    sal_Int32   nCnt = rInfos.getLength();
     if( mxStore.is() && nCnt > 0 )
     {
-        mpInfos = &_rInfos;
+        mpInfos = &rInfos;
         String      aCN_Id( String::CreateFromAscii( "CN" ) );
         String      s;
-        s = GetContentPart( _rInfos[ 0 ].Signer->getSubjectName(), aCN_Id );
+        s = GetContentPart( rInfos[ 0 ].Signer->getSubjectName(), aCN_Id );
 
         for( sal_Int32 i = 1 ; i < nCnt ; ++i )
         {
             s.AppendAscii( "\n" );
-            s += GetContentPart( _rInfos[ i ].Signer->getSubjectName(), aCN_Id );
+            s += GetContentPart( rInfos[ i ].Signer->getSubjectName(), aCN_Id );
         }
 
         maSignsFI.SetText( s );

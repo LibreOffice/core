@@ -78,7 +78,7 @@ namespace connectivity
         {
             // avoid ambiguity
             ::osl::MutexGuard aGuard( m_pDerivedImplementation->WEAK::rBHelper.rMutex );
-            m_xParent = NULL;
+        m_xParent.clear();
         }
         void relase_ChildImpl()
         {

@@ -53,6 +53,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 #include <comphelper/stl_types.hxx>
 
 
@@ -122,7 +123,14 @@ public:
             if ( aFind2 != aFind->second.first.end() )
                 return aFind2->second;
         }
-        OSL_ENSURE(0,"Could find the required config!");
+#if OSL_DEBUG_LEVEL > 0
+        ::rtl::OStringBuffer aMessage( "Could find the required config:\n" );
+        aMessage.append( "component: " );
+        aMessage.append( ::rtl::OUStringToOString( _sComponentName, RTL_TEXTENCODING_UTF8 ) );
+        aMessage.append( "\nname: " );
+        aMessage.append( ::rtl::OUStringToOString( _sName, RTL_TEXTENCODING_UTF8 ) );
+        OSL_ENSURE( 0, aMessage.makeStringAndClear().getStr() );
+#endif
         return ExtendedColorConfigValue();
     }
     void                            SetColorConfigValue(const ::rtl::OUString& _sName,

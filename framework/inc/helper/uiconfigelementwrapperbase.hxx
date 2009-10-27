@@ -52,6 +52,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -80,7 +81,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
-        UIConfigElementWrapperBase( sal_Int16 nType );
+        UIConfigElementWrapperBase( sal_Int16 nType,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory );
         virtual ~UIConfigElementWrapperBase();
 
         //---------------------------------------------------------------------------------------------------------
@@ -99,8 +100,8 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
 
         // XUIElementSettings
         virtual void SAL_CALL updateSettings() throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& UISettings ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& UISettings ) throw (::com::sun::star::uno::RuntimeException);
 
         // XUIElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
@@ -135,6 +136,8 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
         virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
 
+        virtual void impl_fillNewData();
+
         static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
         sal_Int16                                                                               m_nType;
@@ -145,6 +148,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
                                                                                                 m_bDisposed : 1,
                                                                                                 m_bNoClose : 1;
         rtl::OUString                                                                           m_aResourceURL;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xServiceFactory;
         com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >         m_xConfigSource;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >               m_xConfigData;
         com::sun::star::uno::WeakReference< com::sun::star::frame::XFrame >                     m_xWeakFrame;

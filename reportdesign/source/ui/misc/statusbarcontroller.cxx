@@ -223,6 +223,8 @@ void SAL_CALL OStatusbarController::update() throw ( RuntimeException )
 // XComponent
 void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::RuntimeException)
 {
+    Reference< XComponent > xComp( m_pController.getRef(), UNO_QUERY );
+    ::comphelper::disposeComponent(xComp);
     m_pController.dispose();
     svt::StatusbarController::dispose();
 }

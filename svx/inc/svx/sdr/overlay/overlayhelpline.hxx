@@ -46,11 +46,8 @@ namespace sdr
             // remember HelpLineKind
             SdrHelpLineKind                             meKind;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayHelplineStriped(
@@ -58,30 +55,11 @@ namespace sdr
                 SdrHelpLineKind eNewKind = SDRHELPLINE_POINT);
             virtual ~OverlayHelplineStriped();
 
-            // Hittest with logical coordinates
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
-        };
-    } // end of namespace overlay
-} // end of namespace sdr
+            // dat read access
+            SdrHelpLineKind getKind() const { return meKind; }
 
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlayHelpline : public OverlayHelplineStriped
-        {
-        protected:
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-        public:
-            OverlayHelpline(
-                const basegfx::B2DPoint& rBasePos,
-                Color aLineColor = Color(COL_BLACK),
-                SdrHelpLineKind eNewKind = SDRHELPLINE_POINT);
-            virtual ~OverlayHelpline();
+            // react on stripe definition change
+            virtual void stripeDefinitionHasChanged();
         };
     } // end of namespace overlay
 } // end of namespace sdr

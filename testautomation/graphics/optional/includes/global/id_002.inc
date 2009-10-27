@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -55,9 +55,6 @@
 
 testcase tiEditUndoRedo
 
-    '/// open application ///'
-    '/// Type a sentence into the document and do : ///'
-    '/// Edit / Undo and Edit / Redo ///
     hNewDocument
     call hTBOtypeInDoc
 
@@ -65,16 +62,13 @@ testcase tiEditUndoRedo
     WaitSlot (2000)
     EditRedo
     WaitSlot (2000)
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditRepeat
     goto endsub 'Quaste, ask FHA
-    '/// open application ///'
     Call hNewDocument
 
-'/// create 3 rectangles ///'
     gMouseClick 50,50
     Call hRechteckErstellen ( 30, 10, 70, 30 )
     WaitSlot (1000)
@@ -82,24 +76,18 @@ testcase tiEditRepeat
     WaitSlot (1000)
     Call hRechteckErstellen ( 80, 50, 40, 20 )
     WaitSlot (1000)
-    '/// [Modify | ContextMenu]->Arrange->SendBackward ///'
     ContextArrangeBringBackward
     WaitSlot (2000)
-    '/// Edit->Repeat ///'
     try
         EditRepeat
     catch
         Warnlog " Menu entry is disabled #i26129#"
     endcatch
 
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditCutPasteCopySelectall
-    '/// open application ///'
-    '/// Type a sentence into the dokument and do : ///'
-    '/// edit-> (Cut | Paste | Copy | SelectAll | Cut | Paste | DeleteContents) ///'
     Call hNewDocument
 
     call hTBOtypeInDoc
@@ -120,105 +108,74 @@ testcase tiEditCutPasteCopySelectall
     WaitSlot (2000)
     EditDeleteContents
     WaitSlot (2000)
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditPasteSpecial
-    '/// open application ///'
     Call  hNewDocument
 
-    '/// put some words into the clipboard ///'
     SetClipboard "This is a Text in the Clipboard"
 
-    '/// Edit->PasteSpecial ///'
     EditPasteSpecial
     WaitSlot (1000)
     Kontext "InhaltEinfuegen"
-        DialogTest ( InhaltEinfuegen )
+    DialogTest ( InhaltEinfuegen )
 
-        '/// close the dialog without inserting something ///'
-        InhaltEinfuegen.Cancel
+    InhaltEinfuegen.Cancel
     WaitSlot (1000)
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditSearchAndReplace
-    '/// open application ///'
     Call  hNewDocument
 
     try
-        '/// Edit->Find & Replace ///'
         EditSearchAndReplace
         WaitSlot (1000)
         Kontext "FindAndReplace"
-            DialogTest ( FindAndReplace )
+        DialogTest ( FindAndReplace )
 
-            '/// click on "More Options" ///'
-            More.Click
-            '/// check 'similarity search' ///'
-            SimilaritySearch.Check ' culprint for errors if not resetted !
-            WaitSlot (1000)
-            '/// click '...' :-) ///'
-            SimilaritySearchFor.Click
-            Kontext "Aehnlichkeitssuche"
-                DialogTest (Aehnlichkeitssuche )
-                Aehnlichkeitssuche.Cancel
-                '/// close dialog 'similarity search' ///'
+        More.Click
+        SimilaritySearch.Check ' culprint for errors if not resetted !
+        WaitSlot (1000)
+        SimilaritySearchFor.Click
+        Kontext "Aehnlichkeitssuche"
+        DialogTest (Aehnlichkeitssuche )
+        Aehnlichkeitssuche.Cancel
         Kontext "FindAndReplace"
-            '/// UNcheck 'similarity search' ///'
-            SimilaritySearch.UnCheck
-            '/// click on "More Options" ///'
-            More.Click
-            '/// close dialog 'Find & Replace' ///'
-            FindAndReplace.Close
+        SimilaritySearch.UnCheck
+        More.Click
+        FindAndReplace.Close
     catch
         Warnlog "EditSearchAndReplace caused an error"
     endcatch
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditDuplicate
-    '/// open application ///'
     Call hNewDocument
-    '/// create a rectangle ///'
     call hTBOtypeInDoc
-    '/// 'Edit->Select All' ///'
     EditSelectAll
-    '/// Edit->Duplicate ///'
     EditDuplicate
 
     Kontext "Duplizieren"
-        Call DialogTest ( Duplizieren )
-        '/// cancel dialog 'duplicate' ///'
-        Duplizieren.Cancel
+    Call DialogTest ( Duplizieren )
+    Duplizieren.Cancel
 
     Call hCloseDocument
-    '/// close application ///'
 endcase
 
 testcase tEditPoints
-    '/// open application ///'
     Call hNewDocument
-    '/// create a rectangle ///'
     call hTBOtypeInDoc
-    '/// 'Edit->Points' ///'
     FormatEditPoints
-    '/// 'Edit->Glue Points' ///'
     EditGluePoints
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditFields
-    '/// open application ///'
     Call hNewDocument
     WaitSlot (2000)
-    '/// insert something to be able to use this function ///'
-    '///+ Insert->Fields->Date (fixed) ///'
-    '///+ deselect object, select, editmode ///'
     InsertFieldsDateFix
     WaitSlot (1000)
     gMouseDoubleClick 10,10
@@ -229,30 +186,23 @@ testcase tiEditFields
     hTypeKeys "<Home>"                 ' Here we enter Edit-Mode and therefore also the right place
 
     try
-        '/// Edit->Fields ///'
         EditFieldsDraw
         Kontext "FeldbefehlBearbeitenDraw"
-            Call DialogTest ( FeldbefehlBearbeitenDraw )
-            '/// cancel dialog 'Edit->Field' ///'
-            FeldbefehlBearbeitenDraw.Close
+        Call DialogTest ( FeldbefehlBearbeitenDraw )
+        FeldbefehlBearbeitenDraw.Close
     catch
         Warnlog "- Slot could not be accessed"
     endcatch
 
-'/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tdEditDeleteSlide
-'/// open application ///'
     Call hNewDocument
-'/// Insert->Slide ///'
     InsertSlide
     WaitSlot (2000)
     hTypekeys "<Pagedown>"
     WaitSlot (2000)
-    '/// check with navigator, if slide is inserted ///'
-    '///  check state of navigator ! expected: closed ///'
     Kontext "Navigator"
     sleep (2)
     if Navigator.exists then
@@ -271,165 +221,136 @@ testcase tdEditDeleteSlide
         goto endsub
     else
         Liste.Select 2
-        Liste.Typekeys "<RETURN>"   '/// Press Return to go to the selected slide ///'
         Kontext "Navigator"
         Navigator.Close
     end if
     WaitSlot (2000)
-    '/// Edit->Delete Slide ///'
     EditDeleteSlide
     WaitSlot (2000)
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditLinks
-    '/// open application ///'
     Call  hNewDocument
 
-    '/// Insert a linked graphic : "global\input\graf_inp\stabler.tif" ///'
     InsertGraphicsFromFile
     Kontext "GrafikEinfuegenDlg"
-        try
-            if Link.Exists then
-                Link.Check
-            else
-                Warnlog "- Link in Insert graphic is not working"
-            end if
-            Dateiname.settext Convertpath (gTesttoolPath + "global\input\graf_inp\stabler.tif")
-            Oeffnen.Click
-            Kontext "Messagebox"
-                if Messagebox.Exists=True Then
-                    Warnlog Messagebox.GetText
-                    Messagebox.Ok
-                end if
-                InsertGraphicsFromFile
-                Kontext "GrafikEinfuegenDlg"
-                    Link.Check
-                    '/// Insert a linked graphic : "global\input\graf_inp\desp.bmp" ///'
-                    Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
-                    Oeffnen.Click
-                    sleep 2
-                    kontext "Messagebox"
-                        if Messagebox.Exists then
-                            Warnlog Messagebox.GetText
-                            Messagebox.OK
-                            sleep 1
-                        end if
-        catch
-            Warnlog "Insert graphic caused errors"
-        endcatch
-
-        WaitSlot (2000)
     try
-        '/// Edit->Links ///'
+        if Link.Exists then
+            Link.Check
+        else
+            Warnlog "- Link in Insert graphic is not working"
+        end if
+        Dateiname.settext Convertpath (gTesttoolPath + "global\input\graf_inp\stabler.tif")
+        Oeffnen.Click
+        Kontext "Messagebox"
+        if Messagebox.Exists=True Then
+            Warnlog Messagebox.GetText
+            Messagebox.Ok
+        end if
+        InsertGraphicsFromFile
+        Kontext "GrafikEinfuegenDlg"
+        Link.Check
+        Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
+        Oeffnen.Click
+        sleep 2
+        kontext "Messagebox"
+        if Messagebox.Exists then
+            Warnlog Messagebox.GetText
+            Messagebox.OK
+            sleep 1
+        end if
+    catch
+        Warnlog "Insert graphic caused errors"
+    endcatch
+
+    WaitSlot (2000)
+    try
         EditLinksDraw
         WaitSlot (2000)
         Kontext "VerknuepfungenBearbeiten"
-            Call DialogTest ( VerknuepfungenBearbeiten )
-            '/// close dialog 'Edit Links' ///'
-            VerknuepfungenBearbeiten.Close
-            WaitSlot (1000)
+        Call DialogTest ( VerknuepfungenBearbeiten )
+        VerknuepfungenBearbeiten.Close
+        WaitSlot (1000)
     catch
         Warnlog "- EditLinks could not be executed, could be the graphic was not imported"
     endcatch
 
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditImageMap
-    '/// open application ///'
     Call  hNewDocument
 
-    '/// Edit->Image Map ///'
     EditImageMap
     Kontext "ImageMapEditor"
-        sleep (1)
-        if ImageMapEditor.Exists (2) then
-            printlog "- ImageMap exists"
-            DialogTest ( ImageMapEditor )
-            try
-                '/// Close dialog 'Image Map Editor' ///'
-                ImageMapEditor.Close
-                Printlog "ImageMap closed using the close button"
-            catch
-                EditImageMap
-                Printlog "ImageMap closed using menue 'edit-imagemap'"
-            endcatch
-        else
-            warnlog "ImageMap didn't come up!"
-        end if
-    '/// close application ///'
+    sleep (1)
+    if ImageMapEditor.Exists (2) then
+        printlog "- ImageMap exists"
+        DialogTest ( ImageMapEditor )
+        try
+            ImageMapEditor.Close
+            Printlog "ImageMap closed using the close button"
+        catch
+            EditImageMap
+            Printlog "ImageMap closed using menue 'edit-imagemap'"
+        endcatch
+    else
+        warnlog "ImageMap didn't come up!"
+    end if
     Call  hCloseDocument
 endcase
 
 testcase tiEditObjectProperties
     dim i as integer
-    '/// for every object, there are several edit options: ///'
-    '///+ starting with FloatingFrame->Properties ///'
-    '///+ file used for input in frame: global\input\graf_inp\desp.bmp ///
 
-    '/// open application ///'
     Call hNewDocument
 
-    '/// Insert->Floating Frame ///'
     InsertFloatingFrame
     WaitSlot (2000)
 
     Kontext "TabEigenschaften"
-        FrameName.SetText "Hello"
-        '/// insert an picture into the frame (embedded into draw application :-)) ///'
-        Inhalt.SetText ConvertPath ( gTesttoolpath + "global\input\graf_inp\desp.bmp" )
-        WaitSlot (2000)
-        TabEigenschaften.OK
-        WaitSlot (2000)
+    FrameName.SetText "Hello"
+    Inhalt.SetText ConvertPath ( gTesttoolpath + "global\input\graf_inp\desp.bmp" )
+    WaitSlot (2000)
+    TabEigenschaften.OK
+    WaitSlot (2000)
     gMouseDoubleClick 1,1
 
-    '/// select frame ///'
     hTypekeys "<tab>"
 
-    '/// Edit->Object->Properties ///'
     kontext
     WaitSlot (2000)
     EditObjectProperties
     WaitSlot (1000)
     Kontext "TabEigenschaften"
-        DialogTest ( TabEigenschaften )
-        '/// open Contents File Dialog ///'
-        sleep(1)
-        Oeffnen.Click
-        Kontext "OeffnenDlg"
-            Call DialogTest ( OeffnenDlg )
-            '/// Cancel 'Select File for Floating Frame' ///'
-            OeffnenDlg.Cancel
+    DialogTest ( TabEigenschaften )
+    sleep(1)
+    Oeffnen.Click
+    Kontext "OeffnenDlg"
+    Call DialogTest ( OeffnenDlg )
+    OeffnenDlg.Cancel
     Kontext "TabEigenschaften"
-        TabEigenschaften.Cancel
+    TabEigenschaften.Cancel
 
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditObjectEdit
-    '/// OLE: edit & save copy as... ///'
-    '/// open application ///'
     dim i as integer
     Call hNewDocument
 
-    '/// Insert->Object->OLE Object; select the first one in list, usually: 'StarOffice 6.0 Spreadsheet' ///'
     InsertObjectOLEObject
     WaitSlot (1000)
     Kontext "OLEObjektEinfuegen"
-        ObjektTyp.Select 1
-        OLEObjektEinfuegen.OK
-        WaitSlot (1000)
+    ObjektTyp.Select 1
+    OLEObjektEinfuegen.OK
+    WaitSlot (1000)
 
     gMouseClick 20,1
 
-    '/// select object ///'
     hTypekeys "<tab>"
 
-    '/// Edit->Object->Edit ///'
     EditObjectEdit
     ' try EditObjectEdit again, to see, if it is in edit mode !
     WaitSlot (2000)
@@ -438,114 +359,97 @@ testcase tiEditObjectEdit
         warnlog " Couldn't get into edit mode!"
     catch
         printlog "Reached edit mode - ok :-)"
-        '/// exit edit mode, by clicking outside the object ///'
         gMouseClick 20,1
     endcatch
 
-    '/// select object ///'
     EditSelectAll
 
-    '/// Edit->Object->Save Copy As ///'
     EditObjectSaveCopyAs
     Kontext "SpeichernDlg"
-        Call DialogTest ( SpeichernDlg )
-        '/// cancel dialog 'Save As' ///'
-        SpeichernDlg.Cancel
-        WaitSlot (2000)
-        Kontext "Active"
-            if Active.Exists(2) then Active.No
-    '/// close application ///'
-    Call hCloseDocument
+    Call DialogTest ( SpeichernDlg )
+    SpeichernDlg.Cancel
+    WaitSlot (2000)
+    Kontext "Active"
+    if Active.Exists(2) then Active.No
+        Call hCloseDocument
 endcase
 
 testcase tiEditPlugIn
-    '/// open application ///'
     Call hNewDocument
 
-    '/// Insert->Object->Plugin ///'
     InsertObjectPlugin
     Kontext "PlugInEinfuegen"
     '    DialogTest ( PlugInEinfuegen)
-        Durchsuchen.click
-        Kontext "OeffnenDlg"
-            '      Call DialogTest ( OeffnenDlg )
-            if OeffnenDlg.exists (5) then
-                OeffnenDlg.Cancel
-            else
-                warnlog "Open file dialog didn't come up"
-            end if
-            WaitSlot (5000)
+    Durchsuchen.click
+    Kontext "OeffnenDlg"
+    '      Call DialogTest ( OeffnenDlg )
+    if OeffnenDlg.exists (5) then
+        OeffnenDlg.Cancel
+    else
+        warnlog "Open file dialog didn't come up"
+    end if
+    WaitSlot (5000)
     Kontext "PlugInEinfuegen"
-        if PlugInEinfuegen.exists then
-            '/// insert a '.mov' file : "graphics\required\input\sample.mov" ///'
-            DateiUrl.SetText (ConvertPath ( gTesttoolpath + "graphics\required\input\sample.mov" ))
-            '/// Type something into the option field, and delete it  - quite usefull, heh ?! ///'
+    if PlugInEinfuegen.exists then
+        DateiUrl.SetText (ConvertPath ( gTesttoolpath + "graphics\required\input\sample.mov" ))
 
-            Optionen.SetText "Fiddler's Green"
-            Optionen.TypeKeys "<HOME>"
-            Optionen.TypeKeys "<SHIFT><END>"
-            Optionen.TypeKeys "<delete>"
-            PlugInEinfuegen.Ok
-        else
-            warnlog "Insert plugin isn't visible"
-        end if
+        Optionen.SetText "Fiddler's Green"
+        Optionen.TypeKeys "<HOME>"
+        Optionen.TypeKeys "<SHIFT><END>"
+        Optionen.TypeKeys "<delete>"
+        PlugInEinfuegen.Ok
+    else
+        warnlog "Insert plugin isn't visible"
+    end if
     WaitSlot (5000)
     kontext "Messagebox"
-        if Messagebox.exists (5) then
-            warnlog "Messagebox: " + Messagebox.gettext
-            Messagebox.ok
-        end if
-    '/// Edit->Plugin ///'
+    if Messagebox.exists (5) then
+        warnlog "Messagebox: " + Messagebox.gettext
+        Messagebox.ok
+    end if
     EditPlugIn
     printlog "Editplugin works!"
 
-    '/// close application ///'
     Call hCloseDocument
 endcase
 
 testcase tiEditHyperlink
-    '/// open application ///'
     hNewDocument
-    '/// Insert->Hyperlink ///'
     InsertHyperlink
     WaitSlot (5000)
     Kontext "Hyperlink"
-        Auswahl.MouseDown 50, 5
-        Auswahl.MouseUp 50, 5
-        Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
-        Auswahl.typekeys "<TAB>"
-        sleep 3
-        Kontext "TabHyperlinkInternet"
+    Auswahl.MouseDown 50, 5
+    Auswahl.MouseUp 50, 5
+    Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
+    Auswahl.typekeys "<TAB>"
+    sleep 3
+    Kontext "TabHyperlinkInternet"
 
-            'Workaround to get rid of a Focusing-problem...
-            NameText.Typekeys "alal <RETURN>"
-            NameText.Typekeys "<MOD1 A><DELETE>"
-            TabHyperlinkInternet.Typekeys "<TAB>", 6
-            TabHyperlinkInternet.Typekeys "<LEFT>", 3
-            'End of workaround...
+    'Workaround to get rid of a Focusing-problem...
+    NameText.Typekeys "alal <RETURN>"
+    NameText.Typekeys "<MOD1 A><DELETE>"
+    TabHyperlinkInternet.Typekeys "<TAB>", 6
+    TabHyperlinkInternet.Typekeys "<LEFT>", 3
+    'End of workaround...
 
-            Internet.Check           'Just to make sure the radio-button is addressable.
-            ZielUrl.Settext "http://www.liegerad-fahrer.de"
+    Internet.Check           'Just to make sure the radio-button is addressable.
+    ZielUrl.Settext "http://www.liegerad-fahrer.de"
     Kontext "Hyperlink"
-        Uebernehmen.Click
-        Hyperlink.Close
-        '/// presupposition to enable edit->hyperlink: <TAB><F2><STRG+a>///'
-        hTypeKeys "<TAB><F2>"
+    Uebernehmen.Click
+    Hyperlink.Close
+    hTypeKeys "<TAB><F2>"
     EditSelectAll
     try
-        '/// Edit->Hyperlink ///'
         EditHyperlinkDraw
         Kontext "Hyperlink"
-            if Hyperlink.Exists then
-                '/// close dialog 'Hyperlink' ///'
-                Hyperlink.Close
-            else
-                Warnlog "- Hyperlinkdialog not up"
-            end if
+        if Hyperlink.Exists then
+            Hyperlink.Close
+        else
+            Warnlog "- Hyperlinkdialog not up"
+        end if
     catch
         Warnlog "- Not able to edit Hyperlink!"
     endcatch
 
-    '/// close application ///'
     Call hCloseDocument
 endcase

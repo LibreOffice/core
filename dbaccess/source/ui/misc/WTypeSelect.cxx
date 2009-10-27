@@ -339,7 +339,8 @@ void OWizTypeSelect::Reset()
 
     const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
     ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
-    for(;aIter != pDestColumns->end();++aIter)
+    ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
+    for(;aIter != aEnd;++aIter)
     {
         sal_uInt16 nPos;
         if((*aIter)->second->IsPrimaryKey())

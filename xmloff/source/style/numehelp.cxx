@@ -170,7 +170,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
             }
             if (bExportValue)
             {
-                if ( rXMLExport.GetMM100UnitConverter().setNullDate(rXMLExport.GetModel()) )
+                if ( rXMLExport.SetNullDateOnUnitConverter() )
                 {
                     rtl::OUStringBuffer sBuffer;
                     rXMLExport.GetMM100UnitConverter().convertDateTime(sBuffer, rValue);
@@ -453,7 +453,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
             }
             if (bExportValue)
             {
-                if ( pExport->GetMM100UnitConverter().setNullDate(pExport->GetModel()) )
+                if ( pExport->SetNullDateOnUnitConverter() )
                 {
                     rtl::OUStringBuffer sBuffer;
                     pExport->GetMM100UnitConverter().convertDateTime(sBuffer, rValue);

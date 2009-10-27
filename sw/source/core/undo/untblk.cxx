@@ -59,7 +59,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     {
         pTxtFmtColl = pTxtNd->GetTxtColl();
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
-                            0, pTxtNd->GetTxt().Len(), FALSE );
+                            0, pTxtNd->GetTxt().Len(), false );
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
@@ -158,7 +158,9 @@ SwUndoInserts::~SwUndoInserts()
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
             if( pTxtNd ) // Robust
-                pTxtNd->Erase( pPos->nContent );
+            {
+                pTxtNd->EraseText( pPos->nContent );
+            }
             pPos->nNode++;
         }
         pPos->nContent.Assign( 0, 0 );
@@ -247,7 +249,6 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
         }
         else
         {
-            pDoc->RstTxtAttrs( *pPam, TRUE );
             if( bJoinNext && pTxtNode->CanJoinNext())
             {
                 {
@@ -256,6 +257,9 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
                 }
                 pTxtNode->JoinNext();
             }
+            // reset all text attributes in the paragraph!
+            pTxtNode->RstAttr( SwIndex(pTxtNode, 0), pTxtNode->Len(),
+                                0, 0, true );
 
             // setze alle Attribute im Node zurueck
             pTxtNode->ResetAllAttr();
@@ -264,7 +268,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
                 pTxtFmtColl = (SwTxtFmtColl*)pTxtNode->ChgFmtColl( pTxtFmtColl );
 
             pHistory->SetTmpEnd( nSetPos );
-            pHistory->TmpRollback( pDoc, 0, FALSE );
+            pHistory->TmpRollback( pDoc, 0, false );
         }
     }
 
@@ -288,7 +292,6 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
         pSavTxtFmtColl = ((SwTxtNode*)pCNd)->GetTxtColl();
 
     pHistory->SetTmpEnd( nSetPos );
-    pHistory->TmpRollback( pDoc, 0, FALSE );
 
     // alte Anfangs-Position fuers Rollback zurueckholen
     if( ( nSttNode != nEndNode || nSttCntnt != nEndCntnt ) && pPos )
@@ -346,7 +349,7 @@ void SwUndoInserts::Repeat( SwUndoIter& rUndoIter )
 
     SwPaM aPam( *rUndoIter.pAktPam->GetPoint() );
     SetPaM( aPam );
-    aPam.GetDoc()->Copy( aPam, *rUndoIter.pAktPam->GetPoint() );
+    aPam.GetDoc()->CopyRange( aPam, *rUndoIter.pAktPam->GetPoint(), false );
 
     rUndoIter.pLastUndoObj = this;
 }

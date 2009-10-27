@@ -9,7 +9,7 @@
  
   $RCSfile: body.xsl,v $
  
-  $Revision: 1.3 $
+  $Revision: 1.3.14.1 $
  
   This file is part of OpenOffice.org.
  
@@ -96,8 +96,16 @@
 	<!-- ID / NAME of text-box -->
 	<xsl:template match="@draw:name">
 		<xsl:attribute name="id">
-			<!-- a simplified string to ID conversion -->
-			<xsl:value-of select="translate(., '.,;: %()[]/\+', '_____________')"/>
+			<xsl:choose>
+				<xsl:when test="number(substring(.,1,1))">
+				<!-- Heuristic: If the first character is a number a 'a_' will be set
+					as prefix, as id have to be of type NMTOKEN -->
+					<xsl:value-of select="concat('a_',translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:attribute>
 	</xsl:template>
 
@@ -140,13 +148,17 @@
 		<xsl:element namespace="{$namespace}" name="a">
 			<xsl:attribute name="href">
 				<xsl:text>#</xsl:text>
-				<xsl:value-of select="translate(@text:ref-name, '.,;: %()[]/\+', '_____________')"/>
+				<xsl:choose>
+					<xsl:when test="number(substring(@text:ref-name,1,1))">
+					<!-- Heuristic: If the first character is a number a 'a_' will be set
+						as prefix, as id have to be of type NMTOKEN -->
+						<xsl:value-of select="concat('a_',translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:attribute>
-			<xsl:if test="@text:name">
-				<xsl:attribute name="title">
-					<xsl:value-of select="@text:name"/>
-				</xsl:attribute>
-			</xsl:if>
 
 			<xsl:apply-templates select="@* | node()">
 				<xsl:with-param name="globalData" select="$globalData"/>
@@ -154,13 +166,37 @@
 		</xsl:element>
 	</xsl:template>
 
+    <xsl:template match="@text:name">
+		<xsl:attribute name="id">
+			<xsl:choose>
+				<xsl:when test="number(substring(.,1,1))">
+				<!-- Heuristic: If the first character is a number a 'a_' will be set
+					as prefix, as id have to be of type NMTOKEN -->
+					<xsl:value-of select="concat('a_',translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="translate(., '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+				</xsl:otherwise>
+			</xsl:choose>
+        </xsl:attribute>
+    </xsl:template>
+    
 	<xsl:template match="text:sequence">
 		<xsl:param name="globalData"/>
 
 		<xsl:element namespace="{$namespace}" name="a">
 			<xsl:apply-templates select="@*" />
-			<xsl:attribute name="name">
-				<xsl:value-of select="translate(@text:ref-name, '.,;: %()[]/\+', '_____________')"/>
+			<xsl:attribute name="id">			
+				<xsl:choose>
+					<xsl:when test="number(substring(@text:ref-name,1,1))">
+					<!-- Heuristic: If the first character is a number a 'a_' will be set
+						as prefix, as id have to be of type NMTOKEN -->
+						<xsl:value-of select="concat('a_',translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="translate(@text:ref-name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+					</xsl:otherwise>
+				</xsl:choose>			
 			</xsl:attribute>
 		</xsl:element>
 
@@ -174,8 +210,17 @@
 
 		<xsl:element namespace="{$namespace}" name="a">
 			<xsl:apply-templates select="@*" />
-			<xsl:attribute name="name">
-				<xsl:value-of select="translate(@text:name, '.,;: %()[]/\+', '_____________')"/>
+			<xsl:attribute name="id">
+				<xsl:choose>
+					<xsl:when test="number(substring(@text:name,1,1))">
+					<!-- Heuristic: If the first character is a number a 'a_' will be set
+						as prefix, as id have to be of type NMTOKEN -->
+						<xsl:value-of select="concat('a_',translate(@text:name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________'))"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="translate(@text:name, '&#xA;&amp;&lt;&gt;.,;: %()[]/\+', '___________________________')"/>
+					</xsl:otherwise>
+				</xsl:choose>					
 			</xsl:attribute>
 		</xsl:element>
 
@@ -205,9 +250,6 @@
 
 	<!-- @text:title exist only in text:bibliography-mark -->
 	<xsl:template match="@text:title">
-		<xsl:attribute name="name">
-			<xsl:value-of select="translate(., '.,;: %()[]/\+', '_____________')"/>
-		</xsl:attribute>
 		<xsl:attribute name="title">
 			<xsl:value-of select="."/>
 		</xsl:attribute>
@@ -224,6 +266,60 @@
 		<xsl:apply-templates/>
 	</xsl:template>
 
+   
+    <xsl:template match="office:annotation">
+        <xsl:element name="span">
+            <xsl:attribute name="title">annotation</xsl:attribute>       
+            <xsl:attribute name="class">annotation_style_by_filter</xsl:attribute>                    
+            <xsl:apply-templates select="@*" />
+            <br/>            
+            <xsl:text>[ANNOTATION:</xsl:text>
+            <br/>
+            <xsl:apply-templates select="*" mode="annotation"/>
+            <xsl:text>]</xsl:text>           
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="text:p" mode="annotation">
+        <br/>    
+        <xsl:element name="span">
+            <xsl:text>NOTE: '</xsl:text>            
+            <xsl:apply-templates />
+            <xsl:text>'</xsl:text>                        
+        </xsl:element>
+    </xsl:template>
+        
+    <xsl:template match="dc:creator" mode="annotation">
+        <br/>     
+        <xsl:element name="span">
+            <xsl:attribute name="title">dc:creator</xsl:attribute>  
+            <xsl:text>BY '</xsl:text>            
+            <xsl:apply-templates />
+            <xsl:text>'</xsl:text>
+        </xsl:element>   
+    </xsl:template>
+    
+    <xsl:template match="dc:date" mode="annotation">  
+        <br/>     
+        <xsl:element name="span">
+            <xsl:attribute name="title">dc:date</xsl:attribute>
+            <xsl:text>ON '</xsl:text>                    
+            <xsl:apply-templates />
+            <xsl:text>'</xsl:text>
+        </xsl:element>       
+    </xsl:template>    
+    
+    <xsl:template match="meta:date-string" mode="annotation">
+        <br/>    
+        <xsl:element name="span">
+            <xsl:attribute name="title">meta-date-string</xsl:attribute>  
+            <xsl:text>META DATE '</xsl:text>                            
+            <xsl:apply-templates />
+            <xsl:text>'</xsl:text>            
+        </xsl:element>           
+    </xsl:template>    
+        
+    
 	<!-- *************** -->
 	<!-- *** HELPER  *** -->
 	<!-- *************** -->
@@ -243,7 +339,7 @@
 					<xsl:apply-templates mode="concatenate"/>
 				</xsl:variable>
 
-				<xsl:value-of select="translate($title, '.,;: %()[]/\+', '_____________')"/>
+				<xsl:value-of select="concat('a_', translate(normalize-space($title), '.,;: %()[]/\+', '_____________'))"/>
 			</xsl:when>
 			<xsl:when test="self::draw:image[office:binary-data]">
 				<xsl:text>data:image/*;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
@@ -299,7 +395,7 @@
 	<!-- ******************** -->
 
 	<!-- ignore / neglect the following elements -->
-	<xsl:template match="office:forms | text:alphabetical-index-mark | text:alphabetical-index-mark-end | text:alphabetical-index-mark-start | text:bibliography-source | text:reference-mark-end | text:sequence-decls | text:soft-page-break | text:table-of-content-source | text:tracked-changes | text:user-field-decls"/>
+	<xsl:template match="draw:custom-shape | draw:g | office:forms | text:alphabetical-index-mark | text:alphabetical-index-mark-end | text:alphabetical-index-mark-start | text:bibliography-source | text:number | text:reference-mark-end | text:sequence-decls | text:soft-page-break | text:table-of-content-source | text:tracked-changes | text:user-field-decls"/>
 
 	<!-- default template used by purpose-->
 	<xsl:template match="text:bibliography | text:change-end | text:change-start">

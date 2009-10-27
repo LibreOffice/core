@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -41,30 +41,30 @@ sub main
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_navigator.inc"
-    
+
     PrintLog "------------------------- g_navigator test -------------------------"
     Call hStatusIn ( "Graphics","g_navigator.bas")
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-       Call tViewNavigatorZOrder
-       Call tdViewNavigator
-       Call tViewNavigatorGroupedObjects
-       Call tViewNavigatorNameActivated
+    Call tViewNavigatorZOrder
+    Call tdViewNavigator
+    Call tViewNavigatorGroupedObjects
+    Call tViewNavigatorNameActivated
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-       Call tViewNavigatorZOrder
-       Call tdViewNavigator
-       Call tViewNavigatorGroupedObjects
-       Call tViewNavigatorNameActivated
+    Call tViewNavigatorZOrder
+    Call tdViewNavigator
+    Call tViewNavigatorGroupedObjects
+    Call tViewNavigatorNameActivated
 
     Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-    
-   gApplication = "IMPRESS"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+
+    gApplication = "IMPRESS"
+    Call GetUseFiles
 end sub

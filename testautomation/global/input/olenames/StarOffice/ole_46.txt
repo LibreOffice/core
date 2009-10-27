@@ -1,7 +1,0 @@
-CALC=StarOffice 9-tabelldokument
-CHART=StarOffice 9-diagram
-DRAW=StarOffice 9-teckning
-IMPRESS=StarOffice 9-presentation
-MATH=StarOffice 9-formel
-WRITER=StarOffice 9-text
-OTHER=Ytterligare objekt

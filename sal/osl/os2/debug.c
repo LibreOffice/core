@@ -1,3 +1,33 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile:$
+ * $Revision:$
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 /*
  *@@sourcefile debug.c:
  *      this file contains debugging functions for the
@@ -27,20 +57,15 @@
  */
 
 /*
- *      This file Copyright (C) 1992-99 Ulrich M”ller,
+ *      This file Copyright (C) 1992-99 Ulrich Mï¿½ller,
  *                                      Kim Rasmussen,
  *                                      Marc Fiammante,
  *                                      John Currier,
  *                                      Anthony Cruise.
  *      This file is part of the "XWorkplace helpers" source package.
- *      This is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published
- *      by the Free Software Foundation, in version 2 as it comes in the
- *      "COPYING" file of the XWorkplace main distribution.
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
+ *
+ *      2009-06-15 published under LGPL3 with Ulrich Mï¿½ller permission.
+ *
  */
 
 //#define DEBUG_SYMDUMP // enable to dump sym file to log
@@ -1484,7 +1509,7 @@ void dbgPrintVariables(FILE *LogFile,   // in: text log file to write to
                         (PVOID)stackofs,
                         func_name);
                 fprintf(LogFile, "     Offset Name                 Type                              Value            \n");
-                fprintf(LogFile, "     ÄÄÄÄÄÄ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ\n");
+                fprintf(LogFile, "     ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n");
             }
 
             // If it's one of the simple types
@@ -1880,7 +1905,7 @@ VOID dbgPrintStack(FILE *LogFile,           // in: text log file to write to
     fprintf(LogFile, "\n\nCall stack:\n");
     fprintf(LogFile, "                                        Source    Line      Nearest\n");
     fprintf(LogFile, "   EBP      Address    Module  Obj#      File     Numbr  Public Symbol\n");
-    fprintf(LogFile, " ÄÄÄÄÄÄÄÄ  ÄÄÄÄÄÄÄÄ-  ÄÄÄÄÄÄÄÄ ÄÄÄÄ  ÄÄÄÄÄÄÄÄÄÄÄÄ ÄÄÄÄÄ  ÄÄÄÄÄÄÄÄÄÄÄÄ-\n");
+    fprintf(LogFile, " ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-\n");
 
     do
     {

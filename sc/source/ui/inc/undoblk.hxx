@@ -36,6 +36,7 @@
 #include "spellparam.hxx"
 
 class ScDocShell;
+class ScBaseCell;
 class ScDocument;
 class ScOutlineTable;
 class ScRangeName;
@@ -592,6 +593,35 @@ private:
     void                    SetChangeTrack();
 };
 
+class ScUndoRefConversion: public ScSimpleUndo
+{
+public:
+                        TYPEINFO();
+                        ScUndoRefConversion( ScDocShell* pNewDocShell,
+                            const ScRange& aMarkRange, const ScMarkData& rMark,
+                            ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, BOOL bNewMulti, USHORT nNewFlag);
+    virtual             ~ScUndoRefConversion();
+
+    virtual void        Undo();
+    virtual void        Redo();
+    virtual void        Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL        CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String      GetComment() const;
+
+private:
+    ScMarkData          aMarkData;
+    ScDocument*         pUndoDoc;
+    ScDocument*         pRedoDoc;
+    ScRange             aRange;
+    BOOL                bMulti;
+    USHORT              nFlags;
+    ULONG               nStartChangeAction;
+    ULONG               nEndChangeAction;
+
+    void                DoChange( ScDocument* pRefDoc);
+    void                SetChangeTrack();
+};
 
 class ScUndoListNames: public ScBlockUndo
 {

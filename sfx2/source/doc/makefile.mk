@@ -40,18 +40,21 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
-        doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src
+        doc.src new.src doctdlg.src docvor.src doctempl.src graphhelp.src
 
 SLOFILES =	\
         $(SLO)$/printhelper.obj \
         $(SLO)$/docinf.obj \
         $(SLO)$/oleprops.obj \
         $(SLO)$/iframe.obj \
-        $(SLO)$/applet.obj \
         $(SLO)$/plugin.obj \
         $(SLO)$/docfile.obj \
         $(SLO)$/objuno.obj \
@@ -80,9 +83,14 @@ SLOFILES =	\
         $(SLO)$/docinsert.obj \
         $(SLO)$/docmacromode.obj \
         $(SLO)$/SfxDocumentMetaData.obj \
+        $(SLO)$/DocumentMetadataAccess.obj \
+        $(SLO)$/Metadatable.obj \
         $(SLO)$/sfxmodelfactory.obj \
         $(SLO)$/docstoragemodifylistener.obj \
         $(SLO)$/querytemplate.obj
+
+#                $(SLO)$/applet.obj \
+
 
 # --- Tagets -------------------------------------------------------
 

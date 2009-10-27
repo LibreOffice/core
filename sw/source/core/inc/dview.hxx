@@ -90,6 +90,10 @@ protected:
     // add custom handles (used by other apps, e.g. AnchorPos)
     virtual void AddCustomHdl();
 
+    // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
+    using FmFormView::CheckSingleSdrObjectHit;
+    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const;
+
 public:
     SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
 

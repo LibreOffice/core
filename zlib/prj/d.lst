@@ -3,6 +3,7 @@ mkdir: %_DEST%\lib%_EXT%\x64
 
 ..\%__SRC%\inc\patched\zlib.h %_DEST%\inc%_EXT%\external\zlib\zlib.h
 ..\%__SRC%\inc\unzip.h %_DEST%\inc%_EXT%\external\zlib\unzip.h
+..\%__SRC%\inc\ioapi.h %_DEST%\inc%_EXT%\external\zlib\ioapi.h
 ..\%__SRC%\inc\zconf.h %_DEST%\inc%_EXT%\external\zlib\zconf.h
 
 ..\%__SRC%\lib\libzlib.a %_DEST%\lib%_EXT%\libzlib.a

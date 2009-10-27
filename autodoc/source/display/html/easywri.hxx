@@ -59,11 +59,6 @@ class EasyWriter
                                                 { Open_OutputNode(io_rDestination); }
     void                Leave()                 { Finish_OutputNode(); }
 
-    void                Add_HorizontalLine();
-    void                Write(
-                            const char *        i_sFormatTag,
-                            const char *        i_sText );
-
     // ACCESS
     csi::xml::Element & Out();                  // CurOutputNode
 

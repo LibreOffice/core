@@ -39,54 +39,74 @@ import util.utils;
  * This class parses commandline Argument and stores <br>
  * them into TestParameter
  */
-public class ClParser {
+public class ClParser
+{
     /*
      * Parses the commandline argument and puts them<br>
      * into the TestParameters
      */
 
-    public void getCommandLineParameter(TestParameters param, String[] args) {
+    public void getCommandLineParameter(TestParameters param, String[] args)
+    {
         Properties mapping = getMapping();
 
-        for (int i = 0; i < args.length;) {
+        for (int i = 0; i < args.length;)
+        {
             String pName = getParameterFor(mapping, args[i]).trim();
             String pValue = "";
-            if (pName.equals("TestJob")) {
-                if (args.length > (i + 1)) {
+            if (pName.equals("TestJob"))
+            {
+                if (args.length > (i + 1))
+                {
                     pValue = args[i].trim() + " " + args[i + 1].trim();
                     i += 2;
-                } else {
+                }
+                else
+                {
                     pValue = args[i].trim() + " unknown";
                     i += 2;
                 }
-            } else {
-                if ((i + 1) < args.length) {
+            }
+            else
+            {
+                if ((i + 1) < args.length)
+                {
                     pValue = args[i + 1].trim();
 
-                    if (pValue.startsWith("-")) {
+                    if (pValue.startsWith("-"))
+                    {
                         i++;
                         pValue = "yes";
-                    } else if (pValue.startsWith("'")) {
+                    }
+                    else if (pValue.startsWith("'"))
+                    {
                         i++;
-                        while (!pValue.endsWith("'")) {
+                        while (!pValue.endsWith("'"))
+                        {
                             i++;
                             pValue = pValue + " " + args[i].trim();
 
                         }
                         pValue = utils.replaceAll13(pValue, "'", "");
                         i++;
-                    } else {
+                    }
+                    else
+                    {
                         i += 2;
                     }
 
-                    if (pName.equals("TestDocumentPath")) {
+                    if (pName.equals("TestDocumentPath"))
+                    {
                         System.setProperty("DOCPTH", pValue);
                     }
-                    if (pName.equals(PropertyName.SRC_ROOT)) {
-                        System.setProperty(pName,pValue);
+                    else if (pName.equals(PropertyName.SRC_ROOT))
+                    {
+                        System.setProperty(pName, pValue);
 
                     }
-                } else {
+                }
+                else
+                {
                     pValue = "yes";
                     i++;
                 }
@@ -100,11 +120,14 @@ public class ClParser {
      * This method returns the path to a Configuration file <br>
      * if defined as command line parameter, an empty String elsewhere
      */
-    public String getIniPath(String[] args) {
+    public String getIniPath(String[] args)
+    {
         String iniFile = "";
 
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-ini")) {
+        for (int i = 0; i < args.length; i++)
+        {
+            if (args[i].equals("-ini"))
+            {
                 iniFile = args[i + 1];
                 break;
             }
@@ -117,11 +140,14 @@ public class ClParser {
      * This method returns the path to a Configuration file <br>
      * if defined as command line parameter, an empty String elsewhere
      */
-    public String getRunnerIniPath(String[] args) {
+    public String getRunnerIniPath(String[] args)
+    {
         String iniFile = "";
 
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-runnerini")) {
+        for (int i = 0; i < args.length; i++)
+        {
+            if (args[i].equals("-runnerini"))
+            {
                 iniFile = args[i + 1];
                 break;
             }
@@ -133,7 +159,8 @@ public class ClParser {
     /*
      * This method maps commandline Parameters to TestParameters
      */
-    protected Properties getMapping() {
+    protected Properties getMapping()
+    {
         Properties map = new Properties();
         map.setProperty("-cs", "ConnectionString");
         map.setProperty("-tb", "TestBase");
@@ -153,10 +180,12 @@ public class ClParser {
         return map;
     }
 
-    protected String getParameterFor(Properties map, String name) {
+    protected String getParameterFor(Properties map, String name)
+    {
         String ret = map.getProperty(name);
 
-        if (ret == null) {
+        if (ret == null)
+        {
             ret = name.substring(1);
         }
 

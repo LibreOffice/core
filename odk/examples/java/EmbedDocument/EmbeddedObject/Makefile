@@ -86,7 +86,7 @@ include $(SETTINGS)/stdtarget.mk
 
 $(COMP_GEN_OUT)/%.Manifest :
 	-$(MKDIR) $(subst \\,\,$(subst /,$(PS),$(@D)))
-	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).$(COMP_NAME)Factory > $@
+	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).$(COMP_NAME)Factory> $@
 
 # component as well as application are dependent from the generated types
 # rule for component class files

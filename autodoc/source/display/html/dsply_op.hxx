@@ -68,7 +68,6 @@ class OperationsDisplay : public ary::Display,
                                                 io_rInfo );
     virtual             ~OperationsDisplay();
 
-    void                PrepareForGlobals();
     void                PrepareForStdMembers();
     void                PrepareForStaticMembers();
     void                Create_Files();

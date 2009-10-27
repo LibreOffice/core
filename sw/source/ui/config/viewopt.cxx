@@ -58,6 +58,7 @@
 #include <crstate.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
+#include <svtools/syslocale.hxx>
 
 #include <svx/acorrcfg.hxx>
 
@@ -237,7 +238,7 @@ SwViewOption::SwViewOption() :
     nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_GRFKEEPZOOM |VIEWOPT_2_ANY_RULER;
 
-    if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
+    if(MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
     else
         aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm

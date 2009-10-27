@@ -64,193 +64,6 @@ using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
 using ::com::sun::star::uno::Reference;
 
-void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
-                           , double fAnglePositiveDegree, const awt::Size& aSize )
-{
-    //correct label positions left of an axis with right centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree==0.0 )
-    {
-    }
-    else if( fAnglePositiveDegree<= 90.0 )
-    {
-        rfXCorrection  = -aSize.Height*rtl::math::sin( fAnglePi )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 180.0 )
-    {
-        double beta = fAnglePi-F_PI/2.0;
-        rfXCorrection  = -aSize.Width *rtl::math::sin( beta )
-            -aSize.Height *rtl::math::cos( beta )/2.0;
-        rfYCorrection = -aSize.Width *rtl::math::cos( beta );
-    }
-    else if( fAnglePositiveDegree<= 270.0 )
-    {
-        double beta = fAnglePi - F_PI;
-        rfXCorrection  = -aSize.Width *rtl::math::cos( beta )
-            -aSize.Height*rtl::math::sin( beta )/2.0;
-        rfYCorrection = aSize.Width *rtl::math::sin( beta );
-    }
-    else
-    {
-        double beta = 2*F_PI - fAnglePi;
-        rfXCorrection = -aSize.Height*rtl::math::sin( beta )/2.0;
-
-    }
-}
-
-void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
-                           , double fAnglePositiveDegree, const awt::Size& aSize )
-{
-    //correct label positions right of an axis with left centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree== 0.0 )
-    {
-    }
-    else if( fAnglePositiveDegree<= 90.0 )
-    {
-        rfXCorrection = aSize.Height*rtl::math::sin( fAnglePi )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 180.0 )
-    {
-        double beta = F_PI - fAnglePi;
-        rfXCorrection  = aSize.Width *rtl::math::cos( beta )
-            + aSize.Height*rtl::math::sin( beta )/2.0;
-        rfYCorrection  = aSize.Width *rtl::math::sin( beta );
-    }
-    else if( fAnglePositiveDegree<= 270.0 )
-    {
-        double beta = 3*F_PI/2.0 - fAnglePi;
-        rfXCorrection  = aSize.Width *rtl::math::sin( beta )
-                    +aSize.Height*rtl::math::cos( beta )/2.0;
-        rfYCorrection  = -aSize.Width *rtl::math::cos( beta );
-    }
-    else
-    {
-        rfXCorrection  = aSize.Height*rtl::math::sin( 2*F_PI - fAnglePi )/2.0;
-    }
-}
-
-void lcl_correctRotation_Top( double& rfXCorrection, double& rfYCorrection
-                           , double fAnglePositiveDegree, const awt::Size& aSize )
-{
-    //correct label positions on top of an axis with bottom centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree== 0.0 )
-    {
-    }
-    else if( fAnglePositiveDegree<= 90.0 )
-    {
-        rfXCorrection = aSize.Width*rtl::math::cos( fAnglePi )/2.0
-            +aSize.Height*rtl::math::sin( fAnglePi )/2.0;
-        rfYCorrection = -aSize.Width*rtl::math::sin( fAnglePi )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 180.0 )
-    {
-        double beta = fAnglePi - F_PI/2.0;
-        rfYCorrection = -aSize.Width*rtl::math::cos( beta )/2.0
-            - aSize.Height*rtl::math::sin( beta );
-        rfXCorrection = - aSize.Width*rtl::math::sin( beta )/2.0
-            + aSize.Height*rtl::math::cos( beta )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 270.0 )
-    {
-        double beta = fAnglePi - F_PI;
-        rfXCorrection = +aSize.Width *rtl::math::cos( beta )/2.0
-            -aSize.Height *rtl::math::sin( beta )/2.0; ;
-        rfYCorrection = -aSize.Width *rtl::math::sin( beta )/2.0
-            -aSize.Height *rtl::math::cos( beta );
-    }
-    else
-    {
-        rfXCorrection = -aSize.Width*rtl::math::cos( fAnglePi )/2.0
-            +aSize.Height*rtl::math::sin( fAnglePi )/2.0;
-        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi )/2.0;
-    }
-}
-
-void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
-                           , double fAnglePositiveDegree, const awt::Size& aSize )
-{
-    //correct label positions below of an axis with top centered alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree==0.0 )
-    {
-    }
-    else if( fAnglePositiveDegree<= 90.0 )
-    {
-        rfXCorrection  = -aSize.Width *rtl::math::cos( fAnglePi )/2.0
-                         -aSize.Height*rtl::math::sin( fAnglePi )/2.0;
-        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 180.0 )
-    {
-        double beta = fAnglePi-F_PI/2.0;
-        rfYCorrection = aSize.Width *rtl::math::cos( beta )/2.0
-            +aSize.Height*rtl::math::sin( beta );
-        rfXCorrection  = aSize.Width *rtl::math::sin( beta )/2.0
-                    -aSize.Height*rtl::math::cos( beta )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 270.0 )
-    {
-        double beta = 3*F_PI/2.0 - fAnglePi;
-        rfXCorrection  = -aSize.Width *rtl::math::sin( beta )/2.0
-                         +aSize.Height*rtl::math::cos( beta )/2.0;
-        rfYCorrection = aSize.Height*rtl::math::sin( beta )
-                        +aSize.Width*rtl::math::cos( beta )/2.0;
-    }
-    else
-    {
-        double beta = 2*F_PI - fAnglePi;
-        rfXCorrection  = aSize.Height*rtl::math::sin( beta )/2.0
-                        +aSize.Width*rtl::math::cos( beta )/2.0;
-        rfYCorrection = aSize.Width*rtl::math::sin( beta )/2.0;
-    }
-}
-
-void lcl_correctPositionForRotation(
-                  const Reference< drawing::XShape >& xShape2DText
-                , LabelAlignment eLabelAlignment
-                , const double fRotationAngle )
-{
-    if( !xShape2DText.is() )
-        return;
-
-    awt::Point aOldPos = xShape2DText->getPosition();
-    awt::Size  aSize   = xShape2DText->getSize();
-
-    double fYCorrection = 0.0;
-    double fXCorrection  = 0.0;
-
-    double fAnglePositiveDegree = fRotationAngle;
-    while(fAnglePositiveDegree<0.0)
-        fAnglePositiveDegree+=360.0;
-
-    switch(eLabelAlignment)
-    {
-        case LABEL_ALIGN_LEFT:
-        case LABEL_ALIGN_LEFT_TOP:
-        case LABEL_ALIGN_LEFT_BOTTOM:
-            lcl_correctRotation_Left( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize );
-            break;
-        case LABEL_ALIGN_RIGHT:
-        case LABEL_ALIGN_RIGHT_TOP:
-        case LABEL_ALIGN_RIGHT_BOTTOM:
-            lcl_correctRotation_Right( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize );
-            break;
-        case LABEL_ALIGN_TOP:
-            lcl_correctRotation_Top( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize );
-            break;
-        case LABEL_ALIGN_BOTTOM:
-            lcl_correctRotation_Bottom( fXCorrection, fYCorrection, fAnglePositiveDegree, aSize );
-        default: //LABEL_ALIGN_CENTER
-            break;
-    }
-
-    xShape2DText->setPosition( awt::Point(
-          static_cast<sal_Int32>(aOldPos.X + fXCorrection  )
-        , static_cast<sal_Int32>(aOldPos.Y + fYCorrection ) ) );
-}
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -299,9 +112,8 @@ Reference< drawing::XShape > createSingleLabel(
                     .createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
     //correctPositionForRotation
-    lcl_correctPositionForRotation( xShape2DText
-        , rAxisProperties.m_aLabelAlignment
-        , rAxisLabelProperties.fRotationAngleDegree );
+    LabelPositionHelper::correctPositionForRotation( xShape2DText
+        , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, false );
 
     return xShape2DText;
 }
@@ -1424,9 +1236,8 @@ void SAL_CALL VCartesianAxis::updatePositions()
                 }
 
                 //correctPositionForRotation
-                lcl_correctPositionForRotation( xShape2DText
-                    , m_aAxisProperties.m_aLabelAlignment
-                    , m_aAxisLabelProperties.fRotationAngleDegree );
+                LabelPositionHelper::correctPositionForRotation( xShape2DText
+                    , m_aAxisProperties.m_aLabelAlignment, m_aAxisLabelProperties.fRotationAngleDegree, false );
             }
         }
 

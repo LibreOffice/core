@@ -176,8 +176,7 @@ BiffInputStream::BiffInputStream( BinaryInputStream& rInStream, bool bContLookup
     mnCurrRecSize( 0 ),
     mnComplRecSize( 0 ),
     mbHasComplRec( false ),
-    mbCont( bContLookup ),
-    mbNulChars( false )
+    mbCont( bContLookup )
 {
     mbEof = true;   // EOF will be true if stream is not inside a record
 }
@@ -361,32 +360,15 @@ void BiffInputStream::skip( sal_Int32 nBytes )
 
 // byte strings ---------------------------------------------------------------
 
-OString BiffInputStream::readCharArray( sal_uInt16 nChars )
+OString BiffInputStream::readByteString( bool b16BitLen, bool bAllowNulChars )
 {
-    if( nChars == 0 )
-        return OString();
-
-    ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nChars ) );
-    size_t nCharsRead = static_cast< size_t >( readMemory( &aBuffer.front(), nChars ) );
-    if( !mbNulChars )
-        ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
-    return OString( &aBuffer.front(), nCharsRead );
+    sal_Int32 nStrLen = b16BitLen ? readuInt16() : readuInt8();
+    return readCharArray( nStrLen, bAllowNulChars );
 }
 
-OUString BiffInputStream::readCharArray( sal_uInt16 nChars, rtl_TextEncoding eTextEnc )
+OUString BiffInputStream::readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars )
 {
-    return OStringToOUString( readCharArray( nChars ), eTextEnc );
-}
-
-OString BiffInputStream::readByteString( bool b16BitLen )
-{
-    sal_uInt16 nStrLen = b16BitLen ? readuInt16() : readuInt8();
-    return readCharArray( nStrLen );
-}
-
-OUString BiffInputStream::readByteString( bool b16BitLen, rtl_TextEncoding eTextEnc )
-{
-    return OStringToOUString( readByteString( b16BitLen ), eTextEnc );
+    return OStringToOUString( readByteString( b16BitLen, bAllowNulChars ), eTextEnc );
 }
 
 void BiffInputStream::skipByteString( bool b16BitLen )
@@ -396,22 +378,7 @@ void BiffInputStream::skipByteString( bool b16BitLen )
 
 // Unicode strings ------------------------------------------------------------
 
-OUString BiffInputStream::readNulUnicodeArray()
-{
-    OUStringBuffer aBuffer;
-    for( sal_uInt16 nChar = readuInt16(); !mbEof && (nChar > 0); readValue( nChar ) )
-        aBuffer.append( static_cast< sal_Unicode >( nChar ) );
-    return aBuffer.makeStringAndClear();
-}
-
-OUString BiffInputStream::readUnicodeArray( sal_uInt16 nChars )
-{
-    OUStringBuffer aBuffer;
-    appendUnicodeArray( aBuffer, nChars, true );
-    return aBuffer.makeStringAndClear();
-}
-
-OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16Bit )
+OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars )
 {
     OUStringBuffer aBuffer;
     aBuffer.ensureCapacity( nChars );
@@ -422,7 +389,7 @@ OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16Bit )
     while( !mbEof && (nCharsLeft > 0) )
     {
         sal_uInt16 nPortionCount = 0;
-        if( b16Bit )
+        if( b16BitChars )
         {
             nPortionCount = ::std::min< sal_uInt16 >( nCharsLeft, maRecBuffer.getRecLeft() / 2 );
             OSL_ENSURE( (nPortionCount <= nCharsLeft) || ((maRecBuffer.getRecLeft() & 1) == 0),
@@ -434,39 +401,39 @@ OUString BiffInputStream::readUniStringChars( sal_uInt16 nChars, bool b16Bit )
         }
 
         // read the character array
-        appendUnicodeArray( aBuffer, nPortionCount, b16Bit );
+        appendUnicodeArray( aBuffer, nPortionCount, b16BitChars, bAllowNulChars );
 
         // prepare for next CONTINUE record
         nCharsLeft = nCharsLeft - nPortionCount;
         if( nCharsLeft > 0 )
-            jumpToNextStringContinue( b16Bit );
+            jumpToNextStringContinue( b16BitChars );
     }
 
     return aBuffer.makeStringAndClear();
 }
 
-OUString BiffInputStream::readUniString( sal_uInt16 nChars )
+OUString BiffInputStream::readUniStringBody( sal_uInt16 nChars, bool bAllowNulChars )
 {
-    bool b16Bit;
+    bool b16BitChars;
     sal_Int32 nAddSize;
-    readUniStringHeader( b16Bit, nAddSize );
-    OUString aString = readUniStringChars( nChars, b16Bit );
+    readUniStringHeader( b16BitChars, nAddSize );
+    OUString aString = readUniStringChars( nChars, b16BitChars, bAllowNulChars );
     skip( nAddSize );
     return aString;
 }
 
-OUString BiffInputStream::readUniString()
+OUString BiffInputStream::readUniString( bool bAllowNulChars )
 {
-    return readUniString( readuInt16() );
+    return readUniStringBody( readuInt16(), bAllowNulChars );
 }
 
-void BiffInputStream::skipUniStringChars( sal_uInt16 nChars, bool b16Bit )
+void BiffInputStream::skipUniStringChars( sal_uInt16 nChars, bool b16BitChars )
 {
     sal_uInt16 nCharsLeft = nChars;
     while( !mbEof && (nCharsLeft > 0) )
     {
         sal_uInt16 nPortionCount;
-        if( b16Bit )
+        if( b16BitChars )
         {
             nPortionCount = ::std::min< sal_uInt16 >( nCharsLeft, maRecBuffer.getRecLeft() / 2 );
             OSL_ENSURE( (nPortionCount <= nCharsLeft) || ((maRecBuffer.getRecLeft() & 1) == 0),
@@ -482,22 +449,22 @@ void BiffInputStream::skipUniStringChars( sal_uInt16 nChars, bool b16Bit )
         // prepare for next CONTINUE record
         nCharsLeft = nCharsLeft - nPortionCount;
         if( nCharsLeft > 0 )
-            jumpToNextStringContinue( b16Bit );
+            jumpToNextStringContinue( b16BitChars );
     }
 }
 
-void BiffInputStream::skipUniString( sal_uInt16 nChars )
+void BiffInputStream::skipUniStringBody( sal_uInt16 nChars )
 {
-    bool b16Bit;
+    bool b16BitChars;
     sal_Int32 nAddSize;
-    readUniStringHeader( b16Bit, nAddSize );
-    skipUniStringChars( nChars, b16Bit );
+    readUniStringHeader( b16BitChars, nAddSize );
+    skipUniStringChars( nChars, b16BitChars );
     skip( nAddSize );
 }
 
 void BiffInputStream::skipUniString()
 {
-    skipUniString( readuInt16() );
+    skipUniStringBody( readuInt16() );
 }
 
 // private --------------------------------------------------------------------
@@ -517,7 +484,6 @@ void BiffInputStream::setupRecord()
     mnAltContId = BIFF_ID_UNKNOWN;
     mnCurrRecSize = mnComplRecSize = maRecBuffer.getRecSize();
     mbHasComplRec = !mbCont;
-    mbNulChars = false;
     mbEof = !isInRecord();
     // enable decoder in new record
     enableDecoder( true );
@@ -561,7 +527,7 @@ bool BiffInputStream::jumpToNextContinue()
     return !mbEof;
 }
 
-bool BiffInputStream::jumpToNextStringContinue( bool& rb16Bit )
+bool BiffInputStream::jumpToNextStringContinue( bool& rb16BitChars )
 {
     OSL_ENSURE( maRecBuffer.getRecLeft() == 0, "BiffInputStream::jumpToNextStringContinue - unexpected garbage" );
 
@@ -582,7 +548,7 @@ bool BiffInputStream::jumpToNextStringContinue( bool& rb16Bit )
     // trying to read the flags invalidates stream, if no CONTINUE record has been found
     sal_uInt8 nFlags;
     readValue( nFlags );
-    rb16Bit = getFlag( nFlags, BIFF_STRF_16BIT );
+    rb16BitChars = getFlag( nFlags, BIFF_STRF_16BIT );
     return !mbEof;
 }
 
@@ -611,22 +577,22 @@ sal_uInt16 BiffInputStream::getMaxRawReadSize( sal_Int32 nBytes ) const
     return getLimitedValue< sal_uInt16, sal_Int32 >( nBytes, 0, maRecBuffer.getRecLeft() );
 }
 
-void BiffInputStream::appendUnicodeArray( OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16Bit )
+void BiffInputStream::appendUnicodeArray( OUStringBuffer& orBuffer, sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars )
 {
     orBuffer.ensureCapacity( orBuffer.getLength() + nChars );
     sal_uInt16 nChar;
     for( sal_uInt16 nCharIdx = 0; !mbEof && (nCharIdx < nChars); ++nCharIdx )
     {
-        if( b16Bit ) readValue( nChar ); else nChar = readuInt8();
-        orBuffer.append( static_cast< sal_Unicode >( (!mbNulChars && (nChar == 0)) ? '?' : nChar ) );
+        if( b16BitChars ) readValue( nChar ); else nChar = readuInt8();
+        orBuffer.append( static_cast< sal_Unicode >( (!bAllowNulChars && (nChar == 0)) ? '?' : nChar ) );
     }
 }
 
-void BiffInputStream::readUniStringHeader( bool& orb16Bit, sal_Int32& ornAddSize )
+void BiffInputStream::readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAddSize )
 {
     sal_uInt8 nFlags = readuInt8();
     OSL_ENSURE( !getFlag( nFlags, BIFF_STRF_UNKNOWN ), "BiffInputStream::readUniStringHeader - unknown flags" );
-    orb16Bit = getFlag( nFlags, BIFF_STRF_16BIT );
+    orb16BitChars = getFlag( nFlags, BIFF_STRF_16BIT );
     sal_uInt16 nFontCount = getFlag( nFlags, BIFF_STRF_RICH ) ? readuInt16() : 0;
     sal_Int32 nPhoneticSize = getFlag( nFlags, BIFF_STRF_PHONETIC ) ? readInt32() : 0;
     ornAddSize = 4 * nFontCount + ::std::max< sal_Int32 >( 0, nPhoneticSize );

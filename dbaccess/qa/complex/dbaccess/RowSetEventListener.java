@@ -48,12 +48,10 @@ public class RowSetEventListener implements XRowSetApproveListener,XRowSetListen
     public static final int ROW_COUNT           = 7;
     public static final int IS_ROW_COUNT_FINAL  = 8;
 
-    RowSet rowset;
     int callPos = 1;
     int calling [];
 
-    RowSetEventListener(RowSet _rowset){
-        rowset = _rowset;
+    RowSetEventListener(){
         calling = new int [9];
         clearCalling();
     }
@@ -100,15 +98,15 @@ public class RowSetEventListener implements XRowSetApproveListener,XRowSetListen
     }
 
     public void propertyChange(com.sun.star.beans.PropertyChangeEvent propertyChangeEvent) {
-        if ( propertyChangeEvent.PropertyName.equals("Value") ){
+        if ( "Value".equals(propertyChangeEvent.PropertyName) ){
             calling[COLUMN_VALUE] = callPos++;
-        } else if ( propertyChangeEvent.PropertyName.equals("IsModified") ){
+        } else if ( "IsModified".equals(propertyChangeEvent.PropertyName) ){
             calling[IS_MODIFIED] = callPos++;
-        } else if ( propertyChangeEvent.PropertyName.equals("IsNew") ){
+        } else if ( "IsNew".equals(propertyChangeEvent.PropertyName) ){
             calling[IS_NEW] = callPos++;
-        } else if ( propertyChangeEvent.PropertyName.equals("RowCount") ){
+        } else if ( "RowCount".equals(propertyChangeEvent.PropertyName) ){
             calling[ROW_COUNT] = callPos++;
-        } else if ( propertyChangeEvent.PropertyName.equals("IsRowCountFinal") ){
+        } else if ( "IsRowCountFinal".equals(propertyChangeEvent.PropertyName) ){
             calling[IS_ROW_COUNT_FINAL] = callPos++;
         }
     }

@@ -84,8 +84,8 @@ public:
 PageEnumeration PageEnumerationProvider::CreateAllPagesEnumeration (
     const SlideSorterModel& rModel)
 {
-    AllPagesPredicate aPredicate;
-    return PageEnumeration::Create(rModel, aPredicate);
+//    AllPagesPredicate aPredicate; // spurious warning on unxsoli4 debug=t
+    return PageEnumeration::Create(rModel, AllPagesPredicate());
 }
 
 

@@ -58,7 +58,7 @@ CLIMAKERFLAGS += --verbose
 
 #When changing the assembly version then this must also be done in scp2
 $(OUT)$/bin$/cli_uretypes.dll : $(BIN)$/climaker.exe $(SOLARBINDIR)$/types.rdb $(BIN)$/cliureversion.mk
-    $(WRAPCMD) $(BIN)$/climaker.exe $(CLIMAKERFLAGS) \
+    $(subst,$(SOLARBINDIR)$/climaker,$(BIN)$/climaker $(CLIMAKER)) $(CLIMAKERFLAGS) \
         --out $@ \
         --keyfile $(BIN)$/cliuno.snk \
         --assembly-version $(CLI_URETYPES_NEW_VERSION) \

@@ -41,9 +41,7 @@
 #include <sfx2/bindings.hxx>
 #include <svtools/aeitem.hxx>
 #include <svx/svdview.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svx/srchitem.hxx>
 #include <svtools/whiter.hxx>
 #include <svx/swframevalidation.hxx>
@@ -56,20 +54,14 @@
 #endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <edtwin.hxx>
 #include <viewopt.hxx>
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <wrap.hxx>
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
-#ifndef _DRWBASSH_HXX
 #include <drwbassh.hxx>
-#endif
 #include <swdtflvr.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
@@ -77,12 +69,8 @@
 
 #include <shells.hrc>
 #define SwDrawBaseShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"

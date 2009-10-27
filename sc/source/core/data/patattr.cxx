@@ -258,14 +258,16 @@ void ScPatternAttr::GetFont(
     FontEmphasisMark eEmphasis;
     FontRelief eRelief;
     Color aColor;
+    LanguageType eLang;
 
-    USHORT nFontId, nHeightId, nWeightId, nPostureId;
+    USHORT nFontId, nHeightId, nWeightId, nPostureId, nLangId;
     if ( nScript == SCRIPTTYPE_ASIAN )
     {
         nFontId    = ATTR_CJK_FONT;
         nHeightId  = ATTR_CJK_FONT_HEIGHT;
         nWeightId  = ATTR_CJK_FONT_WEIGHT;
         nPostureId = ATTR_CJK_FONT_POSTURE;
+        nLangId    = ATTR_CJK_FONT_LANGUAGE;
     }
     else if ( nScript == SCRIPTTYPE_COMPLEX )
     {
@@ -273,6 +275,7 @@ void ScPatternAttr::GetFont(
         nHeightId  = ATTR_CTL_FONT_HEIGHT;
         nWeightId  = ATTR_CTL_FONT_WEIGHT;
         nPostureId = ATTR_CTL_FONT_POSTURE;
+        nLangId    = ATTR_CTL_FONT_LANGUAGE;
     }
     else
     {
@@ -280,6 +283,7 @@ void ScPatternAttr::GetFont(
         nHeightId  = ATTR_FONT_HEIGHT;
         nWeightId  = ATTR_FONT_WEIGHT;
         nPostureId = ATTR_FONT_POSTURE;
+        nLangId    = ATTR_FONT_LANGUAGE;
     }
 
     if ( pCondSet )
@@ -337,6 +341,10 @@ void ScPatternAttr::GetFont(
         if ( pCondSet->GetItemState( ATTR_FONT_COLOR, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rItemSet.Get( ATTR_FONT_COLOR );
         aColor = ((const SvxColorItem*)pItem)->GetValue();
+
+        if ( pCondSet->GetItemState( nLangId, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rItemSet.Get( nLangId );
+        eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
     }
     else    // alles aus rItemSet
     {
@@ -365,6 +373,9 @@ void ScPatternAttr::GetFont(
                         rItemSet.Get( ATTR_FONT_RELIEF )).GetValue();
         aColor = ((const SvxColorItem&)
                         rItemSet.Get( ATTR_FONT_COLOR )).GetValue();
+        // for graphite language features
+        eLang =
+        ((const SvxLanguageItem&)rItemSet.Get( nLangId )).GetLanguage();
     }
     DBG_ASSERT(pFontAttr,"nanu?");
 
@@ -380,6 +391,8 @@ void ScPatternAttr::GetFont(
     rFont.SetFamily( pFontAttr->GetFamily() );
     rFont.SetCharSet( pFontAttr->GetCharSet() );
     rFont.SetPitch( pFontAttr->GetPitch() );
+
+    rFont.SetLanguage(eLang);
 
     //  Groesse
 

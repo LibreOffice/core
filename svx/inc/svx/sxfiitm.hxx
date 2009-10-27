@@ -40,7 +40,7 @@
 class SdrFractionItem: public SfxPoolItem {
     Fraction nValue;
 public:
-    TYPEINFO();
+    TYPEINFO_VISIBILITY( SVX_DLLPUBLIC );
     SdrFractionItem(USHORT nId=0): SfxPoolItem(nId) {}
     SdrFractionItem(USHORT nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
     SdrFractionItem(USHORT nId, SvStream& rIn);

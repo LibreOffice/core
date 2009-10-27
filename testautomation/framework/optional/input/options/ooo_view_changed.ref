@@ -11,8 +11,10 @@ schriftenhistorie=unchecked
 dokumentansicht=unchecked
 geoeffnetedokumente=checked
 opengl=checked
-UseHardwareAcceleration=checked
+usehardwareacceleration=unchecked
 useantialiasing=unchecked
 mousepositioning=2
 mausaktion=1
+transparency=unchecked
+selectionopacity=10%
 

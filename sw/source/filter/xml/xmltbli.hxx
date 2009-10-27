@@ -31,9 +31,7 @@
 #ifndef _XMLTBLI_HXX
 #define _XMLTBLI_HXX
 
-#ifndef _XMLOFF_XMLTEXTTABLECONTEXT_HXX
 #include <xmloff/XMLTextTableContext.hxx>
-#endif
 
 // STL include
 #include <hash_map>
@@ -69,6 +67,8 @@ class SwXMLTableContext : public XMLTextTableContext
 {
     ::rtl::OUString     aStyleName;
     ::rtl::OUString     aDfltCellStyleName;
+    /// NB: this contains the xml:id only if this table is a subtable!
+    ::rtl::OUString     mXmlId;
 
     SvUShorts           aColumnWidths;
     SvBools             aColumnRelWidths;
@@ -154,7 +154,8 @@ public:
                    const ::rtl::OUString& rLName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                SwXMLTableContext *pTable );
+                SwXMLTableContext *pTable,
+                const ::rtl::OUString& i_rXmlId );
 
     virtual ~SwXMLTableContext();
 
@@ -180,6 +181,7 @@ public:
     void InsertCell( const ::rtl::OUString& rStyleName,
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
                      const SwStartNode *pStNd=0,
+                     const ::rtl::OUString & i_rXmlId = ::rtl::OUString(),
                      SwXMLTableContext *pTable=0,
                      sal_Bool bIsProtected = sal_False,
                      const ::rtl::OUString *pFormula=0,
@@ -188,7 +190,8 @@ public:
                      sal_Bool bTextValue = sal_False );
     void InsertRow( const ::rtl::OUString& rStyleName,
                     const ::rtl::OUString& rDfltCellStyleName,
-                    sal_Bool bInHead );
+                    sal_Bool bInHead,
+                    const ::rtl::OUString & i_rXmlId = ::rtl::OUString() );
     void FinishRow();
     void InsertRepRows( sal_uInt32 nCount );
     SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol ) const;

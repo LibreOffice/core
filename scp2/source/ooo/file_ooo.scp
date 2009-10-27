@@ -178,17 +178,6 @@ End
 
 #endif
 
-#ifndef WITHOUT_FONTOOO
-
-File gid_File_Exe_Msfontextract
-        BIN_FILE_BODY;
-        Dir             = gid_Dir_Program;
-        Name            = EXENAME(msfontextract);
-        Styles          = (PACKED);
-End
-
-#endif
-
 #ifdef UNX
 
 File gid_File_Bin_Open_Url
@@ -359,7 +348,7 @@ End
 
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Emp, emp)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Sdfilt, sdfilt)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -453,12 +442,6 @@ End
 #ifndef SYSTEM_BSH
 STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
 #endif
-#endif
-
-#ifdef SOLAR_JAVA
-
-STD_JAR_FILE( gid_File_Jar_Classes, classes )
-
 #endif
 
 #ifdef SOLAR_JAVA
@@ -830,6 +813,13 @@ File gid_File_Lm_Lithuanian
     Styles = (PACKED);
 End
 
+File gid_File_Lm_Luxembourgish
+    TXT_FILE_BODY;
+    Name = "luxembourgish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
 File gid_File_Lm_Malay
     TXT_FILE_BODY;
     Name = "malay.lm";
@@ -861,6 +851,13 @@ End
 File gid_File_Lm_Mingo
     TXT_FILE_BODY;
     Name = "mingo.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Mongolian_Cyrillic
+    TXT_FILE_BODY;
+    Name = "mongolian_cyrillic.lm";
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End
@@ -1155,7 +1152,7 @@ End
 File gid_File_Mozilla_Runtime
     TXT_FILE_BODY;
     Styles = (ARCHIVE);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = "mozruntime.zip";
 End
 
@@ -1379,7 +1376,6 @@ File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     Name = "/registry/schema/org/openoffice/Office/ExtendedColorScheme.xcs";
 End
 
-
 File gid_File_Oo_Office_Paths_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1497,6 +1493,13 @@ File gid_File_Oo_Office_Dataaccess_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/DataAccess.xcu";
+End
+
+File gid_File_Oo_Office_Dataaccess_Drivers_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Dataaccess;
+    Name = "/registry/schema/org/openoffice/Office/DataAccess/Drivers.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Dbucommands_Xcs
@@ -2231,6 +2234,17 @@ File gid_File_Registry_Spool_Oo_Accelerators_System_Xcu
 #endif
 End
 
+File gid_File_Oo_Office_Paths_System_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Paths;
+#ifdef MACOSX
+    Name = "/registry/spool/org/openoffice/Office/Paths-macosx.xcu";
+#else
+    Name = "/registry/spool/org/openoffice/Office/Paths-unxwnt.xcu";
+#endif
+End
+
 File gid_File_Registry_Spool_Oo_Common_System_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2711,7 +2725,11 @@ File gid_Starregistry_Services_Rdb
     Name = "services.rdb";
     Dir = gid_Dir_Program;
     Styles = (PACKED, STARREGISTRY, PATCH);
+#if defined WNT
+    NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
+#else
     NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
+#endif
     JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
 End
 
@@ -3014,6 +3032,15 @@ File gid_File_Extension_Dictionary_Gl
 	Name = "dict-gl.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_He
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-he.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
 End
 #endif
 

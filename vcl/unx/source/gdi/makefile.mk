@@ -90,6 +90,10 @@ ENVCFLAGS+=-DUSE_CDE
 CFLAGS+=-DXRENDER_LINK
 .ENDIF
 
+.IF "$(ENABLE_GRAPHITE)" == "TRUE"
+CFLAGS+=-DENABLE_GRAPHITE
+.ENDIF
+
 .ENDIF	# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
@@ -103,8 +107,8 @@ ALLTAR : $(MACOSXRC)
 XSALSETLIBNAME=$(DLLPRE)spa$(DLLPOSTFIX)$(DLLPOST)
 
 $(INCCOM)$/rtsname.hxx:
-    rm -f $(INCCOM)$/rtsname.hxx ; \
-    echo "#define _XSALSET_LIBNAME "\"$(XSALSETLIBNAME)\" > $(INCCOM)$/rtsname.hxx
+    @rm -f $(INCCOM)$/rtsname.hxx ; \
+        echo "#define _XSALSET_LIBNAME "\"$(XSALSETLIBNAME)\" > $(INCCOM)$/rtsname.hxx
 
 $(SLO)$/salpimpl.obj : $(INCCOM)$/rtsname.hxx
 $(SLO)$/salprnpsp.obj : $(INCCOM)$/rtsname.hxx

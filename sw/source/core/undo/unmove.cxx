@@ -62,18 +62,22 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     if( pTxtNd )
     {
         pHistory->Add( pTxtNd->GetTxtColl(), nSttNode, ND_TEXTNODE );
-        if( pTxtNd->GetpSwpHints() )
+        if ( pTxtNd->GetpSwpHints() )
+        {
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
-                                0, pTxtNd->GetTxt().Len(), FALSE );
+                                0, pTxtNd->GetTxt().Len(), false );
+        }
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
     }
     if( pEndTxtNd && pEndTxtNd != pTxtNd )
     {
         pHistory->Add( pEndTxtNd->GetTxtColl(), nEndNode, ND_TEXTNODE );
-        if( pEndTxtNd->GetpSwpHints() )
+        if ( pEndTxtNd->GetpSwpHints() )
+        {
             pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nEndNode,
-                                0, pEndTxtNd->GetTxt().Len(), FALSE );
+                                0, pEndTxtNd->GetTxt().Len(), false );
+        }
         if( pEndTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode );
     }
@@ -81,9 +85,11 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     if( 0 != (pTxtNd = rRange.GetDoc()->GetNodes()[ rMvPos.nNode ]->GetTxtNode() ))
     {
         pHistory->Add( pTxtNd->GetTxtColl(), nMvDestNode, ND_TEXTNODE );
-        if( pTxtNd->GetpSwpHints() )
+        if ( pTxtNd->GetpSwpHints() )
+        {
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nMvDestNode,
-                                0, pTxtNd->GetTxt().Len(), FALSE );
+                                0, pTxtNd->GetTxt().Len(), false );
+        }
         if( pTxtNd->HasSwAttrSet() )
             pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode );
     }
@@ -201,7 +207,9 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
             SwNodeRange aRg( aIdx, aIdx );
             aRg.aEnd = nDestEndNode;
             aIdx = nInsPosNode;
-            if( !pDoc->Move( aRg, aIdx, IDocumentContentOperations::DOC_MOVEDEFAULT ) )
+            bool bSuccess = pDoc->MoveNodeRange( aRg, aIdx,
+                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+            if (!bSuccess)
                 break;
         }
         else
@@ -225,7 +233,10 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
                 ((SwTxtNode*)pCNd)->ClearSwpHintsArr( false );
 
             // an der InsertPos erstmal alle Attribute entfernen,
-            if( !pDoc->Move( aPam, aPos, ( bMoveRedlines ? IDocumentContentOperations::DOC_MOVEREDLINES : IDocumentContentOperations::DOC_MOVEDEFAULT ) ) )
+            const bool bSuccess = pDoc->MoveRange( aPam, aPos, (bMoveRedlines)
+                        ? IDocumentContentOperations::DOC_MOVEREDLINES
+                        : IDocumentContentOperations::DOC_MOVEDEFAULT );
+            if (!bSuccess)
                 break;
 
             aPam.Exchange();
@@ -288,7 +299,9 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
     {
         // nur ein Move mit SwRange
         SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
-        rDoc.Move( aRg, aIdx, ( bMoveRedlines ? IDocumentContentOperations::DOC_MOVEREDLINES : IDocumentContentOperations::DOC_MOVEDEFAULT ) );
+        rDoc.MoveNodeRange( aRg, aIdx, (bMoveRedlines)
+                ? IDocumentContentOperations::DOC_MOVEREDLINES
+                : IDocumentContentOperations::DOC_MOVEDEFAULT );
     }
     else
     {
@@ -304,7 +317,8 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
         BOOL bJoinTxt = aIdx.GetNode().IsTxtNode();
 
         aIdx--;
-        rDoc.Move( aPam, aMvPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
+        rDoc.MoveRange( aPam, aMvPos,
+            IDocumentContentOperations::DOC_MOVEDEFAULT );
 
         if( nSttNode != nEndNode && bJoinTxt )
         {

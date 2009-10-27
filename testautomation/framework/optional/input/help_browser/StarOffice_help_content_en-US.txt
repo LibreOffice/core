@@ -1,3 +1,169 @@
+Spreadsheets
+General Information and User Interface Usage
+Welcome to the StarOffice Calc Help
+StarOffice Calc Features
+Shortcut Keys (StarOffice Calc Accessibility)
+Shortcut Keys for Spreadsheets
+Error Codes in StarOffice Calc
+Add-in for Programming in StarOffice Calc
+Instructions for Using StarOffice Calc
+Command and Menu Reference
+Menus
+Menus
+File
+Edit
+View
+Insert
+Format
+Tools
+Window
+Data
+Toolbars
+Toolbars
+Formatting Bar
+Drawing Object Properties Bar
+Text Formatting Bar
+Formula Bar
+Status Bar
+Page Preview Bar
+Picture Bar
+Tools Bar
+Standard Bar
+Hyperlink Bar
+Table Data Bar
+Form Navigation Bar
+Query Design Bar
+Form Design Toolbar
+Functions Types and Operators
+Function Wizard
+Functions by Category
+Database Functions
+Date + Time Functions
+Financial Functions Part One
+Financial Functions Part Two
+Financial Functions Part Three
+Information Functions
+Logical Functions
+Mathematical Functions
+Array Functions
+Statistics Functions
+Statistical Functions Part One
+Statistical Functions Part Two
+Statistical Functions Part Three
+Statistical Functions Part Four
+Statistical Functions Part Five
+Spreadsheet Functions
+Text Functions
+Add-in Functions
+Add-in Functions, List of Analysis Functions Part One
+Add-in Functions, List of Analysis Functions Part Two
+Operators in StarOffice Calc
+User-Defined Functions
+Loading, Saving, Importing, and Exporting
+Inserting External Data in Table (WebQuery)
+Saving and Opening Sheets in HTML
+Importing and Exporting Text Files
+Formatting
+Rotating Text
+Writing Multi-line Text
+Formatting Numbers as Text
+Text Superscript / Subscript
+Changing Row Height or Column Width
+Applying Conditional Formatting
+Highlighting Negative Numbers
+Assigning Formats by Formula
+Entering a Number with Leading Zeros
+Formatting Spreadsheets
+Formatting Numbers With Decimals
+Naming Cells
+Rotating Tables (Transposing)
+Renaming Sheets
+19xx/20xx Years
+Using Rounded Off Numbers
+Cells in Currency Format
+Using AutoFormat for Tables
+Inserting and Editing Comments
+Selecting Themes for Sheets
+Entering Fractions 
+Filtering and Sorting
+Applying Filters
+Filter: Applying Advanced Filters
+Applying AutoFilter
+Applying Sort Lists
+Printing
+Printing Rows or Columns on Every Page
+Printing Sheets in Landscape Format
+Printing Sheet Details
+Defining Number of Pages for Printing
+Data Ranges
+Defining Database Ranges
+Filtering Cell Ranges 
+Sorting Data 
+Data Pilot
+DataPilot
+Creating DataPilot Tables
+Deleting DataPilot Tables
+Editing DataPilot Tables
+Filtering DataPilot Tables
+Selecting DataPilot Output Ranges
+Updating DataPilot Tables
+Scenarios
+Using Scenarios
+References
+Addresses and References, Absolute and Relative
+Referencing a Cell in Another Document
+References to Other Sheets and Referencing URLs
+Referencing Cells by Drag-and-Drop
+Recognizing Names as Addressing
+Viewing, Selecting, Copying
+Changing Table Views
+Displaying Formulas or Values
+Freezing Rows or Columns as Headers
+Navigating Through Sheets Tabs
+Copying to Multiple Sheets
+Only Copy Visible Cells
+Selecting Multiple Cells
+Formulas and Calculations
+Calculating With Formulas
+Copying Formulas
+Entering Formulas 
+Displaying Formulas or Values
+Calculating in Spreadsheets
+Calculating With Dates and Times
+Automatically Calculating Series
+Calculating Time Differences
+Entering Matrix Formulas
+Protection
+Protecting Cells from Changes
+Unprotecting Cells
+Miscellaneous
+Deactivating Automatic Changes
+Consolidating Data
+Applying Goal Seek
+Applying Multiple Operations
+Applying Multiple Sheets
+Validity of Cell Contents
+Charts and Diagrams
+General Information
+Charts in StarOffice
+StarOffice Chart Features
+Shortcuts for Charts
+Formulas
+General Information and User Interface Usage
+Welcome to the StarOffice Math Help
+StarOffice Math Features
+Instructions for Using StarOffice Math
+Shortcuts (StarOffice Math Accessibility)
+Command and Menu Reference
+Menus
+Toolbars
+Working with Formulas
+Manually Aligning Formula Parts
+Changing Default Attributes
+Merging Formula Parts in Brackets
+Entering Comments
+Entering Line Breaks
+Inserting Brackets
 Text Documents
 General Information and User Interface Usage
 Welcome to the StarOffice Writer Help
@@ -159,7 +325,7 @@ Automatically Check Spelling
 Removing Words From a User-Defined Dictionary
 Thesaurus
 Checking Spelling in Other Languages
-Checking Spelling Manually
+Checking Spelling and Grammar
 Troubleshooting Tips
 Inserting Text Before a Table at the Top of Page
 Going to Specific Bookmark
@@ -183,21 +349,20 @@ HTML Documents
 Web Pages
 HTML Filters and Forms
 Saving Text Documents in HTML Format
-Charts and Diagrams
-General Information
-Charts in StarOffice
-StarOffice Chart Features
-Shortcuts for Charts
-Spreadsheets
+Presentations and Drawings
 General Information and User Interface Usage
-Welcome to the StarOffice Calc Help
-StarOffice Calc Features
-Shortcut Keys (StarOffice Calc Accessibility)
-Shortcut Keys for Spreadsheets
-Error Codes in StarOffice Calc
-Add-in for Programming in StarOffice Calc
-Instructions for Using StarOffice Calc
+Welcome to the StarOffice Impress Help
+Welcome to the StarOffice Draw Help
+StarOffice Impress Features
+StarOffice Draw Features
+Using Shortcut Keys in StarOffice Impress 
+Shortcut Keys for Drawing Objects
+Shortcut Keys for StarOffice Impress
+Shortcut Keys for Drawings
+Instructions for Using StarOffice Impress
+Instructions for Using StarOffice Draw
 Command and Menu Reference
+Presentations (StarOffice Impress)
 Menus
 Menus
 File
@@ -207,132 +372,103 @@ Insert
 Format
 Tools
 Window
-Data
+Slide Show
 Toolbars
 Toolbars
-Formatting Bar
-Drawing Object Properties Bar
+Line and Filling Bar
 Text Formatting Bar
-Formula Bar
+Slide View Bar
 Status Bar
-Page Preview Bar
+Rulers
+Drawing Bar
+Outline Bar
+Slide Sorter Bar
+Options Bar
 Picture Bar
-Tools Bar
 Standard Bar
 Hyperlink Bar
-Table Data Bar
 Form Navigation Bar
-Query Design Bar
 Form Design Toolbar
-Functions Types and Operators
-Function Wizard
-Functions by Category
-Database Functions
-Date + Time Functions
-Financial Functions Part One
-Financial Functions Part Two
-Financial Functions Part Three
-Information Functions
-Logical Functions
-Mathematical Functions
-Array Functions
-Statistics Functions
-Statistical Functions Part One
-Statistical Functions Part Two
-Statistical Functions Part Three
-Statistical Functions Part Four
-Statistical Functions Part Five
-Spreadsheet Functions
-Text Functions
-Add-in Functions
-Add-in Functions, List of Analysis Functions Part One
-Add-in Functions, List of Analysis Functions Part Two
-Operators in StarOffice Calc
-User-Defined Functions
+Edit Points Bar
+Drawings (StarOffice Draw)
+Menus
+Menus
+File
+Edit
+View
+Insert
+Format
+Tools
+Modify
+Toolbars
+Toolbars
+Drawing Bar
+Options Bar
+Standard Bar
+Hyperlink Bar
+Form Navigation Bar
+Form Design Toolbar
+Edit Points Bar
 Loading, Saving, Importing, and Exporting
-Inserting External Data in Table (WebQuery)
-Saving and Opening Sheets in HTML
-Importing and Exporting Text Files
+Saving a Presentation in HTML Format
+Importing HTML Pages Into Presentations 
+Loading Color, Gradient, and Hatching Lists
+Exporting Animations in GIF Format
+Including Spreadsheets in Slides
+Inserting Graphics
+Copying Slides From Other Presentations
 Formatting
-Rotating Text
-Writing Multi-line Text
-Formatting Numbers as Text
-Text Superscript / Subscript
-Changing Row Height or Column Width
-Applying Conditional Formatting
-Highlighting Negative Numbers
-Assigning Formats by Formula
-Entering a Number with Leading Zeros
-Formatting Spreadsheets
-Formatting Numbers With Decimals
-Naming Cells
-Rotating Tables (Transposing)
-Renaming Sheets
-19xx/20xx Years
-Using Rounded Off Numbers
-Cells in Currency Format
-Using AutoFormat for Tables
-Inserting and Editing Notes
-Selecting Themes for Sheets
-Entering Fractions 
-Filtering and Sorting
-Applying Filters
-Filter: Applying Advanced Filters
-Applying AutoFilter
-Applying Sort Lists
+Loading Color, Gradient, and Hatching Lists
+Loading Line and Arrow Styles
+Defining Custom Colors
+Creating Gradient Fills
+Replacing Colors
+Arranging, Aligning and Distributing Objects
+Changing the Slide Background Fill
+Adding a Header or a Footer to All Slides
+Applying a Slide Design to a Slide Master 
+Moving Objects
 Printing
-Printing Rows or Columns on Every Page
-Printing Sheets in Landscape Format
-Printing Sheet Details
-Defining Number of Pages for Printing
-Data Ranges
-Defining Database Ranges
-Filtering Cell Ranges 
-Sorting Database Ranges
-Data Pilot
-DataPilot
-Creating DataPilot Tables
-Deleting DataPilot Tables
-Editing DataPilot Tables
-Filtering DataPilot Tables
-Selecting DataPilot Output Ranges
-Updating DataPilot Tables
-Scenarios
-Using Scenarios
-References
-Addresses and References, Absolute and Relative
-Referencing a Cell in Another Document
-References to Other Sheets and Referencing URLs
-Referencing Cells by Drag-and-Drop
-Recognizing Names as Addressing
-Viewing, Selecting, Copying
-Changing Table Views
-Displaying Formulas or Values
-Freezing Rows or Columns as Headers
-Navigating Through Sheets Tabs
-Copying to Multiple Sheets
-Only Copy Visible Cells
-Selecting Multiple Cells
-Formulas and Calculations
-Calculating With Formulas
-Copying Formulas
-Entering Formulas 
-Displaying Formulas or Values
-Calculating in Spreadsheets
-Calculating With Dates and Times
-Automatically Calculating Series
-Calculating Time Differences
-Entering Matrix Formulas
-Protection
-Protecting Cells from Changes
-Unprotecting Cells
-Miscellaneous
-Deactivating Automatic Changes
-Consolidating Data
-Applying Goal Seek
-Applying Multiple Operations
-Applying Multiple Sheets
-Validity of Cell Contents
+Printing Presentations
+Printing a Slide to Fit a Paper Size
+Effects
+Exporting Animations in GIF Format
+Animating Objects in Presentation Slides
+Animating Slide Transitions
+Cross-Fading Two Objects
+Creating Animated GIF Images
+Objects, Graphics, and Bitmaps
+Combining Objects and Constructing Shapes
+Drawing Sectors and Segments
+Duplicating Objects
+Rotating Objects
+Assembling 3D Objects
+Connecting Lines
+Converting Text Characters into Drawing Objects
+Converting Bitmap Images into Vector Graphics
+Converting 2D Objects to Curves, Polygons, and 3D Objects
+Loading Line and Arrow Styles
+Drawing Curves
+Editing Curves
+Inserting Graphics
+Including Spreadsheets in Slides
+Moving Objects
+Selecting Underlying Objects
+Creating a Flowchart
+Groups and Layers
+Grouping Objects
+About Layers
+Inserting Layers
+Working With Layers
+Moving Objects to a Different Layer
+Text in Presentations and Drawings
+Adding Text
+Converting Text Characters into Drawing Objects
+Viewing
+Creating a Custom Slide Show
+Changing the Slide Order
+Zooming With the Keypad
+Rehearse Timings of Slide Changes
 Macros and Programming
 General Information and User Interface Usage
 StarOffice Basic Help
@@ -569,142 +705,6 @@ Using Variables
 Using Objects
 Debugging a Basic Program
 Event-Driven Macros
-Presentations and Drawings
-General Information and User Interface Usage
-Welcome to the StarOffice Impress Help
-Welcome to the StarOffice Draw Help
-StarOffice Impress Features
-StarOffice Draw Features
-Using Shortcut Keys in StarOffice Impress 
-Shortcut Keys for Drawing Objects
-Shortcut Keys for StarOffice Impress
-Shortcut Keys for Drawings
-Instructions for Using StarOffice Impress
-Instructions for Using StarOffice Draw
-Command and Menu Reference
-Presentations (StarOffice Impress)
-Menus
-Menus
-File
-Edit
-View
-Insert
-Format
-Tools
-Window
-Slide Show
-Toolbars
-Toolbars
-Line and Filling Bar
-Text Formatting Bar
-Slide View Bar
-Status Bar
-Rulers
-Drawing Bar
-Outline Bar
-Slide Sorter Bar
-Options Bar
-Picture Bar
-Standard Bar
-Hyperlink Bar
-Form Navigation Bar
-Form Design Toolbar
-Edit Points Bar
-Drawings (StarOffice Draw)
-Menus
-Menus
-File
-Edit
-View
-Insert
-Format
-Tools
-Modify
-Toolbars
-Toolbars
-Drawing Bar
-Options Bar
-Standard Bar
-Hyperlink Bar
-Form Navigation Bar
-Form Design Toolbar
-Edit Points Bar
-Loading, Saving, Importing, and Exporting
-Saving a Presentation in HTML Format
-Importing HTML Pages Into Presentations 
-Loading Color, Gradient, and Hatching Lists
-Exporting Animations in GIF Format
-Including Spreadsheets in Slides
-Inserting Graphics
-Copying Slides From Other Presentations
-Formatting
-Loading Color, Gradient, and Hatching Lists
-Loading Line and Arrow Styles
-Defining Custom Colors
-Creating Gradient Fills
-Replacing Colors
-Arranging, Aligning and Distributing Objects
-Changing the Slide Background Fill
-Adding a Header or a Footer to All Slides
-Applying a Slide Design to a Slide Master 
-Moving Objects
-Printing
-Printing Presentations
-Printing a Slide to Fit a Paper Size
-Effects
-Exporting Animations in GIF Format
-Animating Objects in Presentation Slides
-Animating Slide Transitions
-Cross-Fading Two Objects
-Creating Animated GIF Images
-Objects, Graphics, and Bitmaps
-Combining Objects and Constructing Shapes
-Drawing Sectors and Segments
-Duplicating Objects
-Rotating Objects
-Assembling 3D Objects
-Connecting Lines
-Converting Text Characters into Drawing Objects
-Converting Bitmap Images into Vector Graphics
-Converting 2D Objects to Curves, Polygons, and 3D Objects
-Loading Line and Arrow Styles
-Drawing Curves
-Editing Curves
-Inserting Graphics
-Including Spreadsheets in Slides
-Moving Objects
-Selecting Underlying Objects
-Creating a Flowchart
-Groups and Layers
-Grouping Objects
-About Layers
-Inserting Layers
-Working With Layers
-Moving Objects to a Different Layer
-Text in Presentations and Drawings
-Adding Text
-Converting Text Characters into Drawing Objects
-Viewing
-Creating a Custom Slide Show
-Changing the Slide Order
-Zooming With the Keypad
-Rehearse Timings of Slide Changes
-Formulas
-General Information and User Interface Usage
-Welcome to the StarOffice Math Help
-StarOffice Math Features
-Instructions for Using StarOffice Math
-Shortcuts (StarOffice Math Accessibility)
-Command and Menu Reference
-Menus
-Toolbars
-Working with Formulas
-Manually Aligning Formula Parts
-Changing Default Attributes
-Merging Formula Parts in Brackets
-Entering Comments
-Entering Line Breaks
-Inserting Brackets
 Installation
 Changing the Association of Microsoft Office Document Types
 Common Help Topics

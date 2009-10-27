@@ -45,12 +45,12 @@ using namespace com::sun::star::uno;
 /** Provides general purpose decompression using the ZLIB library */
 
 Inflater::Inflater(sal_Bool bNoWrap)
-: bFinish(sal_False),
-  bFinished(sal_False),
+: bFinished(sal_False),
   bSetParams(sal_False),
   bNeedDict(sal_False),
   nOffset(0),
   nLength(0),
+  nLastInflateError(0),
   pStream(NULL)
 {
     pStream = new z_stream;
@@ -120,16 +120,23 @@ void SAL_CALL Inflater::end(  )
 
 sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
 {
-    sal_Int32 nResult;
+    if ( !pStream )
+    {
+        nLastInflateError = Z_STREAM_ERROR;
+        return 0;
+    }
+
+    nLastInflateError = 0;
+
     pStream->next_in   = ( unsigned char* ) ( sInBuffer.getConstArray() + nOffset );
     pStream->avail_in  = nLength;
     pStream->next_out  = reinterpret_cast < unsigned char* > ( rBuffer.getArray() + nNewOffset );
     pStream->avail_out = nNewLength;
 
 #ifdef SYSTEM_ZLIB
-    nResult = ::inflate(pStream, bFinish ? Z_SYNC_FLUSH : Z_PARTIAL_FLUSH);
+    sal_Int32 nResult = ::inflate(pStream, Z_PARTIAL_FLUSH);
 #else
-    nResult = ::z_inflate(pStream, bFinish ? Z_SYNC_FLUSH : Z_PARTIAL_FLUSH);
+    sal_Int32 nResult = ::z_inflate(pStream, Z_PARTIAL_FLUSH);
 #endif
 
     switch (nResult)
@@ -140,15 +147,19 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;
             return nNewLength - pStream->avail_out;
+
         case Z_NEED_DICT:
             bNeedDict = sal_True;
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;
-        case Z_BUF_ERROR:
             return 0;
-        case Z_DATA_ERROR:
-            return 0;
+
+        default:
+            // it is no error, if there is no input or no output
+            if ( nLength && nNewLength )
+                nLastInflateError = nResult;
     }
+
     return 0;
 }
 

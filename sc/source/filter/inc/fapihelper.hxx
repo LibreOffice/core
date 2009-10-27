@@ -45,6 +45,8 @@ namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
 } } }
 
+namespace comphelper { class IDocPasswordVerifier; }
+
 // Static helper functions ====================================================
 
 class SfxMedium;
@@ -109,7 +111,9 @@ public:
 
     /** Opens a password dialog and returns the entered password.
         @return  The entered password or an empty string on 'Cancel' or any error. */
-    static String       QueryPasswordForMedium( SfxMedium& rMedium );
+    static String       QueryPasswordForMedium( SfxMedium& rMedium,
+                            ::comphelper::IDocPasswordVerifier& rVerifier,
+                            const ::std::vector< ::rtl::OUString >* pDefaultPasswords = 0 );
 };
 
 template< typename Type >

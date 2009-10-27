@@ -329,6 +329,13 @@ namespace dbmm
                 aAsciiParameterNames.push_back( "#doc#" );
                 break;
 
+            case ERR_ADJUSTING_DIALOG_EVENTS_FAILED:
+                pAsciiErrorDescription = "adjusting events for dialog #lib#.#dlg# in document '#doc#' failed";
+                aAsciiParameterNames.push_back( "#doc#" );
+                aAsciiParameterNames.push_back( "#lib#" );
+                aAsciiParameterNames.push_back( "#dlg#" );
+                break;
+
             case ERR_ADJUSTING_FORMCOMP_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting form component events for '#doc#' failed";
                 aAsciiParameterNames.push_back( "#doc#" );

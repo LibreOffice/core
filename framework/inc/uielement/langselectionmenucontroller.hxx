@@ -58,6 +58,8 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
+#include "helper/mischelper.hxx"
+
 namespace framework
 {
     class LanguageSelectionMenuController :  public PopupMenuControllerBase
@@ -70,7 +72,6 @@ namespace framework
             DECLARE_XSERVICEINFO
 
             // XPopupMenuController
-            virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
 
             // XInitialization
@@ -79,16 +80,12 @@ namespace framework
             // XStatusListener
             virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
-            // XMenuListener
-            virtual void SAL_CALL highlight( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL activate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
         private:
+            virtual void impl_setPopupMenu();
+            virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
             enum Mode
             {
                 MODE_SetLanguageSelectionMenu,
@@ -97,7 +94,6 @@ namespace framework
             };
 
             sal_Bool                                                               m_bShowMenu;
-            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
             ::rtl::OUString                                                        m_aLangStatusCommandURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xLanguageDispatch;
             ::rtl::OUString                                                        m_aMenuCommandURL_Lang;
@@ -111,6 +107,7 @@ namespace framework
             sal_Int16           m_nScriptType;
             ::rtl::OUString     m_aKeyboardLang;
             ::rtl::OUString     m_aGuessedText;
+            LanguageGuessingHelper      m_aLangGuessHelper;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const Mode rMode );
     };

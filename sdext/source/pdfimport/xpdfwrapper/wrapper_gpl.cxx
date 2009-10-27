@@ -49,12 +49,12 @@ static char userPassword[33]  = "\001";
 static char outputFile[256]   = "\001";
 
 static ArgDesc argDesc[] = {
-  {"-f",          argString,      outputFile,     sizeof(outputFile),
-   "output file for binary streams"},
-  {"-opw",        argString,      ownerPassword,  sizeof(ownerPassword),
-   "owner password (for encrypted files)"},
-  {"-upw",        argString,      userPassword,   sizeof(userPassword),
-   "user password (for encrypted files)"},
+  {(char*)"-f",          argString,      outputFile,     sizeof(outputFile),
+   (char*)"output file for binary streams"},
+  {(char*)"-opw",        argString,      ownerPassword,  sizeof(ownerPassword),
+   (char*)"owner password (for encrypted files)"},
+  {(char*)"-upw",        argString,      userPassword,   sizeof(userPassword),
+   (char*)"user password (for encrypted files)"},
   {NULL, argString, NULL, 0, NULL }
 };
 #else
@@ -104,13 +104,30 @@ int main(int argc, char **argv)
     // read config file
     globalParams = new GlobalParams(
 #ifndef SYSTEM_POPPLER
-        ""
+        (char*)""
 #endif
     );
     globalParams->setErrQuiet(gTrue);
 #if !defined(SYSTEM_POPPLER) || defined(_MSC_VER)
     globalParams->setupBaseFonts(NULL);
 #endif
+
+    // try to read a possible open password form stdin
+    char aPwBuf[34];
+    aPwBuf[33] = 0;
+    if( ! fgets( aPwBuf, sizeof(aPwBuf)-1, stdin ) )
+        aPwBuf[0] = 0; // mark as empty
+    else
+    {
+        for( unsigned int i = 0; i < sizeof(aPwBuf); i++ )
+        {
+            if( aPwBuf[i] == '\n' )
+            {
+                aPwBuf[i] = 0;
+                break;
+            }
+        }
+    }
 
     // PDFDoc takes over ownership for all strings below
     GooString* pFileName    = new GooString(argv[1]);
@@ -121,12 +138,14 @@ int main(int argc, char **argv)
 
 
     // check for password string(s)
-    GooString* pOwnerPasswordStr(
-        ownerPassword[0] != '\001' ? new GooString(ownerPassword)
-        : (GooString *)NULL );
-    GooString* pUserPasswordStr(
-        userPassword[0] != '\001' ? new GooString(userPassword)
-        : (GooString *)NULL );
+    GooString* pOwnerPasswordStr( ownerPassword[0] != '\001'
+                                  ? new GooString(ownerPassword)
+                                  : (GooString *)NULL );
+    GooString* pUserPasswordStr( aPwBuf[0] != 0
+                                 ? new GooString( aPwBuf )
+                                 : ( userPassword[0] != '\001'
+                                     ? new GooString(userPassword)
+                                     : (GooString *)NULL ) );
     if( outputFile[0] != '\001' )
         g_binary_out = fopen(outputFile,"wb");
 
@@ -150,10 +169,7 @@ int main(int argc, char **argv)
         !aDoc.okToPrint() ||
         !aDoc.okToChange()||
         !aDoc.okToCopy()||
-        !aDoc.okToAddNotes()||
-        (userPassword[0] != '\001')||
-        (ownerPassword[0] != '\001')
-      )
+        !aDoc.okToAddNotes() )
    {
         pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aErrDoc) );
 

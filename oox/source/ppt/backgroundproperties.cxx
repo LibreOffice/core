@@ -60,7 +60,7 @@ Reference< XFastContextHandler > BackgroundPropertiesContext::createFastChildCon
 
     // FillPropertiesGroupContext
     if( !xRet.is() )
-        xRet = ::oox::drawingml::FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, mrFillProperties );
+        xRet = ::oox::drawingml::FillPropertiesContext::createFillContext( *this, aElementToken, xAttribs, mrFillProperties );
 
     return xRet;
 }

@@ -100,8 +100,8 @@ void SdPageDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     {
     case RID_SVXPAGE_PAGE:
         aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION));
-        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, SVX_PAPER_A0));
-        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, SVX_PAPER_E));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, PAPER_A0));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, PAPER_E));
         rPage.PageCreated(aSet);
         break;
     case RID_SVXPAGE_AREA:

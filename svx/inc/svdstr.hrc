@@ -324,7 +324,13 @@
 #define STR_UndoNewLayer             (STR_UndoBegin +13)
 #define STR_UndoDelLayer             (STR_UndoBegin +14)
 #define STR_UndoMovLayer             (STR_UndoBegin +15)
-#define STR_UndoEnd                  (STR_UndoMovLayer)
+
+// --> OD 2009-07-09 #i73249#
+#define STR_UndoObjName              (STR_UndoBegin +16)
+#define STR_UndoObjTitle             (STR_UndoBegin +17)
+#define STR_UndoObjDescription       (STR_UndoBegin +18)
+// <--
+#define STR_UndoEnd                  (STR_UndoObjDescription)
 
 
 #define STR_LayerBegin               (STR_UndoEnd+1)

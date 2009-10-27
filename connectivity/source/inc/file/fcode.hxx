@@ -236,6 +236,16 @@ namespace connectivity
             virtual sal_Bool operate(const OOperand*, const OOperand*) const;
         };
 
+        class OOp_NOT : public OBoolOperator
+        {
+        public:
+            TYPEINFO();
+
+        protected:
+            virtual void Exec(OCodeStack&);
+            virtual sal_Bool operate(const OOperand*, const OOperand* = NULL) const;
+            virtual sal_uInt16 getRequestedOperands() const;
+        };
 
         class OOp_AND : public OBoolOperator
         {

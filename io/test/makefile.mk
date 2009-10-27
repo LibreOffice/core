@@ -41,6 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 
 OBJFILES=	$(OBJ)$/testcomponent.obj \
@@ -90,5 +91,6 @@ $(BIN)$/applicat.rdb: $(SOLARBINDIR)$/udkapi.rdb
     rm -f $@
     regmerge $@ / $?
 
+.ENDIF 		# L10N_framework
 
 .INCLUDE :  target.mk

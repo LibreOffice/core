@@ -59,15 +59,11 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <initui.hxx>               // fuer SpellPointer
-#ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
-#endif
 #include <swundo.hxx>
 #include <breakit.hxx>
 
@@ -85,19 +81,13 @@
 #endif
 
 #define SwDrawTextShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
 #include <uitool.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <swmodule.hxx>
 
 #include <svx/xtable.hxx>
@@ -524,7 +514,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
                 case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
             }
-            pOLV->InsertText( String(cIns), TRUE );
+            pOLV->InsertText( String(cIns));
             rReq.Done();
         }
         break;
@@ -650,6 +640,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                                 pUndoManager->Redo(0);
                     }
                     bCallBase = FALSE;
+                    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
                 }
                 break;
             }
@@ -866,7 +857,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         aFontSet.Set( aOldSet );
 
         // String einfuegen
-        pOLV->InsertText( sSym, TRUE );
+        pOLV->InsertText( sSym );
 
         // attributieren (Font setzen)
         SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );

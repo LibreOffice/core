@@ -465,7 +465,10 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 
             case SID_INSERT_SOUND:
             case SID_INSERT_VIDEO:
-                if ( bOle || bTabProt || !SvxPluginFileDlg::IsAvailable(nWhich) || bShared )
+                 /* #i102735# discussed with NN: removed for performance reasons
+                 || !SvxPluginFileDlg::IsAvailable(nWhich)
+                 */
+                if ( bOle || bTabProt || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 

@@ -216,6 +216,7 @@ protected:
                             FormatType eFmtType = FORMATTYPE_DEC );
 
     sal_uInt16          dumpRepeatedRecId();
+    void                dumpFrHeader( bool bWithFlags, bool bWithRange );
 
     void                dumpDffClientRect();
     void                dumpEmbeddedDff();

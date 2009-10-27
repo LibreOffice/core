@@ -56,9 +56,6 @@ class HtmlDocuFile
                             uintt               i_depthInOutputTree );
     void                SetTitle(
                             const char *        i_sTitle );
-    void                SetBodyAttr(
-                            const char *        i_sAttrName,
-                            const char *        i_sAttrValue );
     void                SetCopyright(
                             const char *        i_sCopyright );
     void                EmptyBody();

@@ -39,8 +39,9 @@ PACKAGE = com$/sun$/star$/deployment$/ui
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 IDLFILES = \
-        PackageManagerDialog.idl \
-    LicenseDialog.idl
+    PackageManagerDialog.idl \
+    LicenseDialog.idl \
+    UpdateRequiredDialog.idl
 
 .INCLUDE : target.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk

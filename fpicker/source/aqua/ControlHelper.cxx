@@ -61,7 +61,6 @@ ControlHelper::ControlHelper()
 , m_bUserPaneNeeded( false )
 , m_bIsUserPaneLaidOut(false)
 , m_bIsFilterControlNeeded(false)
-, m_bAutoFilenameExtension(true)
 , m_pFilterHelper(NULL)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
@@ -174,12 +173,7 @@ void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bE
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION) {
-        OSL_TRACE(" autoextension checkbox cannot be changed");
-        DBG_PRINT_EXIT(CLASS_NAME, __func__);
-        return;
-    }
-    else if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
+    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
         OSL_TRACE(" preview checkbox cannot be changed");
         DBG_PRINT_EXIT(CLASS_NAME, __func__);
         return;
@@ -268,12 +262,7 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION) {
-        /* see comment in the header file */
-        //rValue >>= m_bAutoFilenameExtension;
-        OSL_TRACE(" value is a bool: %d", m_bAutoFilenameExtension);
-    }
-    else if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
+    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW) {
         OSL_TRACE(" value for preview is unchangeable");
     }
     else {
@@ -307,25 +296,19 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     uno::Any aRetval;
 
-    if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION) {
-        aRetval <<= m_bAutoFilenameExtension;
-        OSL_TRACE("value is a bool (autoextension): %d", m_bAutoFilenameExtension);
-    }
-    else {
-        NSControl* pControl = getControl( nControlId );
+    NSControl* pControl = getControl( nControlId );
 
-        if( pControl == nil ) {
-            OSL_TRACE("get value for unknown control %d", nControlId);
-            aRetval <<= sal_True;
-        } else {
-            if( [pControl class] == [NSPopUpButton class] ) {
-                aRetval = HandleGetListValue(pControl, nControlAction);
-            } else if( [pControl class] == [NSButton class] ) {
-                //NSLog(@"control: %@", [[pControl cell] title]);
-                sal_Bool bValue = [(NSButton*)pControl state] == NSOnState ? sal_True : sal_False;
-                aRetval <<= bValue;
-                OSL_TRACE("value is a bool (checkbox): %d", bValue);
-            }
+    if( pControl == nil ) {
+        OSL_TRACE("get value for unknown control %d", nControlId);
+        aRetval <<= sal_True;
+    } else {
+        if( [pControl class] == [NSPopUpButton class] ) {
+            aRetval = HandleGetListValue(pControl, nControlAction);
+        } else if( [pControl class] == [NSButton class] ) {
+            //NSLog(@"control: %@", [[pControl cell] title]);
+            sal_Bool bValue = [(NSButton*)pControl state] == NSOnState ? sal_True : sal_False;
+            aRetval <<= bValue;
+            OSL_TRACE("value is a bool (checkbox): %d", bValue);
         }
     }
 
@@ -528,7 +511,7 @@ void ControlHelper::createControls()
         }
     }
 
-    for (int i = 1; i < TOGGLE_LAST; i++) {
+    for (int i = 0/*#i102102*/; i < TOGGLE_LAST; i++) {
         if (true == m_bToggleVisibility[i]) {
             m_bUserPaneNeeded = true;
 
@@ -541,6 +524,11 @@ void ControlHelper::createControls()
             [button setButtonType:NSSwitchButton];
 
             [button setState:NSOffState];
+
+            if (i == AUTOEXTENSION) {
+                [button setTarget:m_pDelegate];
+                [button setAction:@selector(autoextensionChanged:)];
+            }
 
             m_pToggles[i] = button;
 
@@ -790,6 +778,7 @@ case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
 
     switch( nControlId )
     {
+            MAP_TOGGLE( AUTOEXTENSION );
             MAP_TOGGLE( PASSWORD );
             MAP_TOGGLE( FILTEROPTIONS );
             MAP_TOGGLE( READONLY );

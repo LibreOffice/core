@@ -553,8 +553,11 @@ char  **cmd; /* Simulate a reference to *cmd. */
       /* Restore stdout/stderr if needed. */
       if( old_stdout != -1 ) {
      dup2(old_stdout, 1);
-     if( old_stderr != -1 )
+     close(old_stdout);
+     if( old_stderr != -1 ) {
         dup2(old_stderr, 2);
+        close(old_stderr);
+      }
       }
 
       internal = 1;
@@ -593,8 +596,11 @@ char  **cmd; /* Simulate a reference to *cmd. */
 
    if( old_stdout != -1 ) {
       dup2(old_stdout, 1);
-      if( old_stderr != -1 )
+      close(old_stdout);
+      if( old_stderr != -1 ) {
      dup2(old_stderr, 2);
+     close(old_stderr);
+      }
    }
    if(pid.pid == (DMHANDLE)-1) {
       /* spawn failed */
@@ -649,8 +655,11 @@ char  **cmd; /* Simulate a reference to *cmd. */
        * failed. */
       if( old_stdout != -1 ) {
      dup2(old_stdout, 1);
-     if( old_stderr != -1 )
+     close(old_stdout);
+     if( old_stderr != -1 ) {
         dup2(old_stderr, 2);
+        close(old_stderr);
+     }
       }
       fprintf(stderr, "%s:  Error executing '%s': %s",
           Pname, argv[0], strerror(errno) );

@@ -299,9 +299,12 @@ void SwServerObject::SetNoServer()
     if(eType == BOOKMARK_SERVER && CNTNT_TYPE.pBkmk)
     {
         ::sw::mark::DdeBookmark* const pDdeBookmark = dynamic_cast< ::sw::mark::DdeBookmark* >(CNTNT_TYPE.pBkmk);
-        if(pDdeBookmark) pDdeBookmark->SetRefObject(NULL);
+        if(pDdeBookmark)
+        {
+            CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER;
+            pDdeBookmark->SetRefObject(NULL);
+        }
     }
-    CNTNT_TYPE.pBkmk = 0, eType = NONE_SERVER;
 }
 
 void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)

@@ -301,8 +301,7 @@ css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const ::rtl::OUString
         // <- SAFE
     }
 
-    css::uno::Any aValue = impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
-    return aValue;
+    return impl_getPropertyValue(aPropInfo.Name, aPropInfo.Handle);
 }
 
 //-----------------------------------------------------------------------------

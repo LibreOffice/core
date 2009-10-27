@@ -53,55 +53,57 @@ import com.sun.star.wizards.document.TimeStampControl;
 import com.sun.star.wizards.text.TextStyleHandler;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.UIConsts;
+import java.util.ArrayList;
+
+// TODO: Style Templates fuer OOo?
 
 public class StyleApplier
 {
 
-    WizardDialog CurUnoDialog;
-    XPropertySet xPageStylePropertySet;
-    XMultiServiceFactory xMSF;
-    short curtabindex;
-    XRadioButton optNoBorder;
-    XRadioButton opt3DLook;
-    XRadioButton optFlat;
-    XListBox lstStyles;
-    Desktop.OfficePathRetriever curofficepath;//  String[][] sLayoutFiles;
-    FormDocument curFormDocument;
-    short iOldLayoutPos;
-    int SOLAYOUTLST = 0;
-    String SCHANGELAYOUT = "changeLayout";
-    String SCHANGEBORDERTYPE = "changeBorderLayouts";
-    String[] StyleNames;
-    String[] StyleNodeNames;
-    String[] FileNames;
-    String StylesPath;
-    final static int SOBACKGROUNDCOLOR = 0;
-    final static int SODBTEXTCOLOR = 1;
-    final static int SOLABELTEXTCOLOR = 2;
+    private WizardDialog CurUnoDialog;
+    private XPropertySet xPageStylePropertySet;
+    private XMultiServiceFactory xMSF;
+    private short curtabindex;
+    private XRadioButton optNoBorder;
+    private XRadioButton opt3DLook;
+    private XRadioButton optFlat;
+    private XListBox lstStyles;
+    private Desktop.OfficePathRetriever curofficepath;//  String[][] sLayoutFiles;
+    private FormDocument curFormDocument;
+    private short iOldLayoutPos;
+    private int SOLAYOUTLST = 0;
+    private static final String SCHANGELAYOUT = "changeLayout";
+    private static final String SCHANGEBORDERTYPE = "changeBorderLayouts";
+    private String[] StyleNames;
+    private String[] StyleNodeNames;
+    private String[] FileNames;
+    // private String StylesPath;
+    private final static int SOBACKGROUNDCOLOR = 0;
+    private final static int SODBTEXTCOLOR = 1;
+    private final static int SOLABELTEXTCOLOR = 2;
 //  final static int SODBCONTROLBACKGROUNDCOLOR = 3;
-    final static int SOLABELBACKGROUNDCOLOR = 4;
-    final static int SOBORDERCOLOR = 5;
-    Short IBorderValue = new Short((short) 1);
+    private final static int SOLABELBACKGROUNDCOLOR = 4;
+    private final static int SOBORDERCOLOR = 5;
+    private Short IBorderValue = new Short((short) 1);
 
     public StyleApplier(WizardDialog _CurUnoDialog, FormDocument _curFormDocument) throws NoValidPathException
     {
-        try
-        {
+//        try
+//        {
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;
-            StylesPath = FileAccess.getOfficePath(xMSF, "Config", "", "");
-            StylesPath = FileAccess.combinePaths(xMSF, StylesPath, "/wizard/form/styles");
+
             TextStyleHandler oTextStyleHandler = new TextStyleHandler(xMSF, curFormDocument.xTextDocument);
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
             this.CurUnoDialog = _CurUnoDialog;
-            curtabindex = (short) (FormWizard.SOSTYLEPAGE * 100);
-            Integer IStyleStep = new Integer(FormWizard.SOSTYLEPAGE);
+            curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
+            Integer IStyleStep = new Integer(FormWizard.SOSTYLE_PAGE);
             String sPageStyles = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 86);
             String sNoBorder = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 29);
             String s3DLook = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 30);
             String sFlat = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 31);
             String sFieldBorder = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 28);
-            XInterface xUcbInterface = (XInterface) _curFormDocument.xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+//            XInterface xUcbInterface = (XInterface) _curFormDocument.xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             setStyles();
             short[] SelLayoutPos;
             SelLayoutPos = new short[]
@@ -168,11 +170,11 @@ public class StyleApplier
                     {
                         UIConsts.INTEGERS[8], sFieldBorder, new Integer(192), new Integer(25), IStyleStep, new Short(curtabindex++), new Integer(98)
                     });
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.out);
-        }
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace(System.out);
+//        }
     }
 
     /*  public void initialize(short _iStyleindex){
@@ -356,9 +358,49 @@ public class StyleApplier
         return -1;
     }
 
+    private XMultiServiceFactory getMSF()
+    {
+        return xMSF;
+    }
+
+    private ArrayList<String> getStylePaths()
+    {
+        ArrayList<String> aStylePaths = new ArrayList<String>();
+        try
+        {
+            // TODO: check different languages in header layouts
+            aStylePaths = FileAccess.getOfficePaths(getMSF(), "Config", "", "");
+            FileAccess.combinePaths(getMSF(), aStylePaths, "/wizard/form/styles");
+
+            String[][] LayoutFiles = FileAccess.getFolderTitles(getMSF(), null, aStylePaths, ".css");
+
+        }
+        catch (com.sun.star.wizards.common.NoValidPathException e)
+        {
+            // if there are problems, don't show anything is a little bit hard.
+            aStylePaths.add("default");
+        }
+        return aStylePaths;
+    }
+
+    private String getStylePath()
+        {
+// TODO: umstellen auf mehrere Pfade
+            String StylesPath = "";
+            try
+            {
+                StylesPath = FileAccess.getOfficePath(xMSF, "Config", "", "");
+                StylesPath = FileAccess.combinePaths(xMSF, StylesPath, "/wizard/form/styles");
+            }
+            catch (NoValidPathException e)
+            {
+            }
+            return StylesPath;
+        }
+
     private int[] getStyleColors(String _filename)
     {
-        String sFilePath = this.StylesPath + "/" + _filename;
+        String sFilePath = getStylePath() + "/" + _filename;
         int[] oStylePropList = new int[6];
         String[] sData = FileAccess.getDataFromTextFile(xMSF, sFilePath);
         oStylePropList[SOBACKGROUNDCOLOR] = getStyleColor(sData, ".toctitle {", "background-color:");
@@ -414,9 +456,12 @@ public class StyleApplier
                     {
                         if (_iStyleColors[SODBTEXTCOLOR] > -1)
                         {
-                            if (DBControls[n].xServiceInfo.supportsService("com.sun.star.drawing.ShapeCollection"))
+                            DatabaseControl aDBControl = DBControls[n];
+                            if (aDBControl != null)
                             {
-                                TimeStampControl oTimeStampControl = (TimeStampControl) DBControls[n];
+                                if (aDBControl.xServiceInfo.supportsService("com.sun.star.drawing.ShapeCollection"))
+                            {
+                                    TimeStampControl oTimeStampControl = (TimeStampControl) aDBControl;
                                 for (int i = 0; i < 2; i++)
                                 {
                                     XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
@@ -425,7 +470,8 @@ public class StyleApplier
                             }
                             else
                             {
-                                setDBControlColors(DBControls[n].xPropertySet, _iStyleColors);
+                                    setDBControlColors(aDBControl.xPropertySet, _iStyleColors);
+                                }
                             }
                         }
                     }

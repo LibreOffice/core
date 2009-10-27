@@ -199,7 +199,7 @@ SbxVariable* SbiRuntime::FindElement
                 }
                 // #72382 VORSICHT! Liefert jetzt wegen unbekannten
                 // Modulen IMMER ein Ergebnis!
-                SbxVariable* pUnoClass = findUnoClass( aName );
+                SbUnoClass* pUnoClass = findUnoClass( aName );
                 if( pUnoClass )
                 {
                     pElem = new SbxVariable( t );
@@ -255,7 +255,7 @@ SbxVariable* SbiRuntime::FindElement
                     ClearArgvStack();
 
                     // Normalen Error setzen
-                    Error( nNotFound );
+                    Error( nNotFound, aName );
                 }
                 else
                 {
@@ -832,6 +832,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     // Wenn der Expr-Stack am Anfang einen Statements eine Variable enthaelt,
     // hat ein Trottel X als Funktion aufgerufen, obwohl es eine Variable ist!
     BOOL bFatalExpr = FALSE;
+    String sUnknownMethodName;
     if( nExprLvl > 1 )
         bFatalExpr = TRUE;
     else if( nExprLvl )
@@ -839,7 +840,10 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
         SbxVariable* p = refExprStk->Get( 0 );
         if( p->GetRefCount() > 1
          && refLocals.Is() && refLocals->Find( p->GetName(), p->GetClass() ) )
+        {
+            sUnknownMethodName = p->GetName();
             bFatalExpr = TRUE;
+        }
     }
     // Der Expr-Stack ist nun nicht mehr notwendig
     ClearExprStack();
@@ -854,7 +858,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     // stimmen!
     if( bFatalExpr)
     {
-        StarBASIC::FatalError( SbERR_NO_METHOD );
+        StarBASIC::FatalError( SbERR_NO_METHOD, sUnknownMethodName );
         return;
     }
     pStmnt = pCode - 9;

@@ -75,8 +75,8 @@ Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     if( pScreen )
     {
         NSRect aFrame = [pScreen frame];
-        aRet = Rectangle( Point( aFrame.origin.x, aFrame.origin.y ),
-                          Size( aFrame.size.width, aFrame.size.height ) );
+        aRet = Rectangle( Point( static_cast<long int>(aFrame.origin.x), static_cast<long int>(aFrame.origin.y) ),
+                          Size( static_cast<long int>(aFrame.size.width), static_cast<long int>(aFrame.size.height) ) );
     }
     return aRet;
 }
@@ -94,8 +94,8 @@ Rectangle AquaSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
     if( pScreen )
     {
         NSRect aFrame = [pScreen visibleFrame];
-        aRet = Rectangle( Point( aFrame.origin.x, aFrame.origin.y ),
-                          Size( aFrame.size.width, aFrame.size.height ) );
+        aRet = Rectangle( Point( static_cast<long int>(aFrame.origin.x), static_cast<long int>(aFrame.origin.y) ),
+                          Size( static_cast<long int>(aFrame.size.width), static_cast<long int>(aFrame.size.height) ) );
     }
     return aRet;
 }

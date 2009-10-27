@@ -58,6 +58,7 @@ OBJFILES= \
 
 # SO launcher
 .IF "$(BUILD_SPECIAL)"!=""
+APP1DEPN= $(APP1RES) verinfo.rc
 APP1TARGET=so$/swriter
 APP1NOSAL=TRUE
 APP1LINKRES=$(MISC)$/$(TARGET)1.res
@@ -66,6 +67,8 @@ APP1OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/swriter.obj
 APP1STDLIBS = $(SHELL32LIB)
+APP1VERINFO=verinfo.rc
+APP1PRODUCTDEF+=-DRES_APP_NAME=swriter
 
 APP2TARGET=so$/scalc
 APP2NOSAL=TRUE
@@ -75,6 +78,9 @@ APP2OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/scalc.obj
 APP2STDLIBS = $(SHELL32LIB)
+APP2DEPN=verinfo.rc
+APP2VERINFO=verinfo.rc
+APP2PRODUCTDEF+=-DRES_APP_NAME=scalc
 
 APP3TARGET=so$/sdraw
 APP3NOSAL=TRUE
@@ -84,6 +90,9 @@ APP3OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sdraw.obj
 APP3STDLIBS = $(SHELL32LIB)
+APP3DEPN=verinfo.rc
+APP3VERINFO=verinfo.rc
+APP3PRODUCTDEF+=-DRES_APP_NAME=sdraw
 
 APP4TARGET=so$/simpress
 APP4NOSAL=TRUE
@@ -93,6 +102,9 @@ APP4OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/simpress.obj
 APP4STDLIBS = $(SHELL32LIB)
+APP4DEPN=verinfo.rc
+APP4VERINFO=verinfo.rc
+APP4PRODUCTDEF+=-DRES_APP_NAME=simpress
 
 APP5TARGET=so$/sbase
 APP5NOSAL=TRUE
@@ -102,6 +114,9 @@ APP5OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sbase.obj
 APP5STDLIBS = $(SHELL32LIB)
+APP5DEPN=verinfo.rc
+APP5VERINFO=verinfo.rc
+APP5PRODUCTDEF+=-DRES_APP_NAME=sbase
 
 APP6TARGET=so$/smath
 APP6NOSAL=TRUE
@@ -111,6 +126,9 @@ APP6OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
 APP6STDLIBS = $(SHELL32LIB)
+APP6DEPN=verinfo.rc
+APP6VERINFO=verinfo.rc
+APP6PRODUCTDEF+=-DRES_APP_NAME=smath
 
 APP7TARGET=so$/sweb
 APP7NOSAL=TRUE
@@ -120,6 +138,9 @@ APP7OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sweb.obj
 APP7STDLIBS = $(SHELL32LIB)
+APP7DEPN=verinfo.rc
+APP7VERINFO=verinfo.rc
+APP7PRODUCTDEF+=-DRES_APP_NAME=sweb
 
 
 .ENDIF			# "$(BUILD_SPECIAL)"!=""

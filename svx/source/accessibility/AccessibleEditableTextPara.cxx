@@ -93,10 +93,10 @@ using namespace ::com::sun::star::accessibility;
 namespace accessibility
 {
 
-    const SfxItemPropertyMap* ImplGetSvxCharAndParaPropertiesMap()
+    const SvxItemPropertySet* ImplGetSvxCharAndParaPropertiesSet()
     {
         // PropertyMap for character and paragraph properties
-        static const SfxItemPropertyMap aPropMap[] =
+        static const SfxItemPropertyMapEntry aPropMap[] =
         {
             SVX_UNOEDIT_CHAR_PROPERTIES,
             SVX_UNOEDIT_PARA_PROPERTIES,
@@ -105,8 +105,8 @@ namespace accessibility
             {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
             {0,0,0,0,0,0}
         };
-
-        return aPropMap;
+        static SvxItemPropertySet aPropSet( aPropMap );
+        return &aPropSet;
     }
 
 
@@ -806,7 +806,7 @@ namespace accessibility
         // must provide XAccesibleText by hand, since it comes publicly inherited by XAccessibleEditableText
         if ( rType == ::getCppuType((uno::Reference< XAccessibleText > *)0) )
         {
-            uno::Reference< XAccessibleText > aAccText = this;
+            uno::Reference< XAccessibleText > aAccText = static_cast< XAccessibleEditableText * >(this);
             aRet <<= aAccText;
         }
         else if ( rType == ::getCppuType((uno::Reference< XAccessibleEditableText > *)0) )
@@ -912,65 +912,18 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+//        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        // append first 40 characters from text, or first line, if shorter
-        // (writer takes first sentence here, but that's not supported
-        // from EditEngine)
-        // throws if defunc
-        ::rtl::OUString aLine;
-
-        if( getCharacterCount() )
-            aLine = getTextAtIndex(0, AccessibleTextType::LINE).SegmentText;
-
-        // Get the string from the resource for the specified id.
-        String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_DESCRIPTION ) );
-        String sParaIndex = ::rtl::OUString::valueOf( GetParagraphIndex() );
-        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
-                               sParaIndex );
-
-        if( aLine.getLength() > MaxDescriptionLen )
-        {
-            ::rtl::OUString aCurrWord;
-            sal_Int32 i;
-
-            // search backward from MaxDescriptionLen for previous word start
-            for( aCurrWord=getTextAtIndex(MaxDescriptionLen, AccessibleTextType::WORD).SegmentText,
-                     i=MaxDescriptionLen,
-                     aLine=::rtl::OUString();
-                 i>=0;
-                 --i )
-            {
-                if( getTextAtIndex(i, AccessibleTextType::WORD).SegmentText != aCurrWord )
-                {
-                    if( i == 0 )
-                        // prevent completely empty string
-                        aLine = getTextAtIndex(0, AccessibleTextType::WORD).SegmentText;
-                    else
-                        aLine = getTextRange(0, i);
-                }
-            }
-        }
-
-        return ::rtl::OUString( sStr ) + aLine;
+        return ::rtl::OUString();
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getAccessibleName() throw (uno::RuntimeException)
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+//        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        // throws if defunc
-        sal_Int32 nPara( GetParagraphIndex() );
-
-        // Get the string from the resource for the specified id.
-        String sStr = ::rtl::OUString( SVX_RESSTR (RID_SVXSTR_A11Y_PARAGRAPH_NAME) );
-        String sParaIndex = ::rtl::OUString::valueOf( nPara );
-        sStr.SearchAndReplace( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "$(ARG)" )),
-                               sParaIndex );
-
-        return ::rtl::OUString( sStr );
+        return ::rtl::OUString();
     }
 
     uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::getAccessibleRelationSet() throw (uno::RuntimeException)
@@ -1885,8 +1838,8 @@ namespace accessibility
             SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
                                                    0 == nStartIndex &&
                                                    rCacheTF.GetTextLen(nPara) == nEndIndex ?
-                                                   ImplGetSvxUnoOutlinerTextCursorPropertyMap() :
-                                                   ImplGetSvxTextPortionPropertyMap() );
+                                                   ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() :
+                                                   ImplGetSvxTextPortionSvxPropertySet() );
 
             aPropSet.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
 
@@ -1950,7 +1903,7 @@ namespace accessibility
         // get XPropertySetInfo for paragraph attributes and
         // character attributes that span all the paragraphs text.
         SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                ImplGetSvxCharAndParaPropertiesMap() );
+                ImplGetSvxCharAndParaPropertiesSet() );
         aPropSet.SetSelection( MakeSelection( 0, GetTextLen() ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
         if (!xPropSetInfo.is())
@@ -2049,7 +2002,7 @@ namespace accessibility
         CheckIndex(nIndex);
 
         SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                                               ImplGetSvxCharAndParaPropertiesMap() );
+                                               ImplGetSvxCharAndParaPropertiesSet() );
         aPropSet.SetSelection( MakeSelection( nIndex ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
         if (!xPropSetInfo.is())
@@ -2111,6 +2064,99 @@ namespace accessibility
         aOutSequence.realloc( nOutLen );
 
         return aOutSequence;
+    }
+
+    // XAccessibleMultiLineText
+    sal_Int32 SAL_CALL AccessibleEditableTextPara::getLineNumberAtIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    {
+        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
+
+        sal_Int32 nRes = -1;
+        sal_Int32 nPara = GetParagraphIndex();
+
+        SvxTextForwarder &rCacheTF = GetTextForwarder();
+        const bool bValidPara = 0 <= nPara && nPara < rCacheTF.GetParagraphCount();
+        DBG_ASSERT( bValidPara, "getLineNumberAtIndex: current paragraph index out of range" );
+        if (bValidPara)
+        {
+            // we explicitly allow for the index to point at the character right behind the text
+            if (0 <= nIndex && nIndex <= rCacheTF.GetTextLen( static_cast< USHORT >(nPara) ))
+                nRes = rCacheTF.GetLineNumberAtIndex( static_cast< USHORT >(nPara), static_cast< USHORT >(nIndex) );
+            else
+                throw lang::IndexOutOfBoundsException();
+        }
+        return nRes;
+    }
+
+    // XAccessibleMultiLineText
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineNumber( sal_Int32 nLineNo ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    {
+        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
+
+        ::com::sun::star::accessibility::TextSegment aResult;
+        sal_Int32 nPara = GetParagraphIndex();
+        SvxTextForwarder &rCacheTF = GetTextForwarder();
+        const bool bValidPara = 0 <= nPara && nPara < rCacheTF.GetParagraphCount();
+        DBG_ASSERT( bValidPara, "getTextAtLineNumber: current paragraph index out of range" );
+        if (bValidPara)
+        {
+            if (0 <= nLineNo && nLineNo < rCacheTF.GetLineCount( static_cast< USHORT >(nPara) ))
+            {
+                USHORT nStart = 0, nEnd = 0;
+                rCacheTF.GetLineBoundaries( nStart, nEnd, static_cast< USHORT >(nPara), static_cast< USHORT >(nLineNo) );
+                if (nStart != 0xFFFF && nEnd != 0xFFFF)
+                {
+                    try
+                    {
+                        aResult.SegmentText     = getTextRange( nStart, nEnd );
+                        aResult.SegmentStart    = nStart;
+                        aResult.SegmentEnd      = nEnd;
+                    }
+                    catch (lang::IndexOutOfBoundsException)
+                    {
+                        // this is not the exception that should be raised in this function ...
+                        DBG_ASSERT( 0, "unexpected exception" );
+                    }
+                }
+            }
+            else
+                throw lang::IndexOutOfBoundsException();
+        }
+        return aResult;
+    }
+
+    // XAccessibleMultiLineText
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineWithCaret(  ) throw (uno::RuntimeException)
+    {
+        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
+
+        ::com::sun::star::accessibility::TextSegment aResult;
+        try
+        {
+            aResult = getTextAtLineNumber( getNumberOfLineWithCaret() );
+        }
+        catch (lang::IndexOutOfBoundsException &)
+        {
+            // this one needs to be catched since this interface does not allow for it.
+        }
+        return aResult;
+    }
+
+    // XAccessibleMultiLineText
+    sal_Int32 SAL_CALL AccessibleEditableTextPara::getNumberOfLineWithCaret(  ) throw (uno::RuntimeException)
+    {
+        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
+
+        sal_Int32 nRes = -1;
+        try
+        {
+            nRes = getLineNumberAtIndex( getCaretPosition() );
+        }
+        catch (lang::IndexOutOfBoundsException &)
+        {
+            // this one needs to be catched since this interface does not allow for it.
+        }
+        return nRes;
     }
 
 

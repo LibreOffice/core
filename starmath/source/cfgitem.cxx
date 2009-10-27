@@ -580,19 +580,6 @@ void SmMathConfig::Save()
     SaveFontFormatList();
 }
 
-
-USHORT SmMathConfig::GetSymbolCount() const
-{
-    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolCount();
-}
-
-
-const SmSym * SmMathConfig::GetSymbol( USHORT nIndex ) const
-{
-    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolByPos( nIndex );
-}
-
-
 void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 {
     Sequence< OUString > aNodes( ((SmMathConfig*) this)->GetNodeNames( A2OU( SYMBOL_LIST ) ) );
@@ -1258,22 +1245,6 @@ void SmMathConfig::SetIgnoreSpacesRight( BOOL bVal )
     if (!pOther)
         LoadOther();
     SetOtherIfNotEqual( pOther->bIgnoreSpacesRight, bVal );
-}
-
-
-BOOL SmMathConfig::IsToolboxVisible() const
-{
-    if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
-    return pOther->bToolboxVisible;
-}
-
-
-void SmMathConfig::SetToolboxVisible( BOOL bVal )
-{
-    if (!pOther)
-        LoadOther();
-    SetOtherIfNotEqual( pOther->bToolboxVisible, bVal );
 }
 
 

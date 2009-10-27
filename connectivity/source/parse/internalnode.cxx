@@ -44,7 +44,7 @@ OSQLInternalNode::OSQLInternalNode(const sal_Char* pNewValue,
                  : OSQLParseNode(pNewValue,eNodeType,nNodeID)
 {
     OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
-    OSQLParser::s_pGarbageCollector->push_back(this);
+    (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ OSQLInternalNode::OSQLInternalNode(const ::rtl::OString &_NewValue,
                 :OSQLParseNode(_NewValue,eNodeType,nNodeID)
 {
     OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
-    OSQLParser::s_pGarbageCollector->push_back(this);
+    (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -64,7 +64,7 @@ OSQLInternalNode::OSQLInternalNode(const sal_Unicode* pNewValue,
                  :OSQLParseNode(pNewValue,eNodeType,nNodeID)
 {
     OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
-    OSQLParser::s_pGarbageCollector->push_back(this);
+    (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
 //-----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ OSQLInternalNode::OSQLInternalNode(const ::rtl::OUString &_NewValue,
                 :OSQLParseNode(_NewValue,eNodeType,nNodeID)
 {
     OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
-    OSQLParser::s_pGarbageCollector->push_back(this);
+    (*OSQLParser::s_pGarbageCollector)->push_back(this);
 }
 
 
@@ -82,11 +82,7 @@ OSQLInternalNode::OSQLInternalNode(const ::rtl::OUString &_NewValue,
 OSQLInternalNode::~OSQLInternalNode()
 {
     // remove the node from the garbage list
+
     OSL_ENSURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
-    if (!OSQLParser::s_pGarbageCollector->empty())
-    {
-        OSQLParser::s_pGarbageCollector->erase(
-        ::std::find(OSQLParser::s_pGarbageCollector->begin(), OSQLParser::s_pGarbageCollector->end(),
-        this));
-    }
+    (*OSQLParser::s_pGarbageCollector)->erase(this);
 }

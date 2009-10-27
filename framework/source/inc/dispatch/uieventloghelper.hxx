@@ -40,6 +40,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <comphelper/uieventslogger.hxx>
 #include <rtl/ustring.hxx>
+#include <services.h>
 
 namespace framework
 {
@@ -61,7 +62,7 @@ namespace framework
                 {
                     try
                     {
-                        static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+                        static ::rtl::OUString our_aModuleManagerName = SERVICENAME_MODULEMANAGER;
                         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
                             rServiceManager->createInstance(our_aModuleManagerName)
                             , ::com::sun::star::uno::UNO_QUERY_THROW);

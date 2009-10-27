@@ -46,7 +46,7 @@ class SVX_DLLPUBLIC XFillColorItem : public XColorItem
 public:
             TYPEINFO();
             XFillColorItem() {}
-            XFillColorItem(long nIndex, const Color& rTheColor);
+            XFillColorItem(INT32 nIndex, const Color& rTheColor);
             XFillColorItem(const String& rName, const Color& rTheColor);
             XFillColorItem(SvStream& rIn);
 

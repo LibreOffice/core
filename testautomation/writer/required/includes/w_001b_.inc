@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Required-Testcases for the File-menu.
 '*
@@ -209,10 +209,10 @@ testcase tFileSendOutlineToClipboard
     WaitSlot(1000)
 
     PrintLog "Paste outline in new document"
-    EditPaste
+    hUseAsyncSlot( "EditPaste" )
     Call wTypeKeys("<Up>", 6)
     Call wTypeKeys("<Home><Shift End>")
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
     if GetClipboardText <> "Seite 1." then QAErrorlog "Wrong Outline in Impress Outlinemode"
     WaitSlot(1000)
     PrintLog "Close active document"

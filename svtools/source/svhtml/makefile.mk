@@ -34,6 +34,8 @@ PRJ=..$/..
 PRJNAME=svtools
 TARGET=svhtml
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk

@@ -91,41 +91,93 @@ long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
     return nColor;
 }
 
-
-PenStyle DXF2GDIMetaFile::LTypeToPStyle(const char * sLineType)
+DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(const char * sLineType)
 {
     const DXFLType * pLT;
-    PenStyle ePStyle;
+    DXFLineInfo aDXFLineInfo;
+
     pLT=pDXF->aTables.SearchLType(sLineType);
-    if (pLT==NULL) ePStyle=PEN_SOLID;
-    else if (pLT->nDashCount<=1) ePStyle=PEN_SOLID;
-    else if (pLT->nDashCount==2) {
-        if (fabs(pLT->fDash[0])*4<fabs(pLT->fPatternLength)) ePStyle=PEN_DOT;
-        else ePStyle=PEN_DASH;
+    if (pLT==NULL || pLT->nDashCount == 0) {
+        aDXFLineInfo.eStyle = LINE_SOLID;
     }
-    else ePStyle=PEN_DASHDOT;
-    return ePStyle;
+    else {
+        sal_Int32 i;
+        double x;
+        aDXFLineInfo.eStyle = LINE_DASH;
+        for (i=0; i < (pLT->nDashCount); i++) {
+            x = pLT->fDash[i] * pDXF->getGlobalLineTypeScale();
+// ####
+            // x = (sal_Int32) rTransform.TransLineWidth( pLT->fDash[i] * pDXF->getGlobalLineTypeScale() );
+            if ( x >= 0.0 ) {
+                if ( aDXFLineInfo.nDotCount == 0 ) {
+                    aDXFLineInfo.nDotCount ++;
+                    aDXFLineInfo.fDotLen = x;
+                }
+                else if ( aDXFLineInfo.fDotLen == x ) {
+                    aDXFLineInfo.nDotCount ++;
+                }
+                else if ( aDXFLineInfo.nDashCount == 0 ) {
+                    aDXFLineInfo.nDashCount ++;
+                    aDXFLineInfo.fDashLen = x;
+                }
+                else if ( aDXFLineInfo.fDashLen == x ) {
+                    aDXFLineInfo.nDashCount ++;
+                }
+                else {
+                    // It is impossible to be converted.
+                }
+            }
+            else {
+                if ( aDXFLineInfo.fDistance == 0 ) {
+                    aDXFLineInfo.fDistance = -1 * x;
+                }
+                else {
+                    // It is impossible to be converted.
+                }
+            }
+
+        }
+    }
+
+#if 0
+    if (aDXFLineInfo.DashCount > 0 && aDXFLineInfo.DashLen == 0.0)
+        aDXFLineInfo.DashLen ( 1 );
+    if (aDXFLineInfo.DotCount > 0 && aDXFLineInfo.DotLen() == 0.0)
+        aDXFLineInfo.SetDotLen( 1 );
+    if (aDXFLineInfo.GetDashCount > 0 || aDXFLineInfo.GetDotCount > 0)
+        if (aDXFLineInfo.GetDistance() == 0)
+            aDXFLineInfo.SetDistance( 1 );
+#endif
+
+    return aDXFLineInfo;
 }
 
-
-PenStyle DXF2GDIMetaFile::GetEntityPStyle(const DXFBasicEntity & rE)
+DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 {
-    PenStyle ePStyle;
+    DXFLineInfo aDXFLineInfo;
     const DXFLayer * pLayer;
 
+    aDXFLineInfo.eStyle = LINE_SOLID;
+    aDXFLineInfo.fWidth = 0;
+    aDXFLineInfo.nDashCount = 0;
+    aDXFLineInfo.fDashLen = 0;
+    aDXFLineInfo.nDotCount = 0;
+    aDXFLineInfo.fDotLen = 0;
+    aDXFLineInfo.fDistance = 0;
+
     if (strcmp(rE.sLineType,"BYLAYER")==0) {
-        if (rE.sLayer[0]=='0' && rE.sLayer[1]==0) ePStyle=eParentLayerPStyle;
+        if (rE.sLayer[0]=='0' && rE.sLayer[1]==0) aDXFLineInfo=aParentLayerDXFLineInfo;
         else {
             pLayer=pDXF->aTables.SearchLayer(rE.sLayer);
-            if (pLayer!=NULL) ePStyle=LTypeToPStyle(pLayer->sLineType);
-            else ePStyle=eParentLayerPStyle;
+            if (pLayer!=NULL) aDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
+            else aDXFLineInfo=aParentLayerDXFLineInfo;
         }
     }
     else if (strcmp(rE.sLineType,"BYBLOCK")==0) {
-        ePStyle=eBlockPStyle;
+        aDXFLineInfo=aBlockDXFLineInfo;
     }
-    else ePStyle=LTypeToPStyle(rE.sLineType);
-    return ePStyle;
+    else aDXFLineInfo=LTypeToDXFLineInfo(rE.sLineType);
+    return aDXFLineInfo;
 }
 
 
@@ -133,12 +185,10 @@ BOOL DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE, ULONG /*nWidth
 {
     long nColor;
     Color aColor;
-    PenStyle ePStyle;
 
     nColor=GetEntityColor(rE);
     if (nColor<0) return FALSE;
     aColor=ConvertColor((BYTE)nColor);
-    ePStyle=GetEntityPStyle(rE);
 
     if (aActLineColor!=aColor) {
         pVirDev->SetLineColor( aActLineColor = aColor );
@@ -202,12 +252,30 @@ BOOL DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, 
 
 void DXF2GDIMetaFile::DrawLineEntity(const DXFLineEntity & rE, const DXFTransform & rTransform)
 {
-
     if (SetLineAttribute(rE)) {
         Point aP0,aP1;
         rTransform.Transform(rE.aP0,aP0);
         rTransform.Transform(rE.aP1,aP1);
-        pVirDev->DrawLine(aP0,aP1);
+
+        DXFLineInfo aDXFLineInfo;
+        aDXFLineInfo=GetEntityDXFLineInfo(rE);
+        LineInfo aLineInfo;
+        aLineInfo = rTransform.Transform(aDXFLineInfo);
+
+#if 0
+        printf("%f\n", rTransform.TransLineWidth(1000.0));
+
+        // LINE_NONE = 0, LINE_SOLID = 1, LINE_DASH = 2, LineStyle_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
+        aLineInfo.SetStyle( LINE_DASH );
+        aLineInfo.SetWidth( 300 );
+        aLineInfo.SetDashCount( 2 );
+        aLineInfo.SetDashLen( 100 );
+        aLineInfo.SetDotCount( 1 );
+        aLineInfo.SetDotLen( 0 );
+        aLineInfo.SetDistance( 500 );
+#endif
+
+        pVirDev->DrawLine(aP0,aP1,aLineInfo);
         if (rE.fThickness!=0) {
             Point aP2,aP3;
             rTransform.Transform(rE.aP0+DXFVector(0,0,rE.fThickness),aP2);
@@ -426,23 +494,23 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
             rTransform
         );
         long nSavedBlockColor, nSavedParentLayerColor;
-        PenStyle eSavedBlockPStyle, eSavedParentLayerPStyle;
+        DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
         nSavedBlockColor=nBlockColor;
         nSavedParentLayerColor=nParentLayerColor;
-        eSavedBlockPStyle=eBlockPStyle;
-        eSavedParentLayerPStyle=eParentLayerPStyle;
+        aSavedBlockDXFLineInfo=aBlockDXFLineInfo;
+        aSavedParentLayerDXFLineInfo=aParentLayerDXFLineInfo;
         nBlockColor=GetEntityColor(rE);
-        eBlockPStyle=GetEntityPStyle(rE);
+        aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
         if (rE.sLayer[0]!='0' || rE.sLayer[1]!=0) {
             DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.sLayer);
             if (pLayer!=NULL) {
                 nParentLayerColor=pLayer->nColor;
-                eParentLayerPStyle=LTypeToPStyle(pLayer->sLineType);
+                aParentLayerDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
             }
         }
         DrawEntities(*pB,aT,FALSE);
-        eBlockPStyle=eSavedBlockPStyle;
-        eParentLayerPStyle=eSavedParentLayerPStyle;
+        aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
+        aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
         nBlockColor=nSavedBlockColor;
         nParentLayerColor=nSavedParentLayerColor;
     }
@@ -540,6 +608,8 @@ void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const
                 pVirDev->DrawPolygon( aPoly );
             else
                 pVirDev->DrawPolyLine( aPoly );
+                // ####
+                //pVirDev->DrawPolyLine( aPoly, aDXFLineInfo );
         }
     }
 }
@@ -675,23 +745,23 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
             rTransform
         );
         long nSavedBlockColor, nSavedParentLayerColor;
-        PenStyle eSavedBlockPStyle, eSavedParentLayerPStyle;
+        DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
         nSavedBlockColor=nBlockColor;
         nSavedParentLayerColor=nParentLayerColor;
-        eSavedBlockPStyle=eBlockPStyle;
-        eSavedParentLayerPStyle=eParentLayerPStyle;
+        aSavedBlockDXFLineInfo=aBlockDXFLineInfo;
+        aSavedParentLayerDXFLineInfo=aParentLayerDXFLineInfo;
         nBlockColor=GetEntityColor(rE);
-        eBlockPStyle=GetEntityPStyle(rE);
+        aBlockDXFLineInfo=GetEntityDXFLineInfo(rE);
         if (rE.sLayer[0]!='0' || rE.sLayer[1]!=0) {
             DXFLayer * pLayer=pDXF->aTables.SearchLayer(rE.sLayer);
             if (pLayer!=NULL) {
                 nParentLayerColor=pLayer->nColor;
-                eParentLayerPStyle=LTypeToPStyle(pLayer->sLineType);
+                aParentLayerDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
             }
         }
         DrawEntities(*pB,aT,FALSE);
-        eBlockPStyle=eSavedBlockPStyle;
-        eParentLayerPStyle=eSavedParentLayerPStyle;
+        aBlockDXFLineInfo=aSavedBlockDXFLineInfo;
+        aParentLayerDXFLineInfo=aSavedParentLayerDXFLineInfo;
         nBlockColor=nSavedBlockColor;
         nParentLayerColor=nSavedParentLayerColor;
     }
@@ -801,16 +871,28 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     nMainEntitiesCount=CountEntities(pDXF->aEntities);
 
     nBlockColor=7;
-    eBlockPStyle=PEN_SOLID;
+    aBlockDXFLineInfo.eStyle = LINE_SOLID;
+    aBlockDXFLineInfo.fWidth = 0;
+    aBlockDXFLineInfo.nDashCount = 0;
+    aBlockDXFLineInfo.fDashLen = 0;
+    aBlockDXFLineInfo.nDotCount = 0;
+    aBlockDXFLineInfo.fDotLen = 0;
+    aBlockDXFLineInfo.fDistance = 0;
 
     pLayer=pDXF->aTables.SearchLayer("0");
     if (pLayer!=NULL) {
         nParentLayerColor=pLayer->nColor & 0xff;
-        eParentLayerPStyle=LTypeToPStyle(pLayer->sLineType);
+        aParentLayerDXFLineInfo=LTypeToDXFLineInfo(pLayer->sLineType);
     }
     else {
         nParentLayerColor=7;
-        eParentLayerPStyle=PEN_SOLID;
+        aParentLayerDXFLineInfo.eStyle = LINE_SOLID;
+        aParentLayerDXFLineInfo.fWidth = 0;
+        aParentLayerDXFLineInfo.nDashCount = 0;
+        aParentLayerDXFLineInfo.fDashLen = 0;
+        aParentLayerDXFLineInfo.nDotCount = 0;
+        aParentLayerDXFLineInfo.fDotLen = 0;
+        aParentLayerDXFLineInfo.fDistance = 0;
     }
 
     pVirDev->EnableOutput(FALSE);
@@ -837,14 +919,14 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                 fScale = 0;  // -Wall added this...
             }
             else {
-                if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
+//              if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
                     if (fWidth>fHeight)
                         fScale=10000.0/fWidth;
                     else
                         fScale=10000.0/fHeight;
-                }
-                else
-                    fScale=1.0;
+//              }
+//              else
+//                  fScale=1.0;
                 aTransform=DXFTransform(fScale,-fScale,fScale,
                                         DXFVector(-pDXF->aBoundingBox.fMinX*fScale,
                                                    pDXF->aBoundingBox.fMaxY*fScale,
@@ -857,14 +939,14 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     else {
         fHeight=pVPort->fHeight;
         fWidth=fHeight*pVPort->fAspectRatio;
-        if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
+//      if (fWidth<500.0 || fHeight<500.0 || fWidth>32767.0 || fHeight>32767.0) {
             if (fWidth>fHeight)
                 fScale=10000.0/fWidth;
             else
                 fScale=10000.0/fHeight;
-        }
-        else
-            fScale=1.0;
+//      }
+//      else
+//          fScale=1.0;
         aTransform=DXFTransform(
             DXFTransform(pVPort->aDirection,pVPort->aTarget),
             DXFTransform(
@@ -894,7 +976,6 @@ BOOL DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     }
 
     delete pVirDev;
-
     return bStatus;
 }
 

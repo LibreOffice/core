@@ -33,6 +33,7 @@
 #include "imp_share.hxx"
 
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <osl/mutex.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -1610,6 +1611,23 @@ void ImportContext::importDefaults(
     {
         _xControlModel->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ), makeAny( sal_False ) );
+    }
+
+    sal_Bool bVisible = sal_True;
+    if (getBoolAttr(
+            &bVisible, OUString( RTL_CONSTASCII_USTRINGPARAM("visible") ),
+            xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !bVisible)
+    {
+    try
+    {
+
+            _xControlModel->setPropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("EnableVisible") ), makeAny( sal_False ) );
+    }
+    catch( Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     }
 
     if (!importLongProperty( nBaseX,

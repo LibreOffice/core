@@ -219,7 +219,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 // NB: rich text format is lost.
                 // This is also true of Cells.
                 if( ScPostIt* pNote = pCell->GetNote() )
-                    pNote->SetText( aString );
+                    pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
             }
             else if ( cMatrixFlag != MM_NONE )
             {   // #60558# Matrix nicht zerreissen
@@ -658,7 +658,7 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
             com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
-            aSearchOptions.Locale = *ScGlobal::pLocale;
+            aSearchOptions.Locale = *ScGlobal::GetLocale();
 
             //  #107259# reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).

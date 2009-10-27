@@ -215,6 +215,10 @@ public:
             com::sun::star::ucb::XCommandEnvironment > & xEnv )
     throw( DAVException );
 
+    void
+    ABORT()
+    throw( DAVException );
+
     // helper
     static void getUserRequestHeaders(
     const com::sun::star::uno::Reference<

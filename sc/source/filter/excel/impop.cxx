@@ -46,6 +46,7 @@
 #include <svx/pageitem.hxx>
 #include <svx/colritem.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/docfile.hxx>
 #include <svtools/zforlist.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -84,6 +85,7 @@
 #include "xiview.hxx"
 #include "xilink.hxx"
 #include "xiescher.hxx"
+#include "xicontent.hxx"
 
 #include "excimp8.hxx"
 #include "excform.hxx"
@@ -134,7 +136,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pExcRoot->pIR = this;   // ExcRoot -> XclImpRoot
     pExcRoot->eDateiTyp = BiffX;
     pExcRoot->pExtSheetBuff = new ExtSheetBuffer( pExcRoot );   //&aExtSheetBuff;
-    pExcRoot->pTabNameBuff = new NameBuffer( pExcRoot );        //&aTabNameBuff;
     pExcRoot->pShrfmlaBuff = new ShrfmlaBuffer( pExcRoot );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( *this );
 
@@ -173,6 +174,25 @@ ImportExcel::~ImportExcel( void )
     delete pFormConv;
 }
 
+
+void ImportExcel::ReadFileSharing()
+{
+    sal_uInt16 nRecommendReadOnly, nPasswordHash;
+    maStrm >> nRecommendReadOnly >> nPasswordHash;
+
+    if( (nRecommendReadOnly != 0) || (nPasswordHash != 0) )
+        if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
+            pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
+
+    if( nPasswordHash != 0 )
+    {
+        if( SfxObjectShell* pDocShell = GetDocShell() )
+        {
+            ScfPropertySet aPropSet( pDocShell->GetModel() );
+            aPropSet.SetProperty( CREATE_OUSTRING( "WriteProtectionPassword" ), static_cast< sal_Int32 >( nPasswordHash ) );
+        }
+    }
+}
 
 sal_uInt16 ImportExcel::ReadXFIndex( bool bBiff2 )
 {
@@ -418,14 +438,12 @@ void ImportExcel::Eof( void )
 }
 
 
-BOOL ImportExcel::Password( void )
+void ImportExcel::SheetPassword( void )
 {
-    // POST: return = TRUE, wenn Password <> 0
-    UINT16 nPasswd;
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
 
-    aIn >> nPasswd;
-
-    return nPasswd != 0x0000;
+    GetRoot().GetSheetProtectBuffer().ReadPasswordHash( aIn, GetCurrScTab() );
 }
 
 
@@ -436,6 +454,15 @@ void ImportExcel::Externsheet( void )
     String aEncodedUrl( aIn.ReadByteString( false ) );
     XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
     mnLastRefIdx = pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
+}
+
+
+void ImportExcel:: WinProtection( void )
+{
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetDocProtectBuffer().ReadWinProtect( aIn );
 }
 
 
@@ -570,24 +597,29 @@ void ImportExcel::Defrowheight2( void )
 }
 
 
-void ImportExcel::Protect( void )
+void ImportExcel::SheetProtect( void )
 {
-    if( aIn.ReaduInt16() )
-    {
-        uno::Sequence<sal_Int8> aEmptyPass;
-        GetDoc().SetTabProtection( GetCurrScTab(), TRUE, aEmptyPass );
-    }
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetSheetProtectBuffer().ReadProtect( aIn, GetCurrScTab() );
 }
 
 void ImportExcel::DocProtect( void )
 {
-    if( aIn.ReaduInt16() )
-    {
-        uno::Sequence<sal_Int8> aEmptyPass;
-        GetDoc().SetDocProtection( TRUE, aEmptyPass );
-    }
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetDocProtectBuffer().ReadDocProtect( aIn );
 }
 
+void ImportExcel::DocPasssword( void )
+{
+    if (GetRoot().GetBiff() != EXC_BIFF8)
+        return;
+
+    GetRoot().GetDocProtectBuffer().ReadPasswordHash( aIn );
+}
 
 void ImportExcel::Codepage( void )
 {
@@ -665,13 +697,13 @@ void ImportExcel::Boundsheet( void )
 
     if( GetBiff() == EXC_BIFF5 )
     {
-        aIn.Ignore( 4 );
+        aIn.DisableDecryption();
+        maSheetOffsets.push_back( aIn.ReaduInt32() );
+        aIn.EnableDecryption();
         aIn >> nGrbit;
     }
 
     String aName( aIn.ReadByteString( FALSE ) );
-
-    *pExcRoot->pTabNameBuff << aName;
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )

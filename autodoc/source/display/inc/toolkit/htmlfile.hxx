@@ -56,8 +56,6 @@ class DocuFile_Html
                                                 i_rFilePath );
     void                SetTitle(
                             const char *        i_sTitle );
-    void                SetInlineStyle(
-                            const char *        i_sStyle );
     void                SetRelativeCssPath(
                             const char *        i_sCssFile_relativePath );
     void                SetCopyright(

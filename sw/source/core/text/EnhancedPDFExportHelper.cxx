@@ -698,7 +698,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 const SwNoTxtFrm* pNoTxtFrm   = static_cast<const SwNoTxtFrm*>(pFly->Lower());
                 const SwNoTxtNode* pNoTxtNode = static_cast<const SwNoTxtNode*>(pNoTxtFrm->GetNode());
 
-                const String aAlternateTxt( pNoTxtNode->GetAlternateText() );
+                const String aAlternateTxt( pNoTxtNode->GetTitle() );
                 mpPDFExtOutDevData->SetAlternateText( aAlternateTxt );
             }
         }

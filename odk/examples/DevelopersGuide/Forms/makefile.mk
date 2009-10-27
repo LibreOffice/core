@@ -75,6 +75,9 @@ FORMS_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/TimeValidator.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/UNO.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/ValueBinding.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/URLHelper.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/HsqlDatabase.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/RowSet.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Forms$/WaitForInput.java
 
 DIR_FILE_LIST= \

@@ -45,7 +45,7 @@ DLLPRE =
 dummy:
         @echo "not building vba..."
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 INCPRE=$(INCCOM)$/$(TARGET)
 
 # ------------------------------------------------------------------
@@ -135,10 +135,12 @@ SLOFILES= \
                 $(SLO)$/vbaspinbutton.obj \
                 $(SLO)$/vbaimage.obj \
                 $(SLO)$/service.obj
-
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+.IF "$(L10N_framework)"==""
 
 ALLTAR : \
         $(MISC)$/$(TARGET).don \
@@ -149,3 +151,4 @@ $(MISC)$/$(TARGET).don : $(SOLARBINDIR)$/oovbaapi.rdb
         +$(CPPUMAKER) -O$(INCCOM)$/$(TARGET) -BUCR $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
         echo $@
 
+.ENDIF

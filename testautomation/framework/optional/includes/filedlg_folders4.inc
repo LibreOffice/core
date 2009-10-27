@@ -39,10 +39,6 @@
 
 testcase tUpOneLevel1
     
-    '///<h1>Click &quot;Level-Up&quot; button until we reach filesystem root</h1>
-    '///+This test verifies that each click moves one level up in the filesystem.
-    '///+Furthermore it is verified that the button does not get disabled under way.
-    '///<ul>
     
     dim iClick as integer
     
@@ -74,26 +70,19 @@ testcase tUpOneLevel1
     dim sExpectedDir as string
     
     
-    '///+<li>Click FileOpen</li>
     FileOpen
     
-    '///+<li>Open [Testtoolpath]\framework\optional\input\filetest\level1\level2\level3</li>
     Kontext "OeffnenDlg"
     Dateiname.SetText( cStartDir )
     Oeffnen.Click()
     
-    '///+<li>Click the &quot;Level-Up&quot; button until we are in the filesystem root</li>
-    '///<ul>
     printlog "Click the Level-Up button until we are in the filesystem root"
     for iClick = 1 to iDirLevels
     
-        '///+<li>Verify that the button exists</li>
         if ( UebergeordneterOrdner.exists() ) then
         
-            '///+<li>Verify that the button is enabled</li>
             if ( UebergeordneterOrdner.isEnabled() ) then
             
-                '///+<li>Click the &quot;Level-Up&quot; button</li>
                 UebergeordneterOrdner.Click()
             else
                 warnlog( "Level-Up button is disabled" )
@@ -102,10 +91,8 @@ testcase tUpOneLevel1
             warnlog( "Level-Up button does not exist" )
         endif
 
-        '///+<li>Get the name of the first item in the filepicker (excluding CVS)</li>
         sCurrentDir = hGetFirstNameFromFileList()
         
-        '///+<li>Verify that the name of the first item is correct. The names of the first six dirs are known</li>
         select case iClick
         case 1 : sExpectedDir = "level3"
         case 2 : sExpectedDir = "level2"
@@ -125,25 +112,19 @@ testcase tUpOneLevel1
             endif
         endif
     next iClick
-    '///</ul>
     
-    '///+<li>We should now be at the top of the tree, the &quot;Level-Up&quot; button should be disabled</li>
     kontext "OeffnenDlg"
     
-    '///+<li>Verify that the button exists</li>
     if ( UebergeordneterOrdner.exists() ) then
     
-        '///+<li>Check that the button is not enabled</li>
         if ( not UebergeordneterOrdner.isEnabled() ) then
             printlog( "Level-Up button is disabled, good" )
         else
-            '///+<li>Warn if the button is enabled</li>    
             warnlog( "The Level-up button should not be enabled for filesystem root" )
         endif
     else
         warnlog( "Level-Up button does not exist" )
     endif    
-    '///</ul>
 
     OeffnenDlg.Cancel()
     

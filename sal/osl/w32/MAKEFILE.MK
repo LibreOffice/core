@@ -78,6 +78,10 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj     \
             $(SLO)$/file.obj\
+            $(SLO)$/file_dirvol.obj\
+            $(SLO)$/file_error.obj\
+            $(SLO)$/file_url.obj\
+            $(SLO)$/tempfile.obj\
             $(SLO)$/path_helper.obj\
             $(SLO)$/procimpl.obj \
             $(SLO)$/salinit.obj
@@ -101,6 +105,10 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj     \
             $(OBJ)$/file.obj\
+            $(OBJ)$/file_dirvol.obj\
+            $(OBJ)$/file_error.obj\
+            $(OBJ)$/file_url.obj\
+            $(OBJ)$/tempfile.obj\
             $(OBJ)$/path_helper.obj\
             $(OBJ)$/procimpl.obj \
             $(OBJ)$/salinit.obj

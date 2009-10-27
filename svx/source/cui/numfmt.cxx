@@ -64,7 +64,9 @@
 #include <svx/dialmgr.hxx>
 #include <sfx2/request.hxx> //CHINA001
 #include <sfx2/app.hxx> //CHINA001
+#include <sfx2/basedlgs.hxx>
 #include "flagsdef.hxx" //CHINA001
+
 #define NUMKEY_UNDEFINED SAL_MAX_UINT32
 
 // static ----------------------------------------------------------------
@@ -290,7 +292,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         pNumFmtShell    ( NULL ),
         nInitFormat     ( ULONG_MAX ),
 
-        aStrEurope      ( THIS_SVX_RES( STR_EUROPE) ),
         sAutomaticEntry ( THIS_SVX_RES( STR_AUTO_ENTRY)),
         pLastActivWindow( NULL )
 {
@@ -1278,8 +1279,18 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
     if ( pLb == &aLbFormat )
     {
         SelFormatHdl_Impl( pLb );
-        // Uebergangsloesung, sollte von SfxTabPage angeboten werden
-        fnOkHdl.Call( NULL );
+
+        if ( fnOkHdl.IsSet() )
+        {   // Uebergangsloesung, sollte von SfxTabPage angeboten werden
+            fnOkHdl.Call( NULL );
+        }
+        else
+        {
+            SfxSingleTabDialog* pParent = dynamic_cast< SfxSingleTabDialog* >( GetParent() );
+            OKButton* pOKButton = pParent ? pParent->GetOKButton() : NULL;
+            if ( pOKButton )
+                pOKButton->Click();
+        }
     }
     return 0;
 }
@@ -1875,7 +1886,7 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     USHORT  nPos=0;
     USHORT  nSelPos=0;
 
-    pNumFmtShell->GetCurrencySymbols(aList,aStrEurope,&nSelPos);
+    pNumFmtShell->GetCurrencySymbols( aList, &nSelPos);
 
     for(USHORT i=1;i<aList.Count();i++)
     {

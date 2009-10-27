@@ -75,8 +75,8 @@ namespace sdr
             basegfx::B3DPolyPolygon aPolyPolygon3D(GetE3dPolygonObj().GetPolyPolygon3D());
             const basegfx::B3DPolyPolygon aPolyNormals3D(GetE3dPolygonObj().GetPolyNormals3D());
             const basegfx::B2DPolyPolygon aPolyTexture2D(GetE3dPolygonObj().GetPolyTexture2D());
-            const bool bNormals(aPolyNormals3D.count());
-            const bool bTexture(aPolyTexture2D.count());
+            const bool bNormals(aPolyNormals3D.count() && aPolyNormals3D.count() == aPolyPolygon3D.count());
+            const bool bTexture(aPolyTexture2D.count() && aPolyTexture2D.count() == aPolyPolygon3D.count());
 
             if(bNormals || bTexture)
             {
@@ -100,12 +100,19 @@ namespace sdr
                     {
                         if(bNormals)
                         {
-                            aCandidate3D.setNormal(b, aNormals3D.getB3DPoint(b));
+                            sal_uInt32 nNormalCount = aNormals3D.count();
+                            if( b < nNormalCount )
+                                aCandidate3D.setNormal(b, aNormals3D.getB3DPoint(b));
+                            else if( nNormalCount > 0 )
+                                aCandidate3D.setNormal(b, aNormals3D.getB3DPoint(0));
                         }
-
                         if(bTexture)
                         {
-                            aCandidate3D.setTextureCoordinate(b, aTexture2D.getB2DPoint(b));
+                            sal_uInt32 nTextureCount = aTexture2D.count();
+                            if( b < nTextureCount )
+                                aCandidate3D.setTextureCoordinate(b, aTexture2D.getB2DPoint(b));
+                            else if( nTextureCount > 0 )
+                                aCandidate3D.setTextureCoordinate(b, aTexture2D.getB2DPoint(0));
                         }
                     }
 

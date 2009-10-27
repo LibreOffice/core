@@ -40,45 +40,56 @@ import share.LogWriter;
 /**
  *
  */
-public class ComplexDescGetter extends DescGetter {
+public class ComplexDescGetter extends DescGetter
+{
 
     ComplexTest testClass;
 
     /** Creates new ComplexDescGetter */
-    public ComplexDescGetter() {
+    public ComplexDescGetter()
+    {
         testClass = null;
     }
 
     public DescEntry[] getDescriptionFor(String entry, String DescPath,
-                                                            boolean debug) {
+            boolean debug)
+    {
         // read scenario file
-        if (entry.startsWith("-sce")) {
-            DescEntry[] entries = getScenario(entry.substring(5),null,debug);
+        if (entry.startsWith("-sce"))
+        {
+            DescEntry[] entries = getScenario(entry.substring(5), null, debug);
             return entries;
         }
         // one single job
-        else if (entry.startsWith("-o")) {
+        else if (entry.startsWith("-o"))
+        {
             DescEntry dEntry = getDescriptionForSingleJob(entry.substring(3), null, debug);
             if (dEntry != null)
-                return new DescEntry[] {dEntry};
+            {
+                return new DescEntry[]
+                        {
+                            dEntry
+                        };
+            }
         }
-        System.out.println("Could not get a testjob with parameter '"
-                            + entry +"'");
+        System.out.println("Could not get a testjob with parameter '" + entry + "'");
         // no job available
         return null;
     }
 
-
-    protected DescEntry getDescriptionForSingleJob(String className, String descPath, boolean debug) {
+    protected DescEntry getDescriptionForSingleJob(String className, String descPath, boolean debug)
+    {
         DynamicClassLoader dcl = new DynamicClassLoader();
         String methodNames[] = null;
 
-        if (debug) {
+        if (debug)
+        {
             System.out.println("Searching Class: " + className);
         }
 
         int index = className.indexOf("::");
-        if (index != -1) {
+        if (index != -1)
+        {
             // case1: method()
             // case2: method(param1,param2)
             // case3: method1(param1,param2),method2(param1,param2)
@@ -88,43 +99,53 @@ public class ComplexDescGetter extends DescGetter {
 
             String[] split = method.split("(?<=\\)),(?=\\w+)");
 
-            for (int i = 0; i < split.length; i++) {
+            for (int i = 0; i < split.length; i++)
+            {
                 String meth = split[i];
 
-                if (meth.endsWith("()")) meth = meth.substring(0, meth.length() - 2);
+                if (meth.endsWith("()"))
+                {
+                    meth = meth.substring(0, meth.length() - 2);
+                }
 
                 methods.add(meth);
             }
 
             methodNames = new String[methods.size()];
-            methodNames = (String[])methods.toArray(methodNames);
+            methodNames = (String[]) methods.toArray(methodNames);
         }
 
         // create an instance
-        try {
-            testClass = (ComplexTestCase)dcl.getInstance(className);
+        try
+        {
+            testClass = (ComplexTestCase) dcl.getInstance(className);
         }
-        catch(java.lang.IllegalArgumentException e) {
-            System.out.println("Error while getting description for test '" +className + "' as a Complex test.");
+        catch (java.lang.IllegalArgumentException e)
+        {
+            System.out.println("Error while getting description for test '" + className + "' as a Complex test.");
             return null;
         }
-        catch(java.lang.ClassCastException e) {
-            System.out.println("The given class '" +className + "' is not a Complex test.");
+        catch (java.lang.ClassCastException e)
+        {
+            System.out.println("The given class '" + className + "' is not a Complex test.");
             return null;
         }
 
 
-        if (debug) {
-            System.out.println("Got test: "+((Object)testClass).toString());
+        if (debug)
+        {
+            System.out.println("Got test: " + ((Object) testClass).toString());
         }
 
         String testObjectName = className;
         String[] testMethodNames = null;
 
-        if (testMethodNames == null){
+        if (testMethodNames == null)
+        {
             testMethodNames = testClass.getTestMethodNames();
         }
-        if (methodNames != null) {
+        if (methodNames != null)
+        {
             testMethodNames = methodNames;
         }
 
@@ -141,7 +162,8 @@ public class ComplexDescGetter extends DescGetter {
      * @param log
      * @return filled description entry
      */
-    public DescEntry createTestDesc(String testObjectName, String className, String[] testMethodNames, LogWriter log){
+    public DescEntry createTestDesc(String testObjectName, String className, String[] testMethodNames, LogWriter log)
+    {
 
         DescEntry dEntry = new DescEntry();
 
@@ -153,10 +175,11 @@ public class ComplexDescGetter extends DescGetter {
         dEntry.Logger = log;
         dEntry.SubEntryCount = testMethodNames.length;
         dEntry.SubEntries = new DescEntry[dEntry.SubEntryCount];
-        for (int i=0; i<dEntry.SubEntryCount; i++) {
+        for (int i = 0; i < dEntry.SubEntryCount; i++)
+        {
             DescEntry aEntry = new DescEntry();
             aEntry.entryName = testMethodNames[i];
-            aEntry.longName = testObjectName +"::" + aEntry.entryName;
+            aEntry.longName = testObjectName + "::" + aEntry.entryName;
             aEntry.isOptional = false;
             aEntry.EntryType = "method";
             aEntry.isToTest = true;
@@ -167,8 +190,8 @@ public class ComplexDescGetter extends DescGetter {
         return dEntry;
     }
 
-    protected String[] createScenario(String descPath, String job, boolean debug) {
-        return new String[]{};
+    protected String[] createScenario(String descPath, String job, boolean debug)
+    {
+        return new String[] {};
     }
-
 }

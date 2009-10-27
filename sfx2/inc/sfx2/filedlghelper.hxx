@@ -151,7 +151,8 @@ public:
         SD_INSERT_SOUND,                // insert sound in draw
         SD_INSERT_VIDEO,                // insert video in draw
         SD_EXPORT,                      // export in draw
-        SI_EXPORT                       // export in impress
+        SI_EXPORT,                      // export in impress
+        SW_EXPORT                       // export in writer
     };
 
 private:
@@ -229,7 +230,15 @@ public:
     void                    SetTitle( const String&  rNewTitle );
     String                  GetPath() const;
 
+    /** @deprected: Don't use this method to retrieve the selected files
+        There are file picker which can provide multiple selected file which belong
+        to different folders. As this method always provides the root folder for all selected
+        files this cannot work.
+    */
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMPath() const;
+
+    /** Provides the selected files with full path information */
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetSelectedFiles() const;
 
     void                     AddFilter( const String& rFilterName, const String& rExtension );
     void                     SetCurrentFilter( const String& rFilter );

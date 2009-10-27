@@ -210,7 +210,7 @@ public class Factory
         throws com.sun.star.uno.Exception
     {
         Object inst = instantiate( xContext );
-        XInitialization xInit = (XInitialization)UnoRuntime.queryInterface(
+        XInitialization xInit = UnoRuntime.queryInterface(
             XInitialization.class, inst );
         if (null == xInit)
         {

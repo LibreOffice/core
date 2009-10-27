@@ -77,8 +77,7 @@ namespace dbaui
         FixedText           m_aFT_Connection;
         OConnectionURLEdit  m_aConnectionURL;
         PushButton          m_aPB_Connection;
-        ::dbaccess::DATASOURCE_TYPE
-                            m_eType;          // the type can't be changed in this class, so we hold it as member.
+        ::rtl::OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.
 
     public:
 
@@ -122,7 +121,6 @@ namespace dbaui
            virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         {
             OGenericAdministrationPage::SetServiceFactory(_rxORB);
-            m_aConnectionURL.initializeTypeCollection(m_xORB);
         }
 
     protected:

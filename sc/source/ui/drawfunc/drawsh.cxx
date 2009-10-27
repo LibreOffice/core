@@ -230,7 +230,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 {
                     SdrPageView* pPV = 0;
                     SdrObject* pHit = 0;
-                    if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pHit, pPV, SDRSEARCH_DEEP ) )
+                    if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                         pObj = pHit;
                 }
 

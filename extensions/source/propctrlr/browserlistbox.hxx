@@ -149,6 +149,7 @@ namespace pcr
         void                        EnableUpdate();
         void                        DisableUpdate();
         long                        Notify( NotifyEvent& _rNEvt );
+        long                        PreNotify( NotifyEvent& _rNEvt );
 
         void                        SetListener( IPropertyLineListener* _pListener );
         void                        SetObserver( IPropertyControlObserver* _pObserver );
@@ -164,7 +165,7 @@ namespace pcr
         sal_Bool                    RemoveEntry( const ::rtl::OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
 
-        void                        SetPropertyValue( const ::rtl::OUString& rEntryName, const ::com::sun::star::uno::Any& rValue );
+        void                        SetPropertyValue( const ::rtl::OUString& rEntryName, const ::com::sun::star::uno::Any& rValue, bool _bUnknownValue );
         ::com::sun::star::uno::Any  GetPropertyValue( const ::rtl::OUString& rEntryName ) const;
         sal_uInt16                  GetPropertyPos( const ::rtl::OUString& rEntryName ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >

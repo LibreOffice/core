@@ -38,6 +38,7 @@
 #include <parser/parserinfo.hxx>
 #include <adc_cl.hxx>
 #include <adc_msg.hxx>
+#include <../parser/inc/x_docu.hxx>
 #include <s2_dsapi/dsapitok.hxx>
 #include <s2_dsapi/tk_atag2.hxx>
 #include <s2_dsapi/tk_html.hxx>
@@ -511,15 +512,44 @@ SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::inf::DocuToken & let_drNewToken )
         return;
     }
 
-    char cFirst = *pToken->GetText();
-    const char cCiphersend = '9' + 1;
-    if ( autodoc::CommandLine::Get_().DoesTransform_SinceTag()
-         AND NOT csv::in_range('0', cFirst, cCiphersend) )
+    const String
+        sVersion(pToken->GetText());
+    const char
+        cFirst = *sVersion.begin();
+    const char
+        cCiphersend = '9' + 1;
+    const autodoc::CommandLine &
+        rCommandLine = autodoc::CommandLine::Get_();
+
+
+    if ( rCommandLine.DoesTransform_SinceTag())
     {
-        delete &let_drNewToken;
-        return;
+        // The @since version number shall be interpreted,
+
+        if ( NOT csv::in_range('0', cFirst, cCiphersend) )
+        {
+            // But this is a non-number-part, so we wait for
+            // the next one.
+            delete &let_drNewToken;
+            return;
+        }
+        else if (rCommandLine.DisplayOf_SinceTagValue(sVersion).empty())
+        {
+            // This is the numbered part, but we don't know it.
+            delete &let_drNewToken;
+
+            StreamLock
+                sl(200);
+            sl()
+                << "Since-value '"
+                << sVersion
+                << "' not found in translation table.";
+            throw X_Docu("since", sl().c_str());
+        }
     }
 
+    // Either since tags are not specially interpreted, or
+    // we got a known one.
     pCurAtTag->AddToken(let_drNewToken);
     fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2SinceAtTag;
 }

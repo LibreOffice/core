@@ -137,7 +137,7 @@ using namespace ::com::sun::star::io;
 #include "brokenpackageint.hxx"
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
-#include "applet.hxx"
+// #include "applet.hxx"
 #include "plugin.hxx"
 #include "iframe.hxx"
 #include <ownsubfilterservice.hxx>
@@ -2150,6 +2150,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
 
+    #if 0
     // AppletObject
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += ::sfx2::AppletObject::impl_getStaticImplementationName();
@@ -2158,6 +2159,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
+    #endif
 
     // IFrameObject
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2324,11 +2326,13 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
         IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
+        #if 0
         if ( ::sfx2::AppletObject::impl_getStaticImplementationName().equals(
                  ::rtl::OUString::createFromAscii( pImplementationName ) ) )
         {
             xFactory = ::sfx2::AppletObject::impl_createFactory();
         }
+        #endif
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::PluginObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::OwnSubFilterService )

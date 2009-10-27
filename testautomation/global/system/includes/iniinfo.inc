@@ -35,29 +35,6 @@
 '*
 '* short description : get information for startup a test out of important ini-files
 '*
-'************************************************************************
-' **
-' #1 GetIniInformation          ' Set all important variables
-' #1 GetOfficeInformation       ' Generates the path to the StarOffice executable.
-' #1 ConvertPath                ' Path conversion
-' #1 GetLanguageInformation     ' Main routine to get the language information from Setup.xcu file.
-' #1 ConvertLanguage            ' Sets international language code for the whole language name.
-' #1 GetLanguageText            ' Sets the language name for the international language-code.
-' #1 ConvertLanguage2           ' Sets the international language code for the international language shortcut.
-' #1 ConvertCodeToLanguage      ' Converts the old language code to international language code
-' #1 GetTheInstallationType     ' The global variable 'gNetzInst' and 'gNetzOfficePath' will be set here.
-' #1 FileURLToNormalFile        ' Converts a file URL to a system specific URL.
-' #1 ReplaceCharacter           ' Replace a character with another
-' #1 fgetL10Nvalue              ' Search routine to get the language information from Setup.xcu file
-' #1 sGetCrashreporterValues    ' Reading the crashreporter relevant values from testtool control file.
-' #1 getSofficeNative           ' Reading the registry entries where the application is installed
-' #1 getSofficeTesttool         ' Trying to get value of [OOoProgramDir] section from testtool control file
-' #1 hGetPathSigne              ' Return the path signe for the given platform
-' #1 hPlatformToGroup           ' Return the operating system group for the given platform
-' #1 sGetScreenshotValue        ' Check if screenshots are requested
-' #1 fgetOOoStartupTimeOut      ' Set a value for OOo start up time out
-' #1 fgetOOoShutdownTimeOut     ' Set a value for OOo shut down time out
-' **
 '\***********************************************************************
 
 sub GetIniInformation
@@ -351,7 +328,7 @@ sub GetLanguageInformation
     ' Issue #i97875 (JSK) experimental delay
     ' If we're too fast we might encounter that the Setup.xcu is not created yet.
     ' So we retry a couple of times    
-    while( IsMissing( SetupXML ) ) 
+    while( not FileExists( SetupXML ) ) 
         iTimeOut = iTimeOut + 1
         if ( iTimeOut = 10 ) then
             warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
@@ -402,6 +379,8 @@ sub GetLanguageInformation
          case "no_no", "no-no", "no" : iSprache = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : iSprache = 48        ' Polish
          case "de_de", "de-de", "de" : iSprache = 49        ' German
+		 case "sr_rs", "sr-rs", "sr" : iSprache = 51        ' Serbian (Cyrillic)
+         case "sh_rs", "sh-rs", "sh" : iSprache = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : iSprache = 55        ' Portuguese (Brazil)
          case "th_th", "th-th", "th" : iSprache = 66        ' Thai
          case "ja_jp", "ja-jp", "ja" : iSprache = 81        ' Japanese
@@ -459,11 +438,13 @@ function ConvertLanguage ( Sprache as String ) as Integer
       case "finisch", "finnish"                             : ConvertLanguage = 35
       case "hungaria", "ungarisch"                          : ConvertLanguage = 36
       case "italienisch", "italian"                         : ConvertLanguage = 39
+	  case "slowak", "slovakisch"                           : ConvertLanguage = 43	  
       case "daenisch", "danish"                             : ConvertLanguage = 45
       case "schwedisch", "swedish"                          : ConvertLanguage = 46
       case "norwegian", "norwegisch"                        : ConvertLanguage = 47
-      case "polnisch", "polish"                             : ConvertLanguage = 48
-      case "slowak", "slovakisch"                           : ConvertLanguage = 51
+      case "polnisch", "polish"                             : ConvertLanguage = 48      
+	  case "serbisch kyrillisch", "serbian cyrillic"        : ConvertLanguage = 51
+	  case "serbisch latein", "serbian latin"               : ConvertLanguage = 52	  
       case "japanisch", "japanese"                          : ConvertLanguage = 81
       case "koreanisch", "korean"                           : ConvertLanguage = 82
       case "vietnamesisch", "vietnamese"                    : ConvertLanguage = 84
@@ -500,6 +481,8 @@ function GetLanguageText ( iLan ) as String
       case 47   : GetLanguageText = "Norwegian"
       case 48   : GetLanguageText = "Polnish"
       case 49   : GetLanguageText = "German"
+      case 51   : GetlanguageText = "Serbian (Cyrillic)"
+      case 52   : GetlanguageText = "Serbian (Latin)"	  
       case 55   : GetLanguageText = "Portuguese (Brazil)"
       case 66   : GetLanguageText = "Thai"
       case 81   : GetLanguageText = "Japanese"
@@ -542,6 +525,8 @@ function ConvertLanguage2 ( sSprache as String, optional bExact ) as Integer
          case "no_no", "no-no", "no" : ConvertLanguage2 = 47        ' Norwegian
          case "pl_pl", "pl-pl", "pl" : ConvertLanguage2 = 48        ' Polish
          case "de_de", "de-de", "de" : ConvertLanguage2 = 49        ' German
+         case "sr_rs", "sr_rs", "sr" : ConvertLanguage2 = 51        ' Serbian (Cyrillic)
+         case "sh_rs", "sh_rs", "sh" : ConvertLanguage2 = 52        ' Serbian (Latin)		 
          case "pt_br", "pt-br", "br" : ConvertLanguage2 = 55        ' Portuguese (Brazil)
          case "th_th", "th-th", "th" : ConvertLanguage2 = 66        ' Thai
          case "ja_jp", "ja-jp", "ja" : ConvertLanguage2 = 81        ' Japanese
@@ -596,6 +581,8 @@ function ConvertCodeToLanguage ( sSprache as String ) as Integer
          case "1045" : ConvertCodeToLanguage = 48        ' Polish
          case "1031" : ConvertCodeToLanguage = 49        ' German
          case "    " : ConvertCodeToLanguage = 55        ' Portuguese (Brazil)
+         case "3098" : ConvertCodeToLanguage = 51        ' Serbian (Cyriliic)
+         case "2074" : ConvertCodeToLanguage = 52        ' Serbian (Latin)		 
          case "    " : ConvertCodeToLanguage = 66        ' Thai
          case "1041" : ConvertCodeToLanguage = 81        ' Japanese
          case "1042" : ConvertCodeToLanguage = 82        ' Korean
@@ -1237,33 +1224,46 @@ end function
 '-------------------------------------------------------------------------
 
 function getOfficeBasisPath as string
+
+    const CFN = "global::system::iniinfo.inc:getOfficeBasisPath: "
     'get the basis directory from the information of basis-link
     dim ltemp(5) as string
     dim sFile as string
     dim sTemp as string
+    dim sPath as string
 
     sTemp = gNetzOfficePath
-    sFile = gNetzOfficePath + "basis-link"
-
-    if fileExists(sFile) then
+    sFile = gNetzOfficePath & "basis-link"
+    
+    if FileExists( sFile ) then
         if ( lcase( gPlatform ) = "osx" ) then
             'MacOS X
-            sTemp = sFile + gPathSigne
+            sTemp = sFile
         else
-            if gPlatGroup = "unx" then
+            if ( gPlatGroup = "unx" ) then
                 'Unixes
-               sTemp = getLinkDestination(sFile)
-               sTemp = fRelativeToAbsolutePath(gNetzOfficePath + sTemp) + gPathSigne
+               sPath = getLinkDestination( sFile )
+               sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sPath )
+               if ( NOT FileExists( sTemp ) ) then
+                    sTemp = fRelativeToAbsolutePath( sPath )
+               endif
+               
             else
-                'Win32
-                ListRead(lTemp, sFile)
+                'all other platforms are Windows/DOS style
+                ListRead( lTemp, sFile )
                 if lTemp(1) <> "" then
                     stemp = lTemp(1)
-                    sTemp = fRelativeToAbsolutePath(gNetzOfficePath + sTemp) + gPathSigne
-                end if
-            end if
-        end if
-    end if
+                    sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sTemp )
+                endif
+            endif
+        endif
+    else
+        warnlog( CFN & "Basis-link could not be found" )
+    endif
+    
+    if ( NOT FileExists( sTemp ) ) then
+        warnlog( CFN & "Retrieved invalid path" )
+    endif
 
-    getOfficeBasisPath = sTemp
+    getOfficeBasisPath = sTemp & gPathSigne
 end function

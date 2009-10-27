@@ -63,23 +63,6 @@ class Slot_Null : public Slot
                             Display &           o_rDestination ) const;
 };
 
-
-class Slot_RidSet : public Slot
-{
-  public:
-                        Slot_RidSet(
-                            const Set_Rid &     i_rData );
-    virtual             ~Slot_RidSet();
-
-    virtual uintt       Size() const;
-
-  private:
-    virtual void        StoreEntries(
-                            Display &           o_rDestination ) const;
-    // DATA
-    const Set_Rid *     pData;
-};
-
 class Slot_MapLocalCe : public Slot
 {
   public:
@@ -111,22 +94,6 @@ class Slot_MapOperations : public Slot
     // DATA
     const std::multimap<String, cpp::Ce_id> *
                         pData;
-};
-
-class Slot_RidList : public Slot
-{
-  public:
-                        Slot_RidList(
-                            const List_Rid &    i_rData );
-    virtual             ~Slot_RidList();
-
-    virtual uintt       Size() const;
-
-  private:
-    virtual void        StoreEntries(
-                            Display &           o_rDestination ) const;
-    // DATA
-    const List_Rid *    pData;
 };
 
 class Slot_ListLocalCe : public Slot

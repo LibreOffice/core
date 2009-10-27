@@ -100,35 +100,6 @@ TypeUsingSet TypeDependency::getDependencies(const OString& type)
     return TypeUsingSet();
 }
 
-sal_Bool TypeDependency::lookupDependency(const OString& type, const OString& depend, sal_uInt16 use)
-{
-    sal_Bool ret =  sal_False;
-
-    if (type.getLength() > 0 && depend.getLength() > 0)
-    {
-        if (m_pImpl->m_dependencies.count(type) > 0)
-        {
-            TypeUsingSet::const_iterator iter = m_pImpl->m_dependencies[type].begin();
-
-            while (iter != m_pImpl->m_dependencies[type].end())
-            {
-                if (depend == (*iter).m_type &&
-                    (use & (*iter).m_use))
-                {
-                    ret = sal_True;
-                    break;
-                }
-                iter++;
-            }
-        } else
-        {
-            ret = sal_False;
-        }
-    }
-
-    return ret;
-}
-
 sal_Bool TypeDependency::hasDependencies(const OString& type)
 {
     if (type.getLength() > 0)

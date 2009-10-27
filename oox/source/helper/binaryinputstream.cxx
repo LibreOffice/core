@@ -29,9 +29,16 @@
  ************************************************************************/
 
 #include "oox/helper/binaryinputstream.hxx"
-#include <osl/diagnose.h>
 #include <string.h>
+#include <vector>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
@@ -43,6 +50,60 @@ namespace oox {
 const sal_Int32 INPUTSTREAM_BUFFERSIZE      = 0x8000;
 
 // ============================================================================
+
+OString BinaryInputStream::readNulCharArray()
+{
+    OStringBuffer aBuffer;
+    for( sal_uInt8 nChar = readuInt8(); !mbEof && (nChar > 0); readValue( nChar ) )
+        aBuffer.append( static_cast< sal_Char >( nChar ) );
+    return aBuffer.makeStringAndClear();
+}
+
+OUString BinaryInputStream::readNulCharArrayUC( rtl_TextEncoding eTextEnc )
+{
+    return OStringToOUString( readNulCharArray(), eTextEnc );
+}
+
+OUString BinaryInputStream::readNulUnicodeArray()
+{
+    OUStringBuffer aBuffer;
+    for( sal_uInt16 nChar = readuInt16(); !mbEof && (nChar > 0); readValue( nChar ) )
+        aBuffer.append( static_cast< sal_Unicode >( nChar ) );
+    return aBuffer.makeStringAndClear();
+}
+
+OString BinaryInputStream::readCharArray( sal_Int32 nChars, bool bAllowNulChars )
+{
+    if( nChars <= 0 )
+        return OString();
+
+    ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nChars ) );
+    size_t nCharsRead = static_cast< size_t >( readMemory( &aBuffer.front(), nChars ) );
+    if( !bAllowNulChars )
+        ::std::replace( aBuffer.begin(), aBuffer.begin() + nCharsRead, '\0', '?' );
+    return OString( &aBuffer.front(), nCharsRead );
+}
+
+OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars )
+{
+    return OStringToOUString( readCharArray( nChars, bAllowNulChars ), eTextEnc );
+}
+
+OUString BinaryInputStream::readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars )
+{
+    OUStringBuffer aBuffer;
+    if( nChars > 0 )
+    {
+        aBuffer.ensureCapacity( nChars );
+        sal_uInt16 nChar;
+        for( sal_uInt16 nCharIdx = 0; !mbEof && (nCharIdx < nChars); ++nCharIdx )
+        {
+            readValue( nChar );
+            aBuffer.append( static_cast< sal_Unicode >( (!bAllowNulChars && (nChar == 0)) ? '?' : nChar ) );
+        }
+    }
+    return aBuffer.makeStringAndClear();
+}
 
 void BinaryInputStream::readAtom( void* opMem, sal_uInt8 nSize )
 {
@@ -131,7 +192,7 @@ void BinaryXInputStream::close()
 
 // ============================================================================
 
-SequenceInputStream::SequenceInputStream( StreamDataSequence& rData ) :
+SequenceInputStream::SequenceInputStream( const StreamDataSequence& rData ) :
     SequenceSeekableStream( rData )
 {
 }

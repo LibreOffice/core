@@ -54,7 +54,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -88,11 +88,8 @@ namespace framework{
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class OComponentEnumeration :   public css::lang::XTypeProvider     ,
-                                public css::lang::XEventListener    ,
-                                public css::container::XEnumeration ,
-                                public ThreadHelpBase               ,
-                                public ::cppu::OWeakObject
+class OComponentEnumeration :   public ThreadHelpBase               ,
+                                public ::cppu::WeakImplHelper2< ::com::sun::star::container::XEnumeration,::com::sun::star::lang::XEventListener >
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -118,13 +115,6 @@ class OComponentEnumeration :   public css::lang::XTypeProvider     ,
         *//*-*****************************************************************************************************/
 
          OComponentEnumeration( const css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
-
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
         //  XEventListener

@@ -66,7 +66,7 @@ APP1STDLIBS=$(TOOLSLIB) 		\
             $(SALLIB)		\
             $(VCLLIB)			\
             $(UCBHELPERLIB)		\
-            $(SVXLIB)
+            $(SVXCORELIB)
 
 #.IF "$(COM)"=="GCC"
 #ADDOPTFILES=$(OBJ)$/gengal.obj

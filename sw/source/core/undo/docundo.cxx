@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <svx/svdmodel.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <doc.hxx>
@@ -112,6 +113,10 @@ bool SwDoc::IsUndoNoResetModified() const
 void SwDoc::DoUndo(bool bUn)
 {
     mbUndo = bUn;
+
+    SdrModel* pSdrModel = GetDrawModel();
+    if( pSdrModel )
+        pSdrModel->EnableUndo(bUn);
 }
 
 bool SwDoc::DoesUndo() const
@@ -674,22 +679,27 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
                 int nTmpPos = nPos + pUndoStart->GetEndOffset();
                 int nSubstitute = -1;
 
-                SwUndo * pTmpUndo;
-                do
+                // --> OD 2009-09-30 #i105457#
+                if ( nTmpPos > 0 )
+                // <--
                 {
-                    nTmpPos--;
-                    pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
+                    SwUndo * pTmpUndo;
+                    do
+                    {
+                        nTmpPos--;
+                        pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
 
-                    if (pTmpUndo->GetEffectiveId() > UNDO_END)
-                        nSubstitute = nTmpPos;
-                }
-                while (nSubstitute < 0 && nTmpPos > nPos);
+                        if (pTmpUndo->GetEffectiveId() > UNDO_END)
+                            nSubstitute = nTmpPos;
+                    }
+                    while (nSubstitute < 0 && nTmpPos > nPos);
 
-                if (nSubstitute >= 0)
-                {
-                    SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
-                    nId = pSubUndo->GetEffectiveId();
-                    sStr = pSubUndo->GetComment();
+                    if (nSubstitute >= 0)
+                    {
+                        SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
+                        nId = pSubUndo->GetEffectiveId();
+                        sStr = pSubUndo->GetComment();
+                    }
                 }
             }
             else

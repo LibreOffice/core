@@ -165,6 +165,7 @@ namespace vcl { struct ControlLayoutData; }
 #define SHOW_NOPARENTUPDATE             ((USHORT)0x0001)
 #define SHOW_NOFOCUSCHANGE              ((USHORT)0x0002)
 #define SHOW_NOACTIVATE                 ((USHORT)0x0004)
+#define SHOW_FOREGROUNDTASK             ((USHORT)0x0008)
 
 // Flags for SetZOrder()
 #define WINDOW_ZORDER_BEFOR             ((USHORT)0x0001)
@@ -983,6 +984,8 @@ public:
     void                DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly );
     // the same, but fills a passed Color with a text color complementing the selection background
     void                DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly, Color* pSelectionTextColor );
+    // support rounded edges in the selection rect
+    void                DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly, long nCornerRadius, Color* pSelectionTextColor, Color* pPaintColor );
 
     void                ShowTracking( const Rectangle& rRect,
                                       USHORT nFlags = SHOWTRACK_SMALL );

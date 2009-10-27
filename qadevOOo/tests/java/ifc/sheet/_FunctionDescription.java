@@ -37,6 +37,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sheet.FunctionArgument;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
@@ -75,7 +76,7 @@ public class _FunctionDescription extends MultiMethodTest {
 
             XInterface FA = (XInterface)oDocMSF.
                 createInstance("com.sun.star.sheet.FunctionArgument");
-            FunctionArgument arg = (FunctionArgument)UnoRuntime.queryInterface
+            FunctionArgument arg = (FunctionArgument)AnyConverter.toObject
                 (FunctionArgument.class, FA);
 
             arg.Description = "FunctionDescription argument description" ;

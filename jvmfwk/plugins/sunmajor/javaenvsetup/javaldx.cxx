@@ -106,7 +106,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         errcode = jfw_existJRE(pInfo, &bExist);
         if (errcode == JFW_E_NONE)
         {
-            if (false == findAndSelect(&pInfo))
+            if (!bExist && !findAndSelect(&pInfo))
                 return -1;
         }
         else

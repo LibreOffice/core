@@ -37,8 +37,8 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
-#ifndef DBA_CORE_WARNINGS_HXX
-#include "warnings.hxx"
+#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
+#include <connectivity/warningscontainer.hxx>
 #endif
 #ifndef DBA_HELPERCOLLECTIONS_HXX
 #include "HelperCollections.hxx"

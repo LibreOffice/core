@@ -47,7 +47,7 @@ TARGET=redhat
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
 SPECFILE=$(TARGET)-menus.spec
-RPMFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i-$(SPECFILE:b)-$(PKGVERSION.$i)-$(PKGREV).noarch.rpm)
+RPMFLAGFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i-$(SPECFILE:b)-$(PKGVERSION.$i)-$(PKGREV).noarch.flag)
 
 .ENDIF
 
@@ -58,6 +58,6 @@ RPMFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i-$(SPECFILE:b)-$(PKGVERSION.$
 
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
-$(RPMFILES) : $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag
+$(RPMFLAGFILES) : $(COMMONMISC)$/{$(PRODUCTLIST)}$/build.flag
 
 .ENDIF

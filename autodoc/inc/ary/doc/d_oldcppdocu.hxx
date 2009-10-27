@@ -100,8 +100,6 @@ class OldCppDocu : public Node
     virtual bool        IsInternal() const;
     virtual bool        IsInterface() const;
 
-    static const OldCppDocu &
-                        Null_();
   private:
     // Interface csv::ConstProcessorClient:
     virtual void        do_Accept(

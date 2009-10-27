@@ -194,52 +194,17 @@ throw ( RuntimeException )
 }
 
 // ------------------------------------------------------------------
-
-void SAL_CALL EditToolbarController::execute( sal_Int16 KeyModifier )
-throw ( RuntimeException )
+Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
-    Reference< XDispatch >       xDispatch;
-    Reference< XURLTransformer > xURLTransformer;
-    ::rtl::OUString                     aCommandURL;
-    ::rtl::OUString                     aSelectedText;
-    ::com::sun::star::util::URL  aTargetURL;
+    Sequence<PropertyValue> aArgs( 2 );
+    ::rtl::OUString aSelectedText = m_pEditControl->GetText();
 
-    {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        if ( m_bInitialized &&
-             m_xFrame.is() &&
-             m_xServiceManager.is() &&
-             m_aCommandURL.getLength() )
-        {
-            xURLTransformer = m_xURLTransformer;
-            xDispatch = getDispatchFromCommand( m_aCommandURL );
-            aCommandURL = m_aCommandURL;
-            aTargetURL = getInitializedURL();
-            aSelectedText = m_pEditControl->GetText();
-        }
-    }
-
-    if ( xDispatch.is() && aTargetURL.Complete.getLength() > 0 )
-    {
-        Sequence<PropertyValue>   aArgs( 2 );
-
-        // Add key modifier to argument list
-        aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
-        aArgs[0].Value <<= KeyModifier;
-        aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
-        aArgs[1].Value <<= aSelectedText;
-
-        // Execute dispatch asynchronously
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-        pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        pExecuteInfo->aArgs         = aArgs;
-        Application::PostUserEvent( STATIC_LINK(0, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
-    }
+    // Add key modifier to argument list
+    aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+    aArgs[0].Value <<= KeyModifier;
+    aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ));
+    aArgs[1].Value <<= aSelectedText;
+    return aArgs;
 }
 
 // ------------------------------------------------------------------

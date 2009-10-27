@@ -102,8 +102,9 @@ namespace dbaui
             return sal_False;
 
         ConstIndexFieldsIterator aLeft = _rLHS.begin();
+        ConstIndexFieldsIterator aLeftEnd = _rLHS.end();
         ConstIndexFieldsIterator aRight = _rRHS.begin();
-        for (; aLeft != _rLHS.end(); ++aLeft, ++aRight)
+        for (; aLeft != aLeftEnd; ++aLeft, ++aRight)
         {
             if (*aLeft != *aRight)
                 return sal_False;

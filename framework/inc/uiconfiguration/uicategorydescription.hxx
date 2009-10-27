@@ -43,9 +43,8 @@
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
+#include <uielement/uicommanddescription.hxx>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
@@ -59,61 +58,18 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
-#include <rtl/ustring.hxx>
 
 namespace framework
 {
-
-class ConfigurationAccess_UICategory;
-class UICategoryDescription :  public com::sun::star::lang::XTypeProvider    ,
-                               public com::sun::star::lang::XServiceInfo     ,
-                               public com::sun::star::container::XNameAccess ,
-                               private ThreadHelpBase                        ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
-                               public ::cppu::OWeakObject
+class UICategoryDescription :  public UICommandDescription
 {
     public:
         UICategoryDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~UICategoryDescription();
 
-        //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
-
-        // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
-            throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
-            throw (::com::sun::star::uno::RuntimeException);
-
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
-            throw (::com::sun::star::uno::RuntimeException);
-
-        // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasElements()
-            throw (::com::sun::star::uno::RuntimeException);
-
-        typedef ::std::hash_map< ::rtl::OUString,
-                                 ::rtl::OUString,
-                                 OUStringHashCode,
-                                 ::std::equal_to< ::rtl::OUString > > ModuleToCategoryFileMap;
-
-        typedef ::std::hash_map< ::rtl::OUString,
-                                 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
-                                 OUStringHashCode,
-                                 ::std::equal_to< ::rtl::OUString > > CategoryHashMap;
-
     private:
-        sal_Bool                                                                            m_bConfigRead;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-        ModuleToCategoryFileMap                                                             m_aModuleToCategoryFileMap;
-        CategoryHashMap                                                                     m_aCategoryHashMap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xGenericCategories;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const ::rtl::OUString& _sName);
 };
 
 } // namespace framework

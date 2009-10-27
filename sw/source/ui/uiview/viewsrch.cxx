@@ -607,10 +607,10 @@ void SwView::Replace()
     {
         if (GetPostItMgr()->GetActivePostIt())
             GetPostItMgr()->Replace(pSrchItem);
-        pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
+        sal_Bool bReplaced = pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
                                             pSrchItem->GetRegExp());
 
-        if( pReplList && pReplList->Count() && pWrtShell->HasSelection() )
+        if( bReplaced && pReplList && pReplList->Count() && pWrtShell->HasSelection() )
         {
             SfxItemSet aReplSet( pWrtShell->GetAttrPool(),
                                     aTxtFmtCollSetRange );

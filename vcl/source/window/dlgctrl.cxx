@@ -46,10 +46,41 @@ using namespace ::com::sun::star;
 
 // =======================================================================
 
+static BOOL ImplHasIndirectTabParent( Window* pWindow )
+{
+    // The window has inderect tab parent if it is included in tab hierarchy
+    // of the indirect parent window
+
+    return ( pWindow && pWindow->GetParent()
+          && ( pWindow->GetParent()->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) );
+}
+
+// -----------------------------------------------------------------------
+
+static Window* ImplGetTopParentOfTabHierarchy( Window* pParent )
+{
+    // The method allows to find the most close parent containing all the
+    // window from the current tab-hierarchy
+    // The direct parent should be provided as a parameter here
+
+    Window* pResult = pParent;
+
+    if ( pResult )
+    {
+        while ( pResult->GetParent() && ( pResult->ImplGetWindow()->GetStyle() & WB_CHILDDLGCTRL ) )
+            pResult = pResult->GetParent();
+    }
+
+    return pResult;
+}
+
+// -----------------------------------------------------------------------
+
 static Window* ImplGetSubChildWindow( Window* pParent, USHORT n, USHORT& nIndex )
 {
     Window*     pTabPage = NULL;
     Window*     pFoundWindow = NULL;
+
     Window*     pWindow = pParent->GetWindow( WINDOW_FIRSTCHILD );
     Window*     pNextWindow = pWindow;
     while ( pWindow )
@@ -96,7 +127,8 @@ static Window* ImplGetSubChildWindow( Window* pParent, USHORT n, USHORT& nIndex 
                         }
                     }
                 }
-                else if ( pWindow->GetStyle() & WB_DIALOGCONTROL )
+                else if ( ( pWindow->GetStyle() & WB_DIALOGCONTROL )
+                       || ( pWindow->GetStyle() & WB_CHILDDLGCTRL ) )
                     pFoundWindow = ImplGetSubChildWindow( pWindow, n, nIndex );
             }
 
@@ -122,6 +154,8 @@ static Window* ImplGetSubChildWindow( Window* pParent, USHORT n, USHORT& nIndex 
 
 static Window* ImplGetChildWindow( Window* pParent, USHORT n, USHORT& nIndex, BOOL bTestEnable )
 {
+    pParent = ImplGetTopParentOfTabHierarchy( pParent );
+
     nIndex = 0;
     Window* pWindow = ImplGetSubChildWindow( pParent, n, nIndex );
     if ( bTestEnable )
@@ -284,14 +318,16 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& 
     USHORT  nFormEnd;
 
     // Focus-Fenster in der Child-Liste suchen
-    pSWindow = ImplGetChildWindow( pParent, 0, i, FALSE );
+    Window* pFirstChildWindow = pSWindow = ImplGetChildWindow( pParent, 0, i, FALSE );
 
     if( pWindow == NULL )
         pWindow = pSWindow;
 
     while ( pSWindow )
     {
-        if ( pSWindow->ImplGetWindow()->IsDialogControlStart() )
+        // the DialogControlStart mark is only accepted for the direct children
+        if ( !ImplHasIndirectTabParent( pSWindow )
+          && pSWindow->ImplGetWindow()->IsDialogControlStart() )
             nFormStart = i;
 
         // SecondWindow wegen zusammengesetzten Controls wie
@@ -331,12 +367,33 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& 
     // Formularende suchen
     nFormEnd = nFormStart;
     pTempWindow = pSWindow;
+    sal_Int32 nIteration = 0;
     do
     {
         nFormEnd = i;
         pTempWindow = ImplGetNextWindow( pParent, i, i, FALSE );
-        if ( !i || (pTempWindow && pTempWindow->ImplGetWindow()->IsDialogControlStart()) )
+
+        // the DialogControlStart mark is only accepted for the direct children
+        if ( !i
+          || ( pTempWindow && !ImplHasIndirectTabParent( pTempWindow )
+               && pTempWindow->ImplGetWindow()->IsDialogControlStart() ) )
             break;
+
+        if ( pTempWindow && pTempWindow == pFirstChildWindow )
+        {
+            // It is possible to go through the begin of hierarchy once
+            // while looking for DialogControlStart mark.
+            // If it happens second time, it looks like an endless loop,
+            // that should be impossible, but just for the case...
+            nIteration++;
+            if ( nIteration >= 2 )
+            {
+                // this is an unexpected scenario
+                DBG_ASSERT( FALSE, "It seems to be an endless loop!" );
+                rFormStart = 0;
+                break;
+            }
+        }
     }
     while ( pTempWindow );
     rFormEnd = nFormEnd;

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: outfont.hxx,v $
- * $Revision: 1.6.14.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -407,17 +404,5 @@ private:
     ImplMultiTextLineInfo&  operator=( const ImplMultiTextLineInfo& );
 };
 
-#define SAL_FONTSUBSETINFO_TYPE_TRUETYPE 0
-#define SAL_FONTSUBSETINFO_TYPE_TYPE1    1
-
-struct FontSubsetInfo
-{
-    String      m_aPSName;
-    int         m_nFontType;
-    int         m_nAscent; // all lengths in PS font units
-    int         m_nDescent;
-    int         m_nCapHeight;
-    Rectangle   m_aFontBBox;
-};
-
 #endif // _SV_OUTFONT_HXX
+

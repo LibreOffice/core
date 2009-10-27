@@ -134,6 +134,7 @@ class Desktop : public Application
         static rtl::OUString    GetLicensePath();
         static sal_Bool         LicenseNeedsAcceptance();
         static sal_Bool         IsFirstStartWizardNeeded();
+        static sal_Bool         CheckExtensionDependencies();
 
     private:
         // Bootstrap methods

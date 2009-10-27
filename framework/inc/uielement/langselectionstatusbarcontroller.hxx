@@ -39,6 +39,8 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <svtools/statusbarcontroller.hxx>
 
+#include "helper/mischelper.hxx"
+
 // component helper namespace
 namespace framework {
 
@@ -86,13 +88,14 @@ class LangSelectionStatusbarController : public svt::StatusbarController
         LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
         void operator =(LangSelectionStatusbarController &); // not defined
 
+
         sal_Bool            m_bShowMenu;
         sal_Int16           m_nScriptType;
         ::rtl::OUString     m_aCurrentLanguage;
         ::rtl::OUString     m_aCurLang;
         ::rtl::OUString     m_aKeyboardLang;
         ::rtl::OUString     m_aGuessedText;
-        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
+        LanguageGuessingHelper      m_aLangGuessHelper;
 
         void LangMenu() throw (::com::sun::star::uno::RuntimeException);
 };

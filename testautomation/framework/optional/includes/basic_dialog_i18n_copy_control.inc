@@ -39,13 +39,6 @@
 
 testcase tBasicDialogI18nCopyControl
 
-    '///<h1>Copy a formcontrol with i18n data within BASIC IDE</h1>
-    '///<u><pre>Synopsis</pre></u>Apply localization to a form control and copy 
-    '///+ it within the BASIC IDE. Verify that the localized data is preserved<br>
-    '///<u><pre>Specification document</pre></u><a href="http://specs.openoffice.org/appwide/dialog_ide/GUI_Translation_in_Dialog_IDE.odt">
-    '///+ GUI translation in Dialog IDE</a><br>
-    '///<u><pre>Files used</pre></u>None<br>
-    '///<u><pre>Test case specification</pre></u>
 
     const COMMAND_BUTTON = 1            ' id of the command button (formcontrols.inc)
     const DIALOG_NAME = "DialogExport"  ' Name of the first module
@@ -73,14 +66,8 @@ testcase tBasicDialogI18nCopyControl
     ' Some multi purpose returncode                
     dim brc as boolean
     
-    '///<ul>
-    '///+<li>Create a new document</li>
     hCreateDocument()
 
-    '///+<li>Open the Macro Organizer</li>
-    '///+<li>Create a new module for the document</li>
-    '///+<li>Open the BASIC IDE</li>
-    '///+<li>Create a new Dialog via the tabbar at the bottom of the IDE</li>
     printlog( "Test init: Setting up environment" )
     brc = hInitFormControls( DIALOG_NAME )
     if ( not brc ) then
@@ -88,11 +75,8 @@ testcase tBasicDialogI18nCopyControl
         goto endsub
     endif
     
-    '///+<li>Draw a Command Button</li>
     hDrawControlOnDialog( COMMAND_BUTTON )
     
-    '///+<li>Retrieve the current BASIC IDE internal coordinates of the control for
-    '///+ later usage</li>
     hOpenPropertyBrowser()
     kontext "TabGeneralControl"
     printlog( "Get internal coordinates for the control" )
@@ -108,11 +92,9 @@ testcase tBasicDialogI18nCopyControl
     
     qaerrorlog( "#i80456# properties button not enabled when a formcontrol is inserted via keyboard" )
     
-    '///+<li>Click Manage Language button on ToolsCollection Bar</li>
     kontext "ToolsCollectionBar"
     ManageLanguage.click()
     
-    '///+<li>Add a default language</li>
     kontext "ManageUILanguages"
     if ( ManageUILanguages.exists( 2 ) ) then
     
@@ -128,7 +110,6 @@ testcase tBasicDialogI18nCopyControl
         warnlog( "Unable to open Manage UI Languages dialog" )
     endif
     
-    '///+<li>Add a number of additional languages</li>
     kontext "ManageUILanguages"
     if ( ManageUILanguages.exists( 1 ) ) then
     
@@ -148,7 +129,6 @@ testcase tBasicDialogI18nCopyControl
         warnlog( "Unable to open Manage UI Languages dialog" )
     endif
     
-    '///+<li>Store the installed languages for further usage</li>
     kontext "ManageUILanguages"
     for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
         PresentLanguages.select( iCurrentLanguage + 1 ) 
@@ -156,11 +136,9 @@ testcase tBasicDialogI18nCopyControl
         printlog( iCurrentLanguage & ": " & cLanguageList( iCurrentLanguage ) )
     next iCurrentLanguage
     
-    '///+<li>Close the Manage UI Languages dialog</li>
     kontext "ManageUILanguages"
     ManageUILanguages.close()
     
-    '///+<li>Change the property &quot;NameText&quot; for all languages</li>
     printlog( "Localizing control" )
     for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
         kontext "TranslationBar"
@@ -174,21 +152,15 @@ testcase tBasicDialogI18nCopyControl
         hClosePropertyBrowser()
     next iCurrentLanguage
     
-    '///+<li>Execute edit/copy on the currently selected command button</li>
     printlog( "Copy control" )
     EditCopy
         
-    '///+<li>Create a second dialog</li>
     printlog( "New dialog" )
     Call hNewDialog()
     
-    '///+<li>Paste the content of the clipboard (the control) to the dialog window</li>
     printlog( "Paste control" )
     EditPaste
     
-    '///+<li>Apply the coordinates from the source control (the control is placed
-    '///+ at random within the dialog pane, now we move it to the same coordinates
-    '///+ as its source control). We wouldn't be able to handle it otherwise</li>
     hOpenPropertyBrowser()
     kontext "TabGeneralControl"
     printlog( "Set coordinates to be identical with those from the source control" )
@@ -200,8 +172,6 @@ testcase tBasicDialogI18nCopyControl
     hClosePropertyBrowser
 
 
-    '///+<li>Retrieve the current BASIC IDE internal coordinates of the control for
-    '///+ later usage</li>
     hOpenPropertyBrowser()
     kontext "TabGeneralControl"
     printlog( "Get internal coordinates for the control" )
@@ -216,7 +186,6 @@ testcase tBasicDialogI18nCopyControl
     hClosePropertyBrowser()
 
     
-    '///+<li>Get the list of transferred languages from the translation bar</li>
     kontext "TranslationBar"
     for iCurrentLanguage = 0 to LANGUAGES_TO_COPY
         CurrentLanguage.select( iCurrentLanguage + 1 )
@@ -230,8 +199,6 @@ testcase tBasicDialogI18nCopyControl
         endif
     next iCurrentLanguage
     
-    '///+<li>
-    '///</ul>
     
     kontext "BasicIde"
     hDestroyDocument()

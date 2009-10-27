@@ -46,6 +46,8 @@
 #include <comcore.hrc>
 #endif
 #include <undobj.hxx>
+#include <docsh.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -280,19 +282,30 @@ void SwXBookmark::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 
+// MetadatableMixin
+::sfx2::Metadatable* SwXBookmark::GetCoreObject()
+{
+    return dynamic_cast< ::sfx2::Metadatable* >( GetBookmark() );
+}
+
+uno::Reference<frame::XModel> SwXBookmark::GetModel()
+{
+    if (GetDoc())
+    {
+        SwDocShell const * const pShell( GetDoc()->GetDocShell() );
+        return (pShell) ? pShell->GetModel() : 0;
+    }
+    return 0;
+}
+
+
 uno::Reference< beans::XPropertySetInfo >  SwXBookmark::getPropertySetInfo(void)
     throw( uno::RuntimeException )
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef;
     if(!aRef.is())
     {
-        const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_BOOKMARK);
-        uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(pMap);
-        // extend PropertySetInfo!
-        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-        aRef = new SfxExtItemPropertySetInfo(
-            aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
-            aPropSeq );
+        aRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_BOOKMARK)->getPropertySetInfo();
     }
     return aRef;
 }

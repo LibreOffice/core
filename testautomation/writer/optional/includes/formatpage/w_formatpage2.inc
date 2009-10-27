@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test the functionality of Page Formatting / Page Styles - 2
 '*
@@ -135,8 +135,10 @@ testcase tFormatPage_16
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height!"
     Call fCloseNavigator
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -144,7 +146,8 @@ endcase
 testcase tFormatPage_17
 
     Dim sTestFile as String
-    Dim sDummy1 as String  ,  sDummy2 as String
+    Dim sDummy1 as String
+    Dim sDummy2 as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
@@ -236,9 +239,11 @@ testcase tFormatPage_17
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height --2 !"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -319,9 +324,11 @@ testcase tFormatPage_18
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -387,16 +394,18 @@ testcase tFormatPage_19
     SearchAll.Click
     Sleep 1
     FindAndReplace.Close
-    
+
     Kontext "Navigator"
     if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -439,33 +448,34 @@ testcase tFormatPage_20
     Sleep 2
     MenuSelect(Menugetitemid(4))
     Sleep 2
-    MenuSelect(Menugetitemid(9))
+    MenuSelect(Menugetitemid(10))
     Sleep 2
-    MenuSelect(Menugetitemid(3))
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
+'    MenuSelect(Menugetitemid(3))
     Sleep 2
-    
+
     '/// formatPage , tabpage footer
     fFormatPageWriter("TabFusszeile")
-    
+
     '/// AutoFit Height should be checked
     if Hoehedynamisch.IsChecked <> TRUE then
         warnlog "AutoFit Height should be checked!"
         Hoehedynamisch.Check
     end if
     TabFusszeile.OK
-    
+
     Call wTypeKeys "Test"
     Call wTypeKeys "<End><Shift Home>"
-    
+
     '/// Set the bigger fonts to selection in the footer
     fFormatCharacter("TabFont")
     try
-        SizeWest.Select  SizeWest.GetItemCount-2
+        SizeWest.Select SizeWest.GetItemCount-2
     catch
-        Size.Select      Size.GetItemCount-2
+        Size.Select Size.GetItemCount-2
     endcatch
     TabFont.OK
-    
+
     '/// Check if AutoFit Height works well
     Kontext
     EditSearchAndReplace
@@ -475,16 +485,18 @@ testcase tFormatPage_20
     SearchAll.Click
     Sleep 1
     FindAndReplace.Close
-    
+
     Kontext "Navigator"
     if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -492,14 +504,13 @@ endcase
 testcase tFormatPage_21
 
     Dim sTestFile as String
-    Dim sDummy1 as String  ,  sDummy2 as String
+    Dim sDummy1 as String
+    Dim sDummy2 as String
 
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\formatpage\testForAutoFit.sxw")
 
     PrintLog "- AutoFit height - Check (Footer,multiline content)"
     '/// AutoFit height - Check (Footer,multiline content)
-
-    Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
      Call hFileOpen(sTestFile)
@@ -520,7 +531,7 @@ testcase tFormatPage_21
     
     '/// Remember number in line
     EditCopy
-    sDummy1 =  GetClipboardText
+    sDummy1 = GetClipboardText
 
     '/// Again 1 step up
     Call wTypeKeys "<Up>"
@@ -528,15 +539,15 @@ testcase tFormatPage_21
 
     '/// Remember number in current line
     EditCopy
-    sDummy2 =  GetClipboardText
-    
-    '/// Insert a footer
+    sDummy2 = GetClipboardText
+
+    printlog " Insert a footer"
     DocumentWriter.UseMenu
     MenuSelect(Menugetitemid(4))
     Sleep 2
-    MenuSelect(Menugetitemid(9))
+    MenuSelect(Menugetitemid(10))
     Sleep 2
-    MenuSelect(Menugetitemid(3))
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
     Sleep 2
     
     '/// formatPage , tabpage footer
@@ -586,9 +597,11 @@ testcase tFormatPage_21
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height --2 !"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -627,13 +640,14 @@ testcase tFormatPage_22
     sDummy =  GetClipboardText
 
     '/// Insert a footer
-     DocumentWriter.UseMenu
-     MenuSelect(Menugetitemid(4))
-     Sleep 2
-     MenuSelect(Menugetitemid(10))
-     Sleep 2
-     MenuSelect(Menugetitemid(3))
-     Sleep 2
+    DocumentWriter.UseMenu
+    MenuSelect(Menugetitemid(4))
+    Sleep 2
+    MenuSelect(Menugetitemid(10))
+    Sleep 2
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
+'    MenuSelect(Menugetitemid(3))
+    Sleep 2
 
     '/// formatPage , tabpage footer ,UnCheck AutoFit Height
     fFormatPageWriter("TabFusszeile")
@@ -647,9 +661,9 @@ testcase tFormatPage_22
     '/// Set the bigger fonts to selection in the footer
     fFormatCharacter("TabFont")
     try
-        SizeWest.Select  SizeWest.GetItemCount-2
+        SizeWest.Select SizeWest.GetItemCount-2
     catch
-        Size.Select      Size.GetItemCount-2
+        Size.Select Size.GetItemCount-2
     endcatch
     TabFont.OK
     
@@ -669,9 +683,11 @@ testcase tFormatPage_22
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -685,8 +701,6 @@ testcase tFormatPage_23
 
     PrintLog "- AutoFit height - UnCheck (Footer,multiline content)"
     '/// AutoFit height - UnCheck (Footer,multiline content)
-
-    Call hNewDocument
 
     '/// Open test file testForAutoFit.sxw
     Call hFileOpen(sTestFile)
@@ -715,7 +729,8 @@ testcase tFormatPage_23
     Sleep 2
     MenuSelect(Menugetitemid(10))
     Sleep 2
-    MenuSelect(Menugetitemid(3))
+    Call hMenuFindSelect (".uno:InsertPageFooter?PageStyle:string=Default&On:bool=true", true, 3, true)   'Find "Insert:Footer:Default" and call the slot.
+'    MenuSelect(Menugetitemid(3))
     Sleep 2
     
     '/// formatPage , tabpage footer ,Uncheck AutoFit Height
@@ -745,8 +760,10 @@ testcase tFormatPage_23
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
     
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -785,7 +802,6 @@ testcase tFormatPage_24
      TabKopfzeile.Cancel
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -823,7 +839,6 @@ testcase tFormatPage_25
      end if
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -839,7 +854,7 @@ testcase tFormatPage_26
      DocumentWriter.UseMenu
      MenuSelect(Menugetitemid(4))
      Sleep 2
-     MenuSelect(Menugetitemid(9))
+     MenuSelect(Menugetitemid(10))
      Sleep 2
      MenuSelect(Menugetitemid(1))
      Sleep 2
@@ -862,7 +877,6 @@ testcase tFormatPage_26
      TabKopfzeile.Cancel
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -878,7 +892,7 @@ testcase tFormatPage_27
      DocumentWriter.UseMenu
      MenuSelect(Menugetitemid(4))
      Sleep 2
-     MenuSelect(Menugetitemid(9))
+     MenuSelect(Menugetitemid(10))
      Sleep 2
      MenuSelect(Menugetitemid(1))
      Sleep 2
@@ -887,7 +901,7 @@ testcase tFormatPage_27
      DocumentWriter.UseMenu
      MenuSelect(Menugetitemid(4))
       Sleep 2
-     MenuSelect(Menugetitemid(9))
+     MenuSelect(Menugetitemid(10))
      Sleep 2
      MenuSelect(Menugetitemid(1))
      Sleep 2
@@ -901,7 +915,6 @@ testcase tFormatPage_27
      end if
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -974,7 +987,6 @@ testcase tFormatPage_28
      TabFusszeile.Cancel
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------

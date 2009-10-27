@@ -443,20 +443,21 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // get font attributes; use normally scaled font
                             const basegfx::BColor aFontColor(aRGBColor);
                             Font aVclFont;
-                            basegfx::B2DVector aSize;
+                            basegfx::B2DVector aTextSizeAttribute;
 
                             aVclFont.SetHeight( 500 );
 
-                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-                                aSize,
-                                aVclFont,
-                                false,
-                                false));
+                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(
+                                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                                    aTextSizeAttribute,
+                                    aVclFont,
+                                    false,
+                                    false));
 
                             // fill text matrix
                             basegfx::B2DHomMatrix aTextMatrix;
 
-                            aTextMatrix.scale(aSize.getX(), aSize.getY());
+                            aTextMatrix.scale(aTextSizeAttribute.getX(), aTextSizeAttribute.getY());
                             aTextMatrix.shearX(fShearX);
                             aTextMatrix.rotate(fRotate);
                             aTextMatrix.translate(fPosX, fPosY);
@@ -468,15 +469,16 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             const ::com::sun::star::lang::Locale aLocale;
 
                             // create primitive and add
-                            const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                aTextMatrix,
-                                aObjectString,
-                                0,
-                                nTextLength,
-                                aDXArray,
-                                aFontAttributes,
-                                aLocale,
-                                aFontColor));
+                            const drawinglayer::primitive2d::Primitive2DReference xRef(
+                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    aTextMatrix,
+                                    aObjectString,
+                                    0,
+                                    nTextLength,
+                                    aDXArray,
+                                    aFontAttributes,
+                                    aLocale,
+                                    aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                         }
                     }
@@ -793,7 +795,7 @@ sal_Bool View::SdrBeginTextEdit(
             Color aBackground;
             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_TABLE )
             {
-                aBackground = ImpGetTextEditBackgroundColor();
+                aBackground = GetTextEditBackgroundColor(*this);
             }
             else
             {
@@ -1252,8 +1254,15 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
 
 bool View::isRecordingUndo() const
 {
-    sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
-    return pUndoManager && pUndoManager->isInListAction();
+    if( mpDoc && mpDoc->IsUndoEnabled() )
+    {
+        sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
+        return pUndoManager && pUndoManager->isInListAction();
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void View::AddCustomHdl()

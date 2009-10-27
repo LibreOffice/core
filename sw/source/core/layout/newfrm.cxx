@@ -435,7 +435,6 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     mbBookMode( false ),
     mbSidebarChanged( false ),
     mbNeedGrammarCheck( false ),
-    mbGrammarCheckActive( false ),
     // <--
     nBrowseWidth( MM50*4 ), //2cm Minimum
     pTurbo( 0 ),

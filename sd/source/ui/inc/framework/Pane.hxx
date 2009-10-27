@@ -34,19 +34,24 @@
 #include "MutexOwner.hxx"
 
 #include <com/sun/star/drawing/framework/XPane.hpp>
+#include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase3.hxx>
 #include <tools/link.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
 class Window;
 
+namespace css = ::com::sun::star;
+namespace cssu = ::com::sun::star::uno;
+
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2 <
+typedef ::cppu::WeakComponentImplHelper3 <
     ::com::sun::star::drawing::framework::XPane,
+    ::com::sun::star::drawing::framework::XPane2,
       ::com::sun::star::lang::XUnoTunnel
     > PaneInterfaceBase;
 
@@ -96,22 +101,39 @@ public:
     */
     virtual ::Window* GetWindow (void);
 
-    // XPane
+
+    //----- XPane -------------------------------------------------------------
 
     /** For a UNO API based implementation of a view this may the most
         important method of this class because the view is only interested
         in the window of the pane.
     */
-    virtual ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>
+    virtual cssu::Reference<css::awt::XWindow>
         SAL_CALL getWindow (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (cssu::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>
+    virtual cssu::Reference<css::rendering::XCanvas>
         SAL_CALL getCanvas (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (cssu::RuntimeException);
 
 
-    // XResource
+    //----- XPane2 -------------------------------------------------------------
+
+    virtual sal_Bool SAL_CALL isVisible (void)
+        throw (cssu::RuntimeException);
+
+    virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
+        throw (cssu::RuntimeException);
+
+    virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
+        throw (cssu::RuntimeException);
+
+    virtual void SAL_CALL setAccessible (
+        const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
+        throw (cssu::RuntimeException);
+
+
+    //----- XResource ---------------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
         SAL_CALL getResourceId (void)
@@ -124,10 +146,11 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 
-    // XUnoTunnel
+    //----- XUnoTunnel --------------------------------------------------------
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
         throw (com::sun::star::uno::RuntimeException);
+
 
 protected:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;

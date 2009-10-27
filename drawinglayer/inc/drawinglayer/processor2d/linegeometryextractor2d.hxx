@@ -48,8 +48,8 @@ namespace drawinglayer
         class LineGeometryExtractor2D : public BaseProcessor2D
         {
         private:
-            basegfx::B2DPolyPolygon                 maExtractedHairlines;
-            basegfx::B2DPolyPolygon                 maExtractedLineFills;
+            std::vector< basegfx::B2DPolygon >      maExtractedHairlines;
+            std::vector< basegfx::B2DPolyPolygon >  maExtractedLineFills;
 
             // bitfield
             unsigned                                mbInLineGeometry : 1;
@@ -61,8 +61,8 @@ namespace drawinglayer
             LineGeometryExtractor2D(const geometry::ViewInformation2D& rViewInformation);
             virtual ~LineGeometryExtractor2D();
 
-            const basegfx::B2DPolyPolygon& getExtractedHairlines() const { return maExtractedHairlines; }
-            const basegfx::B2DPolyPolygon& getExtractedLineFills() const { return maExtractedLineFills; }
+            const std::vector< basegfx::B2DPolygon >& getExtractedHairlines() const { return maExtractedHairlines; }
+            const std::vector< basegfx::B2DPolyPolygon >& getExtractedLineFills() const { return maExtractedLineFills; }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

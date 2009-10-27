@@ -157,6 +157,7 @@ PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceF
     ,   m_pPropHelp(0    )
     ,  m_bIgnoreEvents(sal_False)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::PathSettings" );
 }
 
 //-----------------------------------------------------------------------------
@@ -170,6 +171,7 @@ PathSettings::~PathSettings()
 void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw (css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::changesOccurred" );
     /*
     if (m_bIgnoreEvents)
         return;
@@ -206,6 +208,7 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
 void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::disposing" );
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);
 
@@ -219,6 +222,7 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
 //-----------------------------------------------------------------------------
 void PathSettings::impl_readAll()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readAll" );
     RTL_LOGFILE_CONTEXT(aLog, "framework (as96863) ::PathSettings::load config (all)");
 
     // TODO think about me
@@ -241,6 +245,7 @@ void PathSettings::impl_readAll()
 // NO substitution here ! It's done outside ...
 OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readOldFormat" );
     css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgOld();
     css::uno::Any                                      aVal = xCfg->getByName(sPath);
 
@@ -308,6 +313,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
 //-----------------------------------------------------------------------------
 void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_storePath" );
     m_bIgnoreEvents = sal_True;
 
     css::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew();
@@ -356,6 +362,7 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
                                           const OUStringList&           lOld )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_mergeOldUserPaths" );
     OUStringList::const_iterator pIt;
     for (  pIt  = lOld.begin();
            pIt != lOld.end()  ;
@@ -654,6 +661,7 @@ void PathSettings::impl_subst(PathSettings::PathInfo& aPath   ,
 {
     OUStringList::const_iterator pIt;
     OUStringList                 lTemp;
+    lTemp.reserve(rPath.lInternalPaths.size() + rPath.lUserPaths.size() + 1);
 
     for (  pIt  = rPath.lInternalPaths.begin();
            pIt != rPath.lInternalPaths.end()  ;
@@ -857,7 +865,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 if (aChangePath.bIsSinglePath)
                 {
                     LOG_ASSERT2(lList.size()>1, "PathSettings::impl_setPathValue()", "You try to set more then path value for a defined SINGLE_PATH!")
-                    if (lList.size()>0)
+                    if ( !lList.empty() )
                         aChangePath.sWritePath = *(lList.begin());
                     else
                         aChangePath.sWritePath = ::rtl::OUString();

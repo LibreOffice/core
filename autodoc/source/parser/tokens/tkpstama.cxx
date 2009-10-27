@@ -178,34 +178,3 @@ StateMachine::Peek(intt in_nBranch)
     StmArrayStatus & rSt = CurrentStatus();
     nPeekedStatus = rSt.NextBy(in_nBranch);
 }
-
-void
-StateMachine::PrintOut()
-{
-    const intt anzahl = nNrofStati;
-    for (int i = 0; i < anzahl; i++)
-    {
-        Cout() << i << ':';
-        StmArrayStatus * pArrSt = pStati[i]->AsArray();
-        if (pArrSt != 0)
-        {
-            Cout() << Endl();
-            for (int b = 0; b < 128; b++)
-            {
-                Cout().width(4);
-                Cout() << pArrSt->NextBy(b);
-                if (b%16 == 15)
-                    Cout() << Endl();
-            }
-        }
-        else if (pStati[i]->AsBounds() != 0)
-        {
-            Cout() << "Bounds ";
-        }
-        else
-            Cout() << "Error! ";
-        Cout() << (pStati[i]->IsADefault() ? "DEF" : "---")
-             << Endl();
-    }   // for
-}
-

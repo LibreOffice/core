@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slotadd.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.30.124.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,7 +147,7 @@
 #define avmedia_MediaItem ::avmedia::MediaItem
 
 #define SFX_TYPEMAP
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 

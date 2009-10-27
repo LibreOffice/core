@@ -62,8 +62,8 @@ class FmFormObj: public SdrUnoObj
                             // only to be used for comparison with the current ref device!
 
 public:
-    FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
-    FmFormObj(sal_Int32 _nType);
+    SVX_DLLPUBLIC FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
+    SVX_DLLPUBLIC FmFormObj(sal_Int32 _nType);
 
     TYPEINFO();
 
@@ -108,6 +108,8 @@ public:
     /** returns the type of this form object. See fmglob.hxx
     */
     sal_Int32   getType() const;
+
+    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& _rxModel );
 
 protected:
     virtual FASTBOOL    EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd );

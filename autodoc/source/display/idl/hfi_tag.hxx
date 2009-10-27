@@ -142,11 +142,6 @@ class HF_IdlTag : public HtmlFactory_Idl,
                             Xml::Element &      o_rText,
                             const ary::inf::AtTag2 &
                                                 i_rTag ) const;
-    void                Produce_byData(
-                            Xml::Element &      o_rTitle,
-                            Xml::Element &      o_rText,
-                            const std::vector< csi::dsapi::DT_SeeAlsoAtTag* > &
-                                                i_seeAlsoVector ) const;
   private:
     virtual void        Display_StdAtTag(
                             const csi::dsapi::DT_StdAtTag &

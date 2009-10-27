@@ -51,6 +51,7 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 #include "oox/ppt/slidetransition.hxx"
@@ -565,11 +566,11 @@ namespace oox { namespace ppt {
                     break;
                 case NMSP_PPT|XML_to:
                     // CT_Color
-                    xRet.set( new colorChoiceContext( *this, maToClr ) );
+                    xRet.set( new ColorContext( *this, maToClr ) );
                     break;
                 case NMSP_PPT|XML_from:
                     // CT_Color
-                    xRet.set( new colorChoiceContext( *this, maFromClr ) );
+                    xRet.set( new ColorContext( *this, maFromClr ) );
                     break;
 
                 default:

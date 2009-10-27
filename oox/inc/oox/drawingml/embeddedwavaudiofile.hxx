@@ -46,7 +46,7 @@ namespace oox { namespace drawingml {
             }
         bool mbBuiltIn;
         ::rtl::OUString msName;
-        ::rtl::OUString msLink;
+        ::rtl::OUString msEmbed;
     };
 
     void getEmbeddedWAVAudioFile(

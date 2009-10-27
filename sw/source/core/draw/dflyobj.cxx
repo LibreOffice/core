@@ -72,6 +72,9 @@ using namespace ::com::sun::star;
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <sw_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 using namespace ::com::sun::star;
 
@@ -189,10 +192,6 @@ UINT16 __EXPORT SwFlyDrawObj::GetObjVersion() const
 //////////////////////////////////////////////////////////////////////////////////////
 // AW: Need own primitive to get the FlyFrame paint working
 
-// Unique PrimitiveID. If more will be needed, create an own file in SW following
-// the example in SD
-#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D                      (PRIMITIVE2D_ID_RANGE_SW| 0)
-
 namespace drawinglayer
 {
     namespace primitive2d
@@ -201,15 +200,19 @@ namespace drawinglayer
         {
         private:
             const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
+            const basegfx::B2DRange                 maOuterRange;
 
         protected:
             // method which is to be used to implement the local decomposition of a 2D primitive
             virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            SwVirtFlyDrawObjPrimitive(const SwVirtFlyDrawObj& rSwVirtFlyDrawObj)
+            SwVirtFlyDrawObjPrimitive(
+                const SwVirtFlyDrawObj& rSwVirtFlyDrawObj,
+                const basegfx::B2DRange &rOuterRange)
             :   BasePrimitive2D(),
-                mrSwVirtFlyDrawObj(rSwVirtFlyDrawObj)
+                mrSwVirtFlyDrawObj(rSwVirtFlyDrawObj),
+                maOuterRange(rOuterRange)
             {
             }
 
@@ -218,6 +221,13 @@ namespace drawinglayer
 
             // get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // overloaded to allow callbacks to wrap_DoPaintObject
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // data read access
+            const SwVirtFlyDrawObj& getSwVirtFlyDrawObj() const { return mrSwVirtFlyDrawObj; }
+            const basegfx::B2DRange& getOuterRange() const { return maOuterRange; }
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -229,13 +239,42 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        Primitive2DSequence SwVirtFlyDrawObjPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            Primitive2DSequence aRetval;
+
+            if(!getOuterRange().isEmpty())
+            {
+                // currently this SW object has no primitive representation. As long as this is the case,
+                // create an invisible HitTestPrimitive to allow hitting the object. Use a filled primitive
+                // to get a HitTest which uses 'inside' as default object hit. The special cases from
+                // the old SwVirtFlyDrawObj::CheckHit implementation are handled now in SwDrawView::PickObj;
+                // this removed the 'hack' to get a view from inside model data or to react on noll-tolerance
+                // as it was done in the old implementation
+                const basegfx::B2DPolygon aOuterRangePolygon(basegfx::tools::createPolygonFromRect(getOuterRange()));
+                const basegfx::BColor aColor(0.0, 0.0, 0.0);
+                const Primitive2DReference aContentReference(
+                    new PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(aOuterRangePolygon),
+                        aColor));
+                const Primitive2DReference aHitTestReference(
+                    new HitTestPrimitive2D(
+                        Primitive2DSequence(&aContentReference, 1)));
+
+                aRetval = Primitive2DSequence(&aHitTestReference, 1);
+            }
+
+            return aRetval;
+        }
+
         bool SwVirtFlyDrawObjPrimitive::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const SwVirtFlyDrawObjPrimitive& rCompare = (SwVirtFlyDrawObjPrimitive&)rPrimitive;
 
-                return (&mrSwVirtFlyDrawObj == &rCompare.mrSwVirtFlyDrawObj);
+                return (&getSwVirtFlyDrawObj() == &rCompare.getSwVirtFlyDrawObj()
+                    && getOuterRange() == rCompare.getOuterRange());
             }
 
             return false;
@@ -243,23 +282,20 @@ namespace drawinglayer
 
         basegfx::B2DRange SwVirtFlyDrawObjPrimitive::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // fallback on FlyFrame SnapRect
-            const Rectangle& rSnapRect = mrSwVirtFlyDrawObj.GetSnapRect();
-
-            return basegfx::B2DRange(rSnapRect.Left(), rSnapRect.Top(), rSnapRect.Right(), rSnapRect.Bottom());
+            return getOuterRange();
         }
 
-        Primitive2DSequence SwVirtFlyDrawObjPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // This is the callback to keep the FlyFrame painting in SW alive as long as it
             // is not changed to primitives. This is the method which will be called by the processors
             // when they do not know this primitive (and they do not). Inside wrap_DoPaintObject
             // there needs to be a test that paint is only done during SW repaints (see there).
             // Using this mechanism guarantees the correct Z-Order of the VirtualObject-based FlyFrames.
-            mrSwVirtFlyDrawObj.wrap_DoPaintObject();
+            getSwVirtFlyDrawObj().wrap_DoPaintObject();
 
             // call parent
-            return BasePrimitive2D::createLocalDecomposition(rViewInformation);
+            return BasePrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID
@@ -313,10 +349,19 @@ namespace sdr
 
             if(rReferencedObject.ISA(SwFlyDrawObj))
             {
-                // create an own specialized primitive which is used as repaint callpoint (see primitive
-                // implementation above)
-                const drawinglayer::primitive2d::Primitive2DReference xPrimitive(new drawinglayer::primitive2d::SwVirtFlyDrawObjPrimitive(GetSwVirtFlyDrawObj()));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xPrimitive, 1);
+                // create an own specialized primitive which is used as repaint callpoint and HitTest
+                // for HitTest processor (see primitive implementation above)
+                const basegfx::B2DRange aOuterRange(GetSwVirtFlyDrawObj().getOuterBound());
+
+                if(!aOuterRange.isEmpty())
+                {
+                    const drawinglayer::primitive2d::Primitive2DReference xPrimitive(
+                        new drawinglayer::primitive2d::SwVirtFlyDrawObjPrimitive(
+                            GetSwVirtFlyDrawObj(),
+                            aOuterRange));
+
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xPrimitive, 1);
+                }
             }
 
             return xRetval;
@@ -329,6 +374,58 @@ namespace sdr
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////////////
+
+basegfx::B2DRange SwVirtFlyDrawObj::getOuterBound() const
+{
+    basegfx::B2DRange aOuterRange;
+    const SdrObject& rReferencedObject = GetReferencedObj();
+
+    if(rReferencedObject.ISA(SwFlyDrawObj))
+    {
+        const SwFlyFrm* pFlyFrame = GetFlyFrm();
+
+        if(pFlyFrame)
+        {
+            const Rectangle aOuterRectangle(pFlyFrame->Frm().Pos(), pFlyFrame->Frm().SSize());
+
+            if(!aOuterRectangle.IsEmpty()
+                && RECT_EMPTY != aOuterRectangle.Right()
+                && RECT_EMPTY != aOuterRectangle.Bottom())
+            {
+                aOuterRange.expand(basegfx::B2DTuple(aOuterRectangle.Left(), aOuterRectangle.Top()));
+                aOuterRange.expand(basegfx::B2DTuple(aOuterRectangle.Right(), aOuterRectangle.Bottom()));
+            }
+        }
+    }
+
+    return aOuterRange;
+}
+
+basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
+{
+    basegfx::B2DRange aInnerRange;
+    const SdrObject& rReferencedObject = GetReferencedObj();
+
+    if(rReferencedObject.ISA(SwFlyDrawObj))
+    {
+        const SwFlyFrm* pFlyFrame = GetFlyFrm();
+
+        if(pFlyFrame)
+        {
+            const Rectangle aInnerRectangle(pFlyFrame->Frm().Pos() + pFlyFrame->Prt().Pos(), pFlyFrame->Prt().SSize());
+
+            if(!aInnerRectangle.IsEmpty()
+                && RECT_EMPTY != aInnerRectangle.Right()
+                && RECT_EMPTY != aInnerRectangle.Bottom())
+            {
+                aInnerRange.expand(basegfx::B2DTuple(aInnerRectangle.Left(), aInnerRectangle.Top()));
+                aInnerRange.expand(basegfx::B2DTuple(aInnerRectangle.Right(), aInnerRectangle.Bottom()));
+            }
+        }
+    }
+
+    return aInnerRange;
+}
 
 sdr::contact::ViewContact* SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
 {
@@ -421,74 +518,6 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
             }
         }
     }
-}
-
-/*************************************************************************
-|*
-|*  SwVirtFlyDrawObj::CheckHit()
-|*  Beschreibung        Das Teil ist genau dann getroffen wenn
-|*                      1. der Point im Rand des Frm liegt.
-|*                      2. der Point im heissen Bereich liegt.
-|*                      3. der Point in der Flaeche liegt und es sich um
-|*                         einen Rahmen mit NoTxtFrm handelt und dieser
-|*                         keine URL traegt.
-|*                      3a nicht aber wenn ueber dem Fly noch ein Fly liegt,
-|*                         und der Point in dessen Flaeche nicht steht.
-|*                      4. der Point in der Flaeche liegt und der Rahmen
-|*                         selektiert ist.
-|*  Ersterstellung      MA 08. Dec. 94
-|*  Letzte Aenderung    JP 25.03.96
-|*
-*************************************************************************/
-
-SdrObject* __EXPORT SwVirtFlyDrawObj::CheckHit( const Point& rPnt, USHORT nTol,
-                                    const SetOfByte* ) const
-{
-    Rectangle aHitRect( pFlyFrm->Frm().Pos(), pFlyFrm->Frm().SSize() );
-    if ( nTol )
-    {
-        Rectangle aExclude( aHitRect );
-        aHitRect.Top()    -= nTol;
-        aHitRect.Bottom() += nTol;
-        aHitRect.Left()   -= nTol;
-        aHitRect.Right()  += nTol;
-        if( aHitRect.IsInside( rPnt ) )
-        {
-            if ( pFlyFrm->Lower() && pFlyFrm->Lower()->IsNoTxtFrm() )
-            {
-                // #107513#
-                // This test needs to be done outside, since also drawing layer HitTest
-                // methods are called. Not all drawing objects are derived and the
-                // CheckHit() overloaded. That's an conceptual error here.
-                return (SdrObject*)this;
-            }
-            else
-            {
-                ViewShell *pShell = pFlyFrm->GetShell();
-
-                //4. Getroffen wenn das Objekt selektiert ist.
-                if ( pShell )
-                {
-                    const SdrMarkList &rMrkList = pShell->
-                                            Imp()->GetDrawView()->GetMarkedObjectList();
-                    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
-                        if ( long(this) == long(rMrkList.GetMark(i)->GetMarkedSdrObj()) )
-                            return (SdrObject*)this;
-                }
-
-                const Rectangle aPrtRect( pFlyFrm->Frm().Pos() + pFlyFrm->Prt().Pos(),
-                                          pFlyFrm->Prt().SSize() );
-                aExclude.Top()    += Max( long(nTol), aPrtRect.Top()   - aHitRect.Top() );
-                aExclude.Bottom() -= Max( long(nTol), aHitRect.Bottom()- aPrtRect.Bottom());
-                aExclude.Left()   += Max( long(nTol), aPrtRect.Left()  - aHitRect.Left() );
-                aExclude.Right()  -= Max( long(nTol), aHitRect.Right() - aPrtRect.Right() );
-                return aExclude.IsInside( rPnt ) ? 0 : (SdrObject*)this;
-            }
-        }
-    }
-    else
-        return aHitRect.IsInside( rPnt ) ? (SdrObject*)this : 0;
-    return 0;
 }
 
 /*************************************************************************

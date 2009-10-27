@@ -51,46 +51,41 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "com/sun/star/frame/XModuleManager.hpp"
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
 
-class ConfigurationAccess_WindowContentFactoryManager;
-class WindowContentFactoryManager : public com::sun::star::lang::XTypeProvider                    ,
-                                    public com::sun::star::lang::XServiceInfo                     ,
-                                    public com::sun::star::lang::XSingleComponentFactory          ,
-                                    private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                    public ::cppu::OWeakObject
+class ConfigurationAccess_FactoryManager;
+class WindowContentFactoryManager : private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                    public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo                    ,
+                                                             com::sun::star::lang::XSingleComponentFactory>
 {
     public:
         WindowContentFactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~WindowContentFactoryManager();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XSingleComponentFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
+        static void RetrieveTypeNameFromResourceURL( const ::rtl::OUString& aResourceURL, rtl::OUString& aType, rtl::OUString& aName );
     private:
-        void RetrieveTypeNameFromResourceURL( const ::rtl::OUString& aResourceURL, rtl::OUString& aType, rtl::OUString& aName );
 
         sal_Bool                                                                         m_bConfigRead;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >      m_xModuleManager;
-        ConfigurationAccess_WindowContentFactoryManager*                                 m_pConfigAccess;
+        ConfigurationAccess_FactoryManager*                                 m_pConfigAccess;
 };
 
 } // namespace framework

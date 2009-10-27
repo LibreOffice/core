@@ -53,6 +53,7 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
 
+    //------------------------------------------------------------------------
     ::rtl::OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     {
         PcrClient aResourceAccess;
@@ -128,6 +129,20 @@ namespace pcr
         }
 
         return sClassName;
+    }
+
+    //------------------------------------------------------------------------
+    sal_Int16 classifyComponent( const Reference< XInterface >& _rxComponent )
+    {
+        Reference< XPropertySet > xComponentProps( _rxComponent, UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xPSI( xComponentProps->getPropertySetInfo(), UNO_SET_THROW );
+
+        sal_Int16 nControlType( FormComponentType::CONTROL );
+        if ( xPSI->hasPropertyByName( PROPERTY_CLASSID ) )
+        {
+            OSL_VERIFY( xComponentProps->getPropertyValue( PROPERTY_CLASSID ) >>= nControlType );
+        }
+        return nControlType;
     }
 
 //............................................................................

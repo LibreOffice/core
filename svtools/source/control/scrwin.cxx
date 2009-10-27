@@ -273,8 +273,8 @@ void __EXPORT ScrollableWindow::Resize()
     // disable painting in the corner between the scrollbars
     if ( bVVisible && bHVisible )
     {
-        aCornerWin.SetPosSizePixel(
-            *((Point*) &aOutPixSz), Size(nScrSize, nScrSize) );
+        aCornerWin.SetPosSizePixel(Point(aOutPixSz.Width(), aOutPixSz.Height()),
+            Size(nScrSize, nScrSize) );
         aCornerWin.Show();
     }
     else

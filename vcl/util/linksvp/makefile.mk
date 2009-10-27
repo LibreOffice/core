@@ -54,6 +54,7 @@ SHL1LIBS=$(LIB1TARGET)
 SHL1DEPN=$(LB)$/libvcl$(DLLPOSTFIX)$(DLLPOST)
 SHL1STDLIBS=\
             $(VCLLIB)\
+            $(I18NPAPERLIB)\
             $(BASEBMPLIB)\
             $(BASEGFXLIB)\
             $(TOOLSLIB)         \

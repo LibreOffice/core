@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Functional-Tests for Tools - Options - Html - Print & Table
 '*
@@ -130,6 +130,7 @@ testcase tToolsOptionsHTMLPrint
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
+	sleep (4)
     Call hFileSaveAsKill(gOfficepath + "user\work\printtest.html")
     Call hCloseDocument
 
@@ -299,9 +300,9 @@ testcase tToolsOptionsHTMLPrint
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -496,9 +497,9 @@ testcase tToolsOptionsHTMLTable
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------

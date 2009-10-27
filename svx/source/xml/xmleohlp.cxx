@@ -326,11 +326,29 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         }
         else
         {
-            sal_Int32 nPathStart = 0;
-            if( 0 == aURLNoPar.compareToAscii( "./", 2 ) )
-                nPathStart = 2;
-            if( _nPos >= nPathStart )
-                rContainerStorageName = aURLNoPar.copy( nPathStart, _nPos-nPathStart);
+            //eliminate 'superfluous' slashes at start and end
+            //#i103076# load objects with all allowed xlink:href syntaxes
+            {
+                //eliminate './' at start
+                sal_Int32 nStart = 0;
+                sal_Int32 nCount = aURLNoPar.getLength();
+                if( 0 == aURLNoPar.compareToAscii( "./", 2 ) )
+                {
+                    nStart = 2;
+                    nCount -= 2;
+                }
+
+                //eliminate '/' at end
+                sal_Int32 nEnd = aURLNoPar.lastIndexOf( '/' );
+                if( nEnd == aURLNoPar.getLength()-1 && nEnd != (nStart-1) )
+                    nCount--;
+
+                aURLNoPar = aURLNoPar.copy( nStart, nCount );
+            }
+
+            _nPos = aURLNoPar.lastIndexOf( '/' );
+            if( _nPos >= 0 )
+                rContainerStorageName = aURLNoPar.copy( 0, _nPos );
             rObjectStorageName = aURLNoPar.copy( _nPos+1 );
         }
     }

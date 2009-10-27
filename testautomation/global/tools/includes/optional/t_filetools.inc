@@ -80,7 +80,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
     dim cMessage as string
     dim bSkip as boolean
 
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
 
     ' not good but apparently required - else hDestroyDocument will handle the
     ' dialogs and warn about them.
@@ -119,7 +119,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
                     printlog( CFN & "MSG (" & iActives & "): closed with Cancel" )
                     bSkip = true
                 catch
-                    printlog( CFN & "Missed - this dialog has no OK button (create new document)" )
+                    printlog( CFN & "Missed - this dialog has no Cancel button (create new document)" )
                     active.ok()
                 endcatch
 
@@ -129,7 +129,6 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
                             active.ok()
                             printlog( CFN & "MSG (" & iActives & "): closed with OK" )
                             bSkip = true
-                        else
                         endif
                     else
                     endif
@@ -147,6 +146,23 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
 
             endif
         catch
+            kontext "Active"
+            if ( Active.exists( 1 ) ) then
+                if ( Active.getButtonCount() = 2 ) then
+                    printlog( CFN & "Probably the dreaded <File corrupted warning>" )
+                    active.yes()
+                    hFileWait( FALSE )
+                    kontext "Active"
+                    if ( Active.exists( 2 ) ) then
+                        qaerrorlog( CFN & "Trying to recover." )
+                        Active.ok()
+                        hHandleActivesOnLoad() = FALSE
+                        exit function
+                    endif
+                    warnlog( "#105670# - File corruption warning, the template is broken" )
+                endif
+            endif
+
             qaerrorlog( "Problem while trying to handle messageboxes" )
             hHandleActivesOnLoad() = false
         endcatch
@@ -159,7 +175,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
         printlog( CFN & "Exit: The test closed more dialogs than expected" )
         hHandleActivesOnLoad() = false
     else
-        printlog( CFN & "Exit" )
+        if ( VERBOSE ) then printlog( CFN & "Exit" )
     endif
        
 end function       
@@ -198,7 +214,7 @@ function hHandleInitialDialogs() as integer
     dim incident as integer
         incident = 0
         
-    printlog( CFN & "Enter" )
+    if ( VERBOSE ) then printlog( CFN & "Enter" )
     try
 
         '///+<li>Test for UseOfThisTemplate-dialog</li>
@@ -244,7 +260,7 @@ function hHandleInitialDialogs() as integer
     endcatch
          
     hHandleInitialDialogs() = incident
-    printlog( CFN & "Exit" )
+    if ( VERBOSE ) then printlog( CFN & "Exit" )
     
     '///</ul>
 
@@ -315,10 +331,12 @@ function hGetWorkPath() as string
     sPath = convertpath( sPath ) 
     
     '///+<li>Print info to the log and return the path</li>
-    if ( bPathIsFromAPI ) then
-    	printlog( CFN & "(From API): " & sPath )
-    else
-        qaerrorlog( CFN & "(Junked API-Path): " & sPath )
+    if ( VERBOSE ) then 
+        if ( bPathIsFromAPI ) then
+        	printlog( CFN & "(From API): " & sPath )
+        else
+            qaerrorlog( CFN & "(Junked API-Path): " & sPath )
+        endif
     endif
     hGetWorkPath() = sPath 
     '///</ul>

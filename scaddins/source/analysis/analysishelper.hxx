@@ -514,7 +514,7 @@ public:
 enum ConvertDataClass
 {
     CDC_Mass, CDC_Length, CDC_Time, CDC_Pressure, CDC_Force, CDC_Energy, CDC_Power, CDC_Magnetism,
-    CDC_Temperature, CDC_Volume, CDC_Area, CDC_Speed
+    CDC_Temperature, CDC_Volume, CDC_Area, CDC_Speed, CDC_Information
 };
 
 
@@ -533,11 +533,13 @@ protected:
     double                  fConst;
     STRING                  aName;
     ConvertDataClass        eClass;
+    sal_Bool                bPrefixSupport;
 public:
                             ConvertData(
                                 const sal_Char      pUnitName[],
                                 double              fConvertConstant,
-                                ConvertDataClass    eClass );
+                                ConvertDataClass    eClass,
+                                sal_Bool            bPrefSupport = sal_False );
 
     virtual                 ~ConvertData();
 
@@ -556,6 +558,7 @@ public:
     virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 
     inline ConvertDataClass Class( void ) const;
+    inline sal_Bool         IsPrefixSupport( void ) const;
 };
 
 
@@ -570,7 +573,8 @@ public:
                                 const sal_Char      pUnitName[],
                                 double              fConvertConstant,
                                 double              fConvertOffset,
-                                ConvertDataClass    eClass );
+                                ConvertDataClass    eClass,
+                                sal_Bool            bPrefSupport = sal_False );
 
     virtual                 ~ConvertDataLinear();
 
@@ -891,9 +895,14 @@ inline ConvertDataClass ConvertData::Class( void ) const
 
 
 
+inline sal_Bool ConvertData::IsPrefixSupport( void ) const
+{
+    return bPrefixSupport;
+}
 
-inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e ) :
-    ConvertData( p, fC, e ),
+inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e,
+        sal_Bool bPrefSupport ) :
+    ConvertData( p, fC, e, bPrefSupport ),
     fOffs( fO )
 {
 }

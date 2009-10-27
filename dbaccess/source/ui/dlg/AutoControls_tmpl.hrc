@@ -163,7 +163,7 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X , AUTO_Y + 2) ;                                                 \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;           \
-         Text[ en-US ]  = "Name of the database";                                                    \
+         Text[ en-US ]  = "Database name";                                                    \
     };                                                                                              \
                                                                                                     \
     Edit ET_AUTODATABASENAME                                                                        \
@@ -183,7 +183,7 @@
     {                                                                                               \
         Pos = MAP_APPFONT (START_X , AUTO_Y + 2 )  ;                                                \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT );            \
-        Text [ en-US ]  = "Server ~URL" ;                                                           \
+        Text [ en-US ]  = "Server" ;                                                           \
     };                                                                                              \
                                                                                                     \
     Edit ET_AUTOHOSTNAME                                                                            \
@@ -229,10 +229,11 @@
     NumericField NF_AUTOPORTNUMBER                                                                  \
     {                                                                                               \
         HelpId = AUTO_HID ;                                                                         \
-        Pos = MAP_APPFONT (EDIT_X, AUTO_Y )  ;                                                  \
+        Pos = MAP_APPFONT (EDIT_X, AUTO_Y )  ;                                                      \
         Size = MAP_APPFONT ( 22 , EDIT_HEIGHT ) ;                                                   \
         TabStop = TRUE ;                                                                            \
         Border = TRUE ;                                                                             \
+        NoThousandSep = TRUE;                                                                       \
     };                                                                                              \
                                                                                                     \
     FixedText FT_AUTOPORTNUMBERDEFAULT                                                              \
@@ -455,11 +456,6 @@
 // --------------------------------------------------------------------------------------------------
 
 
-#define AUTO_HELP_NAMECONTROLGROUP(AUTO_LINECOUNT, AUTO_HID )                           \
-    AUTO_WIZARDHELPTEXT(AUTO_LINECOUNT )                                               \
-    AUTO_NAMECONTROLGROUP(INIT_Y + AUTO_LINECOUNT * FIXEDTEXT_HEIGHT + 2, AUTO_HID)     \
-
-
 // --------------------------------------------------------------------------------------------------
 
 #define AUTO_JDBCDRIVERCLASSGROUP(AUTO_Y, AUTO_HID)                                   \
@@ -497,7 +493,7 @@
     {                                                                                               \
         Pos = MAP_APPFONT (START_X , AUTO_Y +2)  ;                                                  \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;           \
-        Text = "Socket" ;                                                                           \
+        Text [ en-US ] = "Socket" ;                                                                 \
     };                                                                                              \
                                                                                                     \
     Edit ET_SOCKET                                                                                  \
@@ -509,13 +505,13 @@
     };
 
 
-#define AUTOHELP_JDBCCONTROLGROUP(AUTO_HID)                                             \
-    AUTO_HELP_NAMECONTROLGROUP(6, AUTO_HID )                                            \
+#define AUTOHELP_JDBCCONTROLGROUP( AUTO_HID )                                           \
+    AUTO_WIZARDHELPTEXT( 6 )                                                            \
+    AUTO_NAMECONTROLGROUP( INIT_Y + 6 * FIXEDTEXT_HEIGHT + 2, AUTO_HID )                \
     AUTO_HOSTCONTROLGROUP(96, AUTO_HID + 1)                                             \
     AUTO_PORTCONTROLGROUP(113, AUTO_HID + 2 )                                           \
-    AUTO_SOCKETCONTROLGROUP(129)                                           \
+    AUTO_SOCKETCONTROLGROUP(129)                                                        \
     AUTO_JDBCDRIVERCLASSGROUP(146, AUTO_HID + 3)
-
 
 
 // --------------------------------------------------------------------------------------------------

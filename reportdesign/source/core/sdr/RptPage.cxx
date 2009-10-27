@@ -187,6 +187,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
             {
                 SdrObject* pObject = RemoveObject(i);
                 (void)pObject;
+                break;
                 // delete pObject;
             }
         }
@@ -195,6 +196,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 
 void OReportPage::resetSpecialMode()
 {
+    const sal_Bool bChanged = rModel.IsChanged();
     ::std::vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
     ::std::vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
 
@@ -202,6 +204,8 @@ void OReportPage::resetSpecialMode()
     {
          removeTempObject(*aIter);
     }
+    m_aTemporaryObjectList.clear();
+    rModel.SetChanged(bChanged);
 
     m_bSpecialInsertMode = false;
 }

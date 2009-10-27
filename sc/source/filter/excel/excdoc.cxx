@@ -68,11 +68,11 @@
 #include "convuno.hxx"
 #include "patattr.hxx"
 #include "docoptio.hxx"
+#include "tabprotection.hxx"
 
 #include "excdoc.hxx"
 #include "namebuff.hxx"
 
-#include "xcl97dum.hxx"
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
 #include "xetable.hxx"
@@ -118,7 +118,7 @@ static void lcl_AddCalcPr( XclExpRecordList<>& aRecList, ExcTable& self )
     aRecList.AppendNewRecord( new XclRefmode( rDoc ) );
     aRecList.AppendNewRecord( new XclIteration( rDoc ) );
     aRecList.AppendNewRecord( new XclDelta( rDoc ) );
-    aRecList.AppendNewRecord( new ExcDummy8_02 );
+    aRecList.AppendNewRecord( new XclExpBoolRecord(0x005F, true) ); // SAVERECALC
     aRecList.AppendNewRecord( new XclExpXmlEndSingleElementRecord() );  // XML_calcPr
 }
 
@@ -144,12 +144,12 @@ static void lcl_AddWorkbookProtection( XclExpRecordList<>& aRecList, ExcTable& s
 }
 #endif
 
-static void lcl_AddScenariosAndFilters( XclExpRecordList<>& aRecList, ExcTable& self, SCTAB mnScTab )
+static void lcl_AddScenariosAndFilters( XclExpRecordList<>& aRecList, const XclExpRoot& rRoot, SCTAB nScTab )
 {
     // Scenarios
-    aRecList.AppendNewRecord( new ExcEScenarioManager( self.GetDoc(), mnScTab ) );
+    aRecList.AppendNewRecord( new ExcEScenarioManager( rRoot, nScTab ) );
     // filter
-    aRecList.AppendRecord( self.GetFilterManager().CreateRecord( mnScTab ) );
+    aRecList.AppendRecord( rRoot.GetFilterManager().CreateRecord( nScTab ) );
 }
 
 
@@ -205,11 +205,47 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 
     rR.pObjRecs = NULL;             // per sheet
 
+    sal_uInt16 nWriteProtHash = 0;
+    if( SfxObjectShell* pDocShell = GetDocShell() )
+    {
+        ScfPropertySet aPropSet( pDocShell->GetModel() );
+        sal_Int32 nApiHash = 0;
+        if( aPropSet.GetProperty( nApiHash, CREATE_OUSTRING( "WriteProtectionPassword" ) ) && (0 < nApiHash) && (nApiHash <= SAL_MAX_UINT16) )
+        {
+            nWriteProtHash = static_cast< sal_uInt16 >( nApiHash );
+            Add( new XclExpEmptyRecord( EXC_ID_WRITEPROT ) );
+        }
+    }
+
+    // TODO: correct codepage for BIFF5?
+    sal_uInt16 nCodePage = XclTools::GetXclCodePage( (GetBiff() <= EXC_BIFF5) ? RTL_TEXTENCODING_MS_1252 : RTL_TEXTENCODING_UNICODE );
+
     if( GetBiff() <= EXC_BIFF5 )
+    {
+        Add( new XclExpEmptyRecord( EXC_ID_INTERFACEHDR ) );
+        Add( new XclExpUInt16Record( EXC_ID_MMS, 0 ) );
+        Add( new XclExpEmptyRecord( EXC_ID_TOOLBARHDR ) );
+        Add( new XclExpEmptyRecord( EXC_ID_TOOLBAREND ) );
+        Add( new XclExpEmptyRecord( EXC_ID_INTERFACEEND ) );
         Add( new ExcDummy_00 );
+    }
     else
     {
-        Add( new ExcDummy8_00a );
+        if( IsDocumentEncrypted() )
+            Add( new XclExpFilePass( GetRoot() ) );
+        Add( new XclExpInterfaceHdr( nCodePage ) );
+        Add( new XclExpUInt16Record( EXC_ID_MMS, 0 ) );
+        Add( new XclExpEmptyRecord( EXC_ID_INTERFACEEND ) );
+        Add( new XclExpWriteAccess );
+    }
+
+    Add( new XclExpFileSharing( GetRoot(), nWriteProtHash ) );
+    Add( new XclExpUInt16Record( EXC_ID_CODEPAGE, nCodePage ) );
+
+    if( GetBiff() == EXC_BIFF8 )
+    {
+        Add( new XclExpBoolRecord( EXC_ID_DSF, false ) );
+        Add( new XclExpEmptyRecord( EXC_ID_XL9FILE ) );
         rR.pTabId = new XclExpChTrTabId( Max( nExcTabCount, nCodenames ) );
         Add( rR.pTabId );
         if( HasVbaStorage() )
@@ -219,8 +255,9 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
             if( rCodeName.Len() )
                 Add( new XclCodename( rCodeName ) );
         }
-        Add( new ExcDummy8_00b );
     }
+
+    Add( new XclExpUInt16Record( EXC_ID_FNGROUPCOUNT, 14 ) );
 
     // erst Namen- und Tabellen-Eintraege aufbauen
     String          aName;
@@ -239,12 +276,22 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         aRecList.AppendRecord( CreateRecord( EXC_ID_NAME ) );
     }
 
-    aRecList.AppendNewRecord( new XclExpWindowProtection( GetExtDocOptions().GetDocSettings().mbWinProtected ) );
-    aRecList.AppendNewRecord( new XclExpDocProtection( rDoc.IsDocProtected() ) );
-    aRecList.AppendNewRecord( new XclExpBoolRecord( EXC_ID_PASSWORD, false ) );
+    // document protection options
+    const ScDocProtection* pProtect = GetDoc().GetDocProtection();
+    if (pProtect && pProtect->isProtected())
+    {
+        Add( new XclExpWindowProtection(pProtect->isOptionEnabled(ScDocProtection::WINDOWS)) );
+        Add( new XclExpProtection(pProtect->isOptionEnabled(ScDocProtection::STRUCTURE)) );
+#if ENABLE_SHEET_PROTECTION
+        Add( new XclExpPassHash(pProtect->getPasswordHash(PASSHASH_XL)) );
+#endif
+    }
 
     if( GetBiff() == EXC_BIFF8 )
-        Add( new ExcDummy8_040 );
+    {
+        Add( new XclExpProt4Rev );
+        Add( new XclExpProt4RevPass );
+    }
 
     // document protection options
     if( GetOutput() == EXC_OUTPUT_BINARY )
@@ -255,6 +302,12 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 
     Add( new XclExpXmlStartSingleElementRecord( XML_workbookPr ) );
 
+    if ( GetBiff() == EXC_BIFF8 )
+    {
+        Add( new XclExpBoolRecord(0x0040, false) ); // BACKUP
+        Add( new XclExpBoolRecord(0x008D, false) ); // HIDEOBJ
+    }
+
     if( GetBiff() <= EXC_BIFF5 )
     {
         Add( new ExcDummy_040 );
@@ -263,9 +316,11 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     }
     else
     {
+        // BIFF8
         Add( new Exc1904( rDoc ) );
         Add( new XclExpBoolRecord( 0x000E, !rDoc.GetDocOptions().IsCalcAsShown() ) );
-        Add( new ExcDummy8_041 );
+        Add( new XclExpBoolRecord(0x01B7, false) ); // REFRESHALL
+        Add( new XclExpBoolRecord(0x00DA, false) ); // BOOKBOOL
         // OOXTODO: The following /workbook/workbookPr attributes are mapped
         //          to various BIFF records that are not currently supported:
         //
@@ -361,10 +416,14 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         if( GetOutput() != EXC_OUTPUT_BINARY )
             lcl_AddCalcPr( aRecList, *this );
 
+        Add( new XclExpRecalcId );
+
         // MSODRAWINGGROUP per-document data
         Add( new XclMsodrawinggroup( rR, ESCHER_DggContainer ) );
         // Shared string table: SST, EXTSST
         aRecList.AppendRecord( CreateRecord( EXC_ID_SST ) );
+
+        Add( new XclExpBookExt );
     }
 
     Add( new ExcEof );
@@ -425,15 +484,23 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
     // page settings (SETUP and various other records)
     aRecList.AppendRecord( xPageSett );
 
-    if( rDoc.IsTabProtected( mnScTab ) )
-        Add( new XclProtection() );
+    const ScTableProtection* pTabProtect = rDoc.GetTabProtection(mnScTab);
+    if (pTabProtect && pTabProtect->isProtected())
+    {
+        Add( new XclExpProtection(true) );
+        Add( new XclExpBoolRecord(0x00DD, pTabProtect->isOptionEnabled(ScTableProtection::SCENARIOS)) );
+        Add( new XclExpBoolRecord(0x0063, pTabProtect->isOptionEnabled(ScTableProtection::OBJECTS)) );
+#if ENABLE_SHEET_PROTECTION
+        Add( new XclExpPassHash(pTabProtect->getPasswordHash(PASSHASH_XL)) );
+#endif
+    }
 
     // local link table: EXTERNCOUNT, EXTERNSHEET
     if( eBiff <= EXC_BIFF5 )
         aRecList.AppendRecord( CreateRecord( EXC_ID_EXTERNSHEET ) );
 
     if ( eBiff == EXC_BIFF8 )
-        lcl_AddScenariosAndFilters( aRecList, *this, mnScTab );
+        lcl_AddScenariosAndFilters( aRecList, GetRoot(), mnScTab );
 
     // cell table: DEFCOLWIDTH, COLINFO, DIMENSIONS, ROW, cell records
     aRecList.AppendRecord( mxCellTable );
@@ -467,6 +534,9 @@ void ExcTable::FillAsTable( size_t nCodeNameIdx )
 
     if( eBiff == EXC_BIFF8 )
     {
+        // sheet protection options
+        Add( new XclExpSheetProtectOptions( GetRoot(), mnScTab ) );
+
         // web queries
         Add( new XclExpWebQueryBuffer( GetRoot() ) );
 
@@ -542,7 +612,7 @@ void ExcTable::FillAsXmlTable( size_t nCodeNameIdx )
     // web queries
     Add( new XclExpWebQueryBuffer( GetRoot() ) );
 
-    lcl_AddScenariosAndFilters( aRecList, *this, mnScTab );
+    lcl_AddScenariosAndFilters( aRecList, GetRoot(), mnScTab );
 
     // MERGEDCELLS record, generated by the cell table
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_MERGEDCELLS ) );
@@ -771,7 +841,7 @@ void ExcDocument::WriteXml( SvStream& rStrm )
 
         rWorkbook->endElement( XML_workbook );
         rWorkbook.reset();
-        aStrm.commit();
+        aStrm.commitStorage();
     }
 #if 0
     if( pExpChangeTrack )

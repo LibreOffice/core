@@ -608,7 +608,8 @@ void ODatabaseModelImpl::clearConnections()
     aConnections.swap( m_aConnections );
 
     Reference< XConnection > xConn;
-    for ( OWeakConnectionArray::iterator i = aConnections.begin(); aConnections.end() != i; ++i )
+    OWeakConnectionArray::iterator aEnd = aConnections.end();
+    for ( OWeakConnectionArray::iterator i = aConnections.begin(); aEnd != i; ++i )
     {
         xConn = *i;
         if ( xConn.is() )
@@ -1005,6 +1006,8 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
     OSL_PRECOND( !xModel.is(), "ODatabaseModelImpl::createNewModel_deliverOwnership: not to be called if there already is a model!" );
     if ( !xModel.is() )
     {
+        bool bHadModelBefore = m_bDocumentInitialized;
+
         xModel = ODatabaseDocument::createDatabaseDocument( this, ODatabaseDocument::FactoryAccess() );
         m_xModel = xModel;
 
@@ -1017,6 +1020,17 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
+        }
+
+        if ( bHadModelBefore )
+        {
+            // do an attachResources
+            // In case the document is loaded regularly, this is not necessary, as our loader will do it.
+            // However, in case that the document is implicitly created by asking the data source for the document,
+            // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
+            // state, fires all events, and so on.
+            // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
+            xModel->attachResource( xModel->getURL(), m_aArgs );
         }
 
         if ( _bInitialize )
@@ -1079,6 +1093,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
     {
         // known JDBC settings
         AsciiPropertyValue( "JavaDriverClass",            makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "JavaDriverClassPath",       makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         // known settings for file-based drivers
         AsciiPropertyValue( "Extension",                  makeAny( ::rtl::OUString() ) ),
@@ -1110,6 +1125,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "MaxRowCount",                makeAny( (sal_Int32)100 ) ),
         // known MySQLNative driver settings
         AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "NamedPipe",                  makeAny( ::rtl::OUString() ) ),
         // misc known driver settings
         AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AddIndexAppendix",           makeAny( (sal_Bool)sal_True ) ),
@@ -1397,7 +1413,7 @@ sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 }
 
 // -----------------------------------------------------------------------------
-Reference< XStorage > ODatabaseModelImpl::getLastCommitDocumentStorage()
+Reference< XStorage > ODatabaseModelImpl::getZipStorageToSign()
 {
     // we do not support signing the scripting storages, so we're allowed to
     // return <NULL/> here.
@@ -1441,10 +1457,17 @@ Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() c
 }
 
 // -----------------------------------------------------------------------------
-sal_Int16 ODatabaseModelImpl::getScriptingSignatureState() const
+sal_Int16 ODatabaseModelImpl::getScriptingSignatureState()
 {
     // no support for signatures at the moment
     return SIGNATURESTATE_NOSIGNATURES;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ODatabaseModelImpl::hasTrustedScriptingSignature( sal_Bool /*bAllowUIToAddAuthor*/ )
+{
+    // no support for signatures at the moment
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------------

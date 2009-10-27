@@ -69,28 +69,34 @@ function hOpenPropertyBrowser() as boolean
     const CFN = "hOpenPropertyBrowser::"
     
     '///+<li>Open the property browser (call slot)</li>
-    ContextProperties
-    
-    '///+<li>Verify that the property browser is open</li>
-    kontext "ControlPropertiesTabControl"
-    if ( ControlPropertiesTabControl.exists( 2 ) ) then
+    try
+        ContextProperties
         
-        '///+<li>Activate General-tabpage</li>
-        ControlPropertiesTabControl.setPage( TabGeneralControl )
-    
-        '///+<li>Verify that the General-tabpage is visible</li>
-        kontext "TabGeneralControl"
-        if ( TabGeneralControl.isVisible() ) then
-            printlog( CFN & "ok" )
-            hOpenPropertyBrowser() = true
+        '///+<li>Verify that the property browser is open</li>
+        kontext "ControlPropertiesTabControl"
+        if ( ControlPropertiesTabControl.exists( 2 ) ) then
+            
+            '///+<li>Activate General-tabpage</li>
+            ControlPropertiesTabControl.setPage( TabGeneralControl )
+        
+            '///+<li>Verify that the General-tabpage is visible</li>
+            kontext "TabGeneralControl"
+            if ( TabGeneralControl.isVisible() ) then
+                printlog( CFN & "ok" )
+                hOpenPropertyBrowser() = true
+            else
+                printlog( CFN & "General-tab is not visible." )
+                hOpenPropertyBrowser() = false
+            endif   
         else
-            printlog( CFN & "General-tab is not visible." )
-            hOpenPropertyBrowser() = false
-        endif   
-    else
-        printlog( CFN & "Could not open property browser" )
-        hOpenPropertyBrowser() = false    
-    endif
+            printlog( CFN & "Could not open property browser" )
+            hOpenPropertyBrowser() = false    
+        endif
+    catch
+        hOpenPropertyBrowser() = false
+        printlog( CFN & "Slot <ContextProperties> not available" )
+    endcatch
+    
     '///</ul>
     
 end function
@@ -127,7 +133,7 @@ function hClosePropertyBrowser() as boolean
 
     '///+<li>Verify that the property browser is open</li>
     kontext "ControlPropertiesTabControl"
-    if ( ControlPropertiesTabControl.exists() ) then
+    if ( ControlPropertiesTabControl.exists( 1 ) ) then
     
         '///+<li>Execute the ContextProperties slot</li>
         ContextProperties
@@ -181,12 +187,39 @@ function hPBSetControlName( cControl as string ) as boolean
     kontext "TabGeneralControl"
     if ( NameText.exists() ) then
         '///+<li>Set the new name</li>
-        wait( 100 )
+        WaitSlot()
+        
+        ' Name the control and append some Spaces which should be truncated.
+        printlog( CFN & "Naming control: " & cControl )
+        NameText.setText( cControl )
+        TabGeneralControl.typeKeys( "   <RETURN>" )
+        WaitSlot()
+        
+        printlog( CFN & "Verifying rename..." )
+        if ( NameText.getText() = cControl ) then
+            printlog( CFN & "Name is set ok: " & cControl )
+            hPBSetControlName() = true
+            exit function
+        endif
+        
+        ' If the name cannot be set this is in 99% of the cases a timing problem.
+        ' Here is a (costly) workaround.
+        qaerrorlog( CFN & "Name not set correctly, retrying" )
+        Wait( 300 )
         NameText.setText( cControl )
         TabGeneralControl.typeKeys( "<RETURN>" )
-        wait( 100 )
-        printlog( CFN & "Named control: " & cControl )
-        hPBSetControlName() = true
+        Wait( 300 )
+
+        ' Test again, leave function if good
+        if ( NameText.getText() = cControl ) then
+            printlog( CFN & "Name is set ok: " & cControl )
+            hPBSetControlName() = true
+            exit function
+        endif
+        
+        warnlog( CFN & "Unable to set control name: " & cControl )
+        hPBSetControlName() = false
+            
     else
         warnlog( "Unable to name the control." )
         hPBSetControlName() = false
@@ -234,20 +267,20 @@ function hPBGetControlName( cControl as string ) as boolean
         
             '///+<li>Verify that the name is correct</li>
             if ( cControlName = cControl ) then
-                printlog( CFN & "The correct control is open: " & cControl )
+                printlog( CFN & "The name of the control is correct: " & cControl )
                 hPBGetControlName() = true
             else
-                warnlog( CFN & "This is not the correct control." )
+                warnlog( CFN & "Unexpected control name:" )
                 printlog( CFN & "Found....: " & cControlName )
                 printlog( CFN & "Expected.: " & cControl     )
                 hPBGetControlName() = false
             endif
         else
-            warnlog( CFN & "General Tab is not visible" )
+            warnlog( CFN & "Dialog present but tabpage could not be accessed (TabGeneralControl)." )
             hPBGetControlName() = false
         endif
     else
-        warnlog( CFN & "Unable to get the name from the control." )
+        warnlog( CFN & "Unable to get the name from the control, dialog not accessible (TabGeneralControl)." )
         hPBGetControlName() = false
     endif
     '///</ul>

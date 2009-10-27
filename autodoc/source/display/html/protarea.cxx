@@ -56,22 +56,6 @@ ProtectionArea::ProtectionArea( const char *        i_sLabel,
 {
 }
 
-ProtectionArea::ProtectionArea( const char *        i_sLabel,
-                                const char *        i_sTitle_class,
-                                const char *        i_sTitle_struct,
-                                const char *        i_sTitle_union )
-    :   pSglTable(0),
-        aClassesTables(),
-        sLabel(i_sLabel)
-{
-    aClassesTables[ Index(ary::cpp::CK_class) ]
-                = new S_Slot_Table(i_sTitle_class);
-    aClassesTables[ Index(ary::cpp::CK_struct) ]
-                = new S_Slot_Table(i_sTitle_struct);
-    aClassesTables[ Index(ary::cpp::CK_union) ]
-                = new S_Slot_Table(i_sTitle_union);
-}
-
 ProtectionArea::~ProtectionArea()
 {
 
@@ -130,19 +114,6 @@ ProtectionArea::WasUsed_Area() const
            OR static_cast< cdyntab& >(aClassesTables[1])->WasUsed()
            OR static_cast< cdyntab& >(aClassesTables[2])->WasUsed();
 }
-
-bool
-ProtectionArea::WasUsed_Table() const
-{
-    return pSglTable->WasUsed();
-}
-
-bool
-ProtectionArea::WasUsed_Table( ary::cpp::E_ClassKey i_eClassKey ) const
-{
-    return aClassesTables[Index(i_eClassKey)]->WasUsed();
-}
-
 
 //*******************        S_Slot_Table        **********************//
 

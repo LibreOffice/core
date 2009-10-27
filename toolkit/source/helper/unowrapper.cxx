@@ -65,6 +65,13 @@ using namespace ::com::sun::star;
         case WINDOW_OKBUTTON:
         case WINDOW_CANCELBUTTON:   return new VCLXButton;
         case WINDOW_CHECKBOX:       return new VCLXCheckBox;
+        // --> OD 2009-06-29 #i95042#
+        // A Window of type <MetricBox> is inherited from type <ComboBox>.
+        // Thus, it does make more sense to return a <VCLXComboBox> instance
+        // instead of only a <VCLXWindow> instance, especially regarding its
+        // corresponding accessibility API.
+        case WINDOW_METRICBOX:
+        // <--
         case WINDOW_COMBOBOX:       return new VCLXComboBox;
         case WINDOW_SPINFIELD:
         case WINDOW_NUMERICFIELD:
@@ -109,7 +116,6 @@ using namespace ::com::sun::star;
         // case WINDOW_DATEBOX:
         // case WINDOW_GROUPBOX:
         // case WINDOW_LONGCURRENCYBOX:
-        // case WINDOW_METRICBOX:
         // case WINDOW_SPLITTER:
         // case WINDOW_STATUSBAR:
         // case WINDOW_TABCONTROL:

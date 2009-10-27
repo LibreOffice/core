@@ -881,8 +881,9 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                             xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XSpellChecker >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
-                        catch (uno::Exception &)
+                        catch (uno::Exception &rEx)
                         {
+                            (void) rEx;
                             DBG_ASSERT( 0, "createInstance failed" );
                         }
                     }
@@ -946,8 +947,9 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                             xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XProofreader >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
-                        catch (uno::Exception &)
+                        catch (uno::Exception &rEx)
                         {
+                            (void) rEx;
                             DBG_ASSERT( 0, "createInstance failed" );
                         }
                     }
@@ -1010,8 +1012,9 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                             xSvc = uno::Reference< linguistic2::XHyphenator >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
 
                         }
-                        catch (uno::Exception &)
+                        catch (uno::Exception &rEx)
                         {
+                            (void) rEx;
                             DBG_ASSERT( 0, "createInstance failed" );
                         }
                     }
@@ -1076,8 +1079,9 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                             xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
                             xSvc = uno::Reference< linguistic2::XThesaurus >( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
                         }
-                        catch (uno::Exception &)
+                        catch (uno::Exception &rEx)
                         {
+                            (void) rEx;
                             DBG_ASSERT( 0, "createInstance failed" );
                         }
                     }

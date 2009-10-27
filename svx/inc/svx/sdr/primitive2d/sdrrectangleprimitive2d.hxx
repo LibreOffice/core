@@ -49,10 +49,15 @@ namespace drawinglayer
         class SdrRectanglePrimitive2D : public BasePrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                     maTransform;
+            basegfx::B2DHomMatrix                       maTransform;
             attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
             double                                      mfCornerRadiusX;    // [0.0..1.0] relative to 1/2 width
             double                                      mfCornerRadiusY;    // [0.0..1.0] relative to 1/2 height
+
+            // bitfield
+            // flag which decides if this is a text frame. If Yes, the HitArea
+            // should be the filled geometry
+            bool                                        mbTextFrame : 1;
 
         protected:
             // local decomposition.
@@ -60,17 +65,19 @@ namespace drawinglayer
 
         public:
             SdrRectanglePrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform,
+                const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-                double fCornerRadiusX = 0.0,
-                double fCornerRadiusY = 0.0);
+                double fCornerRadiusX,
+                double fCornerRadiusY,
+                bool bTextFrame);
 
             // data access
-            const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+            const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
             double getCornerRadiusX() const { return mfCornerRadiusX; }
             double getCornerRadiusY() const { return mfCornerRadiusY; }
-            bool hasCornerRadius() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
+            bool isCornerRadiusUsed() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
+            bool getTextFrame() const { return mbTextFrame; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

@@ -20,13 +20,13 @@
     A second possiblity is:
 
     - temporarily change the DOCTYPE of your file to read (all on one line)
-      <!DOCTYPE Locale SYSTEM "http://l10n.openoffice.org/unbranded-source/browse/*checkout*/l10n/i18npool/source/localedata/data/locale.dtd">
+      <!DOCTYPE Locale SYSTEM "http://svn.services.openoffice.org/ooo/trunk/i18npool/source/localedata/data/locale.dtd">
 
     - upload it to the form available at http://www.validome.org/
 
     This will validate the file against the HEAD revision of locale.dtd, for
-    other revisions you'll have to specify the revision as in
-    http://l10n.openoffice.org/unbranded-source/browse/*checkout*/l10n/i18npool/source/localedata/data/locale.dtd?rev=1.14.4.3
+    other revisions you'll have to specify the corresponding tags or cws branch
+    instead of trunk.
 
 
     Please test locale data files either in a non-product (!) build, which

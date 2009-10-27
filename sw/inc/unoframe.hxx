@@ -43,6 +43,7 @@
  */
 
 class SwDoc;
+class SfxItemPropertSet;
 /*-----------------12.02.98 11:21-------------------
 
 --------------------------------------------------*/
@@ -59,9 +60,8 @@ class SwXFrame : public cppu::WeakImplHelper6
     public SwClient
 {
     SwEventListenerContainer        aLstnrCntnr;
-    SfxItemPropertySet              aPropSet;
-    const SfxItemPropertyMap*       _pMap;
-    SwDoc*                          mpDoc;
+    const SfxItemPropertySet*       m_pPropSet;
+    SwDoc*                          m_pDoc;
 
     const FlyCntType                eType;
 
@@ -79,10 +79,10 @@ protected:
     virtual ~SwXFrame();
 public:
     SwXFrame(FlyCntType eSet,
-                const SfxItemPropertyMap*   pMap,
+                const SfxItemPropertySet*    pPropSet,
                 SwDoc *pDoc ); //Descriptor-If
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
-                const SfxItemPropertyMap*   pMap);
+                const SfxItemPropertySet*    pPropSet);
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -166,7 +166,7 @@ class SwXTextFrame : public SwXTextFrameBaseClass,
     public SwXText,
     public SwXFrame
 {
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertSet*    _pPropSet;
 
 protected:
     virtual const SwStartNode *GetStartNode() const;

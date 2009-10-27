@@ -87,7 +87,6 @@ OFrames::OFrames(   const   Reference< XMultiServiceFactory >&  xFactory        
                             FrameContainer*                     pFrameContainer )
         //  Init baseclasses first
         :   ThreadHelpBase              ( &Application::GetSolarMutex() )
-        ,   OWeakObject                 (                               )
         // Init member
         ,   m_xFactory                  ( xFactory                      )
         ,   m_xOwner                    ( xOwner                        )
@@ -107,24 +106,6 @@ OFrames::~OFrames()
     // Reset instance, free memory ....
     impl_resetObject();
 }
-
-//*****************************************************************************************************************
-//  XInterface
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_4     (   OFrames                         ,
-                            OWeakObject                     ,
-                            DIRECT_INTERFACE(XTypeProvider  ),
-                            DIRECT_INTERFACE(XFrames        ),
-                            DIRECT_INTERFACE(XIndexAccess   ),
-                            DIRECT_INTERFACE(XElementAccess )
-                        )
-
-DEFINE_XTYPEPROVIDER_4  (   OFrames        ,
-                            XTypeProvider  ,
-                            XFrames        ,
-                            XIndexAccess   ,
-                            XElementAccess
-                        )
 
 //*****************************************************************************************************************
 //  XFrames

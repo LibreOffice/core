@@ -43,6 +43,19 @@
 
 #include <svtools/rtftoken.h>
 
+// alle Werte auf default; wird nach einlesen der Bitmap aufgerufen !
+void SvxRTFPictureType::ResetValues()
+{   // setze alle Werte RTF-Defaults
+    eStyle = RTF_BITMAP;
+    nMode = HEX_MODE;
+    nType = nGoalWidth = nGoalHeight = 0;
+    nWidth = nHeight = nWidthBytes = 0;
+    uPicLen = 0;
+    nBitsPerPixel = nPlanes = 1;
+    nScalX = nScalY = 100;      // Skalierung in Prozent
+    nCropT = nCropB = nCropL = nCropR = 0;
+}
+
 ImportInfo::ImportInfo( ImportState eSt, SvParser* pPrsrs, const ESelection& rSel )
     : aSelection( rSel )
 {

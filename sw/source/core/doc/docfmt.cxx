@@ -40,9 +40,7 @@
 #include <svtools/itemiter.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/misccfg.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -53,9 +51,7 @@
 #include <svtools/zforlist.hxx>
 #endif
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 #include <fmtpdsc.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
@@ -367,8 +363,8 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark )
     if( DoesUndo() )
     {
         ClearRedo();
-        SwUndoRstAttr* pUndo = new SwUndoRstAttr( rRg, RES_CHRFMT );
-        pHst = pUndo->GetHistory();
+        SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg, RES_CHRFMT );
+        pHst = &pUndo->GetHistory();
         AppendUndo( pUndo );
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
@@ -415,8 +411,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         else
         {
             Boundary aBndry;
-            if( pBreakIt->xBreak.is() )
-                aBndry = pBreakIt->xBreak->getWordBoundary(
+            if( pBreakIt->GetBreakIter().is() )
+                aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
@@ -452,17 +448,20 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     if( DoesUndo() )
     {
         ClearRedo();
-        SwUndoRstAttr* pUndo = new SwUndoRstAttr( rRg,
+        SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg,
             static_cast<USHORT>(bTxtAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL ));
         if( pAttrs && pAttrs->Count() )
+        {
             pUndo->SetAttrs( *pAttrs );
-        pHst = pUndo->GetHistory();
+        }
+        pHst = &pUndo->GetHistory();
         AppendUndo( pUndo );
     }
 
     const SwPosition *pStt = pPam->Start(), *pEnd = pPam->End();
     ParaRstFmt aPara( pStt, pEnd, pHst );
 
+    // mst: not including META here; it seems attrs with CH_TXTATR are omitted
     USHORT __FAR_DATA aResetableSetRange[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -470,9 +469,10 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         // --> OD 2008-02-25 #refactorlists#
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
         // <--
-        RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
         RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-        RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+        RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+        RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         0
     };
@@ -505,9 +505,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             {
                 if( IsInRange( aCharFmtSetRange, pItem->Which() ))
                 {
-
-                    if( !pTNd->pSwpHints )
-                        pTNd->pSwpHints = new SwpHints;
+                    pTNd->GetOrCreateSwpHints();
 
                     aCharSet.Put( *pItem );
 
@@ -528,12 +526,15 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             {
                 if ( pHst )
                 {
-                    SwRegHistory( pTNd, aCharSet, 0, pTNd->GetTxt().Len(), nsSetAttrMode::SETATTR_NOFORMATATTR, pHst );
+                    SwRegHistory history( pTNd, *pTNd, pHst );
+                    history.InsertItems( aCharSet, 0, pTNd->GetTxt().Len(),
+                        nsSetAttrMode::SETATTR_NOFORMATATTR );
                 }
                 else
                 {
-                    SwTxtAttr* pNew = pTNd->MakeTxtAttr( aCharSet, 0, pTNd->GetTxt().Len() );
-                    pTNd->Insert( pNew );
+                    SwTxtAttr* pNew =
+                        MakeTxtAttr( *this, aCharSet, 0, pTNd->GetTxt().Len() );
+                    pTNd->InsertHint( pNew );
                 }
             }
         }
@@ -554,16 +555,16 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             {
                 if( IsInRange( aCharFmtSetRange, pItem->Which() ))
                 {
-                    SwTxtAttr* pTAttr = pTNd->MakeTxtAttr( *pItem, 0,
-                                                pTNd->GetTxt().Len() );
-                    if( !pTNd->pSwpHints )
-                        pTNd->pSwpHints = new SwpHints;
-                    pTNd->pSwpHints->SwpHintsArr::Insert( pTAttr );
-                    if( pHst )
+                    SwTxtAttr* pTAttr = MakeTxtAttr( *this,
+                        const_cast<SfxPoolItem&>(*pItem),
+                        0, pTNd->GetTxt().Len() );
+                    SwpHints & rHints = pTNd->GetOrCreateSwpHints();
+                    rHints.SwpHintsArray::Insert( pTAttr );
+                    if ( pHst )
                     {
                         SwRegHistory aRegH( pTNd, *pTNd, pHst );
                         pTNd->ResetAttr( pItem->Which() );
-                        pHst->Add( pTAttr, aTmpEnd.GetIndex(), TRUE );
+                        pHst->Add( pTAttr, aTmpEnd.GetIndex(), true );
                     }
                     else
                         pTNd->ResetAttr( pItem->Which() );
@@ -602,8 +603,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 // Einfuegen der Hints nach Inhaltsformen;
 // wird in SwDoc::Insert(..., SwFmtHint &rHt) benutzt
 
-BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
-                USHORT nFlags, SwUndoAttr* pUndo )
+static bool
+lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
+            const SetAttrMode nFlags, SwUndoAttr *const pUndo)
 {
     // teil die Sets auf (fuer Selektion in Nodes)
     const SfxItemSet* pCharSet = 0;
@@ -619,22 +621,22 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         const SfxPoolItem* pItem = aIter.FirstItem();
         const USHORT nWhich = pItem->Which();
 
-        if ( (RES_CHRATR_BEGIN <= nWhich && nWhich < RES_CHRATR_END) ||
-             RES_TXTATR_CHARFMT == nWhich ||
-             RES_TXTATR_INETFMT == nWhich ||
-             RES_TXTATR_AUTOFMT == nWhich ||
-             (RES_UNKNOWNATR_BEGIN <= nWhich && nWhich < RES_UNKNOWNATR_END) )
+        if ( isCHRATR(nWhich) ||
+             (RES_TXTATR_CHARFMT == nWhich) ||
+             (RES_TXTATR_INETFMT == nWhich) ||
+             (RES_TXTATR_AUTOFMT == nWhich) ||
+             isUNKNOWNATR(nWhich) )
         {
             pCharSet  = &rChgSet;
             bCharAttr = true;
         }
 
-        if ( (RES_PARATR_BEGIN <= nWhich && nWhich < RES_PARATR_END) ||
+        if (    isPARATR(nWhich)
              // --> OD 2008-02-25 #refactorlists#
-             (RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END) ||
+             || isPARATR_LIST(nWhich)
              // <--
-             (RES_FRMATR_BEGIN <= nWhich && nWhich < RES_FRMATR_END) ||
-             (RES_GRFATR_BEGIN <= nWhich && nWhich < RES_GRFATR_END) )
+             || isFRMATR(nWhich)
+             || isGRFATR(nWhich) )
         {
             pOtherSet = &rChgSet;
             bOtherAttr = true;
@@ -672,8 +674,8 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         bDelete = true;
     }
 
-    SwHistory* pHistory = pUndo ? pUndo->GetHistory() : 0;
-    BOOL bRet = FALSE;
+    SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : 0;
+    bool bRet = false;
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     SwCntntNode* pNode = pStt->nNode.GetNode().GetCntntNode();
 
@@ -691,7 +693,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 ASSERT( false,
                         "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
                 DELETECHARSETS
-                return FALSE;
+                return false;
             }
             // <--
 
@@ -709,7 +711,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             }
 
             DELETECHARSETS
-            return TRUE;
+            return true;
         }
         // <- #i27615#
 
@@ -723,12 +725,12 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             aTxtSet.Put( rChgSet );
             if( aTxtSet.Count() )
             {
-                SwRegHistory( (SwTxtNode*)pNode, aTxtSet, rSt.GetIndex(),
-                                rSt.GetIndex(), nFlags, pHistory );
-                bRet = TRUE;
+                SwRegHistory history( pNode, *pNode, pHistory );
+                bRet = history.InsertItems(
+                    aTxtSet, rSt.GetIndex(), rSt.GetIndex(), nFlags ) || bRet;
 
-                if( pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline() &&
-                    pDoc->GetRedlineTbl().Count() ))
+                if (bRet && (pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline()
+                                && pDoc->GetRedlineTbl().Count())))
                 {
                     SwPaM aPam( pStt->nNode, pStt->nContent.GetIndex()-1,
                                 pStt->nNode, pStt->nContent.GetIndex() );
@@ -752,7 +754,8 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // TEST_TEMP ToDo: AutoFmt!
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
-                                RES_TXTATR_DUMMY5, RES_TXTATR_WITHEND_END-1,
+                                RES_TXTATR_META, RES_TXTATR_METAFIELD,
+                                RES_TXTATR_CJK_RUBY, RES_TXTATR_WITHEND_END-1,
                                 0 );
 
             aTxtSet.Put( rChgSet );
@@ -762,12 +765,12 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 USHORT nEnd = pStt->nNode == pEnd->nNode
                                 ? pEnd->nContent.GetIndex()
                                 : pNode->Len();
-                SwRegHistory( (SwTxtNode*)pNode, aTxtSet, nInsCnt,
-                                nEnd, nFlags, pHistory );
-                bRet = TRUE;
+                SwRegHistory history( pNode, *pNode, pHistory );
+                bRet = history.InsertItems( aTxtSet, nInsCnt, nEnd, nFlags )
+                    || bRet;
 
-                if( pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline() &&
-                     pDoc->GetRedlineTbl().Count() ) )
+                if (bRet && (pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline()
+                                && pDoc->GetRedlineTbl().Count())))
                 {
                     // wurde Text-Inhalt eingefuegt? (RefMark/TOXMarks ohne Ende)
                     BOOL bTxtIns = nInsCnt != rSt.GetIndex();
@@ -789,7 +792,6 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
     // bei PageDesc's, die am Node gesetzt werden, muss immer das
     // Auto-Flag gesetzt werden!!
-    const SvxLRSpaceItem* pLRSpace = 0;
     if( pOtherSet && pOtherSet->Count() )
     {
         SwTableNode* pTblNd;
@@ -816,11 +818,12 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
                     SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
                     pFmt->SetFmtAttr( aNew );
+                    bRet = true;
                 }
                 else
                 {
                     SwRegHistory aRegH( pNode, *pNode, pHistory );
-                    pNode->SetAttr( aNew );
+                    bRet = pNode->SetAttr( aNew ) || bRet;
                 }
             }
 
@@ -828,13 +831,13 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // we know, that there is only one attribute in pOtherSet. We cannot
             // perform the following operations, instead we return:
             if ( bOtherAttr )
-                return TRUE;
+                return bRet;
 
             const_cast<SfxItemSet*>(pOtherSet)->ClearItem( RES_PAGEDESC );
             if( !pOtherSet->Count() )
             {
                 DELETECHARSETS
-                return TRUE;
+                return bRet;
             }
         }
 
@@ -853,24 +856,21 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
             SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
             pFmt->SetFmtAttr( *pBreak );
+            bRet = true;
 
             // bOtherAttr = true means that pOtherSet == rChgSet. In this case
             // we know, that there is only one attribute in pOtherSet. We cannot
             // perform the following operations, instead we return:
             if ( bOtherAttr )
-                return TRUE;
+                return bRet;
 
             const_cast<SfxItemSet*>(pOtherSet)->ClearItem( RES_BREAK );
             if( !pOtherSet->Count() )
             {
                 DELETECHARSETS
-                return TRUE;
+                return bRet;
             }
         }
-
-        // fuer Sonderbehandlung von LR-Space innerhalb einer Numerierung !!!
-        pOtherSet->GetItemState( RES_LR_SPACE, FALSE,
-                                (const SfxPoolItem**)&pLRSpace );
 
         {
             // wenns eine PoolNumRule ist, diese ggfs. anlegen
@@ -896,7 +896,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
         {
-            SwTxtNode* pTxtNd = (SwTxtNode*)pNode;
+            SwTxtNode* pTxtNd = static_cast<SwTxtNode*>(pNode);
             const SwIndex& rSt = pStt->nContent;
             USHORT nMkPos, nPtPos = rSt.GetIndex();
             const String& rStr = pTxtNd->GetTxt();
@@ -914,8 +914,8 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             else
             {
                 Boundary aBndry;
-                if( pBreakIt->xBreak.is() )
-                    aBndry = pBreakIt->xBreak->getWordBoundary(
+                if( pBreakIt->GetBreakIter().is() )
+                    aBndry = pBreakIt->GetBreakIter()->getWordBoundary(
                                 pTxtNd->GetTxt(), nPtPos,
                                 pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                                 WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
@@ -951,10 +951,10 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     pTxtNd->RstAttr( aSt, nPtPos, 0, pCharSet );
             }
 
-            // eintragen des Attributes im Node erledigt die SwRegHistory !!
-            SwRegHistory( (SwTxtNode*)pNode, *pCharSet,
-                            nMkPos, nPtPos, nFlags, pHistory );
-            bRet = TRUE;
+            // the SwRegHistory inserts the attribute into the TxtNode!
+            SwRegHistory history( pNode, *pNode, pHistory );
+            bRet = history.InsertItems( *pCharSet, nMkPos, nPtPos, nFlags )
+                || bRet;
 
             if( pDoc->IsRedlineOn() )
             {
@@ -968,8 +968,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         if( pOtherSet && pOtherSet->Count() )
         {
             SwRegHistory aRegH( pNode, *pNode, pHistory );
-            pNode->SetAttr( *pOtherSet );
-            bRet = TRUE;
+            bRet = pNode->SetAttr( *pOtherSet ) || bRet;
         }
 
         DELETECHARSETS
@@ -998,25 +997,26 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         if( pStt->nContent.GetIndex() != 0 || aCntEnd.GetIndex() != nLen )
         {
-            // eintragen des Attributes im Node erledigt die SwRegHistory !!
+            // the SwRegHistory inserts the attribute into the TxtNode!
             if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
             {
-                SwRegHistory( (SwTxtNode*)pNode, *pCharSet,
-                                pStt->nContent.GetIndex(), aCntEnd.GetIndex(),
-                                nFlags, pHistory );
+                SwRegHistory history( pNode, *pNode, pHistory );
+                bRet = history.InsertItems(*pCharSet,
+                        pStt->nContent.GetIndex(), aCntEnd.GetIndex(), nFlags)
+                    || bRet;
             }
 
             if( pOtherSet && pOtherSet->Count() )
             {
                 SwRegHistory aRegH( pNode, *pNode, pHistory );
-                pNode->SetAttr( *pOtherSet );
+                bRet = pNode->SetAttr( *pOtherSet ) || bRet;
             }
 
             // lediglich Selektion in einem Node.
             if( pStt->nNode == pEnd->nNode )
             {
                 DELETECHARSETS
-                return TRUE;
+                return bRet;
             }
             ++nNodes;
             aSt.Assign( pStt->nNode.GetNode(), +1 );
@@ -1041,11 +1041,12 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             USHORT nLen = pNode->Len();
             if( aCntEnd.GetIndex() != nLen )
             {
-            // eintragen des Attributes im Node erledigt die SwRegHistory !!
+                // the SwRegHistory inserts the attribute into the TxtNode!
                 if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
                 {
-                    SwRegHistory( (SwTxtNode*)pNode, *pCharSet,
-                                    0, aCntEnd.GetIndex(), nFlags, pHistory );
+                    SwRegHistory history( pNode, *pNode, pHistory );
+                    history.InsertItems(*pCharSet,
+                            0, aCntEnd.GetIndex(), nFlags);
                 }
 
                 if( pOtherSet && pOtherSet->Count() )
@@ -1118,14 +1119,14 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
     }
 
     DELETECHARSETS
-    return nNodes != 0;
+    return (nNodes != 0) || bRet;
 }
 
 
-bool SwDoc::Insert( const SwPaM &rRg, const SfxPoolItem &rHt, USHORT nFlags )
+bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
+                            const SetAttrMode nFlags )
 {
     SwDataChanged aTmp( rRg, 0 );
-    BOOL bRet;
     SwUndoAttr* pUndoAttr = 0;
     if( DoesUndo() )
     {
@@ -1135,7 +1136,7 @@ bool SwDoc::Insert( const SwPaM &rRg, const SfxPoolItem &rHt, USHORT nFlags )
 
     SfxItemSet aSet( GetAttrPool(), rHt.Which(), rHt.Which() );
     aSet.Put( rHt );
-    bRet = InsAttr( this, rRg, aSet, nFlags, pUndoAttr );
+    bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr );
 
     if( DoesUndo() )
         AppendUndo( pUndoAttr );
@@ -1145,17 +1146,18 @@ bool SwDoc::Insert( const SwPaM &rRg, const SfxPoolItem &rHt, USHORT nFlags )
     return bRet;
 }
 
-bool SwDoc::Insert( const SwPaM &rRg, const SfxItemSet &rSet, USHORT nFlags )
+bool SwDoc::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
+                            const SetAttrMode nFlags )
 {
     SwDataChanged aTmp( rRg, 0 );
     SwUndoAttr* pUndoAttr = 0;
     if( DoesUndo() )
     {
         ClearRedo();
-        pUndoAttr = new SwUndoAttr( rRg, rSet );
+        pUndoAttr = new SwUndoAttr( rRg, rSet, nFlags );
     }
 
-    BOOL bRet = InsAttr( this, rRg, rSet, nFlags, pUndoAttr );
+    bool bRet = lcl_InsAttr( this, rRg, rSet, nFlags, pUndoAttr );
 
     if( DoesUndo() )
         AppendUndo( pUndoAttr );
@@ -1183,13 +1185,17 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
     if( DoesUndo() )
     {
         ClearRedo();
-        _UndoFmtAttr aTmp( rFmt );
+        SwUndoFmtAttrHelper aTmp( rFmt );
         rFmt.SetFmtAttr( rSet );
-        if( aTmp.pUndo )
-            AppendUndo( aTmp.pUndo );
+        if ( aTmp.GetUndo() )
+        {
+            AppendUndo( aTmp.ReleaseUndo() );
+        }
     }
     else
+    {
         rFmt.SetFmtAttr( rSet );
+    }
     SetModified();
 }
 
@@ -1271,30 +1277,34 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         GetAttrPool().SetPoolDefaultItem( *pItem );
         aNew.Put( GetAttrPool().GetDefaultItem( nWhich ) );
 
-        if( RES_CHRATR_BEGIN <= nWhich && RES_TXTATR_END > nWhich )
+        if (isCHRATR(nWhich) || isTXTATR(nWhich))
         {
             aCallMod.Add( pDfltTxtFmtColl );
             aCallMod.Add( pDfltCharFmt );
             bCheckSdrDflt = 0 != pSdrPool;
         }
-        else if ( ( RES_PARATR_BEGIN <= nWhich && RES_PARATR_END > nWhich ) ||
+        else if ( isPARATR(nWhich) ||
                   // --> OD 2008-02-25 #refactorlists#
-                  ( RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END ) )
+                  isPARATR_LIST(nWhich) )
                   // <--
         {
             aCallMod.Add( pDfltTxtFmtColl );
             bCheckSdrDflt = 0 != pSdrPool;
         }
-        else if( RES_GRFATR_BEGIN <= nWhich && RES_GRFATR_END > nWhich )
+        else if (isGRFATR(nWhich))
+        {
             aCallMod.Add( pDfltGrfFmtColl );
-        else if( RES_FRMATR_BEGIN <= nWhich && RES_FRMATR_END > nWhich )
+        }
+        else if (isFRMATR(nWhich))
         {
             aCallMod.Add( pDfltGrfFmtColl );
             aCallMod.Add( pDfltTxtFmtColl );
             aCallMod.Add( pDfltFrmFmt );
         }
-        else if( RES_BOXATR_BEGIN <= nWhich && RES_BOXATR_END > nWhich )
+        else if (isBOXATR(nWhich))
+        {
             aCallMod.Add( pDfltFrmFmt );
+        }
 
         // copy also the defaults
         if( bCheckSdrDflt )
@@ -2093,7 +2103,7 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
     }
 }
 
-void SwDoc::_CopyPageDescHeaderFooter( BOOL bCpyHeader,
+void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
 {
     // jetzt noch Header-/Footer-Attribute richtig behandeln
@@ -2136,7 +2146,7 @@ void SwDoc::_CopyPageDescHeaderFooter( BOOL bCpyHeader,
                 aTmpIdx = *pSttNd->EndOfSectionNode();
                 rSrcNds._Copy( aRg, aTmpIdx );
                 aTmpIdx = *pSttNd;
-                rSrcFmt.GetDoc()->_CopyFlyInFly( aRg, aTmpIdx );
+                rSrcFmt.GetDoc()->CopyFlyInFlyImpl( aRg, 0, aTmpIdx );
                 pNewFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
             }
             else
@@ -2332,7 +2342,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, BOOL bRight, BOOL bModulus )
         ClearRedo();
         SwUndoMoveLeftMargin* pUndo = new SwUndoMoveLeftMargin( rPam, bRight,
                                                                 bModulus );
-        pHistory = pUndo->GetHistory();
+        pHistory = &pUndo->GetHistory();
         AppendUndo( pUndo );
     }
 
@@ -2496,7 +2506,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, USHORT nPoolId,
     {
         aPam.SetMark();
         aPam.GetMark()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
-        Insert( aPam, *pSet, 0 );
+        InsertItemSet( aPam, *pSet, 0 );
     }
 }
 
@@ -2538,7 +2548,7 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
         SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
     }
 
-    Insert( rPam, rSet, nsSetAttrMode::SETATTR_DONTEXPAND );
+    InsertItemSet( rPam, rSet, nsSetAttrMode::SETATTR_DONTEXPAND );
     SetRedlineMode_intern( eOld );
 }
 

@@ -150,7 +150,7 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 // class XMLTableExport
 // --------------------------------------------------------------------
 
-XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
+XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper  >& xExportPropertyMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )
 , mbExportTables( false )
 {
@@ -174,7 +174,7 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< XMLPrope
         (void)e;
     }
 
-    mxCellExportPropertySetMapper = new SvXMLExportPropertyMapper( xCellPropertySetMapper.get() );
+    mxCellExportPropertySetMapper = xExportPropertyMapper;
     mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
 
     mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get() ) );

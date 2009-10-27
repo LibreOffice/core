@@ -429,7 +429,7 @@ void SvpSalGraphics::copyArea( long nDestX,
 {
     B2IRange aSrcRect( nSrcX, nSrcY, nSrcX+nSrcWidth, nSrcY+nSrcHeight );
     B2IRange aDestRect( nDestX, nDestY, nDestX+nSrcWidth, nDestY+nSrcHeight );
-    m_aDevice->drawBitmap( m_aDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+    m_aDevice->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -444,7 +444,7 @@ void SvpSalGraphics::copyBits( const SalTwoRect* pPosAry,
     B2IRange aDestRect( pPosAry->mnDestX, pPosAry->mnDestY,
                         pPosAry->mnDestX+pPosAry->mnDestWidth,
                         pPosAry->mnDestY+pPosAry->mnDestHeight );
-    m_aDevice->drawBitmap( pSrc->m_aDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
+    m_aDevice->drawBitmap( pSrc->m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
@@ -519,7 +519,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
                            m_aDevice );
     B2IRange aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
     B2IRange aDestRect( 0, 0, nWidth, nHeight );
-    aCopy->drawBitmap( m_aDevice, aSrcRect, aDestRect, DrawMode_PAINT );
+    aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, DrawMode_PAINT );
 
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
     pBitmap->setBitmap( aCopy );
@@ -556,6 +556,22 @@ void SvpSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert /*
 BOOL SvpSalGraphics::drawEPS( long, long, long, long, void*, ULONG )
 {
     return FALSE;
+}
+
+SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
+{
+    SystemFontData aSysFontData;
+
+    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
+    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+
+    aSysFontData.nSize = sizeof( SystemFontData );
+    aSysFontData.nFontId = 0;
+    aSysFontData.nFontFlags = 0;
+    aSysFontData.bFakeBold = false;
+    aSysFontData.bFakeItalic = false;
+    aSysFontData.bAntialias = true;
+    return aSysFontData;
 }
 
 SystemGraphicsData SvpSalGraphics::GetGraphicsData() const

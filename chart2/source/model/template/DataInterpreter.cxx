@@ -33,7 +33,7 @@
 
 #include "DataInterpreter.hxx"
 #include "DataSeries.hxx"
-#include "DataSource.hxx"
+#include "DataSourceHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "macros.hxx"
 #include "CommonConverters.hxx"
@@ -355,7 +355,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     // add unused data at end
     copy( aUnusedDataVec.begin(), aUnusedDataVec.end(), back_inserter( aResultVec ));
 
-    return Reference< data::XDataSource >( new DataSource( ContainerToSequence( aResultVec )));
+    return Reference< data::XDataSource >( DataSourceHelper::createDataSource( ContainerToSequence( aResultVec ) ) );
 }
 
 // convenience methods

@@ -39,6 +39,7 @@
 #include "target.hxx"
 #include "rangelst.hxx"         // ScRangeListRef
 #include "shellids.hxx"
+#include "tabprotection.hxx" // for ScPasswordHash
 
 class FmFormShell;
 class SbxObject;
@@ -417,7 +418,7 @@ public:
 
     void    ExecuteCellFormatDlg    ( SfxRequest& rReq, USHORT nTabPage = 0xffff );
 
-    BOOL    GetFunction( String& rFuncStr );
+    BOOL    GetFunction( String& rFuncStr, sal_uInt16 nErrCode = 0 );
 
     void    StartSimpleRefDialog( const String& rTitle, const String& rInitVal,
                                     BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection );
@@ -429,6 +430,8 @@ public:
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
     BOOL    HasAccessibilityObjects();
+
+    bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
     using ScTabView::ShowCursor;
 };

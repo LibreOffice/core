@@ -274,9 +274,10 @@ void OSectionWindow::Resize()
 // -----------------------------------------------------------------------------
 void OSectionWindow::setCollapsed(sal_Bool _bCollapsed)
 {
-    m_aReportSection.Show(_bCollapsed);
-    m_aEndMarker.Show(_bCollapsed);
-    m_aSplitter.Show(_bCollapsed);
+    if ( m_aStartMarker.isCollapsed() != _bCollapsed )
+    {
+        m_aStartMarker.setCollapsed(_bCollapsed);
+    }
 }
 //-----------------------------------------------------------------------------
 void OSectionWindow::showProperties()
@@ -290,17 +291,20 @@ void OSectionWindow::setMarked(sal_Bool _bMark)
     m_aEndMarker.setMarked(_bMark);
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OSectionWindow, Collapsed, OStartMarker *, _pMarker )
+IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
 {
     if ( _pMarker )
     {
-        setCollapsed(!_pMarker->isCollapsed());
+        sal_Bool bShow = !_pMarker->isCollapsed();
+        m_aReportSection.Show(bShow);
+        m_aEndMarker.Show(bShow);
+        m_aSplitter.Show(bShow);
+
         m_pParent->resize(*this);
         Resize();
         // TRY
         // m_pParent->Invalidate(INVALIDATE_TRANSPARENT | INVALIDATE_NOCHILDREN);
         Invalidate();
-        // _pMarker->Invalidate();
     }
     return 0L;
 }

@@ -33,16 +33,15 @@
 .IF "$(RCTARGET)"!=""
 $(RCTARGET): $(RCFILES) 		\
              $(RCDEPN)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(CCNUMVER)" > "001300000000"
 .IF "$(MFC_INCLUDE)"!=""
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) -I$(MFC_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(COMMAND_ECHO)$(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) -I$(MFC_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ELSE
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(COMMAND_ECHO)$(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ENDIF
 .ELSE
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(COMMAND_ECHO)$(RC) $(INCLUDE) -I$(SOLARRESDIR) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ENDIF
 .ENDIF
 

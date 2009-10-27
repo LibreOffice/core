@@ -163,7 +163,7 @@ public class QueryMetaData extends CommandMetaData
             FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length - 1];
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                if (!FieldColumns[i].m_sFieldName.equals(_sFieldName))
+                if (!FieldColumns[i].getFieldName().equals(_sFieldName))
                 {
                     if (!FieldColumns[i].getCommandName().equals(_sCommandName))
                     {
@@ -222,8 +222,7 @@ public class QueryMetaData extends CommandMetaData
     public String[] getFieldNamesOfCommand(String _sCommandName)
     {
         CommandObject oTable = getTableByName(_sCommandName);
-        return oTable.xColumns.getElementNames();
-
+        return oTable.getColumns().getElementNames();
     }
 
     public void initializeFieldTitleSet(boolean _bAppendMode)
@@ -238,9 +237,10 @@ public class QueryMetaData extends CommandMetaData
             String[] aCommandNames = getIncludedCommandNames();
             for (int i = 0; i < aCommandNames.length; i++)
             {
-                CommandObject oTable = getTableByName(aCommandNames[i]);
-                String sTableName = oTable.Name;
-                String[] LocFieldNames = oTable.xColumns.getElementNames();
+                String sCommandName = aCommandNames[i];
+                CommandObject oTable = getTableByName(sCommandName);
+                String sTableName = oTable.getName();
+                String[] LocFieldNames = oTable.getColumns().getElementNames();
                 for (int a = 0; a < LocFieldNames.length; a++)
                 {
                     String sDisplayFieldName = FieldColumn.composeDisplayFieldName(sTableName, LocFieldNames[a]);
@@ -276,7 +276,7 @@ public class QueryMetaData extends CommandMetaData
     {
         for (int i = 0; i < FieldColumns.length; i++)
         {
-            if (FieldColumns[i].bIsNumberFormat)
+            if (FieldColumns[i].isNumberFormat())
             {
                 return true;
             }

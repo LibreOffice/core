@@ -36,13 +36,10 @@
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/window.hxx>
-
-// #i72754#
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
-
-// #i75163#
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <vcl/cursor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -63,7 +60,7 @@ namespace sdr
             // compare the MapModes for zoom/scroll changes
             if(maBufferDevice.GetMapMode() != getOutputDevice().GetMapMode())
             {
-                const sal_Bool bZoomed(
+                const bool bZoomed(
                     maBufferDevice.GetMapMode().GetScaleX() != getOutputDevice().GetMapMode().GetScaleX()
                     || maBufferDevice.GetMapMode().GetScaleY() != getOutputDevice().GetMapMode().GetScaleY());
 
@@ -71,7 +68,7 @@ namespace sdr
                 {
                     const Point& rOriginOld = maBufferDevice.GetMapMode().GetOrigin();
                     const Point& rOriginNew = getOutputDevice().GetMapMode().GetOrigin();
-                    const sal_Bool bScrolled(rOriginOld != rOriginNew);
+                    const bool bScrolled(rOriginOld != rOriginNew);
 
                     if(bScrolled)
                     {
@@ -81,8 +78,8 @@ namespace sdr
                         const Size aOutputSizePixel(maBufferDevice.GetOutputSizePixel());
 
                         // remember and switch off MapMode
-                        const sal_Bool bMapModeWasEnabled(maBufferDevice.IsMapModeEnabled());
-                        maBufferDevice.EnableMapMode(sal_False);
+                        const bool bMapModeWasEnabled(maBufferDevice.IsMapModeEnabled());
+                        maBufferDevice.EnableMapMode(false);
 
                         // scroll internally buffered stuff
                         const Point aDestinationOffsetPixel(aOriginNewPixel - aOriginOldPixel);
@@ -132,10 +129,10 @@ namespace sdr
             Rectangle aRegionRectanglePixel;
 
             // MapModes off
-            const sal_Bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
-            const sal_Bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
-            getOutputDevice().EnableMapMode(sal_False);
-            ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(sal_False);
+            const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
+            const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
+            getOutputDevice().EnableMapMode(false);
+            ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(false);
 
             while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
             {
@@ -200,10 +197,10 @@ namespace sdr
             Rectangle aRegionRectanglePixel;
 
             // MapModes off
-            const sal_Bool bMapModeWasEnabledDest(rSource.IsMapModeEnabled());
-            const sal_Bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
-            rSource.EnableMapMode(sal_False);
-            maBufferDevice.EnableMapMode(sal_False);
+            const bool bMapModeWasEnabledDest(rSource.IsMapModeEnabled());
+            const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
+            rSource.EnableMapMode(false);
+            maBufferDevice.EnableMapMode(false);
 
             while(aRegion.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
             {
@@ -221,7 +218,7 @@ namespace sdr
                 static bool bDoPaintForVisualControl(false);
                 if(bDoPaintForVisualControl)
                 {
-                    const sal_Bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
+                    const bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
                     getOutputDevice().EnableMapMode(false);
                     getOutputDevice().SetLineColor(COL_LIGHTRED);
                     getOutputDevice().SetFillColor();
@@ -259,15 +256,21 @@ namespace sdr
                     maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
                 aBufferRememberedRangeLogic.transform(getOutputDevice().GetInverseViewTransformation());
 
+                // prepare cursor handling
                 const bool bTargetIsWindow(OUTDEV_WINDOW == rmOutputDevice.GetOutDevType());
-                Cursor* pCursor = 0;
+                bool bCursorWasEnabled(false);
 
-                // #i75172# switch off VCL cursor during overlay refresh
+                // #i80730# switch off VCL cursor during overlay refresh
                 if(bTargetIsWindow)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
-                    pCursor = rWindow.GetCursor();
-                    rWindow.SetCursor(0);
+                    Cursor* pCursor = rWindow.GetCursor();
+
+                    if(pCursor && pCursor->IsVisible())
+                    {
+                        pCursor->Hide();
+                        bCursorWasEnabled = true;
+                    }
                 }
 
                 if(DoRefreshWithPreRendering())
@@ -282,7 +285,7 @@ namespace sdr
                     }
 
                     maOutputBufferDevice.SetMapMode(getOutputDevice().GetMapMode());
-                    maOutputBufferDevice.EnableMapMode(sal_False);
+                    maOutputBufferDevice.EnableMapMode(false);
                     maOutputBufferDevice.SetDrawMode(maBufferDevice.GetDrawMode());
                     maOutputBufferDevice.SetSettings(maBufferDevice.GetSettings());
                     maOutputBufferDevice.SetAntialiasing(maBufferDevice.GetAntialiasing());
@@ -320,8 +323,8 @@ namespace sdr
                     const Size aSize(aRegionRectanglePixel.GetSize());
 
                     {
-                        const sal_Bool bMapModeWasEnabledDest(maBufferDevice.IsMapModeEnabled());
-                        maBufferDevice.EnableMapMode(sal_False);
+                        const bool bMapModeWasEnabledDest(maBufferDevice.IsMapModeEnabled());
+                        maBufferDevice.EnableMapMode(false);
 
                         maOutputBufferDevice.DrawOutDev(
                             aTopLeft, aSize, // destination
@@ -334,14 +337,14 @@ namespace sdr
 
                     // paint overlay content for remembered region, use
                     // method from base class directly
-                    maOutputBufferDevice.EnableMapMode(sal_True);
+                    maOutputBufferDevice.EnableMapMode(true);
                     OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, maOutputBufferDevice);
-                    maOutputBufferDevice.EnableMapMode(sal_False);
+                    maOutputBufferDevice.EnableMapMode(false);
 
                     // copy to output
                     {
-                        const sal_Bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
-                        getOutputDevice().EnableMapMode(sal_False);
+                        const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
+                        getOutputDevice().EnableMapMode(false);
 
                         getOutputDevice().DrawOutDev(
                             aTopLeft, aSize, // destination
@@ -367,47 +370,17 @@ namespace sdr
                     OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, getOutputDevice());
                 }
 
-                // VCL hack for transparent child windows
-                // Problem is e.g. a radiobuttion form control in life mode. The used window
-                // is a transparence vcl childwindow. This flag only allows the parent window to
-                // paint into the child windows area, but there is no mechanism which takes
-                // care for a repaint of the child window. A transparent child window is NOT
-                // a window which always keeps it's content consistent over the parent, but it's
-                // more like just a paint flag for the parent.
-                // To get the update, the windows in question are updated manulally here.
-                if(bTargetIsWindow)
+                // #i80730# restore visibility of VCL cursor
+                if(bCursorWasEnabled)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
+                    Cursor* pCursor = rWindow.GetCursor();
 
-                    if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
+                    if(pCursor)
                     {
-                        const Rectangle aRegionRectanglePixel(
-                            maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
-                            maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-
-                        for(sal_uInt16 a(0); a < rWindow.GetChildCount(); a++)
-                        {
-                            Window* pCandidate = rWindow.GetChild(a);
-
-                            if(pCandidate && pCandidate->IsPaintTransparent())
-                            {
-                                const Rectangle aCandidatePosSizePixel(pCandidate->GetPosPixel(), pCandidate->GetSizePixel());
-
-                                if(aCandidatePosSizePixel.IsOver(aRegionRectanglePixel))
-                                {
-                                    pCandidate->Invalidate(INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN);
-                                    pCandidate->Update();
-                                }
-                            }
-                        }
+                        // check if cursor still exists. It may have been deleted from someone
+                        pCursor->Show();
                     }
-                }
-
-                // #i75172# restore VCL cursor
-                if(bTargetIsWindow)
-                {
-                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
-                    rWindow.SetCursor(pCursor);
                 }
 
                 // forget remembered Region
@@ -417,8 +390,11 @@ namespace sdr
             return 0;
         }
 
-        OverlayManagerBuffered::OverlayManagerBuffered(OutputDevice& rOutputDevice, sal_Bool bRefreshWithPreRendering)
-        :   OverlayManager(rOutputDevice),
+        OverlayManagerBuffered::OverlayManagerBuffered(
+            OutputDevice& rOutputDevice,
+            OverlayManager* pOldOverlayManager,
+            bool bRefreshWithPreRendering)
+        :   OverlayManager(rOutputDevice, pOldOverlayManager),
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
@@ -515,9 +491,9 @@ namespace sdr
             }
         }
 
-        void OverlayManagerBuffered::SetRefreshWithPreRendering(sal_Bool bNew)
+        void OverlayManagerBuffered::SetRefreshWithPreRendering(bool bNew)
         {
-            if(mbRefreshWithPreRendering != bNew)
+            if((bool)mbRefreshWithPreRendering != bNew)
             {
                 mbRefreshWithPreRendering = bNew;
             }

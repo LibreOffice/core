@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE :  	settings.mk
-
+.IF "$(L10N_framework)"==""
 # don't link default libraries from sal
 UWINAPILIB=
 LIBSALCPPRT=
@@ -86,7 +86,10 @@ DEFLIB1NAME	=$(TARGET)
 
 # --- Targets ----------------------------------
 
+.ENDIF # L10N_framework
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk $(TARGET).flt
     @$(TYPE) $(TARGET).flt > $@
+
+.ENDIF # L10N_framework

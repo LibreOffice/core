@@ -201,6 +201,9 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
             if( xCell->isMerged() )
             {
                 findMergeOrigin( mxTable, mnRight, mnBottom, rEnd.mnCol, rEnd.mnRow );
+                // merge not possible if selection is only one cell and all its merges
+                if( rEnd == rStart )
+                    return false;
                 xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( rEnd.mnCol, rEnd.mnRow ).get() ) );
             }
         }
@@ -266,12 +269,14 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
         throw DisposedException();
 
     SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
-    if( pModel )
+    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
+
+    if( bUndo )
         pModel->BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
 
     try
     {
-        merge( aStart.mnCol, aStart.mnRow, aEnd.mnCol - aStart.mnCol + 1, aEnd.mnRow - aStart.mnRow + 1 );
+        mxTable->merge( aStart.mnCol, aStart.mnRow, aEnd.mnCol - aStart.mnCol + 1, aEnd.mnRow - aStart.mnRow + 1 );
         mxTable->optimize();
         mxTable->setModified(sal_True);
     }
@@ -280,42 +285,11 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
         DBG_ERROR("sdr::table::CellCursor::merge(), exception caught!");
     }
 
-    if( pModel )
+    if( bUndo )
         pModel->EndUndo();
-}
 
-// -----------------------------------------------------------------------------
-
-void CellCursor::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
-{
-    // merge first cell
-    CellRef xOriginCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-    if( xOriginCell.is() )
-    {
-        xOriginCell->AddUndo();
-        xOriginCell->merge( nColSpan, nRowSpan );
-    }
-
-    const sal_Int32 nLastRow = nRow + nRowSpan;
-    const sal_Int32 nLastCol = nCol + nColSpan;
-
-    sal_Int32 nTempCol = nCol + 1;
-
-    // merge remaining cells
-    for( ; nRow < nLastRow; nRow++ )
-    {
-        for( ; nTempCol < nLastCol; nTempCol++ )
-        {
-            CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nTempCol, nRow ).get() ) );
-            if( xCell.is() && !xCell->isMerged() )
-            {
-                xCell->AddUndo();
-                xCell->setMerged();
-                xOriginCell->mergeContent( xCell );
-            }
-        }
-        nTempCol = nCol;
-    }
+    if( pModel )
+        pModel->SetChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -362,8 +336,13 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
         CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
         if( !xCell.is() || xCell->isMerged() )
         {
-            // merged cells are ignored, but newly added columns will be added to leftovers
-            rLeftOvers[nRow] += nNewCols;
+            if( nNewCols > 0 )
+            {
+                // merged cells are ignored, but newly added columns will be added to leftovers
+                xCell.set( dynamic_cast< Cell* >(mxTable->getCellByPosition( nCol+1, nRow ).get() ) );
+                if( !xCell.is() || !xCell->isMerged() )
+                rLeftOvers[nRow] += nNewCols;
+            }
         }
         else
         {
@@ -388,12 +367,9 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
                     if( nSplits == 0 )
                         nSplitSpan = nCellsAvailable - ((nSplitSpan+1) * nColumns) - 1;
 
-                    xCell->merge( nSplitSpan + 1, nRowSpan + 1);
+                    mxTable->merge( nSplitCol, nRow, nSplitSpan + 1, nRowSpan + 1);
                     if( nSplits > 0 )
-                    {
                         nSplitCol += nSplitSpan + 1;
-                        xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( nSplitCol, nRow ).get() ) );
-                    }
                 }
 
                 do
@@ -407,7 +383,7 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
             {
                 // cope with outside cells, merge if needed
                 if( nColSpan < (rLeftOvers[nRow] + nNewCols) )
-                    merge( nCol, nRow, (rLeftOvers[nRow] + nNewCols) + 1, nRowSpan + 1 );
+                    mxTable->merge( nCol, nRow, (rLeftOvers[nRow] + nNewCols) + 1, nRowSpan + 1 );
 
                 do
                 {
@@ -476,8 +452,13 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
         CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
         if( !xCell.is() || xCell->isMerged() )
         {
-            // merged cells are ignored, but newly added columns will be added to leftovers
-            rLeftOvers[nCol] += nNewRows;
+            if( nNewRows )
+            {
+                // merged cells are ignored, but newly added columns will be added to leftovers
+                xCell.set( dynamic_cast< Cell* >(mxTable->getCellByPosition( nCol, nRow+1 ).get() ) );
+                if( !xCell.is() || !xCell->isMerged() )
+                    rLeftOvers[nCol] += nNewRows;
+            }
         }
         else
         {
@@ -502,12 +483,9 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
                     if( nSplits == 0 )
                         nSplitSpan = nCellsAvailable - ((nSplitSpan+1) * nRows) - 1;
 
-                    xCell->merge( nColSpan + 1, nSplitSpan + 1 );
+                    mxTable->merge( nCol, nSplitRow, nColSpan + 1, nSplitSpan + 1 );
                     if( nSplits > 0 )
-                    {
                         nSplitRow += nSplitSpan + 1;
-                        xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nSplitRow ).get() ) );
-                    }
                 }
 
                 do
@@ -521,7 +499,7 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
             {
                 // cope with outside cells, merge if needed
                 if( nRowSpan < (rLeftOvers[nCol] + nNewRows) )
-                    merge( nCol, nRow, nColSpan + 1, (rLeftOvers[nCol] + nNewRows) + 1 );
+                    mxTable->merge( nCol, nRow, nColSpan + 1, (rLeftOvers[nCol] + nNewRows) + 1 );
 
                 do
                 {
@@ -557,7 +535,8 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
         throw DisposedException();
 
     SdrModel* pModel = mxTable->getSdrTableObj()->GetModel();
-    if( pModel )
+    const bool bUndo = pModel && mxTable->getSdrTableObj()->IsInserted() && pModel->IsUndoEnabled();
+    if( bUndo )
         pModel->BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
 
     try
@@ -577,8 +556,11 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
         throw NoSupportException();
     }
 
-    if( pModel )
+    if( bUndo )
         pModel->EndUndo();
+
+    if( pModel )
+        pModel->SetChanged();
 }
 
 // -----------------------------------------------------------------------------

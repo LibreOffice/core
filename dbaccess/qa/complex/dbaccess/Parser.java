@@ -31,7 +31,6 @@ package complex.dbaccess;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdbc.DataType;
@@ -46,7 +45,8 @@ public class Parser extends CRMBasedTestCase
     {
         return new String[] {
             "checkJoinSyntax",
-            "checkParameterTypes"
+            "checkParameterTypes",
+            "checkWhere",
         };
     }
 
@@ -71,12 +71,48 @@ public class Parser extends CRMBasedTestCase
         }
     }
 
+    public void checkWhere() throws Exception
+    {
+        final XSingleSelectQueryComposer composer = createQueryComposer();
+        final String SELECT = "SELECT \"products\".\"Name\" FROM \"products\" WHERE ";
+        final String[] queries = new String[]
+        {
+             "\"ID\" in ( 1,2,3,4)"
+            ,"not ( \"ID\" in ( 1,2,3,4))"
+            ,"(1 = 1) is true"
+            ,"(1 = 1) is not false"
+            ,"(1 = 1) is not null"
+            ,"not ( (1 = 1) is not null)"
+            ,"'a' like 'a%'"
+            ,"not ( 'a' like 'a%')"
+            ,"'a' not like 'a%'"
+            ,"1 between 0 and 2"
+            ,"not ( 1 between 0 and 2 )"
+            ,"1 not between 3 and 4"
+            ,"1 not between ( select \"ID\" from \"categories\") and ( select \"ID\" from \"categories\")"
+            ,"1 = 1"
+            ,"0 < 1"
+            ,"not(0 < 1)"
+            ,"1 > 0"
+            ,"not(1 > 0)"
+            ,"1 <> 0"
+            ,"(1 <> 0 and 'a' = 'a' and 'c' = 'd') or (1 = 1 and 2 = 2 and 3 = 4)"
+            ,"not ( 1 <> 0 )"
+            ,"\"CategoryID\" in ( select \"ID\" from \"categories\")"
+            ,"not (\"CategoryID\" in ( select \"ID\" from \"categories\"))"
+            ,"\"CategoryID\" not in ( select \"ID\" from \"categories\")"
+        };
+        for (int i = 0; i < queries.length; i++)
+        {
+            composer.setQuery( SELECT + queries[i]);
+        }
+    }
     // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
     public void checkJoinSyntax() throws Exception
     {
-        XSingleSelectQueryComposer composer = createQueryComposer();
+        final XSingleSelectQueryComposer composer = createQueryComposer();
 
         // feed the composer with some statements. If any of those cannot be parsed, the composer
         // will throw an exception - which is a regression then
@@ -84,6 +120,21 @@ public class Parser extends CRMBasedTestCase
             "SELECT \"categories\".\"Name\", " +
                     "\"products\".\"Name\" " +
             "FROM \"products\" RIGHT OUTER JOIN \"categories\" AS \"categories\" ON \"products\".\"CategoryID\" = \"categories\".\"ID\"" );
+
+        composer.setQuery(
+            "SELECT \"categories\".\"Name\", " +
+                    "\"products\".\"Name\" " +
+            "FROM \"products\" LEFT OUTER JOIN \"categories\" AS \"categories\" ON \"products\".\"CategoryID\" = \"categories\".\"ID\"" );
+
+        composer.setQuery(
+            "SELECT \"categories\".\"Name\", " +
+                    "\"products\".\"Name\" " +
+            "FROM \"products\" CROSS JOIN \"categories\" AS \"categories\"" );
+
+        composer.setQuery(
+            "SELECT \"categories\".\"Name\", " +
+                    "\"products\".\"Name\" " +
+            "FROM \"products\" INNER JOIN \"categories\" AS \"categories\" ON \"products\".\"CategoryID\" = \"categories\".\"ID\"" );
 
         // just to be sure the composer *really* parses upon setting the query: feed it with
         // an unparseable statement
@@ -101,27 +152,27 @@ public class Parser extends CRMBasedTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private void impl_checkParameters( final String _statement, final String[] _expectedParameterNames, final int[] _expectedParameterTypes, String _context ) throws Exception
+    private void impl_checkParameters( final String _statement, final String[] _expectedParameterNames, final int[] _expectedParameterTypes,final String _context ) throws Exception
     {
-        XSingleSelectQueryComposer composer = createQueryComposer();
+        final XSingleSelectQueryComposer composer = createQueryComposer();
         composer.setQuery( _statement );
 
         assureEquals( "checkParameterTypes: internal error", _expectedParameterNames.length, _expectedParameterTypes.length );
 
-        XParametersSupplier paramSupp = (XParametersSupplier)UnoRuntime.queryInterface(
+        final XParametersSupplier paramSupp = (XParametersSupplier)UnoRuntime.queryInterface(
             XParametersSupplier.class, composer );
-        XIndexAccess parameters = paramSupp.getParameters();
+        final XIndexAccess parameters = paramSupp.getParameters();
 
         assureEquals( "(ctx: " + _context + ") unexpected parameter count", _expectedParameterNames.length, parameters.getCount() );
         for ( int i=0; i<parameters.getCount(); ++i )
         {
-            XPropertySet parameter = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+            final XPropertySet parameter = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
                 parameters.getByIndex(i) );
 
-            String name = (String)parameter.getPropertyValue( "Name" );
+            final String name = (String)parameter.getPropertyValue( "Name" );
             assureEquals( "(ctx: " + _context + ") unexpected parameter name for parameter number " + ( i + 1 ), _expectedParameterNames[i], name );
 
-            int type = ((Integer)parameter.getPropertyValue( "Type" )).intValue();
+            final int type = ((Integer)parameter.getPropertyValue( "Type" )).intValue();
             assureEquals( "(ctx: " + _context + ") unexpected data type for parameter number " + ( i + 1 ), _expectedParameterTypes[i], type );
         }
     }

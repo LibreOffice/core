@@ -2,32 +2,32 @@
 <!--
 
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-  
+
   Copyright 2008 by Sun Microsystems, Inc.
- 
+
   OpenOffice.org - a multi-platform office productivity suite
- 
+
   $RCSfile: style_mapping_css.xsl,v $
- 
-  $Revision: 1.3 $
- 
+
+  $Revision: 1.3.14.3 $
+
   This file is part of OpenOffice.org.
- 
+
   OpenOffice.org is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License version 3
   only, as published by the Free Software Foundation.
- 
+
   OpenOffice.org is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU Lesser General Public License version 3 for more details
   (a copy is included in the LICENSE file that accompanied this code).
- 
+
   You should have received a copy of the GNU Lesser General Public License
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
 -->
 <!--
 	For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
@@ -98,7 +98,7 @@
 
 	<!-- Maps fo:margin as well fo:margin-top, fo:margin-bottom, fo:padding-left, fo:margin-right -->
 	<!-- Maps fo:padding as well fo:padding-top, fo:padding-bottom, fo:padding-left, fo:padding-right -->
-	<xsl:template match="@fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">
+	<xsl:template match="@fo:letter-spacing | @fo:line-height | @fo:width |@fo:margin | @fo:margin-top | @fo:margin-bottom | @fo:margin-left | @fo:margin-right | @fo:padding | @fo:padding-top | @fo:padding-bottom | @fo:padding-left | @fo:padding-right">
 		<xsl:value-of select="substring-after(name(), ':')"/>
 		<xsl:text>:</xsl:text>
 		<!-- Map once erroneusly used inch shortage 'inch' to CSS shortage 'in' -->
@@ -118,10 +118,24 @@
 			Otherwise a table cell style-class would always be outnumbered by the run-time alignment value -->
 		<xsl:choose>
 			<xsl:when test="contains(., 'start')">
-				<xsl:text>text-align:left ! important; </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
+                        <xsl:text>text-align:right ! important; </xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>text-align:left ! important; </xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
 			</xsl:when>
 			<xsl:when test="contains(., 'end')">
-				<xsl:text>text-align:right ! important; </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="parent::*/@style:writing-mode and contains(parent::*/@style:writing-mode, 'rl')">
+                        <xsl:text>text-align:left ! important;</xsl:text> 
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>text-align:right ! important; </xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>text-align:</xsl:text>
@@ -281,8 +295,12 @@
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
-				<!-- *** Properties with a no 'fo:' or 'style:' prefix *** -->
-
+	<xsl:template match="@style:writing-mode">
+        <xsl:text>writing-mode:</xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>; </xsl:text>
+	</xsl:template>    
+    <!-- *** Properties with a no 'fo:' or 'style:' prefix *** -->
 	<xsl:template match="@table:align">
 		<xsl:choose>
 			<xsl:when test=".='left'">

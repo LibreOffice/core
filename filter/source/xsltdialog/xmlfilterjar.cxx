@@ -35,15 +35,15 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -62,6 +62,7 @@
 using namespace rtl;
 using namespace osl;
 using namespace comphelper;
+using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
@@ -173,8 +174,14 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
         // create the package jar file
 
-        Sequence< Any > aArguments( 1 );
+        Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= rPackageURL;
+
+        // let ZipPackage be used ( no manifest.xml is required )
+        beans::NamedValue aArg;
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+        aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
+        aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
@@ -270,8 +277,14 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
     {
         // create the package jar file
 
-        Sequence< Any > aArguments( 1 );
+        Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= rPackageURL;
+
+        // let ZipPackage be used ( no manifest.xml is required )
+        beans::NamedValue aArg;
+        aArg.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StorageFormat" ) );
+        aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
+        aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(

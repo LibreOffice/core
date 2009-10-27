@@ -112,7 +112,8 @@ ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode )
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
     ScRange aRange;
-    if ( GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE )
+    ScMarkType eMarkType = GetViewData()->GetSimpleArea(aRange);
+    if ( eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED )
         pData = pDocSh->GetDBData( aRange, eMode, FALSE );
     else if ( eMode != SC_DB_OLD )
         pData = pDocSh->GetDBData(

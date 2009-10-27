@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
-#ifndef _COM_SUN_STAR_CONTAINER_XIndexCONTAINER_HPP_
+#include "comphelper_module.hxx"
+
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -48,11 +48,6 @@
 using namespace com::sun::star;
 
 typedef std::vector < uno::Sequence< beans::PropertyValue > > IndexedPropertyValues;
-
-uno::Sequence< rtl::OUString > SAL_CALL IndexedPropertyValuesContainer_getSupportedServiceNames() throw();
-rtl::OUString SAL_CALL IndexedPropertyValuesContainer_getImplementationName() throw();
-uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer_createInstance(
-                const uno::Reference< uno::XComponentContext > & rxContext ) throw( uno::Exception );
 
 class IndexedPropertyValuesContainer : public cppu::WeakImplHelper2< container::XIndexContainer, lang::XServiceInfo >
 {
@@ -90,6 +85,11 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo - static versions (used for component registration)
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
+    static uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
 private:
     IndexedPropertyValues maProperties;
@@ -233,7 +233,12 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
 //XServiceInfo
 ::rtl::OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return IndexedPropertyValuesContainer_getImplementationName();
+    return getImplementationName_static();
+}
+
+::rtl::OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName_static(  )
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndexedPropertyValuesContainer" ) );
 }
 
 sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
@@ -244,25 +249,25 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const ::rtl::
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return IndexedPropertyValuesContainer_getSupportedServiceNames();
+    return getSupportedServiceNames_static();
 }
 
 
-uno::Sequence< rtl::OUString > SAL_CALL IndexedPropertyValuesContainer_getSupportedServiceNames() throw()
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames_static(  )
 {
     const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.IndexedPropertyValues" ) );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL IndexedPropertyValuesContainer_getImplementationName() throw()
-{
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndexedPropertyValuesContainer" ) );
-}
 
-uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer_createInstance(
-                const uno::Reference< uno::XComponentContext >&) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer::Create(
+                const uno::Reference< uno::XComponentContext >&)
 {
     return (cppu::OWeakObject*)new IndexedPropertyValuesContainer();
 }
 
+void createRegistryInfo_IndexedPropertyValuesContainer()
+{
+    static ::comphelper::module::OAutoRegistration< IndexedPropertyValuesContainer > aAutoRegistration;
+}

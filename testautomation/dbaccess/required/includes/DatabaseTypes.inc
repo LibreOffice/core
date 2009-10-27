@@ -87,7 +87,7 @@ testcase tMySQLODBCProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("MySQLODBC"))
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:mysql:odbc:*"))
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -125,7 +125,7 @@ testcase tMySQLJDBCProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("MySQLJDBC"))    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:mysql:jdbc:*"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -175,7 +175,7 @@ testcase tAdabasProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("AdabasD"))    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:adabas:*"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -213,7 +213,7 @@ testcase tOracleJDBCProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("OracleJDBC")    
+        DataBaseType.select(hGetDatabaseDisplayName("jdbc:oracle:thin:*"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -249,7 +249,7 @@ testcase tJDBCProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("JDBC")    
+        DataBaseType.select(hGetDatabaseDisplayName("jdbc:*"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -282,7 +282,7 @@ testcase tLDAPProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("LDAP")  + 1 ) ' +1 because for mysql there are 2 entries    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:address:ldap:*"))
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -325,7 +325,7 @@ testcase tEvolutionProperties
         call DialogTest(TabGeneral)
         try
             if ( DatabaseType.getItemCount() > 12 ) then
-                DataBaseType.select(getIdForDatabaseType("Evolution"))    
+                DataBaseType.select(hGetDatabaseDisplayName("sdbc:address:evolution:ldap"))
                 Kontext "ConnectionType"        
                 ConnectionType.OK
             else
@@ -365,7 +365,7 @@ testcase tMozillaProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("Mozilla"))    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:address:mozilla:"))
 
     'add sleep to give OOo time to react 
     sleep(2)    
@@ -396,7 +396,7 @@ testcase tSpreadsheetProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("CALC"))    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:calc:*"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -426,7 +426,7 @@ testcase tTextProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("Text"))    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:flat:*"))
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -464,7 +464,7 @@ testcase tdBaseProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("dBase"))    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:dbase:*"))
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -502,7 +502,7 @@ testcase tODBCProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("ODBC"))    
+        DataBaseType.select(hGetDatabaseDisplayName("sdbc:odbc:*"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
@@ -576,12 +576,12 @@ function fCheckAdvancedDialog(sType as string)
         elseif sType = "MySQLODBC" OR sType = "MySQLJDBC" then
 
             'call fcheckControl(SQL92Check)
-            call fcheckControl(AppendAlias)
+            'call fcheckControl(AppendAlias)
             call fcheckControl(Ignoreprivileges)
-            call fcheckControl(ParameterSubstiti)
+            'call fcheckControl(ParameterSubstiti)
             call fcheckControl(DisplayVersionColumns)
             call fcheckControl(BooleanComparison)
-            call fcheckControl(EnableOuterJoin)
+            'call fcheckControl(EnableOuterJoin)
             call fcheckControl(CheckRequiredFields)
         
             

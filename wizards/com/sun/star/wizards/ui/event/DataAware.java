@@ -51,7 +51,6 @@ import java.util.Iterator;
  * Data Object.
  */
 public abstract class DataAware {
-    protected static Class[] EMPTY_ARRAY = new Class[0];
 
     /**
      * this is the data object.
@@ -294,11 +293,18 @@ public abstract class DataAware {
          * @param obj the object which contains the property.
          * @return the get method reflection object.
          */
-        protected Method createGetMethod(String propName, Object obj) {
+        private static Class[] EMPTY_ARRAY = new Class[0];
+
+        protected Method createGetMethod(String propName, Object obj)
+        {
             Method m = null;
-            try { //try to get a "get" method.
+            try
+            { //try to get a "get" method.
+
                 m = obj.getClass().getMethod("get" + propName, EMPTY_ARRAY);
-            } catch (NoSuchMethodException ex1) {
+            }
+            catch (NoSuchMethodException ex1)
+            {
                 throw new IllegalArgumentException("get" + propName + "() method does not exist on " + obj.getClass().getName());
             }
             return m;

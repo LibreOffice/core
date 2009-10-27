@@ -43,6 +43,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -63,6 +64,7 @@
 #include <sot/storage.hxx>
 #include <rsc/rscsfx.hxx>
 
+#include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/shell.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -207,11 +209,13 @@ enum SfxTitleQuery
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 
-class SFX2_DLLPUBLIC SfxObjectShell: public SfxShell, virtual public SotObject, public ::comphelper::IEmbeddedHelper
+class SFX2_DLLPUBLIC SfxObjectShell :
+    public SfxShell, virtual public SotObject,
+    public ::comphelper::IEmbeddedHelper, public ::sfx2::IXmlIdRegistrySupplier
 {
 friend struct ModifyBlocker_Impl;
 
-public:
+private:
     struct SfxObjectShell_Impl* pImp;               // interne Daten
 
     SfxMedium *                 pMedium;            // Beschreibung der Datei bzw. des Storage, in dem sich das Objekt befindet
@@ -232,10 +236,6 @@ private:
     SAL_DLLPRIVATE sal_Bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
 //REMOVE        sal_Bool                    SaveInfoAndConfig_Impl( SvStorageRef pNewStg );
-
-    SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
-
 
 //#endif
 
@@ -325,7 +325,10 @@ public:
     void                        ResetError();
     sal_uInt32                  GetError() const;
     sal_uInt32                  GetErrorCode() const;
-    void                        SetError(sal_uInt32 rErr);
+    void                        SetError( sal_uInt32 rErr, const ::rtl::OUString& aLogMessage );
+
+    void                        AddLog( const ::rtl::OUString& aMessage );
+    void                        StoreLog();
 
     sal_Bool                    DoInitNew( SfxMedium* pMedium=0 );
     sal_Bool                    DoLoad( SfxMedium* pMedium );
@@ -521,6 +524,7 @@ public:
 
     //determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
+    sal_uInt16                  GetAutoStyleFilterIndex();
     virtual sal_Bool            HasBasic() const;
     BasicManager*               GetBasicManager() const;
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
@@ -726,8 +730,11 @@ public:
     SAL_DLLPRIVATE void BreakMacroSign_Impl( sal_Bool bBreakMacroSing );
     SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
     SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+    SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
+    SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
-    SAL_DLLPRIVATE static SEQUENCE< OUSTRING > GetEventNames_Impl();
+    SAL_DLLPRIVATE SEQUENCE< OUSTRING > GetEventNames_Impl();
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
 
@@ -790,6 +797,13 @@ public:
     SAL_DLLPRIVATE SfxAcceleratorManager* GetAccMgr_Impl();
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
+
+    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >
+        ImplAnalyzeSignature(
+            sal_Bool bScriptingContent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >& xSigner
+                = ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >() );
+
     SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = FALSE );
     SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 //#endif

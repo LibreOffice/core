@@ -64,9 +64,13 @@ class ResMgr;
 struct FmFoundRecordInformation;
 struct FmSearchContext;
 
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
+
 namespace dbaui
 {
-
     // =========================================================================
 
     typedef ::cppu::ImplInheritanceHelper9  <   OGenericUnoController
@@ -110,6 +114,8 @@ namespace dbaui
         ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
 
         OAsyncronousLink        m_aAsyncGetCellFocus;
+        OAsyncronousLink        m_aAsyncDisplayError;
+        ::dbtools::SQLExceptionInfo m_aCurrentError;
 
         String                  m_sStateSaveRecord;
         String                  m_sStateUndoRecord;
@@ -124,7 +130,7 @@ namespace dbaui
 
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
-        sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
+        bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper
@@ -151,7 +157,7 @@ namespace dbaui
         sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
         sal_Bool    isLoaded() const;
         sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
-        void        setLoadingStarted()     { m_bLoadCanceled = sal_False; }
+        void        onStartLoading( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable );
         void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
 
         const TransferableDataHelper&
@@ -230,6 +236,8 @@ namespace dbaui
         virtual void CellDeactivated();
         virtual void BeforeDrop();
         virtual void AfterDrop();
+
+    public:
 
     protected:
         virtual ~SbaXDataBrowserController();
@@ -316,10 +324,7 @@ namespace dbaui
 
         void enterFormAction();
         void leaveFormAction();
-        bool errorOccured() const { return m_bErrorOccured; }
-            // As many form actions don't throw an exception but call their error handler instead we don't have
-            // a chance to recognize errors by exception catching.
-            // So for error recognition the above methods may be used.
+
         // init the formatter if form changes
         void initFormatter();
 
@@ -346,6 +351,8 @@ namespace dbaui
         void        setCurrentColumnPosition( sal_Int16 _nPos );
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
+        void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
+
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, AutoTimer* );
         DECL_LINK( OnClipboardChanged, void* );
@@ -363,6 +370,8 @@ namespace dbaui
             // (the alternative would be to lock the SolarMutex in OnOpenFinished to avoid problems with the needed updates,
             // but playing with this mutex seems very hazardous to me ....)
         DECL_LINK(OnAsyncGetCellFocus, void*);
+
+        DECL_LINK( OnAsyncDisplayError, void* );
     };
 
     //==================================================================

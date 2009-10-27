@@ -57,16 +57,7 @@ const String  C_sIndexDir( "ix" );
 namespace
 {
 
-void    CreateDirectory( const String  &            i_sPath );
 void    CreateDirectory( const csv::ploc::Path &    i_rPath );
-
-void
-CreateDirectory( const String  & i_sPath )
-{
-    csv::ploc::Directory aDirectory(i_sPath);
-    if (NOT aDirectory.Exists())
-        aDirectory.PhysicalCreate();
-}
 
 void
 CreateDirectory( const csv::ploc::Path & i_rPath )

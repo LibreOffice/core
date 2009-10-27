@@ -172,11 +172,20 @@ testcase tOpenNoneDatabaseDocument
         
     Kontext "DocumentCalc"
     if (DocumentCalc.exists()) then
-        printlog "the spreadsheet is loaded"
-        printlog "close spreadsheet again"
+		warnlog "the spreadsheet should not appear"
         call hCloseDocument()
     else
-        warnlog "the spreadsheet is not loaded"
+        Kontext "MessageBox"
+        if(MessageBox.exists(1)) then
+        	printlog "messagebox appear ->> OK"
+        	MessageBox.OK
+            Kontext "DatabaseWizard"	
+    	        DatabaseWizard.Cancel
+        else
+        	warnlog "there should be a message box about the fact that this is no database"
+        	Kontext "DatabaseWizard"	
+	            DatabaseWizard.Cancel
+        endif
     endif
     
 endcase
@@ -204,14 +213,24 @@ endcase
 '-------------------------------------------------------------------------
 testcase tMozilla
 
-    call fCreateMozillaAddressbookDatasource(gOfficePath + "user/work/tt_mozilla.odb")
-    call fOpendatabase(gOfficePath + "user/work/tt_mozilla.odb")
-    
-    Kontext "ContainerView"
-        ViewTables
-    
-    call fCloseDatabase(true)    
+    if ( fCreateMozillaAddressbookDatasource(gOfficePath + "user/work/tt_mozilla.odb") = true) then
+        if ( fOpendatabase(gOfficePath + "user/work/tt_mozilla.odb") = true) then        
+            Kontext "ContainerView"
+                ViewTables
+        else
+            warnlog "mozilla database could not be open."
 
+        endif
+    else
+        qaerrorlog "mozilla database could not be created. Maybe you have no mozilla installed."
+    	Kontext "MessageBox"
+    		if (MessageBox.exists(1)) then
+    			MessageBox.OK
+    		endif
+    endif
+	' try to close the database    
+    call fCloseDatabase(false)
+    
 endcase
 '-------------------------------------------------------------------------
 testcase tJDBC

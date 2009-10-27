@@ -38,6 +38,7 @@
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
 #include "ObjectIdentifier.hxx"
+#include "DataSeriesHelper.hxx"
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -78,7 +79,8 @@ RangeHighlighter::RangeHighlighter(
     const Reference< view::XSelectionSupplier > & xSelectionSupplier ) :
         impl::RangeHighlighter_Base( m_aMutex ),
         m_xSelectionSupplier( xSelectionSupplier ),
-        m_nAddedListenerCount( 0 )
+        m_nAddedListenerCount( 0 ),
+        m_bIncludeHiddenCells(true)
 {
 }
 
@@ -103,6 +105,8 @@ void RangeHighlighter::determineRanges()
             Reference< frame::XModel > xChartModel;
             if( xController.is())
                 xChartModel.set( xController->getModel());
+
+            m_bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( xChartModel );
 
             uno::Any aSelection( m_xSelectionSupplier->getSelection());
             OUString aCID;
@@ -271,11 +275,13 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
                             -1,
                             nPreferredColor,
                             sal_False ));
+
+                sal_Int32 nUnhiddenIndex = DataSeriesHelper::translateIndexFromHiddenToFullSequence( nIndex, xValues, !m_bIncludeHiddenCells );
                 if( xValues.is())
                     aHilightedRanges.push_back(
                         chart2::data::HighlightedRange(
                             xValues->getSourceRangeRepresentation(),
-                            nIndex,
+                            nUnhiddenIndex,
                             nPreferredColor,
                             sal_False ));
             }

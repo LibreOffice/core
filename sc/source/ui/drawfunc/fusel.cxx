@@ -171,7 +171,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else
         {
             BOOL bAlt = rMEvt.IsMod2();
-            if ( !bAlt && pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKMACRO) )
+            if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
             {
                 pView->BegMacroObj(aMDPos, pObj, pPV, pWindow);
                 bReturn = TRUE;
@@ -179,7 +179,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             else
             {
                 String sURL, sTarget;
-                if ( !bAlt && pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER))
                 {
                    // Support for imported Excel docs
                    // Excel is of course not consistent and allows
@@ -200,7 +200,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                    if ( pObj->IsGroupObject() )
                    {
                        SdrObject* pHit = NULL;
-                       if ( pView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                       if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                            pObj = pHit;
                    }
 

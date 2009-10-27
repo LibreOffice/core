@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Allgemein ----------------------------------------------------
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -74,11 +74,26 @@ SHL1STDLIBS= \
         $(BASEGFXLIB)	\
         $(SAXLIB)
 
+# link openssl, copied this bit from ucb/source/ucp/webdav/makefile.mk
+.IF "$(GUI)"=="WNT"
+SHL1STDLIBS+= $(OPENSSLLIB)
+.ELSE # WNT
+.IF "$(OS)"=="SOLARIS"
+SHL1STDLIBS+= -lnsl -lsocket -ldl
+.ENDIF # SOLARIS
+.IF "$(SYSTEM_OPENSSL)"=="YES"
+SHL1STDLIBS+= $(OPENSSLLIB)
+.ELSE
+SHL1STDLIBS+= $(OPENSSLLIBST)
+.ENDIF
+.ENDIF # WNT
+
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=   $(LIB1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 DEFLIB1NAME =$(TARGET)
 
 # --- Targets ----------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE :  target.mk

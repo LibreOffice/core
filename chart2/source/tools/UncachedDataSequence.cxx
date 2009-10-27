@@ -63,8 +63,6 @@ enum
 //     PROP_SOURCE_IDENTIFIER,
     PROP_NUMBERFORMAT_KEY,
     PROP_PROPOSED_ROLE,
-    PROP_HIDDEN,
-    PROP_HIDDEN_VALUES,
     PROP_XML_RANGE
 };
 }  // anonymous namespace
@@ -79,10 +77,10 @@ UncachedDataSequence::UncachedDataSequence(
     const OUString & rRangeRepresentation )
         : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
+          m_nNumberFormatKey(0),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
 }
@@ -93,10 +91,10 @@ UncachedDataSequence::UncachedDataSequence(
     const OUString & rRole )
         : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
+          m_nNumberFormatKey(0),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
     setFastPropertyValue_NoBroadcast( PROP_PROPOSED_ROLE, uno::makeAny( rRole ));
@@ -109,11 +107,9 @@ UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource
           UncachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
-          m_bIsHidden( rSource.m_bIsHidden ),
-          m_aHiddenValues( rSource.m_aHiddenValues ),
           m_xDataProvider( rSource.m_xDataProvider ),
           m_aSourceRepresentation( rSource.m_aSourceRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
 }
@@ -134,18 +130,6 @@ void UncachedDataSequence::registerProperties()
                       0,   // PropertyAttributes
                       & m_sRole,
                       ::getCppuType( & m_sRole ) );
-
-    registerProperty( C2U( "IsHidden" ),
-                      PROP_HIDDEN,
-                      0,   // PropertyAttributes
-                      & m_bIsHidden,
-                      ::getCppuType( & m_bIsHidden ) );
-
-    registerProperty( C2U( "HiddenValues" ),
-                      PROP_HIDDEN_VALUES,
-                      0,   // PropertyAttributes
-                      & m_aHiddenValues,
-                      ::getCppuType( & m_aHiddenValues ) );
 
     registerProperty( C2U( "CachedXMLRange" ),
                       PROP_XML_RANGE,
@@ -266,7 +250,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
     throw (lang::IndexOutOfBoundsException,
            uno::RuntimeException)
 {
-    return 0;
+    return m_nNumberFormatKey;
 }
 
 // ____ XIndexReplace ____

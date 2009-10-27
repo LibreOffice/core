@@ -328,6 +328,9 @@ protected:
     // wird an der Target-View aufgerufen (im Drop-Handler)
     virtual void ReadDragServerInfo( const Point&,SvLBoxDDInfo* );
 
+    // invalidate children on enable/disable
+    virtual void StateChanged( StateChangedType );
+
     virtual ULONG Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,ULONG nPos=LIST_APPEND);
     virtual ULONG Insert( SvLBoxEntry* pEntry,ULONG nRootPos = LIST_APPEND );
     void            InsertTree( SvLBoxEntry* pTree, SvLBoxEntry* pTarget) {pModel->InsertTree( pTree, pTarget ); }

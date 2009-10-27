@@ -900,6 +900,8 @@ inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
         case ocGammaDist:
         case ocPoissonDist:
         case ocAddress:
+        case ocLogNormDist:
+        case ocNormDist:
             return true;
         case ocMissing:
         case ocLog:
@@ -941,6 +943,25 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
             {
                 pNewArr->AddOpCode( ocSep );
                 pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=TRUE()
+            }
+            break;
+        case ocNormDist:
+            if ( mnCurArg == 2 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=TRUE()
+            }
+            break;
+        case ocLogNormDist:
+            if ( mnCurArg == 0 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 0.0 );      // 2nd, mean = 0.0
+            }
+            if ( mnCurArg <= 1 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 3rd, standard deviation = 1.0
             }
             break;
         case ocLog:

@@ -132,17 +132,17 @@ public final class java_remote_bridge_Test extends ComplexTestCase {
             proxyBXInterface[i] = (XInterface) bridgeB.getInstance(name);
 
             // map object:
-            proxyBTestInterface[i] = (TestInterface) UnoRuntime.queryInterface(
+            proxyBTestInterface[i] = UnoRuntime.queryInterface(
                 TestInterface.class, proxyBXInterface[i]);
             proxyBTestInterface[i].function();
 
             // remap object once:
-            TestInterface remapped = (TestInterface) UnoRuntime.queryInterface(
+            TestInterface remapped = UnoRuntime.queryInterface(
                 TestInterface.class, proxyBXInterface[i]);
             remapped.function();
 
             // remap object twice:
-            remapped = (TestInterface) UnoRuntime.queryInterface(
+            remapped = UnoRuntime.queryInterface(
                 TestInterface.class, proxyBXInterface[i]);
             remapped.function();
         }

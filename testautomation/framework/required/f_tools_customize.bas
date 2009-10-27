@@ -39,6 +39,8 @@
 
 sub main
 
+    GLOBAL_USE_NEW_SLEEP = TRUE
+
     use "framework\required\includes\tools_customize.inc"
     
     dim cApp as string

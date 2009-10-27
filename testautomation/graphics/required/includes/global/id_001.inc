@@ -52,9 +52,6 @@
 ' #1 tmFilePrinterSetting
 '\**********************************************************************************
 
-'/// used Documents ///'
-'///"graphics\required\input\tbo_alf_.od?" ///
-
 testcase tiFileSaveAs
 
     dim sFileName as string ' test document & new created doc
@@ -78,8 +75,7 @@ testcase tiFileSaveAs
     end if
 
     sFilter (0) = 0 ' initalize ;-)...
-    '/// used document: "graphics\required\input\tbo_alf_.od?" ///
-
+    printlog " used document: graphics\required\input\tbo_alf_.od?"
     sFileName = "graphics\required\input\tbo_alf_." + ExtensionString    ' this is the file with all features
     printlog "FileName is " + sFileName
     sFile = "isas_"                                ' this is the filename of the export files
@@ -89,7 +85,7 @@ testcase tiFileSaveAs
         app.mkdir (sPath)
     end if
 
-    Printlog "'/// deleting all files in output directory: \\user\\work\\graphics\\required\\gApplication gPlatform isas_* ///'"
+    printlog " deleting all files in output directory: \\user\\work\\graphics\\required\\gApplication gPlatform isas_*"
     if gSamePC = TRUE then ' delete export directory
         GetFileList ( sPath, sFile+"*", Exlist() )
         if KillFileList ( Exlist() ) <> TRUE then
@@ -186,42 +182,42 @@ testcase tiFileReload
   if app.dir(ConvertPath (gOfficePath + "user/work/graphics/required/")) = "" then
     app.mkdir (ConvertPath (gOfficePath + "user/work/graphics/required/"))
   end if
-'/// open application ///'
+printlog " open application"
    Call hNewDocument
    WaitSlot (2000)
-'/// save document "..." ///'
+printlog " save document ..."
    Call hFileSaveAsKill (Datei$)
    WaitSlot (2000)
-'/// close document ///'
+printlog " close document "
    Call hCloseDocument
 
-'/// load document again ///'
+printlog " load document again "
    Call hFileOpen (Datei$)
    WaitSlot (2000)
-'/// type something in document ///'
+printlog " type something in document "
    call hTBOtypeInDoc
    WaitSlot (2000)
-'/// File->Reload ///'
+printlog " File->Reload "
    FileReload
    WaitSlot (2000)
-'/// Messagebox has to come up; say NO ///'
+printlog " Messagebox has to come up; say NO"
    Kontext "Messagebox"
    sleep 2
    Messagebox.No
    WaitSlot (2000)
 
-'/// File->Reload ///'
+printlog " File->Reload "
    FileReload
    WaitSlot (2000)
    Kontext "Messagebox"
    sleep 2
-'/// Messagebox has to come up; say YES ///'
+printlog " Messagebox has to come up; say YES"
    Messagebox.Yes
    WaitSlot (1000)
 
-'/// close document ///'
+printlog " close document"
    Call hCloseDocument
-'/// delete document ///'
+printlog " delete document"
    if Dir (Datei$) <> "" AND gSamePC = TRUE then kill Datei$
    
 endcase 'tiFileReload
@@ -242,22 +238,22 @@ testcase tiFileVersion
   Datei$= (ConvertPath (gOfficePath + "user/work/graphics/required/erwin." + ExtensionString))
   'if dir (ConvertPath (gOfficePath + "user/work/graphics/required/")) = "" then
   if dir (Datei$) = "" then app.mkdir (ConvertPath (gOfficePath + "user/work/graphics/required/"))
-'/// open application ///'
+printlog " open application"
    Call hNewDocument
    WaitSlot (1000)
-'/// save document as "..." ///'
+printlog " save document as ..."
    Call hFileSaveAsKill (Datei$)
    WaitSlot (1000)
-'/// close document ///'
+printlog " close document"
    Call hCloseDocument
 
-'/// open document again ///'
+printlog " open document again"
    Call hFileOpen (Datei$)
    WaitSlot (1000)
-'/// type something in document ///'
+printlog " type something in document"
    call hTBOtypeInDoc
    WaitSlot (1000)
-'/// File->Versions ///'
+printlog " File->Versions "
    try
       FileVersions
    catch
@@ -267,17 +263,17 @@ testcase tiFileVersion
 
    Kontext "Versionen"
    Call DialogTest ( Versionen )
-'/// in Versions dialog press "save" ///'
+printlog " in Versions dialog press save "
    Speichern.Click
-'/// type a comment ///'
+printlog " type a comment"
    Kontext "VersionskommentarEingeben"
    Call DialogTest ( VersionskommentarEingeben )
-'/// exit comment dialog with cancel ///'
+printlog " exit comment dialog with cancel"
    VersionskommentarEingeben.Cancel
    Kontext "Versionen"
-'/// close version dialog ///'
+printlog " close version dialog"
    Versionen.Close
-'/// close document ///'
+printlog " close document"
    Call hCloseDocument
 '   if Dir (Datei$) <> "" AND gSamePC = TRUE then kill Datei$
 
@@ -309,13 +305,13 @@ testcase tiFilePassword
         ExtensionString = "odg"
     end if
 
-'///  save file to:  "graphics\required\output\"+gApplication+"\"+ gPlatform+"\"isp__" ///'
+printlog "  save file to:  graphics\required\output\" + gApplication + "\" + gPlatform + "\"
    sFile = "isp__"                                                     ' this is the filename of the export files
    sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+gApplication+"\"+ gPlatform+"\") ' this is the export path
    mkdir (sPath)
    if dir (sPath) = "" then app.mkdir (sPath)
    sFileIn = (sPath + sFile + "." + ExtensionString)
-   Printlog "'/// deleting all files in output directory: \\graphics\required\output\\impress\\ gPlatform isp_* ///'"
+   printlog " deleting all files in output directory: \\graphics\required\output\\impress\\ gPlatform isp_* "
    if gSamePC = TRUE then ' delete export directory
       GetFileList ( sPath, sFile+"*", Exlist() )
       if KillFileList ( Exlist() ) <> TRUE then
@@ -326,10 +322,10 @@ testcase tiFilePassword
       end if
    end if
 
-'/// open application ///'
+printlog " open application "
    Call hNewDocument
    WaitSlot (1000)
-'/// File->SaveAs ///'
+printlog " File->SaveAs "
    FileSaveAs
       Kontext "SpeichernDlg"
       Datei$ = ConvertPath ( sFileIn )
@@ -337,37 +333,37 @@ testcase tiFilePassword
       if Dir (Datei$) <> "" then
          kill Datei$
       end if
-      '/// check 'password' ///'
+      printlog " check 'password'"
       Passwort.Check
-      '/// set 'filename' ///'
+      printlog " set 'filename'"
       Dateiname.SetText Datei$
-      '/// press 'save' ///'
+      printlog " press 'save'"
       Speichern.Click
    WaitSlot (2000)
    Kontext "Passwort"
-      '/// type password "12345", confirm password: "54321" -> WRONG ///'
+      printlog " type password 12345, confirm password: 54321 -> WRONG "
       PasswortName.SetText "12345"
       PasswortBestaetigen.Settext "54321"
       Passwort.OK
    WaitSlot (2000)
    Kontext "Messagebox"
-      '/// messagebox has to show up, say OK, if messagebox doesnt come up -> ERROR ///'
+      printlog " messagebox has to show up, say OK, if messagebox doesnt come up -> ERROR "
       if Messagebox.Exists(1) then
          Messagebox.OK
       else
          Warnlog "- Wrong password not recognized"
       end if
    Kontext "Passwort"
-      '/// type password "12345", confirm password: "12345" -> RIGHT ///'
+      printlog " type password 12345, confirm password: 12345 -> RIGHT "
       PasswortName.SetText "12345"
       PasswortBestaetigen.SetText "12345"
       Passwort.OK
-      '/// close document ///'
+      printlog " close document"
       sleep 2
    FileClose
    sleep 2
 
-   '/// open document ///'
+   printlog " open document"
    FileOpen
       Kontext "OeffnenDlg"
       WaitSlot (2000)
@@ -375,7 +371,7 @@ testcase tiFilePassword
       Oeffnen.Click
    WaitSlot (2000)
    Kontext "PasswordFileOpen"
-      '/// type password: "34567" -> WRONG ///'
+      printlog " type password: 34567 -> WRONG "
       PasswortName.SetText "34567"
       try
          PasswordFileOpen.OK
@@ -383,7 +379,7 @@ testcase tiFilePassword
          Printlog "- Wrong password not accepted"
       endcatch
    Kontext
-   '/// messagebox has to show up, say OK, if messagebox doesn't come up -> ERROR ///'
+   printlog " messagebox has to show up, say OK, if messagebox doesn't come up -> ERROR "
       if Not Messagebox.Exists(1) then
          Warnlog "Wrong password while loading not recognized"
       else
@@ -392,42 +388,42 @@ testcase tiFilePassword
       end if
    WaitSlot (3000)
    Kontext "PasswordFileOpen"
-      '/// type password: "12345" -> RIGHT ///'
+      printlog " type password: 12345 -> RIGHT"
       PasswortName.SetText "12345"
       PasswordFileOpen.OK
    WaitSlot (5000)
-   '/// File->SaveAs ///'
+   printlog " File->SaveAs "
    FileSaveAs
       Kontext "SpeichernDlg"
       Dateiname.SetText Datei$
       if (Passwort.IsChecked <> TRUE) then
          Warnlog "Password has to be checked! :-("
       end if
-      '/// press 'save', without changing any checkbox! -> file has to be saved WITH password protection ///'
+      printlog " press 'save', without changing any checkbox! -> file has to be saved WITH password protection "
       Speichern.Click
       WaitSlot (1000)
    Kontext "Messagebox"
-      '/// (if messagebox comes up, say YES) ///'
+      printlog " (if messagebox comes up, say YES)"
       if Messagebox.Exists(5) then
          Messagebox.Yes
       end if
-      '/// password dialog has to show up! ///'
+      printlog " password dialog has to show up!"
    Kontext "Passwort"
       if (Passwort.Exists(5) = FALSE)then
          Warnlog "- Password dialog Didn't pop up after pressing save"
       else
          Kontext "Passwort"
-         '/// type password "a12345", confirm password: "a12345" -> RIGHT ///'
+         printlog " type password a12345, confirm password: a12345 -> RIGHT"
          WaitSlot (1000)
          PasswortName.SetText "a12345"
          PasswortBestaetigen.SetText "a12345"
 	 Passwort.OK
          WaitSlot (1000)
-         '/// close document ///'
+         printlog " close document"
          FileClose
          WaitSlot (1000)
       end if
-   '/// open document ///'
+   printlog " open document"
    FileOpen
       WaitSlot (2000)
       Kontext "OeffnenDlg"
@@ -435,11 +431,11 @@ testcase tiFilePassword
       Oeffnen.Click
       Kontext "PasswordFileOpen"
       WaitSlot (1000)
-      '/// type password: "a12345" -> RIGHT ///'
+      printlog " type password: a12345 -> RIGHT"
       PasswortName.SetText "a12345"
       PasswordFileOpen.OK
       WaitSlot (5000)
-   '/// File->SaveAs ///'
+   printlog " File->SaveAs "
    FileSaveAs
       Kontext "SpeichernDlg"
       Dateiname.SetText Datei$
@@ -447,21 +443,21 @@ testcase tiFilePassword
          Warnlog "Password has to be checked! :-("
       end if
       Passwort.UnCheck
-      '/// press 'save', without changing any checkbox! -> file has to be saved WITH password protection ///'
+      printlog " press 'save', without changing any checkbox! -> file has to be saved WITH password protection "
       Speichern.Click
    Kontext "Messagebox"
-      '/// (if messagebox comes up, say YES) ///'
+      printlog " (if messagebox comes up, say YES)"
       if Messagebox.Exists(5) then Messagebox.Yes
-   '/// password dialog needn't to show up! ///'
+   printlog " password dialog needn't to show up!"
    Kontext "Passwort"
       if (Passwort.Exists(5))then
          Warnlog "- Password dialog didn't pop up after pressing save"
          Kontext "Passwort"
          password.cancel
-         '/// close document ///'
+         printlog " close document "
          FileClose
       else
-         '/// close document ///'
+         printlog " close document"
          hCloseDocument
       end if
 endcase 'tiFilePassword
@@ -543,8 +539,8 @@ endcase 'tiFileTemplates
 
 testcase tiFilePrint
    Call hNewDocument
-'/// open application ///'
-'/// File->Print ///'
+printlog " open application"
+printlog " File->Print"
    FilePrint
    WaitSlot (1000)
    kontext
@@ -555,19 +551,19 @@ testcase tiFilePrint
    WaitSlot (2000)
    Kontext "DruckenDlg"
        Call DialogTest (DruckenDlg)
-        '/// click 'options' ///'
+        printlog " click 'options'"
        WaitSlot (2000)
        Zusaetze.Click
 
        Kontext "DruckerZusaetzeDraw"
        Call DialogTest (DruckerZusaetzeDraw)
        DruckerZusaetzeDraw.Cancel
-        '/// close options dialog with 'cancel' ///'
+        printlog " close options dialog with 'cancel'"
        Kontext "DruckenDlg"
-       '/// close print dialog with 'cancel' ///'
+       printlog " close print dialog with 'cancel'"
        DruckenDlg.Cancel
        WaitSlot (2000)
-'/// close application ///'
+printlog " close application"
    Call hCloseDocument
 endcase 'tiFilePrint
 
@@ -576,10 +572,10 @@ endcase 'tiFilePrint
 testcase tmFileNewFromTemplate
    Call hNewDocument
    FileNewFromTemplate
-  '/// Open dialog with File / New / From Template ///
+  printlog " Open dialog with File / New / From Template"
   WaitSlot (5000)
   Kontext "TemplateAndDocuments"
-  '/// Check if dialog has been opened ///
+  printlog " Check if dialog has been opened"
   if TemplateAndDocuments.NotExists then
      Warnlog "Dialog Templates and Documents are not up!"
      goto endsub
@@ -613,14 +609,14 @@ endcase 'tmFileOpen
 
 testcase tmFileClose
    printlog "- File Close"
-   hNewDocument    ' just for the records: I open ONE document
+   hNewDocument 
    call hTBOtypeInDoc
    WaitSlot (2000)
    FileClose
-   Kontext         ' Expecting "Modified, do you want to close?"
+   Kontext   
    if active.exists (5) then
       printlog "  Ok, active came up: " + active.gettext
-      Active.Cancel   ' No, not this time
+      Active.Cancel 
    else
       warnlog "active missing (1)"
    end if
@@ -628,7 +624,7 @@ testcase tmFileClose
 
    FileClose
    Kontext
-   Active.Yes      ' but now - records: this document is closed
+   Active.Yes 
    WaitSlot (2000)
 
    Kontext "SpeichernDlg"
@@ -636,7 +632,7 @@ testcase tmFileClose
    SpeichernDlg.Cancel
    WaitSlot (2000)
 
-   FileClose       ' now the office gets closed! (if there were no modifications!)
+   FileClose
    Kontext
    Active.No
    WaitSlot (2000)
@@ -800,7 +796,7 @@ endcase 'tmFilePrinterSetting
 testcase tdFileExport
     goto endsub
    dim x as integer
-'/// just call File->Export and exit ///'
+printlog " just call File->Export and exit "
    Call hNewDocument
    WaitSlot (3000)
    FileExport
@@ -808,9 +804,9 @@ testcase tdFileExport
       Call DialogTest ( ExportierenDlg )
       UebergeordneterOrdner.Click
       Kontext "SpeichernDlg"
-      '/// check number of available export filters. it has to be 17 ///'
-      '///+ this is also done in the 'first test', I provide it just as an additional info here.///'
-      '///+ testcase: ExFilterCountCompare ///'
+      printlog " check number of available export filters. it has to be 17 "
+      printlog "+ this is also done in the 'first test', I provide it just as an additional info here"
+      printlog "+ testcase: ExFilterCountCompare"
       x=Dateityp.getitemcount
       if x <> 18 then warnlog "the number of filters is not 18, it is: " + x
    SpeichernDlg.Cancel

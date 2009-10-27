@@ -75,10 +75,11 @@ namespace drawinglayer
             const attribute::SdrTextAttribute& rText,
             const attribute::SdrLineAttribute* pStroke,
             bool bCellText,
-            bool bWordWrap);
+            bool bWordWrap,
+            bool bClipOnBounds);
 
-        Primitive2DReference createShadowPrimitive(
-            const Primitive2DSequence& rSource,
+        Primitive2DSequence createEmbeddedShadowPrimitive(
+            const Primitive2DSequence& rContent,
             const attribute::SdrShadowAttribute& rShadow);
 
     } // end of namespace primitive2d

@@ -39,8 +39,6 @@
 
 testcase tSaveReservedNamesUNIX()
 
-    '///<h1>Check if we accidentially disallow some special names on UNIX</h1>
-    '///<ul>
     
     if ( gPlatGroup = "w95" ) then
         printlog( "Test not relevant for Unix(like)"
@@ -57,36 +55,28 @@ testcase tSaveReservedNamesUNIX()
         printlog( "Document Type is: " & hNumericDocType( iCurrentDocType ) )
         printlog( "Names that are reserved on WINDOWS but are OK on UNIX" )
         
-        '///+<li>Try &quot;NUL&quot as filename -> should save ok</li>
         irc = hSaveLoadDelSuccess( "NUL" , true )
         if ( irc <> 0 ) then warnlog( "failed" )
 
-        '///+<li>Try &quot;CLOCK$&quot as filename -> should save ok</li>
         irc = hSaveLoadDelSuccess( "CLOCK$" , true )
         if ( irc <> 0 ) then warnlog( "failed" )
 
-        '///+<li>Try &quot;CON&quot as filename -> should save ok</li>
         irc = hSaveLoadDelSuccess( "CON" , true )
         if ( irc <> 0 ) then warnlog( "failed" )
 
-        '///+<li>Try &quot;PRN&quot as filename -> should save ok</li>
         irc = hSaveLoadDelSuccess( "PRN" , true )
         if ( irc <> 0 ) then warnlog( "failed" )
 
-        '///+<li>Try &quot;AUX&quot as filename -> should save ok</li>
         irc = hSaveLoadDelSuccess( "AUX" , true )
         if ( irc <> 0 ) then warnlog( "failed" )
 
-        '///+<li>Try &quot;LPT1&quot as filename -> should save ok</li>
         irc = hSaveLoadDelSuccess( "LPT1" , true )
         if ( irc <> 0 ) then warnlog( "failed" )
 
-        '///+<li>Try &quot;COM1&quot as filename -> should save ok</li>
         irc = hSaveLoadDelSuccess( "COM1" , true )
         if ( irc <> 0 ) then warnlog( "failed" )
         
     next iCurrentDocType
 
-    '///</ul>    
 endcase
 

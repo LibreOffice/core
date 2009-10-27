@@ -70,6 +70,21 @@ struct ScCompare
         }
 };
 
+struct ScCompareOptions
+{
+    ScQueryEntry        aQueryEntry;
+    bool                bRegEx;
+    bool                bMatchWholeCell;
+    bool                bIgnoreCase;
+
+                        ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
+private:
+                        // Not implemented, prevent usage.
+                        ScCompareOptions();
+                        ScCompareOptions( const ScCompareOptions & );
+     ScCompareOptions&  operator=( const ScCompareOptions & );
+};
+
 class ScToken;
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
@@ -178,6 +193,7 @@ void ReplaceCell( ScAddress& );     // for TableOp
 void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
 BOOL IsTableOpInRange( const ScRange& );
 ULONG GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
+double ConvertStringToValue( const String& );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
 double GetCellValueOrZero( const ScAddress&, const ScBaseCell* );
 double GetValueCellValue( const ScAddress&, const ScValueCell* );
@@ -356,9 +372,16 @@ void ScChoseJump();
 // Returns true if last jump was executed and result matrix pushed.
 bool JumpMatrix( short nStackLevel );
 
-double CompareFunc( const ScCompare& rComp );
+/** @param pOptions
+        NULL means case sensitivity document option is to be used!
+ */
+double CompareFunc( const ScCompare& rComp, ScCompareOptions* pOptions = NULL );
 double Compare();
-ScMatrixRef CompareMat();
+/** @param pOptions
+        NULL means case sensitivity document option is to be used!
+ */
+ScMatrixRef CompareMat( ScCompareOptions* pOptions = NULL );
+ScMatrixRef QueryMat( ScMatrix* pMat, ScCompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
 void ScLess();
@@ -431,6 +454,8 @@ void ScClean();
 void ScChar();
 void ScJis();
 void ScAsc();
+void ScUnicode();
+void ScUnichar();
 void ScMin( BOOL bTextAsZero = FALSE );
 void ScMax( BOOL bTextAsZero = FALSE );
 double IterateParameters( ScIterFunc, BOOL bTextAsZero = FALSE );
@@ -520,7 +545,17 @@ void ScSpewFunc();
 void ScGame();
 
 //----------------Funktionen in interpr2.cxx---------------
-double GetDate(INT16 nYear, INT16 nMonth, INT16 nDay);
+
+/** Obtain the date serial number for a given date.
+    @param bStrict
+        If FALSE, nYear < 100 takes the two-digit year setting into account,
+        and rollover of invalid calendar dates takes place, e.g. 1999-02-31 =>
+        1999-03-03.
+        If TRUE, the date passed must be a valid Gregorian calendar date. No
+        two-digit expanding or rollover is done.
+ */
+double GetDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, bool bStrict );
+
 void ScGetActDate();
 void ScGetActTime();
 void ScGetYear();
@@ -660,6 +695,7 @@ void ScNoName();
 void ScBadName();
 // Statistik:
 double phi(double x);
+double integralPhi(double x);
 double taylor(double* pPolynom, USHORT nMax, double x);
 double gauss(double x);
 double gaussinv(double x);

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner :  fredrik.haegg@sun.com
+'* owner :  helge.delfs@sun.com
 '*
 '* short description : Test of content and update reliability of the fields 
 '*
@@ -59,7 +59,7 @@ sub main
     use "writer\optional\includes\fields\w_fields7.inc"   
 
     printlog Chr(13) + "Loading of Include - Files takes: " + Wielange ( StartZeit )
-    printlog Chr(13) + "******* Writer - Level 1 - Test *******"
+    printlog Chr(13) + "******* Writer - Fields - Test *******"
 
     Call hStatusIn ( "writer", "w_fields.bas" , "Fields" )
 

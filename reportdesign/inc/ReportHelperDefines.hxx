@@ -143,8 +143,8 @@
     virtual void SAL_CALL setCharRotation( ::sal_Int16 _charrotation ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharScaleWidth() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharScaleWidth( ::sal_Int16 _charscalewidth ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::sal_Int16 SAL_CALL getParaVertAlignment() throw (::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setParaVertAlignment( ::sal_Int16 _paravertalignment ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);\
+    virtual ::com::sun::star::style::VerticalAlignment SAL_CALL getVerticalAlign() throw (::com::sun::star::beans::UnknownPropertyException,::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setVerticalAlign( ::com::sun::star::style::VerticalAlignment _paravertalignment ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::rtl::OUString SAL_CALL getHyperLinkURL() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setHyperLinkURL( const ::rtl::OUString& _hyperlinkurl ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::rtl::OUString SAL_CALL getHyperLinkTarget() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\

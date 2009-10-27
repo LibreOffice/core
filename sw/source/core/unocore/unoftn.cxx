@@ -254,11 +254,18 @@ void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xText
         SwFmtFtn aFootNote(m_bIsEndnote);
         if(m_sLabel.Len())
             aFootNote.SetNumStr(m_sLabel);
-        SfxItemSet  aSet(pNewDoc->GetAttrPool(), RES_TXTATR_FTN, RES_TXTATR_FTN, 0L);
-        aSet.Put(aFootNote);
-        SwXTextCursor::SetCrsrAttr(aPam, aSet, 0);
 
-        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+        SwXTextCursor const*const pTextCursor(
+                dynamic_cast<SwXTextCursor*>(pCursor));
+        const bool bForceExpandHints( (pTextCursor)
+                ? pTextCursor->IsAtEndOfMeta() : false );
+        const SetAttrMode nInsertFlags = (bForceExpandHints)
+            ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
+            : nsSetAttrMode::SETATTR_DEFAULT;
+
+        pNewDoc->InsertPoolItem(aPam, aFootNote, nInsertFlags);
+
+        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                     aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN );
 
         if(pTxtAttr)
@@ -490,8 +497,7 @@ void SwXFootnote::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 uno::Reference< beans::XPropertySetInfo > SwXFootnote::getPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef =
-        new SfxItemPropertySetInfo(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_FOOTNOTE));
+    static uno::Reference< beans::XPropertySetInfo >  xRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_FOOTNOTE)->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.09.00 13:12:04---------------------------------------------------

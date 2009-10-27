@@ -110,8 +110,9 @@ public:
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
-
+#ifdef DBG_UTIL
     void    TestData() const;
+#endif
     void    Reset( const ScPatternAttr* pPattern, BOOL bAlloc = TRUE );
     BOOL    Concat(SCSIZE nPos);
 

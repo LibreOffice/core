@@ -232,24 +232,6 @@ void ScPrivatSplit::MouseMove( const MouseEvent& rMEvt )
 }
 
 /*************************************************************************
-#*  Member:     SetXRange                                   Datum:14.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScPrivatSplit
-#*
-#*  Funktion:   Setzt den Range fuer die X- Verschiebung
-#*
-#*  Input:      neuer Bereich
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-void ScPrivatSplit::SetXRange(Range cRgeX)
-{
-    aXMovingRange=cRgeX;
-}
-
-/*************************************************************************
 #*  Member:     SetYRange                                   Datum:14.10.97
 #*------------------------------------------------------------------------
 #*

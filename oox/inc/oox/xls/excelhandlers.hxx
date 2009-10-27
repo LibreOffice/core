@@ -34,12 +34,6 @@
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
-#define XML_TOKEN( token )          (::oox::NMSP_XML | XML_##token)
-#define R_TOKEN( token )            (::oox::NMSP_RELATIONSHIPS | XML_##token)
-#define XLS_TOKEN( token )          (::oox::NMSP_XLS | XML_##token)
-#define XDR_TOKEN( token )          (::oox::NMSP_XDR | XML_##token)
-#define XM_TOKEN( token )           (::oox::NMSP_XM | XML_##token)
-
 namespace oox {
 namespace xls {
 
@@ -80,7 +74,7 @@ public:
                             ParentType& rParent,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
     template< typename ParentType >
     explicit            OoxWorksheetContextBase( ParentType& rParent );
@@ -90,7 +84,7 @@ public:
 
 template< typename ParentType >
 OoxWorksheetContextBase::OoxWorksheetContextBase( ParentType& rParent,
-        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     ::oox::core::ContextHandler2( rParent ),
     WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
 {
@@ -131,7 +125,7 @@ public:
                             const ::rtl::OUString& rFragmentPath,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
     explicit            OoxWorksheetFragmentBase(
                             const WorksheetHelper& rHelper,
@@ -242,7 +236,7 @@ protected:
                             const ParentType& rParent,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
     template< typename ParentType >
     explicit            BiffWorksheetContextBase( const ParentType& rParent );
@@ -252,7 +246,7 @@ protected:
 
 template< typename ParentType >
 BiffWorksheetContextBase::BiffWorksheetContextBase( const ParentType& rParent,
-        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int32 nSheet ) :
+        ISegmentProgressBarRef xProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     BiffContextHandler( rParent ),
     WorksheetHelperRoot( rParent, xProgressBar, eSheetType, nSheet )
 {
@@ -310,6 +304,17 @@ protected:
      */
     BiffFragmentType    startFragment( BiffType eBiff );
 
+    /** Starts a new fragment at a specific position in the workbbok stream and
+        returns the fragment type.
+
+        The passed record handle must specify the stream position of the BOF
+        record of the fragment substream. The function will try to start the
+        next record and read the contents of the BOF record, if extant.
+
+        @return  Fragment type according to the imported BOF record.
+     */
+    BiffFragmentType    startFragment( BiffType eBiff, sal_Int64 nRecHandle );
+
     /** Skips the current fragment up to its trailing EOF record.
 
         Skips all records until next EOF record. When this function returns,
@@ -322,6 +327,10 @@ protected:
         @return  True = stream points to the EOF record of the current fragment.
      */
     bool                skipFragment();
+
+private:
+    /** Implementation helper for the startFragment() functions. */
+    BiffFragmentType    implStartFragment( BiffType eBiff );
 };
 
 // ============================================================================
@@ -352,7 +361,7 @@ protected:
                             const BiffWorkbookFragmentBase& rParent,
                             ISegmentProgressBarRef xProgressBar,
                             WorksheetType eSheetType,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 };
 
 // ============================================================================
@@ -365,7 +374,7 @@ public:
     explicit            BiffSkipWorksheetFragment(
                             const BiffWorkbookFragmentBase& rParent,
                             ISegmentProgressBarRef xProgressBar,
-                            sal_Int32 nSheet );
+                            sal_Int16 nSheet );
 
     virtual bool        importFragment();
 };

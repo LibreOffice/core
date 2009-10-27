@@ -43,7 +43,7 @@ public interface JobProgressIndicator
      *
      * @param string the new description
      */
-    public void setText(String string);
+    void setText(String string);
 
     /**
      * Initializes the progress indicator and sets the progress description to
@@ -56,7 +56,7 @@ public interface JobProgressIndicator
      * @param maxValue the maximum value
      * @see JobProgressIndicator#setText(String)
      */
-    public void start(String text, int maxValue);
+    void start(String text, int maxValue);
 
     /**
      * Updates the value to the specified value. Invalid values must be ignored.
@@ -65,17 +65,17 @@ public interface JobProgressIndicator
      * @param value the new value that should be shown now. This must fit the
      * range [0..maxValue] as defined in {@link JobProgressIndicator#start(String, int)}.
      */
-    public void setValue(int value);
+    void setValue(int value);
 
     /**
      * Stop the progress. A progress indicator cannot be destructed before end()
      * has been called.
      */
-    public void end();
+    void end();
 
     /**
      * Clear progress value and description. Calling of setValue(0) and
      * setText("") should do the same. Stopped indicators must ignore this call.
      */
-    public void reset();
+    void reset();
 }

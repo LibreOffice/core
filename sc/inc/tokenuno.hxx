@@ -31,15 +31,14 @@
 #ifndef SC_TOKENUNO_HXX
 #define SC_TOKENUNO_HXX
 
-#include <svtools/lstner.hxx>
-#include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
+#include <com/sun/star/sheet/FormulaToken.hpp>
+#include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <cppuhelper/implbase3.hxx>
+#include <svtools/lstner.hxx>
 #include <formula/FormulaOpCodeMapperObj.hxx>
 #include "address.hxx"
 #include "compiler.hxx"
@@ -47,6 +46,7 @@
 class ScTokenArray;
 class ScDocShell;
 
+// ============================================================================
 
 class ScTokenConversion
 {
@@ -61,6 +61,7 @@ public:
                         const ScTokenArray& rTokenArray );
 };
 
+// ============================================================================
 
 class ScFormulaParserObj : public ::cppu::WeakImplHelper3<
                             ::com::sun::star::sheet::XFormulaParser,
@@ -73,7 +74,6 @@ private:
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
     ScCompiler::OpCodeMapPtr    mxOpCodeMap;
     ScDocShell*         mpDocShell;
-    ScAddress           maRefPos;
     sal_Int16           mnConv;
     bool                mbEnglish;
     bool                mbIgnoreSpaces;
@@ -89,10 +89,12 @@ public:
 
                             // XFormulaParser
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL parseFormula(
-                                    const ::rtl::OUString& aFormula )
+                                    const ::rtl::OUString& aFormula,
+                                    const ::com::sun::star::table::CellAddress& rReferencePos )
                                 throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL printFormula( const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::sheet::FormulaToken >& aTokens )
+                                    ::com::sun::star::sheet::FormulaToken >& aTokens,
+                                    const ::com::sun::star::table::CellAddress& rReferencePos )
                                 throw (::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet
@@ -145,11 +147,15 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
+// ============================================================================
+
 class ScFormulaOpCodeMapperObj : public formula::FormulaOpCodeMapperObj
 {
 public:
     ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler);
 };
+
+// ============================================================================
 
 #endif
 

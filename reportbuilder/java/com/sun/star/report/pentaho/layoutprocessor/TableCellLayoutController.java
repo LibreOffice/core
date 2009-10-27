@@ -70,6 +70,7 @@ public class TableCellLayoutController extends SectionLayoutController
     {
         final AttributeMap attributeMap = new AttributeMap(super.computeAttributes(fc, element, target));
         final String definedStyle = (String) attributeMap.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
+        final String valueType = (String) attributeMap.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
         attributeMap.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, getDisplayStyleName((Section) element, definedStyle));
 
         try
@@ -77,7 +78,7 @@ public class TableCellLayoutController extends SectionLayoutController
             final DataFlags value = computeValue();
             if (value != null)
             {
-                FormatValueUtility.applyValueForCell(value.getValue(), attributeMap);
+                FormatValueUtility.applyValueForCell(value.getValue(), attributeMap,valueType);
             }
         }
         catch (Exception e)

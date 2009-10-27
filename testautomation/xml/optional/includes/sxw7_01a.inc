@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : XML Writer Include File
 '*
@@ -65,7 +65,7 @@ testcase tfields
     '/// Saving the document in OOo XML 1.0 format.
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\fields.sxw") , "StarOffice XML (Writer)") then    
         '/// Closing the document also if there is a verification dialog.    
-        call hCloseAndLooseDocument    
+        call hCloseDocument()    
         sleep(3)
         '/// Unpack the complete content of the file (ZIP-archieve) into a seperate directory.
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\fields.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\fields") )        
@@ -429,7 +429,7 @@ testcase tfootnotes
     '/// Saving the document in OOo XML 1.0 format.
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\writer\level1\footnotes.sxw") , "StarOffice XML (Writer)") then    
         '/// Closing the document also if there is a verification dialog.    
-        call hCloseAndLooseDocument    
+        call hCloseDocument()    
         sleep(3)
         '/// Unpack the complete content of the file (ZIP-archieve) into a seperate directory.
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\writer\level1\footnotes.sxw") , gOfficePath & ConvertPath("user\work\xml\writer\level1\footnotes") )

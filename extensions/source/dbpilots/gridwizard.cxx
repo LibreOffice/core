@@ -218,8 +218,8 @@ namespace dbp
                         xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
                         // the label
                         xColumn->setPropertyValue(s_sLabelProperty, makeAny(::rtl::OUString(*pFormFieldName) += *pColumnLabelPostfix));
-                        // the width (0 => column will be auto-sized)
-                        xColumn->setPropertyValue(s_sWidthProperty, makeAny(sal_Int32(0)));
+                        // the width (<void/> => column will be auto-sized)
+                        xColumn->setPropertyValue(s_sWidthProperty, Any());
 
                         // insert the column
                         xColumnContainer->insertByName(sColumnName, makeAny(xColumn));

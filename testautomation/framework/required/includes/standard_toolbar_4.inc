@@ -33,37 +33,29 @@
 '*
 '*  owner : joerg.skottke@sun.com
 '*
-'*  short description : invisible items on the standardbar
+'*  short description : Invisible items on the standardbar
 '*
 '\******************************************************************************
 
 testcase tStandardBar_4
 
-    '///<h1>Update test to activate hidden items on StandardBar</h1>
+    printlog( "Invisible items on the standardbar" )
     
-    '///<ul>
     dim brc as boolean
    
-    '///+<li>reset the Standardbar to defaults. The toolbar should be docked</li>
     hResetStandardBar()
     
-    '///+<li>Check the number of items for the standarbar using the list in customize toolbars (30)</li>
     hInitSingleDoc()
     DocumentWriter.maximize() ' Needed to avoid toolbar clipping on resolutions < 1024x768 or small windows.
     hStandardbarItemGetCount()
     
-    '///+<li>Load URL: check absence, toggle it, check presence, remove it</li>
     hStandardbarLoadUrl()
     
-    '///+<li>New from Template: check absence, toggle it, use it, remove it</li>
     hStandardbarNewDialog()
     
-    '///+<li>Save As: check absence, toggle it, use it, remove it</li>
     hStandardbarSaveAs()
     
-    '///+<li>Close the document</li>
     brc = hInitBackingMode()
-    '///</ul>
 
         
 endcase

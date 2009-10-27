@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=msfilter
+LIBTARGET=NO
 AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
@@ -42,25 +43,29 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=\
+LIB1TARGET= $(SLB)$/$(TARGET)-msfilter.lib
+LIB1OBJFILES= \
     $(SLO)$/countryid.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/eschesdo.obj    \
     $(SLO)$/msdffimp.obj	\
     $(SLO)$/msoleexp.obj	\
     $(SLO)$/msvbasic.obj	\
-    $(SLO)$/msashape.obj	\
     $(SLO)$/svxmsbas.obj	\
     $(SLO)$/msocximex.obj	\
-    $(SLO)$/msashape3d.obj	\
     $(SLO)$/mscodec.obj		\
     $(SLO)$/msfiltertracer.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB2OBJFILES= \
+    $(SLO)$/svxmsbas2.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 EXCEPTIONSFILES= \
     $(SLO)$/eschesdo.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/msdffimp.obj	\
-    $(SLO)$/msashape3d.obj	\
     $(SLO)$/msvbasic.obj	\
     $(SLO)$/msocximex.obj	\
     $(SLO)$/msoleexp.obj	\

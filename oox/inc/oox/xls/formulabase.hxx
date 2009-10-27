@@ -37,9 +37,11 @@
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {
+    namespace sheet { class XFormulaParser; }
     namespace sheet { class XFormulaTokens; }
     namespace sheet { class XFormulaOpCodeMapper; }
 } } }
@@ -56,14 +58,16 @@ const size_t BIFF_TOKARR_MAXLEN                 = 4096;     /// Maximum size of 
 // token class flags ----------------------------------------------------------
 
 const sal_uInt8 BIFF_TOKCLASS_MASK              = 0x60;
-const sal_uInt8 BIFF_TOKID_MASK                 = 0x1F;
-
 const sal_uInt8 BIFF_TOKCLASS_NONE              = 0x00;     /// 00-1F: Base tokens.
 const sal_uInt8 BIFF_TOKCLASS_REF               = 0x20;     /// 20-3F: Reference class tokens.
 const sal_uInt8 BIFF_TOKCLASS_VAL               = 0x40;     /// 40-5F: Value class tokens.
 const sal_uInt8 BIFF_TOKCLASS_ARR               = 0x60;     /// 60-7F: Array class tokens.
 
+const sal_uInt8 BIFF_TOKFLAG_INVALID            = 0x80;     /// This bit must be null for a valid token identifier.
+
 // base token identifiers -----------------------------------------------------
+
+const sal_uInt8 BIFF_TOKID_MASK                 = 0x1F;
 
 const sal_uInt8 BIFF_TOKID_NONE                 = 0x00;     /// Placeholder for invalid token id.
 const sal_uInt8 BIFF_TOKID_EXP                  = 0x01;     /// Array or shared formula reference.
@@ -357,6 +361,115 @@ struct ApiOpCodes
     sal_Int32           OPCODE_RANGE;           /// Range operator.
 };
 
+// Function parameter info ====================================================
+
+/** Enumerates validity modes for a function parameter. */
+enum FuncParamValidity
+{
+    FUNC_PARAM_NONE = 0,        /// Default for an unspecified entry in a C-array.
+    FUNC_PARAM_REGULAR,         /// Parameter supported by Calc and Excel.
+    FUNC_PARAM_CALCONLY,        /// Parameter supported by Calc only.
+    FUNC_PARAM_EXCELONLY        /// Parameter supported by Excel only.
+};
+
+/** Enumerates different types of token class conversion in function parameters. */
+enum FuncParamConversion
+{
+    FUNC_PARAMCONV_ORG,         /// Use original class of current token.
+    FUNC_PARAMCONV_VAL,         /// Convert tokens to VAL class.
+    FUNC_PARAMCONV_ARR,         /// Convert tokens to ARR class.
+    FUNC_PARAMCONV_RPT,         /// Repeat parent conversion in VALTYPE parameters.
+    FUNC_PARAMCONV_RPX,         /// Repeat parent conversion in REFTYPE parameters.
+    FUNC_PARAMCONV_RPO          /// Repeat parent conversion in operands of operators.
+};
+
+/** Structure that contains all needed information for a parameter in a
+    function.
+
+    The member meValid specifies which application supports the parameter. If
+    set to CALCONLY, import filters have to insert a default value for this
+    parameter, and export filters have to skip the parameter. If set to
+    EXCELONLY, import filters have to skip the parameter, and export filters
+    have to insert a default value for this parameter.
+
+    The member mbValType specifies whether the parameter requires tokens to be
+    of value type (VAL or ARR class).
+
+        If set to false, the parameter is called to be REFTYPE. Tokens with REF
+        default class can be inserted for the parameter (e.g. tAreaR tokens).
+
+        If set to true, the parameter is called to be VALTYPE. Tokens with REF
+        class need to be converted to VAL tokens first (e.g. tAreaR will be
+        converted to tAreaV), and further conversion is done according to this
+        new token class.
+
+    The member meConv specifies how to convert the current token class of the
+    token inserted for the parameter. If the token class is still REF this
+    means that the token has default REF class and the parameter is REFTYPE
+    (see member mbValType), the token will not be converted at all and remains
+    in REF class. Otherwise, token class conversion is depending on the actual
+    token class of the return value of the function containing this parameter.
+    The function may return REF class (tFuncR, tFuncVarR, tFuncCER), or it may
+    return VAL or ARR class (tFuncV, tFuncA, tFuncVarV, tFuncVarA, tFuncCEV,
+    tFuncCEA). Even if the function is able to return REF class, it may return
+    VAL or ARR class instead due to the VALTYPE data type of the parent
+    function parameter that calls the own function. Example: The INDIRECT
+    function returns REF class by default. But if called from a VALTYPE
+    function parameter, e.g. in the formula =ABS(INDIRECT("A1")), it returns
+    VAL or ARR class instead. Additionally, the repeating conversion types RPT
+    and RPX rely on the conversion executed for the function token class.
+
+        1) ORG:
+        Use the original class of the token (VAL or ARR), regardless of any
+        conversion done for the function return class.
+
+        2) VAL:
+        Convert ARR tokens to VAL class, regardless of any conversion done for
+        the function return class.
+
+        3) ARR:
+        Convert VAL tokens to ARR class, regardless of any conversion done for
+        the function return class.
+
+        4) RPT:
+        If the own function returns REF class (thus it is called from a REFTYPE
+        parameter, see above), and the parent conversion type (for the function
+        return class) was ORG, VAL, or ARR, ignore that conversion and always
+        use VAL conversion for the own token instead. If the parent conversion
+        type was RPT or RPX, repeat the conversion that would have been used if
+        the function would return value type.
+        If the own function returns value type (VAL or ARR class, see above),
+        and the parent conversion type (for the function return class) was ORG,
+        VAL, ARR, or RPT, repeat this conversion for the own token. If the
+        parent conversion type was RPX, always use ORG conversion type for the
+        own token instead.
+
+        5) RPX:
+        This type of conversion only occurs in functions returning VAL class by
+        default. If the own token is value type, and the VAL return class of
+        the own function has been changed to ARR class (due to direct ARR
+        conversion, or due to ARR conversion repeated by RPT or RPX), set the
+        own token to ARR type. Otherwise use the original token type (VAL
+        conversion from parent parameter will not be repeated at all). If
+        nested functions have RPT or value-type RPX parameters, they will not
+        repeat this conversion type, but will use ORG conversion instead (see
+        description of RPT above).
+
+        6) RPO:
+        This type of conversion is only used for the operands of all operators
+        (unary and binary arithmetic operators, comparison operators, and range
+        operators). It is not used for function parameters. On conversion, it
+        will be replaced by the last conversion type that was not the RPO
+        conversion. This leads to a slightly different behaviour than the RPT
+        conversion for operands in conjunction with a parent RPX conversion.
+ */
+struct FunctionParamInfo
+{
+    FuncParamValidity   meValid;        /// Parameter validity.
+    FuncParamConversion meConv;         /// Token class conversion type.
+    bool                mbValType;      /// Data type (false = REFTYPE, true = VALTYPE).
+};
+
 // function data ==============================================================
 
 /** This enumeration contains constants for all known external libraries
@@ -369,23 +482,13 @@ enum FunctionLibraryType
 
 // ----------------------------------------------------------------------------
 
-const sal_uInt8 FUNCINFO_MAXPARAM           = 30;       /// Maximum parameter count.
-
-const sal_uInt8 FUNCINFO_PARAM_EXCELONLY    = 0x01;     /// Flag for a parameter existing in Excel, but not in Calc.
-const sal_uInt8 FUNCINFO_PARAM_CALCONLY     = 0x02;     /// Flag for a parameter existing in Calc, but not in Excel.
-const sal_uInt8 FUNCINFO_PARAM_INVALID      = 0x04;     /// Flag for an invalid token class.
-
 /** Represents information for a spreadsheet function.
 
-    The member mpnParamClass contains an array of BIFF token classes for each
-    parameter of the function. The last existing (non-null) value in this array
-    is used for all following parameters used in a function. Additionally to
-    the three actual token classes, this array may contain the special values
-    FUNCINFO_PARAM_CALCONLY, FUNCINFO_PARAM_EXCELONLY, and
-    FUNCINFO_PARAM_INVALID. The former two specify parameters only existing in
-    one of the applications. FUNCINFO_PARAM_INVALID is simply a terminator for
-    the array to prevent repetition of the last token class or special value
-    for additional parameters.
+    The member mpParamInfos points to an array of type information structures
+    for all parameters of the function. The last initialized structure
+    describing a regular parameter (member meValid == EXC_PARAMVALID_ALWAYS) in
+    this array is used repeatedly for all following parameters supported by a
+    function.
  */
 struct FunctionInfo
 {
@@ -400,43 +503,45 @@ struct FunctionInfo
     sal_uInt8           mnMinParamCount;    /// Minimum number of parameters.
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
-    const sal_uInt8*    mpnParamClass;      /// Expected BIFF token classes of parameters.
+    const FunctionParamInfo* mpParamInfos;  /// Information about all parameters.
+    bool                mbParamPairs;       /// true = optional parameters are expected to appear in pairs.
     bool                mbVolatile;         /// True = volatile function.
     bool                mbExternal;         /// True = external function in Calc.
     bool                mbMacroFunc;        /// True = macro sheet function or command.
     bool                mbVarParam;         /// True = use a tFuncVar token, also if min/max are equal.
 };
 
+typedef RefVector< FunctionInfo > FunctionInfoVector;
+
 // function info parameter class iterator =====================================
 
-/** Iterator working on the mpnParamClass member of the FunctionInfo struct.
+/** Iterator working on the mpParamInfos member of the FunctionInfo struct.
 
     This iterator can be used to iterate through the array containing the
-    expected token classes of function parameters. This iterator repeats the
-    last valid token class in the array - it stops automatically before the
-    first empty array entry or before the end of the array, even for repeated
-    calls to the increment operator.
+    token class conversion information of function parameters. This iterator
+    repeats the last valid structure in the array - it stops automatically
+    before the first empty array entry or before the end of the array, even for
+    repeated calls to the increment operator.
  */
-class FuncInfoParamClassIterator
+class FunctionParamInfoIterator
 {
 public:
-    explicit            FuncInfoParamClassIterator( const FunctionInfo& rFuncInfo );
+    explicit            FunctionParamInfoIterator( const FunctionInfo& rFuncInfo );
 
-    FuncInfoParamClassIterator& operator++();
-
-    inline sal_uInt8    getParamClass() const { return *mpnParamClass; }
-    inline sal_uInt8    isExcelOnlyParam() const { return getFlag( *mpnParamClass, FUNCINFO_PARAM_EXCELONLY ); }
-    inline sal_uInt8    isCalcOnlyParam() const { return getFlag( *mpnParamClass, FUNCINFO_PARAM_CALCONLY ); }
+    const FunctionParamInfo& getParamInfo() const;
+    bool                isCalcOnlyParam() const;
+    bool                isExcelOnlyParam() const;
+    FunctionParamInfoIterator& operator++();
 
 private:
-    const sal_uInt8*    mpnParamClass;
-    const sal_uInt8*    mpnParamClassEnd;
+    const FunctionParamInfo* mpParamInfo;
+    const FunctionParamInfo* mpParamInfoEnd;
+    bool                mbParamPairs;
 };
 
 // base function provider =====================================================
 
-class FunctionProviderImpl;
-namespace { struct FunctionData; }
+struct FunctionProviderImpl;
 
 /** Provides access to function info structs for all available sheet functions.
  */
@@ -462,46 +567,37 @@ public:
         EXTERN.CALL function, or 0 on error. */
     const FunctionInfo* getFuncInfoFromMacroName( const ::rtl::OUString& rFuncName ) const;
 
+    /** Returns the library type associated with the passed URL of a function
+        library (function add-in). */
+    FunctionLibraryType getFuncLibTypeFromLibraryName( const ::rtl::OUString& rLibraryName ) const;
+
 protected:
-    typedef RefVector< FunctionInfo >               FuncVector;
-    typedef RefMap< ::rtl::OUString, FunctionInfo > FuncNameMap;
-    typedef RefMap< sal_uInt16, FunctionInfo >      FuncIdMap;
-
-    typedef ::boost::shared_ptr< FuncVector >       FuncVectorRef;
-    typedef ::boost::shared_ptr< FuncNameMap >      FuncNameMapRef;
-    typedef ::boost::shared_ptr< FuncIdMap >        FuncIdMapRef;
-
     /** Returns the list of all function infos. */
-    inline const FuncVector& getFuncs() const { return *mxFuncs; }
+    const FunctionInfoVector& getFuncs() const;
 
 private:
-    /** Creates and inserts a function info struct from the passed function data. */
-    void                initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxParam );
-
-    /** Initializes the members from the passed function data list. */
-    void                initFuncs(
-                            const FunctionData* pBeg, const FunctionData* pEnd,
-                            sal_uInt8 nMaxParam, bool bImportFilter );
-
-private:
-    FuncVectorRef       mxFuncs;            /// All function infos in one list.
-    FuncNameMapRef      mxOdfFuncs;         /// Maps ODF function names to function data.
-    FuncNameMapRef      mxOoxFuncs;         /// Maps OOXML function names to function data.
-    FuncIdMapRef        mxOobFuncs;         /// Maps OOBIN function indexes to function data.
-    FuncIdMapRef        mxBiffFuncs;        /// Maps BIFF function indexes to function data.
-    FuncNameMapRef      mxMacroFuncs;       /// Maps macro function names to function data.
+    typedef ::boost::shared_ptr< FunctionProviderImpl > FunctionProviderImplRef;
+    FunctionProviderImplRef mxFuncImpl;     /// Shared implementation between all copies of the provider.
 };
 
 // op-code and function provider ==============================================
 
+struct OpCodeProviderImpl;
+
 /** Provides access to API op-codes for all available formula tokens and to
     function info structs for all available sheet functions.
  */
-class OpCodeProvider : public ApiOpCodes, public FunctionProvider, public WorkbookHelper
+class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelper to make it usable as UNO service
 {
 public:
-    explicit            OpCodeProvider( const WorkbookHelper& rHelper );
+    explicit            OpCodeProvider(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            FilterType eFilter, BiffType eBiff, bool bImportFilter );
     virtual             ~OpCodeProvider();
+
+    /** Returns the structure containing all token op-codes for operators and
+        special tokens used by the Calc document and its formula parser. */
+    const ApiOpCodes&   getOpCodes() const;
 
     /** Returns the function info for an API token, or 0 on error. */
     const FunctionInfo* getFuncInfoFromApiToken( const ApiToken& rToken ) const;
@@ -511,30 +607,32 @@ public:
                         getOoxParserMap() const;
 
 private:
-    typedef ::std::map< ::rtl::OUString, ApiToken >                                             ApiTokenMap;
-    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >   OpCodeEntrySequence;
-    typedef ::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >                     OpCodeEntryVector;
+    typedef ::boost::shared_ptr< OpCodeProviderImpl > OpCodeProviderImplRef;
+    OpCodeProviderImplRef mxOpCodeImpl;     /// Shared implementation between all copies of the provider.
+};
 
-    static bool         fillEntrySeq( OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
-    static bool         fillTokenMap( ApiTokenMap& orTokenMap, OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper, sal_Int32 nMapGroup );
-    bool                fillFuncTokenMaps( ApiTokenMap& orIntFuncTokenMap, ApiTokenMap& orExtFuncTokenMap, OpCodeEntrySequence& orEntrySeq, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper >& rxMapper ) const;
+// API formula parser wrapper =================================================
 
-    static bool         initOpCode( sal_Int32& ornOpCode, const OpCodeEntrySequence& rEntrySeq, sal_Int32 nSpecialId );
-    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const ::rtl::OUString& rOdfName, const ::rtl::OUString& rOoxName );
-    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, const sal_Char* pcOdfName, const sal_Char* pcOoxName );
-    bool                initOpCode( sal_Int32& ornOpCode, const ApiTokenMap& rTokenMap, sal_Unicode cOdfName, sal_Unicode cOoxName );
+/** A wrapper around the FormulaParser service provided by the Calc document. */
+class ApiParserWrapper : public OpCodeProvider
+{
+public:
+    explicit            ApiParserWrapper(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const OpCodeProvider& rOpCodeProv );
 
-    bool                initFuncOpCode( FunctionInfo& orFuncInfo, const ApiTokenMap& rFuncTokenMap );
-    bool                initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, const ApiTokenMap& rExtFuncTokenMap );
+    /** Returns read/write access to the formula parser property set. */
+    inline PropertySet& getParserProperties() { return maParserProps; }
+
+    /** Calls the XFormulaParser::parseFormula() function of the API parser. */
+    ApiTokenSequence    parseFormula(
+                            const ::rtl::OUString& rFormula,
+                            const ::com::sun::star::table::CellAddress& rRefPos );
 
 private:
-    typedef RefMap< sal_Int32, FunctionInfo >           OpCodeFuncMap;
-    typedef ::boost::shared_ptr< OpCodeFuncMap >        OpCodeFuncMapRef;
-    typedef ::boost::shared_ptr< OpCodeEntryVector >    OpCodeEntryVectorRef;
-
-    OpCodeFuncMapRef    mxOpCodeFuncs;      /// Maps API op-codes to function data.
-    FuncNameMapRef      mxExtProgFuncs;     /// Maps programmatical API function names to function data.
-    OpCodeEntryVectorRef mxParserMap;       /// OOXML token mapping for formula parser service.
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >
+                        mxParser;
+    PropertySet         maParserProps;
 };
 
 // formula contexts ===========================================================
@@ -548,6 +646,7 @@ public:
     inline const ::com::sun::star::table::CellAddress& getBaseAddress() const { return maBaseAddress; }
     inline bool         isRelativeAsOffset() const { return mbRelativeAsOffset; }
     inline bool         is2dRefsAs3dRefs() const { return mb2dRefsAs3dRefs; }
+    inline bool         isNulCharsAllowed() const { return mbAllowNulChars; }
 
     virtual void        setTokens( const ApiTokenSequence& rTokens ) = 0;
     virtual void        setSharedFormula( const ::com::sun::star::table::CellAddress& rBaseAddr );
@@ -555,13 +654,15 @@ public:
 protected:
     explicit            FormulaContext(
                             bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs );
+                            bool b2dRefsAs3dRefs,
+                            bool bAllowNulChars = false );
     virtual             ~FormulaContext();
 
 private:
     ::com::sun::star::table::CellAddress maBaseAddress;
     bool                mbRelativeAsOffset;
     bool                mb2dRefsAs3dRefs;
+    bool                mbAllowNulChars;
 };
 
 // ----------------------------------------------------------------------------
@@ -572,7 +673,8 @@ class TokensFormulaContext : public FormulaContext
 public:
     explicit            TokensFormulaContext(
                             bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs );
+                            bool b2dRefsAs3dRefs,
+                            bool bAllowNulChars = false );
 
     inline const ApiTokenSequence& getTokens() const { return maTokens; }
 
@@ -591,7 +693,8 @@ public:
     explicit            SimpleFormulaContext(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaTokens >& rxTokens,
                             bool bRelativeAsOffset,
-                            bool b2dRefsAs3dRefs );
+                            bool b2dRefsAs3dRefs,
+                            bool bAllowNulChars = false );
 
     virtual void        setTokens( const ApiTokenSequence& rTokens );
 
@@ -599,10 +702,10 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaTokens > mxTokens;
 };
 
-// formula parser/formula compiler base class =================================
+// formula parser/printer base class for filters ==============================
 
 /** Base class for import formula parsers and export formula compilers. */
-class FormulaProcessorBase : public OpCodeProvider
+class FormulaProcessorBase : public OpCodeProvider, protected ApiOpCodes, public WorkbookHelper
 {
 public:
     explicit            FormulaProcessorBase( const WorkbookHelper& rHelper );
@@ -720,20 +823,51 @@ public:
     ::com::sun::star::uno::Any
                         extractReference( const ApiTokenSequence& rTokens ) const;
 
-    /** Tries to extract an absolute cell range from a formula token sequence.
+    /** Tries to extract a single cell address from a formula token sequence.
 
-        @param orRange  (output parameter) The extracted cell range address.
-            Only valid, if the function returns true.
+        @param orAddress  (output parameter) If the token sequence is valid,
+            this parameter will contain the extracted cell address. If the
+            token sequence contains unexpected tokens, nothing meaningful is
+            inserted, and the function returns false.
 
         @param rTokens  The token sequence to be parsed. Should contain exactly
-            one address token or cell range address token. The token sequence
-            may contain whitespace tokens.
+            one cell address token. The token sequence may contain whitespace
+            tokens.
 
-        @return  True, if orRange contains the extracted cell range address.
+        @param bAllowRelative  True = it is allowed that rTokens contains
+            relative references (based on cell A1 of the current sheet).
+            False = only real absolute references will be accepted.
+
+        @return  True, if the token sequence contains a valid cell address
+            which has been extracted to orAddress, false otherwise.
      */
-    bool                extractAbsoluteRange(
+    bool                extractCellAddress(
+                            ::com::sun::star::table::CellAddress& orAddress,
+                            const ApiTokenSequence& rTokens,
+                            bool bAllowRelative ) const;
+
+    /** Tries to extract a cell range address from a formula token sequence.
+
+        @param orAddress  (output parameter) If the token sequence is valid,
+            this parameter will contain the extracted cell range address. If
+            the token sequence contains unexpected tokens, nothing meaningful
+            is inserted, and the function returns false.
+
+        @param rTokens  The token sequence to be parsed. Should contain exactly
+            one cell range address token. The token sequence may contain
+            whitespace tokens.
+
+        @param bAllowRelative  True = it is allowed that rTokens contains
+            relative references (based on cell A1 of the current sheet).
+            False = only real absolute references will be accepted.
+
+        @return  True, if the token sequence contains a valid cell range
+            address which has been extracted to orRange, false otherwise.
+     */
+    bool                extractCellRange(
                             ::com::sun::star::table::CellRangeAddress& orRange,
-                            const ApiTokenSequence& rTokens ) const;
+                            const ApiTokenSequence& rTokens,
+                            bool bAllowRelative ) const;
 
     /** Tries to extract a cell range list from a formula token sequence.
 
@@ -748,6 +882,10 @@ public:
             standard function parameter separator token. The token sequence may
             contain parentheses and whitespace tokens.
 
+        @param bAllowRelative  True = it is allowed that rTokens contains
+            relative references (based on cell A1 of the current sheet).
+            False = only real absolute references will be accepted.
+
         @param nFilterBySheet  If non-negative, this function returns only cell
             ranges located in the specified sheet, otherwise returns all cell
             ranges contained in the token sequence.
@@ -755,6 +893,7 @@ public:
     void                extractCellRangeList(
                             ApiCellRangeList& orRanges,
                             const ApiTokenSequence& rTokens,
+                            bool bAllowRelative,
                             sal_Int32 nFilterBySheet = -1 ) const;
 
     /** Tries to extract a string from a formula token sequence.

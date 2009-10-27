@@ -118,9 +118,6 @@ namespace sd {
 
 GraphicFilter* GetGrfFilter();
 
-SfxProgress* DrawDocShell::mpSpecialProgress = NULL;
-Link*        DrawDocShell::mpSpecialProgressHdl = NULL;
-
 /*************************************************************************
 |*
 |* SFX-Slotmaps und -Definitionen
@@ -525,7 +522,6 @@ void DrawDocShell::ApplySlotFilter() const
         pTestViewShell = SfxViewShell::GetNext( *pTestViewShell );
     }
 }
-
 
 void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 {

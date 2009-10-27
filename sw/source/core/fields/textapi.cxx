@@ -43,9 +43,9 @@
 
 using namespace com::sun::star;
 
-const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap()
+static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
 {
-    static const SfxItemPropertyMap aSvxTextPortionPropertyMap[] =
+    static const SfxItemPropertyMapEntry aSvxTextPortionPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -57,12 +57,12 @@ const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap()
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {0,0,0,0,0,0}
     };
-
-    return aSvxTextPortionPropertyMap;
+    static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap );
+    return &aSvxTextPortionPropertySet;
 }
 
 SwTextAPIObject::SwTextAPIObject( SwTextAPIEditSource* p )
-: SvxUnoText( p, ImplGetSvxTextPortionPropertyMap(), uno::Reference < text::XText >() )
+: SvxUnoText( p, ImplGetSvxTextPortionPropertySet(), uno::Reference < text::XText >() )
 , pSource(p)
 {
 }

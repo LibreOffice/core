@@ -159,7 +159,7 @@ sal_Bool XMLHatchStyleImport::importXML(
             case XML_TOK_HATCH_ROTATION:
                 {
                     sal_Int32 nValue;
-                    rUnitConverter.convertNumber( nValue, rStrValue, 0, 360 );
+                    rUnitConverter.convertNumber( nValue, rStrValue, 0, 3600 );
                     aHatch.Angle = sal_Int16( nValue );
                 }
                 break;

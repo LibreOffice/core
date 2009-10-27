@@ -41,6 +41,7 @@
 
 #include <process.h>
 #include <memory>
+#include "SolarMutex.hxx"
 
 //------------------------------------------------
 //
@@ -159,7 +160,9 @@ bool SAL_CALL CAsyncEventNotifier::startup(bool bCreateSuspended)
 
 void SAL_CALL CAsyncEventNotifier::shutdown()
 {
-    OSL_PRECOND(GetCurrentThreadId() != m_ThreadId, "Method called in wrong thread context!");
+    unsigned nThreadId = GetCurrentThreadId();
+
+    OSL_PRECOND(nThreadId != m_ThreadId, "Method called in wrong thread context!");
 
     osl::ResettableMutexGuard aGuard(m_Mutex);
 

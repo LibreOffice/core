@@ -51,6 +51,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffcodec.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
@@ -59,6 +60,7 @@
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/pivotcachebuffer.hxx"
 #include "oox/xls/pivottablebuffer.hxx"
+#include "oox/xls/scenariobuffer.hxx"
 #include "oox/xls/sharedstringsbuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 #include "oox/xls/tablebuffer.hxx"
@@ -248,6 +250,15 @@ TimeCount& WorkbookHelper::getTimeCount( TimerType eType ) const
 
 // ============================================================================
 
+bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
+{
+    // there is no wrapper in rtl::OUString, TODO: compare with collator
+    return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
+        rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
+}
+
+// ============================================================================
+
 class WorkbookData
 #if OSL_DEBUG_LEVEL > 0
     : public dbg::WorkbookData
@@ -296,8 +307,8 @@ public:
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
     Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
-    /** Creates a com.sun.star.style.Style object and returns its final name. */
-    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const;
+    /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
+    Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
 
     // buffers ----------------------------------------------------------------
 
@@ -321,6 +332,8 @@ public:
     inline DefinedNamesBuffer& getDefinedNames() const { return *mxDefNames; }
     /** Returns the tables collection (equivalent to Calc's database ranges). */
     inline TableBuffer& getTables() const { return *mxTables; }
+    /** Returns the scenarios collection. */
+    inline ScenarioBuffer& getScenarios() const { return *mxScenarios; }
     /** Returns the web queries. */
     inline WebQueryBuffer& getWebQueries() const { return *mxWebQueries; }
     /** Returns the collection of pivot caches. */
@@ -363,7 +376,7 @@ public:
     /** Enables workbook file mode, used for BIFF4 workspace files. */
     void                setIsWorkbookFile();
     /** Recreates global buffers that are used per sheet in specific BIFF versions. */
-    void                createBuffersPerSheet();
+    void                createBuffersPerSheet( sal_Int16 nSheet );
     /** Returns the codec helper that stores the encoder/decoder object. */
     inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
@@ -384,6 +397,7 @@ private:
     typedef ::std::auto_ptr< ExternalLinkBuffer >       ExtLinkBfrPtr;
     typedef ::std::auto_ptr< DefinedNamesBuffer >       DefNamesBfrPtr;
     typedef ::std::auto_ptr< TableBuffer >              TableBfrPtr;
+    typedef ::std::auto_ptr< ScenarioBuffer >           ScenarioBfrPtr;
     typedef ::std::auto_ptr< WebQueryBuffer >           WebQueryBfrPtr;
     typedef ::std::auto_ptr< PivotCacheBuffer >         PivotCacheBfrPtr;
     typedef ::std::auto_ptr< PivotTableBuffer >         PivotTableBfrPtr;
@@ -415,6 +429,7 @@ private:
     ExtLinkBfrPtr       mxExtLinks;             /// All external links.
     DefNamesBfrPtr      mxDefNames;             /// All defined names.
     TableBfrPtr         mxTables;               /// All tables (database ranges).
+    ScenarioBfrPtr      mxScenarios;            /// All scenarios.
     WebQueryBfrPtr      mxWebQueries;           /// Web queries buffer.
     PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
     PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
@@ -557,15 +572,14 @@ Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName,
     return xNamedRange;
 }
 
-Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const
+Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
     Reference< XStyle > xStyle;
     try
     {
         Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
-        Reference< XMultiServiceFactory > xFactory( mxDoc, UNO_QUERY_THROW );
-        xStyle.set( xFactory->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
-        orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ), bRenameOldExisting );
+        xStyle.set( mrBaseFilter.getModelFactory()->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
+        orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ), false );
     }
     catch( Exception& )
     {
@@ -600,22 +614,28 @@ void WorkbookData::setIsWorkbookFile()
     mbWorkbook = true;
 }
 
-void WorkbookData::createBuffersPerSheet()
+void WorkbookData::createBuffersPerSheet( sal_Int16 nSheet )
 {
+    // set mnCurrSheet to enable usage of WorkbookHelper::getCurrentSheetIndex()
+    mnCurrSheet = nSheet;
     switch( meBiff )
     {
         case BIFF2:
         case BIFF3:
+            OSL_ENSURE( mnCurrSheet == 0, "WorkbookData::createBuffersPerSheet - unexpected sheet index" );
+            mxDefNames->setLocalCalcSheet( mnCurrSheet );
         break;
 
         case BIFF4:
-            // #i11183# sheets in BIFF4W files have own styles or names
-            if( mbWorkbook )
+            OSL_ENSURE( mbWorkbook || (mnCurrSheet == 0), "WorkbookData::createBuffersPerSheet - unexpected sheet index" );
+            // #i11183# sheets in BIFF4W files have own styles and names
+            if( mbWorkbook && (mnCurrSheet > 0) )
             {
                 mxStyles.reset( new StylesBuffer( *this ) );
                 mxDefNames.reset( new DefinedNamesBuffer( *this ) );
                 mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
             }
+            mxDefNames->setLocalCalcSheet( mnCurrSheet );
         break;
 
         case BIFF5:
@@ -629,6 +649,7 @@ void WorkbookData::createBuffersPerSheet()
         case BIFF_UNKNOWN:
         break;
     }
+    mnCurrSheet = -1;
 }
 
 // private --------------------------------------------------------------------
@@ -657,6 +678,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     mxExtLinks.reset( new ExternalLinkBuffer( *this ) );
     mxDefNames.reset( new DefinedNamesBuffer( *this ) );
     mxTables.reset( new TableBuffer( *this ) );
+    mxScenarios.reset( new ScenarioBuffer( *this ) );
     mxWebQueries.reset( new WebQueryBuffer( *this ) );
     mxPivotCaches.reset( new PivotCacheBuffer( *this ) );
     mxPivotTables.reset( new PivotTableBuffer( *this ) );
@@ -754,6 +776,11 @@ FilterBase& WorkbookHelper::getBaseFilter() const
     return mrBookData.getBaseFilter();
 }
 
+Reference< XMultiServiceFactory > WorkbookHelper::getGlobalFactory() const
+{
+    return mrBookData.getBaseFilter().getGlobalFactory();
+}
+
 FilterType WorkbookHelper::getFilterType() const
 {
     return mrBookData.getFilterType();
@@ -789,8 +816,13 @@ void WorkbookHelper::finalizeWorkbookImport()
         data pilots expect existing source data on creation. */
     mrBookData.getPivotTables().finalizeImport();
 
+    /*  Insert scenarios after all sheet processing is done, because new hidden
+        sheets are created for scenarios which would confuse code that relies
+        on certain sheet indexes. Must be done after pivot tables too. */
+    mrBookData.getScenarios().finalizeImport();
+
     /*  Set 'Default' page style to automatic page numbering (default is manual
-        number 1). Otherwise hidden tables (e.g. for scenarios) which have
+        number 1). Otherwise hidden sheets (e.g. for scenarios) which have
         'Default' page style will break automatic page numbering for following
         sheets. Automatic numbering is set by passing the value 0. */
     PropertySet aDefPageStyle( getStyleObject( CREATE_OUSTRING( "Default" ), true ) );
@@ -802,6 +834,11 @@ void WorkbookHelper::finalizeWorkbookImport()
 Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
 {
     return mrBookData.getDocument();
+}
+
+Reference< XMultiServiceFactory > WorkbookHelper::getDocumentFactory() const
+{
+    return mrBookData.getBaseFilter().getModelFactory();
 }
 
 Reference< XDevice > WorkbookHelper::getReferenceDevice() const
@@ -829,13 +866,27 @@ Reference< XNameAccess > WorkbookHelper::getDdeLinks() const
     return mrBookData.getDdeLinks();
 }
 
-Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int32 nSheet ) const
+Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int16 nSheet ) const
 {
     Reference< XSpreadsheet > xSheet;
     try
     {
         Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
         xSheet.set( xSheetsIA->getByIndex( nSheet ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+    }
+    return xSheet;
+}
+
+Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( const OUString& rSheet ) const
+{
+    Reference< XSpreadsheet > xSheet;
+    try
+    {
+        Reference< XNameAccess > xSheetsNA( getDocument()->getSheets(), UNO_QUERY_THROW );
+        xSheet.set( xSheetsNA->getByName( rSheet ), UNO_QUERY );
     }
     catch( Exception& )
     {
@@ -886,9 +937,9 @@ Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orNam
     return mrBookData.createNamedRangeObject( orName, nNameFlags );
 }
 
-Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const
+Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
-    return mrBookData.createStyleObject( orStyleName, bPageStyle, bRenameOldExisting );
+    return mrBookData.createStyleObject( orStyleName, bPageStyle );
 }
 
 // buffers --------------------------------------------------------------------
@@ -941,6 +992,11 @@ DefinedNamesBuffer& WorkbookHelper::getDefinedNames() const
 TableBuffer& WorkbookHelper::getTables() const
 {
     return mrBookData.getTables();
+}
+
+ScenarioBuffer& WorkbookHelper::getScenarios() const
+{
+    return mrBookData.getScenarios();
 }
 
 WebQueryBuffer& WorkbookHelper::getWebQueries() const
@@ -1038,9 +1094,9 @@ void WorkbookHelper::setIsWorkbookFile()
     mrBookData.setIsWorkbookFile();
 }
 
-void WorkbookHelper::createBuffersPerSheet()
+void WorkbookHelper::createBuffersPerSheet( sal_Int16 nSheet )
 {
-    mrBookData.createBuffersPerSheet();
+    mrBookData.createBuffersPerSheet( nSheet );
 }
 
 BiffCodecHelper& WorkbookHelper::getCodecHelper() const

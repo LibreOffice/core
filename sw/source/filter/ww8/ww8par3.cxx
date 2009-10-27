@@ -207,7 +207,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     aFld.SetHelp(aFormula.sHelp);
     aFld.SetToolTip(aFormula.sToolTip);
 
-    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return FLD_OK;
     } else {
     WW8PLCFx_Book* pB = pPlcxMan->GetBook();
@@ -321,7 +321,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
         aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
     }
 
-    rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
 
     return FLD_OK;
 }

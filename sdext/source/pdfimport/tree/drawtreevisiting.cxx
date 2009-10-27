@@ -175,6 +175,11 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         // TODO(F2): general transformation case missing; if implemented, note
         // that ODF rotation is oriented the other way
 
+        // vertical mirroring is done by horizontally mirroring and rotaing 180 degree
+        // quaint !
+        if( rElem.MirrorVertical )
+            fRotate += M_PI;
+
         // build transformation string
         if( fShearX != 0.0 )
         {
@@ -853,6 +858,13 @@ void DrawXmlFinalizer::visit( FrameElement& elem, const std::list< Element* >::c
     aGCProps[ USTR("fo:padding-left") ]                = USTR("0cm");
     aGCProps[ USTR("fo:padding-right") ]               = USTR("0cm");
     aGCProps[ USTR("fo:padding-bottom") ]              = USTR("0cm");
+
+    // remark: vertical mirroring is done in current OOO by
+    // mirroring horzontally and rotating 180 degrees
+    // this is quaint, but unfortunately it seems
+    // mirror=vertical is defined but not implemented in current code
+    if( elem.MirrorVertical )
+        aGCProps[ USTR("style:mirror") ] = USTR("horizontal");
 
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:graphic-properties", aGCProps );

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -78,8 +78,8 @@ SLOFILES =  \
         $(SLO)$/docoptio.obj \
         $(SLO)$/editutil.obj \
         $(SLO)$/filtopt.obj \
+        $(SLO)$/formulaparserpool.obj \
         $(SLO)$/hints.obj \
-        $(SLO)$/indexmap.obj \
         $(SLO)$/inputopt.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \
@@ -122,6 +122,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/chartlock.obj \
         $(SLO)$/chgtrack.obj \
         $(SLO)$/compiler.obj \
+        $(SLO)$/formulaparserpool.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \
         $(SLO)$/interpr3.obj \

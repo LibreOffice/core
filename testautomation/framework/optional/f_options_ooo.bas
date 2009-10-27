@@ -39,6 +39,7 @@
 
 sub main
 
+    GLOBAL_USE_NEW_SLEEP = TRUE
     
     use "framework\optional\includes\options_ooo_general.inc"
     use "framework\optional\includes\options_ooo_memory.inc"

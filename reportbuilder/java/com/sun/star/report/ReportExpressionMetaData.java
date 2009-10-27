@@ -34,17 +34,17 @@ import java.util.Locale;
 public interface ReportExpressionMetaData
 {
 
-    public int getParameterCount();
+    int getParameterCount();
 
-    public String getParameterName(int param);
+    String getParameterName(int param);
 
-    public String getParameterDisplayName(int param, Locale locale);
+    String getParameterDisplayName(int param, Locale locale);
 
-    public String getParameterDescription(int param, Locale locale);
+    String getParameterDescription(int param, Locale locale);
 
-    public String getName();
+    String getName();
 
-    public String getDisplayName(Locale l);
+    String getDisplayName(Locale l);
 
-    public String getDescription(Locale l);
+    String getDescription(Locale l);
 }

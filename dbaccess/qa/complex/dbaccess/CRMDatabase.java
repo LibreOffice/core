@@ -51,10 +51,12 @@ import connectivity.tools.QueryDefinition;
  */
 public class CRMDatabase
 {
-    private XMultiServiceFactory        m_orb;
-    private HsqlDatabase                m_database;
-    private DataSource                  m_dataSource;
-    private XConnection                 m_connection;
+    private static final String INTEGER = "INTEGER";
+    private static final String VARCHAR50 = "VARCHAR(50)";
+    private final XMultiServiceFactory        m_orb;
+    private final HsqlDatabase                m_database;
+    private final DataSource                  m_dataSource;
+    private final XConnection                 m_connection;
 
     /** constructs the CRM database
      */
@@ -97,8 +99,8 @@ public class CRMDatabase
     {
         HsqlTableDescriptor table = new HsqlTableDescriptor( "categories",
             new HsqlColumnDescriptor[] {
-                new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
-                new HsqlColumnDescriptor( "Name", "VARCHAR(50)" ),
+                new HsqlColumnDescriptor( "ID",INTEGER, HsqlColumnDescriptor.PRIMARY ),
+                new HsqlColumnDescriptor( "Name",VARCHAR50),
                 new HsqlColumnDescriptor( "Description", "VARCHAR(1024)" ),
                 new HsqlColumnDescriptor( "Image", "LONGVARBINARY" ) } );
         m_database.createTable( table, true );
@@ -108,9 +110,9 @@ public class CRMDatabase
 
         table = new HsqlTableDescriptor( "products",
             new HsqlColumnDescriptor[] {
-                new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
-                new HsqlColumnDescriptor( "Name", "VARCHAR(50)" ),
-                new HsqlColumnDescriptor( "CategoryID", "INTEGER", HsqlColumnDescriptor.REQUIRED, "categories", "ID" ) } );
+                new HsqlColumnDescriptor( "ID",INTEGER, HsqlColumnDescriptor.PRIMARY ),
+                new HsqlColumnDescriptor( "Name",VARCHAR50),
+                new HsqlColumnDescriptor( "CategoryID",INTEGER, HsqlColumnDescriptor.REQUIRED, "categories", "ID" ) } );
         m_database.createTable( table, true );
 
         m_database.executeSQL( "INSERT INTO \"products\" VALUES ( 1, 'Oranges', 1 )" );
@@ -120,22 +122,23 @@ public class CRMDatabase
 
         table = new HsqlTableDescriptor( "customers",
             new HsqlColumnDescriptor[] {
-                new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
-                new HsqlColumnDescriptor( "Name", "VARCHAR(50)" ),
-                new HsqlColumnDescriptor( "Address", "VARCHAR(50)" ),
-                new HsqlColumnDescriptor( "City", "VARCHAR(50)" ),
-                new HsqlColumnDescriptor( "Postal", "VARCHAR(50)" ) } );
+                new HsqlColumnDescriptor( "ID",INTEGER, HsqlColumnDescriptor.PRIMARY ),
+                new HsqlColumnDescriptor( "Name",VARCHAR50),
+                new HsqlColumnDescriptor( "Address",VARCHAR50),
+                new HsqlColumnDescriptor( "City",VARCHAR50),
+                new HsqlColumnDescriptor( "Postal",VARCHAR50),
+                new HsqlColumnDescriptor( "Comment","LONGVARCHAR")} );
         m_database.createTable( table, true );
 
-        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(1,'Food, Inc.','Down Under','Melbourne','509') " );
-        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(2,'Simply Delicious','Down Under','Melbourne','518') " );
-        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(3,'Pure Health','10 Fish St.','San Francisco','94107') " );
-        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(4,'Milk And More','Arlington Road 21','Dublin','31021') " );
+        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(1,'Food, Inc.','Down Under','Melbourne','509','Prefered') " );
+        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(2,'Simply Delicious','Down Under','Melbourne','518',null) " );
+        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(3,'Pure Health','10 Fish St.','San Francisco','94107',null) " );
+        m_database.executeSQL( "INSERT INTO \"customers\" VALUES(4,'Milk And More','Arlington Road 21','Dublin','31021','Good one.') " );
 
         table = new HsqlTableDescriptor( "orders",
             new HsqlColumnDescriptor[] {
-                new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
-                new HsqlColumnDescriptor( "CustomerID", "INTEGER", HsqlColumnDescriptor.REQUIRED, "customers", "ID"  ),
+                new HsqlColumnDescriptor( "ID",INTEGER, HsqlColumnDescriptor.PRIMARY ),
+                new HsqlColumnDescriptor( "CustomerID",INTEGER, HsqlColumnDescriptor.REQUIRED, "customers", "ID"  ),
                 new HsqlColumnDescriptor( "OrderDate", "DATE" ),
                 new HsqlColumnDescriptor( "ShipDate", "DATE" ) } );
         m_database.createTable( table, true );
@@ -145,9 +148,9 @@ public class CRMDatabase
 
         table = new HsqlTableDescriptor( "orders_details",
             new HsqlColumnDescriptor[] {
-                new HsqlColumnDescriptor( "OrderID", "INTEGER", HsqlColumnDescriptor.PRIMARY, "orders", "ID" ),
-                new HsqlColumnDescriptor( "ProductID", "INTEGER", HsqlColumnDescriptor.PRIMARY, "products", "ID"  ),
-                new HsqlColumnDescriptor( "Quantity", "INTEGER" ) } );
+                new HsqlColumnDescriptor( "OrderID",INTEGER, HsqlColumnDescriptor.PRIMARY, "orders", "ID" ),
+                new HsqlColumnDescriptor( "ProductID",INTEGER, HsqlColumnDescriptor.PRIMARY, "products", "ID"  ),
+                new HsqlColumnDescriptor( "Quantity",INTEGER) } );
         m_database.createTable( table, true );
 
         m_database.executeSQL( "INSERT INTO \"orders_details\" VALUES(1, 1, 100)" );
@@ -158,9 +161,9 @@ public class CRMDatabase
 
         // since we created the tables by directly executing the SQL statements, we need to refresh
         // the tables container
-        XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
+        final XTablesSupplier suppTables = (XTablesSupplier)UnoRuntime.queryInterface(
             XTablesSupplier.class, m_connection );
-        XRefreshable refreshTables = (XRefreshable)UnoRuntime.queryInterface(
+        final XRefreshable refreshTables = (XRefreshable)UnoRuntime.queryInterface(
             XRefreshable.class, suppTables.getTables() );
         refreshTables.refresh();
     }
@@ -169,11 +172,11 @@ public class CRMDatabase
     private void validateUnparseable()
     {
         // The "unparseable" query should be indeed be unparseable by OOo (though a valid HSQL query)
-        XSingleSelectQueryComposer composer = null;
-        QueryDefinition unparseableQuery = null;
+        XSingleSelectQueryComposer composer;
+        QueryDefinition unparseableQuery;
         try
         {
-            XMultiServiceFactory factory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            final XMultiServiceFactory factory = (XMultiServiceFactory)UnoRuntime.queryInterface(
                     XMultiServiceFactory.class, m_database.defaultConnection() );
             composer = (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
                     XSingleSelectQueryComposer.class, factory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );

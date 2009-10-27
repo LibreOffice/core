@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dp_informationprovider.cxx,v $
- * $Revision: 1.5 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -54,6 +51,7 @@
 #include "rtl/ustring.hxx"
 #include "ucbhelper/content.hxx"
 
+#include "dp_dependencies.hxx"
 #include "dp_descriptioninfoset.hxx"
 #include "dp_identifier.hxx"
 #include "dp_version.hxx"
@@ -388,6 +386,11 @@ uno::Sequence< uno::Sequence< rtl::OUString > >
 
                 if (*id2 == id)
                 {
+                    // check, if there are unsatisfied dependencies and ignore those updates
+                    uno::Sequence< uno::Reference< xml::dom::XElement > > ds( dp_misc::Dependencies::check( infoset ) );
+                    if ( ds.getLength() )
+                        continue;
+
                     rtl::OUString v( infoset.getVersion() );
                     if ( dp_misc::compareVersions( v, latestVersion ) == dp_misc::GREATER )
                     {

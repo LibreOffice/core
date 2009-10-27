@@ -330,9 +330,6 @@ sub do_job {
     if (defined $job_hash{setenv_string}) {
         # use configuration string from server
         $setenv_string .= $job_hash{setenv_string};
-        if ((defined $ENV{USE_SHELL}) && ($ENV{USE_SHELL} eq '4nt')) {
-            $cmd_file .= '.btm';
-        };
         print "Environment: $setenv_string\n";
 
         my $directory = $job_hash{job_dir};
@@ -349,19 +346,11 @@ sub do_job {
 
         print COMMAND_FILE "pushd $job_hash{job_dir} && ";
         print COMMAND_FILE $job_hash{job} ." >& $tmp_log_file\n";
-        if ((defined $ENV{USE_SHELL}) && ($ENV{USE_SHELL} eq '4nt')) {
-            print COMMAND_FILE "exit %?\n";
-        } else {
-            print COMMAND_FILE "exit \$?\n";
-        };
+        print COMMAND_FILE "exit \$?\n";
         close COMMAND_FILE;
         $job_temp_files{$cmd_file} = 0;
         $job_temp_files{$tmp_log_file} = $job_hash{log};
-        if ((defined $ENV{USE_SHELL}) && ($ENV{USE_SHELL} eq '4nt')) {
-            $error_code = system($ENV{COMSPEC}, '/c', $cmd_file);
-        } else {
-            $error_code = system($ENV{SHELL}, $cmd_file);
-        };
+        $error_code = system($ENV{SHELL}, $cmd_file);
         unlink $cmd_file or system("rm -rf $cmd_file");
         delete $job_temp_files{$cmd_file};
     } else {
@@ -411,22 +400,6 @@ sub get_setsolar_environment {
     my $error_code = 0;
     my $cmd_file = File::Temp::tmpnam($ENV_BACKUP{TMP});
     my $tmp_log_file = File::Temp::tmpnam($ENV_BACKUP{TMP});
-    if ((defined $ENV{USE_SHELL}) && ($ENV{USE_SHELL} eq '4nt')) {
-        my $setsolar = $ENV{ENV_ROOT} . '/etools/setsolar.pl';
-        $setsolar_string =~ s/^(\S+\s)\S+/$1$setsolar/; #replace the use of the local script with generic setsolar
-        $cmd_file .= '.btm';
-        my $setsolar_tmp_file = File::Temp::tmpnam($ENV_BACKUP{TMP});
-        $setsolar_tmp_file .= '.btm';
-        open (COMMAND_FILE, ">$setsolar_tmp_file") or return $?;
-        print COMMAND_FILE "set SOURCE_ROOT=$$job_hash{source_root}\n" if ($$job_hash{source_root});
-        print COMMAND_FILE "unset UPDATER\n" if (!defined $$job_hash{updater});
-        print COMMAND_FILE "$setsolar_string -file $cmd_file";
-        close COMMAND_FILE;
-        $error_code = system($ENV{COMSPEC}, '/c', $setsolar_tmp_file);
-        unlink $setsolar_tmp_file or system("rm -rf $setsolar_tmp_file");
-        store_env_hash($cmd_file);
-        return $error_code;
-    };
     if (defined $$job_hash{updater}) {
         $ENV{UPDATER} = $$job_hash{updater};
     } else {
@@ -454,20 +427,11 @@ sub store_env_hash {
     my $env_vars_file = File::Temp::tmpnam($ENV_BACKUP{TMP});
     print "$cmd_file $env_vars_file\n";
     #get all env variables in $env_vars_file
-    if ((defined $ENV{USE_SHELL}) && ($ENV{USE_SHELL} eq '4nt')) {
-        $cmd_file .= '.btm';
-        open (COMMAND_FILE, ">$cmd_file");
-        print COMMAND_FILE "call $ss_setenv_file\n";
-        print COMMAND_FILE "set > $env_vars_file\n";
-        close COMMAND_FILE;
-        system($ENV{COMSPEC}, '/c', $cmd_file);
-    } else {
-        open (COMMAND_FILE, ">$cmd_file");
-        print COMMAND_FILE "source $ss_setenv_file\n";
-        print COMMAND_FILE "env > $env_vars_file\n";
-        close COMMAND_FILE;
-        system($ENV{SHELL}, $cmd_file);
-    };
+    open (COMMAND_FILE, ">$cmd_file");
+    print COMMAND_FILE "source $ss_setenv_file\n";
+    print COMMAND_FILE "env > $env_vars_file\n";
+    close COMMAND_FILE;
+    system($ENV{SHELL}, $cmd_file);
     print_error($?) if ($?);
     unlink $cmd_file or system("rm -rf $cmd_file");
     unlink $ss_setenv_file or system("rm -rf $ss_setenv_file");

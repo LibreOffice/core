@@ -129,7 +129,7 @@
 #define CB_ACTIV                        121
 #define CB_COLLECT                      122
 #define CB_APPEND_SPACE                 123
-#define CB_KEEP_LIST                    124
+#define CB_REMOVE_LIST                  124
 #define CB_AS_TIP                       125
 #define FT_MIN_WORDLEN                  126
 #define FT_MAX_ENTRIES                  127

@@ -41,16 +41,9 @@
 #pragma warning(push, 1)
 #pragma warning(disable: 4548 4555 4917)
 #endif
+
 #include "windows.h"
-#ifdef __MINGW32__
-#include <atlbase.h>
-#else
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
-#include <atldbcli.h>
-#else
-#include "atlcomcli.h"
-#endif
-#endif
+
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif

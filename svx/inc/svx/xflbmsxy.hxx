@@ -45,12 +45,12 @@ class SVX_DLLPUBLIC XFillBmpSizeXItem : public SfxMetricItem
 public:
                             TYPEINFO();
                             XFillBmpSizeXItem( long nSizeX = 0 );
-                            XFillBmpSizeXItem( SvStream& rIn );
+                            SVX_DLLPRIVATE XFillBmpSizeXItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
@@ -58,7 +58,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    virtual FASTBOOL        HasMetrics() const;
+    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
 };
 
 /*************************************************************************
@@ -72,12 +72,12 @@ class SVX_DLLPUBLIC XFillBmpSizeYItem : public SfxMetricItem
 public:
                             TYPEINFO();
                             XFillBmpSizeYItem( long nSizeY = 0 );
-                            XFillBmpSizeYItem( SvStream& rIn );
+                            SVX_DLLPRIVATE XFillBmpSizeYItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
@@ -85,7 +85,7 @@ public:
     // Dieses Item nimmt sowohl metrische als auch
     // Prozentwerte ( sind negativ ) auf; das muessen
     // wir hier beruecksichtigen
-    virtual FASTBOOL        HasMetrics() const;
+    SVX_DLLPRIVATE virtual FASTBOOL     HasMetrics() const;
 };
 
 #endif

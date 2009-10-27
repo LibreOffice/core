@@ -188,8 +188,6 @@ public:
     SmSymSetManager &   GetSymSetManager();
     void                GetSymbols( std::vector< SmSym > &rSymbols ) const;
     void                SetSymbols( const std::vector< SmSym > &rNewSymbols );
-    USHORT              GetSymbolCount() const;
-    const SmSym *       GetSymbol( USHORT nIndex ) const;
 
     const SmFormat &    GetStandardFormat() const;
     void                SetStandardFormat( const SmFormat &rFormat, BOOL bSaveFontFormatList = FALSE );
@@ -207,8 +205,6 @@ public:
 
     BOOL            IsIgnoreSpacesRight() const;
     void            SetIgnoreSpacesRight( BOOL bVal );
-    BOOL            IsToolboxVisible() const;
-    void            SetToolboxVisible( BOOL bVal );
     BOOL            IsAutoRedraw() const;
     void            SetAutoRedraw( BOOL bVal );
     BOOL            IsShowFormulaCursor() const;

@@ -35,35 +35,6 @@
 
 class SubTotal
 {
-#if OLD_PIVOT_IMPLEMENTATION
-private:
-    long    nCount;
-    long    nCount2;
-    double  nSum;
-    double  nSumSqr;
-    double  nMax;
-    double  nMin;
-    double  nProduct;
-    BOOL    bSumOk;
-    BOOL    bSumSqrOk;
-    BOOL    bProductOk;
-    USHORT  nProgress;
-
-public:
-    SCSIZE  nIndex;         // Test
-
-public:
-            SubTotal();
-            ~SubTotal();
-
-    void    UpdateNoVal();
-    void    Update( double nVal );
-    void    Update( const SubTotal& rVal );
-
-    short   Valid( USHORT nFunction ) const;
-                            // return 0 => Fehler, -1 => kein Wert, 1 => ok
-    double  Result( USHORT nFunction ) const;
-#endif
 public:
 
     static  BOOL SafePlus( double& fVal1, double fVal2);

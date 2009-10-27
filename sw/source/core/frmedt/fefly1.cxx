@@ -804,7 +804,9 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
     SwFlyFrmFmt* pFmt = 0;
     SET_CURR_SHELL( this );
     StartAllAction();
-    FOREACHCURSOR_START( this )
+    SwShellCrsr *pStartCursor = dynamic_cast<SwShellCrsr*>(this->GetSwCrsr());
+    SwShellCrsr *pCursor = pStartCursor;
+    do {
 
         // Anker noch nicht oder unvollstaendig gesetzt ?
         if( pFlyAttrSet )
@@ -820,18 +822,22 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
                 case FLY_AUTO_CNTNT: // LAYER_IMPL
                 case FLY_IN_CNTNT:
                     if( !pAnchor->GetCntntAnchor() )
-                        pAnchor->SetAnchor( PCURCRSR->GetPoint() );
+                    {
+                        pAnchor->SetAnchor( pCursor->GetPoint() );
+                    }
                     break;
                 case FLY_AT_FLY:
                     if( !pAnchor->GetCntntAnchor() )
-                        lcl_SetNewFlyPos( *PCURCRSR->GetNode(),
-                                            *pAnchor, GetCrsrDocPos() );
+                    {
+                        lcl_SetNewFlyPos( *pCursor->GetNode(),
+                                *pAnchor, GetCrsrDocPos() );
+                    }
                     break;
                 case FLY_PAGE:
                     if( !pAnchor->GetPageNum() )
                     {
-                        pAnchor->SetPageNum( PCURCRSR->GetPageNum(
-                                    sal_True, &PCURCRSR->GetPtPos() ) );
+                        pAnchor->SetPageNum( pCursor->GetPageNum(
+                                sal_True, &pCursor->GetPtPos() ) );
                     }
                     break;
                 default :
@@ -839,13 +845,15 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
                 }
             }
         }
-        pFmt = GetDoc()->Insert(*PCURCRSR, rGrfName,
+        pFmt = GetDoc()->Insert(*pCursor, rGrfName,
                                 rFltName, pGraphic,
                                 pFlyAttrSet,
                                 pGrfAttrSet, pFrmFmt );
         ASSERT( pFmt, "Doc->Insert(notxt) failed." );
 
-    FOREACHCURSOR_END()
+    } while( (pCursor = dynamic_cast<SwShellCrsr*>(pCursor->GetNext()))
+             != pStartCursor );
+
     EndAllAction();
 
     if( pFmt )
@@ -1603,7 +1611,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
     sal_uInt16 nOld = pDView->GetHitTolerancePixel();
     pDView->SetHitTolerancePixel( 2 );
 
-    if( pDView->PickObj( rPt, pObj, pPV,SDRSEARCH_PICKMACRO ) &&
+    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV,SDRSEARCH_PICKMACRO ) &&
         pObj->ISA(SwVirtFlyDrawObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
@@ -1643,8 +1651,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         Point aPt( rPt );
                         aPt -= pFly->Frm().Pos();
                         // ohne MapMode-Offset, ohne Offset, o ... !!!!!
-                        aPt = (Point&)(const Size&)GetOut()->LogicToPixel(
-                                (const Size&)aPt, MapMode( MAP_TWIP ) );
+                        aPt = GetOut()->LogicToPixel(
+                                aPt, MapMode( MAP_TWIP ) );
                         ((( *pURL += '?' ) += String::CreateFromInt32( aPt.X() ))
                                   += ',' ) += String::CreateFromInt32(aPt.Y() );
                     }
@@ -1671,7 +1679,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     SdrPageView* pPV;
     SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
 
-    if( pDView->PickObj( rPt, pObj, pPV ) && pObj->ISA(SwVirtFlyDrawObj) )
+    if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV ) && pObj->ISA(SwVirtFlyDrawObj) )
     {
         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
@@ -1715,7 +1723,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill
         // Tattergrenze fuer Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
+        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
         {
             // dann teste mal was es ist:
             if ( pObj->ISA(SwVirtFlyDrawObj) )
@@ -1847,7 +1855,7 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
         // Tattergrenze fuer Drawing-SS
         pDView->SetHitTolerancePixel( pDView->GetMarkHdlSizePixel()/2 );
 
-        if( pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
+        if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) )
             eType = GetObjCntType( *(rpObj = pObj) );
 
         pDView->SetHitTolerancePixel( nOld );
@@ -2060,3 +2068,99 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 
     EndAction();
 }
+
+// --> OD 2009-07-13 #i73249#
+const String SwFEShell::GetObjTitle() const
+{
+    String aTitle;
+
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            const SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                aTitle = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjTitle();
+            }
+            else
+            {
+                aTitle = pObj->GetTitle();
+            }
+        }
+    }
+
+    return aTitle;
+}
+
+void SwFEShell::SetObjTitle( const String& rTitle )
+{
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                GetDoc()->SetFlyFrmTitle( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
+                                          rTitle );
+            }
+            else
+            {
+                pObj->SetTitle( rTitle );
+            }
+        }
+    }
+}
+
+const String SwFEShell::GetObjDescription() const
+{
+    String aDescription;
+
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            const SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                aDescription = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjDescription();
+            }
+            else
+            {
+                aDescription = pObj->GetDescription();
+            }
+        }
+    }
+
+    return aDescription;
+}
+
+void SwFEShell::SetObjDescription( const String& rDescription )
+{
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                GetDoc()->SetFlyFrmDescription( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
+                                                rDescription );
+            }
+            else
+            {
+                pObj->SetDescription( rDescription );
+            }
+        }
+    }
+}
+// <--

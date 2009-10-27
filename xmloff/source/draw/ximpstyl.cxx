@@ -730,9 +730,30 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     break;
                 }
-                default: // 5 items
+                case 5:
                 {
-                    mnTypeId = 18; // AUTOLAYOUT_4OBJ
+                    SdXMLPresentationPlaceholderContext* pObj1 = maList.GetObject(1);
+
+                    if(pObj1->GetName().equals(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("object"))))
+                    {
+                        mnTypeId = 18; // AUTOLAYOUT_4OBJ
+                    }
+                    else
+                    {
+                        mnTypeId = 33; // AUTOLAYOUT_4CLIPART
+                    }
+                     break;
+
+                }
+                case 7:
+                {
+                    mnTypeId = 33; // AUTOLAYOUT_6CLIPART
+                    break;
+                }
+                default:
+                {
+                    mnTypeId = 20; // AUTOLAYOUT_NONE
                     break;
                 }
             }

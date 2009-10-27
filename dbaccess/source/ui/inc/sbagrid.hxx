@@ -299,6 +299,12 @@ namespace dbaui
         virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
         virtual void DeleteSelectedRows();
+        /** copies the currently selected rows to the clipboard
+            @precond
+                at least one row is selected
+        */
+        void CopySelectedRowsToClipboard();
+
 
     protected:
         // DragSourceHelper overridables
@@ -348,6 +354,7 @@ namespace dbaui
 
     private:
         sal_Bool    IsReadOnlyDB() const;
+        void implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag );
 
     private:
         using FmGridControl::AcceptDrop;

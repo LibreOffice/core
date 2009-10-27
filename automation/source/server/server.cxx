@@ -805,7 +805,7 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
                 break;
             }
             default:
-                DBG_ERROR1( "Unbekannter Request Nr:%il", nId );
+                DBG_ERROR1( "Unbekannter Request Nr:%i", nId );
                 break;
         }
         if( !pIn->IsEof() )

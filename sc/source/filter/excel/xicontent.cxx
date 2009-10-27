@@ -41,6 +41,7 @@
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #include <svtools/intitem.hxx>
+#include <svtools/stritem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/wghtitem.hxx>
@@ -67,6 +68,12 @@
 #include "xiname.hxx"
 
 #include "excform.hxx"
+#include "tabprotection.hxx"
+
+#include <memory>
+
+using ::com::sun::star::uno::Sequence;
+using ::std::auto_ptr;
 
 // Shared string table ========================================================
 
@@ -370,14 +377,33 @@ void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
     String aNewUrl(sal_Unicode('#')), aTabName;
 
     bool bInQuote = false;
+    bool bQuoteTabName = false;
     for (xub_StrLen i = 1; i < n; ++i)
     {
         c = rUrl.GetChar(i);
         if (c == sal_Unicode('\''))
         {
+            if (bInQuote && i+1 < n && rUrl.GetChar(i+1) == sal_Unicode('\''))
+            {
+                // Two consecutive single quotes ('') signify a single literal
+                // quite.  When this occurs, the whole table name needs to be
+                // quoted.
+                bQuoteTabName = true;
+                aTabName.Append(c);
+                aTabName.Append(c);
+                ++i;
+                continue;
+            }
+
             bInQuote = !bInQuote;
             if (!bInQuote && aTabName.Len() > 0)
+            {
+                if (bQuoteTabName)
+                    aNewUrl.Append(sal_Unicode('\''));
                 aNewUrl.Append(aTabName);
+                if (bQuoteTabName)
+                    aNewUrl.Append(sal_Unicode('\''));
+            }
         }
         else if (bInQuote)
             aTabName.Append(c);
@@ -1004,7 +1030,7 @@ XclImpDecrypterRef lclReadFilepass5( XclImpStream& rStrm )
     {
         sal_uInt16 nKey, nHash;
         rStrm >> nKey >> nHash;
-        xDecr.reset( new XclImpBiff5Decrypter( rStrm.GetRoot(), nKey, nHash ) );
+        xDecr.reset( new XclImpBiff5Decrypter( nKey, nHash ) );
     }
     return xDecr;
 }
@@ -1015,14 +1041,13 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
     DBG_ASSERT( rStrm.GetRecLeft() == 48, "lclReadFilepass8 - wrong record size" );
     if( rStrm.GetRecLeft() == 48 )
     {
-        sal_uInt8 pnDocId[ 16 ];
-        sal_uInt8 pnSaltData[ 16 ];
-        sal_uInt8 pnSaltHash[ 16 ];
-        rStrm.Read( pnDocId, 16 );
-        rStrm.Read( pnSaltData, 16 );
-        rStrm.Read( pnSaltHash, 16 );
-        xDecr.reset( new XclImpBiff8Decrypter(
-            rStrm.GetRoot(), pnDocId, pnSaltData, pnSaltHash ) );
+        sal_uInt8 pnSalt[ 16 ];
+        sal_uInt8 pnVerifier[ 16 ];
+        sal_uInt8 pnVerifierHash[ 16 ];
+        rStrm.Read( pnSalt, 16 );
+        rStrm.Read( pnVerifier, 16 );
+        rStrm.Read( pnVerifierHash, 16 );
+        xDecr.reset( new XclImpBiff8Decrypter( pnSalt, pnVerifier, pnVerifierHash ) );
     }
     return xDecr;
 }
@@ -1080,6 +1105,7 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
     XclImpDecrypterRef xDecr;
     rStrm.DisableDecryption();
 
+    // read the FILEPASS record and create a new decrypter object
     switch( rStrm.GetRoot().GetBiff() )
     {
         case EXC_BIFF2:
@@ -1089,12 +1115,185 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
         case EXC_BIFF8: xDecr = lclReadFilepass8( rStrm );  break;
         default:        DBG_ERROR_BIFF();
     };
+
     // set decrypter at import stream
     rStrm.SetDecrypter( xDecr );
-    // remember encryption for export
-    rStrm.GetRoot().GetExtDocOptions().GetDocSettings().mbEncrypted = true;
 
+    // request and verify a password (decrypter implements IDocPasswordVerifier)
+    if( xDecr.is() )
+        rStrm.GetRoot().RequestPassword( *xDecr );
+
+    // return error code (success, wrong password, etc.)
     return xDecr.is() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
+}
+
+// Document protection ========================================================
+
+XclImpDocProtectBuffer::XclImpDocProtectBuffer( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot ),
+    mnPassHash(0x0000),
+    mbDocProtect(false),
+    mbWinProtect(false)
+{
+}
+
+void XclImpDocProtectBuffer::ReadDocProtect( XclImpStream& rStrm )
+{
+    mbDocProtect = rStrm.ReaduInt16() ? true : false;
+}
+
+void XclImpDocProtectBuffer::ReadWinProtect( XclImpStream& rStrm )
+{
+    mbWinProtect = rStrm.ReaduInt16() ? true : false;
+}
+
+void XclImpDocProtectBuffer::ReadPasswordHash( XclImpStream& rStrm )
+{
+    rStrm.EnableDecryption();
+    mnPassHash = rStrm.ReaduInt16();
+}
+
+void XclImpDocProtectBuffer::Apply() const
+{
+    if (!mbDocProtect && !mbWinProtect)
+        // Excel requires either the structure or windows protection is set.
+        // If neither is set then the document is not protected at all.
+        return;
+
+    auto_ptr<ScDocProtection> pProtect(new ScDocProtection);
+    pProtect->setProtected(true);
+
+#if ENABLE_SHEET_PROTECTION
+    if (mnPassHash)
+    {
+        // 16-bit password pash.
+        Sequence<sal_Int8> aPass(2);
+        aPass[0] = (mnPassHash >> 8) & 0xFF;
+        aPass[1] = mnPassHash & 0xFF;
+        pProtect->setPasswordHash(aPass, PASSHASH_XL);
+    }
+#endif
+
+    // document protection options
+    pProtect->setOption(ScDocProtection::STRUCTURE, mbDocProtect);
+    pProtect->setOption(ScDocProtection::WINDOWS,   mbWinProtect);
+
+    GetDoc().SetDocProtection(pProtect.get());
+}
+
+// Sheet Protection ===========================================================
+
+XclImpSheetProtectBuffer::Sheet::Sheet() :
+    mbProtected(false),
+    mnPasswordHash(0x0000),
+    mnOptions(0x4400)
+{
+}
+
+// ----------------------------------------------------------------------------
+
+XclImpSheetProtectBuffer::Sheet::Sheet(const Sheet& r) :
+    mbProtected(r.mbProtected),
+    mnPasswordHash(r.mnPasswordHash),
+    mnOptions(r.mnOptions)
+{
+}
+
+XclImpSheetProtectBuffer::XclImpSheetProtectBuffer( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
+{
+}
+
+void XclImpSheetProtectBuffer::ReadProtect( XclImpStream& rStrm, SCTAB nTab )
+{
+    if ( rStrm.ReaduInt16() )
+    {
+        Sheet* pSheet = GetSheetItem(nTab);
+        if (pSheet)
+            pSheet->mbProtected = true;
+    }
+}
+
+void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
+{
+    rStrm.Ignore(19);
+    sal_uInt16 nOptions;
+    rStrm >> nOptions;
+
+    Sheet* pSheet = GetSheetItem(nTab);
+    if (pSheet)
+        pSheet->mnOptions = nOptions;
+}
+
+void XclImpSheetProtectBuffer::ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab )
+{
+    sal_uInt16 nHash;
+    rStrm >> nHash;
+    Sheet* pSheet = GetSheetItem(nTab);
+    if (pSheet)
+        pSheet->mnPasswordHash = nHash;
+}
+
+void XclImpSheetProtectBuffer::Apply() const
+{
+    for (ProtectedSheetMap::const_iterator itr = maProtectedSheets.begin(), itrEnd = maProtectedSheets.end();
+         itr != itrEnd; ++itr)
+    {
+        if (!itr->second.mbProtected)
+            // This sheet is (for whatever reason) not protected.
+            continue;
+
+        auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
+        pProtect->setProtected(true);
+
+#if ENABLE_SHEET_PROTECTION
+        // 16-bit hash password
+        const sal_uInt16 nHash = itr->second.mnPasswordHash;
+        if (nHash)
+        {
+            Sequence<sal_Int8> aPass(2);
+            aPass[0] = (nHash >> 8) & 0xFF;
+            aPass[1] = nHash & 0xFF;
+            pProtect->setPasswordHash(aPass, PASSHASH_XL);
+        }
+#endif
+
+        // sheet protection options
+        const sal_uInt16 nOptions = itr->second.mnOptions;
+        pProtect->setOption( ScTableProtection::OBJECTS,               (nOptions & 0x0001) );
+        pProtect->setOption( ScTableProtection::SCENARIOS,             (nOptions & 0x0002) );
+        pProtect->setOption( ScTableProtection::FORMAT_CELLS,          (nOptions & 0x0004) );
+        pProtect->setOption( ScTableProtection::FORMAT_COLUMNS,        (nOptions & 0x0008) );
+        pProtect->setOption( ScTableProtection::FORMAT_ROWS,           (nOptions & 0x0010) );
+        pProtect->setOption( ScTableProtection::INSERT_COLUMNS,        (nOptions & 0x0020) );
+        pProtect->setOption( ScTableProtection::INSERT_ROWS,           (nOptions & 0x0040) );
+        pProtect->setOption( ScTableProtection::INSERT_HYPERLINKS,     (nOptions & 0x0080) );
+        pProtect->setOption( ScTableProtection::DELETE_COLUMNS,        (nOptions & 0x0100) );
+        pProtect->setOption( ScTableProtection::DELETE_ROWS,           (nOptions & 0x0200) );
+        pProtect->setOption( ScTableProtection::SELECT_LOCKED_CELLS,   (nOptions & 0x0400) );
+        pProtect->setOption( ScTableProtection::SORT,                  (nOptions & 0x0800) );
+        pProtect->setOption( ScTableProtection::AUTOFILTER,            (nOptions & 0x1000) );
+        pProtect->setOption( ScTableProtection::PIVOT_TABLES,          (nOptions & 0x2000) );
+        pProtect->setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, (nOptions & 0x4000) );
+
+        // all done.  now commit.
+        GetDoc().SetTabProtection(itr->first, pProtect.get());
+    }
+}
+
+XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB nTab )
+{
+    ProtectedSheetMap::iterator itr = maProtectedSheets.find(nTab);
+    if (itr == maProtectedSheets.end())
+    {
+        // new sheet
+        if ( !maProtectedSheets.insert( ProtectedSheetMap::value_type(nTab, Sheet()) ).second )
+            return NULL;
+
+        itr = maProtectedSheets.find(nTab);
+    }
+
+    return &itr->second;
 }
 
 // ============================================================================

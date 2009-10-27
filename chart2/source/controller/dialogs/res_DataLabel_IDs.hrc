@@ -42,3 +42,7 @@
 #define FT_LABEL_TEXTDIR    31
 #define LB_LABEL_TEXTDIR    32
 
+#define FL_LABEL_ROTATE  40
+#define CT_LABEL_DIAL    40
+#define FT_LABEL_DEGREES 40
+#define NF_LABEL_DEGREES 40

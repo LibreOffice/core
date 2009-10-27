@@ -85,14 +85,7 @@ SwUnoCrsr::~SwUnoCrsr()
 
 SwUnoCrsr * SwUnoCrsr::Clone() const
 {
-    SwUnoCrsr * pNewCrsr = 0;
-
-    // check if the cursor is a SwUnoTableCrsr, if so clone that type
-    const SwUnoTableCrsr * pUnoTableCrsr = *this;
-    if (pUnoTableCrsr)
-        pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint(), sal_True /* create SwUnoTableCrsr */ );
-    else
-        pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint() );
+    SwUnoCrsr * pNewCrsr = GetDoc()->CreateUnoCrsr( *GetPoint() );
     if (HasMark())
     {
         pNewCrsr->SetMark();
@@ -101,8 +94,36 @@ SwUnoCrsr * SwUnoCrsr::Clone() const
     return pNewCrsr;
 }
 
-SwUnoCrsr::operator SwUnoCrsr* ()   { return this; }
+SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
+{
+    SwUnoTableCrsr * pNewCrsr = dynamic_cast<SwUnoTableCrsr*>(
+        GetDoc()->CreateUnoCrsr(
+            *GetPoint(), sal_True /* create SwUnoTableCrsr */ ) );
+    OSL_ENSURE(pNewCrsr, "Clone: cannot create SwUnoTableCrsr?");
+    if (HasMark())
+    {
+        pNewCrsr->SetMark();
+        *pNewCrsr->GetMark() = *GetMark();
+    }
+    return pNewCrsr;
+}
 
+
+bool SwUnoCrsr::IsReadOnlyAvailable() const
+{
+    return true;
+}
+
+const SwCntntFrm*
+SwUnoCrsr::DoSetBidiLevelLeftRight( BOOL &, BOOL, BOOL )
+{
+    return 0; // not for uno cursor
+}
+
+void SwUnoCrsr::DoSetBidiLevelUpDown()
+{
+    return; // not for uno cursor
+}
 
 BOOL SwUnoCrsr::IsSelOvr( int eFlags )
 {
@@ -208,9 +229,6 @@ SwUnoTableCrsr::~SwUnoTableCrsr()
         delete aTblSel.GetNext();           // und loeschen
 }
 
-SwUnoTableCrsr::operator SwUnoCrsr* ()      { return this; }
-SwUnoTableCrsr::operator SwTableCursor* ()  { return this; }
-SwUnoTableCrsr::operator SwUnoTableCrsr* () { return this; }
 
 /*
 SwCursor* SwUnoTableCrsr::Create( SwPaM* pRing ) const

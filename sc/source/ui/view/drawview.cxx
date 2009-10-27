@@ -828,28 +828,28 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
     }
 }
 
-void ScDrawView::CaptionTextDirection( USHORT nSlot )
-{
-    if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
-        return;
-
-    SdrObject* pObject  = GetTextEditObject();
-    if ( ScDrawLayer::IsNoteCaption( pObject ) )
-    {
-        if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-        {
-            SfxItemSet aAttr(pCaption->GetMergedItemSet());
-            aAttr.Put( SvxWritingModeItem(
-                nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-                    com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
-                    SDRATTR_TEXTDIRECTION ) );
-            pCaption->SetMergedItemSet(aAttr);
-            FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
-            if ( pPoor )
-            {
-                FuText* pText = static_cast<FuText*>(pPoor);
-                pText->StopEditMode(TRUE);
-            }
-        }
-    }
-}
+//UNUSED2009-05 void ScDrawView::CaptionTextDirection( USHORT nSlot )
+//UNUSED2009-05 {
+//UNUSED2009-05     if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
+//UNUSED2009-05         return;
+//UNUSED2009-05
+//UNUSED2009-05     SdrObject* pObject  = GetTextEditObject();
+//UNUSED2009-05     if ( ScDrawLayer::IsNoteCaption( pObject ) )
+//UNUSED2009-05     {
+//UNUSED2009-05         if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
+//UNUSED2009-05         {
+//UNUSED2009-05             SfxItemSet aAttr(pCaption->GetMergedItemSet());
+//UNUSED2009-05             aAttr.Put( SvxWritingModeItem(
+//UNUSED2009-05                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
+//UNUSED2009-05                     com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
+//UNUSED2009-05                     SDRATTR_TEXTDIRECTION ) );
+//UNUSED2009-05             pCaption->SetMergedItemSet(aAttr);
+//UNUSED2009-05             FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
+//UNUSED2009-05             if ( pPoor )
+//UNUSED2009-05             {
+//UNUSED2009-05                 FuText* pText = static_cast<FuText*>(pPoor);
+//UNUSED2009-05                 pText->StopEditMode(TRUE);
+//UNUSED2009-05             }
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05 }

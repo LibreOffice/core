@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@ sub main
     call hStatusIn ( "Graphics", "gallery.bas")
 
     use "graphics\tools\id_tools_2.inc"
-    use "graphics\required\includes\global\gallery.inc"
+    use "graphics\optional\includes\global\gallery.inc"
 
     printlog "------------------------ F u n c t i o n a l i t y ----------------------"
     call tGallery_DialogTest                           ' open gallery, pin - unpin, dock - undock, close gallery
@@ -62,10 +62,10 @@ end sub
 '-------------------------------------------------------------------------
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   gApplication = "WRITER"
-   call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    gApplication = "WRITER"
+    call GetUseFiles
 end sub
 
 '-------------------------------------------------------------------------

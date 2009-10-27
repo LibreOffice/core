@@ -34,13 +34,14 @@
 #include <vector>
 #include <map>
 #include <com/sun/star/task/XPasswordContainer.hpp>
+#include <com/sun/star/task/XUrlContainer.hpp>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XMasterPasswordHandling2.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
@@ -51,6 +52,8 @@
 
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
+
+#include "syscreds.hxx"
 
 #define MEMORY_RECORD         0
 #define PERSISTENT_RECORD     1
@@ -241,9 +244,10 @@ enum PasswordState {
     cancelled
 };
 
-class PasswordContainer : public ::cppu::WeakImplHelper4<
+class PasswordContainer : public ::cppu::WeakImplHelper5<
         ::com::sun::star::task::XPasswordContainer,
         ::com::sun::star::task::XMasterPasswordHandling2,
+        ::com::sun::star::task::XUrlContainer,
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XEventListener >
 {
@@ -253,6 +257,7 @@ private:
     ::osl::Mutex mMutex;
     ::rtl::OUString m_aMasterPasswd; // master password is set when the string is not empty
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mComponent;
+    SysCredentialsConfig mUrlContainer;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > CopyToUserRecordSequence(
                                         const ::std::list< NamePassRecord >& original,
@@ -269,6 +274,19 @@ private:
                                         const ::rtl::OUString& name,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
+bool createUrlRecord(
+    const PassMap::iterator & rIter,
+    bool bName,
+    const ::rtl::OUString & aName,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler,
+    ::com::sun::star::task::UrlRecord & rRec  )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+::com::sun::star::task::UrlRecord find(
+    const ::rtl::OUString& aURL,
+    const ::rtl::OUString& aName,
+    bool bName, // only needed to support empty user names
+    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler  ) throw(::com::sun::star::uno::RuntimeException);
 
     ::rtl::OUString GetDefaultMasterPassword();
 
@@ -368,6 +386,12 @@ public:
     // XMasterPasswordHandling2
     virtual ::sal_Bool SAL_CALL useDefaultMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isDefaultMasterPasswordUsed(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XUrlContainer
+    virtual void SAL_CALL addUrl( const ::rtl::OUString& Url, ::sal_Bool MakePersistent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL findUrl( const ::rtl::OUString& Url ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeUrl( const ::rtl::OUString& Url ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getUrls( ::sal_Bool OnlyPersistent ) throw (::com::sun::star::uno::RuntimeException);
 
     void            Notify();
 };

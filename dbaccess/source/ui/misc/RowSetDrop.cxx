@@ -177,7 +177,8 @@ sal_Bool ORowSetImportExport::insertNewRow()
     {
         m_xTargetResultSetUpdate->moveToInsertRow();
         sal_Int32 i = 1;
-        for (::std::vector<sal_Int32>::iterator aIter = m_aColumnMapping.begin(); aIter != m_aColumnMapping.end() ;++aIter,++i )
+        ::std::vector<sal_Int32>::iterator aEnd = m_aColumnMapping.end();
+        for (::std::vector<sal_Int32>::iterator aIter = m_aColumnMapping.begin(); aIter != aEnd ;++aIter,++i )
         {
             if(*aIter > 0)
             {

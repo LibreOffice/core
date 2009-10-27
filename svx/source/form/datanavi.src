@@ -512,7 +512,8 @@ Menu RID_MENU_DATANAVIGATOR
 {
     ItemList =
     {
-        MenuItem
+        // MID_INSERT_CONTROL not implemented, yet (#i99890#)
+        /*MenuItem
         {
             Identifier = MID_INSERT_CONTROL ;
             HelpId = HID_XFORMS_MID_INSERT_CONTROL ;
@@ -521,7 +522,7 @@ Menu RID_MENU_DATANAVIGATOR
         MenuItem
         {
             Separator = TRUE;
-        };
+        };*/
         MenuItem
         {
             Identifier = TBI_ITEM_ADD ;

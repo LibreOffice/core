@@ -54,7 +54,7 @@
 		<xsl:param name="globalData"/>
 
 		<xsl:choose>
-			<xsl:when test="*/text:tab">
+			<xsl:when test="*/text:tab[1] or */*/text:tab[1]">
 				<xsl:call-template name="createIndexBodyTable">
 					<xsl:with-param name="globalData" select="$globalData"/>
 				</xsl:call-template>
@@ -97,15 +97,18 @@
 			<xsl:attribute name="border">0</xsl:attribute>
 			<xsl:attribute name="cellspacing">0</xsl:attribute>
 			<xsl:attribute name="cellpadding">0</xsl:attribute>
-			<xsl:variable name="value" select="$globalData/all-doc-styles/style[@style:name = current()/@table:style-name]/*/@style:rel-width"/>
-			<xsl:if test="$value">
-				<xsl:attribute name="width">
-					<xsl:value-of select="$value"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:attribute name="class">
-				<xsl:value-of select="translate(@text:style-name, '.,;: %()[]/\+', '_____________')"/>
-			</xsl:attribute>
+            <xsl:if test="parent::*/@text:style-name">
+				<!-- parent as index:body has no style -->
+                <xsl:variable name="value" select="$globalData/all-doc-styles/style[@style:name = current()/parent::*/@text:style-name]/*/@style:rel-width"/>
+                <xsl:if test="$value">
+                    <xsl:attribute name="width">
+                        <xsl:value-of select="$value"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:attribute name="class">
+                    <xsl:value-of select="translate(parent::*/@text:style-name, '.,;: %()[]/\+', '_____________')"/>
+                </xsl:attribute>
+            </xsl:if>
 
 			<xsl:element namespace="{$namespace}" name="colgroup">
 				<xsl:choose>
@@ -440,7 +443,7 @@ Scenarios unmatched:
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:variable name="nodesOfNextColumn" select="node()[position() &lt; $tabNodePositions/tab-stop-node-position[$endingTabStopPosition]][position() > $tabNodePositions/tab-stop-node-position[$endingTabStopPosition - 1]]"/>
+				<xsl:variable name="nodesOfNextColumn" select="node()[position() &lt; $tabNodePositions/tab-stop-node-position[$endingTabStopPosition]][position() &gt; $tabNodePositions/tab-stop-node-position[$endingTabStopPosition - 1]]"/>
 				<xsl:choose>
 					<xsl:when test="$nodesOfNextColumn != ''">
 						<xsl:apply-templates mode="content-table" select="$nodesOfNextColumn">
@@ -495,20 +498,27 @@ Scenarios unmatched:
 	<xsl:template match="text:a" mode="content-table">
 		<xsl:param name="globalData"/>
 
-		<xsl:choose>
-			<!-- heuristic assumption that first in a content table row, there is numbering (if at all) and than the text, furthermore that a tab will separate the to be neglected page number -->
-			<xsl:when test="text:tab">
-				<xsl:element namespace="{$namespace}" name="a">
-					<xsl:attribute name="href">
-						<xsl:text>#</xsl:text>
-						<xsl:value-of select="translate(text()[1], '.,;: %()[]/\+', '_____________')"/>
-					</xsl:attribute>
-					<xsl:value-of select="text()[1]"/>
-				</xsl:element>
-			</xsl:when>
-			<xsl:otherwise>
-			</xsl:otherwise>
-		</xsl:choose>
+      <xsl:variable name="text">
+            <xsl:choose>
+                <!-- heuristic assumption that first in a content table row, there is numbering (if at all) and than the text, 
+                furthermore that a tab will separate the to be neglected page number -->
+                <xsl:when test="text:tab">    
+                    <xsl:value-of select="text()[1]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="text()"/>
+                </xsl:otherwise>
+            </xsl:choose>        
+        </xsl:variable>
+        
+        <!-- REFERENCE HANDLING - HREF -->
+        <xsl:element namespace="{$namespace}" name="a">
+            <xsl:attribute name="href">
+                <xsl:text>#</xsl:text>				
+                <xsl:value-of select='concat("a_",  translate(normalize-space($text), "&#xA;&amp;&lt;&gt;.,;: %()[]/\+", "_______________________________"))'/>
+            </xsl:attribute>
+            <xsl:value-of select="$text"/>
+        </xsl:element>
 	</xsl:template>
 
 	<xsl:template match="text:s" mode="content-table">
@@ -516,7 +526,6 @@ Scenarios unmatched:
 			<xsl:with-param name="whitespaces" select="@text:c"/>
 		</xsl:call-template>
 	</xsl:template>
-
 
 	<!-- ******************** -->
 	<!-- *** Common Rules *** -->
@@ -537,5 +546,13 @@ Scenarios unmatched:
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
-
+	
+	<xsl:template match="text()" mode="content-table">
+		<!-- Heuristic to remove page numbers (useless in HTML) in the content table 
+			usually after a tab  -->
+		<xsl:if test="name(preceding-sibling::*[1]) != 'text:tab' and not(number() &gt; -1)">
+			<xsl:value-of select="."/>
+		</xsl:if>
+	</xsl:template>
+	
 </xsl:stylesheet>

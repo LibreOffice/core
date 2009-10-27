@@ -46,7 +46,7 @@ HostWin::~HostWin()
 }
 
 
-LRESULT HostWin::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+LRESULT HostWin::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
     CAxWindow wnd(m_hWnd);
 

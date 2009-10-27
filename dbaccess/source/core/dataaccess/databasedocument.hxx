@@ -227,7 +227,9 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArguments,
             const StoreType _eType,
             DocumentGuard& _rGuard
-         );
+         )
+         throw  (   ::com::sun::star::io::IOException
+                ,   ::com::sun::star::uno::RuntimeException );
 
     /** notifies our storage change listeners that our underlying storage changed
 

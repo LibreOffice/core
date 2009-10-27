@@ -3584,16 +3584,17 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
             }
 
             const XMLPropertyMapEntry* pEntry = &aXMLTableShapeAttributes[0];
-            int i = 0;
-            while( pEntry->msApiName && (i < 6) ) try
+            for( int i = 0; pEntry->msApiName && (i < 6); i++, pEntry++ )
             {
-                const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
-                xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i++] ) );
-                pEntry++;
-            }
-            catch( Exception& )
-            {
-                DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+                try
+                {
+                    const OUString sAPIPropertyName( OUString(pEntry->msApiName, pEntry->nApiNameLength, RTL_TEXTENCODING_ASCII_US ) );
+                    xProps->setPropertyValue( sAPIPropertyName, Any( maTemplateStylesUsed[i] ) );
+                }
+                catch( Exception& )
+                {
+                    DBG_ERROR("SdXMLTableShapeContext::StartElement(), exception caught!");
+                }
             }
         }
 

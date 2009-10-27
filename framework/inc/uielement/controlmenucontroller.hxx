@@ -72,7 +72,6 @@ namespace framework
             DECLARE_XSERVICEINFO
 
             // XPopupMenuController
-            virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
 
             // XInitialization
@@ -82,15 +81,15 @@ namespace framework
             virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
             // XMenuListener
-            virtual void SAL_CALL highlight( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL activate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
         private:
+            virtual void impl_setPopupMenu();
+            virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
+
             class UrlToDispatchMap : public ::std::hash_map< ::rtl::OUString,
                                                              com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
                                                              OUStringHashCode,

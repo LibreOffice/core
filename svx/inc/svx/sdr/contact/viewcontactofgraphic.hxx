@@ -38,6 +38,8 @@
 // predeclarations
 
 class SdrGrafObj;
+namespace drawinglayer { namespace attribute { class SdrLineFillShadowTextAttribute; }}
+class GraphicAttr;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,6 +49,16 @@ namespace sdr
     {
         class ViewContactOfGraphic : public ViewContactOfTextObj
         {
+        private:
+            // helpers for constructing various primitive visualisations in various states
+            drawinglayer::primitive2d::Primitive2DSequence createVIP2DSForPresObj(
+                const basegfx::B2DHomMatrix& rObjectMatrix,
+                const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute,
+                const GraphicAttr& rLocalGrafInfo) const;
+            drawinglayer::primitive2d::Primitive2DSequence createVIP2DSForDraft(
+                const basegfx::B2DHomMatrix& rObjectMatrix,
+                const drawinglayer::attribute::SdrLineFillShadowTextAttribute& rAttribute) const;
+
         protected:
             // Create a Object-Specific ViewObjectContact, set ViewContact and
             // ObjectContact. Always needs to return something.
@@ -62,6 +74,13 @@ namespace sdr
             // basic constructor, destructor
             ViewContactOfGraphic(SdrGrafObj& rGrafObj);
             virtual ~ViewContactOfGraphic();
+
+            // #i102380#
+            void flushGraphicObjects();
+
+            // helpers for viusualisation state
+            bool visualisationUsesPresObj() const;
+            bool visualisationUsesDraft() const;
 
         protected:
             // This method is responsible for creating the graphical visualisation data

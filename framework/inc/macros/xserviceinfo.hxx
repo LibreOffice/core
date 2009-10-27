@@ -55,7 +55,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/factory.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -93,29 +95,7 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     sal_Bool SAL_CALL CLASS::supportsService( const ::rtl::OUString& sServiceName ) throw( css::uno::RuntimeException )                             \
     {                                                                                                                                               \
-        /* Set default return value. */                                                                                                             \
-        sal_Bool bReturn = sal_False ;                                                                                                              \
-        /* Get names of all supported servicenames. */                                                                                              \
-        css::uno::Sequence< ::rtl::OUString >  seqServiceNames =   getSupportedServiceNames();                                                      \
-        const ::rtl::OUString*                 pArray          =   seqServiceNames.getConstArray();                                                 \
-        sal_Int32                              nCounter        =   0;                                                                               \
-        sal_Int32                              nLength         =   seqServiceNames.getLength();                                                     \
-        /* Search for right name in list. */                                                                                                        \
-        while   (                                                                                                                                   \
-                    ( nCounter  <   nLength     )   &&                                                                                              \
-                    ( bReturn   ==  sal_False   )                                                                                                   \
-                )                                                                                                                                   \
-        {                                                                                                                                           \
-            /* Is name was found, say "YES, SERVICE IS SUPPORTED." and break loop. */                                                               \
-            if ( pArray[nCounter] == sServiceName )                                                                                                 \
-            {                                                                                                                                       \
-                bReturn = sal_True ;                                                                                                                \
-            }                                                                                                                                       \
-            /* Else step to next element in list. */                                                                                                \
-            ++nCounter;                                                                                                                             \
-        }                                                                                                                                           \
-        /* Return state of search. */                                                                                                               \
-        return bReturn;                                                                                                                             \
+        return ::comphelper::findValue(getSupportedServiceNames(), sServiceName, sal_True).getLength() != 0;                                        \
     }                                                                                                                                               \
                                                                                                                                                     \
     /*===========================================================================================================*/                                 \
@@ -155,6 +135,7 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )  \
     {                                                                                                                                                                                              \
+        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework","Ocke.Janssen@sun.com",U2B(IMPLEMENTATIONNAME).getStr());                                                                                                               \
         /* create new instance of service */                                                                                                                                                       \
         CLASS* pClass = new CLASS( xServiceManager );                                                                                                                                              \
         /* hold it alive by increasing his ref count!!! */                                                                                                                                         \

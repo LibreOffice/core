@@ -1816,6 +1816,7 @@ void ScOutputData::FindChanged()
     pDoc->DisableIdle( bWasIdleDisabled );
 }
 
+#ifdef OLD_SELECTION_PAINT
 void ScOutputData::DrawMark( Window* pWin )
 {
     Rectangle aRect;
@@ -1826,14 +1827,14 @@ void ScOutputData::DrawMark( Window* pWin )
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-        if ( pThisRowInfo->bChanged )
+        if (pThisRowInfo->bChanged)
         {
             long nPosX = nScrX;
-            if ( bLayoutRTL )
+            if (bLayoutRTL)
                 nPosX += nMirrorW - 1;      // always in pixels
 
             aRect = Rectangle( Point( nPosX,nPosY ), Size(1, pThisRowInfo->nHeight) );
-            if ( bLayoutRTL )
+            if (bLayoutRTL)
                 aRect.Left() = aRect.Right() + 1;
             else
                 aRect.Right() = aRect.Left() - 1;
@@ -1841,12 +1842,12 @@ void ScOutputData::DrawMark( Window* pWin )
             BOOL bOldMarked = FALSE;
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
-                if ( pThisRowInfo->pCellInfo[nX+1].bMarked != bOldMarked )
+                if (pThisRowInfo->pCellInfo[nX+1].bMarked != bOldMarked)
                 {
                     if (bOldMarked && aRect.Right() >= aRect.Left())
                         aInvert.AddRect( aRect );
 
-                    if ( bLayoutRTL )
+                    if (bLayoutRTL)
                         aRect.Right() = nPosX;
                     else
                         aRect.Left() = nPosX;
@@ -1854,7 +1855,7 @@ void ScOutputData::DrawMark( Window* pWin )
                     bOldMarked = pThisRowInfo->pCellInfo[nX+1].bMarked;
                 }
 
-                if ( bLayoutRTL )
+                if (bLayoutRTL)
                 {
                     nPosX -= pRowInfo[0].pCellInfo[nX+1].nWidth;
                     aRect.Left() = nPosX+1;
@@ -1871,6 +1872,7 @@ void ScOutputData::DrawMark( Window* pWin )
         nPosY += pThisRowInfo->nHeight;
     }
 }
+#endif
 
 void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                                 SCCOL nRefEndX, SCROW nRefEndY,

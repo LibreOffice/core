@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Avoid regression (issuezilla tasks)
 '*
@@ -46,6 +46,7 @@ sub w_issuezilla_regression
     Call i75027
     Call i76637
     Call i88656
+	Call i103265
 
 end sub
 
@@ -71,11 +72,10 @@ testcase i64991
         Call hCloseDocument
         goto endsub
     end if
-    Call sMakeReadOnlyDocumentEditable
-    '/// Now Execute Macro 'Main' in Node 'i64991'->'check_page_style'
-	Kontext "SecurityWarning"
-    if SecurityWarning.Exists(2) then SecurityWarning.OK	
     
+	printlog "Save document to be able to find macro module later"    
+    Call hFileSaveAsKill (gOfficepath + "user\work\i64991.odt")
+	
 	printlog "- execute macro"
     ToolsMacrosRunMacro
     ' Sometimes it lasts long until dialog is shown
@@ -442,3 +442,79 @@ testcase i88656
 endcase
 
 '--------------------------------------------------------------------------
+
+testcase i103265
+
+	Dim i as integer
+
+	printlog "ODF Hyperlinks in TOCs"
+	Call hNewDocument
+    printlog "- Open test document"
+	Call hFileOpen ( gTesttoolPath + "writer\optional\input\regression\issuezilla\i103265.odt" )
+    printlog "- Update TOC"
+	ToolsUpdateAllIndexes
+	
+	printlog "Check that every hyperlink jumps correctly to its target"
+	For i = 1 to 3
+		' point cursor to beginning of document
+		Call wTypeKeys "<MOD1 HOME>"
+		' point cursor to index entry
+		Call wTypeKeys "<DOWN>", 4 + i
+		'execute Hyperlink
+		ContextOpenHyperlink
+		' check if it jumps to correct target
+		Call wTypeKeys "<SHIFT END>"
+		EditCopy
+		Select Case i
+			Case 1:
+				if GetClipboardText <> "# 1 Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1 Test' but " & GetClipboardtext
+				end if
+			Case 2:
+				if GetClipboardText <> "1. Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1. Test' but " & GetClipboardtext
+				end if
+			Case 3:
+				if GetClipboardText <> "Test " then
+					Warnlog "First hyperlink not correctly jumped to. Not 'Test' but " & GetClipboardtext
+				end if
+		end select
+	next i
+
+	printlog "- Save as HTML"
+	gApplication = "HTML"	
+	Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\ODFHyperlinksInTOCs.html", "HTML" )
+    Call hCloseDocument
+	
+    printlog "- Reload"
+	Call hFileOpen ( gOfficePath + "user\work\ODFHyperlinksInTOCs.html" )		
+	printlog "Check that every hyperlink jumps correctly to its target"
+	For i = 1 to 3
+		' point cursor to beginning of document
+		Call wTypeKeys "<MOD1 HOME>"
+		' point cursor to index entry
+		Call wTypeKeys "<DOWN>", 5 + i
+		'execute Hyperlink
+		ContextOpenHyperlink
+		' check if it jumps to correct target
+		Call wTypeKeys "<SHIFT END>"
+		EditCopy
+		Select Case i
+			Case 1:
+				if GetClipboardText <> "# 1 Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1 Test' but " & GetClipboardtext
+				end if
+			Case 2:
+				if GetClipboardText <> "1. Test" then
+					Warnlog "First hyperlink not correctly jumped to. Not '# 1. Test' but " & GetClipboardtext
+				end if
+			Case 3:
+				if GetClipboardText <> "1Test " then
+					Warnlog "First hyperlink not correctly jumped to. Not 'Test ' but " & GetClipboardtext
+				end if
+		end select
+	next i
+	
+	Call hCloseDocument
+
+endcase

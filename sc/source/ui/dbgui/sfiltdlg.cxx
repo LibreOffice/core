@@ -78,7 +78,12 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aEdFilterArea   ( this, this, ScResId( ED_CRITERIA_AREA ) ),
         aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
+        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         _INIT_COMMON_FILTER_RSCOBJS
+        aBtnOk          ( this, ScResId( BTN_OK ) ),
+        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+        aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
         pOptionsMgr     ( NULL ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),

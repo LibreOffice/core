@@ -72,6 +72,7 @@
 #include "sfxurlrelocator.hxx"
 #include "doctemplateslocal.hxx"
 #include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
 #include "doc.hrc"
 
 //-----------------------------------------------------------------------------
@@ -909,7 +910,8 @@ sal_Bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const ::rtl::OU
 
        Content aParent;
 
-       if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), maCmdEnv, aParent ) )
+    uno::Reference< XCommandEnvironment > aQuietEnv;
+    if ( Content::create( aDirPath.GetMainURL( INetURLObject::NO_DECODE ), aQuietEnv, aParent ) )
        {
         for ( sal_Int32 nInd = 0; nInd < 32000; nInd++ )
         {
@@ -1220,10 +1222,14 @@ void SfxDocTplService_Impl::doUpdate()
 
     // the last directory in the list must be writable
     sal_Bool bWriteableDirectory = sal_True;
+
+    // the target folder might not exist, for this reason no interaction handler should be used
+    uno::Reference< XCommandEnvironment > aQuietEnv;
+
     while ( nCountDir )
     {
         nCountDir--;
-        if ( Content::create( pDirs[ nCountDir ], maCmdEnv, aDirContent ) )
+        if ( Content::create( pDirs[ nCountDir ], aQuietEnv, aDirContent ) )
         {
             createFromContent( aGroupList, aDirContent, sal_False, bWriteableDirectory );
         }
@@ -1915,7 +1921,11 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         aStoreArgs[1].Name = ::rtl::OUString::createFromAscii( "DocumentTitle" );
         aStoreArgs[1].Value <<= rTemplateName;
 
-        rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
+        ::rtl::OUString aCurrentDocumentURL = rStorable->getLocation();
+        if( !SfxMedium::EqualURLs( aNewTemplateTargetURL, rStorable->getLocation() ))
+            rStorable->storeToURL( aNewTemplateTargetURL, aStoreArgs );
+        else
+            rStorable->store();
 
         // the storing was successful, now the old template with the same name can be removed if it existed
         if ( aTemplateToRemoveTargetURL.getLength() )
@@ -2060,7 +2070,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         Content aResultContent;
         if ( Content::create( aNewTemplateTargetURL, xEnv, aResultContent ) )
         {
-            ::rtl::OUString aPropertyName( RTL_CONSTASCII_USTRINGPARAM( "IsReadonly" ) );
+            ::rtl::OUString aPropertyName( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) );
             uno::Any aProperty;
             sal_Bool bReadOnly = sal_False;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )
@@ -2535,7 +2545,10 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
 
     try
     {
-        aContent = Content( rOwnURL, maCmdEnv );
+        // this method is only used during checking of the available template-folders
+        // that should happen quietly
+        uno::Reference< XCommandEnvironment > aQuietEnv;
+        aContent = Content( rOwnURL, aQuietEnv );
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aContent.createCursor( aProps, eInclude );
     }

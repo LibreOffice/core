@@ -125,6 +125,7 @@ APP5OBJS=               $(OBJ)$/svpclient.obj
 APP5STDLIBS=    $(CPPULIB)                      \
                                 $(CPPUHELPERLIB)        \
                                 $(COMPHELPERLIB)        \
+                                $(UCBHELPERLIB)        \
                                 $(VCLLIB)                       \
                                 $(TOOLSLIB)             \
                                 $(SALLIB)                       \
@@ -139,6 +140,7 @@ APP5STDLIBS+=-lsocket
 .ENDIF
 
 .INCLUDE :	target.mk
+.IF "$(L10N_framework)"==""
 
 ALLTAR : $(BIN)$/applicat.rdb
 
@@ -150,4 +152,4 @@ $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
          $(REGCOMP) -register -r applicat.rdb \
              -c i18nsearch.uno$(DLLPOST) \
              -c i18npool.uno$(DLLPOST)
-
+.ENDIF

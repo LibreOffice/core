@@ -93,7 +93,7 @@ void HViews::impl_refresh(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 void HViews::disposing(void)
 {
-    m_xMetaData = NULL;
+m_xMetaData.clear();
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------

@@ -46,24 +46,23 @@
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
-
 // static
-const SfxItemPropertyMap* ScDocOptionsHelper::GetPropertyMap()
+const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
-    static SfxItemPropertyMap aMap[] =
+    static SfxItemPropertyMapEntry aMap[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  0,  &getBooleanCppuType(),          0, 0},
-        {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),   0,  &getCppuType((sal_Int16*)0),    0, 0},
-        {MAP_CHAR_LEN(SC_UNO_IGNORECASE),   0,  &getBooleanCppuType(),          0, 0},
-        {MAP_CHAR_LEN(SC_UNO_ITERENABLED),  0,  &getBooleanCppuType(),          0, 0},
-        {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),    0,  &getCppuType((sal_Int32*)0),    0, 0},
-        {MAP_CHAR_LEN(SC_UNO_ITEREPSILON),  0,  &getCppuType((double*)0),       0, 0},
-        {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS), 0,  &getBooleanCppuType(),          0, 0},
-        {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),   0,  &getBooleanCppuType(),          0, 0},
-        {MAP_CHAR_LEN(SC_UNO_NULLDATE),     0,  &getCppuType((util::Date*)0),   0, 0},
-        {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),  0,  &getBooleanCppuType(),          0, 0},
-        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  0,  &getCppuType((sal_Int16*)0),    0, 0},
-        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), 0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  PROP_UNO_CALCASSHOWN ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),   PROP_UNO_DEFTABSTOP  ,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_IGNORECASE),   PROP_UNO_IGNORECASE  ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITERENABLED),  PROP_UNO_ITERENABLED ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),    PROP_UNO_ITERCOUNT   ,  &getCppuType((sal_Int32*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITEREPSILON),  PROP_UNO_ITEREPSILON ,  &getCppuType((double*)0),       0, 0},
+        {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS), PROP_UNO_LOOKUPLABELS,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),   PROP_UNO_MATCHWHOLE  ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_NULLDATE),     PROP_UNO_NULLDATE    ,  &getCppuType((util::Date*)0),   0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),  PROP_UNO_SPELLONLINE ,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), PROP_UNO_REGEXENABLED,  &getBooleanCppuType(),          0, 0},
         {0,0,0,0,0,0}
     };
     return aMap;
@@ -71,102 +70,132 @@ const SfxItemPropertyMap* ScDocOptionsHelper::GetPropertyMap()
 
 // static
 sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
+                const SfxItemPropertyMap& rPropMap,
                 const rtl::OUString& aPropertyName, const uno::Any& aValue )
 {
     //! use map (with new identifiers)
 
-    sal_Bool bKnown = sal_True;
-    String aString(aPropertyName);
-
-    if ( aString.EqualsAscii( SC_UNO_CALCASSHOWN ) )
-        rOptions.SetCalcAsShown( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if ( aString.EqualsAscii( SC_UNO_IGNORECASE ) )
-        rOptions.SetIgnoreCase( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if ( aString.EqualsAscii( SC_UNO_ITERENABLED ) )
-        rOptions.SetIter( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if ( aString.EqualsAscii( SC_UNO_REGEXENABLED ) )
-        rOptions.SetFormulaRegexEnabled( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if ( aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) )
-        rOptions.SetLookUpColRowNames( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if ( aString.EqualsAscii( SC_UNO_MATCHWHOLE ) )
-        rOptions.SetMatchWholeCell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if ( aString.EqualsAscii( SC_UNO_SPELLONLINE ) )
-        rOptions.SetAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-    else if ( aString.EqualsAscii( SC_UNO_DEFTABSTOP ) )
+    const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName(aPropertyName );
+    if( !pEntry || !pEntry->nWID )
+        return sal_False;
+    switch( pEntry->nWID )
     {
-        sal_Int16 nIntVal = 0;
-        if ( aValue >>= nIntVal )
-            rOptions.SetTabDistance( nIntVal );
+        case PROP_UNO_CALCASSHOWN :
+            rOptions.SetCalcAsShown( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
+        case PROP_UNO_DEFTABSTOP  :
+        {
+            sal_Int16 nIntVal = 0;
+            if ( aValue >>= nIntVal )
+                rOptions.SetTabDistance( nIntVal );
+        }
+        break;
+        case PROP_UNO_IGNORECASE  :
+            rOptions.SetIgnoreCase( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
+        case PROP_UNO_ITERENABLED:
+            rOptions.SetIter( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
+        case PROP_UNO_ITERCOUNT   :
+        {
+            sal_Int32 nIntVal = 0;
+            if ( aValue >>= nIntVal )
+                rOptions.SetIterCount( (USHORT)nIntVal );
+        }
+        break;
+        case PROP_UNO_ITEREPSILON :
+        {
+            double fDoubleVal = 0;
+            if ( aValue >>= fDoubleVal )
+                rOptions.SetIterEps( fDoubleVal );
+        }
+        break;
+        case PROP_UNO_LOOKUPLABELS :
+            rOptions.SetLookUpColRowNames( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
+        case PROP_UNO_MATCHWHOLE  :
+            rOptions.SetMatchWholeCell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
+        case PROP_UNO_NULLDATE:
+        {
+            util::Date aDate;
+            if ( aValue >>= aDate )
+                rOptions.SetDate( aDate.Day, aDate.Month, aDate.Year );
+        }
+        break;
+        case PROP_UNO_SPELLONLINE:
+            rOptions.SetAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
+        case PROP_UNO_STANDARDDEC:
+        {
+            sal_Int16 nIntVal = 0;
+            if ( aValue >>= nIntVal )
+                rOptions.SetStdPrecision( nIntVal );
+        }
+        break;
+        case PROP_UNO_REGEXENABLED:
+            rOptions.SetFormulaRegexEnabled( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        break;
+        default:;
     }
-    else if ( aString.EqualsAscii( SC_UNO_ITERCOUNT ) )
-    {
-        sal_Int32 nIntVal = 0;
-        if ( aValue >>= nIntVal )
-            rOptions.SetIterCount( (USHORT)nIntVal );
-    }
-    else if ( aString.EqualsAscii( SC_UNO_STANDARDDEC ) )
-    {
-        sal_Int16 nIntVal = 0;
-        if ( aValue >>= nIntVal )
-            rOptions.SetStdPrecision( nIntVal );
-    }
-    else if ( aString.EqualsAscii( SC_UNO_ITEREPSILON ) )
-    {
-        double fDoubleVal = 0;
-        if ( aValue >>= fDoubleVal )
-            rOptions.SetIterEps( fDoubleVal );
-    }
-    else if ( aString.EqualsAscii( SC_UNO_NULLDATE ) )
-    {
-        util::Date aDate;
-        if ( aValue >>= aDate )
-            rOptions.SetDate( aDate.Day, aDate.Month, aDate.Year );
-    }
-    else
-        bKnown = sal_False;
-
-    return bKnown;
+    return sal_True;
 }
 
 // static
 uno::Any ScDocOptionsHelper::getPropertyValue(
-                const ScDocOptions& rOptions, const rtl::OUString& aPropertyName )
+                const ScDocOptions& rOptions,
+                const SfxItemPropertyMap& rPropMap,
+                const rtl::OUString& aPropertyName )
 {
-    //! use map (with new identifiers)
-
-    String aString(aPropertyName);
     uno::Any aRet;
-
-    if ( aString.EqualsAscii( SC_UNO_CALCASSHOWN ) )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsCalcAsShown() );
-    else if ( aString.EqualsAscii( SC_UNO_IGNORECASE ) )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIgnoreCase() );
-    else if ( aString.EqualsAscii( SC_UNO_ITERENABLED ) )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIter() );
-    else if ( aString.EqualsAscii( SC_UNO_REGEXENABLED ) )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsFormulaRegexEnabled() );
-    else if ( aString.EqualsAscii( SC_UNO_LOOKUPLABELS ) )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsLookUpColRowNames() );
-    else if ( aString.EqualsAscii( SC_UNO_MATCHWHOLE ) )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsMatchWholeCell() );
-    else if ( aString.EqualsAscii( SC_UNO_SPELLONLINE ) )
-        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsAutoSpell() );
-    else if ( aString.EqualsAscii( SC_UNO_DEFTABSTOP ) )
-        aRet <<= (sal_Int16)( rOptions.GetTabDistance() );
-    else if ( aString.EqualsAscii( SC_UNO_ITERCOUNT ) )
-        aRet <<= (sal_Int32)( rOptions.GetIterCount() );
-    else if ( aString.EqualsAscii( SC_UNO_STANDARDDEC ) )
-        aRet <<= (sal_Int16)( rOptions.GetStdPrecision() );
-    else if ( aString.EqualsAscii( SC_UNO_ITEREPSILON ) )
-        aRet <<= (double)( rOptions.GetIterEps() );
-    else if ( aString.EqualsAscii( SC_UNO_NULLDATE ) )
+    const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( aPropertyName );
+    if( !pEntry || !pEntry->nWID )
+        return aRet;
+    switch( pEntry->nWID )
     {
-        USHORT nD, nM, nY;
-        rOptions.GetDate( nD, nM, nY );
-        util::Date aDate( nD, nM, nY );
-        aRet <<= aDate;
+        case PROP_UNO_CALCASSHOWN :
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsCalcAsShown() );
+        break;
+        case PROP_UNO_DEFTABSTOP :
+            aRet <<= (sal_Int16)( rOptions.GetTabDistance() );
+        break;
+        case PROP_UNO_IGNORECASE :
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIgnoreCase() );
+        break;
+        case PROP_UNO_ITERENABLED:
+        ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsIter() );
+        break;
+        case PROP_UNO_ITERCOUNT:
+            aRet <<= (sal_Int32)( rOptions.GetIterCount() );
+        break;
+        case PROP_UNO_ITEREPSILON:
+            aRet <<= (double)( rOptions.GetIterEps() );
+        break;
+        case PROP_UNO_LOOKUPLABELS:
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsLookUpColRowNames() );
+        break;
+        case PROP_UNO_MATCHWHOLE:
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsMatchWholeCell() );
+        break;
+        case PROP_UNO_NULLDATE:
+        {
+            USHORT nD, nM, nY;
+            rOptions.GetDate( nD, nM, nY );
+            util::Date aDate( nD, nM, nY );
+            aRet <<= aDate;
+        }
+        break;
+        case PROP_UNO_SPELLONLINE:
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsAutoSpell() );
+        break;
+        case PROP_UNO_STANDARDDEC :
+            aRet <<= (sal_Int16)( rOptions.GetStdPrecision() );
+        break;
+        case PROP_UNO_REGEXENABLED:
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOptions.IsFormulaRegexEnabled() );
+        break;
+        default:;
     }
-
     return aRet;
 }
 
@@ -190,7 +219,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
 {
     ScUnoGuard aGuard;
 
-    BOOL bDone = ScDocOptionsHelper::setPropertyValue( aOptions, aPropertyName, aValue );
+    BOOL bDone = ScDocOptionsHelper::setPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName, aValue );
 
     if (!bDone)
         ScModelObj::setPropertyValue( aPropertyName, aValue );
@@ -202,7 +231,7 @@ uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const rtl::OUString& aPrope
 {
     ScUnoGuard aGuard;
 
-    uno::Any aRet(ScDocOptionsHelper::getPropertyValue( aOptions, aPropertyName ));
+    uno::Any aRet(ScDocOptionsHelper::getPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName ));
     if ( !aRet.hasValue() )
         aRet =  ScModelObj::getPropertyValue( aPropertyName );
 

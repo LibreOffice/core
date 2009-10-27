@@ -119,8 +119,9 @@ SwEnvItem::SwEnvItem() :
     aSendText       = MakeSender();
     lSendFromLeft   = 566; // 1 cm
     lSendFromTop    = 566; // 1 cm
-    lWidth          = lC65Width;
-    lHeight         = lC65Height;
+    Size aEnvSz     = SvxPaperInfo::GetPaperSize(PAPER_ENV_C65);
+    lWidth          = aEnvSz.Width();
+    lHeight         = aEnvSz.Height();
     eAlign          = ENV_HOR_LEFT;
     bPrintFromAbove = TRUE;
     lShiftRight     = 0;

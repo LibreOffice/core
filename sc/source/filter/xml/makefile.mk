@@ -51,57 +51,8 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        xmlwrap.cxx \
-        xmlimprt.cxx \
-        xmlexprt.cxx \
-        xmlbodyi.cxx \
-        xmltabi.cxx \
-        xmlexternaltabi.cxx \
-        xmlrowi.cxx \
-        xmlcelli.cxx \
-        xmlconti.cxx \
-        xmlcoli.cxx \
-        xmlsubti.cxx \
-        xmlnexpi.cxx \
-        xmldrani.cxx \
-        xmlfilti.cxx \
-        xmlsorti.cxx \
-        xmlstyle.cxx \
-        xmlstyli.cxx \
-        xmldpimp.cxx \
-        xmlannoi.cxx \
-        xmlsceni.cxx \
-        xmlcvali.cxx \
-        XMLTableMasterPageExport.cxx \
-        xmllabri.cxx \
-        XMLTableHeaderFooterContext.cxx \
-        XMLDetectiveContext.cxx \
-        XMLCellRangeSourceContext.cxx \
-        XMLConsolidationContext.cxx \
-        XMLConverter.cxx \
-        XMLExportIterator.cxx \
-        XMLColumnRowGroupExport.cxx \
-        XMLStylesExportHelper.cxx \
-        XMLStylesImportHelper.cxx \
-        XMLExportDataPilot.cxx \
-        XMLExportDatabaseRanges.cxx \
-        XMLTableShapeImportHelper.cxx \
-        XMLTableShapesContext.cxx \
-        XMLExportDDELinks.cxx \
-        XMLDDELinksContext.cxx \
-        XMLCalculationSettingsContext.cxx \
-        XMLTableSourceContext.cxx \
-        XMLTextPContext.cxx \
-        XMLTableShapeResizer.cxx \
-        XMLChangeTrackingExportHelper.cxx \
-        xmlfonte.cxx \
-        XMLChangeTrackingImportHelper.cxx \
-        XMLTrackedChangesContext.cxx \
-        XMLExportSharedData.cxx \
-        XMLEmptyContext.cxx
-
 SLOFILES =  \
+        $(SLO)$/sheetdata.obj \
         $(SLO)$/xmlwrap.obj \
         $(SLO)$/xmlimprt.obj \
         $(SLO)$/xmlexprt.obj \

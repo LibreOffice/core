@@ -49,7 +49,6 @@
 #include <svx/langitem.hxx>
 #include <svx/SpellPortions.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <fmthbsh.hxx>
 #include <charatr.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
@@ -70,6 +69,8 @@
 #include <redline.hxx>      // SwRedline
 #include <docary.hxx>       // SwRedlineTbl
 #include <docsh.hxx>
+#include <txatbase.hxx>
+
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -682,7 +683,7 @@ void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
         DelSoftHyph( *pCrsr );
         pSttPos->nContent += nHyphPos;
         SwPaM aRg( *pSttPos );
-        pDoc->Insert( aRg, CHAR_SOFTHYPHEN );
+        pDoc->InsertString( aRg, CHAR_SOFTHYPHEN );
         // Durch das Einfuegen des SoftHyphs ist ein Zeichen hinzugekommen
 //JP 18.07.95: warum, ist doch ein SwIndex, dieser wird doch mitverschoben !!
 //        pSttPos->nContent++;
@@ -1342,7 +1343,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                     // ... and apply language if necessary
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                         SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
-                    pDoc->Insert(*pCrsr, aCurrentNewPortion->sText, true);
+                    pDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
                 }
                 else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                 {
@@ -1388,7 +1389,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 if(rLang.GetLanguage() != aCurrentNewPortion->eLanguage)
                     SetAttr( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
                 //insert the new string
-                pDoc->Insert(*pCrsr, aCurrentNewPortion->sText, true);
+                pDoc->InsertString(*pCrsr, aCurrentNewPortion->sText);
 
                 //set the cursor to the end of the inserted string
                 *pCrsr->Start() = *pCrsr->End();
@@ -1819,20 +1820,18 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                 xub_Unicode cChar = pTxtNode->GetTxt().GetChar( pCrsr->GetMark()->nContent.GetIndex() );
                 if( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
                 {
-                    const SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttr(
-                        pCrsr->GetMark()->nContent.GetIndex(), RES_TXTATR_FIELD );
-                    bField = 0 != pTxtAttr;
-                    if(!bField)
+                    const SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrForCharAt(
+                        pCrsr->GetMark()->nContent.GetIndex() );
+                    const USHORT nWhich = pTxtAttr
+                        ? pTxtAttr->Which()
+                        : static_cast<USHORT>(RES_TXTATR_END);
+                    switch (nWhich)
                     {
-                        const SwTxtAttr* pTmpTxtAttr = pTxtNode->GetTxtAttr(
-                            pCrsr->GetMark()->nContent.GetIndex(), RES_TXTATR_FTN );
-                        bField = 0 != pTmpTxtAttr;
-                    }
-                    if(!bField)
-                    {
-                        const SwTxtAttr* pTmpTxtAttr = pTxtNode->GetTxtAttr(
-                            pCrsr->GetMark()->nContent.GetIndex(), RES_TXTATR_FLYCNT );
-                        bField = 0 != pTmpTxtAttr;
+                        case RES_TXTATR_FIELD:
+                        case RES_TXTATR_FTN:
+                        case RES_TXTATR_FLYCNT:
+                            bField = true;
+                            break;
                     }
                 }
 

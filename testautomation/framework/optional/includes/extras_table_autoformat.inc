@@ -44,8 +44,6 @@ testcase tAutoformatTable( iApp as integer )
         goto endsub
     endif
 
-    '///<h1>Autoformats for tables in Writer and Calc</h1>
-    '///<ul>
     
     dim al_UI_formats( 1000 ) as string
         al_UI_formats( 0 ) = "0"
@@ -72,10 +70,8 @@ testcase tAutoformatTable( iApp as integer )
     sFileIn = convertpath( sFileIn & sFile )
     sFileOut = hGetWorkPath() & sFile
     
-    '///+<li>Open a new document - Writer or Calc</li>
     hCreateDocument()
     
-    '///+<li>Depending on the doctype create a table to work on</li>
     select case iApp
     case 1 : kontext "DocumentWriter"
              hTabelleEinfuegen()
@@ -84,7 +80,6 @@ testcase tAutoformatTable( iApp as integer )
              DocumentCalc.TypeKeys( "<Shift Down>", 3 )
     end select
     
-    '///+<li>Open the table autoformat dialog</li>
     FormatAutoformat
     
     select case iApp
@@ -105,40 +100,30 @@ testcase tAutoformatTable( iApp as integer )
                 endif
     end select
     
-    '///+<li>Get the number of items from the list</li>
     iFormatCount = oControl.getItemCount()
     
-    '///+<li>Compile a list of the autoformat names</li>
-    '///<ul>
     for iCurrentFormat = 1 to iFormatCount
     
-        '///+<li>Select the (next) format name from the list</li>
         oControl.select( iCurrentFormat )
         
-        '///+<li>Retrieve the name of the current item and store it into a list 
         cCurrentFormat = oControl.getSelText()
         ListAppend( al_UI_formats() , cCurrentFormat )
         
     next iCurrentFormat
-    '///</ul>
         
-    '///+<li>Close the autoformat dialog</li>
     select case iApp
     case 1 : AutoformatTabelle.ok()
     case 2 : AutoformatCalc.ok()
     end select
     
-    '///+<li>Close the document</li>
     hDestroyDocument()
     
-    '///+<li>Compare the list against the reference file</li>
     irc = hManageComparisionList( sFileIn, sFileOut, al_UI_formats() )
     if ( irc <> 0 ) then
         warnlog( "The list of table autoformats has changed, please review." )
     else
         printlog( "The list of table autoformats is unchanged. Good." )
     endif
-    '///</ul>
     
 endcase
         

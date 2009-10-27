@@ -95,6 +95,6 @@ public:
 // - DitherBitmap -
 // ----------------
 
-BOOL DitherBitmap( Bitmap& rBitmap );
+SVX_DLLPUBLIC BOOL DitherBitmap( Bitmap& rBitmap );
 
 #endif // _XOUTBMP_HXX

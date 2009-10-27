@@ -94,8 +94,7 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
 {
     DBG_CTOR(ODatabaseAdministrationDialog,NULL);
 
-    m_pCollection = new ::dbaccess::ODsnTypeCollection();
-    m_pCollection->initUserDriverTypes(m_aContext.getLegacyServiceFactory());
+    m_pCollection = new ::dbaccess::ODsnTypeCollection(_rxORB);
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
 }
 

@@ -1,0 +1,451 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: contourextractor2d.cxx,v $
+ *
+ *  $Revision: 1.6 $
+ *
+ *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_drawinglayer.hxx"
+
+#include <drawinglayer/processor2d/hittestprocessor2d.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace processor2d
+    {
+        HitTestProcessor2D::HitTestProcessor2D(const geometry::ViewInformation2D& rViewInformation,
+            const basegfx::B2DPoint& rLogicHitPosition,
+            double fLogicHitTolerance,
+            bool bHitTextOnly)
+        :   BaseProcessor2D(rViewInformation),
+            maDiscreteHitPosition(),
+            mfDiscreteHitTolerance(0.0),
+            mbHit(false),
+            mbHitToleranceUsed(false),
+            mbUseHitTestPrimitiveContent(true),
+            mbHitTextOnly(bHitTextOnly)
+        {
+            // init hit tolerance
+            mfDiscreteHitTolerance = fLogicHitTolerance;
+
+            if(basegfx::fTools::less(mfDiscreteHitTolerance, 0.0))
+            {
+                // ensure input parameter for hit tolerance is >= 0.0
+                mfDiscreteHitTolerance = 0.0;
+            }
+            else if(basegfx::fTools::more(mfDiscreteHitTolerance, 0.0))
+            {
+                // generate discrete hit tolerance
+                mfDiscreteHitTolerance = (getViewInformation2D().getObjectToViewTransformation()
+                    * basegfx::B2DVector(mfDiscreteHitTolerance, 0.0)).getLength();
+            }
+
+            // gererate discrete hit position
+            maDiscreteHitPosition = getViewInformation2D().getObjectToViewTransformation() * rLogicHitPosition;
+
+            // check if HitTolerance is used
+            mbHitToleranceUsed = basegfx::fTools::more(getDiscreteHitTolerance(), 0.0);
+        }
+
+        HitTestProcessor2D::~HitTestProcessor2D()
+        {
+        }
+
+        bool HitTestProcessor2D::checkHairlineHitWithTolerance(
+            const basegfx::B2DPolygon& rPolygon,
+            double fDiscreteHitTolerance)
+        {
+            basegfx::B2DPolygon aLocalPolygon(rPolygon);
+            aLocalPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
+
+            // get discrete range
+            basegfx::B2DRange aPolygonRange(aLocalPolygon.getB2DRange());
+
+            if(basegfx::fTools::more(fDiscreteHitTolerance, 0.0))
+            {
+                aPolygonRange.grow(fDiscreteHitTolerance);
+            }
+
+            // do rough range test first
+            if(aPolygonRange.isInside(getDiscreteHitPosition()))
+            {
+                // check if a polygon edge is hit
+                return basegfx::tools::isInEpsilonRange(
+                    aLocalPolygon,
+                    getDiscreteHitPosition(),
+                    fDiscreteHitTolerance);
+            }
+
+            return false;
+        }
+
+        bool HitTestProcessor2D::checkFillHitWithTolerance(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            double fDiscreteHitTolerance)
+        {
+            bool bRetval(false);
+            basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
+            aLocalPolyPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
+
+            // get discrete range
+            basegfx::B2DRange aPolygonRange(aLocalPolyPolygon.getB2DRange());
+            const bool bDiscreteHitToleranceUsed(basegfx::fTools::more(fDiscreteHitTolerance, 0.0));
+
+            if(bDiscreteHitToleranceUsed)
+            {
+                aPolygonRange.grow(fDiscreteHitTolerance);
+            }
+
+            // do rough range test first
+            if(aPolygonRange.isInside(getDiscreteHitPosition()))
+            {
+                // if a HitTolerance is given, check for polygon edge hit in epsilon first
+                if(bDiscreteHitToleranceUsed &&
+                    basegfx::tools::isInEpsilonRange(
+                        aLocalPolyPolygon,
+                        getDiscreteHitPosition(),
+                        fDiscreteHitTolerance))
+                {
+                    bRetval = true;
+                }
+
+                // check for hit in filled polyPolygon
+                if(!bRetval && basegfx::tools::isInside(
+                    aLocalPolyPolygon,
+                    getDiscreteHitPosition(),
+                    true))
+                {
+                    bRetval = true;
+                }
+            }
+
+            return bRetval;
+        }
+
+        void HitTestProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        {
+            if(getHit())
+            {
+                // stop processing as soon as a hit was recognized
+                return;
+            }
+
+            switch(rCandidate.getPrimitiveID())
+            {
+                case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
+                {
+                    // remember current ViewInformation2D
+                    const primitive2d::TransformPrimitive2D& rTransformCandidate(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
+                    const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
+
+                    // create new local ViewInformation2D containing transformation
+                    const geometry::ViewInformation2D aViewInformation2D(
+                        getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
+                        getViewInformation2D().getViewTransformation(),
+                        getViewInformation2D().getViewport(),
+                        getViewInformation2D().getVisualizedPage(),
+                        getViewInformation2D().getViewTime(),
+                        getViewInformation2D().getExtendedInformationSequence());
+                    updateViewInformation(aViewInformation2D);
+
+                    // proccess child content recursively
+                    process(rTransformCandidate.getChildren());
+
+                    // restore transformations
+                    updateViewInformation(aLastViewInformation2D);
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // create hairline in discrete coordinates
+                        const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
+
+                        // use hairline test
+                        mbHit = checkHairlineHitWithTolerance(rPolygonCandidate.getB2DPolygon(), getDiscreteHitTolerance());
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // handle marker like hairline; no need to decompose in dashes
+                        const primitive2d::PolygonMarkerPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonMarkerPrimitive2D& >(rCandidate));
+
+                        // use hairline test
+                        mbHit = checkHairlineHitWithTolerance(rPolygonCandidate.getB2DPolygon(), getDiscreteHitTolerance());
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // handle stroke evtl. directly; no need to decompose to filled polygon outlines
+                        const primitive2d::PolygonStrokePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate));
+                        const attribute::LineAttribute& rLineAttribute = rPolygonCandidate.getLineAttribute();
+
+                        if(basegfx::fTools::more(rLineAttribute.getWidth(), 0.0))
+                        {
+                            if(basegfx::B2DLINEJOIN_MITER == rLineAttribute.getLineJoin())
+                            {
+                                // if line is mitered, use decomposition since mitered line
+                                // geometry may use more space than the geometry grown by half line width
+                                process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                            }
+                            else
+                            {
+                                // for all other B2DLINEJOIN_* do a hairline HitTest with expanded tolerance
+                                const basegfx::B2DVector aDiscreteHalfLineVector(getViewInformation2D().getObjectToViewTransformation()
+                                    * basegfx::B2DVector(rLineAttribute.getWidth() * 0.5, 0.0));
+                                mbHit = checkHairlineHitWithTolerance(
+                                    rPolygonCandidate.getB2DPolygon(),
+                                    getDiscreteHitTolerance() + aDiscreteHalfLineVector.getLength());
+                            }
+                        }
+                        else
+                        {
+                            // hairline; fallback to hairline test. Do not decompose
+                            // since this may decompose the hairline to dashes
+                            mbHit = checkHairlineHitWithTolerance(rPolygonCandidate.getB2DPolygon(), getDiscreteHitTolerance());
+                        }
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // do not use decompose; just handle like a line with width
+                        const primitive2d::PolygonWavePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonWavePrimitive2D& >(rCandidate));
+                        double fLogicHitTolerance(0.0);
+
+                        // if WaveHeight, grow by it
+                        if(basegfx::fTools::more(rPolygonCandidate.getWaveHeight(), 0.0))
+                        {
+                            fLogicHitTolerance += rPolygonCandidate.getWaveHeight();
+                        }
+
+                        // if line width, grow by it
+                        if(basegfx::fTools::more(rPolygonCandidate.getLineAttribute().getWidth(), 0.0))
+                        {
+                            fLogicHitTolerance += rPolygonCandidate.getLineAttribute().getWidth() * 0.5;
+                        }
+
+                        const basegfx::B2DVector aDiscreteHalfLineVector(getViewInformation2D().getObjectToViewTransformation()
+                            * basegfx::B2DVector(fLogicHitTolerance, 0.0));
+
+                        mbHit = checkHairlineHitWithTolerance(
+                            rPolygonCandidate.getB2DPolygon(),
+                            getDiscreteHitTolerance() + aDiscreteHalfLineVector.getLength());
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // create filled polyPolygon in discrete coordinates
+                        const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
+
+                        // use fill hit test
+                        mbHit = checkFillHitWithTolerance(rPolygonCandidate.getB2DPolyPolygon(), getDiscreteHitTolerance());
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                {
+                    // sub-transparence group
+                    const primitive2d::AlphaPrimitive2D& rTransCandidate(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+
+                    // Currently the transparence content is not taken into account; only
+                    // the children are recursively checked for hit. This may be refined for
+                    // parts where the content is completely transparent if needed.
+                    process(rTransCandidate.getChildren());
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
+                {
+                    // create mask in discrete coordinates; only recursively continue
+                    // with content when HitTest position is inside the mask
+                    const primitive2d::MaskPrimitive2D& rMaskCandidate(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
+
+                    // use fill hit test
+                    if(checkFillHitWithTolerance(rMaskCandidate.getMask(), getDiscreteHitTolerance()))
+                    {
+                        // recursively HitTest children
+                        process(rMaskCandidate.getChildren());
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_SCENEPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // 2D Scene primitive containing 3D stuff; extract 2D contour in world coordinates
+                        // This may be refined later to an own 3D HitTest renderer which processes the 3D
+                        // geometry directly
+                        const primitive2d::ScenePrimitive2D& rScenePrimitive2DCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
+                        const primitive2d::Primitive2DSequence xExtracted2DSceneGeometry(rScenePrimitive2DCandidate.getGeometry2D(getViewInformation2D()));
+
+                        if(xExtracted2DSceneGeometry.hasElements())
+                        {
+                            // proccess extracted 2D content
+                            process(xExtracted2DSceneGeometry);
+                        }
+                        else
+                        {
+                            // empty 3D scene; Check for border hit
+                            const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+                            basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+
+                            mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
+                        }
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
+                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
+                case PRIMITIVE2D_ID_GRIDPRIMITIVE2D :
+                case PRIMITIVE2D_ID_HELPLINEPRIMITIVE2D :
+                {
+                    // ignorable primitives
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
+                {
+                    // for text use the BoundRect of the primitive itself
+                    const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+                    basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+
+                    mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
+                case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
+                case PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D :
+                case PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D :
+                case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        // Class of primitives for which just the BoundRect of the primitive itself
+                        // will be used for HitTest currently.
+                        //
+                        // This may be refined in the future, e.g:
+                        // - For Bitamps, the mask and/or alpha information may be used
+                        // - For MetaFiles, the MetaFile content may be used
+                        const basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+
+                        mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_HITTESTPRIMITIVE2D :
+                {
+                    // HitTest primitive; the default decomposition would return an empty seqence,
+                    // so force this primitive to process it's children directly if the switch is set
+                    // (which is the default). Else, ignore invisible content
+                    if(getUseHitTestPrimitiveContent())
+                    {
+                        const primitive2d::HitTestPrimitive2D& rHitTestCandidate(static_cast< const primitive2d::HitTestPrimitive2D& >(rCandidate));
+                        process(rHitTestCandidate.getChildren());
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D :
+                {
+                    if(!getHitTextOnly())
+                    {
+                        const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate(static_cast< const primitive2d::PointArrayPrimitive2D& >(rCandidate));
+                        const std::vector< basegfx::B2DPoint >& rPositions = rPointArrayCandidate.getPositions();
+                        const sal_uInt32 nCount(rPositions.size());
+
+                        for(sal_uInt32 a(0); !getHit() && a < nCount; a++)
+                        {
+                            const basegfx::B2DPoint aPosition(getViewInformation2D().getObjectToViewTransformation() * rPositions[a]);
+                            const basegfx::B2DVector aDistance(aPosition - getDiscreteHitPosition());
+
+                            if(aDistance.getLength() <= getDiscreteHitTolerance())
+                            {
+                                mbHit = true;
+                            }
+                        }
+                    }
+
+                    break;
+                }
+                default :
+                {
+                    // process recursively
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    break;
+                }
+            }
+        }
+
+    } // end of namespace processor2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+// eof

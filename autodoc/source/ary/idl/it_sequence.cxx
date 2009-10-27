@@ -36,7 +36,6 @@
 #include <cosv/tpl/processor.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_type.hxx>
-#include "i_strconst.hxx"
 
 
 
@@ -84,6 +83,11 @@ Sequence::inq_Get_Text( StringVector &      o_module,
                         i_rGate );
 }
 
+const Type &
+Sequence::inq_FirstEnclosedNonSequenceType(const Gate & i_rGate) const
+{
+    return i_rGate.Types().Find_Type(nRelatedType).FirstEnclosedNonSequenceType(i_rGate);
+}
 
 
 }   // namespace idl

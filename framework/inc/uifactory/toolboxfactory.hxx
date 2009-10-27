@@ -36,23 +36,13 @@
 //_________________________________________________________________________________________________________________
 
 #include <stdtypes.h>
-#include <threadhelp/threadhelpbase.hxx>
-#include <macros/generic.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 #include <services.h>
+#include <uifactory/menubarfactory.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -62,27 +52,16 @@
 namespace framework
 {
 
-class ToolBoxFactory :  public com::sun::star::lang::XTypeProvider                  ,
-                        public com::sun::star::lang::XServiceInfo                   ,
-                        public ::com::sun::star::ui::XUIElementFactory        ,
-                        protected ThreadHelpBase                                    ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                        public ::cppu::OWeakObject
+class ToolBoxFactory :  public MenuBarFactory
 {
     public:
         ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-        virtual ~ToolBoxFactory();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
         DECLARE_XSERVICEINFO
-        FWK_DECLARE_XTYPEPROVIDER
 
         // XUIElementFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
-
-    private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
 };
 
 }

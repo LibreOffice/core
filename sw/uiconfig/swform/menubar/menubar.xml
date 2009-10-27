@@ -37,7 +37,6 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
-            <menu:menuitem menu:id=".uno:Signature"/>
             <menu:menu menu:id=".uno:TemplateMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Organizer"/>
@@ -421,7 +420,6 @@
                     <menu:menuitem menu:id=".uno:MacroRecorder"/>
                     <menu:menuitem menu:id=".uno:RunMacro"/>
                     <menu:menu menu:id=".uno:ScriptOrganizer"/>
-                    <menu:menuitem menu:id=".uno:MacroSignature"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
                     </menu:menupopup>

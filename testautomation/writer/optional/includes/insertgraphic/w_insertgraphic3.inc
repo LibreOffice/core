@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the insert graphic function - 3
 '*
@@ -52,8 +52,8 @@
 
 testcase tInsertGraphic_21
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer , iRight as Integer  , iCenterHorizontal as Integer
+  Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
 
   iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
@@ -151,8 +151,8 @@ endcase
 
 testcase tInsertGraphic_22
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
+  Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
 
   iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
@@ -250,8 +250,8 @@ endcase
 
 testcase tInsertGraphic_23
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
+  Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
 
   iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
@@ -349,7 +349,7 @@ endcase
 
 testcase tInsertGraphic_24
 
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iTop as Integer  , iBottom as Integer , iCenterVertical as Integer
 
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
 
@@ -409,8 +409,8 @@ endcase
 
 testcase tInsertGraphic_25
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
+  Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
 
   iLeft = 1 : iRight  = 2 : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2 : iCenterVertical   = 3
@@ -529,8 +529,8 @@ endcase
 
 testcase tInsertGraphic_26
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
+  Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
 
   iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
@@ -649,8 +649,8 @@ endcase
 
 testcase tInsertGraphic_27
 
-  Dim iLeft , iRight  , iCenterHorizontal as Integer
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iLeft as Integer , iRight  as Integer , iCenterHorizontal as Integer
+  Dim iTop  as Integer , iBottom as Integer , iCenterVertical   as Integer
 
   iLeft = 1 : iRight  = 2  : iCenterHorizontal = 3
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
@@ -769,7 +769,7 @@ endcase
 
 testcase tInsertGraphic_28
 
-  Dim iTop  , iBottom , iCenterVertical   as Integer
+  Dim iTop as Integer , iBottom as Integer , iCenterVertical as Integer
 
   iTop  = 1 : iBottom = 2  : iCenterVertical   = 3
 

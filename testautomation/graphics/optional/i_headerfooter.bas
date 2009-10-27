@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,8 @@ sub main
 
     PrintLog "-------------------------" + gApplication + "-------------------"
 
-   call tiHeaderFooterSlide
-   call tiHeaderFooterNotesHandout
+    call tiHeaderFooterSlide
+    call tiHeaderFooterNotesHandout
 
     Call hStatusOut
 end sub

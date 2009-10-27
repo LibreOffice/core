@@ -34,12 +34,8 @@
 
 
 #include <tools/urlobj.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sot/formats.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
@@ -61,30 +57,18 @@
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
 #include <docsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
 #include <romenu.hxx>
 #include <pagedesc.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _DOCVW_HRC
 #include <docvw.hrc>
-#endif
-#ifndef _DOCVW_HRC
 #include <docvw.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -92,6 +76,7 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
@@ -415,22 +400,13 @@ static void lcl_GetPreferedExtension( String &rExt, const Graphic &rGrf )
 
 String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 {
-/*  SvtPathOptions aPathOpt;
-    String sGrfPath( aPathOpt.GetGraphicPath() );
-
-    FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
-    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-
-//    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
-    INetURLObject aPath;
-    aPath.SetSmartURL( sGrfPath);*/
 
     //Namen der Grafik herausfischen.
     String aName;
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
         if ( pItem->GetGraphicLink() )
-            aName = *pItem->GetGraphicLink();
+            sGrfName = *pItem->GetGraphicLink();
         ((SvxBrushItem*)pItem)->SetDoneLink( Link() );
         const Graphic *pGrf = pItem->GetGraphic( rView.GetDocShell() );
         if ( pGrf )
@@ -442,12 +418,10 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
         else
             return aEmptyStr;
     }
-    else
-        aName = sGrfName;
-    return ExportGraphic( aGraphic, sGrfName, aName );
+    return ExportGraphic( aGraphic, sGrfName );
 }
 
-String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const String &rName )
+String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
 {
     SvtPathOptions aPathOpt;
     String sGrfPath( aPathOpt.GetGraphicPath() );
@@ -457,16 +431,16 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const Str
 
 //    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
-    aPath.SetSmartURL( rName );
+    aPath.SetSmartURL( sGrfPath );
 
     //Namen der Grafik herausfischen.
     String aName = rGrfName;
 
+    aDlgHelper.SetTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
+    aDlgHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
     INetURLObject aURL;
     aURL.SetSmartURL( aName );
-    aPath.Append( aURL.GetName() );
-    xFP->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-    xFP->setTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
+    aDlgHelper.SetFileName( aURL.GetName() );
 
     GraphicFilter& rGF = *GetGrfFilter();
     const USHORT nCount = rGF.GetExportFormatCount();

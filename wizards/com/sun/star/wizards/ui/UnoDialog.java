@@ -233,7 +233,8 @@ public class UnoDialog implements EventNames
             Property[] allProps = xPSet.getPropertySetInfo().getProperties();
             for (int i = 0; i < allProps.length; i++)
             {
-                System.out.println(allProps[i].Name);
+                String sName = allProps[i].Name;
+                System.out.println(sName);
             }
         }
         catch (com.sun.star.uno.Exception exception)
@@ -276,7 +277,10 @@ public class UnoDialog implements EventNames
 
     public static int getListBoxItemCount(XListBox _xListBox)
     {
-        String[] fieldnames = (String[]) Helper.getUnoPropertyValue(getModel(_xListBox), "StringItemList");
+        // This function may look ugly, but this is the only way to check the count
+        // of values in the model,which is always right.
+        // the control is only a view and could be right or not.
+        final String[] fieldnames = (String[]) Helper.getUnoPropertyValue(getModel(_xListBox), "StringItemList");
         return fieldnames.length;
     }
 
@@ -831,6 +835,7 @@ public class UnoDialog implements EventNames
         }
         XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(XToolkit.class, tk);
         xReschedule = (XReschedule) UnoRuntime.queryInterface(XReschedule.class, xToolkit);
+        // TEUER!
         xControl.createPeer(xToolkit, parentPeer);
         xWindowPeer = xControl.getPeer();
         return xControl.getPeer();
@@ -878,7 +883,9 @@ public class UnoDialog implements EventNames
 
     public static Object getModel(Object control)
     {
-        return ((XControl) UnoRuntime.queryInterface(XControl.class, control)).getModel();
+        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, control);
+        XControlModel xModel = xControl.getModel();
+        return xModel;
     }
 
     public static void setEnabled(Object control, boolean enabled)

@@ -47,6 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/unohelp2.hxx>
+#include <vcl/help.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -618,9 +619,12 @@ awt::FontDescriptor SAL_CALL VCLXAccessibleToolBoxItem::getFontMetrics( const Re
     ::rtl::OUString sRet;
     if ( m_pToolBox )
     {
-        sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
+        if ( Help::IsExtHelpEnabled() )
+            sRet = m_pToolBox->GetHelpText( m_nItemId );
+        else
+            sRet = m_pToolBox->GetQuickHelpText( m_nItemId );
         if ( !sRet.getLength() )
-            // no quick help text set, so use item text
+            // no help text set, so use item text
             sRet = m_pToolBox->GetItemText( m_nItemId );
     }
     return sRet;

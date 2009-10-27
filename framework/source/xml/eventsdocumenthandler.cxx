@@ -128,7 +128,6 @@ static EventEntryProperty EventEntries[OReadEventsDocumentHandler::EV_XML_ENTRY_
 
 OReadEventsDocumentHandler::OReadEventsDocumentHandler( EventsConfig& aItems ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    ::cppu::OWeakObject(),
     m_aEventItems( aItems )
 {
     ::rtl::OUString aNamespaceEvent( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT ));
@@ -161,18 +160,6 @@ OReadEventsDocumentHandler::OReadEventsDocumentHandler( EventsConfig& aItems ) :
 
 OReadEventsDocumentHandler::~OReadEventsDocumentHandler()
 {
-}
-
-Any SAL_CALL OReadEventsDocumentHandler::queryInterface( const Type & rType )
-throw( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                SAL_STATIC_CAST( XDocumentHandler*, this ));
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
 }
 
 // XDocumentHandler

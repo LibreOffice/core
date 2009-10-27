@@ -131,10 +131,11 @@ namespace dbaui
         sal_Bool                HasCriteria()       const
         {
             ::std::vector< ::rtl::OUString>::const_iterator aIter = m_vecCriteria.begin();
-            for(;aIter != m_vecCriteria.end();++aIter)
+            ::std::vector< ::rtl::OUString>::const_iterator aEnd = m_vecCriteria.end();
+            for(;aIter != aEnd;++aIter)
                 if(aIter->getLength())
                     break;
-            return aIter != m_vecCriteria.end();
+            return aIter != aEnd;
         }
 
         const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_vecCriteria;}

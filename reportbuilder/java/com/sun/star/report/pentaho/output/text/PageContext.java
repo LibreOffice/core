@@ -208,17 +208,8 @@ public class PageContext
         }
 
         final StringBuffer b = new StringBuffer();
-
-        PageContext pc = this;
-        while (pc != null)
-        {
-            final String header_ = pc.getHeader();
-            if (header_ != null)
-            {
-                b.append(header_);
-            }
-            pc = pc.getParent();
-        }
+        b.append(parent.getPageHeaderContent());
+        b.append(getHeader());
 
         if (b.length() != 0)
         {

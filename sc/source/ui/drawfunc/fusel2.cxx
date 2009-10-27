@@ -53,6 +53,7 @@
 #include "drwlayer.hxx"
 #include "docsh.hxx"
 #include "drawview.hxx"
+#include <svx/sdrhittesthelper.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -79,7 +80,7 @@ BOOL FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
         {
             USHORT nHitLog = (USHORT) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
-            if ( pObject->IsHit( rPos, nHitLog ) )
+            if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, 0, false))
             {
                 ScViewData* pViewData = pViewShell->GetViewData();
                 ScSplitPos ePos = pViewShell->FindWindow( pWindow );

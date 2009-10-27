@@ -38,6 +38,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
+#include <oox/helper/helper.hxx>
 #include "filter.hxx"
 #include "scdllapi.h"
 
@@ -50,9 +51,6 @@
 
 /** Expands to a temporary String, created from an ASCII character array. */
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
-/** Expands to a temporary ::rtl::OUString, created from an ASCII character array. */
-#undef CREATE_OUSTRING
-#define CREATE_OUSTRING( ascii )    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 
 // items and item sets --------------------------------------------------------
 

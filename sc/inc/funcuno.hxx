@@ -74,6 +74,7 @@ class ScFunctionAccess : public cppu::WeakImplHelper3<
 private:
     ScTempDocCache  aDocCache;
     ScDocOptions*   pOptions;
+    SfxItemPropertyMap aPropertyMap;
     BOOL            bInvalid;
 
 public:

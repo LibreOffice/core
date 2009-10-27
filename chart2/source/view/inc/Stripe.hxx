@@ -65,7 +65,7 @@ public:
 
     ::com::sun::star::uno::Any      getPolyPolygonShape3D() const;
     ::com::sun::star::uno::Any      getNormalsPolygon() const;
-    ::com::sun::star::uno::Any      getTexturePolygon() const;
+    ::com::sun::star::uno::Any      getTexturePolygon( bool bRotatedTexture ) const;
 
     ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1; }
     ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }

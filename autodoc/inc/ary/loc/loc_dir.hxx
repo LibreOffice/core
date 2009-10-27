@@ -82,8 +82,6 @@ class Directory : public LocationEntity
     Le_id               Parent() const;
     Le_id               AssignedRoot() const;
 
-    Le_id               Search_Child(
-                            const String &      i_name ) const;
     Le_id               Search_Dir(
                             const String &      i_name ) const;
     Le_id               Search_File(

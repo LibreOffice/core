@@ -54,7 +54,6 @@ static Sequence< sal_Int8 > impl_getStaticIdentifier()
 
 
 ImageWrapper::ImageWrapper( const Image& aImage ) : ThreadHelpBase( &Application::GetSolarMutex() )
-                                                    ,   cppu::OWeakObject()
                                                     ,   m_aImage( aImage )
 {
 }
@@ -68,33 +67,6 @@ ImageWrapper::~ImageWrapper()
 Sequence< sal_Int8 > ImageWrapper::GetUnoTunnelId()
 {
     return impl_getStaticIdentifier();
-}
-
-
-// XInterface
-void SAL_CALL ImageWrapper::acquire() throw ()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ImageWrapper::release() throw ()
-{
-    OWeakObject::release();
-}
-
-Any SAL_CALL ImageWrapper::queryInterface( const Type& aType )
-throw ( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                aType ,
-                SAL_STATIC_CAST( com::sun::star::awt::XBitmap*, this ),
-                SAL_STATIC_CAST( XUnoTunnel*, this ),
-                SAL_STATIC_CAST( XTypeProvider*, this ));
-
-    if( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( aType );
 }
 
 // XBitmap
@@ -145,64 +117,6 @@ sal_Int64 SAL_CALL ImageWrapper::getSomething( const Sequence< sal_Int8 >& aIden
         return reinterpret_cast< sal_Int64 >( this );
     else
         return 0;
-}
-
-// XTypeProvider
-Sequence< Type > SAL_CALL ImageWrapper::getTypes() throw ( RuntimeException )
-{
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
-
-    if ( pTypeCollection == NULL )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == NULL )
-        {
-            // Create a static typecollection ...
-            static ::cppu::OTypeCollection aTypeCollection(
-                        ::getCppuType(( const Reference< XTypeProvider                  >*)NULL ) ,
-                        ::getCppuType(( const Reference< XUnoTunnel                     >*)NULL ) ,
-                        ::getCppuType(( const Reference< com::sun::star::awt::XBitmap   >*)NULL )   ) ;
-
-            // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
-}
-
-Sequence< sal_Int8 > SAL_CALL ImageWrapper::getImplementationId() throw ( RuntimeException )
-{
-    // Create one Id for all instances of this class.
-    // Use ethernet address to do this! (sal_True)
-
-    // Optimize this method
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pID is NULL - for the second call pID is different from NULL!
-    static ::cppu::OImplementationId* pID = NULL ;
-
-    if ( pID == NULL )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pID == NULL )
-        {
-            // Create a new static ID ...
-            static ::cppu::OImplementationId aID( sal_False ) ;
-            // ... and set his address to static pointer!
-            pID = &aID ;
-        }
-    }
-
-    return pID->getImplementationId() ;
 }
 
 }

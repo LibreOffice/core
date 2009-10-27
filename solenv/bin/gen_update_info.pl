@@ -79,6 +79,32 @@ if( $^O =~ /cygwin/i ) {
 }
 
 # read openoffice.lst
+# reading Globals section
+unless(open(LSTFILE, "sed -n \"/^Globals\$/,/^}\$/ p\" $lstfile |")) {
+    print STDERR "Can't open $lstfile file: $!\n";
+    return;
+}
+
+while (<LSTFILE>) {
+    if( /\bPRODUCTNAME / ) {
+        chomp;
+        s/.*PRODUCTNAME //;
+        $productname = $_;
+    }
+    if( /\bPACKAGEVERSION / ) {
+        chomp;
+        s/.*PACKAGEVERSION //;
+        $productversion = $_;
+    }
+    if( /\bPRODUCTEDITION / ) {
+        chomp;
+        s/.*PRODUCTEDITION //;
+        $productedition = $_;
+    }
+}
+
+close(LSTFILE);
+
 ### may be hierarchical ...
 if(open(LSTFILE, "sed -n \"/^$product:/,/^}\$/ p\" $lstfile |")) {
     while (<LSTFILE>) {
@@ -94,6 +120,8 @@ if(open(LSTFILE, "sed -n \"/^$product:/,/^}\$/ p\" $lstfile |")) {
 }
 close(LSTFILE);
 
+# Reading product specific settings
+
 unless(open(LSTFILE, "sed -n \"/^$product\$/,/^}\$/ p\" $lstfile |")) {
     print STDERR "Can't open $lstfile file: $!\n";
     return;
@@ -105,9 +133,9 @@ while (<LSTFILE>) {
         s/.*PRODUCTNAME //;
         $productname = $_;
     }
-    if( /\bPRODUCTVERSION / ) {
+    if( /\bPACKAGEVERSION / ) {
         chomp;
-        s/.*PRODUCTVERSION //;
+        s/.*PACKAGEVERSION //;
         $productversion = $_;
     }
     if( /\bPRODUCTEDITION / ) {

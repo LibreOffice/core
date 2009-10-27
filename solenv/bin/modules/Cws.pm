@@ -493,6 +493,19 @@ sub set_subversion_flag {
     return $self->set_subversion_flag_in_eis($value);
 }
 
+sub get_scm {
+    my $self  = shift;
+
+    return $self->get_scm_from_eis();
+}
+
+sub set_scm {
+    my $self     = shift;
+    my $scm_name = shift;
+
+    return $self->set_scm_in_eis($scm_name);
+}
+
 
 # Check if milestone exists
 sub is_milestone
@@ -1206,7 +1219,7 @@ sub register_child_with_eis
     };
 
     if ( $@ ) {
-        carp("ERROR: create_child_wortkspace(): EIS database transaction failed. Reason:\n$@\n");
+        carp("ERROR: create_child_workspace(): EIS database transaction failed. Reason:\n$@\n");
         return undef;
     }
     # set EIS_ID directly, since $self->eis_id() is not
@@ -1790,6 +1803,47 @@ sub set_subversion_flag_in_eis
     return $result;
 }
 
+sub get_scm_from_eis
+{
+    my $self = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getSCMName($id) };
+    if ( $@ ) {
+        carp("ERROR: get_scm_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
+sub set_scm_in_eis
+{
+    my $self     = shift;
+    my $scm_name = shift;
+
+    $scm_name = Eis::to_string($scm_name);
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    eval { $eis->setSCMName($id, $scm_name) };
+    if ( $@ ) {
+        carp("ERROR: set_scm_in_eis(): EIS database transaction failed. Reason:\n$@\n");
+        return 0;
+    }
+    return 1;
+}
 
 sub is_uirelevant_from_eis
 {

@@ -59,7 +59,7 @@ public:
 
     void add( CustomAnimationEffectPtr pEffect );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > create( const rtl::OUString& rstrSubType );
+    SD_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > create( const rtl::OUString& rstrSubType );
 
     const rtl::OUString& getPresetId() const { return maPresetId; }
     const rtl::OUString& getProperty() const { return maProperty; }
@@ -108,11 +108,11 @@ public:
 
     void init();
 
-    static const CustomAnimationPresets& getCustomAnimationPresets();
+    SD_DLLPUBLIC static const CustomAnimationPresets& getCustomAnimationPresets();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
-    CustomAnimationPresetPtr getEffectDescriptor( const rtl::OUString& rPresetId ) const;
+    SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const rtl::OUString& rPresetId ) const;
 //  const AnimationEffect* getEffect( const rtl::OUString& rPresetId ) const;
 //  const AnimationEffect* getEffect( const rtl::OUString& rPresetId, const rtl::OUString& rPresetSubType ) const;
 

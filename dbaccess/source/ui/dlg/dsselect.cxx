@@ -107,7 +107,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 //==================================================================
-ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, ::dbaccess::DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet)
+ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, bool _bAdabas,SfxItemSet* _pOutputSet)
      :ModalDialog(_pParent, ModuleRes(DLG_DATASOURCE_SELECTION))
      ,m_aDescription        (this, ModuleRes(FT_DESCRIPTION))
      ,m_aDatasource         (this, ModuleRes(LB_DATASOURCE))
@@ -120,7 +120,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
      ,m_aCreateAdabasDB     (this, ModuleRes(PB_CREATE))
      ,m_pOutputSet(_pOutputSet)
 {
-    if ( ::dbaccess::DST_ADABAS == _eType)
+    if ( _bAdabas )
     {   // set a new title (indicating that we're browsing local data sources only)
         SetText(ModuleRes(STR_LOCAL_DATASOURCES));
         m_aDescription.SetText(ModuleRes(STR_DESCRIPTION2));
@@ -158,7 +158,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
     fillListBox(_rDatasources);
 #ifdef HAVE_ODBC_ADMINISTRATION
     // allow ODBC datasource managenment
-    if (  ::dbaccess::DST_ODBC == _eType ||  ::dbaccess::DST_MYSQL_ODBC == _eType )
+    if (  !_bAdabas )
     {
         m_aManageDatasources.Show();
         m_aManageDatasources.Enable();

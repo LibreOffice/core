@@ -22,20 +22,32 @@ else
   mkdir "$$INSTDIR"
 fi
 
+#
+# Need to check diskless service install and make sure use the correct unpkg 
+#
+DISKLESS_SRVC=`echo $$BASEDIR | /usr/bin/grep export/Solaris_[1-9][0-9]/usr_$${ARCH}.all`
+if [  "$$DISKLESS_SRVC" ]; then
+	UNOPKG=/export/Solaris_11/usr_`uname -p`.all/opt/staroffice9/program/unopkg
+	POSTRUN=$$PKG_INSTALL_ROOT/usr_`uname -p`.all/usr/lib/postrun
+	CLIENT_BASEDIR=$$PKG_INSTALL_ROOT/usr_$${ARCH}.all
+else
+	UNOPKG=$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg
+	POSTRUN=$$PKG_INSTALL_ROOT/usr/lib/postrun
+fi
 # Use postrun command on Solaris where available (OpenSolaris)
-if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
+if [ -x $$POSTRUN ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "umask 022"
   echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" add --shared --bundled \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
-) | $$PKG_INSTALL_ROOT/usr/lib/postrun -b -c UNOPKG
+) | $$POSTRUN -b -c UNOPKG
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Installation of UNO extension ${OXTFILENAME}"
-    echo " through $$PKG_INSTALL_ROOT/usr/lib/postrun failed."
+    echo " through $$POSTRUN failed."
     exit 1
   fi
 else
   # No postrun available, try running unopkg directly
-  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" add --shared --bundled "$$BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$UNOPKG" add --shared --bundled "$$BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Installation of UNO extension ${OXTFILENAME} failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root install requires SUNWpostrun package to be installed"
@@ -48,7 +60,7 @@ if [ -n "$$INSTDIR" ]; then
   rm -rf "$$INSTDIR"
 fi
 
-exit 0  
+exit 0
 END
 
 %preremove << END
@@ -79,7 +91,7 @@ if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
   echo "umask 022"
   echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" remove --shared --bundled \"${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
   echo "rm -rf \"$$INSTDIR\""
-) | $$PKG_INSTALL_ROOT/usr/lib/postrun -b -c UNOPKG
+) | $$PKG_INSTALL_ROOT/usr/lib/postrun -c UNOPKG
 else
   # No postrun available, try running unopkg directly
   test -x $$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg || exit 0  

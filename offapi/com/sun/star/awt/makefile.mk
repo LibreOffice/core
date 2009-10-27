@@ -127,6 +127,7 @@ IDLFILES=\
     MessageBoxCommand.idl\
     MouseButton.idl\
     MouseEvent.idl\
+    MouseWheelBehavior.idl\
     PaintEvent.idl\
     Point.idl\
     PopupMenuDirection.idl\

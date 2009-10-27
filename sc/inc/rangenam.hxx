@@ -37,11 +37,11 @@
 #include "formula/grammar.hxx"
 #include "scdllapi.h"
 
+#include <map>
+
 //------------------------------------------------------------------------
 
 class ScDocument;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 
 namespace rtl {
     class OUStringBuffer;
@@ -67,7 +67,6 @@ typedef USHORT RangeType;
 //------------------------------------------------------------------------
 
 class ScTokenArray;
-class ScIndexMap;
 
 class ScRangeData : public ScDataObject
 {
@@ -81,9 +80,16 @@ private:
     USHORT          nIndex;
     BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
 
+    // max row and column to use for wrapping of references.  If -1 use the
+    // application's default.
+    SCROW           mnMaxRow;
+    SCCOL           mnMaxCol;
+
     friend class ScRangeName;
     ScRangeData( USHORT nIndex );
 public:
+    typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
+
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const String& rSymbol,
@@ -141,7 +147,7 @@ public:
     BOOL            IsReference( ScRange& rRef, const ScAddress& rPos ) const;
     BOOL            IsValidReference( ScRange& rRef ) const;
 
-    BOOL            IsRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
+//UNUSED2009-05 BOOL            IsRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
     BOOL            IsRangeAtBlock( const ScRange& ) const;
 
     void            UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable);
@@ -149,10 +155,15 @@ public:
 
     void            ValidateTabRefs();
 
-    void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
+    void            ReplaceRangeNamesInUse( const IndexMap& rMap );
 
     static void     MakeValidName( String& rName );
     SC_DLLPUBLIC static BOOL        IsNameValid( const String& rName, ScDocument* pDoc );
+
+    SC_DLLPUBLIC void SetMaxRow(SCROW nRow);
+    SCROW GetMaxRow() const;
+    SC_DLLPUBLIC void SetMaxCol(SCCOL nCol);
+    SCCOL GetMaxCol() const;
 };
 
 inline BOOL ScRangeData::HasType( RangeType nType ) const
@@ -193,7 +204,7 @@ public:
     virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
     virtual BOOL            IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
 
-    ScRangeData*            GetRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
+//UNUSED2009-05 ScRangeData*            GetRangeAtCursor( const ScAddress&, BOOL bStartOnly ) const;
     SC_DLLPUBLIC ScRangeData*           GetRangeAtBlock( const ScRange& ) const;
 
     SC_DLLPUBLIC BOOL                   SearchName( const String& rName, USHORT& rPos ) const;

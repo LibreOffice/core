@@ -507,10 +507,11 @@ public:
     virtual sal_Int16 getCurrentMacroExecMode() const;
     virtual sal_Bool setCurrentMacroExecMode( sal_uInt16 );
     virtual ::rtl::OUString getDocumentLocation() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getLastCommitDocumentStorage();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign();
     virtual sal_Bool documentStorageHasMacros() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
-    virtual sal_Int16 getScriptingSignatureState() const;
+    virtual sal_Int16 getScriptingSignatureState();
+    virtual sal_Bool hasTrustedScriptingSignature( sal_Bool bAllowUIToAddAuthor );
     virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
 
     // IModifiableDocument

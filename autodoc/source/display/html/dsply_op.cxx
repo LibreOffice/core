@@ -64,15 +64,6 @@ OperationsDisplay::~OperationsDisplay()
 }
 
 void
-OperationsDisplay::PrepareForGlobals()
-{
-    if (pClassMembersDisplay)
-        pClassMembersDisplay = 0;
-
-    csv::erase_map_of_heap_ptrs( aMap_GlobalFunctionsDisplay );
-}
-
-void
 OperationsDisplay::PrepareForStdMembers()
 {
     csv::erase_map_of_heap_ptrs( aMap_GlobalFunctionsDisplay );

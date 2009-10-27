@@ -63,6 +63,26 @@
 
 #include <algorithm>
 
+#ifdef DEBUG
+//#define MULTI_SL_DEBUG
+#endif
+
+#ifdef MULTI_SL_DEBUG
+#include <string>
+FILE * mslLogFile = NULL;
+FILE * mslLog()
+{
+#ifdef MSC
+    std::string logFileName(getenv("TEMP"));
+    logFileName.append("\\msllayout.log");
+    if (mslLogFile == NULL) mslLogFile = fopen(logFileName.c_str(),"w");
+    else fflush(mslLogFile);
+    return mslLogFile;
+#else
+    return stdout;
+#endif
+}
+#endif
 // =======================================================================
 
 // TODO: ask the glyph directly, for now we need this method because of #i99367#
@@ -1157,11 +1177,17 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     for( int nCharPos = i = -1; rArgs.GetNextPos( &nCharPos, &bRTL ); )
     {
         n = nCharPos - rArgs.mnMinCharPos;
-        i = pLogCluster[ n ];
-        long nDelta = rArgs.mpDXArray[ n ] ;
-        if( n > 0 )
-            nDelta -= rArgs.mpDXArray[ n-1 ];
-        pNewGlyphWidths[ i ] += nDelta * mnUnitsPerPixel;
+        if( (n < 0) || (nCharCount <= n) )  continue;
+
+        if( pLogCluster[ n ] >= 0 )
+            i = pLogCluster[ n ];
+        if( i >= 0 )
+        {
+            long nDelta = rArgs.mpDXArray[ n ] ;
+            if( n > 0 )
+                nDelta -= rArgs.mpDXArray[ n-1 ];
+            pNewGlyphWidths[ i ] += nDelta * mnUnitsPerPixel;
+        }
     }
 
     // move cluster positions using the adjusted widths
@@ -1768,6 +1794,19 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         }
     }
 
+    // Compute rtl flags, since in some scripts glyphs/char order can be
+    // reversed for a few character sequencies e.g. Myanmar
+    std::vector<bool> vRtl(rArgs.mnEndCharPos - rArgs.mnMinCharPos, false);
+    rArgs.ResetPos();
+    bool bRtl;
+    int nRunStart, nRunEnd;
+    while (rArgs.GetNextRun(&nRunStart, &nRunEnd, &bRtl))
+    {
+        if (bRtl) std::fill(vRtl.begin() + nRunStart - rArgs.mnMinCharPos,
+                            vRtl.begin() + nRunEnd - rArgs.mnMinCharPos, true);
+    }
+    rArgs.ResetPos();
+
     // prepare "merge sort"
     int nStartOld[ MAX_FALLBACK ];
     int nStartNew[ MAX_FALLBACK ];
@@ -1804,6 +1843,10 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nStartNew[ nLevel ] = nStartOld[ nLevel ] = 0;
         nValid[ nLevel ] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
             nStartNew[ nLevel ], &nGlyphAdv[ nLevel ], &nCharPos[ nLevel ] );
+#ifdef MULTI_SL_DEBUG
+        if (nValid[nLevel]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", n, nStartOld[nLevel], nStartNew[nLevel], aPos.X(), nGlyphAdv[nLevel], nCharPos[nLevel],
+            rArgs.mpStr[nCharPos[nLevel]]);
+#endif
         if( (n > 0) && !nValid[ nLevel ] )
         {
             // an empty fallback layout can be released
@@ -1829,6 +1872,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     int nActiveCharPos = nCharPos[0];
+    int nLastRunEndChar = (vRtl[nActiveCharPos - mnMinCharPos])?
+        rArgs.mnEndCharPos : rArgs.mnMinCharPos - 1;
+    int nRunVisibleEndChar = nCharPos[0];
     while( nValid[0] && (nLevel > 0))
     {
         // find best fallback level
@@ -1864,6 +1910,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 nStartOld[0] = nStartNew[0];
                 nValid[0] = mpLayouts[0]->GetNextGlyphs( 1, &nDummy, aPos,
                     nStartNew[0], &nGlyphAdv[0], &nCharPos[0] );
+#ifdef MULTI_SL_DEBUG
+                if (nValid[0]) fprintf(mslLog(), "layout[0]->GetNextGlyphs %d,%d x%d a%d c%d %x\n", nStartOld[0], nStartNew[0], aPos.X(), nGlyphAdv[0], nCharPos[0], rArgs.mpStr[nCharPos[0]]);
+#endif
                 if( !nValid[0] )
                    break;
             }
@@ -1881,7 +1930,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             int nOrigCharPos = nCharPos[n];
             nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
                 nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
-
+#ifdef MULTI_SL_DEBUG
+            if (nValid[n]) fprintf(mslLog(), "layout[%d]->GetNextGlyphs %d,%d a%d c%d %x\n", n, nStartOld[n], nStartNew[n], nGlyphAdv[n], nCharPos[n], rArgs.mpStr[nCharPos[n]]);
+#endif
             // break after last glyph of active layout
             if( !nValid[n] )
             {
@@ -1927,6 +1978,27 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                     { maFallbackRuns[0].NextRun(); break; }
                 bKeepNotDef = bNeedFallback;
             }
+            // check for reordered glyphs
+            if (aMultiArgs.mpDXArray &&
+                nRunVisibleEndChar < mnEndCharPos &&
+                nRunVisibleEndChar >= mnMinCharPos &&
+                nCharPos[n] < mnEndCharPos &&
+                nCharPos[n] >= mnMinCharPos)
+            {
+                if (vRtl[nActiveCharPos - mnMinCharPos])
+                {
+                    if (aMultiArgs.mpDXArray[nRunVisibleEndChar-mnMinCharPos]
+                        >= aMultiArgs.mpDXArray[nCharPos[n] - mnMinCharPos])
+                    {
+                        nRunVisibleEndChar = nCharPos[n];
+                    }
+                }
+                else if (aMultiArgs.mpDXArray[nRunVisibleEndChar-mnMinCharPos]
+                         <= aMultiArgs.mpDXArray[nCharPos[n] - mnMinCharPos])
+                {
+                    nRunVisibleEndChar = nCharPos[n];
+                }
+            }
         }
 
         // if a justification array is available
@@ -1936,16 +2008,40 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // the run advance is the width from the first char
             // in the run to the first char in the next run
             nRunAdvance = 0;
-            const bool bLTR = (nActiveCharPos < nCharPos[0]);
+#ifdef MULTI_SL_DEBUG
+            const bool bLTR = !(vRtl[nActiveCharPos - mnMinCharPos]);//(nActiveCharPos < nCharPos[0]);
+            int nOldRunAdv = 0;
             int nDXIndex = nCharPos[0] - mnMinCharPos - bLTR;
             if( nDXIndex >= 0 )
-                nRunAdvance += aMultiArgs.mpDXArray[ nDXIndex ];
+                nOldRunAdv += aMultiArgs.mpDXArray[ nDXIndex ];
             nDXIndex = nActiveCharPos - mnMinCharPos - bLTR;
             if( nDXIndex >= 0 )
-                nRunAdvance -= aMultiArgs.mpDXArray[ nDXIndex ];
+                nOldRunAdv -= aMultiArgs.mpDXArray[ nDXIndex ];
             if( !bLTR )
-                nRunAdvance = -nRunAdvance;
-
+                nOldRunAdv = -nOldRunAdv;
+#endif
+            if (vRtl[nActiveCharPos - mnMinCharPos])
+            {
+              if (nRunVisibleEndChar > mnMinCharPos && nRunVisibleEndChar <= mnEndCharPos)
+                  nRunAdvance -= aMultiArgs.mpDXArray[nRunVisibleEndChar - 1 - mnMinCharPos];
+              if (nLastRunEndChar > mnMinCharPos && nLastRunEndChar <= mnEndCharPos)
+                  nRunAdvance += aMultiArgs.mpDXArray[nLastRunEndChar - 1 - mnMinCharPos];
+#ifdef MULTI_SL_DEBUG
+              fprintf(mslLog(), "rtl visible %d-%d,%d-%d adv%d(%d)\n", nLastRunEndChar-1, nRunVisibleEndChar-1, nActiveCharPos - bLTR, nCharPos[0] - bLTR, nRunAdvance, nOldRunAdv);
+#endif
+            }
+            else
+            {
+                if (nRunVisibleEndChar >= mnMinCharPos)
+                  nRunAdvance += aMultiArgs.mpDXArray[nRunVisibleEndChar - mnMinCharPos];
+                if (nLastRunEndChar >= mnMinCharPos)
+                  nRunAdvance -= aMultiArgs.mpDXArray[nLastRunEndChar - mnMinCharPos];
+#ifdef MULTI_SL_DEBUG
+                fprintf(mslLog(), "visible %d-%d,%d-%d adv%d(%d)\n", nLastRunEndChar, nRunVisibleEndChar, nActiveCharPos - bLTR, nCharPos[0] - bLTR, nRunAdvance, nOldRunAdv);
+#endif
+            }
+            nLastRunEndChar = nRunVisibleEndChar;
+            nRunVisibleEndChar = nCharPos[0];
             // the requested width is still in pixel units
             // => convert it to base level font units
             nRunAdvance *= mnUnitsPerPixel;
@@ -1963,9 +2059,27 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
         // prepare for next fallback run
         nActiveCharPos = nCharPos[0];
+        // it essential that the runs don't get ahead of themselves and in the
+        // if( bKeepNotDef && !bNeedFallback ) statement above, the next run may
+        // have already been reached on the base level
         for( int i = nFBLevel; --i >= 0;)
-            if( !maFallbackRuns[i].PosIsInRun( nActiveCharPos ) )
-                maFallbackRuns[i].NextRun();
+        {
+            if (maFallbackRuns[i].GetRun(&nRunStart, &nRunEnd, &bRtl))
+            {
+                if (bRtl)
+                {
+                    if (nRunStart > nActiveCharPos)
+                        maFallbackRuns[i].NextRun();
+                }
+                else
+                {
+                    if (nRunEnd <= nActiveCharPos)
+                        maFallbackRuns[i].NextRun();
+                }
+            }
+        }
+//            if( !maFallbackRuns[i].PosIsInRun( nActiveCharPos ) )
+//                maFallbackRuns[i].NextRun();
     }
 
     mpLayouts[0]->Simplify( true );

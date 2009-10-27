@@ -45,7 +45,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=		$(SLO)$/stillinteraction.obj		    \
+SLOFILES=		$(SLO)$/quietinteraction.obj		    \
                 $(SLO)$/preventduplicateinteraction.obj
 
 # --- Targets ------------------------------------------------------

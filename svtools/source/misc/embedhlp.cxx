@@ -54,6 +54,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
@@ -249,6 +250,7 @@ struct EmbeddedObjectRef_Impl
     sal_Int64                                   nViewAspect;
     BOOL                                        bIsLocked;
     sal_Bool                                    bNeedUpdate;
+    awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
 };
 
 void EmbeddedObjectRef::Construct_Impl()
@@ -260,6 +262,7 @@ void EmbeddedObjectRef::Construct_Impl()
     mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
     mpImp->bIsLocked = FALSE;
     mpImp->bNeedUpdate = sal_False;
+    mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size(8000,7000);
 }
 
 EmbeddedObjectRef::EmbeddedObjectRef()
@@ -286,6 +289,7 @@ EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj )
     mpImp->aPersistName = rObj.mpImp->aPersistName;
     mpImp->aMediaType = rObj.mpImp->aMediaType;
     mpImp->bNeedUpdate = rObj.mpImp->bNeedUpdate;
+    mpImp->aDefaultSizeForChart_In_100TH_MM = rObj.mpImp->aDefaultSizeForChart_In_100TH_MM;
 
     if ( rObj.mpImp->pGraphic && !rObj.mpImp->bNeedUpdate )
         mpImp->pGraphic = new Graphic( *rObj.mpImp->pGraphic );
@@ -334,6 +338,14 @@ void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObj
     mpImp->nViewAspect = nAspect;
     mxObj = xObj;
     mpImp->xListener = EmbedEventListener_Impl::Create( this );
+
+    //#i103460#
+    {
+        ::com::sun::star::uno::Reference < ::com::sun::star::chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
+        DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
+        if( xSizeTransmitter.is() )
+            xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );
+    }
 }
 
 void EmbeddedObjectRef::Clear()
@@ -900,6 +912,20 @@ BOOL EmbeddedObjectRef::IsChart() const
     }
 
     return sal_False;
+}
+
+void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
+{
+    //#i103460# charts do not necessaryly have an own size within ODF files,
+    //for this case they need to use the size settings from the surrounding frame,
+    //which is made available with this method
+
+    mpImp->aDefaultSizeForChart_In_100TH_MM = awt::Size( rSizeIn_100TH_MM.getWidth(), rSizeIn_100TH_MM.getHeight() );
+
+    ::com::sun::star::uno::Reference < ::com::sun::star::chart2::XDefaultSizeTransmitter > xSizeTransmitter( mxObj, uno::UNO_QUERY );
+    DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
+    if( xSizeTransmitter.is() )
+        xSizeTransmitter->setDefaultSize( mpImp->aDefaultSizeForChart_In_100TH_MM );
 }
 
 }

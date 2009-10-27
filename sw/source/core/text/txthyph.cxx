@@ -89,7 +89,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     ASSERT( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
-    if( !pBreakIt->xBreak.is() )
+    if( !pBreakIt->GetBreakIter().is() )
         return sal_False;;
     // Wir machen den Laden erstmal dicht:
     ASSERT( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
@@ -254,7 +254,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         Reference< XHyphenatedWord > xHyphWord;
 
         Boundary aBound =
-            pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nWrdStart,
+            pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nWrdStart,
             pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
         nWrdStart = static_cast<xub_StrLen>(aBound.startPos);
         nLen = static_cast<xub_StrLen>(aBound.endPos - nWrdStart);

@@ -610,6 +610,11 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
         aThisDriverSettings.getNodeValue(getDbLocationNodeName()) >>= sURL;
         sURL = SvtPathOptions().SubstituteVariable(sURL);
 
+        if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
+        {
+            m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
+        }
+
         // check if URL is already loaded
         ObjectCacheIterator aExistent = m_aDatabaseObjects.find(sURL);
         if ( aExistent != m_aDatabaseObjects.end() )

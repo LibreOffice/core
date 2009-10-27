@@ -57,8 +57,6 @@ class TableEdgeHdl : public SdrHdl
 public:
     TableEdgeHdl( const Point& rPnt, bool bHorizontal, sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nEdges );
 
-    virtual bool IsHdlHit(const Point& rPnt) const;
-
     sal_Int32 GetValidDragOffset( const SdrDragStat& rDrag ) const;
 
     virtual Pointer GetPointer() const;
@@ -68,7 +66,7 @@ public:
     bool IsHorizontalEdge() const { return mbHorizontal; }
 
     basegfx::B2DPolyPolygon getSpecialDragPoly(const SdrDragStat& rDrag) const;
-    basegfx::B2DPolyPolygon GetPolyPolygon( bool bOnlyVisible, const SdrDragStat* pDrag = 0 ) const;
+    void getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2DPolyPolygon& rInvisible, const SdrDragStat* pDrag) const;
 
 protected:
     // create marker for this kind
@@ -77,7 +75,6 @@ protected:
 private:
     bool mbHorizontal;
     sal_Int32 mnMin, mnMax;
-    basegfx::B2DPolyPolygon maVisiblePolygon;
     TableEdgeVector maEdges;
 };
 

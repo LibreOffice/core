@@ -44,7 +44,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/pdfextoutdevdata.hxx>
 #include <svtools/cacheoptions.hxx>
 #include "grfmgr.hxx"
 
@@ -674,30 +673,10 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     const sal_uInt32    nOldDrawMode = pOut->GetDrawMode();
     BOOL                bCropped = aAttr.IsCropped();
     BOOL                bCached = FALSE;
-    BOOL                bWritingPdfLinkedGraphic = FALSE;
     BOOL                bRet;
 
     // #i29534# Provide output rects for PDF writer
     Rectangle           aCropRect;
-
-    // #i29534# Notify PDF writer about linked graphic (if any)
-    vcl::ExtOutDevData* pExtOutDevData = pOut->GetExtOutDevData();
-    if( pExtOutDevData && pExtOutDevData->ISA(vcl::PDFExtOutDevData) )
-    {
-        // #i29534# Only delegate image handling to PDF, if no special
-        // treatment is necessary
-        if( GetGraphic().IsLink() &&
-            aSz.Width() > 0L &&
-            aSz.Height() > 0L &&
-            !aAttr.IsSpecialDrawMode() &&
-            !aAttr.IsMirrored() &&
-            !aAttr.IsRotated() &&
-            !aAttr.IsAdjusted() )
-        {
-            bWritingPdfLinkedGraphic = TRUE;
-            static_cast< vcl::PDFExtOutDevData* >( pExtOutDevData )->BeginGroup();
-        }
-    }
 
     if( !( GRFMGR_DRAW_USE_DRAWMODE_SETTINGS & nFlags ) )
         pOut->SetDrawMode( nOldDrawMode & ( ~( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) ) );
@@ -748,16 +727,6 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         pOut->Pop();
 
     pOut->SetDrawMode( nOldDrawMode );
-
-    // #i29534# Notify PDF writer about linked graphic (if any)
-    if( bWritingPdfLinkedGraphic )
-    {
-        static_cast< vcl::PDFExtOutDevData* >( pExtOutDevData )->EndGroup(
-            const_cast< Graphic& >(GetGraphic()),
-            aAttr.GetTransparency(),
-            Rectangle( aPt, aSz ),
-            aCropRect );
-    }
 
     // #i29534# Moved below OutDev restoration, to avoid multiple swap-ins
     // (code above needs to call GetGraphic twice)

@@ -325,7 +325,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 BOOL bMacro = FALSE;
 
-                if (bMacro && mpView->PickObj(aMDPos,pObj,pPV,SDRSEARCH_PICKMACRO))
+                if (bMacro && mpView->PickObj(aMDPos,mpView->getHitTolLog(),pObj,pPV,SDRSEARCH_PICKMACRO))
                 {
                     // Makro
                     USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
@@ -659,7 +659,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if( mpView && mpView->MouseButtonUp(rMEvt, mpWindow) || rMEvt.GetClicks() == 2 )
+    if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow)) || rMEvt.GetClicks() == 2 )
         return (TRUE); // Event von der SdrView ausgewertet
 
     BOOL bEmptyTextObj = FALSE;
@@ -1037,7 +1037,7 @@ void FuText::Activate()
     mpView->SetQuickTextEditMode(mpViewShell->GetFrameView()->IsQuickEdit());
 
     // #i89661# it's no longer necessary to make it so big here, it's fine tuned
-    // for text objects in SdrMarkView::ImpCheckObjHit
+    // for text objects in SdrMarkView::CheckSingleSdrObjectHit
     mpView->SetHitTolerancePixel( 2 * HITPIX );
 
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();

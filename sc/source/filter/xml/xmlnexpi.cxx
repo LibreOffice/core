@@ -196,8 +196,6 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
-    const formula::FormulaGrammar::Grammar eStorageGrammar = pNamedExpression->eGrammar =
-        GetScImport().GetDocument()->GetStorageGrammar();
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetNamedExpressionAttrTokenMap());
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -217,16 +215,9 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
             break;
             case XML_TOK_NAMED_EXPRESSION_ATTR_EXPRESSION :
             {
-                rtl::OUString sFormula;
-                sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
-                    _GetKeyByAttrName( sValue, &sFormula, sal_False );
-
-                if (ScXMLImport::IsAcceptedFormulaNamespace( nFormulaPrefix,
-                            sValue, pNamedExpression->eGrammar,
-                            eStorageGrammar))
-                    pNamedExpression->sContent = sFormula;
-                else
-                    pNamedExpression->sContent = sValue;
+                GetScImport().ExtractFormulaNamespaceGrammar(
+                    pNamedExpression->sContent, pNamedExpression->sContentNmsp,
+                    pNamedExpression->eGrammar, sValue );
             }
             break;
             case XML_TOK_NAMED_EXPRESSION_ATTR_BASE_CELL_ADDRESS :

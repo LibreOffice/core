@@ -36,9 +36,8 @@
 #include <EncryptionData.hxx>
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
-#ifndef _VOS_REF_H_
+#include <ZipFile.hxx>
 #include <vos/ref.hxx>
-#endif
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <comphelper/storagehelper.hxx>
@@ -103,15 +102,9 @@ void SAL_CALL ZipOutputStream::putNextEntry( ZipEntry& rEntry,
     if (bEncrypt)
     {
         bEncryptCurrentEntry = sal_True;
-        rtlCipherError aResult;
 
-        aCipher = rtl_cipher_create ( rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-        aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionEncode,
-                            reinterpret_cast < const sal_uInt8 * > (xEncryptData->aKey.getConstArray() ),
-                            xEncryptData->aKey.getLength(),
-                            reinterpret_cast < const sal_uInt8 * > ( xEncryptData->aInitVector.getConstArray() ),
-                            xEncryptData->aInitVector.getLength());
-        OSL_ASSERT( aResult == rtl_Cipher_E_None );
+        ZipFile::StaticGetCipher( xEncryptData, aCipher, sal_False );
+
         aDigest = rtl_digest_createSHA1();
         mnDigested = 0;
         rEntry.nFlag |= 1 << 4;
@@ -302,10 +295,10 @@ void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
 void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
-    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sName, sal_True ) )
+    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, sal_True ) )
         throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
 
-    ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sName, RTL_TEXTENCODING_UTF8 );
+    ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
     aChucker << CENSIG;
@@ -351,10 +344,10 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
 sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     throw(IOException, RuntimeException)
 {
-    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sName, sal_True ) )
+    if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, sal_True ) )
         throw IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
 
-    ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sName, RTL_TEXTENCODING_UTF8 );
+    ::rtl::OString sUTF8Name = ::rtl::OUStringToOString( rEntry.sPath, RTL_TEXTENCODING_UTF8 );
     sal_Int16 nNameLength       = static_cast < sal_Int16 > ( sUTF8Name.getLength() );
 
     aChucker << LOCSIG;

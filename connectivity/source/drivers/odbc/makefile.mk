@@ -45,7 +45,7 @@ LDUMP=ldump2.exe
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 .IF "$(SYSTEM_ODBC_HEADERS)" == "YES"
@@ -79,4 +79,4 @@ SHL1VERSIONMAP=odbc.map
 
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk

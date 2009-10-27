@@ -38,6 +38,7 @@
 #include "anmdef.hxx"
 #include <svx/svdobj.hxx>
 #include <tools/color.hxx>
+#include <sddllapi.h>
 
 class Polygon;
 class Point;
@@ -46,7 +47,6 @@ class SdrObjSurrogate;
 class SdrObject;
 class SdrPathObj;
 class SdDrawDocument;
-
 
 class SdAnimationInfo : public SdrObjUserData
 {
@@ -73,16 +73,19 @@ public:
     String                  maSecondSoundFile; // fuer Objekt ausblenden
     BOOL                    mbSecondSoundOn;    // fuer Objekt ausblenden
     BOOL                    mbSecondPlayFull;// fuer Objekt ausblenden
-    String                  maBookmark;     // Sprung zu Objekt/Seite
+//  String                  maBookmark;     // Sprung zu Objekt/Seite
     USHORT                  mnVerb;         // fuer OLE-Objekt
     ULONG                   mnPresOrder;
+    SdrObject&              mrObject;
 
+    SD_DLLPUBLIC void                    SetBookmark( const String& rBookmark );
+    SD_DLLPUBLIC String                  GetBookmark();
 public:
-                            SdAnimationInfo();
-                            SdAnimationInfo(const SdAnimationInfo& rAnmInfo);
+                            SdAnimationInfo(SdrObject& rObject);
+                            SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);
     virtual                 ~SdAnimationInfo();
 
-    virtual SdrObjUserData* Clone(SdrObject* pObj) const;
+    virtual SdrObjUserData* Clone(SdrObject* pObject) const;
 };
 
 #endif // _SD_ANMINFO_HXX

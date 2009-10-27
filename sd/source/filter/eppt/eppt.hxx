@@ -775,6 +775,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          ImplDocumentListContainer( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplMasterSlideListContainer( SvStream* pOutStrm = NULL );
 
+    public:
+        static void         WriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
+
     protected:
 
         sal_Bool            ImplCreateDocumentSummaryInformation( sal_uInt32 nCnvrtFlags );
@@ -835,7 +838,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         Rectangle                           ImplMapRectangle( const ::com::sun::star::awt::Rectangle& );
 
         sal_Bool                            ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
-        void                                ImplWriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
 
     public:
                                 PPTWriter( SvStorageRef& rSvStorage,

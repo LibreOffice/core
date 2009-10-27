@@ -615,8 +615,8 @@ namespace xmloff
         }
         else
         {
-            static const sal_Char* pValueAttributeName = OAttributeMetaData::getSpecialAttributeName(CCA_VALUE);
-            static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getSpecialAttributeName(CCA_CURRENT_VALUE);
+            static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_VALUE);
+            static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_VALUE);
             static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MIN_VALUE);
             static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MAX_VALUE);
             static const sal_Char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY );

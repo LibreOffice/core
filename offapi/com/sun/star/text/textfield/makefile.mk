@@ -70,6 +70,7 @@ IDLFILES=\
     InputUser.idl\
     JumpEdit.idl\
     Macro.idl\
+    MetadataField.idl\
     PageCount.idl\
     PageNumber.idl\
     ParagraphCount.idl\

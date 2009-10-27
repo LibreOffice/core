@@ -216,7 +216,8 @@ published service RowSet
         the <type scope="com::sun::star::sdbc">XParameters</type> interface.<br/>
         However, you can also choose to let an interaction handler supply such data. For this, you may
         for instance instantiate an <type>InteractionHandler</type>, which asks the user for the
-        data, or you may write your own one, which supplies the data from somewhere else.</p>
+        data, or you may write your own one, which supplies the data from somewhere else.
+        The default implementation will only ask for parameters which aren't set before through the <type scope="com::sun::star::sdbc">XParameters</type> interface.</p>
 
         @see com::sun::star::sdb::InteractionHandler
     */

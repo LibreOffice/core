@@ -37,6 +37,7 @@
 #include "ControllerLockGuard.hxx"
 #include "PropertyHelper.hxx"
 #include "DataSourceHelper.hxx"
+#include "ChartModelHelper.hxx"
 
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -169,6 +170,9 @@ void UndoElement::applyModelContentToModel(
             ControllerLockGuard aLockedControllers( xInOutModelToChange );
             Reference< chart2::XChartDocument > xSource( xModelToCopyFrom, uno::UNO_QUERY_THROW );
             Reference< chart2::XChartDocument > xDestination( xInOutModelToChange, uno::UNO_QUERY_THROW );
+
+            // propagate the correct flag for plotting of hidden values to the data provider and all used sequences
+            ChartModelHelper::setIncludeHiddenCells( ChartModelHelper::isIncludeHiddenCells( xModelToCopyFrom ) , xInOutModelToChange );
 
             // diagram
             xDestination->setFirstDiagram( xSource->getFirstDiagram());

@@ -56,12 +56,12 @@ class AddonMenu : public PopupMenu
                         AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                         ~AddonMenu();
 
-    private:
+    protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 };
 
 class AddonMenuManager;
-class AddonPopupMenu : public PopupMenu
+class AddonPopupMenu : public AddonMenu
 {
     public:
                                 ~AddonPopupMenu();
@@ -78,8 +78,7 @@ class AddonPopupMenu : public PopupMenu
     private:
                                 AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
-        rtl::OUString                                                     m_aCommandURL;
-        ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame > m_xFrame;
+    rtl::OUString               m_aCommandURL;
 
     friend class AddonMenuManager;
 };

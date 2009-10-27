@@ -39,7 +39,7 @@
 #include <general.h>
 #include <macros/debug/assertion.hxx>
 #include <helper/imageproducer.hxx>
-#include <classes/menuconfiguration.hxx>
+#include <xml/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -106,23 +106,12 @@ sal_Bool AddonPopupMenu::IsCommandURLPrefix( const ::rtl::OUString& aCmdURL )
 }
 
 AddonPopupMenu::AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame ) :
-    m_xFrame( rFrame )
+    AddonMenu( rFrame )
 {
 }
 
 AddonPopupMenu::~AddonPopupMenu()
 {
-    for ( USHORT i = 0; i < GetItemCount(); i++ )
-    {
-        if ( GetItemType( i ) != MENUITEM_SEPARATOR )
-        {
-            // delete user attributes created with new!
-            USHORT nId = GetItemId( i );
-            MenuConfiguration::Attributes* pUserAttributes = (MenuConfiguration::Attributes*)GetUserValue( nId );
-            delete pUserAttributes;
-            delete GetPopupMenu( nId );
-        }
-    }
 }
 
 // ------------------------------------------------------------------------

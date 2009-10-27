@@ -70,8 +70,8 @@ Table::Table( const WorkbookHelper& rHelper ) :
 void Table::importTable( const AttributeList& rAttribs, sal_Int16 nSheet )
 {
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), nSheet );
-    maModel.maProgName    = rAttribs.getString( XML_name, OUString() );
-    maModel.maDisplayName = rAttribs.getString( XML_displayName, OUString() );
+    maModel.maProgName    = rAttribs.getXString( XML_name, OUString() );
+    maModel.maDisplayName = rAttribs.getXString( XML_displayName, OUString() );
     maModel.mnId          = rAttribs.getInteger( XML_id, -1 );
     maModel.mnType        = rAttribs.getToken( XML_tableType, XML_worksheet );
     maModel.mnHeaderRows  = rAttribs.getInteger( XML_headerRowCount, 1 );

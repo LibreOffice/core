@@ -35,6 +35,8 @@
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
 
+#include <vector>
+
 // --- class XclMsodrawing_Base --------------------------------------
 
 class XclMsodrawing_Base
@@ -57,29 +59,26 @@ public:
 
 // --- class XclMsodrawinggroup --------------------------------------
 
-class XclMsodrawinggroup : public XclMsodrawing_Base, public ExcRecord
+class XclMsodrawinggroup : public XclMsodrawing_Base, public XclExpRecord
 {
 private:
 
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteBody( XclExpStream& rStrm );
 
 public:
                                 XclMsodrawinggroup( RootData& rRoot,
                                     UINT16 nEscherType = 0 );
     virtual                     ~XclMsodrawinggroup();
-
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
 };
 
 
 // --- class XclMsodrawing -------------------------------------------
 
-class XclMsodrawing : public XclMsodrawing_Base, public ExcRecord
+class XclMsodrawing : public XclMsodrawing_Base, public XclExpRecord
 {
 private:
 
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteBody( XclExpStream& rStrm );
 
 public:
                                 XclMsodrawing(
@@ -87,9 +86,6 @@ public:
                                     UINT16 nEscherType = 0,
                                     sal_Size nInitialSize = 0 );
     virtual                     ~XclMsodrawing();
-
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
 };
 
 
@@ -416,7 +412,7 @@ private:
     sal_Size                    nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
-    static XclExpString         sUsername;
+    XclExpString                sUserName;
     UINT8                       nProtected;
 
     inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
@@ -428,7 +424,7 @@ private:
 
 protected:
 public:
-                                ExcEScenario( ScDocument& rDoc, SCTAB nTab );
+                                ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenario();
 
     virtual UINT16              GetNum() const;
@@ -454,7 +450,7 @@ private:
 
 protected:
 public:
-                                ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab );
+                                ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenarioManager();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -464,23 +460,24 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
+// ============================================================================
 
-// ---- class XclProtection ------------------------------------------
-
-class XclProtection : public ExcDummyRec
+/** Represents a SHEETPROTECTION record that stores sheet protection
+    options.  Note that a sheet still needs to save its sheet protection
+    options even when it's not protected. */
+class XclExpSheetProtectOptions : public XclExpRecord
 {
-    // replacement for records PROTECT, SCENPROTECT, OBJPROTECT...
-private:
-    static const BYTE           pMyData[];
-    static const sal_Size       nMyLen;
 public:
-    virtual sal_Size            GetLen( void ) const;
-    virtual const BYTE*         GetData( void ) const;
+    explicit            XclExpSheetProtectOptions( const XclExpRoot& rRoot, SCTAB nTab );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    sal_uInt16      mnOptions;      /// Encoded sheet protection options.
 };
 
-
-// -------------------------------------------------------------------
-
+// ============================================================================
 
 class XclCalccount : public ExcRecord
 {
@@ -542,6 +539,104 @@ public:
                                 XclRefmode( const ScDocument& );
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpFilePass : public XclExpRecord
+{
+public:
+    explicit XclExpFilePass( const XclExpRoot& rRoot );
+    virtual ~XclExpFilePass();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+
+private:
+    const XclExpRoot& mrRoot;
+};
+
+// ============================================================================
+
+/** Beginning of User Interface Records */
+class XclExpInterfaceHdr : public XclExpUInt16Record
+{
+public:
+    explicit            XclExpInterfaceHdr( sal_uInt16 nCodePage );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** Write Access User Name - This record contains the user name, which is
+    the name you type when you install Excel. */
+class XclExpWriteAccess : public XclExpRecord
+{
+public:
+    explicit XclExpWriteAccess();
+    virtual ~XclExpWriteAccess();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpFileSharing : public XclExpRecord
+{
+public:
+    explicit            XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash );
+
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    XclExpString        maUserName;
+    sal_uInt16          mnPasswordHash;
+};
+
+// ============================================================================
+
+class XclExpProt4Rev : public XclExpRecord
+{
+public:
+    explicit XclExpProt4Rev();
+    virtual ~XclExpProt4Rev();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpProt4RevPass : public XclExpRecord
+{
+public:
+    explicit XclExpProt4RevPass();
+    virtual ~XclExpProt4RevPass();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpRecalcId : public XclExpDummyRecord
+{
+public:
+    explicit XclExpRecalcId();
+};
+
+// ============================================================================
+
+class XclExpBookExt : public XclExpDummyRecord
+{
+public:
+    explicit XclExpBookExt();
 };
 
 

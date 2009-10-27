@@ -38,7 +38,7 @@ class ResMgr;
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS RessourceManager
+class RessourceManager
 {
 public:
     static ::ResMgr &  getRessourceManager();

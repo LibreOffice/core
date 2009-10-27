@@ -160,6 +160,8 @@ Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild( sal_Int32
 
         maChildMap[xCell] = xAccessibleCell;
 
+        xAccessibleCell->Init();
+
         Reference< XAccessible > xChild( xAccessibleCell.get() );
         return xChild;
     }
@@ -501,10 +503,11 @@ Reference< XAccessible > SAL_CALL AccessibleTableShape::getAccessibleCellAt( sal
     ::vos::OGuard aSolarGuard (::Application::GetSolarMutex());
     checkCellPosition( nColumn, nRow );
 
-    (void)nRow;
-    (void)nColumn;
-    Reference< XAccessible > xRet;
-    return xRet;
+    sal_Int32 nChildIndex = 0;
+    if( mxImpl->mxTable.is() )
+        nChildIndex = mxImpl->mxTable->getColumnCount() * nRow + nColumn;
+
+    return getAccessibleChild( nChildIndex );
 }
 
 //--------------------------------------------------------------------

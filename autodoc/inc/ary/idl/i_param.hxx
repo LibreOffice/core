@@ -49,7 +49,6 @@ class Parameter
 {
   public:
     // LIFECYCLE
-                        Parameter();
                         Parameter(
                             const String &      i_sName,
                             Type_id             i_nType,

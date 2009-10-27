@@ -235,12 +235,6 @@ PE_Parameter::On_expectName_Comma(const char * i_sText)
 }
 
 void
-PE_Parameter::On_expectName_Assign(const char * i_sText)
-{
-    On_afterName_Assign(i_sText);
-}
-
-void
 PE_Parameter::On_afterName_ArrayBracket_Left(const char *)
 {
     pSpuVariable->Push(not_done);

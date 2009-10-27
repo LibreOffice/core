@@ -84,107 +84,16 @@ Resource RID_RSC_TABWIN_PREFIX
 };
 String RID_STR_FORMSHELL
 {
-    Text [ en-US ] = "Form";
+    Text = "Form Shell";
 };
 String RID_STR_STDFORMNAME
 {
-    Text = "Standard";
+    Text [ en-US ]= "Form";
 };
-String RID_STR_FORMATTED_CLASSNAME
+String RID_STR_PROPTITLE_HIDDEN
 {
-    Text = "FormattedField";
+    Text [ en-US ] = "Hidden Control";
 };
-String RID_STR_CONTROL_CLASSNAME
-{
-    Text = "Control";
-};
-String RID_STR_CHECKBOX_CLASSNAME
-{
-    Text = "CheckBox";
-};
-String RID_STR_RADIOBUTTON_CLASSNAME
-{
-    Text = "OptionButton";
-};
-String RID_STR_BUTTON_CLASSNAME
-{
-    Text = "PushButton";
-};
-String RID_STR_FIXEDTEXT_CLASSNAME
-{
-    Text = "LabelField";
-};
-String RID_STR_IMAGE_CLASSNAME
-{
-    Text = "ImageButton";
-};
-String RID_STR_GRID_CLASSNAME
-{
-    Text = "TableControl";
-};
-String RID_STR_GROUPBOX_CLASSNAME
-{
-    Text = "GroupBox";
-};
-String RID_STR_LISTBOX_CLASSNAME
-{
-    Text = "ListBox";
-};
-String RID_STR_COMBOBOX_CLASSNAME
-{
-    Text = "ComboBox";
-};
-String RID_STR_EDIT_CLASSNAME
-{
-    Text = "TextBox";
-};
-String RID_STR_FILECONTROL_CLASSNAME
-{
-    Text = "FileSelection";
-};
-String RID_STR_DATEFIELD_CLASSNAME
-{
-    Text = "DateField";
-};
-String RID_STR_TIMEFIELD_CLASSNAME
-{
-    Text = "TimeField";
-};
-String RID_STR_NUMERICFIELD_CLASSNAME
-{
-    Text = "NumericalField";
-};
-String RID_STR_CURRENCYFIELD_CLASSNAME
-{
-    Text = "CurrencyField";
-};
-String RID_STR_PATTERNFIELD_CLASSNAME
-{
-    Text = "PatternField";
-};
-String RID_STR_IMAGECONTROL_CLASSNAME
-{
-    Text = "ImageControl";
-};
-String RID_STR_HIDDEN_CLASSNAME
-{
-    Text = "HiddenControl";
-};
-String RID_STR_NAVBAR_CLASSNAME
-{
-    Text [ en-US ] = "NavigationBar";
-};
-
-String RID_STR_CLASSNAME_SCROLLBAR
-{
-    Text [ en-US ] = "Scrollbar";
-};
-
-String RID_STR_CLASSNAME_SPINBUTTON
-{
-    Text [ en-US ] = "SpinButton";
-};
-
 String RID_STR_CONTROL
 {
     Text [ en-US ] = "Control";
@@ -282,7 +191,7 @@ String RID_STR_TIME
 };
 String RID_STR_PROPTITLE_PUSHBUTTON
 {
-    Text [ en-US ] = "Button";
+    Text [ en-US ] = "Push Button";
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
@@ -294,7 +203,7 @@ String RID_STR_PROPTITLE_CHECKBOX
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
-    Text [ en-US ] = "Label field";
+    Text [ en-US ] = "Label Field";
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {

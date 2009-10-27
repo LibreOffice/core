@@ -39,6 +39,7 @@ NO_BSYMBOLIC=TRUE
 UCB_MAJOR=1
 
 .INCLUDE: settings.mk
+.IF "$(L10N_framework)"==""
 
 SLOFILES=\
     $(SLO)$/identify.obj \
@@ -71,6 +72,8 @@ SHL1VERSIONMAP=exports.map
 .ENDIF
 
 DEF1NAME=$(SHL1TARGET)
+
+.ENDIF # L10N_framework
 
 .INCLUDE: target.mk
 

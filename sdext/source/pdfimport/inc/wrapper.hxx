@@ -47,13 +47,19 @@ namespace com { namespace sun { namespace star {
 
 namespace pdfi
 {
-    bool xpdf_ImportFromFile( const ::rtl::OUString&                             rURL,
+    bool xpdf_ImportFromFile( const rtl::OUString&                               rURL,
                               const ContentSinkSharedPtr&                        rSink,
+                              const com::sun::star::uno::Reference<
+                                    com::sun::star::task::XInteractionHandler >& xIHdl,
+                              const rtl::OUString&                               rPwd,
                               const com::sun::star::uno::Reference<
                                     com::sun::star::uno::XComponentContext >&    xContext );
     bool xpdf_ImportFromStream( const com::sun::star::uno::Reference<
                                       com::sun::star::io::XInputStream >&          xInput,
                                 const ContentSinkSharedPtr&                        rSink,
+                                const com::sun::star::uno::Reference<
+                                      com::sun::star::task::XInteractionHandler >& xIHdl,
+                                const rtl::OUString&                               rPwd,
                                 const com::sun::star::uno::Reference<
                                       com::sun::star::uno::XComponentContext >&    xContext );
 }

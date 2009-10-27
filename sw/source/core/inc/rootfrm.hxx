@@ -87,7 +87,6 @@ class SwRootFrm: public SwLayoutFrm
     // <--
 
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
-    bool    mbGrammarCheckActive;   // true when grammar checking has been started
 
     static SwLayVout     *pVout;
     static BOOL           bInPaint;     //Schutz gegen doppelte Paints.
@@ -221,8 +220,6 @@ public:
 
     bool IsNeedGrammarCheck() const         { return mbNeedGrammarCheck; }
     void SetNeedGrammarCheck( bool bVal )   { mbNeedGrammarCheck = bVal; }
-    bool IsGrammarCheckActive() const       { return mbGrammarCheckActive; }
-    void SetGrammarCheckActive( bool bVal ) { mbGrammarCheckActive = bVal; }
 
     //Sorgt dafuer, dass alle gewuenschten Seitengebunden Flys eine Seite finden
     void SetAssertFlyPages() { bAssertFlyPages = TRUE; }

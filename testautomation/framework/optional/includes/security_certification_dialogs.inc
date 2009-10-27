@@ -39,7 +39,6 @@
 
 testcase tCertificationDialogs
 
-    '///<H1>Walk through a number of dialogs related to digital signatures</H1>
 
     dim brc as boolean
     const CFN = "tCertificationDialogs::"

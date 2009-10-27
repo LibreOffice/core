@@ -204,42 +204,17 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     {
         // Cloning because of I can't keep all storage references open
         // MBA with think about a better API...
-        sal_Bool bEncrypted = sal_False;
-
         const ::rtl::OUString sName = ::rtl::Uri::decode(
             rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (sName.getLength() == 0 && rURI.getLength() != 0)
             throw uno::Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "Could not decode URI for stream element.")), 0);
-        try
-        {
-            uno::Reference< io::XStream > xStream;
-            xStream = rxStore->cloneStreamElement( sName );
-            if ( !xStream.is() )
-                throw uno::RuntimeException();
 
-            try {
-                uno::Reference< beans::XPropertySet > xProps( xStream, uno::UNO_QUERY_THROW );
-                xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEncrypted" ) ) ) >>= bEncrypted;
-            } catch( uno::Exception )
-            {}
-
-            if ( !bEncrypted )
-                xInStream = xStream->getInputStream();
-        }
-        catch ( packages::WrongPasswordException& )
-        {
-            bEncrypted = sal_True;
-        }
-
-        if ( bEncrypted )
-        {
-            // this is an encrypted stream that should be handled accordingly
-            uno::Reference< embed::XStorageRawAccess > xRawStore( rxStore, uno::UNO_QUERY );
-            OSL_ENSURE( xRawStore.is(), "Strange storage implementation is used for signing!\n" );
-            if ( xRawStore.is() )
-                xInStream = xRawStore->getPlainRawStreamElement( sName );
-        }
+        uno::Reference< io::XStream > xStream;
+        xStream = rxStore->cloneStreamElement( sName );
+        if ( !xStream.is() )
+            throw uno::RuntimeException();
+        xInStream = xStream->getInputStream();
     }
     else
     {

@@ -46,11 +46,8 @@ namespace sdr
             // geometry
             basegfx::B2DPolyPolygon             maPolyPolygon;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlayPolyPolygonStriped(const basegfx::B2DPolyPolygon& rPolyPolygon);
@@ -60,33 +57,8 @@ namespace sdr
             basegfx::B2DPolyPolygon getPolyPolygon() const { return maPolyPolygon; }
             void setPolyPolygon(const basegfx::B2DPolyPolygon& rNew);
 
-            // Hittest with logical coordinates
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
-
-            // transform object coordinates. Needs to transform maSecondPosition
-            // and maThirdPosition.
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
-        };
-    } // end of namespace overlay
-} // end of namespace sdr
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace sdr
-{
-    namespace overlay
-    {
-        class OverlayPolyPolygon : public OverlayPolyPolygonStriped
-        {
-        protected:
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-        public:
-            OverlayPolyPolygon(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                Color aPolygonColor = Color(COL_BLACK));
-            virtual ~OverlayPolyPolygon();
+            // react on stripe definition change
+            virtual void stripeDefinitionHasChanged();
         };
     } // end of namespace overlay
 } // end of namespace sdr

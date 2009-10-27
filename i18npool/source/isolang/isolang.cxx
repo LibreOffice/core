@@ -331,9 +331,9 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_VENDA,                      "ven", "ZA" },   // 639-2 may have been used temporarily since 2004-07-23
     { LANGUAGE_XHOSA,                       "xh", "ZA" },
     { LANGUAGE_ZULU,                        "zu", "ZA" },
-    { LANGUAGE_QUECHUA_BOLIVIA,             "qu", "BO" },
     { LANGUAGE_QUECHUA_ECUADOR,             "qu", "EC" },
     { LANGUAGE_QUECHUA_PERU,                "qu", "PE" },
+    { LANGUAGE_QUECHUA_BOLIVIA,             "qu", "BO" },   // macro: quh-BO, qul-BO
     { LANGUAGE_PASHTO,                      "ps", "AF" },
     { LANGUAGE_OROMO,                       "om", "ET" },
     { LANGUAGE_DHIVEHI,                     "dv", "MV" },
@@ -446,6 +446,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_TETUN_TIMOR_LESTE,     "tet", "TL" },
     { LANGUAGE_USER_TOK_PISIN,             "tpi", "PG" },
     { LANGUAGE_USER_SHUSWAP,               "shs", "CA" },
+    { LANGUAGE_USER_ANCIENT_GREEK,         "grc", "GR" },
+    { LANGUAGE_USER_ASTURIAN,              "ast", "ES" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };

@@ -1,7 +1,0 @@
-sc=StarSuite 7 스프레드시트
-sh=StarSuite 7 차트
-sd=StarSuite 7 그리기
-si=StarSuite 7 프레젠테이션
-sm=StarSuite 7 수식
-sw=StarSuite 7 텍스트
-ot=기타 개체

@@ -32,6 +32,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sdext.hxx"
 
+#undef ENABLE_PANE_RESIZING
+//#define ENABLE_PANE_RESIZING
+
 #include "PresenterWindowManager.hxx"
 #include "PresenterAnimation.hxx"
 #include "PresenterAnimator.hxx"
@@ -72,8 +75,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
-
-#undef ENABLE_PANE_RESIZING
 
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
@@ -121,6 +122,8 @@ namespace {
 }
 
 
+
+
 //===== PresenterWindowManager ================================================
 
 PresenterWindowManager::PresenterWindowManager (
@@ -142,7 +145,7 @@ PresenterWindowManager::PresenterWindowManager (
       mxScaledBackgroundBitmap(),
       maPaneBackgroundColor(),
       mxClipPolygon(),
-      meLayoutMode(Generic),
+      meLayoutMode(LM_Generic),
       mbIsSlideSorterActive(false),
       mbIsHelpViewActive(false),
       maLayoutListeners(),
@@ -517,6 +520,8 @@ void SAL_CALL PresenterWindowManager::focusGained (const css::awt::FocusEvent& r
 {
     ThrowIfDisposed();
     (void)rEvent;
+    OSL_TRACE("PresenterWindowManager::focusGained window %x\n",
+        rEvent.Source.get());
 }
 
 
@@ -623,7 +628,7 @@ void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 
         mpPresenterController->RequestViews(
             mbIsSlideSorterActive,
-            meLayoutMode==Notes,
+            meLayoutMode==LM_Notes,
             mbIsHelpViewActive);
         Layout();
         NotifyLayoutModeChange();
@@ -648,10 +653,11 @@ void PresenterWindowManager::SetSlideSorterState (bool bIsActive)
         mbIsSlideSorterActive = bIsActive;
         if (mbIsSlideSorterActive)
             mbIsHelpViewActive = false;
+        StoreViewMode(GetViewMode());
 
         mpPresenterController->RequestViews(
             mbIsSlideSorterActive,
-            meLayoutMode==Notes,
+            meLayoutMode==LM_Notes,
             mbIsHelpViewActive);
         Layout();
         NotifyLayoutModeChange();
@@ -676,10 +682,11 @@ void PresenterWindowManager::SetHelpViewState (bool bIsActive)
         mbIsHelpViewActive = bIsActive;
         if (mbIsHelpViewActive)
             mbIsSlideSorterActive = false;
+        StoreViewMode(GetViewMode());
 
         mpPresenterController->RequestViews(
             mbIsSlideSorterActive,
-            meLayoutMode==Notes,
+            meLayoutMode==LM_Notes,
             mbIsHelpViewActive);
         Layout();
         NotifyLayoutModeChange();
@@ -692,6 +699,119 @@ void PresenterWindowManager::SetHelpViewState (bool bIsActive)
 bool PresenterWindowManager::IsHelpViewActive (void) const
 {
     return mbIsHelpViewActive;
+}
+
+
+
+
+void PresenterWindowManager::SetViewMode (const ViewMode eMode)
+{
+    switch (eMode)
+    {
+        case VM_Standard:
+            SetSlideSorterState(false);
+            SetHelpViewState(false);
+            SetLayoutMode(LM_Standard);
+            break;
+
+        case VM_Notes:
+            SetSlideSorterState(false);
+            SetHelpViewState(false);
+            SetLayoutMode(LM_Notes);
+            break;
+
+        case VM_SlideOverview:
+            SetHelpViewState(false);
+            SetSlideSorterState(true);
+            break;
+
+        case VM_Help:
+            SetHelpViewState(true);
+            SetSlideSorterState(false);
+            break;
+    }
+
+    StoreViewMode(eMode);
+}
+
+
+
+
+PresenterWindowManager::ViewMode PresenterWindowManager::GetViewMode (void) const
+{
+    if (mbIsHelpViewActive)
+        return VM_Help;
+    else if (mbIsSlideSorterActive)
+        return VM_SlideOverview;
+    else if (meLayoutMode == LM_Notes)
+        return VM_Notes;
+    else
+        return VM_Standard;
+}
+
+
+
+
+void PresenterWindowManager::RestoreViewMode (void)
+{
+    sal_Int32 nMode (0);
+    PresenterConfigurationAccess aConfiguration (
+        mxComponentContext,
+        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+        PresenterConfigurationAccess::READ_ONLY);
+    aConfiguration.GetConfigurationNode(A2S("Presenter/InitialViewMode")) >>= nMode;
+    switch (nMode)
+    {
+        default:
+        case 0:
+            SetViewMode(VM_Standard);
+            break;
+
+        case 1:
+            SetViewMode(VM_Notes);
+            break;
+
+        case 2:
+            SetViewMode(VM_SlideOverview);
+            break;
+    }
+}
+
+
+
+
+void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
+{
+    try
+    {
+        PresenterConfigurationAccess aConfiguration (
+            mxComponentContext,
+            OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+            PresenterConfigurationAccess::READ_WRITE);
+        aConfiguration.GoToChild(A2S("Presenter"));
+        Any aValue;
+        switch (eViewMode)
+        {
+            default:
+            case VM_Standard:
+                aValue = Any(sal_Int32(0));
+                break;
+
+            case VM_Notes:
+                aValue = Any(sal_Int32(1));
+                break;
+
+            case VM_SlideOverview:
+                aValue = Any(sal_Int32(2));
+                break;
+        }
+
+        aConfiguration.SetProperty (A2S("InitialViewMode"), aValue);
+        aConfiguration.CommitChanges();
+    }
+    catch (Exception&)
+    {
+    }
 }
 
 
@@ -743,17 +863,13 @@ void PresenterWindowManager::Layout (void)
             else
                 switch (meLayoutMode)
                 {
-                    case Standard:
+                    case LM_Standard:
                     default:
                         LayoutStandardMode();
                         break;
 
-                    case Notes:
+                    case LM_Notes:
                         LayoutNotesMode();
-                        break;
-
-                    case Generic:
-                        LayoutUnknownMode();
                         break;
                 }
         }

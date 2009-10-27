@@ -90,6 +90,16 @@ shell TableObjectBar
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_TABLE_INSERT_ROW_DLG
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_INSERT_COL_DLG
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     SID_TABLE_DELETE_ROW
     [
         ExecMethod = Execute;

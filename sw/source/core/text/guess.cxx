@@ -243,7 +243,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nBreakStart = nCutPos;
     }
-    else if( pBreakIt->xBreak.is() )
+    else if( pBreakIt->GetBreakIter().is() )
     {
         // New: We should have a look into the last portion, if it was a
         // field portion. For this, we expand the text of the field portion
@@ -366,7 +366,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // determines first possible line break from nRightPos to
         // start index of current line
-        LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(
+        LineBreakResults aResult = pBreakIt->GetBreakIter()->getLineBreak(
             rInf.GetTxt(), nCutPos, aLocale,
             rInf.GetLineStart(), aHyphOpt, aUserOpt );
 
@@ -534,7 +534,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     xub_StrLen nWordLen;
 
     Boundary aBound =
-        pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nPos,
+        pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nPos,
         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
         WordType::DICTIONARY_WORD, sal_True );
     nBreakStart = (xub_StrLen)aBound.startPos;

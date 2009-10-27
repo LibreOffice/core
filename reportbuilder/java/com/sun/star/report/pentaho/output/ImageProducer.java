@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Blob;
@@ -50,7 +51,10 @@ import com.sun.star.report.OutputRepository;
 import com.sun.star.report.ImageService;
 import com.sun.star.report.ReportExecutionException;
 import com.sun.star.report.pentaho.DefaultNameGenerator;
+import java.net.URI;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jfree.layouting.input.style.values.CSSNumericType;
@@ -347,7 +351,7 @@ public class ImageProducer
                 final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getWidth() / 100.0);
                 final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getHeight() / 100.0);
 
-                final String filename = copyToOutputRepository(mimeType, source, data);
+                final String filename = copyToOutputRepository(mimeType, data);
                 final OfficeImage officeImage = new OfficeImage(filename, widthVal, heightVal);
                 imageCache.put(source, officeImage);
                 return officeImage;
@@ -371,7 +375,17 @@ public class ImageProducer
     private OfficeImage produceFromURL(final URL url,
             final boolean preserveIRI)
     {
-        final OfficeImage o = (OfficeImage) imageCache.get(url);
+        final String urlString = url.toString();
+        URI uri = null;
+        try
+        {
+            uri = new URI(urlString);
+        }
+        catch ( URISyntaxException ex )
+        {
+            Logger.getLogger(ImageProducer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        final OfficeImage o = (OfficeImage) imageCache.get(uri);
         if (o != null)
         {
             return o;
@@ -398,15 +412,14 @@ public class ImageProducer
 
             if (preserveIRI)
             {
-                final OfficeImage retval = new OfficeImage(url.toString(), widthVal, heightVal);
-                imageCache.put(url, retval);
+                final OfficeImage retval = new OfficeImage(urlString, widthVal, heightVal);
+                imageCache.put(uri, retval);
                 return retval;
             }
 
-            final String file = url.getFile();
-            final String name = copyToOutputRepository(mimeType, file, data);
+            final String name = copyToOutputRepository(mimeType, data);
             final OfficeImage officeImage = new OfficeImage(name, widthVal, heightVal);
-            imageCache.put(url, officeImage);
+            imageCache.put(uri, officeImage);
             return officeImage;
         }
         catch (IOException e)
@@ -420,8 +433,8 @@ public class ImageProducer
 
         if (!preserveIRI)
         {
-            final OfficeImage image = new OfficeImage(url.toString(), null, null);
-            imageCache.put(url, image);
+            final OfficeImage image = new OfficeImage(urlString, null, null);
+            imageCache.put(uri, image);
             return image;
         }
 
@@ -429,7 +442,7 @@ public class ImageProducer
         return null;
     }
 
-    private String copyToOutputRepository(final String urlMimeType, final String file, final byte[] data)
+    private String copyToOutputRepository(final String urlMimeType, final byte[] data)
             throws IOException, ReportExecutionException
     {
         final String mimeType;

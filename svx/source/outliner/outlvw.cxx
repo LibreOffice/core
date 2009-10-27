@@ -1010,6 +1010,14 @@ void OutlinerView::PasteSpecial()
         pOwner->bPasting = TRUE;
         pEditView->PasteSpecial();
 
+        if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
+        {
+            const USHORT nParaCount = pOwner->pEditEngine->GetParagraphCount();
+
+            for( USHORT nPara = 0; nPara < nParaCount; nPara++ )
+                pOwner->ImplSetLevelDependendStyleSheet( nPara );
+        }
+
         pEditView->SetEditEngineUpdateMode( TRUE );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
         pEditView->ShowCursor( TRUE, TRUE );
@@ -1634,4 +1642,16 @@ USHORT OutlinerView::GetSelectedScriptType() const
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSelectedScriptType();
+}
+
+String OutlinerView::GetSurroundingText() const
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->GetSurroundingText();
+}
+
+Selection OutlinerView::GetSurroundingTextSelection() const
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->GetSurroundingTextSelection();
 }

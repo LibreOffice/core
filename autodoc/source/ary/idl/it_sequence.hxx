@@ -72,6 +72,9 @@ class Sequence : public Type
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const;
+    virtual const Type &
+                        inq_FirstEnclosedNonSequenceType(
+                            const Gate &        i_rGate ) const;
     // DATA
     Type_id             nRelatedType;
 };

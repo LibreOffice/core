@@ -1206,22 +1206,6 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
 
 /*************************************************************************
 |*
-|* Hittest fuer 3D-Objekte, wird an Geometrie weitergegeben
-|*
-\************************************************************************/
-
-SdrObject* E3dCompoundObject::CheckHit(const Point& rPnt, USHORT /*nTol*/, const SetOfByte* /*pVisiLayer*/) const
-{
-    if(checkHitSingle3DObject(basegfx::B2DPoint(rPnt.X(), rPnt.Y()), *this))
-    {
-        return const_cast< E3dCompoundObject* >(this);
-    }
-
-    return 0;
-}
-
-/*************************************************************************
-|*
 |* Parameter Geometrieerzeugung setzen
 |*
 \************************************************************************/

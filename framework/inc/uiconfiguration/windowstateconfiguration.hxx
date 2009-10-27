@@ -59,7 +59,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
@@ -83,11 +83,8 @@ namespace framework
 #define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
 
 class ConfigurationAccess_Windows;
-class WindowStateConfiguration :  public com::sun::star::lang::XTypeProvider    ,
-                                  public com::sun::star::lang::XServiceInfo     ,
-                                  public com::sun::star::container::XNameAccess ,
-                                  private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                  public ::cppu::OWeakObject
+class WindowStateConfiguration :  private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                  public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameAccess, css::lang::XServiceInfo>
 {
     public:
         WindowStateConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );

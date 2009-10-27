@@ -420,10 +420,9 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     Image    *pImage    = &(mpButtonData->maImage);
     BitmapEx *pBitmapEx = mpButtonData->mpBitmapEx;
 
-    Color aBackCol;
-    if( !!(mpButtonData->maImageHC) && ImplGetCurrentBackgroundColor( aBackCol ) )
+    if( !!(mpButtonData->maImageHC) )
     {
-        if( aBackCol.IsDark() )
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
         {
             pImage = &(mpButtonData->maImageHC);
             pBitmapEx = mpButtonData->mpBitmapExHC;
@@ -2375,14 +2374,10 @@ if ( bNativeOK == FALSE )
 
         // check for HC mode
         Image *pImage = &maImage;
-        Color aBackCol;
-        if( !!maImageHC && ImplGetCurrentBackgroundColor( aBackCol ) )
+        if( !!maImageHC )
         {
-            if( aBackCol.IsDark() )
+            if( rStyleSettings.GetHighContrastMode() )
                 pImage = &maImageHC;
-            // #99902 no col transform required
-            //if( aBackCol.IsBright() )
-            //  nStyle |= IMAGE_DRAW_COLORTRANSFORM;
         }
 
         Point aImagePos( aImageRect.TopLeft() );

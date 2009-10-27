@@ -124,8 +124,8 @@ void KabResultSet::disposing()
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    m_xStatement    = NULL;
-    m_xMetaData     = NULL;
+m_xStatement.clear();
+m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL KabResultSet::queryInterface(const Type & rType) throw(RuntimeException)

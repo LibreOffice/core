@@ -100,6 +100,32 @@ SvXMLImportContext* ScXMLExternalRefTabSourceContext::CreateChildContext(
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
 
+/**
+ * Make sure the URL is a valid relative URL, mainly to avoid storing
+ * absolute URL as relative URL by accident.  For now, we only check the first
+ * three characters which are assumed to be always '../', because the relative
+ * URL for an external document is always in reference to the content.xml
+ * fragment of the original document.
+ */
+static bool lcl_isValidRelativeURL(const OUString& rUrl)
+{
+    sal_Int32 n = ::std::min( rUrl.getLength(), static_cast<sal_Int32>(3));
+    if (n < 3)
+        return false;
+    const sal_Unicode* p = rUrl.getStr();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        sal_Unicode c = p[i];
+        if (i < 2 && c != '.')
+            // the path must begin with '..'
+            return false;
+        else if (i == 2 && c != '/')
+            // a '/' path separator must follow
+            return false;
+    }
+    return true;
+}
+
 void ScXMLExternalRefTabSourceContext::EndElement()
 {
     ScDocument* pDoc = mrScImport.GetDocument();
@@ -107,9 +133,52 @@ void ScXMLExternalRefTabSourceContext::EndElement()
         return;
 
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-    if (!maRelativeUrl.equals(mrExternalRefInfo.maFileUrl))
+    if (lcl_isValidRelativeURL(maRelativeUrl))
         pRefMgr->setRelativeFileName(mrExternalRefInfo.mnFileId, maRelativeUrl);
     pRefMgr->setFilterData(mrExternalRefInfo.mnFileId, maFilterName, maFilterOptions);
+}
+
+// ============================================================================
+
+ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& /* xAttrList */, ScXMLExternalTabData& rRefInfo ) :
+    SvXMLImportContext( rImport, nPrefix, rLName ),
+    mrScImport(rImport),
+    mrExternalRefInfo(rRefInfo)
+{
+}
+
+ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext()
+{
+}
+
+SvXMLImportContext* ScXMLExternalRefRowsContext::CreateChildContext(
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+{
+    // #i101319# row elements inside group, rows or header-rows
+    // are treated like row elements directly in the table element
+
+    const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowsElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
+    switch (nToken)
+    {
+        case XML_TOK_TABLE_ROWS_ROW_GROUP:
+        case XML_TOK_TABLE_ROWS_HEADER_ROWS:
+        case XML_TOK_TABLE_ROWS_ROWS:
+            return new ScXMLExternalRefRowsContext(
+                mrScImport, nPrefix, rLocalName, xAttrList, mrExternalRefInfo);
+        case XML_TOK_TABLE_ROWS_ROW:
+            return new ScXMLExternalRefRowContext(
+                mrScImport, nPrefix, rLocalName, xAttrList, mrExternalRefInfo);
+        default:
+            ;
+    }
+    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+}
+
+void ScXMLExternalRefRowsContext::EndElement()
+{
 }
 
 // ============================================================================
@@ -153,7 +222,7 @@ SvXMLImportContext* ScXMLExternalRefRowContext::CreateChildContext(
 {
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
-    if (nToken == XML_TOK_TABLE_ROW_CELL)
+    if (nToken == XML_TOK_TABLE_ROW_CELL || nToken == XML_TOK_TABLE_ROW_COVERED_CELL)
         return new ScXMLExternalRefCellContext(mrScImport, nPrefix, rLocalName, xAttrList, mrExternalRefInfo);
 
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);

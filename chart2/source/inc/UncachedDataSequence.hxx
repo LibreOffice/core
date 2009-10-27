@@ -73,7 +73,7 @@ typedef ::cppu::WeakComponentImplHelper8<
     UncachedDataSequence_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS UncachedDataSequence :
+class UncachedDataSequence :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
         public ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >,
@@ -186,8 +186,6 @@ protected:
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
     ::rtl::OUString                                 m_sRole;
-    sal_Bool                                        m_bIsHidden;
-    ::com::sun::star::uno::Sequence< sal_Int32 >    m_aHiddenValues;
     ::rtl::OUString                                 m_aXMLRange;
     // </properties>
 

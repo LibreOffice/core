@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* Owner : fredrik.haegg@sun.com
+'* Owner : wolfram.garten@sun.com
 '*
 '* short description :
 '*

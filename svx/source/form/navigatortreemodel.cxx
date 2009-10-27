@@ -323,20 +323,27 @@ namespace svxform
             else
                 xContainer = Reference< XIndexContainer > (GetForms(), UNO_QUERY);
 
-            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-            aUndoStr.SearchAndReplace('#', aStr);
-            m_pFormModel->BegUndo(aUndoStr);
+            bool bUndo = m_pFormModel->IsUndoEnabled();
+
+            if( bUndo )
+            {
+                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+                aUndoStr.SearchAndReplace('#', aStr);
+                m_pFormModel->BegUndo(aUndoStr);
+            }
 
             if (nRelPos >= (sal_uInt32)xContainer->getCount())
                 nRelPos = (sal_uInt32)xContainer->getCount();
 
             // UndoAction
-            if (m_pPropChangeList->CanUndo())
+            if ( bUndo && m_pPropChangeList->CanUndo())
+            {
                 m_pFormModel->AddUndo(new FmUndoContainerAction(*m_pFormModel,
                                                          FmUndoContainerAction::Inserted,
                                                          xContainer,
                                                          xElement,
                                                          nRelPos));
+            }
 
             // das Element muss den Typ haben, den der Container erwartet
             if (xContainer->getElementType() ==
@@ -358,7 +365,8 @@ namespace svxform
                 DBG_ERROR("NavigatorTreeModel::Insert : the parent container needs an elementtype I don't know !");
             }
 
-            m_pFormModel->EndUndo();
+            if( bUndo )
+                m_pFormModel->EndUndo();
         }
 
         //////////////////////////////////////////////////////////////////////
@@ -403,6 +411,8 @@ namespace svxform
         if (IsListening(*m_pFormModel))
             EndListening(*m_pFormModel);
 
+        const bool bUndo = m_pFormModel->IsUndoEnabled();
+
         m_pPropChangeList->Lock();
         FmFormData*     pFolder     = (FmFormData*) pEntry->GetParent();
         Reference< XChild > xElement ( pEntry->GetChildIFace() );
@@ -414,9 +424,12 @@ namespace svxform
             else
                 aStr = SVX_RES(RID_STR_CONTROL);
 
-            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE));
-            aUndoStr.SearchAndReplace('#', aStr);
-            m_pFormModel->BegUndo(aUndoStr);
+            if( bUndo )
+            {
+                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE));
+                aUndoStr.SearchAndReplace('#', aStr);
+                m_pFormModel->BegUndo(aUndoStr);
+            }
         }
 
         // jetzt die eigentliche Entfernung der Daten aus dem Model
@@ -434,14 +447,23 @@ namespace svxform
             // UndoAction
             if (nContainerIndex >= 0)
             {
-                if (m_pPropChangeList->CanUndo())
+                if ( bUndo && m_pPropChangeList->CanUndo())
+                {
                     m_pFormModel->AddUndo(new FmUndoContainerAction(*m_pFormModel,
                                                           FmUndoContainerAction::Removed,
                                                           xContainer,
                                                           xElement, nContainerIndex ));
+                }
+                else if( !m_pPropChangeList->CanUndo() )
+                {
+                    FmUndoContainerAction::DisposeElement( xElement );
+                }
+
                 xContainer->removeByIndex(nContainerIndex );
             }
-            m_pFormModel->EndUndo();
+
+            if( bUndo )
+                m_pFormModel->EndUndo();
         }
 
         // beim Vater austragen

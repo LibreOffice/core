@@ -66,10 +66,6 @@ ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
 
     pPrintRanges = pDoc->CreatePrintRangeSaver();       // neu erzeugt
 
-#if OLD_PIVOT_IMPLEMENTATION
-    ScPivotCollection* pOldPivot = pDoc->GetPivotCollection();
-    pPivotCollection = pOldPivot ? new ScPivotCollection(*pOldPivot) : NULL;
-#endif
     //! bei Pivot nur Bereiche merken ???
 
     ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        //! const
@@ -96,9 +92,6 @@ ScRefUndoData::~ScRefUndoData()
     delete pDBCollection;
     delete pRangeName;
     delete pPrintRanges;
-#if OLD_PIVOT_IMPLEMENTATION
-    delete pPivotCollection;
-#endif
     delete pDPCollection;
     delete pCondFormList;
     delete pDetOpList;
@@ -129,15 +122,6 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
             DELETEZ(pPrintRanges);
         delete pNewRanges;
     }
-
-#if OLD_PIVOT_IMPLEMENTATION
-    if (pPivotCollection)
-    {
-        ScPivotCollection* pNewPivot = pDoc->GetPivotCollection();
-        if ( pNewPivot && *pPivotCollection == *pNewPivot )
-            DELETEZ(pPivotCollection);
-    }
-#endif
 
     if (pDPCollection)
     {
@@ -194,11 +178,6 @@ void ScRefUndoData::DoUndo( ScDocument* pDoc, BOOL bUndoRefFirst )
 
     if (pPrintRanges)
         pDoc->RestorePrintRanges(*pPrintRanges);
-
-#if OLD_PIVOT_IMPLEMENTATION
-    if (pPivotCollection)
-        pDoc->SetPivotCollection( new ScPivotCollection(*pPivotCollection) );
-#endif
 
     if (pDPCollection)
     {

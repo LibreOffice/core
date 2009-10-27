@@ -41,12 +41,6 @@ namespace cpp
 {
 
 
-EnumValue::EnumValue()
-//  :   aEssentials,
-           // sInitialisation
-{
-}
-
 EnumValue::EnumValue( const String  &     i_sLocalName,
                       Ce_id               i_nOwner,
                       String              i_sInitialisation )

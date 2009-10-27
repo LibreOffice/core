@@ -33,6 +33,7 @@ PRJ=..$/..$/..
 PRJNAME=sd
 TARGET=ppt
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -48,8 +49,10 @@ CDEFS+= -DDBG_ANIM_LOG
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/pptinanimations.obj\
-        $(SLO)$/pptatom.obj\
+        $(SLO)$/propread.obj \
+        $(SLO)$/pptin.obj \
+        $(SLO)$/pptinanimations.obj \
+        $(SLO)$/pptatom.obj \
         $(SLO)$/ppt97animations.obj
 
 # --- Targets --------------------------------------------------------------

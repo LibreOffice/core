@@ -44,7 +44,7 @@ DEPTARGET=vios2met
 .IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
 CDEFS+= -DEDITDEBUG
 .ENDIF
-
+.IF "$(L10N_framework)"==""
 SLOFILES =  $(SLO)$/ios2met.obj
 
 # ==========================================================================
@@ -65,7 +65,7 @@ SHL1VERSIONMAP=exports.map
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :  target.mk

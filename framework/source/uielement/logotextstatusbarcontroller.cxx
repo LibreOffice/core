@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
 #include <uielement/logotextstatusbarcontroller.hxx>
-#include <classes/fwkresid.hxx>
+#include <classes/fwlresid.hxx>
 #include <services.h>
 #include <classes/resource.hrc>
 #include <vos/mutex.hxx>
@@ -65,7 +65,7 @@ DEFINE_INIT_SERVICE                     (   LogoTextStatusbarController, {} )
 LogoTextStatusbarController::LogoTextStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )
 {
-    m_aLogoText = String( FwkResId( STR_STATUSBAR_LOGOTEXT ));
+    m_aLogoText = String( FwlResId( STR_STATUSBAR_LOGOTEXT ));
 }
 
 LogoTextStatusbarController::~LogoTextStatusbarController()

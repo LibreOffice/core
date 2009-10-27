@@ -132,6 +132,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     BOOL        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
 
+    void        Modified();
 
 public:
                 ScDetectiveFunc(ScDocument* pDocument, SCTAB nTable) : pDoc(pDocument),nTab(nTable) {}

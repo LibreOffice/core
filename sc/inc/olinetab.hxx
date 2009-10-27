@@ -39,8 +39,6 @@
 #define SC_OL_MAXDEPTH      7
 
 class SvStream;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 
 
 class ScOutlineEntry : public ScDataObject

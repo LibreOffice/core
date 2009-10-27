@@ -82,11 +82,10 @@ using namespace ::com::sun::star::lang;
 }
 
 // --------------------------------------------------------------------------------
-OEvoabConnection::OEvoabConnection(OEvoabDriver*    _pDriver)
-    :OSubComponent<OEvoabConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
-    ,m_pDriver(_pDriver)
+OEvoabConnection::OEvoabConnection( OEvoabDriver& _rDriver )
+    :OSubComponent<OEvoabConnection, OConnection_BASE>( (::cppu::OWeakObject*)(&_rDriver), this )
+    ,m_rDriver(_rDriver)
     ,m_xCatalog(NULL)
-    ,m_aPassword()
 {
 }
 //-----------------------------------------------------------------------------
@@ -98,8 +97,6 @@ OEvoabConnection::~OEvoabConnection()
         acquire();
         close();
     }
-
-    m_pDriver = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -195,8 +192,9 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    OEvoabPreparedStatement* pStmt = new OEvoabPreparedStatement(this, sql);
+    OEvoabPreparedStatement* pStmt = new OEvoabPreparedStatement( this );
     Reference< XPreparedStatement > xStmt = pStmt;
+    pStmt->construct( sql );
 
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return xStmt;
@@ -228,11 +226,11 @@ void SAL_CALL OEvoabConnection::close(  ) throw(SQLException, RuntimeException)
 // XWarningsSupplier
 Any SAL_CALL OEvoabConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
-    return Any();   // when you collected some warnings -> return it
+    return m_aWarnings.getWarnings();
 }
 void SAL_CALL OEvoabConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
-    // you should clear your collected warnings here
+    m_aWarnings.clearWarnings();
 }
 //------------------------------------------------------------------------------
 

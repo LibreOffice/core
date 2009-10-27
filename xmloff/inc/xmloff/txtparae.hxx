@@ -38,9 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmlexppr.hxx>
-#ifndef _XMLOFF_STYLEEXP_HXX
 #include <xmloff/styleexp.hxx>
-#endif
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLStringVector.hxx>
@@ -68,12 +66,18 @@ namespace com { namespace sun { namespace star
 {
     namespace beans { class XPropertySet; class XPropertyState;
                       class XPropertySetInfo; }
-    namespace container { class XEnumeration; class XIndexAccess; }
+    namespace container { class XEnumerationAccess; class XEnumeration; class XIndexAccess; }
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;
+                     class XTextField;
                      class XDocumentIndex; class XTextShapesSupplier; }
 } } }
-namespace xmloff { class OFormLayerXMLExport; }
+
+namespace xmloff
+{
+    class OFormLayerXMLExport;
+    class BoundFrameSets;
+}
 
 class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 {
@@ -86,23 +90,8 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     UniReference < SvXMLExportPropertyMapper > xAutoFramePropMapper;
     UniReference < SvXMLExportPropertyMapper > xSectionPropMapper;
     UniReference < SvXMLExportPropertyMapper > xRubyPropMapper;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexAccess > xTextFrames;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexAccess > xGraphics;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexAccess > xEmbeddeds;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexAccess > xShapes;
 
-    SvLongs                     *pPageTextFrameIdxs;
-    SvLongs                     *pPageGraphicIdxs;
-    SvLongs                     *pPageEmbeddedIdxs;
-    SvLongs                     *pPageShapeIdxs;
-    SvLongs                     *pFrameTextFrameIdxs;
-    SvLongs                     *pFrameGraphicIdxs;
-    SvLongs                     *pFrameEmbeddedIdxs;
-    SvLongs                     *pFrameShapeIdxs;
+    const ::std::auto_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
     OUStrings_Impl              *pListElements;
     // --> OD 2008-05-07 #refactorlists# - no longer needed
@@ -135,7 +124,11 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 protected:
 
     const ::rtl::OUString sActualSize;
-    const ::rtl::OUString sAlternativeText;
+    // --> OD 2009-07-22 #i73249#
+//    const ::rtl::OUString sAlternativeText;
+    const ::rtl::OUString sTitle;
+    const ::rtl::OUString sDescription;
+    // <--
     const ::rtl::OUString sAnchorCharStyleName;
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sAnchorType;
@@ -274,6 +267,12 @@ public:
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
 
+    void exportTextRangeEnumeration(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::container::XEnumeration > & rRangeEnum,
+        sal_Bool bAutoStyles, sal_Bool bProgress,
+        sal_Bool bPrvChrIsSpc = sal_True );
+
 protected:
 
     sal_Int32 addTextFrameAttributes(
@@ -286,8 +285,6 @@ protected:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle );
 
-    void collectFrames();
-    void collectFrames( sal_Bool bBoundToFrameOnly );
     void exportPageFrames( sal_Bool bAutoStyles, sal_Bool bProgress );
     void exportFrameFrames( sal_Bool bAutoStyles, sal_Bool bProgress,
             const ::com::sun::star::uno::Reference <
@@ -328,16 +325,17 @@ protected:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
         sal_Bool bAutoStyles, sal_Bool bProgress );
-    void exportTextRangeEnumeration(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::container::XEnumeration > & rRangeEnum,
-        sal_Bool bAutoStyles, sal_Bool bProgress,
-        sal_Bool bPrvChrIsSpc = sal_True  );
 
     void exportTextField(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextRange > & rTextRange,
-        sal_Bool bAutoStyles );
+        sal_Bool bAutoStyles, sal_Bool bProgress );
+
+    void exportTextField(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextField> & xTextField,
+        const sal_Bool bAutoStyles, const sal_Bool bProgress,
+        const sal_Bool bRecursive );
 
     void exportAnyTextFrame(
         const ::com::sun::star::uno::Reference <
@@ -496,6 +494,12 @@ protected:
             ::com::sun::star::beans::XPropertySet> & rPortionPropSet,
         sal_Bool bAutoStyles );
 
+    /// export a text:meta
+    void exportMeta(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & i_xPortion,
+        sal_Bool i_bAutoStyles, sal_Bool i_isProgress );
+
 public:
 
     XMLTextParagraphExport(
@@ -608,41 +612,16 @@ public:
     bool collectTextAutoStylesOptimized(
         sal_Bool bIsProgress = sal_False );
 
-    // This method collects all automatic styles that are bound to a page
-    void collectFrameBoundToPageAutoStyles( sal_Bool bIsProgress = sal_False )
-    {
-        collectFrames();
-        exportPageFrames( sal_True, bIsProgress );
-        exportFrameFrames( sal_True, bIsProgress );
-    }
-    // This method prepares the collection of auto styles for frames
-    // that are bound to a frame.
-    void collectFramesBoundToFrameAutoStyles()
-    {
-        collectFrames( sal_True );
-    }
-    // This method prepares the collection of auto styles for frames
-    // that are bound to a frame and it collects auto styles
-    // for frames bound to a page.
-    void collectFramesBoundToPageOrFrameAutoStyles( sal_Bool bIsProgress = sal_False )
-    {
-        collectFrames( sal_False );
-        exportPageFrames( sal_True, bIsProgress );
-    }
-    void collectFramesBoundToFrameAutoStyles(
-            const ::com::sun::star::uno::Reference <
-                    ::com::sun::star::text::XTextFrame >& rParentTxtFrame,
-            sal_Bool bIsProgress = sal_False )
-    {
-        exportFrameFrames( sal_True, bIsProgress, &rParentTxtFrame );
-    }
-
     // This method exports all automatic styles that have been collected.
     virtual void exportTextAutoStyles();
 
     void exportEvents( const ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > & rPropSet );
-    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
-                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    // --> OD 2009-07-22 #i73249#
+//    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
+//                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    void exportTitleAndDescription( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
+                                    const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    // <--
 
     // This method exports the given XText
     void exportText(
@@ -712,6 +691,8 @@ public:
     void PushNewTextListsHelper();
     void PopTextListsHelper();
     // <--
+    private:
+        XMLTextParagraphExport(XMLTextParagraphExport &); // private copy-ctor because of explicit copy-ctor of auto_ptr
 };
 
 inline const XMLTextListAutoStylePool&

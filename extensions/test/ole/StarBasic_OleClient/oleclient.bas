@@ -350,10 +350,11 @@ inLong = 0
 inFloat = 0
 inVariant = 0
 inVariant2 = 0
-'defaults are: 1, 2. , 3, 4
+'defaults are: 1, 2, 4
+'The third parameter is a VARIANT with a default value of 4. COM gives it the type BSTR
 obj.defaultvalue1()
 obj.defaultvalue2(inLong, inFloat, inVariant)
-If inLong <> 1 Or inFloat <> 2 Or inVariant <> 3 Then
+If inLong <> 1 Or inFloat <> 2 Or inVariant <> "4" Then
   runtest = -1
   Exit Function
 End If
@@ -365,7 +366,7 @@ inVariant = 0
 inVariant = 0
 obj.defaultvalue1(inLong, inFloat)
 obj.defaultvalue2(inLong, inFloat, inVariant)
-If inLong <> inLong2 Or inFloat <> inFloat2 Or inVariant <> 3 Then
+If inLong <> inLong2 Or inFloat <> inFloat2 Or inVariant <> "4" Then
   runtest = -1
   Exit Function
 End If

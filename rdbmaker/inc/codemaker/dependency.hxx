@@ -154,7 +154,6 @@ public:
 
     sal_Bool        insert(const ::rtl::OString& type, const ::rtl::OString& depend, sal_uInt16);
     TypeUsingSet    getDependencies(const ::rtl::OString& type);
-    sal_Bool        lookupDependency(const ::rtl::OString& type, const ::rtl::OString& depend, sal_uInt16);
     sal_Bool        hasDependencies(const ::rtl::OString& type);
 
     void        setGenerated(const ::rtl::OString& type, sal_uInt16 genFlag=CODEGEN_DEFAULT);

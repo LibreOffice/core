@@ -21,4 +21,4 @@ tc	stoc\source\typeconv					nmake	-	all	tc_tcv tc_stserv tc_nservice tc_inc NULL
 tc	stoc\source\javavm						nmake	-	all	tc_jvm tc_inc NULL
 tc	stoc\source\javaloader					nmake	-	all	tc_jvload tc_inc NULL
 tc  	stoc\source\uriproc                     		nmake   -   	all 	tc_uriproc tc_stserv tc_inc NULL
-tc  	stoc\util						nmake   -   	all 	tc_util tc_boot tc_stserv tc_tcv tc_uriproc tc_smgr tc_inc tc_sreg tc_defr tc_ireg tc_regtd tc_tdmng NULL
+tc  	stoc\util						nmake   -   	all 	tc_util tc_boot tc_stserv tc_tcv tc_uriproc tc_smgr tc_inc tc_sreg tc_defr tc_ireg tc_regtd tc_tdmng tc_sec NULL

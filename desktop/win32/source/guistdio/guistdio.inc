@@ -47,10 +47,6 @@
 
 #include <stdio.h>
 
-//---------------------------------------------------------------------------
-// Thread that reads from child process standard output pipe
-//---------------------------------------------------------------------------
-
 #ifdef UNOPKG
 
 DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
@@ -169,21 +165,76 @@ DWORD WINAPI ErrorThread( LPVOID pParam )
 // Thread that writes to child process standard input pipe
 //---------------------------------------------------------------------------
 #ifdef UNOPKG
+
 DWORD WINAPI InputThread( LPVOID pParam )
 {
-	const DWORD dwBufferSize = 256;
-	wchar_t	aBuffer[dwBufferSize];
 	DWORD	dwRead = 0;
 	HANDLE	hWritePipe = (HANDLE)pParam;
-		
-	while (ReadConsoleW( GetStdHandle( STD_INPUT_HANDLE ), &aBuffer, dwBufferSize, &dwRead, NULL ) )
+
+    //We need to read in the complete input until we encounter a new line before
+    //converting to Unicode. This is necessary because the input string can use
+    //characters of one, two, and more bytes. If the last character is not
+    //complete, then it will not be converted properly.
+
+    //Find out how a new line (0xd 0xa) looks like with the used code page.
+    //Characters may have one or multiple bytes and different byte ordering
+    //can be used (little and big endian);
+    int cNewLine = WideCharToMultiByte(
+        GetConsoleCP(), 0, L"\r\n", 2, NULL, 0, NULL, NULL);
+    char * mbBuff = new char[cNewLine];
+    WideCharToMultiByte(
+        GetConsoleCP(), 0, L"\r\n", 2, mbBuff, cNewLine, NULL, NULL);
+    
+    const size_t dwBufferSize = 256;
+    char* readBuf = (char*) malloc(dwBufferSize);
+    int readAll = 0;
+    size_t curBufSize = dwBufferSize;
+    
+    while ( ReadFile( GetStdHandle( STD_INPUT_HANDLE ),
+                      readBuf + readAll,
+                      curBufSize - readAll, &dwRead, NULL ) )
 	{
-		BOOL	fSuccess;
+        readAll += dwRead;
+        int lastBufSize = curBufSize;
+        //Grow the buffer if necessary
+        if (readAll > curBufSize * 0.7)
+        {
+            curBufSize *= 2;
+            readBuf = (char *) realloc(readBuf, curBufSize);
+        }
+        
+        //If the buffer was filled completely then 
+        //there could be more input coming. But if we read from the console
+        //and the console input fits exactly in the buffer, then the next
+        //ReadFile would block until the users presses return, etc.
+        //Therefor we check if last character is a new line.
+        //To test this, set dwBufferSize to 4 and enter "no". This should produce
+        //4 bytes with most code pages.
+        if ( readAll == lastBufSize
+             && memcmp(readBuf + lastBufSize - cNewLine, mbBuff, cNewLine) != 0)
+        {
+            //The buffer was completely filled and the last byte(s) are no
+            //new line, so there is more to come.
+            continue;
+        }
+        //Obtain the size of the buffer for the converted string.
+        int sizeWBuf = MultiByteToWideChar(
+            GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, NULL, 0);
+
+        wchar_t * wideBuf = new wchar_t[sizeWBuf];
+
+        //Do the conversion.
+        MultiByteToWideChar(
+            GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, wideBuf, sizeWBuf);
+        
+        BOOL	fSuccess;
 		DWORD	dwWritten;
-
-		fSuccess = WriteFile( hWritePipe, aBuffer, dwRead * 2, &dwWritten, NULL );
+        fSuccess = WriteFile( hWritePipe, wideBuf, sizeWBuf * 2, &dwWritten, NULL );
+        delete[] wideBuf;
+        readAll = 0;
 	}
-
+    delete[] mbBuff;
+    free(readBuf);
 	return 0;
 }
 #else

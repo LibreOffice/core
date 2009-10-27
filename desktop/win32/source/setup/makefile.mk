@@ -91,5 +91,5 @@ APP1NOSVRES=	$(RES)$/$(TARGET).res
 .INCLUDE :  target.mk
 
 $(RCFILES) : $(ULFDIR)$/setup.ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
-    $(WRAPCMD) lngconvex.exe -ulf $(ULFDIR)$/setup.ulf -rc $(RCFILES) -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+    $(LNGCONVEX) -ulf $(ULFDIR)$/setup.ulf -rc $(RCFILES) -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
 

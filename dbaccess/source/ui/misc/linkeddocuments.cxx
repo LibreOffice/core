@@ -140,7 +140,6 @@
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include "ExtensionNotPresent.hxx"
 #include "com/sun/star/sdb/RowSetVetoException.hpp"
 
 //......................................................................
@@ -455,7 +454,7 @@ namespace dbaui
 
             // more like a hack, insert an empty message
             String sText( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
-            sText = sText.GetToken(0,'\n');
+            sText.SearchAndReplaceAscii("$file$",_rLinkName);
             aInfo.prepend(sText);
 
             String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));

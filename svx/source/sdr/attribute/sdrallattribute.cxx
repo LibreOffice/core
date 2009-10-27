@@ -30,6 +30,7 @@
  ************************************************************************/
 
 #include "precompiled_svx.hxx"
+
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <drawinglayer/attribute/sdrattribute.hxx>
 #include <drawinglayer/attribute/fillattribute.hxx>
@@ -45,20 +46,20 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        SdrShadowTextAttribute::SdrShadowTextAttribute(SdrShadowAttribute* pShadow, SdrTextAttribute* pTextAttribute)
+        SdrShadowTextAttribute::SdrShadowTextAttribute(
+            SdrShadowAttribute* pShadow,
+            SdrTextAttribute* pTextAttribute)
         :   mpShadow(pShadow),
             mpTextAttribute(pTextAttribute)
         {
         }
 
-        SdrShadowTextAttribute::SdrShadowTextAttribute(const SdrShadowTextAttribute& rCandidate)
-        :   mpShadow(0L),
-            mpTextAttribute(0L)
+        SdrShadowTextAttribute::SdrShadowTextAttribute(
+            const SdrShadowTextAttribute& rCandidate)
+        :   mpShadow(0),
+            mpTextAttribute(0)
         {
-            if(!(*this == rCandidate))
-            {
-                *this = rCandidate;
-            }
+            *this = rCandidate;
         }
 
         SdrShadowTextAttribute::~SdrShadowTextAttribute()
@@ -72,14 +73,14 @@ namespace drawinglayer
             // handle mpShadow
             {
                 // delete local mpShadow if necessary
-                if(mpShadow && ((!rCandidate.mpShadow) || (!(*mpShadow == *rCandidate.mpShadow))))
+                if(mpShadow)
                 {
                     delete mpShadow;
-                    mpShadow = 0L;
+                    mpShadow = 0;
                 }
 
                 // copy mpShadow if necessary
-                if(!mpShadow && rCandidate.mpShadow)
+                if(rCandidate.mpShadow)
                 {
                     mpShadow = new SdrShadowAttribute(*rCandidate.mpShadow);
                 }
@@ -88,14 +89,14 @@ namespace drawinglayer
             // handle mpTextAttribute
             {
                 // delete local mpTextAttribute if necessary
-                if(mpTextAttribute && ((!rCandidate.mpTextAttribute) || (!(*mpTextAttribute == *rCandidate.mpTextAttribute))))
+                if(mpTextAttribute)
                 {
                     delete mpTextAttribute;
-                    mpTextAttribute = 0L;
+                    mpTextAttribute = 0;
                 }
 
                 // copy mpTextAttribute if necessary
-                if(!mpTextAttribute && rCandidate.mpTextAttribute)
+                if(rCandidate.mpTextAttribute)
                 {
                     mpTextAttribute = new SdrTextAttribute(*rCandidate.mpTextAttribute);
                 }
@@ -125,22 +126,23 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        SdrFillTextAttribute::SdrFillTextAttribute(SdrFillAttribute* pFill, FillGradientAttribute* pFillFloatTransGradient, SdrTextAttribute* pTextAttribute)
+        SdrFillTextAttribute::SdrFillTextAttribute(
+            SdrFillAttribute* pFill,
+            FillGradientAttribute* pFillFloatTransGradient,
+            SdrTextAttribute* pTextAttribute)
         :   mpFill(pFill),
             mpFillFloatTransGradient(pFillFloatTransGradient),
             mpTextAttribute(pTextAttribute)
         {
         }
 
-        SdrFillTextAttribute::SdrFillTextAttribute(const SdrFillTextAttribute& rCandidate)
+        SdrFillTextAttribute::SdrFillTextAttribute(
+            const SdrFillTextAttribute& rCandidate)
         :   mpFill(0),
             mpFillFloatTransGradient(0),
             mpTextAttribute(0)
         {
-            if(!(*this == rCandidate))
-            {
-                *this = rCandidate;
-            }
+            *this = rCandidate;
         }
 
         SdrFillTextAttribute::~SdrFillTextAttribute()
@@ -155,14 +157,14 @@ namespace drawinglayer
             // handle mpFill
             {
                 // delete local mpFill if necessary
-                if(mpFill && ((!rCandidate.mpFill) || (!(*mpFill == *rCandidate.mpFill))))
+                if(mpFill)
                 {
                     delete mpFill;
-                    mpFill = 0L;
+                    mpFill = 0;
                 }
 
                 // copy mpFill if necessary
-                if(!mpFill && rCandidate.mpFill)
+                if(rCandidate.mpFill)
                 {
                     mpFill = new attribute::SdrFillAttribute(*rCandidate.mpFill);
                 }
@@ -171,14 +173,14 @@ namespace drawinglayer
             // handle mpFillFloatTransGradient
             {
                 // delete local mpFillFloatTransGradient if necessary
-                if(mpFillFloatTransGradient && ((!rCandidate.mpFillFloatTransGradient) || (!(*mpFillFloatTransGradient == *rCandidate.mpFillFloatTransGradient))))
+                if(mpFillFloatTransGradient)
                 {
                     delete mpFillFloatTransGradient;
-                    mpFillFloatTransGradient = 0L;
+                    mpFillFloatTransGradient = 0;
                 }
 
                 // copy mpFillFloatTransGradient if necessary
-                if(!mpFillFloatTransGradient && rCandidate.mpFillFloatTransGradient)
+                if(rCandidate.mpFillFloatTransGradient)
                 {
                     mpFillFloatTransGradient = new FillGradientAttribute(*rCandidate.mpFillFloatTransGradient);
                 }
@@ -187,14 +189,14 @@ namespace drawinglayer
             // handle mpTextAttribute
             {
                 // delete local mpTextAttribute if necessary
-                if(mpTextAttribute && ((!rCandidate.mpTextAttribute) || (!(*mpTextAttribute == *rCandidate.mpTextAttribute))))
+                if(mpTextAttribute)
                 {
                     delete mpTextAttribute;
-                    mpTextAttribute = 0L;
+                    mpTextAttribute = 0;
                 }
 
                 // copy mpTextAttribute if necessary
-                if(!mpTextAttribute && rCandidate.mpTextAttribute)
+                if(rCandidate.mpTextAttribute)
                 {
                     mpTextAttribute = new SdrTextAttribute(*rCandidate.mpTextAttribute);
                 }
@@ -229,23 +231,23 @@ namespace drawinglayer
     namespace attribute
     {
         SdrLineShadowTextAttribute::SdrLineShadowTextAttribute(
-            SdrLineAttribute* pLine, SdrLineStartEndAttribute* pLineStartEnd,
-            SdrShadowAttribute* pShadow, SdrTextAttribute* pTextAttribute)
+            SdrLineAttribute* pLine,
+            SdrLineStartEndAttribute* pLineStartEnd,
+            SdrShadowAttribute* pShadow,
+            SdrTextAttribute* pTextAttribute)
         :   SdrShadowTextAttribute(pShadow, pTextAttribute),
             mpLine(pLine),
             mpLineStartEnd(pLineStartEnd)
         {
         }
 
-        SdrLineShadowTextAttribute::SdrLineShadowTextAttribute(const SdrLineShadowTextAttribute& rCandidate)
-        :   SdrShadowTextAttribute(0L, 0L),
-            mpLine(0L),
-            mpLineStartEnd(0L)
+        SdrLineShadowTextAttribute::SdrLineShadowTextAttribute(
+            const SdrLineShadowTextAttribute& rCandidate)
+        :   SdrShadowTextAttribute(0, 0),
+            mpLine(0),
+            mpLineStartEnd(0)
         {
-            if(!(*this == rCandidate))
-            {
-                *this = rCandidate;
-            }
+            *this = rCandidate;
         }
 
         SdrLineShadowTextAttribute::~SdrLineShadowTextAttribute()
@@ -262,14 +264,14 @@ namespace drawinglayer
             // handle mpLine
             {
                 // delete local mpLine if necessary
-                if(mpLine && ((!rCandidate.mpLine) || (!(*mpLine == *rCandidate.mpLine))))
+                if(mpLine)
                 {
                     delete mpLine;
-                    mpLine = 0L;
+                    mpLine = 0;
                 }
 
                 // copy mpLine if necessary
-                if(!mpLine && rCandidate.mpLine)
+                if(rCandidate.mpLine)
                 {
                     mpLine = new SdrLineAttribute(*rCandidate.mpLine);
                 }
@@ -278,14 +280,14 @@ namespace drawinglayer
             // handle mpLineStartEnd
             {
                 // delete local mpLineStartEnd if necessary
-                if(mpLineStartEnd && ((!rCandidate.mpLineStartEnd) || (!(*mpLineStartEnd == *rCandidate.mpLineStartEnd))))
+                if(mpLineStartEnd)
                 {
                     delete mpLineStartEnd;
-                    mpLineStartEnd = 0L;
+                    mpLineStartEnd = 0;
                 }
 
                 // copy mpLineStartEnd if necessary
-                if(!mpLineStartEnd && rCandidate.mpLineStartEnd)
+                if(rCandidate.mpLineStartEnd)
                 {
                     mpLineStartEnd = new SdrLineStartEndAttribute(*rCandidate.mpLineStartEnd);
                 }
@@ -320,23 +322,25 @@ namespace drawinglayer
     namespace attribute
     {
         SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(
-            SdrLineAttribute* pLine, attribute::SdrFillAttribute* pFill, SdrLineStartEndAttribute* pLineStartEnd,
-            SdrShadowAttribute* pShadow, FillGradientAttribute* pFillFloatTransGradient, SdrTextAttribute* pTextAttribute)
+            SdrLineAttribute* pLine,
+            attribute::SdrFillAttribute* pFill,
+            SdrLineStartEndAttribute* pLineStartEnd,
+            SdrShadowAttribute* pShadow,
+            FillGradientAttribute* pFillFloatTransGradient,
+            SdrTextAttribute* pTextAttribute)
         :   SdrLineShadowTextAttribute(pLine, pLineStartEnd, pShadow, pTextAttribute),
             mpFill(pFill),
             mpFillFloatTransGradient(pFillFloatTransGradient)
         {
         }
 
-        SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(const SdrLineFillShadowTextAttribute& rCandidate)
-        :   SdrLineShadowTextAttribute(0L, 0L, 0L, 0L),
-            mpFill(0L),
-            mpFillFloatTransGradient(0L)
+        SdrLineFillShadowTextAttribute::SdrLineFillShadowTextAttribute(
+            const SdrLineFillShadowTextAttribute& rCandidate)
+        :   SdrLineShadowTextAttribute(0, 0, 0, 0),
+            mpFill(0),
+            mpFillFloatTransGradient(0)
         {
-            if(!(*this == rCandidate))
-            {
-                *this = rCandidate;
-            }
+            *this = rCandidate;
         }
 
         SdrLineFillShadowTextAttribute::~SdrLineFillShadowTextAttribute()
@@ -353,14 +357,14 @@ namespace drawinglayer
             // handle mpFill
             {
                 // delete local mpFill if necessary
-                if(mpFill && ((!rCandidate.mpFill) || (!(*mpFill == *rCandidate.mpFill))))
+                if(mpFill)
                 {
                     delete mpFill;
-                    mpFill = 0L;
+                    mpFill = 0;
                 }
 
                 // copy mpFill if necessary
-                if(!mpFill && rCandidate.mpFill)
+                if(rCandidate.mpFill)
                 {
                     mpFill = new attribute::SdrFillAttribute(*rCandidate.mpFill);
                 }
@@ -369,14 +373,14 @@ namespace drawinglayer
             // handle mpFillFloatTransGradient
             {
                 // delete local mpFillFloatTransGradient if necessary
-                if(mpFillFloatTransGradient && ((!rCandidate.mpFillFloatTransGradient) || (!(*mpFillFloatTransGradient == *rCandidate.mpFillFloatTransGradient))))
+                if(mpFillFloatTransGradient)
                 {
                     delete mpFillFloatTransGradient;
-                    mpFillFloatTransGradient = 0L;
+                    mpFillFloatTransGradient = 0;
                 }
 
                 // copy mpFillFloatTransGradient if necessary
-                if(!mpFillFloatTransGradient && rCandidate.mpFillFloatTransGradient)
+                if(rCandidate.mpFillFloatTransGradient)
                 {
                     mpFillFloatTransGradient = new FillGradientAttribute(*rCandidate.mpFillFloatTransGradient);
                 }

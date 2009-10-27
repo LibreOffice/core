@@ -38,6 +38,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <svx/sdr/overlay/overlaytools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -45,81 +46,34 @@ namespace sdr
 {
     namespace overlay
     {
-        basegfx::B2DPolyPolygon OverlayHatchRect::getGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayHatchRect::createOverlayObjectPrimitive2DSequence()
         {
-            const basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
-            const basegfx::B2DPoint aDiscreteBottomRight(rOutputDevice.GetViewTransformation() * getSecondPosition());
+            const basegfx::B2DRange aHatchRange(getBasePosition(), getSecondPosition());
+            const drawinglayer::primitive2d::Primitive2DReference aReference(
+                new drawinglayer::primitive2d::OverlayHatchRectanglePrimitive(
+                    aHatchRange,
+                    3.0,
+                    getHatchRotation(),
+                    getBaseColor().getBColor(),
+                    getDiscreteGrow(),
+                    getDiscreteShrink(),
+                    getRotation()));
 
-            basegfx::B2DRange aInnerRange(
-                floor(aDiscreteTopLeft.getX()), floor(aDiscreteTopLeft.getY()),
-                floor(aDiscreteBottomRight.getX()), floor(aDiscreteBottomRight.getY()));
-            basegfx::B2DRange aOuterRange(aInnerRange);
-            basegfx::B2DPolyPolygon aRetval;
-
-            aOuterRange.grow(getDiscreteWidth() * 0.5);
-            aInnerRange.grow(getDiscreteWidth() * -0.5);
-
-            aRetval.append(basegfx::tools::createPolygonFromRect(aOuterRange));
-            aRetval.append(basegfx::tools::createPolygonFromRect(aInnerRange));
-
-            if(!basegfx::fTools::equalZero(mfRotation))
-            {
-                basegfx::B2DHomMatrix aTransform;
-
-                aTransform.translate(-aOuterRange.getMinX(), -aOuterRange.getMinY());
-                aTransform.rotate(getRotation());
-                aTransform.translate(aOuterRange.getMinX(), aOuterRange.getMinY());
-
-                aRetval.transform(aTransform);
-            }
-
-            return aRetval;
-        }
-
-        void OverlayHatchRect::drawGeometry(OutputDevice& rOutputDevice)
-        {
-            const basegfx::B2DPolyPolygon aB2DGeometry(getGeometry(rOutputDevice));
-            const bool bMapModeWasEnabled(rOutputDevice.IsMapModeEnabled());
-
-            // use VCL polygon and methodology for paint
-            double fFullRotation(getHatchRotation() - getRotation());
-
-            while(fFullRotation < 0.0)
-            {
-                fFullRotation += F_2PI;
-            }
-
-            while(fFullRotation >= F_2PI)
-            {
-                fFullRotation -= F_2PI;
-            }
-
-            const Hatch aHatch(HATCH_SINGLE, getBaseColor(), 3, (sal_uInt16)basegfx::fround(fFullRotation * ( 10.0 / F_PI180)));
-            rOutputDevice.EnableMapMode(false);
-            rOutputDevice.DrawHatch(PolyPolygon(aB2DGeometry), aHatch);
-            rOutputDevice.EnableMapMode(bMapModeWasEnabled);
-        }
-
-        void OverlayHatchRect::createBaseRange(OutputDevice& rOutputDevice)
-        {
-            // reset range and expand with fresh geometry
-            maBaseRange = getGeometry(rOutputDevice).getB2DRange();
-
-            // getGeometry data is in discrete coordinates (pixels), so transform back to
-            // world coordinates (logic)
-            maBaseRange.transform(rOutputDevice.GetInverseViewTransformation());
+            return drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
         }
 
         OverlayHatchRect::OverlayHatchRect(
             const basegfx::B2DPoint& rBasePosition,
             const basegfx::B2DPoint& rSecondPosition,
             const Color& rHatchColor,
-            double fDiscreteWidth,
+            double fDiscreteGrow,
+            double fDiscreteShrink,
             double fHatchRotation,
             double fRotation)
         :   OverlayObjectWithBasePosition(rBasePosition, rHatchColor),
             maSecondPosition(rSecondPosition),
-            mfDiscreteWidth(fDiscreteWidth),
+            mfDiscreteGrow(fDiscreteGrow),
+            mfDiscreteShrink(fDiscreteShrink),
             mfHatchRotation(fHatchRotation),
             mfRotation(fRotation)
         {
@@ -135,12 +89,6 @@ namespace sdr
                 // register change (after change)
                 objectChange();
             }
-        }
-
-        void OverlayHatchRect::zoomHasChanged()
-        {
-            // reset validity of range in logical coor to force recalculation
-            mbIsChanged = sal_True;
         }
     } // end of namespace overlay
 } // end of namespace sdr

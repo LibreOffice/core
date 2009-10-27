@@ -249,6 +249,8 @@ using namespace ::rtl;
         // empty
     } catch ( IndexOutOfBoundsException & e ) {
         // empty
+    } catch ( RuntimeException& ) {
+        // at least don't crash
     }
     return string;
 }

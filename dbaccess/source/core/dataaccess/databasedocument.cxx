@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include "core_resource.hxx"
+#include "core_resource.hrc"
 #include "datasource.hxx"
 #include "databasedocument.hxx"
 #include "dbastrings.hrc"
@@ -190,8 +192,17 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     // #i94840#
     if ( m_pImpl->hadInitializedDocument() )
     {
-        impl_setInitialized();
-        m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
+        // Note we set our init-state to "Initializing", not "Initialized". We're created from inside the ModelImpl,
+        // which is expected to call attachResource in case there was a previous incarnation of the document,
+        // so we can properly finish our initialization then.
+        impl_setInitializing();
+
+        if ( m_pImpl->getURL().getLength() )
+        {
+            // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
+            // here is effectively loading the document.
+            m_aViewMonitor.onLoadedDocument();
+        }
     }
 }
 
@@ -556,6 +567,8 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
         // should know this before anybody actually uses the object.
         m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
 
+        aGuard.clear();
+        // <- SYNCHRONIZED
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }
 
@@ -724,7 +737,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 
 // -----------------------------------------------------------------------------
 void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const Sequence< PropertyValue>& _rArguments,
-    const StoreType _eType, DocumentGuard& _rGuard )
+    const StoreType _eType, DocumentGuard& _rGuard ) throw ( IOException, RuntimeException )
 {
     OSL_PRECOND( ( _eType == SAVE ) || ( _eType == SAVE_AS ),
         "ODatabaseDocument::impl_storeAs_throw: you introduced a new type which cannot be handled here!" );
@@ -788,10 +801,29 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
     }
     catch( const Exception& )
     {
+        Any aError = ::cppu::getCaughtException();
+
         // notify the failure
         if ( !bIsInitializationProcess )
             m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
-        throw;
+
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        Exception aExcept;
+        aError >>= aExcept;
+
+        ::rtl::OUString sErrorMessage = ResourceManager::loadString(
+            RID_STR_ERROR_WHILE_SAVING,
+            "$except$", aError.getValueTypeName(),
+            "$message$", aExcept.Message
+        );
+        throw IOException( sErrorMessage, *this );
     }
 
     // notify the document event
@@ -933,8 +965,26 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
     }
     catch( const Exception& )
     {
-        m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToFailed", NULL, makeAny( _rURL ) );
-        throw;
+        Any aError = ::cppu::getCaughtException();
+        m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToFailed", NULL, aError );
+
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        Exception aExcept;
+        aError >>= aExcept;
+
+        ::rtl::OUString sErrorMessage = ResourceManager::loadString(
+            RID_STR_ERROR_WHILE_SAVING,
+            "$except$", aError.getValueTypeName(),
+            "$message$", aExcept.Message
+        );
+        throw IOException( sErrorMessage, *this );
     }
 
     m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", NULL, makeAny( _rURL ) );
@@ -1102,7 +1152,8 @@ void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( sal_Bool _bDeliv
 {
     Controllers aCopy = m_aControllers;
 
-    for ( Controllers::iterator aIter = aCopy.begin(); aIter != aCopy.end() ; ++aIter )
+    Controllers::iterator aEnd = aCopy.end();
+    for ( Controllers::iterator aIter = aCopy.begin(); aIter != aEnd ; ++aIter )
     {
         if ( !aIter->is() )
             continue;
@@ -1304,6 +1355,24 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(aSaveOpt.IsPrettyPrinting()));
     if ( aSaveOpt.IsSaveRelFSys() )
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rMediaDescriptor.getOrDefault("URL",::rtl::OUString())));
+
+    ::rtl::OUString aVersion;
+    SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
+
+    // older versions can not have this property set, it exists only starting from ODF1.2
+    if ( nDefVersion >= SvtSaveOptions::ODFVER_012 )
+        aVersion = ODFVER_012_TEXT;
+
+    if ( aVersion.getLength() )
+    {
+        try
+        {
+            xInfoSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Version" )), uno::makeAny( aVersion ) );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);

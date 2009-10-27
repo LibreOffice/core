@@ -47,6 +47,11 @@ sub create_directory
     my $returnvalue = 1;
     my $infoline = "";
 
+    if ($directory eq "" )
+    {
+        return 0;
+    }
+
     if (!(-d $directory))
     {
         $returnvalue = mkdir($directory, 0775);

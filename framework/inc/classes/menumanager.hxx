@@ -43,6 +43,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -50,7 +51,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/accel.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 
@@ -73,9 +74,8 @@ namespace framework
 class BmkMenu;
 class AddonMenu;
 class AddonPopupMenu;
-class MenuManager : public XSTATUSLISTENER      ,
-                    public ThreadHelpBase           ,
-                    public ::cppu::OWeakObject
+class MenuManager : public ThreadHelpBase           ,
+                    public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
 {
     public:
         // #110897#
@@ -89,33 +89,11 @@ class MenuManager : public XSTATUSLISTENER      ,
         MenuManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             REFERENCE< XFRAME >& rFrame,
-            BmkMenu*            pBmkMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
-
-        MenuManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            REFERENCE< XFRAME >& rFrame,
             AddonMenu*          pAddonMenu,
             sal_Bool            bDelete,
             sal_Bool            bDeleteChildren );
 
-        MenuManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            REFERENCE< XFRAME >& rFrame,
-            AddonPopupMenu* pAddonMenu,
-            sal_Bool            bDelete,
-            sal_Bool            bDeleteChildren );
-
         virtual ~MenuManager();
-
-        // XInterface
-        virtual void SAL_CALL acquire() throw()
-            { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw()
-            { OWeakObject::release(); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type & rType ) throw( RUNTIMEEXCEPTION );
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const FEATURSTATEEVENT& Event ) throw ( RUNTIMEEXCEPTION );
@@ -132,6 +110,9 @@ class MenuManager : public XSTATUSLISTENER      ,
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
+        static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
+        static void FillMenuImages(::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,Menu* _pMenu,sal_Bool bIsHiContrast,sal_Bool bShowMenuImages);
+
     protected:
         DECL_LINK( Highlight, Menu * );
         DECL_LINK( Activate, Menu * );
@@ -140,6 +121,10 @@ class MenuManager : public XSTATUSLISTENER      ,
     private:
         void UpdateSpecialFileMenu( Menu* pMenu );
         void UpdateSpecialWindowMenu( Menu* pMenu );
+        void ClearMenuDispatch(const EVENTOBJECT& Source = EVENTOBJECT(),bool _bRemoveOnly = true);
+        void SetHdl();
+        void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,USHORT _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
+        USHORT FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,USHORT _nIndex) const;
 
 
         struct MenuItemHandler
@@ -177,6 +162,7 @@ class MenuManager : public XSTATUSLISTENER      ,
 
         // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >             m_xURLTransformer;
 };
 
 } // namespace

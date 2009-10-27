@@ -31,7 +31,7 @@
 '*
 '/******************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Writer-Tools
 '*
@@ -182,27 +182,28 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
 
     Objekt = UCase( Objekt )
     select case Objekt
-    case "RECHTECK" : Rechteck.Click
-    case "LINIE"     : Linie.Click
-    case "ELLIPSE"  : Ellipse.Click
-    case "TEXT"      : Textobjekt.Click
-    case "VTEXT"     :
-        try
-            VerticalText.Click
-        catch
-            if gAsianSup = True then
-                Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
-            end if
-        endcatch
-    case "LAUFTEXT" : Lauftext.Click
-    case "LEGENDE"  : Legende.Click
-    case "VLEGENDE" :
-        try
-            VerticalCallout.Click
-        catch
-            Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
-        endcatch
+    	case "RECHTECK" : Rechteck.Click
+		case "LINIE"     : Linie.Click
+		case "ELLIPSE"  : Ellipse.Click
+		case "TEXT"      : Textobjekt.Click
+		case "VTEXT"     :
+        	try
+            	VerticalText.Click
+			catch
+				if gAsianSup = True then
+                	Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
+				end if
+			endcatch
+		case "LAUFTEXT" : Lauftext.Click
+		case "LEGENDE"  : Legende.Click
+		case "VLEGENDE" :
+			try
+				VerticalCallout.Click
+			catch
+				Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
+			endcatch
     end select
+	Sleep (2)
 
     Select Case gApplication
     Case "WRITER"
@@ -219,7 +220,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentWriter"
-            Call gMouseClick (1, 1)
+            Call gMouseClick (10, 10)
             wait 100
         end if
 
@@ -237,10 +238,11 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
         end if
         if Objekt <> "TEXT" and Objekt <> "VTEXT" then
             Kontext "DocumentMasterDoc"
-            Call gMouseClick (1, 1)
+            Call gMouseClick (10, 10)
             wait 100
         end if
     end select
+	sleep (1)
 end sub
 
 ' -----------------------------------------------------------------------
@@ -858,8 +860,10 @@ end function
 
 ' -----------------------------------------------------------------------
 
-sub wOptionenUndo ( sOption$ )
-    Dim i as integer, sTempSeparator as string, sTempUnit as integer
+sub wOptionsUndo ( sOption$ )
+    Dim i as integer
+    Dim sTempSeparator as string
+    Dim sTempUnit as integer
 
     Printlog "  - Initial state"
 
@@ -878,7 +882,7 @@ sub wOptionenUndo ( sOption$ )
     end if
     sTempUnit = Masseinheit.GetSelIndex
 
-    if sOption$ = "Laden" OR sOption$ = "Alle" then
+    if sOption$ = "Laden" OR sOption$ = "All" then
         ' Update
         AufNachfrage.Check
         Feldbefehle.Check
@@ -899,7 +903,7 @@ sub wOptionenUndo ( sOption$ )
     end if
 
     Call hToolsOptions("WRITER","View")
-    if sOption$ = "Inhalte" OR sOption$ = "Alle" then
+    if sOption$ = "Inhalte" OR sOption$ = "All" then
         ' Guides
         Hilfslinien.Uncheck
         FarbigeHandles.Check
@@ -919,7 +923,7 @@ sub wOptionenUndo ( sOption$ )
         Notizen.Check
     end if
 
-    if sOption$ = "Cursor" OR sOption$ = "Alle" then
+    if sOption$ = "Cursor" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","FormattingAids")
         ' Display of
         Absatzenden.UnCheck
@@ -937,7 +941,7 @@ sub wOptionenUndo ( sOption$ )
         Zonen_Cursor.Check
     end if
 
-    if sOption$ = "Raster" OR sOption$ = "Alle" then
+    if sOption$ = "Raster" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Grid")
         ' Grid
         FangrasterBenutzen.Uncheck
@@ -967,13 +971,13 @@ sub wOptionenUndo ( sOption$ )
         RasterUnterteilungYAchse.More 1
     end if
 
-    if sOption$ = "Grundschriften" OR sOption$ = "Alle" then
+    if sOption$ = "Grundschriften" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","BasicFonts")
         Standard.Click
         AktuellesDokument.Uncheck
     end if
 
-    if sOption$ = "Drucken" OR sOption$ = "Alle" then
+    if sOption$ = "Drucken" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Print")
         ' Contents
         Grafiken.Check
@@ -995,7 +999,7 @@ sub wOptionenUndo ( sOption$ )
         Fax.SetNoSelection
     end if
 
-    if sOption$ = "Tabelle" OR sOption$ = "Alle" then
+    if sOption$ = "Tabelle" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Table")
         ' Default
         Ueberschrift.Check
@@ -1040,7 +1044,7 @@ sub wOptionenUndo ( sOption$ )
         Variabel.Check
     end if
 
-    if sOption$ = "Aenderung" OR sOption$ = "Alle" then
+    if sOption$ = "Aenderung" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Changes")
         ' Text display
         EinfuegenAttribute.Select 4
@@ -1054,7 +1058,7 @@ sub wOptionenUndo ( sOption$ )
         Zeilenfarbe.Select 1
     end if
 
-    if sOption$ = "AutoCaption" OR sOption$ = "Alle" then
+    if sOption$ = "AutoCaption" OR sOption$ = "All" then
         Call hToolsOptions("WRITER","Autocaption")
         for i = 1 to ObjectList.GetItemCount
             ObjectList.Select i

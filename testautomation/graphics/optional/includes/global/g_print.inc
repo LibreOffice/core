@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,135 +40,125 @@
 '\*************************************************************************************
 
 testcase tFilePrint
-   Call hNewDocument
-   
-   '/// Inserting test text
-   printlog "Inserting testtext."
-   hTextrahmenErstellen ("This is an automated print test with testtool for GRAPHICS ",90,90,80,10)
-   hTextrahmenErstellen ("Version    : "+ gVersionsnummer + " / " + gLanguage,80,90,70,10)
-   hTextrahmenErstellen ("Date / Time : "+  Date + " / " + Time,70,90,60,10)
-   hTextrahmenErstellen ("Machine / User: " + gPCName + "   " + gUser,60,90,50,10)
-   
-   '/// starting printing dialog
-   printlog "Opening print Dialog."
-   FilePrint
-   kontext
-   if active.exists(2) then
-       active.ok
-       qaerrorlog "There is no printer available - please install one on your system!"
-   endif
-   sleep 2
-   Kontext "DruckenDlg"
-   
-   
-   ' Not yet active since this feature is not build into the master: i85355
-   '/// Checking Options for impress, PrintContentBox
-'   printlog "Checking options for impress..."
-'    if (gApplication = "IMPRESS") then
-'        if PrintContent.GetSelIndex <> 1 then
-'            warnlog "Not first entry selected!"
-'       else
-'            printlog " First entry selected."
-'        endif
-'        
-'        if PrintContent.GetItemCount <> 4 then
-'            warnlog "Entry-number of PrintContent listbox is wrong!"
-'        else
-'            printlog "Entry-number of PrintContent listbox is 4."
-'        endif
-'        
-'        '/// checking SlidesPerPage
-'        PrintContent.Select 2
-'        if SlidesPerPage.IsEnabled then
-'            printlog "SlidesPerPage active."
-'        else
-'            warnlog "SlidesPerPage did not get active!"
-'        endif
-'        
-'        '/// Checking Order RadioButtons
-'        VerticalOrder.Check
-'        printlog "Vertical checked."
-'        HorizontalOrder.Check
-'        printlog "Horizontal checked again."
-'        
-'    else
-'        printlog "This is not impress, so no further print content testing."
-'    endif
+    Call hNewDocument
 
-    '/// Opening options dialog
+    printlog "Inserting testtext."
+    hTextrahmenErstellen ("This is an automated print test with testtool for GRAPHICS ",90,90,80,10)
+    hTextrahmenErstellen ("Version    : "+ gVersionsnummer + " / " + gLanguage,80,90,70,10)
+    hTextrahmenErstellen ("Date / Time : "+  Date + " / " + Time,70,90,60,10)
+    hTextrahmenErstellen ("Machine / User: " + gPCName + "   " + gUser,60,90,50,10)
+
+    printlog "Opening print Dialog."
+    FilePrint
+    kontext
+    if active.exists(2) then
+        active.ok
+        qaerrorlog "There is no printer available - please install one on your system!"
+    endif
+    sleep 2
+    Kontext "DruckenDlg"
+
+
+    ' Not yet active since this feature is not build into the master: i85355
+    '   printlog "Checking options for impress..."
+    '    if (gApplication = "IMPRESS") then
+    '        if PrintContent.GetSelIndex <> 1 then
+    '            warnlog "Not first entry selected!"
+    '       else
+    '            printlog " First entry selected."
+    '        endif
+    '
+    '        if PrintContent.GetItemCount <> 4 then
+    '            warnlog "Entry-number of PrintContent listbox is wrong!"
+    '        else
+    '            printlog "Entry-number of PrintContent listbox is 4."
+    '        endif
+    '
+    '        PrintContent.Select 2
+    '        if SlidesPerPage.IsEnabled then
+    '            printlog "SlidesPerPage active."
+    '        else
+    '            warnlog "SlidesPerPage did not get active!"
+    '        endif
+    '
+    '        VerticalOrder.Check
+    '        printlog "Vertical checked."
+    '        HorizontalOrder.Check
+    '        printlog "Horizontal checked again."
+    '
+    '    else
+    '        printlog "This is not impress, so no further print content testing."
+    '    endif
+
     printlog "Opening Options dialog."
     Zusaetze.Click
     sleep 1
     Kontext "DruckerZusaetzeDraw"
-      
-    '/// Checking brochure printing
+
     printlog "Checking brochure printing."
     if Prospekt.IsChecked then
         warnlog "Somebody forgot to uncheck the prospect printing!"
-            Standard.Check
+        Standard.Check
     else
         printlog "Brochure printing is checked."
     endif
-      
-            
-    '/// Checking additional options
+
+
     Seitenname.Check
     Datum.Check
     Zeit.Check
     AusgeblendeteSeiten.Check
     SeitengroesseAnpassen.Check
     AusDruckereinstellung.Check
-    
-    '/// Opening dialog again for checking settings
+
     DruckerZusaetzeDraw.OK
     Kontext "DruckenDlg"
     Zusaetze.Click
     sleep 2
     Kontext "DruckerZusaetzeDraw"
-    if NOT Seitenname.IsChecked Then 
+    if NOT Seitenname.IsChecked Then
         warnlog "  - Page name not checked"
     else
         printlog "Page name checked."
     endif
-    
+
     if NOT Datum.IsChecked Then
-         warnlog "  - Date not checked"
+        warnlog "  - Date not checked"
     else
         printlog "Date is checked."
     endif
-    
+
     if NOT Zeit.IsChecked Then
-         warnlog "  - Time not checked"
+        warnlog "  - Time not checked"
     else
         printlog "Time is checked."
     endif
-    
+
     if NOT AusgeblendeteSeiten.IsChecked Then
-         warnlog "  - Hidden pages not checked"
+        warnlog "  - Hidden pages not checked"
     else
         printlog "Hidden pages checked."
     endif
-    
+
     if NOT SeitengroesseAnpassen.IsChecked Then
-         warnlog "  - Fit to page not checked"
+        warnlog "  - Fit to page not checked"
     else
         printlog "Fit to page checked."
     endif
-    
+
     if NOT AusDruckereinstellung.IsChecked Then
-         warnlog "  - Paper tray from printer settings not checked"
+        warnlog "  - Paper tray from printer settings not checked"
     else
         printlog "Paper tray checked."
     endif
-    
+
     AusDruckereinstellung.UnCheck
     Standard.Check
     DruckerZusaetzeDraw.OK
     Kontext "DruckenDlg"
     DruckenDlg.Cancel
     Sleep 5
-    
-      '/// Close document ///'
+
     Call hCloseDocument
 endcase
 

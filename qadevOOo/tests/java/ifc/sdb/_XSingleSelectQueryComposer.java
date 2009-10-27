@@ -33,6 +33,7 @@ package ifc.sdb;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import lib.MultiMethodTest;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import lib.StatusException;
 import lib.Status;
@@ -80,7 +81,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
      * @see om.sun.star.sdb.XSingleSelectQueryAnalyzer
      * @see com.sun.star.beans.XPropertySet
      */
-    protected void before() {
+    protected void before() throws Exception {
 
         xQueryAna = (XSingleSelectQueryAnalyzer)
                       UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
@@ -102,9 +103,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         }
 
-        colName = (String)
-                      UnoRuntime.queryInterface(String.class,
-                      tEnv.getObjRelation("colName"));
+        colName = AnyConverter.toString(tEnv.getObjRelation("colName"));
 
         if (colName == null) {
             throw new StatusException(Status.failed(

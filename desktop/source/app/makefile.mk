@@ -40,10 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(GUIBASE)"=="aqua"
-CFLAGS+=-x objective-c++
-.ENDIF
-
 .IF "$(ENABLE_GNOMEVFS)"=="TRUE"
 CFLAGS+=-DGNOME_VFS_ENABLED
 .ENDIF
@@ -56,6 +52,7 @@ SHL1OBJS = \
     $(SLO)$/appsys.obj \
     $(SLO)$/cfgfilter.obj \
     $(SLO)$/checkinstall.obj \
+    $(SLO)$/check_ext_deps.obj \
     $(SLO)$/cmdlineargs.obj \
     $(SLO)$/cmdlinehelp.obj \
     $(SLO)$/configinit.obj \

@@ -332,6 +332,13 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
+        rOutProperties.push_back(
+        Property( C2U( "TextRotation" ),
+                  PROP_DATAPOINT_TEXT_ROTATION,
+                  ::getCppuType( reinterpret_cast< const double * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
     // statistics
     rOutProperties.push_back(
         Property( C2U( "ErrorBarX" ),
@@ -427,6 +434,8 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_X, uno::Reference< beans::XPropertySet >());
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_Y, uno::Reference< beans::XPropertySet >());
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_PERCENT_DIAGONAL, 0 );
+
+    PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_TEXT_ROTATION, 0.0 );
 }
 
 } //  namespace chart

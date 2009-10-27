@@ -128,7 +128,7 @@ interface SlideSorterView
         ExecMethod = FuSupport ;
         StateMethod = GetClipboardState ;
     ]
-    SID_PASTE2 // ole : no, status : ?
+    SID_PASTE_SPECIAL // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
         StateMethod = GetClipboardState ;
@@ -199,7 +199,7 @@ interface SlideSorterView
         GroupId = GID_DOCUMENT ;
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
-        Asynchron , Volatile , AutoUpdate ,
+        Asynchron , AutoUpdate ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
     SID_SEARCH_DLG // ole : no, status : ?

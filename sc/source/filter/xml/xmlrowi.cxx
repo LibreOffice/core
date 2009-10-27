@@ -43,6 +43,7 @@
 #include "document.hxx"
 #include "docuno.hxx"
 #include "olinetab.hxx"
+#include "sheetdata.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -170,6 +171,7 @@ void ScXMLTableRowContext::EndElement()
             GetScImport().GetTables().AddRow();
         DBG_ERRORFILE("it seems here is a nonvalid file; possible missing of table:table-cell element");
     }
+    sal_Int32 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow(rXMLImport.GetTables().GetCurrentRow());
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(xSheet.is())
@@ -196,7 +198,16 @@ void ScXMLTableRowContext::EndElement()
                             XMLTableStyleContext* pStyle((XMLTableStyleContext *)pStyles->FindStyleChildContext(
                                 XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True));
                             if (pStyle)
+                            {
                                 pStyle->FillPropertySet(xRowProperties);
+
+                                if ( nSheet != pStyle->GetLastSheet() )
+                                {
+                                    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
+                                    pSheetData->AddRowStyle( sStyleName, ScAddress( 0, (SCROW)nFirstRow, (SCTAB)nSheet ) );
+                                    pStyle->SetLastSheet(nSheet);
+                                }
+                            }
                         }
                     }
                     sal_Bool bVisible (sal_True);

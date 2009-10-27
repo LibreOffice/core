@@ -35,6 +35,7 @@
 
 #include <svx/unoviwou.hxx>
 #include <svx/outliner.hxx>
+#include <svx/editeng.hxx>
 #include <svx/svdotext.hxx>
 
 

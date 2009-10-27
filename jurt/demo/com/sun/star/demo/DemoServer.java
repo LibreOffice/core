@@ -92,12 +92,12 @@ public class DemoServer {
         ServiceManager serviceManager = new ServiceManager();
         serviceManager.addFactories(neededServices);
 
-        XAcceptor xAcceptor = (XAcceptor)UnoRuntime.queryInterface(XAcceptor.class, serviceManager.createInstance("com.sun.star.connection.Acceptor"));
+        XAcceptor xAcceptor = UnoRuntime.queryInterface(XAcceptor.class, serviceManager.createInstance("com.sun.star.connection.Acceptor"));
 
         System.err.println("waiting for connect...");
         XConnection xConnection = xAcceptor.accept(conDcp);
 
-        XBridgeFactory xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class, serviceManager.createInstance("com.sun.star.bridge.BridgeFactory"));
+        XBridgeFactory xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class, serviceManager.createInstance("com.sun.star.bridge.BridgeFactory"));
         XBridge xBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp, protDcp, xConnection, new InstanceProvider());
 
     }

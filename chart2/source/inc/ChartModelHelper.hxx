@@ -34,6 +34,12 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/chart2/data/XDataProvider.hpp>
+#include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
+#include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
@@ -52,6 +58,19 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModelHelper
 {
 public:
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > createUndoManager();
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > createRangeHighlighter(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >& xSelectionSupplier );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider();
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDataArray >& xDataToCopy );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > createInternalDataProvider(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >
         findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
@@ -60,7 +79,7 @@ public:
             ::com::sun::star::chart2::XDiagram >
         findDiagram( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
 
-    static ::std::vector< ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > > getDataSeries(
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
@@ -87,6 +106,12 @@ public:
 
     static void triggerRangeHighlighting( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XModel >& xModel );
+
+    static bool isIncludeHiddenCells( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::frame::XModel >& xChartModel );
+
+    static bool setIncludeHiddenCells( bool bIncludeHiddenCells, const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::frame::XModel >& xChartModel );
 };
 
 //.............................................................................

@@ -63,7 +63,7 @@ public final class Bug111153_Test extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTransport t = (XTransport) UnoRuntime.queryInterface(
+            XTransport t = UnoRuntime.queryInterface(
                 XTransport.class, getBridge(context).getInstance("Transport"));
             XDerived d = new XDerived() {};
             t.setDerived(d);

@@ -31,13 +31,12 @@
 #ifndef OOX_XLS_BIFFHELPER_HXX
 #define OOX_XLS_BIFFHELPER_HXX
 
-#include "oox/helper/helper.hxx"
+#include "oox/helper/binarystreambase.hxx"
 
 namespace oox {
 namespace xls {
 
 class BiffInputStream;
-class BiffOutputStream;
 
 // OOBIN record identifiers ===================================================
 
@@ -121,6 +120,7 @@ const sal_Int32 OOBIN_ID_EXTROW             = 0x016E;
 const sal_Int32 OOBIN_ID_EXTSHEETDATA       = 0x016B;
 const sal_Int32 OOBIN_ID_EXTERNALNAMEFLAGS  = 0x024A;
 const sal_Int32 OOBIN_ID_EXTSHEETNAMES      = 0x0167;
+const sal_Int32 OOBIN_ID_FILESHARING        = 0x0224;
 const sal_Int32 OOBIN_ID_FILEVERSION        = 0x0080;
 const sal_Int32 OOBIN_ID_FILL               = 0x002D;
 const sal_Int32 OOBIN_ID_FILLS              = 0x025B;
@@ -137,6 +137,7 @@ const sal_Int32 OOBIN_ID_HEADERFOOTER       = 0x01DF;
 const sal_Int32 OOBIN_ID_HYPERLINK          = 0x01EE;
 const sal_Int32 OOBIN_ID_ICONSET            = 0x01D1;
 const sal_Int32 OOBIN_ID_INDEXEDCOLORS      = 0x0235;
+const sal_Int32 OOBIN_ID_INPUTCELLS         = 0x01F8;
 const sal_Int32 OOBIN_ID_LEGACYDRAWING      = 0x0227;
 const sal_Int32 OOBIN_ID_MERGECELL          = 0x00B0;
 const sal_Int32 OOBIN_ID_MERGECELLS         = 0x00B1;
@@ -209,6 +210,8 @@ const sal_Int32 OOBIN_ID_PTROWFIELDS        = 0x0135;
 const sal_Int32 OOBIN_ID_RGBCOLOR           = 0x01DB;
 const sal_Int32 OOBIN_ID_ROW                = 0x0000;
 const sal_Int32 OOBIN_ID_ROWBREAKS          = 0x0188;
+const sal_Int32 OOBIN_ID_SCENARIO           = 0x01F6;
+const sal_Int32 OOBIN_ID_SCENARIOS          = 0x01F4;
 const sal_Int32 OOBIN_ID_SELECTION          = 0x0098;
 const sal_Int32 OOBIN_ID_SHAREDFMLA         = 0x01AB;
 const sal_Int32 OOBIN_ID_SHEET              = 0x009C;
@@ -293,6 +296,12 @@ const sal_uInt16 BIFF_ID_CHFORMAT           = 0x104E;
 const sal_uInt16 BIFF_ID_CHFORMATRUNS       = 0x1050;
 const sal_uInt16 BIFF_ID_CHFRAME            = 0x1032;
 const sal_uInt16 BIFF_ID_CHFRAMEPOS         = 0x104F;
+const sal_uInt16 BIFF_ID_CHFRBLOCKBEGIN     = 0x0852;
+const sal_uInt16 BIFF_ID_CHFRBLOCKEND       = 0x0853;
+const sal_uInt16 BIFF_ID_CHFRINFO           = 0x0850;
+const sal_uInt16 BIFF_ID_CHFRLABELPROPS     = 0x086B;
+const sal_uInt16 BIFF_ID_CHFRUNITPROPS      = 0x0857;
+const sal_uInt16 BIFF_ID_CHFRWRAPPER        = 0x0851;
 const sal_uInt16 BIFF_ID_CHLABELRANGE       = 0x1020;
 const sal_uInt16 BIFF_ID_CHLABELRANGE2      = 0x1062;
 const sal_uInt16 BIFF_ID_CHLEGEND           = 0x1015;
@@ -304,6 +313,7 @@ const sal_uInt16 BIFF_ID_CHPICFORMAT        = 0x103C;
 const sal_uInt16 BIFF_ID_CHPIE              = 0x1019;
 const sal_uInt16 BIFF_ID_CHPIEEXT           = 0x1061;
 const sal_uInt16 BIFF_ID_CHPIEFORMAT        = 0x100B;
+const sal_uInt16 BIFF_ID_CHPIVOTFLAGS       = 0x0859;
 const sal_uInt16 BIFF5_ID_CHPIVOTREF        = 0x1048;
 const sal_uInt16 BIFF8_ID_CHPIVOTREF        = 0x0858;
 const sal_uInt16 BIFF_ID_CHPLOTFRAME        = 0x1035;
@@ -324,9 +334,7 @@ const sal_uInt16 BIFF_ID_CHSURFACE          = 0x103F;
 const sal_uInt16 BIFF_ID_CHTEXT             = 0x1025;
 const sal_uInt16 BIFF_ID_CHTICK             = 0x101E;
 const sal_uInt16 BIFF_ID_CHTYPEGROUP        = 0x1014;
-const sal_uInt16 BIFF_ID_CHUNITPROPERTIES   = 0x0857;
 const sal_uInt16 BIFF_ID_CHVALUERANGE       = 0x101F;
-const sal_uInt16 BIFF_ID_CHWRAPPEDRECORD    = 0x0851;
 const sal_uInt16 BIFF_ID_CFHEADER           = 0x01B0;
 const sal_uInt16 BIFF_ID_CFRULE             = 0x01B1;
 const sal_uInt16 BIFF_ID_CODENAME           = 0x01BA;
@@ -363,6 +371,7 @@ const sal_uInt16 BIFF5_ID_EXTERNALNAME      = 0x0023;
 const sal_uInt16 BIFF_ID_EXTERNSHEET        = 0x0017;
 const sal_uInt16 BIFF_ID_EXTSST             = 0x00FF;
 const sal_uInt16 BIFF_ID_FILEPASS           = 0x002F;
+const sal_uInt16 BIFF_ID_FILESHARING        = 0x005B;
 const sal_uInt16 BIFF2_ID_FONT              = 0x0031;
 const sal_uInt16 BIFF3_ID_FONT              = 0x0231;
 const sal_uInt16 BIFF5_ID_FONT              = 0x0031;
@@ -382,6 +391,7 @@ const sal_uInt16 BIFF_ID_HYPERLINK          = 0x01B8;
 const sal_uInt16 BIFF3_ID_IMGDATA           = 0x007F;
 const sal_uInt16 BIFF8_ID_IMGDATA           = 0x00E9;
 const sal_uInt16 BIFF2_ID_INTEGER           = 0x0002;
+const sal_uInt16 BIFF_ID_INTERFACEHDR       = 0x00E1;
 const sal_uInt16 BIFF_ID_ITERATION          = 0x0011;
 const sal_uInt16 BIFF_ID_IXFE               = 0x0044;
 const sal_uInt16 BIFF2_ID_LABEL             = 0x0004;
@@ -445,6 +455,8 @@ const sal_uInt16 BIFF2_ID_ROW               = 0x0008;
 const sal_uInt16 BIFF3_ID_ROW               = 0x0208;
 const sal_uInt16 BIFF_ID_RSTRING            = 0x00D6;
 const sal_uInt16 BIFF_ID_SAVERECALC         = 0x005F;
+const sal_uInt16 BIFF_ID_SCENARIO           = 0x00AF;
+const sal_uInt16 BIFF_ID_SCENARIOS          = 0x00AE;
 const sal_uInt16 BIFF_ID_SCL                = 0x00A0;
 const sal_uInt16 BIFF_ID_SCENPROTECT        = 0x00DD;
 const sal_uInt16 BIFF_ID_SCREENTIP          = 0x0800;
@@ -459,6 +471,7 @@ const sal_uInt16 BIFF_ID_STANDARDWIDTH      = 0x0099;
 const sal_uInt16 BIFF2_ID_STRING            = 0x0007;
 const sal_uInt16 BIFF3_ID_STRING            = 0x0207;
 const sal_uInt16 BIFF_ID_STYLE              = 0x0293;
+const sal_uInt16 BIFF_ID_STYLEEXT           = 0x0892;
 const sal_uInt16 BIFF_ID_SXEXT              = 0x00DC;
 const sal_uInt16 BIFF_ID_TOPMARGIN          = 0x0028;
 const sal_uInt16 BIFF_ID_TXO                = 0x01B6;
@@ -469,6 +482,7 @@ const sal_uInt16 BIFF_ID_VERPAGEBREAKS      = 0x001A;
 const sal_uInt16 BIFF_ID_WINDOW1            = 0x003D;
 const sal_uInt16 BIFF2_ID_WINDOW2           = 0x003E;
 const sal_uInt16 BIFF3_ID_WINDOW2           = 0x023E;
+const sal_uInt16 BIFF_ID_WRITEACCESS        = 0x005C;
 const sal_uInt16 BIFF_ID_XCT                = 0x0059;
 const sal_uInt16 BIFF2_ID_XF                = 0x0043;
 const sal_uInt16 BIFF3_ID_XF                = 0x0243;
@@ -526,40 +540,12 @@ const sal_uInt8 BIFF_STRF_PHONETIC          = 0x04;
 const sal_uInt8 BIFF_STRF_RICH              = 0x08;
 const sal_uInt8 BIFF_STRF_UNKNOWN           = 0xF2;
 
-// GUID =======================================================================
-
-/** This struct stores a GUID (class ID) and supports reading, writing and comparison.
- */
-struct BiffGuid
-{
-    sal_uInt8           mpnData[ 16 ];      /// Stores the GUID, always in little-endian.
-
-    explicit            BiffGuid();
-    explicit            BiffGuid(
-                            sal_uInt32 nData1,
-                            sal_uInt16 nData2, sal_uInt16 nData3,
-                            sal_uInt8 nData41, sal_uInt8 nData42,
-                            sal_uInt8 nData43, sal_uInt8 nData44,
-                            sal_uInt8 nData45, sal_uInt8 nData46,
-                            sal_uInt8 nData47, sal_uInt8 nData48 );
-};
-
-bool operator==( const BiffGuid& rGuid1, const BiffGuid& rGuid2 );
-bool operator<( const BiffGuid& rGuid1, const BiffGuid& rGuid2 );
-
-BiffInputStream& operator>>( BiffInputStream& rStrm, BiffGuid& rGuid );
-BiffOutputStream& operator<<( BiffOutputStream& rStrm, const BiffGuid& rGuid );
-
 // ============================================================================
 
 /** Static helper functions for BIFF filters. */
 class BiffHelper
 {
 public:
-    static const BiffGuid maGuidStdHlink;       /// GUID of StdHlink (HLINK record).
-    static const BiffGuid maGuidUrlMoniker;     /// GUID of URL moniker (HLINK record).
-    static const BiffGuid maGuidFileMoniker;    /// GUID of file moniker (HLINK record).
-
     // conversion -------------------------------------------------------------
 
     /** Converts the passed packed number to a double. */
@@ -575,6 +561,13 @@ public:
     static rtl_TextEncoding calcTextEncodingFromCodePage( sal_uInt16 nCodePage );
     /** Returns a Windows code page from a text encoding. */
     static sal_uInt16   calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc );
+
+    /** Imports a picture from an IMGDATA record. */
+    static void         importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff );
+
+private:
+                        BiffHelper();   // not implemented
+                        ~BiffHelper();  // not implemented
 };
 
 // ============================================================================

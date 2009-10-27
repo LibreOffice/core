@@ -238,6 +238,8 @@ void PDFIRawAdaptor::setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rV
 }
 
 bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput,
+                            const uno::Reference<task::XInteractionHandler>& xIHdl,
+                            const rtl::OUString&                          rPwd,
                             const uno::Reference<task::XStatusIndicator>& xStatus,
                             const XmlEmitterSharedPtr&                    rEmitter,
                             const rtl::OUString&                          rURL )
@@ -253,9 +255,9 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
     bool bSuccess=false;
 
     if( xInput.is() && (!rURL.getLength() || rURL.compareToAscii( "file:", 5 ) != 0) )
-        bSuccess = xpdf_ImportFromStream( xInput, pSink, m_xContext );
+        bSuccess = xpdf_ImportFromStream( xInput, pSink, xIHdl, rPwd, m_xContext );
     else
-        bSuccess = xpdf_ImportFromFile( rURL, pSink, m_xContext );
+        bSuccess = xpdf_ImportFromFile( rURL, pSink, xIHdl, rPwd, m_xContext );
 
     if( bSuccess )
         pSink->emit(*rEmitter,*m_pVisitorFactory);
@@ -268,7 +270,10 @@ bool PDFIRawAdaptor::odfConvert( const rtl::OUString&                          r
                                  const uno::Reference<task::XStatusIndicator>& xStatus )
 {
     XmlEmitterSharedPtr pEmitter = createOdfEmitter(xOutput);
-    const bool bSuccess = parse(uno::Reference<io::XInputStream>(),xStatus,pEmitter,rURL);
+    const bool bSuccess = parse(uno::Reference<io::XInputStream>(),
+                                uno::Reference<task::XInteractionHandler>(),
+                                rtl::OUString(),
+                                xStatus,pEmitter,rURL);
 
     // tell input stream that it is no longer needed
     xOutput->closeOutput();
@@ -284,7 +289,9 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     // get the InputStream carrying the PDF content
     uno::Reference< io::XInputStream > xInput;
     uno::Reference< task::XStatusIndicator > xStatus;
+    uno::Reference< task::XInteractionHandler > xInteractionHandler;
     rtl::OUString aURL;
+    rtl::OUString aPwd;
     const beans::PropertyValue* pAttribs = rSourceData.getConstArray();
     sal_Int32 nAttribs = rSourceData.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
@@ -296,12 +303,16 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
             pAttribs->Value >>= aURL;
         else if( pAttribs->Name.equalsAscii( "StatusIndicator" ) )
             pAttribs->Value >>= xStatus;
+        else if( pAttribs->Name.equalsAscii( "InteractionHandler" ) )
+            pAttribs->Value >>= xInteractionHandler;
+        else if( pAttribs->Name.equalsAscii( "Password" ) )
+            pAttribs->Value >>= aPwd;
     }
     if( !xInput.is() )
         return sal_False;
 
     XmlEmitterSharedPtr pEmitter = createSaxEmitter(rHdl);
-    const bool bSuccess = parse(xInput,xStatus,pEmitter,aURL);
+    const bool bSuccess = parse(xInput,xInteractionHandler, aPwd, xStatus,pEmitter,aURL);
 
     // tell input stream that it is no longer needed
     xInput->closeInput();

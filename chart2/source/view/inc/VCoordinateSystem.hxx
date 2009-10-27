@@ -74,7 +74,9 @@ public:
                 , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::drawing::XShapes >& xFinalTarget
                 , const ::com::sun::star::uno::Reference<
-                        ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+                        ::com::sun::star::lang::XMultiServiceFactory >& xFactory
+                , ::com::sun::star::uno::Reference<
+                        ::com::sun::star::drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
                         throw (::com::sun::star::uno::RuntimeException);
 
     void setParticle( const rtl::OUString& rCooSysParticle );

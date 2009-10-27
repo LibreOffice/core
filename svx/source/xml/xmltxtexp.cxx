@@ -247,7 +247,11 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
         return uno::Reference< uno::XInterface >(
             SvxCreateNumRule( (SdrModel*)NULL ), uno::UNO_QUERY );
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
+    if (   (0 == aServiceSpecifier.reverseCompareToAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.textfield.DateTime")))
+        || (0 == aServiceSpecifier.reverseCompareToAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime")))
+       )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
     }
@@ -395,7 +399,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
 {
     SvxEditEngineSource aEditSource( pEditEngine );
 
-    static const SfxItemPropertyMap SvxXMLTextExportComponentPropertyMap[] =
+    static const SfxItemPropertyMapEntry SvxXMLTextExportComponentPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -406,8 +410,9 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
         SVX_UNOEDIT_PARA_PROPERTIES,
         {0,0,0,0,0,0}
     };
+    static SvxItemPropertySet aSvxXMLTextExportComponentPropertySet( SvxXMLTextExportComponentPropertyMap );
 
-    SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, SvxXMLTextExportComponentPropertyMap, mxText );
+    SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextExportComponentPropertySet, mxText );
     pUnoText->SetSelection( rSel );
     mxText = pUnoText;
 

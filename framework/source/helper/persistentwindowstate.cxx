@@ -240,12 +240,11 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 
     try
     {
-        css::uno::Any aWindowState = ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+        ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
                                                                                       sPackage,
                                                                                       sRelPath,
                                                                                       sKey,
-                                                                                      ::comphelper::ConfigurationHelper::E_READONLY);
-        aWindowState >>= sWindowState;
+                                                                                      ::comphelper::ConfigurationHelper::E_READONLY) >>= sWindowState;
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }

@@ -89,8 +89,6 @@ enum ScChangeActionClipMode
 };
 
 class SvStream;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 
 // --- ScChangeActionLinkEntry ---------------------------------------------
 
@@ -278,27 +276,7 @@ protected:
                                                 const ScBigRange&,
                                                 const ULONG nAction);
 
-                                ScChangeAction( SvStream&,
-                                    ScMultipleReadHeader&, ScChangeTrack* );
     virtual                     ~ScChangeAction();
-
-    static  void                StoreCell( ScBaseCell*, SvStream&,
-                                    ScMultipleWriteHeader& );
-    static ScBaseCell*          LoadCell( SvStream&, ScMultipleReadHeader&,
-                                    ScDocument*, USHORT nVer );
-
-    static  BOOL                StoreLinkChain( ScChangeActionLinkEntry*,
-                                    SvStream& );
-    static  BOOL                LoadLinkChain( ScChangeAction*,
-                                    ScChangeActionLinkEntry**,
-                                    SvStream&, ScChangeTrack*,
-                                    BOOL bLinkDeleted );
-
-    static  BOOL                StoreCellList( ScChangeActionCellListEntry*,
-                                    SvStream& );
-    static  BOOL                LoadCellList( ScChangeAction* pOfAction,
-                                    ScChangeActionCellListEntry*&, SvStream&,
-                                    ScChangeTrack* );
 
             String              GetRefString( const ScBigRange&,
                                     ScDocument*, BOOL bFlag3D = FALSE ) const;
@@ -366,10 +344,6 @@ protected:
 
                                 // used in Reject() instead of IsRejectable()
             BOOL                IsInternalRejectable() const;
-
-    virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
-    virtual BOOL                StoreLinks( SvStream& ) const;
-    virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
                                 // Derived classes that hold a pointer to the
                                 // ChangeTrack must return that. Otherwise NULL.
@@ -491,16 +465,12 @@ class ScChangeActionIns : public ScChangeAction
     friend class ScChangeTrack;
 
                                 ScChangeActionIns( const ScRange& rRange );
-                                ScChangeActionIns( SvStream&,
-                                    ScMultipleReadHeader&, ScChangeTrack* );
     virtual                     ~ScChangeActionIns();
 
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
 
     virtual BOOL                Reject( ScDocument* );
-
-    virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
@@ -586,9 +556,6 @@ class ScChangeActionDel : public ScChangeAction
 
                                 ScChangeActionDel( const ScRange& rRange,
                                     SCsCOL nDx, SCsROW nDy, ScChangeTrack* );
-                                ScChangeActionDel( SvStream&,
-                                    ScMultipleReadHeader&, ScDocument*,
-                                    USHORT nVer, ScChangeTrack* );
     virtual                     ~ScChangeActionDel();
 
             ScChangeActionIns*  GetCutOffInsert() { return pCutOff; }
@@ -606,9 +573,6 @@ class ScChangeActionDel : public ScChangeAction
     virtual BOOL                Reject( ScDocument* );
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
-
-    virtual BOOL                StoreLinks( SvStream& ) const;
-    virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
 public:
                                 ScChangeActionDel(const ULONG nActionNumber,
@@ -687,8 +651,6 @@ class ScChangeActionMove : public ScChangeAction
                                         nStartLastCut(0),
                                         nEndLastCut(0)
                                     {}
-                                ScChangeActionMove( SvStream&,
-                                    ScMultipleReadHeader&, ScChangeTrack* );
     virtual                     ~ScChangeActionMove();
 
     virtual void                AddContent( ScChangeActionContent* );
@@ -708,10 +670,6 @@ class ScChangeActionMove : public ScChangeAction
     virtual BOOL                Reject( ScDocument* );
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return pTrack; }
-
-    virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
-    virtual BOOL                StoreLinks( SvStream& ) const;
-    virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
 protected:
     using ScChangeAction::GetRefString;
@@ -764,10 +722,6 @@ class ScChangeActionContent : public ScChangeAction
         ScChangeActionContent*  pPrevContent;
         ScChangeActionContent*  pNextInSlot;    // in gleichem Slot
         ScChangeActionContent** ppPrevInSlot;
-
-                                ScChangeActionContent( SvStream&,
-                                    ScMultipleReadHeader&, ScDocument*,
-                                    USHORT nVer, ScChangeTrack* );
 
             void                InsertInSlot( ScChangeActionContent** pp )
                                     {
@@ -848,10 +802,6 @@ class ScChangeActionContent : public ScChangeAction
 
             void                PutValueToDoc( ScBaseCell*, const String&,
                                     ScDocument*, SCsCOL nDx, SCsROW nDy ) const;
-
-    virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
-    virtual BOOL                StoreLinks( SvStream& ) const;
-    virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
 protected:
     using ScChangeAction::GetRefString;
@@ -983,8 +933,6 @@ class ScChangeActionReject : public ScChangeAction
                                         SetRejectAction( nReject );
                                         SetState( SC_CAS_ACCEPTED );
                                     }
-                                ScChangeActionReject( SvStream&,
-                                    ScMultipleReadHeader&, ScChangeTrack* );
 
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
@@ -992,8 +940,6 @@ class ScChangeActionReject : public ScChangeAction
     virtual BOOL                Reject( ScDocument* ) { return FALSE; }
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
-
-    virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
 
 public:
                                 ScChangeActionReject(const ULONG nActionNumber,
@@ -1282,11 +1228,6 @@ public:
                                 // alter Wert aus pOldCell, Format aus Doc
             void                AppendContent( const ScAddress& rPos,
                                     const ScBaseCell* pOldCell );
-                                // nachdem neuer Wert im Dokument gesetzt wurde,
-                                // alter Wert aus pOldCell, Format aus RefDoc
-            void                AppendContent( const ScAddress& rPos,
-                                    const ScBaseCell* pOldCell,
-                                    ScDocument* pRefDoc );
                                 // nachdem neue Werte im Dokument gesetzt wurden,
                                 // alte Werte aus RefDoc/UndoDoc.
                                 // Alle Contents, wo im RefDoc eine Zelle steht.
@@ -1311,9 +1252,6 @@ public:
                                 // nicht anders geht (setzen nur String fuer
                                 // NewValue bzw. Formelerzeugung)
 
-                                // bevor neuer Wert im Dokument gesetzt wird
-            void                AppendContent( const ScAddress& rPos,
-                                    const String& rNewValue );
                                 // bevor neuer Wert im Dokument gesetzt wird
             void                AppendContent( const ScAddress& rPos,
                                     const String& rNewValue,

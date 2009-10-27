@@ -63,7 +63,7 @@ void CustomShapeProperties::apply( const CustomShapePropertiesPtr& /* rSourceCus
     // not sure if this needs to be implemented
 }
 
-void CustomShapeProperties::pushToPropSet( const ::oox::core::XmlFilterBase& /* rFilterBase */,
+void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
     const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape ) const
 {
     if ( maShapePresetType.getLength() )

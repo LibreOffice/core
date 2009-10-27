@@ -314,6 +314,7 @@ namespace dbaui
         sal_Int16                       m_nOperation;
         Wizard_Button_Style             m_ePressed;
         sal_Bool                        m_bCreatePrimaryKeyColumn;
+        sal_Bool                        m_bUseHeaderLine;
 
     private:
         DECL_LINK( ImplPrevHdl  , PushButton* );
@@ -373,6 +374,8 @@ namespace dbaui
         // when not the value is COLUMN_POSITION_NOT_FOUND == (sal_uInt32)-1
         ODatabaseExport::TPositions GetColumnPositions()    const { return m_vColumnPos; }
         ::std::vector<sal_Int32>    GetColumnTypes()        const { return m_vColumnTypes; }
+        sal_Bool                    UseHeaderLine()         const { return m_bUseHeaderLine; }
+        void                        setUseHeaderLine(sal_Bool _bUseHeaderLine) { m_bUseHeaderLine = _bUseHeaderLine; }
 
         void insertColumn(sal_Int32 _nPos,OFieldDescription* _pField);
 

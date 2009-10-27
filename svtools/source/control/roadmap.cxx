@@ -201,6 +201,17 @@ namespace svt
         m_pImpl->InCompleteHyperLabel = NULL;
         m_pImpl->setCurItemID(-1 );
         m_pImpl->setComplete( sal_True );
+
+        // Roadmap control should be reachable as one unit with a Tab key
+        // the next Tab key should spring out of the control.
+        // To reach it the control itself should get focus and set it
+        // on entries. The entries themself should not be reachable with
+        // the Tab key directly. So each entry should have WB_NOTABSTOP.
+        //
+        // In other words the creator should create the control with the following
+        // flags:
+        // SetStyle( ( GetStyle() | WB_TABSTOP ) & ~WB_DIALOGCONTROL );
+
 // TODO: if somebody sets a new font from outside (OutputDevice::SetFont), we would have to react
 // on this with calculating a new bold font.
 // Unfortunately, the OutputDevice does not offer a notify mechanism for a changed font.
@@ -725,10 +736,8 @@ namespace svt
     //---------------------------------------------------------------------
       IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, _CurHyperLabel)
     {
-       return SelectRoadmapItemByID( _CurHyperLabel->GetID() );
+        return SelectRoadmapItemByID( _CurHyperLabel->GetID() );
     }
-
-
 
     void ORoadmap::DataChanged( const DataChangedEvent& rDCEvt )
     {
@@ -753,7 +762,7 @@ namespace svt
     ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, const ResId& )
     {
         mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_WORDBREAK);
-        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+        mpDescHyperLabel = new HyperLabel(_pParent, WB_NOTABSTOP | WB_WORDBREAK);
     }
 
 
@@ -761,7 +770,7 @@ namespace svt
     {
         mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_WORDBREAK);
         mpIDLabel->SetTextColor( mpIDLabel->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
-        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
+        mpDescHyperLabel = new HyperLabel(_pParent, WB_NOTABSTOP | WB_WORDBREAK);
     }
 
     //---------------------------------------------------------------------

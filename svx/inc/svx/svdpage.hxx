@@ -132,9 +132,7 @@ friend class SdrEditView;
     FASTBOOL    bRectsDirty;
 protected:
     virtual void RecalcRects();
-//#if 0 // _SOLAR__PRIVATE
-    FASTBOOL ImpGetFillColor(SdrObject* pObj, Color& rCol) const;
-//#endif // __PRIVATE
+
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
     void impChildInserted(SdrObject& rChild) const;
@@ -188,12 +186,6 @@ public:
     const Rectangle& GetAllObjSnapRect() const;
     const Rectangle& GetAllObjBoundRect() const;
 
-    // HitTest auf alle Objekte der Liste
-    SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer, FASTBOOL bBackward=FALSE) const;
-    SdrObject* CheckHit(const Point& rPnt, USHORT nTol, FASTBOOL bBackward=FALSE) const { return CheckHit(rPnt,nTol,NULL,bBackward); }
-    FASTBOOL IsHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const { return CheckHit(rPnt,nTol,pVisiLayer)!=NULL; }
-    FASTBOOL IsHit(const Point& rPnt, USHORT nTol) const                              { return CheckHit(rPnt,nTol)!=NULL; } // #i24906#
-
     // Alle Textobjekte neu formatieren, z.B. bei Druckerwechsel
     void NbcReformatAllTextObjects();
     void ReformatAllTextObjects();
@@ -203,14 +195,6 @@ public:
 
     // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
     void BurnInStyleSheetAttributes();
-
-    // Bestimmung der FuellFarbe an einer bestimmten Position.
-    // FALSE=Kein Objekt mit FuellFarbe an dieser Position gefunden.
-    // rVisLayers gibt die zu durchsuchenden Layer an.
-    // bLayerSorted: TRUE=Es wird in der Reihenfolge der Layer gesucht (ni)
-    // rCol: Hier wird die gefundene Farbe zurueckgegeben
-    FASTBOOL GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-        /* FASTBOOL bLayerSorted, */ Color& rCol) const;
 
     ULONG      GetObjCount() const;
     SdrObject* GetObj(ULONG nNum) const;
@@ -444,10 +428,6 @@ friend class ChXChartDocument;
     // this is a weak reference to a possible living api wrapper for this page
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
 
-    // #108867# used by GetFillColor
-    FASTBOOL ImplGetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-        /* FASTBOOL bLayerSorted, */ Color& rCol, FASTBOOL bSkipBackgroundShape) const;
-
 protected:
     SdrLayerAdmin*  pLayerAdmin;
     SdrObject*      pBackgroundObj;
@@ -529,15 +509,6 @@ public:
     // Aenderungen an den Layern setzen nicht das Modified-Flag !
     const         SdrLayerAdmin& GetLayerAdmin() const                  { return *pLayerAdmin; }
                   SdrLayerAdmin& GetLayerAdmin()                        { return *pLayerAdmin; }
-
-    // Bestimmung der FuellFarbe an einer bestimmten Position.
-    // FALSE=Kein Objekt mit FuellFarbe an dieser Position gefunden.
-    // rVisLayers gibt die zu durchsuchenden Layer an.
-    // bLayerSorted: TRUE=Es wird in der Reihenfolge der Layer gesucht (ni)
-    // rCol: Hier wird die gefundene Farbe zurueckgegeben
-    // Auch MasterPages werden durchsucht.
-    FASTBOOL GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
-        /*FASTBOOL bLayerSorted,*/ Color& rCol) const;
 
     // GetBitmap und GetMetafile sind noch nicht implementiert.
     // Bitmap in Bildschirmaufloesung und -farbtiefe aus den Objekten der

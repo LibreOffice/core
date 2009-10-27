@@ -330,17 +330,12 @@ public:
     USHORT                      GetPaperBin() const;
     BOOL                        SetPaper( Paper ePaper );
     BOOL                        SetPaperSizeUser( const Size& rSize );
-    Paper                       GetPaper() const;
+    Paper                   GetPaper() const;
 
     // returns number of available paper formats
     int                         GetPaperInfoCount() const;
     // returns info about paper format nPaper
-    const vcl::PaperInfo&       GetPaperInfo( int nPaper ) const;
-    // sets current paper to format contained in rInfo
-    BOOL                        SetPaperFromInfo( const vcl::PaperInfo& rInfo );
-    // gets info about paper fromat best matching current paper
-    const vcl::PaperInfo&       GetCurrentPaperInfo() const;
-
+    const PaperInfo&            GetPaperInfo( int nPaper ) const;
     USHORT                      GetPaperBinCount() const;
     XubString                   GetPaperBinName( USHORT nPaperBin ) const;
 

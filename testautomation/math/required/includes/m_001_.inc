@@ -590,7 +590,7 @@ testcase tmExportAsPDF
    Sleep 5
    ExportAsPDF.click
       ' the 'Export as PDF' dialog has to come up, with the only 'File type' 'PDF - Portable Document Format (.pdf)'
-      kontext "ExportAsPDFDlg"
+      kontext "ExportierenDlg"
       sTemp = Dateityp.GetSelText
       if (sTemp <> sPDF) then
          Warnlog "filter for PDF export is missing :-( should: '" + sPDF + "'; is: '" +  + "'"
@@ -608,7 +608,7 @@ testcase tmExportAsPDF
          OrdnerName.SetText "abc"
          '///+ - - cancel dialog $Foldername ///'
          NeuerOrdner.cancel
-      kontext "ExportAsPDFDlg"
+      kontext "ExportierenDlg"
       '///+ - click on the button 'Default Directory' ///'
       Standard.Click
       '///+ - cancel dialog ///'

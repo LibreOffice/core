@@ -227,6 +227,7 @@
 #include <com/sun/star/system/XProxySettings.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
+#include <com/sun/star/task/DocumentMSPasswordRequest.hpp>
 #include <com/sun/star/task/MasterPasswordRequest.hpp>
 #include <com/sun/star/task/NoMasterException.hpp>
 #include <com/sun/star/task/PasswordRequestMode.hpp>

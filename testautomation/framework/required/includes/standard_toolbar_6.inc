@@ -33,146 +33,112 @@
 '*
 '* owner : joerg.skottke@sun.com
 '*
-'* short description : global update test (Standardbar)
+'* short description : Open applications from New button on standardbar
 '*
 '\***************************************************************************
 
 testcase tStandardBar_6
 
-    '///<h1>Update test: &quot;New-Button&quot; on Standard Bar for all applications</h1>
-    '///<ul>
+    printlog( "Open applications from New button on standardbar" )
 
-    '///+<li>Disable the Impress Autopilot</li>
+
     hUseImpressAutopilot( false )
     
     gApplication = "WRITER"
     
-    '///+<li>Check the 'New'-menu-button in Standardbar in each application</li>
     printlog "Check the 'New'-menu-button in Standardbar in each application"
     printlog "- click on menu-button -> open a new document as same document-type"
     
-    '///+<li>Open a new writer doc</li>
     printlog "   - Writer"
     gApplication = "WRITER"
     hCreateDocument()
-    '///+click on 'new'
 
     kontext "standardbar"
     Neu.Click()
     
-    '///+<li>Check if the new document is a writer-doc</li>
     kontext "documentwriter"
     DocumentWriter.TypeKeys( "Hallo" )
     
-    '///+<li>Close both new docs</li>
     hDestroyDocument()
     hDestroyDocument()
     
-    '///+<li>Open a new calc doc</li>
     printlog "   - Calc"
     gApplication = "CALC"
     hCreateDocument()
     
-    '///+<li>Click on 'new'</li>
     kontext "standardbar"
     Neu.Click()
     
-    '///+<li>Check if the new document is a calc-doc</li>
     kontext "documentcalc"
     DocumentCalc.TypeKeys( "Hallo" )
     
-    '///+<li>Close both new docs</li>
     hDestroyDocument()
     hDestroyDocument()
     
-    '///+<li>Open a new draw doc</li>
     printlog "   - Draw"
     gApplication = "DRAW"
     hCreateDocument()
 
     kontext "standardbar"
-    '///+<li>Click on 'new'</li>
     Neu.Click()
     
-    '///+<li>Check if the new document is a draw-doc</li>
     gMouseClick ( 50, 50 )
     
-    '///+<li>Close both new docs</li>
     hDestroyDocument()
     hDestroyDocument()
     
-    '///+<li>Open a new impress doc</li>
     printlog "   - Impress"
     gApplication = "IMPRESS"
     hCreateDocument()
 
     kontext "standardbar"
-    '///+<li>Click on 'new'</li>
     Neu.Click()
     
-    '///+<li>Check if the new document is a impress-doc</li>
     gMouseClick ( 50, 50 )
     
-    '///+<li>Close both new docs</li>
     hDestroyDocument()
     hDestroyDocument()
     
-    '///+<li>Open a new HTML doc</li>
     printlog "   - HTML-document"
     gApplication = "HTML"
     hCreateDocument()
-    '///+click on 'new'
 
     kontext "standardbar"
     Neu.Click()
-    '///+<li>Check if the new document is a HTML-doc</li>
 
     kontext "documentwriter"
     DocumentWriter.TypeKeys( "Hallo" )
     
-    '///+<li>Close both new docs</li>
     hDestroyDocument()
     hDestroyDocument()
     
-    '///+<li>Open a new master document</li>
     printlog "   - Master-document"
     gApplication = "MASTERDOCUMENT"
     hCreateDocument()
-    '///+<li>Click on &quot;new&quot;</li>
 
     kontext "standardbar"
     Neu.Click()
-    '///+<li>Check if the new document is a master doc</li>
 
     kontext "documentwriter"
     DocumentWriter.TypeKeys( "Hallo" )
     
-    '///+<li>Close the navigator</li>
-    '///+<li>Close the document</li>
     hCloseNavigator()
     hDestroyDocument()
     
-    '///+<li>Close the navigator</li>
-    '///+<li>Close the second document</li>
     hCloseNavigator()
     hDestroyDocument()
     
-    '///+<li>Open a new math document</li>
     printlog "   - Math"
     gApplication = "MATH"
     hCreateDocument()
-    '///+<li>Click on 'new'</li>
 
     kontext "standardbar"
     Neu.Click()
     
-    '///+<li>Check if the new document is a math document</li>
     SchreibenInMathdok "a over b"
     
-    '///+<li>Close both new documents</li>
     hDestroyDocument()
     hDestroyDocument()
-    '///</ul>
     
 endcase
 

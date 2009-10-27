@@ -160,8 +160,8 @@ namespace dbaccess
         sal_Int32 getPredicateType(::connectivity::OSQLParseNode * _pPredicate) const;
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
-        // clear only the parameter columns
-        void clearParametersCollection();
+        // clears the columns collection given by EColumnType
+        void clearColumns( const EColumnType _eType );
 
         /** retrieves a particular part of a statement
             @param _rIterator

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*                                                                **
-'* owner : fredrik.haegg@sun.com             **
+'* owner : helge.delfs@sun.com             **
 '*                                                                **
 '* short description :                                  **
 '*                                                                **
@@ -84,7 +84,7 @@ testcase tEditUndoRedo
     PrintLog "- Edit/Undo - Redo"
 
     PrintLog "Open new document"
-    Call hNewDocument (True)
+    hNewDocument()
 
     PrintLog "Insert table"
     Call hTabelleEinfuegen
@@ -200,8 +200,9 @@ testcase tEditPasteSpecial
         try
             PrintLog "Edit / Paste / Special"
             hUseAsyncSlot( "EditPasteSpecialWriter" )
+            
             Kontext "InhaltEinfuegen"
-            if InhaltEinfuegen.Exists then
+            if ( InhaltEinfuegen.Exists( 2 ) ) then
                 try
                     Auswahl.Select 1
                 catch
@@ -245,7 +246,7 @@ testcase tEditPasteSpecial
     
     PrintLog "Edit / Paste / Special"
     Kontext "InhaltEinfuegen"
-    if InhaltEinfuegen.Exists then
+    if ( InhaltEinfuegen.Exists( 2 ) ) then
         DialogTest ( InhaltEinfuegen )
         Auswahl.Select 1
         InhaltEinfuegen.OK
@@ -255,6 +256,7 @@ testcase tEditPasteSpecial
     else
         Warnlog "Dialog 'Paste Special' is not up!"
     end if
+    
     Call hCloseDocument
     PrintLog "Close active document"
     
@@ -662,7 +664,6 @@ endcase
 '---------------------------------------------------
 
 testcase tEditAutotext
-    Dim j as integer
     Dim k as integer
     Dim i as integer
     Dim CurrentEntryNr as integer
@@ -677,16 +678,14 @@ testcase tEditAutotext
     DialogTest ( AutoText )
 
     Kontext "AutoText"
-
-    PrintLog "Click Categories"
-    Bereiche.Click
-    Sleep 1
-
     Printlog "If it exists: Delete DummyAutotext."
     if wDeleteAutotext("DummyAutotext") = true then
         qaerrorlog "DummyAutotext from previous testrun found, now deleted."
     end if
 
+    PrintLog "Click Categories"
+    Bereiche.Click
+    Sleep 1    
     Kontext "BereicheBearbeitenAutoText"
     if BereicheBearbeitenAutoText.Exists then
         DialogTest ( BereicheBearbeitenAutoText )
@@ -1024,6 +1023,10 @@ testcase tEditFields
             Auswahl.Select 1
         case 49 : Feldtyp.Select 1
             Auswahl.Select 1
+        case 51 : Feldtyp.Select 5 
+            Auswahl.Select 1
+        case 52 : Feldtyp.Select 5
+            Auswahl.Select 1			
         case 55 : Feldtyp.Select 7
             Auswahl.Select 1
         case 81 : Feldtyp.Select 4
@@ -1069,6 +1072,10 @@ testcase tEditFields
             Auswahl.Select 1
         case 49 : Feldtyp.Select 1
             Auswahl.Select 1
+        case 51 : Feldtyp.Select 6
+            Auswahl.Select 1
+		case 52 : Feldtyp.Select 6
+            Auswahl.Select 1			
         case 55 : Feldtyp.Select 9
             Auswahl.Select 1
         case 81 : Feldtyp.Select 5
@@ -1412,6 +1419,10 @@ testcase tHtmlDocEditFields
         Auswahl.Select 1
     case 49 : Feldtyp.Select 1
         Auswahl.Select 1
+    case 51 : Feldtyp.Select 5
+        Auswahl.Select 1
+    case 52 : Feldtyp.Select 5
+        Auswahl.Select 1		
     case 55 : Feldtyp.Select 7
         Auswahl.Select 1
     case 81 : Feldtyp.Select 4

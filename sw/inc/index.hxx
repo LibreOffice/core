@@ -132,8 +132,8 @@ class SwIndexReg
     static SwIndexReg* pEmptyIndexArray;
 
 protected:
-    virtual void Update( const SwIndex & aPos, xub_StrLen nLen,
-                         BOOL bNegativ = FALSE, BOOL bDelete = FALSE );
+    virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
+                 const bool bNegative = false, const bool bDelete = false );
 
     void ChkArr();
 

@@ -39,6 +39,7 @@
 namespace com { namespace sun { namespace star {
     namespace text {
         class XTextRange;
+        class XTextContent;
     }
     namespace xml { namespace sax {
         class XAttributeList;
@@ -75,10 +76,16 @@ public:
 class XMLTextMarkImportContext : public SvXMLImportContext
 {
 
-    XMLTextImportHelper& rHelper;
-    ::rtl::OUString m_XmlId;
-    ::rtl::OUString sBookmarkName;
-    ::rtl::OUString sFieldName;
+    XMLTextImportHelper & m_rHelper;
+    ::rtl::OUString m_sBookmarkName;
+    ::rtl::OUString m_sFieldName;
+    ::rtl::OUString m_sXmlId;
+    // RDFa
+    bool m_bHaveAbout;
+    ::rtl::OUString m_sAbout;
+    ::rtl::OUString m_sProperty;
+    ::rtl::OUString m_sContent;
+    ::rtl::OUString m_sDatatype;
 
 public:
 
@@ -89,7 +96,6 @@ public:
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
-
 
 protected:
 
@@ -103,7 +109,8 @@ protected:
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 public:
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > CreateAndInsertMark(
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::text::XTextContent > CreateAndInsertMark(
         SvXMLImport& rImport,
         const ::rtl::OUString& sServiceName,
         const ::rtl::OUString& sMarkName,
@@ -111,13 +118,10 @@ public:
             ::com::sun::star::text::XTextRange> & rRange,
         const ::rtl::OUString& i_rXmlId = ::rtl::OUString());
 
-    static sal_Bool FindName(
+    sal_Bool FindName(
         SvXMLImport& rImport,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
-        ::rtl::OUString& sName,
-        ::rtl::OUString& o_rXmlId,
-        ::rtl::OUString *pFieldName=NULL);
+        ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 };
 
 #endif

@@ -33,10 +33,12 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmluconv.hxx>
 #include "xmlEnums.hxx"
 #include "xmlComponent.hxx"
 #include "xmlReportElement.hxx"
 #include "xmlControlProperty.hxx"
+#include "xmlHelper.hxx"
 #include <tools/debug.hxx>
 #include <svtools/pathoptions.hxx>
 
@@ -90,7 +92,19 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     _xComponent->setPreserveIRI(s_sTRUE == sValue);
                     break;
                 case XML_TOK_SCALE:
-                    _xComponent->setScaleMode(s_sTRUE == sValue ? awt::ImageScaleMode::Anisotropic : awt::ImageScaleMode::None );
+                    {
+                        sal_uInt16 nRet = awt::ImageScaleMode::None;
+                        if ( s_sTRUE == sValue )
+                        {
+                            nRet = awt::ImageScaleMode::Anisotropic;
+                        }
+                        else
+                        {
+                                   const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetImageScaleOptions();
+                                   SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
+                        }
+                        _xComponent->setScaleMode( nRet );
+                    }
                     break;
                 case XML_TOK_DATA_FORMULA:
                     _xComponent->setDataField(ORptFilter::convertFormula(sValue));

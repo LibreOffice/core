@@ -84,6 +84,10 @@ Menu RID_SBA_GRID_ROWCTXMENU
             HelpID = HID_BROWSER_ROWHEIGHT ;
             Text [ en-US ] = "Row Height..." ;
         };
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
     };
 };
 

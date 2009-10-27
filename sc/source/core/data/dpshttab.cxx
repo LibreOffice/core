@@ -140,12 +140,6 @@ long ScSheetDPData::GetColumnCount()
     return pImpl->aCacheTable.getColSize();
 }
 
-BOOL lcl_HasQuery( const ScQueryParam& rParam )
-{
-    return rParam.GetEntryCount() > 0 &&
-            rParam.GetEntry(0).bDoQuery;
-}
-
 const TypedScStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
 {
     DBG_ASSERT(nColumn>=0 && nColumn < pImpl->aCacheTable.getColSize(), "ScSheetDPData: wrong column");

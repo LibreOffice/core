@@ -889,9 +889,6 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
         break;
         case SID_FM_SHOWCOLS_MORE:
         {
-            //CHINA001 FmShowColsDialog dlg(NULL);
-            //CHINA001 dlg.SetColumns(xCols);
-            //CHINA001 dlg.Execute();
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
@@ -960,24 +957,14 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             }
             else
             {
-                // Standardlabel setzen
-                ::rtl::OUString sLabelBase = String( SVX_RES( RID_STR_COLUMN ) );
-                // disambiguate the name
-                Reference< XNameAccess > xColNames( xCols, UNO_QUERY );
-                ::rtl::OUString sLabel;
-                for ( sal_Int32 i=1; i<65535; ++i )
-                {
-                    sLabel = sLabelBase;
-                    sLabel += ::rtl::OUString::valueOf( (sal_Int32)i );
-                    if ( !xColNames->hasByName( sLabel ) )
-                        break;
-                }
-                // no fallback in case the name is not unique (which is rather improbable) ....
+                FormControlFactory factory( ::comphelper::getProcessServiceFactory() );
+
+                ::rtl::OUString sLabel = factory.getDefaultUniqueName_ByComponentType(
+                    Reference< XNameAccess >( xCols, UNO_QUERY_THROW ), xNewCol );
                 xNewCol->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel ) );
                 xNewCol->setPropertyValue( FM_PROP_NAME, makeAny( sLabel ) );
 
-                FormControlFactory determine( ::comphelper::getProcessServiceFactory() );
-                determine.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xNewCol );
+                factory.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xNewCol );
 
                 xCols->insertByIndex( nPos, makeAny( xNewCol ) );
             }

@@ -37,16 +37,12 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <pview.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
 #include <swprtopt.hxx>
@@ -84,23 +80,23 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/document/RedlineDisplayType.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <svx/linkmgr.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unolingu.hxx>
 #include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
-#ifndef _MODOPT_HXX //
 #include <modcfg.hxx>
-#endif
 #include <ndtxt.hxx>
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
@@ -246,15 +242,23 @@ sal_Int64 SAL_CALL SwXTextDocument::getSomething( const Sequence< sal_Int8 >& rI
 Any SAL_CALL SwXTextDocument::queryInterface( const uno::Type& rType ) throw(RuntimeException)
 {
     Any aRet = SwXTextDocumentBaseClass::queryInterface(rType);
-    if(aRet.getValueType() == getVoidCppuType())
+    if ( !aRet.hasValue() )
         aRet = SfxBaseModel::queryInterface(rType);
-    if(aRet.getValueType() == getVoidCppuType() &&
+    if ( !aRet.hasValue() &&
         rType == ::getCppuType((Reference<lang::XMultiServiceFactory>*)0))
     {
         Reference<lang::XMultiServiceFactory> xTmp = this;
         aRet <<= xTmp;
     }
-    if(aRet.getValueType() == getVoidCppuType())
+
+    if ( !aRet.hasValue()
+        && rType != ::getCppuType((Reference< com::sun::star::document::XDocumentEventBroadcaster>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::frame::XController>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::frame::XFrame>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::script::XInvocation>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::reflection::XIdlClassProvider>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::beans::XFastPropertySet>*)0)
+        && rType != ::getCppuType((Reference< com::sun::star::awt::XWindow>*)0))
     {
         GetNumberFormatter();
         if(xNumFmtAgg.is())
@@ -329,7 +333,7 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
 
     aRefreshCont ( static_cast < XTextDocument* > ( this ) ),
 
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_DOCUMENT)),
+    pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_DOCUMENT)),
 
     pDocShell(pShell),
 
@@ -1942,7 +1946,7 @@ Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( Runt
   -----------------------------------------------------------------------*/
 Reference< XPropertySetInfo >  SwXTextDocument::getPropertySetInfo(void) throw( RuntimeException )
 {
-    static Reference< XPropertySetInfo >  xRet = aPropSet.getPropertySetInfo();
+    static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
 }
 /*-- 10.05.99 13:58:58---------------------------------------------------
@@ -1956,14 +1960,13 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
 
-    if(!pMap)
+    if(!pEntry)
         throw UnknownPropertyException();
-    if(pMap->nFlags & PropertyAttribute::READONLY)
+    if(pEntry->nFlags & PropertyAttribute::READONLY)
         throw PropertyVetoException();
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case  WID_DOC_CHAR_COUNT     :
         case  WID_DOC_PARA_COUNT     :
@@ -1981,14 +1984,14 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         {
             sal_Bool bSet = *(sal_Bool*)aValue.getValue();
             sal_uInt16 eMode = pDocShell->GetDoc()->GetRedlineMode();
-            if(WID_DOC_CHANGES_SHOW == pMap->nWID)
+            if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
                 eMode &= ~(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE);
                 eMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
                 if( bSet )
                     eMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
             }
-            else if(WID_DOC_CHANGES_RECORD == pMap->nWID)
+            else if(WID_DOC_CHANGES_RECORD == pEntry->nWID)
             {
                 eMode = bSet ? eMode|nsRedlineMode_t::REDLINE_ON : eMode&~nsRedlineMode_t::REDLINE_ON;
             }
@@ -2118,9 +2121,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
 
         default:
         {
-            const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
+            const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pEntry->nWID);
             SfxPoolItem* pNewItem = rItem.Clone();
-            pNewItem->PutValue(aValue, pMap->nMemberId);
+            pNewItem->PutValue(aValue, pEntry->nMemberId);
             pDocShell->GetDoc()->SetDefault(*pNewItem);
             delete pNewItem;
         }
@@ -2135,13 +2138,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
 
-    if(!pMap)
+    if(!pEntry)
         throw UnknownPropertyException();
     Any aAny;
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case  WID_DOC_CHAR_COUNT     :
         case  WID_DOC_PARA_COUNT     :
@@ -2151,7 +2153,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             if(aStat.bModified)
                 pDocShell->GetDoc()->UpdateDocStat( aStat );
             sal_Int32 nValue;
-            switch(pMap->nWID)
+            switch(pEntry->nWID)
             {
                 case  WID_DOC_CHAR_COUNT     :nValue = aStat.nChar;break;
                 case  WID_DOC_PARA_COUNT     :nValue = aStat.nPara;break;
@@ -2170,12 +2172,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             sal_uInt16 eMode = pDocShell->GetDoc()->GetRedlineMode();
             sal_Bool bSet = sal_False;
-            if(WID_DOC_CHANGES_SHOW == pMap->nWID)
+            if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
                 sal_uInt16 nMask = nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE;
                 bSet = (eMode & nMask) == nMask;
             }
-            else if(WID_DOC_CHANGES_RECORD == pMap->nWID)
+            else if(WID_DOC_CHANGES_RECORD == pEntry->nWID)
             {
                 bSet = (eMode& nsRedlineMode_t::REDLINE_ON)  != 0;
             }
@@ -2273,8 +2275,8 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
 
         default:
         {
-            const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
-            rItem.QueryValue(aAny, pMap->nMemberId);
+            const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pEntry->nWID);
+            rItem.QueryValue(aAny, pEntry->nMemberId);
         }
     }
     return aAny;
@@ -2397,13 +2399,12 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
     PropertyState eRet = PropertyState_DIRECT_VALUE;
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
 
-    if(!pMap)
+    if(!pEntry)
         throw UnknownPropertyException();
     Any aAny;
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case 0:default:break;
     }
@@ -2428,11 +2429,10 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
-    if(!pMap)
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    if(!pEntry)
         throw UnknownPropertyException();
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case 0:default:break;
     }
@@ -2443,12 +2443,11 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName);
-    if(!pMap)
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( rPropertyName);
+    if(!pEntry)
         throw UnknownPropertyException();
     Any aAny;
-    switch(pMap->nWID)
+    switch(pEntry->nWID)
     {
         case 0:default:break;
     }
@@ -2856,7 +2855,27 @@ uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlat
 {
     return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
 }
+/*-- 07.05.2009 09:21:12---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    //create a new document - hidden - copy the storage and return it
+    SwDoc* pCopyDoc = pDocShell->GetDoc()->CreateCopy();
+    SfxObjectShell* pShell = new SwDocShell( pCopyDoc, SFX_CREATE_MODE_STANDARD );
+    pShell->DoInitNew();
+
+    uno::Reference< embed::XStorage > xSourceStorage = getDocumentStorage();
+    uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
+    //copy this storage
+    uno::Reference< document::XStorageBasedDocument > xStorageDoc( xNewModel, uno::UNO_QUERY );
+    uno::Reference< embed::XStorage > xNewStorage = xStorageDoc->getDocumentStorage();
+    xSourceStorage->copyToStorage( xNewStorage );
+    return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
+}
 /* -----------------------------20.06.00 09:54--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -3253,7 +3272,7 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames(void)
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
             Reference< XNameAccess >  xAccess, const String& rLinkDisplayName, String sSuffix ) :
     xRealAccess(xAccess),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_LINK_TARGET)),
+    pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
     sLinkDisplayName(rLinkDisplayName),
     pxDoc(0)
@@ -3264,7 +3283,7 @@ SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
  --------------------------------------------------*/
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
             const String& rLinkDisplayName, String sSuffix) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_LINK_TARGET)),
+    pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sLinkSuffix(sSuffix),
     sLinkDisplayName(rLinkDisplayName),
     xDoc(&rxDoc),
@@ -3442,7 +3461,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
 Reference< XPropertySetInfo >  SwXLinkNameAccessWrapper::getPropertySetInfo(void)
                                         throw( RuntimeException )
 {
-    static Reference< XPropertySetInfo >  xRet = aPropSet.getPropertySetInfo();
+    static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
 }
 /*-- 26.10.99 09:16:26---------------------------------------------------
@@ -3583,7 +3602,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getSupportedServiceNames(void)
 
  --------------------------------------------------*/
 SwXOutlineTarget::SwXOutlineTarget(const String& rOutlineText) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_LINK_TARGET)),
+    pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
     sOutlineText(rOutlineText)
 {
 }
@@ -3598,7 +3617,7 @@ SwXOutlineTarget::~SwXOutlineTarget()
   -----------------------------------------------------------------------*/
 Reference< XPropertySetInfo >  SwXOutlineTarget::getPropertySetInfo(void) throw( RuntimeException )
 {
-    static Reference< XPropertySetInfo >  xRet = aPropSet.getPropertySetInfo();
+    static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
     return xRet;
 }
 /*-- 26.10.99 15:51:46---------------------------------------------------

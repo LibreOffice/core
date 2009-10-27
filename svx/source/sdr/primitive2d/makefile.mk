@@ -51,6 +51,7 @@ SLOFILES=\
         $(SLO)$/sdrcaptionprimitive2d.obj			\
         $(SLO)$/sdrgrafprimitive2d.obj				\
         $(SLO)$/sdrole2primitive2d.obj				\
+        $(SLO)$/sdrolecontentprimitive2d.obj		\
         $(SLO)$/sdrpathprimitive2d.obj				\
         $(SLO)$/sdrprimitivetools.obj				\
         $(SLO)$/sdrmeasureprimitive2d.obj			\

@@ -527,6 +527,7 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     // #90356#
     bShowUndoDeleteWarning( TRUE ),
     bSlideshowRespectZOrder( TRUE ),
+    bShowComments( TRUE ),
     bPreviewNewEffects( TRUE ),
     bPreviewChangedEffects( FALSE ),
     bPreviewTransitions( TRUE ),
@@ -569,6 +570,7 @@ void SdOptionsMisc::SetDefaults()
     SetPreviewChangedEffects(false);
     SetPreviewTransitions(true);
     SetDisplay(0);
+    SetShowComments(true);
 }
 
 // -----------------------------------------------------------------------------
@@ -601,8 +603,8 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsPreviewNewEffects() == rOpt.IsPreviewNewEffects() &&
             IsPreviewChangedEffects() == rOpt.IsPreviewChangedEffects() &&
             IsPreviewTransitions() == rOpt.IsPreviewTransitions() &&
-            GetDisplay() == rOpt.GetDisplay()
-
+            GetDisplay() == rOpt.GetDisplay() &&
+            IsShowComments() == rOpt.IsShowComments()
         );
 }
 
@@ -630,6 +632,8 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
         "Compatibility/PrinterIndependentLayout",
 
+        "ShowComments",
+
         // just for impress
         "NewDoc/AutoPilot",
         "Start/CurrentPage",
@@ -645,9 +649,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "Display"
     };
 
-    // #90356# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
-    // #97016# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 16 : 12 );
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 24 : 15 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 25 : 16 );
     ppNames = aPropNames;
 }
 
@@ -672,33 +674,35 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[13].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 13 ].getValue() );
     if( pValues[14].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 14 ].getValue() );
 
+    if( pValues[15].hasValue() ) SetShowComments(  *(sal_Bool*) pValues[ 11 ].getValue() );
+
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        if( pValues[15].hasValue() )
-            SetStartWithTemplate( *(sal_Bool*) pValues[ 15 ].getValue() );
         if( pValues[16].hasValue() )
-            SetStartWithActualPage( *(sal_Bool*) pValues[ 16 ].getValue() );
+            SetStartWithTemplate( *(sal_Bool*) pValues[ 16 ].getValue() );
         if( pValues[17].hasValue() )
-            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 17 ].getValue() );
-        // #90356#
+            SetStartWithActualPage( *(sal_Bool*) pValues[ 17 ].getValue() );
         if( pValues[18].hasValue() )
-            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 18 ].getValue() );
-
+            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 18 ].getValue() );
+        // #90356#
         if( pValues[19].hasValue() )
-            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 19 ].getValue());
+            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 19 ].getValue() );
 
         if( pValues[20].hasValue() )
-            SetPreviewNewEffects(*(sal_Bool*) pValues[ 20 ].getValue());
+            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 20 ].getValue());
 
         if( pValues[21].hasValue() )
-            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 21 ].getValue());
+            SetPreviewNewEffects(*(sal_Bool*) pValues[ 21 ].getValue());
 
         if( pValues[22].hasValue() )
-            SetPreviewTransitions(*(sal_Bool*) pValues[ 22 ].getValue());
+            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 22 ].getValue());
 
         if( pValues[23].hasValue() )
-            SetDisplay(*(sal_Int32*) pValues[ 23 ].getValue());
+            SetPreviewTransitions(*(sal_Bool*) pValues[ 23 ].getValue());
+
+        if( pValues[24].hasValue() )
+            SetDisplay(*(sal_Int32*) pValues[ 24 ].getValue());
     }
 
     return TRUE;
@@ -725,22 +729,23 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
     pValues[ 12 ] <<= GetDefaultObjectSizeWidth();
     pValues[ 13 ] <<= GetDefaultObjectSizeHeight();
     pValues[ 14 ] <<= GetPrinterIndependentLayout();
+    pValues[ 15 ] <<= (sal_Bool)IsShowComments();
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        pValues[ 15 ] <<= IsStartWithTemplate();
-        pValues[ 16 ] <<= IsStartWithActualPage();
-        pValues[ 17 ] <<= IsSummationOfParagraphs();
+        pValues[ 16 ] <<= IsStartWithTemplate();
+        pValues[ 17 ] <<= IsStartWithActualPage();
+        pValues[ 18 ] <<= IsSummationOfParagraphs();
         // #90356#
-        pValues[ 18 ] <<= IsShowUndoDeleteWarning();
-        pValues[ 19 ] <<= IsSlideshowRespectZOrder();
+        pValues[ 19 ] <<= IsShowUndoDeleteWarning();
+        pValues[ 20 ] <<= IsSlideshowRespectZOrder();
 
-        pValues[ 20 ] <<= IsPreviewNewEffects();
-        pValues[ 21 ] <<= IsPreviewChangedEffects();
-        pValues[ 22 ] <<= IsPreviewTransitions();
+        pValues[ 21 ] <<= IsPreviewNewEffects();
+        pValues[ 22 ] <<= IsPreviewChangedEffects();
+        pValues[ 23 ] <<= IsPreviewTransitions();
 
-        pValues[ 23 ] <<= GetDisplay();
+        pValues[ 24 ] <<= GetDisplay();
     }
 
     return TRUE;

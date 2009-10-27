@@ -212,9 +212,9 @@ xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
     if( !pHints )
         return STRING_LEN;
     SwTxtAttr* pFound = NULL;
-    for( MSHORT i = 0; i < pHints->Count(); i++)
+    for ( USHORT i = 0; i < pHints->Count(); i++)
     {
-        SwTxtAttr *pHt = pHints->GetHt( i );
+        SwTxtAttr *pHt = pHints->GetTextHint( i );
         if( RES_TXTATR_FLYCNT == pHt->Which() )
         {
             SwFrmFmt* pFrmFmt = pHt->GetFlyCnt().GetFrmFmt();

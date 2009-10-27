@@ -36,6 +36,7 @@ TARGET=configmgr
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 DLLPRE = 
@@ -75,6 +76,7 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ----------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
 

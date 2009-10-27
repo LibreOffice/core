@@ -103,7 +103,7 @@ throw(::com::sun::star::uno::RuntimeException)
 sal_Bool SAL_CALL GraphicNameAccess::hasElements()
 throw( uno::RuntimeException )
 {
-    return ( m_aNameToElementMap.size() > 0 );
+    return ( !m_aNameToElementMap.empty() );
 }
 
 uno::Type SAL_CALL GraphicNameAccess::getElementType()

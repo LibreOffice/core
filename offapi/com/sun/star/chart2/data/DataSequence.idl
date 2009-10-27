@@ -140,14 +140,11 @@ service DataSequence
      */
     [property] DataSequenceRole                   Role;
 
-    /** If <TRUE/>, the values are hidden, and should therefore not be
-        used.  This may result in omitting a complete data series
-        object on rendering.
+    /** If set to false <FALSE/>, values from hidden cells are not returned.
      */
-    [optional, property] boolean                  IsHidden;
+    [optional, property] boolean                  IncludeHiddenCells;
 
-    /** a sequence of indexes that identify data points that should
-        not be rendered, because they are hidden in the underlying
+    /** a sequence of indexes that identify values that are hidden in the underlying
         data provider.
      */
     [optional, property] sequence< long >         HiddenValues;

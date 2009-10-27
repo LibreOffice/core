@@ -80,25 +80,28 @@ public class DefaultNameGenerator
             name = "file";
         }
 
-        String firstFileName = name;
+        StringBuffer firstFileName = new StringBuffer();
+        firstFileName.append(name);
         final String suffix;
         if (mimeType != null)
         {
             suffix = getSuffixForType(mimeType);
-            firstFileName += "." + suffix;
+            firstFileName.append('.');
+            firstFileName.append(suffix);
         }
         else
         {
             suffix = null;
         }
+        String newName = firstFileName.toString();
         boolean exists;
         if (isStream)
         {
-            exists = outputRepository.exists(firstFileName);
+            exists = outputRepository.exists(newName);
         }
         else
         {
-            exists = outputRepository.existsStorage(firstFileName);
+            exists = outputRepository.existsStorage(newName);
         }
         if (exists)
         {
@@ -109,23 +112,27 @@ public class DefaultNameGenerator
                 {
                     throw new IOException();
                 }
-                firstFileName = name + counter;
+                firstFileName.delete(0,firstFileName.length() );
+                firstFileName.append(name);
+                firstFileName.append(counter);
                 if (suffix != null)
                 {
-                    firstFileName += "." + suffix;
+                    firstFileName.append('.');
+                    firstFileName.append(suffix);
                 }
+                newName = firstFileName.toString();
                 if (isStream)
                 {
-                    exists = outputRepository.exists(firstFileName);
+                    exists = outputRepository.exists(newName);
                 }
                 else
                 {
-                    exists = outputRepository.existsStorage(firstFileName);
+                    exists = outputRepository.existsStorage(newName);
                 }
-                counter += 1;
+                counter++;
             }
         }
-        return firstFileName;
+        return newName;
     }
 
     protected String getSuffixForType(final String mimeType)

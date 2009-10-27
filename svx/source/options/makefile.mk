@@ -36,6 +36,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util\svxpch
 
 PRJNAME=svx
 TARGET=options
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -62,38 +63,22 @@ SRC1FILES=\
     optchart.src    \
     optimprove.src
 
-#EXCEPTIONSFILES=\
-#	$(SLO)$/optasian.obj		\
-#	$(SLO)$/optlingu.obj		\
-#	$(SLO)$/optaccessibility.obj	\
-#	$(SLO)$/optsave.obj		\
-#	$(SLO)$/optpath.obj
-
-#SLOFILES=\
-#	$(EXCEPTIONSFILES)	\
-#	$(SLO)$/asiancfg.obj	\
-#	$(SLO)$/htmlcfg.obj	\
-#	$(SLO)$/optcolor.obj    \
-#	$(SLO)$/optjsearch.obj  \
-#	$(SLO)$/optitems.obj	\
-#	$(SLO)$/optgenrl.obj	\
-#	$(SLO)$/adritem.obj	\
-#	$(SLO)$/optgrid.obj	\
-#	$(SLO)$/optinet2.obj	\
-#	$(SLO)$/optextbr.obj    \
-#	$(SLO)$/srchcfg.obj	\
-#	$(SLO)$/optctl.obj
-
 EXCEPTIONSFILES=\
     $(SLO)$/optlingu.obj
 
-SLOFILES=\
-    $(EXCEPTIONSFILES)	\
-    $(SLO)$/asiancfg.obj    \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
+    $(SLO)$/asiancfg.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+    $(SLO)$/optlingu.obj \
     $(SLO)$/htmlcfg.obj \
     $(SLO)$/optitems.obj    \
     $(SLO)$/optgrid.obj \
     $(SLO)$/srchcfg.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 # --- Targets -------------------------------------------------------
 

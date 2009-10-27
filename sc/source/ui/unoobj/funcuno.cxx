@@ -51,12 +51,13 @@
 #include "cell.hxx"
 #include "docoptio.hxx"
 #include "optuno.hxx"
-
+#include <docuno.hxx>
 // for lcl_CopyData:
 #include "markdata.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "attrib.hxx"
+#include "clipparam.hxx"
 
 using namespace com::sun::star;
 
@@ -175,9 +176,8 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScMarkData aSourceMark;
     aSourceMark.SelectOneTable( nSrcTab );      // for CopyToClip
     aSourceMark.SetMarkArea( rSrcRange );
-    pSrcDoc->CopyToClip( rSrcRange.aStart.Col(),rSrcRange.aStart.Row(),
-                         rSrcRange.aEnd.Col(),rSrcRange.aEnd.Row(),
-                         FALSE, pClipDoc, FALSE, &aSourceMark );
+    ScClipParam aClipParam(rSrcRange, false);
+    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false);
 
     if ( pClipDoc->HasAttrib( 0,0,nSrcTab, MAXCOL,MAXROW,nSrcTab,
                                 HASATTR_MERGED | HASATTR_OVERLAPPED ) )
@@ -201,6 +201,7 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
 
 ScFunctionAccess::ScFunctionAccess() :
     pOptions( NULL ),
+    aPropertyMap( ScDocOptionsHelper::GetPropertyMap() ),
     bInvalid( FALSE )
 {
     StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
@@ -278,7 +279,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySe
 {
     ScUnoGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
-        new SfxItemPropertySetInfo( ScDocOptionsHelper::GetPropertyMap() ));
+        new SfxItemPropertySetInfo( &aPropertyMap ));
     return aRef;
 }
 
@@ -295,7 +296,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 
     // options aren't initialized from configuration - always get the same default behaviour
 
-    BOOL bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyName, aValue );
+    BOOL bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
     if (!bDone)
         throw beans::UnknownPropertyException();
 }
@@ -311,7 +312,7 @@ uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const rtl::OUString& aProp
 
     // options aren't initialized from configuration - always get the same default behaviour
 
-    return ScDocOptionsHelper::getPropertyValue( *pOptions, aPropertyName );
+    return ScDocOptionsHelper::getPropertyValue( *pOptions, aPropertyMap, aPropertyName );
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )

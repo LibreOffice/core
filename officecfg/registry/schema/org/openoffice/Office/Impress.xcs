@@ -398,7 +398,15 @@
 				</constraints>
 				<value>0</value>
 			</prop>
-			<prop oor:name="SimpleHandles" oor:type="xs:boolean">
+      <prop oor:name="ShowComments" oor:type="xs:boolean">
+        <info>
+          <author>CL</author>
+          <desc>Indicates whether to show comments (true) or hide them (false).</desc>
+          <label>Show Comments</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="SimpleHandles" oor:type="xs:boolean">
 				<!-- OldPath: Impress/Other -->
 				<!-- OldLocation: soffice.cfg -->
 				<!-- UIHints: Optionbar -->

@@ -121,6 +121,8 @@ void TabPage::StateChanged( StateChangedType nType )
     {
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
+        // FIXME: no layouting, workaround some clipping issues
+        ImplAdjustNWFSizes();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {

@@ -83,7 +83,7 @@ namespace connectivity
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            OStatement_Base*                            m_pStatement;
+            OCommonStatement*                           m_pStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
             sal_uInt32                                  m_nRowPos;
@@ -126,7 +126,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet(OStatement_Base* pStmt, const ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >& _pSQLIterator );
+            OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >& _pSQLIterator );
 
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()

@@ -41,20 +41,14 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayPrimitive2DSequenceObject : public OverlayObjectWithBasePosition
+        class SVX_DLLPUBLIC OverlayPrimitive2DSequenceObject : public OverlayObjectWithBasePosition
         {
         protected:
             // the sequence of primitives to show
             const drawinglayer::primitive2d::Primitive2DSequence    maSequence;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
-
-            // Hittest with logical coordinates. Default tests against maBaseRange.
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         private:
             // internal helper to create a drawinglayer::geometry::ViewInformation2D

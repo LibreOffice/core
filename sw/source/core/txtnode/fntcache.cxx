@@ -152,6 +152,7 @@ SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
                  || UNDERLINE_NONE != aFont.GetOverline()
                  || STRIKEOUT_NONE != aFont.GetStrikeout() )
                  && !aFont.IsWordLineMode();
+    aFont.SetLanguage(rFont.GetLanguage());
 }
 
 SwFntObj::~SwFntObj()
@@ -912,10 +913,10 @@ static void lcl_DrawLineForWrongListData(
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Push();
 
-            const Color aCol( rInf.GetOut().GetTextLineColor() );
+            const Color aCol( rInf.GetOut().GetLineColor() );
             const BOOL bColSave = aCol != aLineColor;
             if (bColSave)
-                rInf.GetOut().SetTextLineColor( aLineColor );
+                rInf.GetOut().SetLineColor( aLineColor );
 
             // iterate over all ranges stored in the respective SwWrongList
             do
@@ -986,7 +987,7 @@ static void lcl_DrawLineForWrongListData(
             while (nWrLen && pWList->Check( nStart, nWrLen ));
 
             if (bColSave)
-                rInf.GetOut().SetTextLineColor( aCol );
+                rInf.GetOut().SetLineColor( aCol );
 
             if (rInf.GetOut().GetConnectMetaFile())
                 rInf.GetOut().Pop();
@@ -1906,10 +1907,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
                             ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
                             WAVE_FLAT );
-                        Color aCol( rInf.GetOut().GetTextLineColor() );
+                        Color aCol( rInf.GetOut().GetLineColor() );
                         BOOL bColSave = aCol != *pWaveCol;
                         if ( bColSave )
-                            rInf.GetOut().SetTextLineColor( *pWaveCol );
+                            rInf.GetOut().SetLineColor( *pWaveCol );
 
                         Point aEnd;
                         long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
@@ -1956,7 +1957,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         rInf.GetOut().DrawWaveLine( aCurrPos, aEnd, nWave );
 
                         if ( bColSave )
-                            rInf.GetOut().SetTextLineColor( aCol );
+                            rInf.GetOut().SetLineColor( aCol );
 
                         if ( rInf.GetOut().GetConnectMetaFile() )
                             rInf.GetOut().Pop();
@@ -2424,7 +2425,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     // skip character cells for complex scripts
     if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
-         pBreakIt->xBreak.is() )
+         pBreakIt->GetBreakIter().is() )
     {
         aLang = rInf.GetFont()->GetLanguage();
         bSkipCell = sal_True;
@@ -2440,7 +2441,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
         if ( bSkipCell )
         {
-            nIdx = (xub_StrLen)pBreakIt->xBreak->nextCharacters( rInf.GetText(),
+            nIdx = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
                         nIdx, pBreakIt->GetLocale( aLang ), nItrMode, 1, nDone );
             if ( nIdx <= nLastIdx )
                 break;
@@ -2703,13 +2704,13 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             const XubString aSnippet( rInf.GetText(), rInf.GetIdx(), nLn );
             aTmpText = aSub[nActual].CalcCaseMap( aSnippet );
             const bool bTitle = SVX_CASEMAP_TITEL == aSub[nActual].GetCaseMap() &&
-                                pBreakIt->xBreak.is();
+                                pBreakIt->GetBreakIter().is();
 
             // Uaaaaahhhh!!! In title case mode, we would get wrong results
             if ( bTitle && nLn )
             {
                 // check if rInf.GetIdx() is begin of word
-                if ( !pBreakIt->xBreak->isBeginWord(
+                if ( !pBreakIt->GetBreakIter()->isBeginWord(
                      rInf.GetText(), rInf.GetIdx(),
                      pBreakIt->GetLocale( aSub[nActual].GetLanguage() ),
                      i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
@@ -2797,7 +2798,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
         if ( COL_BLACK != rFnt.GetColor().GetColor() )
             bChgFntColor = sal_True;
 
-        if ( (COL_BLACK != GetOut().GetTextLineColor().GetColor()) ||
+        if ( (COL_BLACK != GetOut().GetLineColor().GetColor()) ||
              (COL_BLACK != GetOut().GetOverlineColor().GetColor()) )
             bChgLineColor = sal_True;
     }
@@ -2894,8 +2895,8 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
         {
             // get current font color or color set at output device
             aNewColor = pFont ? pFont->GetColor() : GetOut().GetFont().GetColor();
-            if ( aNewColor != GetOut().GetTextLineColor() )
-                GetOut().SetTextLineColor( aNewColor );
+            if ( aNewColor != GetOut().GetLineColor() )
+                GetOut().SetLineColor( aNewColor );
             if ( aNewColor != GetOut().GetOverlineColor() )
                 GetOut().SetOverlineColor( aNewColor );
         }

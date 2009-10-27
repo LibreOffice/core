@@ -31,9 +31,10 @@
 #ifndef SYSTEM_STL_SLIST
 #define SYSTEM_STL_SLIST
 
+#ifdef GCC
+
 #include <ext/slist>
 
-#ifdef GCC
 namespace std
 {
 	using __gnu_cxx::slist;

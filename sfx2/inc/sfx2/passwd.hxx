@@ -81,6 +81,7 @@ public:
     String          GetConfirm() const { return maConfirmED.GetText(); }
 
     void            SetMinLen( USHORT Len );
+    void            SetMaxLen( USHORT Len );
     void            SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
     void            ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
 

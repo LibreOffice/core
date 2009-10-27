@@ -59,11 +59,7 @@ sub create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
         }
         else
         {
@@ -89,11 +85,8 @@ sub create_directory
                         $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
                         push(@installer::globals::logfileinfo, $infoline);
 
-                        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                        {
-                            my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
-                            system($localcall);
-                        }
+                        my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
+                        system($localcall);
                     }
                     else
                     {
@@ -122,11 +115,8 @@ sub create_directory
                     $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
                     push(@installer::globals::logfileinfo, $infoline);
 
-                    if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                    {
-                        my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
-                        system($localcall);
-                    }
+                    my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+                    system($localcall);
                 }
                 else
                 {
@@ -177,11 +167,8 @@ sub create_directory_with_privileges
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -207,11 +194,8 @@ sub create_directory_with_privileges
                         $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
                         push(@installer::globals::logfileinfo, $infoline);
 
-                        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                        {
-                            my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
-                            system($localcall);
-                        }
+                        my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
+                        system($localcall);
                     }
                     else
                     {
@@ -240,11 +224,8 @@ sub create_directory_with_privileges
                     $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
                     push(@installer::globals::logfileinfo, $infoline);
 
-                    if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                    {
-                        my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-                        system($localcall);
-                    }
+                    my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+                    system($localcall);
                 }
                 else
                 {
@@ -272,11 +253,8 @@ sub create_directory_with_privileges
         $infoline = "\nAlready existing directory, did not create: $directory\n";
         push(@installer::globals::logfileinfo, $infoline);
 
-        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-        {
-            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-            system($localcall);
-        }
+        my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+        system($localcall);
     }
 }
 
@@ -1423,11 +1401,8 @@ sub try_to_create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -1638,6 +1613,43 @@ sub read_complete_directory
             }
         }
     }
+}
+
+##############################################################
+# Reading all files from a directory and its subdirectories
+# Version 2
+##############################################################
+
+sub read_full_directory {
+    my ( $currentdir, $pathstring, $collector ) = @_;
+    my $item;
+    my $fullname;
+    local *DH;
+
+    unless (opendir(DH, $currentdir))
+    {
+        return;
+    }
+    while (defined ($item = readdir(DH)))
+    {
+        next if($item eq "." or $item eq "..");
+        $fullname = $currentdir . $installer::globals::separator . $item;
+        my $sep = "";
+        if ( $pathstring ne "" ) { $sep = $installer::globals::separator; }
+
+        if( -d $fullname)
+        {
+            my $newpathstring = $pathstring . $sep . $item;
+            read_full_directory($fullname, $newpathstring, $collector) if(-d $fullname);
+        }
+        else
+        {
+            my $content = $pathstring . $sep . $item;
+            push(@{$collector}, $content);
+        }
+    }
+    closedir(DH);
+    return
 }
 
 1;

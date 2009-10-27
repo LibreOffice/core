@@ -42,6 +42,7 @@ GEN_HID=TRUE
 .INCLUDE :  settings.mk
 
 # --- Allgemein ---------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 LIB1TARGET=$(SLB)$/go.lib
 LIB1FILES=\
@@ -78,6 +79,7 @@ DEF1EXPORTFILE	=goodies.dxp
 
 # THB: exports list goodies checked for 6.0 Final 6.12.2001
 # Note: explicit exports only necessary for VCL graphic filters (see there)
+.ENDIF
 
 # --- Targets -----------------------------------------------------------
 
@@ -86,6 +88,7 @@ DEF1EXPORTFILE	=goodies.dxp
 .IF "$(depend)"==""
 
 # --- Goodies-Filter-Datei ---
+.IF "$(L10N_framework)"==""
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
@@ -96,5 +99,7 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
         @echo CT>>$@
+
+.ENDIF
 
 .ENDIF

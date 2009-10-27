@@ -39,26 +39,24 @@
 
 testcase tiInsertSlideExpandSummary
 
-'/// open application ///'
+printlog "open application "
    Call hNewDocument
-   ' presupposition
-'/// View->Master View->Outline View ///'
+printlog "View->Master View->Outline View "
       ViewWorkspaceOutlineView
       Sleep 1
       Kontext "DocumentImpressOutlineView"
-'/// Type 2 rows ///'
+printlog "Type 2 rows "
       DocumentImpressOutlineView.TypeKeys "Herbert<Return>Rudi"
-'/// View->Master View->Drawing View ///'
+printlog "View->Master View->Drawing View "
       ViewWorkspaceDrawingView
       Sleep 1
-   ' test menue entries
-'/// Insert->Summery Slide ///'
+printlog "Insert->Summery Slide "
    InsertSummerySlide
    Sleep 1
-'/// Insert->Expand Slide ///'
+printlog "Insert->Expand Slide "
    InsertExpandSlide
    Sleep 2
-'/// close application ///'
+printlog "close application "
    Call  hCloseDocument
 endcase
 

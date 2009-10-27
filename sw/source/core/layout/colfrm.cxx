@@ -213,6 +213,15 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFtn )
         return;
+    // --> OD 2009-08-12 #i97379#
+    // If current lower is a no text frame, then columns are not allowed
+    if ( Lower() && Lower()->IsNoTxtFrm() &&
+         rNew.GetNumCols() > 1 )
+    {
+        return;
+    }
+    // <--
+
     USHORT nNewNum, nOldNum = 1;
     if( Lower() && Lower()->IsColumnFrm() )
     {

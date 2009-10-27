@@ -44,6 +44,6 @@ typedef USHORT SoundType;
 #define SOUND_ERROR                     ((SoundType)3)
 #define SOUND_QUERY                     ((SoundType)4)
 
-#define SOUND_DISABLE                   (SOUND_DEFAULT)
+#define SOUND_DISABLE                   ((SoundType)5)
 
 #endif // _SV_SNDSTYLE_HXX

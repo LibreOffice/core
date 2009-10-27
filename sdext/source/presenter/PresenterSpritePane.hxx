@@ -86,10 +86,10 @@ public:
 
     // XPane
 
-    css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
         throw (css::uno::RuntimeException);
 
-    css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
+    virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
         throw (css::uno::RuntimeException);
 
 

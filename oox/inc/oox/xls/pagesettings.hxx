@@ -46,8 +46,8 @@ class HeaderFooterParser;
 /** Holds page style data for a single sheet. */
 struct PageSettingsModel
 {
+    ::rtl::OUString     maGraphicUrl;           /// URL of the graphic object.
     ::rtl::OUString     maBinSettPath;          /// Relation identifier of binary printer settings.
-    ::rtl::OUString     maPicturePath;          /// Relation identifier of background image.
     ::rtl::OUString     maOddHeader;            /// Header string for odd pages.
     ::rtl::OUString     maOddFooter;            /// Footer string for odd pages.
     ::rtl::OUString     maEvenHeader;           /// Header string for even pages.
@@ -155,6 +155,10 @@ public:
 
     /** Creates a page style for the spreadsheet and sets all page properties. */
     void                finalizeImport();
+
+private:
+    /** Imports the binary picture data from the fragment with the passed identifier. */
+    void                importPictureData( const ::oox::core::Relations& rRelations, const ::rtl::OUString& rRelId );
 
 private:
     PageSettingsModel   maModel;

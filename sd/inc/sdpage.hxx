@@ -41,6 +41,7 @@
 #endif
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
+#include <com/sun/star/office/XAnnotation.hpp>
 
 #include <list>
 #include <functional>
@@ -105,6 +106,8 @@ namespace sd {
 
         bool operator==( const HeaderFooterSettings& rSettings ) const;
     };
+
+    typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > > AnnotationVector;
 }
 
 namespace sd {
@@ -148,6 +151,8 @@ protected:
     USHORT      mnPaperBin;                // PaperBin
     Orientation meOrientation;             // Print-Orientation
     SdPageLink* mpPageLink;               // PageLink (nur bei gelinkten Seiten)
+
+    sd::AnnotationVector    maAnnotations;
 
     /** holds the smil animation sequences for this page */
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
@@ -390,6 +395,12 @@ public:
             master page should not be deleted automatically.
     */
     bool IsPrecious (void) const;
+
+    void createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
+    void addAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, int nIndex = -1 );
+    void removeAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
+    const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
+    bool hasAnnotations() const { return !maAnnotations.empty(); }
 
 private:
     bool mbIsPrecious;

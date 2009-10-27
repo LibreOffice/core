@@ -810,6 +810,8 @@ public:
 
     virtual VclAbstractDialog*          CreateOptionsDialog(
         Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext );
+
+    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId );
 };
 
 #endif

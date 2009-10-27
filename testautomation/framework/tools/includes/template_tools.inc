@@ -227,26 +227,31 @@ function hSelectCategory( cCategory as string ) as boolean
     '///<u>Returns</u>: Alwas TRUE, no errorhandling
 
     Kontext "TemplateAndDocuments"
-    Category.typeKeys( "<HOME>" )
-    wait( 500 )
-    
-    if ( UCASE( cCategory ) = "NEWDOCUMENTS" ) then
-    ' do nothing, the selection should be on this item
+    if ( TemplateAndDocuments.exists( 2 ) ) then
+        Wait( 500 )
+        Category.typeKeys( "<HOME>" )
+        wait( 500 )
         
-    elseif ( UCASE( cCategory ) = "TEMPLATES" ) then
-        Category.typeKeys( "<DOWN>" )
-        
-    elseif ( UCASE( cCategory ) = "MYDOCUMENTS" ) then
-        Category.typeKeys( "<DOWN>" )
-        Category.typeKeys( "<DOWN>" )
-        
-    elseif ( UCASE( cCategory ) = "SAMPLES" ) then
-        Category.typeKeys( "<DOWN>" )
-        Category.typeKeys( "<DOWN>" )
-        Category.typeKeys( "<DOWN>" )
-    endif
+        if ( UCASE( cCategory ) = "NEWDOCUMENTS" ) then
+        ' do nothing, the selection should be on this item
+            
+        elseif ( UCASE( cCategory ) = "TEMPLATES" ) then
+            Category.typeKeys( "<DOWN>" )
+            
+        elseif ( UCASE( cCategory ) = "MYDOCUMENTS" ) then
+            Category.typeKeys( "<DOWN>" )
+            Category.typeKeys( "<DOWN>" )
+            
+        elseif ( UCASE( cCategory ) = "SAMPLES" ) then
+            Category.typeKeys( "<DOWN>" )
+            Category.typeKeys( "<DOWN>" )
+            Category.typeKeys( "<DOWN>" )
+        endif
 
-    hSelectCategory() = true
+        hSelectCategory() = true
+    else
+        warnlog( "TemplateAndDocuments dialog did not open" )
+    endif
 
 end function
 

@@ -547,30 +547,6 @@ void XMLTextStyleContext::FillPropertySet(
                 struct XMLPropertyState& rState = GetProperties()[nIndex];
                 Any rAny = rState.maValue;
                 sal_Int32 nMapperIndex = rState.mnIndex;
-                if( i == 3 )
-                {
-                    if( SvXMLImport::OOo_2x != GetImport().getGeneratorVersion() )
-                        continue;
-                    sal_Bool bHidden;
-                    rAny >>= bHidden;
-                    bHidden = !bHidden;
-                    Any aAny( rAny );
-                    aAny <<= bHidden;
-                    // get property set mapper
-                    UniReference<XMLPropertySetMapper> rPropMapper =
-                        xImpPrMap->getPropertySetMapper();
-
-                    // set property
-                    OUString rPropertyName(
-                        rPropMapper->GetEntryAPIName(nMapperIndex) );
-                    if( !xInfo.is() )
-                        xInfo = rPropSet->getPropertySetInfo();
-                    if ( xInfo->hasPropertyByName( rPropertyName ) )
-                    {
-                        rPropSet->setPropertyValue( rPropertyName, aAny );
-                    }
-                    continue;
-                }
 
                 // Now check for font name in rState and set corrected value,
                 // if necessary.

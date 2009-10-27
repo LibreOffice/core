@@ -1,7 +1,7 @@
 #************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -56,13 +56,15 @@ SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(I18NISOLANGLIB) \
+    $(I18NPAPERLIB) \
     $(SOTLIB) \
     $(TOOLSLIB) \
     $(UNOTOOLSLIB) \
     $(CPPUHELPERLIB)    \
     $(COMPHELPERLIB)    \
     $(CPPULIB)          \
-    $(SALLIB)
+    $(SALLIB)			\
+    $(OOXLIB)
 
 
 SHL1DEPN=

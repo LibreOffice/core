@@ -49,9 +49,9 @@ namespace drawinglayer
         class SdrPathPrimitive2D : public BasePrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                     maTransform;
+            basegfx::B2DHomMatrix                       maTransform;
             attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
-            ::basegfx::B2DPolyPolygon                   maUnitPolyPolygon;
+            basegfx::B2DPolyPolygon                     maUnitPolyPolygon;
 
         protected:
             // local decomposition.
@@ -59,14 +59,14 @@ namespace drawinglayer
 
         public:
             SdrPathPrimitive2D(
-                const ::basegfx::B2DHomMatrix& rTransform,
+                const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-                const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon);
+                const basegfx::B2DPolyPolygon& rUnitPolyPolygon);
 
             // data access
-            const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+            const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
-            const ::basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
+            const basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

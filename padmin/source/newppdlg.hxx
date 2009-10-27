@@ -64,9 +64,14 @@ namespace padmin {
         DECL_LINK( ModifyHdl, ComboBox* );
 
         void Import();
+
+        std::list< rtl::OUString >  m_aImportedFiles;
     public:
         PPDImportDialog( Window* pParent );
         ~PPDImportDialog();
+
+        const std::list< rtl::OUString >& getImportedFiles() const
+        { return m_aImportedFiles; }
     };
 
 } // namespace

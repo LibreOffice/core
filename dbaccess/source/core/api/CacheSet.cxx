@@ -88,6 +88,7 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
 using namespace comphelper;
@@ -205,36 +206,37 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
 void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::insertRow" );
-    ::rtl::OUString aSql(::rtl::OUString::createFromAscii("INSERT INTO "));
+    ::rtl::OUStringBuffer aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    aSql += m_aComposedTableName;
-    aSql += ::rtl::OUString::createFromAscii(" ( ");
+    aSql.append(m_aComposedTableName);
+    aSql.append(::rtl::OUString::createFromAscii(" ( "));
     // set values and column names
-    ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
-    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
+    ::rtl::OUStringBuffer aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
+    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
     ::rtl::OUString aQuote = getIdentifierQuoteString();
-    static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
+    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
-    for(; aIter != _rInsertRow->get().end();++aIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
+    for(; aIter != aEnd;++aIter)
     {
-        aSql += ::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++));
-        aSql += aComma;
-        aValues += aPara;
+        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)));
+        aSql.append(aComma);
+        aValues.append(aPara);
     }
 
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-    aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+    aSql.setCharAt(aSql.getLength()-1,')');
+    aValues.setCharAt(aValues.getLength()-1,')');
 
-    aSql += aValues;
+    aSql.append(aValues.makeStringAndClear());
     // now create end execute the prepared statement
     {
-        Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
+        Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
         Reference< XParameters > xParameter(xPrep,UNO_QUERY);
         i = 1;
-        for(aIter = _rInsertRow->get().begin()+1; aIter != _rInsertRow->get().end();++aIter,++i)
+        for(aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter,++i)
         {
             if(aIter->isNull())
                 xParameter->setNull(i,aIter->getTypeKind());
@@ -265,8 +267,8 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
 // -------------------------------------------------------------------------
 void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,const connectivity::OSQLTable& _xTable
-                                        ,::rtl::OUString& _sCondition
-                                        ,::rtl::OUString& _sParameter
+                                        ,::rtl::OUStringBuffer& _sCondition
+                                        ,::rtl::OUStringBuffer& _sParameter
                                         ,::std::list< sal_Int32>& _rOrgValues)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillParameters" );
@@ -330,6 +332,9 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     sal_Int32 nCheckCount = 1; // index for the orginal values
     sal_Int32 i = 1;
+
+    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
+    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
     ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end()+1;
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
@@ -337,34 +342,35 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         aColumnName = m_xSetMetaData->getColumnName(i);
         if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
         {
-            _sCondition += ::dbtools::quoteName( aQuote,aColumnName);
+            _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
             if(aIter->isNull())
-                _sCondition += ::rtl::OUString::createFromAscii(" IS NULL");
+                _sCondition.append(sIsNull);
             else
-                _sCondition += ::rtl::OUString::createFromAscii(" = ?");
-            _sCondition += aAnd;
+                _sCondition.append(sParam);
+            _sCondition.append(aAnd);
             _rOrgValues.push_back(nCheckCount);
 
-        }
+        } // if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
+        ::std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
         for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
-                aIndexIter != aAllIndexColumns.end();++aIndexIter)
+                aIndexIter != aIndexEnd;++aIndexIter)
         {
             if((*aIndexIter)->hasByName(aColumnName))
             {
-                _sCondition += ::dbtools::quoteName( aQuote,aColumnName);
+                _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
                 if(aIter->isNull())
-                    _sCondition += ::rtl::OUString::createFromAscii(" IS NULL");
+                    _sCondition.append(sIsNull);
                 else
-                    _sCondition += ::rtl::OUString::createFromAscii(" = ?");
-                _sCondition += aAnd;
+                    _sCondition.append(sParam);
+                _sCondition.append(aAnd);
                 _rOrgValues.push_back(nCheckCount);
                 break;
             }
         }
         if(aIter->isModified())
         {
-            _sParameter += ::dbtools::quoteName( aQuote,aColumnName);
-            _sParameter += aPara;
+            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName));
+            _sParameter.append(aPara);
         }
     }
 }
@@ -375,39 +381,41 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("UPDATE ");
-    aSql += m_aComposedTableName;
-    aSql += ::rtl::OUString::createFromAscii(" SET ");
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("UPDATE ");
+    aSql.append(m_aComposedTableName);
+    aSql.append(::rtl::OUString::createFromAscii(" SET "));
     // list all cloumns that should be set
 
-    ::rtl::OUString aCondition;
+    ::rtl::OUStringBuffer aCondition;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(" "));
+    aSql.setCharAt(aSql.getLength()-1,' ');
     if ( aCondition.getLength() )
     {
-        aCondition = aCondition.replaceAt(aCondition.getLength()-5,5,::rtl::OUString::createFromAscii(" "));
+        aCondition.setLength(aCondition.getLength()-5);
 
-        aSql += ::rtl::OUString::createFromAscii(" WHERE ");
-        aSql += aCondition;
+        aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
+        aSql.append(aCondition.makeStringAndClear());
     }
     else
         ::dbtools::throwSQLException(
             DBACORE_RESSTRING( RID_STR_NO_UPDATE_MISSING_CONDITION ), SQL_GENERAL_ERROR, *this );
 
     // now create end execute the prepared statement
-    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
+    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
-    for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != _rInsertRow->get().end();++aIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
+    for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter)
     {
         if(aIter->isModified())
         {
             setParameter(i,xParameter,*aIter,m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
             ++i;
         }
-    }
-    for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValues.end();++aOrgValue,++i)
+    } // for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter)
+    ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
+    for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValueEnd;++aOrgValue,++i)
     {
         setParameter(i,xParameter,(_rOrginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
@@ -421,9 +429,9 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DELETE FROM ");
-    aSql += m_aComposedTableName;
-    aSql += ::rtl::OUString::createFromAscii(" WHERE ");
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("DELETE FROM ");
+    aSql.append(m_aComposedTableName);
+    aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
 
     // list all cloumns that should be set
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
@@ -480,17 +488,18 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
         }
     }
 
-    ::rtl::OUString aColumnName;
+    ::rtl::OUStringBuffer aColumnName;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rDeleteRow,_xTable,aSql,aColumnName,aOrgValues);
 
-    aSql = aSql.replaceAt(aSql.getLength()-5,5,::rtl::OUString::createFromAscii(" "));
+    aSql.setLength(aSql.getLength()-5);
 
     // now create end execute the prepared statement
-    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
+    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
-    for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValues.end();++j,++i)
+    ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
+    for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValueEnd;++j,++i)
     {
         setParameter(i,xParameter,(_rDeleteRow->get())[*j],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }

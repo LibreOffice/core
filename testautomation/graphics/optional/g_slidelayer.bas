@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -50,26 +50,26 @@ sub main
     use "graphics\optional\includes\impress\i_slidelayer.inc"
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tInsertSlide
-        Call tInsertDuplicateSlide
-        Call tiInsertExpandSlide  ' only in impress
-        Call tiInsertSummarySlide  ' only in impress
-        Call tiFormatSeitenlayout  ' only in impress    
-        Call t114174  ' only in impress
-        Call t111862
+    Call tInsertSlide
+    Call tInsertDuplicateSlide
+    Call tiInsertExpandSlide  ' only in impress
+    Call tiInsertSummarySlide  ' only in impress
+    Call tiFormatSeitenlayout  ' only in impress
+    Call t114174  ' only in impress
+    Call t111862
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tInsertSlide
-        Call tInsertDuplicateSlide
-        Call tInsertLayer ' in impress not here, instead Edit->Layer->Insert
+    Call tInsertSlide
+    Call tInsertDuplicateSlide
+    Call tInsertLayer ' in impress not here, instead Edit->Layer->Insert
 
     Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   gApplication = "IMPRESS"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    gApplication = "IMPRESS"
+    Call GetUseFiles
 end sub

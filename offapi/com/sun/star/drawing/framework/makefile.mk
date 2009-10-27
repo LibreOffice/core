@@ -62,6 +62,7 @@ IDLFILES=									\
     XControllerManager.idl					\
     XModuleController.idl					\
     XPane.idl								\
+    XPane2.idl								\
     XPaneBorderPainter.idl					\
     XRelocatableResource.idl				\
     XResource.idl							\

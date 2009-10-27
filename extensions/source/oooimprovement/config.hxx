@@ -53,7 +53,9 @@ namespace oooimprovement
             ::rtl::OUString getSoapId() const;
             ::rtl::OUString getSoapUrl() const;
             sal_Int32 getReportCount() const;
+#ifdef FUTURE
             sal_Int32 getFailedAttempts() const;
+#endif
             sal_Int32 getOfficeStartCounterdown() const;
             sal_Int32 incrementEventCount(sal_Int32 by);
             sal_Int32 incrementReportCount(sal_Int32 by);

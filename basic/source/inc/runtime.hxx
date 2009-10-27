@@ -220,10 +220,11 @@ public:
     SbiInstance( StarBASIC* );
    ~SbiInstance();
 
-    void Error( SbError );          // trappable Error
+    void Error( SbError );                      // trappable Error
     void Error( SbError, const String& rMsg );  // trappable Error mit Message
-    void FatalError( SbError );     // non-trappable Error
-    void Abort();                   // Abbruch mit aktuellem Fehlercode
+    void FatalError( SbError );                 // non-trappable Error
+    void FatalError( SbError, const String& );  // non-trappable Error
+    void Abort();                               // Abbruch mit aktuellem Fehlercode
 
     void    Stop();
     SbError GetErr()                { return nErr; }
@@ -267,30 +268,6 @@ struct RefSaveItem
     RefSaveItem* pNext;
 
     RefSaveItem() { pNext = NULL; }
-};
-
-
-// #72732 Spezielle SbxVariable, die beim put/get prueft,
-// ob der Kontext fuer eine UnoClass sinnvoll ist. Sonst
-// liegt eventuell ein Schreibfehler im Basic-Source vor.
-class UnoClassMemberVariable : public SbxVariable
-{
-    SbiRuntime* mpRuntime;
-    BOOL bInternalUse;
-
-public:
-    UnoClassMemberVariable( SbiRuntime* pRuntime_, const SbxObjectRef& xWrapper )
-        : SbxVariable( SbxVARIANT ), mpRuntime( pRuntime_ )
-    {
-        bInternalUse = TRUE;
-        PutObject( xWrapper );
-        bInternalUse = FALSE;
-    }
-
-    virtual BOOL Get( SbxValues& ) const;
-    virtual BOOL Put( const SbxValues& );
-
-    TYPEINFO();
 };
 
 
@@ -467,8 +444,10 @@ public:
 
     SbiRuntime( SbModule*, SbMethod*, UINT32 );
    ~SbiRuntime();
-    void Error( SbError );          // Fehler setzen, falls != 0
-    void FatalError( SbError );     // Fehlerbehandlung=Standard, Fehler setzen
+    void Error( SbError );                      // Fehler setzen, falls != 0
+    void Error( SbError, const String& );       // Fehler setzen, falls != 0
+    void FatalError( SbError );                 // Fehlerbehandlung=Standard, Fehler setzen
+    void FatalError( SbError, const String& );  // Fehlerbehandlung=Standard, Fehler setzen
     void DumpPCode();
     BOOL Step();                    // Einzelschritt (ein Opcode)
     void Stop()            { bRun = FALSE;   }

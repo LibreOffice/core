@@ -36,7 +36,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "CartesianCoordinateSystem.hxx"
-#include "Scaling.hxx"
+#include "AxisHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -179,7 +179,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 
         chart2::ScaleData aScaleData = xAxis->getScaleData();
         aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
-        aScaleData.Scaling = new LinearScaling( 1.0, 0.0 );
+        aScaleData.Scaling = AxisHelper::createLinearScaling();
 
         if( i == 2  )
             aScaleData.AxisType = chart2::AxisType::SERIES;

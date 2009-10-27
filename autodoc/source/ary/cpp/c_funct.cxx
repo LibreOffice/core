@@ -84,19 +84,6 @@ namespace ary
 namespace cpp
 {
 
-Function::Function()
-    :   aEssentials(),
-        aTemplateParameterTypes(),
-        aSignature(),
-        nReturnType(0),
-        eProtection(PROTECT_global),
-        eVirtuality(VIRTUAL_none),
-        aFlags(),
-        aParameterInfos(),
-        pExceptions()
-{
-}
-
 Function::Function( const String  &             i_sLocalName,
                     Ce_id                       i_nOwner,
                     E_Protection                i_eProtection,

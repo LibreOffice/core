@@ -92,7 +92,7 @@ GalleryThemeProvider::~GalleryThemeProvider()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString GalleryThemeProvider::getImplementationName_Static()
+SVX_DLLPUBLIC ::rtl::OUString GalleryThemeProvider::getImplementationName_Static()
     throw()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.gallery.GalleryThemeProvider" ) );
@@ -100,7 +100,7 @@ GalleryThemeProvider::~GalleryThemeProvider()
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > GalleryThemeProvider::getSupportedServiceNames_Static()
+SVX_DLLPUBLIC uno::Sequence< ::rtl::OUString > GalleryThemeProvider::getSupportedServiceNames_Static()
     throw()
 {
     uno::Sequence< ::rtl::OUString > aSeq( 1 );

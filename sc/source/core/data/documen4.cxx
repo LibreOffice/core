@@ -311,9 +311,16 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
                 switch (t->GetType())
                 {
                     case svExternalSingleRef:
-                    case svExternalDoubleRef:
                         bAllMarked = pRefMgr->setCacheTableReferenced(
-                                t->GetIndex(), t->GetString());
+                                t->GetIndex(), t->GetString(), 1);
+                        break;
+                    case svExternalDoubleRef:
+                        {
+                            const ScComplexRefData& rRef = t->GetDoubleRef();
+                            size_t nSheets = rRef.Ref2.nTab - rRef.Ref1.nTab + 1;
+                            bAllMarked = pRefMgr->setCacheTableReferenced(
+                                    t->GetIndex(), t->GetString(), nSheets);
+                        }
                         break;
                     case svExternalName:
                         /* TODO: external names aren't supported yet, but would

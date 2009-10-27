@@ -33,6 +33,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=accessibility
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -42,7 +43,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	\
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
+    $(SLO)$/AccessibleStringWrap.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
     $(SLO)$/charmapacc.obj						\
     $(SLO)$/svxrectctaccessiblecontext.obj		\
     $(SLO)$/GraphCtlAccessibleContext.obj		\
@@ -63,13 +69,14 @@ SLOFILES =	\
     $(SLO)$/AccessibleStaticTextBase.obj		\
     $(SLO)$/AccessibleParaManager.obj			\
     $(SLO)$/AccessibleEditableTextPara.obj		\
-    $(SLO)$/AccessibleStringWrap.obj			\
     $(SLO)$/AccessibleImageBullet.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj					\
     $(SLO)$/AccessibleControlShape.obj			\
     $(SLO)$/DGColorNameLookUp.obj				\
     $(SLO)$/AccessibleFrameSelector.obj
+    
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 SRS2NAME = accessibility
 SRC2FILES = accessibility.src

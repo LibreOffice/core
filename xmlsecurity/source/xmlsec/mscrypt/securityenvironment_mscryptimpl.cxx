@@ -882,7 +882,33 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFr
     return createCertificateFromRaw( rawCert ) ;
 }
 
-sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+
+HCERTSTORE getCertStoreForIntermediatCerts(
+    const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
+{
+    HCERTSTORE store = NULL;
+    store = CertOpenStore(
+        CERT_STORE_PROV_MEMORY, 0, NULL, 0, NULL);
+    if (store == NULL)
+        return NULL;
+
+    for (int i = 0; i < seqCerts.getLength(); i++)
+    {
+        Sequence<sal_Int8> data = seqCerts[i]->getEncoded();
+        PCCERT_CONTEXT cert = CertCreateCertificateContext(
+            X509_ASN_ENCODING, ( const BYTE* )&data[0], data.getLength());
+        //Adding the certificate creates a copy and not just increases the ref count
+        //Therefore we free later the certificate that we now add
+        CertAddCertificateContextToStore(store, cert, CERT_STORE_ADD_ALWAYS, NULL);
+        CertFreeCertificateContext(cert);
+    }
+    return store;
+}
+sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
+    const Reference< ::com::sun::star::security::XCertificate >& aCert,
+    const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
+    throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException )
+{
     sal_Int32 validity = 0;
     PCCERT_CHAIN_CONTEXT pChainContext = NULL;
     PCCERT_CONTEXT pCertContext = NULL;
@@ -913,52 +939,50 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
     chainPara.cbSize = sizeof( CERT_CHAIN_PARA ) ;
     chainPara.RequestedUsage = certUsage ;
 
+
+    HCERTSTORE hCollectionStore = NULL;
+    HCERTSTORE hIntermediateCertsStore = NULL;
     BOOL bChain = FALSE;
     if( pCertContext != NULL )
     {
-        HCERTSTORE hAdditionalStore = NULL;
-        HCERTSTORE hCollectionStore = NULL;
-        if (m_hCertStore && m_hKeyStore)
+        hIntermediateCertsStore =
+            getCertStoreForIntermediatCerts(seqCerts);
+
+        //Merge m_hCertStore and m_hKeyStore and the store of the intermediate
+        //certificates into one store.
+        hCollectionStore = CertOpenStore(
+            CERT_STORE_PROV_COLLECTION ,
+            0 ,
+            NULL ,
+            0 ,
+            NULL
+            ) ;
+        if (hCollectionStore != NULL)
         {
-            //Merge m_hCertStore and m_hKeyStore into one store.
-            hCollectionStore = CertOpenStore(
-                CERT_STORE_PROV_COLLECTION ,
-                0 ,
-                NULL ,
-                0 ,
-                NULL
-                ) ;
-            if (hCollectionStore != NULL)
-            {
-                CertAddStoreToCollection (
-                     hCollectionStore ,
-                     m_hCertStore ,
-                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                     0) ;
-                CertAddStoreToCollection (
-                     hCollectionStore ,
-                     m_hCertStore ,
-                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                     0) ;
-                hAdditionalStore = hCollectionStore;
-            }
+            CertAddStoreToCollection (
+                hCollectionStore ,
+                m_hCertStore ,
+                CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                0) ;
+            CertAddStoreToCollection (
+                hCollectionStore ,
+                m_hCertStore ,
+                CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                0) ;
+            CertAddStoreToCollection (
+                hCollectionStore,
+                hIntermediateCertsStore,
+                CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
+                0);
 
         }
-
-        //if the merge of both stores failed then we add only m_hCertStore
-        if (hAdditionalStore == NULL && m_hCertStore)
-            hAdditionalStore = m_hCertStore;
-        else if (hAdditionalStore == NULL && m_hKeyStore)
-            hAdditionalStore = m_hKeyStore;
-        else
-            hAdditionalStore = NULL;
 
         //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
         bChain = CertGetCertificateChain(
             NULL ,
             pCertContext ,
             NULL , //use current system time
-            hAdditionalStore,
+            hCollectionStore,
             &chainPara ,
             CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
             NULL ,
@@ -967,8 +991,6 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
         if (!bChain)
             pChainContext = NULL;
 
-        //Close the additional store
-       CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
 
     if(bChain && pChainContext != NULL )
@@ -1080,6 +1102,12 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
 
     if (pChainContext)
         CertFreeCertificateChain(pChainContext);
+
+    //Close the additional store, do not destroy the contained certs
+    CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
+    //Close the temporary store containing the intermediate certificates and make
+    //sure all certificates are deleted.
+    CertCloseStore(hIntermediateCertsStore, CERT_CLOSE_STORE_CHECK_FLAG);
 
     return validity ;
 }

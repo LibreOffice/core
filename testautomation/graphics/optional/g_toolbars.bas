@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -43,25 +43,25 @@ sub main
 
     use "graphics\tools\id_tools.inc"
     use "graphics\optional\includes\global\g_toolbars.inc"
-   
+
 
     PrintLog "-------------------------" + gApplication + "-------------------"
 
     Call Toolboxen_Rechtecke
-        Call Toolboxen_Kreise
-        Call Toolboxen_3DObjekte
-        Call Toolboxen_Kurven
-        Call Toolboxen_Linien
-        Call tToolsCustomize              'global\required\includes
+    Call Toolboxen_Kreise
+    Call Toolboxen_3DObjekte
+    Call Toolboxen_Kurven
+    Call Toolboxen_Linien
+    Call tToolsCustomize              'global\required\includes
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call Toolboxen_Rechtecke
-        Call Toolboxen_Kreise
-        Call Toolboxen_3DObjekte
-        Call Toolboxen_Kurven
-        Call Toolboxen_Linien
-        Call tToolsCustomize              'global\required\includes
+    Call Toolboxen_Rechtecke
+    Call Toolboxen_Kreise
+    Call Toolboxen_3DObjekte
+    Call Toolboxen_Kurven
+    Call Toolboxen_Linien
+    Call tToolsCustomize              'global\required\includes
 
     Call hStatusOut
 end sub

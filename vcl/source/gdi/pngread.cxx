@@ -156,6 +156,7 @@ private:
     BOOL                mbIDAT;         // TRUE if finished with enough IDAT chunks
     BOOL                mbGamma;        // TRUE if Gamma Correction available
     BOOL                mbpHYs;         // TRUE if pysical size of pixel available
+    sal_Bool            mbIgnoreGammaChunk;
 
     bool                ReadNextChunk();
     void                ReadRemainingChunks();
@@ -186,6 +187,7 @@ public:
 
     BitmapEx            GetBitmapEx( const Size& rPreviewSizeHint );
     const std::vector< PNGReader::ChunkData >& GetAllChunks();
+    void                SetIgnoreGammaChunk( sal_Bool bIgnore ){ mbIgnoreGammaChunk = bIgnore; };
 };
 
 // ------------------------------------------------------------------------------
@@ -205,8 +207,9 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mbzCodecInUse   ( sal_False ),
     mbStatus( TRUE),
     mbIDAT( FALSE ),
-    mbGamma         ( sal_False ),
-    mbpHYs          ( sal_False )
+    mbGamma             ( sal_False ),
+    mbpHYs              ( sal_False ),
+    mbIgnoreGammaChunk  ( sal_False )
 {
     // prepare the PNG data stream
     mnOrigStreamMode = mrPNGStream.GetNumberFormatInt();
@@ -382,9 +385,9 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             break;
 
             case PNGCHUNK_gAMA :                                // the gamma chunk must precede
-            {
-                if ( mbIDAT == FALSE )                          // the 'IDAT' and also the
-                    ImplGetGamma();                             // 'PLTE'(if available )
+            {                                                   // the 'IDAT' and also the 'PLTE'(if available )
+                if ( !mbIgnoreGammaChunk && ( mbIDAT == FALSE ) )
+                    ImplGetGamma();
             }
             break;
 
@@ -1567,5 +1570,13 @@ const std::vector< vcl::PNGReader::ChunkData >& PNGReader::GetChunks() const
 {
     return mpImpl->GetAllChunks();
 }
+
+// ------------------------------------------------------------------------
+
+void PNGReader::SetIgnoreGammaChunk( sal_Bool b )
+{
+    mpImpl->SetIgnoreGammaChunk( b );
+}
+
 
 } // namespace vcl

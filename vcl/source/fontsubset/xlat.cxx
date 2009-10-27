@@ -25,163 +25,196 @@
  *
  ************************************************************************/
 
-/*
- *
- * Data translation from Unicode to MS encodings
- * If the host system provides this functionality
- * this file should be rewritten to use it and
- * the large translation arrays should be removed
- *
- * Author: Alexander Gelfenbain
- *
-  */
+#include "rtl/textcvt.h"
+#include <tools/debug.hxx>
+
+namespace { // anonymous namespace
+
+// ====================================================================
+
+#define MAX_CVT_SELECT 6
+
+class ConverterCache
+{
+public:
+    explicit    ConverterCache( void );
+                ~ConverterCache( void );
+    sal_uInt16  convertOne( int nSelect, sal_Unicode );
+    void        convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount );
+protected:
+    void        ensureConverter( int nSelect );
+private:
+    rtl_UnicodeToTextConverter maConverterCache[ MAX_CVT_SELECT+1 ];
+    rtl_UnicodeToTextContext maContexts[ MAX_CVT_SELECT+1 ];
+};
+
+// ====================================================================
+
+ConverterCache::ConverterCache( void)
+{
+    for( int i = 0; i <= MAX_CVT_SELECT; ++i)
+    {
+        maConverterCache[i] = NULL;
+        maContexts[i] = NULL;
+    }
+}
+
+// --------------------------------------------------------------------
+
+ConverterCache::~ConverterCache( void)
+{
+    for( int i = 0; i <= MAX_CVT_SELECT; ++i)
+    {
+        if( !maContexts[i] )
+            continue;
+        rtl_destroyUnicodeToTextContext( maConverterCache[i], maContexts[i] );
+        rtl_destroyUnicodeToTextConverter( maConverterCache[i] );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void ConverterCache::ensureConverter( int nSelect )
+{
+    // DBG_ASSERT( (2<=nSelect) && (nSelect<=MAX_CVT_SELECT)), "invalid XLAT.Converter requested" );
+    rtl_UnicodeToTextContext aContext = maContexts[ nSelect ];
+    if( !aContext )
+    {
+        rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
+        switch( nSelect )
+        {
+            default: nSelect = 1; // fall through to unicode recoding
+            case 1: eRecodeFrom = RTL_TEXTENCODING_UNICODE; break;
+            case 2: eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS; break;
+            case 3: eRecodeFrom = RTL_TEXTENCODING_GB_2312; break;
+            case 4: eRecodeFrom = RTL_TEXTENCODING_BIG5; break;
+            case 5: eRecodeFrom = RTL_TEXTENCODING_MS_949; break;
+            case 6: eRecodeFrom = RTL_TEXTENCODING_MS_1361; break;
+        }
+        rtl_UnicodeToTextConverter aRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
+        maConverterCache[ nSelect ] = aRecodeConverter;
+
+        aContext = rtl_createUnicodeToTextContext( aRecodeConverter );
+        maContexts[ nSelect ] = aContext;
+    }
+
+    rtl_resetUnicodeToTextContext( maConverterCache[ nSelect ], aContext );
+}
+
+// --------------------------------------------------------------------
+
+sal_uInt16 ConverterCache::convertOne( int nSelect, sal_Unicode aChar )
+{
+    ensureConverter( nSelect );
+
+    sal_Unicode aUCS2Char = aChar;
+    sal_Char aTempArray[8];
+    sal_Size nTempSize;
+    sal_uInt32 nCvtInfo;
+
+    // TODO: use direct unicode->mbcs converter should there ever be one
+    int nCodeLen = rtl_convertUnicodeToText(
+            maConverterCache[ nSelect ], maContexts[ nSelect ],
+            &aUCS2Char, 1, aTempArray, sizeof(aTempArray),
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0
+            | RTL_UNICODETOTEXT_FLAGS_INVALID_0,
+            &nCvtInfo, &nTempSize );
+
+    sal_uInt16 aCode = aTempArray[0];
+    for( int i = 1; i < nCodeLen; ++i )
+        aCode = (aCode << 8) + (aTempArray[i] & 0xFF);
+    return aCode;
+}
+
+// --------------------------------------------------------------------
+
+void ConverterCache::convertStr( int nSelect, const sal_Unicode* pSrc, sal_uInt16* pDst, int nCount )
+{
+    ensureConverter( nSelect );
+
+    for( int n = 0; n < nCount; ++n )
+    {
+        sal_Unicode aUCS2Char = pSrc[n];
+
+        sal_Char aTempArray[8];
+        sal_Size nTempSize;
+        sal_uInt32 nCvtInfo;
+
+        // assume that non-unicode-fonts do not support codepoints >U+FFFF
+        // TODO: use direct unicode->mbcs converter should there ever be one
+        int nCodeLen = rtl_convertUnicodeToText(
+            maConverterCache[ nSelect ], maContexts[ nSelect ],
+            &aUCS2Char, 1, aTempArray, sizeof(aTempArray),
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0
+            | RTL_UNICODETOTEXT_FLAGS_INVALID_0,
+            &nCvtInfo, &nTempSize );
+
+        sal_uInt16 aCode = aTempArray[0];
+        for( int i = 1; i < nCodeLen; ++i )
+            aCode = (aCode << 8) + (aTempArray[i] & 0xFF);
+        pDst[n] = aCode;
+    }
+}
+
+} // anonymous namespace
+
+// ====================================================================
 
 #include "xlat.hxx"
 
 namespace vcl
 {
 
-// TODO: use generic encoding converters and get rid of the include files below
-#include "u2big5.inc"
-#include "u2johab.inc"
-#include "u2prc.inc"
-#include "u2shiftjis.inc"
-#include "u2wansung.inc"
-
-#define MISSING_CODE 0
-
-static sal_uInt16 xlat(sal_uInt16pair p[], sal_uInt32 n, sal_uInt16 src)
-{
-    int l = 0, r = n - 1, i;
-    sal_uInt16 t, res = MISSING_CODE;
-
-    do {
-        i = (l + r) >> 1;
-        t = p[i].s;
-        if (src >= t) l = i + 1;
-        if (src <= t) r = i - 1;
-    } while (l <= r);
-
-    if (l - r == 2) {
-        res =  p[l-1].d;
-    }
-
-    return res;
-}
+static ConverterCache aCC;
 
 sal_uInt16 TranslateChar12(sal_uInt16 src)
 {
-    return xlat(xlat_1_2, sizeof(xlat_1_2) / sizeof(xlat_1_2[0]), src);
+    return aCC.convertOne( 2, src);
 }
 
 sal_uInt16 TranslateChar13(sal_uInt16 src)
 {
-    return xlat(xlat_1_3, sizeof(xlat_1_3) / sizeof(xlat_1_3[0]), src);
+    return aCC.convertOne( 3, src);
 }
 
 sal_uInt16 TranslateChar14(sal_uInt16 src)
 {
-    return xlat(xlat_1_4, sizeof(xlat_1_4) / sizeof(xlat_1_4[0]), src);
+    return aCC.convertOne( 4, src);
 }
 
 sal_uInt16 TranslateChar15(sal_uInt16 src)
 {
-    return xlat(xlat_1_5, sizeof(xlat_1_5) / sizeof(xlat_1_5[0]), src);
+    return aCC.convertOne( 5, src);
 }
 
 sal_uInt16 TranslateChar16(sal_uInt16 src)
 {
-    return xlat(xlat_1_6, sizeof(xlat_1_6) / sizeof(xlat_1_5[0]), src);
+    return aCC.convertOne( 6, src);
 }
 
 void TranslateString12(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    sal_uInt32 i;
-    sal_uInt16 lastS, lastD;
-
-    if (n == 0) return;
-
-    lastD = dst[0] = xlat(xlat_1_2, sizeof(xlat_1_2) / sizeof(xlat_1_2[0]), lastS = src[0]);
-
-    for (i=1; i < n; i++) {
-        if (src[i] == lastS) {
-            dst[i] = lastD;
-        } else {
-            lastD = dst[i] = xlat(xlat_1_2, sizeof(xlat_1_2) / sizeof(xlat_1_2[0]), lastS = src[i]);
-        }
-    }
+    aCC.convertStr( 2, src, dst, n);
 }
 
 void TranslateString13(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    sal_uInt32 i;
-    sal_uInt16 lastS, lastD;
-
-    if (n == 0) return;
-
-    lastD = dst[0] = xlat(xlat_1_3, sizeof(xlat_1_3) / sizeof(xlat_1_3[0]), lastS = src[0]);
-
-    for (i=1; i < n; i++) {
-        if (src[i] == lastS) {
-            dst[i] = lastD;
-        } else {
-            lastD = dst[i] = xlat(xlat_1_3, sizeof(xlat_1_3) / sizeof(xlat_1_3[0]), lastS = src[i]);
-        }
-    }
+    aCC.convertStr( 3, src, dst, n);
 }
 
 void TranslateString14(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    sal_uInt32 i;
-    sal_uInt16 lastS, lastD;
-
-    if (n == 0) return;
-
-    lastD = dst[0] = xlat(xlat_1_4, sizeof(xlat_1_4) / sizeof(xlat_1_4[0]), lastS = src[0]);
-
-    for (i=1; i < n; i++) {
-        if (src[i] == lastS) {
-            dst[i] = lastD;
-        } else {
-            lastD = dst[i] = xlat(xlat_1_4, sizeof(xlat_1_4) / sizeof(xlat_1_4[0]), lastS = src[i]);
-        }
-    }
+    aCC.convertStr( 4, src, dst, n);
 }
 
 void TranslateString15(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    sal_uInt32 i;
-    sal_uInt16 lastS, lastD;
-
-    if (n == 0) return;
-
-    lastD = dst[0] = xlat(xlat_1_5, sizeof(xlat_1_5) / sizeof(xlat_1_5[0]), lastS = src[0]);
-
-    for (i=1; i < n; i++) {
-        if (src[i] == lastS) {
-            dst[i] = lastD;
-        } else {
-            lastD = dst[i] = xlat(xlat_1_5, sizeof(xlat_1_5) / sizeof(xlat_1_5[0]), lastS = src[i]);
-        }
-    }
+    aCC.convertStr( 5, src, dst, n);
 }
 
 void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    sal_uInt32 i;
-    sal_uInt16 lastS, lastD;
-
-    if (n == 0) return;
-
-    lastD = dst[0] = xlat(xlat_1_6, sizeof(xlat_1_6) / sizeof(xlat_1_6[0]), lastS = src[0]);
-
-    for (i=1; i < n; i++) {
-        if (src[i] == lastS) {
-            dst[i] = lastD;
-        } else {
-            lastD = dst[i] = xlat(xlat_1_6, sizeof(xlat_1_6) / sizeof(xlat_1_6[0]), lastS = src[i]);
-        }
-    }
+    aCC.convertStr( 6, src, dst, n);
 }
 
 } // namespace vcl

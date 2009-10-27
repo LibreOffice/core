@@ -1,7 +1,0 @@
-CALC=OpenOffice.org 2.3-regneark
-CHART=OpenOffice.org 2.3-diagram
-DRAW=OpenOffice.org 2.3-tegning
-IMPRESS=OpenOffice.org 2.3-præsentation
-MATH=OpenOffice.org 2.3-formel
-WRITER=OpenOffice.org 2.3-tekst
-OTHER=

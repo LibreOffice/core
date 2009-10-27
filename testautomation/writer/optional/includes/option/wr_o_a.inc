@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Writer options test
 '*
@@ -49,7 +49,7 @@ testcase tToolsOptionsWriterPrint
     ' called after my save/restart testing
     ' The real print with paper to touch - and to get from the printer :-(
 
-    Dim i
+    Dim i as integer
     printlog "- Tools/Options/Writer: PrintWriter (real print)"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\options\options3.sxw" )
     Call sMakeReadOnlyDocumentEditable
@@ -128,11 +128,10 @@ testcase tToolsOptionsWriterPrint
         Sleep 3
     end if
 
-    'If this testcase runs alone next line has to be integrated
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
-    Call wOptionenUndo ( "Drucken" )
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    Call wOptionsUndo ( "Drucken" )
 endcase
 
 '------------------------------------------------------------------------------
@@ -271,22 +270,11 @@ testcase tToolsOptionsWriterTableMove
 
     Printlog "- with <Shift Alt Left> upsize 2. column to the right"
     Call wTypeKeys "<Shift Mod2 Left>"
-
     Call SpaltenBreiteTesten ( Spalte2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
     Printlog "- with <Alt Down> upsize 1. column down"
     Call wTypeKeys "<Left><Mod2 Down>"
-    Call ZeilenHoeheTesten ( Zeile1+VerschubSpalte )
-    Call SeitenAbstaendeTesten ( 0, 0 )
-
-    Printlog "- with <Shift Alt Up> upsize 1. column down"
-    Call wTypeKeys "<Mod2 Down>"
-    Call ZeilenHoeheTesten ( Zeile1+VerschubSpalte*2 )
-    Call SeitenAbstaendeTesten ( 0, 0 )
-
-    Printlog "- with <Shift Alt Down> downsize 1. column up"
-    Call wTypeKeys "<Shift Mod2 Down>"
     Call ZeilenHoeheTesten ( Zeile1+VerschubSpalte )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
@@ -309,25 +297,15 @@ testcase tToolsOptionsWriterTableMove
     Call ZeilenHoeheTesten ( Zeile2+VerschubSpalte*2/2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
-    Printlog "- with <Shift Alt Up> upsize 2. column down"
-    Call wTypeKeys "<Shift Mod2 Down>"
-    Call ZeilenHoeheTesten ( Zeile2+VerschubSpalte*2 )
-    Call SeitenAbstaendeTesten ( 0, 0 )
-
-    Printlog "- with <Shift Alt Down> downsize 2. column up"
-    Call wTypeKeys "<Shift Mod2 Down>"
-    Call ZeilenHoeheTesten ( Zeile2+VerschubSpalte*2/2 )
-    Call SeitenAbstaendeTesten ( 0, 0 )
-
     Printlog "- with <Alt Up> downsize 2. column up"
     Call wTypeKeys "<Mod2 Up>"
     Call ZeilenHoeheTesten ( Zeile2 )
     Call SeitenAbstaendeTesten ( 0, 0 )
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
-    Call wOptionenUndo "Tabelle"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    Call wOptionsUndo "Tabelle"
 endcase
 
 '------------------------------------------------------------------------------
@@ -427,10 +405,10 @@ testcase tToolsOptionsWriterTableInsert
     Call SpaltenTesten ( 2 )
     Call SeitenAbstaendeTesten ( VerschubSpalte, Spalte2 -VerschubSpalte )
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
-    Call wOptionenUndo "Tabelle"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    Call wOptionsUndo "Tabelle"
 endcase
 
 ' ************************************************************************
@@ -587,11 +565,11 @@ testcase tToolsOptionsWriterTableEffects
         Call ZeilenHoeheTesten ( 0.7 )
         Call SeitenAbstaendeTesten ( 0.00, 0.00 )
     end if
-    Call wOptionenUndo "Tabelle"
+    Call wOptionsUndo "Tabelle"
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '------------------------------------------------------------------------------
@@ -600,9 +578,9 @@ testcase tToolsOptionsWriterTableEffects2
     Dim Spalte1 as Double
     Dim vSeparator as string
     Dim VerschubZeile as Double
-  
+
     vSeparator = GetDecimalSeperator
-    
+
     printlog "- Tools / Options / Table"
     printlog "- Effect options should work immediately"
 
@@ -642,10 +620,10 @@ testcase tToolsOptionsWriterTableEffects2
     end if
     TabTabelle.Cancel
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
-    Call wOptionenUndo "Tabelle"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    Call wOptionsUndo "Tabelle"
 endcase
 
 '------------------------------------------------------------------------------
@@ -688,10 +666,10 @@ testcase tToolsOptionsWriterDirectCursor2
     Vergroesserung100.Check
     Massstab.OK
 
-	Do Until GetDocumentCount = 0
-    	Call hCloseDocument
-	Loop
-    Call wOptionenUndo "Cursor"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
+    Call wOptionsUndo "Cursor"
 endcase
 
 '------------------------------------------------------------------------------

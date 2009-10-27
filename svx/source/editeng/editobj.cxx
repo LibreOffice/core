@@ -253,6 +253,18 @@ void ContentInfo::DestroyLoadStoreTempInfos()
 }
 */
 
+// #i102062#
+bool ContentInfo::isWrongListEqual(const ContentInfo& rCompare) const
+{
+    if(GetWrongList() == rCompare.GetWrongList())
+        return true;
+
+    if(!GetWrongList() || !rCompare.GetWrongList())
+        return false;
+
+    return (*GetWrongList() == *rCompare.GetWrongList());
+}
+
 bool ContentInfo::operator==( const ContentInfo& rCompare ) const
 {
     if( (aText == rCompare.aText) &&
@@ -566,6 +578,12 @@ bool EditTextObject::operator==( const EditTextObject& rCompare ) const
     return static_cast< const BinTextObject* >( this )->operator==( static_cast< const BinTextObject& >( rCompare ) );
 }
 
+// #i102062#
+bool EditTextObject::isWrongListEqual(const EditTextObject& rCompare) const
+{
+    return static_cast< const BinTextObject* >(this)->isWrongListEqual(static_cast< const BinTextObject& >(rCompare));
+}
+
 // from SfxItemPoolUser
 void BinTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 {
@@ -599,6 +617,23 @@ void BinTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
     }
 }
 
+EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
+{
+    EditEngineItemPool* pRetval = dynamic_cast< EditEngineItemPool* >(pPool);
+
+    while(!pRetval && pPool && pPool->GetSecondaryPool())
+    {
+        pPool = pPool->GetSecondaryPool();
+
+        if(pPool)
+        {
+            pRetval = dynamic_cast< EditEngineItemPool* >(pPool);
+        }
+    }
+
+    return pRetval;
+}
+
 BinTextObject::BinTextObject( SfxItemPool* pP ) :
     EditTextObject( EE_FORMAT_BIN ),
     SfxItemPoolUser()
@@ -608,9 +643,17 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
     nUserType = 0;
     nObjSettings = 0;
     pPortionInfo = 0;
-    if ( pP )
+
+    // #i101239# ensure target is a EditEngineItemPool, else
+    // fallback to pool ownership. This is needed to ensure that at
+    // pool destruction time of an alien pool, the pool is still alive.
+    // When registering would happen at an alien pool which just uses an
+    // EditEngineItemPool as some sub-pool, that pool could already
+    // be decoupled and deleted whcih would lead to crashes.
+    pPool = getEditEngineItemPool(pP);
+
+    if ( pPool )
     {
-        pPool = pP;
         bOwnerOfPool = FALSE;
     }
     else
@@ -621,6 +664,7 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
 
     if(!bOwnerOfPool && pPool)
     {
+        // it is sure now that the pool is an EditEngineItemPool
         pPool->AddSfxItemPoolUser(*this);
     }
 
@@ -641,9 +685,12 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
     nScriptType = r.nScriptType;
     pPortionInfo = NULL;    // PortionInfo nicht kopieren
     bStoreUnicodeStrings = FALSE;
+
     if ( !r.bOwnerOfPool )
     {
-        // Dann den Pool mitverwenden
+        // reuse alien pool; this must be a EditEngineItemPool
+        // since there is no other way to construct a BinTextObject
+        // than it's regular constructor where that is ensured
         pPool = r.pPool;
         bOwnerOfPool = FALSE;
     }
@@ -656,6 +703,7 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
 
     if(!bOwnerOfPool && pPool)
     {
+        // it is sure now that the pool is an EditEngineItemPool
         pPool->AddSfxItemPoolUser(*this);
     }
 
@@ -1584,6 +1632,28 @@ bool BinTextObject::operator==( const BinTextObject& rCompare ) const
     {
         if( !( *aContents.GetObject( n ) == *rCompare.aContents.GetObject( n ) ) )
             return false;
+    }
+
+    return true;
+}
+
+// #i102062#
+bool BinTextObject::isWrongListEqual(const BinTextObject& rCompare) const
+{
+    if(GetContents().Count() != rCompare.GetContents().Count())
+    {
+        return false;
+    }
+
+    for(USHORT a(0); a < GetContents().Count(); a++)
+    {
+        const ContentInfo& rCandA(*GetContents().GetObject(a));
+        const ContentInfo& rCandB(*rCompare.GetContents().GetObject(a));
+
+        if(!rCandA.isWrongListEqual(rCandB))
+        {
+            return false;
+        }
     }
 
     return true;

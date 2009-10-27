@@ -67,9 +67,6 @@ struct Ce_Traits
     static entity_base_type &
                         EntityOf_(
                             id_type             i_id );
-    static id_type      IdOf_(
-                            const entity_base_type &
-                                                i_entity );
 };
 
 
@@ -86,10 +83,6 @@ struct CeNode_Traits : public Ce_Traits
     static symtree::Node<CeNode_Traits> *
                         NodeOf_(
                             entity_base_type &  i_entity );
-    static const String &
-                        LocalNameOf_(
-                            const entity_base_type &
-                                                i_entity );
     static entity_base_type *
                         ParentOf_(
                             const entity_base_type &
@@ -148,9 +141,6 @@ struct Def_Traits
     static entity_base_type &
                         EntityOf_(
                             id_type             i_id );
-    static id_type      IdOf_(
-                            const entity_base_type &
-                                                i_entity );
 };
 
 
@@ -181,9 +171,6 @@ struct Type_Traits
     static entity_base_type &
                         EntityOf_(
                             id_type             i_id );
-    static id_type      IdOf_(
-                            const entity_base_type &
-                                                i_entity );
 };
 
 /** An instance of COMPARE for ->::ary::SortedIds<>.

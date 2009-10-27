@@ -46,6 +46,7 @@ class ScEditViewForwarder;
 class ScPreviewShell;
 class EditTextObject;
 class ScCsvViewForwarder;
+class ScAccessibleCell;
 
 
 // ============================================================================
@@ -103,7 +104,7 @@ class ScAccessibleCellTextData : public ScAccessibleCellBaseTextData
 {
 public:
                         ScAccessibleCellTextData(ScTabViewShell* pViewShell,
-                            const ScAddress& rP, ScSplitPos eSplitPos);
+                            const ScAddress& rP, ScSplitPos eSplitPos, ScAccessibleCell* pAccCell);
     virtual             ~ScAccessibleCellTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -123,6 +124,7 @@ private:
     ScTabViewShell* mpViewShell;
     ScSplitPos meSplitPos;
     sal_Bool mbViewEditEngine;
+    ScAccessibleCell* mpAccessibleCell;
 
     // prevent the using of this method of the base class
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }

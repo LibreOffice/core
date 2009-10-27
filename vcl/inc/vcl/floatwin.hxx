@@ -157,6 +157,8 @@ public:
     const Link&     GetPopupModeEndHdl() const  { return maPopupModeEndHdl; }
 
     BOOL            GrabsFocus() const { return mbGrabFocus; }
+
+    static Point    CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, ULONG nFlags, USHORT& rArrangeIndex );
 };
 
 #endif // _SV_FLOATWIN_HXX

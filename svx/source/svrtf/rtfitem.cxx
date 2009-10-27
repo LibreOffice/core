@@ -1257,12 +1257,16 @@ ATTR_SETEMPHASIS:
                                 ReadTabAttr( nToken, *pSet );
 
                                 /*
-                                cmc: #i76140, he who reads the { must read the }
+                                cmc: #i76140, he who consumed the { must consume the }
                                 We rewound to a state of { being the current
-                                token so it is our responsibility to read the }
-                                token.
+                                token so it is our responsibility to consume the }
+                                token if we consumed the {. We will not have consumed
+                                the { if it belonged to our caller, i.e. if the { we
+                                are handling is the "firsttoken" passed to us then
+                                the *caller* must consume it, not us. Otherwise *we*
+                                should consume it.
                                 */
-                                if (nToken == BRACELEFT)
+                                if (nToken == BRACELEFT && !bFirstToken)
                                 {
                                     nToken = GetNextToken();
                                     DBG_ASSERT( nToken == BRACERIGHT,

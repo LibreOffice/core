@@ -33,7 +33,7 @@
 
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/task/XInteractionHandler.hpp"
+#include "com/sun/star/task/XInteractionHandler2.hpp"
 #include "cppuhelper/implbase3.hxx"
 
 class UUIInteractionHelper;
@@ -41,7 +41,7 @@ class UUIInteractionHelper;
 class UUIInteractionHandler:
     public cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
                                   com::sun::star::lang::XInitialization,
-                                  com::sun::star::task::XInteractionHandler >
+                                  com::sun::star::task::XInteractionHandler2 >
 {
 public:
     static char const m_aImplementationName[];
@@ -95,6 +95,10 @@ private:
        rRequest)
         throw (com::sun::star::uno::RuntimeException);
 
+    virtual ::sal_Bool SAL_CALL
+        handleInteractionRequest(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& _Request
+        )   throw ( ::com::sun::star::uno::RuntimeException );
 };
 
 #endif // UUI_INTERACTIONHANDLER_HXX

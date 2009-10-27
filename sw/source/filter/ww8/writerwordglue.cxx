@@ -69,23 +69,6 @@
 
 namespace myImplHelpers
 {
-    class closeenough : public std::unary_function<long, bool>
-    {
-    private:
-        long mnValue;
-        long mnWriggleRoom;
-    public:
-        closeenough(long nValue, long nWriggleRoom)
-            : mnValue(nValue), mnWriggleRoom(nWriggleRoom) {}
-        bool operator()(long nTest) const
-        {
-            return (
-                    (mnValue - nTest < mnWriggleRoom) &&
-                    (mnValue - nTest > -mnWriggleRoom)
-                   );
-        }
-    };
-
     SwTwips CalcHdFtDist(const SwFrmFmt& rFmt, sal_uInt16 nSpacing)
     {
         /*
@@ -400,38 +383,6 @@ namespace myImplHelpers
 
 namespace sw
 {
-    namespace types
-    {
-        long SnapPageDimension(long nSize) throw()
-        {
-            static const long aSizes[] =
-            {
-                lA0Width, lA0Height, lA1Width, lA2Width, lA3Width, lA4Width,
-                lA5Width, lB4Width, lB4Height, lB5Width, lB6Width, lC4Width,
-                lC4Height, lC5Width, lC6Width, lC65Width, lC65Height, lDLWidth,
-                lDLHeight, lJISB4Width, lJISB4Height, lJISB5Width, lJISB6Width,
-                lLetterWidth, lLetterHeight, lLegalHeight, lTabloidWidth,
-                lTabloidHeight, lDiaWidth, lDiaHeight, lScreenWidth,
-                lScreenHeight, lAWidth, lAHeight, lBHeight, lCHeight, lDHeight,
-                lEHeight, lExeWidth, lExeHeight, lLegal2Width, lLegal2Height,
-                lCom675Width, lCom675Height, lCom9Width, lCom9Height,
-                lCom10Width, lCom10Height, lCom11Width, lCom11Height,
-                lCom12Width, lMonarchHeight, lKai16Width, lKai16Height,
-                lKai32Width, lKai32BigWidth, lKai32BigHeight
-            };
-
-            const long nWriggleRoom = 5;
-            const long *pEnd = aSizes + sizeof(aSizes) / sizeof(aSizes[0]);
-            const long *pEntry =
-                std::find_if(aSizes, pEnd, myImplHelpers::closeenough(nSize, nWriggleRoom));
-
-            if (pEntry != pEnd)
-                nSize = *pEntry;
-
-            return nSize;
-        }
-    }
-
     namespace util
     {
 
@@ -597,8 +548,8 @@ namespace sw
             using namespace ::com::sun::star::i18n;
 
             sal_uInt16 nScript = i18n::ScriptType::LATIN;
-            if (rTxt.Len() && pBreakIt && pBreakIt->xBreak.is())
-                nScript = pBreakIt->xBreak->getScriptType(rTxt, 0);
+            if (rTxt.Len() && pBreakIt && pBreakIt->GetBreakIter().is())
+                nScript = pBreakIt->GetBreakIter()->getScriptType(rTxt, 0);
 
             rtl_TextEncoding eChrSet = ItemGet<SvxFontItem>(rTxtNd,
                 GetWhichOfScript(RES_CHRATR_FONT, nScript)).GetCharSet();
@@ -684,20 +635,20 @@ namespace sw
 
             using sw::types::writer_cast;
 
-            if (pBreakIt && pBreakIt->xBreak.is())
+            if (pBreakIt && pBreakIt->GetBreakIter().is())
             {
                 xub_StrLen nLen = rTxt.Len();
                 xub_StrLen nPos = 0;
                 while (nPos < nLen)
                 {
-                    sal_Int32 nEnd2 = pBreakIt->xBreak->endOfScript(rTxt, nPos,
+                    sal_Int32 nEnd2 = pBreakIt->GetBreakIter()->endOfScript(rTxt, nPos,
                         nScript);
                     if (nEnd2 < 0)
                         break;
 //                    nPos = writer_cast<xub_StrLen>(nEnd2);
                     nPos = static_cast< xub_StrLen >(nEnd2);
                     aScripts.push_back(ScriptEntry(nPos, nScript));
-                    nScript = pBreakIt->xBreak->getScriptType(rTxt, nPos);
+                    nScript = pBreakIt->GetBreakIter()->getScriptType(rTxt, nPos);
                 }
             }
 

@@ -1,0 +1,35 @@
+--- misc/redland-1.0.8/librdf/rdf_storage_hashes.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_storage_hashes.c	Thu Nov  6 12:44:39 2008
+@@ -1593,7 +1661,6 @@
+ {
+   librdf_storage_hashes_context_serialise_stream_context* scontext=(librdf_storage_hashes_context_serialise_stream_context*)context;
+   librdf_hash_datum* v;
+-  librdf_node** cnp=NULL;
+ 
+   switch(flags) {
+     case LIBRDF_ITERATOR_GET_METHOD_GET_OBJECT:
+@@ -1606,20 +1673,14 @@
+           return scontext->context_node;
+       }
+ 
+-      /* current stuff is out of date - get new cached answers */
+-      if(scontext->index_contexts) {
+-        if(scontext->context_node)
+-          librdf_free_node(scontext->context_node);
+-        scontext->context_node=NULL;
+-        cnp=&scontext->context_node;
+-      }
+-      
++      /* note: scontext->context_node is still valid */
++
+       librdf_statement_clear(&scontext->current);
+ 
+       v=(librdf_hash_datum*)librdf_iterator_get_value(scontext->iterator);
+-      
++
+       /* decode value content and optional context */
+-      if(!librdf_statement_decode_parts(&scontext->current, cnp,
++      if(!librdf_statement_decode_parts(&scontext->current, NULL,
+                                         (unsigned char*)v->data, v->size)) {
+         return NULL;
+       }

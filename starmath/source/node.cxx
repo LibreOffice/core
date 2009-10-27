@@ -579,16 +579,16 @@ SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
     SmNode( rNode.GetType(), rNode.GetToken() )
 {
     ULONG i;
-    for (i = 0;  i < aSubNodes.GetSize();  i++)
-        delete aSubNodes.Get(i);
-    aSubNodes.Clear();
+    for (i = 0;  i < aSubNodes.size();  i++)
+        delete aSubNodes[i];
+    aSubNodes.resize(0);
 
-    ULONG nSize = rNode.aSubNodes.GetSize();
-    aSubNodes.SetSize( nSize );
+    ULONG nSize = rNode.aSubNodes.size();
+    aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
-        SmNode *pNode = rNode.aSubNodes.Get(i);
-        aSubNodes.Put( i, pNode ? new SmNode( *pNode ) : 0 );
+        SmNode *pNode = rNode.aSubNodes[i];
+        aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
     }
 }
 
@@ -608,16 +608,16 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
     SmNode::operator = ( rNode );
 
     ULONG i;
-    for (i = 0;  i < aSubNodes.GetSize();  i++)
-        delete aSubNodes.Get(i);
-    aSubNodes.Clear();
+    for (i = 0;  i < aSubNodes.size();  i++)
+        delete aSubNodes[i];
+    aSubNodes.resize(0);
 
-    ULONG nSize = rNode.aSubNodes.GetSize();
-    aSubNodes.SetSize( nSize );
+    ULONG nSize = rNode.aSubNodes.size();
+    aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
-        SmNode *pNode = rNode.aSubNodes.Get(i);
-        aSubNodes.Put( i, pNode ? new SmNode( *pNode ) : 0 );
+        SmNode *pNode = rNode.aSubNodes[i];
+        aSubNodes[i] = pNode ? new SmNode( *pNode ) : 0;
     }
 
     return *this;
@@ -626,12 +626,14 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
 
 void SmStructureNode::SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird)
 {
+    size_t nSize = pThird ? 3 : (pSecond ? 2 : (pFirst ? 1 : 0));
+    aSubNodes.resize( nSize );
     if (pFirst)
-        aSubNodes.Put(0, pFirst);
+        aSubNodes[0] = pFirst;
     if (pSecond)
-        aSubNodes.Put(1, pSecond);
+        aSubNodes[1] = pSecond;
     if (pThird)
-        aSubNodes.Put(2, pThird);
+        aSubNodes[2] = pThird;
 }
 
 
@@ -649,13 +651,13 @@ BOOL SmStructureNode::IsVisible() const
 
 USHORT SmStructureNode::GetNumSubNodes() const
 {
-    return (USHORT) aSubNodes.GetSize();
+    return (USHORT) aSubNodes.size();
 }
 
 
 SmNode * SmStructureNode::GetSubNode(USHORT nIndex)
 {
-    return aSubNodes.Get(nIndex);
+    return aSubNodes[nIndex];
 }
 
 
@@ -857,8 +859,6 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 void SmExpressionNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // as 'SmLineNode::Arrange' but keeps alignment of leftmost subnode
 {
-    DBG_ASSERT(GetNumSubNodes() > 0, "Sm: keine subnodes");
-
     SmLineNode::Arrange(rDev, rFormat);
 
     //  copy alignment of leftmost subnode if any

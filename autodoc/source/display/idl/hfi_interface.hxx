@@ -55,9 +55,6 @@ class HF_IdlInterface : public HtmlFactory_Idl
 
     void                Produce_byData(
                             const client &      i_ce ) const;
-    void                Display_BaseNode(
-                            const HF_IdlBaseNode &
-                                                i_rNode ) const;
   private:
     // Locals
     DYN HF_NaviSubRow & make_Navibar(

@@ -68,7 +68,7 @@ public final class Bug108825_Test extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTest test = (XTest) UnoRuntime.queryInterface(
+            XTest test = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));
             // Send the XObject that is held on the server side amidst two
             // dummies that are not held on the server side; then wait for the

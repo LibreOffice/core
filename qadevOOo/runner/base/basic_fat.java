@@ -60,12 +60,13 @@ import stats.Summarizer;
 
 import util.DynamicClassLoader;
 
-
 /**
  * The testbase for executing basic tests.
  *  @see lib.TestBase
  */
-public class basic_fat implements TestBase {
+public class basic_fat implements TestBase
+{
+
     public static boolean debug = false;
 
     /**
@@ -73,7 +74,8 @@ public class basic_fat implements TestBase {
      *  @param param The test parameters.
      *  @param return True, if the test was executed.
      */
-    public boolean executeTest(TestParameters param) {
+    public boolean executeTest(TestParameters param)
+    {
         DescGetter dg = new APIDescGetter();
         String job = (String) param.get("TestJob");
         OfficeProvider office = null;
@@ -84,11 +86,12 @@ public class basic_fat implements TestBase {
         System.out.print("Getting Descriptions for Job: " + job + " from ");
 
         DescEntry[] entries = dg.getDescriptionFor(job,
-                                                   (String) param.get(
-                                                           "DescriptionPath"),
-                                                   debug);
+                (String) param.get(
+                "DescriptionPath"),
+                debug);
 
-        if (entries == null) {
+        if (entries == null)
+        {
             System.out.println("Couldn't get Description for Job");
 
             return false;
@@ -97,7 +100,8 @@ public class basic_fat implements TestBase {
         String ExclusionFile = (String) param.get("ExclusionList");
         Vector exclusions = null;
 
-        if (ExclusionFile != null) {
+        if (ExclusionFile != null)
+        {
             exclusions = getExclusionList(ExclusionFile, debug);
         }
 
@@ -106,8 +110,10 @@ public class basic_fat implements TestBase {
         System.out.print("> Connecting the Office ");
         System.out.println("With " + conStr);
 
-        for (int l = 0; l < entries.length; l++) {
-            if (entries[l].hasErrorMsg) {
+        for (int l = 0; l < entries.length; l++)
+        {
+            if (entries[l].hasErrorMsg)
+            {
                 System.out.println(entries[l].ErrorMsg);
 
                 continue;
@@ -116,9 +122,10 @@ public class basic_fat implements TestBase {
             office = new OfficeProvider();
 
             XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
-                                               param);
+                    param);
 
-            if (msf == null) {
+            if (msf == null)
+            {
                 return false;
             }
 
@@ -134,7 +141,8 @@ public class basic_fat implements TestBase {
 
             tCase = (TestCase) new BasicTestCase(entry);
 
-            if (tCase == null) {
+            if (tCase == null)
+            {
                 sumIt.summarizeDown(entry, entry.ErrorMsg);
 
                 LogWriter sumObj = OutProducerFactory.createOutProducer(param);
@@ -147,21 +155,26 @@ public class basic_fat implements TestBase {
             System.out.println("Creating: " + tCase.getObjectName());
 
             LogWriter log = (LogWriter) dcl.getInstance(
-                                    (String) param.get("LogWriter"));
+                    (String) param.get("LogWriter"));
             log.initialize(entry, true);
             entry.UserDefinedParams = param;
             tCase.setLogWriter((PrintWriter) log);
 
-            try {
+            try
+            {
                 tCase.initializeTestCase(param);
-            } catch (RuntimeException e) {
+            }
+            catch (RuntimeException e)
+            {
                 helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                                   "AppProvider");
+                        "AppProvider");
 
-                if (ph != null) {
+                if (ph != null)
+                {
                     OfficeWatcher ow = (OfficeWatcher) param.get("Watcher");
 
-                    if ((ow != null) && ow.isAlive()) {
+                    if ((ow != null) && ow.isAlive())
+                    {
                         ow.finish = true;
                     }
 
@@ -174,7 +187,8 @@ public class basic_fat implements TestBase {
 
             TestEnvironment tEnv = tCase.getTestEnvironment(param);
 
-            if (tEnv == null) {
+            if (tEnv == null)
+            {
                 sumIt.summarizeDown(entry, "Unable to create testcase");
 
                 LogWriter sumObj = OutProducerFactory.createOutProducer(param);
@@ -182,12 +196,14 @@ public class basic_fat implements TestBase {
                 sumObj.summary(entry);
 
                 helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                                   "AppProvider");
+                        "AppProvider");
 
-                if (ph != null) {
+                if (ph != null)
+                {
                     OfficeWatcher ow = (OfficeWatcher) param.get("Watcher");
 
-                    if ((ow != null) && ow.isAlive()) {
+                    if ((ow != null) && ow.isAlive())
+                    {
                         ow.finish = true;
                     }
 
@@ -200,36 +216,41 @@ public class basic_fat implements TestBase {
 
             System.out.println("created " + tCase.getObjectName());
 
-            for (int j = 0; j < entry.SubEntryCount; j++) {
-                if (!entry.SubEntries[j].isToTest) {
+            for (int j = 0; j < entry.SubEntryCount; j++)
+            {
+                if (!entry.SubEntries[j].isToTest)
+                {
                     Summarizer.summarizeDown(entry.SubEntries[j],
-                                             "not part of the job");
+                            "not part of the job");
 
                     continue;
                 }
 
                 if ((exclusions != null) &&
-                        (exclusions.contains(entry.SubEntries[j].longName))) {
+                        (exclusions.contains(entry.SubEntries[j].longName)))
+                {
                     Summarizer.summarizeDown(entry.SubEntries[j],
-                                             "known issue");
+                            "known issue");
 
                     continue;
                 }
 
                 System.out.println("running: " +
-                                   entry.SubEntries[j].entryName);
+                        entry.SubEntries[j].entryName);
 
                 LogWriter ifclog = (LogWriter) dcl.getInstance(
-                                           (String) param.get("LogWriter"));
+                        (String) param.get("LogWriter"));
                 ifclog.initialize(entry.SubEntries[j], true);
                 entry.SubEntries[j].UserDefinedParams = param;
                 entry.SubEntries[j].Logger = ifclog;
 
-                if ((tEnv == null) || tEnv.isDisposed()) {
+                if ((tEnv == null) || tEnv.isDisposed())
+                {
                     helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                                       "AppProvider");
+                            "AppProvider");
 
-                    if (ph != null) {
+                    if (ph != null)
+                    {
                         office.closeExistingOffice(param, true);
                         shortWait(5000);
                     }
@@ -250,15 +271,19 @@ public class basic_fat implements TestBase {
                 sumIfc.summary(entry.SubEntries[j]);
             }
 
-            try {
+            try
+            {
                 tCase.cleanupTestCase(param);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.println("TestCase already gone");
 
                 helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                                   "AppProvider");
+                        "AppProvider");
 
-                if (ph != null) {
+                if (ph != null)
+                {
                     office.closeExistingOffice(param, true);
                     shortWait(5000);
                 }
@@ -271,49 +296,56 @@ public class basic_fat implements TestBase {
             sumObj.summary(entry);
         }
 
-        if (entries.length > 1) {
+        if (entries.length > 1)
+        {
             System.out.println();
 
             int counter = 0;
             System.out.println(
                     "Failures that appeared during scenario execution:");
 
-            for (int i = 0; i < entries.length; i++) {
-                if (!entries[i].State.endsWith("OK")) {
+            for (int i = 0; i < entries.length; i++)
+            {
+                if (!entries[i].State.endsWith("OK"))
+                {
                     System.out.println("\t " + entries[i].longName);
                     counter++;
                 }
             }
 
             System.out.println(counter + " of " + entries.length +
-                               " tests failed");
+                    " tests failed");
         }
 
         helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                           "AppProvider");
+                "AppProvider");
 
-        if (ph != null) {
+        if (ph != null)
+        {
             office.closeExistingOffice(param, true);
         }
 
         return true;
     }
 
-    protected TestEnvironment getEnv(DescEntry entry, TestParameters param) {
+    protected TestEnvironment getEnv(DescEntry entry, TestParameters param)
+    {
         DynamicClassLoader dcl = new DynamicClassLoader();
         String officeProviderName = (String) param.get("OfficeProvider");
         AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
 
-        if (office == null) {
+        if (office == null)
+        {
             System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
-                               " it cannot be instantiated.");
+                    " it cannot be instantiated.");
             System.exit(-1);
         }
 
         XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
-                                           param);
+                param);
 
-        if (msf == null) {
+        if (msf == null)
+        {
             return null;
         }
 
@@ -324,23 +356,27 @@ public class basic_fat implements TestBase {
         System.out.println("Creating: " + tCase.getObjectName());
 
         LogWriter log = (LogWriter) dcl.getInstance(
-                                (String) param.get("LogWriter"));
+                (String) param.get("LogWriter"));
         log.initialize(entry, true);
         entry.UserDefinedParams = param;
         tCase.setLogWriter((PrintWriter) log);
 
         TestEnvironment tEnv = null;
 
-        try {
+        try
+        {
             tCase.initializeTestCase(param);
             tEnv = tCase.getTestEnvironment(param);
-        } catch (java.lang.RuntimeException e) {
+        }
+        catch (java.lang.RuntimeException e)
+        {
             System.out.println(e.getMessage());
 
             helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                               "AppProvider");
+                    "AppProvider");
 
-            if (ph != null) {
+            if (ph != null)
+            {
                 office.closeExistingOffice(param, true);
                 shortWait(5000);
             }
@@ -352,37 +388,52 @@ public class basic_fat implements TestBase {
         return tEnv;
     }
 
-    protected void shortWait(int millis) {
-        try {
+    protected void shortWait(int millis)
+    {
+        try
+        {
             Thread.sleep(millis);
-        } catch (java.lang.InterruptedException ie) {
+        }
+        catch (java.lang.InterruptedException ie)
+        {
         }
     }
 
-    protected Vector getExclusionList(String url, boolean debug) {
+    protected Vector getExclusionList(String url, boolean debug)
+    {
         Vector entryList = new Vector();
         String line = "#";
         BufferedReader exclusion = null;
 
-        try {
+        try
+        {
             exclusion = new BufferedReader(new FileReader(url));
-        } catch (java.io.FileNotFoundException fnfe) {
-            if (debug) {
+        }
+        catch (java.io.FileNotFoundException fnfe)
+        {
+            if (debug)
+            {
                 System.out.println("Couldn't find file " + url);
             }
 
             return entryList;
         }
 
-        while (line != null) {
-            try {
-                if (!line.startsWith("#")) {
+        while (line != null)
+        {
+            try
+            {
+                if (!line.startsWith("#"))
+                {
                     entryList.add(line);
                 }
 
                 line = exclusion.readLine();
-            } catch (java.io.IOException ioe) {
-                if (debug) {
+            }
+            catch (java.io.IOException ioe)
+            {
+                if (debug)
+                {
                     System.out.println(
                             "Exception while reading exclusion list");
                 }
@@ -391,10 +442,14 @@ public class basic_fat implements TestBase {
             }
         }
 
-        try {
+        try
+        {
             exclusion.close();
-        } catch (java.io.IOException ioe) {
-            if (debug) {
+        }
+        catch (java.io.IOException ioe)
+        {
+            if (debug)
+            {
                 System.out.println("Couldn't close file " + url);
             }
 

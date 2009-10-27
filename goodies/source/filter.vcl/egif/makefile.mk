@@ -49,17 +49,18 @@ CDEFS+= -DEDITDEBUG
 SRS1NAME=$(TARGET)
 SRC1FILES =	dlgegif.src		\
         egifstr.src
-
+.IF "$(L10N_framework)"==""
 SLOFILES= 	$(SLO)$/egif.obj		\
         $(SLO)$/dlgegif.obj	\
         $(SLO)$/giflzwc.obj
-
+.ENDIF
 
 # ==========================================================================
 
 RESLIB1NAME=$(TARGET2)
 RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
+.IF "$(L10N_framework)"==""
 SHL1TARGET=     egi$(DLLPOSTFIX)
 SHL1IMPLIB=     egif
 SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(CPPULIB) $(SVTOOLLIB) $(SALLIB)
@@ -75,7 +76,7 @@ SHL1OBJS=       $(SLO)$/egif.obj
 SHL1VERSIONMAP=exports.map
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-
+.ENDIF
 # ==========================================================================
 
 .INCLUDE :  target.mk

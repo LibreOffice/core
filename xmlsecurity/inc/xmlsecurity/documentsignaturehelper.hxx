@@ -33,7 +33,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
-
+#include "xmlsecurity/sigstruct.hxx"
 
 #ifndef _STLP_VECTOR
 #include <vector>
@@ -64,6 +64,13 @@ namespace css = com::sun::star;
 
 enum DocumentSignatureMode { SignatureModeDocumentContent, SignatureModeMacros, SignatureModePackage };
 
+enum DocumentSignatureAlgorithm
+{
+    OOo2Document,
+    OOo3_0Document,
+    OOo3_2Document
+};
+
 struct SignatureStreamHelper
 {
     css::uno::Reference < css::embed::XStorage >    xSignatureStorage;
@@ -75,14 +82,24 @@ class DocumentSignatureHelper
 {
 public:
 
-    static SignatureStreamHelper OpenSignatureStream( const css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode );
-    static std::vector< rtl::OUString > CreateElementList( const css::uno::Reference < css::embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode );
-
+    static SignatureStreamHelper OpenSignatureStream(
+        const css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode,
+        DocumentSignatureMode eDocSigMode );
+    static std::vector< rtl::OUString > CreateElementList(
+        const css::uno::Reference < css::embed::XStorage >& rxStore,
+        const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode,
+        const DocumentSignatureAlgorithm mode);
+    static bool isODFPre_1_2(const ::rtl::OUString & sODFVersion);
+    static bool isOOo3_2_Signature(const SignatureInformation & sigInfo);
+    static DocumentSignatureAlgorithm getDocumentAlgorithm(
+        const ::rtl::OUString & sODFVersion, const SignatureInformation & sigInfo);
+    static bool checkIfAllFilesAreSigned( const ::std::vector< ::rtl::OUString > & sElementList,
+        const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
+    static bool equalsReferenceUriManifestPath(
+        const ::rtl::OUString & rUri, const ::rtl::OUString & rPath);
     static ::rtl::OUString GetDocumentContentSignatureDefaultStreamName();
     static ::rtl::OUString GetScriptingContentSignatureDefaultStreamName();
     static ::rtl::OUString GetPackageSignatureDefaultStreamName();
-    static bool isODFPre_1_2(const ::com::sun::star::uno::Reference <
-        ::com::sun::star::embed::XStorage >& /*rxStore*/);
 
 };
 

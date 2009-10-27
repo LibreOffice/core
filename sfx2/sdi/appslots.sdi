@@ -92,14 +92,6 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-    SID_CURRENTTIME // ole(no) api(final/play/norec)
-    [
-        StateMethod = MiscState_Impl ;
-    ]
-    SID_CURRENTDATE // ole(no) api(final/play/norec)
-    [
-        StateMethod = MiscState_Impl ;
-    ]
     SID_LOADCONFIG // ole(no) api(final/play)
     [
         ExecMethod = MiscExec_Impl ;

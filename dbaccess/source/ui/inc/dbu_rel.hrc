@@ -41,9 +41,10 @@
 #define STR_QUERY_REL_DELETE_WINDOW         RID_STR_REL_START + 3
 #define STR_QUERY_REL_EDIT                  RID_STR_REL_START + 4
 #define STR_QUERY_REL_CREATE                RID_STR_REL_START + 5
+#define STR_QUERY_REL_COULD_NOT_CREATE      RID_STR_REL_START + 6
 // please adjust checking before insert new strings
 
-#if STR_QUERY_REL_DELETE_WINDOW > RID_STR_REL_END
+#if STR_QUERY_REL_COULD_NOT_CREATE > RID_STR_REL_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 

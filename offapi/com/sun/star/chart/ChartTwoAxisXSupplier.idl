@@ -66,10 +66,20 @@ published service ChartTwoAxisXSupplier
 
     //-------------------------------------------------------------------------
 
-    /** determines if the description of the secondary x-axis
-        is shown or hidden.
-     */
+    /** determines for the secondary x-axis
+        if the labels at the tick marks are shown or hidden.
+    */
     [property] boolean HasSecondaryXAxisDescription;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the title of the secondary X-axis is shown or hidden.
+
+        @see ChartTitle
+
+        @since OOo 3.0
+    */
+    [optional, property] boolean HasSecondaryXAxisTitle;
 
 };
 

@@ -42,6 +42,7 @@
 #include "detfunc.hxx"
 #include "document.hxx"
 #include <vcl/svapp.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 /*************************************************************************
 |*
@@ -333,8 +334,10 @@ BOOL FuPoor::IsDetectiveHit( const Point& rLogicPos )
         {
             USHORT nHitLog = (USHORT) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
-            if ( pObject->IsHit( rLogicPos, nHitLog ) )
+            if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, 0, false))
+            {
                 bFound = TRUE;
+            }
         }
 
         pObject = aIter.Next();

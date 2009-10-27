@@ -133,16 +133,6 @@ Position::operator-=( intt i_levels )
 }
 
 String
-Position::LinkTo( const Position &  i_destination,
-                  const String &    i_localLabel ) const
-{
-    StreamLock  aLink(C_nAssumedMaxLinkLength);
-    StreamStr & rLink = aLink();
-    Get_LinkTo(rLink, i_destination, i_localLabel);
-    return rLink.c_str();
-}
-
-String
 Position::LinkToRoot( const String & ) const
 {
     StreamLock sl(C_nAssumedMaxLinkLength);

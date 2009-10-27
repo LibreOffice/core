@@ -39,8 +39,6 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XWindow;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.drawing.XDrawPage;
 

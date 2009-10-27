@@ -39,10 +39,6 @@ TARGET=gen
 .INCLUDE : settings.mk
 .INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
-.IF "$(WITH_GPC)"!="NO"
-CDEFS+=-DHAVE_GPC_H
-.ENDIF
-
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES = $(SLO)$/poly.obj $(OBJ)$/poly.obj

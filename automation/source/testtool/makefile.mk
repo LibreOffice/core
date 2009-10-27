@@ -103,12 +103,15 @@ $(MISC)$/xfilter.pl : filter.pl
 
 .IF "$(GUI)"=="UNX"
 INIFILESUFFIX=rc
+BRANDPATH=none
 .ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 INIFILESUFFIX=.ini
+BRANDPATH=..
 .END
 
 $(BIN)$/testtool$(INIFILESUFFIX): testtool.ini
-        $(SED) -e s/$(EMQ)!INIFILESUFFIX$(EMQ)!/$(INIFILESUFFIX)/ < $< > $@
+        $(SED) -e s/$(EMQ)!INIFILESUFFIX$(EMQ)!/$(INIFILESUFFIX)/ \
+            -e s/$(EMQ)!BRANDPATH$(EMQ)!/$(BRANDPATH)/ < $< > $@
 
 ALLTAR: \
         $(BIN)$/testtool$(INIFILESUFFIX)

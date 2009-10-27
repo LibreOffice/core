@@ -670,13 +670,13 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                     // if the first node dont contained any content, then
                     // insert one char in it calc again and delete once again
                     SwIndex aNdIdx( pFirstTxtNd );
-                    pFirstTxtNd->Insert( String::CreateFromAscii(
+                    pFirstTxtNd->InsertText( String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "MM" )), aNdIdx );
                     ULONG nAbsMinCnts;
                     pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
                                             nMinFrm, nMaxFrm, nAbsMinCnts );
                     aNdIdx -= 2;
-                    pFirstTxtNd->Erase( aNdIdx, 2 );
+                    pFirstTxtNd->EraseText( aNdIdx, 2 );
                 }
 
                 // Umrandung und Abstand zum Inhalt beachten

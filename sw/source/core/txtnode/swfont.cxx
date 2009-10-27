@@ -445,7 +445,9 @@ SwFont::SwFont( const SwFont &rFont )
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
-    nToxCnt = nRefCnt = 0;
+    nToxCnt = 0;
+    nRefCnt = 0;
+    m_nMetaCount = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;
@@ -461,7 +463,9 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
                 const IDocumentSettingAccess* pIDocumentSettingAccess )
 {
     nActual = SW_LATIN;
-    nToxCnt = nRefCnt = 0;
+    nToxCnt = 0;
+    nRefCnt = 0;
+    m_nMetaCount = 0;
     bPaintBlank = FALSE;
     bPaintWrong = FALSE;
     bURL = FALSE;
@@ -590,7 +594,9 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     pBackColor = rFont.pBackColor ? new Color( *rFont.pBackColor ) : NULL;
     aUnderColor = rFont.GetUnderColor();
     aOverColor  = rFont.GetOverColor();
-    nToxCnt = nRefCnt = 0;
+    nToxCnt = 0;
+    nRefCnt = 0;
+    m_nMetaCount = 0;
     bFntChg = rFont.bFntChg;
     bOrgChg = rFont.bOrgChg;
     bPaintBlank = rFont.bPaintBlank;

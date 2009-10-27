@@ -62,15 +62,15 @@ private:
     DrawModelWrapper();
 
 public:
-    DrawModelWrapper(::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE DrawModelWrapper(::com::sun::star::uno::Reference<
                ::com::sun::star::uno::XComponentContext > const & xContext );
-    virtual ~DrawModelWrapper();
+    SAL_DLLPRIVATE virtual ~DrawModelWrapper();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getShapeFactory();
 
     // the main page will contain the normal view objects
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > getMainDrawPage();
-    void clearMainDrawPage();
+    SAL_DLLPRIVATE void clearMainDrawPage();
 
     // the extra page is not visible, but contains some extras like the symbols for data points
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > getHiddenDrawPage();
@@ -80,25 +80,25 @@ public:
             ::com::sun::star::drawing::XDrawPage>& xPage );
 
 
-    void lockControllers();
-    void unlockControllers();
+    SAL_DLLPRIVATE void lockControllers();
+    SAL_DLLPRIVATE void unlockControllers();
 
     /// tries to get an OutputDevice from the XParent of the model to use as reference device
-    void attachParentReferenceDevice(
+    SAL_DLLPRIVATE void attachParentReferenceDevice(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
 
     OutputDevice* getReferenceDevice() const;
 
     SfxItemPool&            GetItemPool();
-    const SfxItemPool&      GetItemPool() const;
+    SAL_DLLPRIVATE const SfxItemPool&      GetItemPool() const;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         createUnoModel();
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         getUnoModel();
     SdrModel& getSdrModel();
 
-    void updateTablesFromChartModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
+    SAL_DLLPRIVATE void updateTablesFromChartModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
 
     XColorTable*    GetColorTable() const;
     XDashList*      GetDashList() const;

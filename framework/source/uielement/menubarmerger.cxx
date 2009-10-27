@@ -190,7 +190,7 @@ bool MenuBarMerger::CreateSubMenu(
             {
                 pSubMenu->InsertItem( nItemId, rMenuItem.aTitle, 0, MENU_APPEND );
                 pSubMenu->SetItemCommand( nItemId, rMenuItem.aURL );
-                if ( rMenuItem.aSubMenu.size() > 0 )
+                if ( !rMenuItem.aSubMenu.empty() )
                 {
                     PopupMenu* pPopupMenu = new PopupMenu();
                     pSubMenu->SetPopupMenu( nItemId, pPopupMenu );
@@ -231,7 +231,7 @@ bool MenuBarMerger::MergeMenuItems(
             {
                 pMenu->InsertItem( nItemId, rMenuItem.aTitle, 0, nPos+nModIndex+nIndex );
                 pMenu->SetItemCommand( nItemId, rMenuItem.aURL );
-                if ( rMenuItem.aSubMenu.size() > 0 )
+                if ( !rMenuItem.aSubMenu.empty() )
                 {
                     PopupMenu* pSubMenu = new PopupMenu();
                     pMenu->SetPopupMenu( nItemId, pSubMenu );
@@ -342,7 +342,8 @@ bool MenuBarMerger::ProcessFallbackOperation(
         {
             if ( nLevel == nSize-1 )
             {
-                for ( sal_uInt32 i = 0; i < rAddonMenuItems.size(); i++ )
+                const sal_uInt32 nCount = rAddonMenuItems.size();
+                for ( sal_uInt32 i = 0; i < nCount; ++i )
                 {
                     const AddonMenuItem& rMenuItem = rAddonMenuItems[i];
                     if ( IsCorrectContext( rMenuItem.aContext, rModuleIdentifier ))
@@ -429,6 +430,7 @@ void MenuBarMerger::GetSubMenu(
     rSubMenu.clear();
 
     const sal_Int32 nCount = rSubMenuEntries.getLength();
+    rSubMenu.reserve(rSubMenu.size() + nCount);
     for ( sal_Int32 i = 0; i < nCount; i++ )
     {
         const uno::Sequence< beans::PropertyValue >& rMenuEntry = rSubMenuEntries[ i ];

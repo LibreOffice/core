@@ -74,6 +74,8 @@ public:
     ::rtl::OUString& GetVersion() { return m_sVersion; }
     void SetVersion( const ::rtl::OUString& aVersion ) { m_sVersion = aVersion; }
 
+    sal_Bool LookForUnexpectedODF12Streams( const ::rtl::OUString& aPath );
+
     void setChildStreamsTypeByExtension( const ::com::sun::star::beans::StringPair& aPair );
 
     void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )

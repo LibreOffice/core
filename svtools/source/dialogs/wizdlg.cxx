@@ -303,8 +303,9 @@ void WizardDialog::ImplPosTabPage()
         }
         else if ( meViewAlign == WINDOWALIGN_LEFT )
         {
-            nOffX += aViewSize.Width()+WIZARDDIALOG_VIEW_DLGOFFSET_X;
-            aDlgSize.Width() -= aViewSize.Width()+WIZARDDIALOG_VIEW_DLGOFFSET_X;
+            long nViewOffset = mbEmptyViewMargin ? 0 : WIZARDDIALOG_VIEW_DLGOFFSET_X;
+            nOffX += aViewSize.Width() + nViewOffset;
+            aDlgSize.Width() -= nOffX;
         }
         else if ( meViewAlign == WINDOWALIGN_BOTTOM )
             aDlgSize.Height() -= aViewSize.Height()+WIZARDDIALOG_VIEW_DLGOFFSET_Y;

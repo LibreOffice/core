@@ -60,9 +60,9 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetNamedRangeMap()
+const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
-    static SfxItemPropertyMap aNamedRangeMap_Impl[] =
+    static SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),      0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),     0,  &getCppuType((rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },

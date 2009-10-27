@@ -41,7 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 # --- Files --------------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 PYEXC=$(DLLDEST)$/python$(EXECPOST)
 REGEXC=$(DLLDEST)$/regcomp$(EXECPOST)
 
@@ -51,7 +51,6 @@ DOLLAR_SIGN=$$
 .ENDIF
 
 #these are temporary
-REGCOMP=$(WRAPCMD) regcomp
 PYTHON=$(WRAPCMD) python
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
@@ -91,9 +90,10 @@ ALL : 	\
     $(DLLDEST)$/pyuno_regcomp.rdb		\
     doc					\
     ALLTAR
+.ENDIF # L10N_framework
 
 .INCLUDE :  target.mk
-
+.IF "$(L10N_framework)"==""
 $(DLLDEST)$/%.py: %.py
     cp $? $@
 
@@ -111,9 +111,10 @@ doc .PHONY:
     @echo start test with  dmake runtest
 
 runtest : ALL
-    cd $(DLLDEST) && $(TEST_ENV) && python main.py 
-    cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
+    cd $(DLLDEST) && $(TEST_ENV) && python main.py
+    cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
             -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))
-    cd $(DLLDEST) && $(TEST_ENV) && $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
+    cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
             -l com.sun.star.loader.Python -c vnd.sun.star.expand:$(DOLLAR_SIGN)FOO/samplecomponent.py
+.ENDIF # L10N_framework
 

@@ -40,6 +40,8 @@ ENABLE_EXCEPTIONS=true
 SLOFILES=\
     $(SLO)$/list.obj		\
     $(SLO)$/sft.obj			\
+    $(SLO)$/cff.obj			\
+    $(SLO)$/fontsubset.obj	\
     $(SLO)$/xlat.obj		\
     $(SLO)$/ttcr.obj		\
     $(SLO)$/gsub.obj

@@ -1,0 +1,170 @@
+--- misc/redland-1.0.8/librdf/rdf_storage_hashes.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_storage_hashes.c	Thu Nov  6 12:44:39 2008
+@@ -1387,6 +1387,66 @@
+                                                     LIBRDF_STATEMENT_OBJECT);
+ }
+ 
++
++/* return -1 on failure, 1 if context contains stmt, 0 if not */
++static int
++librdf_storage_hashes_context_contains_statement(librdf_storage* storage,
++    librdf_node* context_node,
++    librdf_statement* statement)
++{
++  librdf_storage_hashes_context* context=(librdf_storage_hashes_context*)storage->context;
++  librdf_hash_datum key, value; /* on stack - not allocated */
++  size_t size;
++  int status;
++
++  if(context->contexts_index < 0) {
++    librdf_log(storage->world, 0, LIBRDF_LOG_WARN, LIBRDF_FROM_STORAGE, NULL,
++               "Storage was created without context support");
++    return -1;
++  }
++
++  /* ENCODE KEY */
++  size=librdf_node_encode(context_node, NULL, 0);
++  if (!size)
++    return -1;
++  key.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!key.data)
++    return -1;
++  key.size=librdf_node_encode(context_node,
++                               (unsigned char*)key.data, size);
++  if (!key.size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  /* ENCODE VALUE */
++  size=librdf_statement_encode(statement, NULL, 0);
++  if (!size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!value.data) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.size=librdf_statement_encode(statement, (unsigned char*)value.data, size);
++  if (!value.size) {
++    LIBRDF_FREE(data, value.data);
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  status=librdf_hash_exists(context->hashes[context->contexts_index], &key, &value);
++  LIBRDF_FREE(data, value.data);
++  LIBRDF_FREE(data, key.data);
++
++  /* DO NOT free statement, ownership was not passed in */
++  return status;
++}
++
++
++
+ /**
+  * librdf_storage_hashes_context_add_statement:
+  * @storage: #librdf_storage object
+@@ -1412,7 +1472,15 @@
+                "Storage was created without context support");
+     return 1;
+   }
+-  
++
++  /* Do not add duplicate statements */
++  status=librdf_storage_hashes_context_contains_statement(storage, context_node, statement);
++  if(status)
++    if(status < 0)
++      return 1;
++    else
++      return 0;
++
+   if(librdf_storage_hashes_add_remove_statement(storage, 
+                                                 statement, context_node, 1))
+     return 1;
+--- misc/redland-1.0.8/librdf/rdf_storage_list.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_storage_list.c	Thu Nov  6 12:44:39 2008
+@@ -457,6 +457,64 @@
+ }
+ 
+ 
++/* return -1 on failure, 1 if context contains stmt, 0 if not */
++static int
++librdf_storage_list_context_contains_statement(librdf_storage* storage,
++    librdf_node* context_node,
++    librdf_statement* statement)
++{
++  librdf_storage_list_context* context=(librdf_storage_list_context*)storage->context;
++  librdf_hash_datum key, value; /* on stack - not allocated */
++  size_t size;
++  int status;
++
++  if(!context->index_contexts) {
++    librdf_log(storage->world, 0, LIBRDF_LOG_WARN, LIBRDF_FROM_STORAGE, NULL,
++               "Storage was created without context support");
++    return -1;
++  }
++
++  /* ENCODE KEY */
++  size=librdf_node_encode(context_node, NULL, 0);
++  if (!size)
++    return -1;
++  key.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!key.data)
++    return -1;
++  key.size=librdf_node_encode(context_node,
++                               (unsigned char*)key.data, size);
++  if (!key.size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  /* ENCODE VALUE */
++  size=librdf_statement_encode(statement, NULL, 0);
++  if (!size) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.data=(char*)LIBRDF_MALLOC(cstring, size);
++  if (!value.data) {
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++  value.size=librdf_statement_encode(statement, (unsigned char*)value.data, size);
++  if (!value.size) {
++    LIBRDF_FREE(data, value.data);
++    LIBRDF_FREE(data, key.data);
++    return -1;
++  }
++
++  status=librdf_hash_exists(context->contexts, &key, &value);
++  LIBRDF_FREE(data, value.data);
++  LIBRDF_FREE(data, key.data);
++
++  /* DO NOT free statement, ownership was not passed in */
++  return status;
++}
++
++
+ /**
+  * librdf_storage_list_context_add_statement:
+  * @storage: #librdf_storage object
+@@ -483,7 +541,15 @@
+                "Storage was created without context support");
+     return 1;
+   }
+-  
++
++  /* Do not add duplicate statements */
++  status=librdf_storage_list_context_contains_statement(storage, context_node, statement);
++  if(status)
++    if(status < 0)
++      return 1;
++    else
++      return 0;
++
+   /* Store statement + node in the storage_list */
+   sln=(librdf_storage_list_node*)LIBRDF_MALLOC(librdf_storage_list_node, sizeof(librdf_storage_list_node));
+   if(!sln)

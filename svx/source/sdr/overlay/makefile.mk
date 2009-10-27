@@ -43,22 +43,21 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
         $(SLO)$/overlayanimatedbitmapex.obj				\
-        $(SLO)$/overlaybitmap.obj						\
         $(SLO)$/overlaybitmapex.obj						\
+        $(SLO)$/overlaycrosshair.obj					\
+        $(SLO)$/overlayhatchrect.obj					\
+        $(SLO)$/overlayhelpline.obj						\
         $(SLO)$/overlayline.obj							\
-        $(SLO)$/overlaylinestriped.obj					\
         $(SLO)$/overlaymanager.obj						\
         $(SLO)$/overlaymanagerbuffered.obj				\
         $(SLO)$/overlayobject.obj						\
+        $(SLO)$/overlayobjectcell.obj					\
         $(SLO)$/overlayobjectlist.obj					\
-        $(SLO)$/overlaytriangle.obj						\
-        $(SLO)$/overlaycrosshair.obj					\
-        $(SLO)$/overlayhelpline.obj						\
-        $(SLO)$/overlayhatchrect.obj					\
-        $(SLO)$/overlayrollingrectangle.obj				\
         $(SLO)$/overlaypolypolygon.obj					\
-        $(SLO)$/overlaysdrobject.obj					\
         $(SLO)$/overlayprimitive2dsequenceobject.obj	\
-        $(SLO)$/overlayobjectcell.obj
+        $(SLO)$/overlayrollingrectangle.obj				\
+        $(SLO)$/overlayselection.obj					\
+        $(SLO)$/overlaytools.obj						\
+        $(SLO)$/overlaytriangle.obj
 
 .INCLUDE :  target.mk

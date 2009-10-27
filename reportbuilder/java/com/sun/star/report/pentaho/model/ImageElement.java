@@ -59,15 +59,16 @@ public class ImageElement extends ReportElement
     this.formula = formula;
   }
 
-  public boolean isScale()
-  {
-    return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.SCALE));
-  }
 
-  public void setScale(final boolean scale)
-  {
-    setAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.SCALE, String.valueOf(scale));
-  }
+    public String getScaleMode()
+    {
+        String val = (String)getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.SCALE);
+        if ( OfficeToken.TRUE.equals(val) )
+            val = OfficeToken.ANISOTROPIC;
+        else if ( OfficeToken.FALSE.equals(val) || val == null )
+            val = OfficeToken.NONE;
+        return val;
+    }
 
   public boolean isPreserveIRI()
   {

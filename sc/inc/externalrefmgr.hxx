@@ -132,15 +132,27 @@ public:
     class Table
     {
     public:
+
+        enum ReferencedFlag
+        {
+            UNREFERENCED,
+            REFERENCED_MARKED,      // marked as referenced during store to file
+            REFERENCED_PERMANENT    // permanently marked, e.g. from within interpreter
+        };
+
         Table();
         ~Table();
 
         SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0);
         TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
-        /// A temporary state used only during store to file.
-        bool isReferenced() const;
+        /** Set/clear referenced status flag only if current status is not
+            REFERENCED_PERMANENT. */
         void setReferenced( bool bReferenced );
+        /// Unconditionally set the reference status flag.
+        void setReferencedFlag( ReferencedFlag eFlag );
+        ReferencedFlag getReferencedFlag() const;
+        bool isReferenced() const;
         /// Obtain a sorted vector of rows.
         void getAllRows(::std::vector<SCROW>& rRows) const;
         /// Obtain a sorted vector of columns.
@@ -148,8 +160,8 @@ public:
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
 
     private:
-        RowsDataType maRows;
-        bool         mbReferenced;
+        RowsDataType   maRows;
+        ReferencedFlag meReferenced;
     };
 
     typedef ::boost::shared_ptr<Table>      TableTypeRef;
@@ -173,7 +185,7 @@ public:
      */
     ScExternalRefCache::TokenRef getCellData(
         sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
-        bool bEmptyCellOnNull, sal_uInt32* pnFmtIndex = NULL);
+        bool bEmptyCellOnNull, bool bWriteEmpty, sal_uInt32* pnFmtIndex);
 
     /**
      * Get a cached cell range data.
@@ -183,7 +195,7 @@ public:
      *         guaranteed if the TokenArrayRef is properly used..
      */
     ScExternalRefCache::TokenArrayRef getCellRangeData(
-        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull);
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull, bool bWriteEmpty);
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const String& rName, TokenArrayRef pArray);
@@ -219,9 +231,16 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets, bool bPermanent );
     void setAllCacheTableReferencedStati( bool bReferenced );
     bool areAllCacheTablesReferenced() const;
+
+    /**
+     * Set a table as permanently referenced, to be called if not in
+     * mark-during-store-to-file cycle.
+     */
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
+
 private:
     struct ReferencedStatus
     {
@@ -403,10 +422,13 @@ public:
     /** Source document meta-data container. */
     struct SrcFileData
     {
-        String maFileName;
+        String maFileName;      /// original file name as loaded from the file.
+        String maRealFileName;  /// file name created from the relative name.
         String maRelativeName;
         String maFilterName;
         String maFilterOptions;
+
+        void maybeCreateRealFileName(const String& rOwnDocName);
     };
 
 public:
@@ -497,8 +519,14 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL external documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
     void setAllCacheTableReferencedStati( bool bReferenced );
+
+    /**
+     * Set a table as permanently referenced, to be called if not in
+     * mark-during-store-to-file cycle.
+     */
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
 
     /**
      * @returns <TRUE/> if setAllCacheTableReferencedStati(false) was called,
@@ -551,7 +579,21 @@ public:
      */
     void convertToAbsName(String& rFile) const;
     sal_uInt16 getExternalFileId(const String& rFile);
-    const String* getExternalFileName(sal_uInt16 nFileId) const;
+
+    /**
+     * It returns a pointer to the name of the URI associated with a given
+     * external file ID.  In case the original document has moved, it returns
+     * an URI adjusted for the relocation.
+     *
+     * @param nFileId file ID for an external document
+     * @param bForceOriginal If true, it always returns the original document
+     *                       URI even if the referring document has relocated.
+     *                       If false, it returns an URI adjusted for
+     *                       relocated document.
+     *
+     * @return const String* external document URI.
+     */
+    const String* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
     bool hasExternalFile(sal_uInt16 nFileId) const;
     bool hasExternalFile(const String& rFile) const;
     const SrcFileData* getExternalFileData(sal_uInt16 nFileId) const;
@@ -560,8 +602,15 @@ public:
     const String* getRealRangeName(sal_uInt16 nFileId, const String& rRangeName) const;
     void refreshNames(sal_uInt16 nFileId);
     void breakLink(sal_uInt16 nFileId);
-    void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile);
+    void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile, const String& rNewFilter);
 
+    /**
+     * Set a relative file path for the specified file ID.  Note that the
+     * caller must ensure that the passed URL is a valid relative URL.
+     *
+     * @param nFileId file ID for an external document
+     * @param rRelUrl relative URL
+     */
     void setRelativeFileName(sal_uInt16 nFileId, const String& rRelUrl);
 
     /**
@@ -582,8 +631,11 @@ public:
      * Re-generates relative names for all stored source files.  This is
      * necessary when exporting to an ods document, to ensure that all source
      * files have their respective relative names for xlink:href export.
+     *
+     * @param rBaseFileUrl Absolute URL of the content.xml fragment of the
+     *                     document being exported.
      */
-    void resetSrcFileData();
+    void resetSrcFileData(const String& rBaseFileUrl);
 
     /**
      * Update a single referencing cell position.
@@ -649,6 +701,19 @@ private:
     bool isFileLoadable(const String& rFile) const;
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
+
+    /**
+     * Try to create a "real" file name from the relative path.  The original
+     * file name may not point to the real document when the referencing and
+     * referenced documents have been moved.
+     *
+     * For the real file name to be created, the relative name should not be
+     * empty before calling this method, or the real file name will not be
+     * created.
+     *
+     * @param nFileId file ID for an external document
+     */
+    void maybeCreateRealFileName(sal_uInt16 nFileId);
 
     bool compileTokensByCell(const ScAddress& rCell);
 

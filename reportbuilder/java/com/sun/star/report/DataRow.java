@@ -41,9 +41,9 @@ package com.sun.star.report;
 public interface DataRow
 {
 
-    public int getColumnCount() throws DataSourceException;
+    int getColumnCount() throws DataSourceException;
 
-    public String getColumnName(int column) throws DataSourceException;
+    String getColumnName(int column) throws DataSourceException;
 
-    public Object getObject(int column) throws DataSourceException;
+    Object getObject(int column) throws DataSourceException;
 }

@@ -1,7 +1,0 @@
-CALC=StarSuite 9 스프레드시트
-CHART=StarSuite 9 차트
-DRAW=StarSuite 9 그리기
-IMPRESS=StarSuite 9 프레젠테이션
-MATH=StarSuite 9 수식
-WRITER=StarSuite 9 텍스트
-OTHER=그밖의 개체

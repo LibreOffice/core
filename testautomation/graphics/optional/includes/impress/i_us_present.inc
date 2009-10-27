@@ -630,8 +630,7 @@ endcase 'i_us_presentation6
 '00oo...//==---...---...---...---....---...---...---...---...---...---...--..--.--.-.-.-.-....---....
 
 testcase i_us_presentation7
-    'qaErrorLog "#i70754# - i_us_presentation7 outcommented due to bug."
-    'goto endsub
+
     dim sFilter as string
     dim sFileName as string
     dim PresentationFile6 as string

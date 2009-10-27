@@ -1037,10 +1037,10 @@ void SmParser::Table()
 
     ULONG n = NodeStack.Count();
 
-    LineArray.SetSize(n);
+    LineArray.resize(n);
 
     for (ULONG i = 0; i < n; i++)
-        LineArray.Put(n - (i + 1), NodeStack.Pop());
+        LineArray[n - (i + 1)] = NodeStack.Pop();
 
     SmStructureNode *pSNode = new SmTableNode(CurToken);
     pSNode->SetSubNodes(LineArray);
@@ -1107,15 +1107,15 @@ void SmParser::Line()
     USHORT  n = 0;
     SmNodeArray  ExpressionArray;
 
-    ExpressionArray.SetSize(n);
+    ExpressionArray.resize(n);
 
     // start with single expression that may have an alignment statement
     // (and go on with expressions that must not have alignment
     // statements in 'while' loop below. See also 'Expression()'.)
     if (CurToken.eType != TEND  &&  CurToken.eType != TNEWLINE)
     {   Align();
-        ExpressionArray.SetSize(++n);
-        ExpressionArray.Put(n - 1, NodeStack.Pop());
+        ExpressionArray.resize(++n);
+        ExpressionArray[n - 1] = NodeStack.Pop();
     }
 
     while (CurToken.eType != TEND  &&  CurToken.eType != TNEWLINE)
@@ -1123,8 +1123,8 @@ void SmParser::Line()
             Expression();
         else
             Align();
-        ExpressionArray.SetSize(++n);
-        ExpressionArray.Put(n - 1, NodeStack.Pop());
+        ExpressionArray.resize(++n);
+        ExpressionArray[n - 1] = NodeStack.Pop();
     }
 
     SmStructureNode *pSNode = new SmLineNode(CurToken);
@@ -1138,16 +1138,16 @@ void SmParser::Expression()
     USHORT       n = 0;
     SmNodeArray  RelationArray;
 
-    RelationArray.SetSize(n);
+    RelationArray.resize(n);
 
     Relation();
-    RelationArray.SetSize(++n);
-    RelationArray.Put(n - 1, NodeStack.Pop());
+    RelationArray.resize(++n);
+    RelationArray[n - 1] = NodeStack.Pop();
 
     while (CurToken.nLevel >= 4)
     {   Relation();
-        RelationArray.SetSize(++n);
-        RelationArray.Put(n - 1, NodeStack.Pop());
+        RelationArray.resize(++n);
+        RelationArray[n - 1] = NodeStack.Pop();
     }
 
     SmStructureNode *pSNode = new SmExpressionNode(CurToken);
@@ -1282,10 +1282,10 @@ void SmParser::SubSup(ULONG nActiveGroup)
 
     // initialize subnodes array
     SmNodeArray  aSubNodes;
-    aSubNodes.SetSize(1 + SUBSUP_NUM_ENTRIES);
-    aSubNodes.Put(0, NodeStack.Pop());
-    for (USHORT i = 1;  i < aSubNodes.GetSize();  i++)
-        aSubNodes.Put(i, NULL);
+    aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
+    aSubNodes[0] = NodeStack.Pop();
+    for (USHORT i = 1;  i < aSubNodes.size();  i++)
+        aSubNodes[i] = NULL;
 
     // process all sub-/supscripts
     int  nIndex = 0;
@@ -1321,9 +1321,9 @@ void SmParser::SubSup(ULONG nActiveGroup)
                    "SmParser::Power() : sub-/supscript index falsch");
 
         // set sub-/supscript if not already done
-        if (aSubNodes.Get(nIndex) != NULL)
+        if (aSubNodes[nIndex] != NULL)
             Error(PE_DOUBLE_SUBSUPSCRIPT);
-        aSubNodes.Put(nIndex, NodeStack.Pop());
+        aSubNodes[nIndex] = NodeStack.Pop();
     }
 
     pNode->SetSubNodes(aSubNodes);
@@ -1501,7 +1501,7 @@ void SmParser::Term()
                 USHORT  n = 0;
                 while (TRUE == (bIsAttr = TokenInGroup(TGATTRIBUT))
                        ||  TokenInGroup(TGFONTATTR))
-                {   aArray.SetSize(n + 1);
+                {   aArray.resize(n + 1);
 
                     if (bIsAttr)
                         Attribut();
@@ -1511,7 +1511,7 @@ void SmParser::Term()
                     // check if casting in following line is ok
                     DBG_ASSERT(!NodeStack.Top()->IsVisible(), "Sm : Ooops...");
 
-                    aArray.Put(n, (SmStructureNode *) NodeStack.Pop());
+                    aArray[n] = (SmStructureNode *) NodeStack.Pop();
                     n++;
                 }
 
@@ -1519,8 +1519,8 @@ void SmParser::Term()
 
                 SmNode *pFirstNode = NodeStack.Pop();
                 while (n > 0)
-                {   aArray.Get(n - 1)->SetSubNodes(0, pFirstNode);
-                    pFirstNode = aArray.Get(n - 1);
+                {   aArray[n - 1]->SetSubNodes(0, pFirstNode);
+                    pFirstNode = aArray[n - 1];
                     n--;
                 }
                 NodeStack.Push(pFirstNode);
@@ -2113,9 +2113,9 @@ void SmParser::Bracebody(BOOL bIsLeftRight)
     }
 
     // build argument vector in parsing order
-    aNodes.SetSize(nNum);
+    aNodes.resize(nNum);
     for (USHORT i = 0;  i < nNum;  i++)
-        aNodes.Put(nNum - 1 - i, NodeStack.Pop());
+        aNodes[nNum - 1 - i] = NodeStack.Pop();
 
     pBody->SetSubNodes(aNodes);
     pBody->SetScaleMode(bIsLeftRight ? SCALE_HEIGHT : SCALE_NONE);
@@ -2170,10 +2170,10 @@ void SmParser::Binom()
     Sum();
     Sum();
 
-    ExpressionArray.SetSize(2);
+    ExpressionArray.resize(2);
 
     for (int i = 0;  i < 2;  i++)
-        ExpressionArray.Put(2 - (i + 1), NodeStack.Pop());
+        ExpressionArray[2 - (i + 1)] = NodeStack.Pop();
 
     pSNode->SetSubNodes(ExpressionArray);
     NodeStack.Push(pSNode);
@@ -2196,10 +2196,10 @@ void SmParser::Stack()
         }
         while (CurToken.eType == TPOUND);
 
-        ExpressionArray.SetSize(n);
+        ExpressionArray.resize(n);
 
         for (USHORT i = 0; i < n; i++)
-            ExpressionArray.Put(n - (i + 1), NodeStack.Pop());
+            ExpressionArray[n - (i + 1)] = NodeStack.Pop();
 
         if (CurToken.eType != TRGROUP)
             Error(PE_RGROUP_EXPECTED);
@@ -2256,10 +2256,10 @@ void SmParser::Matrix()
 
         long nRC = r * c;
 
-        ExpressionArray.SetSize(nRC);
+        ExpressionArray.resize(nRC);
 
         for (USHORT i = 0; i < (nRC); i++)
-            ExpressionArray.Put((nRC) - (i + 1), NodeStack.Pop());
+            ExpressionArray[(nRC) - (i + 1)] = NodeStack.Pop();
 
         if (CurToken.eType != TRGROUP)
             Error(PE_RGROUP_EXPECTED);

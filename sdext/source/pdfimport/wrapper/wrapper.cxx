@@ -33,36 +33,39 @@
 #include "precompiled_sdext.hxx"
 
 #include "contentsink.hxx"
+#include "pdfparse.hxx"
+#include "pdfihelper.hxx"
 
-#include <osl/file.h>
-#include <osl/thread.h>
-#include <osl/process.h>
-#include <osl/diagnose.h>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/byteseq.hxx>
+#include "osl/file.h"
+#include "osl/thread.h"
+#include "osl/process.h"
+#include "osl/diagnose.h"
+#include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/strbuf.hxx"
+#include "rtl/byteseq.hxx"
 
-#include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/geometry/Matrix2D.hpp>
-#include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include "cppuhelper/exc_hlp.hxx"
+#include "com/sun/star/io/XInputStream.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/awt/FontDescriptor.hpp"
+#include "com/sun/star/deployment/XPackageInformationProvider.hpp"
+#include "com/sun/star/beans/XMaterialHolder.hpp"
+#include "com/sun/star/rendering/PathCapType.hpp"
+#include "com/sun/star/rendering/PathJoinType.hpp"
+#include "com/sun/star/rendering/XColorSpace.hpp"
+#include "com/sun/star/rendering/XPolyPolygon2D.hpp"
+#include "com/sun/star/rendering/XBitmap.hpp"
+#include "com/sun/star/geometry/Matrix2D.hpp"
+#include "com/sun/star/geometry/AffineMatrix2D.hpp"
+#include "com/sun/star/geometry/RealRectangle2D.hpp"
+#include "com/sun/star/task/XInteractionHandler.hpp"
 
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/unopolypolygon.hxx>
+#include "basegfx/point/b2dpoint.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/tools/canvastools.hxx"
+#include "basegfx/tools/unopolypolygon.hxx"
 
 #include <boost/bind.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -561,18 +564,23 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     static const rtl::OString aJpegMarker( "JPEG" );
     static const rtl::OString aPbmMarker(  "PBM" );
     static const rtl::OString aPpmMarker(  "PPM" );
+    static const rtl::OString aPngMarker(  "PNG" );
     static const rtl::OUString aJpegFile(
         RTL_CONSTASCII_USTRINGPARAM( "DUMMY.JPEG" ));
     static const rtl::OUString aPbmFile(
         RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PBM" ));
     static const rtl::OUString aPpmFile(
         RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PPM" ));
+    static const rtl::OUString aPngFile(
+        RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PNG" ));
 
     rtl::OString aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );
 
     rtl::OUString           aFileName;
-    if( aToken.compareTo( aJpegMarker ) == 0 )
+    if( aToken.compareTo( aPngMarker ) == 0 )
+        aFileName = aPngFile;
+    else if( aToken.compareTo( aJpegMarker ) == 0 )
         aFileName = aJpegFile;
     else if( aToken.compareTo( aPbmMarker ) == 0 )
         aFileName = aPbmFile;
@@ -813,14 +821,76 @@ oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
 
 } // namespace
 
-bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL,
-                          const ContentSinkSharedPtr&                       rSink,
-                          const uno::Reference< uno::XComponentContext >&   xContext )
+static bool checkEncryption( const rtl::OUString&                               i_rPath,
+                             const uno::Reference< task::XInteractionHandler >& i_xIHdl,
+                             rtl::OUString&                                     io_rPwd,
+                             bool&                                              o_rIsEncrypted
+                             )
+{
+    bool bSuccess = false;
+    rtl::OString aPDFFile;
+    aPDFFile = rtl::OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
+
+    pdfparse::PDFReader aParser;
+    boost::scoped_ptr<pdfparse::PDFEntry> pEntry( aParser.read( aPDFFile.getStr() ));
+    if( pEntry )
+    {
+        pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());
+        if( pPDFFile )
+        {
+            o_rIsEncrypted = pPDFFile->isEncrypted();
+            if( o_rIsEncrypted )
+            {
+                bool bAuthenticated = false;
+                if( io_rPwd.getLength() )
+                {
+                    rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                                                                   RTL_TEXTENCODING_ISO_8859_1 );
+                    bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                }
+                if( bAuthenticated )
+                    bSuccess = true;
+                else
+                {
+                    if( i_xIHdl.is() )
+                    {
+                        bool bEntered = false;
+                        do
+                        {
+                            bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered );
+                            rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                                                                           RTL_TEXTENCODING_ISO_8859_1 );
+                            bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                        } while( bEntered && ! bAuthenticated );
+                    }
+
+                    OSL_TRACE( "password: %s\n", bAuthenticated ? "matches" : "does not match" );
+                    bSuccess = bAuthenticated;
+                }
+            }
+            else
+                bSuccess = true;
+        }
+    }
+    return bSuccess;
+}
+
+bool xpdf_ImportFromFile( const ::rtl::OUString&                             rURL,
+                          const ContentSinkSharedPtr&                        rSink,
+                          const uno::Reference< task::XInteractionHandler >& xIHdl,
+                          const rtl::OUString&                               rPwd,
+                          const uno::Reference< uno::XComponentContext >&    xContext )
 {
     OSL_ASSERT(rSink);
 
     ::rtl::OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rURL.pData, &aSysUPath.pData ) != osl_File_E_None )
+        return false;
+
+    // check for encryption, if necessary get password
+    rtl::OUString aPwd( rPwd );
+    bool bIsEncrypted = false;
+    if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted ) == false )
         return false;
 
     rtl::OUStringBuffer converterURL = rtl::OUString::createFromAscii("xpdfimport");
@@ -853,15 +923,17 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     rtl_bootstrap_expandMacros( &aStr.pData );
     rtl::OUString aSysPath;
     osl_getSystemPathFromFileURL( aStr.pData, &aSysPath.pData );
-    rtl::OUStringBuffer aBuf( aStr.getLength() + 20 );
-    aBuf.appendAscii( "LD_LIBRARY_PATH=" );
-    aBuf.append( aSysPath );
-    aStr = aBuf.makeStringAndClear();
+    rtl::OUStringBuffer aEnvBuf( aStr.getLength() + 20 );
+    aEnvBuf.appendAscii( "LD_LIBRARY_PATH=" );
+    aEnvBuf.append( aSysPath );
+    aStr = aEnvBuf.makeStringAndClear();
     ppEnv = &aStr.pData;
     nEnv = 1;
     #endif
 
     rtl_uString*  args[] = { aSysUPath.pData };
+    sal_Int32 nArgs = 1;
+
     oslProcess    aProcess;
     oslFileHandle pIn  = NULL;
     oslFileHandle pOut = NULL;
@@ -869,7 +941,7 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     const oslProcessError eErr =
         osl_executeProcess_WithRedirectedIO(converterURL.makeStringAndClear().pData,
                                             args,
-                                            sizeof(args)/sizeof(*args),
+                                            nArgs,
                                             osl_Process_SEARCHPATH|osl_Process_HIDDEN,
                                             osl_getCurrentSecurity(),
                                             0, ppEnv, nEnv,
@@ -880,6 +952,17 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     {
         if( eErr!=osl_Process_E_None )
             return false;
+
+        if( pIn )
+        {
+            rtl::OStringBuffer aBuf(256);
+            if( bIsEncrypted )
+                aBuf.append( rtl::OUStringToOString( aPwd, RTL_TEXTENCODING_ISO_8859_1 ) );
+            aBuf.append( '\n' );
+
+            sal_uInt64 nWritten = 0;
+            osl_writeFile( pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten );
+        }
 
         if( pOut && pErr )
         {
@@ -908,8 +991,11 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     return bRet;
 }
 
+
 bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xInput,
                             const ContentSinkSharedPtr&                       rSink,
+                            const uno::Reference<task::XInteractionHandler >& xIHdl,
+                            const rtl::OUString&                              rPwd,
                             const uno::Reference< uno::XComponentContext >&   xContext )
 {
     OSL_ASSERT(xInput.is());
@@ -952,7 +1038,7 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
 
     osl_closeFile( aFile );
 
-    return bSuccess && xpdf_ImportFromFile( aURL, rSink, xContext );
+    return bSuccess && xpdf_ImportFromFile( aURL, rSink, xIHdl, rPwd, xContext );
 }
 
 }

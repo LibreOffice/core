@@ -206,6 +206,32 @@ BOOL DXFTransform::TransCircleToEllipse(double fRadius, double & rEx, double & r
     else return FALSE;
 }
 
+LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
+{
+    double fex,fey,scale;
+
+    fex=sqrt(aMX.fx*aMX.fx + aMX.fy*aMX.fy);
+    fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
+    scale = (fex+fey)/2.0;
+
+    LineInfo aLineInfo;
+
+    aLineInfo.SetStyle( aDXFLineInfo.eStyle );
+    aLineInfo.SetWidth( (sal_Int32) (aDXFLineInfo.fWidth * scale + 0.5) );
+    aLineInfo.SetDashCount( static_cast< USHORT >( aDXFLineInfo.nDashCount ) );
+    aLineInfo.SetDashLen( (sal_Int32) (aDXFLineInfo.fDashLen * scale + 0.5) );
+    aLineInfo.SetDotCount( static_cast< USHORT >( aDXFLineInfo.nDotCount ) );
+    aLineInfo.SetDotLen( (sal_Int32) (aDXFLineInfo.fDotLen * scale + 0.5) );
+    aLineInfo.SetDistance( (sal_Int32) (aDXFLineInfo.fDistance * scale + 0.5) );
+
+    if ( aLineInfo.GetDashCount() > 0 && aLineInfo.GetDashLen() == 0 )
+        aLineInfo.SetDashLen(1);
+
+    if ( aLineInfo.GetDotCount() > 0 && aLineInfo.GetDotLen() == 0 )
+        aLineInfo.SetDotLen(1);
+
+    return aLineInfo;
+}
 
 ULONG DXFTransform::TransLineWidth(double fW) const
 {
@@ -213,6 +239,8 @@ ULONG DXFTransform::TransLineWidth(double fW) const
 
     fex=sqrt(aMX.fx*aMX.fx + aMX.fy*aMX.fy);
     fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
+    // ###
+    // printf("fex=%f fey=%f\n", fex, fey);
     return (ULONG)(fabs(fW)*(fex+fey)/2.0+0.5);
 }
 
@@ -226,5 +254,4 @@ BOOL DXFTransform::Mirror() const
 {
     if (aMZ.SProd(aMX*aMY)<0) return TRUE; else return FALSE;
 }
-
 

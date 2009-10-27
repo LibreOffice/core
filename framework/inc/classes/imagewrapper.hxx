@@ -35,17 +35,15 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <vcl/image.hxx>
 
 namespace framework
 {
 
 class ImageWrapper : public ThreadHelpBase                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                     public ::com::sun::star::awt::XBitmap          ,
-                     public ::com::sun::star::lang::XUnoTunnel      ,
-                     public ::com::sun::star::lang::XTypeProvider   ,
-                     public ::cppu::OWeakObject
+                     public ::cppu::WeakImplHelper2< ::com::sun::star::awt::XBitmap,
+                                                    ::com::sun::star::lang::XUnoTunnel >
 {
     public:
         ImageWrapper( const Image& aImage );
@@ -58,12 +56,6 @@ class ImageWrapper : public ThreadHelpBase                          ,   // Struc
 
         static ::com::sun::star::uno::Sequence< sal_Int8 > GetUnoTunnelId();
 
-        // XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-            throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire() throw ();
-        virtual void SAL_CALL release() throw ();
-
         // XBitmap
         virtual ::com::sun::star::awt::Size SAL_CALL getSize() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw (::com::sun::star::uno::RuntimeException);
@@ -71,10 +63,6 @@ class ImageWrapper : public ThreadHelpBase                          ,   // Struc
 
         // XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
-
-        // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
     private:
         Image   m_aImage;

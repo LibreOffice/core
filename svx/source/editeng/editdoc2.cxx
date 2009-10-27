@@ -324,16 +324,62 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLin
     DBG_ASSERT( aLineList[ aLineList.Count()-1 ]->GetEnd() == pNode->Len(), "CorrectLines: Ende stimmt nicht!" );
 }
 
-// -------------------------------------------------------------------------
+// Shared reverse lookup acceleration pieces ...
+
+static USHORT FastGetPos( const VoidPtr *pPtrArray, USHORT nPtrArrayLen,
+                          VoidPtr pPtr, USHORT &rLastPos )
+{
+  // Through certain filter code-paths we do a lot of appends, which in
+  // turn call GetPos - creating some N^2 nightmares. If we have a
+  // non-trivially large list, do a few checks from the end first.
+  if( rLastPos > 16 )
+    {
+      USHORT nEnd;
+      if (rLastPos > nPtrArrayLen - 2)
+        nEnd = nPtrArrayLen;
+      else
+        nEnd = rLastPos + 2;
+
+      for( USHORT nIdx = rLastPos - 2; nIdx < nEnd; nIdx++ )
+        {
+          if( pPtrArray[ nIdx ] == pPtr )
+            {
+              rLastPos = nIdx;
+              return nIdx;
+            }
+        }
+    }
+  // The world's lamest linear search from svarray ...
+  for( USHORT nIdx = 0; nIdx < nPtrArrayLen; nIdx++ )
+    if (pPtrArray[ nIdx ] == pPtr )
+      return rLastPos = nIdx;
+  return USHRT_MAX;
+}
+
+// -------------------------------------------------------------------------
 // class ParaPortionList
 // -------------------------------------------------------------------------
-ParaPortionList::ParaPortionList()
+ParaPortionList::ParaPortionList() : nLastCache( 0 )
 {
 }
 
 ParaPortionList::~ParaPortionList()
 {
     Reset();
+}
+
+USHORT ParaPortionList::GetPos( const ParaPortionPtr &rPtr ) const
+{
+    return FastGetPos( reinterpret_cast<const VoidPtr *>( GetData() ),
+                       Count(), static_cast<VoidPtr>( rPtr ),
+                       ((ParaPortionList *)this)->nLastCache );
+}
+
+USHORT ContentList::GetPos( const ContentNodePtr &rPtr ) const
+{
+    return FastGetPos( reinterpret_cast<const VoidPtr *>( GetData() ),
+                       Count(), static_cast<VoidPtr>( rPtr ),
+                       ((ContentList *)this)->nLastCache );
 }
 
 void ParaPortionList::Reset()

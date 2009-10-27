@@ -52,16 +52,14 @@ CFLAGSCC += $(HUNSPELL_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
-CFLAGSCXX += -I..$/..$/lingutil
-CFLAGSCXX += -x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
+CFLAGSCXX+=-I..$/..$/lingutil
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/sprophelp.obj\
         $(SLO)$/macspellimp.obj
 
 
 SLOFILES=	\
-        $(SLO)$/sprophelp.obj\
         $(SLO)$/macreg.obj\
         $(SLO)$/macspellimp.obj
 

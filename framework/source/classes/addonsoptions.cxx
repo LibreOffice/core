@@ -789,7 +789,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeTo
         ReadToolBarItemSet( aToolBarItemNode, rAddonOfficeToolBars[n] );
     }
 
-    return ( rAddonOfficeToolBars.size() > 0 );
+    return ( !rAddonOfficeToolBars.empty() );
 }
 
 

@@ -37,10 +37,12 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XMap.hpp>
 
 #include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include "svx/svxdllapi.h"
 #include <map>
@@ -57,8 +59,6 @@ FORWARD_DECLARE_INTERFACE(container,XIndexContainer)
 
 class SdrObjList;
 
-DECLARE_LIST(FmObjectList, FmFormObj*)
-
 //==================================================================
 // FmFormPageImpl
 // lauscht an allen Containern, um festzustellen, wann Objecte
@@ -68,9 +68,11 @@ DECLARE_LIST(FmObjectList, FmFormObj*)
 class SVX_DLLPRIVATE FmFormPageImpl
 {
     ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >,SdrObject* > m_aComponentMap;
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>                xCurrentForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  m_xForms;
-    FmFormPage*     pPage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >               xCurrentForm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xForms;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XMap >       m_aControlShapeMap;
+
+    FmFormPage&     m_rPage;
     Link            m_aFormsCreationHdl;
 
     sal_Bool        m_bFirstActivation;
@@ -81,8 +83,8 @@ protected:
     void Init();
 
 public:
-    FmFormPageImpl(FmFormPage* _pPage);
-    FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl);
+    FmFormPageImpl( FmFormPage& _rPage );
+    FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl );
     ~FmFormPageImpl();
 
     //  nur wichtig fuer den DesignMode
@@ -131,11 +133,15 @@ protected:
         sal_Int32 nCommandType
     );
 
-    ::rtl::OUString getDefaultName(
-                        sal_Int16 _nClassId,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _rxControls,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
-                    ) const;
+public:
+    ::rtl::OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
+
+    void formObjectInserted( const FmFormObj& _object );
+    void formObjectRemoved( const FmFormObj& _object );
+
+    /** returns an object mapping from control models to drawing shapes.
+    */
+    SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XMap > getControlToShapeMap();
 
 private:
     /** validates whether <member>xCurrentForm</member> is still valid and to be used
@@ -153,16 +159,8 @@ private:
     */
     bool    validateCurForm();
 
-public:
-
-    static UniString getDefaultName(
-                        sal_Int16 nClassId,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
-                    );
-
-    ::rtl::OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
-    ::rtl::OUString getUniqueName(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& xNamedSet) const;
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XMap >
+        impl_createControlShapeMap_nothrow();
 
 private:
     FmFormPageImpl();                                   // never implemented

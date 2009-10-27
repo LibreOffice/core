@@ -75,12 +75,12 @@ StorageBase::StorageBase( const Reference< XInputStream >& rxInStream, bool bBas
     OSL_ENSURE( mxInStream.is(), "StorageBase::StorageBase - missing base input stream" );
 }
 
-StorageBase::StorageBase( const Reference< XStream >& rxStream, bool bBaseStreamAccess ) :
-    mxStream( rxStream ),
+StorageBase::StorageBase( const Reference< XStream >& rxOutStream, bool bBaseStreamAccess ) :
+    mxOutStream( rxOutStream ),
     mpParentStorage( 0 ),
     mbBaseStreamAccess( bBaseStreamAccess )
 {
-    OSL_ENSURE( mxStream.is(), "StorageBase::StorageBase - missing base output stream" );
+    OSL_ENSURE( mxOutStream.is(), "StorageBase::StorageBase - missing base output stream" );
 }
 
 StorageBase::StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName ) :
@@ -183,7 +183,7 @@ Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStrea
     }
     else if( mbBaseStreamAccess )
     {
-        xOutStream = mxStream->getOutputStream();
+        xOutStream = mxOutStream->getOutputStream();
     }
     return xOutStream;
 }

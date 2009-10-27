@@ -41,33 +41,22 @@
 #include <svx/linkmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
-#ifndef _SFX_DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
 #include <sfx2/docfile.hxx>
-#ifndef _SFX_VIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/visitem.hxx>
 #include <sfx2/objitem.hxx>
-#ifndef _SFX_DISPATCH_HXX //autogen
-#include <sfx2/dispatch.hxx>
-#endif
 #include <svtools/filter.hxx>
 #include <svx/gallery.hxx>
 #include <svx/langitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svx/impgrf.hxx>
 #include <svtools/slstitm.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/ptitem.hxx>
 #include <svtools/itemiter.hxx>
 #include <svtools/stritem.hxx>
@@ -86,20 +75,14 @@
 #include <fmturl.hxx>
 #include <fmthdft.hxx>
 #include <fmtclds.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 #include <swundo.hxx>
 #include <fldbas.hxx>
 #include <uitool.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <fontcfg.hxx>
 #include <docstat.hxx>
@@ -171,7 +154,7 @@ static BYTE nFooterPos;
 
 #define SwBaseShell
 #define Shadow
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 #define SWCONTOURDLG(rView) ( (SvxContourDlg*) ( rView.GetViewFrame()->GetChildWindow(  \
@@ -318,11 +301,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             if ( rSh.HasSelection() )
             {
                 SwTransferable* pTransfer = new SwTransferable( rSh );
-/*??*/          uno::Reference<
-                    datatransfer::XTransferable > xRef(
-                                                                pTransfer );
+/*??*/          uno::Reference< datatransfer::XTransferable > xRef( pTransfer );
 
-                if ( nId == SID_CUT )
+                if ( nId == SID_CUT && !rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) )
                     pTransfer->Cut();
                 else
                 {
@@ -387,7 +368,42 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
 
-        case FN_PASTESPECIAL:
+        case SID_PASTE_UNFORMATTED:
+            {
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard(
+                        &rSh.GetView().GetEditWin()) );
+                if( aDataHelper.GetXTransferable().is() &&
+                    SwTransferable::IsPaste( rSh, aDataHelper ))
+                {
+                    // temp. Variablen, da die Shell nach dem Paste schon
+                    // zerstoert sein kann
+                    SwView* pView = &rView;
+                    rReq.Ignore();
+                    bIgnore = sal_True;
+                    int nRet = SwTransferable::PasteUnformatted( rSh, aDataHelper );
+                    if(nRet)// && rReq.IsRecording() )
+                    {
+                        SfxViewFrame* pViewFrame = pView->GetViewFrame();
+                        uno::Reference< frame::XDispatchRecorder > xRecorder =
+                            pViewFrame->GetBindings().GetRecorder();
+                        if(xRecorder.is()) {
+                            SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
+                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, SOT_FORMAT_STRING ) );
+                            aReq.Done();
+                        }
+                    }
+
+                    if (rSh.IsFrmSelected() || rSh.IsObjSelected())
+                        rSh.EnterSelFrmMode();
+                    pView->AttrChangedNotify( &rSh );
+                }
+                else
+                    return;
+            }
+            break;
+
+        case SID_PASTE_SPECIAL:
             {
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
@@ -463,9 +479,12 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                 rSet.DisableItem( SID_PASTE );
             break;
 
-        case FN_PASTESPECIAL:
+        case SID_PASTE_SPECIAL:
             if( !GetView().IsPasteSpecialAllowed() )
-                rSet.DisableItem( FN_PASTESPECIAL );
+            {
+                rSet.DisableItem( SID_PASTE_SPECIAL );
+                rSet.DisableItem( SID_PASTE_UNFORMATTED );
+            }
             break;
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
@@ -518,6 +537,8 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
         default:
             DBG_ERROR("falscher Dispatcher");
     }
+
+    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 }
 
 /*--------------------------------------------------------------------
@@ -1730,9 +1751,12 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                         rSh.GetGraphic(FALSE);  // start the loading
                                 }
                                 else if( rSh.IsFrmSelected() )
-                                    bDisable = GRAPHIC_NONE ==
-                                            rSh.GetIMapGraphic().GetType()||
-                                            nSel & nsSelectionType::SEL_FRM;
+                                {
+                                    // #i102253# applied patch from OD (see task)
+                                    bDisable =
+                                        nSel & nsSelectionType::SEL_FRM ||
+                                        GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                                }
                             }
                             bSet = bDisable ? FALSE : rWrap.IsContour();
 
@@ -2082,14 +2106,22 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
 
         if( pArgs )
         {
-            SwTxtFmtColl* pColl;
-            if( (!(RES_CHRATR_BEGIN <= nWhich && nWhich < RES_CHRATR_END ) ||
-                ( rSh.HasSelection() && rSh.IsSelFullPara() ) ) &&
-                0 != (pColl = rSh.GetCurTxtFmtColl()) &&
-                pColl->IsAutoUpdateFmt() )
-                rSh.AutoUpdatePara( pColl, *pArgs );
-            else
+            bool bAuto = false;
+            if ( !isCHRATR(nWhich) ||
+                 ( rSh.HasSelection() && rSh.IsSelFullPara() ) )
+            {
+                SwTxtFmtColl * pColl = rSh.GetCurTxtFmtColl();
+                if ( pColl && pColl->IsAutoUpdateFmt() )
+                {
+                    rSh.AutoUpdatePara( pColl, *pArgs );
+                    bAuto = true;
+                }
+            }
+
+            if (!bAuto)
+            {
                 rSh.SetAttr( *pArgs );
+            }
         }
         delete pSSetItem;
     }

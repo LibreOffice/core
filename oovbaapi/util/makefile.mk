@@ -45,6 +45,7 @@ dummy:
         @echo "not building vba..."
 .ENDIF
 
+.IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 UNOIDLDBFILES= \
     $(UCR)$/vba.db \
@@ -53,5 +54,6 @@ UNOIDLDBFILES= \
     $(UCR)$/constants.db
 
 # --- Targets ------------------------------------------------------
+.ENDIF
 
 .INCLUDE :  target.mk

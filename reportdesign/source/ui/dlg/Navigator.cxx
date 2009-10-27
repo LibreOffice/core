@@ -224,7 +224,7 @@ private:
 DBG_NAME(rpt_NavigatorTree)
 // -----------------------------------------------------------------------------
 NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
-        :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
+        :SvTreeListBox( pParent, WB_TABSTOP| WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
         ,comphelper::OSelectionChangeListener(m_aMutex)
         ,OPropertyChangeListener(m_aMutex)
         ,m_aTimerTriggered(-1,-1)
@@ -945,6 +945,7 @@ ONavigator::ONavigator( Window* _pParent
     //SetOutputSizePixel(aOutSize);
     FreeResource();
     m_pImpl->m_pNavigatorTree->Show();
+    m_pImpl->m_pNavigatorTree->GrabFocus();
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
     Show();
 
@@ -975,6 +976,13 @@ void ONavigator::Resize()
     m_pImpl->m_pNavigatorTree->SetPosSizePixel( aLBPos, aLBSize );
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void ONavigator::GetFocus()
+{
+    Window::GetFocus();
+    if ( m_pImpl->m_pNavigatorTree.get() )
+        m_pImpl->m_pNavigatorTree->GrabFocus();
+}
 // =============================================================================
 } // rptui
 // =============================================================================

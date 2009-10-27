@@ -57,7 +57,9 @@ SLOFILES= \
         $(SLO)$/vclmetafileprocessor2d.obj		\
         $(SLO)$/contourextractor2d.obj			\
         $(SLO)$/linegeometryextractor2d.obj		\
-        $(SLO)$/canvasprocessor.obj
+        $(SLO)$/canvasprocessor.obj				\
+        $(SLO)$/hittestprocessor2d.obj			\
+        $(SLO)$/textaspolygonextractor2d.obj
 
 # --- Targets ----------------------------------
 

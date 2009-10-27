@@ -109,7 +109,7 @@ void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnect
 // -----------------------------------------------------------------------------
 void OConnectionWrapper::disposing()
 {
-    m_xConnection = NULL;
+m_xConnection.clear();
 }
 //-----------------------------------------------------------------------------
 OConnectionWrapper::~OConnectionWrapper()

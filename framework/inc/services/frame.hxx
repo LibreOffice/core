@@ -400,13 +400,6 @@ class Frame :   // interfaces
 
         static sal_Bool implcp_ctor                                (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&             xFactory            );
         static sal_Bool implcp_setActiveFrame                      (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              );
-        static sal_Bool implcp_initialize                          (   const   css::uno::Reference< css::awt::XWindow >&                           xWindow             );
-        static sal_Bool implcp_setCreator                          (   const   css::uno::Reference< css::frame::XFramesSupplier >&                 xCreator            );
-        static sal_Bool implcp_setName                             (   const   ::rtl::OUString&                                                    sName               );
-        static sal_Bool implcp_findFrame                           (   const   ::rtl::OUString&                                                    sTargetFrameName    ,
-                                                                               sal_Int32                                                           nSearchFlags        );
-        static sal_Bool implcp_setComponent                        (   const   css::uno::Reference< css::awt::XWindow >&                           xComponentWindow    ,
-                                                                       const   css::uno::Reference< css::frame::XController >&                     xController         );
         static sal_Bool implcp_addFrameActionListener              (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
         static sal_Bool implcp_removeFrameActionListener           (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
         static sal_Bool implcp_addEventListener                    (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );

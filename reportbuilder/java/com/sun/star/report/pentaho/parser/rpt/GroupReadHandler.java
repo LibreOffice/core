@@ -79,7 +79,7 @@ public class GroupReadHandler extends ElementReadHandler
         super.startParsing(attrs);
 
         final String groupExpr = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "group-expression");
-        if (groupExpr != null)
+        if ( groupExpr != null && !"".equals(groupExpr) )
         {
             final FormulaExpression function = new FormulaExpression();
             function.setFormula(groupExpr);

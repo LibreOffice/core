@@ -121,8 +121,9 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
 
     printlog "Office quit - start"
 
-    TBOrestart
-
+    ExitRestartTheOffice
+    printlog "opening new doc to get the Options"
+    Call hNewDocument
     printlog "checking states"
     ToolsOptions
     hToolsOptions (sApplication,"General")
@@ -402,8 +403,9 @@ testcase tToolsOptionsDrawView (sApplication as string)
 
     printlog "Office quit - start"
 
-    TBOrestart
-
+    ExitRestartTheOffice
+    printlog "opening new doc to get the Options"
+    Call hNewDocument
     printlog "checking states"
     ToolsOptions
     hToolsOptions (sApplication,"View")
@@ -553,17 +555,18 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
       sTempMetricField(5) = FangenFangbereich.GetText
       sTempMetricField(6) = Punktreduktion.GetText
 
-   Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
 
     printlog "Office quit - start"
 
-    TBOrestart
-
-   hTypeKeys "OpenNewDoc!"
-  printlog "checking states"
-   ToolsOptions
-   hToolsOptions (sApplication,"Grid")
+    ExitRestartTheOffice
+    printlog "opening new doc to get the Options"
+    Call hNewDocument
+    hTypeKeys "OpenNewDoc!"
+    printlog "checking states"
+    ToolsOptions
+    hToolsOptions (sApplication,"Grid")
 
       If ( irgendwas(1) = FangrasterBenutzen.IsChecked      ) Then WarnLog "Snap to Grid state changed"
       If ( irgendwas(2) = RasterSichtbar.IsChecked          ) Then WarnLog "Visible Grid state changed"
@@ -911,8 +914,9 @@ testcase tToolsOptionsDrawPrint (sApplication as string)
 
     printlog "SO quit - start"
 
-    TBOrestart
-
+    ExitRestartTheOffice
+    printlog "opening new doc to get the Options"
+    Call hNewDocument
     printlog "checking states"
     ToolsOptions
     hToolsOptions (sApplication,"Print")

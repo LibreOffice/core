@@ -53,10 +53,11 @@ class ImplFontCharMap;
 class SalLayout;
 class ImplLayoutArgs;
 class Rectangle;
-struct FontSubsetInfo;
+class FontSubsetInfo;
 class OutputDevice;
 class ServerFontLayout;
 struct SystemGraphicsData;
+struct SystemFontData;
 
 namespace basegfx {
     class B2DVector;
@@ -493,6 +494,7 @@ public:
                         sal_uInt8 nTransparency, const OutputDevice *pOutDev );
 
     virtual SystemGraphicsData   GetGraphicsData() const = 0;
+    virtual SystemFontData       GetSysFontData( int nFallbacklevel ) const = 0;
 };
 
 #endif // _SV_SALGDI_HXX

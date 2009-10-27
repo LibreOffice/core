@@ -276,49 +276,8 @@ void LayOutPut( const SwFrm* pFrm )
 SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 {
     rOs << " {HINTS:";
-#ifdef JP_NEWCORE
-    for( MSHORT i = 0; i < rHints.GetSize(); ++i)
-    {
-        SwTxtHint *pHint = (SwTxtHint*) rHints[i];
 
-        if(0 != GetCharWidth(pHint))
-            rOs << "CHARWIDTH" << ' '; // << GetCharWidth(pHint)->frCPI;
-        else if(0 != GetColor(pHint))
-            rOs << "COLOR" << ' ' ; // << GetColor(pHint)->aColor;
-        else if(0 != GetCrossedOut(pHint))
-            rOs << "CROSSEDOUT" << ' ' << (MSHORT)(GetCrossedOut(pHint)->nState);
-        else if(0 != GetAttrFont(pHint))
-            rOs << "ATTRFONT" << ' ' <<
-            (const char *)(GetAttrFont(pHint)->sFamilyName) << ',' <<
-            ((MSHORT) GetAttrFont(pHint)->eFamily);
-        else if(0 != GetPosture(pHint))
-            rOs << "POSTURE" << ' ' << GetPosture(pHint)->nPosture;
-        else if(0 != GetFontSize(pHint))
-            rOs << "FONTSIZE" << ' ' << GetFontSize(pHint)->nSize;
-        else if(0 != GetUnderline(pHint))
-            rOs << "UNDERLINE" << ' ' << (MSHORT)(GetUnderline(pHint)->nState);
-        else if(0 != GetOverline(pHint))
-            rOs << "OVERLINE" << ' ' << (MSHORT)(GetOverline(pHint)->nState);
-        else if(0 != GetWeight(pHint))
-            rOs << "WEIGHT" << ' ' << GetWeight(pHint)->nWeight;
-        else if(0 != GetContour(pHint))
-            rOs << "CONTOUR" << ' ' << GetContour(pHint)->nState;
-        else if(0 != GetShadowed(pHint))
-            rOs << "SHADOWED" << ' ' << GetShadowed(pHint)->nState;
-        else if(0 != GetAutoKern(pHint))
-            rOs << "AUTOKERN" << ' ' << GetAutoKern(pHint)->nState;
-        else if(0 != GetWordLineMode(pHint))
-            rOs << "WORDLINEMODE" << ' ' << GetWordLineMode(pHint)->nState;
-        else
-            rOs << pHint->Which();
-
-        rOs << ',' << pHint->GetStart()->GetIndex()
-                << '-'
-                << (pHint->GetEnd() ? pHint->GetEnd()->GetIndex() : STRING_LEN)
-                << "\n";
-    }
-#endif
-    // JP_NEWCORE
+// REMOVED
 
     rOs << '}';
     return rOs;

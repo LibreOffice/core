@@ -704,7 +704,8 @@ InteractionSupplyAuthentication::queryInterface( const uno::Type & rType )
     uno::Any aRet = cppu::queryInterface( rType,
             static_cast< lang::XTypeProvider * >( this ),
             static_cast< task::XInteractionContinuation * >( this ),
-            static_cast< ucb::XInteractionSupplyAuthentication * >( this ) );
+            static_cast< ucb::XInteractionSupplyAuthentication * >( this ),
+            static_cast< ucb::XInteractionSupplyAuthentication2 * >( this ));
 
     return aRet.hasValue()
             ? aRet : InteractionContinuation::queryInterface( rType );
@@ -750,7 +751,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
                     uno::Reference< lang::XTypeProvider > * >( 0 ) ),
                 getCppuType( static_cast<
                     uno::Reference<
-                        ucb::XInteractionSupplyAuthentication > * >( 0 ) ) );
+                        ucb::XInteractionSupplyAuthentication2 > * >( 0 ) ) );
             pCollection = &collection;
         }
     }
@@ -903,6 +904,33 @@ void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
 {
     m_eRememberAccountMode = Remember;
 }
+
+//=========================================================================
+//
+// XInteractionSupplyAuthentication2 methods.
+//
+//=========================================================================
+
+// virtual
+::sal_Bool SAL_CALL
+InteractionSupplyAuthentication::canUseSystemCredentials(
+        ::sal_Bool& Default )
+    throw ( uno::RuntimeException )
+{
+    Default = m_bDefaultUseSystemCredentials;
+    return m_bCanUseSystemCredentials;
+}
+
+//=========================================================================
+// virtual
+void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
+        ::sal_Bool UseSystemCredentials )
+    throw ( uno::RuntimeException )
+{
+    if ( m_bCanUseSystemCredentials )
+        m_bUseSystemCredentials = UseSystemCredentials;
+}
+
 
 //=========================================================================
 //=========================================================================

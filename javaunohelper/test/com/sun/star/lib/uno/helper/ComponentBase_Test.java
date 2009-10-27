@@ -67,9 +67,9 @@ public class ComponentBase_Test
         comp.addEventListener(obj1);
         comp.addEventListener(obj2);
         comp.addEventListener(obj3);
-        comp.addEventListener((XEventListener) UnoRuntime.queryInterface(XEventListener.class, proxyObj1Weak1));
-        comp.addEventListener((XEventListener) UnoRuntime.queryInterface(XEventListener.class, proxyObj3Weak2));
-        comp.addEventListener((XEventListener) UnoRuntime.queryInterface(XEventListener.class, proxyObj3TypeProv));
+        comp.addEventListener(UnoRuntime.queryInterface(XEventListener.class, proxyObj1Weak1));
+        comp.addEventListener(UnoRuntime.queryInterface(XEventListener.class, proxyObj3Weak2));
+        comp.addEventListener(UnoRuntime.queryInterface(XEventListener.class, proxyObj3TypeProv));
         obj1.nDisposingCalled = 0;
         obj2.nDisposingCalled = 0;
         obj3.nDisposingCalled = 0;

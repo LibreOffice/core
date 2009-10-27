@@ -169,7 +169,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     // disable painting in the corner between the scrollbars
     if ( bVVisible && bHVisible )
     {
-        m_aCornerWin.SetPosSizePixel(*((Point*) &aOutPixSz), Size(nScrSize, nScrSize) );
+        m_aCornerWin.SetPosSizePixel(Point(aOutPixSz.Width(), aOutPixSz.Height()), Size(nScrSize, nScrSize) );
         m_aCornerWin.Show();
     }
     else

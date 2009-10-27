@@ -31,25 +31,60 @@
 #ifndef OOX_DRAWINGML_COLORCHOICECONTEXT_HXX
 #define OOX_DRAWINGML_COLORCHOICECONTEXT_HXX
 
-#include "oox/drawingml/color.hxx"
 #include "oox/core/contexthandler.hxx"
-#include "oox/core/fragmenthandler.hxx"
 
-namespace oox { namespace drawingml {
+namespace oox {
+namespace drawingml {
 
-class colorChoiceContext : public oox::core::ContextHandler
+class Color;
+
+// ============================================================================
+
+/** Context handler for the different color value elements (a:scrgbClr,
+    a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
+class ColorValueContext : public ::oox::core::ContextHandler
 {
 public:
-    colorChoiceContext( ::oox::core::ContextHandler& rParent, Color& rColor );
+    explicit            ColorValueContext( ::oox::core::ContextHandler& rParent, Color& rColor );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL startFastElement(
+                            sal_Int32 nElement,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
+                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+                        createFastChildContext(
+                            sal_Int32 nElement,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
+                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
-
-    Color&  mrColor;
+    Color&              mrColor;
 };
 
-} }
+// ============================================================================
 
-#endif  //  OOX_DRAWINGML_COLORCHOICECONTEXT_HXX
+/** Context handler for elements that *contain* a color value element
+    (a:scrgbClr, a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
+class ColorContext : public ::oox::core::ContextHandler
+{
+public:
+    explicit            ColorContext( ::oox::core::ContextHandler& rParent, Color& rColor );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+                        createFastChildContext(
+                            sal_Int32 nElement,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
+                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+
+private:
+    Color&              mrColor;
+};
+
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
+#endif
+

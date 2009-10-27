@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: queryfilter.cxx,v $
- * $Revision: 1.36.66.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -382,7 +379,16 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
             if ( xInfo->hasPropertyByName(PROPERTY_REALNAME) )
             {
                 if ( xInfo->hasPropertyByName(PROPERTY_TABLENAME) )
+                {
                     xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+                    if ( sTableName.getLength() )
+                    {
+                        // properly quote all parts of the table name, so e.g. <schema>.<table> becomes "<schema>"."<table>"
+                        ::rtl::OUString aCatlog,aSchema,aTable;
+                        ::dbtools::qualifiedNameComponents( m_xMetaData, sTableName, aCatlog, aSchema, aTable, ::dbtools::eInDataManipulation );
+                        sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
+                    }
+                }
                 xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
                 static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
                 if ( xInfo->hasPropertyByName(sAgg) )
@@ -398,7 +404,6 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                 if ( sTableName.getLength() )
                 {
                     static ::rtl::OUString sSep(RTL_CONSTASCII_USTRINGPARAM("."));
-                    sTableName = ::dbtools::quoteName(aQuote,sTableName);
                     sTableName += sSep;
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;

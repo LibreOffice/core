@@ -96,6 +96,99 @@ public class TestHelper  {
         return true;
     }
 
+    public boolean WriteBytesToSubstreamDefaultCompressed( XStorage xStorage,
+                                                            String sStreamName,
+                                                            String sMediaType,
+                                                            byte[] pBytes )
+    {
+        // open substream element
+        XStream xSubStream = null;
+        try
+        {
+            Object oSubStream = xStorage.openStreamElement( sStreamName, ElementModes.WRITE );
+            xSubStream = (XStream) UnoRuntime.queryInterface( XStream.class, oSubStream );
+            if ( xSubStream == null )
+            {
+                Error( "Can't create substream '" + sStreamName + "'!" );
+                return false;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't create substream '" + sStreamName + "', exception : " + e + "!" );
+            return false;
+        }
+
+        // get output stream of substream
+        XOutputStream xOutput = xSubStream.getOutputStream();
+        if ( xOutput == null )
+        {
+            Error( "Can't get XOutputStream implementation from substream '" + sStreamName + "'!" );
+            return false;
+        }
+
+        // get XTrucate implementation from output stream
+        XTruncate xTruncate = (XTruncate) UnoRuntime.queryInterface( XTruncate.class, xOutput );
+        if ( xTruncate == null )
+        {
+            Error( "Can't get XTruncate implementation from substream '" + sStreamName + "'!" );
+            return false;
+        }
+
+        // write requested byte sequence
+        try
+        {
+            xTruncate.truncate();
+            xOutput.writeBytes( pBytes );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't write to stream '" + sStreamName + "', exception: " + e );
+            return false;
+        }
+
+        // get access to the XPropertySet interface
+        XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, xSubStream );
+        if ( xPropSet == null )
+        {
+            Error( "Can't get XPropertySet implementation from substream '" + sStreamName + "'!" );
+            return false;
+        }
+
+        // set properties to the stream
+        // do not set the compressed property
+        try
+        {
+            xPropSet.setPropertyValue( "MediaType", sMediaType );
+        }
+        catch( Exception e )
+        {
+            Error( "Can't set properties to substream '" + sStreamName + "', exception: " + e );
+            return false;
+        }
+
+        // check size property of the stream
+        try
+        {
+            int nSize = AnyConverter.toInt( xPropSet.getPropertyValue( "Size" ) );
+            if ( nSize != pBytes.length )
+            {
+                Error( "The 'Size' property of substream '" + sStreamName + "' contains wrong value!" );
+                return false;
+            }
+        }
+        catch( Exception e )
+        {
+            Error( "Can't get 'Size' property from substream '" + sStreamName + "', exception: " + e );
+            return false;
+        }
+
+        // free the stream resources, garbage collector may remove the object too late
+        if ( !disposeStream( xSubStream, sStreamName ) )
+            return false;
+
+        return true;
+    }
 
     public boolean WriteBytesToSubstream( XStorage xStorage,
                                           String sStreamName,

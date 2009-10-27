@@ -518,21 +518,26 @@ inline BOOL SwBorderAttrs::IsLine() const
     OD 2004-03-10 #i28701#
     Values only provided for flow frames (table, section or text frames)
     Note: line spacing value is only determined for text frames
+    OD 2009-08-28 #i102458#
+    Add output parameter <obIsLineSpacingProportional>
 
-    @param _rFrm
+    @param rFrm
     input parameter - frame, for which the spacing values are determined.
 
-    @param _roPrevLowerSpacing
+    @param onPrevLowerSpacing
     output parameter - lower spacing of the frame in SwTwips
 
-    @param _roPrevLineSpacing
+    @param onPrevLineSpacing
     output parameter - line spacing of the frame in SwTwips
+
+    @param obIsLineSpacingProportional
 
     @author OD
 */
-void GetSpacingValuesOfFrm( const SwFrm& _rFrm,
-                            SwTwips& _roLowerSpacing,
-                            SwTwips& _roLineSpacing );
+void GetSpacingValuesOfFrm( const SwFrm& rFrm,
+                            SwTwips& onLowerSpacing,
+                            SwTwips& onLineSpacing,
+                            bool& obIsLineSpacingProportional );
 
 /** method to get the content of the table cell
 

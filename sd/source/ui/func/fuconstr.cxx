@@ -220,7 +220,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
             SdrPageView* pPV;
             USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-            if (!mpView->PickObj(aPnt, pObj, pPV))
+            if (!mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV))
             {
                 mpView->MarkObj(aPnt, nHitLog);
             }

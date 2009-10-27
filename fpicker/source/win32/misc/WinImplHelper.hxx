@@ -53,6 +53,8 @@
 // deklarations
 //------------------------------------------------------------------------
 
+bool SAL_CALL IsWindowsVistaOrNewer();
+bool SAL_CALL IsWindows7();
 bool SAL_CALL IsWindowsVista();
 bool SAL_CALL IsWindows2000();
 bool SAL_CALL IsWindowsXP();

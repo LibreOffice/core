@@ -349,6 +349,16 @@ void OTableEditorCtrl::InitCellController()
     pTypeCell->SetHelpId(HID_TABDESIGN_TYPECELL);
     pDescrCell->SetHelpId(HID_TABDESIGN_COMMENTCELL);
 
+    Size aHeight;
+    const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell};
+    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    {
+        const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
+        if ( aTemp.Height() > aHeight.Height() )
+            aHeight.Height() = aTemp.Height();
+    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    SetDataRowHeight(aHeight.Height());
+
     ClearModified();
 }
 
@@ -502,7 +512,8 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
 
                 const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
                 OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
-                for(;aIter != pTypeInfo->end();++aIter)
+                OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
+                for(;aIter != aEnd;++aIter)
                     pTypeCell->InsertEntry( aIter->second->aUIName );
                 pTypeCell->SelectEntry( aInitString );
             }
@@ -610,9 +621,10 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const String& rFieldName )
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_pRowList->begin();
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_pRowList->end();
     OFieldDescription* pFieldDescr;
     sal_Int32 nCount(0);
-    for(;aIter != m_pRowList->end();++aIter)
+    for(;aIter != aEnd;++aIter)
     {
         pFieldDescr = (*aIter)->GetActFieldDescr();
         if( pFieldDescr && bCase(rFieldName,pFieldDescr->GetName()))
@@ -1300,9 +1312,9 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // Text aus Dokumentdaten holen
-    return ::comphelper::getString(const_cast<OTableEditorCtrl*>(this)->GetCellData( nRow, nColId ));
+    ::rtl::OUString sCellText;
+    const_cast< OTableEditorCtrl* >( this )->GetCellData( nRow, nColId ) >>= sCellText;
+    return sCellText;
 }
 
 //------------------------------------------------------------------------------
@@ -1796,7 +1808,8 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     long nIndex = 0;
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    for(sal_Int32 nRow = 0;aIter != m_pRowList->end();++aIter,++nRow)
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
+    for(sal_Int32 nRow = 0;aIter != aEnd;++aIter,++nRow)
     {
         OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
         if( pFieldDescr && (*aIter)->IsPrimaryKey() && (!bSet || !IsRowSelected(nRow)) )
@@ -1846,7 +1859,8 @@ sal_Bool OTableEditorCtrl::IsPrimaryKey()
     // Gehoeren alle markierten Felder zu einem Primary Key ?
     long nPrimaryKeys = 0;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    for(sal_Int32 nRow=0;aIter != m_pRowList->end();++aIter,++nRow)
+    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
+    for(sal_Int32 nRow=0;aIter != aEnd;++aIter,++nRow)
     {
         if( IsRowSelected(nRow) && !(*aIter)->IsPrimaryKey() )
             return sal_False;
@@ -1880,7 +1894,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     pRow->SetFieldType( _pType, sal_True );
     if ( _pType.get() )
     {
-        sal_uInt16 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
+        const sal_uInt16 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
 
         if  (   ( LISTBOX_ENTRY_NOTFOUND == nCurrentlySelected )
             ||  ( GetView()->getController().getTypeInfo( nCurrentlySelected ) != _pType )
@@ -1889,7 +1903,8 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
             USHORT nEntryPos = 0;
             const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
-            for(;aIter != pTypeInfo->end();++aIter,++nEntryPos)
+            OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
+            for(;aIter != aEnd;++aIter,++nEntryPos)
             {
                 if(aIter->second == _pType)
                     break;

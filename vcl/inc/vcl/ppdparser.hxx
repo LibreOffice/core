@@ -202,7 +202,7 @@ public:
     static const PPDParser* getParser( const String& rFile );
     static String getPPDPrinterName( const String& rFile );
     static void freeAll();
-    static void getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers );
+    static void getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers, bool bRefresh = false );
 
     const String&   getFilename() const { return m_aFile; }
 

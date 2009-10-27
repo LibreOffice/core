@@ -38,60 +38,36 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/hatch.hxx>
-
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <sdrpaintwindow.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
-
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <svx/sdr/overlay/overlayhatchrect.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 namespace sdr { namespace table {
+
+// --------------------------------------------------------------------
 
 class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
 protected:
     basegfx::B2DPolyPolygon maPolyPolygon;
+    bool                    mbVisible;
 
-    // Draw geometry
-    virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-    // Create the BaseRange. This method needs to calculate maBaseRange.
-    virtual void createBaseRange(OutputDevice& rOutputDevice);
-
-    virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
+    // geometry creation for OverlayObject
+    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
 public:
-    OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon );
+    OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible );
     virtual ~OverlayTableEdge();
-};
-
-// --------------------------------------------------------------------
-
-class OverlayTableBorder : public sdr::overlay::OverlayObject
-{
-protected:
-    basegfx::B2DPolyPolygon maPolyPolygon;
-
-    // Draw geometry
-    virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-    // Create the BaseRange. This method needs to calculate maBaseRange.
-    virtual void createBaseRange(OutputDevice& rOutputDevice);
-
-    virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
-
-    virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
-
-public:
-    OverlayTableBorder( const basegfx::B2DPolyPolygon& rPolyPolygon );
-    virtual ~OverlayTableBorder();
 };
 
 // --------------------------------------------------------------------
@@ -134,40 +110,23 @@ sal_Int32 TableEdgeHdl::GetValidDragOffset( const SdrDragStat& rDrag ) const
 
 basegfx::B2DPolyPolygon TableEdgeHdl::getSpecialDragPoly(const SdrDragStat& rDrag) const
 {
-    return GetPolyPolygon(false, &rDrag);
+    basegfx::B2DPolyPolygon aVisible;
+    basegfx::B2DPolyPolygon aInvisible;
+
+    // create and return visible and non-visible parts for drag
+    getPolyPolygon(aVisible, aInvisible, &rDrag);
+    aVisible.append(aInvisible);
+
+    return aVisible;
 }
 
-bool TableEdgeHdl::IsHdlHit(const Point& rPnt) const
+void TableEdgeHdl::getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2DPolyPolygon& rInvisible, const SdrDragStat* pDrag) const
 {
-    if( GetPointNum() != 0 )
-    {
-        double fTol = 0.0;
-        if( pHdlList )
-        {
-            SdrMarkView* pView = pHdlList->GetView();
-            if( pView )
-            {
-                OutputDevice* pOutDev = pView->GetFirstOutputDevice();
-                if( pOutDev )
-                {
-                    fTol = static_cast<double>(pOutDev->PixelToLogic(Size(3, 3)).Width());
-                }
-            }
-        }
-
-        basegfx::B2DPoint aPosition(rPnt.X(), rPnt.Y());
-        if( basegfx::tools::isInEpsilonRange( maVisiblePolygon, aPosition, fTol ) )
-            return sal_True;
-    }
-    return false;
-}
-
-
-basegfx::B2DPolyPolygon TableEdgeHdl::GetPolyPolygon( bool bOnlyVisible, const SdrDragStat* pDrag /*= 0*/ ) const
-{
-    basegfx::B2DPolyPolygon aRetValue;
-
+    // changed method to create visible and invisible partial polygons in one run in
+    // separate PolyPolygons; both kinds are used
     basegfx::B2DPoint aOffset(aPos.X(), aPos.Y());
+    rVisible.clear();
+    rInvisible.clear();
 
     if( pDrag )
     {
@@ -176,36 +135,34 @@ basegfx::B2DPolyPolygon TableEdgeHdl::GetPolyPolygon( bool bOnlyVisible, const S
     }
 
     basegfx::B2DPoint aStart(aOffset), aEnd(aOffset);
-
     int nPos = mbHorizontal ? 0 : 1;
-
-    // base line hit, check for edges
     TableEdgeVector::const_iterator aIter( maEdges.begin() );
+
     while( aIter != maEdges.end() )
     {
         TableEdge aEdge(*aIter++);
 
-        if( aEdge.meState == Visible || ( aEdge.meState == Invisible && !bOnlyVisible ) )
+        aStart[nPos] = aOffset[nPos] + aEdge.mnStart;
+        aEnd[nPos] = aOffset[nPos] + aEdge.mnEnd;
+
+        basegfx::B2DPolygon aPolygon;
+        aPolygon.append( aStart );
+        aPolygon.append( aEnd );
+
+        if(aEdge.meState == Visible)
         {
-            aStart[nPos] = aOffset[nPos] + aEdge.mnStart;
-            aEnd[nPos] = aOffset[nPos] + aEdge.mnEnd;
-
-            basegfx::B2DPolygon aPolygon;
-            aPolygon.append( aStart );
-            aPolygon.append( aEnd );
-
-            aRetValue.append( aPolygon );
+            rVisible.append(aPolygon);
+        }
+        else
+        {
+            rInvisible.append(aPolygon);
         }
     }
-
-    return aRetValue;
 }
 
 void TableEdgeHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
-
-    maVisiblePolygon = GetPolyPolygon(false);
 
     if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
     {
@@ -214,20 +171,40 @@ void TableEdgeHdl::CreateB2dIAObject()
 
         if(pPageView)
         {
-            for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
+            basegfx::B2DPolyPolygon aVisible;
+            basegfx::B2DPolyPolygon aInvisible;
+
+            // get visible and invisible parts
+            getPolyPolygon(aVisible, aInvisible, 0);
+
+            if(aVisible.count() || aInvisible.count())
             {
-                // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-                const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
-
-                if(rPageWindow.GetPaintWindow().OutputToWindow())
+                for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
                 {
-                    if(rPageWindow.GetOverlayManager())
-                    {
-                        ::sdr::overlay::OverlayObject* pOverlayObject =
-                            new OverlayTableEdge( GetPolyPolygon(true) );
+                    const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
 
-                        rPageWindow.GetOverlayManager()->add(*pOverlayObject);
-                        maOverlayGroup.append(*pOverlayObject);
+                    if(rPageWindow.GetPaintWindow().OutputToWindow())
+                    {
+                        if(rPageWindow.GetOverlayManager())
+                        {
+                            if(aVisible.count())
+                            {
+                                // create overlay object for visible parts
+                                sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aVisible, true);
+                                rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                                maOverlayGroup.append(*pOverlayObject);
+                            }
+
+                            if(aInvisible.count())
+                            {
+                                // also create overlay object vor invisible parts to allow
+                                // a standard HitTest using the primitives from that overlay object
+                                // (see OverlayTableEdge implementation)
+                                sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);
+                                rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                                maOverlayGroup.append(*pOverlayObject);
+                            }
+                        }
                     }
                 }
             }
@@ -237,9 +214,10 @@ void TableEdgeHdl::CreateB2dIAObject()
 
 //////////////////////////////////////////////////////////////////////////////
 
-OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon )
+OverlayTableEdge::OverlayTableEdge( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bVisible )
 :   OverlayObject(Color(COL_GRAY))
 ,   maPolyPolygon( rPolyPolygon )
+,   mbVisible(bVisible)
 {
 }
 
@@ -247,47 +225,35 @@ OverlayTableEdge::~OverlayTableEdge()
 {
 }
 
-void OverlayTableEdge::drawGeometry(OutputDevice& rOutputDevice)
+drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayObjectPrimitive2DSequence()
 {
-    rOutputDevice.SetLineColor(getBaseColor());
-    rOutputDevice.SetFillColor();
+    drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
-    for(sal_uInt32 a(0L); a < maPolyPolygon.count();a ++)
+    if(maPolyPolygon.count())
     {
-/*
-        const basegfx::B2DPolygon aPolygon = maPolyPolygon.getB2DPolygon(a);
-        const basegfx::B2DPoint aStart(aPolygon.getB2DPoint(0L));
-        const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() - 1L));
-        const Point aStartPoint(FRound(aStart.getX()), FRound(aStart.getY()));
-        const Point aEndPoint(FRound(aEnd.getX()), FRound(aEnd.getY()));
-        rOutputDevice.DrawLine(aStartPoint, aEndPoint);
-*/
-        PolyPolygon aPolyPolygon( maPolyPolygon );
-        rOutputDevice.DrawTransparent( aPolyPolygon, 50 );
-    }
-}
+        // Discussed with CL. Currently i will leave the transparence out since this
+        // a little bit expensive. We may check the look with drag polygons later
+        const drawinglayer::primitive2d::Primitive2DReference aReference(
+            new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
+                maPolyPolygon,
+                getBaseColor().getBColor()));
 
-void OverlayTableEdge::transform(const basegfx::B2DHomMatrix& rMatrix)
-{
-    maPolyPolygon.transform( rMatrix );
-}
-
-void OverlayTableEdge::createBaseRange(OutputDevice& /*rOutputDevice*/)
-{
-    // reset range and expand it
-    maBaseRange.reset();
-
-    if(isHittable())
-    {
-        for(sal_uInt32 a(0L); a < maPolyPolygon.count();a ++)
+        if(mbVisible)
         {
-            const basegfx::B2DPolygon aPolygon = maPolyPolygon.getB2DPolygon(a);
-            const basegfx::B2DPoint aStart(aPolygon.getB2DPoint(0L));
-            const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() - 1L));
-            maBaseRange.expand(aStart);
-            maBaseRange.expand(aEnd);
+            // visible, just return as sequence
+            aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aReference, 1);
+        }
+        else
+        {
+            // embed in HitTest primitive to support HitTest of this overlay object
+            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aReference, 1);
+            const drawinglayer::primitive2d::Primitive2DReference aNewReference(
+                new drawinglayer::primitive2d::HitTestPrimitive2D(aSequence));
+            aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aNewReference, 1);
         }
     }
+
+    return aRetval;
 }
 
 // ====================================================================
@@ -325,16 +291,15 @@ void TableBorderHdl::CreateB2dIAObject()
                 {
                     if(rPageWindow.GetOverlayManager())
                     {
-                        OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
-
-                        Size aBorderSize( rOutDev.PixelToLogic( Size( 6, 6 ) ) );
-                        basegfx::B2DRectangle aRect( vcl::unotools::b2DRectangleFromRectangle( maRectangle ) );
-                        basegfx::B2DPolyPolygon aPolyPolygon;
-                        aPolyPolygon.append(basegfx::tools::createPolygonFromRect( aRect ) );
-                        aRect.grow( aBorderSize.nA );
-                        aPolyPolygon.append(basegfx::tools::createPolygonFromRect( aRect ) );
-
-                        ::sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableBorder( aPolyPolygon );
+                        const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(maRectangle));
+                        sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayHatchRect(
+                            aRange.getMinimum(),
+                            aRange.getMaximum(),
+                            Color(0x80, 0x80, 0x80),
+                            6.0,
+                            0.0,
+                            45 * F_PI180,
+                            0.0);
 
                         rPageWindow.GetOverlayManager()->add(*pOverlayObject);
                         maOverlayGroup.append(*pOverlayObject);
@@ -345,55 +310,7 @@ void TableBorderHdl::CreateB2dIAObject()
     }
 }
 
-OverlayTableBorder::OverlayTableBorder( const basegfx::B2DPolyPolygon& rPolyPolygon )
-: OverlayObject(Color(COL_GRAY))
-, maPolyPolygon( rPolyPolygon )
-{
-}
-
-OverlayTableBorder::~OverlayTableBorder()
-{
-}
-
-// Hittest with logical coordinates
-sal_Bool OverlayTableBorder::isHit(const basegfx::B2DPoint& rPos, double /*fTol = 0.0*/) const
-{
-    if(isHittable())
-    {
-        if( basegfx::tools::isInside( maPolyPolygon.getB2DPolygon(1), rPos, true ) )
-            if( !basegfx::tools::isInside( maPolyPolygon.getB2DPolygon(0), rPos, false ) )
-                return sal_True;
-    }
-    return sal_False;
-}
-
-// Draw geometry
-void OverlayTableBorder::drawGeometry(OutputDevice& rOutputDevice)
-{
-    svtools::ColorConfig aColorConfig;
-    Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    const Hatch aHatch( HATCH_SINGLE, aHatchCol, 3, 450 );
-    PolyPolygon aPolyPolygon( maPolyPolygon );
-    rOutputDevice.DrawHatch( aPolyPolygon, aHatch );
-}
-
-// Create the BaseRange. This method needs to calculate maBaseRange.
-void OverlayTableBorder::createBaseRange(OutputDevice& /*rOutputDevice*/)
-{
-    if(isHittable())
-    {
-        maBaseRange = basegfx::tools::getRange(maPolyPolygon);
-    }
-    else
-    {
-        maBaseRange.reset();
-    }
-}
-
-void OverlayTableBorder::transform(const basegfx::B2DHomMatrix& rMatrix)
-{
-    maPolyPolygon.transform( rMatrix );
-}
+//////////////////////////////////////////////////////////////////////////////
 
 } // end of namespace table
 } // end of namespace sdr

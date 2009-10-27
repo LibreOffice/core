@@ -140,12 +140,13 @@ testcase tIBIS111158
     '/// Enter in 'Help URL' as value exactly 'HID:123456'
     TabGeneralControl.TypeKeys "<TAB>" , true        
     HelpURL.setText "HID:123456"
-    TabGeneralControl.TypeKeys "<RETURN>",true
+    HelpURL.TypeKeys "<RETURN>",true
     if HelpURL.GetText <> "HID:123456" then 
         warnlog "'HID:123456' has not been accepted as 'Help URL' value."
     end if
     '/// Close all disturbing menus
     Kontext "ControlPropertiesDialog" 
+    sleep(1)
     ControlPropertiesDialog.close
     sleep(2)
     Kontext "FormularNavigator"
@@ -167,7 +168,7 @@ testcase tIBIS111158
             warnlog "Wrong string found in Control: " & testString
         end if
     else
-        warnlog "The control seems to be not named in the document?! Verify!"
+        warnlog "The control seems to be not named in the document?! Verify! If Solaris: #i100870#"
     end if
     call hCloseDocument
 endcase

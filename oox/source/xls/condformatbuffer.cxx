@@ -452,17 +452,19 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
     /*  Replacement formula for unsupported rule types (text comparison rules,
         time period rules, cell type rules). The replacement formulas below may
         contain several placeholders:
-        -   '#B' will be replaced by the current relative base address (may
-            occur several times).
-        -   '#R' will be replaced by the entire range list of the conditional
+        - '#B' will be replaced by the current relative base address (may occur
+            several times).
+        - '#R' will be replaced by the entire range list of the conditional
             formatting (absolute addresses).
-        -   '#T' will be replaced by the quoted comparison text.
-        -   '#L' will be replaced by the length of the comparison text (from
+        - '#T' will be replaced by the quoted comparison text.
+        - '#L' will be replaced by the length of the comparison text (from
             the 'text' attribute) used in text comparison rules.
-        -   '#K' will be replaced by the rank (from the 'rank' attribute) used
-            in top-10 rules.
-        -   '#M' will be replaced by the top/bottom flag (from the 'bottom'
+        - '#K' will be replaced by the rank (from the 'rank' attribute) used in
+            top-10 rules.
+        - '#M' will be replaced by the top/bottom flag (from the 'bottom'
             attribute) used in the RANK function in top-10 rules.
+        - '#C' will be replaced by one of the comparison operators <, >, <=, or
+            >=, according to the 'aboveAverage' and 'equalAverage' flags.
      */
     OUString aReplaceFormula;
 
@@ -548,18 +550,13 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         break;
         case XML_aboveAverage:
             if( maModel.mnStdDev == 0 )
-            {
-                if( maModel.mbAboveAverage )
-                    aReplaceFormula = maModel.mbEqualAverage ? CREATE_OUSTRING( "#B>=AVERAGE(#R)" ) : CREATE_OUSTRING( "#B>AVERAGE(#R)" );
-                else
-                    aReplaceFormula = maModel.mbEqualAverage ? CREATE_OUSTRING( "#B<=AVERAGE(#R)" ) : CREATE_OUSTRING( "#B<AVERAGE(#R)" );
-            }
+                aReplaceFormula = CREATE_OUSTRING( "#B#CAVERAGE(#R)" );
         break;
     }
 
     if( aReplaceFormula.getLength() > 0 )
     {
-        OUString aAddress, aRanges, aText;
+        OUString aAddress, aRanges, aText, aComp;
         sal_Int32 nStrPos = aReplaceFormula.getLength();
         while( (nStrPos = aReplaceFormula.lastIndexOf( '#', nStrPos )) >= 0 )
         {
@@ -592,6 +589,13 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                 case 'M':       // top-10 top/bottom flag
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
                         OUString::valueOf( static_cast< sal_Int32 >( maModel.mbBottom ? 1 : 0 ) ) );
+                break;
+                case 'C':       // average comparison operator
+                    if( aComp.getLength() == 0 )
+                        aComp = maModel.mbAboveAverage ?
+                            (maModel.mbEqualAverage ? CREATE_OUSTRING( ">=" ) : CREATE_OUSTRING( ">" )) :
+                            (maModel.mbEqualAverage ? CREATE_OUSTRING( "<=" ) : CREATE_OUSTRING( "<" ));
+                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aComp );
                 break;
                 default:
                     OSL_ENSURE( false, "CondFormatRule::finalizeImport - unknown placeholder" );
@@ -702,7 +706,7 @@ void CondFormat::finalizeImport()
         if( xEntries.is() )
         {
             // maRules is sorted by rule priority
-            maRules.forEachMem( &CondFormatRule::finalizeImport, xEntries );
+            maRules.forEachMem( &CondFormatRule::finalizeImport, ::boost::cref( xEntries ) );
             aPropSet.setProperty( PROP_ConditionalFormat, xEntries );
         }
     }

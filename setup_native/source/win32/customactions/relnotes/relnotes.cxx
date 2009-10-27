@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: relnotes.cxx,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -42,7 +39,7 @@
 #include <string.h>
 #include <malloc.h>
 #include <stdio.h>
-#include "strsafe.h"
+#include <strsafe.h>
 
 //----------------------------------------------------------
 #ifdef DEBUG
@@ -70,22 +67,28 @@ inline bool IsValidHandle( HANDLE handle )
 //----------------------------------------------------------
 //----------------------------------------------------------
 //----------------------------------------------------------
-UINT ShowReleaseNotes( MSIHANDLE , TCHAR* pFileName )
+UINT ShowReleaseNotes( TCHAR* pFileName, TCHAR* pFilePath )
 {
-    TCHAR szPath[MAX_PATH];
+    TCHAR sFullPath[ MAX_PATH ];
 
-    if( FAILED( SHGetSpecialFolderPath( NULL, szPath, CSIDL_COMMON_DOCUMENTS, true ) ) )
+    if ( FAILED( StringCchCopy( sFullPath, MAX_PATH, pFilePath ) ) )
+    {
+        OutputDebugStringFormat( TEXT("DEBUG: ShowReleaseNotes: Could not copy path [%s]"), pFilePath );
         return ERROR_SUCCESS;
+    }
 
-    if ( FAILED( StringCchCat( szPath, sizeof( szPath ), pFileName ) ) )
+    if ( FAILED( StringCchCat( sFullPath, MAX_PATH, pFileName ) ) )
+    {
+        OutputDebugStringFormat( TEXT("DEBUG: ShowReleaseNotes: Could not append filename [%s]"), pFileName );
         return ERROR_SUCCESS;
+    }
 
-    HANDLE hFile = CreateFile( szPath, 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    HANDLE hFile = CreateFile( sFullPath, 0, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if ( IsValidHandle(hFile) )
     {
         CloseHandle( hFile );
-        OutputDebugStringFormat( TEXT("DEBUG: ShowReleaseNotes: Found file [%s]"), szPath );
+        OutputDebugStringFormat( TEXT("DEBUG: ShowReleaseNotes: Found file [%s]"), sFullPath );
 
         SHELLEXECUTEINFOW aExecInf;
         ZeroMemory( &aExecInf, sizeof( aExecInf ) );
@@ -93,7 +96,7 @@ UINT ShowReleaseNotes( MSIHANDLE , TCHAR* pFileName )
         aExecInf.cbSize = sizeof( aExecInf );
         aExecInf.fMask  = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI;
         aExecInf.lpVerb = TEXT("open");
-        aExecInf.lpFile = szPath;
+        aExecInf.lpFile = sFullPath;
         aExecInf.lpDirectory = NULL;
         aExecInf.nShow = SW_SHOWNORMAL;
 
@@ -102,24 +105,56 @@ UINT ShowReleaseNotes( MSIHANDLE , TCHAR* pFileName )
     }
     else
     {
-        OutputDebugStringFormat( TEXT("DEBUG: ShowReleaseNotes: File not found [%s]"), szPath );
-        return ERROR_SUCCESS;
+        OutputDebugStringFormat( TEXT("DEBUG: ShowReleaseNotes: File not found [%s]"), sFullPath );
     }
 
     return ERROR_SUCCESS;
 }
 
 //----------------------------------------------------------
-extern "C" UINT __stdcall ShowReleaseNotesBefore( MSIHANDLE hMSI )
+extern "C" UINT __stdcall ShowReleaseNotesBefore( MSIHANDLE )
 {
+    TCHAR szPath[MAX_PATH];
+
+    if( FAILED( SHGetSpecialFolderPath( NULL, szPath, CSIDL_COMMON_DOCUMENTS, true ) ) )
+        return ERROR_SUCCESS;
+
     OutputDebugString( TEXT("DEBUG: ShowReleaseNotesBefore called") );
-    return ShowReleaseNotes( hMSI, TEXT("\\sun\\releasenote1.url") );
+
+    return ShowReleaseNotes( TEXT("\\sun\\releasenote1.url"), szPath );
 }
 
 //----------------------------------------------------------
-extern "C" UINT __stdcall ShowReleaseNotesAfter( MSIHANDLE hMSI )
+extern "C" UINT __stdcall ShowReleaseNotesAfter( MSIHANDLE )
 {
+    TCHAR szPath[MAX_PATH];
+
+    if( FAILED( SHGetSpecialFolderPath( NULL, szPath, CSIDL_COMMON_DOCUMENTS, true ) ) )
+        return ERROR_SUCCESS;
+
     OutputDebugString( TEXT("DEBUG: ShowReleaseNotesAfter called") );
-    return ShowReleaseNotes( hMSI, TEXT("\\sun\\releasenote2.url") );
+
+    return ShowReleaseNotes( TEXT("\\sun\\releasenote2.url"), szPath );
+}
+
+//----------------------------------------------------------
+extern "C" UINT __stdcall ShowSurveyAfter( MSIHANDLE )
+{
+    OutputDebugString( TEXT("DEBUG: ShowSurveyAfter called") );
+
+    SHELLEXECUTEINFOW aExecInf;
+    ZeroMemory( &aExecInf, sizeof( aExecInf ) );
+
+    aExecInf.cbSize = sizeof( aExecInf );
+    aExecInf.fMask  = SEE_MASK_FLAG_DDEWAIT | SEE_MASK_FLAG_NO_UI;
+    aExecInf.lpVerb = TEXT("open");
+    aExecInf.lpFile = TEXT("http://surveys.services.openoffice.org/deinstall");
+    aExecInf.lpDirectory = NULL;
+    aExecInf.nShow = SW_SHOWNORMAL;
+
+    SetLastError( 0 );
+    ShellExecuteEx( &aExecInf );
+
+    return ERROR_SUCCESS;
 }
 

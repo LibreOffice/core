@@ -52,7 +52,7 @@
 #include "popup.hrc"
 #include "shells.hrc"
 #define SwBezierShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 #include <unomid.h>

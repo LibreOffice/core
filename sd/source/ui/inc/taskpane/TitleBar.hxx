@@ -92,6 +92,7 @@ public:
     virtual void Paint (const Rectangle& rBoundingBox);
     virtual bool Expand (bool bFlag = true);
     virtual bool IsExpanded (void) const;
+    virtual void SetEnabledState(bool bFlag);
 
     void SetFocus (bool bFlag);
 

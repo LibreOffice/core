@@ -187,7 +187,7 @@ $(ALL_FLAGS) : $(INCLUDE_FRAGMENTS)
 #cmc, hack to workaround the java build requirement
 MERGE:=python ../tools/merge/pyAltFCFGMerge
 .ELSE
-MERGE    := $(JAVAI) -jar $(CLASSDIR)$/FCFGMerge.jar
+MERGE    := $(JAVAI) -jar $(SOLARBINDIR)$/FCFGMerge.jar
 .ENDIF
 
 PACKLANG := $(XSLTPROC) --nonet

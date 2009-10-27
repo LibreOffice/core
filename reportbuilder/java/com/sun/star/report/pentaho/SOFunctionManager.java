@@ -31,8 +31,6 @@
 package com.sun.star.report.pentaho;
 
 import com.sun.star.container.NoSuchElementException;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.report.meta.XFunctionDescription;
 import com.sun.star.uno.XComponentContext;
@@ -43,9 +41,6 @@ import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
 import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 import org.pentaho.reporting.libraries.formula.function.FunctionDescription;
 import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
-import org.pentaho.reporting.libraries.formula.lvalues.LValue;
-import org.pentaho.reporting.libraries.formula.parser.FormulaParser;
-import org.pentaho.reporting.libraries.formula.parser.ParseException;
 
 /**
  * This class capsulates the class, that implements the minimal component, a factory for creating the service
@@ -150,31 +145,6 @@ public final class SOFunctionManager extends ComponentBase implements XFunctionM
         return new StarFunctionCategory(defaultContext,m_xContext, functionRegistry, position, categories[position]);
     }
 
-    public int getFunctionStartAtIndex(String formula, int position)
-    {
-        int nStartPos = -1;
-        try
-        {
-            final FormulaParser parser = new FormulaParser();
-            final LValue x = parser.parse(formula);
-            String part = x.toString();
-            while ( part.length() < position )
-            {
-                final LValue[] children = x.getChildValues();
-                if ( children != null )
-                {
-                    for(int i = 0; i < children.length;++i)
-                    {
-                        part = children[i].toString();
-                    }
-                }
-            }
-        } catch ( ParseException ex )
-        {
-        }
-        return nStartPos;
-    }
-
     public XFunctionDescription getFunctionByName(String arg0) throws NoSuchElementException
     {
         final FunctionDescription func = functionRegistry.getMetaData(arg0);
@@ -188,7 +158,7 @@ public final class SOFunctionManager extends ComponentBase implements XFunctionM
         }
         try
         {
-            return new StarFunctionDescription(defaultContext, m_xContext, getCategory(i), functionRegistry, func);
+            return new StarFunctionDescription(defaultContext, m_xContext, getCategory(i), func);
         }
         catch ( Exception ex )
         {

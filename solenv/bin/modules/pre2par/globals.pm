@@ -55,20 +55,10 @@ BEGIN
 
     $plat = $^O;
 
-    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
-    {
-        $separator = "\\";
-        $pathseparator = "\;";
-        $isunix = 0;
-        $iswin = 1;
-    }
-    else
-    {
-        $separator = "/";
-        $pathseparator = "\:";
-        $isunix = 1;
-        $iswin = 0;
-    }
+    $separator = "/";
+    $pathseparator = "\:";
+    $isunix = 1;
+    $iswin = 0;
 
     $islinux = 0;
     $issolaris = 0;

@@ -46,6 +46,7 @@ IDLFILES=\
     AccessibleChartDocumentView.idl\
     AreaDiagram.idl\
     BarDiagram.idl\
+    BubbleDiagram.idl\
     Chart3DBarProperties.idl\
     ChartArea.idl\
     ChartAxis.idl\
@@ -90,6 +91,7 @@ IDLFILES=\
     Diagram.idl\
     Dim3DDiagram.idl\
     DonutDiagram.idl\
+    FilledNetDiagram.idl\
     LineDiagram.idl\
     MissingValueTreatment.idl\
     NetDiagram.idl\

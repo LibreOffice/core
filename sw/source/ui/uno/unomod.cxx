@@ -50,12 +50,12 @@
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <doc.hxx>
 #include <comphelper/TypeGeneration.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
+#include <com/sun/star/view/DocumentZoomType.hpp>
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <edtwin.hxx>
 #include <rtl/ustrbuf.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -125,7 +125,10 @@ enum SwPrintSettingsPropertyHandles
     HANDLE_PRINTSET_PAPER_FROM_SETUP,
     HANDLE_PRINTSET_TABLES,
     HANDLE_PRINTSET_SINGLE_JOBS,
-    HANDLE_PRINTSET_EMPTY_PAGES
+    HANDLE_PRINTSET_EMPTY_PAGES,
+    HANDLE_PRINTSET_PROSPECT_RTL,
+    HANDLE_PRINTSET_PLACEHOLDER,
+    HANDLE_PRINTSET_HIDDEN_TEXT
 };
 
 static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
@@ -186,14 +189,17 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "PrintControls" ),        HANDLE_PRINTSET_CONTROLS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" ),        HANDLE_PRINTSET_DRAWINGS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" ),        HANDLE_PRINTSET_GRAPHICS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintHiddenText"),       HANDLE_PRINTSET_HIDDEN_TEXT        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" ),       HANDLE_PRINTSET_LEFT_PAGES         , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" ),  HANDLE_PRINTSET_PAGE_BACKGROUND    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" ),        HANDLE_PRINTSET_PROSPECT           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintProspectRTL" ),     HANDLE_PRINTSET_PROSPECT_RTL       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" ),        HANDLE_PRINTSET_REVERSED           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" ),      HANDLE_PRINTSET_RIGHT_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" ),         HANDLE_PRINTSET_FAX_NAME           , CPPUTYPE_OUSTRING, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP   , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintTables" ),          HANDLE_PRINTSET_TABLES             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintTextPlaceholder"),  HANDLE_PRINTSET_PLACEHOLDER        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" ),      HANDLE_PRINTSET_SINGLE_JOBS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintEmptyPages" ),      HANDLE_PRINTSET_EMPTY_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
@@ -456,6 +462,24 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
                 throw lang::IllegalArgumentException();
         }
         break;
+        case HANDLE_PRINTSET_PROSPECT_RTL:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintProspect_RTL(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_PLACEHOLDER:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintTextPlaceholder(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_HIDDEN_TEXT:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintHiddenText(bVal);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -548,6 +572,21 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
         {
             bBool = FALSE;
             rValue <<= mpPrtOpt->GetFaxName();
+        }
+        break;
+        case HANDLE_PRINTSET_PROSPECT_RTL:
+        {
+            rValue <<= mpPrtOpt->IsPrintProspect_RTL();
+        }
+        break;
+        case HANDLE_PRINTSET_PLACEHOLDER:
+        {
+            rValue <<= mpPrtOpt->IsPrintTextPlaceholder();
+        }
+        break;
+        case HANDLE_PRINTSET_HIDDEN_TEXT:
+        {
+            rValue <<= mpPrtOpt->IsPrintHiddenText();
         }
         break;
         default:
@@ -726,22 +765,27 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nZoom))
                 throw IllegalArgumentException();
             SvxZoomType eZoom = (SvxZoomType)USHRT_MAX;
-            switch(nZoom)
+            switch (nZoom)
             {
-                case /*DocumentZoomType_OPTIMAL       */0:
+                case view::DocumentZoomType::OPTIMAL:
                     eZoom = SVX_ZOOM_OPTIMAL;
                 break;
-                case /*DocumentZoomType_PAGE_WIDTH  */  1:
+                case view::DocumentZoomType::PAGE_WIDTH:
                     eZoom = SVX_ZOOM_PAGEWIDTH;
                 break;
-                case /*DocumentZoomType_ENTIRE_PAGE */  2:
+                case view::DocumentZoomType::ENTIRE_PAGE:
                     eZoom = SVX_ZOOM_WHOLEPAGE;
                 break;
-                case /*DocumentZoomType_BY_VALUE    */  3:
+                case view::DocumentZoomType::BY_VALUE:
                     eZoom = SVX_ZOOM_PERCENT;
                 break;
-                case /*DocumentZoomType_PAGE_WIDTH_EXACT */ 4:
+                case view::DocumentZoomType::PAGE_WIDTH_EXACT:
                     eZoom = SVX_ZOOM_PAGEWIDTH_NOBORDER;
+                break;
+                default:
+                    throw IllegalArgumentException(
+                        ::rtl::OUString::createFromAscii(
+                            "SwXViewSettings: invalid zoom type"), 0, 0);
                 break;
             }
             if(eZoom < USHRT_MAX)
@@ -915,23 +959,27 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case HANDLE_VIEWSET_ZOOM_TYPE:
         {
             bBool = FALSE;
-            sal_Int16 nRet;
-            switch(mpConstViewOption->GetZoomType())
+            sal_Int16 nRet(0);
+            switch (mpConstViewOption->GetZoomType())
             {
                 case SVX_ZOOM_OPTIMAL:
-                    nRet = /*DocumentZoomType_OPTIMAL*/ 0;
+                    nRet = view::DocumentZoomType::OPTIMAL;
                 break;
                 case SVX_ZOOM_PAGEWIDTH:
-                    nRet = /*DocumentZoomType_PAGE_WIDTH    */1;
+                    nRet = view::DocumentZoomType::PAGE_WIDTH;
                 break;
                 case SVX_ZOOM_WHOLEPAGE:
-                    nRet = /*DocumentZoomType_ENTIRE_PAGE */  2;
+                    nRet = view::DocumentZoomType::ENTIRE_PAGE;
                 break;
                 case SVX_ZOOM_PERCENT:
-                    nRet = /*DocumentZoomType_BY_VALUE  */  3;
+                    nRet = view::DocumentZoomType::BY_VALUE;
+                break;
+                case SVX_ZOOM_PAGEWIDTH_NOBORDER:
+                    nRet = view::DocumentZoomType::PAGE_WIDTH_EXACT;
                 break;
                 default:
-                    ;
+                    OSL_ENSURE(false, "SwXViewSettings: invalid zoom type");
+                break;
             }
             rValue <<= nRet;
         }
@@ -1015,3 +1063,4 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
     pArray[0] = C2U("com.sun.star.text.ViewSettings");
     return aRet;
 }
+

@@ -45,9 +45,7 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HDL_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -82,11 +80,9 @@
 #include <svtools/filter.hxx>
 #include <svtools/viewoptions.hxx>
 #include <svtools/moduleoptions.hxx>
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 #include <svtools/pickerhelper.hxx>
-#include <svtools/docpasswdrequest.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -98,13 +94,9 @@
 #include <sfx2/passwd.hxx>
 #include "sfxresid.hxx"
 #include <sfx2/sfxsids.hrc>
-#ifndef _SFX_FILEDLGHELPER_HRC
 #include "filedlghelper.hrc"
-#endif
 #include "filtergrouping.hxx"
-#ifndef SFX2_REQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
 #include "filedlgimpl.hxx"
 
 #include <sfxlocal.hrc>
@@ -136,6 +128,7 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
     static const OUString aSD_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SdExportLastFilter" ) );
     static const OUString aSI_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SiExportLastFilter" ) );
+    static const OUString aSW_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SwExportLastFilter" ) );
 
     const OUString* pRet = NULL;
 
@@ -143,6 +136,7 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
     {
         case FileDialogHelper::SD_EXPORT: pRet = &aSD_EXPORT_IDENTIFIER; break;
         case FileDialogHelper::SI_EXPORT: pRet = &aSI_EXPORT_IDENTIFIER; break;
+        case FileDialogHelper::SW_EXPORT: pRet = &aSW_EXPORT_IDENTIFIER; break;
         default: break;
     }
 
@@ -473,6 +467,31 @@ sal_Bool FileDialogHelper_Impl::isInOpenMode() const
 
 // ------------------------------------------------------------------------
 
+namespace {
+
+bool lclCheckODFPasswordCapability( const SfxFilter* pFilter )
+{
+    return pFilter && pFilter->IsOwnFormat() && pFilter->UsesStorage() && (pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60);
+}
+
+bool lclCheckMSPasswordCapability( const SfxFilter* pFilter )
+{
+    // TODO #i105076# this should be in the filter configuration!!!
+    return pFilter && CheckMSPasswordCapabilityForExport( pFilter->GetFilterName() );
+}
+
+bool lclCheckPasswordCapability( const SfxFilter* pFilter )
+{
+    return
+        lclCheckODFPasswordCapability( pFilter ) ||
+        // TODO #i105076# this should be in the filter configuration!!!
+        lclCheckMSPasswordCapability( pFilter );
+}
+
+}
+
+// ------------------------------------------------------------------------
+
 void FileDialogHelper_Impl::updateFilterOptionsBox()
 {
     if ( !m_bHaveFilterOptions )
@@ -556,17 +575,6 @@ void FileDialogHelper_Impl::updateSelectionBox()
 }
 
 // ------------------------------------------------------------------------
-struct CheckPasswordCapability
-{
-    sal_Bool operator() ( const SfxFilter* _pFilter )
-    {
-        return  _pFilter && _pFilter->IsOwnFormat()
-            &&  _pFilter->UsesStorage()
-            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() );
-    }
-};
-
-// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 {
     if ( ! mbHasPassword )
@@ -576,7 +584,7 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
-        CheckPasswordCapability()( getCurentSfxFilter() )
+        lclCheckPasswordCapability( getCurentSfxFilter() )
     );
 
     if( bInit )
@@ -1347,6 +1355,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 //On MacOSX the native file picker has to run in the primordial thread because of drawing issues
 //On Linux the native gtk file picker, when backed by gnome-vfs2, needs to be run in the same
 //primordial thread as the ucb gnome-vfs2 provider was initialized in.
+/*
 #ifdef WNT
     if ( mbSystemPicker )
     {
@@ -1360,9 +1369,18 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
     }
     else
 #endif
+*/
     {
         try
         {
+#ifdef WNT
+            if ( mbSystemPicker )
+            {
+                OReleaseSolarMutex aSolarMutex;
+                nRet = mxFileDlg->execute();
+            }
+            else
+#endif
             nRet = mxFileDlg->execute();
         }
         catch( const Exception& )
@@ -1633,13 +1651,19 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                 sal_Bool bPassWord = sal_False;
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
-                    // ask for the password
+                    // ask for a password
                     uno::Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.comp.uui.UUIInteractionHandler")), UNO_QUERY );
 
                     if( xInteractionHandler.is() )
                     {
-                        RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                            ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+                        // TODO: need a save way to distinguish MS filters from other filters
+                        bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
+                        ::comphelper::DocPasswordRequestType eType = bMSType ?
+                            ::comphelper::DocPasswordRequestType_MS :
+                            ::comphelper::DocPasswordRequestType_STANDARD;
+
+                        ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
+                            eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
 
                         uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
                         xInteractionHandler->handle( rRequest );
@@ -2567,6 +2591,46 @@ Sequence < OUString > FileDialogHelper::GetMPath() const
         Sequence < OUString > aEmpty;
         return aEmpty;
     }
+}
+
+// ------------------------------------------------------------------------
+Sequence< ::rtl::OUString > FileDialogHelper::GetSelectedFiles() const
+{
+    // a) the new way (optional!)
+    uno::Sequence< ::rtl::OUString > aResultSeq;
+    uno::Reference< XFilePicker2 > xPickNew(mpImp->mxFileDlg, UNO_QUERY);
+    if (xPickNew.is())
+    {
+        aResultSeq = xPickNew->getSelectedFiles();
+    }
+    // b) the olde way ... non optional.
+    else
+    {
+        uno::Reference< XFilePicker > xPickOld(mpImp->mxFileDlg, UNO_QUERY_THROW);
+        Sequence< OUString > lFiles = xPickOld->getFiles();
+        ::sal_Int32          nFiles = lFiles.getLength();
+        if ( nFiles > 1 )
+        {
+            aResultSeq = Sequence< ::rtl::OUString >( nFiles-1 );
+
+            INetURLObject aPath( lFiles[0] );
+            aPath.setFinalSlash();
+
+            for (::sal_Int32 i = 1; i < nFiles; i++)
+            {
+                if (i == 1)
+                    aPath.Append( lFiles[i] );
+                else
+                    aPath.setName( lFiles[i] );
+
+                aResultSeq[i-1] = ::rtl::OUString(aPath.GetMainURL( INetURLObject::NO_DECODE ));
+            }
+        }
+        else
+            aResultSeq = lFiles;
+    }
+
+    return aResultSeq;
 }
 
 // ------------------------------------------------------------------------

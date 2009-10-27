@@ -108,14 +108,14 @@ public:
         table, the addresses of series, the addresses of labels,
         the cell-range-address for the categories
      */
-    static void applyTable( const SchXMLTable& rTable,
+    static void applyTableToInternalDataProvider( const SchXMLTable& rTable,
                             com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc );
 
-    /** Second part of applyTable that has to be called after the data series
+    /** Second part of applyTableToInternalDataProvider that has to be called after the data series
         got their styles set.  This function reorders local data to fit the
         correct data structure.
      */
-    static void postProcessTable( const SchXMLTable& rTable,
+    static void switchRangesFromOuterToInternalIfNecessary( const SchXMLTable& rTable,
                                   const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
                                   com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > xChartDoc,
                                   ::com::sun::star::chart::ChartDataRowSource eDataRowSource );

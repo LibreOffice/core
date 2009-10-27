@@ -36,6 +36,8 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/embed/XComponentSupplier.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 /** === end UNO includes === **/
 
@@ -73,6 +75,9 @@ namespace dbaui
     using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::util::XCloseable;
     using ::com::sun::star::awt::XTopWindow;
+    using ::com::sun::star::embed::XComponentSupplier;
+    using ::com::sun::star::ucb::XCommandProcessor;
+    using ::com::sun::star::ucb::Command;
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     /** === end UNO using === **/
 
@@ -84,11 +89,13 @@ namespace dbaui
         struct SubComponentDescriptor
         {
             /// the frame which the component resides in. Must not be <NULL/>
-            Reference< XFrame >         xFrame;
+            Reference< XFrame >             xFrame;
             /// the controller of the sub component. Must not be <NULL/>
-            Reference< XController >    xController;
+            Reference< XController >        xController;
             /// the model of the sub component. Might be <NULL/>
-            Reference< XModel >         xModel;
+            Reference< XModel >             xModel;
+            /// the document definition which holds the component, if any
+            Reference< XCommandProcessor > xComponentCommandProcessor;
 
             SubComponentDescriptor()
                 :xFrame()
@@ -99,28 +106,53 @@ namespace dbaui
 
             SubComponentDescriptor( const Reference< XComponent >& _rxComponent )
             {
-                xModel.set( _rxComponent, UNO_QUERY );
-
-                if ( xModel.is() )
-                    xController.set( xModel->getCurrentController(), UNO_SET_THROW );
-                else
-                    xController.set( _rxComponent, UNO_QUERY );
-
-                if ( xController.is() )
-                    xFrame.set( xController->getFrame(), UNO_SET_THROW );
-                else
-                    xFrame.set( _rxComponent, UNO_QUERY_THROW );
-
-                // if the given component was a frame, then ensure we have a controller
-                if ( xFrame.is() && !xController.is() )
-                    xController.set( xFrame->getController(), UNO_SET_THROW );
-
-                // if the component was a frame or a controller, then check wether there is a model (not required)
-                if ( !xModel.is() )
-                    xModel.set( xController->getModel() );
+                if ( !impl_constructFrom( _rxComponent ) )
+                {
+                    Reference< XComponentSupplier > xCompSupp( _rxComponent, UNO_QUERY_THROW );
+                    Reference< XComponent > xComponent( xCompSupp->getComponent(), UNO_QUERY_THROW );
+                    if ( !impl_constructFrom( xComponent ) )
+                        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal component type." ) ), NULL );
+                    xComponentCommandProcessor.set( _rxComponent, UNO_QUERY_THROW );
+                }
             }
 
             inline bool is() const { return xFrame.is(); }
+
+        private:
+            bool impl_constructFrom( const Reference< XComponent >& _rxComponent )
+            {
+                // is it a model?
+                xModel.set( _rxComponent, UNO_QUERY );
+                if ( xModel.is() )
+                {
+                    xController.set( xModel->getCurrentController(), UNO_SET_THROW );
+                    xFrame.set( xController->getFrame(), UNO_SET_THROW );
+                }
+                else
+                {
+                    // is it a controller?
+                    xController.set( _rxComponent, UNO_QUERY );
+                    if ( xController.is() )
+                    {
+                        xFrame.set( xController->getFrame(), UNO_SET_THROW );
+                    }
+                    else
+                    {
+                        // is it a frame?
+                        xFrame.set( _rxComponent, UNO_QUERY );
+                        if ( !xFrame.is() )
+                            return false;
+
+                        // ensure we have a controller
+                        xController.set( xFrame->getController(), UNO_SET_THROW );
+                    }
+
+                    // check wether there is a model (not required)
+                    xModel.set( xController->getModel() );
+                }
+
+                return true;
+            }
         };
 
         struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
@@ -260,8 +292,32 @@ namespace dbaui
         }
 
         //----------------------------------------------------------------
+        bool lcl_closeComponent( const Reference< XCommandProcessor >& _rxCommandProcessor )
+        {
+            bool bSuccess = false;
+            try
+            {
+                Reference< XCommandProcessor > xCommandProcessor( _rxCommandProcessor, UNO_SET_THROW );
+                sal_Int32 nCommandIdentifier = xCommandProcessor->createCommandIdentifier();
+
+                Command aCommand;
+                aCommand.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "close" ) );
+                xCommandProcessor->execute( aCommand, nCommandIdentifier, NULL );
+                bSuccess = true;
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return bSuccess;
+        }
+
+        //----------------------------------------------------------------
         bool lcl_closeComponent( const SubComponentDescriptor& _rComponent )
         {
+            if ( _rComponent.xComponentCommandProcessor.is() )
+                return lcl_closeComponent( _rComponent.xComponentCommandProcessor );
+
             Reference< XController > xController( _rComponent.xController );
             OSL_ENSURE( xController.is(), "lcl_closeComponent: invalid controller!" );
 

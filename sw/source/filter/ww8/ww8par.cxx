@@ -46,7 +46,7 @@
 #include <unotools/tempfile.hxx>
 #include <svtools/sfxecode.hxx>
 
-#include <svtools/docpasswdrequest.hxx>
+#include <comphelper/docpasswordrequest.hxx>
 #include <hintids.hxx>
 
 #include <svx/tstpitem.hxx>
@@ -81,7 +81,6 @@
 #include <fmtcntnt.hxx>
 #include <fmtcnct.hxx>
 #include <fmtpdsc.hxx>
-#include <fmthbsh.hxx>
 #include <ftninfo.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -139,6 +138,8 @@
 #include <dbgoutsw.hxx>
 #endif
 
+#include "WW8Sttbf.hxx"
+#include "WW8FibData.hxx"
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
@@ -154,7 +155,7 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
         rRdr.maTracer.GetTrace()),
     rReader(rRdr), pFallbackStream(0), pOldEscherBlipCache(0)
 {
-    SetSvxMSDffSettings( GetSvxMSDffSettings() | SVXMSDFF_SETTINGS_IMPORT_IAS ); // #i27541#
+    SetSvxMSDffSettings( GetSvxMSDffSettings() );
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
 }
 
@@ -471,7 +472,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             if( bIsSimpleDrawingTextBox )
-                ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+                ApplyAttributes( rSt, aSet, rObjData );
 
             bool bFitText = false;
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
@@ -597,7 +598,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 }
             }
 
-            if ( ( mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
+            if ( ( ( rObjData.nSpFlags & SP_FFLIPV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
             {
                 SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
 
@@ -605,6 +606,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape ) & 4 ) )
                 {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
                     fExtraTextRotation = -mnFix16Angle;
+                }
+                if ( rObjData.nSpFlags & SP_FFLIPV )    // sj: in ppt the text is flipped, whereas in word the text
+                {                                       // remains unchanged, so we have to take back the flipping here
+                    fExtraTextRotation += 18000.0;      // because our core will flip text if the shape is flipped.
                 }
                 fExtraTextRotation += nTextRotationAngle;
                 if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
@@ -623,7 +628,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             {
                 // rotate text with shape ?
                 double a = mnFix16Angle * nPi180;
-                pObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle,
+                pObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
                     sin( a ), cos( a ) );
             }
         }
@@ -635,7 +640,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pObj = new SdrRectObj(rTextRect);
             pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
-            ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+            ApplyAttributes( rSt, aSet, rObjData );
 
             const SfxPoolItem* pPoolItem=NULL;
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
@@ -950,7 +955,9 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pFrm->SetFmtAttr(aURL);
                     }
                     else
-                        pDoc->Insert(aRegion, *pEntry->pAttr, 0);
+                    {
+                        pDoc->InsertPoolItem(aRegion, *pEntry->pAttr, 0);
+                    }
                 }
             }
             break;
@@ -1068,7 +1075,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     SwTxtNode* pTxt = rBkMrkPos.nNode.GetNode().GetTxtNode();
                     if( pTxt && rBkMrkPos.nContent.GetIndex() )
                     {
-                        SwTxtAttr* pFtn = pTxt->GetTxtAttr(
+                        SwTxtAttr* const pFtn = pTxt->GetTxtAttrForCharAt(
                             rBkMrkPos.nContent.GetIndex()-1, RES_TXTATR_FTN );
                         if( pFtn )
                         {
@@ -1083,7 +1090,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            pDoc->Insert(aPaM, *pEntry->pAttr, 0);
+            pDoc->InsertPoolItem(aPaM, *pEntry->pAttr, 0);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;
@@ -1623,7 +1630,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         sTxt, aDate );
     aPostIt.SetTextObject(pOutliner);
 
-    rDoc.Insert(*pPaM, SwFmtFld(aPostIt), 0);
+    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aPostIt), 0);
 
     return 0;
 }
@@ -2177,6 +2184,66 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
                 switch (pLang->GetLanguage())
                 {
                     case LANGUAGE_CZECH:
+                    case LANGUAGE_HUNGARIAN:
+                    case LANGUAGE_POLISH:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1250;
+                        break;
+                    case LANGUAGE_RUSSIAN:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1251;
+                        break;
+                    case LANGUAGE_GREEK:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1253;
+                        break;
+                    case LANGUAGE_TURKISH:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1254;
+                        break;
+                    default:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1252;
+                        break;
+                }
+            }
+        }
+    }
+    return eSrcCharSet;
+}
+
+//Takashi Ono for CJK
+CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
+{
+    /*
+    #i2015
+    If the hard charset is set use it, if not see if there is an open
+    character run that has set the charset, if not then fallback to the
+    current underlying paragraph style.
+    */
+    CharSet eSrcCharSet = eHardCharSet;
+    if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+    {
+        if (!maFontSrcCJKCharSets.empty())
+            eSrcCharSet = maFontSrcCJKCharSets.top();
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1))
+            eSrcCharSet = pCollA[nCharFmt].GetCJKCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+            eSrcCharSet = pCollA[nAktColl].GetCJKCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+        { // patch from cmc for #i52786#
+            /*
+             #i22206#/#i52786#
+             The (default) character set used for a run of text is the default
+             character set for the version of Word that last saved the document.
+
+             This is a bit tentative, more might be required if the concept is correct.
+             When later version of word write older 6/95 documents the charset is
+             correctly set in the character runs involved, so its hard to reproduce
+             documents that require this to be sure of the process involved.
+            */
+            const SvxLanguageItem *pLang =
+                (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+            if (pLang)
+            {
+                switch (pLang->GetLanguage())
+                {
+                    case LANGUAGE_CZECH:
                         eSrcCharSet = RTL_TEXTENCODING_MS_1250;
                         break;
                     default:
@@ -2220,39 +2287,60 @@ void SwWW8ImplReader::PostProcessAttrs()
  case they default to CP1252. If not then its perhaps that the font encoding
  is only in use for 6/7 and for 8+ if we are in 8bit mode then the encoding
  is always 1252.
+
+ So a encoding converter that on an undefined character attempts to
+ convert from 1252 on the undefined character
 */
-sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
-    sal_Char cChar)
+sal_Size Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
+    sal_Char *pIn, sal_Size nInLen, sal_Unicode *pOut, sal_Size nOutLen)
 {
     const sal_uInt32 nFlags =
+        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+        RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE |
+        RTL_TEXTTOUNICODE_FLAGS_FLUSH;
+
+    const sal_uInt32 nFlags2 =
         RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE |
         RTL_TEXTTOUNICODE_FLAGS_FLUSH;
 
-    sal_Unicode nConvChar;
-    sal_uInt32 nInfo=0;
-    sal_Size nSrcBytes=0;
-    sal_Size nDestChars = rtl_convertTextToUnicode(hConverter, 0,
-        &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
+    sal_Size nDestChars=0;
+    sal_Size nConverted=0;
 
-    if (nInfo & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE)
+    do
     {
-        rtl_TextToUnicodeConverter hCP1252Converter =
-            rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_MS_1252);
-        nDestChars = rtl_convertTextToUnicode(hCP1252Converter, 0,
-            &cChar, 1, &nConvChar, 1, nFlags, &nInfo, &nSrcBytes );
-        rtl_destroyTextToUnicodeConverter(hCP1252Converter);
-    }
+        sal_uInt32 nInfo = 0;
+        sal_Size nThisConverted=0;
 
-    ASSERT(nDestChars == 1, "impossible to get more than 1 char");
+        nDestChars += rtl_convertTextToUnicode(hConverter, 0,
+            pIn+nConverted, nInLen-nConverted,
+            pOut+nDestChars, nOutLen-nDestChars,
+            nFlags, &nInfo, &nThisConverted);
 
-    ASSERT(nInfo == 0, "A character conversion failed, gulp!");
+        ASSERT(nInfo == 0, "A character conversion failed!");
 
-    if (nDestChars == 1)
-        return nConvChar;
-    else
-        return cChar;
+        nConverted += nThisConverted;
+
+        if (
+            nInfo & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR ||
+            nInfo & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+           )
+        {
+            sal_Size nOtherConverted;
+            rtl_TextToUnicodeConverter hCP1252Converter =
+                rtl_createTextToUnicodeConverter(RTL_TEXTENCODING_MS_1252);
+            nDestChars += rtl_convertTextToUnicode(hCP1252Converter, 0,
+                pIn+nConverted, 1,
+                pOut+nDestChars, nOutLen-nDestChars,
+                nFlags2, &nInfo, &nOtherConverted);
+            rtl_destroyTextToUnicodeConverter(hCP1252Converter);
+            nConverted+=1;
+        }
+    } while (nConverted < nInLen);
+
+    return nDestChars;
 }
 
 bool SwWW8ImplReader::LangUsesHindiNumbers(USHORT nLang)
@@ -2314,15 +2402,23 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 
     const CharSet eSrcCharSet = bVer67 ? GetCurrentCharSet() :
         RTL_TEXTENCODING_MS_1252;
+    const CharSet eSrcCJKCharSet = bVer67 ? GetCurrentCJKCharSet() :
+        RTL_TEXTENCODING_MS_1252;
 
     // (re)alloc UniString data
     String sPlainCharsBuf;
 
-    sal_Unicode* pWork = sPlainCharsBuf.AllocBuffer( nLen );
+    sal_Unicode* pBuffer = sPlainCharsBuf.AllocBuffer( nLen );
+    sal_Unicode* pWork = pBuffer;
+
+    sal_Char* p8Bits = NULL;
 
     rtl_TextToUnicodeConverter hConverter = 0;
     if (!bIsUnicode || bVer67)
         hConverter = rtl_createTextToUnicodeConverter(eSrcCharSet);
+
+    if (!bIsUnicode)
+        p8Bits = new sal_Char[nLen];
 
     // read the stream data
     BYTE   nBCode = 0;
@@ -2354,7 +2450,6 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         if ((32 > nUCode) || (0xa0 == nUCode))
         {
             pStrm->SeekRel( bIsUnicode ? -2 : -1 );
-            sPlainCharsBuf.ReleaseBufferAccess( nL2 );
             break;              // Sonderzeichen < 32, == 0xa0 gefunden
         }
 
@@ -2369,27 +2464,34 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
                     sal_Char aTest[2];
                     aTest[0] = static_cast< sal_Char >((nUCode & 0xFF00) >> 8);
                     aTest[1] = static_cast< sal_Char >(nUCode & 0x00FF);
-                    String aTemp(aTest, 2, eSrcCharSet);
+                    String aTemp(aTest, 2, eSrcCJKCharSet);
                     ASSERT(aTemp.Len() == 1, "so much for that theory");
                     *pWork = aTemp.GetChar(0);
                 }
                 else
                 {
-                    *pWork = Custom8BitToUnicode(hConverter, static_cast< sal_Char >(nUCode & 0x00FF));
+                    sal_Char cTest = static_cast< sal_Char >(nUCode & 0x00FF);
+                    Custom8BitToUnicode(hConverter, &cTest, 1, pWork, 1);
                 }
             }
         }
         else
-            *pWork = Custom8BitToUnicode(hConverter, nBCode);
-
-        if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
-        {
-            *pWork = TranslateToHindiNumbers(*pWork);
-        }
+            p8Bits[nL2] = nBCode;
     }
 
     if (nL2)
     {
+        xub_StrLen nEndUsed = nL2;
+
+        if (!bIsUnicode)
+            nEndUsed = Custom8BitToUnicode(hConverter, p8Bits, nL2, pBuffer, nLen);
+
+        for( xub_StrLen nI = 0; nI < nLen; ++nI, ++pBuffer )
+            if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
+                *pBuffer = TranslateToHindiNumbers(*pBuffer);
+
+        sPlainCharsBuf.ReleaseBufferAccess( nEndUsed );
+
         AddTextToParagraph(sPlainCharsBuf);
         rPos += nL2;
         if (!maApos.back()) //a para end in apo doesn't count
@@ -2398,6 +2500,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 
     if (hConverter)
         rtl_destroyTextToUnicodeConverter(hConverter);
+    delete [] p8Bits;
     return nL2 >= nLen;
 }
 
@@ -2408,13 +2511,15 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
     {
 /*
 #ifdef DEBUG
-        ::std::clog << "<addTextToParagraph>" << dbg_out(rAddString)
-        << "</addTextToParagraph>" << ::std::endl;
+//!! does not compile with debug=t -> unresolved external (dbg_out),
+//!! sommeone who knows what he wants to get should fix this
+//        ::std::clog << "<addTextToParagraph>" << dbg_out(rAddString)
+//        << "</addTextToParagraph>" << ::std::endl;
 #endif
 */
         if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN -1)
         {
-            rDoc.Insert (*pPaM, rAddString, true);
+            rDoc.InsertString(*pPaM, rAddString);
         }
         else
         {
@@ -2423,16 +2528,16 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
             {
                 String sTempStr (rAddString,0,
                     STRING_MAXLEN - pNd->GetTxt().Len() -1);
-                rDoc.Insert (*pPaM, sTempStr, true);
+                rDoc.InsertString(*pPaM, sTempStr);
                 sTempStr = rAddString.Copy(sTempStr.Len(),
                     rAddString.Len() - sTempStr.Len());
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert (*pPaM,sTempStr, true );
+                rDoc.InsertString(*pPaM, sTempStr);
             }
             else
             {
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert (*pPaM, rAddString, true);
+                rDoc.InsertString(*pPaM, rAddString);
             }
         }
 
@@ -2453,7 +2558,9 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
         if( bSymbol )   // Spezialzeichen einfuegen
         {
             for(USHORT nCh = 0; nCh < nEnd - rPos; ++nCh)
-                rDoc.Insert( *pPaM, cSymbol );
+            {
+                rDoc.InsertString( *pPaM, cSymbol );
+            }
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
         }
         pStrm->SeekRel( nEnd- rPos );
@@ -2534,7 +2641,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwPageNumberField aFld(
                     (SwPageNumberFieldType*)rDoc.GetSysFldType(
                     RES_PAGENUMBERFLD ), PG_RANDOM, SVX_NUM_ARABIC);
-                rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
+                rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
             }
             break;
         case 0xe:
@@ -2546,7 +2653,8 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             {
                 // Always insert a txtnode for a column break, e.g. ##
                 AppendTxtNode(*pPaM->GetPoint());
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+                rDoc.InsertPoolItem(*pPaM,
+                    SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
             }
             break;
         case 0x7:
@@ -2597,14 +2705,14 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0xc:
             bRet = HandlePageBreakChar();
             break;
-        case 0x1e:
-            rDoc.Insert( *pPaM, CHAR_HARDHYPHEN);   // Non-breaking hyphen
+        case 0x1e:   // Non-breaking hyphen
+            rDoc.InsertString( *pPaM, CHAR_HARDHYPHEN );
             break;
-        case 0x1f:
-            rDoc.Insert( *pPaM, CHAR_SOFTHYPHEN);   // Non-required hyphens
+        case 0x1f:   // Non-required hyphens
+            rDoc.InsertString( *pPaM, CHAR_SOFTHYPHEN );
             break;
-        case 0xa0:
-            rDoc.Insert( *pPaM, CHAR_HARDBLANK);    // Non-breaking spaces
+        case 0xa0:   // Non-breaking spaces
+            rDoc.InsertString( *pPaM, CHAR_HARDBLANK  );
             break;
         case 0x1:
             /*
@@ -2686,12 +2794,8 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;                  // Auto-Fussnoten-Nummer
 #if OSL_DEBUG_LEVEL > 1
         default:
-            {
-                String sUnknown( '<' );
-                sUnknown += String::CreateFromInt32( nWCharVal );
-                sUnknown += '>';
-                rDoc.Insert( *pPaM, sUnknown, true );
-            }
+            ::std::clog << "<unknownValue val=\"" << nWCharVal << "\">" << ::std::endl;
+            break;
 #endif
     }
 
@@ -3066,7 +3170,8 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                     AppendTxtNode(*pPaM->GetPoint());
                 }
                 // <--
-                rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+                rDoc.InsertPoolItem(*pPaM,
+                    SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
                 bPgSecBreak = false;
             }
         }
@@ -3300,7 +3405,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
             rIdx.GetNode().GetCntntNode(), 0);
         SwPaM aPage(aPamStart);
 
-        rDoc.Insert(aPage, rPgDesc, 0);
+        rDoc.InsertPoolItem(aPage, rPgDesc, 0);
     }
 }
 
@@ -3636,6 +3741,34 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     if (mbNewDoc && pStg && !pGloss)
         ReadDocInfo();
+
+    ::ww8::WW8FibData * pFibData = new ::ww8::WW8FibData();
+
+    if (pWwFib->fReadOnlyRecommended)
+        pFibData->setReadOnlyRecommended(true);
+    else
+        pFibData->setReadOnlyRecommended(false);
+
+    if (pWwFib->fWriteReservation)
+        pFibData->setWriteReservation(true);
+    else
+        pFibData->setWriteReservation(false);
+
+    ::sw::tExternalDataPointer pExternalFibData(pFibData);
+
+    rDoc.setExternalData(::sw::FIB, pExternalFibData);
+
+    ::sw::tExternalDataPointer pSttbfAsoc
+          (new ::ww8::WW8Sttb<ww8::WW8Struct>(*pTableStream, pWwFib->fcSttbfAssoc, pWwFib->lcbSttbfAssoc));
+
+    rDoc.setExternalData(::sw::STTBF_ASSOC, pSttbfAsoc);
+
+    if (pWwFib->fWriteReservation || pWwFib->fReadOnlyRecommended)
+    {
+        SwDocShell * pDocShell = rDoc.GetDocShell();
+        if (pDocShell)
+            pDocShell->SetReadOnlyUI(sal_True);
+    }
 
     pPaM = new SwPaM(rPos);
 
@@ -4139,8 +4272,8 @@ namespace
                 uno::Reference< task::XInteractionHandler > xHandler( rMedium.GetInteractionHandler() );
                 if( xHandler.is() )
                 {
-                    RequestDocumentPassword* pRequest = new RequestDocumentPassword(
-                        task::PasswordRequestMode_PASSWORD_ENTER,
+                    ::comphelper::DocPasswordRequest* pRequest = new ::comphelper::DocPasswordRequest(
+                        ::comphelper::DocPasswordRequestType_MS, task::PasswordRequestMode_PASSWORD_ENTER,
                         INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
                     uno::Reference< task::XInteractionRequest > xRequest( pRequest );
 
@@ -4312,6 +4445,13 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                             DecryptRC4(aCtx, *pDataStream, aDecryptData);
                             pDataStream = &aDecryptData;
                         }
+                        SfxMedium* pMedium = mpDocShell->GetMedium();
+                        if ( pMedium )
+                        {
+                            SfxItemSet* pSet = pMedium->GetItemSet();
+                            if ( pSet )
+                                pSet->Put( SfxStringItem(SID_PASSWORD, sUniPassword) );
+                        }
                     }
                 }
             }
@@ -4326,8 +4466,6 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
             pWwFib = new WW8Fib(*pStrm, nWantedVersion);
             if (pWwFib->nFibError)
                 nErrRet = ERR_SWG_READ_ERROR;
-            if(!nErrRet && mpDocShell->GetDoc())
-                mpDocShell->GetDoc()->SetWinEncryption(true);
         }
     }
 

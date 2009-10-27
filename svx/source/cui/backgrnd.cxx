@@ -1204,8 +1204,6 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     const Size aSize15x15 = Size( 15, 15 );
     FASTBOOL bOwn = FALSE;
 
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
-
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
 

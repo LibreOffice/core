@@ -70,10 +70,7 @@ SmartTagMgr::SmartTagMgr( const rtl::OUString& rApplicationName )
       maActionList(),
       maDisabledSmartTagTypes(),
       maSmartTagMap(),
-      mxBreakIter(),
       mxMSF( ::comphelper::getProcessServiceFactory() ),
-      mxContext(),
-      mxConfigurationSettings(),
       mbLabelTextWithSmartTags(true)
 {
 }
@@ -93,15 +90,19 @@ void SmartTagMgr::Init( const rtl::OUString& rConfigurationGroupName )
 
         if ( mxContext.is() )
         {
-            // get the break iterator
-            mxBreakIter = Reference< i18n::XBreakIterator >(
-                mxMSF->createInstance( C2U( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY);
-
             PrepareConfiguration( rConfigurationGroupName );
             ReadConfiguration( true, true );
             RegisterListener();
             LoadLibraries();
         }
+    }
+}
+void SmartTagMgr::CreateBreakIterator() const
+{
+    if ( !mxBreakIter.is() && mxMSF.is() && mxContext.is() )
+    {
+        // get the break iterator
+        mxBreakIter.set(mxMSF->createInstance( C2U( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY);
     }
 }
 
@@ -129,10 +130,13 @@ void SmartTagMgr::Recognize( const rtl::OUString& rText,
         }
 
         if ( bCallRecognizer )
+        {
+            CreateBreakIterator();
             maRecognizerList[i]->recognize( rText, nStart, nLen,
                                             smarttags::SmartTagRecognizerMode_PARAGRAPH,
                                             rLocale, xMarkup, maApplicationName, xController,
                                             mxBreakIter );
+        }
     }
 }
 

@@ -43,55 +43,9 @@ namespace sdr
 {
     namespace overlay
     {
-        void OverlayPrimitive2DSequenceObject::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayPrimitive2DSequenceObject::createOverlayObjectPrimitive2DSequence()
         {
-            if(getOverlayManager())
-            {
-                // prepare ViewInformation2D
-                const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-                    basegfx::B2DHomMatrix(),
-                    rOutputDevice.GetViewTransformation(),
-                    basegfx::B2DRange(),
-                    0,
-                    0.0,
-                    0);
-
-                // create processor
-                drawinglayer::processor2d::BaseProcessor2D* pProcessor = ::sdr::contact::createBaseProcessor2DFromOutputDevice(
-                    rOutputDevice,
-                    aViewInformation2D);
-
-                if(pProcessor)
-                {
-                    pProcessor->process(getSequence());
-
-                    delete pProcessor;
-                }
-            }
-        }
-
-        void OverlayPrimitive2DSequenceObject::createBaseRange(OutputDevice& rOutputDevice)
-        {
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
-                basegfx::B2DHomMatrix(),
-                rOutputDevice.GetViewTransformation(),
-                basegfx::B2DRange(),
-                0,
-                0.0,
-                0);
-
-            maBaseRange = drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                getSequence(), aViewInformation2D);
-        }
-
-        sal_Bool OverlayPrimitive2DSequenceObject::isHit(const basegfx::B2DPoint& /*rPos*/, double /*fTol*/) const
-        {
-            if(isHittable())
-            {
-                return false;
-            }
-
-            return false;
+            return getSequence();
         }
 
         OverlayPrimitive2DSequenceObject::OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DSequence& rSequence)

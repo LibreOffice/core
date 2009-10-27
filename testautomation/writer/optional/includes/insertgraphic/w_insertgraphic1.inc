@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of the insert graphic function - 1
 '*
@@ -63,7 +63,7 @@ testcase tInsertGraphic_1
     '/// Test default directory of inserting graphic -1
     select case iSprache
         case 01: iJump =  5
-        case 31: iJump =  1  
+        case 31: iJump =  1
         case 33: iJump = 14
         case 34: iJump = 12
         case 36: iJump = 10
@@ -131,7 +131,7 @@ testcase tInsertGraphic_1
     Sleep 1
     if iJump-1 > 0 then Typ.TypeKeys "<DOWN>", iJump-1
     Sleep 1
-    Standard.Click    
+    Standard.Click
 
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -287,7 +287,7 @@ testcase tInsertGraphic_X
     Call hNewDocument
     
     try
-        Call wTypeKeys sShortcut    
+        Call wTypeKeys sShortcut
         Kontext "GrafikEinfuegenDlg"
     
         if GrafikEinfuegenDlg.Exists then
@@ -455,10 +455,16 @@ endcase
 
 testcase tInsertGraphic_8
 
-  Dim iFileType , iFileNumber as Integer
+  Dim iFileType      as Integer
+  Dim iFileNumber as Integer
 
-  iFileType   = 1  'filter (Format <All>)
-  iFileNumber = 5  '4 graphic files and 1 directory
+    iFileType = 1  'filter (Format <All>)
+
+    if gPlatGroup = "unx" then
+        iFileNumber = 4  '4 graphic files. (directory hidden on Unix)
+    else
+        iFileNumber = 5  '4 graphic files and 1 directory.
+    end if
 
   PrintLog "- Test preselect Filter (Format <All>)"
  '/// Test preselect Filter (Format <All>)
@@ -489,10 +495,16 @@ endcase
 
 testcase tInsertGraphic_9
 
-  Dim iFileType , iFileNumber as Integer
+  Dim iFileType      as Integer
+  Dim iFileNumber as Integer
 
-  iFileType   = 2  'another filter except for (Format <All>) -- bmp
-  iFileNumber = 2  'the first is a directory - CVS
+    iFileType   = 2  'another filter except for (Format <All>) -- bmp
+
+    if gPlatGroup = "unx" then
+      iFileNumber = 1
+    else
+      iFileNumber = 2  'the first is the .svn-directory
+    end if
 
   PrintLog "- Test preselect Filter excepte for (Format <All>)"
  '/// Test preselect Filter excepte for (Format <All>)
@@ -692,10 +704,14 @@ endcase
 
 testcase tInsertGraphic_11
 
-  Dim sGraphicName                     as String
-  Dim sWidth , sHeight , sLeft , sUp   as String
-  Dim iFromLeft ,            iFromUp   as Integer
-  Dim sURL                             as String
+  Dim sGraphicName  as String
+  Dim sWidth as String
+  Dim sHeight as String
+  Dim sLeft as String
+  Dim sUp as String
+  Dim iFromLeft as Integer
+  Dim iFromUp as Integer
+  Dim sURL as String
 
   sGraphicName = "TEST1"
   sWidth       = "5"+ gSeperator + "00" + gMeasurementUnit
@@ -797,14 +813,21 @@ endcase
 
 testcase tInsertGraphic_12
 
-    Dim sGraphicName                                                     as String
-    Dim sOriginalGraphicName                                             as String
-    Dim sWidth         , sHeight         , sLeft         , sUp           as String
-    Dim sOriginalWidth , sOriginalHeight , sOriginalLeft , sOriginalUp   as String
-    Dim iFromLeft         , iFromUp                                      as Integer
-    Dim iOriginalFromLeft , iOriginalFromUp                              as Integer
-    
-    Dim sURL                                                             as String
+    Dim sGraphicName as String
+    Dim sOriginalGraphicName as String
+    Dim sWidth as String
+    Dim sHeight as String
+    Dim sLeft as String
+    Dim sUp as String
+    Dim sOriginalWidth as String
+    Dim sOriginalHeight as String
+    Dim sOriginalLeft as String
+    Dim sOriginalUp as String
+    Dim iFromLeft as Integer
+    Dim iFromUp as Integer
+    Dim iOriginalFromLeft as Integer
+    Dim iOriginalFromUp as Integer
+    Dim sURL as String
     Dim i as integer
     
     sGraphicName = "TEST1"
@@ -876,12 +899,12 @@ testcase tInsertGraphic_12
     '/// 1. Edit/Paste special the graphic from
     '/// +  Graphic [StarOffice Writer]
     EditPasteSpecialWriter
-    Sleep 1    
-    Kontext "InhaltEinfuegen"    
+    Sleep 1
+    Kontext "InhaltEinfuegen"
     if Auswahl.GetItemCount < 4 then
         QAErrorlog "#i47320#Only " & Auswahl.GetItemCount & " graphic formats available"
         InhaltEinfuegen.Cancel
-    else    
+    else
         Auswahl.Select 1
         PrintLog "- " & Auswahl.GetSelText
         InhaltEinfuegen.OK
@@ -919,7 +942,7 @@ testcase tInsertGraphic_12
         if URL.GetText <> sURL then Warnlog "The graphic's URL is not correct ! "
         wait 500
         TabHyperlinkRahmen.Ok
-        
+
         'delete the graphic
         Call wTypeKeys "<Delete>"
         Sleep 1

@@ -84,6 +84,7 @@ namespace frm
         getPropertyDefaultByHandle( PROPERTY_ID_BORDER                  ) >>= m_nBorder;
         getPropertyDefaultByHandle( PROPERTY_ID_DELAY                   ) >>= m_nDelay;
         getPropertyDefaultByHandle( PROPERTY_ID_ENABLED                 ) >>= m_bEnabled;
+        getPropertyDefaultByHandle( PROPERTY_ID_ENABLEVISIBLE           ) >>= m_bEnableVisible;
         getPropertyDefaultByHandle( PROPERTY_ID_SHOW_POSITION           ) >>= m_bShowPosition;
         getPropertyDefaultByHandle( PROPERTY_ID_SHOW_NAVIGATION         ) >>= m_bShowNavigation;
         getPropertyDefaultByHandle( PROPERTY_ID_SHOW_RECORDACTIONS      ) >>= m_bShowActions;
@@ -107,6 +108,7 @@ namespace frm
         m_sHelpText             = _pOriginal->m_sHelpText;
         m_sHelpURL              = _pOriginal->m_sHelpURL;
         m_bEnabled              = _pOriginal->m_bEnabled;
+        m_bEnableVisible        = _pOriginal->m_bEnableVisible;
         m_nIconSize             = _pOriginal->m_nIconSize;
         m_nBorder               = _pOriginal->m_nBorder;
         m_nDelay                = _pOriginal->m_nDelay;
@@ -125,6 +127,7 @@ namespace frm
         REGISTER_PROP_2( HELPTEXT,            m_sHelpText,              BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( HELPURL,             m_sHelpURL,               BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( ENABLED,             m_bEnabled,               BOUND, MAYBEDEFAULT );
+        REGISTER_PROP_2( ENABLEVISIBLE,       m_bEnableVisible,         BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( ICONSIZE,            m_nIconSize,              BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( BORDER,              m_nBorder,                BOUND, MAYBEDEFAULT );
         REGISTER_PROP_2( DELAY,               m_nDelay,                 BOUND, MAYBEDEFAULT );
@@ -444,6 +447,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_ENABLED:
+        case PROPERTY_ID_ENABLEVISIBLE:
         case PROPERTY_ID_SHOW_POSITION:
         case PROPERTY_ID_SHOW_NAVIGATION:
         case PROPERTY_ID_SHOW_RECORDACTIONS:

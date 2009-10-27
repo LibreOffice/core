@@ -31,7 +31,7 @@
 #ifndef __XLAT_H
 #define __XLAT_H
 
-#include "sft.hxx"
+//####include "sft.hxx"
 
 namespace vcl
 {

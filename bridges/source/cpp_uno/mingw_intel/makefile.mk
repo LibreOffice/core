@@ -47,10 +47,16 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF
+.IF "$(EXCEPTIONS)" == "sjlj"
+CFLAGS += -DBROKEN_ALLOCA
+.ENDIF
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer
+
+NOOPTFILES= \
+    $(SLO)$/uno2cpp.obj
 
 CFLAGSNOOPT=-O0
 

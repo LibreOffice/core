@@ -464,34 +464,36 @@ namespace
                                         OConnectionLineDataVec* pLineDataList,
                                         OQueryTableConnectionData* pData)
     {
-        ::rtl::OUString aCondition;
-        if ( !_xConnection.is() )
-            return aCondition;
-
-        OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
-        try
+        ::rtl::OUStringBuffer aCondition;
+        if ( _xConnection.is() )
         {
-            Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
-            ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
-
-            for(;aIter != pLineDataList->end();++aIter)
+            OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
+            OConnectionLineDataVec::iterator aEnd = pLineDataList->end();
+            try
             {
-                OConnectionLineDataRef pLineData = *aIter;
-                if(aCondition.getLength())
-                    aCondition += C_AND;
-                aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote);
-                aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) );
-                aCondition += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
-                aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_TO),aQuote);
-                aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) );
+                const Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
+                const ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
+                const ::rtl::OUString sEqual(RTL_CONSTASCII_USTRINGPARAM(" = "));
+
+                for(;aIter != aEnd;++aIter)
+                {
+                    OConnectionLineDataRef pLineData = *aIter;
+                    if(aCondition.getLength())
+                        aCondition.append(C_AND);
+                    aCondition.append(quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote));
+                    aCondition.append(::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) ));
+                    aCondition.append(sEqual);
+                    aCondition.append(quoteTableAlias(sal_True,pData->GetAliasName(JTCS_TO),aQuote));
+                    aCondition.append(::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) ));
+                }
+            }
+            catch(SQLException&)
+            {
+                OSL_ASSERT(!"Failure while building Join criteria!");
             }
         }
-        catch(SQLException&)
-        {
-            OSL_ASSERT(!"Failure while building Join criteria!");
-        }
 
-        return aCondition;
+        return aCondition.makeStringAndClear();
     }
     //------------------------------------------------------------------------------
     /** JoinCycle looks for a join cycle and append it to the string
@@ -657,7 +659,8 @@ namespace
         // first search for the "to" window
         const ::std::vector<OTableConnection*>* pConnections = pEntryConn->GetParent()->getTableConnections();
         ::std::vector<OTableConnection*>::const_iterator aIter = pConnections->begin();
-        for(;aIter != pConnections->end();++aIter)
+        ::std::vector<OTableConnection*>::const_iterator aEnd = pConnections->end();
+        for(;aIter != aEnd;++aIter)
         {
             OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(*aIter);
             if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabTo || pNext->GetDestWin() == pEntryTabTo))
@@ -671,11 +674,11 @@ namespace
         }
 
         // when nothing found found look for the "from" window
-        if(aIter == pConnections->end())
+        if(aIter == aEnd)
         {
             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
             aIter = pConnections->begin();
-            for(;aIter != pConnections->end();++aIter)
+            for(;aIter != aEnd;++aIter)
             {
                 OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(*aIter);
                 if(!pNext->IsVisited() && (pNext->GetSourceWin() == pEntryTabFrom || pNext->GetDestWin() == pEntryTabFrom))
@@ -746,12 +749,17 @@ namespace
                                         OTableFields&   _rFieldList,
                                         sal_Bool bAlias)
     {
-        ::rtl::OUString aTmpStr,aFieldListStr;
+        Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
+        if ( !xConnection.is() )
+            return ::rtl::OUString();
+
+        ::rtl::OUStringBuffer aTmpStr,aFieldListStr;
 
         sal_Bool bAsterix = sal_False;
         int nVis = 0;
         OTableFields::iterator aIter = _rFieldList.begin();
-        for(;aIter != _rFieldList.end();++aIter)
+        OTableFields::iterator aEnd = _rFieldList.end();
+        for(;aIter != aEnd;++aIter)
         {
             OTableFieldDescRef pEntryField = *aIter;
             if ( pEntryField->IsVisible() )
@@ -764,31 +772,28 @@ namespace
         if(nVis == 1)
             bAsterix = sal_False;
 
-        Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
-        if(!xConnection.is())
-            return aFieldListStr;
-
         try
         {
-            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-            ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
+            const Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+            const ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
             OJoinTableView::OTableWindowMap* pTabList = _pView->getTableView()->GetTabWinMap();
 
             const static ::rtl::OUString sFieldSeparator(RTL_CONSTASCII_USTRINGPARAM(", "));
+            const static ::rtl::OUString s_sAs(RTL_CONSTASCII_USTRINGPARAM(" AS "));
 
             aIter = _rFieldList.begin();
-            for(;aIter != _rFieldList.end();++aIter)
+            for(;aIter != aEnd;++aIter)
             {
                 OTableFieldDescRef pEntryField = *aIter;
                 ::rtl::OUString rFieldName = pEntryField->GetField();
                 if ( rFieldName.getLength() && pEntryField->IsVisible() )
                 {
                     aTmpStr = ::rtl::OUString();
-                    ::rtl::OUString rAlias = pEntryField->GetAlias();
-                    ::rtl::OUString rFieldAlias = pEntryField->GetFieldAlias();
+                    const ::rtl::OUString rAlias = pEntryField->GetAlias();
+                    const ::rtl::OUString rFieldAlias = pEntryField->GetFieldAlias();
 
-                    aTmpStr += quoteTableAlias((bAlias || bAsterix),rAlias,aQuote);
+                    aTmpStr.append(quoteTableAlias((bAlias || bAsterix),rAlias,aQuote));
 
                     // if we have a none numeric field, the table alias could be in the name
                     // otherwise we are not allowed to do this (e.g. 0.1 * PRICE )
@@ -798,8 +803,9 @@ namespace
                         String sTemp = rFieldName;
                         OTableFieldDescRef  aInfo = new OTableFieldDesc();
                         OJoinTableView::OTableWindowMap::iterator tableIter = pTabList->begin();
+                        OJoinTableView::OTableWindowMap::iterator tableEnd = pTabList->end();
                         sal_Bool bFound = sal_False;
-                        for(;!bFound && tableIter != pTabList->end() ;++tableIter)
+                        for(;!bFound && tableIter != tableEnd ;++tableIter)
                         {
                             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(tableIter->second);
 
@@ -810,21 +816,21 @@ namespace
                         if ( ( rFieldName.toChar() != '*' ) && ( rFieldName.indexOf( aQuote ) == -1 ) )
                         {
                             OSL_ENSURE(pEntryField->GetTable().getLength(),"No table field name!");
-                            aTmpStr += ::dbtools::quoteName(aQuote, rFieldName);
+                            aTmpStr.append(::dbtools::quoteName(aQuote, rFieldName));
                         }
                         else
-                            aTmpStr += rFieldName;
+                            aTmpStr.append(rFieldName);
                     }
                     else
-                        aTmpStr += rFieldName;
+                        aTmpStr.append(rFieldName);
 
                     if  ( pEntryField->isAggreateFunction() )
                     {
                         DBG_ASSERT(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
-                        ::rtl::OUString aTmpStr2( pEntryField->GetFunction());
-                        aTmpStr2 +=  ::rtl::OUString('(');
-                        aTmpStr2 += aTmpStr;
-                        aTmpStr2 +=  ::rtl::OUString(')');
+                        ::rtl::OUStringBuffer aTmpStr2( pEntryField->GetFunction());
+                        aTmpStr2.appendAscii("(");
+                        aTmpStr2.append(aTmpStr.makeStringAndClear());
+                        aTmpStr2.appendAscii(")");
                         aTmpStr = aTmpStr2;
                     }
 
@@ -833,26 +839,26 @@ namespace
                         pEntryField->isNumericOrAggreateFunction()      ||
                         pEntryField->isOtherFunction()))
                     {
-                        aTmpStr += ::rtl::OUString::createFromAscii(" AS ");
-                        aTmpStr += ::dbtools::quoteName(aQuote, rFieldAlias);
+                        aTmpStr.append(s_sAs);
+                        aTmpStr.append(::dbtools::quoteName(aQuote, rFieldAlias));
                     }
-                    aFieldListStr += aTmpStr;
-                    aFieldListStr += sFieldSeparator;
+                    aFieldListStr.append(aTmpStr.makeStringAndClear());
+                    aFieldListStr.append(sFieldSeparator);
                 }
             }
             if(aFieldListStr.getLength())
-                aFieldListStr = aFieldListStr.replaceAt(aFieldListStr.getLength()-2,2, ::rtl::OUString() );
+                aFieldListStr.setLength(aFieldListStr.getLength()-2);
         }
         catch(SQLException&)
         {
             OSL_ASSERT(!"Failure while building select list!");
         }
-        return aFieldListStr;
+        return aFieldListStr.makeStringAndClear();
     }
     //------------------------------------------------------------------------------
     sal_Bool GenerateCriterias( OQueryDesignView* _pView,
-                                ::rtl::OUString& rRetStr,
-                                ::rtl::OUString& rHavingStr,
+                                ::rtl::OUStringBuffer& rRetStr,
+                                ::rtl::OUStringBuffer& rHavingStr,
                                 OTableFields& _rFieldList,
                                 sal_Bool bMulti )
     {
@@ -863,7 +869,8 @@ namespace
         // Zeilenweise werden die Ausdr"ucke mit AND verknuepft
         sal_uInt16 nMaxCriteria = 0;
         OTableFields::iterator aIter = _rFieldList.begin();
-        for(;aIter != _rFieldList.end();++aIter)
+        OTableFields::iterator aEnd = _rFieldList.end();
+        for(;aIter != aEnd;++aIter)
         {
             nMaxCriteria = ::std::max<sal_uInt16>(nMaxCriteria,(sal_uInt16)(*aIter)->GetCriteria().size());
         }
@@ -872,15 +879,15 @@ namespace
             return FALSE;
         try
         {
-            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-            ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
+            const Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+            const ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
             const IParseContext& rContext = static_cast<OQueryController&>(_pView->getController()).getParser().getContext();
 
             for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
             {
                 aHavingStr = aWhereStr = ::rtl::OUString();
 
-                for(aIter = _rFieldList.begin();aIter != _rFieldList.end();++aIter)
+                for(aIter = _rFieldList.begin();aIter != aEnd;++aIter)
                 {
                     OTableFieldDescRef  pEntryField = *aIter;
                     aFieldName = pEntryField->GetField();
@@ -996,26 +1003,26 @@ namespace
                 {
                     aWhereStr += ::rtl::OUString(')');                      // Klammern zu fuer 'AND' Zweig
                     if (rRetStr.getLength())                            // schon Feldbedingungen ?
-                        rRetStr += C_OR;
+                        rRetStr.append(C_OR);
                     else                                        // Klammern auf fuer 'OR' Zweig
-                        rRetStr += ::rtl::OUString('(');
-                    rRetStr += aWhereStr;
+                        rRetStr.append(sal_Unicode('('));
+                    rRetStr.append(aWhereStr);
                 }
                 if (aHavingStr.getLength())
                 {
                     aHavingStr += ::rtl::OUString(')');                     // Klammern zu fuer 'AND' Zweig
                     if (rHavingStr.getLength())                         // schon Feldbedingungen ?
-                        rHavingStr += C_OR;
+                        rHavingStr.append(C_OR);
                     else                                        // Klammern auf fuer 'OR' Zweig
-                        rHavingStr += ::rtl::OUString('(');
-                    rHavingStr += aHavingStr;
+                        rHavingStr.append(sal_Unicode('('));
+                    rHavingStr.append(aHavingStr);
                 }
             }
 
             if (rRetStr.getLength())
-                rRetStr += ::rtl::OUString(')');                                // Klammern zu fuer 'OR' Zweig
+                rRetStr.append(sal_Unicode(')'));                               // Klammern zu fuer 'OR' Zweig
             if (rHavingStr.getLength())
-                rHavingStr += ::rtl::OUString(')');                             // Klammern zu fuer 'OR' Zweig
+                rHavingStr.append(sal_Unicode(')'));                                // Klammern zu fuer 'OR' Zweig
         }
         catch(SQLException&)
         {
@@ -1046,8 +1053,8 @@ namespace
             // * darf keine Filter enthalten : habe ich die entsprechende Warnung schon angezeigt ?
             sal_Bool bCritsOnAsterikWarning = sal_False;        // ** TMFS **
             OTableFields::iterator aIter = _rFieldList.begin();
-
-            for(;aIter != _rFieldList.end();++aIter)
+            OTableFields::iterator aEnd = _rFieldList.end();
+            for(;aIter != aEnd;++aIter)
             {
                 OTableFieldDescRef  pEntryField = *aIter;
                 EOrderDir eOrder = pEntryField->GetOrderDir();
@@ -1132,7 +1139,8 @@ namespace
                                     const ::std::vector<OTableConnection*>* _pConnList)
     {
         ::std::vector<OTableConnection*>::const_iterator aIter = _pConnList->begin();
-        for(;aIter != _pConnList->end();++aIter)
+        ::std::vector<OTableConnection*>::const_iterator aEnd = _pConnList->end();
+        for(;aIter != aEnd;++aIter)
         {
             const OQueryTableConnection* pEntryConn = static_cast<const OQueryTableConnection*>(*aIter);
             OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get());
@@ -1175,12 +1183,13 @@ namespace
         if(!pConnList->empty())
         {
             ::std::vector<OTableConnection*>::const_iterator aIter = pConnList->begin();
-            for(;aIter != pConnList->end();++aIter)
+            ::std::vector<OTableConnection*>::const_iterator aEnd = pConnList->end();
+            for(;aIter != aEnd;++aIter)
                 static_cast<OQueryTableConnection*>(*aIter)->SetVisited(sal_False);
 
             aIter = pConnList->begin();
-            sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
-            for(;aIter != pConnList->end();++aIter)
+            const sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
+            for(;aIter != aEnd;++aIter)
             {
                 OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>(*aIter);
                 if(!pEntryConn->IsVisited())
@@ -1228,7 +1237,7 @@ namespace
 
             // and now all inner joins
             aIter = pConnList->begin();
-            for(;aIter != pConnList->end();++aIter)
+            for(;aIter != aEnd;++aIter)
             {
                 OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>(*aIter);
                 if(!pEntryConn->IsVisited())
@@ -1247,7 +1256,8 @@ namespace
         }
         // all tables that haven't a connection to anyone
         OQueryTableView::OTableWindowMap::const_iterator aTabIter = pTabList->begin();
-        for(;aTabIter != pTabList->end();++aTabIter)
+        OQueryTableView::OTableWindowMap::const_iterator aTabEnd = pTabList->end();
+        for(;aTabIter != aTabEnd;++aTabIter)
         {
             const OQueryTableWindow* pEntryTab = static_cast<const OQueryTableWindow*>(aTabIter->second);
             if(!pEntryTab->ExistsAConn())
@@ -1278,7 +1288,8 @@ namespace
             const ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
             OTableFields::iterator aIter = _rFieldList.begin();
-            for(;aIter != _rFieldList.end();++aIter)
+            OTableFields::iterator aEnd = _rFieldList.end();
+            for(;aIter != aEnd;++aIter)
             {
                 OTableFieldDescRef  pEntryField = *aIter;
                 if ( pEntryField->IsGroupBy() )
@@ -1421,7 +1432,7 @@ namespace
                 if ( SQL_ISRULE(pChild,search_condition) )
                     eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving,bAddOrOnOneLine);
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving, i == 0 ? false : bAddOrOnOneLine);
             }
         }
         else
@@ -1475,8 +1486,9 @@ namespace
             eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,bMustAddOrOnOneLine );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
-        else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
+        else if ( SQL_ISRULE(pCondition,boolean_term) )
         {
+            OSL_ENSURE(pCondition->count() == 3,"Illegal definifiton of boolean_term");
             eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(0), nLevel,bHaving,bAddOrOnOneLine );
             if ( eErrorCode == eOk )
                 eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(2), nLevel,bHaving,bAddOrOnOneLine );
@@ -1644,7 +1656,8 @@ namespace
                 {
                     OJoinTableView::OTableWindowMap* pTabList = _pView->getTableView()->GetTabWinMap();
                     OJoinTableView::OTableWindowMap::iterator aIter = pTabList->begin();
-                    for(;aIter != pTabList->end();++aIter)
+                    OJoinTableView::OTableWindowMap::iterator aTabEnd = pTabList->end();
+                    for(;aIter != aTabEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
                         if (pTabWin->ExistsField( ::rtl::OUString::createFromAscii("*"), aDragLeft ))
@@ -1718,13 +1731,14 @@ namespace
                 {
                     OConnectionLineDataVec* pLineDataList = pConn->GetData()->GetConnLineDataList();
                     OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
-                    for(;aIter != pLineDataList->end();++aIter)
+                    OConnectionLineDataVec::iterator aEnd = pLineDataList->end();
+                    for(;aIter != aEnd;++aIter)
                     {
                         if((*aIter)->GetSourceFieldName() == aDragLeft->GetField() ||
                            (*aIter)->GetDestFieldName() == aDragLeft->GetField() )
                             break;
                     }
-                    if(aIter != pLineDataList->end())
+                    if(aIter != aEnd)
                         return eOk;
                 }
             }
@@ -1853,7 +1867,8 @@ namespace
         OQueryTableWindow* lcl_findColumnInTables( const ::rtl::OUString& _rColumName, const OJoinTableView::OTableWindowMap& _rTabList, OTableFieldDescRef& _rInfo )
         {
             OJoinTableView::OTableWindowMap::const_iterator aIter = _rTabList.begin();
-            for ( ; aIter != _rTabList.end(); ++aIter )
+            OJoinTableView::OTableWindowMap::const_iterator aEnd = _rTabList.end();
+            for ( ; aIter != aEnd; ++aIter )
             {
                 OQueryTableWindow* pTabWin = static_cast< OQueryTableWindow* >( aIter->second );
                 if ( pTabWin && pTabWin->ExistsField( _rColumName, _rInfo ) )
@@ -2019,7 +2034,8 @@ namespace
         // now we have to insert the fields which aren't in the statement
         OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
         OTableFields& rUnUsedFields = rController.getUnUsedFields();
-        for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != rUnUsedFields.end();++aIter)
+        OTableFields::iterator aEnd = rUnUsedFields.end();
+        for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != aEnd;++aIter)
             if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,sal_False,sal_False).isValid())
                 (*aIter) = NULL;
         OTableFields().swap( rUnUsedFields );
@@ -2088,7 +2104,8 @@ namespace
                 OQueryTableView* pTableView = static_cast<OQueryTableView*>(_pView->getTableView());
                 pTableView->clearLayoutInformation();
                 OSQLTables::const_iterator aIter = aMap.begin();
-                for(;aIter != aMap.end();++aIter)
+                OSQLTables::const_iterator aEnd = aMap.end();
+                for(;aIter != aEnd;++aIter)
                 {
                     OSQLTable xTable = aIter->second;
                     Reference< XPropertySet > xTableProps( xTable, UNO_QUERY_THROW );
@@ -2132,7 +2149,8 @@ namespace
                 // now delete the data for which we haven't any tablewindow
                 OJoinTableView::OTableWindowMap aTableMap(*pTableView->GetTabWinMap());
                 OJoinTableView::OTableWindowMap::iterator aIterTableMap = aTableMap.begin();
-                for(;aIterTableMap != aTableMap.end();++aIterTableMap)
+                OJoinTableView::OTableWindowMap::iterator aIterTableEnd = aTableMap.end();
+                for(;aIterTableMap != aIterTableEnd;++aIterTableMap)
                 {
                     if(aMap.find(aIterTableMap->second->GetComposedName())  == aMap.end() &&
                         aMap.find(aIterTableMap->first)                     == aMap.end())
@@ -2191,7 +2209,8 @@ namespace
         sal_Bool bFirstField = sal_True;
         ::rtl::OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));
         OJoinTableView::OTableWindowMap::iterator aIter = _pTabList->begin();
-        for(;aIter != _pTabList->end() && eOk == eErrorCode ;++aIter)
+        OJoinTableView::OTableWindowMap::iterator aEnd = _pTabList->end();
+        for(;aIter != aEnd && eOk == eErrorCode ;++aIter)
         {
             OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
             OTableFieldDescRef  aInfo = new OTableFieldDesc();
@@ -2319,7 +2338,8 @@ namespace
                             if ( pParamRef && pParamRef->getTokenValue().toChar() == '*' )
                             {
                                 OJoinTableView::OTableWindowMap::iterator aIter = pTabList->begin();
-                                for(;aIter != pTabList->end();++aIter)
+                                OJoinTableView::OTableWindowMap::iterator aEnd  = pTabList->end();
+                                for(;aIter != aEnd;++aIter)
                                 {
                                     OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
                                     if (pTabWin->ExistsField( ::rtl::OUString::createFromAscii("*"), aInfo ))
@@ -2448,7 +2468,8 @@ namespace
 
                         OTableFields& aList = rController.getTableFieldDesc();
                         OTableFields::iterator aIter = aList.begin();
-                        for(;aIter != aList.end();++aIter)
+                        OTableFields::iterator aEnd = aList.end();
+                        for(;aIter != aEnd;++aIter)
                         {
                             OTableFieldDescRef pEntry = *aIter;
                             if(pEntry.isValid() && pEntry->GetFieldAlias() == aColumnName)
@@ -2869,7 +2890,8 @@ void OQueryDesignView::fillValidFields(const ::rtl::OUString& sAliasName, ComboB
     ::rtl::OUString strCurrentPrefix;
     ::std::vector< ::rtl::OUString> aFields;
     OJoinTableView::OTableWindowMap::iterator aIter = pTabWins->begin();
-    for(;aIter != pTabWins->end();++aIter)
+    OJoinTableView::OTableWindowMap::iterator aEnd  = pTabWins->end();
+    for(;aIter != aEnd;++aIter)
     {
         OQueryTableWindow* pCurrentWin = static_cast<OQueryTableWindow*>(aIter->second);
         if (bAllTables || (pCurrentWin->GetAliasName() == sAliasName))
@@ -2880,7 +2902,8 @@ void OQueryDesignView::fillValidFields(const ::rtl::OUString& sAliasName, ComboB
             pCurrentWin->EnumValidFields(aFields);
 
             ::std::vector< ::rtl::OUString>::iterator aStrIter = aFields.begin();
-            for(;aStrIter != aFields.end();++aStrIter)
+            ::std::vector< ::rtl::OUString>::iterator aStrEnd = aFields.end();
+            for(;aStrIter != aStrEnd;++aStrIter)
             {
                 if (bAllTables || aStrIter->toChar() == '*')
                     pFieldList->InsertEntry(::rtl::OUString(strCurrentPrefix) += *aStrIter);
@@ -2942,7 +2965,8 @@ sal_Bool OQueryDesignView::checkStatement()
     sal_uInt32 nFieldcount = 0;
     OTableFields& rFieldList = rController.getTableFieldDesc();
     OTableFields::iterator aIter = rFieldList.begin();
-    for(;aIter != rFieldList.end();++aIter)
+    OTableFields::iterator aEnd = rFieldList.end();
+    for(;aIter != aEnd;++aIter)
     {
         OTableFieldDescRef pEntryField = *aIter;
         if ( pEntryField->GetField().getLength() && pEntryField->IsVisible() )
@@ -2951,6 +2975,7 @@ sal_Bool OQueryDesignView::checkStatement()
                 !pEntryField->HasCriteria()                 &&
                 pEntryField->isNoneFunction()               &&
                 pEntryField->GetOrderDir() == ORDER_NONE    &&
+                !pEntryField->IsGroupBy()                   &&
                 !pEntryField->GetFunction().getLength() )
             rUnUsedFields.push_back(pEntryField);
     }
@@ -2979,7 +3004,7 @@ sal_Bool OQueryDesignView::checkStatement()
     // wenn es Felder gibt, koennen die nur durch Einfuegen aus einer schon existenten Tabelle entstanden sein; wenn andererseits
     // eine Tabelle geloescht wird, verschwinden auch die zugehoerigen Felder -> ergo KANN es das nicht geben, dass Felder
     // existieren, aber keine Tabellen (und aFieldListStr hat schon eine Laenge, das stelle ich oben sicher)
-    ::rtl::OUString aHavingStr,aCriteriaListStr;
+    ::rtl::OUStringBuffer aHavingStr,aCriteriaListStr;
     // ----------------- Kriterien aufbauen ----------------------
     if (!GenerateCriterias(this,aCriteriaListStr,aHavingStr,rFieldList, nTabcount > 1))
         return ::rtl::OUString();
@@ -2994,22 +3019,22 @@ sal_Bool OQueryDesignView::checkStatement()
         if(aCriteriaListStr.getLength())
         {
             aTmp += C_AND;
-            aTmp += aCriteriaListStr;
+            aTmp += aCriteriaListStr.makeStringAndClear();
         }
         aCriteriaListStr = aTmp;
     }
     // ----------------- Statement aufbauen ----------------------
-    ::rtl::OUString aSqlCmd(::rtl::OUString::createFromAscii("SELECT "));
+    ::rtl::OUStringBuffer aSqlCmd(::rtl::OUString::createFromAscii("SELECT "));
     if(static_cast<OQueryController&>(getController()).isDistinct())
-        aSqlCmd += ::rtl::OUString::createFromAscii(" DISTINCT ");
-    aSqlCmd += aFieldListStr;
-    aSqlCmd += ::rtl::OUString::createFromAscii(" FROM ");
-    aSqlCmd += aTableListStr;
+        aSqlCmd.append(::rtl::OUString::createFromAscii(" DISTINCT "));
+    aSqlCmd.append(aFieldListStr);
+    aSqlCmd.append(::rtl::OUString::createFromAscii(" FROM "));
+    aSqlCmd.append(aTableListStr);
 
     if (aCriteriaListStr.getLength())
     {
-        aSqlCmd += ::rtl::OUString::createFromAscii(" WHERE ");
-        aSqlCmd += aCriteriaListStr;
+        aSqlCmd.append(::rtl::OUString::createFromAscii(" WHERE "));
+        aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
     }
     // ----------------- GroupBy aufbauen und Anh"angen ------------
     Reference<XDatabaseMetaData> xMeta;
@@ -3019,18 +3044,18 @@ sal_Bool OQueryDesignView::checkStatement()
     if ( xMeta.is() )
         bUseAlias = bUseAlias || !xMeta->supportsGroupByUnrelated();
 
-    aSqlCmd += GenerateGroupBy(this,rFieldList,bUseAlias);
+    aSqlCmd.append(GenerateGroupBy(this,rFieldList,bUseAlias));
     // ----------------- having Anh"angen ------------
     if(aHavingStr.getLength())
     {
-        aSqlCmd += ::rtl::OUString::createFromAscii(" HAVING ");
-        aSqlCmd += aHavingStr;
+        aSqlCmd.append(::rtl::OUString::createFromAscii(" HAVING "));
+        aSqlCmd.append(aHavingStr.makeStringAndClear());
     }
     // ----------------- Sortierung aufbauen und Anh"angen ------------
     ::rtl::OUString sOrder;
     SqlParseError eErrorCode = eOk;
     if ( (eErrorCode = GenerateOrder(this,rFieldList,nTabcount > 1,sOrder)) == eOk)
-        aSqlCmd += sOrder;
+        aSqlCmd.append(sOrder);
     else
     {
         if ( !m_rController.hasError() )
@@ -3039,11 +3064,12 @@ sal_Bool OQueryDesignView::checkStatement()
         m_rController.displayError();
     }
 
+    ::rtl::OUString sSQL = aSqlCmd.makeStringAndClear();
     if ( xConnection.is() )
     {
         ::connectivity::OSQLParser& rParser( rController.getParser() );
         ::rtl::OUString sErrorMessage;
-        ::std::auto_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, aSqlCmd, sal_True ) );
+        ::std::auto_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, sal_True ) );
         if ( pParseNode.get() )
         {
             OSQLParseNode* pNode = pParseNode->getChild(3)->getChild(1);
@@ -3055,12 +3081,12 @@ sal_Bool OQueryDesignView::checkStatement()
                     OSQLParseNode::compress(pCondition);
                     ::rtl::OUString sTemp;
                     pParseNode->parseNodeToStr(sTemp,xConnection);
-                    aSqlCmd = sTemp;
+                    sSQL = sTemp;
                 }
             }
         }
     }
-    return aSqlCmd;
+    return sSQL;
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

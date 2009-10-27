@@ -153,7 +153,7 @@ XInputStream_impl::readBytes(
            io::IOException,
            uno::RuntimeException)
 {
-    if( ! m_nIsOpen ) throw io::IOException();
+    if( ! m_nIsOpen ) throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     aData.realloc(nBytesToRead);
         //TODO! translate memory exhaustion (if it were detectable...) into
@@ -162,7 +162,7 @@ XInputStream_impl::readBytes(
     sal_uInt64 nrc(0);
     if(m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc )
        != osl::FileBase::E_None)
-        throw io::IOException();
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     // Shrink aData in case we read less than nBytesToRead (XInputStream
     // documentation does not tell whether this is required, and I do not know
@@ -219,7 +219,7 @@ XInputStream_impl::closeInput(
     {
         osl::FileBase::RC err = m_aFile.close();
         if( err != osl::FileBase::E_None )
-            throw io::IOException();
+            throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
         m_nIsOpen = false;
     }
 }
@@ -233,9 +233,9 @@ XInputStream_impl::seek(
            uno::RuntimeException )
 {
     if( location < 0 )
-        throw lang::IllegalArgumentException();
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
     if( osl::FileBase::E_None != m_aFile.setPos( Pos_Absolut, sal_uInt64( location ) ) )
-        throw io::IOException();
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -247,7 +247,7 @@ XInputStream_impl::getPosition(
 {
     sal_uInt64 uPos;
     if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
-        throw io::IOException();
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     return sal_Int64( uPos );
 }
 
@@ -259,7 +259,7 @@ XInputStream_impl::getLength(
 {
     sal_uInt64 uEndPos;
     if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
-        throw io::IOException();
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else
         return sal_Int64( uEndPos );
 }

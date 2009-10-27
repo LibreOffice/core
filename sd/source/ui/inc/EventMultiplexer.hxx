@@ -92,9 +92,10 @@ public:
     */
     static const EventId EID_PANE_MANAGER_DYING     = 0x00000100;
 
-    /** The edit mode of the ViewShell in the center pane has been modified.
+    /** Edit mode was (or is being) switched to normal mode.  Find
+        EID_EDIT_MODE_MASTER below.
     */
-    static const EventId EID_EDIT_MODE              = 0x00000200;
+    static const EventId EID_EDIT_MODE_NORMAL       = 0x00000200;
 
     /** One or more pages have been inserted into or deleted from the model.
     */
@@ -133,6 +134,10 @@ public:
     /** A configuration update has been completed.
     */
     static const EventId EID_CONFIGURATION_UPDATED  = 0x00040000;
+
+    /** Edit mode was (or is being) switched to master mode.
+    */
+    static const EventId EID_EDIT_MODE_MASTER       = 0x00080000;
 
     const ViewShellBase& mrBase;
     EventId meEventId;

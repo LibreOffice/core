@@ -50,33 +50,49 @@ namespace sdr
     {
         void OverlayManager::ImpDrawMembers(const basegfx::B2DRange& rRange, OutputDevice& rDestinationDevice) const
         {
-            ::sdr::overlay::OverlayObject* pCurrent = mpOverlayObjectStart;
+            const sal_uInt32 nSize(maOverlayObjects.size());
 
-            if(pCurrent)
+            if(nSize)
             {
                 const sal_uInt16 nOriginalAA(rDestinationDevice.GetAntialiasing());
+                const bool bIsAntiAliasing(getDrawinglayerOpt().IsAntiAliasing());
 
-                // react on AntiAliasing settings
-                if(maDrawinglayerOpt.IsAntiAliasing())
-                {
-                    rDestinationDevice.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
-                }
-                else
-                {
-                    rDestinationDevice.SetAntialiasing(nOriginalAA & ~ANTIALIASING_ENABLE_B2DDRAW);
-                }
+                // create processor
+                drawinglayer::processor2d::BaseProcessor2D* pProcessor = ::sdr::contact::createBaseProcessor2DFromOutputDevice(
+                    rDestinationDevice,
+                    getCurrentViewInformation2D());
 
-                while(pCurrent)
+                if(pProcessor)
                 {
-                    if(pCurrent->isVisible())
+                    for(OverlayObjectVector::const_iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); aIter++)
                     {
-                        if(rRange.overlaps(pCurrent->getBaseRange()))
+                        OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
+                        const OverlayObject& rCandidate = **aIter;
+
+                        if(rCandidate.isVisible())
                         {
-                            pCurrent->drawGeometry(rDestinationDevice);
+                            const drawinglayer::primitive2d::Primitive2DSequence& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
+
+                            if(rSequence.hasElements())
+                            {
+                                if(rRange.overlaps(rCandidate.getBaseRange()))
+                                {
+                                    if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
+                                    {
+                                        rDestinationDevice.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+                                    }
+                                    else
+                                    {
+                                        rDestinationDevice.SetAntialiasing(nOriginalAA & ~ANTIALIASING_ENABLE_B2DDRAW);
+                                    }
+
+                                    pProcessor->process(rSequence);
+                                }
+                            }
                         }
                     }
 
-                    pCurrent = pCurrent->mpNext;
+                    delete pProcessor;
                 }
 
                 // restore AA settings
@@ -84,87 +100,162 @@ namespace sdr
             }
         }
 
-        void OverlayManager::ImpCheckMapModeChange() const
-        {
-            sal_Bool bZoomHasChanged(sal_False);
-            MapMode aOutputDeviceMapMode(getOutputDevice().GetMapMode());
-            ::sdr::overlay::OverlayObject* pCurrent = mpOverlayObjectStart;
-
-            if(maMapMode != aOutputDeviceMapMode)
-            {
-                bZoomHasChanged = (
-                    maMapMode.GetScaleX() != aOutputDeviceMapMode.GetScaleX()
-                    || maMapMode.GetScaleY() != aOutputDeviceMapMode.GetScaleY());
-
-                // remember MapMode
-                ((OverlayManager*)this)->maMapMode = aOutputDeviceMapMode;
-            }
-
-            if(bZoomHasChanged && pCurrent)
-            {
-                while(pCurrent)
-                {
-                    pCurrent->zoomHasChanged();
-                    pCurrent = pCurrent->mpNext;
-                }
-            }
-        }
-
         void OverlayManager::ImpStripeDefinitionChanged()
         {
-            ::sdr::overlay::OverlayObject* pCurrent = mpOverlayObjectStart;
+            const sal_uInt32 nSize(maOverlayObjects.size());
 
-            while(pCurrent)
+            if(nSize)
             {
-                pCurrent->stripeDefinitionHasChanged();
-                pCurrent = pCurrent->mpNext;
+                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); aIter++)
+                {
+                    OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
+                    OverlayObject& rCandidate = **aIter;
+                    rCandidate.stripeDefinitionHasChanged();
+                }
             }
         }
 
         double OverlayManager::getDiscreteOne() const
         {
-            if(getOutputDevice().GetViewTransformation() != maViewTransformation)
+            if(basegfx::fTools::equalZero(mfDiscreteOne))
             {
-                OverlayManager* pThis = const_cast< OverlayManager* >(this);
-                pThis->maViewTransformation = getOutputDevice().GetViewTransformation();
                 const basegfx::B2DVector aDiscreteInLogic(getOutputDevice().GetInverseViewTransformation() * basegfx::B2DVector(1.0, 0.0));
-                pThis->mfDiscreteOne = aDiscreteInLogic.getLength();
+                const_cast< OverlayManager* >(this)->mfDiscreteOne = aDiscreteInLogic.getLength();
             }
 
             return mfDiscreteOne;
         }
 
-        OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
+        OverlayManager::OverlayManager(
+            OutputDevice& rOutputDevice,
+            OverlayManager* pOldOverlayManager)
         :   Scheduler(),
             rmOutputDevice(rOutputDevice),
-            mpOverlayObjectStart(0L),
-            mpOverlayObjectEnd(0L),
+            maOverlayObjects(),
             maStripeColorA(Color(COL_BLACK)),
             maStripeColorB(Color(COL_WHITE)),
-            mnStripeLengthPixel(5L),
+            mnStripeLengthPixel(5),
             maDrawinglayerOpt(),
             maViewTransformation(),
+            maViewInformation2D(0),
             mfDiscreteOne(0.0)
         {
+            if(pOldOverlayManager)
+            {
+                // take over OverlayObjects from given OverlayManager. Copy
+                // the vector of pointers
+                maOverlayObjects = pOldOverlayManager->maOverlayObjects;
+                const sal_uInt32 nSize(maOverlayObjects.size());
+
+                if(nSize)
+                {
+                    for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); aIter++)
+                    {
+                        OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
+                        OverlayObject& rCandidate = **aIter;
+
+                        // remove from old and add to new OverlayManager
+                        pOldOverlayManager->impApplyRemoveActions(rCandidate);
+                        impApplyAddActions(rCandidate);
+                    }
+
+                    pOldOverlayManager->maOverlayObjects.clear();
+                }
+            }
+        }
+
+        const drawinglayer::geometry::ViewInformation2D OverlayManager::getCurrentViewInformation2D() const
+        {
+            if(getOutputDevice().GetViewTransformation() != maViewTransformation)
+            {
+                basegfx::B2DRange aViewRange(maViewInformation2D.getViewport());
+
+                if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
+                {
+                    const Size aOutputSizePixel(getOutputDevice().GetOutputSizePixel());
+                    aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
+                    aViewRange.transform(getOutputDevice().GetInverseViewTransformation());
+                }
+
+                OverlayManager* pThis = const_cast< OverlayManager* >(this);
+
+                pThis->maViewTransformation = getOutputDevice().GetViewTransformation();
+                pThis->maViewInformation2D = drawinglayer::geometry::ViewInformation2D(
+                    maViewInformation2D.getObjectTransformation(),
+                    maViewTransformation,
+                    aViewRange,
+                    maViewInformation2D.getVisualizedPage(),
+                    maViewInformation2D.getViewTime(),
+                    maViewInformation2D.getExtendedInformationSequence());
+                pThis->mfDiscreteOne = 0.0;
+            }
+
+            return maViewInformation2D;
+        }
+
+        void OverlayManager::impApplyRemoveActions(OverlayObject& rTarget)
+        {
+            // handle evtl. animation
+            if(rTarget.allowsAnimation())
+            {
+                // remove from event chain
+                RemoveEvent(&rTarget);
+            }
+
+            // make invisible
+            invalidateRange(rTarget.getBaseRange());
+
+            // clear manager
+            rTarget.mpOverlayManager = 0;
+        }
+
+        void OverlayManager::impApplyAddActions(OverlayObject& rTarget)
+        {
+            // set manager
+            rTarget.mpOverlayManager = this;
+
+            // make visible
+            invalidateRange(rTarget.getBaseRange());
+
+            // handle evtl. animation
+            if(rTarget.allowsAnimation())
+            {
+                // Trigger at current time to get alive. This will do the
+                // object-specific next time calculation and hand over adding
+                // again to the scheduler to the animated object, too. This works for
+                // a paused or non-paused animator.
+                rTarget.Trigger(GetTime());
+            }
         }
 
         OverlayManager::~OverlayManager()
         {
-            // the OverlayManager is not the owner of the OverlayObjects
-            // and thus will not delete them, but remove them.
-            while(mpOverlayObjectStart)
+            // The OverlayManager is not the owner of the OverlayObjects
+            // and thus will not delete them, but remove them. Profit here
+            // from knowing that all will be removed
+            const sal_uInt32 nSize(maOverlayObjects.size());
+
+            if(nSize)
             {
-                remove(*mpOverlayObjectStart);
+                for(OverlayObjectVector::iterator aIter(maOverlayObjects.begin()); aIter != maOverlayObjects.end(); aIter++)
+                {
+                    OSL_ENSURE(*aIter, "Corrupted OverlayObject List (!)");
+                    OverlayObject& rCandidate = **aIter;
+                    impApplyRemoveActions(rCandidate);
+                }
+
+                // erase vector
+                maOverlayObjects.clear();
             }
         }
 
         void OverlayManager::completeRedraw(const Region& rRegion, OutputDevice* pPreRenderDevice) const
         {
-            if(!rRegion.IsEmpty() && mpOverlayObjectStart)
+            if(!rRegion.IsEmpty() && maOverlayObjects.size())
             {
                 // check for changed MapModes. That may influence the
                 // logical size of pixel based OverlayObjects (like BitmapHandles)
-                ImpCheckMapModeChange();
+                //ImpCheckMapModeChange();
 
                 // paint members
                 const Rectangle aRegionBoundRect(rRegion.GetBoundRect());
@@ -195,87 +286,38 @@ namespace sdr
 
         void OverlayManager::add(OverlayObject& rOverlayObject)
         {
+            OSL_ENSURE(0 == rOverlayObject.mpOverlayManager, "OverlayObject is added twice to an OverlayManager (!)");
+
             // add to the end of chain to preserve display order in paint
-            DBG_ASSERT(0L == rOverlayObject.mpOverlayManager,
-                "OverlayManager::add: OverlayObject is added to an OverlayManager (!)");
+            maOverlayObjects.push_back(&rOverlayObject);
 
-            if(mpOverlayObjectEnd)
-            {
-                // new element, add to end
-                rOverlayObject.mpNext = mpOverlayObjectEnd->mpNext;
-                rOverlayObject.mpPrevious = mpOverlayObjectEnd;
-                mpOverlayObjectEnd->mpNext = &rOverlayObject;
-                mpOverlayObjectEnd = &rOverlayObject;
-            }
-            else
-            {
-                // first element
-                rOverlayObject.mpNext = rOverlayObject.mpPrevious = 0L;
-                mpOverlayObjectEnd = mpOverlayObjectStart = &rOverlayObject;
-            }
-
-            // set manager
-            rOverlayObject.mpOverlayManager = this;
-
-            // make visible
-            invalidateRange(rOverlayObject.getBaseRange());
-
-            // handle evtl. animation
-            if(rOverlayObject.allowsAnimation())
-            {
-                // Trigger at current time to get alive. This will do the
-                // object-specific next time calculation and hand over adding
-                // again to the scheduler to the animated object, too. This works for
-                // a paused or non-paused animator.
-                rOverlayObject.Trigger(GetTime());
-            }
+            // execute add actions
+            impApplyAddActions(rOverlayObject);
         }
 
         void OverlayManager::remove(OverlayObject& rOverlayObject)
         {
-            // handle evtl. animation
-            if(rOverlayObject.allowsAnimation())
+            OSL_ENSURE(rOverlayObject.mpOverlayManager == this, "OverlayObject is removed from wrong OverlayManager (!)");
+
+            // execute remove actions
+            impApplyRemoveActions(rOverlayObject);
+
+            // remove from vector
+            const OverlayObjectVector::iterator aFindResult = ::std::find(maOverlayObjects.begin(), maOverlayObjects.end(), &rOverlayObject);
+            const bool bFound(aFindResult != maOverlayObjects.end());
+            OSL_ENSURE(bFound, "OverlayObject NOT found at OverlayManager (!)");
+
+            if(bFound)
             {
-                // remove from event chain
-                RemoveEvent(&rOverlayObject);
+                maOverlayObjects.erase(aFindResult);
             }
-
-            // Remove from chain
-            DBG_ASSERT(rOverlayObject.mpOverlayManager == this,
-                "OverlayManager::remove: OverlayObject is removed from wrong OverlayManager (!)");
-
-            if(rOverlayObject.mpPrevious)
-            {
-                rOverlayObject.mpPrevious->mpNext = rOverlayObject.mpNext;
-            }
-
-            if(rOverlayObject.mpNext)
-            {
-                rOverlayObject.mpNext->mpPrevious = rOverlayObject.mpPrevious;
-            }
-
-            if(&rOverlayObject == mpOverlayObjectStart)
-            {
-                mpOverlayObjectStart = rOverlayObject.mpNext;
-            }
-
-            if(&rOverlayObject == mpOverlayObjectEnd)
-            {
-                mpOverlayObjectEnd = rOverlayObject.mpPrevious;
-            }
-
-            // make invisible
-            invalidateRange(rOverlayObject.getBaseRange());
-
-            // clear manager
-            rOverlayObject.mpOverlayManager = 0L;
         }
 
         void OverlayManager::invalidateRange(const basegfx::B2DRange& rRange)
         {
             if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
             {
-                if(maDrawinglayerOpt.IsAntiAliasing())
+                if(getDrawinglayerOpt().IsAntiAliasing())
                 {
                     // assume AA needs one pixel more and invalidate one pixel more
                     const double fDiscreteOne(getDiscreteOne());
@@ -330,18 +372,6 @@ namespace sdr
                 mnStripeLengthPixel = nNew;
                 ImpStripeDefinitionChanged();
             }
-        }
-
-        ::boost::shared_ptr<OverlayObjectVector> OverlayManager::GetOverlayObjects (void) const
-        {
-            ::boost::shared_ptr<OverlayObjectVector> pObjectList (new OverlayObjectVector());
-            sdr::overlay::OverlayObject* pObject = mpOverlayObjectStart;
-            while (pObject != NULL)
-            {
-                pObjectList->push_back(pObject);
-                pObject = pObject->mpNext;
-            }
-            return pObjectList;
         }
     } // end of namespace overlay
 } // end of namespace sdr

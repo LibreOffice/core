@@ -76,9 +76,6 @@ class StateMachine
                         ~StateMachine();
 
 
-        // FOR TESTS ONLY:
-        void            PrintOut();
-
         // OPERATIONS
         StmBoundsStatus &
                         GetCharChain(

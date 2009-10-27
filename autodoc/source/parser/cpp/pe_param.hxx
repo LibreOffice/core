@@ -97,7 +97,6 @@ class PE_Parameter : public Cpp_PE
     void                On_expectName_ArrayBracket_Left(const char * i_sText);
     void                On_expectName_Bracket_Right(const char * i_sText);
     void                On_expectName_Comma(const char * i_sText);
-    void                On_expectName_Assign(const char * i_sText);
 
     void                On_afterName_ArrayBracket_Left(const char * i_sText);
     void                On_afterName_Bracket_Right(const char * i_sText);

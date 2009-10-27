@@ -220,6 +220,7 @@ protected:
     Container*      pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
     USHORT          nUndoLevel;     // Undo-Klammerung
+    bool            mbUndoEnabled;  // If false no undo is recorded or we are during the execution of an undo action
     USHORT          nProgressPercent; // fuer den ProgressBar-Handler
     USHORT          nLoadVersion;   // Versionsnummer der geladenen Datei
     FASTBOOL        bExtColorTable; // Keinen eigenen ColorTable
@@ -688,7 +689,7 @@ public:
     void        SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
-    void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel ) { mxUnoModel = xModel; }
+    void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.
@@ -728,6 +729,17 @@ public:
     bool IsInDestruction() const;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+
+    /** enables (true) or disables (false) recording of undo actions
+        If undo actions are added while undo is disabled, they are deleted.
+        Disabling undo does not clear the current undo buffer! */
+    void EnableUndo( bool bEnable );
+
+    /** returns true if undo is currently enabled
+        This returns false if undo was disabled using EnableUndo( false ) and
+        also during the runtime of the Undo() and Redo() methods. */
+    bool IsUndoEnabled() const;
+
 };
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;

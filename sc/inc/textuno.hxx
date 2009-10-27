@@ -259,6 +259,8 @@ public:
                             ScCellTextCursor(ScCellObj& rText);
         virtual                                 ~ScCellTextCursor() throw();
 
+    ScCellObj&              GetCellObj() const  { return rTextObj; }
+
                             // SvxUnoTextCursor methods reimplemented here:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
                             getText() throw(::com::sun::star::uno::RuntimeException);
@@ -324,6 +326,15 @@ public:
                             getStart() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
                             getEnd() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+                                    sal_Int8 >& aIdentifier )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static ScDrawTextCursor* getImplementation( const com::sun::star::uno::Reference<
+                                    com::sun::star::uno::XInterface> xObj );
 };
 
 

@@ -851,7 +851,8 @@ void SwRTFParser::ReadTable( int nToken )
             //table
             aRg.SetMark();
             aRg.GetMark()->nContent.Assign(aRg.GetCntntNode(), 0);
-            pDoc->Move(aRg, *pPam->GetPoint(), IDocumentContentOperations::DOC_MOVEDEFAULT);
+            pDoc->MoveRange(aRg, *pPam->GetPoint(),
+                    IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
 
         //Update the attribute stack entries to reflect that the properties

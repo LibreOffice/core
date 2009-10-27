@@ -179,12 +179,13 @@
 
         <node oor:name="Temp" oor:op="fuse" oor:mandatory="true">
             <prop oor:name="IsSinglePath" oor:finalized="true">
-                <value>true</value>
+                  <value>true</value>
             </prop>
-            <node oor:name="InternalPaths" oor:finalized="true" />
-            <prop oor:name="UserPaths" oor:finalized="true" />
+            <node oor:name="InternalPaths" oor:finalized="true"/>
+            <prop oor:name="UserPaths" oor:finalized="true"/>
             <prop oor:name="WritePath">
-                     <value>$(temp)</value>
+                  <value install:module="macosx">$(userurl)/temp</value>
+                  <value install:module="unxwnt">$(temp)</value>
             </prop>
         </node>
 

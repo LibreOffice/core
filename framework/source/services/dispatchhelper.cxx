@@ -63,19 +63,6 @@ namespace framework{
 //_______________________________________________
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_4(DispatchHelper                                       ,
-                    OWeakObject                                          ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider           ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo            ),
-                    DIRECT_INTERFACE(css::frame::XDispatchHelper        ),
-                    DIRECT_INTERFACE(css::frame::XDispatchResultListener))
-
-DEFINE_XTYPEPROVIDER_4(DispatchHelper                     ,
-                       css::lang::XTypeProvider           ,
-                       css::lang::XServiceInfo            ,
-                       css::frame::XDispatchHelper        ,
-                       css::frame::XDispatchResultListener)
-
 DEFINE_XSERVICEINFO_MULTISERVICE(DispatchHelper                   ,
                                  ::cppu::OWeakObject              ,
                                  SERVICENAME_DISPATCHHELPER       ,
@@ -91,7 +78,6 @@ DEFINE_INIT_SERVICE( DispatchHelper, {} )
 */
 DispatchHelper::DispatchHelper( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
         :   ThreadHelpBase(     )
-        ,   OWeakObject   (     )
         // Init member
         ,   m_xSMGR       (xSMGR)
 {

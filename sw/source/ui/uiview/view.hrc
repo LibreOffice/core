@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +39,6 @@
 
 // STR -------------------------------------------------------------------
 
-#define STR_NOGLOS1                 (RC_VIEW_BEGIN + 1)
-#define STR_NOGLOS2                 (RC_VIEW_BEGIN + 2)
 #define STR_NUM_LEVEL               (RC_VIEW_BEGIN + 3)
 #define STR_NUM_OUTLINE             (RC_VIEW_BEGIN + 4)
 

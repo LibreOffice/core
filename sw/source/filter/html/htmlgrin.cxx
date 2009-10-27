@@ -53,7 +53,7 @@
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-
+#include <svtools/eventcfg.hxx>
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
@@ -743,7 +743,7 @@ IMAGE_SETEVENT:
     }
 
     if( sAltNm.Len() )
-        pGrfNd->SetAlternateText( sAltNm );
+        pGrfNd->SetTitle( sAltNm );
 
     if( bSetTwipSize )
         pGrfNd->SetTwipSize( aGrfSz );
@@ -841,7 +841,7 @@ void SwHTMLParser::InsertBodyOptions()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        USHORT nEvent = 0;
+        rtl::OUString aEvent;
         BOOL bSetEvent = FALSE;
 
         switch( pOption->GetToken() )
@@ -872,28 +872,28 @@ void SwHTMLParser::InsertBodyOptions()
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONLOAD:
-                nEvent = SFX_EVENT_OPENDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC );
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONUNLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONUNLOAD:
-                nEvent = SFX_EVENT_PREPARECLOSEDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC );
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONFOCUS:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONFOCUS:
-                nEvent = SFX_EVENT_ACTIVATEDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC );
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONBLUR:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONBLUR:
-                nEvent = SFX_EVENT_DEACTIVATEDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC );
                 bSetEvent = TRUE;
                 break;
 
@@ -919,7 +919,7 @@ void SwHTMLParser::InsertBodyOptions()
         {
             const String& rEvent = pOption->GetString();
             if( rEvent.Len() )
-                InsertBasicDocEvent( nEvent, rEvent, eScriptType2,
+                InsertBasicDocEvent( aEvent, rEvent, eScriptType2,
                                      sDfltScriptType );
         }
     }
@@ -1374,7 +1374,7 @@ void SwHTMLParser::StripTrailingPara()
                 if( pPrvNd )
                 {
                     SwIndex aSrc( pCNd, 0 );
-                    pCNd->GetTxtNode()->Cut( pPrvNd, aSrc, pCNd->Len() );
+                    pCNd->GetTxtNode()->CutText( pPrvNd, aSrc, pCNd->Len() );
                 }
             }
 
@@ -1436,9 +1436,10 @@ void SwHTMLParser::StripTrailingPara()
         xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
         while( bSetSmallFont && nPos>0 )
         {
-            bSetSmallFont = CH_TXTATR_BREAKWORD ==
-                                        pTxtNd->GetTxt().GetChar( --nPos ) &&
-                        0 != pTxtNd->GetTxtAttr( nPos, RES_TXTATR_FLYCNT );
+            --nPos;
+            bSetSmallFont =
+                (CH_TXTATR_BREAKWORD == pTxtNd->GetTxt().GetChar( nPos )) &&
+                (0 != pTxtNd->GetTxtAttrForCharAt( nPos, RES_TXTATR_FLYCNT ));
         }
     }
 

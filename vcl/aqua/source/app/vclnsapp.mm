@@ -104,45 +104,52 @@
                     return;
                 }
             }
+            
+            // #i90083# handle frame switching
+            // FIXME: lousy workaround
+            if( (nModMask & (NSControlKeyMask|NSAlternateKeyMask)) == 0 )
+            {
+                if( [[pEvent characters] isEqualToString: @"<"] ||
+                    [[pEvent characters] isEqualToString: @"~"] )
+                {
+                    [self cycleFrameForward: pFrame];
+                    return;
+                }
+                else if( [[pEvent characters] isEqualToString: @">"] ||
+                         [[pEvent characters] isEqualToString: @"`"] )
+                {
+                    [self cycleFrameBackward: pFrame];
+                    return;
+                }
+            }
  
-            /* #i89611#
-               Cmd-Option-Space is for some reason not consumed by the menubar,
-               but also not by the input method (like e.g. Cmd-Space) and stays
-               without function.
-
-               However MOD1 + MOD2 combinations are not used throughout OOo code
-               since they tend to clash with system shortcuts on all platforms so
-               we can skip this case here.
-            */
             // get information whether the event was handled; keyDown returns nothing
             GetSalData()->maKeyEventAnswer[ pEvent ] = false;
             bool bHandled = false;
             
-            if( nModMask != (NSCommandKeyMask | NSAlternateKeyMask) )
+            // dispatch to view directly to avoid the key event being consumed by the menubar
+            // popup windows do not get the focus, so they don't get these either
+            // simplest would be dispatch this to the key window always if it is without parent
+            // however e.g. in document we want the menu shortcut if e.g. the stylist has focus
+            if( pFrame->mpParent && (pFrame->mnStyle & SAL_FRAME_STYLE_FLOAT) == 0 ) 
             {
-                // dispatch to view directly to avoid the key event being consumed by the menubar
-                // popup windows do not get the focus, so they don't get these either
-                // simplest would be dispatch this to the key window always if it is without parent
-                // however e.g. in document we want the menu shortcut if e.g. the stylist has focus
-                if( pFrame->mpParent && (pFrame->mnStyle & SAL_FRAME_STYLE_FLOAT) == 0 ) 
-                {
-                    [[pKeyWin contentView] keyDown: pEvent];
-                    bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
-                }
-                
-                // see whether the main menu consumes this event
-                // if not, we want to dispatch it ourselves. Unless we do this "trick"
-                // the main menu just beeps for an unknown or disabled key equivalent
-                // and swallows the event wholesale
-                NSMenu* pMainMenu = [NSApp mainMenu];
-                if( ! bHandled && (pMainMenu == 0 || ! [pMainMenu performKeyEquivalent: pEvent]) )
-                {
-                    [[pKeyWin contentView] keyDown: pEvent];
-                    bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
-                }
-                else
-                    bHandled = true;  // event handled already or main menu just handled it
+                [[pKeyWin contentView] keyDown: pEvent];
+                bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
             }
+            
+            // see whether the main menu consumes this event
+            // if not, we want to dispatch it ourselves. Unless we do this "trick"
+            // the main menu just beeps for an unknown or disabled key equivalent
+            // and swallows the event wholesale
+            NSMenu* pMainMenu = [NSApp mainMenu];
+            if( ! bHandled && (pMainMenu == 0 || ! [pMainMenu performKeyEquivalent: pEvent]) )
+            {
+                [[pKeyWin contentView] keyDown: pEvent];
+                bHandled = GetSalData()->maKeyEventAnswer[ pEvent ];
+            }
+            else
+                bHandled = true;  // event handled already or main menu just handled it
+
             GetSalData()->maKeyEventAnswer.erase( pEvent );
             if( bHandled )
                 return;
@@ -196,6 +203,84 @@
 -(void)sendSuperEvent:(NSEvent*)pEvent
 {
     [super sendEvent: pEvent];
+}
+
+-(void)cycleFrameForward: (AquaSalFrame*)pCurFrame
+{
+    // find current frame in list
+    std::list< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
+    std::list< AquaSalFrame* >::iterator it = rFrames.begin();
+    for( ; it != rFrames.end() && *it != pCurFrame; ++it )
+        ;
+    if( it != rFrames.end() )
+    {
+        // now find the next frame (or end)
+        do
+        {
+            ++it;
+            if( it != rFrames.end() )
+            {
+                if( (*it)->mpDockMenuEntry != NULL &&
+                    (*it)->mbShown )
+                {
+                    [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                    return;
+                }
+            }
+        } while( it != rFrames.end() );
+        // cycle around, find the next up to pCurFrame
+        it = rFrames.begin();
+        while( *it != pCurFrame )
+        {
+            if( (*it)->mpDockMenuEntry != NULL &&
+                (*it)->mbShown )
+            {
+                [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                return;
+            }
+            ++it;
+        }
+    }
+}
+
+-(void)cycleFrameBackward: (AquaSalFrame*)pCurFrame
+{
+    // do the same as cycleFrameForward only with a reverse iterator
+    
+    // find current frame in list
+    std::list< AquaSalFrame* >& rFrames( GetSalData()->maFrames );
+    std::list< AquaSalFrame* >::reverse_iterator it = rFrames.rbegin();
+    for( ; it != rFrames.rend() && *it != pCurFrame; ++it )
+        ;
+    if( it != rFrames.rend() )
+    {
+        // now find the next frame (or end)
+        do
+        {
+            ++it;
+            if( it != rFrames.rend() )
+            {
+                if( (*it)->mpDockMenuEntry != NULL &&
+                    (*it)->mbShown )
+                {
+                    [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                    return;
+                }
+            }
+        } while( it != rFrames.rend() );
+        // cycle around, find the next up to pCurFrame
+        it = rFrames.rbegin();
+        while( *it != pCurFrame )
+        {
+            if( (*it)->mpDockMenuEntry != NULL &&
+                (*it)->mbShown )
+            {
+                [(*it)->getWindow() makeKeyAndOrderFront: NSApp];
+                return;
+            }
+            ++it;
+        }
+    }
 }
  
 -(NSMenu*)applicationDockMenu:(NSApplication *)sender
@@ -372,26 +457,6 @@
 -(void)removeFallbackMenuItem: (NSMenuItem*)pItem
 {
     AquaSalMenu::removeFallbackMenuItem( pItem );
-}
-
-- (void)getSystemVersionMajor:(unsigned *)major
-                        minor:(unsigned *)minor
-                       bugFix:(unsigned *)bugFix
-{
-    OSErr err;
-    SInt32 systemVersion = VER_TIGER; // Initialize with minimal requirement
-    if ((err = Gestalt(gestaltSystemVersion, &systemVersion)) == noErr) 
-    {
-        GetSalData()->mnSystemVersion = systemVersion;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "System Version %x\n", (unsigned int)systemVersion);
-        fprintf( stderr, "Stored System Version %x\n", (unsigned int)GetSalData()->mnSystemVersion);
-#endif
-    }
-    else
-        NSLog(@"Unable to obtain system version: %ld", (long)err);
-
-    return;
 }
 
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem

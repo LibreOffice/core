@@ -371,7 +371,7 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
 ::std::auto_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
 {
     ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
-        (new ScAccessibleCellTextData(pViewShell, aCell, eSplitPos));
+        ( new ScAccessibleCellTextData( pViewShell, aCell, eSplitPos, this ) );
     ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
 
     return pEditSource;

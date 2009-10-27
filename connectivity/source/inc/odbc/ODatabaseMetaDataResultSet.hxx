@@ -76,6 +76,7 @@ namespace connectivity
             ::std::map<sal_Int32, ::connectivity::TString2IntMap >              m_aStrValueRange;
 
             ::std::map<sal_Int32, ::connectivity::TInt2StringMap >              m_aIntValueRange;
+            ::std::map<sal_Int32,SWORD>                                         m_aODBCColumnTypes;
 
             SQLHANDLE                                                                   m_aStatementHandle;
             SQLHANDLE                                                                   m_aConnectionHandle;

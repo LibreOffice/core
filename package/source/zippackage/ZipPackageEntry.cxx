@@ -31,10 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
 #include <ZipPackageEntry.hxx>
-#ifndef _COM_SUN_STAR_PACKAGE_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
-#endif
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 #include <ZipPackageFolder.hxx>
 #include <ZipPackageStream.hxx>
@@ -67,20 +65,20 @@ ZipPackageEntry::~ZipPackageEntry()
 OUString SAL_CALL ZipPackageEntry::getName(  )
     throw(RuntimeException)
 {
-    return aEntry.sName;
+    return msName;
 }
 void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     throw(RuntimeException)
 {
-    if ( pParent && pParent->hasByName ( aEntry.sName ) )
-        pParent->removeByName ( aEntry.sName );
+    if ( pParent && msName.getLength() && pParent->hasByName ( msName ) )
+        pParent->removeByName ( msName );
 
     // unfortunately no other exception than RuntimeException can be thrown here
     // usually the package is used through storage implementation, the problem should be detected there
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, sal_True ) )
-        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unexpected character is used in file name." ) ), Reference< XInterface >() );
+        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected character is used in file name." ) ), Reference< XInterface >() );
 
-    aEntry.sName = aName;
+    msName = aName;
 
     if ( pParent )
         pParent->doInsertByName ( this, sal_False );
@@ -96,7 +94,7 @@ void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bIns
 {
     // xParent = pParent = pNewParent;
     pParent = pNewParent;
-    if ( bInsert && !pNewParent->hasByName ( aEntry.sName ) )
+    if ( bInsert && msName.getLength() && !pNewParent->hasByName ( msName ) )
         pNewParent->doInsertByName ( this, sal_False );
 }
 
@@ -106,14 +104,14 @@ void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewPar
     sal_Int64 nTest(0);
     Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
     if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::static_getImplementationId () ) ) == 0 )
-        throw NoSupportException();
+        throw NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );
 
     if ( pNewParent != pParent )
     {
-        if ( pParent && pParent->hasByName ( aEntry.sName ) && mbAllowRemoveOnInsert )
-            pParent->removeByName( aEntry.sName );
+        if ( pParent && msName.getLength() && pParent->hasByName ( msName ) && mbAllowRemoveOnInsert )
+            pParent->removeByName( msName );
         doSetParent ( pNewParent, sal_True );
     }
 }

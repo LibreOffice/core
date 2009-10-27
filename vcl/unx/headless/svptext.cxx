@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svptext.cxx,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -274,20 +271,13 @@ ULONG SvpSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 {
-    ImplFontCharMap* pMap = NULL;
+    if( !m_pServerFont[0] )
+        return NULL;
 
-    int nPairCount = 0;
-    if( m_pServerFont[0] )
-        nPairCount = m_pServerFont[0]->GetFontCodeRanges( NULL );
-
-    if( nPairCount > 0 )
-    {
-        sal_uInt32* pCodePairs = new sal_uInt32[ 2 * nPairCount ];
-        m_pServerFont[0]->GetFontCodeRanges( pCodePairs );
-        pMap = new ImplFontCharMap( nPairCount, pCodePairs );
-    }
-
-    return pMap;
+    CmapResult aCmapResult;
+    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
+        return NULL;
+    return new ImplFontCharMap( aCmapResult );
 }
 
 // ---------------------------------------------------------------------------
@@ -354,7 +344,7 @@ BOOL SvpSalGraphics::CreateFontSubset(
     sal_Int32* pGlyphIDs,
     sal_uInt8* pEncoding,
     sal_Int32* pWidths,
-    int nGlyphs,
+    int nGlyphCount,
     FontSubsetInfo& rInfo
     )
 {
@@ -364,7 +354,16 @@ BOOL SvpSalGraphics::CreateFontSubset(
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the ImplFontData pFont
     psp::fontID aFont = pFont->GetFontId();
-    return PspGraphics::DoCreateFontSubset( rToFile, aFont, pGlyphIDs, pEncoding, pWidths, nGlyphs, rInfo );
+
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    bool bSuccess = rMgr.createFontSubset( rInfo,
+                                 aFont,
+                                 rToFile,
+                                 pGlyphIDs,
+                                 pEncoding,
+                                 pWidths,
+                                 nGlyphCount );
+    return bSuccess;
 }
 
 // ---------------------------------------------------------------------------

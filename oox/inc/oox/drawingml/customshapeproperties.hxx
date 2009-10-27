@@ -72,7 +72,7 @@ public:
     virtual ~CustomShapeProperties();
 
     void apply( const CustomShapePropertiesPtr& );
-    void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
+    void pushToPropSet( const ::oox::core::FilterBase& rFilterBase,
             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape) const;
 

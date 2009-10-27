@@ -40,6 +40,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
@@ -77,6 +78,9 @@
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
+#include "tabprotection.hxx"
+#include "formulaparserpool.hxx"
+#include "clipparam.hxx"
 
 #include <memory>
 
@@ -226,46 +230,6 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
 
     return NULL;
 }
-
-#if OLD_PIVOT_IMPLEMENTATION
-ScPivotCollection* ScDocument::GetPivotCollection() const
-{
-    return pPivotCollection;
-}
-
-void ScDocument::SetPivotCollection(ScPivotCollection* pNewPivotCollection)
-{
-    if ( pPivotCollection && pNewPivotCollection &&
-            *pPivotCollection == *pNewPivotCollection )
-    {
-        delete pNewPivotCollection;
-        return;
-    }
-
-    if (pPivotCollection)
-        delete pPivotCollection;
-    pPivotCollection = pNewPivotCollection;
-
-    if (pPivotCollection)
-    {
-        USHORT nCount = pPivotCollection->GetCount();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ScPivot* pPivot = (*pPivotCollection)[i];
-            if (pPivot->CreateData())
-                pPivot->ReleaseData();
-        }
-    }
-}
-
-ScPivot* ScDocument::GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
-{
-    if (pPivotCollection)
-        return pPivotCollection->GetPivotAtCursor(nCol, nRow, nTab);
-    else
-        return NULL;
-}
-#endif
 
 ScChartCollection* ScDocument::GetChartCollection() const
 {
@@ -465,7 +429,7 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( TRUE );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
+        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
                                         &aFilterName );
         pLink->Update();
         pLink->SetInCreate( FALSE );
@@ -476,10 +440,11 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     return TRUE;
 }
 
-ScExternalRefManager* ScDocument::GetExternalRefManager()
+ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
+    ScDocument* pThis = const_cast<ScDocument*>(this);
     if (!pExternalRefMgr.get())
-        pExternalRefMgr.reset(new ScExternalRefManager(this));
+        pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
 
     return pExternalRefMgr.get();
 }
@@ -505,6 +470,13 @@ void ScDocument::MarkUsedExternalReferences()
     }
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
+}
+
+ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
+{
+    if( !mxFormulaParserPool.get() )
+        mxFormulaParserPool.reset( new ScFormulaParserPool( *this ) );
+    return *mxFormulaParserPool;
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )
@@ -835,10 +807,6 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
             pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
             pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
-#if OLD_PIVOT_IMPLEMENTATION
-            if (pPivotCollection)
-                pPivotCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
-#endif
             if ( pDPCollection )
                 pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
@@ -888,7 +856,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         {
             ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
             if (pClipDoc)
-                pClipDoc->bCutMode = FALSE;
+                pClipDoc->GetClipParam().mbCutMode = false;
         }
     }
 }
@@ -898,7 +866,10 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 {
     DBG_ASSERT(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
 
-    ScRange aSource = pClipDoc->aClipRange;         // Tab wird noch angepasst
+    ScRange aSource;
+    ScClipParam& rClipParam = GetClipParam();
+    if (rClipParam.maRanges.Count())
+        aSource = *rClipParam.maRanges.First();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;
@@ -928,9 +899,6 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     //! UpdateChartRef
 
     pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );
-#if OLD_PIVOT_IMPLEMENTATION
-    pPivotCollection->UpdateGrow( rArea, nGrowX, nGrowY );
-#endif
 
     for (SCTAB i=0; i<=MAXTAB && pTab[i]; i++)
         pTab[i]->UpdateGrow( rArea, nGrowX, nGrowY );
@@ -1701,28 +1669,28 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
         ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
 }
 
-void ScDocument::SetDocProtection( BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
+ScDocProtection* ScDocument::GetDocProtection() const
 {
-    bProtected = bProtect;
-    aProtectPass = rPasswd;
+    return pDocProtection.get();
 }
 
-void ScDocument::SetTabProtection( SCTAB nTab, BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
+void ScDocument::SetDocProtection(const ScDocProtection* pProtect)
 {
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            pTab[nTab]->SetProtection( bProtect, rPasswd );
+    if (pProtect)
+        pDocProtection.reset(new ScDocProtection(*pProtect));
+    else
+        pDocProtection.reset(NULL);
 }
 
 BOOL ScDocument::IsDocProtected() const
 {
-    return bProtected;
+    return pDocProtection.get() && pDocProtection->isProtected();
 }
 
 BOOL ScDocument::IsDocEditable() const
 {
     // import into read-only document is possible
-    return !bProtected && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
+    return !IsDocProtected() && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
 }
 
 BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
@@ -1734,18 +1702,28 @@ BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
     return FALSE;
 }
 
-const uno::Sequence<sal_Int8>& ScDocument::GetDocPassword() const
-{
-    return aProtectPass;
-}
-
-const uno::Sequence<sal_Int8>& ScDocument::GetTabPassword( SCTAB nTab ) const
+ScTableProtection* ScDocument::GetTabProtection( SCTAB nTab ) const
 {
     if (VALIDTAB(nTab) && pTab[nTab])
-        return pTab[nTab]->GetPassword();
+        return pTab[nTab]->GetProtection();
 
-    DBG_ERROR("Falsche Tabellennummer");
-    return aProtectPass;
+    return NULL;
+}
+
+void ScDocument::SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect)
+{
+    if (!ValidTab(nTab))
+        return;
+
+    pTab[nTab]->SetProtection(pProtect);
+}
+
+void ScDocument::CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest)
+{
+    if (!ValidTab(nTabSrc) || !ValidTab(nTabDest))
+        return;
+
+    pTab[nTabDest]->SetProtection( pTab[nTabSrc]->GetProtection() );
 }
 
 const ScDocOptions& ScDocument::GetDocOptions() const
@@ -1756,16 +1734,10 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
-    USHORT d,m,y;
-
     DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
     *pDocOptions = rOpt;
-    rOpt.GetDate( d,m,y );
 
-    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
-    pFormatter->ChangeNullDate( d,m,y );
-    pFormatter->ChangeStandardPrec( (USHORT)rOpt.GetStdPrecision() );
-    pFormatter->SetYear2000( rOpt.GetYear2000() );
+    xPoolHelper->SetFormTableOpt(rOpt);
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const

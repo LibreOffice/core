@@ -48,12 +48,17 @@
 #include "CFStringUtilities.hxx"
 #include "NSString_OOoAdditions.hxx"
 
+#ifndef _NSURL_OOOADDITIONS_HXX_
+#include "NSURL_OOoAdditions.hxx"
+#endif
+
 #include "SalAquaFilePicker.hxx"
 
 #include <stdio.h>
 
 #pragma mark DEFINES
 #define CLASS_NAME "SalAquaPicker"
+#define kSetHideExtensionStateKey @"NSNavLastUserSetHideExtensionButtonState"
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -114,8 +119,22 @@ void SAL_CALL SalAquaPicker::implInitialize()
         case NAVIGATIONSERVICES_SAVE:
             OSL_TRACE("NAVIGATIONSERVICES_SAVE");
             m_pDialog = [NSSavePanel savePanel];
-            [(NSSavePanel*)m_pDialog setCanSelectHiddenExtension:YES];
-            [(NSSavePanel*)m_pDialog setExtensionHidden:NO];
+            [(NSSavePanel*)m_pDialog setCanSelectHiddenExtension:NO]; //changed for issue #102102
+            /* I would have loved to use
+             * [(NSSavePanel*)m_pDialog setExtensionHidden:YES];
+             * here but unfortunately this
+             * a) only works when the dialog is already displayed because it seems to act on the corresponding checkbox (that we don't show but that doesn't matter)
+             * b) Mac OS X saves this setting on an application-based level which means that the last state is always being restored again when the app runs for the next time
+             *
+             * So the only reliable way seems to be using the NSUserDefaults object because that is where that value is stored and
+             * to just overwrite it if it has the wrong value.
+             */
+            NSUserDefaults *pDefaults = [NSUserDefaults standardUserDefaults];
+            NSNumber *pExtn = [pDefaults objectForKey:kSetHideExtensionStateKey];
+            if(pExtn == nil || [pExtn boolValue] == NO) {
+                OSL_TRACE("Hiding extension");
+                [pDefaults setBool:YES forKey:kSetHideExtensionStateKey];
+            }
             break;
 
         case NAVIGATIONSERVICES_DIRECTORY:
@@ -188,6 +207,9 @@ int SalAquaPicker::run()
             break;
     }
 
+    if (retVal == NSFileHandlingPanelOKButton) {
+        implsetDisplayDirectory([[NSURL fileURLWithPath:[m_pDialog directory]] OUStringForInfo:FULLPATH]);
+    }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 
@@ -217,11 +239,6 @@ void SAL_CALL SalAquaPicker::implsetDisplayDirectory( const rtl::OUString& aDire
 
     if (aDirectory != m_sDisplayDirectory) {
         m_sDisplayDirectory = aDirectory;
-
-        if (m_pDialog != nil) {
-            //NSLog(@"would change now to:%@", [NSString stringWithOUString:aDirectory]);
-            // [m_pDialog setDirectory:[NSString stringWithOUString:aDirectory]];
-        }
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);

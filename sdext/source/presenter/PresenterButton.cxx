@@ -481,8 +481,6 @@ void PresenterButton::RenderButton (
         GetBitmap(rpCenter, eMode),
         GetBitmap(rpRight, eMode));
 
-    sal_Int32 nBottomOffset (
-        ::std::max(rpLeft->mnYOffset, ::std::max(rpCenter->mnYOffset, rpRight->mnYOffset)));
     if (rpFont.get()==NULL || ! rpFont->mxFont.is())
         return;
 
@@ -495,7 +493,7 @@ void PresenterButton::RenderButton (
         Sequence<double>(4), rendering::CompositeOperation::SOURCE);
     PresenterCanvasHelper::SetDeviceColor(aRenderState, rpFont->mnColor);
     aRenderState.AffineTransform.m02 = (rSize.Width - aTextBBox.X2 + aTextBBox.X1)/2;
-    aRenderState.AffineTransform.m12 = rSize.Height - aTextBBox.Y2 - gnVerticalBorder - nBottomOffset;
+    aRenderState.AffineTransform.m12 = (rSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y1;
 
     rxCanvas->drawText(
         aContext,

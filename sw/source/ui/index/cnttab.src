@@ -342,12 +342,12 @@ TabPage TP_TOX_SELECT
     CheckBox    CB_FROMFILE
     {
         Pos = MAP_APPFONT ( 136 , 124 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Size = MAP_APPFONT ( 115 , 10 ) ;
         Text [ en-US ] = "~Concordance file";
     };
     MenuButton  MB_AUTOMARK
     {
-        Pos = MAP_APPFONT ( 201 , 122 ) ;
+        Pos = MAP_APPFONT ( 136 , 137 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         ButtonMenu = Menu
@@ -486,32 +486,32 @@ TabPage TP_TOX_SELECT
     };
     FixedLine FL_SORTOPTIONS
     {
-        Pos = MAP_APPFONT ( 6, 150) ;
+        Pos = MAP_APPFONT ( 6, 153) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Sort";
     };
     FixedText FT_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 12, 163) ;
+        Pos = MAP_APPFONT ( 12, 166) ;
         Size = MAP_APPFONT ( 33, 8 ) ;
         Text [ en-US ] = "Language";
     };
     ListBox LB_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 47, 161) ;
+        Pos = MAP_APPFONT ( 47, 164) ;
         Size = MAP_APPFONT ( 80, 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_SORTALG
     {
-        Pos = MAP_APPFONT ( 130, 163) ;
+        Pos = MAP_APPFONT ( 130, 166) ;
         Size = MAP_APPFONT ( 50, 8 ) ;
         Text [ en-US ] = "Key type";
     };
     ListBox LB_SORTALG
     {
-        Pos = MAP_APPFONT ( 201, 161) ;
+        Pos = MAP_APPFONT ( 201, 164) ;
         Size = MAP_APPFONT ( 50, 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
@@ -1049,7 +1049,7 @@ TabPage TP_TOX_STYLES
     FixedText FT_LEVEL
     {
         Pos = MAP_APPFONT ( 11 , 14 ) ;
-        Size = MAP_APPFONT ( 24 , 8 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text [ en-US ] = "~Levels" ;
         Left = TRUE ;
     };
@@ -1064,7 +1064,7 @@ TabPage TP_TOX_STYLES
     FixedText FT_TEMPLATE
     {
         Pos = MAP_APPFONT ( 142 , 14 ) ;
-        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text [ en-US ] = "Paragraph ~Styles" ;
         Left = TRUE ;
     };

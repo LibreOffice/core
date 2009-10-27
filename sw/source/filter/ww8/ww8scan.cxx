@@ -1498,8 +1498,15 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             }
             INT32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
             if( 8 <= pWw8Fib->nVersion )
+            {
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
                                                                 bIsUnicode );
+            }
+            else
+            {
+                if (pWw8Fib->fExtChar)
+                    bIsUnicode=true;
+            }
             INT32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
 
             /*
@@ -1581,7 +1588,10 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
-            *pIsUnicode = false;
+        if (pWw8Fib->fExtChar)
+                *pIsUnicode=true;
+            else
+                    *pIsUnicode = false;
         else
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
 
@@ -5478,7 +5488,8 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
         cQuickSaves = ( aBits1 & 0xf0 ) >> 4;
         fEncrypted  =   aBits2 & 0x01       ;
         fWhichTblStm= ( aBits2 & 0x02 ) >> 1;
-        // dummy    = ( aBits2 & 0x0e ) >> 1;
+        fReadOnlyRecommended = (aBits2 & 0x4) >> 2;
+        fWriteReservation = (aBits2 & 0x8) >> 3;
         fExtChar    = ( aBits2 & 0x10 ) >> 4;
         // dummy    = ( aBits2 & 0x20 ) >> 5;
         fFarEast    = ( aBits2 & 0x40 ) >> 6; // #i90932#
@@ -5624,13 +5635,14 @@ WW8Fib::WW8Fib(BYTE nVer)
     // <-- #i90932#
 }
 
-bool WW8Fib::Write(SvStream& rStrm)
+bool WW8Fib::WriteHeader(SvStream& rStrm)
 {
-    BYTE *pDataPtr = new BYTE[ fcMin ];
-    BYTE *pData = pDataPtr;
-    memset( pData, 0, fcMin );
-
     bool bVer8 = 8 == nVersion;
+
+    size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
+    BYTE *pDataPtr = new BYTE[ nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
+    memset( pData, 0, nUnencryptedHdr );
 
     ULONG nPos = rStrm.Tell();
     cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
@@ -5650,8 +5662,15 @@ bool WW8Fib::Write(SvStream& rStrm)
     nBits16 |= (0xf0 & ( cQuickSaves << 4 ));
     if( fEncrypted )    nBits16 |= 0x0100;
     if( fWhichTblStm )  nBits16 |= 0x0200;
+
+    if (fReadOnlyRecommended)
+        nBits16 |= 0x0400;
+    if (fWriteReservation)
+        nBits16 |= 0x0800;
+
     if( fExtChar )      nBits16 |= 0x1000;
     if( fFarEast )      nBits16 |= 0x4000;  // #i90932#
+    if( fObfuscated )   nBits16 |= 0x8000;
     Set_UInt16( pData, nBits16 );
 
     Set_UInt16( pData, nFibBack );
@@ -5696,6 +5715,27 @@ bool WW8Fib::Write(SvStream& rStrm)
 
     // Marke: "rglw"  Beginning of the array of longs
     Set_UInt32( pData, cbMac );
+
+    rStrm.Write( pDataPtr, nUnencryptedHdr );
+    delete[] pDataPtr;
+    return 0 == rStrm.GetError();
+}
+
+bool WW8Fib::Write(SvStream& rStrm)
+{
+    bool bVer8 = 8 == nVersion;
+
+    WriteHeader( rStrm );
+
+    size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
+
+    BYTE *pDataPtr = new BYTE[ fcMin - nUnencryptedHdr ];
+    BYTE *pData = pDataPtr;
+    memset( pData, 0, fcMin - nUnencryptedHdr );
+
+    ULONG nPos = rStrm.Tell();
+    cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
+    rStrm.Seek( nPos );
 
     // 2 Longs uebergehen, da unwichtiger Quatsch
     pData += 2 * sizeof( INT32);
@@ -5905,7 +5945,7 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, 0);
     }
 
-    rStrm.Write( pDataPtr, fcMin );
+    rStrm.Write( pDataPtr, fcMin - nUnencryptedHdr );
     delete[] pDataPtr;
     return 0 == rStrm.GetError();
 }
@@ -7283,7 +7323,7 @@ SEPr::SEPr() :
     dttmPropRMark(0), dxtCharSpace(0), dyaLinePitch(0), clm(0), reserved1(0),
     dmOrientPage(0), iHeadingPgn(0), pgnStart(1), lnnMin(0), wTextFlow(0),
     reserved2(0), pgbApplyTo(0), pgbPageDepth(0), pgbOffsetFrom(0),
-    xaPage(12240), yaPage(15840), xaPageNUp(12240), yaPageNUp(15840),
+    xaPage(lLetterWidth), yaPage(lLetterHeight), xaPageNUp(lLetterWidth), yaPageNUp(lLetterHeight),
     dxaLeft(1800), dxaRight(1800), dyaTop(1440), dyaBottom(1440), dzaGutter(0),
     dyaHdrTop(720), dyaHdrBottom(720), ccolM1(0), fEvenlySpaced(1),
     reserved3(0), fBiDi(0), fFacingCol(0), fRTLGutter(0), fRTLAlignment(0),

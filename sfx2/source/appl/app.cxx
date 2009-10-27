@@ -460,6 +460,14 @@ void SfxApplication::SetLastDir_Impl
 
 //--------------------------------------------------------------------
 
+void SfxApplication::ResetLastDir()
+{
+    String aEmpty;
+    pAppData_Impl->aLastDir = aEmpty;
+}
+
+//--------------------------------------------------------------------
+
 SfxDispatcher* SfxApplication::GetDispatcher_Impl()
 {
     return pAppData_Impl->pViewFrame? pAppData_Impl->pViewFrame->GetDispatcher(): pAppData_Impl->pAppDispat;
@@ -497,7 +505,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         if ( pOldContainerFrame )
         {
             if ( bTaskActivate )
-                NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pOldContainerFrame->GetObjectShell() ) );
+                NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_DEACTIVATEDOC), pOldContainerFrame->GetObjectShell() ) );
             pOldContainerFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldContainerFrame->GetProgress() )
@@ -521,7 +529,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
             {
                 pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl( pNewContainerFrame );
-                NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, pNewContainerFrame->GetObjectShell() ) );
+                NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_ACTIVATEDOC), pNewContainerFrame->GetObjectShell() ) );
             }
 
             SfxProgress *pProgress = pNewContainerFrame->GetProgress();

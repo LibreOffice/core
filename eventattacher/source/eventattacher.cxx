@@ -882,7 +882,7 @@ void * SAL_CALL component_getFactory(
     {
         Reference< XSingleServiceFactory > xFactory( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( pImplName ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) ),
             ::comp_EventAttacher::EventAttacherImpl_CreateInstance,
             ::comp_EventAttacher::EventAttacherImpl::getSupportedServiceNames_Static() ) );
 

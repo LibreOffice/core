@@ -59,7 +59,7 @@ protected:
     TextSpacing&    mrSpaceAfter;
     BulletList&     mrBulletList;
     ::std::list< ::com::sun::star::style::TabStop >  maTabList;
-    FillPropertiesPtr mpFillPropertiesPtr;
+    ::boost::shared_ptr< BlipFillProperties > mxBlipProps;
 };
 
 } }

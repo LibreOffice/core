@@ -40,6 +40,12 @@ then
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${LIBRARY_PATH?} \
     ${BUILD_TOOLS?}/rpmbuild "$@"
 else
+if [ "$OUTPATH" = "unxlngx6" ]
+then
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${LIBRARY_PATH?} \
+    ${BUILD_TOOLS?}/rpmbuild "$@"
+else
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${COMPATH?}/lib \
     ${BUILD_TOOLS?}/rpm "$@"
+fi
 fi

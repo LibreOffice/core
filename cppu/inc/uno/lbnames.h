@@ -46,12 +46,9 @@
 #endif /* (_MSC_VER < 1000) */
 /* sunpro cc */
 #elif defined (__SUNPRO_CC)
-#if (__SUNPRO_CC < 0x500)
-#error "sunpro cc must be at least 5.x"
-provoking error here, because PP ignores #error
-#elif (__SUNPRO_CC < 0x600)
+#if ((__SUNPRO_CC >= 0x5000 && __SUNPRO_CC < 0x6000) || (__SUNPRO_CC >= 0x500 && __SUNPRO_CC < 0x600))
 #define TMP_CPPU_ENV sunpro5
-#else
+#elif
 #error "sunpro cc version must be 5.x"
 provoking error here, because PP ignores #error
 #endif /* defined (__SUNPRO_CC) */

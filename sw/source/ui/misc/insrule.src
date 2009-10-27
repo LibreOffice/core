@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: insrule.src,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,7 @@ ModalDialog DLG_INSERT_RULER
     {
         Text [ en-US ] = "Plain" ;
     };
-    Text [ en-US ] = "Insert Horizontal Ruler" ;
+    Text [ en-US ] = "Insert Horizontal Rule" ;
 };
 
 

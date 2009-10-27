@@ -118,7 +118,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
             // for the button, we can add to the control only, not to the model
             // - clicking a button is something which happens on the _control_.
             DocumentViewHelper aView = m_aDocument.getCurrentView();
-            XButton xButton = (XButton)aView.getControl( m_xApplyFilter, XButton.class );
+            XButton xButton = (XButton)aView.getFormControl( m_xApplyFilter, XButton.class );
             xButton.addActionListener( this );
         }
         catch ( com.sun.star.uno.Exception e )

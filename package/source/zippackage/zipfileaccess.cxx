@@ -53,20 +53,21 @@ using namespace ::com::sun::star;
 
 // ----------------------------------------------------------------
 OZipFileAccess::OZipFileAccess( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-: m_xFactory( xFactory )
+: m_aMutexHolder( new SotMutexHolder )
+, m_xFactory( xFactory )
 , m_pZipFile( NULL )
 , m_pListenersContainer( NULL )
 , m_bDisposed( sal_False )
 {
     if ( !xFactory.is() )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 // ----------------------------------------------------------------
 OZipFileAccess::~OZipFileAccess()
 {
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
         if ( !m_bDisposed )
         {
             try {
@@ -179,16 +180,16 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     throw ( uno::Exception,
             uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( m_pZipFile )
-        throw uno::Exception(); // TODO: initialization is allowed only one time
+        throw uno::Exception( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // initialization is allowed only one time
 
     if ( !aArguments.getLength() )
-        throw lang::IllegalArgumentException(); // TODO:
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 
     OSL_ENSURE( aArguments.getLength() == 1, "Too meny arguments are provided, only the first one will be used!\n" );
 
@@ -217,15 +218,15 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         xSeekable = uno::Reference< io::XSeekable >( m_xContentStream, uno::UNO_QUERY );
     }
     else
-        throw lang::IllegalArgumentException(); // TODO:
+        throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
 
     if ( !m_xContentStream.is() )
-        throw io::IOException(); // TODO:
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !xSeekable.is() )
     {
         // TODO: after fwkbugfix02 is integrated a helper class can be used to make the stream seekable
-        throw io::IOException();
+        throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 
     // TODO: in case xSeekable is implemented on separated XStream implementation a wrapper is required
@@ -242,24 +243,25 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const ::rtl::OUString& aName )
             lang::WrappedTargetException,
             uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException();
+        throw io::NotConnectedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
     if ( aIter == m_pZipFile->GetEntryHash().end() )
-        throw container::NoSuchElementException();
+        throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
                                                                                 new EncryptionData(),
-                                                                                sal_False ) );
+                                                                                sal_False,
+                                                                                m_aMutexHolder ) );
 
     if ( !xEntryStream.is() )
-        throw uno::RuntimeException(); // TODO:
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     return uno::makeAny ( xEntryStream );
 }
@@ -268,13 +270,13 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const ::rtl::OUString& aName )
 uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException();
+        throw io::NotConnectedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Sequence< ::rtl::OUString > aNames( m_pZipFile->GetEntryHash().size() );
     sal_Int32 nLen = 0;
@@ -287,7 +289,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
             aNames.realloc( nLen );
         }
 
-        aNames[nLen-1] = (*aIter).second.sName;
+        aNames[nLen-1] = (*aIter).second.sPath;
     }
 
     if ( aNames.getLength() != nLen )
@@ -303,13 +305,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
 sal_Bool SAL_CALL OZipFileAccess::hasByName( const ::rtl::OUString& aName )
     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException();
+        throw io::NotConnectedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     EntryHash::iterator aIter = m_pZipFile->GetEntryHash().find( aName );
 
@@ -320,13 +322,13 @@ sal_Bool SAL_CALL OZipFileAccess::hasByName( const ::rtl::OUString& aName )
 uno::Type SAL_CALL OZipFileAccess::getElementType()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException();
+        throw io::NotConnectedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     return getCppuType( ( const uno::Reference< io::XInputStream >* )NULL );
 }
@@ -335,13 +337,13 @@ uno::Type SAL_CALL OZipFileAccess::getElementType()
 sal_Bool SAL_CALL OZipFileAccess::hasElements()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException();
+        throw io::NotConnectedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     return ( m_pZipFile->GetEntryHash().size() != 0 );
 }
@@ -353,32 +355,33 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
             io::IOException,
             uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !m_pZipFile )
-        throw io::NotConnectedException();
+        throw io::NotConnectedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     // Code to compare strings by patterns
     uno::Sequence< ::rtl::OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
 
     for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
     {
-        if ( StringGoodForPattern_Impl( (*aIter).second.sName, aPattern ) )
+        if ( StringGoodForPattern_Impl( (*aIter).second.sPath, aPattern ) )
         {
             uno::Reference< io::XInputStream > xEntryStream( m_pZipFile->getDataStream( (*aIter).second,
                                                                                         new EncryptionData(),
-                                                                                        sal_False ) );
+                                                                                        sal_False,
+                                                                                        m_aMutexHolder ) );
 
             if ( !xEntryStream.is() )
-                throw uno::RuntimeException();
+                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             return xEntryStream;
         }
     }
 
-    throw container::NoSuchElementException();
+    throw container::NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 // XComponent
@@ -386,10 +389,10 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
 void SAL_CALL OZipFileAccess::dispose()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( m_pListenersContainer )
     {
@@ -418,13 +421,13 @@ void SAL_CALL OZipFileAccess::dispose()
 void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( !m_pListenersContainer )
-        m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pListenersContainer = new ::cppu::OInterfaceContainerHelper( m_aMutexHolder->GetMutex() );
     m_pListenersContainer->addInterface( xListener );
 }
 
@@ -432,10 +435,10 @@ void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEve
 void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( m_bDisposed )
-        throw lang::DisposedException();
+        throw lang::DisposedException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     if ( m_pListenersContainer )
         m_pListenersContainer->removeInterface( xListener );

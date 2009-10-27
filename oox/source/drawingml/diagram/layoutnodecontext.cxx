@@ -31,7 +31,6 @@
 #include "layoutnodecontext.hxx"
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/skipcontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/shapecontext.hxx"
@@ -290,8 +289,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         break;
     }
     case NMSP_DIAGRAM|XML_extLst:
-        xRet.set( new SkipContext( *this ) );
-        break;
+        return xRet;
     case NMSP_DIAGRAM|XML_alg:
     {
         // CT_Algorithm

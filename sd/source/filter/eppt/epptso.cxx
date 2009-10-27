@@ -3153,11 +3153,15 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
     if ( mbEmptyPresObj )
         mnTextSize = 0;
-    if ( mnTextSize )
+    if ( !mbEmptyPresObj )
     {
         ParagraphObj* pPara;
         TextObj aTextObj( mXText, nTextInstance, maFontCollection, (PPTExBulletProvider&)*this );
-        aTextObj.Write( &rOut );
+
+        // leaving out EPP_TextCharsAtom w/o text - still write out
+        // attribute info though
+        if ( mnTextSize )
+            aTextObj.Write( &rOut );
 
         if ( pPropOpt )
             ImplAdjustFirstLineLineSpacing( aTextObj, *pPropOpt );
@@ -4601,11 +4605,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
                     if ( aControlName.Len() )
-                        ImplWriteCString( *mpExEmbed, aControlName, 1 );
+                        PPTWriter::WriteCString( *mpExEmbed, aControlName, 1 );
                     if ( aOleIdentifier.Len() )
-                        ImplWriteCString( *mpExEmbed, aOleIdentifier, 2 );
+                        PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
                     if ( aUserName.Len() )
-                        ImplWriteCString( *mpExEmbed, aUserName, 3 );
+                        PPTWriter::WriteCString( *mpExEmbed, aUserName, 3 );
                 }
                 nSize = mpExEmbed->Tell() - nOldPos;
                 mpExEmbed->Seek( nOldPos - 4 );
@@ -4889,8 +4893,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 *mpStrm << (sal_uInt32)( mnTextSize + 1 ) << (sal_uInt32)1 << (sal_uInt16)0;
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientTextBox
                                 mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
-                                continue;
                             }
+                            continue;
                         }
                         else
                         {
@@ -4925,9 +4929,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( mbPresObj )
                 {
                     nOutlinerCount++;
-                    if ( rLayout.bOutlinerPossible && ( nOutlinerCount == 1 ) ||
-                        ( ( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) )
-                            && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ) ) )
+                    if ( (rLayout.bOutlinerPossible && ( nOutlinerCount == 1 )) ||
+                         (( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) ) && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ))
+                       )
                     {
                         ImplGetText();
                         TextObj aTextObj( mXText, EPP_TEXTTYPE_Body, maFontCollection, (PPTExBulletProvider&)*this );
@@ -5090,9 +5094,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 << (sal_uInt32)0
                                 << (sal_uInt32)0x0012b600;
 
-//                  ImplWriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
-//                  ImplWriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
-//                  ImplWriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
 
                     nSize = mpExEmbed->Tell() - nOldPos;
                     mpExEmbed->Seek( nOldPos - 4 );
@@ -5569,6 +5573,18 @@ void PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
     }
 }
 
+void PPTWriter::WriteCString( SvStream& rSt, const String& rString, sal_uInt32 nInstance )
+{
+    sal_uInt32 i, nLen = rString.Len();
+    if ( nLen )
+    {
+        rSt << (sal_uInt32)( ( nInstance << 4 ) | ( EPP_CString << 16 ) )
+            << (sal_uInt32)( nLen << 1 );
+        for ( i = 0; i < nLen; i++ )
+            rSt << rString.GetChar( (sal_uInt16)i );
+    }
+}
+
 void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt )
 {
@@ -5694,38 +5710,25 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
                             aPropOptSp.CreateFillProperties( mXPropSet, sal_True );
                             aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                            if ( mnTextSize )
-                                aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
                             aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
 
-                            if ( mnTextSize )
-                            {
-                                SvMemoryStream aClientTextBox( 0x200, 0x200 );
-                                SvMemoryStream  aExtBu( 0x200, 0x200 );
+                            SvMemoryStream aClientTextBox( 0x200, 0x200 );
+                            SvMemoryStream  aExtBu( 0x200, 0x200 );
 
-                                ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
+                            ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
 
-                                aPropOptSp.Commit( *mpStrm );
-                                mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-                                *mpStrm     << nLeft
-                                            << nTop
-                                               << nRight
-                                            << nBottom;
+                            aPropOptSp.Commit( *mpStrm );
+                            mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+                            *mpStrm     << nLeft
+                                        << nTop
+                                        << nRight
+                                        << nBottom;
 
-                                *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
-                                        << (sal_uInt32)aClientTextBox.Tell();
+                            *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
+                                    << (sal_uInt32)aClientTextBox.Tell();
 
-                                mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
-                            }
-                            else
-                            {
-                                aPropOptSp.Commit( *mpStrm );
-                                mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-                                *mpStrm     << nLeft
-                                            << nTop
-                                               << nRight
-                                            << nBottom;
-                            }
+                            mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
                             mpPptEscherEx->CloseContainer();
                         }
                     }

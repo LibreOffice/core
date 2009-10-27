@@ -66,9 +66,9 @@ static Reference< XInterface > SAL_CALL createInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
     Reference< XInterface > xDlg;
-    bool                    bVista = IsWindowsVista();
+    bool                    bVistaOrNewer = IsWindowsVistaOrNewer();
 
-    if (bVista)
+    if (bVistaOrNewer)
     {
         fprintf(stdout, "use special (vista) system file picker ...\n");
         xDlg.set(

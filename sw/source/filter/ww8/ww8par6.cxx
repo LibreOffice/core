@@ -444,7 +444,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     // 2. Papiergroesse
     SwFmtFrmSize aSz( rFmt.GetFrmSize() );
     aSz.SetWidth(rSection.GetPageWidth());
-    aSz.SetHeight(SnapPageDimension(rSection.GetPageHeight()));
+    aSz.SetHeight(SvxPaperInfo::GetSloppyPaperDimension(rSection.GetPageHeight()));
     rFmt.SetFmtAttr(aSz);
 
     rFmt.SetFmtAttr(
@@ -698,7 +698,8 @@ SwSectionFmt *wwSectionManager::InsertSection(
 
     aSection.SetProtect(SectionIsProtected(rSection));
 
-    rSection.mpSection = mrReader.rDoc.Insert( rMyPaM, aSection, &aSet );
+    rSection.mpSection =
+        mrReader.rDoc.InsertSwSection( rMyPaM, aSection, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
@@ -778,6 +779,11 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
            )
         {
             SwFmtLineNumber aLN;
+            if (const SwFmtLineNumber* pLN
+                = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+            {
+                aLN.SetCountLines( pLN->IsCount() );
+            }
             aLN.SetStartValue(1 + rSection.maSep.lnnMin);
             NewAttr(aLN);
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LINENUMBER);
@@ -788,8 +794,8 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
 
 wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode),
     mpSection(0), mpTitlePage(0), mpPage(0), meDir(FRMDIR_HORI_LEFT_TOP),
-    nPgWidth(lA4Width), nPgLeft(MM_250), nPgRight(MM_250), mnBorders(0),
-    mbHasFootnote(false)
+    nPgWidth(SvxPaperInfo::GetPaperSize(PAPER_A4).Width()),
+    nPgLeft(MM_250), nPgRight(MM_250), mnBorders(0), mbHasFootnote(false)
 {
 }
 
@@ -846,7 +852,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         aSection.SetProtect(true);
         // --> CMC, OD 2004-06-18 #i19922# improvement:
         // return value of method <Insert> not used.
-        mrReader.rDoc.Insert(*mrReader.pPaM, aSection, 0 ,false);
+        mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, false);
     }
 
     wwSection aLastSection(*mrReader.pPaM->GetPoint());
@@ -1010,11 +1016,10 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     aNewSection.maSep.dmOrientPage = ReadBSprm(pSep, pIds[0], 0);
 
     // 2. Papiergroesse
-    aNewSection.maSep.xaPage = ReadUSprm(pSep, pIds[1], (USHORT)lLetterWidth);
+    aNewSection.maSep.xaPage = ReadUSprm(pSep, pIds[1], lLetterWidth);
+    aNewSection.nPgWidth = SvxPaperInfo::GetSloppyPaperDimension(aNewSection.maSep.xaPage);
 
-    aNewSection.nPgWidth = SnapPageDimension(aNewSection.maSep.xaPage);
-
-    aNewSection.maSep.yaPage = ReadUSprm(pSep, pIds[2], (USHORT)lLetterHeight);
+    aNewSection.maSep.yaPage = ReadUSprm(pSep, pIds[2], lLetterHeight);
 
     // 3. LR-Raender
     static const USHORT nLef[] = { MM_250, 1800 };
@@ -2308,14 +2313,12 @@ WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStk)
         const SwFltStackEntry* pEntry = (*pCtrlStck)[ i ];
         if(pEntry->bLocked)
         {
-            if (pEntry->pAttr->Which() > RES_CHRATR_BEGIN &&
-                pEntry->pAttr->Which() < RES_CHRATR_END)
+            if (isCHRATR(pEntry->pAttr->Which()))
             {
                 aChrSet.Put( *pEntry->pAttr );
 
             }
-            else if (pEntry->pAttr->Which() > RES_PARATR_BEGIN &&
-                pEntry->pAttr->Which() < RES_PARATR_END)
+            else if (isPARATR(pEntry->pAttr->Which()))
             {
                 aParSet.Put( *pEntry->pAttr );
             }
@@ -3215,7 +3218,7 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     if (
          aBegin == aEnd && nBegin == nEnd - 1 &&
          0 != (pTNd = aBegin.GetNode().GetTxtNode()) &&
-         0 != (pTFlyAttr = pTNd->GetTxtAttr(nBegin, RES_TXTATR_FLYCNT))
+         0 != (pTFlyAttr = pTNd->GetTxtAttrForCharAt(nBegin, RES_TXTATR_FLYCNT))
        )
     {
         const SwFmtFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
@@ -3555,11 +3558,32 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
         //off the stack will keep in sync
         if (!pAktColl && IsListOrDropcap())
         {
-            if (!maFontSrcCharSets.empty())
-                eSrcCharSet = maFontSrcCharSets.top();
+            if (nWhich == RES_CHRATR_CJK_FONT)
+            {
+                if (!maFontSrcCJKCharSets.empty())
+                {
+                    eSrcCharSet = maFontSrcCJKCharSets.top();
+                }
+                else
+                {
+                    eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
+                }
+
+                maFontSrcCJKCharSets.push(eSrcCharSet);
+            }
             else
-                eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
-            maFontSrcCharSets.push(eSrcCharSet);
+            {
+                if (!maFontSrcCharSets.empty())
+                {
+                    eSrcCharSet = maFontSrcCharSets.top();
+                }
+                else
+                {
+                    eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
+                }
+
+                maFontSrcCharSets.push(eSrcCharSet);
+            }
         }
         return false;
     }
@@ -3589,7 +3613,10 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
         else if (IsListOrDropcap())
         {
             //Add character text encoding to stack
-            maFontSrcCharSets.push(eSrcCharSet);
+            if (nWhich  == RES_CHRATR_CJK_FONT)
+                maFontSrcCJKCharSets.push(eSrcCharSet);
+            else
+                maFontSrcCharSets.push(eSrcCharSet);
         }
     }
 
@@ -3603,6 +3630,13 @@ void SwWW8ImplReader::ResetCharSetVars()
     ASSERT(!maFontSrcCharSets.empty(),"no charset to remove");
     if (!maFontSrcCharSets.empty())
         maFontSrcCharSets.pop();
+}
+
+void SwWW8ImplReader::ResetCJKCharSetVars()
+{
+    ASSERT(!maFontSrcCJKCharSets.empty(),"no charset to remove");
+    if (!maFontSrcCJKCharSets.empty())
+        maFontSrcCJKCharSets.pop();
 }
 
 /*
@@ -3635,7 +3669,10 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
         if( nLen < 0 ) // Ende des Attributes
         {
             pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
-            ResetCharSetVars();
+            if (nId == RES_CHRATR_CJK_FONT)
+                ResetCJKCharSetVars();
+            else
+                ResetCharSetVars();
         }
         else
         {
@@ -3878,6 +3915,12 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT , const BYTE* pData, short nLen)
         return;
     }
     SwFmtLineNumber aLN;
+    if (const SwFmtLineNumber* pLN
+        = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+    {
+        aLN.SetStartValue( pLN->GetStartValue() );
+    }
+
     aLN.SetCountLines( pData && (0 == *pData) );
     NewAttr( aLN );
 }

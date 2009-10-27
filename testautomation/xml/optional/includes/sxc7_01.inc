@@ -69,7 +69,7 @@ testcase tAlienAttributes
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\ooo10\alien_attributes.sxc"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\alien_attributes.sxc") , "StarOffice XML (Calc)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\alien_attributes.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\alien_attributes") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\alien_attributes\styles.xml")) = FALSE then
@@ -187,7 +187,8 @@ testcase tAlienAttributes
                             warnlog "Hidden attributes (in a cell style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
                         end if
                         if c = 2 or c = 3 then 
-                            warnlog "Hidden attributes (in a paragraph style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
+'                            warnlog "Hidden attributes (in a paragraph style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
+							warnlog "#i100879# : Hidden attributes (in a paragraph style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
                         end if
                         if c = 4 or c = 5 then 
                             warnlog "Hidden attributes (in a text style): " & AttributeSearch(i) & " is not " & AttributeValue(i) & "!"
@@ -330,7 +331,7 @@ testcase tfeat906
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\ooo10\feat906.sxc"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\feat906.sxc") , "StarOffice XML (Calc)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\feat906.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\feat906") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\feat906\styles.xml")) = FALSE then
@@ -413,7 +414,7 @@ testcase tCellformats1
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\cellformats1.sdc"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats1.sxc") , "StarOffice XML (Calc)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats1.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats1") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats1\styles.xml")) = FALSE then
@@ -648,7 +649,7 @@ testcase tCellformats2
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\cellformats2.sdc"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats2.sxc") , "StarOffice XML (Calc)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats2.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats2") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats2\styles.xml")) = FALSE then
@@ -677,7 +678,7 @@ testcase tCellformats3
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\cellformats3.sdc"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats3.sxc") , "StarOffice XML (Calc)") then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)     
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats3.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats3") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\cellformats3\styles.xml")) = FALSE then

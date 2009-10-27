@@ -35,6 +35,8 @@
 #include "SchXMLChartContext.hxx"
 #include "contexts.hxx"
 #include "XMLChartPropertySetMapper.hxx"
+#include "SchXMLTools.hxx"
+
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 // header for class ByteString
@@ -346,6 +348,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aChartAttrTokenMap[] =
 {
+    { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_CHART_HREF          },
     { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_CHART_CLASS         },
     { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_CHART_WIDTH         },
     { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_CHART_HEIGHT        },
@@ -614,38 +617,6 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
     }
 }
 
-// static
-Reference< chart2::data::XDataProvider > SchXMLImportHelper::GetDataProvider(
-    const Reference< chart2::XChartDocument > & xDoc )
-{
-    Reference< chart2::data::XDataProvider > xResult;
-    if( xDoc.is())
-    {
-        try
-        {
-            xResult.set( xDoc->getDataProvider());
-//             if( ! xResult.is())
-//             {
-//                 Reference< container::XChild > xChild( xDoc, uno::UNO_QUERY_THROW );
-//                 Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
-//                 if( xFact.is())
-//                 {
-//                     Reference< chart2::data::XDataReceiver > xReceiver( xDoc, uno::UNO_QUERY_THROW );
-//                     xResult.set(
-//                         xFact->createInstance( OUString::createFromAscii("com.sun.star.chart2.data.DataProvider")),
-//                         uno::UNO_QUERY_THROW );
-//                     xReceiver->attachDataProvider( xResult );
-//                 }
-//             }
-        }
-        catch( const uno::Exception & )
-        {
-            // didn't get a data provider from  the container
-        }
-    }
-    return xResult;
-}
-
 //static
 void SchXMLImportHelper::DeleteDataSeries(
                     const Reference< chart2::XDataSeries > & xSeries,
@@ -796,6 +767,8 @@ SchXMLImport::SchXMLImport(
     sal_uInt16 nImportFlags ) :
         SvXMLImport( xServiceFactory, nImportFlags )
 {
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+
     mbIsGraphicLoadOnDemandSupported = false;
 }
 
@@ -807,6 +780,8 @@ SchXMLImport::SchXMLImport(
     sal_Bool /*bLoadDoc*/, sal_Bool bShowProgress )
 :   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+
     // get status indicator (if requested)
     if( bShowProgress )
     {
@@ -899,6 +874,9 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext(
     const OUString& rLocalName,
     const Reference<xml::sax::XAttributeList>& xAttrList )
 {
+    //#i103287# make sure that the version information is set before importing all the properties (especially stroke-opacity!)
+    SchXMLTools::setBuildIDAtImportInfo( GetModel(), getImportInfo() );
+
     SvXMLStylesContext* pStylesCtxt =
         new SvXMLStylesContext( *(this), XML_NAMESPACE_OFFICE, rLocalName, xAttrList );
 

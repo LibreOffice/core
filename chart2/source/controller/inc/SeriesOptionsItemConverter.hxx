@@ -93,6 +93,9 @@ private:
 
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aSupportedMissingValueTreatments;
     sal_Int32 m_nMissingValueTreatment;
+
+    bool m_bSupportingPlottingOfHiddenCells;
+    bool m_bIncludeHiddenCells;
 };
 
 } //  namespace wrapper

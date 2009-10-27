@@ -42,7 +42,9 @@ namespace chart
 #define CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ::rtl::OUString::createFromAscii("com.sun.star.chart2.ScatterChartType")
 #define CHART2_SERVICE_NAME_CHARTTYPE_PIE ::rtl::OUString::createFromAscii("com.sun.star.chart2.PieChartType")
 #define CHART2_SERVICE_NAME_CHARTTYPE_NET ::rtl::OUString::createFromAscii("com.sun.star.chart2.NetChartType")
+#define CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ::rtl::OUString::createFromAscii("com.sun.star.chart2.FilledNetChartType")
 #define CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ::rtl::OUString::createFromAscii("com.sun.star.chart2.CandleStickChartType")
+#define CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ::rtl::OUString::createFromAscii("com.sun.star.chart2.BubbleChartType")
 
 //.............................................................................
 } //namespace chart

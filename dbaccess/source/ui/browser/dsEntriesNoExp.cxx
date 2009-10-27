@@ -165,7 +165,9 @@ void SbaTableQueryBrowser::SelectionChanged()
         InvalidateFeature(ID_BROWSER_INSERTCOLUMNS);
         InvalidateFeature(ID_BROWSER_INSERTCONTENT);
         InvalidateFeature(ID_BROWSER_FORMLETTER);
-    }
+    } // if ( !m_bShowMenu )
+    InvalidateFeature(ID_BROWSER_COPY);
+    InvalidateFeature(ID_BROWSER_CUT);
 }
 //------------------------------------------------------------------------------
 void SbaTableQueryBrowser::describeSupportedFeatures()

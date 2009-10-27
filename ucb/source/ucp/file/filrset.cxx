@@ -355,7 +355,7 @@ XResultSet_impl::OneMore(
         }
         else  // error fetching anything
         {
-            throw sdbc::SQLException();
+            throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
         }
     }
 }
@@ -513,7 +513,7 @@ XResultSet_impl::relative(
            uno::RuntimeException)
 {
     if( isAfterLast() || isBeforeFirst() )
-        throw sdbc::SQLException();
+        throw sdbc::SQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), ::rtl::OUString(), 0, uno::Any() );
     if( row > 0 )
         while( row-- ) next();
     else if( row < 0 )
@@ -665,7 +665,7 @@ XResultSet_impl::getStaticResultSet()
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException();
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     return uno::Reference< sdbc::XResultSet >( this );
 }
@@ -681,7 +681,7 @@ XResultSet_impl::setListener(
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException();
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     m_xListener = Listener;
 
@@ -724,9 +724,9 @@ XResultSet_impl::connectToCache(
         = m_pMyShell->m_xMultiServiceFactory;
 
     if( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException();
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     if( m_bStatic )
-        throw ucb::ListenerAlreadySetException();
+        throw ucb::ListenerAlreadySetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     uno::Reference< ucb::XSourceInitialization > xTarget(
         xCache, uno::UNO_QUERY );
@@ -753,7 +753,7 @@ XResultSet_impl::connectToCache(
             return;
         }
     }
-    throw ucb::ServiceNotFoundException();
+    throw ucb::ServiceNotFoundException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 //=========================================================================
@@ -838,7 +838,7 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
     if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) ||
         aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
         return;
-    throw beans::UnknownPropertyException();
+    throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -862,7 +862,7 @@ uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
         return aAny;
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -891,7 +891,7 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
         m_pRowCountListeners->addInterface( xListener );
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -916,7 +916,7 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
         m_pRowCountListeners->removeInterface( aListener );
     }
     else
-        throw beans::UnknownPropertyException();
+        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL XResultSet_impl::addVetoableChangeListener(

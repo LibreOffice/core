@@ -57,6 +57,20 @@ static RscCompiler * pRscCompiler = NULL;
         delete pRscCompiler;
 }
 
+RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
+{
+    for ( int i = 0; i < argc; ++i )
+    {
+        if ( argv[i] == NULL )
+            continue;
+        if ( rsc_stricmp( argv[i], "-verbose" ) == 0 )
+            return RscVerbosityVerbose;
+        if ( rsc_stricmp( argv[i], "-quiet" ) == 0 )
+            return RscVerbositySilent;
+    }
+    return RscVerbosityNormal;
+}
+
 #if defined( UNX ) || ( defined( OS2 ) && ( defined( CSET ) || defined ( GCC ))) || defined (WTC) || defined(ICC) || defined(__MINGW32__)
 int main ( int argc, char ** argv) {
 #else
@@ -80,7 +94,7 @@ int cdecl main ( int argc, char ** argv) {
     ERRTYPE     aError;
 
     InitRscCompiler();
-    RscError*   pErrHdl    = new RscError();
+    RscError*   pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
 #ifdef MTW
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, (char **)argv, pErrHdl );
 #else

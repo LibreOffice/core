@@ -127,7 +127,7 @@ public:
     }
 
     inline bool    isAutoExtensionEnabled() {
-        return m_bAutoFilenameExtension;
+        return ([((NSButton*) m_pToggles[AUTOEXTENSION]) state] == NSOnState);
     }
 
 private:
@@ -167,16 +167,6 @@ private:
 
     /** indicates if a filter control is needed */
     bool m_bIsFilterControlNeeded;
-
-    /*
-     * With issue #78852 the GUI option to set automatic filename extension was removed but
-     * so far the setting is still in effect and so the value for has to be saved and possibly be restored
-     * also.
-     * But with issue #FILLME users were starting to get confused on Windows so we decided to have
-     * autoextension always on and have it selectable for the user again.
-     */
-    /** indicates if a filename extension is to automatically be appended to a user entered file name */
-    bool m_bAutoFilenameExtension;
 
     /** a list with all actively used controls */
     ::std::list<NSControl*> m_aActiveControls;

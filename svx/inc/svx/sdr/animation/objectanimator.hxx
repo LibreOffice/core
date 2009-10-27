@@ -48,7 +48,7 @@ namespace sdr
         public:
             // basic constructor and destructor
             primitiveAnimator();
-            virtual ~primitiveAnimator();
+            SVX_DLLPUBLIC virtual ~primitiveAnimator();
         };
     } // end of namespace animation
 } // end of namespace sdr

@@ -501,5 +501,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ARABIC_PALESTINE      0x9801  /* makeLangID( 0x26, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
 #define LANGUAGE_USER_ARABIC_SOMALIA        0x9C01  /* makeLangID( 0x27, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
 #define LANGUAGE_USER_ARABIC_SUDAN          0xA001  /* makeLangID( 0x28, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ANCIENT_GREEK         0x0649
+#define LANGUAGE_USER_ASTURIAN              0x064A
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */

@@ -55,9 +55,9 @@ using namespace ::com::sun::star;
 #define WID_SEARCH_CASE         1
 #define WID_SEARCH_WORDS        2
 
-const SfxItemPropertyMap* ImplGetSearchPropertyMap()
+const SfxItemPropertyMapEntry* ImplGetSearchPropertyMap()
 {
-    static const SfxItemPropertyMap aSearchPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_SEARCH_BACKWARDS),  WID_SEARCH_BACKWARDS,   &::getBooleanCppuType(),    0,  0 },
         { MAP_CHAR_LEN(UNO_NAME_SEARCH_CASE),       WID_SEARCH_CASE,        &::getBooleanCppuType(),    0,  0 },
@@ -785,11 +785,11 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const ::rtl::OUStr
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     sal_Bool bOk = sal_False;
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_SEARCH_BACKWARDS:
         bOk = (aValue >>= mbBackwards);
@@ -815,9 +815,9 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::O
 
     uno::Any aAny;
 
-    const SfxItemPropertyMap* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_SEARCH_BACKWARDS:
         aAny <<= (sal_Bool)mbBackwards;

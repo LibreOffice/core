@@ -62,7 +62,7 @@ public class Bootstrap_Test {
                     "no /singletons/com.sun.star.reflection.theTypeDescriptionManager!" );
             }
 
-            XMultiServiceFactory msf = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            XMultiServiceFactory msf = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, xContext.getServiceManager() );
             String services[] = msf.getAvailableServiceNames();
             System.out.println("Available services are:");
@@ -74,7 +74,7 @@ public class Bootstrap_Test {
                 for ( int i=0; i<services.length; i++ )
                     System.out.println(services[i]);
 
-            XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+            XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, xContext );
             xComp.dispose();
 

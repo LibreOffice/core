@@ -177,12 +177,11 @@ class SwPostItMgr: public SfxListener
             bool                HasScrollbars() const;
         void            Focus(SfxBroadcaster& rBC);
 
-        sal_Int32       GetInitialAnchorDistance() const;
-        sal_Int32       GetScrollSize() const;
-        sal_Int32       GetSpaceBetween() const;
+            sal_Int32           GetInitialAnchorDistance() const;
+            sal_Int32           GetScrollSize() const;
+            sal_Int32           GetSpaceBetween() const;
         void            SetReadOnlyState();
-                        DECL_LINK( CalcHdl, void*);
-
+                    DECL_LINK( CalcHdl, void*);
     protected:
 
     public:
@@ -263,6 +262,12 @@ class SwPostItMgr: public SfxListener
             sal_uInt16 Replace(SvxSearchItem* pItem);
             sal_uInt16 SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
             sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
+
+    void                    AssureStdModeAtShell();
 };
 
 #endif
+
+
+
+

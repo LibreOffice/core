@@ -54,7 +54,7 @@ NEON_NAME=neon-0.28.2
 
 TARFILE_NAME=$(NEON_NAME)
 PATCH_FILES=neon.patch
-ADDITIONAL_FILES=src$/makefile.mk src$/config.h
+ADDITIONAL_FILES=src$/makefile.mk src$/config.h src$/ne_ntlm.h src$/ne_ntlm.c
 
 BUILD_DIR=src
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)

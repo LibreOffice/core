@@ -882,8 +882,9 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         {
             SwPageDesc aNew( rPgDsc );
             SwFmtFrmSize aNewSz( rSz );
-            aNewSz.SetHeight( lA4Height );
-            aNewSz.SetWidth( lA4Width );
+            Size a4(SvxPaperInfo::GetPaperSize( PAPER_A4 ));
+            aNewSz.SetHeight( a4.Width() );
+            aNewSz.SetWidth( a4.Height() );
             aNew.GetMaster().SetFmtAttr( aNewSz );
             pOutDoc->ChgPageDesc( 0, aNew );
         }

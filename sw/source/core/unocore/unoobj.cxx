@@ -59,7 +59,6 @@
 #include <swerror.h>
 #include <swtblfmt.hxx>
 #include <fmtruby.hxx>
-#include <fmthbsh.hxx>
 #include <docsh.hxx>
 #include <docstyle.hxx>
 #include <charfmt.hxx>
@@ -92,6 +91,7 @@
 #include <unocoll.hxx>
 #include <unostyle.hxx>
 #include <unofield.hxx>
+#include <unometa.hxx>
 #include <fmtanchr.hxx>
 #include <svx/flstitem.hxx>
 #include <svtools/ctrltool.hxx>
@@ -118,10 +118,9 @@
 #include <dcontact.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <memory>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -150,30 +149,6 @@ uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
     Hilfsklassen
 ****************************************************************************/
 
-SwParaSelection::SwParaSelection(SwUnoCrsr* pCrsr) :
-    pUnoCrsr(pCrsr)
-{
-    if(pUnoCrsr->HasMark())
-        pUnoCrsr->DeleteMark();
-    // steht er schon am Anfang?
-    if(pUnoCrsr->GetPoint()->nContent != 0)
-        pUnoCrsr->MovePara(fnParaCurr, fnParaStart);
-    // oder gleichzeitig am Ende?
-    if(pUnoCrsr->GetPoint()->nContent != pUnoCrsr->GetCntntNode()->Len())
-    {
-        pUnoCrsr->SetMark();
-        pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
-    }
-}
-
-SwParaSelection::~SwParaSelection()
-{
-    if(pUnoCrsr->GetPoint()->nContent != 0)
-    {
-        pUnoCrsr->DeleteMark();
-        pUnoCrsr->MovePara(fnParaCurr, fnParaStart);
-    }
-}
 /* -----------------13.05.98 12:15-------------------
  *
  * --------------------------------------------------*/
@@ -402,9 +377,11 @@ void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)
         SwTxtFmtColl *pLocal = pStyle->GetCollection();
         UnoActionContext aAction(pDoc);
         pDoc->StartUndo( UNDO_START, NULL );
-        FOREACHUNOPAM_START(&rPaM)
-            pDoc->SetTxtFmtColl(*PUNOPAM, pLocal);
-        FOREACHUNOPAM_END()
+        SwPaM *pTmpCrsr = &rPaM;
+        do {
+            pDoc->SetTxtFmtColl(*pTmpCrsr, pLocal);
+            pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
+        } while ( pTmpCrsr != &rPaM );
         pDoc->EndUndo( UNDO_END, NULL );
     }
     else
@@ -492,18 +469,18 @@ void lcl_SetNodeNumStart( SwPaM& rCrsr, uno::Any aValue )
 /* -----------------17.09.98 09:44-------------------
  *
  * --------------------------------------------------*/
-sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
+sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertySimpleEntry* pEntry,
                                 SwPaM& rPam,
                                 SfxItemSet& rItemSet,
                                 const uno::Any& aValue ) throw (lang::IllegalArgumentException)
 {
     sal_Bool bRet = sal_True;
-    if(0 ==(pMap->nFlags&PropertyAttribute::MAYBEVOID) &&
+    if(0 == ( pEntry->nFlags&PropertyAttribute::MAYBEVOID ) &&
         aValue.getValueType() == ::getCppuVoidType())
         bRet = sal_False;
     else
     {
-        switch(pMap->nWID)
+        switch(pEntry->nWID)
         {
             case RES_TXTATR_CHARFMT:
                 lcl_setCharStyle(rPam.GetDoc(), aValue, rItemSet );
@@ -554,8 +531,8 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                 SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
                 // --> OD 2008-05-14 #refactorlists# - check on list style not needed
 //                const SwNumRule* pRule = pTxtNd->GetNumRule();
-//                if( FN_UNO_NUM_LEVEL == pMap->nWID  &&  pRule != NULL )
-                if ( FN_UNO_NUM_LEVEL == pMap->nWID )
+//                if( FN_UNO_NUM_LEVEL == pEntry->nWID  &&  pRule != NULL )
+                if ( FN_UNO_NUM_LEVEL == pEntry->nWID )
                 // <--
                 {
                     sal_Int16 nLevel = 0;
@@ -565,14 +542,14 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
 
                 }
                 // --> OD 2008-07-14 #i91601#
-                else if( FN_UNO_LIST_ID == pMap->nWID )
+                else if( FN_UNO_LIST_ID == pEntry->nWID )
                 {
                     ::rtl::OUString sListId;
                     aValue >>= sListId;
                     pTxtNd->SetListId( sListId );
                 }
                 // <--
-                else if( FN_UNO_IS_NUMBER == pMap->nWID )
+                else if( FN_UNO_IS_NUMBER == pEntry->nWID )
                 {
                     BOOL bIsNumber = *(sal_Bool*) aValue.getValue();
                     if(!bIsNumber)
@@ -595,7 +572,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             break;
             case RES_PARATR_DROP:
             {
-                if( MID_DROPCAP_CHAR_STYLE_NAME == pMap->nMemberId)
+                if( MID_DROPCAP_CHAR_STYLE_NAME == pEntry->nMemberId)
                 {
                     OUString uStyle;
                     if(aValue >>= uStyle)
@@ -631,7 +608,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             }
             break;
             case RES_TXTATR_CJK_RUBY:
-                if(MID_RUBY_CHARSTYLE == pMap->nMemberId )
+                if(MID_RUBY_CHARSTYLE == pEntry->nMemberId )
                 {
                     OUString sTmp;
                     if(aValue >>= sTmp)
@@ -662,7 +639,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     bRet = sal_False;
             break;
             case RES_PAGEDESC      :
-            if(MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId )
+            if(MID_PAGEDESC_PAGEDESCNAME == pEntry->nMemberId )
             {
                 lcl_setPageDesc(rPam.GetDoc(), aValue, rItemSet);
                 break;
@@ -677,7 +654,7 @@ return bRet;
 /* -----------------30.06.98 08:39-------------------
  *
  * --------------------------------------------------*/
-SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
+SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPaM, BOOL bConditional)
 {
     static const sal_uInt16 nMaxLookup = 1000;
     SwFmtColl *pFmt = 0;
@@ -685,12 +662,13 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
 //  if ( GetCrsrCnt() > nMaxLookup )
 //      return 0;
     sal_Bool bError = sal_False;
-    FOREACHUNOPAM_START(&rPam)
+    SwPaM *pTmpCrsr = &rPaM;
+    do {
 
-        ULONG nSttNd = PUNOPAM->GetMark()->nNode.GetIndex(),
-              nEndNd = PUNOPAM->GetPoint()->nNode.GetIndex();
-        xub_StrLen nSttCnt = PUNOPAM->GetMark()->nContent.GetIndex(),
-                nEndCnt = PUNOPAM->GetPoint()->nContent.GetIndex();
+        ULONG nSttNd = pTmpCrsr->GetMark()->nNode.GetIndex();
+        ULONG nEndNd = pTmpCrsr->GetPoint()->nNode.GetIndex();
+        xub_StrLen nSttCnt = pTmpCrsr->GetMark()->nContent.GetIndex();
+        xub_StrLen nEndCnt = pTmpCrsr->GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
@@ -704,7 +682,7 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
             break;
         }
 
-        const SwNodes& rNds = rPam.GetDoc()->GetNodes();
+        const SwNodes& rNds = rPaM.GetDoc()->GetNodes();
         for( ULONG n = nSttNd; n <= nEndNd; ++n )
         {
             const SwTxtNode* pNd = rNds[ n ]->GetTxtNode();
@@ -723,7 +701,9 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
         }
         if(bError)
             break;
-    FOREACHUNOPAM_END()
+
+        pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
+    } while ( pTmpCrsr != &rPaM );
     return bError ? 0 : pFmt;
 }
 
@@ -815,7 +795,7 @@ Sequence< OUString > SwXTextCursor::getSupportedServiceNames(void) throw( Runtim
 SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent, const SwPosition& rPos,
                     CursorType eSet, SwDoc* pDoc, const SwPosition* pMark) :
     aLstnrCntnr(( util::XSortable*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     xParentText(xParent),
     pLastSortOptions(0),
     eType(eSet),
@@ -836,7 +816,7 @@ SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent, const SwPosition&
 SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent,
     SwUnoCrsr* pSourceCrsr, CursorType eSet) :
     aLstnrCntnr( (util::XSortable*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     xParentText(xParent),
     pLastSortOptions(0),
     eType(eSet),
@@ -875,7 +855,8 @@ SwXTextCursor::~SwXTextCursor()
 /*-- 09.12.98 14:19:18---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::DeleteAndInsert(const String& rText)
+void SwXTextCursor::DeleteAndInsert(const String& rText,
+        const bool bForceExpandHints)
 {
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
@@ -894,10 +875,12 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
             }
             if(nTxtLen)
             {
-                if( !SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, *_pStartCrsr, rText ) )
-                {
-                    DBG_ASSERT( sal_False, "Doc->Insert(Str) failed." );
-                }
+                const bool bSuccess(
+                    SwUnoCursorHelper::DocInsertStringSplitCR(
+                        *pDoc, *_pStartCrsr, rText, bForceExpandHints ) );
+                DBG_ASSERT( bSuccess, "Doc->Insert(Str) failed." );
+                (void) bSuccess;
+
                 SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);
                 _pStartCrsr->Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
             }
@@ -905,6 +888,82 @@ void SwXTextCursor::DeleteAndInsert(const String& rText)
         pDoc->EndUndo(UNDO_INSERT, NULL);
     }
 }
+
+
+enum ForceIntoMetaMode { META_CHECK_BOTH, META_INIT_START, META_INIT_END };
+
+sal_Bool lcl_ForceIntoMeta(SwPaM & rCursor,
+        uno::Reference<text::XText> const & xParentText,
+        const enum ForceIntoMetaMode eMode)
+{
+    sal_Bool bRet( sal_True ); // means not forced in META_CHECK_BOTH
+    SwXMeta const * const pXMeta( dynamic_cast<SwXMeta*>(xParentText.get()) );
+    ASSERT(pXMeta, "no parent?");
+    if (!pXMeta)
+        throw uno::RuntimeException();
+    SwTxtNode * pTxtNode;
+    xub_StrLen nStart;
+    xub_StrLen nEnd;
+    const bool bSuccess( pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
+    ASSERT(bSuccess, "no pam?");
+    if (!bSuccess)
+        throw uno::RuntimeException();
+    // force the cursor back into the meta if it has moved outside
+    SwPosition start(*pTxtNode, nStart);
+    SwPosition end(*pTxtNode, nEnd);
+    switch (eMode)
+    {
+        case META_INIT_START:
+            *rCursor.GetPoint() = start;
+            break;
+        case META_INIT_END:
+            *rCursor.GetPoint() = end;
+            break;
+        case META_CHECK_BOTH:
+            if (*rCursor.Start() < start)
+            {
+                *rCursor.Start() = start;
+                bRet = sal_False;
+            }
+            if (*rCursor.End() > end)
+            {
+                *rCursor.End() = end;
+                bRet = sal_False;
+            }
+            break;
+    }
+    return bRet;
+}
+
+bool SwXTextCursor::IsAtEndOfMeta() const
+{
+    if (CURSOR_META == eType)
+    {
+        SwUnoCrsr const * const pCursor( GetCrsr() );
+        SwXMeta const*const pXMeta( dynamic_cast<SwXMeta*>(xParentText.get()) );
+        ASSERT(pXMeta, "no meta?");
+        if (pCursor && pXMeta)
+        {
+            SwTxtNode * pTxtNode;
+            xub_StrLen nStart;
+            xub_StrLen nEnd;
+            const bool bSuccess(
+                    pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
+            ASSERT(bSuccess, "no pam?");
+            if (bSuccess)
+            {
+                const SwPosition end(*pTxtNode, nEnd);
+                if (   (*pCursor->GetPoint() == end)
+                    || (*pCursor->GetMark()  == end))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 /* -----------------------------10.03.00 18:02--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -996,6 +1055,11 @@ sal_Bool SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand) throw( uno::Ru
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         bRet = pUnoCrsr->Left( nCount, CRSR_SKIP_CHARS, FALSE, FALSE);
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
     {
@@ -1015,6 +1079,11 @@ sal_Bool SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand) throw( uno::R
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         bRet = pUnoCrsr->Right(nCount, CRSR_SKIP_CHARS, FALSE, FALSE);
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
     {
@@ -1068,6 +1137,10 @@ void SwXTextCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException )
         {
             pUnoCrsr->MoveSection( fnSectionCurr, fnSectionStart);
         }
+        else if (CURSOR_META == eType)
+        {
+            lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_INIT_START);
+        }
     }
     else
     {
@@ -1085,7 +1158,9 @@ void SwXTextCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
     {
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         if(eType == CURSOR_BODY)
+        {
             pUnoCrsr->Move( fnMoveForward, fnGoDoc );
+        }
         else if(eType == CURSOR_FRAME ||
                 eType == CURSOR_TBLTEXT ||
                 eType == CURSOR_HEADER ||
@@ -1094,6 +1169,10 @@ void SwXTextCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException )
                 eType == CURSOR_REDLINE)
         {
             pUnoCrsr->MoveSection( fnSectionCurr, fnSectionEnd);
+        }
+        else if (CURSOR_META == eType)
+        {
+            lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_INIT_END);
         }
     }
     else
@@ -1121,6 +1200,11 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
         pCursor = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+    }
+
+    if (!pRange && !pCursor)
+    {
+        throw uno::RuntimeException();
     }
 
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -1163,6 +1247,27 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
     if(pOwnStartNode != pTmp)
     {
         throw uno::RuntimeException();
+    }
+
+    if (CURSOR_META == eType)
+    {
+        const SwPosition & rPoint( (pRange)
+            ? pRange->GetBookmark()->GetMarkPos()
+            : *pCursor->GetPaM()->GetPoint() );
+        const SwPosition & rMark ( (pRange)
+            ? ((pRange->GetBookmark()->IsExpanded())
+                    ? pRange->GetBookmark()->GetOtherMarkPos() : rPoint)
+            : *pCursor->GetPaM()->GetMark() );
+        SwPaM aPam(rPoint, rMark);
+        const bool bNotForced(
+                lcl_ForceIntoMeta(aPam, xParentText, META_CHECK_BOTH) );
+        if (!bNotForced)
+        {
+            throw uno::RuntimeException(
+                C2U("gotoRange: parameter range not contained in nesting"
+                    " text content for which this cursor was created"),
+                static_cast<text::XWordCursor*>(this));
+        }
     }
 
     //jetzt muss die Selektion erweitert werden
@@ -1301,7 +1406,9 @@ sal_Bool SwXTextCursor::gotoNextWord(sal_Bool Expand) throw( uno::RuntimeExcepti
         //Absatzende?
         if(pUnoCrsr->GetCntntNode() &&
                 pPoint->nContent == pUnoCrsr->GetCntntNode()->Len())
+        {
             pUnoCrsr->Right(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        }
         else
         {
             sal_Bool bTmp = pUnoCrsr->GoNextWordWT( i18n::WordType::DICTIONARY_WORD );
@@ -1313,6 +1420,10 @@ sal_Bool SwXTextCursor::gotoNextWord(sal_Bool Expand) throw( uno::RuntimeExcepti
         // return true if cursor has moved
         bRet = &pPoint->nNode.GetNode() != pOldNode  ||
                 pPoint->nContent.GetIndex() != nOldIndex;
+        if (bRet && (CURSOR_META == eType))
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
+        }
     }
     else
     {
@@ -1340,7 +1451,9 @@ sal_Bool SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw( uno::RuntimeExc
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         //Absatzanfang ?
         if(pPoint->nContent == 0)
+        {
             pUnoCrsr->Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        }
         else
         {
             pUnoCrsr->GoPrevWordWT( i18n::WordType::DICTIONARY_WORD );
@@ -1351,6 +1464,10 @@ sal_Bool SwXTextCursor::gotoPreviousWord(sal_Bool Expand) throw( uno::RuntimeExc
         // return true if cursor has moved
         bRet = &pPoint->nNode.GetNode() != pOldNode  ||
                 pPoint->nContent.GetIndex() != nOldIndex;
+        if (bRet && (CURSOR_META == eType))
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
+        }
     }
     else
     {
@@ -1387,6 +1504,10 @@ sal_Bool SwXTextCursor::gotoEndOfWord(sal_Bool Expand) throw( uno::RuntimeExcept
             pPoint->nNode       = rOldNode;
             pPoint->nContent    = nOldIndex;
         }
+        else if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
+        }
     }
     else
     {
@@ -1422,6 +1543,10 @@ sal_Bool SwXTextCursor::gotoStartOfWord(sal_Bool Expand) throw( uno::RuntimeExce
         {
             pPoint->nNode       = rOldNode;
             pPoint->nContent    = nOldIndex;
+        }
+        else if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH);
         }
     }
     else
@@ -1513,6 +1638,11 @@ sal_Bool SwXTextCursor::gotoNextSentence(sal_Bool Expand) throw( uno::RuntimeExc
             if (bWasEOS && !bNextWord)
                 bRet = sal_False;
         }
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1540,6 +1670,11 @@ sal_Bool SwXTextCursor::gotoPreviousSentence(sal_Bool Expand) throw( uno::Runtim
                 pUnoCrsr->GoSentence(SwCursor::PREV_SENT);
             }
         }
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1562,6 +1697,11 @@ sal_Bool SwXTextCursor::gotoStartOfSentence(sal_Bool Expand) throw( uno::Runtime
         bRet = SwUnoCursorHelper::IsStartOfPara(*pUnoCrsr)
             || pUnoCrsr->GoSentence(SwCursor::START_SENT) ||
             SwUnoCursorHelper::IsStartOfPara(*pUnoCrsr);
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1585,7 +1725,11 @@ sal_Bool SwXTextCursor::gotoEndOfSentence(sal_Bool Expand) throw( uno::RuntimeEx
         bRet = !bAlreadyParaEnd &&
                     (pUnoCrsr->GoSentence(SwCursor::END_SENT) ||
                         pUnoCrsr->MovePara(fnParaCurr, fnParaEnd));
-
+        if (CURSOR_META == eType)
+        {
+            bRet = lcl_ForceIntoMeta(*pUnoCrsr, xParentText, META_CHECK_BOTH)
+                && bRet;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1627,6 +1771,8 @@ sal_Bool SwXTextCursor::gotoStartOfParagraph(sal_Bool Expand) throw( uno::Runtim
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr )
     {
@@ -1651,6 +1797,8 @@ sal_Bool SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand) throw( uno::RuntimeE
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1675,6 +1823,8 @@ sal_Bool SwXTextCursor::gotoNextParagraph(sal_Bool Expand) throw( uno::RuntimeEx
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1692,6 +1842,8 @@ sal_Bool SwXTextCursor::gotoPreviousParagraph(sal_Bool Expand) throw( uno::Runti
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
+    if (CURSOR_META == eType)
+        return bRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
@@ -1721,7 +1873,19 @@ uno::Reference< XTextRange >  SwXTextCursor::getStart(void) throw( uno::RuntimeE
     {
         SwPaM aPam(*pUnoCrsr->Start());
         uno::Reference< XText >  xParent = getText();
-        xRet = new SwXTextRange(aPam, xParent);
+        if (CURSOR_META == eType)
+        {
+            // return cursor to prevent modifying SwXTextRange for META
+            SwXTextCursor * const pCursor(
+                new SwXTextCursor(xParent, *pUnoCrsr->GetPoint(),
+                    CURSOR_META, pUnoCrsr->GetDoc()) );
+            pCursor->gotoStart(sal_False);
+            xRet = static_cast<text::XWordCursor*>(pCursor);
+        }
+        else
+        {
+            xRet = new SwXTextRange(aPam, xParent);
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1739,7 +1903,19 @@ uno::Reference< XTextRange >  SwXTextCursor::getEnd(void) throw( uno::RuntimeExc
     {
         SwPaM aPam(*pUnoCrsr->End());
         uno::Reference< XText >  xParent = getText();
-        xRet = new SwXTextRange(aPam, xParent);
+        if (CURSOR_META == eType)
+        {
+            // return cursor to prevent modifying SwXTextRange for META
+            SwXTextCursor * const pCursor(
+                new SwXTextCursor(xParent, *pUnoCrsr->GetPoint(),
+                    CURSOR_META, pUnoCrsr->GetDoc()) );
+            pCursor->gotoEnd(sal_False);
+            xRet = static_cast<text::XWordCursor*>(pCursor);
+        }
+        else
+        {
+            xRet = new SwXTextRange(aPam, xParent);
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1786,7 +1962,11 @@ void SwXTextCursor::setString(const OUString& aString) throw( uno::RuntimeExcept
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
-    DeleteAndInsert(aString);
+    const bool bForceExpandHints( (CURSOR_META != eType)
+        ? false
+        : dynamic_cast<SwXMeta*>(xParentText.get())->CheckForOwnMemberMeta(
+            0, GetPaM(), true) );
+    DeleteAndInsert(aString, bForceExpandHints);
 }
 /* -----------------------------03.05.00 12:56--------------------------------
 
@@ -1797,12 +1977,12 @@ Any SwXTextCursor::GetPropertyValue(
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     Any aAny;
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                rPropSet.getPropertyMap(), rPropertyName);
-    if(pMap)
+    const SfxItemPropertySimpleEntry* pEntry = rPropSet.getPropertyMap()->getByName(
+                                    rPropertyName);
+    if(pEntry)
     {
         PropertyState eTemp;
-        BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue( pMap, rPaM, &aAny, eTemp );
+        BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue( *pEntry, rPaM, &aAny, eTemp );
         if(!bDone)
         {
             SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
@@ -1812,7 +1992,7 @@ Any SwXTextCursor::GetPropertyValue(
                 0L);
             SwXTextCursor::GetCrsrAttr(rPaM, aSet);
 
-            aAny = rPropSet.getPropertyValue(*pMap, aSet);
+            rPropSet.getPropertyValue(*pEntry, aSet, aAny);
         }
     }
     else
@@ -1825,23 +2005,22 @@ Any SwXTextCursor::GetPropertyValue(
  ---------------------------------------------------------------------------*/
 void SwXTextCursor::SetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const OUString& rPropertyName,
-    const Any& aValue, const SfxItemPropertyMap* _pMap, USHORT nAttrMode)
+    const Any& aValue, USHORT nAttrMode)
         throw (UnknownPropertyException, PropertyVetoException,
             IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     SwDoc* pDoc = rPaM.GetDoc();
-    const SfxItemPropertyMap*   pMap = _pMap ? _pMap : SfxItemPropertyMap::GetByName(
-                        rPropSet.getPropertyMap(), rPropertyName);
-    if(pMap)
+    const SfxItemPropertySimpleEntry* pEntry = rPropSet.getPropertyMap()->getByName(rPropertyName);
+    if(pEntry)
     {
-        if ( pMap->nFlags & PropertyAttribute::READONLY)
+        if( pEntry->nFlags & PropertyAttribute::READONLY)
             throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
 
-        SfxItemSet aItemSet( pDoc->GetAttrPool(), pMap->nWID, pMap->nWID );
+        SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
         SwXTextCursor::GetCrsrAttr( rPaM, aItemSet );
 
-        if(!lcl_setCrsrPropertyValue( pMap, rPaM, aItemSet, aValue ))
-            rPropSet.setPropertyValue(*pMap, aValue, aItemSet );
+        if(!lcl_setCrsrPropertyValue( pEntry, rPaM, aItemSet, aValue ))
+            rPropSet.setPropertyValue(*pEntry, aValue, aItemSet );
         SwXTextCursor::SetCrsrAttr(rPaM, aItemSet, nAttrMode );
     }
     else
@@ -1851,7 +2030,7 @@ void SwXTextCursor::SetPropertyValue(
 
  ---------------------------------------------------------------------------*/
 Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
-            SwPaM& rPaM, SfxItemPropertySet& rPropSet,
+            SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
             const Sequence< OUString >& PropertyNames,
             SwGetPropertyStatesCaller eCaller )
             throw(UnknownPropertyException, RuntimeException)
@@ -1861,47 +2040,52 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
     PropertyState* pStates = aRet.getArray();
 
     SfxItemSet *pSet = 0, *pSetParent = 0;
-    const SfxItemPropertyMap* pSaveMap, *pMap = rPropSet.getPropertyMap();
+    const SfxItemPropertyMap *pMap = rPropSet.getPropertyMap();
     for( INT32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++ )
     {
-        pSaveMap = pMap;
-        pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i] );
-        if(!pMap)
+        const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pNames[i] );
+        if(!pEntry)
         {
             if(pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
                pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
             {
                 pStates[i] = beans::PropertyState_DEFAULT_VALUE;
-                pMap = pSaveMap;
+                continue;
+            }
+            else if( SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT == eCaller )
+            {
+                //this values marks the element as unknown property
+                pStates[i] = beans::PropertyState_MAKE_FIXED_SIZE;
                 continue;
             }
             else
                 throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
         }
-        if (eCaller == SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION &&
-            pMap->nWID < FN_UNO_RANGE_BEGIN &&
-            pMap->nWID > FN_UNO_RANGE_END  &&
-            pMap->nWID < RES_CHRATR_BEGIN &&
-            pMap->nWID > RES_TXTATR_END )
+        if ((eCaller == SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION ||  eCaller == SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT) &&
+            pEntry->nWID < FN_UNO_RANGE_BEGIN &&
+            pEntry->nWID > FN_UNO_RANGE_END  &&
+            pEntry->nWID < RES_CHRATR_BEGIN &&
+            pEntry->nWID > RES_TXTATR_END )
             pStates[i] = beans::PropertyState_DEFAULT_VALUE;
         else
         {
-            if ( pMap->nWID >= FN_UNO_RANGE_BEGIN &&
-                 pMap->nWID <= FN_UNO_RANGE_END )
-                SwUnoCursorHelper::getCrsrPropertyValue(pMap, rPaM, 0, pStates[i] );
+            if ( pEntry->nWID >= FN_UNO_RANGE_BEGIN &&
+                 pEntry->nWID <= FN_UNO_RANGE_END )
+                SwUnoCursorHelper::getCrsrPropertyValue(*pEntry, rPaM, 0, pStates[i] );
             else
             {
                 if( !pSet )
                 {
                     switch ( eCaller )
                     {
+                        case SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT:
                         case SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION:
                             pSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN,   RES_TXTATR_END );
                         break;
                         case SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY:
                             pSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
-                                    pMap->nWID, pMap->nWID );
+                                    pEntry->nWID, pEntry->nWID );
                         break;
                         default:
                             pSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
@@ -1916,7 +2100,7 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
                 }
 
                 if( pSet->Count() )
-                    pStates[i] = rPropSet.getPropertyState( *pMap,*pSet );
+                    pStates[i] = rPropSet.getPropertyState( *pEntry, *pSet );
                 else
                     pStates[i] = PropertyState_DEFAULT_VALUE;
 
@@ -1932,13 +2116,12 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
                     }
 
                     if( (pSetParent)->Count() )
-                        pStates[i] = rPropSet.getPropertyState( *pMap, *pSetParent );
+                        pStates[i] = rPropSet.getPropertyState( *pEntry, *pSetParent );
                     else
                         pStates[i] = PropertyState_DEFAULT_VALUE;
                 }
             }
         }
-        pMap++;
     }
     delete pSet;
     delete pSetParent;
@@ -1948,7 +2131,7 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
 
  ---------------------------------------------------------------------------*/
 PropertyState SwXTextCursor::GetPropertyState(
-    SwPaM& rPaM, SfxItemPropertySet& rPropSet, const OUString& rPropertyName)
+    SwPaM& rPaM, const SfxItemPropertySet& rPropSet, const OUString& rPropertyName)
                         throw(UnknownPropertyException, RuntimeException)
 {
     Sequence < OUString > aStrings ( 1 );
@@ -1983,23 +2166,22 @@ void SwXTextCursor::SetPropertyToDefault(
 {
     NAMESPACE_VOS(OGuard) aGuard(Application::GetSolarMutex());
     SwDoc* pDoc = rPaM.GetDoc();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                            rPropSet.getPropertyMap(), rPropertyName);
-    if(pMap)
+    const SfxItemPropertySimpleEntry*   pEntry = rPropSet.getPropertyMap()->getByName( rPropertyName);
+    if(pEntry)
     {
-        if ( pMap->nFlags & PropertyAttribute::READONLY)
+        if ( pEntry->nFlags & PropertyAttribute::READONLY)
             throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertyToDefault: property is read-only: " ) ) + rPropertyName, 0 );
-        if(pMap->nWID < RES_FRMATR_END)
+        if(pEntry->nWID < RES_FRMATR_END)
         {
             SvUShortsSort aWhichIds;
-            aWhichIds.Insert(pMap->nWID);
-            if(pMap->nWID < RES_PARATR_BEGIN)
+            aWhichIds.Insert(pEntry->nWID);
+            if(pEntry->nWID < RES_PARATR_BEGIN)
                 pDoc->ResetAttrs(rPaM, sal_True, &aWhichIds);
             else
                 lcl_SelectParaAndReset ( rPaM, pDoc, &aWhichIds );
         }
         else
-            SwUnoCursorHelper::resetCrsrPropertyValue(pMap, rPaM);
+            SwUnoCursorHelper::resetCrsrPropertyValue(*pEntry, rPaM);
     }
     else
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );
@@ -2014,14 +2196,13 @@ Any SwXTextCursor::GetPropertyDefault(
 {
     Any aRet;
     SwDoc* pDoc = rPaM.GetDoc();
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                            rPropSet.getPropertyMap(), rPropertyName);
-    if(pMap)
+    const SfxItemPropertySimpleEntry*   pEntry = rPropSet.getPropertyMap()->getByName( rPropertyName);
+    if(pEntry)
     {
-        if(pMap->nWID < RES_FRMATR_END)
+        if(pEntry->nWID < RES_FRMATR_END)
         {
-            const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);
-            rDefItem.QueryValue(aRet, pMap->nMemberId);
+            const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pEntry->nWID);
+            rDefItem.QueryValue(aRet, pEntry->nMemberId);
         }
     }
     else
@@ -2036,13 +2217,13 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextCursor::getPropertySetInfo(voi
     static uno::Reference< beans::XPropertySetInfo >  xRef;
     if(!xRef.is())
     {
-        static SfxItemPropertyMap aCrsrExtMap_Impl[] =
+        static SfxItemPropertyMapEntry aCrsrExtMap_Impl[] =
         {
             { SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT), FN_SKIP_HIDDEN_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
             { SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT), FN_SKIP_PROTECTED_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
             {0,0,0,0,0,0}
         };
-        uno::Reference< beans::XPropertySetInfo >  xInfo = aPropSet.getPropertySetInfo();
+        uno::Reference< beans::XPropertySetInfo >  xInfo = m_pPropSet->getPropertySetInfo();
         // PropertySetInfo verlaengern!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         xRef = new SfxExtItemPropertySetInfo(
@@ -2073,7 +2254,7 @@ void SwXTextCursor::setPropertyValue(const OUString& rPropertyName, const uno::A
             pUnoCrsr->SetSkipOverProtectSections(bSet);
         }
         else
-            SetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName, aValue);
+            SetPropertyValue(*pUnoCrsr, *m_pPropSet, rPropertyName, aValue);
     }
     else
         throw uno::RuntimeException();
@@ -2101,7 +2282,7 @@ Any SwXTextCursor::getPropertyValue(const OUString& rPropertyName)
             aAny.setValue(&bSet, ::getBooleanCppuType());
         }
         else
-            aAny = GetPropertyValue(*pUnoCrsr, aPropSet, rPropertyName);
+            aAny = GetPropertyValue(*pUnoCrsr, *m_pPropSet, rPropertyName);
     }
     else
         throw uno::RuntimeException();
@@ -2147,7 +2328,7 @@ beans::PropertyState SwXTextCursor::getPropertyState(const OUString& rPropertyNa
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        eRet = GetPropertyState(*pUnoCrsr, aPropSet, rPropertyName);
+        eRet = GetPropertyState(*pUnoCrsr, *m_pPropSet, rPropertyName);
     }
     else
         throw RuntimeException();
@@ -2164,7 +2345,7 @@ uno::Sequence< beans::PropertyState > SwXTextCursor::getPropertyStates(
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         throw RuntimeException();
-    return GetPropertyStates(*pUnoCrsr, aPropSet, PropertyNames);
+    return GetPropertyStates(*pUnoCrsr, *m_pPropSet, PropertyNames);
 }
 /*-- 05.03.99 11:36:12---------------------------------------------------
 
@@ -2206,9 +2387,10 @@ void SAL_CALL SwXTextCursor::setAllPropertiesToDefault()
         // selection specific attribut ranges
         USHORT aResetableSetRange[] = {
             RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
             RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-            RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+            RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
+            RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
             0
         };
         SvUShortsSort   aParaWhichIds;
@@ -2245,36 +2427,33 @@ void SAL_CALL SwXTextCursor::setPropertiesToDefault( const Sequence< OUString >&
         if(pUnoCrsr)
         {
             SwDoc* pDoc = pUnoCrsr->GetDoc();
-            const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap(), *pSaveMap;
             const OUString * pNames = aPropertyNames.getConstArray();
             SvUShortsSort aWhichIds, aParaWhichIds;
             for ( sal_Int32 i = 0; i < nCount; i++ )
             {
-                pSaveMap = pMap;
-                pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i]);
-                if(!pMap)
+                const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName( pNames[i] );
+                if(!pEntry)
                 {
                     if(pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
                        pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
                     {
-                        pMap = pSaveMap;
                         continue;
                     }
                     else
                         throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
                 }
-                if ( pMap->nFlags & PropertyAttribute::READONLY)
+                if( pEntry->nFlags & PropertyAttribute::READONLY)
                     throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertiesToDefault: property is read-only: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
 
-                if( pMap->nWID < RES_FRMATR_END)
+                if( pEntry->nWID < RES_FRMATR_END)
                 {
-                    if(pMap->nWID < RES_PARATR_BEGIN)
-                        aWhichIds.Insert(pMap->nWID);
+                    if(pEntry->nWID < RES_PARATR_BEGIN)
+                        aWhichIds.Insert(pEntry->nWID);
                     else
-                        aParaWhichIds.Insert (pMap->nWID);
+                        aParaWhichIds.Insert (pEntry->nWID);
                 }
-                else if ( pMap->nWID == FN_UNO_NUM_START_VALUE )
-                    SwUnoCursorHelper::resetCrsrPropertyValue(pMap, *pUnoCrsr);
+                else if ( pEntry->nWID == FN_UNO_NUM_START_VALUE )
+                    SwUnoCursorHelper::resetCrsrPropertyValue(*pEntry, *pUnoCrsr);
             }
 
             if ( aParaWhichIds.Count() )
@@ -2298,28 +2477,25 @@ Sequence< Any > SAL_CALL SwXTextCursor::getPropertyDefaults( const Sequence< OUS
         if (pUnoCrsr)
         {
             SwDoc* pDoc = pUnoCrsr->GetDoc();
-            const SfxItemPropertyMap *pSaveMap, *pMap = aPropSet.getPropertyMap();
             const OUString *pNames = aPropertyNames.getConstArray();
             Any *pAny = aRet.getArray();
             for ( sal_Int32 i = 0; i < nCount; i++)
             {
-                pSaveMap = pMap;
-                pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i]);
-                if(!pMap)
+                const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName( pNames[i] );
+                if(!pEntry)
                 {
                     if(pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
                        pNames[i].equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
                     {
-                        pMap = pSaveMap;
                         continue;
                     }
                     else
                         throw UnknownPropertyException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[i], static_cast < cppu::OWeakObject * > ( 0 ) );
                 }
-                if(pMap->nWID < RES_FRMATR_END)
+                if(pEntry->nWID < RES_FRMATR_END)
                 {
-                    const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);
-                    rDefItem.QueryValue(pAny[i], pMap->nMemberId);
+                    const SfxPoolItem& rDefItem = pDoc->GetAttrPool().GetDefaultItem(pEntry->nWID);
+                    rDefItem.QueryValue(pAny[i], pEntry->nMemberId);
                 }
             }
         }

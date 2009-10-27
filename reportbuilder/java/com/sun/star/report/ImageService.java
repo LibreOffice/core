@@ -42,21 +42,21 @@ public interface ImageService
     /**
      * @return the mime-type of the image as string.
      */
-    public String getMimeType(final InputStream image) throws ReportExecutionException;
+    String getMimeType(final InputStream image) throws ReportExecutionException;
 
     /**
      * @return the mime-type of the image as string.
      */
-    public String getMimeType(final byte[] image) throws ReportExecutionException;
+    String getMimeType(final byte[] image) throws ReportExecutionException;
 
     /**
      * @returns the dimension in 100th mm.
      **/
-    public Dimension getImageSize(final InputStream image) throws ReportExecutionException;
+    Dimension getImageSize(final InputStream image) throws ReportExecutionException;
 
     /**
      * @returns the dimension in 100th mm.
      **/
-    public Dimension getImageSize(final byte[] image) throws ReportExecutionException;
+    Dimension getImageSize(final byte[] image) throws ReportExecutionException;
 }
 

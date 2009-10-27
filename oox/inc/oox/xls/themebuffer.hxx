@@ -49,8 +49,6 @@ public:
 
     /** Returns the theme color with the specified token identifier. */
     sal_Int32           getColorByToken( sal_Int32 nToken ) const;
-    /** Returns the theme color with the specified index. */
-    sal_Int32           getColorByIndex( sal_Int32 nIndex ) const;
 
     /** Returns the default font data for the current file type. */
     inline const FontModel& getDefaultFontModel() const { return *mxDefFontModel; }

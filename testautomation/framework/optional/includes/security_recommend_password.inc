@@ -39,11 +39,6 @@
 
 testcase tRecommendPassword( filetypeID as string )
 
-    '///<H1>Recommend password protection when saving</H1>
-    '///<p>This test verifies that the global option to recommend password
-    '/// protection is transported to the file-save dialog. Before saving
-    '/// password protection will be unchecked in order to verify that the
-    '/// global option overrides the individual setting.</p>
 
     dim workfile as string
         workfile = "password" & hGetSuffix( filetypeID )
@@ -55,16 +50,12 @@ testcase tRecommendPassword( filetypeID as string )
 
     dim rc as integer
 
-    '///<ul>
-    '///<li>Open a new document</li>
     printlog( "Open a new document" )
     call hNewDocument()
 
-    '///<li>change the content (document modified status)</li>
     printlog( "Change the document" )
     call hChangeDoc()
 
-    '///<li>Open File-Save-dialog</li>
     printlog( "Open filesave" )
     FileSave
     kontext "SpeichernDlg"
@@ -75,7 +66,6 @@ testcase tRecommendPassword( filetypeID as string )
         goto endsub
     endif
 
-    '///<li>Verify that 'Save with password' is enabled</li>
     printlog( "Verify that the password-checkbox is enabled" )
     if ( passwort.isenabled() ) then
         printlog( " * Password checkbox is enabled. Good." )
@@ -102,26 +92,21 @@ testcase tRecommendPassword( filetypeID as string )
         endif
 
                                                                                                                                
-        '///<li>name the file and select filter</li>
         printlog( "Name the file" )
         Dateiname.settext( workpath & workfile )
   
-        '///<li>uncheck password-protection</li>
         printlog( "Uncheck password-protection" )
         passwort.uncheck()
 
-        '///<li>save the file</li>
         printlog( "Save the file" )
         Speichern.click()
                        
-        '///<li>handle possoble overwrite-warning</li>                                                                                                        
         Kontext "active"
         if ( active.exists( 2 ) ) then
             printlog( " - handle overwrite warning (if any)" )
             active.yes()
         endif
   
-        '///<li>handle unexpected password-dialog</li>
         Kontext "passwordDlg"
         if ( passwordDlg.exists( 2 ) ) then
             warnlog( "Password dialog comes up, this is not expected at this " & _
@@ -133,15 +118,12 @@ testcase tRecommendPassword( filetypeID as string )
             printlog( " * No password dialog is displayed. Good." )
         endif
 
-        '///<li>Delete the workfile</li>
         hDeleteFile( workpath & workfile )
 
     endif
 
-    '///<li>close the document</li>
     printlog( "Close the current document" )
     call hCloseDocument()
     
-    '///</ul>
 
 endcase

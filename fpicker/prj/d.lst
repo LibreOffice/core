@@ -10,4 +10,5 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\source\win32\filepicker\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\win32\folderpicker\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\unx\gnome\fps-gnome-ucd.txt %_DEST%\bin%_EXT%\fps-gnome-ucd.txt
+..\source\unx\kde4\fps-kde4-ucd.txt %_DEST%\bin%_EXT%\fps-kde4-ucd.txt
 ..\source\aqua\fps-aqua-ucd.txt %_DEST%\bin%_EXT%\fps-aqua-ucd.txt

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -39,11 +39,11 @@
 
 dim iSaveSetting as Integer
 sub main
-    call hStatusIn ( "Graphics", "gallery2.bas", "Test of all gallery themes" )
+    call hStatusIn ( "Graphics", "gallery2.bas" )
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
-    use "graphics\required\includes\global\gallery2.inc"
+    use "graphics\optional\includes\global\gallery2.inc"
 
     printlog "------------------------------- T h e m e s -----------------------------"
     call tSettingsToCM
@@ -58,10 +58,10 @@ end sub
 '-------------------------------------------------------------------------
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   gApplication = "WRITER"
-   call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    gApplication = "WRITER"
+    call GetUseFiles
 end sub
 
 '-------------------------------------------------------------------------

@@ -763,7 +763,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
                 if( ! nHeightMM )
                     nHeightMM = (int)(((double)nHeight / fResl) * 25.4);
 #if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr, "set dimensions to (%d, %d) Pixel, (%d, %d) mm, resolution is %lg\n", nWidth, nHeight, nWidthMM, nHeightMM, fResl );
+                fprintf( stderr, "set dimensions to (%d, %d) Pixel, (%d, %d) mm, resolution is %lg\n", (int)nWidth, (int)nHeight, (int)nWidthMM, (int)nHeightMM, fResl );
 #endif
 
                 aConverter.Seek( 18 );

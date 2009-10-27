@@ -391,6 +391,9 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
     rEscherEx.OpenContainer( ESCHER_SpContainer );
     rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     EscherPropertyContainer aPropOpt;
+    bool bVisible = aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "EnableVisible" ) );
+    aPropOpt.AddOpt( ESCHER_Prop_fPrint, bVisible ? 0x00080000 : 0x00080002 ); // visible flag
+
     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01000100 ); // bool field
     aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // Text ID
     aPropOpt.AddOpt( ESCHER_Prop_WrapText, 0x00000001 );
@@ -847,7 +850,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         {
             // TODO: additional text
             if( pScNote )
-                if( SdrCaptionObj* pCaption = pScNote->GetCaption() )
+                if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
                         mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible ) );
 

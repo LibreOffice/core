@@ -129,7 +129,7 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 //  class MouseListenerMultiplexer
 //  ----------------------------------------------------
-DECL_LISTENERMULTIPLEXER_START( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( MouseListenerMultiplexer, ::com::sun::star::awt::XMouseListener )
     void SAL_CALL mousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL mouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL mouseEntered( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException);

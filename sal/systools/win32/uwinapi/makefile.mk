@@ -48,7 +48,6 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-CDEFS+=-UWINVER -DWINVER=0x0500
 CFLAGSCXX+=-Wno-unused-parameter -Wno-return-type
 .ENDIF
 
@@ -143,7 +142,9 @@ STDSHL=
 .IF "$(COM)"=="GCC"
 SHL1STDLIBS=\
         -lmingw32 \
-        -lgcc
+        $(MINGW_LIBGCC)
+MINGWSSTDOBJ=
+MINGWSSTDENDOBJ=
 .ELSE
 SHL1STDLIBS=\
         unicows.lib

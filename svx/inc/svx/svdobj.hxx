@@ -46,6 +46,7 @@
 #include <vcl/bitmapex.hxx>
 #include <svx/sdrobjectuser.hxx>
 #include "svx/svxdllapi.h"
+#include "svx/shapeproperty.hxx"
 
 //************************************************************
 //   Vorausdeklarationen
@@ -94,6 +95,11 @@ namespace sdr
         class ViewContact;
     } // end of namespace contact
 } // end of namespace sdr
+
+namespace svx
+{
+    class PropertyChangeNotifier;
+}
 
 //************************************************************
 //   Defines
@@ -529,9 +535,6 @@ protected:
     // ueberladen, wenn man sich von SdrObjPlusData abgeleitet hat:
     virtual SdrObjPlusData* NewPlusData() const;
 
-    // this is a weak reference to a possible living api wrapper for this shape
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > mxUnoShape;
-
 protected:
     // Diese 3 Methoden muss ein abgeleitetes Objekt ueberladen, wenn es eigene
     // geometrische Daten besitzt, die fuer den Undo-Fall gesichert werden
@@ -680,20 +683,10 @@ public:
     // Tooling for painting a single object to a OutputDevice. This will be needed as long
     // as not all painting is changed to use DrawContact objects.
     sal_Bool SingleObjectPainter(OutputDevice& rOut) const;
-
     BOOL LineGeometryUsageIsNecessary() const;
-
-    // HitTest, 2. Stufe. nTol ist die zulaessige Toleranz in logischen Einheiten.
-    // rVisiLayer ist hauptsaechlich fuer Gruppenobjekte gedacht, die ja Objekte
-    // mit unterschiedlichen Layerzuordnungen beinhalten koennen.
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-    //SdrObject* CheckHit(const Point& rPnt, USHORT nTol) const { return CheckHit(rPnt,nTol,NULL); }
-    sal_Bool IsHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const { return CheckHit(rPnt,nTol,pVisiLayer)!=NULL; }
-    sal_Bool IsHit(const Point& rPnt, USHORT nTol) const { return CheckHit(rPnt,nTol,NULL)!=NULL; }
 
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
     virtual SdrObject* Clone() const;
-    // #116235# virtual SdrObject* Clone(SdrPage* pPage, SdrModel* pModel) const;
     virtual void operator=(const SdrObject& rObj);
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".
@@ -875,10 +868,6 @@ public:
 
     // TextEdit
     virtual FASTBOOL HasTextEdit() const;
-    virtual SdrObject* CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
-    //SdrObject* CheckTextEditHit(const Point& rPnt, USHORT nTol) const { return CheckTextEditHit(rPnt,nTol,NULL); }
-    sal_Bool IsTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const { return CheckTextEditHit(rPnt,nTol,pVisiLayer)!=NULL; }
-    sal_Bool IsTextEditHit(const Point& rPnt, USHORT nTol) const { return CheckTextEditHit(rPnt,nTol,NULL)!=NULL; }
 
     // Return==TRUE: TextEditMode gestartet
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
@@ -1053,7 +1042,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // access to the UNO representation of the shape
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > getWeakUnoShape() { return mxUnoShape; }
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > getWeakUnoShape() const { return maWeakUnoShape; }
 
     static SdrObject* getSdrObjectFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt );
 
@@ -1067,9 +1056,31 @@ public:
 
     // setting the UNO representation is allowed for the UNO representation itself only!
     void setUnoShape(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape,
-        GrantXShapeAccess /*aGrant*/
-    );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape,
+            GrantXShapeAccess /*aGrant*/
+        )
+    {
+        impl_setUnoShape( _rxUnoShape );
+    }
+
+    /** retrieves the instance responsible for notifying changes in the properties of the shape associated with
+        the SdrObject
+
+        @precond
+            There already exists an SvxShape instance associated with the SdrObject
+        @throws ::com::sun::star::uno::RuntimeException
+            if there does nt yet exists an SvxShape instance associated with the SdrObject.
+    */
+    ::svx::PropertyChangeNotifier&
+        getShapePropertyChangeNotifier();
+
+    /** notifies a change in the given property, to all applicable listeners registered at the associated SvxShape
+
+        This method is equivalent to calling getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty ),
+        exception that it is allowed to be called when there does not yet exist an associated SvxShape - in which
+        case the method will silently return without doing anything.
+    */
+    void    notifyShapePropertyChange( const ::svx::ShapeProperty _eProperty ) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -1110,18 +1121,17 @@ public:
     void SetBLIPSizeRectangle( const Rectangle& aRect );
 
 protected:
-    // #b4899532#
-    // Force LineStyle with hard attributes to hair line in COL_LIGHTGRAY
-    /** only for internal use!
-        The returned SvxShape pointer may be null and if not it is only valid as long as you
-        hold the xShapeGuard reference.
-    */
-    SvxShape* getSvxShape( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xShapeGuard );
+    void    impl_setUnoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape );
 
 private:
-    /** do not use directly, always use getSvxShape() if you have to! */
-    SvxShape* mpSvxShape;
+    /** only for internal use!
+    */
+    SvxShape* getSvxShape() const;
 
+    /** do not use directly, always use getSvxShape() if you have to! */
+    SvxShape*   mpSvxShape;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >
+                maWeakUnoShape;
 };
 
 //************************************************************

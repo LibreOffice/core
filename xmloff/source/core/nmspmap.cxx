@@ -199,8 +199,12 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
     if (aIter != aNameMap.end())
     {
         sAttrName.append( sXMLNS  );
-        sAttrName.append( sal_Unicode(':') );
-        sAttrName.append( (*aIter).second->sPrefix);
+        const ::rtl::OUString & prefix( (*aIter).second->sPrefix );
+        if (prefix.getLength()) // not default namespace
+        {
+            sAttrName.append( sal_Unicode(':') );
+            sAttrName.append( prefix );
+        }
     }
     return sAttrName.makeStringAndClear();
 }
@@ -225,8 +229,11 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
             // don't bother caching this, it rarely happens
             OUStringBuffer sQName;
             sQName.append ( sXMLNS );
-            sQName.append ( sal_Unicode(':') );
-            sQName.append ( rLocalName );
+            if (rLocalName.getLength()) // not default namespace
+            {
+                sQName.append ( sal_Unicode(':') );
+                sQName.append ( rLocalName );
+            }
             return sQName.makeStringAndClear();;
         }
         case XML_NAMESPACE_XML:

@@ -1898,7 +1898,13 @@ void ScDBFunc::RepeatDB( BOOL bRecord )
             pDBData->GetQueryParam( aQueryParam );          // Bereich kann sich geaendert haben
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
+            {
+                pDoc->CreateQueryParam(
+                    aAdvSource.aStart.Col(), aAdvSource.aStart.Row(),
+                    aAdvSource.aEnd.Col(), aAdvSource.aEnd.Row(),
+                    aAdvSource.aStart.Tab(), aQueryParam );
                 Query( aQueryParam, &aAdvSource, FALSE );
+            }
             else
                 Query( aQueryParam, NULL, FALSE );
 

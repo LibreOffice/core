@@ -98,9 +98,7 @@ void OPreparedStatement::disposing()
     }
 
     m_xParamColumns = NULL;
-
-
-    m_xMetaData = NULL;
+    m_xMetaData.clear();
     if(m_aParameterRow.isValid())
     {
         m_aParameterRow->get().clear();

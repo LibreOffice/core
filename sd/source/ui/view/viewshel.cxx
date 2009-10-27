@@ -665,9 +665,18 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
             GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
         }
-        else if(HasCurrentFunction())
+        else
         {
-            GetCurrentFunction()->Command(rCEvt);
+            bool bConsumed = false;
+               if( GetView() )
+               {
+                bConsumed = GetView()->getSmartTags().Command(rCEvt);
+            }
+
+            if( !bConsumed && HasCurrentFunction())
+            {
+                GetCurrentFunction()->Command(rCEvt);
+            }
         }
     }
 }

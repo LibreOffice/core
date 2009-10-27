@@ -30,8 +30,8 @@
 #*************************************************************************
 
 $(OUT)$/misc$/$(TARGET).idls: makefile.mk
-    -$(RM) $@
-    $(TYPE) $(mktmp $(foreach,i,$(IDLFILES) $(PACKAGE)$/$i)) >>$@
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(TYPE) $(mktmp $(foreach,i,$(IDLFILES) $(PACKAGE)$/$i)) >>$@
 
 ALLTAR: $(OUT)$/misc$/$(TARGET).idls
 

@@ -47,17 +47,6 @@
 
 
 
-HF_IdlBaseNode::HF_IdlBaseNode( const CE &          i_rCe,
-                                const GATE &        i_rGate )
-    :   nType(0),
-        aBases(),
-        nCountBases(0),
-        nPosition(0),
-        pDerived(0)
-{
-    GatherBases(i_rCe, i_rGate);
-}
-
 HF_IdlBaseNode::HF_IdlBaseNode( const TYPE &            i_rType,
                                 const GATE &            i_rGate,
                                 intt                    i_nPositionOffset,
@@ -90,90 +79,6 @@ HF_IdlBaseNode::FillPositionList( std::vector< const HF_IdlBaseNode* > & o_rPosi
     }  // end for
 
     o_rPositionList.push_back(this);
-}
-
-void
-HF_IdlBaseNode::WriteBaseHierarchy( csi::xml::Element &     o_rOut,
-                                    const HF_IdlInterface & io_rDisplayer,
-                                    const String &          i_sMainNodesText )
-{
-    typedef const HF_IdlBaseNode *  NodePtr;
-    typedef std::vector<NodePtr>    NodeList;
-
-    // Get base classes in sequence of display:
-    NodeList    aPositionList;
-    intt nSize = Position()+1;
-    aPositionList.reserve(nSize);
-    FillPositionList( aPositionList );
-
-    // Write out hierarchy:
-    csi::xml::Element &
-        rPre = o_rOut
-               >> *new csi::xml::AnElement("pre")
-                   << new csi::html::StyleAttr("font-family:monospace;");
-    io_rDisplayer.Out().Enter(rPre);
-
-    for ( int line = 0; line < nSize; ++line )
-    {
-        char * sLine1 = new char[2 + line*5];
-        char * sLine2 = new char[1 + line*5];
-        *sLine1 = '\0';
-        *sLine2 = '\0';
-
-        bool bBaseForThisLineReached = false;
-         for ( int col = 0; col < line; ++col )
-        {
-            intt nDerivPos = aPositionList[col]->Derived()->Position();
-
-            if ( nDerivPos >= line )
-                strcat(sLine1, "  |  ");
-            else
-                strcat(sLine1, "     ");
-
-            if ( nDerivPos > line )
-            {
-                strcat(sLine2, "  |  ");
-            }
-            else if ( nDerivPos == line )
-            {
-                if (NOT bBaseForThisLineReached)
-                {
-                    bBaseForThisLineReached = true;
-                    strcat(sLine2, "  +--");
-                }
-                else
-                {
-                    strcat(sLine2, "--+--");
-                }
-            }
-            else // nDerivPos < line
-            {
-                if (bBaseForThisLineReached)
-                    strcat(sLine2, "-----");
-                else
-                    strcat(sLine2, "     ");
-            }
-        }  // end for (col)
-        strcat(sLine1,"\n");
-        rPre
-            << sLine1
-            << sLine2;
-        delete [] sLine1;
-        delete [] sLine2;
-
-        if (line < nSize - 1)
-        {
-            io_rDisplayer.Display_BaseNode(*aPositionList[line]);
-        }
-        else
-        {
-            rPre
-                >> *new Html::Strong
-                    << i_sMainNodesText;
-        }
-        rPre << "\n";
-    }   // end for (line)
-    io_rDisplayer.Out().Leave();
 }
 
 void

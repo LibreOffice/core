@@ -63,21 +63,6 @@ StmArrayStatus::~StmArrayStatus()
     delete [] dpBranches;
 }
 
-void
-StmArrayStatus::SetBranches( intt                in_nStartBranchIx,
-                             StmStatus::Branch * in_aBranchValues,
-                             intt                in_nNrofValues )
-{
-    csv_assert(in_nStartBranchIx >= 0);
-    csv_assert(in_aBranchValues != 0);
-    csv_assert( in_nNrofValues > 0
-             AND in_nStartBranchIx + in_nNrofValues <= nNrOfBranches );
-
-    memcpy(&dpBranches[in_nStartBranchIx],in_aBranchValues,in_nNrofValues);
-}
-
-
-
 bool
 StmArrayStatus::SetBranch( intt              in_nBranchIx,
                            StmStatus::Branch in_nBranch )

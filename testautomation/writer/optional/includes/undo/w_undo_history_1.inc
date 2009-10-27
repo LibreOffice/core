@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Writer Undo-History - Test ( Typing, Overwrite, Replace, Delete, Sort, Convert To table)
 '*

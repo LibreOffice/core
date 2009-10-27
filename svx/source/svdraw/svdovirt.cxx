@@ -161,13 +161,6 @@ void SdrVirtObj::SetChanged()
     SdrObject::SetChanged();
 }
 
-SdrObject* SdrVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    Point aPnt(rPnt-aAnchor);
-    FASTBOOL bRet=rRefObj.CheckHit(aPnt,nTol,pVisiLayer)!=NULL;
-    return bRet ? (SdrObject*)this : NULL;
-}
-
 SdrObject* SdrVirtObj::Clone() const
 {
     SdrObject* pObj=new SdrVirtObj(((SdrVirtObj*)this)->rRefObj); // Nur eine weitere Referenz

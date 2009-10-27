@@ -53,6 +53,36 @@ class   OutputDevice;
 class   Font;
 class   GfxLink;
 
+class VCL_DLLPUBLIC GraphicConversionParameters
+{
+private:
+    Size            maSizePixel;            // default is (0,0)
+
+    // bitfield
+    unsigned        mbUnlimitedSize : 1;    // default is false
+    unsigned        mbAntiAliase : 1;       // default is false
+    unsigned        mbSnapHorVerLines : 1;  // default is false
+
+public:
+    GraphicConversionParameters(
+        const Size& rSizePixel = Size(),
+        bool bUnlimitedSize = false,
+        bool bAntiAliase = false,
+        bool bSnapHorVerLines = false)
+    :   maSizePixel(rSizePixel),
+        mbUnlimitedSize(bUnlimitedSize),
+        mbAntiAliase(bAntiAliase),
+        mbSnapHorVerLines(bSnapHorVerLines)
+    {
+    }
+
+    // data read access
+    const Size getSizePixel() const { return maSizePixel; }
+    bool getUnlimitedSize() const { return mbUnlimitedSize; }
+    bool getAntiAliase() const { return mbAntiAliase; }
+    bool getSnapHorVerLines() const { return mbSnapHorVerLines; }
+};
+
 class VCL_DLLPUBLIC Graphic : public SvDataCopyStream
 {
 private:
@@ -96,12 +126,14 @@ public:
     BOOL                IsAlpha() const;
     BOOL                IsAnimated() const;
 
-    Bitmap              GetBitmap() const;
-    Bitmap              GetBitmap( const Size* pSizePixel ) const;
-    BitmapEx            GetBitmapEx() const;
-    BitmapEx            GetBitmapEx( const Size* pSizePixel ) const;
-    Bitmap              GetUnlimitedBitmap( const Size* pSizePixel ) const;
-    BitmapEx            GetUnlimitedBitmapEx( const Size* pSizePixel ) const;
+    // #i102089# Access of Bitmap potentially will have to rasterconvert the Graphic
+    // if it is a MetaFile. To be able to control this conversion it is necessary to
+    // allow giving parameters which control AntiAliasing and LineSnapping of the
+    // MetaFile when played. Defaults will use a no-AAed, not snapped conversion as
+    // before.
+    Bitmap              GetBitmap(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
+    BitmapEx            GetBitmapEx(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
+
     Animation           GetAnimation() const;
     const GDIMetaFile&  GetGDIMetaFile() const;
 
@@ -174,7 +206,7 @@ public:
     BOOL                IsSwapOut() const;
 
     void                SetLink( const GfxLink& );
-    GfxLink             GetLink();
+    GfxLink             GetLink() const;
     BOOL                IsLink() const;
 
     BOOL                ExportNative( SvStream& rOStream ) const;

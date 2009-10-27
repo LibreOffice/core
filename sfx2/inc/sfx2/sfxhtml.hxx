@@ -38,16 +38,10 @@
 #include <svtools/parhtml.hxx>
 #include <svtools/macitem.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace document {
-        class XDocumentProperties;
-    }
-} } }
 
 class ImageMap;
 class SfxMedium;
 class SfxObjectShell;
-class SvKeyValueIterator;
 
 class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
 {
@@ -67,7 +61,7 @@ protected:
 
     SfxHTMLParser( SvStream& rStream, BOOL bNewDoc=TRUE, SfxMedium *pMedium=0 );
 
-    ~SfxHTMLParser();
+    virtual ~SfxHTMLParser();
 
 public:
     // Lesen der Optionen einer Image-Map
@@ -85,24 +79,14 @@ public:
                                  USHORT nEventMouseOver = 0,
                                  USHORT nEventMouseOut = 0);
 
-    /// parse meta options into XDocumentProperties
-    static BOOL ParseMetaOptions( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XDocumentProperties>&,
-            SvKeyValueIterator*,
-            const HTMLOptions*,
-            rtl_TextEncoding& rEnc );
-
     // <TD SDVAL="..." SDNUM="...">
     static double GetTableDataOptionsValNum( sal_uInt32& nNumForm,
             LanguageType& eNumLang, const String& aValStr,
             const String& aNumStr, SvNumberFormatter& rFormatter );
 
     static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
-protected:
 
-    BOOL ParseMetaOptions( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::document::XDocumentProperties>&,
-            SvKeyValueIterator* );
+protected:
 
     // Start eines File-Downloads. Dieser erfolgt synchron oder asynchron.
     // Im synchronen Fall befindet sich der Parser nach dem Aufruf im
@@ -140,8 +124,6 @@ protected:
     // Default (auch ohne Iterator) ist JavaScript
     ScriptType GetScriptType( SvKeyValueIterator* ) const;
     const String& GetScriptTypeString( SvKeyValueIterator* ) const;
-
-    static rtl_TextEncoding GetEncodingByMIME( const String& rMime );
 
     BOOL SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
 

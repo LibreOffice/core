@@ -54,7 +54,6 @@ struct BasicIDE_Impl;
 
 namespace BasicIDE
 {
-    SfxMacro*   CreateMacro();
     void            Organize( INT16 tabId );
 
 

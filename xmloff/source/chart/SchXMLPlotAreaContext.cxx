@@ -108,8 +108,10 @@ struct lcl_AxisHasCategories : public ::std::unary_function< SchXMLAxis, bool >
 OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const uno::Reference< chart2::XChartDocument > & xDoc )
 {
     OUString aResult = rRange;
+    if(!xDoc.is())
+        return aResult;
     uno::Reference< chart2::data::XRangeXMLConversion > xConversion(
-        SchXMLImportHelper::GetDataProvider( xDoc ), uno::UNO_QUERY );
+        xDoc->getDataProvider(), uno::UNO_QUERY );
     if( xConversion.is())
         aResult = xConversion->convertRangeFromXML( rRange );
     return aResult;
@@ -177,10 +179,11 @@ SchXML3DSceneAttributesHelper::~SchXML3DSceneAttributesHelper()
 SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport, const rtl::OUString& rLocalName,
+    const rtl::OUString& rXLinkHRefAttributeToIndicateDataProvider,
     uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
     ::rtl::OUString& rCategoriesAddress,
     ::rtl::OUString& rChartAddress,
-    sal_Bool & rHasOwnTable,
+    bool& rbHasRangeAtPlotArea,
     sal_Bool & rAllRangeAddressesAvailable,
     sal_Bool & rColHasLabels,
     sal_Bool & rRowHasLabels,
@@ -195,28 +198,27 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         mrCategoriesAddress( rCategoriesAddress ),
         mrSeriesDefaultsAndStyles( rSeriesDefaultsAndStyles ),
         mnNumOfLinesProp( 0 ),
-        mnNumOfLinesReadBySeries( 0 ),
         mbStockHasVolume( sal_False ),
         mnSeries( 0 ),
-        mnMaxSeriesLength( 0 ),
+        m_aGlobalSeriesImportInfo( rAllRangeAddressesAvailable ),
         maSceneImportHelper( rImport ),
         mbHasSize(false),
         mbHasPosition(false),
         mbPercentStacked(false),
         m_bAxisPositionAttributeImported(false),
+        m_rXLinkHRefAttributeToIndicateDataProvider(rXLinkHRefAttributeToIndicateDataProvider),
         mrChartAddress( rChartAddress ),
-        mrHasOwnTable( rHasOwnTable ),
-        mrAllRangeAddressesAvailable( rAllRangeAddressesAvailable ),
+        m_rbHasRangeAtPlotArea( rbHasRangeAtPlotArea ),
         mrColHasLabels( rColHasLabels ),
         mrRowHasLabels( rRowHasLabels ),
         mrDataRowSource( rDataRowSource ),
-        mnFirstFirstDomainIndex( -1 ),
         maChartTypeServiceName( aChartTypeServiceName ),
         mrLSequencesPerIndex( rLSequencesPerIndex ),
-        mnCurrentDataIndex( 0 ),
         mbGlobalChartTypeUsedBySeries( false ),
         maChartSize( rChartSize )
 {
+    m_rbHasRangeAtPlotArea = false;
+
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
     if( xDoc.is())
@@ -342,7 +344,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             case XML_TOK_PA_CHART_ADDRESS:
                 mrChartAddress = lcl_ConvertRange( aValue, xNewDoc );
                 // indicator for getting data from the outside
-                mrHasOwnTable = sal_False;
+                m_rbHasRangeAtPlotArea = true;
                 break;
             case XML_TOK_PA_DS_HAS_LABELS:
                 {
@@ -518,7 +520,17 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     }
     //
 
-    if( mrHasOwnTable && mxNewDoc.is())
+    bool bCreateInternalDataProvider = false;
+    if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) ) //data comes from the chart itself
+        bCreateInternalDataProvider = true;
+    else if( m_rXLinkHRefAttributeToIndicateDataProvider.equalsAscii( ".." ) ) //data comes from the parent application
+        bCreateInternalDataProvider = false;
+    else if( m_rXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself
+        bCreateInternalDataProvider = true;
+    else if( !m_rbHasRangeAtPlotArea )
+        bCreateInternalDataProvider = true;
+
+    if( bCreateInternalDataProvider && mxNewDoc.is() )
     {
         // we have no complete range => we have own data, so switch the data
         // provider to internal. Clone is not necessary, as we don't have any
@@ -578,14 +590,11 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                         mrImportHelper, GetImport(), rLocalName,
                         mxNewDoc, maAxes,
                         mrSeriesDefaultsAndStyles.maSeriesStyleList,
-                        mnSeries, mnMaxSeriesLength,
-                        mnNumOfLinesReadBySeries, mbStockHasVolume,
-                        maFirstFirstDomainAddress,
-                        mnFirstFirstDomainIndex,
-                        mrAllRangeAddressesAvailable,
+                        mnSeries,
+                        mbStockHasVolume,
+                        m_aGlobalSeriesImportInfo,
                         maChartTypeServiceName,
                         mrLSequencesPerIndex,
-                        mnCurrentDataIndex,
                         mbGlobalChartTypeUsedBySeries, maChartSize );
                 }
                 mnSeries++;
@@ -632,7 +641,7 @@ void SchXMLPlotAreaContext::EndElement()
     if( mrCategoriesAddress.getLength() && mxNewDoc.is())
     {
         uno::Reference< chart2::data::XDataProvider > xDataProvider(
-            mrImportHelper.GetDataProvider( mxNewDoc ));
+            mxNewDoc->getDataProvider()  );
         // @todo: correct coordinate system index
         sal_Int32 nDimension( 0 );
         ::std::vector< SchXMLAxis >::const_iterator aIt(
@@ -659,15 +668,8 @@ void SchXMLPlotAreaContext::EndElement()
             maSceneImportHelper.setSceneAttributes( xDiaProp );
         }
 
-        // if the property NumberOfLines and the number of series containing
-        // class="chart:line" as attribute are both different from 0 they must
-        // be equal
-        OSL_ASSERT( mnNumOfLinesProp == 0 || mnNumOfLinesReadBySeries == 0 ||
-                    mnNumOfLinesProp == mnNumOfLinesReadBySeries );
-
         // set correct number of lines at series
-        if( ! mrAllRangeAddressesAvailable &&
-            mnNumOfLinesReadBySeries == 0 &&
+        if( ! m_aGlobalSeriesImportInfo.rbAllRangeAddressesAvailable &&
             mnNumOfLinesProp > 0 &&
             maChartTypeServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ColumnChartType" )))
         {
@@ -1533,7 +1535,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
         break;
 
         case XML_TOK_AXIS_CATEGORIES:
-            pContext = new SchXMLCategoriesDomainContext( mrImportHelper, GetImport(),
+            pContext = new SchXMLCategoriesContext( mrImportHelper, GetImport(),
                                                           p_nPrefix, rLocalName,
                                                           mrCategoriesAddress );
             maCurrentAxis.bHasCategories = true;
@@ -1640,7 +1642,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
 
 // ========================================
 
-SchXMLCategoriesDomainContext::SchXMLCategoriesDomainContext(
+SchXMLCategoriesContext::SchXMLCategoriesContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
@@ -1652,11 +1654,11 @@ SchXMLCategoriesDomainContext::SchXMLCategoriesDomainContext(
 {
 }
 
-SchXMLCategoriesDomainContext::~SchXMLCategoriesDomainContext()
+SchXMLCategoriesContext::~SchXMLCategoriesContext()
 {
 }
 
-void SchXMLCategoriesDomainContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLCategoriesContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
 

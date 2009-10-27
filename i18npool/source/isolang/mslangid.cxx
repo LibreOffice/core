@@ -41,6 +41,9 @@
 LanguageType MsLangId::nConfiguredSystemLanguage   = LANGUAGE_SYSTEM;
 LanguageType MsLangId::nConfiguredSystemUILanguage = LANGUAGE_SYSTEM;
 
+LanguageType MsLangId::nConfiguredWesternFallback  = LANGUAGE_SYSTEM;
+LanguageType MsLangId::nConfiguredAsianFallback    = LANGUAGE_SYSTEM;
+LanguageType MsLangId::nConfiguredComplexFallback  = LANGUAGE_SYSTEM;
 
 // static
 void MsLangId::setConfiguredSystemLanguage( LanguageType nLang )
@@ -55,6 +58,23 @@ void MsLangId::setConfiguredSystemUILanguage( LanguageType nLang )
     nConfiguredSystemUILanguage = nLang;
 }
 
+// static
+void MsLangId::setConfiguredWesternFallback( LanguageType nLang )
+{
+    nConfiguredWesternFallback = nLang;
+}
+
+// static
+void MsLangId::setConfiguredAsianFallback( LanguageType nLang )
+{
+    nConfiguredAsianFallback = nLang;
+}
+
+// static
+void MsLangId::setConfiguredComplexFallback( LanguageType nLang )
+{
+    nConfiguredComplexFallback = nLang;
+}
 
 // static
 inline LanguageType MsLangId::simplifySystemLanguages( LanguageType nLang )
@@ -118,6 +138,40 @@ LanguageType MsLangId::getRealLanguage( LanguageType nLang )
     return nLang;
 }
 
+
+// static
+LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType )
+{
+    if (nLang == LANGUAGE_NONE)
+        return nLang;
+
+    nLang = getRealLanguage(nLang);
+    if (nType != ::com::sun::star::i18n::ScriptType::WEAK && getScriptType(nLang) != nType)
+    {
+        switch(nType)
+        {
+            case ::com::sun::star::i18n::ScriptType::ASIAN:
+                if (nConfiguredAsianFallback == LANGUAGE_SYSTEM)
+                    nLang = LANGUAGE_CHINESE_SIMPLIFIED;
+                else
+                    nLang = nConfiguredComplexFallback;
+                break;
+            case ::com::sun::star::i18n::ScriptType::COMPLEX:
+                if (nConfiguredComplexFallback == LANGUAGE_SYSTEM)
+                    nLang = LANGUAGE_HINDI;
+                else
+                    nLang = nConfiguredComplexFallback;
+                break;
+            default:
+                if (nConfiguredWesternFallback == LANGUAGE_SYSTEM)
+                    nLang = LANGUAGE_ENGLISH_US;
+                else
+                    nLang = nConfiguredWesternFallback;
+                break;
+        }
+    }
+    return nLang;
+}
 
 // static
 void MsLangId::convertLanguageToLocale( LanguageType nLang,
@@ -211,10 +265,12 @@ bool MsLangId::isRightToLeft( LanguageType nLang )
     {
         case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_HEBREW              & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_YIDDISH             & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_URDU                & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_FARSI               & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_KASHMIRI            & LANGUAGE_MASK_PRIMARY :
         case LANGUAGE_SINDHI              & LANGUAGE_MASK_PRIMARY :
+        case LANGUAGE_UIGHUR_CHINA        & LANGUAGE_MASK_PRIMARY :
             return true;
 
         default:
@@ -281,6 +337,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_BURMESE:
         case LANGUAGE_FARSI:
         case LANGUAGE_HEBREW:
+        case LANGUAGE_YIDDISH:
         case LANGUAGE_MARATHI:
         case LANGUAGE_PUNJABI:
         case LANGUAGE_GUJARATI:

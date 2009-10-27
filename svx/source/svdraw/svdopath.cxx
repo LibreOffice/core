@@ -37,7 +37,6 @@
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdattr.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svddrag.hxx>
@@ -78,6 +77,10 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+
+// #i89784#
+#include <svx/sdr/attribute/sdrtextattribute.hxx>
+#include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 
 using namespace sdr;
 
@@ -948,32 +951,86 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
 
 String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    ImpSdrPathDragData* pDragData = mpSdrPathDragData;
-
-    if(!pDragData)
-    {
-        // getSpecialDragComment is also used from create, so fallback to GetUser()
-        // when mpSdrPathDragData is not set
-        pDragData = (ImpSdrPathDragData*)rDrag.GetUser();
-    }
-
-    if(!pDragData)
-    {
-        DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
-        return String();
-    }
-
-    // Hier auch mal pDragData verwenden !!!
     XubString aStr;
-
     const SdrHdl* pHdl = rDrag.GetHdl();
+    const bool bCreateComment(rDrag.GetView() && &mrSdrPathObject == rDrag.GetView()->GetCreateObj());
 
-    if(!mrSdrPathObject.GetModel() || !pHdl)
+    if(bCreateComment && rDrag.GetUser())
     {
+        // #i103058# re-add old creation comment mode
+        ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
+        const SdrObjKind eKindMerk(meObjectKind);
+        mrSdrPathObject.meKind = pU->eAktKind;
+        mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
+        mrSdrPathObject.meKind = eKindMerk;
+
+        Point aPrev(rDrag.GetPrev());
+        Point aNow(rDrag.GetNow());
+
+        if(pU->bLine)
+            aNow = pU->aLineEnd;
+
+        aNow -= aPrev;
+        aStr.AppendAscii(" (");
+
+        XubString aMetr;
+
+        if(pU->bCircle)
+        {
+            mrSdrPathObject.GetModel()->TakeWinkStr(Abs(pU->nCircRelWink), aMetr);
+            aStr += aMetr;
+            aStr.AppendAscii(" r=");
+            mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, TRUE);
+            aStr += aMetr;
+        }
+
+        aStr.AppendAscii("dx=");
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X(), aMetr, TRUE);
+        aStr += aMetr;
+
+        aStr.AppendAscii(" dy=");
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y(), aMetr, TRUE);
+        aStr += aMetr;
+
+        if(!IsFreeHand(meObjectKind))
+        {
+            INT32 nLen(GetLen(aNow));
+            aStr.AppendAscii("  l=");
+            mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, TRUE);
+            aStr += aMetr;
+
+            INT32 nWink(GetAngle(aNow));
+            aStr += sal_Unicode(' ');
+            mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
+            aStr += aMetr;
+        }
+
+        aStr += sal_Unicode(')');
+    }
+    else if(!mrSdrPathObject.GetModel() || !pHdl)
+    {
+        // #i103058# fallback when no model and/or Handle, both needed
+        // for else-path
         mrSdrPathObject.ImpTakeDescriptionStr(STR_DragPathObj, aStr);
     }
     else
     {
+        // #i103058# standard for modification; model and handle needed
+        ImpSdrPathDragData* pDragData = mpSdrPathDragData;
+
+        if(!pDragData)
+        {
+            // getSpecialDragComment is also used from create, so fallback to GetUser()
+            // when mpSdrPathDragData is not set
+            pDragData = (ImpSdrPathDragData*)rDrag.GetUser();
+        }
+
+        if(!pDragData)
+        {
+            DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
+            return String();
+        }
+
         if(!pDragData->IsMultiPointDrag() && pDragData->bEliminate)
         {
             // Punkt von ...
@@ -983,7 +1040,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
             XubString aStr2(ImpGetResStr(STR_EditDelete));
 
             // UNICODE: Punkt von ... loeschen
-            aStr2.SearchAndReplaceAscii("%O", aStr);
+            aStr2.SearchAndReplaceAscii("%1", aStr);
 
             return aStr2;
         }
@@ -1746,7 +1803,10 @@ void SdrPathObj::ImpForceKind()
         // was called, once here below and once on a 2nd place below.
 
         // #i10659# for SdrTextObj, keep aRect up to date
-        aRect = ImpGetBoundRect(GetPathPoly());
+        if(GetPathPoly().count())
+        {
+            aRect = ImpGetBoundRect(GetPathPoly());
+        }
     }
 
     // #i75974# adapt polygon state to object type. This may include a reinterpretation
@@ -1823,51 +1883,6 @@ void SdrPathObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 UINT16 SdrPathObj::GetObjIdentifier() const
 {
     return USHORT(meKind);
-}
-
-SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    sal_Bool bHit(sal_False);
-    const basegfx::B2DPoint aHitPoint(rPnt.X(), rPnt.Y());
-
-    if(GetPathPoly().isClosed() && (bTextFrame || HasFill()))
-    {
-        // hit in filled polygon? Subdivbide needed for better precision
-        if(GetPathPoly().areControlPointsUsed())
-        {
-            bHit = basegfx::tools::isInside(GetPathPoly().getDefaultAdaptiveSubdivision(), aHitPoint);
-        }
-        else
-        {
-            bHit = basegfx::tools::isInside(GetPathPoly(), aHitPoint);
-        }
-    }
-
-    if(!bHit)
-    {
-        // hit polygon line?
-        const double fHalfLineWidth(ImpGetLineWdt() / 2.0);
-        double fDistance(nTol);
-
-        if(fHalfLineWidth > fDistance)
-        {
-            fDistance = fHalfLineWidth;
-        }
-
-        bHit = basegfx::tools::isInEpsilonRange(GetPathPoly(), aHitPoint, fDistance);
-    }
-
-    if(!bHit && !IsTextFrame() && HasText())
-    {
-        bHit = (0L != SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer));
-    }
-
-    return bHit ? (SdrObject*)this : 0L;
 }
 
 void SdrPathObj::operator=(const SdrObject& rObj)
@@ -2189,12 +2204,26 @@ bool SdrPathObj::applySpecialDrag(SdrDragStat& rDrag)
 String SdrPathObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     String aRetval;
-    ImpPathForDragAndCreate aDragAndCreate(*((SdrPathObj*)this));
-    bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
 
-    if(bDidWork)
+    if(mpDAC)
     {
-        aRetval = aDragAndCreate.getSpecialDragComment(rDrag);
+        // #i103058# also get a comment when in creation
+        const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
+
+        if(bCreateComment)
+        {
+            aRetval = mpDAC->getSpecialDragComment(rDrag);
+        }
+    }
+    else
+    {
+        ImpPathForDragAndCreate aDragAndCreate(*((SdrPathObj*)this));
+        bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
+
+        if(bDidWork)
+        {
+            aRetval = aDragAndCreate.getSpecialDragComment(rDrag);
+        }
     }
 
     return aRetval;
@@ -2424,7 +2453,10 @@ void SdrPathObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 
 void SdrPathObj::RecalcSnapRect()
 {
-    maSnapRect = ImpGetBoundRect(GetPathPoly());
+    if(GetPathPoly().count())
+    {
+        maSnapRect = ImpGetBoundRect(GetPathPoly());
+    }
 }
 
 void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)
@@ -2514,8 +2546,11 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
         }
         else
         {
-            // #i10659# for SdrTextObj, keep aRect up to date
-            aRect = ImpGetBoundRect(GetPathPoly()); // fuer SdrTextObj
+            if(GetPathPoly().count())
+            {
+                // #i10659# for SdrTextObj, keep aRect up to date
+                aRect = ImpGetBoundRect(GetPathPoly()); // fuer SdrTextObj#
+            }
         }
 
         SetRectsDirty();
@@ -2717,7 +2752,19 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
 
 SdrObject* SdrPathObj::DoConvertToPolyObj(BOOL bBezier) const
 {
-    SdrObject* pRet = ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+    // #i89784# check for FontWork with activated HideContour
+    bool bHideContour(false);
+
+    {
+        drawinglayer::attribute::SdrTextAttribute* pText = drawinglayer::primitive2d::createNewSdrTextAttribute(GetObjectItemSet(), *getText(0));
+        bHideContour = pText && pText->getSdrFormTextAttribute() && pText->isHideContour();
+        delete pText;
+    }
+
+    SdrObject* pRet = bHideContour ?
+        0 :
+        ImpConvertMakeObj(GetPathPoly(), IsClosed(), bBezier);
+
     SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
 
     if(pPath)

@@ -48,6 +48,7 @@
 #define LF_PATH_READONLY        0x0020  // "path" readonly
 #define LF_USERNAME_READONLY    0x0040  // "name" readonly
 #define LF_NO_ACCOUNT           0x0080  // hide "account"
+#define LF_NO_USESYSCREDS       0x0100  // hide "use system cedentials"
 
 //............................................................................
 //............................................................................
@@ -70,15 +71,18 @@ class LoginDialog : public ModalDialog
     FixedText       aAccountFT;
     Edit            aAccountED;
     CheckBox        aSavePasswdBtn;
+    CheckBox        aUseSysCredsCB;
     FixedLine       aLoginGB;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
     void            HideControls_Impl( USHORT nFlags );
+    void            EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled );
 
     DECL_LINK( OKHdl_Impl, OKButton * );
     DECL_LINK( PathHdl_Impl, PushButton * );
+    DECL_LINK( UseSysCredsHdl_Impl, CheckBox * );
 
 public:
     LoginDialog( Window* pParent, USHORT nFlags,
@@ -103,6 +107,9 @@ public:
                         { aSavePasswdBtn.Check( bSave ); }
     void            SetSavePasswordText( const String& rTxt )
                         { aSavePasswdBtn.SetText( rTxt ); }
+    BOOL            IsUseSystemCredentials() const
+                        { return aUseSysCredsCB.IsChecked(); }
+    void            SetUseSystemCredentials( BOOL bUse );
     void            SetErrorText( const String& rTxt )
                         { aErrorInfo.SetText( rTxt ); }
     void            SetLoginRequestText( const String& rTxt )

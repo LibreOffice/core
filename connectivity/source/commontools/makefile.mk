@@ -49,6 +49,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 NOOPTFILES= $(SLO)$/RowFunctionParser.obj
 .ENDIF
 
+ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
+
 # --- Files --------------------------------------------------------
 EXCEPTIONSFILES=\
         $(SLO)$/predicateinput.obj						\
@@ -85,7 +87,9 @@ EXCEPTIONSFILES=\
         $(SLO)$/filtermanager.obj                       \
         $(SLO)$/parameters.obj							\
         $(SLO)$/ParamterSubstitution.obj                \
-        $(SLO)$/formattedcolumnvalue.obj
+        $(SLO)$/DriversConfig.obj                       \
+        $(SLO)$/formattedcolumnvalue.obj                \
+        $(SLO)$/warningscontainer.obj
 
 SLOFILES=\
         $(EXCEPTIONSFILES)								\

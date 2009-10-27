@@ -61,16 +61,18 @@ if ($type eq "extshl")
 {
     $type = "shl";
     my $change = "";
+    my %inames;
     foreach $file (@ARGV)
     {
-        otoolD($file) =~ m'^(.*?([^/]+))\n$' or
+        my $iname = otoolD($file);
+        (defined $iname ? $iname : $file . "\n") =~ m'^(.*?([^/]+))\n$' or
             die "unexpected otool -D output";
         $change .= " -change $1 " . action($type, $loc, $loc) . "/$2";
-        $iname{$file} = $2;
+        $inames{$file} = $2;
     }
     foreach $file (@ARGV)
     {
-        my $call = "install_name_tool$change -id \@__________________________________________________$loc/$iname{$file} $file";
+        my $call = "install_name_tool$change -id \@__________________________________________________$loc/$inames{$file} $file";
         system($call) == 0 or die "cannot $call";
     }
 }

@@ -55,7 +55,7 @@
 #include <istyleaccess.hxx>
 
 class SwDocShell;
-struct SfxItemPropertyMap;
+class SfxItemPropertySet;
 class SwXStyle;
 class SwStyleProperties_Impl;
 class SwAutoStylesEnumImpl;

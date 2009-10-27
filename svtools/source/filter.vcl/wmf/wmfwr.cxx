@@ -438,16 +438,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
     BYTE nPitchFamily;
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
-
-    if ( !rFont.GetSize().Width() )
-    {
-        VirtualDevice aDev;
-        FontMetric aMetric( aDev.GetFontMetric( rFont ) );
-        WriteHeightWidth(Size(aMetric.GetWidth(),-rFont.GetSize().Height()));
-    }
-    else
-        WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
-
+    WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
     *pWMF << (short)rFont.GetOrientation() << (short)rFont.GetOrientation();
 
     switch (rFont.GetWeight()) {

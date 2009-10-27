@@ -569,6 +569,18 @@ namespace basegfx
             return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
+        B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate)
+        {
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+            {
+                aRetval.append(snapPointsOfHorizontalOrVerticalEdges(rCandidate.getB2DPolygon(a)));
+            }
+
+            return aRetval;
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 

@@ -35,6 +35,12 @@
 
 #ifdef WITH_OPENLDAP
 #include <ldap.h>
+#ifndef LDAP_API
+#    define LDAP_API(rt) rt
+#endif
+#ifndef LDAP_CALL
+#    define LDAP_CALL
+#endif
 #else
 #ifndef LDAP_INCLUDED
 #define LDAP_INCLUDED

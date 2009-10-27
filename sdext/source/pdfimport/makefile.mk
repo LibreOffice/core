@@ -39,6 +39,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 MKDEPENDSOLVER:=
 .INCLUDE: settings.mk
+
+.IF "$(L10N_framework)"==""
+
 .INCLUDE: pdfisettings.pmk
 INCPRE=-I$(PRJ)$/source$/pdfimport$/inc
 
@@ -125,10 +128,16 @@ COMPONENT_HELP= \
 COMPONENT_LIBRARIES= \
     $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
 
-EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) makefile.mk
+COMPONENT_IMAGES=\
+    $(EXTENSIONDIR)$/images$/pdfiext.png \
+    $(EXTENSIONDIR)$/images$/pdfiext_hc.png
+
+EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) $(COMPONENT_IMAGES) makefile.mk
 
 .INCLUDE : extension_pre.mk
+.ENDIF # L10N_framework
 .INCLUDE : target.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE : extension_post.mk
 
 $(CONVERTER_FILE) : $(BIN)$/$$(@:f)
@@ -142,3 +151,9 @@ $(COMPONENT_DIALOGS) : dialogs$/$$(@:f)
 $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+$(COMPONENT_IMAGES) : images$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ENDIF # L10N_framework
+

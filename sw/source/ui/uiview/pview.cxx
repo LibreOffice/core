@@ -39,9 +39,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/cmdevt.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/printdlg.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/stritem.hxx>
@@ -71,20 +69,12 @@
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <doc.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <scroll.hxx>
 #include <swprtopt.hxx>
 #include <docstat.hxx>
@@ -109,12 +99,8 @@
 #endif
 
 #define SwPagePreView
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 // OD 12.12.2002 #103492#
 #include <pagepreviewlayout.hxx>
 
@@ -384,7 +370,7 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
     aSettings.aPrtSize = pPrinter->GetPaperSize();
     //#97682# make sure that no division by zero occurs
     if(!aSettings.aPrtSize.Width() || !aSettings.aPrtSize.Height())
-        aSettings.aPrtSize = Size(lA4Width, lA4Height);
+        aSettings.aPrtSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
     aSettings.bPrinterLandscape = pPrinter->GetOrientation() == ORIENTATION_LANDSCAPE;
 
 
@@ -1594,6 +1580,10 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     {
         switch(nWhich)
         {
+        case SID_BROWSER_MODE:
+        case FN_PRINT_LAYOUT:
+            rSet.DisableItem(nWhich);
+            break;
         case FN_START_OF_DOCUMENT:
         {
             if ( pPagePrevwLay->IsPageVisible( 1 ) )
@@ -2318,13 +2308,11 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
     aDocSz = rSz;
 
-    // die neue Anzahl von Seiten bestimmen
-    USHORT nNewCnt = GetViewShell()->GetNumPages();
-    if( nNewCnt == mnPageCount )
-        return;
+    // --> OD 2009-08-20 #i96726#
+    // Due to the multiple page layout it is needed to trigger recalculation
+    // of the page preview layout, even if the count of pages is not changing.
+    mnPageCount = GetViewShell()->GetNumPages();
 
-    // dann eine neue Startseite berechnen
-    mnPageCount = nNewCnt;
     if( aVisArea.GetWidth() )
     {
         ChgPage( SwPagePreViewWin::MV_CALC, TRUE );
@@ -2332,6 +2320,7 @@ void SwPagePreView::DocSzChgd( const Size &rSz )
 
         aViewWin.Invalidate();
     }
+    // <--
 }
 
 /*--------------------------------------------------------------------
@@ -2506,6 +2495,10 @@ SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
 {
     ViewShell &rSh = *GetViewShell();
+    SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
     if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
     {

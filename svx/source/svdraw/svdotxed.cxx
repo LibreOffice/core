@@ -291,11 +291,6 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     mbInEditMode = FALSE;
 }
 
-SdrObject* SdrTextObj::CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer);
-}
-
 USHORT SdrTextObj::GetOutlinerViewAnchorMode() const
 {
     SdrTextHorzAdjust eH=GetTextHorizontalAdjust();

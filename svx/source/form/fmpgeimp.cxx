@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include "svxerr.hxx"
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
@@ -37,13 +38,16 @@
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "fmobj.hxx"
+#include "formcontrolfactory.hxx"
 #include "svditer.hxx"
 #include "fmresids.hrc"
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/container/EnumerableMap.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <svx/fmglob.hxx>
@@ -55,6 +59,7 @@
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
@@ -69,12 +74,15 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::container::XMap;
+using ::com::sun::star::container::EnumerableMap;
+using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
 
 DBG_NAME(FmFormPageImpl)
 //------------------------------------------------------------------------------
-FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
-               :pPage(_pPage)
+FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
+               :m_rPage( _rPage )
                ,m_bFirstActivation( sal_True )
                ,m_bAttemptedFormCreation( false )
                ,m_bInFind( false )
@@ -162,13 +170,11 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
-    :pPage(_pPage)
+FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl )
+    :m_rPage( _rPage )
     ,m_bFirstActivation( sal_True )
     ,m_bAttemptedFormCreation( false )
-               ,m_bInFind( false )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::FmFormPageImpl" );
     DBG_CTOR(FmFormPageImpl,NULL);
 
     // clone the Forms collection
@@ -193,8 +199,8 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
         aVisitor.process( FormComponentPair( xCloneable, m_xForms ), aAssignmentProcessor );
 
         // assign the cloned models to their SdrObjects
-        SdrObjListIter aForeignIter( *rImpl.pPage );
-        SdrObjListIter aOwnIter( *pPage );
+        SdrObjListIter aForeignIter( rImpl.m_rPage );
+        SdrObjListIter aOwnIter( m_rPage );
 
         OSL_ENSURE( aForeignIter.IsMore() == aOwnIter.IsMore(), "FmFormPageImpl::FmFormPageImpl: inconsistent number of objects (1)!" );
         while ( aForeignIter.IsMore() && aOwnIter.IsMore() )
@@ -242,6 +248,85 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
 }
 
 //------------------------------------------------------------------------------
+Reference< XMap > FmFormPageImpl::getControlToShapeMap()
+{
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( xControlShapeMap.is() )
+        return xControlShapeMap;
+
+    xControlShapeMap = impl_createControlShapeMap_nothrow();
+    m_aControlShapeMap = xControlShapeMap;
+    return xControlShapeMap;
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    static void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
+    {
+        // the control model
+        Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
+        OSL_ENSURE( xControlModel.is(), "lcl_insertFormObject_throw: suspicious: no control model!" );
+        if ( !xControlModel.is() )
+            return;
+
+        Reference< XControlShape > xControlShape( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY );
+        OSL_ENSURE( xControlShape.is(), "lcl_insertFormObject_throw: suspicious: no control shape!" );
+        if ( !xControlShape.is() )
+            return;
+
+        _map->put( makeAny( xControlModel ), makeAny( xControlShape ) );
+    }
+
+    static void lcl_removeFormObject( const FmFormObj& _object, const Reference< XMap >& _map )
+    {
+        // the control model
+        Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
+        OSL_ENSURE( xControlModel.is(), "lcl_removeFormObject: suspicious: no control model!" );
+        if ( !xControlModel.is() )
+            return;
+
+    #if OSL_DEBUG_LEVEL > 0
+        Any aOldAssignment =
+    #endif
+            _map->remove( makeAny( xControlModel ) );
+        OSL_ENSURE( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
+            "lcl_removeFormObject: map was inconsistent!" );
+    }
+}
+
+//------------------------------------------------------------------------------
+Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
+{
+    Reference< XMap > xMap;
+
+    try
+    {
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        xMap.set( EnumerableMap::create( aContext.getUNOContext(),
+            ::cppu::UnoType< XControlModel >::get(),
+            ::cppu::UnoType< XControlShape >::get()
+        ).get(), UNO_SET_THROW );
+
+        SdrObjListIter aPageIter( m_rPage );
+        while ( aPageIter.IsMore() )
+        {
+            // only FmFormObjs are what we're interested in
+            FmFormObj* pCurrent = FmFormObj::GetFormObject( aPageIter.Next() );
+            if ( !pCurrent )
+                continue;
+
+            lcl_insertFormObject_throw( *pCurrent, xMap );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return xMap;
+}
+
+//------------------------------------------------------------------------------
 const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getForms" );
@@ -264,7 +349,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
             m_aFormsCreationHdl.Call( this );
         }
 
-        FmFormModel* pFormsModel = pPage ? PTR_CAST( FmFormModel, pPage->GetModel() ) : NULL;
+        FmFormModel* pFormsModel = PTR_CAST( FmFormModel, m_rPage.GetModel() );
 
         // give the newly created collection a place in the universe
         Reference< XChild > xAsChild( m_xForms, UNO_QUERY );
@@ -354,11 +439,15 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     // did not find an existing suitable form -> create a new one
     if ( !xForm.is() )
     {
-        SdrModel* pModel = pPage->GetModel();
-        XubString aStr(SVX_RES(RID_STR_FORM));
-        XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-        aUndoStr.SearchAndReplace('#', aStr);
-        pModel->BegUndo(aUndoStr);
+        SdrModel* pModel = m_rPage.GetModel();
+
+        if( pModel->IsUndoEnabled() )
+        {
+            XubString aStr(SVX_RES(RID_STR_FORM));
+            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+            aUndoStr.SearchAndReplace('#', aStr);
+            pModel->BegUndo(aUndoStr);
+        }
 
         try
         {
@@ -373,11 +462,14 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
             Reference< XIndexContainer > xContainer( xForms, UNO_QUERY );
-            pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
-                                                       FmUndoContainerAction::Inserted,
-                                                       xContainer,
-                                                       xForm,
-                                                       xContainer->getCount()));
+            if( pModel->IsUndoEnabled() )
+            {
+                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                                                           FmUndoContainerAction::Inserted,
+                                                           xContainer,
+                                                           xForm,
+                                                           xContainer->getCount()));
+            }
             xForms->insertByName( sName, makeAny( xForm ) );
             xCurrentForm = xForm;
         }
@@ -387,7 +479,8 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xForm.clear();
         }
 
-        pModel->EndUndo();
+        if( pModel->IsUndoEnabled() )
+            pModel->EndUndo();
     }
 
     return xForm;
@@ -428,11 +521,18 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
         // wenn keine ::com::sun::star::form gefunden, dann eine neue erzeugen
         if (!xForm.is())
         {
-            SdrModel* pModel = pPage->GetModel();
-            XubString aStr(SVX_RES(RID_STR_FORM));
-            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-            aUndoStr.SearchAndReplace('#', aStr);
-            pModel->BegUndo(aUndoStr);
+            SdrModel* pModel = m_rPage.GetModel();
+
+            const bool bUndo = pModel->IsUndoEnabled();
+
+            if( bUndo )
+            {
+                XubString aStr(SVX_RES(RID_STR_FORM));
+                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+                aUndoStr.SearchAndReplace('#', aStr);
+                pModel->BegUndo(aUndoStr);
+            }
+
             xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
             // a form should always have the command type table as default
             Reference< ::com::sun::star::beans::XPropertySet > xFormProps(xForm, UNO_QUERY);
@@ -452,29 +552,27 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
 
             Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
-            ::rtl::OUString aName;
 
-            if ((CommandType::TABLE == nCommandType) || (CommandType::QUERY == nCommandType))
+            const bool bTableOrQuery = ( CommandType::TABLE == nCommandType ) || ( CommandType::QUERY == nCommandType );
+            ::rtl::OUString sName = FormControlFactory::getUniqueName( xNamedSet,
+                bTableOrQuery ? rCursorSource : ::rtl::OUString( String( SVX_RES( RID_STR_STDFORMNAME ) ) ) );
+
+            xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
+
+            if( bUndo )
             {
-                // Namen der ::com::sun::star::form ueber den Titel der CursorSource setzen
-                aName = getUniqueName(rCursorSource, xNamedSet);
+                Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
+                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                                                         FmUndoContainerAction::Inserted,
+                                                         xContainer,
+                                                         xForm,
+                                                         xContainer->getCount()));
             }
-            else
-                // ansonsten StandardformName verwenden
-                aName = getUniqueName(::rtl::OUString(String(SVX_RES(RID_STR_STDFORMNAME))), xNamedSet);
 
-            xFormProps->setPropertyValue(FM_PROP_NAME, makeAny(aName));
+            getForms()->insertByName( sName, makeAny( xForm ) );
 
-            Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
-            pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
-                                                     FmUndoContainerAction::Inserted,
-                                                     xContainer,
-                                                     xForm,
-                                                     xContainer->getCount()));
-
-
-            getForms()->insertByName(aName, makeAny(xForm));
-            pModel->EndUndo();
+            if( bUndo )
+                pModel->EndUndo();
         }
         xCurrentForm = xForm;
     }
@@ -569,7 +667,6 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 //------------------------------------------------------------------------------
 ::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::setUniqueName" );
 #if OSL_DEBUG_LEVEL > 0
     try
     {
@@ -593,9 +690,10 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             // setzen eines default Namens ueber die ClassId
             sal_Int16 nClassId( FormComponentType::CONTROL );
             xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
-            Reference< XServiceInfo > xSI( xSet, UNO_QUERY );
 
-            ::rtl::OUString sDefaultName = getDefaultName( nClassId, xControls, xSI );
+            ::rtl::OUString sDefaultName = FormControlFactory::getDefaultUniqueName_ByComponentType(
+                Reference< XNameAccess >( xControls, UNO_QUERY ), xSet );
+
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
             if (!sName.getLength() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
@@ -608,74 +706,37 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     return sName;
 }
 
-
-UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultName" );
-    sal_uInt16 nResId;
-
-    switch (_nClassId)
-    {
-        case FormComponentType::COMMANDBUTTON:  nResId = RID_STR_BUTTON_CLASSNAME;      break;
-        case FormComponentType::RADIOBUTTON:    nResId = RID_STR_RADIOBUTTON_CLASSNAME; break;
-        case FormComponentType::CHECKBOX:       nResId = RID_STR_CHECKBOX_CLASSNAME;    break;
-        case FormComponentType::LISTBOX:        nResId = RID_STR_LISTBOX_CLASSNAME;     break;
-        case FormComponentType::COMBOBOX:       nResId = RID_STR_COMBOBOX_CLASSNAME;    break;
-        case FormComponentType::GROUPBOX:       nResId = RID_STR_GROUPBOX_CLASSNAME;    break;
-        case FormComponentType::IMAGEBUTTON:    nResId = RID_STR_IMAGE_CLASSNAME;       break;
-        case FormComponentType::FIXEDTEXT:      nResId = RID_STR_FIXEDTEXT_CLASSNAME;   break;
-        case FormComponentType::GRIDCONTROL:    nResId = RID_STR_GRID_CLASSNAME;        break;
-        case FormComponentType::FILECONTROL:    nResId = RID_STR_FILECONTROL_CLASSNAME; break;
-        case FormComponentType::DATEFIELD:      nResId = RID_STR_DATEFIELD_CLASSNAME;   break;
-        case FormComponentType::TIMEFIELD:      nResId = RID_STR_TIMEFIELD_CLASSNAME;   break;
-        case FormComponentType::NUMERICFIELD:   nResId = RID_STR_NUMERICFIELD_CLASSNAME;    break;
-        case FormComponentType::CURRENCYFIELD:  nResId = RID_STR_CURRENCYFIELD_CLASSNAME;   break;
-        case FormComponentType::PATTERNFIELD:   nResId = RID_STR_PATTERNFIELD_CLASSNAME;    break;
-        case FormComponentType::IMAGECONTROL:   nResId = RID_STR_IMAGECONTROL_CLASSNAME;    break;
-        case FormComponentType::HIDDENCONTROL:  nResId = RID_STR_HIDDEN_CLASSNAME;      break;
-        case FormComponentType::SCROLLBAR:      nResId = RID_STR_CLASSNAME_SCROLLBAR;   break;
-        case FormComponentType::SPINBUTTON:     nResId = RID_STR_CLASSNAME_SPINBUTTON;  break;
-        case FormComponentType::NAVIGATIONBAR:  nResId = RID_STR_NAVBAR_CLASSNAME;      break;
-
-        case FormComponentType::TEXTFIELD:
-            nResId = RID_STR_EDIT_CLASSNAME;
-            if ( _rxObject.is() && _rxObject->supportsService( FM_SUN_COMPONENT_FORMATTEDFIELD ) )
-                nResId = RID_STR_FORMATTED_CLASSNAME;
-            break;
-
-        default:
-            nResId = RID_STR_CONTROL_CLASSNAME;     break;
-    }
-
-    return SVX_RES(nResId);
-}
-
-//------------------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::getDefaultName(
-    sal_Int16 _nClassId, const Reference< XForm >& _rxControls, const Reference< XServiceInfo >& _rxObject ) const
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultName" );
-    ::rtl::OUString aClassName=getDefaultName( _nClassId, _rxObject );
-
-    Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( _rxControls, UNO_QUERY );
-    return getUniqueName(aClassName, xNamedSet);
-}
-
 //------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::getUniqueName(const ::rtl::OUString& rName, const Reference< ::com::sun::star::container::XNameAccess > & xNamedSet) const
+void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getUniqueName" );
-    Reference< ::com::sun::star::container::XIndexAccess >  xIndexSet(xNamedSet, UNO_QUERY);
-    ::rtl::OUString sName( rName );
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( !xControlShapeMap.is() )
+        // our map does not exist -> not interested in this event
+        return;
 
-    if ( !xIndexSet.is() )
-        return sName;
+    try
+    {
+        lcl_insertFormObject_throw( _object,  xControlShapeMap );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
 
-    sal_Int32 n = 0;
-    ::rtl::OUString sClassName = rName;
+void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
+{
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( !xControlShapeMap.is() )
+        // our map does not exist -> not interested in this event
+        return;
 
-    while ( xNamedSet->hasByName( sName ) )
-        sName = sClassName + ::rtl::OUString::valueOf(++n);
-
-    return sName;
+    try
+    {
+        lcl_removeFormObject( _object, xControlShapeMap );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }

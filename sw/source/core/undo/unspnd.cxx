@@ -66,7 +66,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     {
         pHistory = new SwHistory;
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nNode, 0,
-                            pTxtNd->GetTxt().Len(), FALSE );
+                            pTxtNd->GetTxt().Len(), false );
         if( !pHistory->Count() )
             DELETEZ( pHistory );
     }
@@ -155,7 +155,7 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
                 rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
 
                 pDoc->RstTxtAttrs( rPam, TRUE );
-                pHistory->TmpRollback( pDoc, 0, FALSE );
+                pHistory->TmpRollback( pDoc, 0, false );
             }
         }
     }

@@ -42,6 +42,6 @@ String RID_STR_HELPPROCESSING_GENERAL_ERROR
 
 String RID_STR_HELPPROCESSING_XMLPARSING_ERROR
 {
-    Text [ en-US ] = "The extension will not be installed because an error occured in the Help files:\n";
+    Text [ en-US ] = "The extension will not be installed because an error occurred in the Help files:\n";
 };
 

@@ -73,6 +73,7 @@ public class PentahoReportEngineMetaData
         mandatoryParameters.add(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
         mandatoryParameters.add(ReportEngineParameterNames.AUTHOR);
         mandatoryParameters.add(ReportEngineParameterNames.TITLE);
+        mandatoryParameters.add(ReportEngineParameterNames.MAXROWS);
 
 
         parameterTypes = new HashMap();
@@ -89,6 +90,7 @@ public class PentahoReportEngineMetaData
         parameterTypes.put(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS, List.class);
         parameterTypes.put(ReportEngineParameterNames.AUTHOR, String.class);
         parameterTypes.put(ReportEngineParameterNames.TITLE, String.class);
+        parameterTypes.put(ReportEngineParameterNames.MAXROWS, Integer.class);
 
         enumerationValues = new HashNMap();
         enumerationValues.add(CONTENT_TYPE,

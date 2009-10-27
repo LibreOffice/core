@@ -61,7 +61,6 @@ class ImportExcel8 : public ImportExcel
         void                    Precision( void );              // 0x0E
         void                    Delta( void );                  // 0x10
         void                    Iteration( void );              // 0x11
-        void                    WinProtection(  void );         // 0x19
         void                    Boundsheet( void );             // 0x85
         void                    FilterMode( void );             // 0x9B
         void                    AutoFilterInfo( void );         // 0x9D
@@ -73,6 +72,7 @@ class ImportExcel8 : public ImportExcel
 
         void                    Hlink( void );                  // 0x01B8
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
+        void                    SheetProtection( void );        // 0x0867
 
         virtual void            EndSheet( void );
         virtual void            PostDocLoad( void );

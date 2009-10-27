@@ -49,9 +49,7 @@
 #include <svx/srchdlg.hxx>
 #include <sfx2/templdlg.hxx>
 #include <uivwimp.hxx>
-#ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 #include <swmodule.hxx>
 
 #include <sfx2/objface.hxx>
@@ -92,7 +90,7 @@
 #define WebListInText
 #define WebListInTable
 #define TextPage
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <PostItMgr.hxx>
@@ -497,14 +495,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 {
                     SwDocShell *pDocSh = GetDocShell();
                     SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
-                    SwRootFrm *pRootFrm = pDoc ? pDoc->GetRootFrm() : NULL;
 
                     // right now we don't have view options for automatic grammar checking. Thus...
                     sal_Bool bIsAutoGrammar = sal_False;
                     aCfg.GetProperty( C2U( UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
-                    if (pDoc && pRootFrm && bIsAutoGrammar)
-                        StartGrammarChecking( *pDoc, *pRootFrm );
+                    if (pDoc && bIsAutoGrammar)
+                        StartGrammarChecking( *pDoc );
                 }
             }
         break;

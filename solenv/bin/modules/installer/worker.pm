@@ -2373,7 +2373,8 @@ sub collect_all_files_from_includepathes
 
         my @sourcefiles = ();
         my $pathstring = "";
-        installer::systemactions::read_complete_directory($includepath, $pathstring, \@sourcefiles);
+        # installer::systemactions::read_complete_directory($includepath, $pathstring, \@sourcefiles);
+        installer::systemactions::read_full_directory($includepath, $pathstring, \@sourcefiles);
 
         if ( ! ( $#sourcefiles > -1 ))
         {
@@ -2397,6 +2398,8 @@ sub collect_all_files_from_includepathes
             push(@installer::globals::allincludepathes, \%allfileshash);
         }
     }
+
+    $installer::globals::include_pathes_read = 1;
 
     installer::logger::globallog("Reading all directories: End");
     push( @installer::globals::globallogfileinfo, "\n");
@@ -2680,7 +2683,6 @@ sub generate_cygwin_pathes
         ${$filesref}[$i]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
     }
 }
-
 
 sub filter_pkgmapfile
 {

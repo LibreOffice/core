@@ -43,13 +43,8 @@
 #include <vcl/image.hxx>
 #include <svtools/svtreebx.hxx>
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <vcl/dockwin.hxx>
 #include "fmtools.hxx"
 #include "fmexch.hxx"

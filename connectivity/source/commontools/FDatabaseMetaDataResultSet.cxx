@@ -133,7 +133,7 @@ void ODatabaseMetaDataResultSet::disposing(void)
 
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aStatement    = NULL;
-    m_xMetaData     = NULL;
+m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
     m_aRows.clear();
     m_aRowsIter = m_aRows.end();

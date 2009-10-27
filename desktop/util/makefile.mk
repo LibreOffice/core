@@ -78,6 +78,7 @@ RESLIB1IMAGES=		$(PRJ)$/res
 RESLIB1SRSFILES=	$(SRS)$/desktop.srs \
                     $(SRS)$/wizard.srs
 
+.IF "$(L10N_framework)"==""
 .IF "$(GUI)" != "OS2"
 APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
@@ -107,7 +108,6 @@ APP1STDLIBS =  \
     $(SAXLIB) \
     $(FWILIB) \
     $(ICUUCLIB) \
-    $(SJLIB) \
     $(I18NUTILLIB) \
     $(ICULIB) \
     $(JVMFWKLIB) \
@@ -121,7 +121,7 @@ APP1STDLIBS =  \
 
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
-APP1STDLIBS+= -lXext -lSM -lICE
+APP1STDLIBS+= -lXext 
 .ENDIF
 .ENDIF
 
@@ -171,7 +171,6 @@ APP5STDLIBS = \
     $(SAXLIB) \
     $(FWILIB) \
     $(ICUUCLIB) \
-    $(SJLIB) \
     $(I18NUTILLIB) \
     $(ICULIB) \
     $(JVMFWKLIB) \
@@ -183,7 +182,8 @@ APP5STDLIBS = \
     $(VOSLIB)
 
 .IF "$(OS)" == "LINUX"
-APP5STDLIBS+= -lXext -lSM -lICE
+APP5STDLIBS+= -lXext
+#APP5STDLIBS+= -lXext -lSM -lICE
 .ENDIF # LINUX
 
 APP5DEPN= $(APP1TARGETN) $(APP5RES) ooverinfo.rc
@@ -241,9 +241,13 @@ APP5DEPN= $(APP1TARGETN) $(APP5RES) ooverinfo.rc
 APP5DEF=    $(MISCX)$/$(TARGET).def
 .ENDIF # WNT
 
+.ENDIF
+
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+.IF "$(L10N_framework)"==""
 
 .IF "$(APP1TARGETN)"!=""
 $(APP1TARGETN) :  $(MISC)$/binso_created.flg
@@ -333,3 +337,5 @@ $(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
 
 $(MISC)$/binso_created.flg :
     @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
+
+.ENDIF

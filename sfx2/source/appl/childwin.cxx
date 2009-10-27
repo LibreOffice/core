@@ -807,6 +807,9 @@ sal_Bool SfxChildWindow::QueryClose()
             bAllow = xCtrl->suspend( sal_True );
     }
 
+    if ( bAllow )
+        bAllow = !GetWindow()->IsInModalMode();
+
     return bAllow;
 }
 

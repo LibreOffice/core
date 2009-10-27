@@ -32,7 +32,7 @@ SfxVoidItem Adjust SID_ADJUST
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -259,7 +259,7 @@ SfxVoidItem Draw SID_DRAW
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -488,7 +488,7 @@ SfxVoidItem NextError SID_NEXTERR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -513,7 +513,7 @@ SfxVoidItem NextMark SID_NEXTMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -563,7 +563,7 @@ SfxVoidItem PrevError SID_PREVERR
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -588,7 +588,7 @@ SfxVoidItem PrevMark SID_PREVMARK
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -612,8 +612,8 @@ SfxBoolItem RedrawAutomatic SID_AUTO_REDRAW
 
 [
     /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -740,7 +740,7 @@ SfxBoolItem Textmode SID_TEXTMODE
 [
     /* flags: */
     AutoUpdate = TRUE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
@@ -819,7 +819,7 @@ SfxBoolItem ToolBox SID_TOOLBOX
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,

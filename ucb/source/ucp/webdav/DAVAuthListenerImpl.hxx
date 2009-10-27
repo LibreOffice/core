@@ -54,20 +54,24 @@ namespace webdav_ucp
 
         DAVAuthListener_Impl(
             const com::sun::star::uno::Reference<
-            com::sun::star::ucb::XCommandEnvironment>& xEnv )
-            : m_xEnv( xEnv
-            )
+                com::sun::star::ucb::XCommandEnvironment>& xEnv,
+            const ::rtl::OUString & inURL )
+            : m_xEnv( xEnv ), m_aURL( inURL )
         {
         }
 
         virtual int authenticate( const ::rtl::OUString & inRealm,
                                   const ::rtl::OUString & inHostName,
                                   ::rtl::OUString & inoutUserName,
-                                  ::rtl::OUString & outPassWord );
+                                  ::rtl::OUString & outPassWord,
+                                  sal_Bool bAllowPersistentStoring,
+                                  sal_Bool bCanUseSystemCredentials );
     private:
 
-        com::sun::star::uno::Reference<
+        const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > m_xEnv;
+        const rtl::OUString m_aURL;
+
         rtl::OUString m_aPrevPassword;
         rtl::OUString m_aPrevUsername;
     };

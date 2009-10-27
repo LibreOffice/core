@@ -121,7 +121,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                     Reference<drawing::framework::XView> xView (
                         framework::FrameworkHelper::Instance(*pBase)->GetView(
                             drawing::framework::ResourceId::create(
-                                comphelper_getProcessComponentContext(),
+                                ::comphelper::getProcessComponentContext(),
                                 framework::FrameworkHelper::msCenterPaneURL)));
                     if (xView.is())
                         sViewURL = xView->getResourceId()->getResourceURL();

@@ -53,10 +53,10 @@
 <paragraph role="heading" id="hd_id4554582" xml-lang="en-US" level="2" l10n="NEW">System Requirements</paragraph>
 <list type="unordered">
 <listitem>
-<paragraph role="paragraph" id="par_id2597430" xml-lang="en-US" l10n="NEW">StarOffice/StarSuite 8 Update 10</paragraph>
+<paragraph role="paragraph" id="par_id2597430" xml-lang="en-US" l10n="NEW">StarOffice/StarSuite 9</paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id8430738" xml-lang="en-US" l10n="NEW">OpenOffice.org 2.4</paragraph>
+<paragraph role="paragraph" id="par_id8430738" xml-lang="en-US" l10n="NEW">OpenOffice.org 3.0</paragraph>
 </listitem>
 <listitem>
 <paragraph role="paragraph" id="par_id9340495" xml-lang="en-US" l10n="NEW">Java Runtime Environment 1.4</paragraph>
@@ -66,7 +66,7 @@
 </listitem>
 </list>
 <paragraph role="heading" id="hd_id8047120" xml-lang="en-US" level="2" l10n="NEW">Installing @WIKIEXTENSIONPRODUCTNAME@</paragraph>
-<paragraph role="paragraph" id="par_id4277169" xml-lang="en-US" l10n="NEW">Before you install the @WIKIEXTENSIONPRODUCTNAME@, ensure that StarOffice or OpenOffice.org uses a Java Runtime Environment (JRE). To check the status of the JRE, choose <item type="menuitem">Tools - Options - StarOffice/OpenOffice.org - Java</item>. Ensure that "Use a Java runtime environment" is marked and that a Java runtime folder is selected in the big listbox. If no JRE was activated, then activate a JRE 1.4 or later and restart StarOffice/OpenOffice.org.</paragraph>
+<paragraph role="paragraph" id="par_id4277169" xml-lang="en-US" l10n="NEW">Before you install the @WIKIEXTENSIONPRODUCTNAME@, ensure that %PRODUCTNAME uses a Java Runtime Environment (JRE). To check the status of the JRE, choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Java</item>. Ensure that "Use a Java runtime environment" is marked and that a Java runtime folder is selected in the big listbox. If no JRE was activated, then activate a JRE 1.4 or later and restart %PRODUCTNAME.</paragraph>
 <paragraph role="heading" id="hd_id567339" xml-lang="en-US" level="3" l10n="NEW">To Install the @WIKIEXTENSIONPRODUCTNAME@</paragraph>
 <list type="ordered">
 <listitem>
@@ -79,7 +79,7 @@
 <paragraph role="paragraph" id="par_id5882442" xml-lang="en-US" l10n="NEW">Locate the @WIKIEXTENSIONFILENAME@.oxt file, click Open, and then click Close. </paragraph>
 </listitem>
 <listitem>
-<paragraph role="paragraph" id="par_id4008911" xml-lang="en-US" l10n="NEW">Close StarOffice/StarSuite/OpenOffice.org, and close also the Quickstarter if enabled.</paragraph>
+<paragraph role="paragraph" id="par_id4008911" xml-lang="en-US" l10n="NEW">Close %PRODUCTNAME, and close also the Quickstarter if enabled.</paragraph>
 </listitem>
 <listitem>
 <paragraph role="paragraph" id="par_id265511" xml-lang="en-US" l10n="NEW">Restart the software, open a text document, then choose <item type="menuitem">Tools - Options - Internet - MediaWiki</item> to enter your Wiki settings. See "To Connect To a Wiki" below.</paragraph>
@@ -98,7 +98,7 @@
 </listitem>
 </list>
 <paragraph role="heading" id="hd_id5316019" xml-lang="en-US" level="2" l10n="NEW">To Connect to a Wiki</paragraph>
-<paragraph role="paragraph" id="par_id2381969" xml-lang="en-US" l10n="NEW">Note: You can store your user name and password for all respective dialogs inside StarOffice/OpenOffice.org. The password will be stored in a secure way, where access is maintained by a master password. To enable the master password, choose <item type="menuitem">Tools - Options - StarOffice/OpenOffice.org - Security</item>.</paragraph>
+<paragraph role="paragraph" id="par_id2381969" xml-lang="en-US" l10n="NEW">Note: You can store your user name and password for all respective dialogs inside %PRODUCTNAME. The password will be stored in a secure way, where access is maintained by a master password. To enable the master password, choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Security</item>.</paragraph>
 <paragraph role="paragraph" id="par_id3751640" xml-lang="en-US" l10n="NEW">Note: If you connect to the web using a proxy server, enter the proxy information to <item type="menuitem">Tools - Options - Internet - Proxy</item>, and restart the software.</paragraph>
 <list type="ordered">
 <listitem>
@@ -124,7 +124,7 @@
 <paragraph role="paragraph" id="par_id8869594" xml-lang="en-US" l10n="NEW">In the Password box, enter the password for your Wiki account, then click OK.</paragraph>
 </listitem>
 </list>
-<paragraph role="paragraph" id="par_id292062" xml-lang="en-US" l10n="NEW">Optionally enable "Save password" to save the password between sessions. A master password is used to maintain access to all saved passwords. Choose <item type="menuitem">Tools - Options - StarOffice/OpenOffice.org - Security</item> to enable the master password. "Save password" is unavailable when the master password is not enabled.</paragraph>
+<paragraph role="paragraph" id="par_id292062" xml-lang="en-US" l10n="NEW">Optionally enable "Save password" to save the password between sessions. A master password is used to maintain access to all saved passwords. Choose <item type="menuitem">Tools - Options - %PRODUCTNAME - Security</item> to enable the master password. "Save password" is unavailable when the master password is not enabled.</paragraph>
 <paragraph role="heading" id="hd_id7044892" xml-lang="en-US" level="2" l10n="NEW">To Create a New Wiki Page</paragraph>
 <list type="ordered">
 <listitem>

@@ -324,9 +324,12 @@ namespace abp
         const sal_Char* pGuess = NULL;
         switch ( getSettings().eType )
         {
-            case AST_MORK       :
-            case AST_THUNDERBIRD: pGuess = "Personal Address Book"; break;
-            case AST_LDAP       : pGuess = "LDAP Directory"; break;
+            case AST_MORK               :
+            case AST_THUNDERBIRD        : pGuess = "Personal Address book"; break;
+            case AST_LDAP               : pGuess = "LDAP Directory"; break;
+            case AST_EVOLUTION          :
+            case AST_EVOLUTION_GROUPWISE:
+            case AST_EVOLUTION_LDAP     : pGuess = "Personal"; break;
             default:
                 DBG_ERROR( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
                 return;

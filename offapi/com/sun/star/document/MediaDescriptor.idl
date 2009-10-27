@@ -84,6 +84,12 @@ module com { module sun { module star { module document {
 published service MediaDescriptor
 {
     //-------------------------------------------------------------------------
+    /** May be set by filters or detection services if user has choosen to
+        abort loading/saving, e.g. while entering a password.
+     */
+    [optional,property] boolean Aborted;
+
+    //-------------------------------------------------------------------------
     /** document is a template
 
         <p>

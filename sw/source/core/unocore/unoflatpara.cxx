@@ -228,7 +228,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
     mpTxtNode = pOldTxtNode; // setPropertyValue() modifies this. We restore the old state.
 
     IDocumentContentOperations* pIDCO = mpTxtNode->getIDocumentContentOperations();
-    pIDCO->Replace( aPaM, aNewText, false );
+    pIDCO->ReplaceRange( aPaM, aNewText, false );
 
     mpTxtNode = 0;
 }
@@ -404,15 +404,6 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         xRet = new SwXFlatParagraph( *pRet, aExpandText, pConversionMap );
         // keep hard references...
         m_aFlatParaList.insert( xRet );
-    }
-
-    // in case that grammar checking will be finished we now have to reset
-    // the flag at the root frame that indicated grammar checking was still active.
-    if (!xRet.is() && mnType == text::TextMarkupType::PROOFREADING)
-    {
-        SwRootFrm *pRootFrm = mpDoc? mpDoc->GetRootFrm() : NULL;
-        if (pRootFrm)
-            pRootFrm->SetGrammarCheckActive( false );
     }
 
     return xRet;

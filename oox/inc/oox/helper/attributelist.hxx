@@ -59,6 +59,33 @@ public:
     /** Returns true, if the specified attribute is present. */
     bool                hasAttribute( sal_Int32 nElement ) const;
 
+    // static string conversion -----------------------------------------------
+
+    /** Returns the decoded string value. All characters in the format
+        '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
+    static ::rtl::OUString decodeXString( const ::rtl::OUString& rValue );
+
+    /** Returns the double value from the passed string. */
+    static double       decodeDouble( const ::rtl::OUString& rValue );
+
+    /** Returns the 32-bit signed integer value from the passed string (decimal). */
+    static sal_Int32    decodeInteger( const ::rtl::OUString& rValue );
+
+    /** Returns the 32-bit unsigned integer value from the passed string (decimal). */
+    static sal_uInt32   decodeUnsigned( const ::rtl::OUString& rValue );
+
+    /** Returns the 64-bit signed integer value from the passed string (decimal). */
+    static sal_Int64    decodeHyper( const ::rtl::OUString& rValue );
+
+    /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
+    static sal_Int32    decodeIntegerHex( const ::rtl::OUString& rValue );
+
+    /** Returns the 32-bit unsigned integer value from the passed string (hexadecimal). */
+    static sal_uInt32   decodeUnsignedHex( const ::rtl::OUString& rValue );
+
+    /** Returns the 64-bit signed integer value from the passed string (hexadecimal). */
+    static sal_Int64    decodeHyperHex( const ::rtl::OUString& rValue );
+
     // optional return values -------------------------------------------------
 
     /** Returns the token identifier of the value of the specified attribute. */
@@ -67,20 +94,30 @@ public:
     /** Returns the string value of the specified attribute. */
     OptValue< ::rtl::OUString > getString( sal_Int32 nElement ) const;
 
+    /** Returns the string value of the specified attribute. All characters in
+        the format '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
+    OptValue< ::rtl::OUString > getXString( sal_Int32 nElement ) const;
+
     /** Returns the double value of the specified attribute. */
     OptValue< double >  getDouble( sal_Int32 nElement ) const;
 
-    /** Returns the integer value of the specified attribute. */
+    /** Returns the 32-bit signed integer value of the specified attribute (decimal). */
     OptValue< sal_Int32 > getInteger( sal_Int32 nElement ) const;
 
-    /** Returns the unsigned integer value of the specified attribute. */
-    OptValue< sal_uInt32 > getUnsignedInteger( sal_Int32 nElement ) const;
+    /** Returns the 32-bit unsigned integer value of the specified attribute (decimal). */
+    OptValue< sal_uInt32 > getUnsigned( sal_Int32 nElement ) const;
 
-    /** Returns the 64-bit integer value of the specified attribute. */
-    OptValue< sal_Int64 > getInteger64( sal_Int32 nElement ) const;
+    /** Returns the 64-bit signed integer value of the specified attribute (decimal). */
+    OptValue< sal_Int64 > getHyper( sal_Int32 nElement ) const;
 
-    /** Returns the integer value of the specified hexadecimal attribute. */
-    OptValue< sal_Int32 > getHex( sal_Int32 nElement ) const;
+    /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal). */
+    OptValue< sal_Int32 > getIntegerHex( sal_Int32 nElement ) const;
+
+    /** Returns the 32-bit unsigned integer value of the specified attribute (hexadecimal). */
+    OptValue< sal_uInt32 > getUnsignedHex( sal_Int32 nElement ) const;
+
+    /** Returns the 64-bit signed integer value of the specified attribute (hexadecimal). */
+    OptValue< sal_Int64 > getHyperHex( sal_Int32 nElement ) const;
 
     /** Returns the boolean value of the specified attribute. */
     OptValue< bool >    getBool( sal_Int32 nElement ) const;
@@ -98,25 +135,37 @@ public:
         default string if the attribute is missing. */
     ::rtl::OUString     getString( sal_Int32 nElement, const ::rtl::OUString& rDefault ) const;
 
+    /** Returns the decoded string value of the specified attribute, or the
+        passed default string if the attribute is missing. */
+    ::rtl::OUString     getXString( sal_Int32 nElement, const ::rtl::OUString& rDefault ) const;
+
     /** Returns the double value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to a double. */
     double              getDouble( sal_Int32 nElement, double fDefault ) const;
 
-    /** Returns the integer value of the specified attribute, or the passed
-        default value if the attribute is missing or not convertible to integer. */
+    /** Returns the 32-bit signed integer value of the specified attribute, or the
+        passed default value if the attribute is missing or not convertible to integer. */
     sal_Int32           getInteger( sal_Int32 nElement, sal_Int32 nDefault ) const;
 
-    /** Returns the unsigned integer value of the specified attribute, or the passed
-        default value if the attribute is missing or not convertible to unsigned integer. */
-    sal_uInt32          getUnsignedInteger( sal_Int32 nElement, sal_uInt32 nDefault ) const;
+    /** Returns the 32-bit unsigned integer value of the specified attribute, or the
+        passed default value if the attribute is missing or not convertible to unsigned. */
+    sal_uInt32          getUnsigned( sal_Int32 nElement, sal_uInt32 nDefault ) const;
 
-    /** Returns the 64-bit integer value of the specified attribute, or the passed
-        default value if the attribute is missing or not convertible to integer. */
-    sal_Int64           getInteger64( sal_Int32 nElement, sal_Int64 nDefault ) const;
+    /** Returns the 64-bit signed integer value of the specified attribute, or the
+        passed default value if the attribute is missing or not convertible to integer. */
+    sal_Int64           getHyper( sal_Int32 nElement, sal_Int64 nDefault ) const;
 
-    /** Returns the integer value of the specified hexadecimal attribute,
+    /** Returns the 32-bit signed integer value of the specified attribute (hexadecimal),
         or the passed default value if the attribute is missing or not convertible. */
-    sal_Int32           getHex( sal_Int32 nElement, sal_Int32 nDefault ) const;
+    sal_Int32           getIntegerHex( sal_Int32 nElement, sal_Int32 nDefault ) const;
+
+    /** Returns the 32-bit unsigned integer value of the specified attribute (hexadecimal),
+        or the passed default value if the attribute is missing or not convertible. */
+    sal_uInt32          getUnsignedHex( sal_Int32 nElement, sal_uInt32 nDefault ) const;
+
+    /** Returns the 64-bit signed integer value of the specified attribute (hexadecimal),
+        or the passed default value if the attribute is missing or not convertible. */
+    sal_Int64           getHyperHex( sal_Int32 nElement, sal_Int64 nDefault ) const;
 
     /** Returns the boolean value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to bool. */

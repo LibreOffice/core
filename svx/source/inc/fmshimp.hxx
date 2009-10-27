@@ -79,7 +79,7 @@
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <unotools/configitem.hxx>
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include "formcontrolling.hxx"
 #include "fmdocumentclassification.hxx"
 
@@ -181,6 +181,7 @@ typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
 struct SdrViewEvent;
 class FmFormShell;
+class FmFormView;
 class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public ::svxform::OStaticDataAccessTools
@@ -421,7 +422,7 @@ public:
 
     /** retrieves the current selection
     */
-    void    getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const;
+    SVX_DLLPUBLIC void    getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const;
 
     /** sets a new current selection as indicated by a mark list
         @return
@@ -630,7 +631,7 @@ public:
 
 // ========================================================================
 SV_DECL_PTRARR_DEL(StatusForwarderArray, SfxStatusForwarder*, 16, 0)
-class SAL_DLLPRIVATE ControlConversionMenuController : public SfxMenuControl
+class SVX_DLLPUBLIC ControlConversionMenuController : public SfxMenuControl
 {
 protected:
     StatusForwarderArray    m_aStatusForwarders;
@@ -638,11 +639,11 @@ protected:
     PopupMenu*              m_pConversionMenu;
 
 public:
-    ControlConversionMenuController(sal_uInt16 nId, Menu& rMenu, SfxBindings& rBindings);
-    virtual ~ControlConversionMenuController();
+    SVX_DLLPRIVATE ControlConversionMenuController(sal_uInt16 nId, Menu& rMenu, SfxBindings& rBindings);
+    SVX_DLLPRIVATE virtual ~ControlConversionMenuController();
     SFX_DECL_MENU_CONTROL();
 
-    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
+    SVX_DLLPRIVATE virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
 };
 
 //==================================================================

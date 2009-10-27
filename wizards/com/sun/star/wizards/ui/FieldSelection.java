@@ -42,41 +42,38 @@ import java.util.*;
  */
 public class FieldSelection
 {
+    public XListBox xFieldsListBox;                 // Left ListBox
+    public XListBox xSelectedFieldsListBox;         // right (selected) ListBox
 
-    public UnoDialog CurUnoDialog;
-    public XListBox xFieldsListBox;
-    public XListBox xSelectedFieldsListBox;
-    public XFieldSelectionListener xFieldSelection;
-    public int maxfieldcount = 10000000;
-    public String sIncSuffix;
-    protected Integer IStep;
+    protected UnoDialog CurUnoDialog;
+    protected String sIncSuffix;
     protected int FirstHelpIndex;
-    protected short curtabindex;
+    protected boolean AppendMode = false;
+    protected Integer IStep;
+
+    protected int CompPosX;
+    protected int CompPosY;
+    protected int CompHeight;
+    protected int CompWidth;
+
+    private XFieldSelectionListener xFieldSelection;
+    private int maxfieldcount = 10000000;
     private String[] AllFieldNames;
     private Integer ListBoxWidth;
-    public Integer SelListBoxPosX;
-    boolean bisModified = false;
-    boolean AppendMode = false;
 
-    final int SOCMDMOVESEL = 1;
-    final int SOCMDMOVEALL = 2;
-    final int SOCMDREMOVESEL = 3;
-    final int SOCMDREMOVEALL = 4;
-    final int SOCMDMOVEUP = 5;
-    final int SOCMDMOVEDOWN = 6;
-    final int SOFLDSLST = 7;
-    final int SOSELFLDSLST = 8;
-    final int cmdButtonWidth = 16;
-    final int cmdButtonHoriDist = 4;
-    final int cmdButtonHeight = 14;
-    final int cmdButtonVertiDist = 2;
-    final int lblHeight = 8;
-    final int lblVertiDist = 2;
+    private Integer SelListBoxPosX;
 
-    int CompPosX;
-    int CompPosY;
-    int CompHeight;
-    int CompWidth;
+    private boolean bisModified = false;
+
+    private final static int SOCMDMOVESEL = 1;
+    private final static int SOCMDMOVEALL = 2;
+    private final static int SOCMDREMOVESEL = 3;
+    private final static int SOCMDREMOVEALL = 4;
+    private final static int SOCMDMOVEUP = 5;
+    private final static int SOCMDMOVEDOWN = 6;
+    private final static int SOFLDSLST = 7;
+    private final static int SOSELFLDSLST = 8;
+
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
@@ -181,18 +178,19 @@ public class FieldSelection
         return AppendMode;
     }
 
-    public FieldSelection(UnoDialog CurUnoDialog, int iStep, int CompPosX, int CompPosY, int CompWidth, int CompHeight, String slblFields, String slblSelFields, int _FirstHelpIndex, boolean bshowFourButtons)
+    public FieldSelection(UnoDialog CurUnoDialog, int _iStep, int CompPosX, int CompPosY, int CompWidth, int CompHeight, String slblFields, String slblSelFields, int _FirstHelpIndex, boolean bshowFourButtons)
     {
         try
         {
-            String AccessTextMoveSelected = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 39);
-            String AccessTextRemoveSelected = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 40);
-            String AccessTextMoveAll = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 41);
-            String AccessTextRemoveAll = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 42);
-            String AccessMoveFieldUp = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 43);
-            String AccessMoveFieldDown = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 44);
+            final String AccessTextMoveSelected = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 39);
+            final String AccessTextRemoveSelected = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 40);
+            final String AccessTextMoveAll = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 41);
+            final String AccessTextRemoveAll = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 42);
+            final String AccessMoveFieldUp = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 43);
+            final String AccessMoveFieldDown = CurUnoDialog.m_oResource.getResText(UIConsts.RID_DB_COMMON + 44);
+
             FirstHelpIndex = _FirstHelpIndex;
-            curtabindex = UnoDialog.setInitialTabindex(iStep);
+            short curtabindex = UnoDialog.setInitialTabindex(_iStep);
             int ShiftButtonCount = 2;
             int a = 0;
             this.CurUnoDialog = CurUnoDialog;
@@ -203,12 +201,18 @@ public class FieldSelection
             Object btnmoveall = null;
             Object btnremoveall = null;
 
-            ListBoxWidth = new Integer((int) ((CompWidth - 3 * cmdButtonHoriDist - 2 * cmdButtonWidth) / 2));
-            Integer cmdShiftButtonPosX = new Integer((int) (CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
+            final int cmdButtonWidth = 16;
+            final int cmdButtonHoriDist = 4;
+            final int lblHeight = 8;
+            final int lblVertiDist = 2;
+
+            ListBoxWidth = new Integer(((CompWidth - 3 * cmdButtonHoriDist - 2 * cmdButtonWidth) / 2));
+            Integer cmdShiftButtonPosX = new Integer((CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
             Integer ListBoxPosY = new Integer(CompPosY + lblVertiDist + lblHeight);
             Integer ListBoxHeight = new Integer(CompHeight - 8 - 2);
             SelListBoxPosX = new Integer(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
-            IStep = new Integer(iStep);
+
+            IStep = new Integer(_iStep);
             if (bshowFourButtons == true)
             {
                 ShiftButtonCount = 4;
@@ -221,6 +225,7 @@ public class FieldSelection
 
             sIncSuffix = "_" + com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "lblFields_");
 
+            // Label
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblFields" + sIncSuffix,
                     new String[]
                     {
@@ -231,6 +236,7 @@ public class FieldSelection
                         new Integer(8), slblFields, new Integer(CompPosX), new Integer(CompPosY), IStep, new Short(curtabindex), new Integer(109)
                     });
 
+            // Listbox 'Available fields'
             xFieldsListBox = CurUnoDialog.insertListBox("lstFields" + sIncSuffix, SOFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
@@ -289,6 +295,7 @@ public class FieldSelection
             FontDescriptor oFontDesc = new FontDescriptor();
             oFontDesc.Name = "StarSymbol";
 
+            // Label 'Fields in the form'
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblSelFields" + sIncSuffix,
                     new String[]
                     {
@@ -299,6 +306,7 @@ public class FieldSelection
                         new Integer(8), slblSelFields, SelListBoxPosX, new Integer(CompPosY), IStep, new Short(curtabindex++), ListBoxWidth
                     });
 
+            // ListBox 'Fields in the form'
             xSelectedFieldsListBox = CurUnoDialog.insertListBox("lstSelFields" + sIncSuffix, SOSELFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[]
                     {
@@ -364,7 +372,10 @@ public class FieldSelection
         if (ButtonCount > 0)
         {
             YPosArray = new Integer[ButtonCount];
-            YPosArray[0] = new Integer((int) (CompPosY + 10 + (((CompHeight - 10) - (ButtonCount * cmdButtonHeight) - ((ButtonCount - 1) * cmdButtonVertiDist)) / 2)));
+            final int cmdButtonHeight = 14;
+            final int cmdButtonVertiDist = 2;
+
+            YPosArray[0] = new Integer( (CompPosY + 10 + (((CompHeight - 10) - (ButtonCount * cmdButtonHeight) - ((ButtonCount - 1) * cmdButtonVertiDist)) / 2)));
             if (ButtonCount > 1)
             {
                 for (int i = 1; i < ButtonCount; i++)
@@ -616,9 +627,9 @@ public class FieldSelection
         else
         {
             int MaxOriginalCount = AllFieldNames.length;
-            int MaxSelected = OldSelFieldItems.length;
+            // int MaxSelected = OldSelFieldItems.length;
             String[] SelList = xFieldsListBox.getItems();
-            Vector NewSourceVector = new Vector();
+            Vector<String> NewSourceVector = new Vector<String>();
             for (int i = 0; i < MaxOriginalCount; i++)
             {
                 SearchString = AllFieldNames[i];

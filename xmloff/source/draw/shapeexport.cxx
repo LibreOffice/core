@@ -1213,7 +1213,8 @@ const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
     if( !mxShapeTableExport.is() )
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport ) );
-        rtl::Reference< XMLPropertySetMapper > xPropertySetMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
+        UniReference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory.get() ) );
+        rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&mrExport.GetTextParagraphExport()->GetListAutoStylePool(), mrExport ) );
         mxShapeTableExport = new XMLTableExport( mrExport, xPropertySetMapper, xFactory );
     }
 

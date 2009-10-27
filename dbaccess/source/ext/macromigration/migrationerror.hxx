@@ -59,6 +59,7 @@ namespace dbmm
         ERR_SCRIPT_TRANSLATION_FAILURE,
         ERR_INVALID_SCRIPT_DESCRIPTOR_FORMAT,
         ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED,
+        ERR_ADJUSTING_DIALOG_EVENTS_FAILED,
         ERR_ADJUSTING_FORMCOMP_EVENTS_FAILED,
         ERR_BIND_SCRIPT_STORAGE_FAILED,
         ERR_REMOVE_SCRIPTS_STORAGE_FAILED,
@@ -130,6 +131,18 @@ namespace dbmm
             ,aCaughtException( _rCaughtException )
         {
             impl_constructDetails( _rDetail1, _rDetail2 );
+        }
+
+        MigrationError(
+                const MigrationErrorType _eType,
+                const ::rtl::OUString& _rDetail1,
+                const ::rtl::OUString& _rDetail2,
+                const ::rtl::OUString& _rDetail3,
+                const ::com::sun::star::uno::Any& _rCaughtException )
+            :eType( _eType )
+            ,aCaughtException( _rCaughtException )
+        {
+            impl_constructDetails( _rDetail1, _rDetail2, _rDetail3 );
         }
 
         MigrationError(

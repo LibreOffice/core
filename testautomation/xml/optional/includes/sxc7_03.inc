@@ -67,7 +67,7 @@ testcase tchart_export
     call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\chart_export.sdc"))
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\chart_export.sxc") , "StarOffice XML (Calc)") = TRUE then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\chart_export.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\chart_export") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\chart_export\styles.xml")) = FALSE then
@@ -97,7 +97,7 @@ testcase tconditional_formatting
   call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\conditional_formatting.sdc"))
   if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\conditional_formatting.sxc") , "StarOffice XML (Calc)") = TRUE then
     '/// Closing the document also if there is a verification dialog.
-    call hCloseAndLooseDocument
+    call hCloseDocument()
     sleep(3)
     UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\conditional_formatting.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\conditional_formatting") )
     if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\conditional_formatting\styles.xml")) = FALSE then
@@ -156,7 +156,7 @@ testcase tcontrols01
     sleep(2)  
     if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\controls01.sxc") , "StarOffice XML (Calc)") = TRUE then
         '/// Closing the document also if there is a verification dialog.
-        call hCloseAndLooseDocument
+        call hCloseDocument()
         sleep(3)
         UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\controls01.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\controls01") )
         if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\controls01\styles.xml")) = FALSE then
@@ -194,7 +194,7 @@ testcase tdatabase_ranges
   call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\database_ranges.sdc"))
   if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\database_ranges.sxc") , "StarOffice XML (Calc)") = TRUE then
     '/// Closing the document also if there is a verification dialog.
-    call hCloseAndLooseDocument
+    call hCloseDocument()
     sleep(3)
     UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\database_ranges.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\database_ranges") )
     if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\database_ranges\styles.xml")) = FALSE then
@@ -224,7 +224,7 @@ testcase tfilter_and_subtotals1
   call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\filter_and_subtotals1.sdc"))
   if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals1.sxc") , "StarOffice XML (Calc)") = TRUE then
     '/// Closing the document also if there is a verification dialog.
-    call hCloseAndLooseDocument
+    call hCloseDocument()
     sleep(3)
     UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals1.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals1") )
     if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals1\styles.xml")) = FALSE then
@@ -254,7 +254,7 @@ testcase tfilter_and_subtotals4
   call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\filter_and_subtotals4.sdc"))
   if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals4.sxc") , "StarOffice XML (Calc)") = TRUE then
     '/// Closing the document also if there is a verification dialog.
-    call hCloseAndLooseDocument
+    call hCloseDocument()
     sleep(3)
     UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals4.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals4") )
     if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\filter_and_subtotals4\styles.xml")) = FALSE then
@@ -284,7 +284,7 @@ testcase tmatrixformula_and_notes
   call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\matrixformula_and_notes.sdc"))
   if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\matrixformula_and_notes.sxc") , "StarOffice XML (Calc)") = TRUE then
     '/// Closing the document also if there is a verification dialog.
-    call hCloseAndLooseDocument
+    call hCloseDocument()
     sleep(3)     
     UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\matrixformula_and_notes.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\matrixformula_and_notes") )
     if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\matrixformula_and_notes\styles.xml")) = FALSE then
@@ -314,7 +314,7 @@ testcase tpassword3
   call hFileOpen (gTesttoolPath & ConvertPath("xml\optional\input\calc\so_binary\password3.sdc"))
   if hFileSaveAsWithFilterKill (gOfficePath & ConvertPath("user\work\xml\calc\level1\password3.sxc") , "StarOffice XML (Calc)") = TRUE then
     '/// Closing the document also if there is a verification dialog.
-    call hCloseAndLooseDocument
+    call hCloseDocument()
     sleep(3)
     UnpackStorage( gOfficePath & ConvertPath("user\work\xml\calc\level1\password3.sxc") , gOfficePath & ConvertPath("user\work\xml\calc\level1\password3") )
     if XMLWellformed (gOfficePath & ConvertPath("user\work\xml\calc\level1\password3\styles.xml")) = FALSE then

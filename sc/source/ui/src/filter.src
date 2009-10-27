@@ -34,7 +34,7 @@ ModelessDialog RID_SCDLG_FILTER
     HelpId = SID_FILTER ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 298 , 83 ) ;
+    Size = MAP_APPFONT ( 279 , 121 ) ;
     Text [ en-US ] = "Standard Filter" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -58,14 +58,14 @@ ModelessDialog RID_SCDLG_FILTER
     };
     FixedText FT_VAL
     {
-        Pos = MAP_APPFONT ( 173 , 14 ) ;
+        Pos = MAP_APPFONT ( 201 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text [ en-US ] = "Value" ;
     };
     ListBox LB_OP1
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -78,7 +78,33 @@ ModelessDialog RID_SCDLG_FILTER
     ListBox LB_OP2
     {
         Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "AND" ; Default ; > ;
+            < "OR" ; Default ; > ;
+        };
+    };
+    ListBox LB_OP3
+    {
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "AND" ; Default ; > ;
+            < "OR" ; Default ; > ;
+        };
+    };
+    ListBox LB_OP4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -112,11 +138,19 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
+    ListBox LB_FIELD4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 73 ) ;
+        Size = MAP_APPFONT ( 60 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
     ListBox LB_COND1
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 122 , 25 ) ;
-        Size = MAP_APPFONT ( 47 , 105 ) ;
+        Size = MAP_APPFONT ( 75 , 145 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         stringlist [ en-US ] =
@@ -131,13 +165,19 @@ ModelessDialog RID_SCDLG_FILTER
             < "Smallest" ; Default ; > ;
             < "Largest %" ; Default ; > ;
             < "Smallest %" ; Default ; > ;
+            < "Contains" ; Default ; > ;
+            < "Does not contain" ; Default ; > ;
+            < "Begins with" ; Default ; > ;
+            < "Does not begin with" ; Default ; > ;
+            < "Ends with" ; Default ; > ;
+            < "Does not end with" ; Default ; > ;
         };
     };
     ListBox LB_COND2
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 122 , 41 ) ;
-        Size = MAP_APPFONT ( 47 , 105 ) ;
+        Size = MAP_APPFONT ( 75 , 145 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         stringlist [ en-US ] =
@@ -152,13 +192,19 @@ ModelessDialog RID_SCDLG_FILTER
             < "Smallest" ; Default ; > ;
             < "Largest %" ; Default ; > ;
             < "Smallest %" ; Default ; > ;
+            < "Contains" ; Default ; > ;
+            < "Does not contain" ; Default ; > ;
+            < "Begins with" ; Default ; > ;
+            < "Does not begin with" ; Default ; > ;
+            < "Ends with" ; Default ; > ;
+            < "Does not end with" ; Default ; > ;
         };
     };
     ListBox LB_COND3
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 122 , 57 ) ;
-        Size = MAP_APPFONT ( 47 , 105 ) ;
+        Size = MAP_APPFONT ( 75 , 145 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         stringlist [ en-US ] =
@@ -173,39 +219,87 @@ ModelessDialog RID_SCDLG_FILTER
             < "Smallest" ; Default ; > ;
             < "Largest %" ; Default ; > ;
             < "Smallest %" ; Default ; > ;
+            < "Contains" ; Default ; > ;
+            < "Does not contain" ; Default ; > ;
+            < "Begins with" ; Default ; > ;
+            < "Does not begin with" ; Default ; > ;
+            < "Ends with" ; Default ; > ;
+            < "Does not end with" ; Default ; > ;
+        };
+    };
+    ListBox LB_COND4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 122 , 73 ) ;
+        Size = MAP_APPFONT ( 75 , 145 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        stringlist [ en-US ] =
+        {
+            < "=" ; Default ; > ;
+            < "<" ; Default ; > ;
+            < ">" ; Default ; > ;
+            < "<=" ; Default ; > ;
+            < ">=" ; Default ; > ;
+            < "<>" ; Default ; > ;
+            < "Largest" ; Default ; > ;
+            < "Smallest" ; Default ; > ;
+            < "Largest %" ; Default ; > ;
+            < "Smallest %" ; Default ; > ;
+            < "Contains" ; Default ; > ;
+            < "Does not contain" ; Default ; > ;
+            < "Begins with" ; Default ; > ;
+            < "Does not begin with" ; Default ; > ;
+            < "Ends with" ; Default ; > ;
+            < "Does not end with" ; Default ; > ;
         };
     };
     ComboBox ED_VAL1
     {
-        Pos = MAP_APPFONT ( 173 , 25 ) ;
+        Pos = MAP_APPFONT ( 201 , 25 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ComboBox ED_VAL2
     {
-        Pos = MAP_APPFONT ( 173 , 41 ) ;
+        Pos = MAP_APPFONT ( 201 , 41 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     ComboBox ED_VAL3
     {
-        Pos = MAP_APPFONT ( 173 , 57 ) ;
+        Pos = MAP_APPFONT ( 201 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
+    ComboBox ED_VAL4
+    {
+        Pos = MAP_APPFONT ( 201 , 73 ) ;
+        Size = MAP_APPFONT ( 60 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ScrollBar LB_SCROLL
+    {
+        Pos = MAP_APPFONT ( 265, 25 ) ;
+        Size = MAP_APPFONT ( 8 , 60 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+
     FixedLine FL_CRITERIA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 230 , 8 ) ;
+        Size = MAP_APPFONT ( 267 , 8 ) ;
         Text [ en-US ] = "Filter criteria";
     };
     CheckBox BTN_CASE
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Case ~sensitive" ;
@@ -213,7 +307,7 @@ ModelessDialog RID_SCDLG_FILTER
     CheckBox BTN_REGEXP
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 142 , 86 ) ;
+        Pos = MAP_APPFONT ( 142 , 130 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Regular ~expression" ;
@@ -221,7 +315,7 @@ ModelessDialog RID_SCDLG_FILTER
     CheckBox BTN_HEADER
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Range contains ~column labels" ;
@@ -229,7 +323,7 @@ ModelessDialog RID_SCDLG_FILTER
     CheckBox BTN_UNIQUE
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 142 , 100 ) ;
+        Pos = MAP_APPFONT ( 142 , 144 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~No duplication" ;
@@ -237,7 +331,7 @@ ModelessDialog RID_SCDLG_FILTER
     CheckBox BTN_COPY_RESULT
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Copy ~results to..." ;
@@ -245,7 +339,7 @@ ModelessDialog RID_SCDLG_FILTER
     CheckBox BTN_DEST_PERS
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 142 , 114 ) ;
+        Pos = MAP_APPFONT ( 142 , 158 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Keep filter criteria" ;
@@ -254,8 +348,8 @@ ModelessDialog RID_SCDLG_FILTER
     {
         Border = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 21 , 126 ) ;
-        Size = MAP_APPFONT ( 90 , 90 ) ;
+        Pos = MAP_APPFONT ( 21 , 170 ) ;
+        Size = MAP_APPFONT ( 110 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -263,13 +357,13 @@ ModelessDialog RID_SCDLG_FILTER
     {
         Border = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 126 ) ;
-        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Pos = MAP_APPFONT ( 136 , 170 ) ;
+        Size = MAP_APPFONT ( 110 , 12 ) ;
         TabStop = TRUE ;
     };
     ImageButton RB_COPY_AREA
     {
-        Pos = MAP_APPFONT ( 221 , 125 ) ;
+        Pos = MAP_APPFONT ( 248 , 169 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
@@ -277,14 +371,13 @@ ModelessDialog RID_SCDLG_FILTER
     FixedLine FL_OPTIONS
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 75 ) ;
-        Size = MAP_APPFONT ( 230 , 8 ) ;
-        Text [ en-US ] = "Options" ;
+        Pos = MAP_APPFONT ( 6 , 118 ) ;
+        Size = MAP_APPFONT ( 267 , 8 ) ;
     };
     FixedText FT_DBAREA
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 144 ) ;
+        Pos = MAP_APPFONT ( 66 , 188 ) ;
         Size = MAP_APPFONT ( 167 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "dummy" ;
@@ -292,36 +385,41 @@ ModelessDialog RID_SCDLG_FILTER
     FixedText FT_DBAREA_LABEL
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 144 ) ;
+        Pos = MAP_APPFONT ( 6 , 188 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
         Text [ en-US ] = "Data range:" ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 242 , 6 ) ;
+        Pos = MAP_APPFONT ( 169 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 242 , 23 ) ;
+        Pos = MAP_APPFONT ( 223 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 242 , 43 ) ;
+        Pos = MAP_APPFONT ( 62 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     MoreButton BTN_MORE
     {
-        Pos = MAP_APPFONT ( 242 , 63 ) ;
+        Pos = MAP_APPFONT ( 6 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
-        Delta = 75 ;
+        Delta = 81 ;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 91 ) ;
+        Size = MAP_APPFONT ( 279 , 6 ) ;
     };
 };
  //============================================================================

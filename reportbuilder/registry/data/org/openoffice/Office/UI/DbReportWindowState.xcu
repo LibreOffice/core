@@ -66,10 +66,7 @@
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
             <value>true</value>
-        </prop>
-        <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-            <value>true</value>
-        </prop>
+    </prop>
     </node>
     <node oor:name="private:resource/toolbar/reportcontrols" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">

@@ -56,7 +56,6 @@ class Typedef : public CodeEntity
     // LIFECYCLE
     enum E_ClassId { class_id = 1003 };
 
-                        Typedef();
                         Typedef(
                             const String  &     i_sLocalName,
                             Ce_id               i_nOwner,

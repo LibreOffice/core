@@ -41,8 +41,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Common ----------------------------------------------------------
 
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
+.IF "$(VERBOSE)"=="TRUE"
+CDEFS+=-DVERBOSE
 .ENDIF
 
 SHL1DLLPRE=

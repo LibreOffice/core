@@ -65,6 +65,7 @@ SHL1STDLIBS=\
     $(SALLIB)					\
     $(JVMACCESSLIB)				\
     $(UNOTOOLSLIB)              \
+    $(TOOLSLIB)                 \
     $(COMPHELPERLIB)            \
     $(I18NISOLANGLIB)
 

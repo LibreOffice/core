@@ -80,6 +80,26 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #define OSL_THIS_FILE       __FILE__
 
+/* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
+#ifdef __func__
+#define OSL_THIS_FUNC __func__
+#elifdef __PRETTY_FUNCTION__
+#define OSL_THIS_FUNC __PRETTY_FUNCTION__
+#elifdef __FUNCTION__
+#define OSL_THIS_FUNC __FUNCTION__
+#else
+#define OSL_THIS_FUNC " "
+#endif
+
+/* the macro OSL_TO_STRING is intended to be an office internal macro for now */
+#define OSL_TO_STRING( x ) #x
+
+/* the macro OSL_MACRO_VALUE_TO_STRING is intended to be an office internal macro for now */
+#define OSL_MACRO_VALUE_TO_STRING( x ) OSL_TO_STRING( x )
+
+/* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now */
+#define OSL_LOG_PREFIX OSL_THIS_FILE ":" OSL_THIS_FUNC ":" OSL_MACRO_VALUE_TO_STRING( __LINE__ ) "; "
+
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define OSL_TRACE           _OSL_TRACE
 #define OSL_ASSERT(c)       _OSL_ASSERT(c, OSL_THIS_FILE, __LINE__)

@@ -39,7 +39,7 @@
 #include <libxml/tree.h>
 #include "node.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 
@@ -59,6 +59,8 @@ namespace DOM
 
         virtual void SAL_CALL saxify(
             const Reference< XDocumentHandler >& i_xHandler);
+
+        virtual void SAL_CALL fastSaxify( Context& i_rContext );
 
         /**
         Retrieves an attribute value by name.

@@ -175,7 +175,9 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
     // Alle Transformationen anwenden und UnDo's anlegen
     if(mbMovedAtAll)
     {
-        getSdrDragView().BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_ROTATE));
+        const bool bUndo = getSdrDragView().IsUndoEnabled();
+        if( bUndo )
+            getSdrDragView().BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_ROTATE));
         sal_uInt32 nOb(0);
 
         for(nOb=0;nOb<nCnt;nOb++)
@@ -183,11 +185,15 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
             E3dDragMethodUnit& rCandidate = maGrp[nOb];
             E3DModifySceneSnapRectUpdater aUpdater(rCandidate.mp3DObj);
             rCandidate.mp3DObj->SetTransform(rCandidate.maTransform);
-            getSdrDragView().AddUndo(new E3dRotateUndoAction(rCandidate.mp3DObj->GetModel(),
-                rCandidate.mp3DObj, rCandidate.maInitTransform,
-                rCandidate.maTransform));
+            if( bUndo )
+            {
+                getSdrDragView().AddUndo(new E3dRotateUndoAction(rCandidate.mp3DObj->GetModel(),
+                    rCandidate.mp3DObj, rCandidate.maInitTransform,
+                    rCandidate.maTransform));
+            }
         }
-        getSdrDragView().EndUndo();
+        if( bUndo )
+            getSdrDragView().EndUndo();
     }
 
     return TRUE;

@@ -32,7 +32,8 @@
 #define SC_FMTUNO_HXX
 
 #include "address.hxx"
-#include "formula/grammar.hxx"
+#include "conditio.hxx"
+#include <formula/grammar.hxx>
 #include <tools/list.hxx>
 #include <svtools/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
@@ -61,16 +62,19 @@ struct ScCondFormatEntryItem
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens1;
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens2;
-    String             maExpr1;
-    String             maExpr2;
-    String             maPosStr;  // formula position as text
-    String             maStyle;   // display name as stored in ScStyleSheet
-    ScAddress          maPos;
-    formula::FormulaGrammar::Grammar meGrammar; // grammar used with maExpr1 and maExpr2
-    USHORT             mnMode;    // stores enum ScConditionMode
+    String              maExpr1;
+    String              maExpr2;
+    String              maExprNmsp1;
+    String              maExprNmsp2;
+    String              maPosStr;  // formula position as text
+    String              maStyle;   // display name as stored in ScStyleSheet
+    ScAddress           maPos;
+    formula::FormulaGrammar::Grammar meGrammar1; // grammar used with maExpr1
+    formula::FormulaGrammar::Grammar meGrammar2; // grammar used with maExpr2
+    ScConditionMode     meMode;
 
     // Make sure the grammar is initialized for API calls.
-    ScCondFormatEntryItem() : meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ) {}
+    ScCondFormatEntryItem();
 };
 
 class ScTableConditionalFormat : public cppu::WeakImplHelper5<
@@ -89,11 +93,11 @@ private:
     ScTableConditionalFormat(); // disable
 public:
                             ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
-                                                        const formula::FormulaGrammar::Grammar eGrammar);
+                                formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat();
 
-    void                    FillFormat( ScConditionalFormat& rFormat,
-                                            ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar ) const;
+    void                    FillFormat( ScConditionalFormat& rFormat, ScDocument* pDoc,
+                                formula::FormulaGrammar::Grammar eGrammar) const;
     void                    DataChanged();
 
                             // XSheetConditionalEntries
@@ -211,7 +215,10 @@ private:
     USHORT              nMode;          // enum ScConditionMode
     String              aExpr1;
     String              aExpr2;
-    formula::FormulaGrammar::Grammar  meGrammar;      // grammar used with aExpr1 and aExpr2
+    String              maExprNmsp1;
+    String              maExprNmsp2;
+    formula::FormulaGrammar::Grammar  meGrammar1;      // grammar used with aExpr1 and aExpr2
+    formula::FormulaGrammar::Grammar  meGrammar2;      // grammar used with aExpr1 and aExpr2
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens1;
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens2;
     ScAddress           aSrcPos;

@@ -35,6 +35,8 @@
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
+#include "com/sun/star/uno/Reference.hxx"
+
 #include "vcl/sv.h"
 #include "vcl/svdata.hxx"
 #include "vcl/salwtype.hxx"
@@ -111,6 +113,9 @@ struct SalData
     NSObject*                                     mpDockIconClickHandler;
     long                                          mnDPIX;           // #i100617# read DPI only once per office life
     long                                          mnDPIY;           // #i100617# read DPI only once per office life
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+                                                  mxClipboard;
 
     SalData();
     ~SalData();

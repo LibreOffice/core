@@ -47,3 +47,15 @@
     #define _DEBUG _DEBUG_WAS_DEFINED
 #endif
 
+#ifndef _CONNECTIVITY_MOZILLA_REINTERPRET_CAST_MINGW_ONLY_
+#define _CONNECTIVITY_MOZILLA_REINTERPRET_CAST_MINGW_ONLY_
+
+#ifdef __cplusplus
+#ifdef __MINGW32__
+template<class T1, class T2> T1 inline reinterpret_cast_mingw_only(T2 p) { return reinterpret_cast<T1>(p); }
+#else
+template<class T1, class T2> T1 inline reinterpret_cast_mingw_only(T2 p) { return p; }
+#endif
+#endif
+
+#endif

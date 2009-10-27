@@ -44,7 +44,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 
@@ -322,93 +321,23 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 }
 
 // XMenuListener
-void SAL_CALL FontSizeMenuController::highlight( const css::awt::MenuEvent& ) throw (RuntimeException)
+void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
-}
-
-void SAL_CALL FontSizeMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
-{
-    Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XDispatch >              xDispatch;
-    Reference< XMultiServiceFactory >   xServiceManager;
-
-    ResetableGuard aLock( m_aLock );
-    xPopupMenu      = m_xPopupMenu;
-    xDispatch       = m_xDispatch;
-    xServiceManager = m_xServiceManager;
-    aLock.unlock();
-
-    // Command URL used to dispatch the selected font family name
-    const rtl::OUString aFontHeightCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight?FontHeight.Height:float=" ));
-
-    if ( xPopupMenu.is() && xDispatch.is() )
-    {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( xPopupMenu );
-        if ( pPopupMenu )
-        {
-            css::util::URL               aTargetURL;
-            Sequence<PropertyValue>      aArgs;
-            Reference< XURLTransformer > xURLTransformer( xServiceManager->createInstance(
-                                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                        UNO_QUERY );
-
-            {
-                vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-                PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
-            }
-
-            xURLTransformer->parseStrict( aTargetURL );
-            if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString::createFromAscii("FontSizeMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-            xDispatch->dispatch( aTargetURL, aArgs );
-        }
-    }
-}
-
-void SAL_CALL FontSizeMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
-}
-
-void SAL_CALL FontSizeMenuController::deactivate( const css::awt::MenuEvent& ) throw (RuntimeException)
-{
+    Sequence<PropertyValue>      aArgs;
+    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
+        UiEventLogHelper(::rtl::OUString::createFromAscii("FontSizeMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+    _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 // XPopupMenuController
-void SAL_CALL FontSizeMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
+void FontSizeMenuController::impl_setPopupMenu()
 {
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( m_xFrame.is() && !m_xPopupMenu.is() )
-    {
-        // Create popup menu on demand
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
-
-        m_xPopupMenu = xPopupMenu;
-        m_xPopupMenu->addMenuListener( Reference< css::awt::XMenuListener >( (OWeakObject*)this, UNO_QUERY ));
-
-        Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                    UNO_QUERY );
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-
-        com::sun::star::util::URL aTargetURL;
-
-        // Register for font name updates which gives us info about the current font!
-        aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" ));
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        // Register for font height updates
-        aTargetURL.Complete = m_aCommandURL;
-        xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-
-        updatePopupMenu();
-    }
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    com::sun::star::util::URL aTargetURL;
+    // Register for font name updates which gives us info about the current font!
+    aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" ));
+    m_xURLTransformer->parseStrict( aTargetURL );
+    m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
 }
 
 void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
@@ -419,12 +348,9 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
         throw DisposedException();
 
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
-    Reference< XURLTransformer > xURLTransformer( m_xServiceManager->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
-                                                UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" ));
-    xURLTransformer->parseStrict( aTargetURL );
+    m_xURLTransformer->parseStrict( aTargetURL );
     aLock.unlock();
 
     if ( xDispatch.is() )
@@ -435,11 +361,4 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
 
     PopupMenuControllerBase::updatePopupMenu();
 }
-
-// XInitialization
-void SAL_CALL FontSizeMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
-{
-    PopupMenuControllerBase::initialize( aArguments );
-}
-
 }

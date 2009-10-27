@@ -66,6 +66,9 @@ public:
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisModelProps
                     , const ::com::sun::star::awt::Size& rNewReferenceSize );
 
+    static void correctPositionForRotation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape2DText
+                    , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter );
+
 private:
     LabelPositionHelper();
 

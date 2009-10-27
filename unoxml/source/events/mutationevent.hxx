@@ -13,7 +13,7 @@
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 #include "event.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 
 namespace DOM { namespace events {
 

@@ -65,11 +65,15 @@ char const* const* OtherInfo::getJavaExePaths(int * size)
 char const* const* OtherInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
     "/bin/jrockit/jvm.dll"
+#elif defined(OS2)
+        "/bin/classic/jvm.dll",
+        "/bin/client/jvm.dll",
+        "/bin/hotspot/jvm.dll"
 #elif UNX
 #ifdef MACOSX
         "/../../../JavaVM"

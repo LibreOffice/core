@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: NPreparedStatement.cxx,v $
- * $Revision: 1.7 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -40,6 +37,7 @@
 #include "propertyids.hxx"
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "resource/common_res.hrc"
 
@@ -55,49 +53,67 @@ using namespace com::sun::star::util;
 IMPLEMENT_SERVICE_INFO(OEvoabPreparedStatement,"com.sun.star.sdbcx.evoab.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
-OEvoabPreparedStatement::OEvoabPreparedStatement( OEvoabConnection* _pConnection, const ::rtl::OUString& sql)
-    :OStatement_BASE2(_pConnection)
-    ,m_nNumParams(0)
-    ,m_sSqlStatement(sql)
-    ,m_bPrepared(sal_False)
+OEvoabPreparedStatement::OEvoabPreparedStatement( OEvoabConnection* _pConnection )
+    :OCommonStatement(_pConnection)
+    ,m_sSqlStatement()
+    ,m_xMetaData()
 {
 }
+
+// -----------------------------------------------------------------------------
+void OEvoabPreparedStatement::construct( const ::rtl::OUString& _sql )
+{
+    m_sSqlStatement = _sql;
+
+    m_aQueryData = impl_getEBookQuery_throw( m_sSqlStatement );
+    ENSURE_OR_THROW( m_aQueryData.getQuery(), "no EBookQuery" );
+    ENSURE_OR_THROW( m_aQueryData.xSelectColumns.isValid(), "no SelectColumn" );
+
+    // create our meta data
+    OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( m_aQueryData.sTable );
+    m_xMetaData = pMeta;
+    pMeta->setEvoabFields( m_aQueryData.xSelectColumns );
+}
+
 // -----------------------------------------------------------------------------
 OEvoabPreparedStatement::~OEvoabPreparedStatement()
 {
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OEvoabPreparedStatement::acquire() throw()
 {
-    OStatement_BASE2::acquire();
+    OCommonStatement::acquire();
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OEvoabPreparedStatement::release() throw()
 {
-    OStatement_BASE2::release();
+    OCommonStatement::release();
 }
+
 // -----------------------------------------------------------------------------
 Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = OStatement_BASE2::queryInterface(rType);
+    Any aRet = OCommonStatement::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = OPreparedStatement_BASE::queryInterface(rType);
     return aRet;
 }
 // -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OEvoabPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< Type > SAL_CALL OEvoabPreparedStatement::getTypes(  ) throw(RuntimeException)
 {
-    return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OStatement_BASE2::getTypes());
+    return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OCommonStatement::getTypes());
 }
 // -------------------------------------------------------------------------
 
 Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
-    if(!m_xMetaData.is())
-        m_xMetaData = new OEvoabResultSetMetaData(m_pConnection->getCurrentTableName());
+    // the meta data should have been created at construction time
+    ENSURE_OR_THROW( m_xMetaData.is(), "internal error: no meta data" );
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
@@ -105,13 +121,13 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  
 void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
     free_column_resources();
     // Reset last warning message
     try {
         clearWarnings ();
-        OStatement_BASE2::close();
+        OCommonStatement::close();
     }
     catch (SQLException &) {
         // If we get an error, ignore
@@ -123,11 +139,9 @@ void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeExce
 sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
-    Reference< XResultSet> xRS = OStatement_Base::executeQuery( m_sSqlStatement );
-    // same as in statement with the difference that this statement also can contain parameter
-
+    Reference< XResultSet> xRS = impl_executeQuery_throw( m_aQueryData );
     return xRS.is();
 }
 // -------------------------------------------------------------------------
@@ -135,9 +149,8 @@ sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  ) throw(SQLException, Runti
 sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    // same as in statement with the difference that this statement also can contain parameter
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
+    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
 }
 // -------------------------------------------------------------------------
@@ -151,19 +164,18 @@ void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, 
 Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
-    return (Reference< XConnection >)m_pConnection;
+    return impl_getConnection();
 }
 // -------------------------------------------------------------------------
 
 Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
-    Reference< XResultSet > rs = OStatement_Base::executeQuery( m_sSqlStatement );
-    return rs;
+    return impl_executeQuery_throw( m_aQueryData );
 }
 // -------------------------------------------------------------------------
 
@@ -268,7 +280,7 @@ void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, cons
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
-        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+        const ::rtl::OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
                 "$position$", ::rtl::OUString::valueOf(parameterIndex)
              ) );
@@ -290,13 +302,13 @@ void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, c
 // -------------------------------------------------------------------------
 
 
-void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setCharacterStream", *this );
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setBinaryStream", *this );
 }
@@ -305,35 +317,18 @@ void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterInd
 void SAL_CALL OEvoabPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
 }
-// -------------------------------------------------------------------------
-void OEvoabPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
-{
-    switch(nHandle)
-    {
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            break;
-        case PROPERTY_ID_RESULTSETTYPE:
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            break;
-        case PROPERTY_ID_USEBOOKMARKS:
-            break;
-        default:
-            OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
-    }
-}
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  ) throw(SQLException, RuntimeException)
 {
     return sal_False;
 }

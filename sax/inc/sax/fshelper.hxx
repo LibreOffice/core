@@ -39,10 +39,12 @@
 #include <sax/fastattribs.hxx>
 #include "sax/dllapi.h"
 
-#define FSNS(namespace, element)    ((namespace << 16) | element)
-#define FSEND -1 // same as XML_TOKEN_INVALID
+#define FSNS(namespc, element) ((namespc << 16) | element)
+const sal_Int32 FSEND = -1; // same as XML_TOKEN_INVALID
 
 namespace sax_fastparser {
+
+enum MergeMarksEnum { MERGE_MARKS_APPEND = 0, MERGE_MARKS_PREPEND = 1, MERGE_MARKS_POSTPONE = 2 };
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList > XFastAttributeListRef;
 
@@ -82,6 +84,10 @@ public:
     inline void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
         { singleElementV(FSNS( namespaceTokenId, elementTokenId), xAttrList); }
 
+    void startElementV(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList);
+    inline void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
+        { startElementV( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
+
     FastSerializerHelper* write(const char* value);
     FastSerializerHelper* write(const rtl::OUString& value);
     FastSerializerHelper* write(sal_Int32 value);
@@ -99,7 +105,7 @@ public:
     FastAttributeList *createAttrList();
 
     void mark();
-    void mergeTopMarks( bool bPrepend = false );
+    void mergeTopMarks( MergeMarksEnum eMergeType = MERGE_MARKS_APPEND );
 
 private:
 

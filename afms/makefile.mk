@@ -37,7 +37,7 @@ TARGET=afms
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=Adobe-Core35_AFMs-314
@@ -53,9 +53,11 @@ ZIP1DIR         = $(MISC)$/build$/$(TARFILE_NAME)
 ZIP1TARGET      = fontunxafm
 ZIP1LIST        = *.afm -x "*Helvetica-Narrow*"
 
+.ENDIF # L10N_framework
 .INCLUDE : target.mk
 
 .INCLUDE : tg_ext.mk
-
+.IF "$(L10N_framework)"==""
 $(ZIP1TARGETN):	$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 
+.ENDIF # L10N_framework

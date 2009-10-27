@@ -42,11 +42,12 @@
 #include <tools/fsys.hxx>
 #include <plugin/impl.hxx>
 
-PluginComm::PluginComm( const ::rtl::OString& rLibName ) :
+PluginComm::PluginComm( const ::rtl::OString& rLibName, bool bReusable ) :
         m_nRefCount( 0 ),
         m_aLibName( rLibName )
 {
-    PluginManager::get().getPluginComms().push_back( this );
+    if( bReusable )
+        PluginManager::get().getPluginComms().push_back( this );
 }
 
 PluginComm::~PluginComm()

@@ -28,206 +28,521 @@
  *
  ************************************************************************/
 
-#include <rtl/ustring.hxx>
-#include "oox/vml/shape.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include "oox/vml/vmlshape.hxx"
+#include <rtl/math.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include "properties.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/helper/propertyset.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/ole/axcontrol.hxx"
+#include "oox/ole/axcontrolfragment.hxx"
+#include "oox/ole/oleobjecthelper.hxx"
+#include "oox/vml/vmldrawing.hxx"
+#include "oox/vml/vmlshapecontainer.hxx"
 
-using namespace com::sun::star;
+using ::rtl::OUString;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::awt::Point;
+using ::com::sun::star::awt::Rectangle;
+using ::com::sun::star::awt::Size;
+using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::graphic::XGraphic;
+using ::com::sun::star::drawing::PointSequenceSequence;
+using ::com::sun::star::drawing::XControlShape;
+using ::com::sun::star::drawing::XEnhancedCustomShapeDefaulter;
+using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::drawing::XShapes;
+using ::oox::core::XmlFilterBase;
 
-namespace oox { namespace vml {
+namespace oox {
+namespace vml {
 
-Shape::Shape( const rtl::OUString& rServiceName )
-: msServiceName( rServiceName )
-, mnCoordWidth( 0 )
-, mnCoordHeight( 0 )
-, mnStroked( 0 )
+// ============================================================================
+
+namespace {
+
+Point lclGetAbsPoint( const Point& rRelPoint, const Rectangle& rShapeRect, const Rectangle& rCoordSys )
 {
+    double fWidthRatio = static_cast< double >( rShapeRect.Width ) / rCoordSys.Width;
+    double fHeightRatio = static_cast< double >( rShapeRect.Height ) / rCoordSys.Height;
+    Point aAbsPoint;
+    aAbsPoint.X = static_cast< sal_Int32 >( rShapeRect.X + fWidthRatio * (rRelPoint.X - rCoordSys.X) + 0.5 );
+    aAbsPoint.Y = static_cast< sal_Int32 >( rShapeRect.Y + fHeightRatio * (rRelPoint.Y - rCoordSys.Y) + 0.5 );
+    return aAbsPoint;
 }
-Shape::~Shape()
+
+Rectangle lclGetAbsRect( const Rectangle& rRelRect, const Rectangle& rShapeRect, const Rectangle& rCoordSys )
 {
+    double fWidthRatio = static_cast< double >( rShapeRect.Width ) / rCoordSys.Width;
+    double fHeightRatio = static_cast< double >( rShapeRect.Height ) / rCoordSys.Height;
+    Rectangle aAbsRect;
+    aAbsRect.X = static_cast< sal_Int32 >( rShapeRect.X + fWidthRatio * (rRelRect.X - rCoordSys.X) + 0.5 );
+    aAbsRect.Y = static_cast< sal_Int32 >( rShapeRect.Y + fHeightRatio * (rRelRect.Y - rCoordSys.Y) + 0.5 );
+    aAbsRect.Width = static_cast< sal_Int32 >( fWidthRatio * rRelRect.Width + 0.5 );
+    aAbsRect.Height = static_cast< sal_Int32 >( fHeightRatio * rRelRect.Height + 0.5 );
+    return aAbsRect;
 }
 
-void Shape::applyAttributes( const vml::Shape& rSource )
+Reference< XShape > lclCreateXShape( const XmlFilterBase& rFilter, const OUString& rService )
 {
-    if ( rSource.msId.getLength() )
-        msId = rSource.msId;
-    if ( rSource.msType.getLength() )
-        msType = rSource.msType;
-    if ( rSource.msShapeType.getLength() )
-        msShapeType = rSource.msShapeType;
-    if ( rSource.mnCoordWidth )
-        mnCoordWidth = rSource.mnCoordWidth;
-    if ( rSource.mnCoordHeight )
-        mnCoordHeight = rSource.mnCoordHeight;
-    if ( rSource.mnStroked )
-        mnStroked = rSource.mnStroked;
-    if ( rSource.moFilled )
-        moFilled = rSource.moFilled;
-    if ( rSource.moFillColor )
-        moFillColor = rSource.moFillColor;
-    if ( rSource.maPath.Name.getLength() )
-        maPath = rSource.maPath;
-    if ( rSource.msPosition.getLength() )
-        msPosition = rSource.msPosition;
-    maPosition = rSource.maPosition;
-    maSize = rSource.maSize;
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > Shape::createAndInsert(
-    const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::vml::Shape& rShape,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-            const awt::Rectangle* pShapeRect )
-{
-    uno::Reference< drawing::XShape > xShape;
-    if ( rShape.msServiceName )
+    OSL_ENSURE( rService.getLength() > 0, "lclCreateXShape - missing UNO shape service name" );
+    Reference< XShape > xShape;
+    try
     {
-        try
-        {
-            uno::Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), uno::UNO_QUERY_THROW );
-            xShape.set( xServiceFact->createInstance( rShape.msServiceName ), uno::UNO_QUERY_THROW );
-            rxShapes->add( xShape );
-            awt::Point aPosition;
-            awt::Size aSize;
-            if ( pShapeRect )
-            {
-                aPosition.X = pShapeRect->X;
-                aPosition.Y = pShapeRect->Y;
-                aSize.Width = pShapeRect->Width;
-                aSize.Height = pShapeRect->Height;
-            }
-            else
-            {
-                aPosition = maPosition;
-                aSize = maSize;
-            }
-            xShape->setPosition( aPosition );
-            xShape->setSize( aSize );
-            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-            try
-            {
-                if ( maPath.Name.getLength() )
-                    xPropSet->setPropertyValue( maPath.Name, maPath.Value );
+        Reference< XMultiServiceFactory > xFactory( rFilter.getModel(), UNO_QUERY_THROW );
+        xShape.set( xFactory->createInstance( rService ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( xShape.is(), "lclCreateXShape - cannot instanciate shape object" );
+    return xShape;
+}
 
-                ::rtl::OUString sFillStyle( rtl::OUString::createFromAscii( "FillStyle" ) );
-                if ( moFilled )
-                    xPropSet->setPropertyValue( sFillStyle, uno::Any( *moFilled ? drawing::FillStyle_SOLID : drawing::FillStyle_NONE ) );
-            }
-            catch ( uno::Exception& )
-            {
-            }
-            ::rtl::OUString rServiceName( rtl::OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) );
-            if ( rShape.msShapeType.getLength() && ( msServiceName == rServiceName ) )
-            {
-                uno::Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, uno::UNO_QUERY );
-                if( xDefaulter.is() )
-                    xDefaulter->createCustomShapeDefaults( rShape.msShapeType );
-            }
-            mxShape = xShape;
-        }
-        catch( uno::Exception& )
-        {
-        }
+void lclInsertXShape( const Reference< XShapes >& rxShapes, const Reference< XShape >& rxShape )
+{
+    OSL_ENSURE( rxShapes.is(), "lclInsertXShape - missing XShapes container" );
+    OSL_ENSURE( rxShape.is(), "lclInsertXShape - missing XShape" );
+    if( rxShapes.is() && rxShape.is() ) try
+    {
+        // insert shape into passed shape collection (maybe drawpage or group shape)
+        rxShapes->add( rxShape );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rShapeRect )
+{
+    OSL_ENSURE( rxShape.is(), "lclSetXShapeRect - missing XShape" );
+    if( rxShape.is() )
+    {
+        rxShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );
+        rxShape->setSize( Size( rShapeRect.Width, rShapeRect.Height ) );
+    }
+}
+
+Reference< XShape > lclCreateAndInsertXShape( const XmlFilterBase& rFilter,
+        const Reference< XShapes >& rxShapes, const OUString& rService, const Rectangle& rShapeRect )
+{
+    Reference< XShape > xShape = lclCreateXShape( rFilter, rService );
+    lclInsertXShape( rxShapes, xShape );
+    lclSetXShapeRect( xShape, rShapeRect );
+    return xShape;
+}
+
+} // namespace
+
+// ============================================================================
+
+ShapeTypeModel::ShapeTypeModel()
+{
+}
+
+void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
+{
+    moShapeType.assignIfUsed( rSource.moShapeType );
+    moCoordPos.assignIfUsed( rSource.moCoordPos );
+    moCoordSize.assignIfUsed( rSource.moCoordSize );
+    /*  The style properties position, left, top, width, height, margin-left,
+        margin-top are not derived from shape template to shape. */
+    maStrokeModel.assignUsed( rSource.maStrokeModel );
+    maFillModel.assignUsed( rSource.maFillModel );
+    moGraphicPath.assignIfUsed( rSource.moGraphicPath );
+    moGraphicTitle.assignIfUsed( rSource.moGraphicTitle );
+}
+
+// ----------------------------------------------------------------------------
+
+ShapeType::ShapeType( const Drawing& rDrawing ) :
+    mrDrawing( rDrawing )
+{
+}
+
+ShapeType::~ShapeType()
+{
+}
+
+OUString ShapeType::getGraphicPath() const
+{
+    return maTypeModel.moGraphicPath.get( OUString() );
+}
+
+Rectangle ShapeType::getCoordSystem() const
+{
+    Int32Pair aCoordPos = maTypeModel.moCoordPos.get( Int32Pair( 0, 0 ) );
+    Int32Pair aCoordSize = maTypeModel.moCoordSize.get( Int32Pair( 1000, 1000 ) );
+    return Rectangle( aCoordPos.first, aCoordPos.second, aCoordSize.first, aCoordSize.second );
+}
+
+Rectangle ShapeType::getRectangle( const ShapeParentAnchor* pParentAnchor ) const
+{
+    return pParentAnchor ?
+        lclGetAbsRect( getRelRectangle(), pParentAnchor->maShapeRect, pParentAnchor->maCoordSys ) :
+        getAbsRectangle();
+}
+
+Rectangle ShapeType::getAbsRectangle() const
+{
+    const XmlFilterBase& rFilter = mrDrawing.getFilter();
+    return Rectangle(
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maMarginLeft, 0, true, true ),
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maMarginTop, 0, false, true ),
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maWidth, 0, true, true ),
+        ConversionHelper::decodeMeasureToHmm( rFilter, maTypeModel.maHeight, 0, false, true ) );
+}
+
+Rectangle ShapeType::getRelRectangle() const
+{
+    return Rectangle(
+        maTypeModel.maLeft.toInt32(),
+        maTypeModel.maTop.toInt32(),
+        maTypeModel.maWidth.toInt32(),
+        maTypeModel.maHeight.toInt32() );
+}
+
+// ============================================================================
+
+ShapeClientData::ShapeClientData() :
+    mnObjType( XML_TOKEN_INVALID ),
+    mnCol( -1 ),
+    mnRow( -1 ),
+    mbPrintObject( true ),
+    mbVisible( false )
+{
+}
+
+// ----------------------------------------------------------------------------
+
+ShapeModel::ShapeModel()
+{
+}
+
+ShapeClientData& ShapeModel::createClientData()
+{
+    mxClientData.reset( new ShapeClientData );
+    return *mxClientData;
+}
+
+// ----------------------------------------------------------------------------
+
+ShapeBase::ShapeBase( const Drawing& rDrawing ) :
+    ShapeType( rDrawing )
+{
+}
+
+void ShapeBase::finalizeFragmentImport()
+{
+    // resolve shape template reference
+    if( (maShapeModel.maType.getLength() > 1) && (maShapeModel.maType[ 0 ] == '#') )
+        if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( maShapeModel.maType.copy( 1 ), true ) )
+            maTypeModel.assignUsed( pShapeType->getTypeModel() );
+}
+
+const ShapeType* ShapeBase::getChildTypeById( const OUString& ) const
+{
+    return 0;
+}
+
+const ShapeBase* ShapeBase::getChildById( const OUString& ) const
+{
+    return 0;
+}
+
+Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxShapes, const ShapeParentAnchor* pParentAnchor ) const
+{
+    Reference< XShape > xShape;
+    if( mrDrawing.isShapeSupported( *this ) )
+    {
+        /*  Calculate shape rectangle. Applications may do something special
+            according to some imported shape client data (e.g. Excel cell anchor). */
+        Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
+        // convert the shape, if the calculated rectangle is not empty
+        if( ((aShapeRect.Width > 0) || (aShapeRect.Height > 0)) && rxShapes.is() )
+            xShape = implConvertAndInsert( rxShapes, aShapeRect );
     }
     return xShape;
 }
 
-void Shape::addChilds( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::vml::Drawing& rDrawing,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-            const awt::Rectangle& rClientRect )
+void ShapeBase::convertFormatting( const Reference< XShape >& rxShape, const ShapeParentAnchor* pParentAnchor ) const
 {
-    sal_Int32 nGlobalLeft  = SAL_MAX_INT32;
-    sal_Int32 nGlobalRight = SAL_MIN_INT32;
-    sal_Int32 nGlobalTop   = SAL_MAX_INT32;
-    sal_Int32 nGlobalBottom= SAL_MIN_INT32;
-    std::vector< ShapePtr >::iterator aIter( maChilds.begin() );
-    while( aIter != maChilds.end() )
+    if( rxShape.is() )
     {
-        sal_Int32 l = (*aIter)->maPosition.X;
-        sal_Int32 t = (*aIter)->maPosition.Y;
-        sal_Int32 r = l + (*aIter)->maSize.Width;
-        sal_Int32 b = t + (*aIter)->maSize.Height;
-        if ( nGlobalLeft > l )
-            nGlobalLeft = l;
-        if ( nGlobalRight < r )
-            nGlobalRight = r;
-        if ( nGlobalTop > t )
-            nGlobalTop = t;
-        if ( nGlobalBottom < b )
-            nGlobalBottom = b;
-        aIter++;
-    }
-    aIter = maChilds.begin();
-    while( aIter != maChilds.end() )
-    {
-        awt::Rectangle aShapeRect;
-        awt::Rectangle* pShapeRect = 0;
-        if ( ( nGlobalLeft != SAL_MAX_INT32 ) && ( nGlobalRight != SAL_MIN_INT32 ) && ( nGlobalTop != SAL_MAX_INT32 ) && ( nGlobalBottom != SAL_MIN_INT32 ) )
+        /*  Calculate shape rectangle. Applications may do something special
+            according to some imported shape client data (e.g. Excel cell anchor). */
+        Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
+        // convert the shape, if the calculated rectangle is not empty
+        if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
         {
-            sal_Int32 nGlobalWidth = nGlobalRight - nGlobalLeft;
-            sal_Int32 nGlobalHeight = nGlobalBottom - nGlobalTop;
-            if ( nGlobalWidth && nGlobalHeight )
-            {
-                double fWidth = (*aIter)->maSize.Width;
-                double fHeight= (*aIter)->maSize.Height;
-                double fXScale = (double)rClientRect.Width / (double)nGlobalWidth;
-                double fYScale = (double)rClientRect.Height / (double)nGlobalHeight;
-                aShapeRect.X = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.X - nGlobalLeft ) * fXScale ) + rClientRect.X );
-                aShapeRect.Y = static_cast< sal_Int32 >( ( ( (*aIter)->maPosition.Y - nGlobalTop  ) * fYScale ) + rClientRect.Y );
-                fWidth *= fXScale;
-                fHeight *= fYScale;
-                aShapeRect.Width = static_cast< sal_Int32 >( fWidth );
-                aShapeRect.Height = static_cast< sal_Int32 >( fHeight );
-                pShapeRect = &aShapeRect;
-            }
+            lclSetXShapeRect( rxShape, aShapeRect );
+            convertShapeProperties( rxShape );
         }
-        (*aIter++)->addShape( rFilterBase, rDrawing, rxShapes, pShapeRect );
     }
 }
 
-void Shape::addShape( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::vml::Drawing& rDrawing,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-            const awt::Rectangle* pShapeRect )
+// protected ------------------------------------------------------------------
+
+Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor ) const
 {
-    oox::vml::Shape aShape( msServiceName );
-    if ( msType.getLength() )
-    {
-        std::vector< ShapePtr >& rShapeTypes = const_cast< ::oox::vml::Drawing& >( rDrawing ).getShapeTypes();
-        std::vector< ShapePtr >::const_iterator aShapeTypeIter( rShapeTypes.begin() );
-        while( aShapeTypeIter != rShapeTypes.end() )
-        {
-            if ( (*aShapeTypeIter)->msType == aShape.msType )
-            {
-                aShape.applyAttributes( *(*aShapeTypeIter).get() );
-                break;
-            }
-            aShapeTypeIter++;
-        }
-    }
-    aShape.applyAttributes( *this );
-
-    // creating XShape
-    uno::Reference< drawing::XShape > xShape( createAndInsert( rFilterBase, aShape, rxShapes, pShapeRect ) );
-
-    // creating GroupShape if possible
-    uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
-    if ( xShapes.is() )
-    {
-        awt::Rectangle aChildRect;
-        if ( pShapeRect )
-            aChildRect = *pShapeRect;
-        else
-        {
-            aChildRect.X = maPosition.X;
-            aChildRect.Y = maPosition.Y;
-            aChildRect.Width = maSize.Width;
-            aChildRect.Height = maSize.Height;
-        }
-        addChilds( rFilterBase, rDrawing, xShapes, aChildRect );
-    }
+    /*  Calculate shape rectangle. Applications may do something special
+        according to some imported shape client data (e.g. Excel cell anchor). */
+    Rectangle aShapeRect;
+    if( !maShapeModel.mxClientData.get() || !mrDrawing.convertShapeClientAnchor( aShapeRect, maShapeModel.mxClientData->maAnchor ) )
+        aShapeRect = getRectangle( pParentAnchor );
+    return aShapeRect;
 }
 
-} }
+void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
+{
+    PropertyMap aPropMap;
+
+    maTypeModel.maStrokeModel.pushToPropMap( aPropMap, mrDrawing.getFilter() );
+    maTypeModel.maFillModel.pushToPropMap( aPropMap, mrDrawing.getFilter() );
+
+    PropertySet aPropSet( rxShape );
+    aPropSet.setProperties( aPropMap );
+}
+
+// ============================================================================
+
+SimpleShape::SimpleShape( const Drawing& rDrawing, const OUString& rService ) :
+    ShapeBase( rDrawing ),
+    maService( rService )
+{
+}
+
+Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    Reference< XShape > xShape = lclCreateAndInsertXShape( mrDrawing.getFilter(), rxShapes, maService, rShapeRect );
+    convertShapeProperties( xShape );
+    return xShape;
+}
+
+// ============================================================================
+
+RectangleShape::RectangleShape( const Drawing& rDrawing ) :
+    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ) )
+{
+}
+
+// ============================================================================
+
+EllipseShape::EllipseShape( const Drawing& rDrawing ) :
+    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.EllipseShape" ) )
+{
+}
+
+// ============================================================================
+
+PolyLineShape::PolyLineShape( const Drawing& rDrawing ) :
+    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.PolyLineShape" ) )
+{
+}
+
+Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
+    // polygon path
+    Rectangle aCoordSys = getCoordSystem();
+    if( !maShapeModel.maPoints.empty() && (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
+    {
+        ::std::vector< Point > aAbsPoints;
+        for( ShapeModel::PointVector::const_iterator aIt = maShapeModel.maPoints.begin(), aEnd = maShapeModel.maPoints.end(); aIt != aEnd; ++aIt )
+            aAbsPoints.push_back( lclGetAbsPoint( *aIt, rShapeRect, aCoordSys ) );
+        PointSequenceSequence aPointSeq( 1 );
+        aPointSeq[ 0 ] = ContainerHelper::vectorToSequence( aAbsPoints );
+        PropertySet aPropSet( xShape );
+        aPropSet.setProperty( PROP_PolyPolygon, aPointSeq );
+    }
+    return xShape;
+}
+
+// ============================================================================
+
+CustomShape::CustomShape( const Drawing& rDrawing ) :
+    SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.CustomShape" ) )
+{
+}
+
+Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    // try to create a custom shape
+    Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
+    if( xShape.is() ) try
+    {
+        // create the custom shape geometry
+        Reference< XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY_THROW );
+        xDefaulter->createCustomShapeDefaults( OUString::valueOf( maTypeModel.moShapeType.get( 0 ) ) );
+        // convert common properties
+        convertShapeProperties( xShape );
+    }
+    catch( Exception& )
+    {
+    }
+    return xShape;
+}
+
+// ============================================================================
+
+ComplexShape::ComplexShape( const Drawing& rDrawing ) :
+    CustomShape( rDrawing )
+{
+}
+
+Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    XmlFilterBase& rFilter = mrDrawing.getFilter();
+    OUString aGraphicPath = getGraphicPath();
+
+    // try to find registered OLE object info
+    if( const OleObjectInfo* pOleObjectInfo = mrDrawing.getOleObjectInfo( maTypeModel.maShapeId ) )
+    {
+        // if OLE object is embedded into a DrawingML shape (PPTX), do not create it here
+        if( pOleObjectInfo->mbDmlShape )
+            return Reference< XShape >();
+
+        PropertyMap aOleProps;
+        Size aOleSize( rShapeRect.Width, rShapeRect.Height );
+        if( rFilter.getOleObjectHelper().importOleObject( aOleProps, *pOleObjectInfo, aOleSize ) )
+        {
+            Reference< XShape > xShape = lclCreateAndInsertXShape( rFilter, rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" ), rShapeRect );
+            if( xShape.is() )
+            {
+                // set the replacement graphic
+                if( aGraphicPath.getLength() > 0 )
+                {
+                    Reference< XGraphic > xGraphic = rFilter.importEmbeddedGraphic( aGraphicPath );
+                    if( xGraphic.is() )
+                        aOleProps[ PROP_Graphic ] <<= xGraphic;
+                }
+
+                PropertySet aPropSet( xShape );
+                aPropSet.setProperties( aOleProps );
+
+                return xShape;
+            }
+        }
+    }
+
+    // try to find registered form control info
+    const ControlInfo* pControlInfo = mrDrawing.getControlInfo( maTypeModel.maShapeId );
+    if( pControlInfo && (pControlInfo->maFragmentPath.getLength() > 0) && (maTypeModel.maName.getLength() > 0) )
+    {
+        OSL_ENSURE( maTypeModel.maName == pControlInfo->maName, "ComplexShape::implConvertAndInsert - control name mismatch" );
+        ::oox::ole::AxControl aControl( maTypeModel.maName );
+        // load the control properties from fragment
+        if( rFilter.importFragment( new ::oox::ole::AxControlFragment( rFilter, pControlInfo->maFragmentPath, aControl ) ) ) try
+        {
+            // create control model and insert it into the form of the draw page
+            Reference< XControlModel > xCtrlModel( aControl.convertAndInsert( mrDrawing.getControlHelper() ), UNO_SET_THROW );
+            if( maShapeModel.mxClientData.get() )
+                mrDrawing.convertControlClientData( xCtrlModel, *maShapeModel.mxClientData );
+
+            // create the control shape, set control model at the shape
+            Reference< XShape > xShape = lclCreateAndInsertXShape(
+                rFilter, rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.ControlShape" ), rShapeRect );
+            Reference< XControlShape > xCtrlShape( xShape, UNO_QUERY ); // do not throw, but always return the shape
+            if( xCtrlShape.is() )
+                xCtrlShape->setControl( xCtrlModel );
+            return xShape;
+        }
+        catch( Exception& )
+        {
+        }
+        // on error, proceed and try to create picture from replacement image
+    }
+
+    // try to create a picture object
+    if( aGraphicPath.getLength() > 0 )
+    {
+        Reference< XShape > xShape = lclCreateAndInsertXShape( rFilter, rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.GraphicObjectShape" ), rShapeRect );
+        if( xShape.is() )
+        {
+            OUString aGraphicUrl = rFilter.importEmbeddedGraphicObject( aGraphicPath );
+            if( aGraphicUrl.getLength() > 0 )
+            {
+                PropertySet aPropSet( xShape );
+                aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
+            }
+        }
+        return xShape;
+    }
+
+    // default: try to create a custom shape
+    return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
+}
+
+// ============================================================================
+
+GroupShape::GroupShape( const Drawing& rDrawing ) :
+    ShapeBase( rDrawing ),
+    mxChildren( new ShapeContainer( rDrawing ) )
+{
+}
+
+GroupShape::~GroupShape()
+{
+}
+
+void GroupShape::finalizeFragmentImport()
+{
+    // basic shape processing
+    ShapeBase::finalizeFragmentImport();
+    // finalize all child shapes
+    mxChildren->finalizeFragmentImport();
+}
+
+const ShapeType* GroupShape::getChildTypeById( const OUString& rShapeId ) const
+{
+    return mxChildren->getShapeTypeById( rShapeId, true );
+}
+
+const ShapeBase* GroupShape::getChildById( const OUString& rShapeId ) const
+{
+    return mxChildren->getShapeById( rShapeId, true );
+}
+
+Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+{
+    Reference< XShape > xGroupShape;
+    // check that this shape contains children and a valid coordinate system
+    ShapeParentAnchor aParentAnchor;
+    aParentAnchor.maShapeRect = rShapeRect;
+    aParentAnchor.maCoordSys = getCoordSystem();
+    if( !mxChildren->empty() && (aParentAnchor.maCoordSys.Width > 0) && (aParentAnchor.maCoordSys.Height > 0) ) try
+    {
+        xGroupShape = lclCreateAndInsertXShape( mrDrawing.getFilter(), rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.GroupShape" ), rShapeRect );
+        Reference< XShapes > xChildShapes( xGroupShape, UNO_QUERY_THROW );
+        mxChildren->convertAndInsert( xChildShapes, &aParentAnchor );
+        // no child shape has been created - delete the group shape
+        if( !xChildShapes->hasElements() )
+        {
+            rxShapes->remove( xGroupShape );
+            xGroupShape.clear();
+        }
+    }
+    catch( Exception& )
+    {
+    }
+    return xGroupShape;
+}
+
+// ============================================================================
+
+} // namespace vml
+} // namespace oox
+

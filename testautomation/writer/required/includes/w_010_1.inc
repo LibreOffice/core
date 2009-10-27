@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Testcases for the Objectbars.
 '*
@@ -628,6 +628,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tGraphicAnchor
+
     printlog "- Graphic-(Frame)-Objectbar: Anchor"
     printlog " Open new document"
     Call hNewDocument

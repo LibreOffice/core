@@ -39,13 +39,6 @@
 
 testcase tUpOneLevel3
     
-    '///<h1>Jump to the filesystem root using pathseparator</h1>
-    '///+<i>Note that his is performed four times due to a bug that existed in 
-    '///+ the past.<br>
-    '///+Windows and Unix interpret the pathseparator differently so this test 
-    '///+ provides handling of all four combinations (win + /, win + \, unx + / 
-    '///+ and unx + \)</i><br>
-    '///<ul>
     
     ' We always want to start in a fixed directory structure so the first few dirnames are 
     ' known an can be used for verification
@@ -79,30 +72,22 @@ testcase tUpOneLevel3
     ' Needed for bug (see below)
     const REPEAT_COUNT = 4
         
-    '///+<li>Open the FileOpen dialog</li>
     FileOpen
     
-    '///+<li>Change to the start-directory: ..framework\optional\input\filetest\level1\level2\level3</li>
     kontext "OeffnenDlg"
     DateiName.setText( cStartDir )
     Oeffnen.click()
     
-    '///+<li>For both pathseparators (/ and \) do:</li>
-    '///<ul>
     for iPathSeparator = 1 to 2
     
         printlog( "" )
         printlog( "Trying: " & cPathSeparator( iPathSeparator ) )
     
-        '///<li>Repeat this four times (ancient bug, possible crash)</li>
-        '///<ul>
         printlog( "Note: This is repeated four times due to ancient bug" )
         for iPathRepeat = 1 to REPEAT_COUNT
         
-            '///+<li>Enter the pathseparator into the filename field</li>
             Dateiname.setText( cPathSeparator( iPathSeparator ) )
         
-            '///+<li>Click &quot;open&quot;</li>
             Oeffnen.click()
             
             select case iPathSeparator
@@ -111,7 +96,6 @@ testcase tUpOneLevel3
                 ' This is Unix, Linux
                 if ( gPlatGroup = "unx" ) then
                 
-                    '///+<li>Handle the messagebox (Unix only)</li>
                     kontext "Active"
                     if ( active.exists() ) then
                         active.ok()
@@ -120,7 +104,6 @@ testcase tUpOneLevel3
                         warnlog( "Error missing for invalid pathspec." )
                     endif
 
-                    '///+<li>- Verify that the directory has not changed for Unix</li>  
                     ' in the ../level3-directory we look for the file filetest.txt
                     kontext "OeffnenDlg"
                     cCurrentPath = hGetFirstNameFromFileList()
@@ -132,7 +115,6 @@ testcase tUpOneLevel3
                 
                 else ' Windows, eComStation
                 
-                    '///+<li>- Verify that we are a the virtual root (drives list) on windows</li>                    
                     kontext "OeffnenDlg"
                     cCurrentPath = hGetFirstNameFromFileList()
                     if ( cCurrentPath <> "a:\" ) then
@@ -152,7 +134,6 @@ testcase tUpOneLevel3
                 ' Unix/Linux
                 if ( gPlatGroup = "unx" ) then
     
-                    '///+<li>- Verify that we are at top level of the drive</li>
                     ' Note: cPathArray( 1 ) = / so we need second element
                     '       Additionally we have a trailing slash that must be killed
                     cCurrentPath = left( cPathArray( 2 ) , len( cPathArray( 2 ) ) - 1 )
@@ -167,7 +148,6 @@ testcase tUpOneLevel3
                     
                 else ' Windows, eComStation
 
-                    '///+<li>- Verify that we are a the virtual root (drives list) on windows</li>                    
                     kontext "OeffnenDlg"
                     cCurrentPath = hGetFirstNameFromFileList()
                     if ( cCurrentPath <> "a:\" ) then
@@ -181,15 +161,11 @@ testcase tUpOneLevel3
             end select
             
         next iPathRepeat
-        '///</ul>
         
     next iPathSeparator
-    '///</ul>
     
     kontext "OeffnenDlg"
     OeffnenDlg.cancel()
-    '///+<li>Cancel the FileOpen dialog</li>
-    '///</ul>
 
 endcase
 

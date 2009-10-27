@@ -42,7 +42,7 @@ class SW_DLLPUBLIC AuthorCharAttr
 public:
     USHORT  nItemId;
     USHORT  nAttr;
-    ULONG   nColor;
+    ColorData nColor;
 
     AuthorCharAttr();
 

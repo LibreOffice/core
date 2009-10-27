@@ -54,12 +54,14 @@ public abstract class CRMBasedTestCase extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Override
     public void before()
     {
         createTestCase();
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Override
     public void after()
     {
         try
@@ -78,7 +80,7 @@ public abstract class CRMBasedTestCase extends TestCase
      */
     protected final XSingleSelectQueryComposer createQueryComposer() throws com.sun.star.uno.Exception
     {
-        XMultiServiceFactory connectionFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+        final XMultiServiceFactory connectionFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
             XMultiServiceFactory.class, m_database.getConnection() );
         return (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
             XSingleSelectQueryComposer.class, connectionFactory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );

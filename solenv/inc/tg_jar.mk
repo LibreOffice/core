@@ -30,6 +30,10 @@
 #*************************************************************************
 
 
+.IF "$(VERBOSE)"=="FALSE"
+ZIP_VERBOSITY=-q
+.ENDIF
+
 .IF "$(JARTARGETN)"!=""
 
 .IF "$(JARCOMPRESS)"==""
@@ -45,24 +49,24 @@ $(JARTARGETN) : $(JARMANIFEST) $(JAVACLASSFILES) $(JAVATARGET)
 
 .IF "$(CUSTOMMANIFESTFILE)"!=""
 
-CUSTOMMANIFESTFILEDEP:=$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
+CUSTOMMANIFESTFILEDEP:=$(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f)
 
-$(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,$/ $(DMAKE_WORK_DIR))$/$(CUSTOMMANIFESTFILE)
-    -$(RM) $@
-    $(COPY) $< $@
+$(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f) : $(subst,/,/ $(DMAKE_WORK_DIR))/$(CUSTOMMANIFESTFILE)
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(COPY) $< $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 
 $(JARMANIFEST) .PHONY : $(CUSTOMMANIFESTFILEDEP)
     @@-$(MKDIRHIER) $(@:d)
     @@-$(RM) $@
-    echo Manifest-Version: 1.0 > $@
+    $(COMMAND_ECHO)echo Manifest-Version: 1.0 > $@
 .IF "$(JARCLASSPATH)" != ""
     echo $(USQ)Class-Path: $(JARCLASSPATH)$(USQ) >> $@
 .ENDIF
 # $(RSCREVISION) contains chars that must be quoted (for *NIX shells)
-    echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
+    $(COMMAND_ECHO)echo $(USQ)Solar-Version: $(RSCREVISION)$(USQ) >> $@
 .IF "$(CUSTOMMANIFESTFILE)"!=""
-    $(TYPE) $(MISC)$/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
+    $(COMMAND_ECHO)$(TYPE) $(MISC)/$(TARGET)_$(CUSTOMMANIFESTFILE:f) >> $@
 .ENDIF			# "$(CUSTOMMANIFESTFILE)"!=""
 .ENDIF			# "$(JARMANIFEST)"!=""
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
@@ -76,14 +80,14 @@ $(JARTARGETN) .PHONY :
 .ELSE			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .DIRCACHE = no
 $(JARTARGETN) :
-#$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell @-cat -s $(MISC)$/$(JARTARGETN).dep )
+#$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell @-cat -s $(MISC)/$(JARTARGETN).dep )
 .ENDIF			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
 .ENDIF
 .IF "$(JARMANIFEST)"!=""
-    cd $(CLASSDIR)$/$(TARGET) && zip -u -rX ..$/$(@:f) $(subst,$(CLASSDIR)$/$(TARGET)$/, $(JARMANIFEST)) $(CHECKZIPRESULT)
+    $(COMMAND_ECHO)cd $(CLASSDIR)/$(TARGET) && zip $(ZIP_VERBOSITY) -u -rX ../$(@:f) $(subst,$(CLASSDIR)/$(TARGET)/, $(JARMANIFEST)) $(CHECKZIPRESULT)
 .ENDIF			# "$(JARMANIFEST)"!=""
-    cd $(CLASSDIR) && zip -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
+    $(COMMAND_ECHO)cd $(CLASSDIR) && zip $(ZIP_VERBOSITY) -u -rX $(@:f) $(subst,\,/ $(JARCLASSDIRS)) $(CHECKZIPRESULT)
 .ENDIF
 

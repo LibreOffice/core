@@ -91,7 +91,7 @@ FormattedString::FormattedString(
         uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
     m_aString(),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 FormattedString::FormattedString( const FormattedString & rOther ) :
@@ -99,7 +99,7 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
         impl::FormattedString_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_aString( rOther.m_aString ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 FormattedString::~FormattedString()

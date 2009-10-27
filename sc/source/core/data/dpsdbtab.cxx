@@ -231,15 +231,6 @@ long ScDatabaseDPData::GetColumnCount()
     return pImpl->nColCount;
 }
 
-void lcl_Reset( const uno::Reference<sdbc::XRowSet>& xRowSet )
-                    throw(sdbc::SQLException, uno::RuntimeException)
-{
-    //  isBeforeFirst / beforeFirst is not always available
-    //! query if it is allowed
-
-    xRowSet->execute();     // restart
-}
-
 const TypedScStrCollection& ScDatabaseDPData::GetColumnEntries(long nColumn)
 {
     CreateCacheTable();

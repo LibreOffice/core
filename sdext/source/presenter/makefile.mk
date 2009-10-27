@@ -33,7 +33,7 @@ PRJ=..$/..
 PRJNAME=sdext
 TARGET=PresenterScreen
 GEN_HID=FALSE
-EXTNAME=presenter
+EXTNAME=PresenterScreen
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -41,6 +41,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : rtlbootstrap.mk
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
@@ -54,6 +55,7 @@ common_build_zip=
 # --- Files -------------------------------------
 
 SLOFILES=										\
+    $(SLO)$/PresenterAccessibility.obj			\
     $(SLO)$/PresenterAnimation.obj				\
     $(SLO)$/PresenterAnimator.obj				\
     $(SLO)$/PresenterBitmapContainer.obj		\
@@ -83,6 +85,7 @@ SLOFILES=										\
     $(SLO)$/PresenterSlideSorter.obj			\
     $(SLO)$/PresenterSprite.obj					\
     $(SLO)$/PresenterSpritePane.obj				\
+    $(SLO)$/PresenterTextView.obj				\
     $(SLO)$/PresenterTheme.obj					\
     $(SLO)$/PresenterTimer.obj					\
     $(SLO)$/PresenterToolBar.obj				\
@@ -99,6 +102,7 @@ SHL1TARGET=		$(TARGET).uno
 SHL1STDLIBS=	$(CPPUHELPERLIB)	\
                 $(CPPULIB)			\
                 $(SALLIB)
+
 SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
@@ -121,13 +125,21 @@ PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/license_$i)
 PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/LICENSE_$i)
 .ENDIF
 
+.IF "$(WITH_LANG)"==""
+FIND_XCU=registry/data
+.ELSE			# "$(WITH_LANG)"==""
+FIND_XCU=$(MISC)$/$(EXTNAME)_in$/merge
+.ENDIF			# "$(WITH_LANG)"==""
 
 
 COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/Jobs.xcu							\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu				\
-    $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu		\
-    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs
+    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   \
+   $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
+
+#COMPONENT_MERGED_XCU= \
+#	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
 COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/BorderTop.png							\
@@ -243,14 +255,16 @@ ZIP1DEPS=					\
     $(COMPONENT_BITMAPS)	\
     $(COMPONENT_LIBRARY)	\
     $(COMPONENT_HELP)
+#	$(COMPONENT_MERGED_XCU) \
 
 PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 
 # --- Targets ----------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 $(SLO)$/PresenterComponent.obj : $(INCCOM)$/PresenterExtensionIdentifier.hxx
 
 $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
@@ -265,8 +279,8 @@ $(COMPONENT_HELP) : help$/$$(@:f)
     $(COPY) $< $@
 
 #$(COMPONENT_FILES) : $$(@:f)
-#	@-$(MKDIRHIER) $(@:d)
-#    +$(COPY) $< $@
+#	-$(MKDIRHIER) $(@:d)
+#	$(COPY) $< $@
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
@@ -328,6 +342,7 @@ $(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
     $(GNUCOPY) $< $@
 .ENDIF
 
+
 $(ZIP1DIR)/%.xcu : %.xcu
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
@@ -352,3 +367,8 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
 
 
 .ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
+.ELSE
+ivo:
+    $(ECHO)
+.ENDIF # L10N_framework
+

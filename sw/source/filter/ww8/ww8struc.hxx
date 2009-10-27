@@ -165,15 +165,17 @@ typedef sal_Int32 WW8_CP;
 const WW8_FC WW8_FC_MAX = SAL_MAX_INT32;
 const WW8_CP WW8_CP_MAX = SAL_MAX_INT32;
 
-// STD: STyle Definition
-//   The STD contains the entire definition of a style.
-//   It has two parts, a fixed-length base (cbSTDBase bytes long)
-//   and a variable length remainder holding the name, and the upx and upe
-//   arrays (a upx and upe for each type stored in the style, std.cupx)
-//   Note that new fields can be added to the BASE of the STD without
-//   invalidating the file format, because the STSHI contains the length
-//   that is stored in the file.  When reading STDs from an older version,
-//   new fields will be zero.
+/** STD - STyle Definition
+
+    The STD contains the entire definition of a style.
+    It has two parts, a fixed-length base (cbSTDBase bytes long)
+    and a variable length remainder holding the name, and the upx and upe
+    arrays (a upx and upe for each type stored in the style, std.cupx)
+    Note that new fields can be added to the BASE of the STD without
+    invalidating the file format, because the STSHI contains the length
+    that is stored in the file.  When reading STDs from an older version,
+    new fields will be zero.
+*/
 struct WW8_STD
 {
     // Base part of STD:
@@ -203,9 +205,7 @@ struct WW8_STD
     // char grupe[];
 };
 
-/*
-    Basis zum Einlesen UND zum Arbeiten (wird jeweils unter
-    schiedlich beerbt)
+/** Basis zum Einlesen UND zum Arbeiten (wird jeweils unter schiedlich beerbt)
 */
 struct WW8_FFN_BASE     // Font Descriptor
 {
@@ -223,8 +223,7 @@ struct WW8_FFN_BASE     // Font Descriptor
     BYTE    ibszAlt;        //  0x5     index into ffn.szFfn to the name of the alternate font
 };
 
-/*
-    Hiermit arbeiten wir im Parser (und Dumper)
+/** Hiermit arbeiten wir im Parser (und Dumper)
 */
 struct WW8_FFN : public WW8_FFN_BASE
 {

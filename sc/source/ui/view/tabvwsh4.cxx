@@ -1190,6 +1190,10 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
     pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
+    // update all pending row heights with a single progress bar,
+    // instead of a separate progress for each sheet from ScPrintFunc
+    pDocShell->UpdatePendingRowHeights( MAXTAB, true );
+
     for ( SCTAB i=0; i<nTabCount; i++ )
     {
         ScPrintFunc aPrintFunc( pDocShell, pPrinter, i );
@@ -1506,7 +1510,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  #51889# Spezialfall: Copy/Cut bei Mehrfachselektion -> Fehlermeldung
         //  (Slot ist disabled, SfxViewShell::KeyInput wuerde also kommentarlos verschluckt)
         KeyFuncType eFunc = aCode.GetFunction();
-        if ( eFunc == KEYFUNC_COPY || eFunc == KEYFUNC_CUT )
+        if ( eFunc == KEYFUNC_CUT )
         {
             ScRange aDummy;
             ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy );
@@ -1802,7 +1806,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             {
                 SCTAB nInitTabCount = 3;                            //! konfigurierbar !!!
                 for (SCTAB i=1; i<nInitTabCount; i++)
-                    pDoc->MakeTable(i);
+                    pDoc->MakeTable(i,false);
             }
 
             pDocSh->SetEmpty( FALSE );          // #i6232# make sure this is done only once

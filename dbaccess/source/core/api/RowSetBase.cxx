@@ -226,7 +226,10 @@ void SAL_CALL ORowSetBase::disposing(void)
         m_pColumns->disposing();
     }
     if ( m_pCache )
+    {
         m_pCache->deregisterOldRow(m_aOldRow);
+        m_pCache->deleteIterator(this);
+    }
     m_pCache = NULL;
 }
 // -------------------------------------------------------------------------
@@ -1284,11 +1287,13 @@ Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getWarnings" );
     ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
 
-    Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
-    if ( xWarnings.is() )
-        return xWarnings->getWarnings();
+    if ( m_pCache )
+    {
+        Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
+        if ( xWarnings.is() )
+            return xWarnings->getWarnings();
+    }
 
     return Any();
 }
@@ -1297,12 +1302,13 @@ void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::clearWarnings" );
     ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
 
-
-    Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
-    if ( xWarnings.is() )
-        xWarnings->clearWarnings();
+    if ( m_pCache )
+    {
+        Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
+        if ( xWarnings.is() )
+            xWarnings->clearWarnings();
+    }
 }
 // -------------------------------------------------------------------------
 void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
@@ -1319,7 +1325,8 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     sal_Int32 i=0;
     try
     {
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.end();++aIter,++i) // #104278# OJ ++i inserted
+        TDataColumns::iterator aEnd = m_aDataColumns.end();
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i) // #104278# OJ ++i inserted
             (*aIter)->fireValueChange(_rOldRow.isValid() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)

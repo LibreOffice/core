@@ -39,8 +39,6 @@
 
 testcase tBasicIdeModuleHide
 
-    '///<h1>Hiding modules (make them invisible)</h1>
-    '///<ul>
     
     const CFN = "tBasicIdeModuleHide::"
 
@@ -51,11 +49,9 @@ testcase tBasicIdeModuleHide
     gApplication = "WRITER"
     call hNewDocument()
     
-    '///<li>Create a new BASIC module for the current (writer) document</li>
     brc = hOpenBasicOrganizerFromDoc()
     brc = hCreateModuleForDoc()
     
-    '///<li>Write a macro (one that is unique to all modules)</li>
     brc = hInsertMacro( 1 )
     if ( brc ) then
        printlog( CFN & "Macro has been written successfully" )
@@ -63,13 +59,11 @@ testcase tBasicIdeModuleHide
        warnlog( CFN & "Failed to insert macro" )
     endif
 
-    '///<li>Hide the module using the Tab-Bar's context menu</li>
     rc = hHideModule()
     if ( rc > 0 ) then
         warnlog( "Some unexpected error occurred while trying to hide the module" )
     endif
 
-    '///<li>Verify if the module is really hidden.</li>
     try
         ' hTestMacro is expected to fail, so we jump to the catch statement
         rc = hTestMacro( 1 )
@@ -82,11 +76,9 @@ testcase tBasicIdeModuleHide
         printlog( " * unable to locate editwindow -> no module visible." )
     endcatch
     
-    '///<li>Open the BASIC organizer and select the hidden module</li> 
     if ( hOpenBasicObjectOrganizer( 1 ) ) then
     
         modulliste.typekeys( "<END><RIGHT><DOWN><RIGHT><DOWN>" )
-        '///<li>Click 'Edit' to open the module in the IDE</li>
         try
             bearbeiten.click()
         catch
@@ -94,7 +86,6 @@ testcase tBasicIdeModuleHide
         endcatch
         
          
-        '///<li>Verify that the correct module is visible</li>
         rc = hTestMacro( 1 )
         if ( rc = 1 ) then
             printlog( " * the correct macro-module is open. Good." )
@@ -102,7 +93,6 @@ testcase tBasicIdeModuleHide
             warnlog( "The open macro-module is not the one that was expected" )
         endif
          
-        '///<li>Close IDE and document</li>
         hCloseBasicIDE()
     
         call hCloseDocument()      
@@ -114,6 +104,5 @@ testcase tBasicIdeModuleHide
         
     endif
     
-    '///</ul>
     
 endcase

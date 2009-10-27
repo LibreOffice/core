@@ -48,16 +48,6 @@
 #define BUTTON_SIZE_X    50
 #define BUTTON_SIZE_Y    14
 
-String STR_HTML_TITLE
-{
-    Text [ en-US ] = "Copy HTML table" ;
-};
-
-String STR_RTF_TITLE
-{
-    Text [ en-US ] = "Copy RTF table" ;
-};
-
 String STR_WIZ_COLUMN_SELECT_TITEL
 {
     Text [ en-US ] = "Apply columns";
@@ -523,22 +513,29 @@ TabPage TAB_WIZ_COPYTABLE
         Text [ en-US ] = "Append ~data" ;
     };
 
-    CheckBox CB_PRIMARY_COLUMN
+    CheckBox CB_USEHEADERLINE
     {
         Pos                 = MAP_APPFONT ( 12, 93 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 18, 10 ) ;
+        Text [ en-US ] = "Use first ~line as column names" ;
+    };
+
+    CheckBox CB_PRIMARY_COLUMN
+    {
+        Pos                 = MAP_APPFONT ( 12, 107 ) ;
         Size                = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "Crea~te primary key";
     };
     FixedText FT_KEYNAME
     {
-        Pos                 = MAP_APPFONT ( 21 , 108 ) ;
+        Pos                 = MAP_APPFONT ( 21 , 122 ) ;
         Size                = MAP_APPFONT ( 39 , 8 ) ;
         Text [ en-US ] = "Name";
     };
 
     Edit ET_KEYNAME
     {
-        Pos                 = MAP_APPFONT ( 80, 106 ) ;
+        Pos                 = MAP_APPFONT ( 80, 120 ) ;
         Size                = MAP_APPFONT ( 65 , 12 ) ;
         TabStop             = TRUE ;
         Border              = TRUE ;

@@ -35,8 +35,12 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
-#ifndef __com_sun_star_rdf_XResource_idl__
-#include <com/sun/star/rdf/XResource.idl>
+#ifndef __com_sun_star_beans_StringPair_idl__
+#include <com/sun/star/beans/StringPair.idl>
+#endif
+
+#ifndef __com_sun_star_rdf_XURI_idl__
+#include <com/sun/star/rdf/XURI.idl>
 #endif
 
 
@@ -50,42 +54,52 @@ module com {   module sun {   module star {   module rdf {
 
     <p>
     To make using ODF elements as part of RDF statements more convenient,
-    this interface inherits from XRDFResource.
+    this interface inherits from <type>XURI</type>.
+    The URI is constructed by concatenating the URI of the document, the
+    stream name, a fragment separator, and the XML ID.
     </p>
 
-    @since OOo 3.0
+    <p>
+    Note that using the <type>XURI</type> interface on an instance of
+    <type>XMetadatable</type> may have the side effect of creating a metadata
+    reference for the instance.
+    </p>
 
-    @see XRDFRepository
+    @since OOo 3.2
+
+    @see XRepository
+    @see XDocumentMetadataAccess
  */
-interface XMetadatable : XResource
+interface XMetadatable : XURI
 {
     //-------------------------------------------------------------------------
-    /** an XML ID, comprising the stream name and the xml:id attribute.
+    /** a metadata reference, comprising the stream name and the XML ID.
 
         <p>
-        Note that this ID must be unique for the ODF document.
-        This implies that the xml:id part must be unique for every stream.
-        The ID may be omitted, in which case the value is the empty string.
-        For Example: "content.xml#foo-element-1"
+        Note that this metadata reference must be unique for the ODF document.
+        This implies that the XML ID part must be unique for every stream.
+        A pair of two empty strings signifies "no metadata reference".
+        For example: Pair("content.xml", "foo-element-1")
         </p>
 
         @throws com::sun::star::lang::IllegalArgumentException
-            if the given XmlId is invalid, or not unique
+            if the given metadata reference is invalid, or not unique
      */
-    [attribute] string XmlId {
+    [attribute] com::sun::star::beans::StringPair MetadataReference {
         set raises ( com::sun::star::lang::IllegalArgumentException );
     };
 
     //-------------------------------------------------------------------------
-    /** creates an XML ID for this object, if necessary.
+    /** creates a metadata reference for this object, if necessary.
 
         <p>
-        If this object already has an XML ID, do nothing;
-        otherwise, create a fresh, unique XML ID and assign it to the
-        XmlId attribute.
+        If this object already has a metadata reference, do nothing;
+        otherwise, create metadata reference with a fresh, unique XML ID
+        and assign it to the MetadataReference attribute.
         </p>
      */
-    void ensureXmlId();
+    void ensureMetadataReference();
+
 };
 
 //=============================================================================

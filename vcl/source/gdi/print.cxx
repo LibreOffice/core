@@ -70,44 +70,22 @@ int nImplSysDialog = 0;
 
 // =======================================================================
 
-#define PAPER_SLOPPY    50  // Bigger sloppy value as PaperInfo uses only mm accuracy!
-#define PAPER_COUNT     9
-
-// Use more accurate metric values for Letter/Legal/Tabloid paper formats
-static long ImplPaperFormats[PAPER_COUNT*2] =
+namespace
 {
-    29700, 42000,   // A3
-    21000, 29700,   // A4
-    14800, 21000,   // A5
-    25000, 35300,   // B4
-    17600, 25000,   // B5
-    21590, 27940,   // Letter
-    21590, 35570,   // Legal
-    27960, 43130,   // Tabloid
-    0,     0        // USER
-};
-
-// =======================================================================
-
-Paper ImplGetPaperFormat( long nWidth100thMM, long nHeight100thMM )
-{
-    USHORT i;
-
-    for( i = 0; i < PAPER_COUNT; i++ )
+    static Paper ImplGetPaperFormat( long nWidth100thMM, long nHeight100thMM )
     {
-        if ( (ImplPaperFormats[i*2] == nWidth100thMM) &&
-             (ImplPaperFormats[i*2+1] == nHeight100thMM) )
-            return (Paper)i;
+        PaperInfo aInfo(nWidth100thMM, nHeight100thMM);
+        aInfo.doSloppyFit();
+        return aInfo.getPaper();
     }
 
-    for( i = 0; i < PAPER_COUNT; i++ )
-    {
-        if ( (Abs( ImplPaperFormats[i*2]-nWidth100thMM ) < PAPER_SLOPPY) &&
-             (Abs( ImplPaperFormats[i*2+1]-nHeight100thMM ) < PAPER_SLOPPY) )
-            return (Paper)i;
-    }
+// -----------------------------------------------------------------------
 
-    return PAPER_USER;
+    static const PaperInfo& ImplGetEmptyPaper()
+    {
+        static PaperInfo aInfo(PAPER_USER);
+        return aInfo;
+    }
 }
 
 // =======================================================================
@@ -121,8 +99,9 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
         if ( pConstData->mePaperFormat != PAPER_USER )
         {
             ImplJobSetup* pData  = rJobSetup.ImplGetData();
-            pData->mnPaperWidth  = ImplPaperFormats[((USHORT)pConstData->mePaperFormat)*2];
-            pData->mnPaperHeight = ImplPaperFormats[((USHORT)pConstData->mePaperFormat)*2+1];
+            PaperInfo aInfo(pConstData->mePaperFormat);
+            pData->mnPaperWidth  = aInfo.getWidth();
+            pData->mnPaperHeight = aInfo.getHeight();
         }
     }
     else if ( pConstData->mePaperFormat == PAPER_USER )
@@ -997,17 +976,6 @@ USHORT Printer::GetPaperBin() const
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplPaperSizeEqual( unsigned long nPaperWidth1, unsigned long nPaperHeight1,
-                                unsigned long nPaperWidth2, unsigned long nPaperHeight2 )
-{
-    const long PAPER_ACCURACY = 1; // 1.0 mm accuracy
-
-    return ( (Abs( long(nPaperWidth1)-long(nPaperWidth2) ) <= PAPER_ACCURACY ) &&
-             (Abs( long(nPaperHeight1)-long(nPaperHeight2) ) <= PAPER_ACCURACY ) );
-}
-
-// -----------------------------------------------------------------------
-
 // Map user paper format to a available printer paper formats
 void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
 {
@@ -1016,21 +984,17 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
     int     nLandscapeAngle = GetLandscapeAngle();
     int     nPaperCount     = GetPaperInfoCount();
 
-    unsigned long nPaperWidth   = pSetupData->mnPaperWidth/100;
-    unsigned long nPaperHeight  = pSetupData->mnPaperHeight/100;
+    PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
 
     // Alle Papierformate vergleichen und ein passendes raussuchen
     for ( int i = 0; i < nPaperCount; i++ )
     {
-        const vcl::PaperInfo& rPaperInfo = GetPaperInfo( i );
+        const PaperInfo& rPaperInfo = GetPaperInfo( i );
 
-        if ( ImplPaperSizeEqual( rPaperInfo.m_nPaperWidth,
-                                 rPaperInfo.m_nPaperHeight,
-                                 nPaperWidth,
-                                 nPaperHeight ) )
+        if ( aInfo.sloppyEqual(rPaperInfo) )
         {
-            pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
-                                                            rPaperInfo.m_nPaperHeight*100 );
+            pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.getWidth(),
+                                                            rPaperInfo.getHeight() );
             break;
         }
     }
@@ -1042,17 +1006,17 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
          nLandscapeAngle != 0 &&
          HasSupport( SUPPORT_SET_ORIENTATION ))
     {
+
+        PaperInfo aRotatedInfo(pSetupData->mnPaperHeight, pSetupData->mnPaperWidth);
+
         for ( int i = 0; i < nPaperCount; i++ )
         {
-            const vcl::PaperInfo& rPaperInfo = GetPaperInfo( i );
+            const PaperInfo& rPaperInfo = GetPaperInfo( i );
 
-            if ( ImplPaperSizeEqual( rPaperInfo.m_nPaperWidth,
-                                     rPaperInfo.m_nPaperHeight,
-                                     nPaperHeight,
-                                     nPaperWidth ))
+            if ( aRotatedInfo.sloppyEqual( rPaperInfo ) )
             {
-                pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
-                                                                rPaperInfo.m_nPaperHeight*100 );
+                pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.getWidth(),
+                                                                rPaperInfo.getHeight() );
                 break;
             }
         }
@@ -1073,8 +1037,9 @@ BOOL Printer::SetPaper( Paper ePaper )
         pSetupData->mePaperFormat = ePaper;
         if ( ePaper != PAPER_USER )
         {
-            pSetupData->mnPaperWidth  = ImplPaperFormats[((USHORT)ePaper)*2];
-            pSetupData->mnPaperHeight = ImplPaperFormats[((USHORT)ePaper)*2+1];
+            PaperInfo aInfo(ePaper);
+            pSetupData->mnPaperWidth  = aInfo.getWidth();
+            pSetupData->mnPaperHeight = aInfo.getHeight();
         }
 
         if ( IsDisplayPrinter() )
@@ -1110,9 +1075,8 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
     if ( mbInPrintPage )
         return FALSE;
 
-    MapMode aMap100thMM( MAP_100TH_MM );
     Size    aPixSize = LogicToPixel( rSize );
-    Size    aPageSize = PixelToLogic( aPixSize, aMap100thMM );
+    Size    aPageSize = PixelToLogic( aPixSize, MAP_100TH_MM );
     if ( (maJobSetup.ImplGetConstData()->mePaperFormat != PAPER_USER)       ||
          (maJobSetup.ImplGetConstData()->mnPaperWidth  != aPageSize.Width()) ||
          (maJobSetup.ImplGetConstData()->mnPaperHeight != aPageSize.Height()) )
@@ -1150,15 +1114,6 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
     return TRUE;
 }
 
-
-// -----------------------------------------------------------------------
-
-static const vcl::PaperInfo& ImplGetEmptyPaper()
-{
-    static vcl::PaperInfo aInfo;
-    return aInfo;
-}
-
 // -----------------------------------------------------------------------
 
 int Printer::GetPaperInfoCount() const
@@ -1172,7 +1127,7 @@ int Printer::GetPaperInfoCount() const
 
 // -----------------------------------------------------------------------
 
-const vcl::PaperInfo& Printer::GetPaperInfo( int nPaper ) const
+const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
 {
     if( ! mpInfoPrinter )
         return ImplGetEmptyPaper();
@@ -1181,17 +1136,6 @@ const vcl::PaperInfo& Printer::GetPaperInfo( int nPaper ) const
     if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || nPaper >= int(mpInfoPrinter->m_aPaperFormats.size()) )
         return ImplGetEmptyPaper();
     return mpInfoPrinter->m_aPaperFormats[nPaper];
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Printer::SetPaperFromInfo( const vcl::PaperInfo& rInfo )
-{
-    MapMode aMap( MAP_MM );
-    Size aSize( rInfo.m_nPaperWidth, rInfo.m_nPaperHeight );
-    aSize = LogicToPixel( aSize, aMap );
-    aSize = PixelToLogic( aSize );
-    return SetPaperSizeUser( aSize );
 }
 
 // -----------------------------------------------------------------------
@@ -1206,38 +1150,6 @@ DuplexMode Printer::GetDuplexMode() const
 int Printer::GetLandscapeAngle() const
 {
     return mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle( maJobSetup.ImplGetConstData() ) : 900;
-}
-
-// -----------------------------------------------------------------------
-
-const vcl::PaperInfo& Printer::GetCurrentPaperInfo() const
-{
-    if( ! mpInfoPrinter )
-        return ImplGetEmptyPaper();
-    if( ! mpInfoPrinter->m_bPapersInit )
-        mpInfoPrinter->InitPaperFormats( maJobSetup.ImplGetConstData() );
-    if( mpInfoPrinter->m_aPaperFormats.empty() )
-        return ImplGetEmptyPaper();
-
-    MapMode aMap( MAP_MM );
-    Size aSize = PixelToLogic( GetPaperSizePixel(), aMap );
-    int nMatch = -1;
-    long nDelta = 0;
-    for( unsigned int i = 0; i < mpInfoPrinter->m_aPaperFormats.size(); i++ )
-    {
-        long nW = mpInfoPrinter->m_aPaperFormats[i].m_nPaperWidth;
-        long nH = mpInfoPrinter->m_aPaperFormats[i].m_nPaperHeight;
-        if( nW >= (aSize.Width()-1) && nH >= (aSize.Height()-1) )
-        {
-            long nCurDelta = (nW - aSize.Width())*(nW - aSize.Width()) + (nH - aSize.Height() )*(nH - aSize.Height() );
-            if( nMatch == -1 || nCurDelta < nDelta )
-            {
-                nMatch = i;
-                nDelta = nCurDelta;
-            }
-        }
-    }
-    return nMatch != -1 ? mpInfoPrinter->m_aPaperFormats[nMatch] : ImplGetEmptyPaper();
 }
 
 // -----------------------------------------------------------------------

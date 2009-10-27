@@ -58,6 +58,18 @@ public class Test01 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes ) )
+                return false;
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
@@ -134,6 +146,12 @@ public class Test01 implements StorageTest {
             }
 
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType4", false, ElementModes.READ ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes ) )
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )

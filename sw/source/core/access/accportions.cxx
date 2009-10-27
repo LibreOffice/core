@@ -489,8 +489,8 @@ void SwAccessiblePortionData::GetSentenceBoundary(
     if( pSentences == NULL )
     {
          DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-         DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
-         if( pBreakIt->xBreak.is() )
+         DBG_ASSERT( pBreakIt->GetBreakIter().is(), "No break-iterator." );
+         if( pBreakIt->GetBreakIter().is() )
          {
              pSentences = new Positions_t();
              pSentences->reserve(10);
@@ -505,7 +505,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
                  USHORT nModelPos = GetModelPosition( nCurrent );
 
-                 sal_Int32 nNew = pBreakIt->xBreak->endOfSentence(
+                 sal_Int32 nNew = pBreakIt->GetBreakIter()->endOfSentence(
                      sAccessibleString, nCurrent,
                      pBreakIt->GetLocale(pTxtNode->GetLang(nModelPos)) ) + 1;
 

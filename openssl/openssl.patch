@@ -50,7 +50,19 @@
  $mkdir="-mkdir" unless defined $mkdir;
  
  ($ssl,$crypto)=("ssl","crypto");
-@@ -570,7 +570,7 @@
+@@ -277,6 +277,11 @@
+	chop;
+
+	($key,$val)=/^([^=]+)=(.*)/;
++
++	# On some Windows machines, $val has linefeeds at the end, which confuses
++	# subsequent code in this file. So we strip all whitespace at the end.
++	$val =~ s/\s+$//;
++
+	if ($key eq "RELATIVE_DIRECTORY")
+		{
+		if ($lib ne "")
+@@ -570,7 +575,7 @@
  printf OUT <<EOF;
  #ifdef $platform_cpp_symbol
    /* auto-generated/updated by util/mk1mf.pl for crypto/cversion.c */

@@ -44,6 +44,11 @@ USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
 
+.IF "$(OS)" == "OS2"
+all: 
+    @echo "    Not building under OS/2"
+.ENDIF
+
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
@@ -87,6 +92,8 @@ SLOFILES += \
     $(SLO)$/MNSProfile.obj					\
     $(SLO)$/MNSProfileDirServiceProvider.obj
 .ENDIF
+
+CDEFS     += -DMOZILLA_INTERNAL_API
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -167,7 +174,7 @@ CFLAGS +=   -fPIC
 CFLAGSCXX += \
             -fno-rtti -Wconversion -Wpointer-arith \
             -Wcast-align -Woverloaded-virtual -Wsynth \
-            -Wno-long-long
+            -Wno-long-long -Wno-deprecated
 CDEFS     += -DTRACING
 .ENDIF
 

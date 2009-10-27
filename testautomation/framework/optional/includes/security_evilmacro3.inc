@@ -39,8 +39,6 @@
 
 testcase tSecurityEvilMacro3()
 
-    '///<h1>Level 1 test: Macros not executed/Security level set to High or Very High</h1>
-    '///<ul>
     
     dim acFile( 2 ) as string
 
@@ -55,26 +53,20 @@ testcase tSecurityEvilMacro3()
     dim brc as boolean          ' some returnvalue
     
 
-    '///+<li>Do following for each document to be tested:</li>
-    '///<ul>
 
     for iCurrentFile = 1 to ubound( acFile() )
 
         printlog( "" )
         printlog( "File: " & acFile( iCurrentFile ) )
 
-        '///+<li>Click FileOpen or go to the dialog via menu</li>
 	FileOpen
 
-        '///+<li>Enter the name of the file</li>
 	kontext "OeffnenDlg"
 	Dateiname.setText( acFile( iCurrentFile ) )
 
-        '///+<li>Click &quot;Open&quot;</li>
         Oeffnen.click()
 
       
-        '///+<li>We expect a message that macros exist but that they will not be executed</li>
         kontext "Active"
         if ( active.exists() ) then
             cMsg = active.getText()
@@ -85,9 +77,6 @@ testcase tSecurityEvilMacro3()
             warnlog( "Missing messagebox: Document contains macros ..." )
         endif
 
-        '///+<li>Wait a moment for the document to get loaded</li>
-        '///+<li>Check for a messagebox to come up on load. This might only<br>
-        '///+ after a security warning has been displayed!</li>
         kontext "Active"
         if ( active.exists( 5 ) ) then
 
@@ -103,13 +92,10 @@ testcase tSecurityEvilMacro3()
             printlog( "Macro was not executed" )
         endif
 
-        '///+<li>Close the document</li>
         call ExitRestartTheOffice()
 
     next iCurrentFile
 
-    '///</ul>
-    '///</ul>
 
 endcase
 

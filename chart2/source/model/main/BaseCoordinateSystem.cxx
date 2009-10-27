@@ -113,7 +113,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     sal_Bool bSwapXAndYAxis /* = sal_False */ ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_nDimensionCount( nDimensionCount )
  {
     m_aAllAxis.resize( m_nDimensionCount );
@@ -154,7 +154,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
         MutexContainer(),
         ::property::OPropertySet( rSource, m_aMutex ),
     m_xContext( rSource.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
     m_nDimensionCount( rSource.m_nDimensionCount ),
     m_aOrigin( rSource.m_aOrigin )
 {

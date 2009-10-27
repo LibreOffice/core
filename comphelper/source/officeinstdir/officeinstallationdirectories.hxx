@@ -84,6 +84,16 @@ public:
     getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
+    // XServiceInfo - static versions (used for component registration)
+    static ::rtl::OUString SAL_CALL
+        getImplementationName_static();
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames_static();
+    static ::rtl::OUString SAL_CALL
+        getSingletonName_static();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+
 private:
     void initDirs();
 

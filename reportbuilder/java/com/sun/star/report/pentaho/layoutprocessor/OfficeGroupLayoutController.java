@@ -185,7 +185,7 @@ public class OfficeGroupLayoutController extends SectionLayoutController
     {
       if (lc instanceof OfficeGroupLayoutController)
       {
-        count += 1;
+        count++;
       }
       lc = lc.getParent();
     }

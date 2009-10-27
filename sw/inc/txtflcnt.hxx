@@ -45,7 +45,7 @@ class SwTxtFlyCnt : public SwTxtAttr
     SwFlyInCntFrm  *_GetFlyFrm( const SwFrm *pCurrFrm );
 
 public:
-    SwTxtFlyCnt( const SwFmtFlyCnt& rAttr, xub_StrLen nStart );
+    SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStart );
 
     // Setzt den Anker im pFmt und
     void    SetAnchor( const SwTxtNode *pNode );
@@ -64,7 +64,7 @@ inline SwFlyInCntFrm *SwTxtFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm )
 
 inline const SwFlyInCntFrm *SwTxtFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm ) const
 {
-    return ((SwTxtFlyCnt*)this)->_GetFlyFrm( pCurrFrm );
+    return (const_cast<SwTxtFlyCnt*>(this))->_GetFlyFrm( pCurrFrm );
 }
 
 #endif

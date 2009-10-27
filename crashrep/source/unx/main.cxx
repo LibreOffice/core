@@ -357,7 +357,7 @@ bool SendHTTPRequest(
                         "SOAPAction: \"\"\r\n\r\n",
                         pszServer,
                         uPort,
-                        (int)length
+                        static_cast<int>(length)
                         );
                 else
                     sprintf( buffer,
@@ -365,7 +365,7 @@ bool SendHTTPRequest(
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
                         "Content-Length: %d\r\n"
                         "SOAPAction: \"\"\r\n\r\n",
-                        (int)length
+                        static_cast<int>(length)
                         );
 
                 if ( g_bDebugMode )

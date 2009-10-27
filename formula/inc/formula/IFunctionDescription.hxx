@@ -153,6 +153,7 @@ namespace formula
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
+        virtual ::com::sun::star::table::CellAddress getReferencePosition() const = 0;
 
         virtual void setDispatcherLock( BOOL bLock ) = 0;
         virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked) = 0;

@@ -223,7 +223,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         if ( pShell && !pShell->IsLoading() )       // #88438# don't call GetTitle while loading
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
-        if (pLinkManager)
+        if (GetLinkManager())
             pDrawLayer->SetLinkManager( pLinkManager );
 
         //  Drawing pages are accessed by table number, so they must also be present
@@ -245,7 +245,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
                 pTab[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
-                pTab[nTab]->SetDrawPageSize();  // #54782# sofort die richtige Groesse
+                pTab[nTab]->SetDrawPageSize(false);     // #54782# set the right size immediately
 #if 0
                 ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
                 ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );

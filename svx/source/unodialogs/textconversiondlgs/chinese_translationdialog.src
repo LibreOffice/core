@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "chinese_translationdialog.hrc"
+#include "chinese_direction.hrc"
 
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
@@ -39,7 +40,7 @@
 
 #define FULL_WIDTH (220)
 #define FULL_HEIGHT (120)
-#define EDITBUTTON_WIDTH (70)
+#define EDITBUTTON_WIDTH (75)
 
 #define COL_1 (RSC_SP_DLG_INNERBORDER_LEFT)
 #define COL_2 (COL_1+RSC_SP_FLGR_SPACE_X)

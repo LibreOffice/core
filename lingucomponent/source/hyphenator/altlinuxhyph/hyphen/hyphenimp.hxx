@@ -48,10 +48,12 @@
 
 #include <unotools/charclass.hxx>
 
-#include <lingutil.hxx>
 #include <linguistic/misc.hxx>
-#include "hprophelp.hxx"
+#include <linguistic/lngprophelp.hxx>
+
+#include <lingutil.hxx>
 #include <stdio.h>
+
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -90,15 +92,15 @@ class Hyphenator :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     Reference< XMultiServiceFactory > rSMgr;
-    PropertyHelper_Hyphen *                 pPropHelper;
+    linguistic::PropertyHelper_Hyphen *     pPropHelper;
     BOOL                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     Hyphenator(const Hyphenator &);
     Hyphenator & operator = (const Hyphenator &);
 
-    PropertyHelper_Hyphen & GetPropHelper_Impl();
-    PropertyHelper_Hyphen & GetPropHelper()
+    linguistic::PropertyHelper_Hyphen & GetPropHelper_Impl();
+    linguistic::PropertyHelper_Hyphen & GetPropHelper()
     {
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }

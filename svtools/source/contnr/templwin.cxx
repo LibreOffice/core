@@ -35,6 +35,7 @@
 #include <svtools/svtdata.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/dynamicmenuoptions.hxx>
+#include <svtools/extendedsecurityoptions.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/inettype.hxx>
 #include "imagemgr.hxx"
@@ -1742,9 +1743,16 @@ void SvtDocumentTemplateDialog::InitImpl( )
     pImpl = new SvtTmplDlg_Impl( this );
     pImpl->aTitle = GetText();
 
+    bool bHideLink = ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
+                    == SvtExtendedSecurityOptions::OPEN_NEVER );
+    if ( !bHideLink )
+         {
     aMoreTemplatesLink.SetURL( String(
         RTL_CONSTASCII_STRINGPARAM( "http://templates.services.openoffice.org/?cid=923508" ) ) );
     aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
+    }
+    else
+       aMoreTemplatesLink.Hide();
 
     aManageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OrganizerHdl_Impl ) );
     Link aLink = LINK( this, SvtDocumentTemplateDialog, OKHdl_Impl );
@@ -1762,14 +1770,17 @@ void SvtDocumentTemplateDialog::InitImpl( )
     Size aSize = GetOutputSizePixel();
     Point aPos = aMoreTemplatesLink.GetPosPixel();
     Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-    aPos.Y() -= a6Size.Height();
+    if ( bHideLink )
+        aPos.Y() += aMoreTemplatesLink.GetSizePixel().Height();
+    else
+        aPos.Y() -= a6Size.Height();
     long nDelta = aPos.Y() - nHeight;
     aSize.Height() -= nDelta;
     SetOutputSizePixel( aSize );
 
     aSize.Height() = nHeight;
-    aSize.Width() -= a6Size.Width();
-    pImpl->pWin->SetPosSizePixel( Point( a6Size.Width() / 2, 0 ), aSize );
+    aSize.Width() -= ( a6Size.Width() * 2 );
+    pImpl->pWin->SetPosSizePixel( Point( a6Size.Width(), 0 ), aSize );
 
     aPos = aMoreTemplatesLink.GetPosPixel();
     aPos.Y() -= nDelta;

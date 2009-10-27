@@ -50,6 +50,8 @@ SLOFILES =	\
         $(SLO)$/binaryoutputstream.obj		\
         $(SLO)$/binarystreambase.obj		\
         $(SLO)$/containerhelper.obj			\
+        $(SLO)$/graphichelper.obj			\
+        $(SLO)$/modelobjecthelper.obj		\
         $(SLO)$/olestorage.obj				\
         $(SLO)$/progressbar.obj				\
         $(SLO)$/propertymap.obj				\

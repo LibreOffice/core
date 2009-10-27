@@ -1053,6 +1053,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     aCategories.SetSelectHdl(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
     aCommands.SetSelectHdl( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
+    aCommands.SetDoubleClickHdl( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
 
     aOKButton.SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
     aCancelButton.SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
@@ -1137,6 +1138,14 @@ IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )
         aCommands.FunctionSelected();
     }
     UpdateUI();
+    return 0;
+}
+
+IMPL_LINK( SvxScriptSelectorDialog, FunctionDoubleClickHdl, Control*, pCtrl )
+{
+    (void)pCtrl;
+    if ( aOKButton.IsEnabled() )
+        return ClickHdl( &aOKButton );
     return 0;
 }
 

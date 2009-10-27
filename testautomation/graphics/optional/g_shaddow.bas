@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -41,27 +41,26 @@ global glLocale (15*20) as string
 public ExtensionString as String
 
 sub main
-   Call hStatusIn ( "Graphics","g_shaddow.bas", "Shaddow-Optional Test"  )
-   GetOLEDefaultNames
+    Call hStatusIn ( "Graphics","g_shaddow.bas"  )
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_shaddow.inc"
 
-   gApplication = "IMPRESS"
-   PrintLog "------------------------- " + gApplication + " Shaddow-Optional Test -------------------"
-   Call tiShaddow
+    gApplication = "IMPRESS"
+    PrintLog "------------------------- " + gApplication + " Shaddow-Optional Test -------------------"
+    Call tiShaddow
 
-   gApplication = "DRAW"
-   PrintLog "------------------------- " + gApplication + " Shaddow-Optional Test -------------------"
-   Call tiShaddow
+    gApplication = "DRAW"
+    PrintLog "------------------------- " + gApplication + " Shaddow-Optional Test -------------------"
+    Call tiShaddow
 
-   Call hStatusOut
+    Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   gApplication = "DRAW"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    gApplication = "DRAW"
+    Call GetUseFiles
 end sub

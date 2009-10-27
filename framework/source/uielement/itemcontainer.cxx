@@ -55,39 +55,20 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_6     (   ItemContainer                                                   ,
-                            OWeakObject                                                     ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
-                            DIRECT_INTERFACE( ::com::sun::star::container::XIndexContainer  ),
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XUnoTunnel            ),
-                            DERIVED_INTERFACE( ::com::sun::star::container::XIndexReplace, com::sun::star::container::XIndexContainer ),
-                            DERIVED_INTERFACE( ::com::sun::star::container::XIndexAccess, com::sun::star::container::XIndexReplace    ),
-                            DERIVED_INTERFACE( ::com::sun::star::container::XElementAccess, ::com::sun::star::container::XIndexAccess )
-                        )
 
-DEFINE_XTYPEPROVIDER_6  (   ItemContainer                                   ,
-                            ::com::sun::star::lang::XTypeProvider           ,
-                            ::com::sun::star::container::XIndexContainer    ,
-                            ::com::sun::star::container::XIndexReplace      ,
-                            ::com::sun::star::container::XIndexAccess       ,
-                            ::com::sun::star::container::XElementAccess     ,
-                            ::com::sun::star::lang::XUnoTunnel
-                        )
-
-ItemContainer::ItemContainer( const ShareableMutex& rMutex ) : ::cppu::OWeakObject()
-    ,   m_aShareMutex( rMutex )
+ItemContainer::ItemContainer( const ShareableMutex& rMutex ) :
+    m_aShareMutex( rMutex )
 {
 }
 
 
-ItemContainer::ItemContainer( const ConstItemContainer& rConstItemContainer, const ShareableMutex& rMutex ) : ::cppu::OWeakObject()
-    ,   m_aShareMutex( rMutex )
+ItemContainer::ItemContainer( const ConstItemContainer& rConstItemContainer, const ShareableMutex& rMutex ) : m_aShareMutex( rMutex )
 {
     copyItemContainer( rConstItemContainer.m_aItemVector, rMutex );
 }
 
-ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer, const ShareableMutex& rMutex ) : ::cppu::OWeakObject()
-    ,   m_aShareMutex( rMutex )
+ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer, const ShareableMutex& rMutex ) :
+    m_aShareMutex( rMutex )
 {
     if ( rSourceContainer.is() )
     {
@@ -97,8 +78,7 @@ ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer,
             for ( sal_Int32 i = 0; i < nCount; i++ )
             {
                 Sequence< PropertyValue > aPropSeq;
-                Any a = rSourceContainer->getByIndex( i );
-                if ( a >>= aPropSeq )
+                if ( rSourceContainer->getByIndex( i ) >>= aPropSeq )
                 {
                     sal_Int32 nContainerIndex = -1;
                     Reference< XIndexAccess > xIndexAccess;
@@ -132,7 +112,8 @@ ItemContainer::~ItemContainer()
 // private
 void ItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValue > >& rSourceVector, const ShareableMutex& rMutex )
 {
-    for ( sal_uInt32 i = 0; i < rSourceVector.size(); i++ )
+    const sal_uInt32 nCount = rSourceVector.size();
+    for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
         sal_Int32 nContainerIndex = -1;
         Sequence< PropertyValue > aPropSeq( rSourceVector[i] );
@@ -208,7 +189,7 @@ sal_Bool SAL_CALL ItemContainer::hasElements()
 throw ( RuntimeException )
 {
     ShareGuard aLock( m_aShareMutex );
-    return ( m_aItemVector.size() != 0 );
+    return ( !m_aItemVector.empty() );
 }
 
 // XIndexAccess

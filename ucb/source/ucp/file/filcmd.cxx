@@ -100,7 +100,7 @@ XCommandInfo_impl::getCommandInfoByName(
         if( m_pMyShell->m_sCommandInfo[i].Name == aName )
             return m_pMyShell->m_sCommandInfo[i];
 
-    throw UnsupportedCommandException();
+    throw UnsupportedCommandException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -114,7 +114,7 @@ XCommandInfo_impl::getCommandInfoByHandle(
         if( m_pMyShell->m_sCommandInfo[i].Handle == Handle )
             return m_pMyShell->m_sCommandInfo[i];
 
-    throw UnsupportedCommandException();
+    throw UnsupportedCommandException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 

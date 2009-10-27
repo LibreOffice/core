@@ -36,6 +36,8 @@ TARGET=checkidl
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
+
+.IF "$(L10N_framework)"==""
 ODKCHECKFILE=$(MISC)$/$(TARGET).txt
 
 all : $(ODKCHECKFILE)
@@ -46,3 +48,8 @@ $(ODKCHECKFILE) : $(SDK_CONTENT_CHECK_FILES)
     -diff -br $(DESTDIRIDL) $(SOLARIDLDIR) $(PIPEERROR) $(PERL) $(PRJ)$/util$/checkdiff.pl $(ODKCHECKFILE)
 # RAISE AN ERROR WHEN TAG FILE IS NOT THERE ANYMORE
     cat $(ODKCHECKFILE)
+
+.ELSE
+pseudo:
+
+.ENDIF

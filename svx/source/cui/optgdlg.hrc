@@ -91,6 +91,10 @@
 #define ROW_FT_MOUSEMIDDLE      (ROW_LB_MOUSEPOS + RSC_CD_DROPDOWN_HEIGHT + ROWSPACE)
 #define ROW_LB_MOUSEMIDDLE      (ROW_FT_MOUSEMIDDLE + RSC_CD_FIXEDTEXT_HEIGHT + ROWSPACE)
 
+// #i97672#
+#define ROW_FL_SELECTION        (ROW_LB_MOUSEMIDDLE + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_FLGR_SPACE_X)
+#define ROW_CB_SELECTION        (ROW_FL_SELECTION + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
+
 // tabpage general -------------------------------------------------------
 
 #define FL_HELP                     10
@@ -149,6 +153,11 @@
 #define FL_RENDERING                67
 #define CB_USE_HARDACCELL           68
 #define CB_USE_ANTIALIASE           69
+
+// #i97672#
+#define FL_SELECTION                70
+#define CB_SELECTION                71
+#define MF_SELECTION                72
 
 // tabpage languages -----------------------------------------------------
 

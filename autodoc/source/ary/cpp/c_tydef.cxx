@@ -44,14 +44,6 @@ namespace ary
 namespace cpp
 {
 
-
-Typedef::Typedef()
-    :   // aEssentials,
-        nDescribingType(0),
-        eProtection(PROTECT_global)
-{
-}
-
 Typedef::Typedef( const String  &     i_sLocalName,
                   Cid                 i_nOwner,
                   E_Protection        i_eProtection,

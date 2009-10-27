@@ -130,11 +130,6 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationNode::~OConfigurationNode()
-    {
-    }
-
-    //------------------------------------------------------------------------
     void OConfigurationNode::_disposing( const EventObject& _rSource )
     {
         Reference< XComponent > xDisposingSource(_rSource.Source, UNO_QUERY);

@@ -55,8 +55,6 @@ class Rectangle;
 class SvStream;
 class ScDPSaveData;
 class ScDPOutput;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 class ScPivot;
 class ScPivotCollection;
 struct ScPivotParam;
@@ -107,7 +105,6 @@ private:
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
     BOOL                    bAllowMove;
-    BOOL                    bInfoValid;     // affects: nHeaderRows
     long                    nHeaderRows;    // page fields plus filter button
 
 
@@ -127,7 +124,8 @@ public:
     void                InvalidateData();
     void                InvalidateSource();
 
-    void                Output();
+
+    void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( BOOL& rOverflow );
     const ScRange       GetOutputRangeByType( sal_Int32 nType );
 
@@ -281,9 +279,7 @@ public:
     virtual ScDataObject*   Clone() const;
 
     ScDPObject* operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
-#if OLD_PIVOT_IMPLEMENTATION
-    void        ConvertOldTables( ScPivotCollection& rOldColl );
-#endif
+
     void        DeleteOnTab( SCTAB nTab );
     void        UpdateReference( UpdateRefMode eUpdateRefMode,
                                  const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );

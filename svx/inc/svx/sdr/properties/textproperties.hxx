@@ -42,6 +42,10 @@ namespace sdr
     {
         class SVX_DLLPUBLIC TextProperties : public AttributeProperties
         {
+        private:
+            // #i101556# versioning support
+            sal_uInt32                  maVersion;
+
         protected:
             // create a new itemset
             virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool);
@@ -82,6 +86,9 @@ namespace sdr
             // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
             // ItemChange(), PostItemChange() and ItemSetChanged() calls.
             void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
+
+            // #i101556# versioning support
+            virtual sal_uInt32 getVersion() const;
         };
     } // end of namespace properties
 } // end of namespace sdr

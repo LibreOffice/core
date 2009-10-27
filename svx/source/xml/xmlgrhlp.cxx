@@ -670,17 +670,16 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
 
 // -----------------------------------------------------------------------------
 
-void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos )
+void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos, rtl::OUString& rRequestedFileName )
 {
+    rtl::OUString aURLString( rURLStr );
     ::rtl::OUString aPictureStorageName, aPictureStreamName;
-
-    if( ( maURLSet.find( rURLStr ) != maURLSet.end() ) )
+    if( ( maURLSet.find( aURLString ) != maURLSet.end() ) )
     {
         URLPairVector::iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
-
         while( aIter != aEnd )
         {
-            if( rURLStr == (*aIter).first )
+            if( aURLString == (*aIter).first )
             {
                 maGrfURLs[ nInsertPos ].second = (*aIter).second;
                 aIter = aEnd;
@@ -689,7 +688,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 aIter++;
         }
     }
-    else if( ImplGetStreamNames( rURLStr, aPictureStorageName, aPictureStreamName ) )
+    else if( ImplGetStreamNames( aURLString, aPictureStorageName, aPictureStreamName ) )
     {
         URLPair& rURLPair = maGrfURLs[ nInsertPos ];
 
@@ -718,22 +717,23 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 String          aStreamName( aGraphicObjectId );
                 Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
                 const GfxLink   aGfxLink( aGraphic.GetLink() );
+                String          aExtension;
 
                 if( aGfxLink.GetDataSize() )
                 {
                     switch( aGfxLink.GetType() )
                     {
-                        case( GFX_LINK_TYPE_EPS_BUFFER ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_GIF ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_JPG ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PNG ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_TIF ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".tif" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_WMF ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_MET ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".met" ) ); break;
-                        case( GFX_LINK_TYPE_NATIVE_PCT ): aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ); break;
+                        case( GFX_LINK_TYPE_EPS_BUFFER ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_GIF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_JPG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_PNG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_TIF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".tif" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".met" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ); break;
 
                         default:
-                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".grf" ) );
+                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".grf" ) );
                         break;
                     }
                 }
@@ -742,30 +742,52 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                     if( aGrfObject.GetType() == GRAPHIC_BITMAP )
                     {
                         if( aGrfObject.IsAnimated() )
-                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) );
+                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".gif" ) );
                         else
-                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) );
+                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) );
                     }
                     else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
                     {
                         // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                         GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
                         if ( ImplCheckForEPS( rMtf ) )
-                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) );
+                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".eps" ) );
                         else
-                            aStreamName += String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
+                            aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svm" ) );
                     }
                 }
+
+                rtl::OUString aURLEntry;
+                const String sPictures( RTL_CONSTASCII_USTRINGPARAM( "Pictures/" ) );
+
+                if ( rRequestedFileName.getLength() )
+                {
+                    aURLEntry = sPictures;
+                    aURLEntry += rRequestedFileName;
+                    aURLEntry += aExtension;
+
+                    URLPairVector::iterator aIter( maGrfURLs.begin() ), aEnd( maGrfURLs.end() );
+                    while( aIter != aEnd )
+                    {
+                        if( aURLEntry == (*aIter).second )
+                            break;
+                        aIter++;
+                    }
+                    if ( aIter == aEnd )
+                        aStreamName = rRequestedFileName;
+                }
+
+                aStreamName += aExtension;
 
                 if( mbDirect && aStreamName.Len() )
                     ImplWriteGraphic( aPictureStorageName, aStreamName, aGraphicObjectId );
 
-                rURLPair.second = String( RTL_CONSTASCII_USTRINGPARAM( "Pictures/" ) );
+                rURLPair.second = sPictures;
                 rURLPair.second += aStreamName;
             }
         }
 
-        maURLSet.insert( rURLStr );
+        maURLSet.insert( aURLString );
     }
 }
 
@@ -820,14 +842,45 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
 // -----------------------------------------------------------------------------
 
 // XGraphicObjectResolver
-::rtl::OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const ::rtl::OUString& aURL )
+::rtl::OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const ::rtl::OUString& rURL )
     throw(uno::RuntimeException)
 {
     ::osl::MutexGuard   aGuard( maMutex );
     const sal_Int32     nIndex = maGrfURLs.size();
 
+    rtl::OUString aURL( rURL );
+    rtl::OUString aUserData;
+    rtl::OUString aRequestedFileName;
+
+    sal_Int32 nUser = rURL.indexOf( '?', 0 );
+    if ( nUser >= 0 )
+    {
+        aURL = rtl::OUString( rURL.copy( 0, nUser ) );
+        nUser++;
+        aUserData = rURL.copy( nUser, rURL.getLength() - nUser );
+    }
+    if ( aUserData.getLength() )
+    {
+        sal_Int32 nIndex2 = 0;
+        do
+        {
+            rtl::OUString aToken = aUserData.getToken( 0, ';', nIndex2 );
+            sal_Int32 n = aToken.indexOf( '=' );
+            if ( ( n > 0 ) && ( ( n + 1 ) < aToken.getLength() ) )
+            {
+                rtl::OUString aParam( aToken.copy( 0, n ) );
+                rtl::OUString aValue( aToken.copy( n + 1, aToken.getLength() - ( n + 1 ) ) );
+
+                const rtl::OUString sRequestedName( RTL_CONSTASCII_USTRINGPARAM("requestedName") );
+                if ( aParam.match( sRequestedName ) )
+                    aRequestedFileName = aValue;
+            }
+        }
+        while ( nIndex2 >= 0 );
+    }
+
     maGrfURLs.push_back( ::std::make_pair( aURL, ::rtl::OUString() ) );
-    ImplInsertGraphicURL( aURL, nIndex );
+    ImplInsertGraphicURL( aURL, nIndex, aRequestedFileName );
 
     return maGrfURLs[ nIndex ].second;
 }

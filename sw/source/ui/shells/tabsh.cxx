@@ -57,9 +57,7 @@
 #include <svx/svxdlg.hxx>
 #include <svtools/zformat.hxx>
 #include <sfx2/bindings.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
@@ -72,28 +70,20 @@
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <frmatr.hxx>
 #include <uitool.hxx>
-#ifndef _INPUTWIN_HXX
 #include <inputwin.hxx>
-#endif
 #include <uiitems.hxx>
 #include <usrpref.hxx>
-#ifndef _TABSH_HXX
 #include <tabsh.hxx>
-#endif
 #include "swtablerep.hxx"
 #include <tablemgr.hxx>
 #include <cellatr.hxx>
 #include <frmfmt.hxx>
 #include <swundo.hxx>
 #include <swtable.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <tblsel.hxx>
 
 #include <dialog.hrc>
@@ -130,12 +120,8 @@
 #include <unoobj.hxx>
 
 #define SwTableShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 
 #include "swabstdlg.hxx"
 #include <table.hrc>
@@ -984,13 +970,18 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
-                VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_INS_ROW_COL,
-                                                        GetView(), FN_TABLE_INSERT_COL_DLG == nSlot );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
-                pDlg->Execute();
-                delete pDlg;
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, nSlot) : 0);
+
+                if( pDlg.get() && (pDlg->Execute() == 1) )
+                {
+                    USHORT nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG) ? FN_TABLE_INSERT_COL : FN_TABLE_INSERT_ROW;
+                    SfxUInt16Item aCountItem( nDispatchSlot, static_cast< UINT16 >(pDlg->getInsertCount()) );
+                    SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
+                       SfxViewFrame* pVFrame = GetView().GetViewFrame();
+                       if( pVFrame )
+                        pVFrame->GetDispatcher()->Execute( nDispatchSlot, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aCountItem, &aAfter, 0L);
+                }
             }
         }
         break;

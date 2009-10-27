@@ -157,6 +157,7 @@ public:
     void                SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
 
     void                initResolution( NSWindow* );
+    void                copyResolution( AquaSalGraphics& );
     void                updateResolution();
 
     bool                IsWindowGraphics()      const   { return mbWindow; }
@@ -348,6 +349,7 @@ public:
     virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
 
     virtual SystemGraphicsData    GetGraphicsData() const;
+    virtual SystemFontData        GetSysFontData( int /* nFallbacklevel */ ) const;
 
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems

@@ -382,7 +382,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwFmtFld* pSwFmtFld = static_cast<SwFmtFld*>(pFirst);
                         if ( pSwFmtFld->GetFld() == pPostIt )
                         {
-                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS ) );
+                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS, &GetView() ) );
                             break;
                         }
                         pFirst = aIter++;
@@ -402,7 +402,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     sComment = pRedline->GetComment();
                     if ( sComment == String(rtl::OUString::createFromAscii("")) )
                         GetView().GetDocShell()->Broadcast(SwRedlineHint(pRedline,SWREDLINE_INSERTED));
-                    const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS));
+                    const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS,&GetView()));
                 }
                 */
 

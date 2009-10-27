@@ -56,7 +56,7 @@ JARCOMPRESS 	= TRUE
 # --- Runner Settings ----------------------------------------------
 
 # classpath and argument list
-RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar
+RUNNER_CLASSPATH = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/ConnectivityTools.jar"
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
 .END
 
@@ -73,15 +73,18 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
+test:
+    echo $(SOLARBINDIR)
+
 .IF "$(BUILD_QADEVOOO)" == "YES"
 show_targets:
-    +@java $(RUNNER_CLASSPATH) integration.forms.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
+    +@$(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s/.\$///:s/.java//))
 
 run:
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce forms_all.sce
 
 run_%:
-    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
+    +$(COPY) integration$/forms$/*.props $(CLASSDIR)$/$(PACKAGE) && $(AUGMENT_LIBRARY_PATH) java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
 
 .ELSE
 run: show_targets

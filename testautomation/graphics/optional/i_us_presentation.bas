@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ public i as integer
 
 sub main
     Call hStatusIn ( "Graphics","i_us_presentation.bas")
-    
+
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\impress\i_us_present.inc"
@@ -48,17 +48,17 @@ sub main
 
     PrintLog "------------ Graphics User-scenario-test: PowerUser creates a Presentation ------------"
 
-        Call i_us_presentation1  ' User-Scenario: Pro.
-        Call i_us_presentation2
-        Call i_us_presentation3
-        Call i_us_presentation4
-        Call i_us_presentation5
-        Call i_us_presentation6
-        Call i_us_presentation7
+    Call i_us_presentation1  ' User-Scenario: Pro.
+    Call i_us_presentation2
+    Call i_us_presentation3
+    Call i_us_presentation4
+    Call i_us_presentation5
+    Call i_us_presentation6
+    Call i_us_presentation7
 
-        Call i_us2_pres1         ' User-Scenario: Beginner.
-        Call i_us2_pres2
-        
+    Call i_us2_pres1         ' User-Scenario: Beginner.
+    Call i_us2_pres2
+
     Call hStatusOut
 end sub
 

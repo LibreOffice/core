@@ -51,7 +51,8 @@ SLOFILES =  $(SLO)$/Splines.obj \
             $(SLO)$/BarChart.obj \
             $(SLO)$/PieChart.obj \
             $(SLO)$/AreaChart.obj \
-            $(SLO)$/CandleStickChart.obj
+            $(SLO)$/CandleStickChart.obj \
+            $(SLO)$/BubbleChart.obj
 
 # --- Targets -----------------------------------------------------------------
 

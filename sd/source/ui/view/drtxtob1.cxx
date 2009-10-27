@@ -256,6 +256,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustDepth( -1 );
 
+                // Ensure bold/italic etc. icon state updates
+                Invalidate();
                 // #96551# trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
@@ -269,6 +271,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 pOLV->AdjustDepth( 1 );
 
+                // Ensure bold/italic etc. icon state updates
+                Invalidate();
                 // #96551# trigger preview refresh
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }

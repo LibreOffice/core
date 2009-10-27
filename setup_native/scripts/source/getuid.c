@@ -88,13 +88,29 @@ int fstatat64(int fildes, const char *path, struct stat64  *buf, int flag)
 
     return ret;
 }
-
-#elif defined LINUX
+#elif  defined LINUX
 
 uid_t getuid  (void) {return 0;}
 uid_t geteuid (void) {return 0;}
 
 /* This is to fool tar */
+#ifdef X86_64
+int __lxstat(int n, const char *path, struct stat *buf)
+{
+    int ret = 0;
+    static int (*p_lstat) (int n, const char *path, struct stat *buf) = NULL;
+    if (p_lstat == NULL)
+        p_lstat = (int (*)(int n, const char *path, struct stat *buf))
+            dlsym (RTLD_NEXT, "__lxstat");
+    ret = (*p_lstat)(n, path, buf);
+    if (buf != NULL)
+    {
+        buf->st_uid = 0; /* root */
+        buf->st_gid = 0; /* root */
+    }
+    return ret;
+}
+#else
 int __lxstat64(int n, const char *path, struct stat64 *buf)
 {
     int ret = 0;
@@ -105,13 +121,12 @@ int __lxstat64(int n, const char *path, struct stat64 *buf)
     ret = (*p_lstat)(n, path, buf);
     if (buf != NULL)
     {
-        buf->st_uid = 0; /* root */
-        buf->st_gid = 0; /* root */
+        buf->st_uid = 0;
+        buf->st_gid = 0;
     }
-
     return ret;
 }
-
+#endif
 #endif
 
 #ifdef _cplusplus

@@ -51,6 +51,7 @@
 #include "unoguard.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include "postit.hxx"
 #include "AccessibleText.hxx"
 
 //------------------------------------------------------------------------
@@ -223,7 +224,7 @@ SvxEditSource* ScAnnotationEditSource::Clone() const
 SdrObject* ScAnnotationEditSource::GetCaptionObj()
 {
     ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos );
-    return pNote ? pNote->GetCaption() : 0;
+    return pNote ? pNote->GetOrCreateCaption( aCellPos ) : 0;
 }
 
 SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()

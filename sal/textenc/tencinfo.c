@@ -49,7 +49,7 @@ sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return (sal_Bool)
         (nEncoding > RTL_TEXTENCODING_DONTKNOW
-         && nEncoding <= RTL_TEXTENCODING_PT154
+         && (nEncoding <= RTL_TEXTENCODING_ADOBE_DINGBATS)
              /* always update this! */
          && nEncoding != 9); /* RTL_TEXTENCODING_SYSTEM */
 }

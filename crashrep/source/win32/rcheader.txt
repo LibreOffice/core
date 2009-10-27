@@ -28,23 +28,6 @@
  *
 #*************************************************************************/
 
-#define VERSION			3
-#define SUBVERSION		1
-//#define VERVARIANT		0
-// .0 + VER_CONCEPT
-// .100 + VER_ALPHA
-// .200 + VER_BETA
-// .300 + VER_GAMMA
-// .500 + VER_FINAL
-//#define VER_CONCEPT		0
-//#define VER_BETA		6
-#define VER_FINAL		0
-
-#define VER_DAY			1
-#define VER_MONTH		4
-#define VER_YEAR		09
-
-
 // Header
 #include "resource.h"
 #if defined(_MSC_VER) && (_MSC_VER < 1500)
@@ -57,9 +40,9 @@
 #define IDC_STATIC		(-1)
 #endif
 
-#include "verinfo.hrc"
+#define VER_FIRSTYEAR	2003
 
-#define VER_FIRSTYEAR	03
+#include "version.hrc"
 
 #ifdef FONTSIZE
 #undef FONTSIZE
@@ -130,12 +113,5 @@ VS_VERSION_INFO versioninfo
 #endif
 		}
 	}
-
-// version binary entry
-VS_VERSION_INFO rcdata
-{
-	0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
-	VERSION, SUBVERSION, VERVARIANT, VER_COUNT
-};
 
 

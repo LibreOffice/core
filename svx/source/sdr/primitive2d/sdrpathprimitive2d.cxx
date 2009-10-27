@@ -52,22 +52,22 @@ namespace drawinglayer
             Primitive2DSequence aRetval;
 
             // add fill
-            if(maSdrLFSTAttribute.getFill() && maUnitPolyPolygon.isClosed())
+            if(getSdrLFSTAttribute().getFill() && getUnitPolyPolygon().isClosed())
             {
                 // take care for orientations
-                ::basegfx::B2DPolyPolygon aOrientedUnitPolyPolygon(::basegfx::tools::correctOrientations(maUnitPolyPolygon));
+                basegfx::B2DPolyPolygon aOrientedUnitPolyPolygon(basegfx::tools::correctOrientations(getUnitPolyPolygon()));
 
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(aOrientedUnitPolyPolygon, maTransform, *maSdrLFSTAttribute.getFill(), maSdrLFSTAttribute.getFillFloatTransGradient()));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createPolyPolygonFillPrimitive(aOrientedUnitPolyPolygon, getTransform(), *getSdrLFSTAttribute().getFill(), getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
             // add line
-            if(maSdrLFSTAttribute.getLine())
+            if(getSdrLFSTAttribute().getLine())
             {
-                Primitive2DSequence aTemp(maUnitPolyPolygon.count());
+                Primitive2DSequence aTemp(getUnitPolyPolygon().count());
 
-                for(sal_uInt32 a(0L); a < maUnitPolyPolygon.count(); a++)
+                for(sal_uInt32 a(0L); a < getUnitPolyPolygon().count(); a++)
                 {
-                    aTemp[a] = createPolygonLinePrimitive(maUnitPolyPolygon.getB2DPolygon(a), maTransform, *maSdrLFSTAttribute.getLine(), maSdrLFSTAttribute.getLineStartEnd());
+                    aTemp[a] = createPolygonLinePrimitive(getUnitPolyPolygon().getB2DPolygon(a), getTransform(), *getSdrLFSTAttribute().getLine(), getSdrLFSTAttribute().getLineStartEnd());
                 }
 
                 appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, aTemp);
@@ -76,44 +76,35 @@ namespace drawinglayer
             {
                 // if initially no line is defined, create one for HitTest and BoundRect
                 const attribute::SdrLineAttribute aBlackHairline(basegfx::BColor(0.0, 0.0, 0.0));
-                Primitive2DSequence xHiddenLineSequence(maUnitPolyPolygon.count());
+                Primitive2DSequence xHiddenLineSequence(getUnitPolyPolygon().count());
 
-                for(sal_uInt32 a(0); a < maUnitPolyPolygon.count(); a++)
+                for(sal_uInt32 a(0); a < getUnitPolyPolygon().count(); a++)
                 {
-                    xHiddenLineSequence[a] = createPolygonLinePrimitive(maUnitPolyPolygon.getB2DPolygon(a), maTransform, aBlackHairline);
+                    xHiddenLineSequence[a] = createPolygonLinePrimitive(getUnitPolyPolygon().getB2DPolygon(a), getTransform(), aBlackHairline);
                 }
 
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(new HitTestPrimitive2D(xHiddenLineSequence)));
             }
 
             // add text
-            if(maSdrLFSTAttribute.getText())
+            if(getSdrLFSTAttribute().getText())
             {
-                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(maUnitPolyPolygon, maTransform, *maSdrLFSTAttribute.getText(), maSdrLFSTAttribute.getLine(), false, false));
+                appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, createTextPrimitive(getUnitPolyPolygon(), getTransform(), *getSdrLFSTAttribute().getText(), getSdrLFSTAttribute().getLine(), false, false, false));
             }
 
             // add shadow
-            if(maSdrLFSTAttribute.getShadow())
+            if(getSdrLFSTAttribute().getShadow())
             {
-                // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
-                const Primitive2DReference xShadow(createShadowPrimitive(aRetval, *maSdrLFSTAttribute.getShadow()));
-
-                if(xShadow.is())
-                {
-                    Primitive2DSequence aContentWithShadow(2L);
-                    aContentWithShadow[0L] = xShadow;
-                    aContentWithShadow[1L] = Primitive2DReference(new GroupPrimitive2D(aRetval));
-                    aRetval = aContentWithShadow;
-                }
+                aRetval = createEmbeddedShadowPrimitive(aRetval, *getSdrLFSTAttribute().getShadow());
             }
 
             return aRetval;
         }
 
         SdrPathPrimitive2D::SdrPathPrimitive2D(
-            const ::basegfx::B2DHomMatrix& rTransform,
+            const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
-            const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon)
+            const basegfx::B2DPolyPolygon& rUnitPolyPolygon)
         :   BasePrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
@@ -127,9 +118,9 @@ namespace drawinglayer
             {
                 const SdrPathPrimitive2D& rCompare = (SdrPathPrimitive2D&)rPrimitive;
 
-                return (maUnitPolyPolygon == rCompare.maUnitPolyPolygon
-                    && maTransform == rCompare.maTransform
-                    && maSdrLFSTAttribute == rCompare.maSdrLFSTAttribute);
+                return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
+                    && getTransform() == rCompare.getTransform()
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
             }
 
             return false;

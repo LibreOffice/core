@@ -36,7 +36,6 @@
 #include "svditext.hxx" //
 #include <svx/xpoly.hxx>
 #include <svx/svdtrans.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svddrag.hxx>
@@ -766,37 +765,6 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     }
 }
 
-SdrObject* SdrMeasureObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    sal_Bool bHit(sal_False);
-    INT32 nMyTol=nTol;
-    INT32 nWdt=ImpGetLineWdt()/2; // Halbe Strichstaerke
-    if (nWdt>nMyTol) nMyTol=nWdt; // Bei dicker Linie keine Toleranz noetig
-    Rectangle aR(rPnt,rPnt);
-    aR.Left()  -=nMyTol;
-    aR.Right() +=nMyTol;
-    aR.Top()   -=nMyTol;
-    aR.Bottom()+=nMyTol;
-
-    if (bTextDirty) UndirtyText();
-    ImpMeasureRec aRec;
-    ImpMeasurePoly aMPol;
-    ImpTakeAttr(aRec);
-    ImpCalcGeometrics(aRec,aMPol);
-    bHit=IsRectTouchesLine(aMPol.aMainline1.aP1,aMPol.aMainline1.aP2,aR) ||
-         IsRectTouchesLine(aMPol.aMainline2.aP1,aMPol.aMainline2.aP2,aR) ||
-         IsRectTouchesLine(aMPol.aHelpline1.aP1,aMPol.aHelpline1.aP2,aR) ||
-         IsRectTouchesLine(aMPol.aHelpline2.aP1,aMPol.aHelpline2.aP2,aR);
-    // und nun noch ggf. den Textbereich checken
-    bHit=bHit || SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
-    return bHit ? (SdrObject*)this : NULL;
-}
-
 void SdrMeasureObj::operator=(const SdrObject& rObj)
 {
     SdrTextObj::operator=(rObj);
@@ -1379,12 +1347,6 @@ void SdrMeasureObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle
 {
     if (bTextDirty) UndirtyText();
     SdrTextObj::TakeTextEditArea(pPaperMin,pPaperMax,pViewInit,pViewMin);
-}
-
-SdrObject* SdrMeasureObj::CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if (bTextDirty) UndirtyText();
-    return SdrTextObj::CheckTextEditHit(rPnt,nTol,pVisiLayer);
 }
 
 USHORT SdrMeasureObj::GetOutlinerViewAnchorMode() const

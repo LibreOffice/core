@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description :  Testcases for the Format-Menu.
 '*
@@ -96,13 +96,11 @@ testcase tFormatGraphics
     printlog " Insert a graphic (..\writer\required\input\graphics\jolink.jpg)"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
 
-    try
-        printlog " Format / Graphic"
-        FormatGraphics
-    catch
+    printlog " Format / Graphic"
+    if ( hUseAsyncSlot( "FormatGraphics" ) = -1 ) then
         Warnlog "- Format / Graphics disabled or hidden!"
         goto endsub
-    endcatch
+    end if
 
     printlog " Step through all tabpages"
     Kontext
@@ -220,16 +218,17 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignment
+
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"
     Call hNewDocument
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-    if gApplication = "HTML" then
-        wait 500
+
+    if ( gApplication = "HTML" ) then
         printlog " Format / Anchor / to Page"
-        FormatAnchorToPage
+        hUseAsyncSlot( "FormatAnchorToPage" )
     end if
 
     try
@@ -363,17 +362,17 @@ testcase tFormatArrangeObject
     printlog " Insert a frame"
     Call wInsertFrame
     printlog " Format / Arrange / Bring to front"
-    FormatArrangeBringToFrontCalc
-    WaitSlot()
+    FormatArrangeBringToFrontCalc : WaitSlot()
+
     printlog " Format / Arrange / Bring forward"
-    FormatArrangeBringForward
-    WaitSlot()
+    FormatArrangeBringForward : WaitSlot()
+
     printlog " Format / Arrange / Set backward"
-    FormatArrangeSetBackward
-    WaitSlot()
+    FormatArrangeSetBackward : WaitSlot()
+
     printlog " Format / Arrange / Send to back "
-    FormatArrangeSendToBack
-    WaitSlot()
+    FormatArrangeSendToBack : WaitSlot()
+
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -391,23 +390,23 @@ testcase tFormatAlignmentObject
     printlog " Insert a frame"
     Call wInsertFrame
     printlog " Format / Alignment / Left"
-    FormatAlignmentLeft
-    WaitSlot()
+    FormatAlignmentLeft : WaitSlot()
+
     printlog " Format / Alignment / Centered"
-    FormatAlignmentCentered
-    WaitSlot()
+    FormatAlignmentCentered : WaitSlot()
+
     printlog " Format / Alignment / Right"
-    FormatAlignmentRight
-    WaitSlot()
+    FormatAlignmentRight : WaitSlot()
+
     printlog " Format / Alignment / Top"
-    FormatAlignmentTop
-    WaitSlot()
+    FormatAlignmentTop : WaitSlot()
+
     printlog " Format / Alignment / Center"
-    FormatAlignmentCenter
-    WaitSlot()
+    FormatAlignmentCenter : WaitSlot()
+
     printlog " Format / Alignment / Bottom"
-    FormatAlignmentBottom
-    WaitSlot()
+    FormatAlignmentBottom : WaitSlot()
+
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -415,6 +414,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAnchorObject
+
     PrintLog "- Format / Anchor Frame"
 
     printlog " Open new document"
@@ -422,17 +422,17 @@ testcase tFormatAnchorObject
     printlog " Insert a frame"
     Call wInsertFrame
     printlog " Format / Anchor / to page"
-    FormatAnchorToPage
-    WaitSlot()
+    FormatAnchorToPage : WaitSlot()
+
     printlog " Format / Anchor / to paragraph"
-    FormatAnchorToParagraph
-    WaitSlot()
+    FormatAnchorToParagraph : WaitSlot()
+
     printlog " Format / Anchor / to character"
-    FormatAnchorToCharacter
-    WaitSlot()
+    FormatAnchorToCharacter : WaitSlot()
+
     printlog " Format / Anchor / as character"
-    FormatAnchorAsCharacter
-    WaitSlot()
+    FormatAnchorAsCharacter : WaitSlot()
+
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -440,57 +440,63 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatWrapObject
+
     PrintLog "- Format / Wrap (Frame)"
-    if gApplication = "HTML" then
+
+    if ( gApplication = "HTML" ) then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
+
     printlog " Open new document"
     Call hNewDocument
+
     printlog " Insert a frame"
     Call wInsertFrame
-    WaitSlot()
+
     printlog " Format / Wrap / no wrap"
-    FormatWrapNoWrap
-    WaitSlot()
+    FormatWrapNoWrap : WaitSlot()
+
     printlog " Format / Wrap / page wrap"
-    FormatWrapPageWrap
-    WaitSlot()
+    FormatWrapPageWrap : WaitSlot()
+
     printlog " Format / Wrap / optimal page wrap"
-    FormatWrapOptimalPageWrap
-    WaitSlot()
+    FormatWrapOptimalPageWrap : WaitSlot()
+
     printlog " Format / Wrap / through"
-    FormatWrapThrough
-    WaitSlot()
+    FormatWrapThrough : WaitSlot()
+
     printlog " Format / Wrap / in background"
-    FormatWrapInBackground
-    WaitSlot()
+    FormatWrapInBackground : WaitSlot()
+
     printlog " Format / Wrap / first paragraph"
-    FormatWrapFirstParagraph
-    WaitSlot()
-    try
-        printlog " Format / Wrap / Contour"
-        FormatWrapContour
-        WaitSlot (500)
-        Warnlog "Wrap / Contour should not be enabled for frames ! (Bug#90964)"
-    catch
-    endcatch
-    Sleep 1
-    try
-        printlog " Format / Wrap / Edit Contour"
-        FormatWrapEditContour
+    FormatWrapFirstParagraph : WaitSlot()
+
+    if ( hUseAsyncSlot( "FormatWrapContour" ) = -1 ) then
+        printlog( "Format / Wrap / Contour disabled. Good." )
+    else
+        warnlog( "#i90964# Format / Wrap / Contour should not be enabled for frames" )
+    end if
+
+    printlog " Format / Wrap / Edit Contour"
+    if ( hUseAsyncSlot( "FormatWrapEditContour" ) = -1 ) then
+        printlog( "Format / Wrap / Edit Contour disabled. Good." )
+    else
+        Warnlog( "#i90964# Wrap / Edit Contour should not be enabled for frames" )
+
         Kontext "KonturEditor"
         if ( KonturEditor.exists( 2 ) ) then
-            Warnlog "Wrap / Edit Contour should not be enabled for frames ! (Bug#90964)"
-            printlog " Close 'Contour Editor'"
-            KonturEditor.Close
+            KonturEditor.Close()
         else
-            warnlog( "Dialog <KonturEditor> is not available" )
-        endif
-    catch
-    endcatch
+            warnlog( "Slot <FormatWrapEditContour> is enabled but doesn't trigger the dialog" )
+        end if
+    end if
+
     Kontext
-    if Active.Exists (2) then Active.Yes
+    if ( Active.Exists( 2 ) ) then 
+        qaerrorlog( "JSK: Undocumented active handled silently - fix it" )
+        Active.Yes()
+    end if
 
     printlog " Close active document"
     Call hCloseDocument
@@ -510,30 +516,31 @@ testcase tFormatLine
     Call hNewDocument
     printlog " Insert a rectangle"
     Call wRectangleToClipboard
-    
+
     printlog " Edit / Paste"
     hUseAsyncSlot( "EditPaste" )
-    
 
-        printlog " Format / Line"
+    printlog " Format / Line"
     if ( hUseAsyncSlot( "FormatLine" ) = -1 ) then
         Warnlog "Clipboard problem between applications!"
         Call wZeichenobjektEinfuegen ( "Rechteck", 40, 40, 50, 50 )
         Call gMouseClick ( 45, 45 )
         if ( hUseAsyncSlot( "FormatLine" ) = -1 ) then
             warnlog( "Failed to execute slot <FormatLine>" )
-        endif
-    endif
+        end if
+    end if
 
     Kontext
     printlog " Step through all tabpages"
     wait 500
     active.SetPage TabLinie
+
     kontext "TabLinie"
     Call DialogTest ( TabLinie )
 
     Kontext
     active.SetPage TabLinienstile
+
     kontext "TabLinienstile"
     Call DialogTest ( TabLinienstile )
     try
@@ -550,6 +557,7 @@ testcase tFormatLine
 
     Kontext
     active.SetPage TabLinienenden
+
     Kontext "Linienstil"
     if Linienstil.Exists then
         Warnlog "Messagebox appears changing to Tabpage 'Arrow Styles!"
@@ -589,14 +597,14 @@ testcase tFormatArea
     Call wRectangleToClipboard
 
     hUseAsyncSlot( "EditPaste" )
-    
+
     printlog " Format / Area"
     if ( hUseAsyncSlot( "FormatArea" ) = -1 ) then
         Warnlog "Clipboard problem between applications!"
         Call wZeichenobjektEinfuegen ( "Rechteck", 40, 40, 50, 50 )
         Call gMouseClick ( 45, 45 )
         FormatArea
-    endif
+    end if
 
     Kontext
     wait 500
@@ -634,7 +642,7 @@ testcase tFormatArea
         WaitSlot()
     else
         warnlog( "Dialog <FarbeDlg> is not available" )
-    endif
+    end if
 
     Kontext
     active.SetPage TabFarbverlaeufe
@@ -664,7 +672,7 @@ testcase tFormatArea
         NameDlg.Cancel
     else
         warnlog( "Dialog <NameDlg> is not available" )
-    endif              
+    end if
 
     Kontext
     active.SetPage TabBitmap
@@ -683,7 +691,7 @@ testcase tFormatArea
         NameDlg.Cancel
     else
         warnlog( "Dialog <NameDlg> is not available" )
-    endif    
+    end if
 
     kontext "TabBitmap"
     Import.Click
@@ -693,7 +701,7 @@ testcase tFormatArea
         GrafikEinfuegenDlg.Cancel
     else
         warnlog( "Dialog <GrafikEinfuegenDlg> is not available" )
-    endif
+    end if
 
     printlog " Close Tabdialog"
     kontext "TabBitmap"
@@ -768,9 +776,8 @@ testcase tFormatPositionAndSize
         Call gMouseClick ( 45, 45 )
         if ( hUseAsyncSlot( "ContextPositionAndSize" ) = -1 ) then
             warnlog( "Failed to execute slot <ContextPositionAndSize>" )
-        endif
-    endif
-            
+        end if
+    end if
 
     printlog " Step through all tabpages"
     Kontext
@@ -792,7 +799,6 @@ testcase tFormatPositionAndSize
 
     printlog " Close active document"
     Call hCloseDocument
-
 endcase
 
 '-----------------------------------------------------------
@@ -804,10 +810,10 @@ testcase tFormatFlip
         printlog "Not in WriterWeb!"
         goto endsub
     end if
-    
+
     printlog " Open new document"
     Call hNewDocument
-    
+
     printlog " Paste a rectangle from draw via clipboard"
     Call wRectangleToClipboard
     hUseAsyncSlot( "EditPaste" )
@@ -819,8 +825,8 @@ testcase tFormatFlip
         Call gMouseClick ( 45, 45 )
         if ( hUseAsyncSlot( "FormatFlipVertically" ) = -1 ) then
             warnlog( "Failed to execute slot <FormatFlipVertically>" )
-        endif
-    endif
+        end if
+    end if
 
     WaitSlot (3000)
 
@@ -839,10 +845,10 @@ testcase tFormatArrangeArea
         printlog "Not in WriterWeb!"
         goto endsub
     end if
-    
+
     printlog " Open new document"
     Call hNewDocument
-    
+
     printlog " Paste a rectangle from draw via clipboard"
     Call wRectangleToClipboard
     hUseAsyncSlot( "EditPaste" )
@@ -855,8 +861,8 @@ testcase tFormatArrangeArea
         Call gMouseClick ( 45, 45 )
         if ( hUseAsyncSlot( "FormatArrangeBringToFrontCalc" ) = -1 ) then
             warnlog( "Failed to execute slot <FormatArrangeBringToFrontCalc>" )
-        endif
-    endif
+        end if
+    end if
 
     WaitSlot()
     printlog " Format / Arrange / Bring Forward"
@@ -876,6 +882,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatAlignmentArea
+
     PrintLog "- Format / Alignment drawing objects"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
@@ -961,10 +968,12 @@ testcase tFormatGroup
     Dim y1%
 
     PrintLog "- Format / Group drawing objects"
-    if gApplication = "HTML" then
+
+    if ( gApplication = "HTML" ) then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
+
     printlog " Open new document"
     Call hNewDocument
 
@@ -991,54 +1000,37 @@ testcase tFormatGroup
         y1% = 65
     end if
 
-    Sleep 1
-    try
-        printlog " Format / Group / Group"
-        FormatGroupGroup
-    catch
+    printlog " Format / Group / Group"
+    if ( hUseAsyncSlot( "FormatGroupGroup" ) = -1 ) then
         QAErrorlog "Unable to execute Format / Group / Group. Maybe objects not selected!"
-        printlog " Close active document"
         Call hCloseDocument
         goto endsub
-    endcatch
-    Sleep 2
-    try
-        printlog " Format / Group / Edit Group"
-        FormatGroupEditGroupCalc
-        WaitSlot (2000)
-    catch
+    end if
+
+    printlog " Format / Group / Edit Group"
+    if ( hUseAsyncSlot( "FormatGroupEditGroupCalc" ) = -1 ) then
         Warnlog "Unable to execute Format / Group / Group. Maybe objects not selected!"
         Call hCloseDocument
-        printlog " Close active document"
         goto endsub
-    endcatch
+    end if
 
     Call wTypeKeys ( "<Shift F4>" )
-    Sleep 2
-    try
-        printlog " Format / Exit Group"
-        FormatExitGroupDraw
-        WaitSlot (2000)
-    catch
+
+    printlog " Format / Exit Group"
+    if ( hUseAsyncSlot( "FormatExitGroupDraw" ) = -1 ) then
         Warnlog "Unable to execute Format / Group / Exit Group. Maybe objects not selected!"
         Call hCloseDocument
-        printlog " Close active document"
         goto endsub
-    endcatch
+    end if
 
     Call wTypeKeys ( "<Shift F4>" )
-    Sleep 2
-    try
-        printlog " Format / Ungroup"
-        FormatUngroupDraw
-        WaitSlot (2000)
-    catch
+    
+    printlog " Format / Ungroup"
+    if ( hUseAsyncSlot( "FormatUngroupDraw" ) = -1 ) then
         Warnlog "Unable to execute Format / Group / Ungroup. Maybe objects not selected!"
         Call hCloseDocument
-        printlog " Close active document"
         goto endsub
-    endcatch
-    Sleep 2
+    end if
 
     printlog " Close active document"
     Call hCloseDocument
@@ -1047,8 +1039,10 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatFontwork
+
     PrintLog "- Format / Fontwork drawing objects"
-    if gApplication = "HTML" then
+
+    if ( gApplication = "HTML" ) then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1058,27 +1052,25 @@ testcase tFormatFontwork
     printlog " Paste a rectangle from draw via clipboard"
     Call wRectangleToClipboard
 
-    EditPaste
-    Sleep (1)
+    hUseAsyncSlot( "EditPaste" )
 
-    try
-        printlog " Format / Font Work"
-        FormatFontwork
-    catch
+    printlog " Format / Font Work"
+    if ( hUseAsyncSlot( "FormatFontWork" ) = -1 ) then
         Warnlog "Clipboard problem between applications!"
         Call wZeichenobjektEinfuegen ( "Rechteck", 40, 40, 50, 50 )
         Call gMouseClick ( 45, 45 )
         FormatFontwork
-    endcatch
+    end if
 
     Kontext "Fontwork"
-    if Fontwork.Exists then
+    if ( Fontwork.Exists( 1 ) ) then
         call Dialogtest ( Fontwork )
         printlog " Close Fontwork dialog"
         FormatFontwork
     else
         Warnlog "Dialog 'Fontwork' does not exist!"
     end if
+
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -1086,35 +1078,48 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatPositionAndSizeLegend
+
     PrintLog "- Format / Position and Size in Legend"
-    if gApplication = "HTML" then
+
+    if ( gApplication = "HTML" ) then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
+
     printlog " Open new document"
     Call hNewDocument
-    Call wZeichenobjektEinfuegen ( "Legende", 45, 35, 50, 50 )
-    printlog " Insert a legend"
-    sleep (1)
-    Call wObjektSelektieren(43, 33, 75, 75)
+    Kontext "NavigatorWriter"
+    if NavigatorWriter.Exists then ViewNavigator
 
-    if ( hUseAsyncSlot( "FormatPositionAndSize" = -1 ) ) then
+	printlog " Insert a legend"
+    Call wZeichenobjektEinfuegen ( "Legende", 45, 35, 50, 50 )
+	Call wTypeKeys "<ESCAPE>"
+    Call wTypeKeys "<SHIFT F4>"
+
+    Call hUseAsyncSlot( "FormatPositionAndSize" )
+    kontext "active"
+    if ( active.exists( 1 ) ) then
+        printlog( "Dialog open. Good" )
+    else
         Warnlog "Format / Position and Size does not work! Maybe object not selected!"
         printlog " Close active document"
         Call hCloseDocument
         goto endsub
-    endif
+    end if
 
     printlog " In upcoming dialog step through all tabpages"
     Kontext
     active.setpage TabPositionAndSizeWriter
+
     Kontext "TabPositionAndSizeWriter"
     call Dialogtest ( TabPositionAndSizeWriter )
 
     Kontext
     active.setpage TabLegende
+
     Kontext "TabLegende"
     call Dialogtest ( TabLegende )
+
     printlog " Close dialog"
     TabLegende.Cancel
 
@@ -1125,16 +1130,21 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatStyleEdit
+
     PrintLog "- Format / Style Text objects"
-    if gApplication = "HTML" then
+
+    if ( gApplication = "HTML" ) then
         printlog "Not in WriterWeb !"
         goto endsub
     end if
+
     printlog " Open new document"
     Call hNewDocument
 
     Kontext "DrawBar"
-    if Not DrawBar.Exists then Call hToolbarSelect("Drawing", true)
+    if Not DrawBar.Exists then 
+        Call hToolbarSelect("Drawing", true)
+    end if
 
     if Drawbar.Exists then
         Textobjekt.Click
@@ -1142,9 +1152,8 @@ testcase tFormatStyleEdit
         Sleep 2
 
         Call gMouseMove(50, 20, 70, 40)
-        Sleep 1
+        hUseAsyncSlot( "FormatStyleBold" )
 
-        FormatStyleBold
         printlog " Format / Style / Bold"
         Call wTypeKeys ("a")
         printlog " Format / Style / Italic"
@@ -1212,12 +1221,11 @@ testcase tFormatAlignmentEdit
     printlog " Insert a textbox via 'Draw functions' toolbar"
 
     Call gMouseMove(50, 20, 70, 40)
-    Sleep 1
     printlog " Insert some text in document"
 
     Call wTypeKeys ("Ein Wort")
     printlog " Format / Alignment / Left"
-    FormatAlignmentLeftText
+    hUseAsyncSlot( "FormatAlignmentLeftText" )
     WaitSlot()
     printlog " Format / Alignment / Right"
     FormatAlignmentRightText
@@ -1231,8 +1239,8 @@ testcase tFormatAlignmentEdit
 
     Kontext "Drawbar"
     Drawbar.Close
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -1293,10 +1301,9 @@ testcase tFormatParagraphEdit
     printlog " In a textbox via 'Draw Functions' toolbox"
 
     Call gMouseMove(50, 20, 70, 40)
-    Sleep 1
 
     printlog " Format / Paragraph "
-    FormatParagraph
+    hUseAsyncSlot( "FormatParagraph" )
     printlog " Step through all tabpages"
     Kontext
     Active.SetPage TabEinzuegeUndAbstaende
@@ -1315,12 +1322,12 @@ testcase tFormatParagraphEdit
 
     TabTabulator.Cancel
     Sleep 1
+    printlog " Close dialog"
     Kontext "Drawbar"
     Drawbar.Close
-    printlog " Close dialog"
 
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -1336,13 +1343,10 @@ testcase tHtmlDocFormatGraphics
     printlog " Insert a graphic (..\writer\required\input\graphics\jolink.jpg)"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
 
-    try
-        printlog " Format / Graphic"
-        FormatGraphics
-    catch
+    if ( hUseAsyncSlot( "FormatGraphics" ) = -1 ) then
         Warnlog "- Format / Graphics disabled or hidden!"
         goto endsub
-    endcatch
+    end if
 
     printlog " Step through all tabpages"
     Kontext
@@ -1406,7 +1410,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocFormatAlignment
-    gApplication = "HTML"
+
+	gApplication = "HTML"
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"

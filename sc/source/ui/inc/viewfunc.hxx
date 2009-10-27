@@ -69,6 +69,7 @@ class Exchange;
 class ScRangeList;
 class SvxHyperlinkItem;
 class ScTransferObj;
+class ScTableProtection;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
@@ -199,6 +200,8 @@ public:
 
     void            ChangeIndent( BOOL bIncrement );
 
+    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
+
     void            Protect( SCTAB nTab, const String& rPassword );
     BOOL            Unprotect( SCTAB nTab, const String& rPassword );
 
@@ -300,6 +303,7 @@ public:
 
     void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
     void            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate );
+    void            DoRefConversion( BOOL bRecord = TRUE );
 
 //UNUSED2008-05  void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
@@ -344,6 +348,11 @@ private:
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
+    bool            PasteMultiRangesFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+                                              bool bSkipEmpty, bool bTranspos, bool bAsLink, bool bAllowDialogs,
+                                              InsCellCmd eMoveMode, sal_uInt16 nCondFlags, sal_uInt16 nUndoFlags );
+    void            PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark);
+
     USHORT          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, BOOL bFormula );
 
     void            StartFormatArea();

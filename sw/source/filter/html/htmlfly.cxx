@@ -1640,7 +1640,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     ULONG nFrmFlags = bInCntnr ? HTML_FRMOPTS_IMG_CNTNR : HTML_FRMOPTS_IMG;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrmFlags |= HTML_FRMOPTS_IMG_CSS1;
-    OutHTML_Image( rWrt, rFrmFmt, aGrfNm, pGrfNd->GetAlternateText(),
+    OutHTML_Image( rWrt, rFrmFmt, aGrfNm, pGrfNd->GetTitle(),
                    pGrfNd->GetTwipSize(), nFrmFlags, pMarkToGraphic );
 
     return rWrt;

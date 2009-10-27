@@ -44,8 +44,6 @@ testcase tCompareHelpApps()
         goto endsub
     endif
 
-    '///<h1>Compare the About-Items in the Help-Viewer against a reference</h1>
-    '///<ul>
     
     ' file related variables
     dim sFileOut as string
@@ -71,7 +69,6 @@ testcase tCompareHelpApps()
         
     aTopicsFromUI( 0 ) = "0"
 
-    '///+<li>Open the Help</li>
     brc = hOpenHelp()
     if ( not brc ) then
         warnlog( "Help not open, aborting test" )
@@ -79,13 +76,10 @@ testcase tCompareHelpApps()
     endif
 
     
-    '///+<li>Switch to the Index-Tab</li>
     hSelectHelpTab( "index" )
     
-    '///+<li>Retrieve the number of About-Items (Listbox, to the upper left)</li>
     iTopicsFromUI = HelpAbout.getItemCount()
     
-    '///+<li>copy the strings from the ListBox into an array</li>
     for iCurrentItem = 1 to iTopicsFromUI
     
         HelpAbout.select( iCurrentItem )
@@ -101,12 +95,10 @@ testcase tCompareHelpApps()
     printlog( "" )
     printlog( "Beginning comparision" )
     
-    '///+<li>Compare the array to the reference file</li>
     irc = hManageComparisionList( sFileIn, sFileOut, aTopicsFromUI() )
     if ( irc <> 0 ) then
 	    warnlog( "Something went wrong, please review the log" )
     endif
-    '///</ul>
     
 endcase
 

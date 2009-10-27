@@ -45,18 +45,18 @@ class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem
 public:
                             TYPEINFO();
                             XFillBmpPosItem( RECT_POINT eRP = RP_MM );
-                            XFillBmpPosItem( SvStream& rIn );
+                            SVX_DLLPRIVATE XFillBmpPosItem( SvStream& rIn );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
 
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+    SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual USHORT          GetValueCount() const;
-    RECT_POINT              GetValue() const { return (RECT_POINT) SfxEnumItem::GetValue(); }
+    SVX_DLLPRIVATE virtual USHORT           GetValueCount() const;
+    SVX_DLLPRIVATE RECT_POINT               GetValue() const { return (RECT_POINT) SfxEnumItem::GetValue(); }
 };
 
 

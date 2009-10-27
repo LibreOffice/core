@@ -43,6 +43,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Common ----------------------------------------------------------
 
+ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
+
 .IF "$(OS)"=="SOLARIS"
 .IF "$(CCNUMVER)"=="00050009"
 # SunStudio12: anachronism warning in boost code (smilfunctionparser.cxx)

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dp_gui_updatedialog.cxx,v $
- * $Revision: 1.18.10.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -82,6 +79,7 @@
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "osl/diagnose.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
@@ -231,9 +229,7 @@ public:
     Thread(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         UpdateDialog & dialog,
-        rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
-        css::uno::Sequence< css::uno::Reference<
-            css::deployment::XPackageManager > > const & packageManagers);
+        const std::vector< TUpdateListEntry > &vExtensionList);
 
     void stop();
 
@@ -287,9 +283,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
     UpdateDialog & m_dialog;
-    rtl::Reference< dp_gui::SelectedPackage > m_selectedPackage;
-    css::uno::Sequence< css::uno::Reference<
-        css::deployment::XPackageManager > > m_packageManagers;
+    std::vector< dp_gui::TUpdateListEntry > m_vExtensionList;
     css::uno::Reference< css::deployment::XUpdateInformationProvider >
         m_updateInformation;
 
@@ -301,13 +295,10 @@ private:
 UpdateDialog::Thread::Thread(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     UpdateDialog & dialog,
-    rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
-    css::uno::Sequence< css::uno::Reference<
-        css::deployment::XPackageManager > > const & packageManagers):
+    const std::vector< dp_gui::TUpdateListEntry > &vExtensionList):
     m_context(context),
     m_dialog(dialog),
-    m_selectedPackage(selectedPackage),
-    m_packageManagers(packageManagers),
+    m_vExtensionList(vExtensionList),
     m_updateInformation(
         css::deployment::UpdateInformationProvider::create(context)),
     m_stop(false)
@@ -338,55 +329,28 @@ UpdateDialog::Thread::Entry::Entry(
 
 UpdateDialog::Thread::~Thread() {}
 
-void UpdateDialog::Thread::execute() {
-    OSL_ASSERT(m_selectedPackage.is() != (m_packageManagers.getLength() != 0));
+void UpdateDialog::Thread::execute()
+{
+    OSL_ASSERT( ! m_vExtensionList.empty() );
     Map map;
-    if (m_selectedPackage.is()) {
-        css::uno::Reference< css::deployment::XPackage > p = m_selectedPackage->getPackage();
-        css::uno::Reference< css::deployment::XPackageManager > m= m_selectedPackage->getPackageManager();
+
+    typedef std::vector< TUpdateListEntry >::const_iterator ITER;
+    for ( ITER iIndex = m_vExtensionList.begin(); iIndex < m_vExtensionList.end(); ++iIndex )
+    {
+        css::uno::Reference< css::deployment::XPackage >        p = (*iIndex)->m_xPackage;
+        css::uno::Reference< css::deployment::XPackageManager > m = (*iIndex)->m_xPackageManager;
         if ( p.is() )
         {
-            handle(p, m, &map);
-        }
-    } else {
-        for (sal_Int32 i = 0; i < m_packageManagers.getLength(); ++i) {
-            css::uno::Reference< css::task::XAbortChannel > abort(
-                m_packageManagers[i]->createAbortChannel());
             {
-                vos::OGuard g(Application::GetSolarMutex());
-                if (m_stop) {
+                vos::OGuard g( Application::GetSolarMutex() );
+                if ( m_stop ) {
                     return;
                 }
-                m_abort = abort;
             }
-            css::uno::Sequence<
-                css::uno::Reference< css::deployment::XPackage > > ps;
-            try {
-                ps = m_packageManagers[i]->getDeployedPackages(
-                    abort,
-                    css::uno::Reference< css::ucb::XCommandEnvironment >());
-            } catch (css::deployment::DeploymentException & e) {
-                handleGeneralError(e.Cause);
-                continue;
-            } catch (css::ucb::CommandFailedException & e) {
-                handleGeneralError(e.Reason);
-                continue;
-            } catch (css::ucb::CommandAbortedException &) {
-                return;
-            } catch (css::lang::IllegalArgumentException & e) {
-                throw css::uno::RuntimeException(e.Message, e.Context);
-            }
-            for (sal_Int32 j = 0; j < ps.getLength(); ++j) {
-                {
-                    vos::OGuard g(Application::GetSolarMutex());
-                    if (m_stop) {
-                        return;
-                    }
-                }
-                handle(ps[j], m_packageManagers[i], &map);
-            }
+            handle( p, m, &map );
         }
     }
+
     if (!map.empty()) {
         const rtl::OUString sDefaultURL(dp_misc::getExtensionDefaultUpdateURL());
         if (sDefaultURL.getLength())
@@ -545,7 +509,7 @@ bool UpdateDialog::Thread::update(
     du.aUpdateInfo = updateInfo;
     du.unsatisfiedDependencies.realloc(ds.getLength());
     for (sal_Int32 i = 0; i < ds.getLength(); ++i) {
-        du.unsatisfiedDependencies[i] = dp_misc::Dependencies::name(ds[i]);
+        du.unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
     }
     du.permission = ! packageManager->isReadOnly();
     const ::boost::optional< ::rtl::OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
@@ -599,9 +563,7 @@ bool UpdateDialog::Thread::update(
 UpdateDialog::UpdateDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Window * parent,
-    rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
-    css::uno::Sequence< css::uno::Reference<
-        css::deployment::XPackageManager > > const & packageManagers,
+    const std::vector< dp_gui::TUpdateListEntry > &vExtensionList,
     std::vector< dp_gui::UpdateData > * updateData):
     ModalDialog(parent,DpGuiResId(RID_DLG_UPDATE)),
     m_context(context),
@@ -630,6 +592,7 @@ UpdateDialog::UpdateDialog(
     m_noDescription(String(DpGuiResId(RID_DLG_UPDATE_NODESCRIPTION))),
     m_noInstall(String(DpGuiResId(RID_DLG_UPDATE_NOINSTALL))),
     m_noDependency(String(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY))),
+    m_noDependencyCurVer(String(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER))),
     m_noPermission(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION))),
     m_noPermissionVista(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION_VISTA))),
     m_browserbased(String(DpGuiResId(RID_DLG_UPDATE_BROWSERBASED))),
@@ -637,14 +600,12 @@ UpdateDialog::UpdateDialog(
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
-            context, *this, selectedPackage,
-            packageManagers)),
+            context, *this, vExtensionList)),
     m_nFirstLineDelta(0),
     m_nOneLineMissing(0)
     // TODO: check!
 //    ,
 //    m_extensionManagerDialog(extensionManagerDialog)
-
 {
     OSL_ASSERT(updateData != NULL);
     css::uno::Reference< css::awt::XToolkit > toolkit;
@@ -1111,7 +1072,18 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
             {
                 UpdateDialog::DisabledUpdate & data = m_disabledUpdates[
                     p->index.disabledUpdate];
-                if (data.unsatisfiedDependencies.getLength() != 0) {
+                if (data.unsatisfiedDependencies.getLength() != 0)
+                {
+                    // create error string for version mismatch
+                    ::rtl::OUString sVersion( RTL_CONSTASCII_USTRINGPARAM("%VERSION") );
+                    sal_Int32 nPos = m_noDependencyCurVer.indexOf( sVersion );
+                    if ( nPos >= 0 )
+                    {
+                        ::rtl::OUString sCurVersion( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":Version:OOOPackageVersion}"));
+                        ::rtl::Bootstrap::expandMacros(sCurVersion);
+                        m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sVersion.getLength(), sCurVersion );
+                    }
+
                     b.append(m_noInstall);
                     b.append(LF);
                     b.append(m_noDependency);
@@ -1126,6 +1098,9 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
                             confineToParagraph(
                                 data.unsatisfiedDependencies[i]));
                     }
+                    b.append(LF);
+                    b.appendAscii(RTL_CONSTASCII_STRINGPARAM("  "));
+                    b.append(m_noDependencyCurVer);
                 }
                 if (!data.permission) {
                     if (b.getLength() == 0) {
@@ -1297,4 +1272,3 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
 
     return 1;
 }
-

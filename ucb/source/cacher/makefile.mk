@@ -39,6 +39,7 @@ NO_BSYMBOLIC=TRUE
 UCB_MAJOR=1
 
 .INCLUDE: settings.mk
+.IF "$(L10N_framework)"==""
 
 SLOFILES=\
     $(SLO)$/contentresultsetwrapper.obj \
@@ -65,6 +66,7 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
 DEF1NAME=$(SHL1TARGET)
+.ENDIF # L10N_framework
 
 .INCLUDE: target.mk
 

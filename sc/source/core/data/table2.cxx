@@ -117,6 +117,7 @@ BOOL ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize )
 void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
         if (pRowHeight && pRowFlags)
@@ -143,6 +144,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
                             BOOL* pUndoOutline )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
         if (pRowHeight && pRowFlags)
@@ -186,6 +188,7 @@ BOOL ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -236,6 +239,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
                             BOOL* pUndoOutline )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -292,7 +296,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
             // Zellschutz auf geschuetzter Tabelle nicht setzen
             //
 
-        if ( bProtected && (nDelFlag & IDF_ATTRIB) )
+        if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
         {
             ScPatternAttr aPattern(pDocument->GetPool());
             aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
@@ -318,7 +322,7 @@ void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
         // Zellschutz auf geschuetzter Tabelle nicht setzen
         //
 
-    if ( bProtected && (nDelFlag & IDF_ATTRIB) )
+    if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
     {
         ScDocumentPool* pPool = pDocument->GetPool();
         SfxItemSet aSet( *pPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
@@ -361,12 +365,22 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         //  ggf. Formeln durch Werte ersetzen
 
-        if (bProtected)
+        if ( IsProtected() )
             for (i = nCol1; i <= nCol2; i++)
                 pTable->aCol[i].RemoveProtected(nRow1, nRow2);
     }
 }
 
+void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
+                         bool bKeepScenarioFlags, bool bCloneNoteCaptions)
+{
+    ScRangeList aRanges(rRanges);
+    for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+    {
+        CopyToClip(p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(),
+                   pTable, bKeepScenarioFlags, bCloneNoteCaptions);
+    }
+}
 
 void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, USHORT nInsFlag,
@@ -406,7 +420,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 // Zellschutz auf geschuetzter Tabelle nicht setzen
                 //
 
-            if ( bProtected && (nInsFlag & IDF_ATTRIB) )
+            if ( IsProtected() && (nInsFlag & IDF_ATTRIB) )
             {
                 ScPatternAttr aPattern(pDocument->GetPool());
                 aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
@@ -484,9 +498,10 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 else                            // kopieren
                 {
+                    ScAddress aOwnPos( nCol, nRow, nTab );
                     if (pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
+                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
 
                         //  Referenzen drehen
                         //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
@@ -495,7 +510,9 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             ((ScFormulaCell*)pNew)->TransposeReference();
                     }
                     else
-                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos );
+                    {
+                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos );
+                    }
                 }
                 pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
             }
@@ -623,38 +640,44 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             //  Charts muessen beim Ein-/Ausblenden angepasst werden
             ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
-            if ( pCharts && !pCharts->GetCount() )
-                pCharts = NULL;
 
-            if (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth)
-                for (SCCOL i=nCol1; i<=nCol2; i++)
-                {
-                    BOOL bChange = pCharts &&
-                        ( pDestTab->pColFlags[i] & CR_HIDDEN ) != ( pColFlags[i] & CR_HIDDEN );
-                    pDestTab->pColWidth[i] = pColWidth[i];
-                    pDestTab->pColFlags[i] = pColFlags[i];
-                    //! Aenderungen zusammenfassen?
-                    if (bChange)
-                        pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
-                }
+            BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+            BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && pRowHeight && pDestTab->pRowHeight);
 
-            if (nCol1==0 && nCol2==MAXCOL && pRowHeight && pDestTab->pRowHeight)
+            if (bWidth||bHeight)
             {
-                pDestTab->pRowHeight->CopyFrom( *pRowHeight, nRow1, nRow2);
-                for (SCROW i=nRow1; i<=nRow2; i++)
-                {
-                    // TODO: might need some performance improvement, block
-                    // operations instead of single GetValue()/SetValue() calls.
-                    BYTE nThisRowFlags = pRowFlags->GetValue(i);
-                    BOOL bChange = pCharts &&
-                        ( pDestTab->pRowFlags->GetValue(i) & CR_HIDDEN ) != ( nThisRowFlags & CR_HIDDEN );
-                    pDestTab->pRowFlags->SetValue( i, nThisRowFlags );
-                    //! Aenderungen zusammenfassen?
-                    if (bChange)
-                        pCharts->SetRangeDirty(ScRange( 0, i, nTab, MAXCOL, i, nTab ));
-                }
-            }
+                pDestTab->IncRecalcLevel();
 
+                if (bWidth)
+                    for (SCCOL i=nCol1; i<=nCol2; i++)
+                    {
+                        BOOL bChange = pCharts &&
+                            ( pDestTab->pColFlags[i] & CR_HIDDEN ) != ( pColFlags[i] & CR_HIDDEN );
+                        pDestTab->pColWidth[i] = pColWidth[i];
+                        pDestTab->pColFlags[i] = pColFlags[i];
+                        //! Aenderungen zusammenfassen?
+                        if (bChange)
+                            pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
+                    }
+
+                if (bHeight)
+                {
+                    pDestTab->pRowHeight->CopyFrom( *pRowHeight, nRow1, nRow2);
+                    for (SCROW i=nRow1; i<=nRow2; i++)
+                    {
+                        // TODO: might need some performance improvement, block
+                        // operations instead of single GetValue()/SetValue() calls.
+                        BYTE nThisRowFlags = pRowFlags->GetValue(i);
+                        BOOL bChange = pCharts &&
+                            ( pDestTab->pRowFlags->GetValue(i) & CR_HIDDEN ) != ( nThisRowFlags & CR_HIDDEN );
+                        pDestTab->pRowFlags->SetValue( i, nThisRowFlags );
+                        //! Aenderungen zusammenfassen?
+                        if (bChange)
+                            pCharts->SetRangeDirty(ScRange( 0, i, nTab, MAXCOL, i, nTab ));
+                    }
+                }
+                pDestTab->DecRecalcLevel();
+            }
             pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
         }
     }
@@ -824,13 +847,13 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 }
 
 
-void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pCell )
-{
-    if (pCell)
-        aCol[rPos.Col()].Insert( rPos.Row(), nFormatIndex, pCell );
-    else
-        aCol[rPos.Col()].Delete( rPos.Row() );
-}
+//UNUSED2009-05 void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pCell )
+//UNUSED2009-05 {
+//UNUSED2009-05     if (pCell)
+//UNUSED2009-05         aCol[rPos.Col()].Insert( rPos.Row(), nFormatIndex, pCell );
+//UNUSED2009-05     else
+//UNUSED2009-05         aCol[rPos.Col()].Delete( rPos.Row() );
+//UNUSED2009-05 }
 
 
 BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString )
@@ -894,7 +917,15 @@ ScPostIt* ScTable::GetNote( SCCOL nCol, SCROW nRow )
 void ScTable::TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote )
 {
     if( ValidColRow( nCol, nRow ) )
+    {
         aCol[ nCol ].TakeNote( nRow, rpNote );
+        if( rpNote && rpNote->GetNoteData().mxInitData.get() )
+        {
+            if( !mxUninitNotes.get() )
+                mxUninitNotes.reset( new ScAddress2DVec );
+            mxUninitNotes->push_back( ScAddress2D( nCol, nRow ) );
+        }
+    }
     else
         DELETEZ( rpNote );
 }
@@ -912,6 +943,17 @@ void ScTable::DeleteNote( SCCOL nCol, SCROW nRow )
         aCol[ nCol ].DeleteNote( nRow );
 }
 
+
+void ScTable::InitializeNoteCaptions( bool bForced )
+{
+    if( mxUninitNotes.get() && (bForced || pDocument->IsUndoEnabled()) )
+    {
+        for( ScAddress2DVec::iterator aIt = mxUninitNotes->begin(), aEnd = mxUninitNotes->end(); aIt != aEnd; ++aIt )
+            if( ScPostIt* pNote = GetNote( aIt->first, aIt->second ) )
+                pNote->GetOrCreateCaption( ScAddress( aIt->first, aIt->second, nTab ) );
+        mxUninitNotes.reset();
+    }
+}
 
 CellType ScTable::GetCellType( SCCOL nCol, SCROW nRow ) const
 {
@@ -1150,22 +1192,22 @@ BOOL ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
 }
 
 
-BOOL ScTable::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
-{
-    SCCOL nCol1 = rRange.aStart.Col();
-    SCROW nRow1 = rRange.aStart.Row();
-    SCCOL nCol2 = rRange.aEnd.Col();
-    SCROW nRow2 = rRange.aEnd.Row();
-    PutInOrder( nCol1, nCol2 );
-    PutInOrder( nRow1, nRow2 );
-
-    BOOL bFound = FALSE;
-    for (SCCOL i=nCol1; i<=nCol2; i++)
-        if (aCol[i].HasLines( nRow1, nRow2, rSizes, (i==nCol1), (i==nCol2) ))
-            bFound = TRUE;
-
-    return bFound;
-}
+//UNUSED2009-05 BOOL ScTable::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     SCCOL nCol1 = rRange.aStart.Col();
+//UNUSED2009-05     SCROW nRow1 = rRange.aStart.Row();
+//UNUSED2009-05     SCCOL nCol2 = rRange.aEnd.Col();
+//UNUSED2009-05     SCROW nRow2 = rRange.aEnd.Row();
+//UNUSED2009-05     PutInOrder( nCol1, nCol2 );
+//UNUSED2009-05     PutInOrder( nRow1, nRow2 );
+//UNUSED2009-05
+//UNUSED2009-05     BOOL bFound = FALSE;
+//UNUSED2009-05     for (SCCOL i=nCol1; i<=nCol2; i++)
+//UNUSED2009-05         if (aCol[i].HasLines( nRow1, nRow2, rSizes, (i==nCol1), (i==nCol2) ))
+//UNUSED2009-05             bFound = TRUE;
+//UNUSED2009-05
+//UNUSED2009-05     return bFound;
+//UNUSED2009-05 }
 
 
 BOOL ScTable::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const
@@ -1451,7 +1493,7 @@ BOOL ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
     BOOL bIsEditable = TRUE;
     if ( nLockCount )
         bIsEditable = FALSE;
-    else if ( bProtected && !pDocument->IsScenario(nTab) )
+    else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
         if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )) != FALSE)
         {
@@ -1518,7 +1560,7 @@ BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
     BOOL bIsEditable = TRUE;
     if ( nLockCount )
         bIsEditable = FALSE;
-    else if ( bProtected && !pDocument->IsScenario(nTab))
+    else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
         if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )) != FALSE)
         {
@@ -1912,6 +1954,7 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
         if ( nNewWidth != pColWidth[nCol] )
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
                 pDrawLayer->WidthChanged( nTab, nCol, ((long) nNewWidth) - (long) pColWidth[nCol] );
@@ -1941,6 +1984,7 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
         if ( nNewHeight != nOldHeight )
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
                 pDrawLayer->HeightChanged( nTab, nRow, ((long) nNewHeight) - (long) nOldHeight );
@@ -1963,6 +2007,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowHeight)
     {
         nRecalcLvl++;
+        InitializeNoteCaptions();
         if (!nNewHeight)
         {
             DBG_ERROR("Zeilenhoehe 0 in SetRowHeight");
@@ -2229,6 +2274,7 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
         if (bWasVis != bShow)
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
             {
@@ -2246,7 +2292,7 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
                 SetDrawPageSize();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ));
         }
     }
@@ -2266,6 +2312,7 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
         if (bWasVis != bShow)
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
             {
@@ -2283,7 +2330,7 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
                 SetDrawPageSize();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
         }
     }
@@ -2301,6 +2348,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
         BYTE nFlags = pRowFlags->GetValue(nRow);
         BOOL bWasVis = ( nFlags & CR_HIDDEN ) == 0;
         nRecalcLvl++;
+        InitializeNoteCaptions();
         if (bWasVis != bShow)
         {
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
@@ -2324,7 +2372,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
         if (bWasVis != bShow)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
 
             if (pOutlineTable)
@@ -2342,6 +2390,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
     SCROW nStartRow = nRow1;
     nRecalcLvl++;
+    InitializeNoteCaptions();
     while (nStartRow <= nRow2)
     {
         BYTE nOldFlag = pRowFlags->GetValue(nStartRow) & CR_HIDDEN;
@@ -2372,7 +2421,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         if ( bChanged )
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
         }
 
@@ -2394,6 +2443,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
     SCROW nStartRow = nRow1;
     nRecalcLvl++;
+    InitializeNoteCaptions();
     while (nStartRow <= nRow2)
     {
         BYTE nOldFlag = pRowFlags->GetValue(nStartRow) & CR_HIDDEN;
@@ -2424,7 +2474,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         if ( bChanged )
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
         }
 
@@ -2661,7 +2711,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                     pCell = aCol[nCol].GetCell( nRow );
                     if (pCell)
                         if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                            if (((ScFormulaCell*)pCell)->HasOneReference( aRef ))
+                            if (((ScFormulaCell*)pCell)->HasRefListExpressibleAsOneReference( aRef ))
                                 if ( aRef.aStart.Col() == nCol && aRef.aEnd.Col() == nCol &&
                                      aRef.aStart.Tab() == nTab && aRef.aEnd.Tab() == nTab &&
                                      DiffSign( aRef.aStart.Row(), nRow ) ==
@@ -2692,7 +2742,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
             while ( aIter.Next( nRow, pCell ) && !bFound )
             {
                 if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                    if (((ScFormulaCell*)pCell)->HasOneReference( aRef ))
+                    if (((ScFormulaCell*)pCell)->HasRefListExpressibleAsOneReference( aRef ))
                         if ( aRef.aStart.Row() == nRow && aRef.aEnd.Row() == nRow &&
                              aRef.aStart.Tab() == nTab && aRef.aEnd.Tab() == nTab &&
                              DiffSign( aRef.aStart.Col(), nCol ) ==
@@ -2797,7 +2847,7 @@ void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, String& rStr)
 
 // Berechnen der Groesse der Tabelle und setzen der Groesse an der DrawPage
 
-void ScTable::SetDrawPageSize()
+void ScTable::SetDrawPageSize(bool bResetStreamValid)
 {
     ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
     if( pDrawLayer )
@@ -2812,6 +2862,11 @@ void ScTable::SetDrawPageSize()
 
         pDrawLayer->SetPageSize( static_cast<sal_uInt16>(nTab), Size( x, y ) );
     }
+
+    // #i102616# actions that modify the draw page size count as sheet modification
+    // (exception: InitDrawLayer)
+    if (bResetStreamValid && IsStreamValid())
+        SetStreamValid(FALSE);
 }
 
 

@@ -41,12 +41,6 @@ namespace cpp
 {
 
 
-OperationSignature::OperationSignature()
-    :   // aParameterTypes,
-        eConVol(CONVOL_none)
-{
-}
-
 OperationSignature::OperationSignature( std::vector<Type_id>    i_parameterTypes,
                                         E_ConVol                i_conVol )
     :   aParameterTypes(i_parameterTypes),

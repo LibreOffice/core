@@ -458,12 +458,12 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         }
         if( attribs.hasAttribute( XML_grpId ) )
         {
-            attribs.getUnsignedInteger( XML_grpId, 0 );
+            attribs.getUnsigned( XML_grpId, 0 );
         }
         // ST_TLTimeNodeID
         if( attribs.hasAttribute( XML_id ) )
         {
-            sal_uInt32 nId = attribs.getUnsignedInteger( XML_id, 0 );
+            sal_uInt32 nId = attribs.getUnsigned( XML_id, 0 );
             pNode->setId( nId );
         }
         // ST_TLTimeNodeMasterRelation
@@ -687,7 +687,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             if( mbIterate )
             {
                 AttributeList attribs( xAttribs );
-                double fTime = attribs.getUnsignedInteger( XML_val, 0 );
+                double fTime = attribs.getUnsigned( XML_val, 0 );
                 // time in ms. property is in % TODO
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fTime;
             }
@@ -696,7 +696,7 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             if( mbIterate )
             {
                 AttributeList attribs( xAttribs );
-                double fPercent = (double)attribs.getUnsignedInteger( XML_val, 0 ) / 100000.0;
+                double fPercent = (double)attribs.getUnsigned( XML_val, 0 ) / 100000.0;
                 mpNode->getNodeProperties()[ NP_ITERATEINTERVAL ] <<= fPercent;
             }
             break;

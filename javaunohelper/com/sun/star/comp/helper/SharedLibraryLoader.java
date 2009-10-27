@@ -85,7 +85,7 @@ public class SharedLibraryLoader {
                 XMultiServiceFactory smgr,
                 XRegistryKey regKey )
     {
-        return (XSingleServiceFactory) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                     XSingleServiceFactory.class,
                     component_getFactory(
                         DEFAULT_LIBRARY, DEFAULT_IMPLEMENTATION, smgr, regKey,
@@ -110,7 +110,7 @@ public class SharedLibraryLoader {
                 XMultiServiceFactory smgr,
                 XRegistryKey regKey )
     {
-        return (XSingleServiceFactory) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                     XSingleServiceFactory.class,
                     component_getFactory(
                         libName, impName, smgr, regKey,

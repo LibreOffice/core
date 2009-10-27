@@ -439,14 +439,6 @@ OUString ObjectIdentifier::createParticleForGrid(
     return aRet.makeStringAndClear();
 }
 
-OUString ObjectIdentifier::createClassifiedIdentifierForAxis(
-          const Reference< XAxis >& xAxis
-        , const Reference< frame::XModel >& xChartModel )
-{
-    rtl::OUString  aAxisCID( createClassifiedIdentifierForObject( xAxis,xChartModel ) );
-    return aAxisCID;
-}
-
 //static
 OUString ObjectIdentifier::createClassifiedIdentifierForGrid(
           const Reference< XAxis >& xAxis

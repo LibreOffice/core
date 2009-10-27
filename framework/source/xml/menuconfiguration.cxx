@@ -42,6 +42,7 @@
 #include <classes/addonmenu.hxx>
 #include <xml/menudocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
+#include <services.h>
 
 #ifndef _FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
 #include <services/layoutmanager.hxx>
@@ -99,9 +100,7 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     Reference< XInputStream >& rInputStream )
 throw ( WrappedTargetException )
 {
-    Reference< XParser > xParser( m_rxServiceManager->createInstance(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ))),
-                                  UNO_QUERY);
+    Reference< XParser > xParser( m_rxServiceManager->createInstance(SERVICENAME_SAXPARSER),UNO_QUERY);
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
@@ -167,7 +166,7 @@ throw ( WrappedTargetException )
     Reference< XDocumentHandler > xWriter;
 
     xWriter = Reference< XDocumentHandler >( m_rxServiceManager->createInstance(
-            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+            SERVICENAME_SAXWRITER), UNO_QUERY) ;
 
     Reference< XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
     xDataSource->setOutputStream( rOutputStream );

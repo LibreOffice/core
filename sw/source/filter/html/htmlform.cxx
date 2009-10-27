@@ -45,6 +45,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/urihelper.hxx>
+#include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _SFXAPP_HXX
 #include <sfx2/viewfrm.hxx>
@@ -724,6 +725,12 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
         SwDocShell *pDocSh = pDoc->GetDocShell();
         if( pDocSh )
         {
+            if ( pDocSh->GetMedium() )
+            {
+                // if there is no hidden property in the MediaDescriptor it should be removed after loading
+                SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+                bRemoveHidden = ( pHiddenItem == NULL || !pHiddenItem->GetValue() );
+            }
 
             pTempViewFrame = SfxViewFrame::CreateViewFrame( *pDocSh, 0, sal_True );
             CallStartAction();

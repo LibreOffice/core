@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Test of textframe - 5
 '*
@@ -60,10 +60,10 @@ end sub
 
 testcase tTextframes_71
 
-    Dim iVertical                 as Integer
-    Dim sVerticalBy               as String
-    Dim iHorizontal               as Integer
-    Dim sHorizontalBy             as String
+    Dim iVertical     as Integer
+    Dim sVerticalBy   as String
+    Dim iHorizontal   as Integer
+    Dim sHorizontalBy as String
     
     iHorizontal    = 4 'From Left
     sHorizontalBy  = "-1"+ gSeperator + "00" + gMeasurementUnit
@@ -141,7 +141,10 @@ testcase tTextframes_72
     
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -174,7 +177,10 @@ testcase tTextframes_73
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -206,7 +212,10 @@ testcase tTextframes_74
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -239,7 +248,10 @@ testcase tTextframes_75
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -272,7 +284,10 @@ testcase tTextframes_76
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -305,7 +320,10 @@ testcase tTextframes_77
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
@@ -338,20 +356,21 @@ testcase tTextframes_78
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_80
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    Dim sTestFile      as String
-    Dim iVertical      as Integer
-    Dim iVerticalTo    as Integer
-    Dim sPositionY     as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim iVerticalTo as Integer
+    Dim sPositionY  as String
     
     sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\textframe\lineOfText.sxw")
     iVertical   = 1    ' Top
@@ -393,23 +412,21 @@ goto endsub
     end if
     TabPositionAndSizeWriter.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_81
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    QaErrorLog "#i94758# Testcase outcommented due to unreability."
-    goto endsub
-    
-    Dim sTestFile      as String
-    Dim iVertical      as Integer
-    Dim iVerticalTo    as Integer
-    Dim sPositionY     as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim iVerticalTo as Integer
+    Dim sPositionY  as String
     
     sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\textframe\lineOfText.sxw")
     iVertical   = 2    ' Bottom
@@ -451,20 +468,21 @@ goto endsub
     end if
     TabPositionAndSizeWriter.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_82
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    Dim sTestFile      as String
-    Dim iVertical      as Integer
-    Dim iVerticalTo    as Integer
-    Dim sPositionY     as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim iVerticalTo as Integer
+    Dim sPositionY  as String
     
     sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\textframe\lineOfText.sxw")
     iVertical   = 4    ' Center
@@ -506,21 +524,22 @@ goto endsub
     end if
     TabPositionAndSizeWriter.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_83
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    Dim sTestFile      as String
-    Dim iVertical      as Integer
-    Dim iVerticalTo    as Integer
-    Dim sPositionY     as String
-    Dim sVerticalBy    as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim iVerticalTo as Integer
+    Dim sPositionY  as String
+    Dim sVerticalBy as String
     
     sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\textframe\lineOfText.sxw")
     iVertical   = 6    ' From Bottom
@@ -571,21 +590,22 @@ goto endsub
     end if
     TabPositionAndSizeWriter.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_84
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
-    Dim sTestFile      as String
-    Dim iVertical      as Integer
-    Dim iVerticalTo    as Integer
-    Dim sPositionY     as String
-    Dim sVerticalBy    as String
+    Dim sTestFile   as String
+    Dim iVertical   as Integer
+    Dim iVerticalTo as Integer
+    Dim sPositionY  as String
+    Dim sVerticalBy as String
     
     sTestFile   = Convertpath (gTesttoolpath + "writer\optional\input\textframe\lineOfText.sxw")
     iVertical   = 6    ' From Bottom
@@ -636,15 +656,16 @@ goto endsub
     end if
     TabPositionAndSizeWriter.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tTextframes_85
-QaErrorLog "#i94758# - Testcase outcommented"
-goto endsub
 
     Dim sTestFile       as String
     Dim iVerticalTop    as Integer
@@ -670,10 +691,10 @@ goto endsub
     '/// + the 3rd one is bottom to the line text
     Call hFileOpen(sTestFile,false)
     Call sMakeReadOnlyDocumentEditable
+    Sleep (2)
     
     '/// Set focus to 1st Frame
     Call wTypeKeys ( "<Shift F4>" )
-    Sleep 1
     
     '/// Format/Frame / Type , check if 'To character' in anchor area
     '/// + check if 'Line of text' in vertical to ,
@@ -728,6 +749,11 @@ goto endsub
     end if
     TabType.Cancel
     
-    Call hCloseDocument
+    printlog " Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 
 endcase
+
+' ------------------------------------------------------------------------------

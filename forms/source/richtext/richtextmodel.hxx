@@ -83,6 +83,7 @@ namespace frm
         sal_Int16                   m_nContextWritingMode;
         sal_Int16                   m_nBorder;
         sal_Bool                    m_bEnabled;
+        sal_Bool                    m_bEnableVisible;
         sal_Bool                    m_bHardLineBreaks;
         sal_Bool                    m_bHScroll;
         sal_Bool                    m_bVScroll;

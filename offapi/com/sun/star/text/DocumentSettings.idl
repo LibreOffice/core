@@ -129,8 +129,6 @@ published service DocumentSettings
     /** specifies if the former (till OpenOffice.org 1.1) or the new
         line spacing formatting is applied.
 
-        @since OOo 2.0.0
-
         <p>This property controls how a set line spacing at a paragraph
         influences the formatting of the text lines and the spacing between
         paragraphs.
@@ -144,13 +142,12 @@ published service DocumentSettings
         a proportional line spacing is only applied below a text line and
         it's always added to the paragraph spacing between two paragraphs.</p>
 
+        @since OOo 2.0.0
     */
     [optional, property] boolean UseFormerLineSpacing;
     // ------------------------------------------------------------
     /** specifies if paragraph and table spacing is added at the
         bottom of table cells
-
-        @since OOo 2.0.0
 
         <p>This property controls, if the spacing of the last paragraph
         respectively table of a table cell is added at the bottom of this
@@ -162,13 +159,12 @@ published service DocumentSettings
         the spacing of the last paragraph respectively table of a table
         cell isn't added at the bottom of this table cell.</p>
 
+        @since OOo 2.0.0
     */
     [optional, property] boolean AddParaSpacingToTableCells;
     // ------------------------------------------------------------
     /** specifies if the former (till OpenOffice.org 1.1) or the new
         object positioning is applied.
-
-        @since OOo 2.0.0
 
         <p>This property controls how floating screen objects (Writer
         fly frames and drawing objects are positioned.
@@ -181,14 +177,13 @@ published service DocumentSettings
         its vertical position, doesn't include the lower spacing and the
         line spacing of the previous paragraph.</p>
 
+        @since OOo 2.0.0
     */
     [optional, property] boolean UseFormerObjectPositioning;
 
     // ------------------------------------------------------------
     /** specifies if the text wrap of floating screen objects are
         considered in a specified way in the positioning algorithm.
-
-        @since OOo 2.0.0
 
         <p>This property controls how floating screen objects (Writer
         fly frames and drawing objects) are positioned.
@@ -199,6 +194,7 @@ published service DocumentSettings
         If <FALSE/> (default value), the former object positioning
         algorithm (known from OpenOffice.org 1.1) is applied.</p>
 
+        @since OOo 2.0.0
     */
     [optional, property] boolean ConsiderTextWrapOnObjPos;
 

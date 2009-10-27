@@ -1,0 +1,22 @@
+--- misc/hunspell-1.2.8/src/hunspell/affixmgr.cxx       2009-05-16 14:33:27.000000000 +0100
++++ misc/build/hunspell-1.2.8/src/hunspell/affixmgr.cxx    2009-05-16 14:35:52.000000000 +0100
+@@ -3238,7 +3238,7 @@
+ }
+ 
+ // return the value of suffix
+-const int AffixMgr::have_contclass()
++int AffixMgr::have_contclass() const
+ {
+   return havecontclass;
+ }
+--- misc/hunspell-1.2.8.orig/src/hunspell/affixmgr.hxx	2009-05-16 14:33:27.000000000 +0100
++++ misc/build/hunspell-1.2.8/src/hunspell/affixmgr.hxx	2009-05-16 14:35:38.000000000 +0100
+@@ -189,7 +189,7 @@
+   const char *        get_suffix();
+   const char *        get_derived();
+   const char *        get_version();
+-  const int           have_contclass();
++  int                 have_contclass() const;
+   int                 get_utf8();
+   int                 get_complexprefixes();
+   char *              get_suffixed(char );

@@ -39,7 +39,7 @@ VISIBILITY_HIDDEN=TRUE
 USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
-.INCLUDE :	settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 .IF "$(SOLAR_JAVA)"==""
@@ -115,6 +115,6 @@ DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk
 
 

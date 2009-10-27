@@ -586,7 +586,9 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 SdrRectObj* pTO = new SdrRectObj(OBJ_TEXT);
                 pTO->SetOutlinerParaObject(pOPO);
 
-                mpView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
+                const bool bUndo = mpView->IsUndoEnabled();
+                if( bUndo )
+                    mpView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
                 pPage->InsertObject(pTO);
 
                 // koennte groesser sein als die max. erlaubte Groesse:
@@ -611,8 +613,11 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     pTO->SetTextLink(aFile, aFilterName, gsl_getSystemTextEncoding() );
                 }
 
-                mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
-                mpView->EndUndo();
+                if( bUndo )
+                {
+                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
+                    mpView->EndUndo();
+                }
             }
         }
         delete pOutliner;

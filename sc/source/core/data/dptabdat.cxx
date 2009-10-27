@@ -66,7 +66,7 @@ BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
     //! inline?
     return bHasValue ? ( r.bHasValue && rtl::math::approxEqual( fValue, r.fValue ) ) :
                        ( !r.bHasValue &&
-                        ScGlobal::pTransliteration->isEqual( aString, r.aString ) );
+                        ScGlobal::GetpTransliteration()->isEqual( aString, r.aString ) );
 }
 
 size_t ScDPItemData::Hash() const
@@ -115,7 +115,7 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
     else if ( rB.bHasValue )
         return 1;                // values first
     else
-        return ScGlobal::pCollator->compareString( rA.aString, rB.aString );
+        return ScGlobal::GetCollator()->compareString( rA.aString, rB.aString );
 }
 
 // ---------------------------------------------------------------------------

@@ -47,13 +47,13 @@ class BinaryStreamBase
 public:
     virtual             ~BinaryStreamBase();
 
-    /** Derived classes return whether the stream is seekable. default: false. */
+    /** Derived classes return whether the stream is seekable. Default: false. */
     virtual bool        isSeekable() const;
     /** Derived classes returns the size of the stream, if seekable, otherwise/default: -1. */
     virtual sal_Int64   getLength() const;
     /** Derived classes return the current stream position, if seekable, otherwise/default: -1. */
     virtual sal_Int64   tell() const;
-    /** Derived classes implment seeking the stream to the passed position, if seekable. */
+    /** Derived classes implement seeking the stream to the passed position, if seekable. */
     virtual void        seek( sal_Int64 nPos );
 
     /** Returns true, if the stream position is invalid (EOF). This flag turns
@@ -106,17 +106,18 @@ private:
 
 // ============================================================================
 
-/** Base class for binary input and output streams wrapping a StreamDataSequence. */
+/** Base class for binary input and output streams wrapping a
+    StreamDataSequence, which is always seekable. */
 class SequenceSeekableStream : public virtual BinaryStreamBase
 {
 public:
-    /** Returns true, if the wrapped stream is seekable. */
+    /** Returns true (data sequence streams are always seekable). */
     virtual bool        isSeekable() const;
-    /** Returns the size of the stream, if stream is seekable, otherwise -1. */
+    /** Returns the size of the wrapped data sequence. */
     virtual sal_Int64   getLength() const;
-    /** Returns the current stream position, if stream is seekable, otherwise -1. */
+    /** Returns the current stream position. */
     virtual sal_Int64   tell() const;
-    /** Seeks the stream to the passed position, if stream is seekable. */
+    /** Seeks the stream to the passed position. */
     virtual void        seek( sal_Int64 nPos );
 
 protected:
@@ -127,10 +128,10 @@ protected:
             wrapper. The data sequence MUST NOT be changed from outside as long
             as this stream wrapper is used to modify it.
      */
-    inline explicit     SequenceSeekableStream( StreamDataSequence& rData ) : mrData( rData ), mnPos( 0 ) {}
+    inline explicit     SequenceSeekableStream( const StreamDataSequence& rData ) : mrData( rData ), mnPos( 0 ) {}
 
 protected:
-    StreamDataSequence& mrData;         /// Wrapped data sequence.
+    const StreamDataSequence& mrData;   /// Wrapped data sequence.
     sal_Int32           mnPos;          /// Current position in the sequence.
 };
 

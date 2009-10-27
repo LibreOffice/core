@@ -74,8 +74,8 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 
 #include "SvFilterOptionsDialog.hxx"
@@ -1038,8 +1038,13 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-        SvtPathOptions aPathOpt;
-        aFilterPath = aPathOpt.GetModulePath();
+#if defined WNT
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
+#else
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program"));
+#endif
+        rtl::Bootstrap::expandMacros(url); //TODO: detect failure
+        utl::LocalFileHelper::ConvertURLToPhysicalName(url, aFilterPath);
     }
 
     pErrorEx = new FilterErrorEx;

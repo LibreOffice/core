@@ -1196,7 +1196,8 @@ BOOL SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                     SwPaM aCpyPam( rSrcNd, nStt );
                     aCpyPam.SetMark();
                     aCpyPam.GetPoint()->nContent = nSEnd;
-                    aCpyPam.GetDoc()->Copy( aCpyPam, *aPam.GetPoint() );
+                    aCpyPam.GetDoc()->CopyRange( aCpyPam, *aPam.GetPoint(),
+                            false );
                     pDoc->DoUndo( bUndo );
                 }
 
@@ -1367,7 +1368,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
     SwNodeIndex aInsPos( *pLineNd, nOffset );
     SwNodeIndex aSavePos( aInsPos, -1 );
 
-    ((SwCompareData&)rData).rDoc.CopyWithFlyInFly( aRg, aInsPos );
+    ((SwCompareData&)rData).rDoc.CopyWithFlyInFly( aRg, 0, aInsPos );
     rDoc.SetModified();
     aSavePos++;
 
@@ -1624,7 +1625,9 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-        pSrcRedl->GetDoc()->Copy( *(SwPaM*)pSrcRedl, *pDestRedl->GetPoint() );
+        pSrcRedl->GetDoc()->CopyRange(
+                *const_cast<SwPaM*>(static_cast<const SwPaM*>(pSrcRedl)),
+                *pDestRedl->GetPoint(), false );
 
         pDoc->SetRedlineMode_intern( eOld );
         pDoc->DoUndo( bUndo );

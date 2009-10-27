@@ -37,6 +37,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 /** === end UNO includes === **/
 
 #include <memory>
@@ -92,6 +94,21 @@ namespace svxform
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatabaseField,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats
+                );
+
+        static ::rtl::OUString getDefaultName(
+                    const sal_Int16 nClassId,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
+                );
+
+        static ::rtl::OUString getDefaultUniqueName_ByComponentType(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject
+                );
+
+        static ::rtl::OUString getUniqueName(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
+                    const ::rtl::OUString& _rBaseName
                 );
 
     private:

@@ -39,15 +39,7 @@
 
 testcase tAutocomplete
 
-    '///<h1>Autocompletion feature</h1>
 
-    '///<u><pre>Synopsis</pre></u>Test the autocompletion feature, filename completion<br>
-    '///<u><pre>Specification document</pre></u>No specification document available<br>
-    '///<u><pre>Files used</pre></u>
-    '///+ (User-Layer)/user/work/autocomplete<br>
-    '///+ (User-Layer)/user/work/autocomplete/autocomplete_a.odt</br>
-    '///+ (User-Layer)/user/work/autocomplete/autocomplete_b.odt</br>
-    '///+ (User-Layer)/user/work/autocomplete/autocomplete_bb.odt</br>    
     
     ' IMPORTANT NOTE: Autocompletion is asynchronous. This means that no rule 
     '                 exists when exactly it is going to strike. If you are
@@ -88,14 +80,10 @@ testcase tAutocomplete
     
     dim slot
         
-    '///<u><pre>Test case specification</pre></u>
-    '///<ul>
-    '///+<li>Init: Make sure we only have no open documents</li>
     do while( getDocumentCount > 0 )
         call hCloseDocument()
     loop
     
-    '///+<li>Init: Get the current workpath</li>
     cBasePath = hGetWorkPath()
     aFullPath( 1 ) = cBasePath & WORKDIR & gPathSigne & aWorkFile( 1 )
     aFullPath( 2 ) = cBasePath & WORKDIR & gPathSigne & aWorkFile( 2 )
@@ -107,14 +95,12 @@ testcase tAutocomplete
         rmdir( cBasePath & WORKDIR )
     endif
         
-    '///+<li>Init: Create a directory called &quot;autocomplete&quot; in the user directory</li>
     mkdir( cBasePath & WORKDIR )
     if ( dir( cBasePath & WORKDIR ) = "" ) then
         warnlog( "Failed to create work directory, aborting" )
         goto endsub
     endif
     
-    '///+<li>Init: Create three documents within the workdir - autocomplete_a.odt/_b.odt/_bb.odt</li>
     gApplication = "WRITER"
     for iCurrentDocument = 1 to 3
         call hNewDocument()
@@ -125,29 +111,21 @@ testcase tAutocomplete
     next iCurrentDocument
     
     
-    '///+<li>
-    '///+<li>Open the File Open dialog</li>
     printlog( "open the File Open dialog" )
     FileOpen
     
-    '///+<li>Test case 1: Workdirectory and folder autocompletion</li>
-    '///<ul>
-    '///+<li>Go to the work directory using the &quot;Home&quot; button</li>
     kontext "OeffnenDlg"
     Standard.click()
     
-    '///+<li>Enter the first 4 characters of the testdirectory</li>
     cLeft     = left( WORKDIR, iLeft )
     cEFString = convertpath( WORKDIR & "/" )
     printlog( "Type """ & cLeft & """ into the filename entryfield" )
     DateiName.typeKeys( cLeft )
     
-    '///+<li>Press the &quot;END&quot; key</li>
     printlog( "Press the <END> key and wait for two seconds" )
     DateiName.typeKeys( "<END>" )
     sleep( 1 ) ' Required, do not remove
     
-    '///+<li>Verify that the &quot;autocomplete&quot; dir has been autocompleted</li>
     cAutocomplete = DateiName.getSelText()
     if ( cEFString = cAutocomplete ) then
         printlog( "Autocompletion succeeded for workdirectory" )
@@ -157,21 +135,15 @@ testcase tAutocomplete
         printlog( "Found...: " & cAutocomplete )
     endif
     
-    '///+<li>Press return on the FileOpen dialog</li>
     printlog( "Press <RETURN> on the file open dialog -> Open"
     kontext "OeffnenDlg"
     OeffnenDlg.typeKeys( "<RETURN>" )
-    '///</ul>
     
-    '///+<li>Test case 2: Filename autocompletion/selection</li>
-    '///<ul>
-    '///+<li>Enter the string &quot;auto&quot; into the entryfield</li>
     printlog( "Type "" auto "" into the entryfield" )
     cLeft = left( aWorkFile( 1 ), 4 )
     DateiName.typeKeys( cLeft )
     sleep( 1 )
     
-    '///+<li>Verify that the filename is expanded to autocomplete_a.odt</li>
     cAutocomplete = DateiName.getSelText()
     if ( aWorkFile( 1 ) = cAutocomplete ) then
         printlog( "Autocompletion succeeded for first file" )
@@ -181,12 +153,10 @@ testcase tAutocomplete
         printlog( "Found...: " & cAutocomplete )
     endif   
 
-    '///+<li>Press the down-key in the entry field</li>
     printlog( "Press down key in entry field" )
     DateiName.typeKeys( "<DOWN>" ) 
     sleep( 1 )
     
-    '///+<li>Verify that the filename is expanded to autocomplete_b.odt</li>
     cAutocomplete = DateiName.getSelText()
     if ( aWorkFile( 2 ) = cAutocomplete ) then
         printlog( "Autocompletion succeeded for second file" )
@@ -195,11 +165,7 @@ testcase tAutocomplete
         printlog( "Expected: " & cRight )
         printlog( "Found...: " & cAutocomplete )
     endif
-    '///</ul>
 
-    '///+<li>Test case 3: Wildcards ? and * (click &quot;Open&quot; to apply)</li>
-    '///<ul>
-    '///+<li>Enter autocomplete_?.odt -> 2 matches expected</li>
     printlog( "Enter autocomplete_?.odt -> 2 matches expected" )
     Dateiname.setText( aWildCard( 1 ) )
     Oeffnen.click()
@@ -209,7 +175,6 @@ testcase tAutocomplete
         printlog( "Correct number of files listed in files-list" )
     endif
     
-    '///+<li>Enter autocomplete_b?.odt -> 1 match expected</li>
     printlog( "Enter autocomplete_b?.odt -> 1 match expected" )
     Dateiname.setText( aWildCard( 2 ) )
     Oeffnen.click()
@@ -219,7 +184,6 @@ testcase tAutocomplete
         printlog( "Correct number of files listed in files-list" )
     endif
     
-    '///+<li>Enter autocomplete_*.odt -> 3 matches expected</li>
     printlog( "Enter autocomplete_*.odt -> 3 matches expected" )
     Dateiname.setText( aWildCard( 3 ) )
     Oeffnen.click()
@@ -228,20 +192,16 @@ testcase tAutocomplete
     else
         printlog( "Correct number of files listed in files-list" )
     endif
-    '///</ul>
     
     
-    '///+<li>Close File Open dialog</li>
     printlog( "Close File Open dialog" )
     kontext "OeffnenDlg"
     OeffnenDlg.cancel()
     
-    '///+<li>Cleanup: Remove files, directories</li>
     hDeleteFile( aFullPath( 1 ) )
     hDeleteFile( aFullPath( 2 ) )
     hDeleteFile( aFullPath( 3 ) )
     rmdir( cBasePath & WORKDIR )
-    '///</ul>
 
 endcase
 

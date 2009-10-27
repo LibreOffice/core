@@ -154,19 +154,11 @@ public:
     void startControllerLockTimer();
 
     static ::rtl::OUString ConvertRoleFromInternalToUI( const ::rtl::OUString & rRoleString );
-    static ::rtl::OUString ConvertRoleFromUIToInternal( const ::rtl::OUString & rRoleString );
     static ::rtl::OUString GetRoleDataLabel();
 
     // pass a role string (not translated) and get an index that serves for
     // relative ordering, to get e.g. x-values and y-values in the right order
     static sal_Int32 GetRoleIndexForSorting( const ::rtl::OUString & rInternalRoleString );
-
-    static bool isSeriesValid(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xSeries,
-        const ::rtl::OUString & aRoleOfSequenceForLabel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType > & xChartType );
 
 private:
     ::com::sun::star::uno::Reference<

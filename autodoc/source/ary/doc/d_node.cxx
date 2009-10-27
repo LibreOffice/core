@@ -32,11 +32,6 @@
 #include <ary/doc/d_node.hxx>
 
 
-// NOT FULLY DEFINED SERVICES
-#include <ary/doc/d_hypertext.hxx>
-
-
-
 namespace ary
 {
 namespace doc

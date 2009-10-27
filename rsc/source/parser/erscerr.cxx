@@ -69,14 +69,15 @@ ERRTYPE& ERRTYPE::operator = ( const ERRTYPE & rError )
 |*    Letzte Aenderung  MM 06.05.91
 |*
 *************************************************************************/
-void RscError::StdOut( const char * pStr )
+void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
 {
-#ifndef WIN
-    if( pStr ){
-        printf( "%s", pStr );
-        fflush( stdout );
+    if ( m_verbosity >= _verbosityLevel )
+    {
+        if( pStr ){
+            printf( "%s", pStr );
+            fflush( stdout );
+        }
     }
-#endif
 }
 
 /*************************************************************************

@@ -541,7 +541,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxi
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".sxi";
     Value = "soffice.StarImpressDocument.6";
     Styles = ();
@@ -587,7 +587,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odp
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".odp";
     Value = "opendocument.ImpressDocument.1";
     Styles = ();
@@ -914,7 +914,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Otp
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".otp";
     Value = "opendocument.ImpressDocument.1";
     Styles = ();
@@ -923,35 +923,8 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Sti
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".sti";
-    Value = "opendocument.ImpressDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Ppt
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".ppt";
-    Value = "opendocument.ImpressDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Pps
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".pps";
-    Value = "opendocument.ImpressDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Pot
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".pot";
     Value = "opendocument.ImpressDocument.1";
     Styles = ();
 End

@@ -46,6 +46,9 @@ public interface PropertyName {
      * parameter name: "ConnectionString"
      */
     final public static String CONNECTION_STRING = "ConnectionString";
+    final public static String PIPE_CONNECTION_STRING = "PipeConnectionString";
+    final public static String USE_PIPE_CONNECTION = "UsePipeConnection";
+
     /**
      * parameter name: "TestBase"
      */

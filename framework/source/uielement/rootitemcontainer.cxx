@@ -146,8 +146,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
             for ( sal_Int32 i = 0; i < nCount; i++ )
             {
                 Sequence< PropertyValue > aPropSeq;
-                Any a = rSourceContainer->getByIndex( i );
-                if ( a >>= aPropSeq )
+                if ( rSourceContainer->getByIndex( i ) >>= aPropSeq )
                 {
                     sal_Int32 nContainerIndex = -1;
                     Reference< XIndexAccess > xIndexAccess;
@@ -181,7 +180,9 @@ RootItemContainer::~RootItemContainer()
 // private
 void RootItemContainer::copyItemContainer( const std::vector< Sequence< PropertyValue > >& rSourceVector )
 {
-    for ( sal_uInt32 i = 0; i < rSourceVector.size(); i++ )
+    const sal_uInt32 nCount = rSourceVector.size();
+    m_aItemVector.reserve(nCount);
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         sal_Int32 nContainerIndex = -1;
         Sequence< PropertyValue > aPropSeq( rSourceVector[i] );
@@ -256,7 +257,7 @@ sal_Bool SAL_CALL RootItemContainer::hasElements()
 throw ( RuntimeException )
 {
     ShareGuard aLock( m_aShareMutex );
-    return ( m_aItemVector.size() != 0 );
+    return ( !m_aItemVector.empty() );
 }
 
 // XIndexAccess

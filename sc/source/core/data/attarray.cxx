@@ -103,10 +103,10 @@ ScAttrArray::~ScAttrArray()
 }
 
 //------------------------------------------------------------------------
-
+#ifdef DBG_UTIL
 void ScAttrArray::TestData() const
 {
-#ifdef DBG_UTIL
+
     USHORT nErr = 0;
     if (pData)
     {
@@ -129,8 +129,8 @@ void ScAttrArray::TestData() const
         aMsg += ByteString::CreateFromInt32(nCol);
         DBG_ERROR( aMsg.GetBuffer() );
     }
-#endif
 }
+#endif
 
 //------------------------------------------------------------------------
 
@@ -169,6 +169,9 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, BOOL bAlloc )
             pDocPool->Remove(*pOldPattern);
         }
         delete[] pData;
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
 
         if (bAlloc)
         {
@@ -472,6 +475,9 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 pData[nInsert].pPattern = pPattern;
                 nCount++;
             }
+
+            if (pDocument->IsStreamValid(nTab))
+                pDocument->SetStreamValid(nTab, FALSE);
         }
     }
 //  InfoBox(0, String(nCount) + String(" Eintraege") ).Execute();
@@ -550,6 +556,9 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
             delete pNewPattern;
         }
         while ((nStart <= nEndRow) && (nPos < nCount));
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
     }
 
 #ifdef DBG_UTIL
@@ -789,6 +798,9 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
             }
         }
         while (nStart <= nEndRow);
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
     }
 
 #ifdef DBG_UTIL
@@ -2104,9 +2116,8 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
         //  im eingefuegten Bereich ist nichts zusammengefasst
     }
 
-    //  Flags nicht duplizieren
-    //! direkt am Pattern testen ??
-    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
+    // Don't duplicate the merge flags in the inserted row.
+    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_ALL );
 }
 
 

@@ -63,7 +63,7 @@ public final class Relay implements XRelay, XSource {
         final XAcceptor acceptor = Acceptor.create(context);
         final XBridgeFactory factory;
         try {
-            factory = (XBridgeFactory) UnoRuntime.queryInterface(
+            factory = UnoRuntime.queryInterface(
                 XBridgeFactory.class,
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));

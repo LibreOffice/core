@@ -180,7 +180,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
         m_document = DocumentHelper.loadDocument( m_orb, documentURL );
         m_formLayer = new FormLayer( m_document );
 
-        XPropertySet textFieldModel = m_formLayer.getControlModel( new String[] { "Standard", "TextBox" } );
+        XPropertySet textFieldModel = m_formLayer.getControlModel( new int[] { 0, 0 } );
 
         // all persistent properties should have the expected values
         assure( "persistent properties did not survive reload (1)!", ((String)textFieldModel.getPropertyValue( "SomeBoundText" )).equals( "ChangedBoundText" ) );

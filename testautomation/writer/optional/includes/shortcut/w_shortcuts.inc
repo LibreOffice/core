@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Shortcut-test in writer
 '*
@@ -755,6 +755,108 @@ testcase tShortcutSubscript
     TabFontPosition.Cancel
 
     '/// close previous opened document
+    Call hCloseDocument
+
+endcase
+
+' --------------------------------------------------------------------------------
+
+testcase tShortcutPasteUnformattedText
+
+	Dim vShortcut as string
+	Dim DefaultSize as integer
+	Dim DefaultStyle as integer
+	
+	printlog "This testcases checks the shortcut -> Paste Unformatted Text"
+	printlog "Open a new text document"
+	Call hNewDocument
+	
+	vShortcut = "<Mod1 Mod2 Shift V>"
+	printlog "Type 'This is a formatted sentence'"
+	Call wTypeKeys ("This is a formatted sentence")
+	
+	printlog "Format the word 'formatted' in bold, italic, font size 20"
+	Call wTypeKeys ("<Home>")
+	Call wTypeKeys ("<Mod1 Right>", 3)
+	Call wTypeKeys ("<Mod1 Shift Right>")	
+	
+	FormatCharacter
+	WaitSlot (5)
+	Kontext	
+	Active.Setpage TabFont
+	Kontext "TabFont"
+	DefaultSize = Size.GetSelIndex
+	Size.Select 14 ' Size 20
+	DefaultStyle = Style.GetSelIndex
+	Style.Select 4 ' Style Bold, Italic
+	TabFont.Ok
+	
+	printlog "Copy word 'formatted'"
+	EditCopy		
+	
+	printlog "Go to the end of line"
+	Call wTypeKeys ("<End>")
+	printlog "insert a space"
+	Call wTypeKeys ("<Space>")
+	printlog "Press Ctrl+Alt+Shift+V (cmd+option+shift+V on Mac)"
+    Call wTypeKeys ( vShortcut )
+    wait 500
+	
+	Call wTypeKeys ("<Mod1 Home>")
+	printlog "check if sentence is now: This is a formatted sentence formatted"
+	Call wTypeKeys ("<Shift End>")
+	EditCopy
+	if Trim(GetClipboardText) = "This is a formatted sentence formatted" then
+		printlog "- shortcut did work"
+	else
+		if gPlatgroup = "osx" then
+			Warnlog "#103102#It is not possible to customize the keyboard combination cmd+option on MAC OSX."
+			Call hCloseDocument
+			goto endsub
+		else
+			Warnlog "Shortcut did not work"
+			Call hCloseDocument
+			goto endsub			
+		end if
+	end if	
+	
+	printlog "Check if formatted word held its formatting"
+	Call wTypeKeys ("<Home>")
+	Call wTypeKeys ("<Mod1 Right>", 3)
+	Call wTypeKeys ("<Mod1 Shift Right>")
+	
+	FormatCharacter
+	WaitSlot (5)
+	Kontext	
+	Active.Setpage TabFont
+	Kontext "TabFont"
+	if Size.GetSelIndex <> 14 then
+		Warnlog "formatted word has lost its size"
+	endif
+	if Style.GetSelIndex <> 4 then
+		Warnlog "formatted word has lost its style"
+	endif
+	TabFont.Cancel
+	
+	printlog "Check if pasted word has default formatting"
+	Call wTypeKeys ("<End>")
+	Call wTypeKeys ("<Mod1 Right>", 3)
+	Call wTypeKeys ("<Mod1 Shift Left>")
+	
+	FormatCharacter
+	WaitSlot (5)
+	Kontext	
+	Active.Setpage TabFont
+	Kontext "TabFont"
+	if Size.GetSelIndex <>  DefaultSize then
+		Warnlog "formatted word has no default size"
+	endif
+	if Style.GetSelIndex <> DefaultStyle then
+		Warnlog "formatted word has no default style"
+	endif
+	TabFont.Cancel
+		
+    printlog "close previous opened document"
     Call hCloseDocument
 
 endcase

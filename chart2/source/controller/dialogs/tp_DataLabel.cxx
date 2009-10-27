@@ -42,7 +42,7 @@ namespace chart
 
 DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs) :
         SfxTabPage(pWindow, SchResId(TP_DATA_DESCR), rInAttrs),
-        m_aDataLabelResources(this, rInAttrs, true)
+        m_aDataLabelResources(this, rInAttrs)
 {
     FreeResource();
 }

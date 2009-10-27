@@ -46,8 +46,6 @@ struct ScExtDocSettings
     double              mfTabBarWidth;      /// Width of the tabbar, relative to frame window width (0.0 ... 1.0).
     sal_uInt32          mnLinkCnt;          /// Recursive counter for loading external documents.
     SCTAB               mnDisplTab;         /// Index of displayed sheet.
-    bool                mbWinProtected;     /// true = Window properties are protected.
-    bool                mbEncrypted;        /// true = Imported file was encrypted.
 
     explicit            ScExtDocSettings();
 };

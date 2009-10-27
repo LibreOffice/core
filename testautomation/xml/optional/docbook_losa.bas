@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : DocBook XML Import-/Export Test
 '*
@@ -51,7 +51,8 @@ sub main
             call CreateWorkXMLExportDir ( "user\work\xml\docbook" )   
             sSourcePath = ConvertPath (gTestToolPath & "xml\optional\input\docbook" )
             sDestinationPath = gOfficePath & ConvertPath("user\work\xml\docbook") 
-            call tDocBookXMLtestdocs    
+            call tDocBookXMLtestdocs  
+            call tToolsXMLFilterSettings
         call hStatusOut   
 end sub
 

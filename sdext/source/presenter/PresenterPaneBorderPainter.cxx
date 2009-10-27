@@ -621,7 +621,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     const double nTextWidth = aBox.X2 - aBox.X1;
     double nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
     const sal_Int32 nTitleBarHeight = rInnerBox.Y - rOuterBox.Y - 1;
-    double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 + 3*nTextHeight/4;
+    double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 - aBox.Y1;
     if (nY >= rInnerBox.Y)
         nY = rInnerBox.Y - 1;
     switch (rpStyle->meFontAnchor)

@@ -411,6 +411,7 @@
 #include "comphelper/types.hxx"
 
 #include "connectivity/FValue.hxx"
+#include <connectivity/DriversConfig.hxx>
 #include "connectivity/dbcharset.hxx"
 #include "connectivity/dbconversion.hxx"
 #include "connectivity/dbexception.hxx"

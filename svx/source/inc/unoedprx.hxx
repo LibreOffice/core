@@ -79,6 +79,9 @@ public:
     virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
     virtual USHORT          GetLineCount( USHORT nPara ) const;
     virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
+    virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
+    virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
+
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
@@ -118,12 +121,13 @@ public:
                         SvxAccessibleTextEditViewAdapter();
     virtual             ~SvxAccessibleTextEditViewAdapter();
 
+    // SvxViewForwarder interface
     virtual BOOL        IsValid() const;
-
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 
+    // SvxEditViewForwarder interface
     virtual sal_Bool    GetSelection( ESelection& rSelection ) const;
     virtual sal_Bool    SetSelection( const ESelection& rSelection );
     virtual sal_Bool    Copy();

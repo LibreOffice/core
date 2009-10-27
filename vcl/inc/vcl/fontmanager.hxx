@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fontmanager.hxx,v $
- * $Revision: 1.36 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -51,6 +48,7 @@
 
 // forward declarations
 namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
+class FontSubsetInfo;
 
 namespace psp {
 class PPDParser; // see ppdparser.hxx
@@ -166,6 +164,8 @@ struct FastPrintFontInfo
     rtl_TextEncoding                    m_aEncoding;
     fcstatus::type                      m_eEmbeddedbitmap;
     fcstatus::type                      m_eAntialias;
+    bool                                m_bSubsettable;
+    bool                                m_bEmbeddable;
 
     FastPrintFontInfo() :
             m_nID( 0 ),
@@ -328,9 +328,9 @@ class VCL_DLLPUBLIC PrintFontManager
         rtl::OString          m_aFontFile;        // relative to directory
         rtl::OString          m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
         int                     m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
-        unsigned int           m_nTypeFlags;        // from TrueType file; only known use is for copyright flags
+        unsigned int           m_nTypeFlags;        // copyright bits and PS-OpenType flag
 
-        TrueTypeFontFile() : PrintFont( fonttype::TrueType ), m_nDirectory( 0 ), m_nCollectionEntry(-1), m_nTypeFlags( 0x80000000 ) {}
+        TrueTypeFontFile();
         virtual ~TrueTypeFontFile();
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
@@ -648,7 +648,9 @@ public:
     // nGlyphs: number of glyphs in arrays
     // pCapHeight:: capital height of the produced font
     // pXMin, pYMin, pXMax, pYMax: outgoing font bounding box
-    bool createFontSubset( fontID nFont,
+    // TODO: callers of this method should use its FontSubsetInfo counterpart directly
+    bool createFontSubset( FontSubsetInfo&,
+                           fontID nFont,
                            const rtl::OUString& rOutFile,
                            sal_Int32* pGlyphIDs,
                            sal_uInt8* pNewEncoding,

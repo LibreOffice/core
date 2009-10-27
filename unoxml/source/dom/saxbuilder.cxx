@@ -35,7 +35,6 @@
 #include "saxbuilder.hxx"
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <libxml/tree.h>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.h>
 
 namespace DOM

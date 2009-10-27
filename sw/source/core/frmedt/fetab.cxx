@@ -34,12 +34,8 @@
 
 #include <hintids.hxx>
 
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <basegfx/vector/b2dvector.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -120,13 +116,6 @@ TblWait::TblWait( USHORT nCnt, SwFrm *pFrm, SwDocShell &rDocShell, USHORT nCnt2)
         pWait = new SwWait( rDocShell, TRUE );
 }
 
-inline const SwCursor& GetShellCursor( const SwCrsrShell& rShell )
-{
-    const SwShellCrsr *pCrsr = rShell.GetTableCrsr();
-    if( !pCrsr )
-        pCrsr = (SwShellCrsr*)*rShell.GetSwCrsr( FALSE );
-    return *pCrsr;
-}
 
 void SwFEShell::ParkCursorInTab()
 {
@@ -803,13 +792,13 @@ void SwFEShell::SetRowSplit( const SwFmtRowSplit& rNew )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetRowSplit( GetShellCursor( *this ), rNew );
+    GetDoc()->SetRowSplit( *getShellCrsr( false ), rNew );
     EndAllActionAndCall();
 }
 
 void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
 {
-    GetDoc()->GetRowSplit( GetShellCursor( *this ), rpSz );
+    GetDoc()->GetRowSplit( *getShellCrsr( false ), rpSz );
 }
 
 
@@ -824,7 +813,7 @@ void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetRowHeight( GetShellCursor( *this ), rNew );
+    GetDoc()->SetRowHeight( *getShellCrsr( false ), rNew );
     EndAllActionAndCall();
 }
 
@@ -833,7 +822,7 @@ void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
  ******************************************************************************/
 void SwFEShell::GetRowHeight( SwFmtFrmSize *& rpSz ) const
 {
-    GetDoc()->GetRowHeight( GetShellCursor( *this ), rpSz );
+    GetDoc()->GetRowHeight( *getShellCrsr( false ), rpSz );
 }
 
 BOOL SwFEShell::BalanceRowHeight( BOOL bTstOnly )
@@ -841,7 +830,7 @@ BOOL SwFEShell::BalanceRowHeight( BOOL bTstOnly )
     SET_CURR_SHELL( this );
     if( !bTstOnly )
         StartAllAction();
-    BOOL bRet = GetDoc()->BalanceRowHeight( GetShellCursor( *this ), bTstOnly );
+    BOOL bRet = GetDoc()->BalanceRowHeight( *getShellCrsr( false ), bTstOnly );
     if( !bTstOnly )
         EndAllActionAndCall();
     return bRet;
@@ -854,7 +843,7 @@ void SwFEShell::SetRowBackground( const SvxBrushItem &rNew )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetRowBackground( GetShellCursor( *this ), rNew );
+    GetDoc()->SetRowBackground( *getShellCrsr( false ), rNew );
     EndAllActionAndCall();
 }
 
@@ -863,7 +852,7 @@ void SwFEShell::SetRowBackground( const SvxBrushItem &rNew )
  ******************************************************************************/
 BOOL SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
 {
-    return GetDoc()->GetRowBackground( GetShellCursor( *this ), rToFill );
+    return GetDoc()->GetRowBackground( *getShellCrsr( false ), rToFill );
 }
 
 /***********************************************************************
@@ -877,7 +866,7 @@ void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetTabBorders( GetShellCursor( *this ), rSet );
+    GetDoc()->SetTabBorders( *getShellCrsr( false ), rSet );
     EndAllActionAndCall();
 }
 
@@ -886,14 +875,14 @@ void SwFEShell::SetTabLineStyle( const Color* pColor, BOOL bSetLine,
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetTabLineStyle( GetShellCursor( *this ),
+    GetDoc()->SetTabLineStyle( *getShellCrsr( false ),
                                 pColor, bSetLine, pBorderLine );
     EndAllActionAndCall();
 }
 
 void SwFEShell::GetTabBorders( SfxItemSet& rSet ) const
 {
-    GetDoc()->GetTabBorders( GetShellCursor( *this ), rSet );
+    GetDoc()->GetTabBorders( *getShellCrsr( false ), rSet );
 }
 
 
@@ -907,13 +896,13 @@ void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetBoxAttr( GetShellCursor( *this ), rNew );
+    GetDoc()->SetBoxAttr( *getShellCrsr( false ), rNew );
     EndAllActionAndCall();
 }
 
 BOOL SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
 {
-    return GetDoc()->GetBoxAttr( GetShellCursor( *this ), rToFill );
+    return GetDoc()->GetBoxAttr( *getShellCrsr( false ), rToFill );
 }
 
 /***********************************************************************
@@ -926,13 +915,13 @@ void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetBoxAttr( GetShellCursor( *this ), rNew );
+    GetDoc()->SetBoxAttr( *getShellCrsr( false ), rNew );
     EndAllActionAndCall();
 }
 
 BOOL SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
 {
-    return GetDoc()->GetBoxAttr( GetShellCursor( *this ), rToFill );
+    return GetDoc()->GetBoxAttr( *getShellCrsr( false ), rToFill );
 }
 
 /***********************************************************************
@@ -945,13 +934,13 @@ void SwFEShell::SetBoxAlign( USHORT nAlign )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    GetDoc()->SetBoxAlign( GetShellCursor( *this ), nAlign );
+    GetDoc()->SetBoxAlign( *getShellCrsr( false ), nAlign );
     EndAllActionAndCall();
 }
 
 USHORT SwFEShell::GetBoxAlign() const
 {
-    return GetDoc()->GetBoxAlign( GetShellCursor( *this ) );
+    return GetDoc()->GetBoxAlign( *getShellCrsr( false ) );
 }
 
 /***********************************************************************
@@ -1063,7 +1052,7 @@ void SwFEShell::ProtectCells()
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    GetDoc()->SetBoxAttr( GetShellCursor( *this ), aProt );
+    GetDoc()->SetBoxAttr( *getShellCrsr( false ), aProt );
 
     if( !IsCrsrReadonly() )
     {
@@ -1280,7 +1269,7 @@ void SwFEShell::AdjustCellWidth( BOOL bBalance )
     //ermitteln laesst wieviel Inhalt betroffen ist.
     TblWait aWait( USHRT_MAX, 0, *GetDoc()->GetDocShell() );
 
-    GetDoc()->AdjustCellWidth( GetShellCursor( *this ), bBalance );
+    GetDoc()->AdjustCellWidth( *getShellCrsr( false ), bBalance );
     EndAllActionAndCall();
 }
 

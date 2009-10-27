@@ -40,6 +40,7 @@ class ScBaseCell;
 #define SC_HINT_DYING       SFX_HINT_DYING
 #define SC_HINT_DATACHANGED SFX_HINT_DATACHANGED
 #define SC_HINT_TABLEOPDIRTY    SFX_HINT_USER00
+#define SC_HINT_CALCALL         SFX_HINT_USER01
 
 class ScHint : public SfxSimpleHint
 {

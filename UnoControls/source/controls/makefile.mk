@@ -33,6 +33,7 @@ PRJ=..$/..
 PRJNAME=UnoControls
 TARGET=controls
 ENABLE_EXCEPTIONS=TRUE
+.IF "$(L10N_framework)"==""
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
@@ -47,4 +48,6 @@ SLOFILES=\
             $(SLO)$/statusindicator.obj
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
+
 .INCLUDE :	target.mk

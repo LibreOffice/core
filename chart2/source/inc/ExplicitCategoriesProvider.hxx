@@ -49,10 +49,10 @@ class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider :
 public:
     ExplicitCategoriesProvider( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
-    virtual ~ExplicitCategoriesProvider();
+    SAL_DLLPRIVATE virtual ~ExplicitCategoriesProvider();
 
     //XTextualDataSequence
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData()
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData()
         throw (::com::sun::star::uno::RuntimeException);
 
     static ::rtl::OUString getCategoryByIndex(

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dochdl.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +33,7 @@
 
 #include "rcid.hrc"
 
-#define STR_NOGLOS1                 (RC_DOCHDL_BEGIN + 1)
-#define STR_NOGLOS2                 (RC_DOCHDL_BEGIN + 2)
+#define STR_NOGLOS                  (RC_DOCHDL_BEGIN + 1)
 #define MSG_ERR_INSERT_GLOS         (RC_DOCHDL_BEGIN + 3)
 #define MSG_CLPBRD_FORMAT_ERROR     (RC_DOCHDL_BEGIN + 4)
 #define MSG_UPDATE_NEW_GLOS_FMT     (RC_DOCHDL_BEGIN + 5)

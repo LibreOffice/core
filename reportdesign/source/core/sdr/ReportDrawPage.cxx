@@ -145,7 +145,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         try
         {
             OReportModel* pRptModel = static_cast<OReportModel*>(pObj->GetModel());
-            xRet.set( pRptModel->createShape(sServiceName,xShape,bChangeOrientation ? 0 : -1), uno::UNO_QUERY_THROW );
+            xRet.set( pRptModel->createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {

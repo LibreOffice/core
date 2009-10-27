@@ -313,6 +313,8 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             BOOL bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
             ScImportExport aObj( pDoc, aBlock );
+            if ( bUsedForLink )
+                aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
             aObj.SetFormulas( pDoc->GetViewOptions().GetOption( VOPT_FORMULAS ) );
             aObj.SetIncludeFiltered( bIncludeFiltered );
 
@@ -656,7 +658,7 @@ void ScTransferObj::InitDocShell()
 
         //  page format (grid etc) and page size (maximum size for ole object)
 
-        Size aPaperSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );       // Twips
+        Size aPaperSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );       // Twips
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
         String aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
         SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
@@ -817,7 +819,10 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                 {
                     String aStr;
                     pFCell->GetString(aStr);
-                    pNew = new ScStringCell( aStr );
+                    if ( pFCell->IsMultilineResult() )
+                        pNew = new ScEditCell( aStr, pDestDoc );
+                    else
+                        pNew = new ScStringCell( aStr );
                 }
                 pDestDoc->PutCell( nCol,nRow,nDestTab, pNew );
 

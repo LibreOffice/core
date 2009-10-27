@@ -591,7 +591,18 @@ class SpreadsheetDocHelper : System.IDisposable
         XDesktop aDesktop = (XDesktop)
             mxMSFactory.createInstance( "com.sun.star.frame.Desktop" );
         if (aDesktop != null)
-            aDesktop.terminate();
+        {
+            try
+            {
+                aDesktop.terminate();
+            }
+            catch (DisposedException d)
+            {
+                //This exception may be thrown because shutting down OOo using
+                //XDesktop terminate does not really work. In the case of the
+                //Exception OOo will still terminate. 
+            }
+        }
     }
 
 // ________________________________________________________________

@@ -108,11 +108,8 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     maModelBorder(),
     meOrientation(VERTICAL)
 {
-    maPageModel.GetItemPool().FreezeIdRanges();
-
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
-    maPageModel.GetItemPool().FreezeIdRanges();
 
     // call FreezeIdRanges() at the pool from the newly constructed SdrModel,
     // else creating SfxItemSets on it will complain

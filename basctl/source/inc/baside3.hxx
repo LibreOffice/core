@@ -37,6 +37,10 @@
 
 #include <bastypes.hxx>
 #include <svtools/undo.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/fixed.hxx>
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -94,6 +98,7 @@ public:
     void                DisableBrowser();
     void                UpdateBrowser();
     BOOL                SaveDialog();
+    BOOL                ImportDialog();
 
     virtual String      GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();

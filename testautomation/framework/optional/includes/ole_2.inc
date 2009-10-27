@@ -38,7 +38,6 @@
 '\******************************************************************************
 
 testcase tCheckTheOLEObjectDialog
-'///check in all applications ( Writer/Calc/Draw/Impress/Masterdocument ) the names of all OLE-Objects in the OLE-Dialog
 
    qaerrorlog( "#i80670# The OLE retrieval routine is broken beyond repair, redesign required" )
    goto endsub
@@ -48,7 +47,7 @@ testcase tCheckTheOLEObjectDialog
    Dim iCount, sCount as Integer
    
    call ClosePresentationfloat()
-   call GetOLEDefaultNames()
+   GetOLEDefaultNames()
 
    for i=1 to 5
    
@@ -63,22 +62,19 @@ testcase tCheckTheOLEObjectDialog
       lListe ( 0 ) = 0 : lListSoll ( 0 ) = 0
       printlog "check OLE-Object-Dialog for " + gApplication
       
-      '///file / new / .sxw or .sxc, .sxd, .sxi, .sxm 
       Call hNewDocument
       
-      '///+insert / objects / OLE-objects
       InsertObjectOLEObject
 
       Kontext "OLEObjektEinfuegen"
       if ( not OLEObjektEinfuegen.exists() ) then
         warnlog( "cannot access the OLE object dialog" )
+        goto endsub
       endif
       
-      '///+select 'create new'
       NeuErstellen.Check
-      Sleep (1)
+      WaitSlot()
       
-      '///+check all names in the list with a comparison list in [TesttoolPath]\global\input\olenames\ole_[lang-code].txt
       for j=1 to ObjektTyp.GetItemCount
          ObjektTyp.Select j
          ListAppend ( lListe(), ObjektTyp.GetSelText )
@@ -115,7 +111,7 @@ testcase tCheckTheOLEObjectDialog
                             ListAppend ( lListSoll (), gOLEMath )
       end select
       
-      if gPlatgroup = "w95" then 
+      if ( gPlatgroup = "w95" ) then 
          ListAppend ( lListSoll (), gOLEOthers )
          endif
          
@@ -132,9 +128,7 @@ testcase tCheckTheOLEObjectDialog
          next j
       end if
       
-      '///+cancel the dialog
       OLEObjektEinfuegen.Cancel
-      '///+close the document and repeat it for each application
       hCloseDocument()
    next i
 endcase

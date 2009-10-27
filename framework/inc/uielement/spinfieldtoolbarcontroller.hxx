@@ -81,9 +81,6 @@ class SpinfieldToolbarController : public ISpinfieldListener,
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
-        // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
-
         // ISpinfieldListener
         virtual void Up();
         virtual void Down();
@@ -99,6 +96,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
 
     protected:
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const;
 
     private:
         bool impl_getValue( const ::com::sun::star::uno::Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat );

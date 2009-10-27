@@ -54,6 +54,7 @@ namespace connectivity
         {
         protected:
             ::std::vector<sal_Int32> m_vMapping; // when not every column is needed
+            ::std::map<sal_Int32,sal_Int32> m_aColumnTypes;
 
             SQLHANDLE       m_aStatementHandle;
             OConnection*    m_pConnection;
@@ -80,13 +81,13 @@ namespace connectivity
             virtual ~OResultSetMetaData();
 
 
-            static  SWORD getNumColAttrib(OConnection* _pConnection
+            static SQLLEN getNumColAttrib(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
                                               ,sal_Int32 _column
                                               ,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            static SWORD getColumnODBCType(OConnection* _pConnection
+            static SQLSMALLINT getColumnODBCType(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
                                               ,sal_Int32 column)

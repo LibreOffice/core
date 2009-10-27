@@ -33,22 +33,19 @@
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
-#ifndef _EDITDATA_HXX //autogen
+
+#include <svtools/brdcst.hxx>
+
 #include <svx/editdata.hxx>
-#endif
 #include <i18npool/lang.h>
-#ifndef _SV_COLOR_HXX //autogen
 #include <tools/color.hxx>
-#endif
 #include <vcl/graph.hxx>
 #include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
 #include "svx/svxdllapi.h"
 
-#ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
-#endif
 
 #include <tools/rtti.hxx>   // wegen typedef TypeId
 #include <vector>
@@ -390,6 +387,9 @@ public:
 
     void        SetInvalidateMore( USHORT nPixel );
     USHORT      GetInvalidateMore() const;
+
+    String      GetSurroundingText() const;
+     Selection  GetSurroundingTextSelection() const;
 };
 
 //#if 0 // _SOLAR__PRIVATE
@@ -585,7 +585,7 @@ struct EBulletInfo
 #define OUTLINERMODE_SUBTITLE       (0x0100|OUTLINERMODE_TEXTOBJECT)
 #define OUTLINERMODE_NOTE           (0x0200|OUTLINERMODE_TEXTOBJECT)
 
-class SVX_DLLPUBLIC Outliner
+class SVX_DLLPUBLIC Outliner : public SfxBroadcaster
 {
     friend class OutlinerView;
     friend class OutlinerEditEng;

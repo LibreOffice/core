@@ -576,18 +576,21 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
         if (bRecord)
         {
+            // do not touch notes (ScUndoImportData does not support drawing undo)
+            sal_uInt16 nCopyFlags = IDF_ALL & ~IDF_NOTE;
+
             //  nFormulaCols is set only if column count is unchanged
             pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                     nEndCol+nFormulaCols, nEndRow, nTab,
-                                    IDF_ALL, FALSE, pUndoDoc );
+                                    nCopyFlags, FALSE, pUndoDoc );
             if ( rParam.nCol2 > nEndCol )
                 pDoc->CopyToDocument( nEndCol+1, rParam.nRow1, nTab,
                                         nUndoEndCol, nUndoEndRow, nTab,
-                                        IDF_ALL, FALSE, pUndoDoc );
+                                        nCopyFlags, FALSE, pUndoDoc );
             if ( rParam.nRow2 > nEndRow )
                 pDoc->CopyToDocument( rParam.nCol1, nEndRow+1, nTab,
                                         nUndoEndCol+nFormulaCols, nUndoEndRow, nTab,
-                                        IDF_ALL, FALSE, pUndoDoc );
+                                        nCopyFlags, FALSE, pUndoDoc );
         }
 
         //
@@ -601,7 +604,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
             ScRange aDelRange( rParam.nCol1, rParam.nRow1, nTab,
                                 rParam.nCol2, rParam.nRow2, nTab );
-            pDoc->DeleteAreaTab( aDelRange, IDF_ALL );  // ohne die Formeln
+            pDoc->DeleteAreaTab( aDelRange, IDF_ALL & ~IDF_NOTE );  // ohne die Formeln
 
             ScRange aOld( rParam.nCol1, rParam.nRow1, nTab,
                             rParam.nCol2+nFormulaCols, rParam.nRow2, nTab );
@@ -611,10 +614,10 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         }
         else if ( nEndCol < rParam.nCol2 )      // DeleteArea calls PutInOrder
             pDoc->DeleteArea( nEndCol+1, rParam.nRow1, rParam.nCol2, rParam.nRow2,
-                                aNewMark, IDF_CONTENTS );
+                                aNewMark, IDF_CONTENTS & ~IDF_NOTE );
 
         //  CopyToDocument doesn't remove contents
-        pDoc->DeleteAreaTab( rParam.nCol1, rParam.nRow1, nEndCol, nEndRow, nTab, IDF_CONTENTS );
+        pDoc->DeleteAreaTab( rParam.nCol1, rParam.nRow1, nEndCol, nEndRow, nTab, IDF_CONTENTS & ~IDF_NOTE );
 
         //  #41216# remove each column from ImportDoc after copying to reduce memory usage
         BOOL bOldAutoCalc = pDoc->GetAutoCalc();
@@ -671,7 +674,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             if (nFormulaCols > 0)                   // include filled formulas for redo
                 pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                         nEndCol+nFormulaCols, nEndRow, nTab,
-                                        IDF_ALL, FALSE, pRedoDoc );
+                                        IDF_ALL & ~IDF_NOTE, FALSE, pRedoDoc );
 
             ScDBData* pRedoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
 

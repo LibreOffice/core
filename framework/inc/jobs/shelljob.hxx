@@ -41,7 +41,7 @@
 
 //_______________________________________________
 // other includes
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 //_______________________________________________
 // uno includes
@@ -71,11 +71,8 @@ namespace framework{
 
     @author as96863
  */
-class ShellJob : public css::lang::XTypeProvider
-               , public css::lang::XServiceInfo
-               , public css::task::XJob
-               , private ThreadHelpBase
-               , public ::cppu::OWeakObject
+class ShellJob : private ThreadHelpBase
+               ,public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo,::com::sun::star::task::XJob >
 {
     //-------------------------------------------
     // member
@@ -112,11 +109,7 @@ class ShellJob : public css::lang::XTypeProvider
     public:
 
         //---------------------------------------
-        // css.uno.XInterface
-        // css.lang.XTypeProvider
         // css.lang.XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // css.task.XJob

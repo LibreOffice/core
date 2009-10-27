@@ -53,24 +53,10 @@ using namespace com::sun::star::beans;
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_2     (   StatusIndicatorInterfaceWrapper                                 ,
-                            cppu::OWeakObject                                               ,
-                            DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
-                            DIRECT_INTERFACE( ::com::sun::star::task::XStatusIndicator      )
-                        )
-
-DEFINE_XTYPEPROVIDER_2  (   StatusIndicatorInterfaceWrapper             ,
-                            ::com::sun::star::lang::XTypeProvider       ,
-                            ::com::sun::star::task::XStatusIndicator
-                        )
 
 StatusIndicatorInterfaceWrapper::StatusIndicatorInterfaceWrapper(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rStatusIndicatorImpl ) :
-    ::cppu::OWeakObject()
-    ,   m_xStatusIndicatorImpl( rStatusIndicatorImpl )
+    m_xStatusIndicatorImpl( rStatusIndicatorImpl )
 {
 }
 

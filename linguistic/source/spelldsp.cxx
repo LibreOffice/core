@@ -30,30 +30,25 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
-#include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
+
+#include <cppuhelper/factory.hxx>   // helper for factories
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <svtools/lngmisc.hxx>
-#include <unotools/processfactory.hxx>
+#include <osl/mutex.hxx>
 
 #include <vector>
-
-#ifndef _SPELLIMP_HXX
-#include <spelldsp.hxx>
-#endif
-#ifndef _LNGPROPS_HXX
-#include <lngprops.hxx>
-#endif
 
 #include "spelldsp.hxx"
 #include "spelldta.hxx"
 #include "lngsvcmgr.hxx"
-#include <osl/mutex.hxx>
+#include "lngprops.hxx"
 
 
 using namespace utl;
@@ -90,6 +85,7 @@ public:
 
     //size_t  Size() const   { return aVec.size(); }
     size_t  Count() const;
+    void    Prepend( const OUString &rText );
     void    Append( const OUString &rNew );
     void    Append( const std::vector< OUString > &rNew );
     void    Append( const Sequence< OUString > &rNew );
@@ -108,6 +104,12 @@ BOOL ProposalList::HasEntry( const OUString &rText ) const
             bFound = TRUE;
     }
     return bFound;
+}
+
+void ProposalList::Prepend( const OUString &rText )
+{
+    if (!HasEntry( rText ))
+        aVec.insert( aVec.begin(), rText );
 }
 
 void ProposalList::Append( const OUString &rText )
@@ -279,6 +281,40 @@ Reference< XSpellAlternatives > SAL_CALL
 }
 
 
+// returns the overall result of cross-checking with all user-dictionaries
+// including the IgnoreAll list
+static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
+    const OUString &rWord,
+    LanguageType nLanguage )
+{
+    Reference< XDictionaryEntry > xRes;
+
+    // the order of winning from top to bottom is:
+    // 1) IgnoreAll list will always win
+    // 2) Negative dictionaries will win over positive dictionaries
+    Reference< XDictionary > xIgnoreAll( GetIgnoreAllList() );
+    if (xIgnoreAll.is())
+        xRes = xIgnoreAll->getEntry( rWord );
+    if (!xRes.is())
+    {
+        Reference< XDictionaryList > xDList( GetDictionaryList() );
+        Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
+                rWord, nLanguage, FALSE, TRUE ) );
+        if (xNegEntry.is())
+            xRes = xNegEntry;
+        else
+        {
+            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
+                    rWord, nLanguage, TRUE, TRUE ) );
+            if (xPosEntry.is())
+                xRes = xPosEntry;
+        }
+    }
+
+    return xRes;
+}
+
+
 BOOL SpellCheckerDispatcher::isValid_Impl(
             const OUString& rWord,
             LanguageType nLanguage,
@@ -432,22 +468,13 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
             }
         }
 
-        // countercheck against results from dictionary which have precedence!
+        // cross-check against results from dictionaries which have precedence!
         if (bCheckDics  &&
             GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
         {
-            Reference< XDictionaryList > xDList( GetDicList(), UNO_QUERY );
-            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
-                    aChkWord, nLanguage, TRUE, TRUE ) );
-            if (xPosEntry.is())
-                bRes = TRUE;
-            else
-            {
-                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
-                        aChkWord, nLanguage, FALSE, TRUE ) );
-                if (xNegEntry.is())
-                    bRes = FALSE;
-            }
+            Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
+            if (xTmp.is())
+                bRes = !xTmp->isNegative();
         }
     }
 
@@ -505,8 +532,8 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
         // try already instantiated services first
         {
-            const Reference< XSpellChecker >  *pRef  =
-                    pEntry->aSvcRefs.getConstArray();
+            const Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs.getConstArray();
+            sal_Int32 nNumSugestions = -1;
             while (i <= pEntry->nLastTriedSvcIndex
                    &&  (!bTmpResValid || xTmpRes.is()) )
             {
@@ -530,9 +557,24 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 else
                     bTmpResValid = FALSE;
 
-                // remember first found alternatives only
+                // return first found result if the word is not known by any checker.
+                // But if that result has no suggestions use the first one that does
+                // provide suggestions for the misspelled word.
                 if (!xRes.is() && bTmpResValid)
+                {
                     xRes = xTmpRes;
+                    nNumSugestions = 0;
+                    if (xRes.is())
+                        nNumSugestions = xRes->getAlternatives().getLength();
+                }
+                sal_Int32 nTmpNumSugestions = 0;
+                if (xTmpRes.is() && bTmpResValid)
+                    nTmpNumSugestions = xTmpRes->getAlternatives().getLength();
+                if (xRes.is() && nNumSugestions == 0 && nTmpNumSugestions > 0)
+                {
+                    xRes = xTmpRes;
+                    nNumSugestions = nTmpNumSugestions;
+                }
 
                 ++i;
             }
@@ -555,6 +597,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 //! thus the service needs not to now about it
                 //aArgs.getArray()[1] <<= GetDicList();
 
+                sal_Int32 nNumSugestions = -1;
                 while (i < nLen  &&  (!bTmpResValid || xTmpRes.is()))
                 {
                     // create specific service via it's implementation name
@@ -596,9 +639,24 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     else
                         bTmpResValid = FALSE;
 
-                    // remember first found alternatives only
+                    // return first found result if the word is not known by any checker.
+                    // But if that result has no suggestions use the first one that does
+                    // provide suggestions for the misspelled word.
                     if (!xRes.is() && bTmpResValid)
+                    {
                         xRes = xTmpRes;
+                        nNumSugestions = 0;
+                        if (xRes.is())
+                            nNumSugestions = xRes->getAlternatives().getLength();
+                    }
+                    sal_Int32 nTmpNumSugestions = 0;
+                    if (xTmpRes.is() && bTmpResValid)
+                        nTmpNumSugestions = xTmpRes->getAlternatives().getLength();
+                    if (xRes.is() && nNumSugestions == 0 && nTmpNumSugestions > 0)
+                    {
+                        xRes = xTmpRes;
+                        nNumSugestions = nTmpNumSugestions;
+                    }
 
                     pEntry->nLastTriedSvcIndex = (INT16) i;
                     ++i;
@@ -634,41 +692,30 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
             xDList = Reference< XDictionaryList >( GetDicList(), UNO_QUERY );
 
-        // countercheck against results from dictionary which have precedence!
+        // cross-check against results from user-dictionaries which have precedence!
         if (bCheckDics  &&  xDList.is())
         {
-            Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
-                    aChkWord, nLanguage, TRUE, TRUE ) );
-
-            if (xPosEntry.is())
+            Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
+            if (xTmp.is())
             {
-                xRes = NULL;    // positive dictionaries have precedence over negative ones
-                eFailureType = -1;  // no failure
-            }
-            else
-            {
-                Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
-                        aChkWord, nLanguage, FALSE, TRUE ) );
-                if (xNegEntry.is())
+                if (xTmp->isNegative())    // positive entry found
                 {
                     eFailureType = SpellFailure::IS_NEGATIVE_WORD;
 
                     // replacement text to be added to suggestions, if not empty
-                    OUString aAddRplcTxt( xNegEntry->getReplacementText() );
+                    OUString aAddRplcTxt( xTmp->getReplacementText() );
 
                     // replacement text must not be in negative dictionary itself
                     if (aAddRplcTxt.getLength() &&
                         !SearchDicList( xDList, aAddRplcTxt, nLanguage, FALSE, TRUE ).is())
                     {
-                        aProposalList.Append( aAddRplcTxt );
-//                        // add suggestion if not already part of proposals
-//                        if (!SeqHasEntry( aProposals, aAddRplcTxt))
-//                        {
-//                            INT32 nLen = aProposals.getLength();
-//                            aProposals.realloc( nLen + 1);
-//                            aProposals.getArray()[ nLen ] = aAddRplcTxt;
-//                        }
+                        aProposalList.Prepend( aAddRplcTxt );
                     }
+                }
+                else    // positive entry found
+                {
+                    xRes = NULL;
+                    eFailureType = -1;  // no failure
                 }
             }
         }
@@ -683,6 +730,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             Sequence< OUString > aProposals = aProposalList.GetSequence();
 
             // remove entries listed in negative dictionaries
+            // (we don't want to display suggestions that will be regarded as misspelledlater on)
             if (bCheckDics  &&  xDList.is())
                 SeqRemoveNegEntries( aProposals, xDList, nLanguage );
 
@@ -693,7 +741,19 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 xSetAlt->setFailureType( eFailureType );
             }
             else
-                DBG_ASSERT( 0, "XSetSpellAlternatives not implemented!" );
+            {
+                if (xRes.is())
+                {
+                    DBG_ASSERT( 0, "XSetSpellAlternatives not implemented!" );
+                }
+                else if (aProposals.getLength() > 0)
+                {
+                    // no xRes but Proposals found from the user-dictionaries.
+                    // Thus we need to create an xRes...
+                    xRes = new linguistic::SpellAlternatives( rWord, nLanguage,
+                            SpellFailure::IS_NEGATIVE_WORD, aProposals );
+                }
+            }
         }
     }
 

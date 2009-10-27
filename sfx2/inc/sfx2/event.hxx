@@ -34,6 +34,8 @@
 #include "sfx2/dllapi.h"
 #include <tools/string.hxx>
 #include <svtools/hint.hxx>
+#include <svtools/eventcfg.hxx>
+#include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -44,32 +46,23 @@ class SfxObjectShell;
 
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
-    USHORT              nEventId;
     SfxObjectShell*     pObjShell;
-    String              _aArgs;
-    BOOL                _bDummy;
-    BOOL                _bAddToHistory;
+    ::rtl::OUString     aEventName;
+    USHORT              nEventId;
 
 public:
     TYPEINFO();
-                        SfxEventHint( USHORT nId,
-                                      const String& rArgs,
-                                      SfxObjectShell *pObj = 0  )
-                        :   nEventId(nId),
-                            pObjShell(pObj),
-                            _aArgs( rArgs ),
-                            _bAddToHistory(FALSE)
+    SfxEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
+                        :   pObjShell(pObj),
+                            aEventName(aName),
+                            nEventId(nId)
                         {}
-                        SfxEventHint( USHORT nId, SfxObjectShell *pObj = 0 )
-                        :   nEventId(nId),
-                            pObjShell(pObj),
-                            _bAddToHistory(FALSE)
-                        {}
-
-    const String& GetArgs() const { return _aArgs;}
 
     USHORT              GetEventId() const
                         { return nEventId; }
+
+    ::rtl::OUString     GetEventName() const
+                        { return aEventName; }
 
     SfxObjectShell*     GetObjShell() const
                         { return pObjShell; }
@@ -82,8 +75,6 @@ class SfxNamedHint : public SfxHint
     String              _aEventName;
     SfxObjectShell*     _pObjShell;
     String              _aArgs;
-    BOOL                _bDummy;
-    BOOL                _bAddToHistory;
 
 public:
                         TYPEINFO();
@@ -93,15 +84,13 @@ public:
                                       SfxObjectShell *pObj = 0  )
                         :   _aEventName( rName ),
                             _pObjShell( pObj),
-                            _aArgs( rArgs ),
-                            _bAddToHistory( FALSE )
+                            _aArgs( rArgs )
                         {}
 
                         SfxNamedHint( const String& rName,
                                       SfxObjectShell *pObj = 0 )
                         :   _aEventName( rName ),
-                            _pObjShell( pObj ),
-                            _bAddToHistory( FALSE )
+                            _pObjShell( pObj )
                         {}
 
     const String&       GetArgs() const { return _aArgs;}

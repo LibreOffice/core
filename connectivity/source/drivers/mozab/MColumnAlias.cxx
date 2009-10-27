@@ -32,12 +32,15 @@
 #include "precompiled_connectivity.hxx"
 #include "MColumnAlias.hxx"
 #include "MConnection.hxx"
+#include "MExtConfigAccess.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#ifndef CONNECTIVITY_MOZAB_MEXTCONFIGACCESS_HXX
-#include "MExtConfigAccess.hxx"
-#endif
 
+#include <tools/diagnose_ex.h>
+
+#include <algorithm>
+#include <functional>
 
 using namespace ::connectivity;
 using namespace ::connectivity::mozab;
@@ -46,56 +49,57 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-static const ::rtl::OUString sProgrammaticNames[] =
-{
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FirstName")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LastName")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DisplayName")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NickName")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrimaryEmail")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SecondEmail")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PreferMailFormat")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkPhone")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomePhone")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FaxNumber")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PagerNumber")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CellularNumber")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeAddress")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeAddress2")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeCity")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeState")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeZipCode")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeCountry")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkAddress")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkAddress2")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkCity")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkState")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkZipCode")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkCountry")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("JobTitle")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Department")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Company")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WebPage1")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WebPage2")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BirthYear")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BirthMonth")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BirthDay")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom1")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom2")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom3")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom4")),
-    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Notes"))
-};
 //------------------------------------------------------------------------------
 OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
-    for ( size_t i = 0; i < END - BEGIN; ++i )
-        m_aAliasMap[ sProgrammaticNames[i] ] = AliasDescription( sProgrammaticNames[i], static_cast< ProgrammaticName>( i ) );
+    static const sal_Char* s_pProgrammaticNames[] =
+    {
+        "FirstName",
+        "LastName",
+        "DisplayName",
+        "NickName",
+        "PrimaryEmail",
+        "SecondEmail",
+        "PreferMailFormat",
+        "WorkPhone",
+        "HomePhone",
+        "FaxNumber",
+        "PagerNumber",
+        "CellularNumber",
+        "HomeAddress",
+        "HomeAddress2",
+        "HomeCity",
+        "HomeState",
+        "HomeZipCode",
+        "HomeCountry",
+        "WorkAddress",
+        "WorkAddress2",
+        "WorkCity",
+        "WorkState",
+        "WorkZipCode",
+        "WorkCountry",
+        "JobTitle",
+        "Department",
+        "Company",
+        "WebPage1",
+        "WebPage2",
+        "BirthYear",
+        "BirthMonth",
+        "BirthDay",
+        "Custom1",
+        "Custom2",
+        "Custom3",
+        "Custom4",
+        "Notes",
+    };
+
+    for ( size_t i = 0; i < sizeof( s_pProgrammaticNames ) / sizeof( s_pProgrammaticNames[0] ); ++i )
+        m_aAliasMap[ ::rtl::OUString::createFromAscii( s_pProgrammaticNames[i] ) ] = AliasEntry( s_pProgrammaticNames[i], i );
 
     initialize( _rxORB );
 }
 
-//------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
     // open our driver settings config node
@@ -112,34 +116,26 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
             OSL_ENSURE( xAliasesNode.is(), "OColumnAlias::setAlias: missing the aliases node!" );
 
             // this is a set of string nodes
-            Sequence< ::rtl::OUString > aColumnProgrammaticNames;
+            Sequence< ::rtl::OUString > aProgrammaticNames;
             if ( xAliasesNode.is() )
-                aColumnProgrammaticNames = xAliasesNode->getElementNames();
+                aProgrammaticNames = xAliasesNode->getElementNames();
 
             //.............................................................
             // travel through all the set elements
-            const ::rtl::OUString* pProgrammaticNames = aColumnProgrammaticNames.getConstArray();
-            const ::rtl::OUString* pProgrammaticNamesEnd = pProgrammaticNames + aColumnProgrammaticNames.getLength();
+            const ::rtl::OUString* pProgrammaticNames = aProgrammaticNames.getConstArray();
+            const ::rtl::OUString* pProgrammaticNamesEnd = pProgrammaticNames + aProgrammaticNames.getLength();
             ::rtl::OUString sAssignedAlias;
 
             for ( ; pProgrammaticNames < pProgrammaticNamesEnd; ++pProgrammaticNames )
             {
-                OSL_ENSURE( m_aAliasMap.end() != m_aAliasMap.find( *pProgrammaticNames ),
-                    "OColumnAlias::setAlias: found an invalid programmtic name!" );
-                    // if this asserts, somebody stored a programmatic name in the configuration
-                    // which is not allowed (i.e. not in the list of known programmatics).
-
-#if OSL_DEBUG_LEVEL > 0
-                sal_Bool bExtractionSuccess =
-#endif
-                xAliasesNode->getByName( *pProgrammaticNames) >>= sAssignedAlias;
-                OSL_ENSURE( bExtractionSuccess, "OColumnAlias::setAlias: invalid config data!" );
+                OSL_VERIFY( xAliasesNode->getByName( *pProgrammaticNames ) >>= sAssignedAlias );
 
                 // normalize in case the config data is corrupted
                 // (what we really don't need is an empty alias ...)
                 if ( 0 == sAssignedAlias.getLength() )
                       sAssignedAlias = *pProgrammaticNames;
 
+                ::rtl::OString sAsciiProgrammaticName( ::rtl::OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );
                 //.............................................................
             #if OSL_DEBUG_LEVEL > 0
                 bool bFound = false;
@@ -149,15 +145,11 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
                         ++search
                     )
                 {
-                    if ( search->second.sProgrammaticName == *pProgrammaticNames )
+                    if ( search->second.programmaticAsciiName.equals( sAsciiProgrammaticName ) )
                     {
-                        AliasDescription aDescription( search->second );
-
-                        // delete this old entry for this programmatic name
+                        AliasEntry entry( search->second );
                         m_aAliasMap.erase( search );
-
-                        // insert the same AliasDescription under a new name - its alias
-                        m_aAliasMap[ sAssignedAlias ] = aDescription;
+                        m_aAliasMap[ sAssignedAlias ] = entry;
 
                     #if OSL_DEBUG_LEVEL > 0
                         bFound = true;
@@ -172,29 +164,31 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OColumnAlias::setAlias: could not read my driver's configuration data!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
 
 //------------------------------------------------------------------
-OColumnAlias::ProgrammaticName OColumnAlias::getProgrammaticNameIndex( const ::rtl::OUString& _rAliasName ) const
-{
-    AliasMap::const_iterator pos = m_aAliasMap.find( _rAliasName );
-    if ( pos == m_aAliasMap.end() )
-    {
-        OSL_ENSURE( false, "OColumnAlias::getProgrammaticNameIndex: unknown column alias!" );
-        return END;
-    }
-
-    return pos->second.eProgrammaticNameIndex;
-}
-
-//------------------------------------------------------------------
-::rtl::OUString OColumnAlias::getProgrammaticNameOrFallbackToAlias( const ::rtl::OUString& _rAlias ) const
+::rtl::OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const ::rtl::OUString& _rAlias ) const
 {
     AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );
     if ( pos == m_aAliasMap.end() )
-        return _rAlias;
-    return pos->second.sProgrammaticName;
+    {
+        OSL_ENSURE( false, "OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias: no programmatic name for this alias!" );
+        return ::rtl::OUStringToOString( _rAlias, RTL_TEXTENCODING_UTF8 );
+    }
+    return pos->second.programmaticAsciiName;
+}
+
+//------------------------------------------------------------------
+bool OColumnAlias::isColumnSearchable( const ::rtl::OUString _alias ) const
+{
+    ::rtl::OString sProgrammatic = getProgrammaticNameOrFallbackToUTF8Alias( _alias );
+
+    return  (   !sProgrammatic.equals( "HomeCountry" )
+            &&  !sProgrammatic.equals( "WorkCountry" )
+            );
+    // for those, we know that they're not searchable in the Mozilla/LDAP implementation.
+    // There might be more ...
 }

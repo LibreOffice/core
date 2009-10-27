@@ -36,7 +36,7 @@
 
 #include <osl/mutex.hxx>
 #include <vector>
-#include <map>
+#include <hash_map>
 
 namespace connectivity
 {
@@ -45,87 +45,40 @@ namespace connectivity
         class OColumnAlias
         {
         public:
-            typedef enum {
-                BEGIN = 0,
-
-                FIRSTNAME = BEGIN,
-                LASTNAME,
-                DISPLAYNAME,
-                NICKNAME,
-                PRIMARYEMAIL,
-                SECONDEMAIL,
-                PREFERMAILFORMAT,
-                WORKPHONE,
-                HOMEPHONE,
-                FAXNUMBER,
-                PAGERNUMBER,
-                CELLULARNUMBER,
-                HOMEADDRESS,
-                HOMEADDRESS2,
-                HOMECITY,
-                HOMESTATE,
-                HOMEZIPCODE,
-                HOMECOUNTRY,
-                WORKADDRESS,
-                WORKADDRESS2,
-                WORKCITY,
-                WORKSTATE,
-                WORKZIPCODE,
-                WORKCOUNTRY,
-                JOBTITLE,
-                DEPARTMENT,
-                COMPANY,
-                WEBPAGE1,
-                WEBPAGE2,
-                BIRTHYEAR,
-                BIRTHMONTH,
-                BIRTHDAY,
-                CUSTOM1,
-                CUSTOM2,
-                CUSTOM3,
-                CUSTOM4,
-                NOTES,
-
-                END
-            } ProgrammaticName;
-
-            struct AliasDescription
+            struct AliasEntry
             {
-                ::rtl::OUString     sProgrammaticName;
-                ProgrammaticName    eProgrammaticNameIndex;
+                ::rtl::OString  programmaticAsciiName;
+                sal_Int32       columnPosition;
 
-                AliasDescription()
-                    :eProgrammaticNameIndex( END )
+                AliasEntry()
+                    :programmaticAsciiName()
+                    ,columnPosition( 0 )
                 {
                 }
-
-                AliasDescription( const ::rtl::OUString& _rName, ProgrammaticName _eIndex )
-                    :sProgrammaticName( _rName ), eProgrammaticNameIndex( _eIndex )
+                AliasEntry( const sal_Char* _programmaticAsciiName, sal_Int32 _columnPosition )
+                    :programmaticAsciiName( _programmaticAsciiName )
+                    ,columnPosition( _columnPosition )
                 {
                 }
             };
-
-            typedef ::std::map< ::rtl::OUString, AliasDescription > AliasMap;
+            typedef ::std::hash_map< ::rtl::OUString, AliasEntry, ::rtl::OUStringHash > AliasMap;
 
         private:
             AliasMap    m_aAliasMap;
 
-        protected:
-            ::osl::Mutex  m_aMutex;
-
         public:
-            OColumnAlias(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+            OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
-            ProgrammaticName getProgrammaticNameIndex( const ::rtl::OUString& _rAliasName ) const;
             inline bool hasAlias( const ::rtl::OUString& _rAlias ) const
             {
                 return m_aAliasMap.find( _rAlias ) != m_aAliasMap.end();
             }
-            ::rtl::OUString getProgrammaticNameOrFallbackToAlias( const ::rtl::OUString& _rAlias ) const;
+            ::rtl::OString getProgrammaticNameOrFallbackToUTF8Alias( const ::rtl::OUString& _rAlias ) const;
 
             inline AliasMap::const_iterator begin() const { return m_aAliasMap.begin(); }
             inline AliasMap::const_iterator end() const { return m_aAliasMap.end(); }
+
+            bool isColumnSearchable( const ::rtl::OUString _alias ) const;
 
         private:
             void initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );

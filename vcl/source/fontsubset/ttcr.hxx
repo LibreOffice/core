@@ -138,7 +138,7 @@ namespace vcl
  */
     TrueTypeTable *TrueTypeTableNew(sal_uInt32 tag,
                                     sal_uInt32 nbytes,
-                                    sal_uInt8 *ptr);
+                                    const sal_uInt8* ptr);
 
 /**
  * Creates a new 'head' table for a TrueType font.
@@ -149,7 +149,7 @@ namespace vcl
     TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
                                          sal_uInt16 flags,
                                          sal_uInt16 unitsPerEm,
-                                         sal_uInt8  *created,
+                                         const sal_uInt8  *created,
                                          sal_uInt16 macStyle,
                                          sal_uInt16 lowestRecPPEM,
                                          sal_Int16  fontDirectionHint);
@@ -177,7 +177,7 @@ namespace vcl
  * size specifies the size of existing maxp table for
  * error-checking purposes
  */
-    TrueTypeTable *TrueTypeTableNew_maxp(sal_uInt8 *maxp, int size);
+    TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size);
 
 /**
  * Creates a new empty 'glyf' table.

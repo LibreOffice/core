@@ -88,6 +88,7 @@
 #define IMG_STATE_VALID_HC              13
 #define IMG_STATE_BROKEN_HC             14
 #define IMG_STATE_NOTVALIDATED_HC       15
+#define FI_STATE_OLDSIGNATURE           16
 
 //#define DS_WIDTH                      DLGS_WIDTH
 //#define DS_HEIGHT                     DLGS_HEIGHT

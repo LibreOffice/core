@@ -83,7 +83,6 @@ using namespace ::rtl                           ;
 OComponentAccess::OComponentAccess( const Reference< XDesktop >& xOwner )
         //  Init baseclasses first
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        ,   OWeakObject     (                               )
         // Init member
         ,   m_xOwner        ( xOwner                        )
 {
@@ -97,20 +96,6 @@ OComponentAccess::OComponentAccess( const Reference< XDesktop >& xOwner )
 OComponentAccess::~OComponentAccess()
 {
 }
-
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
-DEFINE_XINTERFACE_3(    OComponentAccess                        ,
-                        OWeakObject                             ,
-                        DIRECT_INTERFACE(XTypeProvider      )   ,
-                        DIRECT_INTERFACE(XEnumerationAccess )   ,
-                        DIRECT_INTERFACE(XElementAccess     )   )
-
-DEFINE_XTYPEPROVIDER_3( OComponentAccess                        ,
-                        XTypeProvider                           ,
-                        XEnumerationAccess                      ,
-                        XElementAccess                          )
 
 //*****************************************************************************************************************
 //  XEnumerationAccess

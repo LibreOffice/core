@@ -32,9 +32,9 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef SOLARIS
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/XKBlib.h>
-#include <postx.h>
+#include <tools/postx.h>
 #endif
 
 #include <saldisp.hxx>

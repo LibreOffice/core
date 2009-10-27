@@ -51,11 +51,10 @@ public final class StarFunctionDescription extends WeakBase
     // attributes
 //     final private com.sun.star.report.meta.XFunctionCategory m_Category;
     private final FunctionDescription functionDescription;
-    private final FunctionRegistry functionRegistry;
     private final XFunctionCategory category;
     private final Locale defaultLocale;
 
-    public StarFunctionDescription(final DefaultFormulaContext defaultContext, final XComponentContext context, final XFunctionCategory category, final FunctionRegistry functionRegistry, final FunctionDescription functionDescription)
+    public StarFunctionDescription(final DefaultFormulaContext defaultContext, final XComponentContext context, final XFunctionCategory category, final FunctionDescription functionDescription)
     {
         m_xContext = context;
         this.category = category;
@@ -71,7 +70,6 @@ public final class StarFunctionDescription extends WeakBase
         this.defaultLocale = locale;
 
         this.functionDescription = functionDescription;
-        this.functionRegistry = functionRegistry;
         // use the last parameter of the PropertySetMixin constructor
         // for your optional attributes if necessary. See the documentation
         // of the PropertySetMixin helper for further information.
@@ -137,14 +135,14 @@ public final class StarFunctionDescription extends WeakBase
     {
         final int count = functionDescription.getParameterCount();
         final StringBuffer signature = new StringBuffer(getName());
-        signature.append("(");
+        signature.append('(');
         for (int i = 0; i < count; i++)
         {
             signature.append(functionDescription.getParameterDisplayName(i, defaultLocale));
             if ( i != (count - 1) )
-                signature.append(";");
+                signature.append(';');
         }
-        signature.append(")");
+        signature.append(')');
         return signature.toString();
     }
 
@@ -176,16 +174,16 @@ public final class StarFunctionDescription extends WeakBase
             throw new com.sun.star.lang.IllegalArgumentException();
 
         final StringBuffer formula = new StringBuffer(getName());
-        formula.append("(");
+        formula.append('(');
         for (int i = 0; i < arguments.length; ++i)
         {
             if ( arguments[i].length() == 0 )
                 break;
             formula.append(arguments[i]);
             if ( i < (arguments.length - 1) && arguments[i+1].length() != 0 )
-                formula.append(";");
+                formula.append(';');
         }
-        formula.append(")");
+        formula.append(')');
         return formula.toString();
     }
 }

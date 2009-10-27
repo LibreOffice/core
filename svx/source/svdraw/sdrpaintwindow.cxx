@@ -116,8 +116,9 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
     // When the buffer usage has changed then we have to create a new
     // overlay manager.  Save the current one so that later we can move its
     // overlay objects to the new one.
-    ::sdr::overlay::OverlayManager* pOldOverlayManager = NULL;
-    if (mbUseBuffer != bUseBuffer)
+    sdr::overlay::OverlayManager* pOldOverlayManager = NULL;
+
+    if(mbUseBuffer != bUseBuffer)
     {
         mbUseBuffer = bUseBuffer;
         pOldOverlayManager = mpOverlayManager;
@@ -134,15 +135,19 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
             if(GetPaintView().IsBufferedOverlayAllowed() && mbUseBuffer)
             {
                 // buffered OverlayManager, buffers it's background and refreshes from there
-                // for pure overlay changes (no system redraw). The 2nd parameter specifies
+                // for pure overlay changes (no system redraw). The 3rd parameter specifies
                 // if that refresh itself will use a 2nd vdev to avoid flickering.
-                mpOverlayManager = new ::sdr::overlay::OverlayManagerBuffered(GetOutputDevice(), sal_True);
+                // Also hand over the evtl. existing old OverlayManager; this means to take over
+                // the registered OverlayObjects from it
+                mpOverlayManager = new ::sdr::overlay::OverlayManagerBuffered(GetOutputDevice(), pOldOverlayManager, true);
             }
             else
             {
                 // unbuffered OverlayManager, just invalidates places where changes
                 // take place
-                mpOverlayManager = new ::sdr::overlay::OverlayManager(GetOutputDevice());
+                // Also hand over the evtl. existing old OverlayManager; this means to take over
+                // the registered OverlayObjects from it
+                mpOverlayManager = new ::sdr::overlay::OverlayManager(GetOutputDevice(), pOldOverlayManager);
             }
 
             OSL_ENSURE(mpOverlayManager, "SdrPaintWindow::SdrPaintWindow: Could not allocate an overlayManager (!)");
@@ -169,33 +174,10 @@ void SdrPaintWindow::impCreateOverlayManager(const bool bUseBuffer)
         }
     }
 
-    // Because we can not notify the creators of the overlay objects that
-    // belong to the old overlay manager we have to move these objects from
-    // the old to the new overlay manager and hope for the best (ie that the
-    // owner of the overlay objects did not store a pointer to the overlay
-    // manager but asks the view for the current one.)
-    if (pOldOverlayManager != NULL)
+    // OverlayObjects are transfered for the evtl. newly created OverlayManager by handing over
+    // at construction time
+    if(pOldOverlayManager)
     {
-        if (mpOverlayManager != NULL)
-        {
-            // Get a list of all overlay objects added to the old overlay
-            // manager.  This list is not modified when overlay objects are
-            // moved from one overlay manager to the other so its save to
-            // iterate over it.
-            ::boost::shared_ptr<sdr::overlay::OverlayObjectVector> pOverlayObjects (
-                pOldOverlayManager->GetOverlayObjects());
-            // Iterate over the list of overlay objects and move, not copy,
-            // them from the old to the new overlay manager.
-            sdr::overlay::OverlayObjectVector::iterator iOverlay;
-            for (iOverlay=pOverlayObjects->begin(); iOverlay!=pOverlayObjects->end(); ++iOverlay)
-            {
-                if (*iOverlay != NULL)
-                {
-                    pOldOverlayManager->remove(**iOverlay);
-                    mpOverlayManager->add(**iOverlay);
-                }
-            }
-        }
         // The old overlay manager is not used anymore and can be (has to be) deleted.
         delete pOldOverlayManager;
     }

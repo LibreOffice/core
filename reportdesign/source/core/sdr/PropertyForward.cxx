@@ -33,6 +33,7 @@
 #include <comphelper/property.hxx>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include "corestrings.hrc"
 
 //........................................................................
@@ -71,12 +72,12 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                 TPropertyNamePair::iterator aEnd = m_aNameMap.end();
                 for (; aIter != aEnd; ++aIter)
                 {
-                    Any aValue = _xDest->getPropertyValue(aIter->second);
                     Property aProp = m_xSourceInfo->getPropertyByName(aIter->first);
                     if (0 == (aProp.Attributes & PropertyAttribute::READONLY))
                     {
+                        Any aValue = _xDest->getPropertyValue(aIter->second.first);
                         if ( 0 != (aProp.Attributes & PropertyAttribute::MAYBEVOID) || aValue.hasValue() )
-                            _xSource->setPropertyValue(aIter->first,aValue);
+                            _xSource->setPropertyValue(aIter->first,aIter->second.second->operator()(aIter->second.first,aValue));
                     }
                 }
             }
@@ -86,13 +87,14 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
                 TPropertyNamePair::iterator aIter = m_aNameMap.begin();
                 TPropertyNamePair::iterator aEnd = m_aNameMap.end();
                 for (; aIter != aEnd; ++aIter)
-                    _xDest->setPropertyValue(aIter->second,_xSource->getPropertyValue(aIter->first));
+                    _xDest->setPropertyValue(aIter->second.first,aIter->second.second->operator()(aIter->second.first,_xSource->getPropertyValue(aIter->first)));
             }
             startListening();
         }
-        catch(Exception&)
+        catch(Exception& e)
         {
-            OSL_ENSURE(sal_False, "OPropertyMediator::OPropertyMediator: caught an exception!");
+            DBG_UNHANDLED_EXCEPTION();
+            (void)e;
         }
     } // if ( m_xDest.is() && m_xSource.is() )
     osl_decrementInterlockedCount(&m_refCount);
@@ -125,7 +127,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                         TPropertyNamePair::iterator aFind = m_aNameMap.find(evt.PropertyName);
                         ::rtl::OUString sPropName;
                         if ( aFind != m_aNameMap.end() )
-                            sPropName = aFind->second;
+                            sPropName = aFind->second.first;
                         else
                         {
                             aFind = ::std::find_if(
@@ -133,14 +135,14 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                                 m_aNameMap.end(),
                                 ::std::compose1(
                                 ::std::bind2nd(::std::equal_to< ::rtl::OUString >(), evt.PropertyName),
-                                    ::std::select2nd<TPropertyNamePair::value_type>()
+                                    ::std::compose1(::std::select1st<TPropertyConverter>(),::std::select2nd<TPropertyNamePair::value_type>())
                                 )
                             );
                             if ( aFind != m_aNameMap.end() )
                                 sPropName = aFind->first;
                         }
                         if ( sPropName.getLength() && xPropInfo->hasPropertyByName(sPropName) )
-                            xProp->setPropertyValue(sPropName,evt.NewValue);
+                            xProp->setPropertyValue(sPropName,aFind->second.second->operator()(sPropName,evt.NewValue));
                         else if (   evt.PropertyName == PROPERTY_CHARFONTNAME
                                 ||  evt.PropertyName == PROPERTY_CHARFONTSTYLENAME
                                 ||  evt.PropertyName == PROPERTY_CHARSTRIKEOUT

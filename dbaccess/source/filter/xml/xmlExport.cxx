@@ -106,6 +106,7 @@
 #include <svtools/filenotation.hxx>
 #include <svtools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
+#include <connectivity/DriversConfig.hxx>
 
 #include <boost/optional.hpp>
 
@@ -251,6 +252,7 @@ namespace dbaxml
 // -----------------------------------------------------------------------------
 ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nExportFlag)
 : SvXMLExport( _rxMSF,MAP_10TH_MM,XML_DATABASE, EXPORT_OASIS | nExportFlag)
+,m_aTypeCollection(_rxMSF)
 ,m_bAllreadyFilled(sal_False)
 {
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
@@ -339,6 +341,10 @@ void ODBExport::exportDataSource()
         xSettingsState->getPropertyDefault( INFO_DECIMALDELIMITER ) >>= aDelimiter.sDecimal;
         xSettingsState->getPropertyDefault( INFO_THOUSANDSDELIMITER ) >>= aDelimiter.sThousand;
 
+        ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
+        const ::rtl::OUString sURL = ::comphelper::getString(xProp->getPropertyValue(PROPERTY_URL));
+        ::comphelper::NamedValueCollection aDriverSupportedProperties( aDriverConfig.getProperties( sURL ) );
+
         static ::rtl::OUString s_sTrue(::xmloff::token::GetXMLToken( XML_TRUE ));
         static ::rtl::OUString s_sFalse(::xmloff::token::GetXMLToken( XML_FALSE ));
         // loop through the properties, and export only those which are not defaulted
@@ -397,7 +403,6 @@ void ODBExport::exportDataSource()
 
             PropertyMap aTokens[] =
             {
-                PropertyMap( INFO_JDBCDRIVERCLASS,      XML_JAVA_DRIVER_CLASS                           ),
                 PropertyMap( INFO_TEXTFILEHEADER,       XML_IS_FIRST_ROW_HEADER_LINE,       s_sTrue     ),
                 PropertyMap( INFO_SHOWDELETEDROWS,      XML_SHOW_DELETED,                   s_sFalse    ),
                 PropertyMap( INFO_ALLOWLONGTABLENAMES,  XML_IS_TABLE_NAME_LENGTH_LIMITED,   s_sTrue     ),
@@ -507,8 +512,11 @@ void ODBExport::exportDataSource()
                 }
                 else
                 {
-                    m_aDataSourceSettings.push_back( TypedPropertyValue(
-                        pProperties->Name, pProperties->Type, aValue ) );
+                    if ( !aDriverSupportedProperties.has(pProperties->Name) || aDriverSupportedProperties.get(pProperties->Name) != aValue )
+                    {
+                        m_aDataSourceSettings.push_back( TypedPropertyValue(
+                            pProperties->Name, pProperties->Type, aValue ) );
+                    }
                     continue;
                 }
             }
@@ -568,21 +576,10 @@ void ODBExport::exportApplicationConnectionSettings(const TSettingsMap& _aSettin
     exportDataSourceSettings();
 }
 // -----------------------------------------------------------------------------
-void ODBExport::exportJavaClassPath(const TSettingsMap& _aSettings)
-{
-    TSettingsMap::const_iterator aFind = _aSettings.find(XML_JAVA_CLASSPATH);
-    if ( aFind != _aSettings.end() )
-    {
-        AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,aFind->second);
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_JAVA_CLASSPATH, sal_True, sal_True);
-    }
-}
-// -----------------------------------------------------------------------------
 void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
 {
     const ::xmloff::token::XMLTokenEnum pSettings[] = {
-        XML_JAVA_DRIVER_CLASS
-        ,XML_SHOW_DELETED
+        XML_SHOW_DELETED
         ,XML_SYSTEM_DRIVER_SETTINGS
         ,XML_BASE_DN
         ,XML_IS_FIRST_ROW_HEADER_LINE
@@ -595,7 +592,6 @@ void ODBExport::exportDriverSettings(const TSettingsMap& _aSettings)
             AddAttribute(XML_NAMESPACE_DB, aFind->first,aFind->second);
     }
     SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DRIVER_SETTINGS, sal_True, sal_True);
-    exportJavaClassPath(_aSettings);
     exportAutoIncrement();
     exportDelimiter();
     exportCharSet();
@@ -609,8 +605,7 @@ void ODBExport::exportConnectionData()
         ::rtl::OUString sValue;
         Reference<XPropertySet> xProp(getDataSource());
         xProp->getPropertyValue(PROPERTY_URL) >>= sValue;
-        const ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(sValue);
-        if ( m_aTypeCollection.isFileSystemBased(eType) )
+        if ( m_aTypeCollection.isFileSystemBased(sValue) )
         {
             SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
             {
@@ -620,11 +615,16 @@ void ODBExport::exportConnectionData()
                 if ( sOrigUrl == sFileName )
                 {
                     ::svt::OFileNotation aTransformer( sFileName );
-                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(aTransformer.get( ::svt::OFileNotation::N_URL )));
+                    ::rtl::OUStringBuffer sURL( aTransformer.get( ::svt::OFileNotation::N_URL ) );
+                    if ( sURL.charAt(sURL.getLength()-1) != '/' )
+                        sURL.append(sal_Unicode('/'));
+
+                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(sURL.makeStringAndClear()));
                 } // if ( sOrigUrl == sFileName )
                 else
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,sOrigUrl);
-                AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(eType));
+                AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(sValue));
+                const ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.determineType(sValue);
                 try
                 {
                     ::rtl::OUString sExtension;
@@ -655,7 +655,7 @@ void ODBExport::exportConnectionData()
             {
                 SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
                 {
-                    String sType = m_aTypeCollection.getDatasourcePrefix(eType);
+                    String sType = m_aTypeCollection.getPrefix(sValue);
                     sType.EraseTrailingChars(':');
                     AddAttribute(XML_NAMESPACE_DB,XML_TYPE,sType);
                     AddAttribute(XML_NAMESPACE_DB,XML_HOSTNAME,sHostName);
@@ -664,19 +664,47 @@ void ODBExport::exportConnectionData()
                     if ( sDatabaseName.Len() )
                         AddAttribute(XML_NAMESPACE_DB,XML_DATABASE_NAME,sDatabaseName);
 
-                    Reference< XPropertySet > xDataSourceSettings;
-                    OSL_VERIFY( xProp->getPropertyValue( PROPERTY_SETTINGS ) >>= xDataSourceSettings );
-                    Reference< XPropertyState > xSettingsState( xDataSourceSettings, UNO_QUERY );
-                    Reference< XPropertySetInfo > xSettingsInfo;
-                    if ( xDataSourceSettings.is() )
-                        xSettingsInfo = xDataSourceSettings->getPropertySetInfo();
-                    static const ::rtl::OUString s_sLocalSocket(RTL_CONSTASCII_USTRINGPARAM("LocalSocket"));
-                    if ( xSettingsInfo.is() && xSettingsInfo->hasPropertyByName(s_sLocalSocket) )
+                    try
                     {
-                        ::rtl::OUString sSocket;
-                        if ( ( xDataSourceSettings->getPropertyValue(s_sLocalSocket) >>= sSocket ) && sSocket.getLength() )
-                            AddAttribute(XML_NAMESPACE_DB,XML_LOCAL_SOCKET,sSocket);
+                        Reference< XPropertySet > xDataSourceSettings( xProp->getPropertyValue( PROPERTY_SETTINGS ), UNO_QUERY_THROW );
+                        Reference< XPropertySetInfo > xSettingsInfo( xDataSourceSettings->getPropertySetInfo(), UNO_SET_THROW );
 
+                        struct PropertyMap
+                        {
+                            const sal_Char* pAsciiPropertyName;
+                            sal_uInt16      nAttributeId;
+
+                            PropertyMap() :pAsciiPropertyName( NULL ), nAttributeId(0) { }
+                            PropertyMap( const sal_Char* _pAsciiPropertyName, const sal_uInt16 _nAttributeId )
+                                :pAsciiPropertyName( _pAsciiPropertyName )
+                                ,nAttributeId( _nAttributeId )
+                            {
+                            }
+                        };
+                        PropertyMap aProperties[] =
+                        {
+                            PropertyMap( "LocalSocket", XML_LOCAL_SOCKET )
+                            //PropertyMap( "NamedPipe", 0 /* TODO */ )
+                        };
+
+                        for (   size_t i=0;
+                                i < sizeof( aProperties ) / sizeof( aProperties[0] );
+                                ++i
+                            )
+                        {
+                            const ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii( aProperties[i].pAsciiPropertyName );
+                            if ( xSettingsInfo->hasPropertyByName( sPropertyName ) )
+                            {
+                                ::rtl::OUString sPropertyValue;
+                                if ( ( xDataSourceSettings->getPropertyValue( sPropertyName ) >>= sPropertyValue ) && sPropertyValue.getLength() )
+                                    AddAttribute( XML_NAMESPACE_DB, XML_LOCAL_SOCKET, sPropertyValue );
+
+                            }
+                        }
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
 
                     SvXMLElementExport aServerDB(*this,XML_NAMESPACE_DB, XML_SERVER_DATABASE, sal_True, sal_True);

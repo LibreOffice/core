@@ -1148,9 +1148,9 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
 
             if ( m_pData->m_bIsFrameReleasedWithController )
             {
-                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, pDoc ) );
+                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEVIEW ), pDoc ) );
                 if ( !pView )
-                    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, pDoc) );
+                    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), pDoc) );
             }
 
             REFERENCE< XMODEL > xModel = pDoc->GetModel();

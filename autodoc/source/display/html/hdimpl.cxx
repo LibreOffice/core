@@ -288,19 +288,6 @@ Get_LinkedTypeText( csi::xml::Element &             o_rOut,
         << sPostName;
 }
 
-
-csi::html::Table &
-Create_ChildListTable( csi::xml::Element &     o_rParentElement,
-                       const char *            i_sTitle,
-                       const char *            i_sLabel )
-{
-    Create_ChildListLabel(o_rParentElement, i_sLabel);
-    csi::html::Table & ret = Create_ChildListTable(i_sTitle);
-    o_rParentElement << &ret;
-
-    return ret;
-}
-
 void
 Create_ChildListLabel( csi::xml::Element &     o_rParentElement,
                        const char *            i_sLabel )

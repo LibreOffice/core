@@ -1,4 +1,5 @@
-/*************************************************************************
+/**************************************************************************
+ *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -36,9 +37,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 
-#ifndef _INTN_HXX //autogen
 // #include <tools/intn.hxx>
-#endif
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/prnmon.hxx>
@@ -46,6 +45,7 @@
 #include <svx/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svtools/syslocale.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
 #include <fmtfsize.hxx>
@@ -355,8 +355,8 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
     aStr.AppendAscii(sTmp);
     aStr += pField->GetPar1();
     aStr += ' ';
-    aStr += GetAppLocaleData().getDate( pField->GetDate() );
-    pIDCO->Insert( aPam, aStr, true );
+    aStr += SvtSysLocale().GetLocaleData().getDate( pField->GetDate() );
+    pIDCO->InsertString( aPam, aStr );
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
@@ -364,7 +364,7 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
-    pIDCO->Insert( aPam, aStr, true );
+    pIDCO->InsertString( aPam, aStr );
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     pIDCO->SplitNode( *aPam.GetPoint(), false );
 }
@@ -455,7 +455,7 @@ void lcl_PrintPostItsEndDoc( ViewShell* pPrtShell,
     aPam.Move( fnMoveBackward, fnGoDoc );
     aPam.SetMark();
     aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->Delete( aPam );
+    pPrtDoc->DeleteRange( aPam );
 
     for( USHORT i = 0, nVirtPg, nLineNo; i < nPostIts; ++i )
     {
@@ -504,7 +504,7 @@ void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
     aPam.Move( fnMoveBackward, fnGoDoc );
     aPam.SetMark();
     aPam.Move( fnMoveForward, fnGoDoc );
-    pPrtDoc->Delete( aPam );
+    pPrtDoc->DeleteRange( aPam );
 
     while( i < nPostIts )
     {
@@ -752,7 +752,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     // Wir bauen uns ein neues Dokument
     SwDoc *pPrtDoc = new SwDoc;
     pPrtDoc->acquire();
-    pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
+    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -770,9 +770,11 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     const Point aSelPoint = pFESh->IsTableMode() ?
@@ -838,7 +840,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     // Wir bauen uns ein neues Dokument
 //    SwDoc *pPrtDoc = new SwDoc;
 //    pPrtDoc->acquire();
-//    pPrtDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)rDocShellRef );
+//    pPrtDoc->SetRefForDocShell( boost::addressof(rDocShellRef) );
     pPrtDoc->LockExpFlds();
 
     // Der Drucker wird uebernommen
@@ -858,9 +860,11 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
-    SwShellCrsr *pFirstCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetNext());
+    SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
     if( !pActCrsr->HasMark() ) // bei Multiselektion kann der aktuelle Cursor leer sein
-        pActCrsr = (SwShellCrsr*)*((SwCursor*)pActCrsr->GetPrev());
+    {
+        pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
+    }
 
     // Die Y-Position der ersten Selektion
     // Die Y-Position der ersten Selektion
@@ -1297,7 +1301,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                                             aSize.Width() = aSize.Height();
                                             aSize.Height() = nWidth;
                                     }
-                                    Paper ePaper = SvxPaperInfo::GetSvPaper(aSize,MAP_TWIP,TRUE);
+                                    Paper ePaper = SvxPaperInfo::GetSvxPaper(aSize,MAP_TWIP,TRUE);
                                     if ( PAPER_USER == ePaper )
                                             pPrt->SetPaperSizeUser( aSize );
                                     else
@@ -1514,7 +1518,9 @@ BOOL ViewShell::IsAnyFieldInDoc() const
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            //#i101026# mod: do not include postits in field check
+            const SwField* pFld = pFmtFld->GetFld();
+            if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() && (pFld->Which() != RES_POSTITFLD))
                 return TRUE;
         }
     return FALSE;

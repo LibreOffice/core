@@ -180,6 +180,11 @@ namespace sdr
                 GetSdrObject().SendUserCall(SDRUSERCALL_CHGATTR, rChange.GetRectangle(a));
             }
         }
+
+        sal_uInt32 BaseProperties::getVersion() const
+        {
+            return 0;
+        }
     } // end of namespace properties
 } // end of namespace sdr
 

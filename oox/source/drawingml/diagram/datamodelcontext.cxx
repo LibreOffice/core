@@ -30,7 +30,6 @@
 
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/skipcontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/shapepropertiescontext.hxx"
@@ -78,8 +77,7 @@ public:
             switch( aElementToken )
             {
             case NMSP_DIAGRAM|XML_extLst:
-                xRet.set( new SkipContext( *this ) );
-                break;
+                return xRet;
             default:
                 break;
             }
@@ -167,8 +165,7 @@ public:
             switch( aElementToken )
             {
             case NMSP_DIAGRAM|XML_extLst:
-                xRet.set( new SkipContext( *this ) );
-                break;
+                return xRet;
             case NMSP_DIAGRAM|XML_prSet:
                 // TODO
                 // CT_ElemPropSet
@@ -266,7 +263,7 @@ public:
             case NMSP_DRAWINGML|XML_pattFill:
             case NMSP_DRAWINGML|XML_solidFill:
                 // EG_FillProperties
-                xRet.set( FillPropertiesGroupContext::StaticCreateContext(
+                xRet.set( FillPropertiesContext::createFillContext(
                     *this, aElementToken, xAttribs, *mpDataModel->getFillProperties() ) );
                 break;
             case NMSP_DRAWINGML|XML_effectDag:
@@ -327,11 +324,9 @@ DataModelContext::createFastChildContext( ::sal_Int32 aElement,
     case NMSP_DIAGRAM|XML_whole:
         // CT_WholeE2oFormatting
         // TODO
-        xRet.set( new SkipContext( *this ) );
-        break;
+        return xRet;
     case NMSP_DIAGRAM|XML_extLst:
-        xRet.set( new SkipContext( *this ) );
-        break;
+        return xRet;
     default:
         break;
     }

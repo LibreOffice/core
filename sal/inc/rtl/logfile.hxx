@@ -189,12 +189,19 @@ namespace rtl
 
 #define RTL_LOGFILE_PRODUCT_TRACE( string )  \
             rtl_logfile_longTrace( "| : %s\n", string )
-#define RTL_LOGFILE_PRODUCT_CONTEXT( instance, name ) \
-            ::rtl::Logfile instance( name )
 #define RTL_LOGFILE_PRODUCT_TRACE1( frmt, arg1 ) \
              rtl_logfile_longTrace( "| : " ); \
              rtl_logfile_trace( frmt, arg1 ); \
              rtl_logfile_trace( "\n" )
+#define RTL_LOGFILE_PRODUCT_CONTEXT( instance, name ) \
+            ::rtl::Logfile instance( name )
+#define RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( instance, frmt, arg1 ) \
+        rtl_logfile_longTrace( "| %s : ", \
+                           instance.getName() ); \
+             rtl_logfile_trace( frmt, arg1 ); \
+             rtl_logfile_trace( "\n" )
+#define RTL_LOGFILE_HASLOGFILE() \
+             rtl_logfile_hasLogFile()
 
 
 #endif

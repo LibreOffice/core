@@ -51,29 +51,6 @@ SLOFILES =	$(SLO)$/eppt.obj				\
             $(SLO)$/pptexanimations.obj		\
             $(SLO)$/pptexsoundcollection.obj
 
-SHL1TARGET	=	emp$(DLLPOSTFIX)
-SHL1IMPLIB	=	eppt
-SHL1VERSIONMAP=exports.map
-SHL1DEF 	=	$(MISC)$/$(SHL1TARGET).def
-SHL1LIBS	=	$(SLB)$/eppt.lib
-
-DEF1NAME=$(SHL1TARGET)
-
-SHL1STDLIBS = 	$(SVXLIB)			\
-                $(SFX2LIB)          \
-                $(SVTOOLLIB)		\
-                $(SOTLIB)           \
-                $(GOODIESLIB)		\
-                $(VCLLIB)			\
-                $(SOTLIB)			\
-                $(UNOTOOLSLIB)		\
-                $(TOOLSLIB) 		\
-                $(UCBHELPERLIB)		\
-                $(CPPULIB)			\
-                $(SALLIB)			\
-                $(COMPHELPERLIB)	\
-                $(I18NISOLANGLIB)
-
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk

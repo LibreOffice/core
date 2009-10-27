@@ -193,7 +193,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
         {
             if (pHdl == NULL &&
 //              pView->TakeTextEditObject(aMDPos, pObj, pPV) )
-                pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKTEXTEDIT) )
+                pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT) )
             {
                 SdrOutliner* pO = MakeOutliner();
                 lcl_UpdateHyphenator( *pO, pObj );
@@ -250,7 +250,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
             BOOL bMacro = FALSE;
 
 //          if (bMacro && pView->TakeMacroObject(aMDPos,pObj,pPV))
-            if (bMacro && pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKMACRO) )
+            if (bMacro && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
 
             {
                 pView->BegMacroObj(aMDPos,pObj,pPV,pWindow);

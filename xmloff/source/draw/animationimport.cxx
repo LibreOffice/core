@@ -472,7 +472,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
         case XML_FONT_WEIGHT:       nType = XML_TYPE_TEXT_WEIGHT;               break;
         case XML_FONT_STYLE:        nType = XML_TYPE_TEXT_POSTURE;              break;
         case XML_TEXT_UNDERLINE:    nType = XML_TYPE_TEXT_UNDERLINE_STYLE;      break;
-        case XML_FONT_SIZE:         nType = XML_TYPE_CHAR_HEIGHT;               break;
+        case XML_FONT_SIZE:         nType = XML_TYPE_DOUBLE_PERCENT;            break;
         case XML_VISIBILITY:        nType = XML_SD_TYPE_PRESPAGE_VISIBILITY;    break;
 
         default:

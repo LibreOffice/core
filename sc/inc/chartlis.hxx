@@ -41,6 +41,7 @@
 
 #include <memory>
 #include <vector>
+#include <list>
 #include <hash_set>
 
 class ScDocument;
@@ -131,9 +132,31 @@ public:
                         { return !operator==( r ); }
 };
 
+// ============================================================================
+
+class ScChartHiddenRangeListener
+{
+public:
+    ScChartHiddenRangeListener();
+    virtual ~ScChartHiddenRangeListener();
+    virtual void notify() = 0;
+};
+
+// ============================================================================
+
 class ScChartListenerCollection : public ScStrCollection
 {
+public:
+    struct RangeListenerItem
+    {
+        ScRange                     maRange;
+        ScChartHiddenRangeListener* mpListener;
+        explicit RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p);
+    };
+
 private:
+    ::std::list<RangeListenerItem> maHiddenListeners;
+
     Timer           aTimer;
     ScDocument*     pDoc;
 
@@ -173,6 +196,24 @@ public:
     void            UpdateChartsContainingTab( SCTAB nTab );
 
     BOOL            operator==( const ScChartListenerCollection& );
+
+    /**
+     * Start listening on hide/show change within specified cell range.  A
+     * single listener may listen on multiple ranges when the caller passes
+     * the same pointer multiple times with different ranges.
+     *
+     * Note that the caller is responsible for managing the life-cycle of the
+     * listener instance.
+     */
+    void            StartListeningHiddenRange( const ScRange& rRange,
+                                               ScChartHiddenRangeListener* pListener );
+
+    /**
+     * Remove all ranges associated with passed listener instance from the
+     * list of hidden range listeners.  This does not delete the passed
+     * listener instance.
+     */
+    void            EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
 };
 
 

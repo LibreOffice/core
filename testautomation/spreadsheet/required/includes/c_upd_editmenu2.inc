@@ -589,14 +589,15 @@ testcase tEditImageMap
     printlog " Click on 'Active'-button"
     Aktiv.Click
     '/// Click on 'Macro...'-button
-    printlog " Click on 'Macro...'-button"
-    Makro.Click
-    Kontext "MakroZuweisen"
-    Call DialogTest ( MakroZuweisen )
-    '/// Close 'Assign Macro'-dialog with Cancel
-    printlog " Close 'Assign Macro'-dialog with Cancel"
-    MakroZuweisen.Cancel
-    Kontext "ImageMapEditor"
+	printlog " Click on 'Macro...'-button"
+	warnlog "Due to #i102720# this functionality is outcommented"
+'		Makro.Click
+'		Kontext "MakroZuweisen"
+'		Call DialogTest ( MakroZuweisen )
+'		'/// Close 'Assign Macro'-dialog with Cancel
+'		printlog " Close 'Assign Macro'-dialog with Cancel"
+'		MakroZuweisen.Cancel
+'		Kontext "ImageMapEditor"
     '/// Click on 'Properties'-button
     printlog " Click on 'Properties'-button"
     Eigenschaften.Click

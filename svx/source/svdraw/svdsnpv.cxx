@@ -93,11 +93,16 @@ void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
     if(rNewPosition != maPosition)
     {
         // apply to OverlayObjects
-        basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(
-            rNewPosition.getX() - maPosition.getX(),
-            rNewPosition.getY() - maPosition.getY());
-        maObjects.transform(aMatrix);
+        for(sal_uInt32 a(0); a < maObjects.count(); a++)
+        {
+            sdr::overlay::OverlayCrosshairStriped* pCandidate =
+                static_cast< sdr::overlay::OverlayCrosshairStriped* >(&maObjects.getOverlayObject(a));
+
+            if(pCandidate)
+            {
+                pCandidate->setBasePosition(rNewPosition);
+            }
+        }
 
         // remember new position
         maPosition = rNewPosition;
@@ -167,11 +172,17 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
     if(rNewPosition != maPosition)
     {
         // apply to OverlayObjects
-        basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(
-            rNewPosition.getX() - maPosition.getX(),
-            rNewPosition.getY() - maPosition.getY());
-        maObjects.transform(aMatrix);
+        // apply to OverlayObjects
+        for(sal_uInt32 a(0); a < maObjects.count(); a++)
+        {
+            sdr::overlay::OverlayHelplineStriped* pCandidate =
+                static_cast< sdr::overlay::OverlayHelplineStriped* >(&maObjects.getOverlayObject(a));
+
+            if(pCandidate)
+            {
+                pCandidate->setBasePosition(rNewPosition);
+            }
+        }
 
         // remember new position
         maPosition = rNewPosition;

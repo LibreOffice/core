@@ -163,15 +163,17 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             break;
 
         case OBJ_CAPTION:
-            if( bCapVertical && pObj )
+        {
+            SdrCaptionObj* pCaptObj = dynamic_cast<SdrCaptionObj*>(pObj);
+            if( bCapVertical && pCaptObj )
             {
-                SdrCaptionObj* pCaptObj = (SdrCaptionObj*)pObj;
                 pCaptObj->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pCaptObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
                     pOPO->SetVertical( TRUE );
             }
-            break;
+        }
+        break;
         default:; //prevent warning
         }
     }

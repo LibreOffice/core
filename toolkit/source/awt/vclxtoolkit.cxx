@@ -55,6 +55,18 @@
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <rtl/process.h>
+
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#elif (defined QUARTZ)
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
+#endif
+#include <vcl/sysdata.hxx>
+
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
@@ -108,12 +120,6 @@
 #include <vcl/wrkwin.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 
-#ifdef QUARTZ
-#include "premac.h"
-#include <Cocoa/Cocoa.h>
-#include "postmac.h"
-#endif
-#include <vcl/sysdata.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 

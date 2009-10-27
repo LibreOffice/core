@@ -142,7 +142,8 @@ void DXFPalette::SetColor(BYTE nIndex, BYTE nRed, BYTE nGreen, BYTE nBlue)
 
 DXFRepresentation::DXFRepresentation()
 {
-  setTextEncoding(RTL_TEXTENCODING_IBM_437);
+    setTextEncoding(RTL_TEXTENCODING_IBM_437);
+        setGlobalLineTypeScale(1.0);
 }
 
 
@@ -217,10 +218,17 @@ void DXFRepresentation::ReadHeader(DXFGroupReader & rDGR)
                                          // FIXME: we really need a whole table of
                                          // $DWGCODEPAGE to encodings mappings
                                          if ( (strcmp(rDGR.GetS(),"ANSI_932")==0) ||
-                                              (strcmp(rDGR.GetS(),"DOS932")==0) )
+                          (strcmp(rDGR.GetS(),"ansi_932")==0) ||
+                                              (strcmp(rDGR.GetS(),"DOS932")==0) ||
+                                              (strcmp(rDGR.GetS(),"dos932")==0) )
                                          {
                                                  setTextEncoding(RTL_TEXTENCODING_MS_932);
                                          }
+                                 }
+                 else if (strcmp(rDGR.GetS(),"$LTSCALE")==0)
+                                 {
+                                         rDGR.Read();
+                                         setGlobalLineTypeScale(getGlobalLineTypeScale() * rDGR.GetF());
                                  }
                                  else rDGR.Read();
                          }

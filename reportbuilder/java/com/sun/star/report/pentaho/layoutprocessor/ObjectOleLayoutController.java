@@ -30,7 +30,6 @@
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import com.sun.star.report.SDBCReportDataFactory;
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.model.ObjectOleElement;
 import java.util.ArrayList;

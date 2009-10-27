@@ -30,7 +30,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Functions for HTML-Test
 '*
@@ -213,10 +213,11 @@ function wSetClipboardtestDefaults(ForWhat as string) as boolean
         
         Case else
             Warnlog "Unknown object!"
-    
     end select
+
     try
         EditCopy
+        EditCopy 'and a second time to make sure..
         wSetClipboardtestDefaults = True
     catch
         QAErrorlog "Error jump to beginning of document!"

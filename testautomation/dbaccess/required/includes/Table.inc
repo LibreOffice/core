@@ -151,7 +151,7 @@ testcase tSortDescending
 endcase
 '-------------------------------------------------------------------------
 testcase tAutoFilter
-
+    
     '/// open a new table
     printlog "open a new table"
     initTable

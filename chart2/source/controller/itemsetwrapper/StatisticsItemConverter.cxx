@@ -108,7 +108,7 @@ uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
 {
     // todo: use a valid context
     return uno::Reference< beans::XPropertySet >(
-        new ::chart::ErrorBar( uno::Reference< uno::XComponentContext >()));
+        ::chart::createErrorBar( uno::Reference< uno::XComponentContext >()));
 }
 
 void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBarProp,

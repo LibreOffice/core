@@ -40,7 +40,7 @@ DEPTARGET=veras
 .INCLUDE :	settings.mk
 
 # --- Allgemein ----------------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 .IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
 CDEFS+= -DEDITDEBUG
 .ENDIF
@@ -63,6 +63,7 @@ SHL1OBJS=		$(SLO)$/eras.obj
 SHL1VERSIONMAP=exports.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
+.ENDIF
 
 # ==========================================================================
 

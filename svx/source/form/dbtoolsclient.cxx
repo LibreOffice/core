@@ -34,7 +34,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 #include <osl/diagnose.h>
 #include <connectivity/formattedcolumnvalue.hxx>
 

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -52,27 +52,27 @@ sub main
 
     gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odp")
-        Call tiDatei_Fuer_Anordnen_Erstellen ' is needed for the following test :-( ueber vars are set here
-        Call tdContextSendBackward
-        Call tdContextBringForward
-        Call tdContextSendToBack
-        Call tdContextBringToFront
-        Call tdContextInFrontOfObject
-        Call tdContextBehindObject
-        Call tdContextReverse
+    Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odp")
+    Call tiDatei_Fuer_Anordnen_Erstellen ' is needed for the following test :-( ueber vars are set here
+    Call tdContextSendBackward
+    Call tdContextBringForward
+    Call tdContextSendToBack
+    Call tdContextBringToFront
+    Call tdContextInFrontOfObject
+    Call tdContextBehindObject
+    Call tdContextReverse
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odg")
-        Call tiDatei_Fuer_Anordnen_Erstellen ' is needed for the following test :-( ueber vars are set here
-        Call tdContextSendBackward
-        Call tdContextBringForward
-        Call tdContextSendToBack
-        Call tdContextBringToFront
-        Call tdContextInFrontOfObject
-        Call tdContextBehindObject
-        Call tdContextReverse
+    Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odg")
+    Call tiDatei_Fuer_Anordnen_Erstellen ' is needed for the following test :-( ueber vars are set here
+    Call tdContextSendBackward
+    Call tdContextBringForward
+    Call tdContextSendToBack
+    Call tdContextBringToFront
+    Call tdContextInFrontOfObject
+    Call tdContextBehindObject
+    Call tdContextReverse
 
     Call hStatusOut
 end sub

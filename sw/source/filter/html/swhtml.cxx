@@ -50,9 +50,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -81,7 +79,6 @@
 #include <charatr.hxx>
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
-#include <fmthbsh.hxx>
 #include <txtfld.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
@@ -99,9 +96,7 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>        // fuer SwBookmark ...
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>       // fuer Start/EndAction
 #include <docufld.hxx>
 #include <swcss1.hxx>
@@ -239,7 +234,7 @@ ULONG HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const 
         // sonst ist sie schon gesetzt.
         if( !rDoc.get(IDocumentSettingAccess::HTML_MODE) )
         {
-            rDoc.Insert( rPam, SwFmtPageDesc(
+            rDoc.InsertPoolItem( rPam, SwFmtPageDesc(
                 rDoc.GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
         }
     }
@@ -334,6 +329,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bInFootEndNoteSymbol( FALSE ),
 //    bIgnoreHTMLComments( bNoHTMLComments )
     bIgnoreHTMLComments( bNoHTMLComments ),
+    bRemoveHidden( FALSE ),
     pTempViewFrame(0)
 {
     nEventId = 0;
@@ -501,10 +497,17 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     {
         // keiner will mehr das Doc haben, also weg damit
         delete pDoc;
+        pDoc = NULL;
     }
 
     if ( pTempViewFrame )
+    {
         pTempViewFrame->DoClose();
+
+        // the temporary view frame is hidden, so the hidden flag might need to be removed
+        if ( bRemoveHidden && pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
+            pDoc->GetDocShell()->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
+    }
 }
 
 IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
@@ -1278,7 +1281,9 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 pPageDesc = pCSS1Parser->GetRightPageDesc();
 
             if( pPageDesc )
-                pDoc->Insert( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
+            {
+                pDoc->InsertPoolItem( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
+            }
         }
         break;
 
@@ -1341,11 +1346,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                     xDocProps = xDPS->getDocumentProperties();
                     DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
                 }
-                // always call ParseMetaOptions, it sets the encoding (#i96700#)
-                if (!ParseMetaOptions( xDocProps, pHTTPHeader ) && IsNewDoc())
-                {
-                    ParseMoreMetaOptions();
-                }
+                ParseMetaOptions( xDocProps, pHTTPHeader );
             }
         }
         break;
@@ -1436,11 +1437,11 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_NONBREAKSPACE:
-        pDoc->Insert( *pPam, CHAR_HARDBLANK );
+        pDoc->InsertString( *pPam, CHAR_HARDBLANK );
         break;
 
     case HTML_SOFTHYPH:
-        pDoc->Insert( *pPam, CHAR_SOFTHYPHEN );
+        pDoc->InsertString( *pPam, CHAR_SOFTHYPHEN );
         break;
 
     case HTML_LINEFEEDCHAR:
@@ -1482,7 +1483,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         {
             if( !bDocInitalized )
                 DocumentDetected();
-            pDoc->Insert( *pPam, aToken, true );
+            pDoc->InsertString( *pPam, aToken );
 
             // wenn es noch vorlaefige Absatz-Attribute gibt, der Absatz aber
             // nicht leer ist, dann sind die Absatz-Attribute entgueltig.
@@ -2190,9 +2191,9 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                         {
                             const String& rText = pTxtNd->GetTxt();
                             sal_uInt16 nScriptTxt =
-                                pBreakIt->xBreak->getScriptType(
+                                pBreakIt->GetBreakIter()->getScriptType(
                                             rText, pAttr->GetSttCnt() );
-                            xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                            xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptTxt );
                             while( nScriptEnd < nEndCnt )
                             {
@@ -2212,9 +2213,9 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                                         pNext->InsertPrev( pSetAttr );
                                 }
                                 nStt = nScriptEnd;
-                                nScriptTxt = pBreakIt->xBreak->getScriptType(
+                                nScriptTxt = pBreakIt->GetBreakIter()->getScriptType(
                                                 rText, nStt );
-                                nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                                nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptTxt );
                             }
                             bInsert = nScriptItem == nScriptTxt;
@@ -2303,7 +2304,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
         SwpHints& rHints = pTxtNd->GetSwpHints();
         for( sal_uInt16 i=0; i < nCntAttr; i++ )
         {
-            SwTxtAttr *pHt = rHints.GetHt( i );
+            SwTxtAttr *pHt = rHints.GetTextHint( i );
             sal_uInt16 nWhich = pHt->Which();
             sal_Int16 nIdx = -1;
             if( RES_CHRATR_CJK_FONT <= nWhich &&
@@ -2336,7 +2337,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                         // also delete the SwpHints!!! To avoid any trouble
                         // we leave the loop immediately if this is the last
                         // hint.
-                        pTxtNd->Delete( pHt, sal_True );
+                        pTxtNd->DeleteAttribute( pHt );
                         if( 1 == nCntAttr )
                             break;
                         i--;
@@ -2613,8 +2614,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                        ( !pAttr->IsLikePara() &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
                          pAttr->GetEndCnt() < nEndCnt &&
-                         RES_CHRATR_BEGIN <= nWhich &&
-                         RES_TXTATR_WITHEND_END > nWhich ) ||
+                         (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich)) ) ||
                        ( bBeforeTable &&
                          nEndParaIdx == rEndIdx.GetIndex() &&
                          !pAttr->GetEndCnt() );
@@ -2663,9 +2663,8 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                 {
                     // durch die elende Loescherei von Nodes kann auch mal
                     // ein Index auf einen End-Node zeigen :-(
-                    if( pAttr->GetSttPara() == pAttr->GetEndPara() &&
-                        (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                         nWhich >= RES_TXTATR_NOEND_END) )
+                    if ( (pAttr->GetSttPara() == pAttr->GetEndPara()) &&
+                         !isTXTATR_NOEND(nWhich) )
                     {
                         // wenn der End-Index auch auf den Node zeigt
                         // brauchen wir auch kein Attribut mehr zu setzen,
@@ -2696,9 +2695,8 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                 pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->nSttCntnt );
 
                 pAttrPam->SetMark();
-                if( pAttr->GetSttPara() != pAttr->GetEndPara() &&
-                    (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                     nWhich >= RES_TXTATR_NOEND_END) )
+                if ( (pAttr->GetSttPara() != pAttr->GetEndPara()) &&
+                         !isTXTATR_NOEND(nWhich) )
                 {
                     pCNd = pDoc->GetNodes()[ pAttr->nEndPara ]->GetCntntNode();
                     if( !pCNd )
@@ -2738,8 +2736,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                     // muessen wir es im Node davor beenden oder wegschmeissen,
                     // wenn es erst in dem Node beginnt
                     if( nWhich != RES_BREAK && nWhich != RES_PAGEDESC &&
-                        (nWhich < RES_TXTATR_NOEND_BEGIN ||
-                         nWhich >= RES_TXTATR_NOEND_END) )
+                         !isTXTATR_NOEND(nWhich) )
                     {
                         if( pAttrPam->GetMark()->nNode.GetIndex() !=
                             rEndIdx.GetIndex() )
@@ -2825,7 +2822,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         eJumpTo = JUMPTO_NONE;
                     }
 
-                    pDoc->Insert( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
+                    pDoc->InsertPoolItem( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
                 }
                 pAttrPam->DeleteMark();
 
@@ -2907,7 +2904,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             pAttrPam->Move( fnMoveBackward );
         }
 
-        pDoc->Insert( *pAttrPam, *pAttr->pItem, 0 );
+        pDoc->InsertPoolItem( *pAttrPam, *pAttr->pItem, 0 );
 
         aFields.Remove( 0, 1 );
         delete pAttr;
@@ -3011,9 +3008,9 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                                             .GetTxtNode();
         ASSERT( pTxtNd, "No text node" );
         const String& rText = pTxtNd->GetTxt();
-        sal_uInt16 nScriptTxt = pBreakIt->xBreak->getScriptType(
+        sal_uInt16 nScriptTxt = pBreakIt->GetBreakIter()->getScriptType(
                         rText, pAttr->GetSttCnt() );
-        xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+        xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                     ->endOfScript( rText, pAttr->GetSttCnt(), nScriptTxt );
         while( nScriptEnd < nEndCnt )
         {
@@ -3031,9 +3028,9 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                 }
             }
             pAttr->nSttCntnt = nScriptEnd;
-            nScriptTxt = pBreakIt->xBreak->getScriptType(
+            nScriptTxt = pBreakIt->GetBreakIter()->getScriptType(
                             rText, nScriptEnd );
-            nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+            nScriptEnd = (xub_StrLen)pBreakIt->GetBreakIter()
                     ->endOfScript( rText, nScriptEnd, nScriptTxt );
         }
         bInsert = nScriptItem == nScriptTxt;
@@ -4945,7 +4942,7 @@ void SwHTMLParser::InsertSpacer()
             {
                 NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
                 String aTmp( ' ' );
-                pDoc->Insert( *pPam, aTmp /*, CHARSET_ANSI*/, true );
+                pDoc->InsertString( *pPam, aTmp );
                 EndAttr( aAttrTab.pKerning );
             }
         }
@@ -5153,7 +5150,7 @@ void SwHTMLParser::InsertLineBreak()
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
         String sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
-        pDoc->Insert( *pPam, sTmp, true );
+        pDoc->InsertString( *pPam, sTmp );
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )
     {
@@ -5501,3 +5498,32 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 
     pAttr->pPrev = pPrv;
 }
+
+bool SwHTMLParser::ParseMetaOptions(
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+        SvKeyValueIterator *i_pHeader )
+{
+    // always call base ParseMetaOptions, it sets the encoding (#i96700#)
+    bool ret( HTMLParser::ParseMetaOptions(i_xDocProps, i_pHeader) );
+    if (!ret && IsNewDoc())
+    {
+        ParseMoreMetaOptions();
+    }
+    return ret;
+}
+
+// override so we can parse DOCINFO field subtypes INFO[1-4]
+void SwHTMLParser::AddMetaUserDefined( ::rtl::OUString const & i_rMetaName )
+{
+    // unless we already have 4 names, append the argument to m_InfoNames
+    ::rtl::OUString* pName // the first empty string in m_InfoNames
+         (!m_InfoNames[0].getLength() ? &m_InfoNames[0] :
+         (!m_InfoNames[1].getLength() ? &m_InfoNames[1] :
+         (!m_InfoNames[2].getLength() ? &m_InfoNames[2] :
+         (!m_InfoNames[3].getLength() ? &m_InfoNames[3] : 0 ))));
+    if (pName)
+    {
+        (*pName) = i_rMetaName;
+    }
+}
+

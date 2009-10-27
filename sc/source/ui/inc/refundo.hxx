@@ -37,9 +37,6 @@ class ScDocument;
 class ScDBCollection;
 class ScRangeName;
 class ScPrintRangeSaver;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivotCollection;
-#endif
 class ScDPCollection;
 class ScChartCollection;
 class ScConditionalFormatList;
@@ -54,9 +51,6 @@ private:
     ScDBCollection*             pDBCollection;
     ScRangeName*                pRangeName;
     ScPrintRangeSaver*          pPrintRanges;
-#if OLD_PIVOT_IMPLEMENTATION
-    ScPivotCollection*          pPivotCollection;
-#endif
     ScDPCollection*             pDPCollection;
     ScConditionalFormatList*    pCondFormList;
     ScDetOpList*                pDetOpList;

@@ -590,7 +590,7 @@ bool AddressConverter::checkCellAddress( const CellAddress& rAddress, bool bTrac
         checkRow( rAddress.Row, bTrackOverflow );
 }
 
-bool AddressConverter::convertToCellAddressUnckecked( CellAddress& orAddress,
+bool AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet )
 {
     orAddress.Sheet = nSheet;
@@ -601,7 +601,7 @@ bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
 {
     return
-        convertToCellAddressUnckecked( orAddress, rString, nSheet ) &&
+        convertToCellAddressUnchecked( orAddress, rString, nSheet ) &&
         checkCellAddress( orAddress, bTrackOverflow );
 }
 
@@ -618,7 +618,7 @@ CellAddress AddressConverter::createValidCellAddress(
     return aAddress;
 }
 
-void AddressConverter::convertToCellAddressUnckecked( CellAddress& orAddress,
+void AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
         const BinAddress& rBinAddress, sal_Int16 nSheet )
 {
     orAddress.Sheet  = nSheet;
@@ -629,7 +629,7 @@ void AddressConverter::convertToCellAddressUnckecked( CellAddress& orAddress,
 bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
         const BinAddress& rBinAddress, sal_Int16 nSheet, bool bTrackOverflow )
 {
-    convertToCellAddressUnckecked( orAddress, rBinAddress, nSheet );
+    convertToCellAddressUnchecked( orAddress, rBinAddress, nSheet );
     return checkCellAddress( orAddress, bTrackOverflow );
 }
 

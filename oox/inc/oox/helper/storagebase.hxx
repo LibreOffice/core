@@ -66,7 +66,7 @@ public:
                             bool bBaseStreamAccess );
 
     explicit            StorageBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
     virtual             ~StorageBase();
@@ -161,7 +161,7 @@ private:
 
     SubStorageMap       maSubStorages;      /// Map of direct sub storages.
     XInputStreamRef     mxInStream;         /// Cached base input stream (to keep it alive).
-    XStreamRef          mxStream;           /// Cached base output stream (to keep it alive).
+    XStreamRef          mxOutStream;        /// Cached base output stream (to keep it alive).
     ::rtl::OUString     maStorageName;      /// Name of this storage, if it is a substorage.
     const StorageBase*  mpParentStorage;    /// Parent storage if this is a sub storage.
     bool                mbBaseStreamAccess; /// True = access base streams with empty stream name.

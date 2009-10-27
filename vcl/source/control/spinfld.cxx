@@ -599,7 +599,12 @@ long SpinField::Notify( NotifyEvent& rNEvt )
     {
         if ( ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) && !IsReadOnly() )
         {
-            if( ! GetSettings().GetMouseSettings().GetNoWheelActionWithoutFocus() || HasChildPathFocus() )
+            USHORT nWheelBehavior( GetSettings().GetMouseSettings().GetWheelBehavior() );
+            if  (   ( nWheelBehavior == MOUSE_WHEEL_ALWAYS )
+                ||  (   ( nWheelBehavior == MOUSE_WHEEL_FOCUS_ONLY )
+                    &&  HasChildPathFocus()
+                    )
+                )
             {
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
                 if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )

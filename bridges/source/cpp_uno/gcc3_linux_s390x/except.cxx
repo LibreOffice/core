@@ -33,6 +33,7 @@
 #include "precompiled_bridges.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>

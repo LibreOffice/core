@@ -471,6 +471,17 @@ USHORT SvxEditEngineForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rEditEngine.GetLineLen(nPara, nLine);
 }
 
+void SvxEditEngineForwarder::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nPara, USHORT nLine ) const
+{
+    rEditEngine.GetLineBoundaries(rStart, rEnd, nPara, nLine);
+}
+
+USHORT SvxEditEngineForwarder::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    return rEditEngine.GetLineNumberAtIndex(nPara, nIndex);
+}
+
+
 sal_Bool SvxEditEngineForwarder::QuickFormatDoc( BOOL )
 {
     rEditEngine.QuickFormatDoc();

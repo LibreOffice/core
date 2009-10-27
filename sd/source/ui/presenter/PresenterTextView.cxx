@@ -33,6 +33,7 @@
 
 #include "PresenterTextView.hxx"
 
+#include <i18npool/mslangid.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
@@ -52,6 +53,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/util/Color.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -381,9 +384,9 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
-        aTable[0].nLang = aOpt.nDefaultLanguage;
-        aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
-        aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
+        aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
+        aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
+        aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
         //
         for (int i = 0;  i < 3;  ++i)
         {

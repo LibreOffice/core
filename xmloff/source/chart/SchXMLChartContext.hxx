@@ -114,7 +114,9 @@ private:
 
     ::rtl::OUString maMainTitle, maSubTitle;
     com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
-    sal_Bool mbHasOwnTable;
+    ::rtl::OUString m_aXLinkHRefAttributeToIndicateDataProvider;
+    bool m_bHasRangeAtPlotArea;
+    bool m_bHasTableElement;
     sal_Bool mbAllRangeAddressesAvailable;
     sal_Bool mbColHasLabels;
     sal_Bool mbRowHasLabels;
@@ -136,23 +138,14 @@ private:
     ::com::sun::star::awt::Size maChartSize;
 
     /** @descr  This method bundles some settings to the chart model and executes them with
-            a locked controller.  This includes setting the draw page size and setting
-            the chart type.
-        @param  aChartSize  The size the draw page will be set to.
-        @param  bDomainForDefaultDataNeeded This flag indicates wether the chart's data set
-            has to contain a domain value.
+            a locked controller.  This includes setting the chart type.
         @param  aServiceName The name of the service the diagram is initialized with.
         @param  bSetWitchData   Indicates wether the data set takes it's data series from
             rows or from columns.
     */
-    void    InitChart   (com::sun::star::awt::Size aChartSize,
-                        sal_Bool bDomainForDefaultDataNeeded,
-                        const ::rtl::OUString & rChartTypeServiceName,
+    void    InitChart   (const ::rtl::OUString & rChartTypeServiceName,
                         sal_Bool bSetSwitchData);
 
-    void ChangeDiagramAccordingToTemplate(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xNewDoc );
-    ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex );
     void MergeSeriesForStockChart();
 };
 

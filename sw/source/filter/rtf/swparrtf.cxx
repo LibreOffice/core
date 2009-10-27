@@ -55,7 +55,6 @@
 #include <svx/hyznitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfld.hxx>
-#include <fmthbsh.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
 #include <txtftn.hxx>
@@ -118,6 +117,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/outlobj.hxx>
+#include <svx/paperinf.hxx>
 
 #include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -447,7 +447,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         rtfSections::myrDummyIter aDEnd = maSegments.maDummyPageNos.rend();
         for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
             pDoc->DelPageDesc(*aI);
-
 
         if( aFlyArr.Count() )
             SetFlysInDoc();
@@ -851,7 +850,8 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     aSet.Put(SvxFrameDirectionItem(
         nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
-    rSection.mpSection = mrReader.pDoc->Insert( rMyPaM, aSection, &aSet );
+    rSection.mpSection =
+        mrReader.pDoc->InsertSwSection( rMyPaM, aSection, &aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
@@ -1002,7 +1002,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                     aIter->maStart.GetNode().GetCntntNode(), 0);
                 SwPaM aPage(aPamStart);
 
-                mrReader.pDoc->Insert(aPage, aPgDesc, 0);
+                mrReader.pDoc->InsertPoolItem(aPage, aPgDesc, 0);
             }
             ++nDesc;
         }
@@ -1649,7 +1649,8 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
                 SwTableLine* pSplitLine = rLns[ nLines-2 ];
                 SwTableBox* pSplitBox = pSplitLine->GetTabBoxes()[ 0 ];
                 SwNodeIndex aSplitIdx( *pSplitBox->GetSttNd() );
-                pDoc->SplitTable( aSplitIdx, HEADLINE_NONE, !isTableKeep );
+                pDoc->SplitTable( SwPosition(aSplitIdx), HEADLINE_NONE,
+                    !isTableKeep );
                 SwTable& rSplitTable=aSplitIdx.GetNode().FindTableNode()->GetTable();
                 aSplitIdx-=2;
                 pDoc->GetNodes().Delete(aSplitIdx);
@@ -1667,7 +1668,7 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
         if (isTableKeep)
         {
             SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
-            pDoc->SplitTable( aTmpIdx, HEADLINE_NONE, FALSE );
+            pDoc->SplitTable( SwPosition(aTmpIdx), HEADLINE_NONE, FALSE );
             SwTable& rSplitTable=aTmpIdx.GetNode().FindTableNode()->GetTable();
             aTmpIdx-=2;
             pDoc->GetNodes().Delete(aTmpIdx);
@@ -1822,7 +1823,8 @@ void SwRTFParser::NextToken( int nToken )
             if (lcl_UsedPara(*pPam))
                 InsertPara();
             CheckInsNewTblLine();
-            pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+            pDoc->InsertPoolItem(*pPam,
+                SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
         }
         break;
 
@@ -1946,7 +1948,9 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_REVDTTM:
-        pRedlineInsert->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
+        if (pRedlineInsert != NULL)
+            pRedlineInsert->aStamp = sw::ms::DTTM2DateTime(nTokenValue);
+
         break;
 
     case RTF_REVDTTMDEL:
@@ -1972,12 +1976,13 @@ void SwRTFParser::NextToken( int nToken )
                 &const_cast<const SwDoc *>(pDoc)
                 ->GetPageDesc( USHORT(nTokenValue) );
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;
 
     case RTF_COLUM:
-        pDoc->Insert( *pPam, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
+        pDoc->InsertPoolItem(*pPam,
+                SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
         break;
 
     case RTF_DXFRTEXT:      // werden nur im Zusammenhang mit Flys ausgewertet
@@ -1997,7 +2002,7 @@ SETCHDATEFIELD:
             SwDateTimeField aDateFld( (SwDateTimeFieldType*)
                                         pDoc->GetSysFldType( RES_DATETIMEFLD ), DATEFLD, nFormat);
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aDateFld ), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtFld( aDateFld ), 0);
         }
         break;
 
@@ -2009,7 +2014,7 @@ SETCHDATEFIELD:
             SwDateTimeField aTimeFld( (SwDateTimeFieldType*)
                     pDoc->GetSysFldType( RES_DATETIMEFLD ), TIMEFLD, nFormat);
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aTimeFld ), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtFld( aTimeFld ), 0);
         }
         break;
 
@@ -2019,7 +2024,7 @@ SETCHDATEFIELD:
                                     pDoc->GetSysFldType( RES_PAGENUMBERFLD ),
                                     PG_RANDOM, SVX_NUM_ARABIC );
             CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SwFmtFld( aPageFld), 0);
+            pDoc->InsertPoolItem(*pPam, SwFmtFld(aPageFld), 0);
         }
         break;
 
@@ -2049,7 +2054,7 @@ SETCHDATEFIELD:
             CheckInsNewTblLine();
             if( nTokenValue )
                 aToken = (sal_Unicode )nTokenValue;
-            pDoc->Insert( *pPam, aToken, true );
+            pDoc->InsertString( *pPam, aToken );
         }
         break;
 
@@ -2115,7 +2120,7 @@ void SwRTFParser::InsertText()
     if(pRedlineDelete)
         mpRedlineStack->open(*pPam->GetPoint(), *pRedlineDelete);
 
-    pDoc->Insert( *pPam, aToken, true );
+    pDoc->InsertString( *pPam, aToken );
 
     if(pRedlineDelete)
     {
@@ -2279,14 +2284,15 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                 }
             } while( 0 != (pStyle = GetStyleTbl().Next()) );
 
-            pDoc->Insert(aPam, *pCharFmt, 0);
+            pDoc->InsertPoolItem(aPam, *pCharFmt, 0);
             rSet.GetAttrSet().ClearItem(RES_TXTATR_CHARFMT);     //test hack
         }
         if (rSet.GetAttrSet().Count())
         {
             // dann setze ueber diesen Bereich die Attrbiute
             SetSwgValues(rSet.GetAttrSet());
-            pDoc->Insert(aPam, rSet.GetAttrSet(), nsSetAttrMode::SETATTR_DONTCHGNUMRULE);
+            pDoc->InsertItemSet(aPam, rSet.GetAttrSet(),
+                    nsSetAttrMode::SETATTR_DONTCHGNUMRULE);
         }
     }
 
@@ -2448,7 +2454,7 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
         {
             SwFmtPageDesc aPgDsc( &rPg );
             aPgDsc.SetNumOffset( nPgStart );
-            pDoc->Insert( *pPam, aPgDsc, 0 );
+            pDoc->InsertPoolItem( *pPam, aPgDsc, 0 );
         }
     }
 }
@@ -3295,7 +3301,8 @@ void SwRTFParser::ReadPageDescTbl()
 
     SvxULSpaceItem aUL( RES_UL_SPACE ), aHUL( RES_UL_SPACE ), aFUL( RES_UL_SPACE );
     SvxLRSpaceItem aLR( RES_LR_SPACE ), aHLR( RES_LR_SPACE ), aFLR( RES_LR_SPACE );
-    SwFmtFrmSize aSz( ATT_FIX_SIZE, 11905, 16837 );     // DIN A4 defaulten
+    Size a4 = SvxPaperInfo::GetPaperSize(PAPER_A4);
+    SwFmtFrmSize aSz( ATT_FIX_SIZE, a4.Width(), a4.Height() );     // DIN A4 defaulten
     SwFmtFrmSize aFSz( ATT_MIN_SIZE ), aHSz( ATT_MIN_SIZE );
 
     SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
@@ -3358,8 +3365,7 @@ void SwRTFParser::ReadPageDescTbl()
 #ifndef CFRONT
     SETPAGEDESC_DEFAULTS:
 #endif
-            // aSz = pPgFmt->GetFrmSize();
-            aSz.SetWidth( 11905 ); aSz.SetHeight( 16837 );      // DIN A4 defaulten
+            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() );
             aLR.SetLeft( 0 );   aLR.SetRight( 0 );
             aUL.SetLower( 0 );  aUL.SetUpper( 0 );
             aHLR.SetLeft( 0 );  aHLR.SetRight( 0 );
@@ -3415,8 +3421,7 @@ void SwRTFParser::ReadPageDescTbl()
             aHUL.SetLower( 0 ); aHUL.SetUpper( 0 );
             aFLR.SetLeft( 0 );  aFLR.SetRight( 0 );
             aFUL.SetLower( 0 ); aFUL.SetUpper( 0 );
-//          aSz = pPgFmt->GetFrmSize();
-            aSz.SetWidth( 11905 ); aSz.SetHeight( 16837 );      // DIN A4 defaulten
+            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() ); // DIN A4 default
             nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
             aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
             aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
@@ -3708,7 +3713,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ));
             pHdFtFmt = pDoc->MakeFlySection( FLY_IN_CNTNT, pPam->GetPoint(), &aSet );
 
-            pTxtAttr = pPam->GetNode()->GetTxtNode()->GetTxtAttr(
+            pTxtAttr = pPam->GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                                                 nPos, RES_TXTATR_FLYCNT );
             ASSERT( pTxtAttr, "konnte den Fly nicht einfuegen/finden" );
 
@@ -4294,7 +4299,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
         {
             const SwPageDesc* pPgDsc = &const_cast<const SwDoc *>(pDoc)
                 ->GetPageDesc( (USHORT)nTokenValue );
-            pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ), 0);
+            pDoc->InsertPoolItem( *pPam, SwFmtPageDesc( pPgDsc ), 0);
         }
         break;
     case RTF_CS:

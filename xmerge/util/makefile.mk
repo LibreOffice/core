@@ -33,4 +33,6 @@ TARGET=xmrg_util
 PRJ=..
 
 .INCLUDE : ant.mk
+.IF "$(L10N_framework)"==""
 ALLTAR: ANTBUILD
+.ENDIF

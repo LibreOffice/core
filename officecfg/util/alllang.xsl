@@ -61,7 +61,7 @@
 			<xsl:choose>
 				<xsl:when test="string-length($locale)">
 			        <xsl:apply-templates select = "@*" mode="locale"/>
-					<xsl:apply-templates mode="locale"/>
+					<xsl:apply-templates select = "node|prop" mode="locale"/>
 				</xsl:when>
 				<xsl:otherwise>
 			        <xsl:apply-templates select = "@*"/>
@@ -85,7 +85,7 @@
                 <xsl:if test="descendant::value[@xml:lang=$locale]/../value[not (@xml:lang)]">
   			        <xsl:copy>
 				        <xsl:apply-templates select = "@*" mode="locale"/>
-				        <xsl:apply-templates mode = "locale"/>
+				        <xsl:apply-templates select = "node|prop|value" mode = "locale"/>
 			        </xsl:copy>
                 </xsl:if>
             </xsl:when>
@@ -93,7 +93,7 @@
                 <xsl:if test="descendant::value[@xml:lang = $locale]">
   			        <xsl:copy>
 				        <xsl:apply-templates select = "@*" mode="locale"/>
-				        <xsl:apply-templates mode = "locale"/>
+				        <xsl:apply-templates select = "node|prop|value" mode = "locale"/>
 			        </xsl:copy>
                 </xsl:if>
             </xsl:otherwise>

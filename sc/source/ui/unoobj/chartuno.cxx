@@ -255,14 +255,19 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
             if( xReceiver.is())
             {
+                String sRangeStr;
+                xNewRanges->Format(sRangeStr, SCR_ABS_3D, pDoc);
+
                 // connect
-                xReceiver->attachDataProvider( xDataProvider );
+                if( sRangeStr.Len() )
+                    xReceiver->attachDataProvider( xDataProvider );
+                else
+                    sRangeStr = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "all" ) );
+
                 uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
                 xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
                 // set arguments
-                String sRangeStr;
-                xNewRanges->Format(sRangeStr, SCR_ABS_3D, pDoc);
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
                     ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,

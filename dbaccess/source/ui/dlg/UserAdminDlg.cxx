@@ -180,7 +180,7 @@ DBG_NAME(OUserAdminDlg)
         return m_pImpl->getDriver();
     }
     // -----------------------------------------------------------------------------
-    ::dbaccess::DATASOURCE_TYPE OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
+    ::rtl::OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }

@@ -95,7 +95,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
 
             // create a range list from the token sequence
             ApiCellRangeList aRanges;
-            rParser.extractCellRangeList( aRanges, aContext.getTokens() );
+            rParser.extractCellRangeList( aRanges, aContext.getTokens(), false );
             aRangeRep = rParser.generateApiRangeListString( aRanges );
         }
         else if( !rDataSeq.maData.empty() )

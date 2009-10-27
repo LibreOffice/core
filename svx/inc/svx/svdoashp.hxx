@@ -105,7 +105,7 @@ private:
     // #i37011# render geometry shadow
     SdrObject*                                          mpLastShadowGeometry;
 
-    static SVX_DLLPRIVATE com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape );
+    static com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeEngine > GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape );
 
 //  SVX_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::drawing::XCustomShapeHandle > >
 //      SdrObjCustomShape::GetInteraction( const SdrObjCustomShape* pCustomShape ) const;
@@ -134,7 +134,7 @@ public:
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
     sal_Bool GetTextBounds( Rectangle& rTextBound ) const;
     sal_Bool IsTextPath() const;
-    static SVX_DLLPRIVATE basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed );
+    static basegfx::B2DPolyPolygon GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed );
 
 protected:
 
@@ -199,6 +199,8 @@ public:
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
+    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+
     virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
 
     // special drag methods
@@ -222,8 +224,6 @@ public:
     virtual void TakeTextAnchorRect( Rectangle& rAnchorRect ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE,
         Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void operator=(const SdrObject& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;

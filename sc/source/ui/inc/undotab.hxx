@@ -52,11 +52,15 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <memory>
+
 class ScDocShell;
 class ScDocument;
 class SdrUndoAction;
 class ScPrintRangeSaver;
 class SdrObject;
+class ScDocProtection;
+class ScTableProtection;
 
 //----------------------------------------------------------------------------
 
@@ -335,14 +339,15 @@ private:
     void DoChange( BOOL bShow ) const;
 };
 
+// ============================================================================
 
-class ScUndoProtect : public ScSimpleUndo
+/** This class implements undo & redo of document protect & unprotect
+    operations. */
+class ScUndoDocProtect : public ScSimpleUndo
 {
 public:
-                    TYPEINFO();
-                    ScUndoProtect( ScDocShell* pShell, SCTAB nNewTab,
-                                    BOOL bNewProtect, const com::sun::star::uno::Sequence<sal_Int8>& rNewPassword );
-    virtual         ~ScUndoProtect();
+                    ScUndoDocProtect(ScDocShell* pShell, ::std::auto_ptr<ScDocProtection> pProtectSettings);
+    virtual         ~ScUndoDocProtect();
 
     virtual void    Undo();
     virtual void    Redo();
@@ -352,11 +357,34 @@ public:
     virtual String  GetComment() const;
 
 private:
-    SCTAB   nTab;
-    BOOL    bProtect;
-    com::sun::star::uno::Sequence<sal_Int8> aPassword;
+    ::std::auto_ptr<ScDocProtection> mpProtectSettings;
 
-    void    DoProtect( BOOL bDo );
+    void    DoProtect(bool bProtect);
+};
+
+// ============================================================================
+
+/** This class implements undo & redo of both protect and unprotect of
+    sheet. */
+class ScUndoTabProtect : public ScSimpleUndo
+{
+public:
+                    ScUndoTabProtect(ScDocShell* pShell, SCTAB nTab,
+                                     ::std::auto_ptr<ScTableProtection> pProtectSettings);
+    virtual         ~ScUndoTabProtect();
+
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
+
+private:
+    SCTAB   mnTab;
+    ::std::auto_ptr<ScTableProtection> mpProtectSettings;
+
+    void    DoProtect(bool bProtect);
 };
 
 
@@ -465,26 +493,26 @@ private:
 };
 
 
-class ScUndoSetGrammar : public ScSimpleUndo
-{
-public:
-                    TYPEINFO();
-                    ScUndoSetGrammar( ScDocShell* pShell,
-                                      formula::FormulaGrammar::Grammar eGrammar );
-    virtual         ~ScUndoSetGrammar();
-
-    virtual void    Undo();
-    virtual void    Redo();
-    virtual void    Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
-
-    virtual String  GetComment() const;
-
-private:
-    formula::FormulaGrammar::Grammar meNewGrammar, meOldGrammar;
-
-    void DoChange( formula::FormulaGrammar::Grammar eGrammar );
-};
+//UNUSED2009-05 class ScUndoSetGrammar : public ScSimpleUndo
+//UNUSED2009-05 {
+//UNUSED2009-05 public:
+//UNUSED2009-05                     TYPEINFO();
+//UNUSED2009-05                     ScUndoSetGrammar( ScDocShell* pShell,
+//UNUSED2009-05                                       formula::FormulaGrammar::Grammar eGrammar );
+//UNUSED2009-05     virtual         ~ScUndoSetGrammar();
+//UNUSED2009-05
+//UNUSED2009-05     virtual void    Undo();
+//UNUSED2009-05     virtual void    Redo();
+//UNUSED2009-05     virtual void    Repeat(SfxRepeatTarget& rTarget);
+//UNUSED2009-05     virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+//UNUSED2009-05
+//UNUSED2009-05     virtual String  GetComment() const;
+//UNUSED2009-05
+//UNUSED2009-05 private:
+//UNUSED2009-05     formula::FormulaGrammar::Grammar meNewGrammar, meOldGrammar;
+//UNUSED2009-05
+//UNUSED2009-05     void DoChange( formula::FormulaGrammar::Grammar eGrammar );
+//UNUSED2009-05 };
 
 #endif
 

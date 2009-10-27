@@ -96,7 +96,7 @@ class SwBasicEscherEx : public EscherEx
 private:
     void Init();
 protected:
-    SwWW8Writer& rWrt;
+    WW8Export& rWrt;
     SvStream* pEscherStrm;
     SvStream* pPictStrm;
     long mnEmuMul, mnEmuDiv;
@@ -121,7 +121,7 @@ protected:
     SdrLayerID GetInvisibleHellId() const;
 
 public:
-    SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
+    SwBasicEscherEx(SvStream* pStrm, WW8Export& rWrt, UINT32 nDrawings = 1);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
@@ -161,7 +161,7 @@ private:
     virtual void SetPicId(const SdrObject &rSdrObj, UINT32 nShapeId,
         EscherPropertyContainer &rPropOpt);
 public:
-    SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt );
+    SwEscherEx( SvStream* pStrm, WW8Export& rWW8Wrt );
     virtual ~SwEscherEx();
     void FinishEscher();
     virtual void WritePictures();

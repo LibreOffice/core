@@ -84,7 +84,7 @@ published service NamedRange
         @see com::sun::star::sheet::FormulaToken
         @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::NAME
 
-        @since OOo 2.x
+        @since OOo 3.0
      */
     [optional, readonly, property] long TokenIndex;
 

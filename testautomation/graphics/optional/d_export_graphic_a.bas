@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -44,17 +44,17 @@ global ExtensionString as String
 sub main
     Printlog "--------------------- Graphics Export Test ------------------- "
 
-    Call hStatusIn ( "Graphics","d_export_graphic_a.bas", "Graphics Export Test" )
+    Call hStatusIn ( "Graphics","d_export_graphic_a.bas" )
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\export_graphic.inc"
 
-if bAsianLan then
-    qaErrorLog "#i71631# - Test deactivated with Asian languages due to bug"
-    Call hStatusOut
-    exit sub
-endif
+    if bAsianLan then
+        qaErrorLog "#i71631# - Test deactivated with Asian languages due to bug"
+        Call hStatusOut
+        exit sub
+    endif
 
     Call sFileExport 'OBSERVE - This line must run before the following testcases!
     Call tEPS   '///+-   Encapsulated PostScript            ///'

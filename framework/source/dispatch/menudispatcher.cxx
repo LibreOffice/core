@@ -36,8 +36,9 @@
 //_________________________________________________________________________________________________________________
 #include <dispatch/menudispatcher.hxx>
 #include <general.h>
-#include <classes/menuconfiguration.hxx>
+#include <xml/menuconfiguration.hxx>
 #include <classes/addonmenu.hxx>
+#include <services.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -62,6 +63,7 @@
 #include <tools/rcid.h>
 #include <vos/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <rtl/logfile.hxx>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -388,7 +390,7 @@ IMPL_LINK( MenuDispatcher, Close_Impl, void*, EMPTYARG )
     css::util::URL aURL;
     aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseWin");
     css::uno::Reference< css::util::XURLTransformer >  xTrans ( m_xFactory->createInstance(
-                        ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), css::uno::UNO_QUERY );
+                        SERVICENAME_URLTRANSFORMER ), css::uno::UNO_QUERY );
     if( xTrans.is() )
     {
         // Datei laden
@@ -434,26 +436,6 @@ sal_Bool MenuDispatcher::impldbg_checkParameter_MenuDispatcher(   const   uno::R
             ( &xOwner       ==  NULL        )   ||
             ( xFactory.is() ==  sal_False   )   ||
             ( xOwner.is()   ==  sal_False   )
-        )
-    {
-        bOK = sal_False ;
-    }
-    // Return result of check.
-    return bOK ;
-}
-
-//*****************************************************************************************************************
-// We don't know anything about right values of aURL and seqArguments!
-// Check valid references only.
-sal_Bool MenuDispatcher::impldbg_checkParameter_dispatch(  const   URL&                        aURL        ,
-                                                                const   Sequence< PropertyValue >&  seqArguments)
-{
-    // Set default return value.
-    sal_Bool bOK = sal_True;
-    // Check parameter.
-    if  (
-            ( &aURL         ==  NULL    )   ||
-            ( &seqArguments ==  NULL    )
         )
     {
         bOK = sal_False ;

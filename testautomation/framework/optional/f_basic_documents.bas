@@ -41,9 +41,8 @@ sub main
 
     use "framework\optional\includes\basic_documents.inc"
 
-
     call hStatusIn( "framework" , "f_basic_documents.bas" )
-    call tBasicDocuments
+    call tBasicDocuments()
     call hStatusOut()
 
 end sub
@@ -65,7 +64,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_listfuncs.inc"
     
     use "framework\tools\includes\init_tools.inc"
-
 
     gApplication = "WRITER"
     call GetUseFiles()

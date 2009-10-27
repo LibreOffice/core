@@ -82,9 +82,9 @@ private:
 
 // ============================================================================
 
-/** This class is used to export BIFF record streams.
+/** This class is used to write BIFF record streams.
 
-    An instance is constructed with an BinaryOutputStream object and the
+    An instance is constructed with a BinaryOutputStream object and the
     maximum size of BIFF record contents (e.g. 2080 bytes in BIFF2-BIFF5, or
     8224 bytes in BIFF8).
 

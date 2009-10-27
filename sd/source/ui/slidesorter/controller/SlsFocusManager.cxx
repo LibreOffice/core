@@ -205,6 +205,9 @@ void FocusManager::FocusPage (sal_Int32 nPageIndex)
         FocusHider aHider (*this);
         mnPageIndex = nPageIndex;
     }
+
+    if (HasFocus() && !IsFocusShowing())
+        ShowFocus();
 }
 
 

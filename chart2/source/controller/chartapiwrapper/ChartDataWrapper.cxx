@@ -37,7 +37,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "CommonFunctors.hxx"
-#include "InternalDataProvider.hxx"
+#include "ChartModelHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "Chart2ModelContact.hxx"
@@ -580,7 +580,7 @@ void ChartDataWrapper::applyData( bool bSetValues, bool bSetRowDescriptions, boo
 
         // create a data provider containing the new data
         uno::Reference< chart2::data::XDataProvider > xTempDataProvider(
-            new InternalDataProvider());
+             ChartModelHelper::createInternalDataProvider() );
         if( ! xTempDataProvider.is())
             throw uno::RuntimeException( C2U("Couldn't create temporary data provider"),
                                          static_cast< ::cppu::OWeakObject * >( this ));

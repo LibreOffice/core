@@ -29,6 +29,7 @@
  ************************************************************************/
 package com.sun.star.wizards.form;
 
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
@@ -40,39 +41,35 @@ import com.sun.star.wizards.ui.*;
 public class FormWizard extends WizardDialog
 {
 
-    CommandFieldSelection curDBCommandFieldSelection;
-    FormConfiguration curFormConfiguration;
-    CommandFieldSelection curSubFormFieldSelection;
-    FormDocument curFormDocument;
-    FieldLinker curFieldLinker;
-    UIControlArranger curControlArranger;
-    DataEntrySetter CurDataEntrySetter;
-    StyleApplier curStyleApplier;
-    Finalizer curFinalizer;
-    static String slblFields;
-    static String slblSelFields;
-    String sShowBinaryFields = "";
-    String sMsgWizardName = "";
-    String serrFormNameexists = "";
-    public static final int SONULLPAGE = 0;
-    public static final int SOMAINPAGE = 1;
-    public static final int SOSUBFORMPAGE = 2;
-    public static final int SOSUBFORMFIELDSPAGE = 3;
-    public static final int SOFIELDLINKERPAGE = 4;
-    public static final int SOCONTROLPAGE = 5;
-    public static final int SODATAPAGE = 6;
-    public static final int SOSTYLEPAGE = 7;
-    public static final int SOSTOREPAGE = 8;
+    private CommandFieldSelection curDBCommandFieldSelection;
+    private FormConfiguration curFormConfiguration;
+    private CommandFieldSelection curSubFormFieldSelection;
+    private FormDocument curFormDocument;
+    private FieldLinker curFieldLinker;
+    private UIControlArranger curControlArranger;
+    private DataEntrySetter CurDataEntrySetter;
+    private StyleApplier curStyleApplier;
+    private Finalizer curFinalizer;
+    private static String slblFields;
+    private static String slblSelFields;
+    private String sShowBinaryFields = "";
+    private String serrFormNameexists = "";
+    public static final int SOMAIN_PAGE = 1;
+    public static final int SOSUBFORM_PAGE = 2;
+    public static final int SOSUBFORMFIELDS_PAGE = 3;
+    public static final int SOFIELDLINKER_PAGE = 4;
+    public static final int SOCONTROL_PAGE = 5;
+    public static final int SODATA_PAGE = 6;
+    public static final int SOSTYLE_PAGE = 7;
+    public static final int SOSTORE_PAGE = 8;
     public static final int SOCOLUMNARLEFT = 1;
     public static final int SOCOLUMNARTOP = 2;
     public static final int SOGRID = 3;
     public static final int SOTOPJUSTIFIED = 4;
-    String WizardHeaderText[] = new String[8];
-    String slblTables;
-    boolean bFormOpenMode;
-    boolean bcreateForm = false;
-    String FormName;
-    Short NBorderValue = null;
+    private String slblTables;
+    private boolean bFormOpenMode;
+    private boolean bcreateForm = false;
+    private String FormName;
 
     public FormWizard(XMultiServiceFactory xMSF)
     {
@@ -94,11 +91,12 @@ public class FormWizard extends WizardDialog
         }
     }
 
+    // @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         try
         {
-            if ((nOldStep < SOCONTROLPAGE) && (nNewStep >= SOCONTROLPAGE))
+            if ((nOldStep < SOCONTROL_PAGE) && (nNewStep >= SOCONTROL_PAGE))
             {
                 curFormDocument.initialize(curDBCommandFieldSelection.isModified(), curFormConfiguration.hasSubForm(), curSubFormFieldSelection.isModified(), getBorderType());
                 curDBCommandFieldSelection.setModified(false);
@@ -106,29 +104,51 @@ public class FormWizard extends WizardDialog
             }
             switch (nNewStep)
             {
-                case SOMAINPAGE:
+                case SOMAIN_PAGE:
                     curDBCommandFieldSelection.setModified(false);
                     break;
-                case SOSUBFORMPAGE:
-                    RelationController oRelationController = new RelationController(curFormDocument.oMainFormDBMetaData, curDBCommandFieldSelection.getSelectedCommandName());
+                case SOSUBFORM_PAGE:
+                {
+                    final String sCommandName = curDBCommandFieldSelection.getSelectedCommandName();
+                    RelationController oRelationController = new RelationController(curFormDocument.oMainFormDBMetaData, sCommandName);
                     curFormConfiguration.initialize(curSubFormFieldSelection, oRelationController);
+                }
                     break;
-                case SOSUBFORMFIELDSPAGE:
-                    String spreselectedTableName = curFormConfiguration.getreferencedTableName();
-                    curSubFormFieldSelection.preselectCommand(spreselectedTableName, (spreselectedTableName.length() > 0));
+                case SOSUBFORMFIELDS_PAGE:
+                {
+                    String sPreSelectedTableName = curFormConfiguration.getreferencedTableName();
+                    boolean bReadOnly = (sPreSelectedTableName.length() > 0);
+                    if (sPreSelectedTableName.length() == 0)
+                    {
+                        final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
+                        String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
+                        curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+                    }
+                    else
+                    {
+                        curSubFormFieldSelection.preselectCommand(sPreSelectedTableName, bReadOnly);
+                    }
+                }
                     break;
-                case SOFIELDLINKERPAGE:
-                    curFieldLinker.initialize(curFormDocument.oMainFormDBMetaData.getFieldNames(), curFormDocument.oSubFormDBMetaData.getFieldNames(), curFormDocument.LinkFieldNames);
+                case SOFIELDLINKER_PAGE:
+                {
+                    final String[] aMainFieldNames = curFormDocument.oMainFormDBMetaData.getFieldNames();
+                    final String[] aSubFieldNames = curFormDocument.oSubFormDBMetaData.getFieldNames();
+                    curFieldLinker.initialize(aMainFieldNames, aSubFieldNames, curFormDocument.LinkFieldNames);
+                }
                     break;
-                case SOCONTROLPAGE:
+                case SOCONTROL_PAGE:
                     curControlArranger.enableSubFormImageList(curFormConfiguration.hasSubForm());
                     break;
-                case SODATAPAGE:
+                case SODATA_PAGE:
                     break;
-                case SOSTYLEPAGE:
+                case SOSTYLE_PAGE:
                     break;
-                case SOSTOREPAGE:
-                    this.curFinalizer.initialize(this.curDBCommandFieldSelection.getSelectedCommandName(), curFormDocument);
+                case SOSTORE_PAGE:
+                {
+                    String sTableName = this.curDBCommandFieldSelection.getSelectedCommandName();
+                    this.curFinalizer.initialize(sTableName, curFormDocument);
+                }
                     break;
                 default:
                     break;
@@ -145,36 +165,61 @@ public class FormWizard extends WizardDialog
         return curStyleApplier.getBorderType();
     }
 
+    // @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
         switch (nOldStep)
         {
-            case SOMAINPAGE:
+            case SOMAIN_PAGE:
 //              curFormDocument.oMainFormDBMetaData.setFieldNames(curDBCommandFieldSelection.getSelectedFieldNames());
-                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(true, curDBCommandFieldSelection.getSelectedCommandName(), curDBCommandFieldSelection.getSelectedFieldNames());
-                curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oMainFormDBMetaData.getFieldNames(), 1);
+            {
+                final String sTableName = curDBCommandFieldSelection.getSelectedCommandName();
+                final String[] aFieldNames = curDBCommandFieldSelection.getSelectedFieldNames();
+                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+
+                final String[] aMainFieldNames = curFormDocument.oMainFormDBMetaData.getFieldNames();
+                try
+                {
+                    curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, aMainFieldNames, 1);
+                }
+                catch (java.lang.Exception e)
+                {}
+            }
                 break;
-            case SOSUBFORMPAGE:
+            case SOSUBFORM_PAGE:
                 break;
-            case SOSUBFORMFIELDSPAGE:
-                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, curSubFormFieldSelection.getSelectedCommandName(), curSubFormFieldSelection.getSelectedFieldNames());
-                curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, curFormDocument.oSubFormDBMetaData.getFieldNames(), 0);
+            case SOSUBFORMFIELDS_PAGE:
+            {
+                final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
+                final String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
+                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+
+                final String[] aSubFieldNames = curFormDocument.oSubFormDBMetaData.getFieldNames();
+                try
+                {
+                    curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, aSubFieldNames, 0);
+                }
+                catch (java.lang.Exception e)
+                {}
+            }
                 break;
-            case SOFIELDLINKERPAGE:
+            case SOFIELDLINKER_PAGE:
+                curFormDocument.LinkFieldNames = curFieldLinker.getLinkFieldNames();
                 break;
-            case SOCONTROLPAGE:
+            case SOCONTROL_PAGE:
                 break;
-            case SODATAPAGE:
+            case SODATA_PAGE:
                 break;
-            case SOSTYLEPAGE:
+            case SOSTYLE_PAGE:
                 break;
-            case SOSTOREPAGE:
+            case SOSTORE_PAGE:
                 break;
             default:
                 break;
         }
     }
 
+/*
     public static void main(String args[])
     {
 
@@ -190,7 +235,14 @@ public class FormWizard extends WizardDialog
                 curproperties = new PropertyValue[1];
 //            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
                 curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
-                curproperties[0] = Properties.createProperty("DataSourceName", "MyHSQLDatabase");  //file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");*//          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");*//          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");*                        //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography"); //Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
+                curproperties[0] = Properties.createProperty("DataSourceName", "MyHSQLDatabase");
+ // file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb");
+ // MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+ //          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");
+ //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+ //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+ // Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
+
                 CurFormWizard.startFormWizard(xLocMSF, curproperties);
             }
         }
@@ -199,13 +251,14 @@ public class FormWizard extends WizardDialog
             exception.printStackTrace(System.out);
         }
     }
+*/
 
     public void buildSteps() throws NoValidPathException
     {
         curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields, slblTables, true, 34411);
         curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
         curFormDocument.xProgressBar.setValue(20);
-
+        // Label Help Text
         insertLabel("lblBinaryHelpText",
                 new String[]
                 {
@@ -213,13 +266,13 @@ public class FormWizard extends WizardDialog
                 },
                 new Object[]
                 {
-                    new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOMAINPAGE), new Integer(210)
+                    new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOMAIN_PAGE), new Integer(210)
                 });
 
         curFormConfiguration = new FormConfiguration(this);
         curFormDocument.xProgressBar.setValue(30);
 
-        curSubFormFieldSelection = new CommandFieldSelection(this, curFormDocument.oSubFormDBMetaData, SOSUBFORMFIELDSPAGE, 92, slblFields, slblSelFields, slblTables, true, 34431);
+        curSubFormFieldSelection = new CommandFieldSelection(this, curFormDocument.oSubFormDBMetaData, SOSUBFORMFIELDS_PAGE, 92, slblFields, slblSelFields, slblTables, true, 34431);
         curSubFormFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
         insertLabel("lblSubFormBinaryHelpText",
                 new String[]
@@ -228,12 +281,12 @@ public class FormWizard extends WizardDialog
                 },
                 new Object[]
                 {
-                    new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOSUBFORMFIELDSPAGE), new Integer(210)
+                    new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOSUBFORMFIELDS_PAGE), new Integer(210)
                 });
 
         curFormDocument.xProgressBar.setValue(40);
 
-        curFieldLinker = new FieldLinker(this, SOFIELDLINKERPAGE, 95, 30, 210, 34441);
+        curFieldLinker = new FieldLinker(this, SOFIELDLINKER_PAGE, 95, 30, 210, 34441);
         curFormDocument.xProgressBar.setValue(50);
 
         curControlArranger = new UIControlArranger(this, curFormDocument);
@@ -254,10 +307,11 @@ public class FormWizard extends WizardDialog
         curFormDocument.xProgressBar.end();
     }
 
+    // @Override
     public void finishWizard()
     {
         int ncurStep = getCurrentStep();
-        if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE))
+        if ((switchToStep(ncurStep, SOSTORE_PAGE)) || (ncurStep == SOSTORE_PAGE))
         {
             this.curFinalizer.initialize(curDBCommandFieldSelection.getSelectedCommandName(), this.curFormDocument);
             String sNewFormName = curFinalizer.getName();
@@ -267,7 +321,7 @@ public class FormWizard extends WizardDialog
                 FormName = curFinalizer.getName();
                 if (curFormDocument.finalizeForms(CurDataEntrySetter, curFieldLinker, curFormConfiguration))
                 {
-                    ;
+
                     if (curFinalizer.finish())
                     {
                         bcreateForm = true;
@@ -283,6 +337,7 @@ public class FormWizard extends WizardDialog
         }
     }
 
+    // @Override
     public void cancelWizard()
     {
         bcreateForm = false;
@@ -293,14 +348,14 @@ public class FormWizard extends WizardDialog
     {
         addRoadmap();
         int i = 0;
-        i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_FORM + 80), SOMAINPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 81), SOSUBFORMPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 82), SOSUBFORMFIELDSPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 83), SOFIELDLINKERPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 84), SOCONTROLPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 85), SODATAPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 86), SOSTYLEPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 87), SOSTOREPAGE);
+        i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_FORM + 80), SOMAIN_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 81), SOSUBFORM_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 82), SOSUBFORMFIELDS_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 83), SOFIELDLINKER_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 84), SOCONTROL_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 85), SODATA_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 86), SOSTYLE_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 87), SOSTORE_PAGE);
         setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
@@ -311,7 +366,7 @@ public class FormWizard extends WizardDialog
         XComponent[] ret = null;
         try
         {
-            curFormDocument = new FormDocument(xMSF, m_oResource);
+            curFormDocument = new FormDocument(xMSF);
             if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue))
             {
                 curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]
@@ -319,10 +374,12 @@ public class FormWizard extends WizardDialog
                             Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)
                         });
                 curFormDocument.xProgressBar.setValue(20);
+                // SystemDialog.showMessageBox(xMSF, "FormName", 0, "slblFields");
                 buildSteps();
+                // SystemDialog.showMessageBox(xMSF, "FormName", 0, "slblFields");
                 this.curDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
-                createWindowPeer(curFormDocument.xWindowPeer);
-                curFormDocument.oMainFormDBMetaData.setWindowPeer(xControl.getPeer());
+                XWindowPeer xWindowPeer2 = createWindowPeer(curFormDocument.xWindowPeer);
+                curFormDocument.oMainFormDBMetaData.setWindowPeer(xWindowPeer2 /* xControl.getPeer() */ );
                 //      setAutoMnemonic("lblDialogHeader", false);
                 insertFormRelatedSteps();
                 short RetValue = executeDialog(curFormDocument.xFrame);
@@ -347,7 +404,6 @@ public class FormWizard extends WizardDialog
 
     private boolean getFormResources()
     {
-        sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_FORM);
         sShowBinaryFields = m_oResource.getResText(UIConsts.RID_FORM + 2);
         slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
         slblFields = m_oResource.getResText(UIConsts.RID_FORM + 12);
@@ -362,11 +418,13 @@ public class FormWizard extends WizardDialog
 
         protected int ID;
 
+        // @Override
         public int getID()
         {
             return ID;
         }
 
+        // @Override
         public void setID(String sIncSuffix)
         {
             ID = 1;
@@ -381,6 +439,7 @@ public class FormWizard extends WizardDialog
             }
         }
 
+        // @Override
         public void shiftFromLeftToRight(String[] SelItems, String[] NewItems)
         {
             if (ID == 1)
@@ -393,6 +452,7 @@ public class FormWizard extends WizardDialog
             }
         }
 
+        // @Override
         public void shiftFromRightToLeft(String[] SelItems, String[] NewItems)
         {
             // TODO When the ListFieldbox is refilled only fields of the current Command may be merged into the Listbox
@@ -405,11 +465,12 @@ public class FormWizard extends WizardDialog
                 toggleSubFormSteps();
             }
         }
-
+        // @Override
         public void moveItemDown(String item)
         {
         }
 
+        // @Override
         public void moveItemUp(String item)
         {
         }
@@ -418,7 +479,7 @@ public class FormWizard extends WizardDialog
         {
             curSubFormFieldSelection.setModified(true);
             boolean benable = curSubFormFieldSelection.getSelectedFieldNames().length > 0;
-            enablefromStep(SOFIELDLINKERPAGE, benable);
+            enablefromStep(SOFIELDLINKER_PAGE, benable);
             if (benable)
             {
                 curFieldLinker.enable(!curFormConfiguration.areexistingRelationsdefined());
@@ -430,7 +491,7 @@ public class FormWizard extends WizardDialog
         {
             curDBCommandFieldSelection.setModified(true);
             boolean benable = curDBCommandFieldSelection.getSelectedFieldNames().length > 0;
-            enablefromStep(SOSUBFORMPAGE, benable);
+            enablefromStep(SOSUBFORM_PAGE, benable);
             setControlProperty("btnWizardNext", "Enabled", new Boolean(benable));
             if (benable)
             {
@@ -440,8 +501,8 @@ public class FormWizard extends WizardDialog
                 }
                 else
                 {
-                    setStepEnabled(SOSUBFORMFIELDSPAGE, false);
-                    setStepEnabled(SOFIELDLINKERPAGE, false);
+                    setStepEnabled(SOSUBFORMFIELDS_PAGE, false);
+                    setStepEnabled(SOFIELDLINKER_PAGE, false);
                 }
             }
             setControlProperty("btnWizardFinish", "Enabled", new Boolean(benable));

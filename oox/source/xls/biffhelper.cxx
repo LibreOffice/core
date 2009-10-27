@@ -41,56 +41,6 @@ using ::rtl::OUStringBuffer;
 namespace oox {
 namespace xls {
 
-// GUID =======================================================================
-
-BiffGuid::BiffGuid()
-{
-    ::std::fill_n( mpnData, sizeof( mpnData ), 0 );
-}
-
-BiffGuid::BiffGuid(
-        sal_uInt32 nData1, sal_uInt16 nData2, sal_uInt16 nData3,
-        sal_uInt8 nData41, sal_uInt8 nData42, sal_uInt8 nData43, sal_uInt8 nData44,
-        sal_uInt8 nData45, sal_uInt8 nData46, sal_uInt8 nData47, sal_uInt8 nData48 )
-{
-    // convert to little endian -> makes streaming easy
-    ByteOrderConverter::writeLittleEndian( mpnData, nData1 );
-    ByteOrderConverter::writeLittleEndian( mpnData + 4, nData2 );
-    ByteOrderConverter::writeLittleEndian( mpnData + 6, nData3 );
-    mpnData[  8 ] = nData41;
-    mpnData[  9 ] = nData42;
-    mpnData[ 10 ] = nData43;
-    mpnData[ 11 ] = nData44;
-    mpnData[ 12 ] = nData45;
-    mpnData[ 13 ] = nData46;
-    mpnData[ 14 ] = nData47;
-    mpnData[ 15 ] = nData48;
-}
-
-bool operator==( const BiffGuid& rGuid1, const BiffGuid& rGuid2 )
-{
-    return ::std::equal( rGuid1.mpnData, STATIC_ARRAY_END( rGuid1.mpnData ), rGuid2.mpnData );
-}
-
-bool operator<( const BiffGuid& rGuid1, const BiffGuid& rGuid2 )
-{
-    return ::std::lexicographical_compare(
-        rGuid1.mpnData, STATIC_ARRAY_END( rGuid1.mpnData ),
-        rGuid2.mpnData, STATIC_ARRAY_END( rGuid2.mpnData ) );
-}
-
-BiffInputStream& operator>>( BiffInputStream& rStrm, BiffGuid& rGuid )
-{
-    rStrm.readMemory( rGuid.mpnData, 16 );  // mpnData always in little endian
-    return rStrm;
-}
-
-BiffOutputStream& operator<<( BiffOutputStream& rStrm, const BiffGuid& rGuid )
-{
-    rStrm.writeBlock( rGuid.mpnData, 16 ); // mpnData already in little endian
-    return rStrm;
-}
-
 // ============================================================================
 
 namespace {
@@ -98,6 +48,14 @@ namespace {
 const sal_Int32 BIFF_RK_100FLAG             = 0x00000001;
 const sal_Int32 BIFF_RK_INTFLAG             = 0x00000002;
 const sal_Int32 BIFF_RK_VALUEMASK           = 0xFFFFFFFC;
+
+const sal_Int32 BITMAPFILEHEADER_SIZE       = 14;
+const sal_Int32 BITMAPCOREHEADER_SIZE       = 12;
+const sal_Int32 BITMAPINFOHEADER_SIZE       = 40;
+
+const sal_uInt16 BIFF_IMGDATA_WMF           = 2;
+const sal_uInt16 BIFF_IMGDATA_DIB           = 9;
+const sal_uInt16 BIFF_IMGDATA_NATIVE        = 14;
 
 // ----------------------------------------------------------------------------
 
@@ -162,43 +120,7 @@ struct CodePageEntry_TEPred
     rtl_TextEncoding    meTextEnc;
 };
 
-} // namespace
-
-// ============================================================================
-
-const BiffGuid BiffHelper::maGuidStdHlink(
-    0x79EAC9D0, 0xBAF9, 0x11CE, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B );
-
-const BiffGuid BiffHelper::maGuidUrlMoniker(
-    0x79EAC9E0, 0xBAF9, 0x11CE, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B );
-
-const BiffGuid BiffHelper::maGuidFileMoniker(
-    0x00000303, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
-
-// conversion -----------------------------------------------------------------
-
-double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
-{
-    double fValue = 0.0;
-    if( getFlag( nRkValue, BIFF_RK_INTFLAG ) )
-    {
-        sal_Int32 nTemp = nRkValue >> 2;
-        setFlag< sal_Int32 >( nTemp, 0xE0000000, nRkValue < 0 );
-        fValue = nTemp;
-    }
-    else
-    {
-        sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &fValue );
-        pDouble->w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
-    }
-
-    if( getFlag( nRkValue, BIFF_RK_100FLAG ) )
-        fValue /= 100.0;
-
-    return fValue;
-}
-
-namespace {
+// ----------------------------------------------------------------------------
 
 bool lclCalcRkFromDouble( sal_Int32& ornRkValue, double fValue )
 {
@@ -224,9 +146,112 @@ bool lclCalcRkFromDouble( sal_Int32& ornRkValue, double fValue )
     return false;
 }
 
+// ----------------------------------------------------------------------------
+
+void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, sal_Int32 nBytes, BiffType eBiff )
+{
+    /*  The IMGDATA record for bitmap format contains a Windows DIB (a bitmap
+        file without the 'BITMAPFILEHEADER' header structure). Usually, the DIB
+        header consists of 12 bytes (called 'OS/2 V1 header' or
+        'BITMAPCOREHEADER', see http://en.wikipedia.org/wiki/BMP_file_format)
+        followed by the remaining pixel data, but the 'Windows V3' or
+        'BITMAPINFOHEADER' is also supported here. This function creates a
+        complete 'BMP file' that can be read by the OOo graphic provider used
+        to import graphic objects. For that, the BITMAPFILEHEADER has to be
+        inserted before the DIB data, and it has to contain the correct offset
+        to the pixel data. Currently, in real life there are only 24-bit and
+        32-bit DIBs (without color palette) in use. This code relies on this
+        fact and calculates the offset to the pixel data according to the size
+        of the DIB header.
+        Remaining tasks are (if really used somewhere):
+        - Support of DIBs with color palette,
+        - Support of 'Windows V4' and 'Windows V5' DIB header. */
+
+    // read and check validity of DIB header
+    sal_Int64 nInStrmPos = rStrm.tell();
+    sal_Int32 nDibHdrSize = rStrm.readInt32();
+    sal_uInt16 nPlanes = 0, nDepth = 0;
+    switch( nDibHdrSize )
+    {
+        case BITMAPCOREHEADER_SIZE:
+            rStrm.skip( 4 );    // width/height as 16-bit integer
+            rStrm >> nPlanes >> nDepth;
+        break;
+        case BITMAPINFOHEADER_SIZE:
+            rStrm.skip( 8 );    // width/height as 32-bit integer
+            rStrm >> nPlanes >> nDepth;
+        break;
+    }
+    rStrm.seek( nInStrmPos );
+
+    if( (nPlanes == 1) && ((nDepth == 24) || (nDepth == 32)) )
+    {
+        // allocate enough space for the BITMAPFILEHEADER and the DIB data
+        orDataSeq.realloc( BITMAPFILEHEADER_SIZE + nBytes );
+        SequenceOutputStream aOutStrm( orDataSeq );
+
+        // write the BITMAPFILEHEADER of a regular BMP file
+        sal_Int32 nBmpSize = BITMAPFILEHEADER_SIZE + nBytes;
+        sal_Int32 nOffset = BITMAPFILEHEADER_SIZE + nDibHdrSize;
+        aOutStrm << sal_uInt16( 0x4D42 ) << nBmpSize << sal_Int32( 0 ) << nOffset;
+
+        // copy the DIB header
+        aOutStrm.copyStream( rStrm, nDibHdrSize );
+        nBytes -= nDibHdrSize;
+
+        /*  Excel 3.x and Excel 4.x seem to write broken or out-dated DIB data.
+            Usually they write a BITMAPCOREHEADER containing width, height,
+            planes as usual. The pixel depth field is set to 32 bit (though
+            this is not allowed according to documentation). Between that
+            header and the actual pixel data, 3 unused bytes are inserted. This
+            does even confuse Excel 5.x and later, which cannot read the image
+            data correctly. */
+        if( (eBiff <= BIFF4) && (nDibHdrSize == BITMAPCOREHEADER_SIZE) && (nDepth == 32) )
+        {
+            // skip the dummy bytes in input stream
+            rStrm.skip( 3 );
+            nBytes -= 3;
+            // correct the total BMP file size in output stream
+            sal_Int64 nOutStrmPos = aOutStrm.tell();
+            aOutStrm.seek( 2 );
+            aOutStrm << sal_Int32( nBmpSize - 3 );
+            aOutStrm.seek( nOutStrmPos );
+        }
+
+        // copy remaining pixel data top output stream
+        aOutStrm.copyStream( rStrm, nBytes );
+    }
+    rStrm.seek( nInStrmPos + nBytes );
+}
+
 } // namespace
 
-bool BiffHelper::calcRkFromDouble( sal_Int32& ornRkValue, double fValue )
+// ============================================================================
+
+// conversion -----------------------------------------------------------------
+
+/*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
+{
+    double fValue = 0.0;
+    if( getFlag( nRkValue, BIFF_RK_INTFLAG ) )
+    {
+        sal_Int32 nTemp = nRkValue >> 2;
+        setFlag< sal_Int32 >( nTemp, 0xE0000000, nRkValue < 0 );
+        fValue = nTemp;
+    }
+    else
+    {
+        sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &fValue );
+        pDouble->w32_parts.msw = static_cast< sal_uInt32 >( nRkValue & BIFF_RK_VALUEMASK );
+    }
+
+    if( getFlag( nRkValue, BIFF_RK_100FLAG ) )
+        fValue /= 100.0;
+
+    return fValue;
+}
+
+/*static*/ bool BiffHelper::calcRkFromDouble( sal_Int32& ornRkValue, double fValue )
 {
     if( lclCalcRkFromDouble( ornRkValue, fValue ) )
         return true;
@@ -240,7 +265,7 @@ bool BiffHelper::calcRkFromDouble( sal_Int32& ornRkValue, double fValue )
     return false;
 }
 
-double BiffHelper::calcDoubleFromError( sal_uInt8 nErrorCode )
+/*static*/ double BiffHelper::calcDoubleFromError( sal_uInt8 nErrorCode )
 {
     sal_uInt16 nApiError = 0x7FFF;
     switch( nErrorCode )
@@ -260,7 +285,7 @@ double BiffHelper::calcDoubleFromError( sal_uInt8 nErrorCode )
     return fValue;
 }
 
-rtl_TextEncoding BiffHelper::calcTextEncodingFromCodePage( sal_uInt16 nCodePage )
+/*static*/ rtl_TextEncoding BiffHelper::calcTextEncodingFromCodePage( sal_uInt16 nCodePage )
 {
     const CodePageEntry* pEntry = ::std::find_if( spCodePages, STATIC_ARRAY_END( spCodePages ), CodePageEntry_CPPred( nCodePage ) );
     if( pEntry == STATIC_ARRAY_END( spCodePages ) )
@@ -271,7 +296,7 @@ rtl_TextEncoding BiffHelper::calcTextEncodingFromCodePage( sal_uInt16 nCodePage 
     return pEntry->meTextEnc;
 }
 
-sal_uInt16 BiffHelper::calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc )
+/*static*/ sal_uInt16 BiffHelper::calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc )
 {
     const CodePageEntry* pEntry = ::std::find_if( spCodePages, STATIC_ARRAY_END( spCodePages ), CodePageEntry_TEPred( eTextEnc ) );
     if( pEntry == STATIC_ARRAY_END( spCodePages ) )
@@ -280,6 +305,25 @@ sal_uInt16 BiffHelper::calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc )
         return 1252;
     }
     return pEntry->mnCodePage;
+}
+
+/*static*/ void BiffHelper::importImgData( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, BiffType eBiff )
+{
+    sal_uInt16 nFormat, nEnv;
+    sal_Int32 nBytes;
+    rStrm >> nFormat >> nEnv >> nBytes;
+    OSL_ENSURE( (nFormat == BIFF_IMGDATA_WMF) || (nFormat == BIFF_IMGDATA_DIB) || (nFormat == BIFF_IMGDATA_NATIVE), "BiffHelper::importImgData - unknown format" );
+    OSL_ENSURE( nBytes > 0, "BiffHelper::importImgData - invalid data size" );
+    if( (0 < nBytes) && (nBytes <= rStrm.getRemaining()) )
+    {
+        switch( nFormat )
+        {
+            case BIFF_IMGDATA_WMF:      /* TODO */                                              break;
+            case BIFF_IMGDATA_DIB:      lclImportImgDataDib( orDataSeq, rStrm, nBytes, eBiff ); break;
+            case BIFF_IMGDATA_NATIVE:   /* TODO */                                              break;
+            default:                    OSL_ENSURE( false, "BiffHelper::importImgData - unknown image format" );
+        }
+    }
 }
 
 // ============================================================================

@@ -45,7 +45,6 @@
 #include "Clipping.hxx"
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <tools/debug.hxx>
@@ -653,15 +652,10 @@ void BarChart::createShapes()
                         getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
 
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getX( nCatIndex ), fSlotX );
-                    double fLogicBarHeight = (*aSeriesIter)->getY( nCatIndex );
+                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getXValue( nCatIndex ), fSlotX );
+                    double fLogicBarHeight = (*aSeriesIter)->getYValue( nCatIndex );
                     if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
-                    {
-                        if( pSeries->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::USE_ZERO )
-                            fLogicBarHeight = 0.0;
-                        else
-                            continue;
-                    }
+                        continue;
 
                     double fLogicValueForLabeDisplay = fLogicBarHeight;
                     fLogicBarHeight-=fBaseValue;

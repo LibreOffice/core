@@ -37,9 +37,6 @@
 #ifndef __com_sun_star_sheet_XFormulaParser_idl__
 #include <com/sun/star/sheet/XFormulaParser.idl>
 #endif
-#ifndef __com_sun_star_table_CellAddress_idl__
-#include <com/sun/star/table/CellAddress.idl>
-#endif
 #ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
 #endif
@@ -62,10 +59,6 @@ service FormulaParser
     // ------------------------------------------------------------------------
 
     interface XFormulaParser;
-
-    // ------------------------------------------------------------------------
-
-    [property] com::sun::star::table::CellAddress ReferencePosition;
 
     // ------------------------------------------------------------------------
 

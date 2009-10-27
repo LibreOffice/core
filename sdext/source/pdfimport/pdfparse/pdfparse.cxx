@@ -42,14 +42,10 @@
 
 // workaround windows compiler: do not include multi_pass.hpp
 //#include <boost/spirit.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility.hpp>
-#include <boost/spirit/error_handling.hpp>
-#include <boost/spirit/iterator/file_iterator.hpp>
-#if SPIRIT_VERSION >= 0x1800
-#define USE_ASSIGN_ACTOR
-#include <boost/spirit/actor/assign_actor.hpp>
-#endif
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_utility.hpp>
+#include <boost/spirit/include/classic_error_handling.hpp>
+#include <boost/spirit/include/classic_file_iterator.hpp>
 #include <boost/bind.hpp>
 #include <string>
 

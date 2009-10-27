@@ -28,16 +28,17 @@
  *
  ************************************************************************/
 
+#include "docprophandler.hxx"
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <osl/time.h>
 
-#include <tokens.hxx>
-#include <oox/core/namespaces.hxx>
-
-#include "docprophandler.hxx"
+#include "tokens.hxx"
+#include "oox/helper/attributelist.hxx"
+#include "oox/core/namespaces.hxx"
 
 using namespace ::com::sun::star;
 
@@ -159,7 +160,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const ::rtl::OUString
         }
     }
 
-    return util::DateTime( (sal_uInt16)( aOslDTime.NanoSeconds / 10e7 ), aOslDTime.Seconds, aOslDTime.Minutes, aOslDTime.Hours, aOslDTime.Day, aOslDTime.Month, aOslDTime.Year );
+    return util::DateTime( (sal_uInt16)( aOslDTime.NanoSeconds / 1e7 ), aOslDTime.Seconds, aOslDTime.Minutes, aOslDTime.Hours, aOslDTime.Day, aOslDTime.Month, aOslDTime.Year );
 }
 
 // ------------------------------------------------
@@ -271,59 +272,6 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const ::rtl::OUString& aChars )
 }
 
 // ------------------------------------------------
-sal_Bool OOXMLDocPropHandler::Is16Digit( sal_Unicode cSign )
-{
-    return ( (cSign >= (sal_Unicode)'0' && cSign <= (sal_Unicode)'9')
-          || (cSign >= (sal_Unicode)'a' && cSign <= (sal_Unicode)'f')
-          || (cSign >= (sal_Unicode)'A' && cSign <= (sal_Unicode)'F') );
-}
-
-// ------------------------------------------------
-::rtl::OUString OOXMLDocPropHandler::Decode_xHHHH_( const ::rtl::OUString& aChars )
-{
-    ::rtl::OUString aResult;
-
-    ::rtl::OUString aPrefix( RTL_CONSTASCII_USTRINGPARAM( "_x" ) );
-    sal_Int32 nStartIndex = 0;
-
-    do
-    {
-        sal_Int32 nIndex = aChars.indexOf( aPrefix, nStartIndex );
-        if ( nIndex > nStartIndex && nIndex < aChars.getLength() )
-        {
-            aResult += aChars.copy( nStartIndex, nIndex - nStartIndex );
-            if ( aChars.getLength() - nIndex >= 7
-              && Is16Digit( aChars.getStr()[nIndex + 2] )
-              && Is16Digit( aChars.getStr()[nIndex + 3] )
-              && Is16Digit( aChars.getStr()[nIndex + 4] )
-              && Is16Digit( aChars.getStr()[nIndex + 5] )
-              && aChars.getStr()[nIndex + 6] == (sal_Unicode)'_' )
-            {
-                aResult += ::rtl::OUString( (sal_Unicode)aChars.copy( nIndex + 2, 4 ).toInt32( 16 ) );
-                nStartIndex = nIndex + 7;
-            }
-            else
-            {
-                aResult += aChars.copy( nIndex, 2 );
-                nStartIndex = nIndex + 2;
-            }
-        }
-        else if ( nIndex == -1 )
-        {
-            aResult += aChars.copy( nStartIndex );
-            nStartIndex = -1;
-        }
-        else
-        {
-            OSL_ASSERT( "Unexpecte string behavior!" );
-            nStartIndex = -1;
-        }
-    }
-    while( nStartIndex >= 0 && nStartIndex < aChars.getLength() );
-
-    return aResult;
-}
-
 // com.sun.star.xml.sax.XFastDocumentHandler
 // ------------------------------------------------
 void SAL_CALL OOXMLDocPropHandler::startDocument()
@@ -453,7 +401,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
 {
     try
     {
-        if ( m_nInBlock == 2 || m_nInBlock == 3 && m_nType )
+        if ( (m_nInBlock == 2) || ((m_nInBlock == 3) && m_nType) )
         {
             if ( m_nState == ( XML_coreProperties|NMSP_COREPR ) )
             {
@@ -671,7 +619,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         case XML_bstr|NMSP_VT:
                         case XML_lpstr|NMSP_VT:
                         case XML_lpwstr|NMSP_VT:
-                            AddCustomProperty( uno::makeAny( Decode_xHHHH_( aChars ) ) ); // the property has string type
+                            AddCustomProperty( uno::makeAny( AttributeList::decodeXString( aChars ) ) ); // the property has string type
                             break;
 
                         case XML_date|NMSP_VT:

@@ -61,15 +61,6 @@ Ce_Traits::EntityOf_(id_type i_id)
     return Ce_Storage::Instance_()[i_id];
 }
 
-Ce_Traits::id_type
-Ce_Traits::IdOf_(const entity_base_type & i_entity)
-{
-    return i_entity.CeId();
-}
-
-
-
-
 //********************      CeNode_Traits      ********************//
 const symtree::Node<CeNode_Traits> *
 CeNode_Traits::NodeOf_(const entity_base_type & i_entity)
@@ -89,12 +80,6 @@ CeNode_Traits::NodeOf_(entity_base_type & io_entity)
     else if (is_type<Class>(io_entity))
         return & ary_cast<Class>(io_entity).AsNode();
     return 0;
-}
-
-const String &
-CeNode_Traits::LocalNameOf_(const entity_base_type & i_entity)
-{
-    return i_entity.LocalName();
 }
 
 Ce_Traits::entity_base_type *
@@ -195,13 +180,6 @@ Def_Traits::EntityOf_(id_type i_id)
     return Def_Storage::Instance_()[i_id];
 }
 
-Def_Traits::id_type
-Def_Traits::IdOf_(const entity_base_type & i_entity)
-{
-    return i_entity.DefId();
-}
-
-
 //********************      Def_Compare      ********************//
 const Def_Compare::key_type &
 Def_Compare::KeyOf_(const entity_base_type & i_entity)
@@ -226,13 +204,6 @@ Type_Traits::EntityOf_(id_type i_id)
     csv_assert(i_id.IsValid());
     return Type_Storage::Instance_()[i_id];
 }
-
-Type_Traits::id_type
-Type_Traits::IdOf_(const entity_base_type & i_entity)
-{
-    return i_entity.TypeId();
-}
-
 
 //********************      Type_Compare      ********************//
 const UsedType_Compare::key_type &

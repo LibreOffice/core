@@ -70,12 +70,9 @@ class StatusBarWrapper : public UIConfigElementWrapperBase
 
         // XUIElementSettings
         virtual void SAL_CALL updateSettings() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( sal_Bool bWriteable ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& UISettings ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >           m_xStatusBarManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceFactory;
 };
 
 } // namespace framework

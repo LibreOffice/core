@@ -66,6 +66,7 @@ namespace dbaui
         RadioButton                             m_aRB_Def;
         RadioButton                             m_aRB_View;
         RadioButton                             m_aRB_AppendData;
+        CheckBox                                m_aCB_UseHeaderLine;
         CheckBox                                m_aCB_PrimaryColumn;
         FixedText                               m_aFT_KeyName;
         Edit                                    m_edKeyName;
@@ -75,6 +76,7 @@ namespace dbaui
         OWizNormalExtend*                       m_pPage3;
 
         BOOL                                    m_bPKeyAllowed;
+        BOOL                                    m_bUseHeaderAllowed;
 
 
         DECL_LINK( AppendDataClickHdl, Button* );
@@ -99,12 +101,18 @@ namespace dbaui
         inline BOOL IsOptionDef()           const { return m_aRB_Def.IsChecked(); }
         inline BOOL IsOptionAppendData()    const { return m_aRB_AppendData.IsChecked(); }
         inline BOOL IsOptionView()          const { return m_aRB_View.IsChecked(); }
+        inline BOOL UseHeaderLine()         const { return m_aCB_UseHeaderLine.IsChecked(); }
         String      GetKeyName()            const { return m_edKeyName.GetText(); }
 
         void setCreateStyleAction();
-        void disallowViews()
+        inline void disallowViews()
         {
             m_aRB_View.Disable();
+        }
+        inline void disallowUseHeaderLine()
+        {
+            m_bUseHeaderAllowed = FALSE;
+            m_aCB_UseHeaderLine.Disable();
         }
 
         void setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName );

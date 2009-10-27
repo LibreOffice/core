@@ -173,7 +173,6 @@ class ODBExport : public SvXMLExport
     void                    exportDataSource();
     void                    exportConnectionData();
     void                    exportDriverSettings(const TSettingsMap& _aSettings);
-    void                    exportJavaClassPath(const TSettingsMap& _aSettings);
     void                    exportApplicationConnectionSettings(const TSettingsMap& _aSettings);
     void                    exportLogin();
     void                    exportSequence(const Sequence< ::rtl::OUString>& _aValue

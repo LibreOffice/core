@@ -139,7 +139,7 @@ private:
     ULONG                           mnMenuDelay;
     ULONG                           mnFollow;
     USHORT                          mnMiddleButtonAction;
-    BOOL                            mbNoWheelActionWithoutFocus;
+    USHORT                          mnWheelBehavior;
     BOOL                            mbAlign1;
 };
 
@@ -157,6 +157,10 @@ private:
 #define MOUSE_MIDDLE_NOTHING        ((USHORT)0)
 #define MOUSE_MIDDLE_AUTOSCROLL     ((USHORT)1)
 #define MOUSE_MIDDLE_PASTESELECTION ((USHORT)2)
+
+#define MOUSE_WHEEL_DISABLE         ((USHORT)0)
+#define MOUSE_WHEEL_FOCUS_ONLY      ((USHORT)1)
+#define MOUSE_WHEEL_ALWAYS          ((USHORT)2)
 
 class VCL_DLLPUBLIC MouseSettings
 {
@@ -257,10 +261,10 @@ public:
     USHORT                          GetMiddleButtonAction() const
                                         { return mpData->mnMiddleButtonAction; }
 
-    void                            SetNoWheelActionWithoutFocus( BOOL bAction )
-                                        { CopyData(); mpData->mbNoWheelActionWithoutFocus = bAction; }
-    BOOL                            GetNoWheelActionWithoutFocus() const
-                                        { return mpData->mbNoWheelActionWithoutFocus; }
+    void                            SetWheelBehavior( USHORT nBehavior )
+                                        { CopyData(); mpData->mnWheelBehavior = nBehavior; }
+    USHORT                          GetWheelBehavior() const
+                                        { return mpData->mnWheelBehavior; }
 
     const MouseSettings&            operator =( const MouseSettings& rSet );
 
@@ -375,6 +379,7 @@ private:
     Color                           maMenuHighlightColor;
     Color                           maMenuHighlightTextColor;
     Color                           maMenuTextColor;
+    Color                           maMenuBarTextColor;
     Color                           maMonoColor;
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
@@ -685,6 +690,10 @@ public:
                                         { CopyData(); mpData->maMenuTextColor = rColor; }
     const Color&                    GetMenuTextColor() const
                                         { return mpData->maMenuTextColor; }
+    void                            SetMenuBarTextColor( const Color& rColor )
+                                        { CopyData(); mpData->maMenuBarTextColor = rColor; }
+    const Color&                    GetMenuBarTextColor() const
+                                        { return mpData->maMenuBarTextColor; }
     void                            SetMenuHighlightColor( const Color& rColor )
                                         { CopyData(); mpData->maMenuHighlightColor = rColor; }
     const Color&                    GetMenuHighlightColor() const

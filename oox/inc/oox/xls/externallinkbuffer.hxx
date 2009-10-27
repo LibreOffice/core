@@ -70,9 +70,7 @@ class ExternalLink;
 class ExternalName : public DefinedNameBase
 {
 public:
-    explicit            ExternalName(
-                            const ExternalLink& rParentLink,
-                            sal_Int32 nLocalSheet );
+    explicit            ExternalName( const ExternalLink& rParentLink );
 
     /** Appends the passed value to the result set. */
     template< typename Type >
@@ -109,8 +107,10 @@ public:
     /** Returns true, if the name refers to an OLE object. */
     inline bool         isOleObject() const { return maExtNameModel.mbOleObj; }
 
+#if 0
     /** Returns the sheet cache index if this is a sheet-local external name. */
     sal_Int32           getSheetCacheIndex() const;
+#endif
 
     /** Returns the DDE item info needed by the XML formula parser. */
     bool                getDdeItemInfo(
@@ -123,6 +123,8 @@ public:
                             ::rtl::OUString& orDdeItem );
 
 private:
+    /** Tries to convert the passed token sequence to an ExternalReference. */
+    void                extractExternalReference( const ApiTokenSequence& rTokens );
     /** Sets the size of the result matrix. */
     void                setResultSize( sal_Int32 nColumns, sal_Int32 nRows );
 
@@ -265,14 +267,20 @@ public:
 
     /** Returns the type of the external library if this is a library link. */
     FunctionLibraryType getFuncLibraryType() const;
-    /** Returns the internal sheet index or external sheet cache index for the passed sheet. */
-    sal_Int32           getSheetIndex( sal_Int32 nTabId = 0 ) const;
-    /** Returns the internal sheet range or range of external sheet caches for the passed sheet range (BIFF only). */
-    void                getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId1, sal_Int32 nTabId2 ) const;
 
+    /** Returns the internal Calc sheet index or for the passed sheet. */
+    sal_Int16           getCalcSheetIndex( sal_Int32 nTabId = 0 ) const;
+
+    /** Returns the token index of the external document. */
+    sal_Int32           getDocumentLinkIndex() const;
+    /** Returns the external sheet cache index or for the passed sheet. */
+    sal_Int32           getSheetCacheIndex( sal_Int32 nTabId = 0 ) const;
     /** Returns the sheet cache of the external sheet with the passed index. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
-                        getExternalSheetCache( sal_Int32 nTabId );
+                        getSheetCache( sal_Int32 nTabId ) const;
+
+    /** Returns the internal sheet range or range of external sheet caches for the passed sheet range (BIFF only). */
+    void                getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId1, sal_Int32 nTabId2 ) const;
 
     /** Returns the external name with the passed zero-based index. */
     ExternalNameRef     getNameByIndex( sal_Int32 nIndex ) const;
@@ -289,7 +297,8 @@ private:
     ExternalNameRef     createExternalName();
 
 private:
-    typedef ::std::vector< sal_Int32 >  IndexVector;
+    typedef ::std::vector< sal_Int16 >  Int16Vector;
+    typedef ::std::vector< sal_Int32 >  Int32Vector;
     typedef RefVector< ExternalName >   ExternalNameVector;
 
     ExternalLinkType    meLinkType;         /// Type of this link object.
@@ -299,7 +308,8 @@ private:
     ::rtl::OUString     maTargetUrl;        /// Target link, DDE topic, OLE target.
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLink >
                         mxDocLink;          /// Interface for an external document.
-    IndexVector         maIndexes;          /// Internal sheet indexes or external sheet cache indexes.
+    Int16Vector         maCalcSheets;       /// Internal sheet indexes.
+    Int32Vector         maSheetCaches;      /// External sheet cache indexes.
     ExternalNameVector  maExtNames;         /// Defined names in external document.
 };
 

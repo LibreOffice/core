@@ -48,7 +48,7 @@ namespace connectivity
 {
     namespace mozab
     {
-        class MDatabaseMetaDataHelper : public ErrorResourceAccess
+        class MDatabaseMetaDataHelper
         {
         private:
             sal_Bool                                        m_bProfileExists ;
@@ -56,6 +56,7 @@ namespace connectivity
             ::std::vector< ::rtl::OUString >                m_aTableTypes;
             ::com::sun::star::mozilla::MozillaProductType   m_ProductType;
             ::rtl::OUString                                 m_ProfileName;
+            ErrorDescriptor                                 m_aError;
 
         public:
             MDatabaseMetaDataHelper();
@@ -73,8 +74,7 @@ namespace connectivity
             sal_Bool   testLDAPConnection( OConnection* _pCon );
             sal_Bool   NewAddressBook( OConnection* _pCon,const ::rtl::OUString & aTableName);
 
-        private:
-            void setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI );
+            inline const ErrorDescriptor& getError() const { return m_aError; }
         };
     }
 

@@ -471,10 +471,10 @@ Reference<XComponentContext> getUNO(
     {
         if (! s_lockfile.check( 0 ))
         {
-            //String sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
-            OUString sMsg(RTL_CONSTASCII_USTRINGPARAM(
-                              "unopkg cannot be started. The lock file indicates it as already running. "
-                              "If this does not apply, delete the lock file at:"));
+            String sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
+            //Create this string before we call DeInitVCL, because this will kill
+            //the ResMgr
+            String sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
 
             sMsg = sMsg + OUSTR("\n") + getLockFilePath();
 
@@ -497,9 +497,8 @@ Reference<XComponentContext> getUNO(
                 DeInitVCL();
             }
 
-//            String sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
             throw LockFileException(
-                OUSTR("\n") + OUSTR("ERROR: ") + sMsg + OUSTR("\n"));
+                OUSTR("\n") + sError + sMsg + OUSTR("\n"));
         }
     }
 

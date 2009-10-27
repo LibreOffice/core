@@ -71,6 +71,16 @@ class Window;
 namespace dbaui
 {
 //.........................................................................
+    class DataSourceInfoConverter
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    public:
+        DataSourceInfoConverter(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory)
+            :m_xFactory(_xFactory)
+        {
+        }
+        void convert(const ::dbaccess::ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sOldURLPrefix,const ::rtl::OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource);
+    };
     class IItemSetHelper;
     //========================================================================
     //= ODbDataSourceAdministrationHelper
@@ -142,7 +152,7 @@ namespace dbaui
         /** extracts the connection type from the given set<p/>
             The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
         */
-        static ::dbaccess::DATASOURCE_TYPE  getDatasourceType( const SfxItemSet& _rSet );
+        static ::rtl::OUString getDatasourceType( const SfxItemSet& _rSet );
 
         /** returns the connection URL
             @return

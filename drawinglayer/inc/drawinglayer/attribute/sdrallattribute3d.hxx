@@ -64,11 +64,11 @@ namespace drawinglayer
 
         public:
             SdrLineFillShadowAttribute(
-                SdrLineAttribute* pLine = 0L,
-                SdrFillAttribute* pFill = 0L,
-                SdrLineStartEndAttribute* pLineStartEnd = 0L,
-                SdrShadowAttribute* pShadow = 0L,
-                FillGradientAttribute* pFillFloatTransGradient = 0L);
+                SdrLineAttribute* pLine = 0,
+                SdrFillAttribute* pFill = 0,
+                SdrLineStartEndAttribute* pLineStartEnd = 0,
+                SdrShadowAttribute* pShadow = 0,
+                FillGradientAttribute* pFillFloatTransGradient = 0);
             ~SdrLineFillShadowAttribute();
 
             // copy constructor and assigment operator

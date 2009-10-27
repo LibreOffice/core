@@ -662,6 +662,9 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
                 if( 2 * (nDocRow2 - nDocRow1) < (nSrcRow2 - nSrcRow1) )
                     ::set_flag( maPCInfo.mnFlags, EXC_SXDB_SAVEDATA, false );
 
+                // #160184# Excel must refresh tables to make drilldown working
+                ::set_flag( maPCInfo.mnFlags, EXC_SXDB_REFRESH_LOAD );
+
                 // adjust row indexes, keep one row of empty area to surely have the empty cache item
                 if( nSrcRow1 < nDocRow1 )
                     nSrcRow1 = nDocRow1 - 1;
@@ -701,10 +704,10 @@ const XclExpPCField* XclExpPivotCache::GetField( sal_uInt16 nFieldIdx ) const
     return maFieldList.GetRecord( nFieldIdx ).get();
 }
 
-const XclExpPCField* XclExpPivotCache::GetField( const String& rFieldName ) const
-{
-    return const_cast< XclExpPivotCache* >( this )->GetFieldAcc( rFieldName );
-}
+//UNUSED2009-05 const XclExpPCField* XclExpPivotCache::GetField( const String& rFieldName ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     return const_cast< XclExpPivotCache* >( this )->GetFieldAcc( rFieldName );
+//UNUSED2009-05 }
 
 bool XclExpPivotCache::HasAddFields() const
 {
@@ -1014,10 +1017,10 @@ sal_uInt16 XclExpPTField::GetLastDataInfoIndex() const
     return static_cast< sal_uInt16 >( maDataInfoVec.size() - 1 );
 }
 
-const XclExpPTItem* XclExpPTField::GetItem( const String& rName ) const
-{
-    return const_cast< XclExpPTField* >( this )->GetItemAcc( rName );
-}
+//UNUSED2009-05 const XclExpPTItem* XclExpPTField::GetItem( const String& rName ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     return const_cast< XclExpPTField* >( this )->GetItemAcc( rName );
+//UNUSED2009-05 }
 
 sal_uInt16 XclExpPTField::GetItemIndex( const String& rName, sal_uInt16 nDefaultIdx ) const
 {

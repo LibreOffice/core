@@ -51,7 +51,7 @@ public class Finalizer
 
     public Finalizer(QueryWizard _CurUnoDialog, QuerySummary _CurDBMetaData)
     {
-        short curtabindex = (short) (100 * QueryWizard.SOSUMMARYPAGE);
+        short curtabindex = (short) (100 * QueryWizard.SOSUMMARY_PAGE);
         String reslblQueryTitle;
         String resoptDisplayQuery;
         String resoptModifyQuery;
@@ -73,7 +73,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(8), reslblQueryTitle, new Integer(95), new Integer(27), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(52)
+                    new Integer(8), reslblQueryTitle, new Integer(95), new Integer(27), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(52)
                 });
         m_aTxtTitle = CurUnoDialog.insertTextField("txtQueryTitle", 0, null, new String[]
                 {
@@ -81,7 +81,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(12), "HID:" + curHelpIndex++, new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(90)
+                    new Integer(12), "HID:" + curHelpIndex++, new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(90)
                 });
         CurUnoDialog.insertLabel("lblHowGoOn", new String[]
                 {
@@ -89,7 +89,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(16), reslblHowGoOn, Boolean.TRUE, new Integer(192), new Integer(27), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(112)
+                    new Integer(16), reslblHowGoOn, Boolean.TRUE, new Integer(192), new Integer(27), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(112)
                 });
         this.xRadioDisplayQuery = CurUnoDialog.insertRadioButton("optDisplayQuery",
                 new String[]
@@ -98,7 +98,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(9), "HID:" + curHelpIndex++, resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(118)
+                    new Integer(9), "HID:" + curHelpIndex++, resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
 
         this.xRadioModifyQuery = CurUnoDialog.insertRadioButton("optModifyQuery",
@@ -108,7 +108,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:" + curHelpIndex++, resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(118)
+                    new Integer(10), "HID:" + curHelpIndex++, resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
         CurUnoDialog.insertFixedLine("flnSummary", new String[]
                 {

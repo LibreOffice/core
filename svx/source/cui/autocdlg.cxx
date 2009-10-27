@@ -2308,7 +2308,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
     aCBAppendSpace  (this, SVX_RES(CB_APPEND_SPACE)),
     aCBAsTip        (this, SVX_RES(CB_AS_TIP)),
     aCBCollect      (this, SVX_RES(CB_COLLECT)),
-    aCBKeepList     (this, SVX_RES(CB_KEEP_LIST)),
+    aCBRemoveList   (this, SVX_RES(CB_REMOVE_LIST)),
     aFTExpandKey    (this, SVX_RES(FT_EXPAND_KEY)),
     aDCBExpandKey   (this, SVX_RES(DCB_EXPAND_KEY)),
     aFTMinWordlen   (this, SVX_RES(FT_MIN_WORDLEN)),
@@ -2369,7 +2369,7 @@ BOOL OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
     bCheck = aCBCollect.IsChecked();
     bModified |= pOpt->bAutoCmpltCollectWords != bCheck;
     pOpt->bAutoCmpltCollectWords = bCheck;
-    bCheck = aCBKeepList.IsChecked();
+    bCheck = !aCBRemoveList.IsChecked(); // inverted value!
     bModified |= pOpt->bAutoCmpltKeepList != bCheck;
     pOpt->bAutoCmpltKeepList = bCheck;
     bCheck = aCBAppendSpace.IsChecked();
@@ -2416,7 +2416,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
 
     aCBActiv.Check( 0 != pOpt->bAutoCompleteWords );
     aCBCollect.Check( 0 != pOpt->bAutoCmpltCollectWords );
-    aCBKeepList.Check( 0 != pOpt->bAutoCmpltKeepList);
+    aCBRemoveList.Check( !pOpt->bAutoCmpltKeepList ); //inverted value!
     aCBAppendSpace.Check( 0 != pOpt->bAutoCmpltAppendBlanc );
     aCBAsTip.Check( 0 != pOpt->bAutoCmpltShowAsTip );
 
@@ -2487,7 +2487,7 @@ IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox*, pBox )
         aDCBExpandKey.Enable( bEnable );
     }
     else if(&aCBCollect == pBox)
-        aCBKeepList.Enable( bEnable );
+        aCBRemoveList.Enable( bEnable );
     return 0;
 }
 

@@ -49,7 +49,7 @@ class FrameView
     : public SdrView
 {
 public:
-    FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = NULL );
+    SD_DLLPUBLIC FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView = NULL );
     FrameView(const FrameView& rFrameView);
     virtual ~FrameView();
 
@@ -106,7 +106,7 @@ public:
     /** can be used to get the page kind that was selected on last save of this document */
     PageKind GetPageKindOnLoad() const { return mePageKindOnLoad; }
 
-    void SetSelectedPage (USHORT nPage);
+    SD_DLLPUBLIC void SetSelectedPage (USHORT nPage);
     USHORT GetSelectedPage () const;
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
@@ -116,7 +116,7 @@ public:
     /** can be used to get the page that was selected on last save of this document */
     USHORT GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
 
-    void SetViewShEditMode(EditMode eMode, PageKind eKind);
+    SD_DLLPUBLIC void SetViewShEditMode(EditMode eMode, PageKind eKind);
     EditMode GetViewShEditMode (PageKind eKind);
 
     /** Remember the edit mode of the main view shell at the time when the

@@ -164,20 +164,6 @@ namespace
         return aRet;
     }
 
-    /*
-     Utility to extract flyfmts from a document, potentially from a
-     selection, and with bAll off ignores the drawing objects
-    */
-    sw::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM, bool /*bAll*/)
-    {
-        SwPosFlyFrms aFlys;
-        rDoc.GetAllFlyFmts(aFlys, pPaM, true);
-        sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
-        for (USHORT i = aFlys.Count(); i > 0;)
-            delete aFlys[--i];
-        return aRet;
-    }
-
     //Utility to test if a frame is anchored at a given node index
     class anchoredto: public std::unary_function<const sw::Frame&, bool>
     {
@@ -570,14 +556,18 @@ namespace sw
         }
         // <--
 
-        Frames GetAllFrames(const SwDoc &rDoc, SwPaM *pPaM)
+        /*
+           Utility to extract flyfmts from a document, potentially from a
+           selection.
+           */
+        Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM /*, bool bAll*/)
         {
-            return GetFrames(rDoc, pPaM, true);
-        }
-
-        Frames GetNonDrawingFrames(const SwDoc &rDoc, SwPaM *pPaM)
-        {
-            return GetFrames(rDoc, pPaM, false);
+            SwPosFlyFrms aFlys;
+            rDoc.GetAllFlyFmts(aFlys, pPaM, true);
+            sw::Frames aRet(SwPosFlyFrmsToFrames(aFlys));
+            for (USHORT i = aFlys.Count(); i > 0;)
+                delete aFlys[--i];
+            return aRet;
         }
 
         Frames GetFramesBetweenNodes(const Frames &rFrames,

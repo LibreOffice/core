@@ -191,7 +191,7 @@ static sal_Int32 lcl_SkipWhiteSpaces( const OUString &rText, sal_Int32 nStartPos
 
 static sal_Int32 lcl_BacktraceWhiteSpaces( const OUString &rText, sal_Int32 nStartPos )
 {
-    // note having nStartPos point right behind the string is OK since that one
+    // note: having nStartPos point right behind the string is OK since that one
     // is a correct end-of-sentence position to be returned from a grammar checker...
 
     const sal_Int32 nLen = rText.getLength();
@@ -215,14 +215,16 @@ static sal_Int32 lcl_BacktraceWhiteSpaces( const OUString &rText, sal_Int32 nSta
     sal_Int32 nPosBefore = nStartPos - 1;
     const sal_Unicode *pStart = rText.getStr();
     if (0 <= nPosBefore && nPosBefore < nLen && lcl_IsWhiteSpace( pStart[ nPosBefore ] ))
-        nStartPos = nPosBefore;
-    if (0 <= nStartPos && nStartPos < nLen)
     {
-        const sal_Unicode *pText = rText.getStr() + nStartPos;
-        while (pText > pStart && lcl_IsWhiteSpace( *pText ))
-            --pText;
-        // now add 1 since we wnat to point to the first char after the last char in the sentence...
-        nRes = pText - pStart + 1;
+        nStartPos = nPosBefore;
+        if (0 <= nStartPos && nStartPos < nLen)
+        {
+            const sal_Unicode *pText = rText.getStr() + nStartPos;
+            while (pText > pStart && lcl_IsWhiteSpace( *pText ))
+                --pText;
+            // now add 1 since we want to point to the first char after the last char in the sentence...
+            nRes = pText - pStart + 1;
+        }
     }
 
     DBG_ASSERT( 0 <= nRes && nRes <= nLen, "lcl_BacktraceWhiteSpaces return value out of range" );
@@ -577,6 +579,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
                     sal_Int32 nStartPos = aFPEntryItem.m_nStartIndex;
                     sal_Int32 nSuggestedEnd = GetSuggestedEndOfSentence( aCurTxt, nStartPos, aCurLocale );
+                    DBG_ASSERT( nSuggestedEnd > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
 
                     linguistic2::ProofreadingResult aRes;
 
@@ -586,6 +589,15 @@ void GrammarCheckingIterator::DequeueAndCheck()
                         aGuard.clear();
                         uno::Sequence< beans::PropertyValue > aEmptyProps;
                         aRes = xGC->doProofreading( aCurDocId, aCurTxt, aCurLocale, nStartPos, nSuggestedEnd, aEmptyProps );
+
+                        //!! work-around to prevent looping if the grammar checker
+                        //!! failed to properly identify the sentence end
+                        if (aRes.nBehindEndOfSentencePosition <= nStartPos)
+                        {
+                            DBG_ASSERT( 0, "!! Grammarchecker failed to provide end of sentence !!" );
+                            aRes.nBehindEndOfSentencePosition = nSuggestedEnd;
+                        }
+
                         aRes.xFlatParagraph      = xFlatPara;
                         aRes.nStartOfSentencePosition = nStartPos;
                     }
@@ -718,6 +730,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 ::osl::ClearableGuard< ::osl::Mutex > aGuard( MyMutex::get() );
                 aDocId = GetOrCreateDocId( xComponent );
                 nSuggestedEndOfSentencePos = GetSuggestedEndOfSentence( rText, nStartPos, aCurLocale );
+                DBG_ASSERT( nSuggestedEndOfSentencePos > nStartPos, "nSuggestedEndOfSentencePos calculation failed?" );
 
                 xGC = GetGrammarChecker( aCurLocale );
             }
@@ -727,6 +740,15 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             {
                 uno::Sequence< beans::PropertyValue > aEmptyProps;
                 aTmpRes = xGC->doProofreading( aDocId, rText, aCurLocale, nStartPos, nSuggestedEndOfSentencePos, aEmptyProps );
+
+                //!! work-around to prevent looping if the grammar checker
+                //!! failed to properly identify the sentence end
+                if (aTmpRes.nBehindEndOfSentencePosition <= nStartPos)
+                {
+                    DBG_ASSERT( 0, "!! Grammarchecker failed to provide end of sentence !!" );
+                    aTmpRes.nBehindEndOfSentencePosition = nSuggestedEndOfSentencePos;
+                }
+
                 aTmpRes.xFlatParagraph           = xFlatPara;
                 aTmpRes.nStartOfSentencePosition = nStartPos;
                 nEndPos = aTmpRes.nBehindEndOfSentencePosition;

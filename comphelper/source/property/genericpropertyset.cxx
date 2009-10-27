@@ -180,8 +180,7 @@ void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries,
             aEvt.PropertyName = aPropertyName;
             aEvt.NewValue = *pValues;
             aGuard.clear();
-            pHelper->forEach<XPropertyChangeListener>(
-                    ::boost::bind(&XPropertyChangeListener::propertyChange,_1,boost::cref(aEvt)));
+            pHelper->notifyEach( &XPropertyChangeListener::propertyChange, aEvt );
             aGuard.reset();
         }
 

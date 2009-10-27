@@ -202,10 +202,11 @@ private:
     virtual void SAL_CALL disposing();
 
     void impl_fillRowSet_throw();
-    void impl_executeRowSet_nothrow(::osl::ResettableMutexGuard& _rClearForNotifies);
+    void impl_executeRowSet_throw(::osl::ResettableMutexGuard& _rClearForNotifies);
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
-    void impl_fillInternalDataProvider_throw();
+    void impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories);
     void impl_invalidateParameter_nothrow();
+    ::com::sun::star::uno::Any impl_getNumberFormatKey_nothrow(const ::rtl::OUString & _sRangeRepresentation) const;
 
     template <typename T> void set(  const ::rtl::OUString& _sProperty
                                         ,const T& _Value
@@ -214,14 +215,18 @@ private:
         BoundListeners l;
         {
             ::osl::MutexGuard aGuard(m_aMutex);
-            prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
-            _member = _Value;
+            if ( _member != _Value )
+            {
+                prepareSet(_sProperty, ::com::sun::star::uno::makeAny(_member), ::com::sun::star::uno::makeAny(_Value), &l);
+                _member = _Value;
+            }
         }
         l.notify();
     }
 
     ::dbtools::ParameterManager m_aParameterManager;
     ::dbtools::FilterManager    m_aFilterManager;
+    ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any>                                m_aNumberFormats;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >                 m_xActiveConnection;

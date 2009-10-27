@@ -356,8 +356,6 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                const css::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
                                const ::comphelper::Locale&                        aLocale       = ::comphelper::Locale(::comphelper::Locale::X_NOTRANSLATE()));
 
-        sal_Bool existsTarget(const ::rtl::OUString& sTarget) const;
-
         //---------------------------------------
         /** @short  try to copy the specified preset from the share
                     layer to the user layer and establish it as the

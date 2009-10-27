@@ -434,6 +434,42 @@ double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C();
   */
 double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C();
 
+/** Returns values of the Errorfunction erf.
+
+    erf is part of the C99 standard, but not provided by some compilers.
+
+    @param fValue
+    The value x in the term erf(x).
+  */
+double SAL_CALL rtl_math_erf(double fValue) SAL_THROW_EXTERN_C();
+
+/** Returns values of the complement Errorfunction erfc.
+
+    erfc is part of the C99 standard, but not provided by some compilers.
+
+    @param fValue
+    The value x in the term erfc(x).
+  */
+double SAL_CALL rtl_math_erfc(double fValue) SAL_THROW_EXTERN_C();
+
+/** Returns values of the inverse hyperbolic sine.
+
+    asinh is part of the C99 standard, but not provided by some compilers.
+
+    @param fValue
+    The value x in the term asinh(x).
+  */
+double SAL_CALL rtl_math_asinh(double fValue) SAL_THROW_EXTERN_C();
+
+/** Returns values of the inverse hyperbolic cosine.
+
+    acosh is part of the C99 standard, but not provided by some compilers.
+
+    @param fValue
+    The value x in the term acosh(x).
+  */
+double SAL_CALL rtl_math_acosh(double fValue) SAL_THROW_EXTERN_C();
+
 #if defined __cplusplus
 }
 #endif /* __cplusplus */

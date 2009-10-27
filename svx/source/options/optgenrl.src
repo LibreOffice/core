@@ -74,6 +74,14 @@ TabPage RID_SFXPAGE_GENERAL
         Hide = TRUE;
         Text [ en-US ] = "Last Name/First name/Father's name/Initials";
     };
+    FixedText FT_NAME_EASTERN
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Hide = TRUE;
+        Text [ en-US ] = "Last/First ~name/Initials" ;
+    };
     Edit ED_FATHERNAME
     {
         Border = TRUE ;

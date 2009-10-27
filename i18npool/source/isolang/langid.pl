@@ -43,7 +43,7 @@ sub Usage()
         "\n",
         "langid - a hackish utility to lookup lang.h language defines and LangIDs,\n",
         "isolang.cxx ISO639/ISO3166 mapping, locale data files, langtab.src language\n",
-        "listbox entries, Langpack.ulf installer language and file_ooo.scp registry name.\n\n",
+        "listbox entries, postset.mk and file_ooo.scp registry name.\n\n",
 
         "Usage: $0 [--single] {language string} | {LangID} | {primarylanguage sublanguage} | {language-country}\n\n",
 
@@ -104,11 +104,12 @@ sub makeLangID($$)
 }
 
 
-sub grepFile($$$$$)
+sub grepFile($$$$@)
 {
-    my( $regex, $modifier, $path, $module, $name) = @_;
+    my( $regex, $path, $module, $name, @addregex) = @_;
     my @result;
     my $found = 0;
+    my $arefound = '';
     my $file;
     # Try module under current working directory first to catch local
     # modifications. A Not yet delivered lang.h is a special case.
@@ -125,43 +126,51 @@ sub grepFile($$$$$)
             print "No $file\n";
             $file = "$path/$module.lnk/$name";
             if (!($found = open( IN, $file))) {
-                print "No $file either.\n"; }
+                print "No $file.\n";
+                $file = "$path/$module.link/$name";
+                if (!($found = open( IN, $file))) {
+                    print "No $file either.\n"; }
+            }
         }
     }
     if ($found)
     {
         $found = 0;
-        if ($modifier eq "i")
+        while (my $line = <IN>)
         {
-            while (my $line = <IN>)
+            if ($line =~ /$regex/)
             {
-                if ($line =~ /$regex/i)
+                if (!$found)
                 {
-                    if (!$found)
-                    {
-                        $found = 1;
-                        print "$file:\n";
-                    }
-                    chomp( $line);
-                    print "$line\n";
-                    push( @result, $line);
+                    $found = 1;
+                    print "$file:\n";
                 }
+                chomp( $line);
+                print "$line\n";
+                push( @result, $line);
             }
-        }
-        else
-        {
-            while (my $line = <IN>)
+            else
             {
-                if ($line =~ /$regex/)
+                for my $re (@addregex)
                 {
-                    if (!$found)
+                    if ($re ne $arefound && $line =~ /$re/)
                     {
-                        $found = 1;
-                        print "$file:\n";
+                        if ($arefound eq '')
+                        {
+                            $arefound = $re;
+                        }
+                        else
+                        {
+                            if (!$found)
+                            {
+                                $found = 1;
+                                print "$file:\n";
+                            }
+                            chomp( $line);
+                            print "$line\n";
+                            push( @result, $line);
+                        }
                     }
-                    chomp( $line);
-                    print "$line\n";
-                    push( @result, $line);
                 }
             }
         }
@@ -214,16 +223,16 @@ sub main()
         Usage();
         return 1;
     }
-    my $modifier = "i";
-    my (@resultlist, @greplist, @lcidlist, $result);
+    my $modifier = "(?i)";
+    my (@resultlist, @greplist, $result);
     # If no string was given on the command line, but value(s) were, lookup the
     # LangID value to obtain the define identifier.
     if ($grepdef)
     {
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
-            '^\s*#\s*define\s+[A-Z_]*' . $grepdef, $modifier,
-            $SOLENVINC, "i18npool", "lang.h");
+            $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
+            $SOLENVINC, "i18npool", "lang.h", ());
     }
     else
     {
@@ -231,8 +240,8 @@ sub main()
                 $lcid, $parts[0], $parts[1]);
         my $buf = sprintf( "0x%04X", $lcid);
         @resultlist = grepFile(
-            '^\s*#\s*define\s+\w+\s+' . $buf, "",
-            $SOLENVINC, "i18npool", "lang.h");
+            '^\s*#\s*define\s+\w+\s+' . $buf,
+            $SOLENVINC, "i18npool", "lang.h", ());
     }
     for $result (@resultlist)
     {
@@ -260,8 +269,8 @@ sub main()
         $coun = uc($coun);
         #     { LANGUAGE_AFRIKAANS,                   "af", "ZA" },
         @resultlist = grepFile(
-            '^\s*\{\s*\w+\s*,\s*\"' . $lang . '\"\s*,\s*\"'  . $coun . '\"\s*\}\s*,', "",
-            "$SRC_ROOT", "i18npool", "source/isolang/isolang.cxx");
+            '^\s*\{\s*\w+\s*,\s*\"' . $lang . '\"\s*,\s*\"'  . $coun . '\"\s*\}\s*,',
+            "$SRC_ROOT", "i18npool", "source/isolang/isolang.cxx", ());
         for $result (@resultlist)
         {
             if ($result =~ /^\s*\{\s*(\w+)\s*,\s*\"\w+\"\s*,\s*\"(\w+)?\"\s*\}\s*,/)
@@ -279,10 +288,13 @@ sub main()
     for $grepdef (@greplist)
     {
         print "\nUsing: " . $grepdef . "\n";
+
+        # Decimal LCID, was needed for Langpack.ulf but isn't used anymore,
+        # keep just in case we'd need it again.
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
-            '^\s*#\s*define\s+[A-Z_]*' . $grepdef, $modifier,
-            $SOLENVINC, "i18npool", "lang.h");
+            $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
+            $SOLENVINC, "i18npool", "lang.h", ());
         my @lcidlist;
         for $result (@resultlist)
         {
@@ -295,8 +307,8 @@ sub main()
 
         #     { LANGUAGE_AFRIKAANS,                   "af", "ZA" },
         @resultlist = grepFile(
-            '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*\".*\"\s*,\s*\".*\"\s*\}\s*,', $modifier,
-            "$SRC_ROOT", "i18npool", "source/isolang/isolang.cxx");
+            $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*\".*\"\s*,\s*\".*\"\s*\}\s*,',
+            "$SRC_ROOT", "i18npool", "source/isolang/isolang.cxx", ());
 
         my @langcoungreplist;
         for $result (@resultlist)
@@ -322,7 +334,11 @@ sub main()
                 if (!($found = open( LD, $file)))
                 {
                     $file = "$SRC_ROOT/i18npool.lnk/source/localedata/data/$loca.xml";
-                    $found = open( LD, $file);
+                    if (!($found = open( LD, $file)))
+                    {
+                        $file = "$SRC_ROOT/i18npool.link/source/localedata/data/$loca.xml";
+                        $found = open( LD, $file);
+                    }
                 }
                 if ($found)
                 {
@@ -346,8 +362,8 @@ sub main()
 
         #         case LANGUAGE_ARABIC:
         grepFile(
-            '^\s*case\s*.*' . $grepdef . '.*\s*:', $modifier,
-            "$SRC_ROOT", "i18npool", "source/isolang/mslangid.cxx");
+            $modifier . '^\s*case\s*.*' . $grepdef . '.*\s*:',
+            "$SRC_ROOT", "i18npool", "source/isolang/mslangid.cxx", ());
 
         # With CWS 'langstatusbar' the language listbox resource file gets a new location.
         my $module = "svx";
@@ -359,28 +375,26 @@ sub main()
         #         < "Afrikaans" ; LANGUAGE_AFRIKAANS ; > ;
         # lookup define
         @resultlist = grepFile(
-            '^\s*<\s*\".*\"\s*;\s*.*' . $grepdef . '.*\s*;\s*>\s*;', $modifier,
-            "$SRC_ROOT", $module, $name);
+            $modifier . '^\s*<\s*\".*\"\s*;\s*.*' . $grepdef . '.*\s*;\s*>\s*;',
+            "$SRC_ROOT", $module, $name, ());
         # lookup string
         if (!@resultlist) {
             grepFile(
-                '^\s*<\s*\".*' . $grepdef . '.*\"\s*;\s*.*\s*;\s*>\s*;', $modifier,
-                "$SRC_ROOT", $module, $name); }
-
-        for $lcid (@lcidlist)
-        {
-            # [OOO_LANGPACK_NAME_1033]
-            grepFile(
-                '^\s*\[OOO_LANGPACK_NAME_' . $lcid . '\]', "",
-                "$SRC_ROOT", "instsetoo_native", "inc_openoffice/windows/msi_languages/Langpack.ulf");
-        }
+                $modifier . '^\s*<\s*\".*' . $grepdef . '.*\"\s*;\s*.*\s*;\s*>\s*;',
+                "$SRC_ROOT", $module, $name, ()); }
 
         for my $langcoun (@langcoungreplist)
         {
             # Name (xxx) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
             grepFile(
-                '^\s*Name\s*\(' . $langcoun . '\)\s*=', "",
-                "$SRC_ROOT", "scp2", "source/ooo/file_ooo.scp");
+                '^\s*Name\s*\(' . $langcoun . '\)\s*=',
+                "$SRC_ROOT", "scp2", "source/ooo/file_ooo.scp", ());
+            # completelangiso=af ar as-IN ... zu
+            grepFile(
+                '^\s*completelangiso\s*[= ](.{2,3}(-..)?)*' . $langcoun . '',
+                "$SRC_ROOT", "solenv", "inc/postset.mk",
+                # needs a duplicated pair of backslashes to produce a literal \\
+                ('^\s*completelangiso\s*=', '^\s+' . $langcoun . '\s*\\\\*$'));
         }
     }
     return 0;

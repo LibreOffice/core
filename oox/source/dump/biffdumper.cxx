@@ -50,6 +50,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::util::DateTime;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 using namespace ::oox::xls;
@@ -326,14 +327,6 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
     ornRecPos = mxBiffStrm->tellBase() - 4;
     ornRecId = mxBiffStrm->getRecId();
 
-    // record specific settings
-    switch( mxBiffStrm->getRecId() )
-    {
-        case BIFF_ID_CHEND:
-            out().decIndent();
-        break;
-    }
-
     // special CONTINUE handling
     mxBiffStrm->resetRecord( mbMergeContRec );
     if( mbMergeContRec ) switch( mxBiffStrm->getRecId() )
@@ -350,8 +343,22 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
         break;
     }
 
+    // record specific settings
+    switch( mxBiffStrm->getRecId() )
+    {
+        case BIFF2_ID_BOF:
+        case BIFF3_ID_BOF:
+        case BIFF4_ID_BOF:
+        case BIFF5_ID_BOF:
+        case BIFF_ID_INTERFACEHDR:
+            mxBiffStrm->enableDecoder( false );
+        break;
+        case BIFF_ID_CHEND:
+            out().decIndent();
+        break;
+    }
+
     ornRecSize = mxBiffStrm->getLength();
-    mxBiffStrm->enableNulChars( true );
     return bValid;
 }
 
@@ -429,7 +436,7 @@ OUString BiffObjectBase::dumpByteString( const String& rName, BiffStringFlags nF
     OSL_ENSURE( !getFlag( nFlags, static_cast< BiffStringFlags >( ~(BIFF_STR_8BITLENGTH | BIFF_STR_EXTRAFONTS) ) ), "BiffObjectBase::dumpByteString - unknown flag" );
     bool b8BitLength = getFlag( nFlags, BIFF_STR_8BITLENGTH );
 
-    OString aString = mxBiffStrm->readByteString( !b8BitLength );
+    OString aString = mxBiffStrm->readByteString( !b8BitLength, true );
     FontPortionModelList aPortions;
     if( getFlag( nFlags, BIFF_STR_EXTRAFONTS ) )
         aPortions.importPortions( *mxBiffStrm, false );
@@ -486,7 +493,7 @@ OUString BiffObjectBase::dumpUniString( const String& rName, BiffStringFlags nFl
     sal_uInt32 nPhoneticSize = bPhonetic ? mxBiffStrm->readuInt32() : 0;
 
     // --- character array ---
-    OUString aString = mxBiffStrm->readUniStringChars( nChars, b16Bit );
+    OUString aString = mxBiffStrm->readUniStringChars( nChars, b16Bit, true );
     writeStringItem( rName( "text" ), aString );
 
     // --- formatting ---
@@ -674,6 +681,19 @@ OUString BiffObjectBase::dumpConstValue( sal_Unicode cStrQuote )
 sal_uInt16 BiffObjectBase::dumpRepeatedRecId()
 {
     return dumpHex< sal_uInt16 >( "repeated-rec-id", getRecNames() );
+}
+
+void BiffObjectBase::dumpFrHeader( bool bWithFlags, bool bWithRange )
+{
+    dumpHex< sal_uInt16 >( "fr-rec-id", getRecNames() );
+    sal_Int16 nFlags = bWithFlags ? dumpHex< sal_uInt16 >( "fr-flags", "FR-FLAGS" ) : 0x0001;
+    if( bWithRange )
+    {
+        if( getFlag< sal_uInt16 >( nFlags, 0x0001 ) )
+            dumpRange( "fr-range" );
+        else
+            dumpUnused( 8 );
+    }
 }
 
 void BiffObjectBase::dumpDffClientRect()
@@ -1317,6 +1337,7 @@ bool FormulaObject::dumpAttrToken()
             dumpDec< sal_uInt16, sal_uInt8 >( !bBiff2, "skip-err" );
         }
         break;
+        case 0:     // in array formulas and defined names, the skip-bit may be 0
         case BIFF_TOK_ATTR_SKIP:
             dumpDec< sal_uInt16, sal_uInt8 >( !bBiff2, "skip" );
         break;
@@ -1736,6 +1757,50 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
         break;
 
+        case BIFF_ID_CHFRBLOCKBEGIN:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt16 >( "type", "CHFRBLOCK-TYPE" );
+            dumpDec< sal_uInt16 >( "context" );
+            dumpDec< sal_uInt16 >( "value-1" );
+            dumpDec< sal_uInt16 >( "value-2" );
+        break;
+
+        case BIFF_ID_CHFRBLOCKEND:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt16 >( "type", "CHFRBLOCK-TYPE" );
+            if( rStrm.getRemaining() >= 6 )
+                dumpUnused( 6 );
+        break;
+
+        case BIFF_ID_CHFRINFO:
+        {
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt8 >( "creator", "CHFRINFO-APPVERSION" );
+            dumpDec< sal_uInt8 >( "writer", "CHFRINFO-APPVERSION" );
+            sal_uInt16 nCount = dumpDec< sal_uInt16 >( "rec-range-count" );
+            out().resetItemIndex();
+            for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
+                dumpHexPair< sal_uInt16 >( "#rec-range", '-' );
+        }
+        break;
+
+        case BIFF_ID_CHFRLABELPROPS:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt16 >( "flags", "CHFRLABELPROPS-FLAGS" );
+            dumpUniString( "separator", BIFF_STR_SMARTFLAGS );
+        break;
+
+        case BIFF_ID_CHFRUNITPROPS:
+            dumpFrHeader( true, false );
+            dumpDec< sal_Int16 >( "preset", "CHFRUNITPROPS-PRESET" );
+            dumpDec< double >( "unit" );
+            dumpHex< sal_uInt16 >( "flags", "CHFRUNITPROPS-FLAGS" );
+        break;
+
+        case BIFF_ID_CHFRWRAPPER:
+            dumpFrHeader( true, false );
+        break;
+
         case BIFF_ID_CHLABELRANGE:
             dumpDec< sal_uInt16 >( "axis-crossing" );
             dumpDec< sal_uInt16 >( "label-frequency" );
@@ -1797,6 +1862,18 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt16 >( "angle", "CONV-DEG" );
             if( eBiff >= BIFF5 ) dumpDec< sal_uInt16 >( "hole-size" );
             if( eBiff >= BIFF8 ) dumpHex< sal_uInt16 >( "flags", "CHPIE-FLAGS" );
+        break;
+
+        case BIFF_ID_CHPIVOTFLAGS:
+            dumpRepeatedRecId();
+            dumpUnused( 2 );
+            dumpHex< sal_uInt16 >( "flags", "CHPIVOTFLAGS-FLAGS" );
+        break;
+
+        case BIFF8_ID_CHPIVOTREF:
+            dumpRepeatedRecId();
+            dumpUnused( 4 );
+            dumpUniString( "ref", BIFF_STR_8BITLENGTH );
         break;
 
         case BIFF_ID_CHPLOTGROWTH:
@@ -1884,14 +1961,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "label-rotation", "TEXTROTATION" );
         break;
 
-        case BIFF_ID_CHUNITPROPERTIES:
-            dumpRepeatedRecId();
-            dumpUnused( 2 );
-            dumpDec< sal_Int16 >( "preset", "CHUNITPROPERTIES-PRESET" );
-            dumpDec< double >( "unit" );
-            dumpHex< sal_uInt16 >( "flags", "CHUNITPROPERTIES-FLAGS" );
-        break;
-
         case BIFF_ID_CHVALUERANGE:
             dumpDec< double >( "minimum" );
             dumpDec< double >( "maximum" );
@@ -1899,11 +1968,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< double >( "minor-inc" );
             dumpDec< double >( "axis-crossing" );
             dumpHex< sal_uInt16 >( "flags", "CHVALUERANGE-FLAGS" );
-        break;
-
-        case BIFF_ID_CHWRAPPEDRECORD:
-            dumpRepeatedRecId();
-            dumpUnused( 2 );
         break;
 
         case BIFF_ID_CODENAME:
@@ -2052,16 +2116,16 @@ void WorkbookStreamObject::implDumpRecordBody()
                 sal_uInt8 nDescrLen = dumpDec< sal_uInt8 >( "description-text-len" );
                 sal_uInt8 nHelpLen = dumpDec< sal_uInt8 >( "help-text-len" );
                 sal_uInt8 nStatusLen = dumpDec< sal_uInt8 >( "statusbar-text-len" );
-                writeStringItem( "name", bBiff8 ? rStrm.readUniString( nNameLen ) : rStrm.readCharArray( nNameLen, eTextEnc ) );
+                writeStringItem( "name", bBiff8 ? rStrm.readUniStringBody( nNameLen, true ) : rStrm.readCharArrayUC( nNameLen, eTextEnc, true ) );
                 getFormulaDumper().dumpNameFormula( EMPTY_STRING, nFmlaSize );
-                if( nMenuLen > 0 ) writeStringItem( "menu-text", bBiff8 ? rStrm.readUniString( nMenuLen ) : rStrm.readCharArray( nMenuLen, eTextEnc ) );
-                if( nDescrLen > 0 ) writeStringItem( "description-text", bBiff8 ? rStrm.readUniString( nDescrLen ) : rStrm.readCharArray( nDescrLen, eTextEnc ) );
-                if( nHelpLen > 0 ) writeStringItem( "help-text", bBiff8 ? rStrm.readUniString( nHelpLen ) : rStrm.readCharArray( nHelpLen, eTextEnc ) );
-                if( nStatusLen > 0 ) writeStringItem( "statusbar-text", bBiff8 ? rStrm.readUniString( nStatusLen ) : rStrm.readCharArray( nStatusLen, eTextEnc ) );
+                if( nMenuLen > 0 ) writeStringItem( "menu-text", bBiff8 ? rStrm.readUniStringBody( nMenuLen, true ) : rStrm.readCharArrayUC( nMenuLen, eTextEnc, true ) );
+                if( nDescrLen > 0 ) writeStringItem( "description-text", bBiff8 ? rStrm.readUniStringBody( nDescrLen, true ) : rStrm.readCharArrayUC( nDescrLen, eTextEnc, true ) );
+                if( nHelpLen > 0 ) writeStringItem( "help-text", bBiff8 ? rStrm.readUniStringBody( nHelpLen, true ) : rStrm.readCharArrayUC( nHelpLen, eTextEnc, true ) );
+                if( nStatusLen > 0 ) writeStringItem( "statusbar-text", bBiff8 ? rStrm.readUniStringBody( nStatusLen, true ) : rStrm.readCharArrayUC( nStatusLen, eTextEnc, true ) );
             }
             else
             {
-                writeStringItem( "name", rStrm.readCharArray( nNameLen, eTextEnc ) );
+                writeStringItem( "name", rStrm.readCharArrayUC( nNameLen, eTextEnc, true ) );
                 getFormulaDumper().dumpNameFormula( EMPTY_STRING, nFmlaSize );
                 if( eBiff == BIFF2 ) getFormulaDumper().dumpFormulaSize();
             }
@@ -2133,11 +2197,57 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
             else
             {
-                OStringBuffer aUrl( rStrm.readByteString( false ) );
+                OStringBuffer aUrl( rStrm.readByteString( false, true ) );
                 if( (aUrl.getLength() > 0) && (aUrl[ 0 ] == '\x03') )
                     aUrl.append( static_cast< sal_Char >( rStrm.readuInt8() ) );
                 writeStringItem( "encoded-url", OStringToOUString( aUrl.makeStringAndClear(), getBiffData().getTextEncoding() ) );
             }
+        break;
+
+        case BIFF_ID_FILEPASS:
+        {
+            rStrm.enableDecoder( false );
+            if( eBiff == BIFF8 )
+            {
+                switch( dumpDec< sal_uInt16 >( "type", "FILEPASS-TYPE" ) )
+                {
+                    case 0:
+                        dumpHex< sal_uInt16 >( "key" );
+                        dumpHex< sal_uInt16 >( "verifier" );
+                    break;
+                    case 1:
+                    {
+                        sal_uInt16 nMajor = dumpDec< sal_uInt16 >( "major-version", "FILEPASS-MAJOR" );
+                        dumpDec< sal_uInt16 >( "minor-version" );
+                        switch( nMajor )
+                        {
+                            case 1:
+                                dumpArray( "salt", 16 );
+                                dumpArray( "verifier", 16 );
+                                dumpArray( "verifier-hash", 16 );
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                dumpHex< sal_uInt16 >( "key" );
+                dumpHex< sal_uInt16 >( "verifier" );
+            }
+            rStrm.seekToStart();
+            BiffDecoderRef xDecoder = BiffCodecHelper::implReadFilePass( rStrm, eBiff );
+            if( xDecoder.get() )
+                cfg().requestPassword( *xDecoder );
+            setBinaryOnlyMode( !xDecoder || !xDecoder->isValid() );
+        }
+        break;
+
+        case BIFF_ID_FILESHARING:
+            dumpBool< sal_uInt16 >( "recommend-read-only" );
+            dumpHex< sal_uInt16 >( "password-hash" );
+            dumpString( "password-creator", BIFF_STR_8BITLENGTH, BIFF_STR_SMARTFLAGS );
         break;
 
         case BIFF2_ID_FONT:
@@ -2274,7 +2384,7 @@ void WorkbookStreamObject::implDumpRecordBody()
             else
             {
                 sal_uInt16 nTextLen = ::std::min( dumpDec< sal_uInt16 >( "text-len" ), static_cast< sal_uInt16 >( rStrm.getRemaining() ) );
-                writeStringItem( "note-text", rStrm.readCharArray( nTextLen, getBiffData().getTextEncoding() ) );
+                writeStringItem( "note-text", rStrm.readCharArrayUC( nTextLen, getBiffData().getTextEncoding(), true ) );
             }
         break;
 
@@ -2502,6 +2612,35 @@ void WorkbookStreamObject::implDumpRecordBody()
         }
         break;
 
+        case BIFF_ID_SCENARIO:
+        {
+            sal_uInt16 nCellCount = dumpDec< sal_uInt16 >( "cell-count" );
+            // two bytes instead of flag field
+            dumpBoolean( "locked" );
+            dumpBoolean( "hidden" );
+            sal_uInt16 nNameLen = dumpDec< sal_uInt8 >( "name-len" );
+            sal_uInt16 nCommentLen = dumpDec< sal_uInt8 >( "comment-len" );
+            sal_uInt16 nUserLen = dumpDec< sal_uInt8 >( "user-len" );
+            writeStringItem( "name", rStrm.readUniStringBody( nNameLen, true ) );
+            if( nUserLen > 0 ) dumpUniString( "user" );         // repeated string length
+            if( nCommentLen > 0 ) dumpUniString( "comment" );   // repeated string length
+            out().resetItemIndex();
+            for( sal_uInt16 nCell = 0; !rStrm.isEof() && (nCell < nCellCount); ++nCell )
+                dumpAddress( "#pos" );
+            out().resetItemIndex();
+            for( sal_uInt16 nCell = 0; !rStrm.isEof() && (nCell < nCellCount); ++nCell )
+                dumpString( "#value" );
+            dumpUnused( 2 * nCellCount );
+        }
+        break;
+
+        case BIFF_ID_SCENARIOS:
+            dumpDec< sal_uInt16 >( "count" );
+            dumpDec< sal_uInt16 >( "selected" );
+            dumpDec< sal_uInt16 >( "shown" );
+            dumpRangeList( "result-cells" );
+        break;
+
         case BIFF_ID_SCL:
         {
             sal_uInt16 nNum = dumpDec< sal_uInt16 >( "numerator" );
@@ -2511,8 +2650,7 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SCREENTIP:
-            dumpRepeatedRecId();
-            dumpRange();
+            dumpFrHeader( false, true );
             dumpNullUnicodeArray( "tooltip" );
         break;
 
@@ -2531,9 +2669,14 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SHEET:
-            if( eBiff >= BIFF5 ) dumpHex< sal_uInt32 >( "sheet-stream-pos", "CONV-DEC" );
-            if( eBiff >= BIFF5 ) dumpDec< sal_uInt8 >( "sheet-state", "SHEET-STATE" );
-            if( eBiff >= BIFF5 ) dumpDec< sal_uInt8 >( "sheet-type", "SHEET-TYPE" );
+            if( eBiff >= BIFF5 )
+            {
+                rStrm.enableDecoder( false );
+                dumpHex< sal_uInt32 >( "sheet-stream-pos", "CONV-DEC" );
+                rStrm.enableDecoder( true );
+                dumpDec< sal_uInt8 >( "sheet-state", "SHEET-STATE" );
+                dumpDec< sal_uInt8 >( "sheet-type", "SHEET-TYPE" );
+            }
             dumpString( "sheet-name", BIFF_STR_8BITLENGTH, BIFF_STR_8BITLENGTH );
         break;
 
@@ -2543,8 +2686,8 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SHEETPROTECTION:
-            dumpRepeatedRecId();
-            dumpUnused( 17 );
+            dumpFrHeader( true, true );
+            dumpUnused( 7 );
             dumpHex< sal_uInt16 >( "allowed-flags", "SHEETPROTECTION-FLAGS" );
             dumpUnused( 2 );
         break;
@@ -2567,12 +2710,21 @@ void WorkbookStreamObject::implDumpRecordBody()
             sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "STYLE-FLAGS" );
             if( getFlag( nFlags, BIFF_STYLE_BUILTIN ) )
             {
-                dumpDec< sal_uInt8 >( "builtin-idx", "STYLE-BUILTIN" );
-                dumpDec< sal_uInt8 >( "outline-level" );
+                dumpDec< sal_Int8 >( "builtin-idx", "STYLE-BUILTIN" );
+                dumpDec< sal_Int8 >( "outline-level" );
             }
             else
                 dumpString( "style-name", BIFF_STR_8BITLENGTH );
         }
+        break;
+
+        case BIFF_ID_STYLEEXT:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt8 >( "flags", "STYLEEXT-FLAGS" );
+            dumpDec< sal_uInt8 >( "category", "STYLEEXT-CATEGORY" );
+            dumpDec< sal_Int8 >( "builtin-idx", "STYLEEXT-BUILTIN" );
+            dumpDec< sal_Int8 >( "outline-level" );
+            dumpUnicodeArray( "style-name", rStrm.readuInt16() );
         break;
 
         case BIFF_ID_SXEXT:
@@ -2644,6 +2796,10 @@ void WorkbookStreamObject::implDumpRecordBody()
             }
             else
                 dumpColorABGR( "grid-color" );
+        break;
+
+        case BIFF_ID_WRITEACCESS:
+            dumpString( "user-name", BIFF_STR_8BITLENGTH );
         break;
 
         case BIFF_ID_XCT:
@@ -2724,8 +2880,8 @@ OUString WorkbookStreamObject::dumpPivotString( const String& rName, sal_uInt16 
     if( nStrLen != BIFF_PT_NOSTRING )
     {
         aString = (getBiff() == BIFF8) ?
-            getBiffStream().readUniString( nStrLen ) :
-            getBiffStream().readCharArray( nStrLen, getBiffData().getTextEncoding() );
+            getBiffStream().readUniStringBody( nStrLen ) :
+            getBiffStream().readCharArrayUC( nStrLen, getBiffData().getTextEncoding() );
         writeStringItem( rName, aString );
     }
     return aString;
@@ -3441,7 +3597,7 @@ void WorkbookStreamObject::dumpObjRecString( const String& rName, sal_uInt16 nTe
         if( bRepeatLen )
             dumpByteString( rName, BIFF_STR_8BITLENGTH );
         else
-            writeStringItem( rName, getBiffStream().readCharArray( nTextLen, getBiffData().getTextEncoding() ) );
+            writeStringItem( rName, getBiffStream().readCharArrayUC( nTextLen, getBiffData().getTextEncoding() ) );
         dumpObjRecPadding();
     }
 }
@@ -3611,7 +3767,8 @@ Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Refere
     if( rxFactory.is() && rxInStrm.is() )
     {
         StorageRef xStrg( new OleStorage( rxFactory, rxInStrm, true ) );
-        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        MediaDescriptor aMediaDesc;
+        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }

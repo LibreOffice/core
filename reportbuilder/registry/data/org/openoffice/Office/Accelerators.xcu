@@ -132,6 +132,20 @@
           </prop>
         </node>
 
+        <node oor:name="SUBTRACT" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="en-US">.uno:CollapseSection</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          </prop>
+        </node>
+
+        <node oor:name="ADD" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="en-US">.uno:ExpandSection</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          </prop>
+        </node>
+
       </node>
     </node>
   </node>

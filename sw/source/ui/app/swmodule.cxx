@@ -221,11 +221,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                                      ERRCODE_AREA_SW_END,
                                      pSwResMgr );
 
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMerge"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE_END, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMergeFinished"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_FIELD_MERGE, String(), String::CreateFromAscii("OnFieldMerge"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_FIELD_MERGE_FINISHED, String(), String::CreateFromAscii("OnFieldMergeFinished"));
-    SfxEventConfiguration::RegisterEvent(SW_EVENT_PAGE_COUNT, SW_RES(STR_PAGE_COUNT_MACRO), String::CreateFromAscii("OnPageCountChange"));
     pModuleConfig = new SwModuleOptions;
 
     //Die brauchen wie sowieso

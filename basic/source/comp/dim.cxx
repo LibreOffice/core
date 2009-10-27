@@ -212,7 +212,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 
     // #110004 It can also be a sub/function
     if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ||
-                    eCurTok == STATIC || eCurTok == ENUM ) )
+                    eCurTok == STATIC || eCurTok == ENUM || eCurTok == DECLARE) )
     {
         // Next token is read here, because !bConst
         bool bPrivate = ( eFirstTok == PRIVATE );
@@ -239,6 +239,12 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         {
             Next();
             DefEnum( bPrivate );
+            return;
+        }
+        else if( eCurTok == DECLARE )
+        {
+            Next();
+            DefDeclare( bPrivate ); 
             return;
         }
     }
@@ -546,7 +552,7 @@ void SbiParser::DefType( BOOL bPrivate )
     SbxObject *pType = new SbxObject(aSym);
 
     SbiSymDef* pElem;
-    SbiDimList* pDim;
+    SbiDimList* pDim = NULL;
     BOOL bDone = FALSE;
 
     while( !bDone && !IsEof() )
@@ -570,13 +576,6 @@ void SbiParser::DefType( BOOL bPrivate )
                 pElem = VarDecl(&pDim,FALSE,FALSE);
                 if( !pElem )
                     bDone = TRUE;   // Error occured
-                if( pDim )
-                {
-                    // HOT FIX, to be updated
-                    delete pDim;
-                    Error( SbERR_NO_STRINGS_ARRAYS );
-                }
-
         }
         if( pElem )
         {
@@ -586,6 +585,43 @@ void SbiParser::DefType( BOOL bPrivate )
             else
             {
                 SbxProperty *pTypeElem = new SbxProperty (pElem->GetName(),pElem->GetType());
+                if( pDim )
+                {
+                    SbxDimArray* pArray = new SbxDimArray( pElem->GetType() );  
+                    if ( pDim->GetSize() )
+                    {
+                        // Dimension the target array
+
+                        for ( short i=0; i<pDim->GetSize();++i )
+                        {
+                            INT32 ub = -1;
+                            INT32 lb = nBase;
+                            SbiExprNode* pNode =  pDim->Get(i)->GetExprNode();
+                            ub = pNode->GetNumber();
+                            if ( !pDim->Get( i )->IsBased() ) // each dim is low/up
+                            {
+                                if (  ++i >= pDim->GetSize() ) // trouble
+                                    StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
+                                pNode =  pDim->Get(i)->GetExprNode();
+                                lb = ub;
+                                ub = pNode->GetNumber();
+                            }
+                            else if ( !bCompatible )
+                                ub += nBase;
+                            pArray->AddDim32( lb, ub );      
+                        }
+                        pArray->setHasFixedSize( true );
+                    }
+                    else
+                        pArray->unoAddDim( 0, -1 ); // variant array
+                    USHORT nSavFlags = pTypeElem->GetFlags();
+                    // need to reset the FIXED flag 
+                    // when calling PutObject ( because the type will not match Object )    
+                    pTypeElem->ResetFlag( SBX_FIXED );
+                    pTypeElem->PutObject( pArray );
+                    pTypeElem->SetFlags( nSavFlags );
+                }
+                delete pDim;
                 pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );
             }
             delete pElem;
@@ -872,6 +908,11 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
 
 void SbiParser::Declare()
 {
+    DefDeclare( FALSE );
+}
+
+void SbiParser::DefDeclare( BOOL bPrivate )
+{
     Next();
     if( eCurTok != SUB && eCurTok != FUNCTION )
       Error( SbERR_UNEXPECTED, eCurTok );
@@ -892,12 +933,16 @@ void SbiParser::Declare()
                     // Als Variable deklariert
                     Error( SbERR_BAD_DECLARATION, pDef->GetName() );
                     delete pDef;
+                    pDef = NULL;
                 }
                 else
                     pDef->Match( p );
             }
             else
                 aPublics.Add( pDef );
+
+            if ( pDef )
+                pDef->SetPublic( !bPrivate );
         }
     }
 }

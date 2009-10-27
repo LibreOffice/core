@@ -32,6 +32,7 @@
 #include <com/sun/star/io/XTextInputStream.hpp>
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
+#include "oox/dump/pptxdumper.hxx"
 #include "oox/helper/olestorage.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/filterbase.hxx"
@@ -47,6 +48,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::util::DateTime;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 using namespace ::oox::xls;
@@ -1491,6 +1493,12 @@ void RecordStreamObject::implDumpRecordBody()
                 dumpString( "#sheet-name" );
         break;
 
+        case OOBIN_ID_FILESHARING:
+            dumpBool< sal_uInt16 >( "recommend-read-only" );
+            dumpHex< sal_uInt16 >( "password-hash" );
+            dumpString( "password-creator" );
+        break;
+
         case OOBIN_ID_FILL:
             dumpDec< sal_Int32 >( "fill-pattern", "FILLPATTERNS" );
             dumpColor( "fg-color" );
@@ -1581,6 +1589,13 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "location" );
             dumpString( "tooltip" );
             dumpString( "display" );
+        break;
+
+        case OOBIN_ID_INPUTCELLS:
+            dumpAddress( "pos" );
+            dumpUnused( 8 );
+            dumpDec< sal_uInt16 >( "numfmt-id" );
+            dumpString( "value" );
         break;
 
         case OOBIN_ID_LEGACYDRAWING:
@@ -1986,6 +2001,22 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "manual-count" );
         break;
 
+        case OOBIN_ID_SCENARIO:
+            dumpDec< sal_uInt16 >( "cell-count" );
+            // two longs instead of flag field
+            dumpDec< sal_Int32 >( "locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "hidden", "BOOLEAN" );
+            dumpString( "name" );
+            dumpString( "comment" );
+            dumpString( "user" );
+        break;
+
+        case OOBIN_ID_SCENARIOS:
+            dumpDec< sal_uInt16 >( "selected" );
+            dumpDec< sal_uInt16 >( "shown" );
+            dumpRangeList( "result-cells" );
+        break;
+
         case OOBIN_ID_SELECTION:
             dumpDec< sal_Int32 >( "pane", "PANE-ID" );
             dumpAddress( "active-cell" );
@@ -2180,6 +2211,12 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
         ::oox::dump::biff::Dumper( getFactory(), xInStrm, rSysFileName ).dump();
     }
     else if(
+        aExt.equalsIgnoreAsciiCaseAscii( "pptx" ) ||
+        aExt.equalsIgnoreAsciiCaseAscii( "potx" ) )
+    {
+        ::oox::dump::pptx::Dumper( getFactory(), xInStrm, rSysFileName ).dump();
+    }
+    else if(
         aExt.equalsIgnoreAsciiCaseAscii( "xml" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "vml" ) ||
         aExt.equalsIgnoreAsciiCaseAscii( "rels" ) )
@@ -2211,6 +2248,10 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
         {
             RecordStreamObject( *this, rxStrm, rSysFileName ).dump();
         }
+        else if( rStrgPath.equalsAscii( "xl/activeX" ) )
+        {
+            OcxGuidControlObject( *this, rxStrm, rSysFileName ).dump();
+        }
         else
         {
             BinaryStreamObject( *this, rxStrm, rSysFileName ).dump();
@@ -2233,7 +2274,8 @@ Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Refere
     if( rxFactory.is() && rxInStrm.is() )
     {
         StorageRef xStrg( new ZipStorage( rxFactory, rxInStrm ) );
-        ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName ) );
+        MediaDescriptor aMediaDesc;
+        ConfigRef xCfg( new Config( DUMP_XLSB_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }

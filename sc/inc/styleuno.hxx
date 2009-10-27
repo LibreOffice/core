@@ -224,14 +224,15 @@ class ScStyleObj : public ::cppu::WeakImplHelper7<
                 public SfxListener
 {
 private:
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
     SfxStyleFamily          eFamily;        // Familie
     String                  aStyleName;
 
     SfxStyleSheetBase*      GetStyle_Impl();
-    const SfxItemSet*       GetStyleItemSet_Impl( const String& rPropName, const SfxItemPropertyMap*& rpMapEntry );
-    void                    SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    const SfxItemSet*       GetStyleItemSet_Impl( const ::rtl::OUString& rPropName, const SfxItemPropertySimpleEntry*& rpEntry );
+    void                    SetOnePropertyValue(    const ::rtl::OUString& rPropertyName,
+                                                    const SfxItemPropertySimpleEntry* pEntry,
                                                     const ::com::sun::star::uno::Any* pValue )
                                             throw(::com::sun::star::lang::IllegalArgumentException,
                                                     ::com::sun::star::uno::RuntimeException);

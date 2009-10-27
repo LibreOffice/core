@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -60,14 +60,13 @@ testcase tSettingsToCM
     iSaveSetting = Masseinheit.GetSelIndex
     Masseinheit.Select 2
     Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
+    ExtrasOptionenDlg.OK
     Call hCloseDocument
-    
+
 endcase
 '-------------------------------------------------------------------------
 testcase tLoad100GalleryGraphicFiles
 
-    '/// Inserting all gallery graphics in a Writer document and checking the sizes.
     Dim lsFiles (3000) as String
     Dim lsGraphics (3000) as String
     Dim i as Integer
@@ -77,7 +76,6 @@ testcase tLoad100GalleryGraphicFiles
     Dim corLoad as Boolean
     Dim x as boolean
 
-    '/// Geting all installed gallery objects out of the installation in a list.
     if gNetzInst = TRUE then
         GetAllFileList ( ConvertPath ( gOfficeBasisPath + "share\gallery\" ), "*.*", lsFiles () )
     else
@@ -86,7 +84,6 @@ testcase tLoad100GalleryGraphicFiles
     call GetOnlyGraphics ( lsFiles (), lsGraphics() )
     iCount = ListCount ( lsGraphics() )
     printlog "   We have " + iCount + " graphics in the gallery."
-    '/// + Open a new document
     call hNewDocument
 
     for i = 1 to 100
@@ -100,13 +97,6 @@ testcase tLoad100GalleryGraphicFiles
 
         corLoad = FALSE
         try
-            '/// <i>Loop begin</i>
-            '/// + Inserting all gallery files and checking the sizes
-            '/// +- Iinsert / graphic / from file
-            '/// +- Check the size in 'format / graphics' on the <i>Type</i> tabpage
-            '/// +-- The size should noz be smaler than 17*25cm / photos 21*25cm
-            '///    + Deleting the graphic with &lt;delete&gt; of the keyboard
-            '/// <i>Loop ends</i>
             x = LoadGraphic ( lsGraphics(t), corLoad )
             printlog
         catch
@@ -122,17 +112,14 @@ testcase tLoad100GalleryGraphicFiles
         end if
     next i
 
-    '/// Close the gallery ///'
     ToolsGallery
     WaitSlot (2000)
-    '/// Close the document ///'
     call hCloseDocument
 endcase 'tLoadAllGalleryGraphicFiles
 
 '-------------------------------------------------------------------------
 
 testcase tCheckAllGalleryGraphicFiles
-'/// Checking the filesize of all gallery graphics.
     Dim lsFiles (3000) as String
     Dim lsGraphics (3000) as String
     Dim i as Integer
@@ -142,7 +129,6 @@ testcase tCheckAllGalleryGraphicFiles
     Dim corLoad as Boolean
     Dim x as boolean
 
-    '/// Geting all installed gallery objects out of the installation in a list.
     if gNetzInst = TRUE then
         GetAllFileList ( ConvertPath ( gOfficeBasisPath + "share\gallery\" ), "*.*", lsFiles () )
     else
@@ -151,19 +137,11 @@ testcase tCheckAllGalleryGraphicFiles
     call GetOnlyGraphics ( lsFiles (), lsGraphics() )
     iCount = ListCount ( lsGraphics() )
     printlog "   We have " + iCount + " graphics in the gallery."
-    '/// Open a new document
     call hNewDocument
 
     for i=1 to iCount
         corLoad = FALSE
         try
-            '/// <i>Loop begin</i>
-            '///+ Inserting all gallery files and checking the sizes
-            '///+- Iinsert / graphic / from file
-            '///+- Check the size in 'format / graphics' on the <i>Type</i> tabpage
-            '///+-- The size should noz be smaler than 17*25cm / photos 21*25cm
-            '///+ Deleting the graphic with &lt;delete&gt; of the keyboard
-            '/// <i>Loop ends</i>
             x = CheckGraphic ( lsGraphics(i), corLoad )
         catch
             ExceptLog
@@ -177,10 +155,8 @@ testcase tCheckAllGalleryGraphicFiles
             printlog "   Tested nr: " + i + " : " + lsGraphics(i)
         end if
     next i
-    '/// Close the gallery ///'
     ToolsGallery
     WaitSlot (2000)
-    '/// Close the document ///'
     call hCloseDocument
 endcase 'tLoadAllGalleryGraphicFiles
 
@@ -199,84 +175,76 @@ testcase tInsertGalleryObjects
     Dim iCount as Integer
     Dim corLoad, x as Boolean
 
-    '/// 1. Select theme ///'
     call hNewDocument
     call hOpenGallery
     kontext "Gallery"
-        CountOfThemes = Gallerys.GetItemCount
-        for ct = 1 to CountOfThemes
-            Gallerys.Select ct
-            printlog "   Selected Gallery-Theme nr: " + ct + ": " + Gallerys.GetSelText
-            kontext "Gallery"
-                CountOfItems = View.GetItemCount()
-                '/// 2. Choose if we should test 3,4 or 5 objects. ///'
-                for d = 1 to 1
-                    randomize
-                    HowManyItems=Int((5*Rnd)+(3*Rnd))
-                    if CountOfItems = 0 then
-                        QaErrorLog "   There were no objects in the the gallery-theme on position: " + ct
-                    else
-                        if (HowManyItems<3) then 'just so we get it between 3 and 5.
-                            d = d - 1
-                        else
-                            printlog "   Will now select and copy " + HowManyItems + " items from this Theme."
+    CountOfThemes = Gallerys.GetItemCount
+    for ct = 1 to CountOfThemes
+        Gallerys.Select ct
+        printlog "   Selected Gallery-Theme nr: " + ct + ": " + Gallerys.GetSelText
+        kontext "Gallery"
+        CountOfItems = View.GetItemCount()
+        for d = 1 to 1
+            randomize
+            HowManyItems=Int((5*Rnd)+(3*Rnd))
+            if CountOfItems = 0 then
+                QaErrorLog "   There were no objects in the the gallery-theme on position: " + ct
+            else
+                if (HowManyItems<3) then 'just so we get it between 3 and 5.
+                    d = d - 1
+                else
+                    printlog "   Will now select and copy " + HowManyItems + " items from this Theme."
+                end if
+                for i = 1 to HowManyItems
+                    for x = 1 to 1
+                        randomize
+                        WhichOne=Int(CountOfItems*RND) '(5*Rnd)+(CountOfItems*Rnd))
+                        if (WhichOne<1) then 'just so we get it between 1 and the amount of items.  '>(CountOfItems + 1)) OR (WhichOne<1) then '
+                            x = x - 1
                         end if
-                        for i = 1 to HowManyItems
-                            '/// 3. Select the objects ///'
-                            for x = 1 to 1
-                                randomize
-                                WhichOne=Int(CountOfItems*RND) '(5*Rnd)+(CountOfItems*Rnd))
-                                if (WhichOne<1) then 'just so we get it between 1 and the amount of items.  '>(CountOfItems + 1)) OR (WhichOne<1) then '
-                                    x = x - 1
-                                end if
-                            next x
-                            printlog "   Will copy object nr: " + WhichOne
-                            View.Mousemove (1,1)
-                            View.TypeKeys "<HOME>"
-                            View.TypeKeys "<RIGHT>", (WhichOne)
-                            kontext "GraphicObjectBar"
-                                if GraphicObjectBar.Exists then
-                                    if GraphicObjectBar.IsDocked = False then GraphicObjectBar.Dock
-                                end if
-                            kontext "Gallery"
+                    next x
+                    printlog "   Will copy object nr: " + WhichOne
+                    View.Mousemove (1,1)
+                    View.TypeKeys "<HOME>"
+                    View.TypeKeys "<RIGHT>", (WhichOne)
+                    kontext "GraphicObjectBar"
+                    if GraphicObjectBar.Exists then
+                        if GraphicObjectBar.IsDocked = False then GraphicObjectBar.Dock
+                        end if
+                        kontext "Gallery"
+                        sleep (1)
+                        View.TypeKeys("<shift f10>")
+                        sleep (1)
+                        try
+                            dim number as integer
+                            number = MenuGetItemCount
+                            if (number > 2) AND (number < 10) then
+                                hMenuSelectNr (1) 'Insert
+                                hMenuSelectNr (1) 'As Copy
                                 sleep (1)
-                                View.TypeKeys("<shift f10>")
-                                sleep (1)
-                                try
-                                    dim number as integer
-                                    number = MenuGetItemCount
-                                    if (number > 2) AND (number < 10) then
-                                        '/// 4. Copy the selected item into our document. ///'
-                                        hMenuSelectNr (1) 'Insert
-                                        hMenuSelectNr (1) 'As Copy
-                                        sleep (1)
-                                    else
-                                        Warnlog "   The contextmenu came up, but the number of entries were strange."
-                                        printlog "   Number of entries:" + number
-                                        MenuSelect(0)
-                                    end if
-                                catch
-                                    warnlog "   A contextmenu didnt come up for the gallery-theme on position: " + ct
-                                    i = HowManyItems
-                                endcatch
-                            '/// 5. Repeat 3.-5. until 2. is fulfilled. ///'
-                        next i
-                    end if 'if the theme didnt have any objects, we landed here.
-        next d
-        '/// 6. Change Theme. ///'
-        '/// 7. Repeat 2. - 8. until all themes are done. ///'
-    next ct
+                            else
+                                Warnlog "   The contextmenu came up, but the number of entries were strange."
+                                printlog "   Number of entries:" + number
+                                MenuSelect(0)
+                            end if
+                        catch
+                            warnlog "   A contextmenu didnt come up for the gallery-theme on position: " + ct
+                            i = HowManyItems
+                        endcatch
+                    next i
+                end if 'if the theme didnt have any objects, we landed here.
+            next d
+        next ct
 
-    Kontext "Gallery"
+        Kontext "Gallery"
         if Gallery.Exists(2) then
             ToolsGallery
             WaitSlot (2000)
         end if
-        
-    '/// Remove the last copied object. ///'
-    hTypeKeys "<DELETE>"
-    call hCloseDocument
-    
+
+        hTypeKeys "<DELETE>"
+        call hCloseDocument
+
 endcase 'tInsertGalleryObjects
 
 '-------------------------------------------------------------------------
@@ -289,8 +257,8 @@ testcase tResetSettings
     hToolsOptions ( "WRITER", "General" )
     Masseinheit.Select iSaveSetting
     Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
+    ExtrasOptionenDlg.OK
     call hCloseDocument
-    
+
 endcase 'tResetSettings
 '-------------------------------------------------------------------------

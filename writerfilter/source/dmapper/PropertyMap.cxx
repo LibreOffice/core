@@ -32,6 +32,7 @@
 #include <ooxml/resourceids.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
+#include <i18npool/paper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
@@ -209,10 +210,11 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
         m_nBorderDistances[ nBorder ] = -1;
     //todo: set defaults in ApplyPropertiesToPageStyles
     //initialize defaults
-    //page height, todo: rounded to default values, default: 0x3dc0 (15808) twip  27883 1/100 mm
-    Insert( PROP_HEIGHT, false, uno::makeAny( (sal_Int32) 27883 ) );
-    //page width, todo: rounded to default values, default 0x2fd0 (12240) twip -> 21590 1/100 mm
-    Insert( PROP_WIDTH, false, uno::makeAny( (sal_Int32)21590 ) );
+    PaperInfo aLetter(PAPER_LETTER);
+    //page height, 1/100mm
+    Insert( PROP_HEIGHT, false, uno::makeAny( (sal_Int32) aLetter.getHeight() ) );
+    //page width, 1/100mm
+    Insert( PROP_WIDTH, false, uno::makeAny( (sal_Int32) aLetter.getWidth() ) );
     //page left margin, default 0x708 (1800) twip -> 3175 1/100 mm
     Insert( PROP_LEFT_MARGIN, false, uno::makeAny( (sal_Int32) 3175 ) );
     //page right margin, default 0x708 (1800) twip -> 3175 1/100 mm

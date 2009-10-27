@@ -65,7 +65,7 @@ public:
     void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
 
     BOOL    Search( SCROW nRow, SCSIZE& nIndex ) const;
-    void    DeleteArea(SCROW nStartRow, SCROW nEndRow);
+//UNUSED2009-05 void    DeleteArea(SCROW nStartRow, SCROW nEndRow);
 
     /// Including current row, may return -1 if bUp and not found
     SCsROW  GetNextMarked( SCsROW nRow, BOOL bUp ) const;

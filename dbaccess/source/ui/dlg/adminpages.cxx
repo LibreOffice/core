@@ -183,7 +183,7 @@ namespace dbaui
         return 0L;
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::dbaccess::DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
+    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
     {
         // collect all ODBC data source names
         StringBag aOdbcDatasources;
@@ -202,7 +202,7 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // excute the select dialog
-            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, _eType);
+            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, false);
             if (_sCurr.getLength())
                 aSelector.Select(_sCurr);
             if ( RET_OK == aSelector.Execute() )
@@ -339,16 +339,22 @@ namespace dbaui
     }
 
 
-    Point OGenericAdministrationPage::MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift)
+    //=========================================================================
+    //= LayoutHelper
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    void LayoutHelper::positionBelow( const Control& _rReference, Control& _rControl, const ControlRelation _eRelation,
+        const long _nIndentAppFont )
     {
-        Point rLogicPoint = PixelToLogic( _aPixelBasePoint, MAP_APPFONT );
-        sal_uInt32 XPos = rLogicPoint.X() + _XShift;
-        sal_uInt32 YPos = rLogicPoint.Y() + _YShift;
-        Point aNewPixelPoint = LogicToPixel(Point(XPos, YPos), MAP_APPFONT);
-        return aNewPixelPoint;
+        Point aReference = _rReference.GetPosPixel();
+        aReference.Y() += _rReference.GetSizePixel().Height();
+
+        const Window* pConverter = _rControl.GetParent();
+        Size aOffset = pConverter->LogicToPixel( Size( _nIndentAppFont, ( _eRelation == RelatedControls ? 3 : 6 ) ), MAP_APPFONT );
+
+        Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );
+        _rControl.SetPosPixel( aControlPos );
     }
-
-
 
 //.........................................................................
 }   // namespace dbaui

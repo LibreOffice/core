@@ -367,6 +367,22 @@ published constants AccessibleEventId
         old and new accessible objects representing the table summary.
     */
     const short TABLE_SUMMARY_CHANGED = 31;
+
+    /** Constant used to indicate that a list box entry has been expanded.
+        <member>AccessibleEventObject::OldValue</member> is empty.
+        <member>AccessibleEventObject::NewValue</member> contains the expanded list box entry.
+
+        @since OOo 3.2
+    */
+    const short LISTBOX_ENTRY_EXPANDED = 32;
+
+    /** Constant used to indicate that a list box entry has been collapsed.
+        <member>AccessibleEventObject::OldValue</member> is empty.
+        <member>AccessibleEventObject::NewValue</member> contains the collapsed list box entry.
+
+        @since OOo 3.2
+    */
+    const short LISTBOX_ENTRY_COLLAPSED = 33;
 };
 
 }; }; }; };

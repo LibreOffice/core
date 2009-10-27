@@ -1203,6 +1203,12 @@ void SvLBox::ViewDataInitialized( SvLBoxEntry* )
     DBG_CHKTHIS(SvLBox,0);
 }
 
+void SvLBox::StateChanged( StateChangedType eType )
+{
+    if( eType == STATE_CHANGE_ENABLE )
+        Invalidate( INVALIDATE_CHILDREN );
+    Control::StateChanged( eType );
+}
 
 void SvLBox::ImplShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow)
 {

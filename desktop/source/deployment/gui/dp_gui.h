@@ -82,6 +82,7 @@ enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
 class SelectedPackage: public salhelper::SimpleReferenceObject {
 public:
+    SelectedPackage() {}
     SelectedPackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> &xPackage,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> &xPackageManager )
     : m_xPackage( xPackage ),

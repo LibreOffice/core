@@ -34,6 +34,7 @@
 #ifndef _DBAUI_ODBC_CONFIG_HXX_
 #include "odbcconfig.hxx"
 #endif
+#include <rtl/bootstrap.hxx>
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -380,7 +381,8 @@ bool OOdbcManagement::manageDataSources_async()
 
     // this is done in an external process, due to #i78733#
     // (and note this whole functionality is supported on Windows only, ATM)
-    ::rtl::OUString sExecutableName( RTL_CONSTASCII_USTRINGPARAM( "odbcconfig.exe" ) );
+    ::rtl::OUString sExecutableName( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR/program/odbcconfig.exe" ) );
+    ::rtl::Bootstrap::expandMacros( sExecutableName ); //TODO: detect failure
     oslProcess hProcessHandle(0);
     oslProcessError eError = osl_executeProcess( sExecutableName.pData, NULL, 0, 0, NULL, NULL, NULL, 0, &hProcessHandle );
     if ( eError != osl_Process_E_None )

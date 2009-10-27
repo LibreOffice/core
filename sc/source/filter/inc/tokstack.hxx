@@ -179,7 +179,7 @@ class TokenPool
 
         void                        GrowString( void );
         void                        GrowDouble( void );
-        void                        GrowError( void );
+//UNUSED2009-05 void                        GrowError( void );
         void                        GrowTripel( void );
         void                        GrowId( void );
         void                        GrowElement( void );

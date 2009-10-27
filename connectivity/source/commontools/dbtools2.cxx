@@ -86,10 +86,10 @@ namespace dbtools
     sal_Int32       nPrecision  = 0;
     sal_Int32       nScale      = 0;
 
-    ::rtl::OUString sQuoteString = xMetaData->getIdentifierQuoteString();
-    ::rtl::OUString aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
+    const ::rtl::OUString sQuoteString = xMetaData->getIdentifierQuoteString();
+    ::rtl::OUStringBuffer aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
 
-    aSql += ::rtl::OUString::createFromAscii(" ");
+    aSql.appendAscii(" ");
 
     nDataType = nPrecision = nScale = 0;
     sal_Bool bIsAutoIncrement = sal_False;
@@ -143,54 +143,59 @@ namespace dbtools
         sal_Int32 nParenPos = sTypeName.indexOf('(');
         if ( nParenPos == -1 )
         {
-            aSql += sTypeName;
-            aSql += ::rtl::OUString::createFromAscii("(");
+            aSql.append(sTypeName);
+            aSql.appendAscii("(");
         }
         else
         {
-            aSql += sTypeName.copy(0,++nParenPos);
+            aSql.append(sTypeName.copy(0,++nParenPos));
         }
 
         if ( nPrecision > 0 && nDataType != DataType::TIMESTAMP )
         {
-            aSql += ::rtl::OUString::valueOf(nPrecision);
+            aSql.append(nPrecision);
             if ( (nScale > 0) || (_sCreatePattern.getLength() && sCreateParams.indexOf(_sCreatePattern) != -1) )
-                aSql += ::rtl::OUString::createFromAscii(",");
+                aSql.appendAscii(",");
         }
         if ( (nScale > 0) || (_sCreatePattern.getLength() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
-            aSql += ::rtl::OUString::valueOf(nScale);
+            aSql.append(nScale);
 
         if ( nParenPos == -1 )
-            aSql += ::rtl::OUString::createFromAscii(")");
+            aSql.appendAscii(")");
         else
         {
             nParenPos = sTypeName.indexOf(')',nParenPos);
-            aSql += sTypeName.copy(nParenPos);
+            aSql.append(sTypeName.copy(nParenPos));
         }
     }
     else
-        aSql += sTypeName; // simply add the type name
+        aSql.append(sTypeName); // simply add the type name
 
     ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
-    if(aDefault.getLength())
-        aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + sPreFix + aDefault + sPostFix;
+    if ( aDefault.getLength() )
+    {
+        aSql.append(::rtl::OUString::createFromAscii(" DEFAULT "));
+        aSql.append(sPreFix);
+        aSql.append(aDefault);
+        aSql.append(sPostFix);
+    } // if ( aDefault.getLength() )
 
     if(::comphelper::getINT32(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
-        aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
+        aSql.append(::rtl::OUString::createFromAscii(" NOT NULL"));
 
     if ( bIsAutoIncrement && sAutoIncrementValue.getLength())
     {
-        aSql += ::rtl::OUString::createFromAscii(" ");
-        aSql += sAutoIncrementValue;
+        aSql.appendAscii(" ");
+        aSql.append(sAutoIncrementValue);
     }
 
-    return aSql;
+    return aSql.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
 
 ::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sCreatePattern)
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUStringBuffer aSql  = ::rtl::OUString::createFromAscii("CREATE TABLE ");
     ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -204,7 +209,8 @@ namespace dbtools
     if ( !sComposedName.getLength() )
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-    aSql += sComposedName + ::rtl::OUString::createFromAscii(" (");
+    aSql.append(sComposedName);
+    aSql.append(::rtl::OUString::createFromAscii(" ("));
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -220,11 +226,11 @@ namespace dbtools
     {
         if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
         {
-            aSql += createStandardColumnPart(xColProp,_xConnection,_sCreatePattern);
-            aSql += ::rtl::OUString::createFromAscii(",");
+            aSql.append(createStandardColumnPart(xColProp,_xConnection,_sCreatePattern));
+            aSql.appendAscii(",");
         }
     }
-    return aSql;
+    return aSql.makeStringAndClear();
 }
 namespace
 {
@@ -256,7 +262,7 @@ namespace
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
 
-    ::rtl::OUString aSql;
+    ::rtl::OUStringBuffer aSql;
     // keys
     Reference<XKeysSupplier> xKeySup(descriptor,UNO_QUERY);
     Reference<XIndexAccess> xKeys = xKeySup->getKeys();
@@ -286,8 +292,8 @@ namespace
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
-                    aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY ");
-                    aSql += generateColumnNames(xColumns,xMetaData);
+                    aSql.append(::rtl::OUString::createFromAscii(" PRIMARY KEY "));
+                    aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::UNIQUE)
                 {
@@ -297,8 +303,8 @@ namespace
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
                     const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
-                    aSql += ::rtl::OUString::createFromAscii(" UNIQUE ");
-                    aSql += generateColumnNames(xColumns,xMetaData);
+                    aSql.append(::rtl::OUString::createFromAscii(" UNIQUE "));
+                    aSql.append(generateColumnNames(xColumns,xMetaData));
                 }
                 else if(nKeyType == KeyType::FOREIGN)
                 {
@@ -309,7 +315,7 @@ namespace
                     if(!xColumns.is() || !xColumns->getCount())
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql += ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
+                    aSql.append(::rtl::OUString::createFromAscii(" FOREIGN KEY "));
                     ::rtl::OUString sRefTable = getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     ::dbtools::qualifiedNameComponents(xMetaData,
                                                         sRefTable,
@@ -323,21 +329,21 @@ namespace
                     if ( !sComposedName.getLength() )
                         ::dbtools::throwFunctionSequenceException(_xConnection);
 
-                    aSql += generateColumnNames(xColumns,xMetaData);
+                    aSql.append(generateColumnNames(xColumns,xMetaData));
 
                     switch(nDeleteRule)
                     {
                         case KeyRule::CASCADE:
-                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
+                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE CASCADE "));
                             break;
                         case KeyRule::RESTRICT:
-                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
+                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE RESTRICT "));
                             break;
                         case KeyRule::SET_NULL:
-                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
+                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE SET NULL "));
                             break;
                         case KeyRule::SET_DEFAULT:
-                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
+                            aSql.append(::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT "));
                             break;
                         default:
                             ;
@@ -349,13 +355,13 @@ namespace
 
     if ( aSql.getLength() )
     {
-        if ( aSql.lastIndexOf(',') == (aSql.getLength()-1) )
-            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+        if ( aSql.charAt(aSql.getLength()-1) == ',' )
+            aSql.setCharAt(aSql.getLength()-1,')');
         else
-            aSql += ::rtl::OUString::createFromAscii(")");
+            aSql.appendAscii(")");
     }
 
-    return aSql;
+    return aSql.makeStringAndClear();
 
 }
 // -----------------------------------------------------------------------------
@@ -364,7 +370,7 @@ namespace
                                                 const ::rtl::OUString& _sCreatePattern)
 {
     ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection,_sCreatePattern);
-    ::rtl::OUString sKeyStmt = ::dbtools::createStandardKeyStatement(descriptor,_xConnection);
+    const ::rtl::OUString sKeyStmt = ::dbtools::createStandardKeyStatement(descriptor,_xConnection);
     if ( sKeyStmt.getLength() )
         aSql += sKeyStmt;
     else
@@ -378,7 +384,7 @@ namespace
 }
 namespace
 {
-    Reference<XPropertySet> lcl_createSDBCXColumn(
+    Reference<XPropertySet> lcl_createSDBCXColumn(const Reference<XNameAccess>& _xPrimaryKeyColumns,
                                           const Reference<XConnection>& _xConnection,
                                           const Any& _aCatalog,
                                           const ::rtl::OUString& _aSchema,
@@ -418,8 +424,7 @@ namespace
                         const ::rtl::OUString sQuote = xMetaData->getIdentifierQuoteString();
                         ::rtl::OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
                         ::rtl::OUString sComposedName;
-                        sComposedName = composeTableNameForSelect(
-                            _xConnection, getString( _aCatalog ), _aSchema, _aTable );
+                        sComposedName = composeTableNameForSelect(_xConnection, getString( _aCatalog ), _aSchema, _aTable );
 
                         ColumnInformationMap aInfo(_bCase);
                         collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
@@ -439,11 +444,19 @@ namespace
                     {
                         try
                         {
-                            Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
-                            Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
-                            while( xPKeys->next() ) // there can be only one primary key
+                            if ( _xPrimaryKeyColumns.is() )
+                            {
+                                if ( _xPrimaryKeyColumns->hasByName(_rName) )
+                                    nField11 = ColumnValue::NO_NULLS;
+
+                            }
+                            else
+                            {
+                                Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
+                                Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
+                                while( xPKeys->next() ) // there can be only one primary key
                                 {
-                                ::rtl::OUString sKeyColumn = xPKeyRow->getString(4);
+                                    ::rtl::OUString sKeyColumn = xPKeyRow->getString(4);
                                     if ( aMixCompare(_rName,sKeyColumn) )
                                     {
                                         nField11 = ColumnValue::NO_NULLS;
@@ -451,6 +464,7 @@ namespace
                                     }
                                 }
                             }
+                        }
                         catch(SQLException&)
                         {
                             OSL_ENSURE( false, "lcl_createSDBCXColumn: caught an exception!" );
@@ -515,10 +529,33 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
 
-    xProp = lcl_createSDBCXColumn(_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+    Reference<XKeysSupplier> xKeysSup(_xTable,UNO_QUERY);
+    Reference<XNameAccess> xPrimaryKeyColumns;
+    if ( xKeysSup.is() )
+    {
+        const Reference<XIndexAccess> xKeys = xKeysSup->getKeys();
+        if ( xKeys.is() )
+        {
+            const sal_Int32 nKeyCount = xKeys->getCount();
+            for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++nKeyIter)
+            {
+                const Reference<XPropertySet> xKey(xKeys->getByIndex(nKeyIter),UNO_QUERY_THROW);
+                sal_Int32 nType = 0;
+                xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))   >>= nType;
+                if ( nType == KeyType::PRIMARY )
+                {
+                    const Reference<XColumnsSupplier> xColS(xKey,UNO_QUERY_THROW);
+                    xPrimaryKeyColumns = xColS->getColumns();
+                    break;
+                }
+            } // for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++)
+        }
+    }
+
+    xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
     if ( !xProp.is() )
     {
-        xProp = lcl_createSDBCXColumn(_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
+        xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
         if ( !xProp.is() )
             xProp = new connectivity::sdbcx::OColumn(_rName,
                                                 ::rtl::OUString(),::rtl::OUString(),
@@ -603,7 +640,7 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
 
         // if we don't get the catalog from the original driver we have to try them all.
         if ( !xTablesSup.is() )
-        {
+        { // !TODO: Why?
             Reference< XEnumerationAccess> xEnumAccess( xManager, UNO_QUERY_THROW );
             Reference< XEnumeration > xEnum( xEnumAccess->createEnumeration(), UNO_QUERY_THROW );
             while ( xEnum.is() && xEnum->hasMoreElements() && !xTablesSup.is() )
@@ -752,6 +789,7 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
         Reference< XResultSetMetaData > xMeta( xSuppMeta->getMetaData(), UNO_QUERY_THROW );
 
         sal_Int32 nCount = xMeta->getColumnCount();
+        OSL_ENSURE( nCount != 0, "::dbtools::collectColumnInformation: result set has empty (column-less) meta data!" );
         for (sal_Int32 i=1; i <= nCount ; ++i)
         {
             _rInfo.insert(ColumnInformationMap::value_type(xMeta->getColumnName(i),

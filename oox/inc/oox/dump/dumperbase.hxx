@@ -41,6 +41,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/binaryinputstream.hxx"
@@ -56,6 +57,10 @@ namespace com { namespace sun { namespace star {
     namespace io { class XTextOutputStream; }
     namespace lang { class XMultiServiceFactory; }
 } } }
+
+namespace comphelper {
+    class IDocPasswordVerifier;
+}
 
 namespace oox {
     class BinaryOutputStream;
@@ -866,7 +871,8 @@ public:
                             const ::rtl::OUString& rFileName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
                             const StorageRef& rxRootStrg,
-                            const ::rtl::OUString& rSysFileName );
+                            const ::rtl::OUString& rSysFileName,
+                            ::comphelper::MediaDescriptor& rMediaDesc );
 
     virtual             ~SharedConfigData();
 
@@ -882,6 +888,9 @@ public:
     void                setNameList( const ::rtl::OUString& rListName, const NameListRef& rxList );
     void                eraseNameList( const ::rtl::OUString& rListName );
     NameListRef         getNameList( const ::rtl::OUString& rListName ) const;
+
+    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier );
+    inline bool         isPasswordCancelled() const { return mbPwCancelled; }
 
 protected:
     virtual bool        implIsValid() const;
@@ -905,11 +914,13 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxFactory;
     StorageRef          mxRootStrg;
     ::rtl::OUString     maSysFileName;
+    ::comphelper::MediaDescriptor& mrMediaDesc;
     ConfigFileSet       maConfigFiles;
     ConfigDataMap       maConfigData;
     NameListMap         maNameLists;
     ::rtl::OUString     maConfigPath;
     bool                mbLoaded;
+    bool                mbPwCancelled;
 };
 
 // ----------------------------------------------------------------------------
@@ -947,7 +958,8 @@ public:
                             const sal_Char* pcEnvVar,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
                             const StorageRef& rxRootStrg,
-                            const ::rtl::OUString& rSysFileName );
+                            const ::rtl::OUString& rSysFileName,
+                            ::comphelper::MediaDescriptor& rMediaDesc );
 
     virtual             ~Config();
 
@@ -978,6 +990,9 @@ public:
     template< typename Type >
     bool                hasName( const NameListWrapper& rListWrp, Type nKey ) const;
 
+    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier );
+    bool                isPasswordCancelled() const;
+
 protected:
     inline explicit     Config() {}
     void                construct( const Config& rParent );
@@ -988,7 +1003,8 @@ protected:
                             const sal_Char* pcEnvVar,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
                             const StorageRef& rxRootStrg,
-                            const ::rtl::OUString& rSysFileName );
+                            const ::rtl::OUString& rSysFileName,
+                            ::comphelper::MediaDescriptor& rMediaDesc );
 
     virtual bool        implIsValid() const;
     virtual const ::rtl::OUString* implGetOption( const ::rtl::OUString& rKey ) const;
@@ -1408,6 +1424,11 @@ protected:
     template< typename Type >
     void                writeValueItem( const ItemFormat& rItemFmt, Type nData );
 
+    template< typename Type >
+    void                writeDecPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep = ',' );
+    template< typename Type >
+    void                writeHexPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep = ',' );
+
 private:
     OutputRef           mxOut;
 };
@@ -1503,6 +1524,24 @@ void OutputObjectBase::writeValueItem( const ItemFormat& rItemFmt, Type nData )
     writeValueItem( aNameUtf8.getStr(), nData, rItemFmt.meFmtType, rItemFmt.maListName );
 }
 
+template< typename Type >
+void OutputObjectBase::writeDecPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep )
+{
+    ItemGuard aItem( *mxOut, rName );
+    mxOut->writeDec( nData1 );
+    mxOut->writeChar( cSep );
+    mxOut->writeDec( nData2 );
+}
+
+template< typename Type >
+void OutputObjectBase::writeHexPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep )
+{
+    ItemGuard aItem( *mxOut, rName );
+    mxOut->writeHex( nData1 );
+    mxOut->writeChar( cSep );
+    mxOut->writeHex( nData2 );
+}
+
 // ============================================================================
 // ============================================================================
 
@@ -1588,6 +1627,11 @@ protected:
     Type1               dumpBool( bool bType1, const String& rName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
     Type1               dumpValue( bool bType1, const ItemFormat& rItemFmt );
+
+    template< typename Type >
+    void                dumpDecPair( const String& rName, sal_Unicode cSep = ',' );
+    template< typename Type >
+    void                dumpHexPair( const String& rName, sal_Unicode cSep = ',' );
 
 private:
     BinaryInputStreamRef mxStrm;
@@ -1702,6 +1746,22 @@ Type1 InputObjectBase::dumpValue( bool bType1, const ItemFormat& rItemFmt )
     return bType1 ? dumpValue< Type1 >( rItemFmt ) : static_cast< Type1 >( dumpValue< Type2 >( rItemFmt ) );
 }
 
+template< typename Type >
+void InputObjectBase::dumpDecPair( const String& rName, sal_Unicode cSep )
+{
+    Type nData1, nData2;
+    *mxStrm >> nData1 >> nData2;
+    writeDecPairItem( rName, nData1, nData2, cSep );
+}
+
+template< typename Type >
+void InputObjectBase::dumpHexPair( const String& rName, sal_Unicode cSep )
+{
+    Type nData1, nData2;
+    *mxStrm >> nData1 >> nData2;
+    writeHexPairItem( rName, nData1, nData2, cSep );
+}
+
 // ============================================================================
 // ============================================================================
 
@@ -1778,11 +1838,6 @@ class RecordObjectBase : public InputObjectBase
 protected:
     inline explicit     RecordObjectBase() {}
 
-    inline sal_Int64    getRecPos() const { return mnRecPos; }
-    inline sal_Int64    getRecId() const { return mnRecId; }
-    inline sal_Int64    getRecSize() const { return mnRecSize; }
-    inline NameListRef  getRecNames() const { return maRecNames.getNameList( cfg() ); }
-
     using               InputObjectBase::construct;
     void                construct(
                             const ObjectBase& rParent,
@@ -1797,6 +1852,14 @@ protected:
                             const BinaryInputStreamRef& rxRecStrm,
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
+
+    inline sal_Int64    getRecPos() const { return mnRecPos; }
+    inline sal_Int64    getRecId() const { return mnRecId; }
+    inline sal_Int64    getRecSize() const { return mnRecSize; }
+    inline NameListRef  getRecNames() const { return maRecNames.getNameList( cfg() ); }
+
+    inline void         setBinaryOnlyMode( bool bBinaryOnly ) { mbBinaryOnly = bBinaryOnly; }
+    inline bool         isBinaryOnlyMode() const { return mbBinaryOnly; }
 
     virtual bool        implIsValid() const;
     virtual void        implDump();
@@ -1821,6 +1884,7 @@ private:
     sal_Int64           mnRecId;
     sal_Int64           mnRecSize;
     bool                mbShowRecPos;
+    bool                mbBinaryOnly;
 };
 
 // ============================================================================
@@ -1878,6 +1942,7 @@ public:
     virtual             ~DumperBase();
 
     bool                isImportEnabled() const;
+    bool                isImportCancelled() const;
 
 protected:
     inline explicit     DumperBase() {}
@@ -1892,12 +1957,13 @@ protected:
 } // namespace dump
 } // namespace oox
 
-#define OOX_DUMP_FILE( DumperClassName )    \
-do {                                        \
-    DumperClassName aDumper( *this );       \
-    aDumper.dump();                         \
-    if( !aDumper.isImportEnabled() )        \
-        return aDumper.isValid();           \
+#define OOX_DUMP_FILE( DumperClassName )            \
+do {                                                \
+    DumperClassName aDumper( *this );               \
+    aDumper.dump();                                 \
+    bool bCancelled = aDumper.isImportCancelled();  \
+    if( !aDumper.isImportEnabled() || bCancelled )  \
+        return aDumper.isValid() && !bCancelled;    \
 } while( false )
 
 #else   // OOX_INCLUDE_DUMPER

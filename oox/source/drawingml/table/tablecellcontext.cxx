@@ -115,7 +115,7 @@ TableCellContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::
     break;
 
     default:
-        xRet.set( oox::drawingml::FillPropertiesGroupContext::StaticCreateContext( *this, aElementToken, xAttribs, mrTableCell.maFillProperties ) );
+        xRet.set( FillPropertiesContext::createFillContext( *this, aElementToken, xAttribs, mrTableCell.maFillProperties ) );
     break;
 
     }

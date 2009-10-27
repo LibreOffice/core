@@ -136,8 +136,8 @@ Menu RID_POPUP_ROWHEADER
         PART2
         MenuItem
         {
-            Identifier = FID_PASTE_CONTENTS ;
-            HelpId = FID_PASTE_CONTENTS ;
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = SID_PASTE_SPECIAL ;
             Text [ en-US ] = "P~aste Special..." ;
         };
     };
@@ -214,8 +214,8 @@ Menu RID_POPUP_COLHEADER
         PART2
         MenuItem
         {
-            Identifier = FID_PASTE_CONTENTS ;
-            HelpId = FID_PASTE_CONTENTS ;
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = SID_PASTE_SPECIAL ;
             Text [ en-US ] = "Paste ~Special..." ;
         };
     };

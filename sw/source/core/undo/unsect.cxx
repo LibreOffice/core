@@ -167,8 +167,10 @@ void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
     if( bSplitAtEnd )
         Join( rDoc, nEndNode );
 
-    if( pHistory )
-        pHistory->TmpRollback( &rDoc, 0, FALSE );
+    if ( pHistory )
+    {
+        pHistory->TmpRollback( &rDoc, 0, false );
+    }
 
     if( bUpdateFtn )
         rDoc.GetFtnIdxs().UpdateFtn( aIdx );
@@ -190,7 +192,9 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
                                         rBase, pAttr, TRUE );
     }
     else
-        rDoc.Insert( *rUndoIter.pAktPam, *pSection, pAttr, TRUE );
+    {
+        rDoc.InsertSwSection( *rUndoIter.pAktPam, *pSection, pAttr, true );
+    }
 
     if( pHistory )
         pHistory->SetTmpEnd( pHistory->Count() );
@@ -234,7 +238,10 @@ void SwUndoInsSection::Repeat( SwUndoIter& rUndoIter )
                                             rBase, pAttr, TRUE );
     }
     else
-        rUndoIter.GetDoc().Insert( *rUndoIter.pAktPam, *pSection, pAttr );
+    {
+        rUndoIter.GetDoc().InsertSwSection( *rUndoIter.pAktPam,
+            *pSection, pAttr );
+    }
 }
 
 
@@ -253,7 +260,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, ULONG nNode )
     if( pHistory )
     {
         SwIndex aCntIdx( pTxtNd, 0 );
-        pTxtNd->RstAttr( aCntIdx, pTxtNd->GetTxt().Len() );
+        pTxtNd->RstAttr( aCntIdx, pTxtNd->Len(), 0, 0, true );
     }
 }
 
@@ -265,7 +272,7 @@ void SwUndoInsSection::SaveSplitNode( SwTxtNode* pTxtNd, BOOL bAtStt )
         if( !pHistory )
             pHistory = new SwHistory;
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), pTxtNd->GetIndex(), 0,
-                            pTxtNd->GetTxt().Len(), FALSE );
+                            pTxtNd->GetTxt().Len(), false );
     }
 
     if( bAtStt )

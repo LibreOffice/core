@@ -75,16 +75,14 @@
 #include "plugin/win/sysplug.hxx"
 #endif
 
-#ifdef OS2
+#ifdef WNT
+#include <plugin/win/sysplug.hxx>
+#elif defined(OS2)
 #include "plugin/os2/sysplug.hxx"
-#endif
-
-#if defined(UNX)
-#if defined(QUARTZ)
+#elif defined(QUARTZ)
 #include "plugin/aqua/sysplug.hxx"
-#else
+#elif defined(UNX)
 #include "plugin/unx/sysplug.hxx"
-#endif
 #endif
 
 #if ! defined (QUARTZ)
@@ -295,6 +293,9 @@ public:
     virtual Reference< com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw();
 
     // has to be implemented per system
+    virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL impl_getPluginDescriptions(void) throw();
+    // calls system specific impl_getPluginDescriptions
+    // checks whether plugins are disabled
     virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw();
 
     virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< rtl::OUString >& argn, const Sequence< rtl::OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException );

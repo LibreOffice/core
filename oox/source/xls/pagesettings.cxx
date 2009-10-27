@@ -43,6 +43,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
@@ -244,7 +245,7 @@ void PageSettings::importHeaderFooterCharacters( const OUString& rChars, sal_Int
 
 void PageSettings::importPicture( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    maModel.maPicturePath = rRelations.getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+    importPictureData( rRelations, rAttribs.getString( R_TOKEN( id ), OUString() ) );
 }
 
 void PageSettings::importPageMargins( RecordInputStream& rStrm )
@@ -312,7 +313,7 @@ void PageSettings::importHeaderFooter( RecordInputStream& rStrm )
 
 void PageSettings::importPicture( const Relations& rRelations, RecordInputStream& rStrm )
 {
-    maModel.maPicturePath = rRelations.getFragmentPathFromRelId( rStrm.readString() );
+    importPictureData( rRelations, rStrm.readString() );
 }
 
 void PageSettings::importLeftMargin( BiffInputStream& rStrm )
@@ -395,7 +396,7 @@ void PageSettings::importPrintGridLines( BiffInputStream& rStrm )
 void PageSettings::importHeader( BiffInputStream& rStrm )
 {
     if( rStrm.getRemaining() > 0 )
-        maModel.maOddHeader = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
+        maModel.maOddHeader = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() );
     else
         maModel.maOddHeader = OUString();
 }
@@ -403,13 +404,16 @@ void PageSettings::importHeader( BiffInputStream& rStrm )
 void PageSettings::importFooter( BiffInputStream& rStrm )
 {
     if( rStrm.getRemaining() > 0 )
-        maModel.maOddFooter = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteString( false, getTextEncoding() );
+        maModel.maOddFooter = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( false, getTextEncoding() );
     else
         maModel.maOddFooter = OUString();
 }
 
-void PageSettings::importPicture( BiffInputStream& /*rStrm*/ )
+void PageSettings::importPicture( BiffInputStream& rStrm )
 {
+    StreamDataSequence aPictureData;
+    BiffHelper::importImgData( aPictureData, rStrm, getBiff() );
+    maModel.maGraphicUrl = getBaseFilter().getGraphicHelper().importGraphicObject( aPictureData );
 }
 
 void PageSettings::setFitToPagesMode( bool bFitToPages )
@@ -433,6 +437,13 @@ void PageSettings::finalizeImport()
 
     PropertySet aSheetProps( getSheet() );
     aSheetProps.setProperty( PROP_PageStyle, aStyleName );
+}
+
+void PageSettings::importPictureData( const Relations& rRelations, const OUString& rRelId )
+{
+    OUString aPicturePath = rRelations.getFragmentPathFromRelId( rRelId );
+    if( aPicturePath.getLength() > 0 )
+        maModel.maGraphicUrl = getBaseFilter().importEmbeddedGraphicObject( aPicturePath );
 }
 
 // ============================================================================
@@ -1173,20 +1184,14 @@ void PageSettingsConverter::writePageSettingsProperties(
     aPropMap[ PROP_FooterIsDynamicHeight ] <<= maFooterData.mbDynamicHeight;
     aPropMap[ PROP_FooterHeight ]          <<= maFooterData.mnHeight;
     aPropMap[ PROP_FooterBodyDistance ]    <<= maFooterData.mnBodyDist;
-    rPropSet.setProperties( aPropMap );
-
     // background image
-    OSL_ENSURE( (getFilterType() == FILTER_OOX) || (rModel.maPicturePath.getLength() == 0),
-        "PageSettingsConverter::writePageSettingsProperties - unexpected background picture" );
-    if( (getFilterType() == FILTER_OOX) && (rModel.maPicturePath.getLength() > 0) )
+    if( rModel.maGraphicUrl.getLength() > 0 )
     {
-        OUString aPictureUrl = getOoxFilter().copyPictureStream( rModel.maPicturePath );
-        if( aPictureUrl.getLength() > 0 )
-        {
-            rPropSet.setProperty( PROP_BackGraphicURL, aPictureUrl );
-            rPropSet.setProperty( PROP_BackGraphicLocation, ::com::sun::star::style::GraphicLocation_TILED );
-        }
+        aPropMap[ PROP_BackGraphicURL ] <<= rModel.maGraphicUrl;
+        aPropMap[ PROP_BackGraphicLocation ] <<= ::com::sun::star::style::GraphicLocation_TILED;
     }
+
+    rPropSet.setProperties( aPropMap );
 }
 
 void PageSettingsConverter::convertHeaderFooterData(

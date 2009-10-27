@@ -19,7 +19,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
+ * ( a copy is included in the LICENSE file that accompanied this code ).
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
+// MARKER( update_precomp.py ): autogen include statement, do not remove
 #include "precompiled_package.hxx"
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
@@ -44,8 +44,9 @@ using namespace com::sun::star;
 using namespace rtl;
 using namespace std;
 
+// ---------------------------------------------------
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
-: nNumProperty (0)
+: nNumProperty ( 0 )
 , bIgnoreEncryptData    ( sal_False )
 , rManVector ( rNewManVector )
 
@@ -82,41 +83,52 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sPBKDF2                       ( RTL_CONSTASCII_USTRINGPARAM ( "PBKDF2" ) )
 , sChecksumType                 ( RTL_CONSTASCII_USTRINGPARAM ( CHECKSUM_TYPE ) )
 {
+    aStack.reserve( 10 );
 }
-ManifestImport::~ManifestImport (void )
+
+// ---------------------------------------------------
+ManifestImport::~ManifestImport ( void )
 {
 }
+
+// ---------------------------------------------------
 void SAL_CALL ManifestImport::startDocument(  )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
+
+// ---------------------------------------------------
 void SAL_CALL ManifestImport::endDocument(  )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
+
+// ---------------------------------------------------
 void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    if (aName == sFileEntryElement)
+    StringHashMap aConvertedAttribs;
+    ::rtl::OUString aConvertedName = PushNameAndNamespaces( aName, xAttribs, aConvertedAttribs );
+
+    if ( aConvertedName == sFileEntryElement )
     {
-        aStack.push( e_FileEntry );
         aSequence.realloc ( PKG_SIZE_ENCR_MNFST );
 
         // Put full-path property first for MBA
         aSequence[nNumProperty].Name = sFullPathProperty;
-        aSequence[nNumProperty++].Value <<= xAttribs->getValueByName( sFullPathAttribute );
+        aSequence[nNumProperty++].Value <<= aConvertedAttribs[sFullPathAttribute];
         aSequence[nNumProperty].Name = sMediaTypeProperty;
-        aSequence[nNumProperty++].Value <<= xAttribs->getValueByName( sMediaTypeAttribute );
+        aSequence[nNumProperty++].Value <<= aConvertedAttribs[sMediaTypeAttribute];
 
-        OUString sVersion = xAttribs->getValueByName ( sVersionAttribute );
+        OUString sVersion = aConvertedAttribs[sVersionAttribute];
         if ( sVersion.getLength() )
         {
             aSequence[nNumProperty].Name = sVersionProperty;
             aSequence[nNumProperty++].Value <<= sVersion;
         }
 
-        OUString sSize = xAttribs->getValueByName ( sSizeAttribute );
-        if (sSize.getLength())
+        OUString sSize = aConvertedAttribs[sSizeAttribute];
+        if ( sSize.getLength() )
         {
             sal_Int32 nSize;
             nSize = sSize.toInt32();
@@ -124,92 +136,200 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             aSequence[nNumProperty++].Value <<= nSize;
         }
     }
-    else if (!aStack.empty())
+    else if ( aStack.size() > 1 )
     {
-        if (aStack.top() == e_FileEntry && aName == sEncryptionDataElement)
-        {
-            // If this element exists, then this stream is encrypted and we need
-            // to store the initialisation vector, salt and iteration count used
-            aStack.push (e_EncryptionData );
-            OUString aString = xAttribs->getValueByName ( sChecksumTypeAttribute );
-            if (aString == sChecksumType && !bIgnoreEncryptData)
-            {
-                aString = xAttribs->getValueByName ( sChecksumAttribute );
-                Sequence < sal_uInt8 > aDecodeBuffer;
-                Base64Codec::decodeBase64 (aDecodeBuffer, aString);
-                aSequence[nNumProperty].Name = sDigestProperty;
-                aSequence[nNumProperty++].Value <<= aDecodeBuffer;
-            }
-        }
-        else if (aStack.top() == e_EncryptionData && aName == sAlgorithmElement)
-        {
-            aStack.push (e_Algorithm);
-            OUString aString = xAttribs->getValueByName ( sAlgorithmNameAttribute );
-            if (aString == sBlowfish && !bIgnoreEncryptData)
-            {
-                aString = xAttribs->getValueByName ( sInitialisationVectorAttribute );
-                Sequence < sal_uInt8 > aDecodeBuffer;
-                Base64Codec::decodeBase64 (aDecodeBuffer, aString);
-                aSequence[nNumProperty].Name = sInitialisationVectorProperty;
-                aSequence[nNumProperty++].Value <<= aDecodeBuffer;
-            }
-            else
-                // If we don't recognise the algorithm, then the key derivation info
-                // is useless to us
-                bIgnoreEncryptData = sal_True;
-        }
-        else if (aStack.top() == e_EncryptionData && aName == sKeyDerivationElement)
-        {
-            aStack.push (e_KeyDerivation);
-            OUString aString = xAttribs->getValueByName ( sKeyDerivationNameAttribute );
-            if ( aString == sPBKDF2 && !bIgnoreEncryptData )
-            {
-                aString = xAttribs->getValueByName ( sSaltAttribute );
-                Sequence < sal_uInt8 > aDecodeBuffer;
-                Base64Codec::decodeBase64 (aDecodeBuffer, aString);
-                aSequence[nNumProperty].Name = sSaltProperty;
-                aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+        ManifestStack::reverse_iterator aIter = aStack.rbegin();
+        aIter++;
 
-                aString = xAttribs->getValueByName ( sIterationCountAttribute );
-                aSequence[nNumProperty].Name = sIterationCountProperty;
-                aSequence[nNumProperty++].Value <<= aString.toInt32();
+        if ( aIter->m_aConvertedName.equals( sFileEntryElement ) )
+        {
+            if ( aConvertedName.equals( sEncryptionDataElement ) )
+            {
+                // If this element exists, then this stream is encrypted and we need
+                // to store the initialisation vector, salt and iteration count used
+                OUString aString = aConvertedAttribs[sChecksumTypeAttribute];
+                if ( aString == sChecksumType && !bIgnoreEncryptData )
+                {
+                    aString = aConvertedAttribs[sChecksumAttribute];
+                    Sequence < sal_uInt8 > aDecodeBuffer;
+                    Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                    aSequence[nNumProperty].Name = sDigestProperty;
+                    aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                }
             }
-            else
-                // If we don't recognise the key derivation technique, then the
-                // algorithm info is useless to us
-                bIgnoreEncryptData = sal_True;
+        }
+        else if ( aIter->m_aConvertedName.equals( sEncryptionDataElement ) )
+        {
+            if ( aConvertedName == sAlgorithmElement )
+            {
+                OUString aString = aConvertedAttribs[sAlgorithmNameAttribute];
+                if ( aString == sBlowfish && !bIgnoreEncryptData )
+                {
+                    aString = aConvertedAttribs[sInitialisationVectorAttribute];
+                    Sequence < sal_uInt8 > aDecodeBuffer;
+                    Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                    aSequence[nNumProperty].Name = sInitialisationVectorProperty;
+                    aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+                }
+                else
+                    // If we don't recognise the algorithm, then the key derivation info
+                    // is useless to us
+                    bIgnoreEncryptData = sal_True;
+            }
+            else if ( aConvertedName == sKeyDerivationElement )
+            {
+                OUString aString = aConvertedAttribs[sKeyDerivationNameAttribute];
+                if ( aString == sPBKDF2 && !bIgnoreEncryptData )
+                {
+                    aString = aConvertedAttribs[sSaltAttribute];
+                    Sequence < sal_uInt8 > aDecodeBuffer;
+                    Base64Codec::decodeBase64 ( aDecodeBuffer, aString );
+                    aSequence[nNumProperty].Name = sSaltProperty;
+                    aSequence[nNumProperty++].Value <<= aDecodeBuffer;
+
+                    aString = aConvertedAttribs[sIterationCountAttribute];
+                    aSequence[nNumProperty].Name = sIterationCountProperty;
+                    aSequence[nNumProperty++].Value <<= aString.toInt32();
+                }
+                else
+                    // If we don't recognise the key derivation technique, then the
+                    // algorithm info is useless to us
+                    bIgnoreEncryptData = sal_True;
+            }
         }
     }
 }
-void SAL_CALL ManifestImport::endElement( const OUString& /*aName*/ )
-    throw(xml::sax::SAXException, uno::RuntimeException)
+
+// ---------------------------------------------------
+void SAL_CALL ManifestImport::endElement( const OUString& aName )
+    throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    if ( !aStack.empty() )
+    ::rtl::OUString aConvertedName = ConvertName( aName );
+    if ( !aStack.empty() && aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) )
     {
-        if (aStack.top() == e_FileEntry)
+        if ( aConvertedName.equals( sFileEntryElement ) )
         {
             aSequence.realloc ( nNumProperty );
             bIgnoreEncryptData = sal_False;
             rManVector.push_back ( aSequence );
             nNumProperty = 0;
         }
-        aStack.pop();
+
+        aStack.pop_back();
     }
 }
+
+// ---------------------------------------------------
 void SAL_CALL ManifestImport::characters( const OUString& /*aChars*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
+
+// ---------------------------------------------------
 void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
+
+// ---------------------------------------------------
 void SAL_CALL ManifestImport::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
+
+// ---------------------------------------------------
 void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException)
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
+}
+
+// ---------------------------------------------------
+::rtl::OUString ManifestImport::PushNameAndNamespaces( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs, StringHashMap& o_aConvertedAttribs )
+{
+    StringHashMap aNamespaces;
+    ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > aAttribsStrs;
+
+    if ( xAttribs.is() )
+    {
+        sal_Int16 nAttrCount = xAttribs.is() ? xAttribs->getLength() : 0;
+        aAttribsStrs.reserve( nAttrCount );
+
+        for( sal_Int16 nInd = 0; nInd < nAttrCount; nInd++ )
+        {
+            ::rtl::OUString aAttrName = xAttribs->getNameByIndex( nInd );
+            ::rtl::OUString aAttrValue = xAttribs->getValueByIndex( nInd );
+            if ( aAttrName.getLength() >= 5
+              && aAttrName.compareToAscii( "xmlns", 5 ) == 0
+              && ( aAttrName.getLength() == 5 || aAttrName.getStr()[5] == ( sal_Unicode )':' ) )
+            {
+                // this is a namespace declaration
+                ::rtl::OUString aNsName( ( aAttrName.getLength() == 5 ) ? ::rtl::OUString() : aAttrName.copy( 6 ) );
+                aNamespaces[aNsName] = aAttrValue;
+            }
+            else
+            {
+                // this is no namespace declaration
+                aAttribsStrs.push_back( pair< ::rtl::OUString, ::rtl::OUString >( aAttrName, aAttrValue ) );
+            }
+        }
+    }
+
+    ::rtl::OUString aConvertedName = ConvertNameWithNamespace( aName, aNamespaces );
+    if ( !aConvertedName.getLength() )
+        aConvertedName = ConvertName( aName );
+
+    aStack.push_back( ManifestScopeEntry( aConvertedName, aNamespaces ) );
+
+    for ( sal_uInt16 nInd = 0; nInd < aAttribsStrs.size(); nInd++ )
+    {
+        // convert the attribute names on filling
+        o_aConvertedAttribs[ConvertName( aAttribsStrs[nInd].first )] = aAttribsStrs[nInd].second;
+    }
+
+    return aConvertedName;
+}
+
+// ---------------------------------------------------
+::rtl::OUString ManifestImport::ConvertNameWithNamespace( const ::rtl::OUString& aName, const StringHashMap& aNamespaces )
+{
+    ::rtl::OUString aNsAlias;
+    ::rtl::OUString aPureName = aName;
+
+    sal_Int32 nInd = aName.indexOf( ( sal_Unicode )':' );
+    if ( nInd != -1 && nInd < aName.getLength() )
+    {
+        aNsAlias = aName.copy( 0, nInd );
+        aPureName = aName.copy( nInd + 1 );
+    }
+
+    ::rtl::OUString aResult;
+
+    StringHashMap::const_iterator aIter = aNamespaces.find( aNsAlias );
+    if ( aIter != aNamespaces.end()
+      && ( aIter->second.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_NAMESPACE ) ) )
+        || aIter->second.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_OASIS_NAMESPACE ) ) ) ) )
+    {
+        // no check for manifest.xml consistency currently since the old versions have supported inconsistent documents as well
+        aResult = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MANIFEST_NSPREFIX ) );
+        aResult += aPureName;
+    }
+
+    return aResult;
+}
+
+// ---------------------------------------------------
+::rtl::OUString ManifestImport::ConvertName( const ::rtl::OUString& aName )
+{
+    ::rtl::OUString aConvertedName;
+    for ( ManifestStack::reverse_iterator aIter = aStack.rbegin(); !aConvertedName.getLength() && aIter != aStack.rend(); aIter++ )
+    {
+        if ( !aIter->m_aNamespaces.empty() )
+            aConvertedName = ConvertNameWithNamespace( aName, aIter->m_aNamespaces );
+    }
+
+    if ( !aConvertedName.getLength() )
+        aConvertedName = aName;
+
+    return aConvertedName;
 }
 

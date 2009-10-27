@@ -40,7 +40,6 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "oox/vml/drawingfragmenthandler.hxx"
 #include "ShapeFilterBase.hxx"
 
 namespace css = ::com::sun::star;
@@ -134,11 +133,11 @@ public:
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getShape()
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Reference< css::drawing::XShapes > SAL_CALL getShapes()
+    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getDrawPage()
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL setShapes
-    (const css::uno::Reference< css::drawing::XShapes > & the_value)
+    virtual void SAL_CALL setDrawPage
+    (const css::uno::Reference< css::drawing::XDrawPage > & the_value)
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel()
@@ -172,7 +171,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     drawingml::ShapePtr mpShape;
-    vml::DrawingPtr mpDrawing;
+    ::boost::shared_ptr< vml::Drawing > mpDrawing;
 
     typedef boost::shared_ptr<drawingml::GraphicShapeContext>
     GraphicShapeContextPtr;
@@ -181,7 +180,7 @@ private:
 
     core::XmlFilterRef mxFilterBase;
     drawingml::ThemePtr mpThemePtr;
-    css::uno::Reference<css::drawing::XShapes> mxShapes;
+    css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
     css::uno::Reference<css::io::XInputStream> mxInputStream;
     ::rtl::OUString msRelationFragmentPath;
 

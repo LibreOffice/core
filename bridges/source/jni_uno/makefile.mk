@@ -47,6 +47,12 @@ nojava:
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUI)$(COM)" == "WNTGCC"
+.IF "$(EXCEPTIONS)" == "sjlj"
+CFLAGS += -DBROKEN_ALLOCA
+.ENDIF
+.ENDIF
+
 SLOFILES= \
     $(SLO)$/jni_info.obj		\
     $(SLO)$/jni_data.obj		\

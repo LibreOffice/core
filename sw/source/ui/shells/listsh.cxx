@@ -65,7 +65,7 @@
 #include "edtwin.hxx"
 
 #define SwListShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 #include <IDocumentOutlineNodes.hxx>

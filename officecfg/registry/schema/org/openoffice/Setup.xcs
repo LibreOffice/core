@@ -352,6 +352,13 @@
 				</info>
 				<value>false</value>
 			</prop>
+			<prop oor:name="LastCompatibilityCheckID" oor:type="xs:string">
+				<info>
+					<author>DV</author>
+					<desc>The build ID of the office. On startup the office will compare this ID with the current build id to decide if the extensions dependencies need to be checked.</desc>
+				</info>
+				<value>not checked</value>
+			</prop>
 			<set oor:name="Factories" oor:node-type="Factory">
 				<info>
 					<author>AS</author>

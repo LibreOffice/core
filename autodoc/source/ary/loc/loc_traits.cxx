@@ -53,15 +53,6 @@ Le_Traits::EntityOf_(id_type i_id)
     return Le_Storage::Instance_()[i_id];
 }
 
-Le_Traits::id_type
-Le_Traits::IdOf_(const entity_base_type & i_entity)
-{
-    return i_entity.LeId();
-}
-
-
-
-
 //********************      LeNode_Traits       ************************//
 symtree::Node<LeNode_Traits> *
 LeNode_Traits::NodeOf_(entity_base_type & io_entity)
@@ -69,12 +60,6 @@ LeNode_Traits::NodeOf_(entity_base_type & io_entity)
     if (is_type<Directory>(io_entity))
         return & ary_cast<Directory>(io_entity).AsNode();
     return 0;
-}
-
-const String &
-LeNode_Traits::LocalNameOf_(const entity_base_type & i_entity)
-{
-    return i_entity.LocalName();
 }
 
 Le_Traits::entity_base_type *
@@ -86,19 +71,6 @@ LeNode_Traits::ParentOf_(const entity_base_type & i_entity)
         return &EntityOf_(ret);
     return 0;
 }
-
-template <class KEY>
-Le_Traits::id_type
-LeNode_Traits::Search_( const entity_base_type & i_entity,
-                        const KEY &              i_localKey )
-{
-    if (is_type<Directory>(i_entity))
-        return ary_cast<Directory>(i_entity).Search_Child(i_localKey);
-    return id_type(0);
-}
-
-
-
 
 //********************      Le_Compare       ************************//
 const Le_Compare::key_type &

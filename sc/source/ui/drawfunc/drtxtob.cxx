@@ -201,7 +201,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_PASTE_SPECIAL:
             ExecutePasteContents( rReq );
             break;
 
@@ -467,7 +467,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
 
         SfxBindings& rBindings = pViewData->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -502,7 +502,7 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         switch (nWhich)
         {
             case SID_PASTE:
-            case FID_PASTE_CONTENTS:
+            case SID_PASTE_SPECIAL:
                 if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;

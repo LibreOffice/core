@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : helge.delfs@Sun.COM
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Load/Save test for chart files - Input: SXC, Output: SDC
 '*

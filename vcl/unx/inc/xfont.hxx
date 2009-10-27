@@ -31,9 +31,9 @@
 #define EXTENDED_FONTSTRUCT_HXX
 
 #ifndef _XLIB_H_
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <tools/postx.h>
 #endif
 #include <tools/ref.hxx>
 #include <rtl/tencinfo.h>

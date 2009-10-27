@@ -77,52 +77,5 @@ Macro::inq_DefinitionText() const
      return aDefinition;
 }
 
-void
-Macro::GetText( StreamStr &                     o_rText,
-                const StringVector &  i_rGivenArguments ) const
-{
-    bool bSwitch_Stringify = false;
-    bool bSwitch_Concatenate = false;
-    intt nActiveParamNr = -1;
-
-    if ( aDefinition.begin() == aDefinition.end() )
-        return;
-
-    for ( StringVector::const_iterator it = aDefinition.begin();
-          it != aDefinition.end();
-          ++it )
-    {
-        if ( HandleOperatorsBeforeTextItem( o_rText,
-                                            bSwitch_Stringify,
-                                            bSwitch_Concatenate,
-                                            *it ) )
-        {
-            continue;
-        }
-
-        for ( StringVector::const_iterator param_it = aParams.begin();
-              param_it != aParams.end() AND nActiveParamNr == -1;
-              ++param_it )
-        {
-             if ( strcmp(*it, *param_it) == 0 )
-                nActiveParamNr = param_it - aParams.begin();
-        }
-        if ( nActiveParamNr == -1 )
-        {
-            o_rText << (*it);
-        }
-        else
-        {
-            o_rText << i_rGivenArguments[nActiveParamNr];
-            nActiveParamNr = -1;
-        }
-
-        Do_bStringify_end(o_rText, bSwitch_Stringify);
-        o_rText << " ";
-    }
-    o_rText.seekp(-1, csv::cur);
-}
-
-
 }   // namespace cpp
 }   // namespace ary

@@ -85,7 +85,8 @@ LIBLIST = \
     $(DESTDIRLIB)$/isalhelper.lib 	\
     $(DESTDIRLIB)$/icppu.lib 	\
     $(DESTDIRLIB)$/icppuhelper.lib 	\
-    $(DESTDIRLIB)$/irmcxt.lib
+    $(DESTDIRLIB)$/irmcxt.lib \
+    $(DESTDIRLIB)$/ipurpenvhelper3MSC.lib
 
 .IF "$(COMEX)"=="8"
     LIBLIST += $(DESTDIRLIB)$/stlport_vc7.lib
@@ -213,9 +214,14 @@ MYZIPLIST=com$/* win$/*
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
+
+.IF "$(L10N_framework)"==""
+
 all : CLEAN_DKVERSION_CHECK \
     $(DIR_FILE_LIST) \
     $(DIR_FILE_FLAG) \
+
+.ENDIF
 
 #--------------------------------------------------
 # use global rules

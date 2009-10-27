@@ -36,7 +36,7 @@ TARGET=zipcore
 LIBTARGET=NO
 
 .INCLUDE : settings.mk
-
+.IF "$(L10N_framework)"==""
 UWINAPILIB =
 
 .IF "$(SYSTEM_PYTHON)" == "YES" || "$(GUI)" == "OS2"
@@ -73,6 +73,7 @@ APP1STDLIBS =
 APP1RPATH = BRAND
 OBJFILES = $(OBJ)$/python.obj
 .ENDIF
+
 
 .INCLUDE: target.mk
 
@@ -129,3 +130,7 @@ $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
 .ENDIF
 
 .ENDIF
+.ELSE
+ivo:
+    $(ECHO)
+.ENDIF # L10N_framework

@@ -179,8 +179,9 @@ public class UnoRuntime {
      * otherwise <code>null</code>
      * @see #queryInterface(Type, Object)
      */
-    public static Object queryInterface(Class zInterface, Object object) {
-        return queryInterface(new Type(zInterface), object);
+    @SuppressWarnings("unchecked")
+    public static <T> T queryInterface(Class<T> zInterface, Object object) {
+        return (T) queryInterface(new Type(zInterface), object);
     }
 
     /**

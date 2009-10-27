@@ -298,22 +298,34 @@ void PresenterCanvasHelper::SetDeviceColor(
 
 
 
-css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
+css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-    const ::rtl::OUString& rsText)
+    const ::rtl::OUString& rsText,
+    const sal_Int8 nTextDirection)
 {
     if (rxFont.is() && rsText.getLength() > 0)
     {
         rendering::StringContext aContext (rsText, 0, rsText.getLength());
         Reference<rendering::XTextLayout> xLayout (
-            rxFont->createTextLayout(aContext, rendering::TextDirection::WEAK_LEFT_TO_RIGHT, 0));
-        const geometry::RealRectangle2D aTextBBox (xLayout->queryTextBounds());
-        return css::geometry::RealSize2D(aTextBBox.X2 - aTextBBox.X1, aTextBBox.Y2 - aTextBBox.Y1);
+            rxFont->createTextLayout(aContext, nTextDirection, 0));
+        return xLayout->queryTextBounds();
     }
     else
     {
-        return geometry::RealSize2D(0,0);
+        return geometry::RealRectangle2D(0,0,0,0);
     }
+}
+
+
+
+
+css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
+    const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
+    const ::rtl::OUString& rsText,
+    const sal_Int8 nTextDirection)
+{
+    const geometry::RealRectangle2D aTextBBox (GetTextBoundingBox(rxFont, rsText, nTextDirection));
+    return css::geometry::RealSize2D(aTextBBox.X2 - aTextBBox.X1, aTextBBox.Y2 - aTextBBox.Y1);
 }
 
 

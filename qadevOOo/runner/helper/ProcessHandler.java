@@ -36,6 +36,9 @@ import java.io.PrintStream;
 import java.io.LineNumberReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import lib.TestParameters;
 import util.PropertyName;
 import util.utils;
@@ -51,7 +54,8 @@ import util.utils;
  * This class is currently used by ProcesHandler
  * internally only.
  */
-class Pump extends Thread {
+class Pump extends Thread
+{
 
     private LineNumberReader reader;
     private String pref;
@@ -69,23 +73,29 @@ class Pump extends Thread {
      * @param outPrefix A prefix which is printed at the
      *   beginning of each output line.
      */
-    public Pump(InputStream is, PrintWriter log, String outPrefix) {
-        this.pref = outPrefix == null ? "" : outPrefix;
+    public Pump(InputStream is, PrintWriter log, String outPrefix)
+    {
+        this.pref = (outPrefix == null) ? "" : outPrefix;
         reader = new LineNumberReader(new InputStreamReader(is));
         this.log = log;
         start();
     }
 
-    public void run() {
-        try {
+    public void run()
+    {
+        try
+        {
             String line = reader.readLine();
-            while (line != null) {
+            while (line != null)
+            {
                 log.println(pref + line);
                 log.flush();
                 buf.append(line).append('\n');
                 line = reader.readLine();
             }
-        } catch (java.io.IOException e) {
+        }
+        catch (java.io.IOException e)
+        {
             log.println(pref + "Exception occured: " + e);
         }
     }
@@ -93,7 +103,8 @@ class Pump extends Thread {
     /**
      * Returns the text collected from input stream.
      */
-    public String getStringBuffer() {
+    public String getStringBuffer()
+    {
         return buf.toString();
     }
 }
@@ -105,7 +116,8 @@ class Pump extends Thread {
  * execution. If you need to execute the same command again you
  * should create a new instance for this.
  */
-public class ProcessHandler {
+public class ProcessHandler
+{
 
     private String cmdLine;
     private String[] cmdLineArray;
@@ -121,7 +133,7 @@ public class ProcessHandler {
     private Pump stdout = null;
     private Pump stderr = null;
     private PrintStream stdIn = null;
-    private Process proc = null;
+    private Process m_aProcess = null;
     private TestParameters param = null;
     private boolean debug = false;
 
@@ -131,7 +143,8 @@ public class ProcessHandler {
      * of external command is printed to stdout.
      * @param cmdLine
      */
-    public ProcessHandler(String cmdLine) {
+    public ProcessHandler(String cmdLine)
+    {
         this(cmdLine, null, null, null, 0);
     }
 
@@ -142,7 +155,8 @@ public class ProcessHandler {
      * of external command is printed to stdout.
      * @param cmdLines
      */
-    public ProcessHandler(String[] cmdLines) {
+    public ProcessHandler(String[] cmdLines)
+    {
         this(null, null, null, null, 0);
         cmdLineArray = cmdLines;
     }
@@ -157,7 +171,8 @@ public class ProcessHandler {
      * @param envVars
      * @see java.lang.Runtime exec(String[], String[])
      */
-    public ProcessHandler(String[] cmdLines, String[] envVars) {
+    public ProcessHandler(String[] cmdLines, String[] envVars)
+    {
         this(null, null, null, envVars, 0);
         cmdLineArray = cmdLines;
     }
@@ -171,7 +186,8 @@ public class ProcessHandler {
      * @param cmdLines
      * @param workDir
      */
-    public ProcessHandler(String[] cmdLines, File workDir) {
+    public ProcessHandler(String[] cmdLines, File workDir)
+    {
         this(null, null, workDir, null, 0);
         cmdLineArray = cmdLines;
 
@@ -185,7 +201,8 @@ public class ProcessHandler {
      * @param log
      * @param workDir
      */
-    public ProcessHandler(String[] cmdLines, PrintWriter log, File workDir) {
+    public ProcessHandler(String[] cmdLines, PrintWriter log, File workDir)
+    {
         this(null, log, workDir, null, 0);
         cmdLineArray = cmdLines;
     }
@@ -197,7 +214,8 @@ public class ProcessHandler {
      * @param cmdLine
      * @param log
      */
-    public ProcessHandler(String cmdLine, PrintWriter log) {
+    public ProcessHandler(String cmdLine, PrintWriter log)
+    {
         this(cmdLine, log, null, null, 0);
     }
 
@@ -206,7 +224,8 @@ public class ProcessHandler {
      * @param cmdLine
      * @param timeOut
      */
-    public ProcessHandler(String cmdLine, int timeOut) {
+    public ProcessHandler(String cmdLine, int timeOut)
+    {
         this(cmdLine, null, null, null, timeOut);
     }
 
@@ -218,7 +237,8 @@ public class ProcessHandler {
      * @param cmdLine
      * @param workDir
      */
-    public ProcessHandler(String cmdLine, File workDir) {
+    public ProcessHandler(String cmdLine, File workDir)
+    {
         this(cmdLine, null, workDir, null, 0);
     }
 
@@ -230,7 +250,8 @@ public class ProcessHandler {
      * @param log
      * @param workDir
      */
-    public ProcessHandler(String cmdLine, PrintWriter log, File workDir) {
+    public ProcessHandler(String cmdLine, PrintWriter log, File workDir)
+    {
         this(cmdLine, log, workDir, null, 0);
     }
 
@@ -246,7 +267,8 @@ public class ProcessHandler {
      * @param workDir
      * @param envVars
      */
-    public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars) {
+    public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars)
+    {
         this(cmdLine, log, workDir, envVars, 0);
     }
 
@@ -278,15 +300,19 @@ public class ProcessHandler {
      *
      *
      */
-    public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars, long timeOut) {
+    public ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars, long timeOut)
+    {
         this.cmdLine = cmdLine;
         this.workDir = workDir;
         this.log = log;
         this.cmdLine = cmdLine;
         this.envVars = envVars;
-        if (log == null) {
+        if (log == null)
+        {
             this.log = new PrintWriter(new OutputStreamWriter(System.out));
-        } else {
+        }
+        else
+        {
             this.log = log;
         }
         this.mTimeOut = timeOut;
@@ -307,13 +333,17 @@ public class ProcessHandler {
      * @see lib.TestParameters
      * @see helper.OfficeWatcher
      */
-    public ProcessHandler(String[] commands, PrintWriter log, File workDir, int shortWait, TestParameters param) {
+    public ProcessHandler(String[] commands, PrintWriter log, File workDir, int shortWait, TestParameters param)
+    {
         this(null, log, workDir, null, 0);
         this.cmdLineArray = commands;
         this.param = param;
-        if (shortWait != 0) {
+        if (shortWait != 0)
+        {
             this.mTimeOut = shortWait;
-        } else {
+        }
+        else
+        {
             this.mTimeOut = (long) (param.getInt(PropertyName.TIME_OUT) / 1.3);
         }
         debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
@@ -325,7 +355,8 @@ public class ProcessHandler {
      * caused by <CODE>OfficeWatcher</CODE>, the OfficeWatcher get frequently a ping.
      * @see helper.OfficeWatcher
      */
-    public void runCommand() {
+    public void runCommand()
+    {
 
         boolean changedText = true;
         int count = 0;
@@ -334,44 +365,61 @@ public class ProcessHandler {
         this.executeAsynchronously();
 
         OfficeWatcher ow = null;
-        if (param != null) {
+        if (param != null)
+        {
             ow = (OfficeWatcher) param.get(PropertyName.OFFICE_WATCHER);
         }
+        if (ow != null)
+        {
+            ow.ping();
+        }
 
-        while (!this.isFinished() && changedText) {
+        int hangcheck = 10;
+        while (!this.isFinished() && changedText)
+        {
             count++;
-            if (ow != null) {
-                ow.ping();
-            }
-            dbg("runCommand: waiting " + mTimeOut / 1000 + " seconds while command execution is ongoing... " + count);
-            shortWait(mTimeOut);
+            // dbg("runCommand: waiting " + mTimeOut / 1000 + " seconds while command execution is ongoing... " + count);
+            // shortWait(mTimeOut);
+            // shortWait(2000); // wait 2 seconds.
             //waitFor(mTimeOut);
+            waitFor(2000, false); // wait but don't kill
 
-            if (ow != null) {
+            if (ow != null)
+            {
                 ow.ping();
             }
             // check for changes in the output stream. If there are no changes, the process maybe hangs
-            if (!this.isFinished()) {
-                if (this.getOutputText().length() == memText.length()) {
-                    changedText = false;
-                    dbg("runCommand Could not detect changes in output stream!!!");
-
+            if (!this.isFinished())
+            {
+                hangcheck--;
+                if (hangcheck < 0)
+                {
+                    String sOutputText = getOutputText();
+                    if (sOutputText.length() == memText.length())
+                    {
+                        changedText = false;
+                    // dbg("runCommand Could not detect changes in output stream!!!");
+                    }
+                    hangcheck = 10;
+                    memText = this.getOutputText();
                 }
-                memText = this.getOutputText();
             }
         }
 
-        if (!this.isFinished()) {
+        if (!this.isFinished())
+        {
             dbg("runCommand Process ist not finished but there are no changes in output stream.");
             this.kill();
         }
     }
 
-    public boolean isTimedOut() {
+    public boolean isTimedOut()
+    {
         return mbTimedOut;
     }
 
-    private void setTimedOut(boolean bTimedOut) {
+    private void setTimedOut(boolean bTimedOut)
+    {
         mbTimedOut = bTimedOut;
     }
 
@@ -383,7 +431,8 @@ public class ProcessHandler {
      * started and correcly exits (exit code doesn't affect
      * to this result).
      */
-    public boolean executeSynchronously() {
+    public boolean executeSynchronously()
+    {
         execute();
         return waitFor(mTimeOut);
     }
@@ -396,34 +445,48 @@ public class ProcessHandler {
      * @return <code>true</code> if process was successfully
      * started.
      */
-    public boolean executeAsynchronously() {
+    public boolean executeAsynchronously()
+    {
         execute();
         return isStarted();
     }
 
-    public synchronized void kill() {
-        if (!isStarted()) {
+    public synchronized void kill()
+    {
+        if (!isStarted())
+        {
             return;
         }
         boolean exit = false;
         int counter = 1;
-        while (counter < 3 && !exit) {
-            proc.destroy();
+        while (counter < 3 && !exit)
+        {
+            m_aProcess.destroy();
 
-            try {
+            try
+            {
                 Thread.sleep(1000 * counter); // 5000
-            } catch (java.lang.InterruptedException e) {
             }
-            try {
-                final int exit_Value = proc.exitValue();
-                if (exit_Value < 1) {
+            catch (java.lang.InterruptedException e)
+            {
+            }
+            try
+            {
+                final int exit_Value = m_aProcess.exitValue();
+                if (exit_Value < 1)
+                {
                     exit = true;
-                } else {
+                }
+                else
+                {
                     counter++;
                 }
                 dbg("kill: process closed with exit code " + exit_Value);
-            } catch (java.lang.IllegalThreadStateException e) {
-                if (counter < 3) {
+            }
+            catch (java.lang.IllegalThreadStateException e)
+            {
+                if (counter < 3)
+                {
                     dbg("kill: Couldn't close process after " + counter + " attempts, trying again");
                 }
                 counter++;
@@ -432,45 +495,86 @@ public class ProcessHandler {
         isStarted = false;
     }
 
-    protected void execute() {
-        if (isStarted()) {
+    /**
+     * Returns the time in seconds since 1st January 1970
+     * @return
+     */
+    public static long getSystemTime()
+    {
+        // Calendar cal = new GregorianCalendar();
+        // final long nTime = cal.getTimeInMillis();
+        final long nTime = System.currentTimeMillis();
+        return nTime;
+    }
+    private long m_nExactStartTimeInMillisec;
+
+    private void initialExactStartTime()
+    {
+        m_nExactStartTimeInMillisec = getSystemTime();
+    }
+
+    public long getProcessStartTime()
+    {
+        return m_nExactStartTimeInMillisec;
+    }
+
+    protected void execute()
+    {
+        if (isStarted())
+        {
             throw new RuntimeException(
-                "The process handler has already been executed.");
+                    "The process handler has already been executed.");
         }
         final Runtime runtime = Runtime.getRuntime();
-        try {
-            if (cmdLine == null) {
+        try
+        {
+            if (cmdLine == null)
+            {
                 log.print(utils.getDateTime() + "execute: Starting command from array: ");
-                for (int i = 0; i < cmdLineArray.length; i++) {
+                for (int i = 0; i < cmdLineArray.length; i++)
+                {
                     log.print(cmdLineArray[i]);
                     log.print(" ");
                 }
                 log.println("");
-
-                proc = runtime.exec(cmdLineArray, envVars);
-            } else {
-                if (workDir != null) {
+                initialExactStartTime();
+                m_aProcess = runtime.exec(cmdLineArray, envVars);
+            }
+            else
+            {
+                if (workDir != null)
+                {
                     log.println(utils.getDateTime() + "execute: Starting command: " + cmdLine + " " +
-                        workDir.getAbsolutePath());
-                    proc = runtime.exec(cmdLine, envVars, workDir);
-                } else {
+                            workDir.getAbsolutePath());
+                    m_aProcess = runtime.exec(cmdLine, envVars, workDir);
+                }
+                else
+                {
                     log.println(utils.getDateTime() + "execute: Starting command: " + cmdLine);
-                    proc = runtime.exec(cmdLine, envVars);
+                    m_aProcess = runtime.exec(cmdLine, envVars);
                 }
             }
             isStarted = true;
-        } catch (java.io.IOException e) {
-            if (cmdLine == null) {
+        }
+        catch (java.io.IOException e)
+        {
+            if (cmdLine == null)
+            {
                 log.println(utils.getDateTime() + "execute: The command array can't be started: " + e);
-            } else {
+            }
+            else
+            {
                 log.println(utils.getDateTime() + "execute: The command " + cmdLine + " can't be started: " + e);
             }
             return;
         }
         dbg("execute: pump io-streams");
-        stdout = new Pump(proc.getInputStream(), log, "out > ");
-        stderr = new Pump(proc.getErrorStream(), log, "err > ");
-        stdIn = new PrintStream(proc.getOutputStream());
+        stdout = new Pump(m_aProcess.getInputStream(), log, "out > ");
+        stderr = new Pump(m_aProcess.getErrorStream(), log, "err > ");
+        stdIn = new PrintStream(m_aProcess.getOutputStream());
+
+        // int nExitValue = m_aProcess.exitValue();
+        // int dummy = 0;
 
         dbg("execute: flush io-streams");
 
@@ -485,7 +589,8 @@ public class ProcessHandler {
      * @return <code>true</code> if process correctly exited
      * (exit code doesn't affect to this result).
      */
-    public boolean waitFor() {
+    public boolean waitFor()
+    {
         return waitFor(0);
     }
 
@@ -507,50 +612,79 @@ public class ProcessHandler {
      * @return <code>true</code> if process correctly exited
      * (exit code doesn't affect to this result).
      */
-    public boolean waitFor(long timeout) {
-        if (isFinished()) {
+    public boolean waitFor(long timeout)
+    {
+        return waitFor(timeout, true);
+    }
+
+    private boolean waitFor(long timeout, boolean bKillProcessAfterTimeout)
+    {
+        if (isFinished())
+        {
             return true;
         }
-        if (!isStarted()) {
+        if (!isStarted())
+        {
             return false;
         }
 
-        if (timeout == 0) {
-            try {
-                proc.waitFor();
-            } catch (InterruptedException e) {
+        if (timeout == 0)
+        {
+            try
+            {
+                m_aProcess.waitFor();
+            }
+            catch (InterruptedException e)
+            {
                 log.println("The process was interrupted: " + e);
             }
             isFinished = true;
-            try {
-                exitValue = proc.exitValue();
-            } catch (IllegalThreadStateException e) {
+            try
+            {
+                exitValue = m_aProcess.exitValue();
             }
-        } else {
-            try {
-                while (!isFinished && timeout > 0) {
+            catch (IllegalThreadStateException e)
+            {
+            }
+        }
+        else
+        {
+            try
+            {
+                while (!isFinished && timeout > 0)
+                {
                     isFinished = true;
                     Thread.sleep(1000);
                     timeout -= 1000;
-                    try {
-                        exitValue = proc.exitValue(); // throws exception if not finished
-                    } catch (IllegalThreadStateException e) {
+                    try
+                    {
+                        exitValue = m_aProcess.exitValue(); // throws exception if not finished
+                    }
+                    catch (IllegalThreadStateException e)
+                    {
                         isFinished = false;
                     }
                 }
-                if (timeout < 0) {
+                if (timeout < 0)
+                {
                     setTimedOut(true);
                     log.println("The process has timed out!");
                 }
-            } catch (InterruptedException ex) {
+            }
+            catch (InterruptedException ex)
+            {
                 log.println("The process was interrupted: " + ex);
             }
         }
 
-        if (!isFinished) {
-            log.println("Going to destroy the process!!");
-            proc.destroy();
-            log.println("Process has been destroyed!");
+        if (bKillProcessAfterTimeout == true)
+        {
+            if (!isFinished)
+            {
+                log.println("Going to destroy the process!!");
+                m_aProcess.destroy();
+                log.println("Process has been destroyed!");
+            }
         }
 //  Removed as hung up in SDK test 'PathSettings'
 //        try {
@@ -561,12 +695,15 @@ public class ProcessHandler {
         return isFinished();
     }
 
-    protected void flushInput() {
-        if (stdIn == null) {
+    protected void flushInput()
+    {
+        if (stdIn == null)
+        {
             return;
         }
 
-        synchronized (stdInBuff) {
+        synchronized(stdInBuff)
+        {
             stdIn.print(stdInBuff);
             stdIn.flush();
             stdInBuff = "";
@@ -577,10 +714,14 @@ public class ProcessHandler {
      * Returns the text output by external command to stdout.
      * @return the text output by external command to stdout
      */
-    public String getOutputText() {
-        if (stdout == null) {
+    public String getOutputText()
+    {
+        if (stdout == null)
+        {
             return "";
-        } else {
+        }
+        else
+        {
             return stdout.getStringBuffer();
         }
     }
@@ -589,10 +730,14 @@ public class ProcessHandler {
      * Returns the text output by external command to stderr.
      * @return the text output by external command to stderr
      */
-    public String getErrorText() {
-        if (stderr == null) {
+    public String getErrorText()
+    {
+        if (stderr == null)
+        {
             return "";
-        } else {
+        }
+        else
+        {
             return stderr.getStringBuffer();
         }
     }
@@ -607,7 +752,8 @@ public class ProcessHandler {
      * and transfered to command when it will be started.
      * @param str
      */
-    public void printInputText(String str) {
+    public void printInputText(String str)
+    {
         stdInBuff += str;
         flushInput();
     }
@@ -619,7 +765,8 @@ public class ProcessHandler {
      * @return <code>true</code> if the external command was
      * found and successfully started.
      */
-    public boolean isStarted() {
+    public boolean isStarted()
+    {
         return isStarted;
     }
 
@@ -630,7 +777,8 @@ public class ProcessHandler {
      * @return <code>true</code> if the command correctly starts,
      * exits and was not interrupted due to timeout.
      */
-    public boolean isFinished() {
+    public boolean isFinished()
+    {
         return isFinished;
     }
 
@@ -640,11 +788,15 @@ public class ProcessHandler {
      * @return exit code of command if it was finished,
      * -1 if not.
      */
-    public int getExitCode() {
-        try {
-            exitValue = proc.exitValue();
-        } catch (Exception e) {
-        //System.out.println("No ExitValue available");
+    public int getExitCode()
+    {
+        try
+        {
+            exitValue = m_aProcess.exitValue();
+        }
+        catch (Exception e)
+        {
+            //System.out.println("No ExitValue available");
         }
 
         return exitValue;
@@ -653,16 +805,22 @@ public class ProcessHandler {
     /** Causes the thread to sleep some time.
      * @param milliseconds
      */
-    public static void shortWait(long milliseconds) {
-        try {
+    public static void shortWait(long milliseconds)
+    {
+        try
+        {
             Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e)
+        {
             System.out.println("While waiting :" + e);
         }
     }
 
-    private void dbg(String message) {
-        if (debug) {
+    private void dbg(String message)
+    {
+        if (debug)
+        {
             log.println(utils.getDateTime() + "PH." + message);
         }
     }

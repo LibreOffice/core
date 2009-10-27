@@ -51,11 +51,38 @@ using ::oox::core::FragmentHandlerRef;
 using ::oox::core::Relation;
 using ::oox::core::Relations;
 using ::oox::core::XmlFilterBase;
-using ::oox::vml::DrawingPtr;
 using ::oox::drawingml::table::TableStyleListPtr;
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+ExcelFilterBase::ExcelFilterBase() :
+    mpHelper( 0 )
+{
+}
+
+ExcelFilterBase::~ExcelFilterBase()
+{
+    OSL_ENSURE( !mpHelper, "ExcelFilterBase::~ExcelFilterBase - workbook helper not cleared" );
+}
+
+void ExcelFilterBase::setWorkbookHelper( WorkbookHelper& rHelper )
+{
+    mpHelper = &rHelper;
+}
+
+WorkbookHelper& ExcelFilterBase::getWorkbookHelper() const
+{
+    OSL_ENSURE( mpHelper, "ExcelFilterBase::getWorkbookHelper - missing workbook helper" );
+    return *mpHelper;
+}
+
+void ExcelFilterBase::clearWorkbookHelper()
+{
+    mpHelper = 0;
+}
 
 // ============================================================================
 
@@ -72,16 +99,15 @@ Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw()
 }
 
 Reference< XInterface > SAL_CALL ExcelFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxFactory ) throw( Exception )
+        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxGlobalFactory ) );
 }
 
 // ----------------------------------------------------------------------------
 
-ExcelFilter::ExcelFilter( const Reference< XMultiServiceFactory >& rxFactory ) :
-    XmlFilterBase( rxFactory ),
-    mpHelper( 0 )
+ExcelFilter::ExcelFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+    XmlFilterBase( rxGlobalFactory )
 {
 }
 
@@ -97,15 +123,15 @@ bool ExcelFilter::importDocument() throw()
     OOX_DUMP_FILE( ::oox::dump::xlsb::Dumper );
 
     bool bRet = false;
-    OUString aWorkbookPath = getFragmentPathFromType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
+    OUString aWorkbookPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "officeDocument" ) );
     if( aWorkbookPath.getLength() > 0 )
     {
         WorkbookHelperRoot aHelper( *this );
         if( aHelper.isValid() )
         {
-            mpHelper = &aHelper;    // needed for callbacks
+            setWorkbookHelper( aHelper );   // needed for callbacks
             bRet = importFragment( new OoxWorkbookFragment( aHelper, aWorkbookPath ) );
-            mpHelper = 0;
+            clearWorkbookHelper();
         }
     }
     return bRet;
@@ -116,20 +142,24 @@ bool ExcelFilter::exportDocument() throw()
     return false;
 }
 
+sal_Int32 ExcelFilter::getSchemeColor( sal_Int32 nToken ) const
+{
+    return getWorkbookHelper().getTheme().getColorByToken( nToken );
+}
+
+sal_Int32 ExcelFilter::getPaletteColor( sal_Int32 nPaletteIdx ) const
+{
+    return getWorkbookHelper().getStyles().getPaletteColor( nPaletteIdx );
+}
+
 const ::oox::drawingml::Theme* ExcelFilter::getCurrentTheme() const
 {
-    return &mpHelper->getTheme();
+    return &getWorkbookHelper().getTheme();
 }
 
-sal_Int32 ExcelFilter::getSchemeClr( sal_Int32 nColorSchemeToken ) const
+::oox::vml::Drawing* ExcelFilter::getVmlDrawing()
 {
-    OSL_ENSURE( mpHelper, "ExcelFilter::getSchemeClr - no workbook helper" );
-    return mpHelper->getTheme().getColorByToken( nColorSchemeToken );
-}
-
-const DrawingPtr ExcelFilter::getDrawings()
-{
-    return DrawingPtr();
+    return 0;
 }
 
 const TableStyleListPtr ExcelFilter::getTableStyles()
@@ -139,8 +169,7 @@ const TableStyleListPtr ExcelFilter::getTableStyles()
 
 ::oox::drawingml::chart::ChartConverter& ExcelFilter::getChartConverter()
 {
-    OSL_ENSURE( mpHelper, "ExcelFilter::getChartConverter - no workbook helper" );
-    return mpHelper->getChartConverter();
+    return getWorkbookHelper().getChartConverter();
 }
 
 OUString ExcelFilter::implGetImplementationName() const
@@ -163,15 +192,15 @@ Sequence< OUString > SAL_CALL ExcelBiffFilter_getSupportedServiceNames() throw()
 }
 
 Reference< XInterface > SAL_CALL ExcelBiffFilter_createInstance(
-        const Reference< XMultiServiceFactory >& rxFactory ) throw( Exception )
+        const Reference< XMultiServiceFactory >& rxGlobalFactory ) throw( Exception )
 {
-    return static_cast< ::cppu::OWeakObject* >( new ExcelBiffFilter( rxFactory ) );
+    return static_cast< ::cppu::OWeakObject* >( new ExcelBiffFilter( rxGlobalFactory ) );
 }
 
 // ----------------------------------------------------------------------------
 
-ExcelBiffFilter::ExcelBiffFilter( const Reference< XMultiServiceFactory >& rxFactory ) :
-    BinaryFilterBase( rxFactory )
+ExcelBiffFilter::ExcelBiffFilter( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
+    BinaryFilterBase( rxGlobalFactory )
 {
 }
 
@@ -186,12 +215,12 @@ bool ExcelBiffFilter::importDocument() throw()
         file:///<path-to-oox-module>/source/dump/biffdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::biff::Dumper );
 
-    /*  A boolean argument passed through XInitialisation decides whether to
-        use the BIFF file dumper implemented in this filter only, or to really
-        import/export the document. */
-    const Sequence< Any >& rArgs = getArguments();
-    bool bDumperOnly = false;
-    if( (rArgs.getLength() >= 2) && (rArgs[ 1 ] >>= bDumperOnly) && bDumperOnly )
+    /*  The boolean argument "UseBiffFilter" passed through XInitialisation
+        decides whether to use the BIFF file dumper implemented in this filter
+        only (false or missing), or to import/export the document (true). */
+    Any aUseBiffFilter = getArgument( CREATE_OUSTRING( "UseBiffFilter" ) );
+    bool bUseBiffFilter = false;
+    if( !(aUseBiffFilter >>= bUseBiffFilter) || !bUseBiffFilter )
         return true;
 
     bool bRet = false;
@@ -203,7 +232,12 @@ bool ExcelBiffFilter::importDocument() throw()
     if( eBiff != BIFF_UNKNOWN )
     {
         WorkbookHelperRoot aHelper( *this, eBiff );
-        bRet = aHelper.isValid() && BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
+        if( aHelper.isValid() )
+        {
+            setWorkbookHelper( aHelper );   // needed for callbacks
+            bRet = BiffWorkbookFragment( aHelper, aWorkbookName ).importFragment();
+            clearWorkbookHelper();
+        }
     }
     return bRet;
 }
@@ -211,6 +245,11 @@ bool ExcelBiffFilter::importDocument() throw()
 bool ExcelBiffFilter::exportDocument() throw()
 {
     return false;
+}
+
+sal_Int32 ExcelBiffFilter::getPaletteColor( sal_Int32 nPaletteIdx ) const
+{
+    return getWorkbookHelper().getStyles().getPaletteColor( nPaletteIdx );
 }
 
 OUString ExcelBiffFilter::implGetImplementationName() const

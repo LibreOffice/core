@@ -41,23 +41,103 @@ module com {   module sun {   module star {   module rdf {
 /** Constants to specify some well-known URIs.
 
     <p>
-    These constants are mainly for use with
-    <method>URI::createKnown</method>.
+    These constants are for use with <member>URI::createKnown</member>.
     </p>
 
-    @since OOo 3.0
+    @since OOo 3.2
 
     @see URI::createKnown
  */
 constants URIs
 {
-//    /// http://www.w3.org/2001/XMLSchema#NCName
-//FIXME: XMLSchema-datatypes is preferred to XMLSchema in this context???
-
     /// http://www.w3.org/2001/XMLSchema-datatypes#NCName
-    const short XSD_NCNAME = 1;
+    const short XSD_NCNAME              =  1;
     /// http://www.w3.org/2001/XMLSchema-datatypes#string
-    const short XSD_STRING = 2;
+    const short XSD_STRING              =  2;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#normalizedString
+    const short XSD_NORMALIZEDSTRING    =  3;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#boolean
+    const short XSD_BOOLEAN             =  4;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#decimal
+    const short XSD_DECIMAL             =  5;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#float
+    const short XSD_FLOAT               =  6;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#double
+    const short XSD_DOUBLE              =  7;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#integer
+    const short XSD_INTEGER             =  8;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#nonNegativeInteger
+    const short XSD_NONNEGATIVEINTEGER  =  9;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#positiveInteger
+    const short XSD_POSITIVEINTEGER     = 10;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#nonPositiveInteger
+    const short XSD_NONPOSITIVEINTEGER  = 11;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#negativeInteger
+    const short XSD_NEGATIVEINTEGER     = 12;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#long
+    const short XSD_LONG                = 13;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#int
+    const short XSD_INT                 = 14;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#short
+    const short XSD_SHORT               = 15;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#byte
+    const short XSD_BYTE                = 16;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#unsignedLong
+    const short XSD_UNSIGNEDLONG        = 17;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#unsignedInt
+    const short XSD_UNSIGNEDINT         = 18;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#unsignedShort
+    const short XSD_UNSIGNEDSHORT       = 19;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#unsignedByte
+    const short XSD_UNSIGNEDBYTE        = 20;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#hexBinary
+    const short XSD_HEXBINARY           = 21;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#base64Binary
+    const short XSD_BASE64BINARY        = 22;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#dateTime
+    const short XSD_DATETIME            = 23;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#time
+    const short XSD_TIME                = 24;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#date
+    const short XSD_DATE                = 25;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#gYearMonth
+    const short XSD_GYEARMONTH          = 26;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#gYear
+    const short XSD_GYEAR               = 27;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#gMonthDay
+    const short XSD_GMONTHDAY           = 28;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#gDay
+    const short XSD_GDAY                = 29;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#gMonth
+    const short XSD_GMONTH              = 30;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#anyURI
+    const short XSD_ANYURI              = 31;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#token
+    const short XSD_TOKEN               = 32;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#language
+    const short XSD_LANGUAGE            = 33;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#NMTOKEN
+    const short XSD_NMTOKEN             = 34;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#Name
+    const short XSD_NAME                = 35;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#duration
+    const short XSD_DURATION            = 36;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#QName
+    const short XSD_QNAME               = 37;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#NOTATION
+    const short XSD_NOTATION            = 38;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#NMTOKENS
+    const short XSD_NMTOKENS            = 39;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#ID
+    const short XSD_ID                  = 40;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#IDREF
+    const short XSD_IDREF               = 41;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#IDREFS
+    const short XSD_IDREFS              = 42;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#ENTITY
+    const short XSD_ENTITY              = 43;
+    /// http://www.w3.org/2001/XMLSchema-datatypes#ENTITIES
+    const short XSD_ENTITIES            = 44;
 
     /// http://www.w3.org/1999/02/22-rdf-syntax-ns#type
     const short RDF_TYPE        = 1000;
@@ -71,56 +151,179 @@ constants URIs
     const short RDF_PROPERTY    = 1004;
     /// http://www.w3.org/1999/02/22-rdf-syntax-ns#Statement
     const short RDF_STATEMENT   = 1005;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#value
+    const short RDF_VALUE       = 1006;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#first
+    const short RDF_FIRST       = 1007;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#rest
+    const short RDF_REST        = 1008;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#nil
+    const short RDF_NIL         = 1009;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral
+    const short RDF_XMLLITERAL  = 1010;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#Alt
+    const short RDF_ALT         = 1011;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag
+    const short RDF_BAG         = 1012;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#List
+    const short RDF_LIST        = 1013;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq
+    const short RDF_SEQ         = 1014;
+    /// http://www.w3.org/1999/02/22-rdf-syntax-ns#_1
+    const short RDF_1           = 1015;
+    /* hmm... that's a lot of potential constants:
+    _n where n is a decimal integer greater than zero with no leading zeros.
+    */
 
     /// http://www.w3.org/2000/01/rdf-schema#comment
-    const short RDFS_COMMENT    = 1100;
+    const short RDFS_COMMENT                        = 1100;
     /// http://www.w3.org/2000/01/rdf-schema#label
-    const short RDFS_LABEL      = 1101;
+    const short RDFS_LABEL                          = 1101;
     /// http://www.w3.org/2000/01/rdf-schema#domain
-    const short RDFS_DOMAIN     = 1102;
+    const short RDFS_DOMAIN                         = 1102;
     /// http://www.w3.org/2000/01/rdf-schema#range
-    const short RDFS_RANGE      = 1103;
+    const short RDFS_RANGE                          = 1103;
     /// http://www.w3.org/2000/01/rdf-schema#subClassOf
-    const short RDFS_SUBCLASSOF = 1104;
+    const short RDFS_SUBCLASSOF                     = 1104;
     /// http://www.w3.org/2000/01/rdf-schema#Literal
-    const short RDFS_LITERAL    = 1105;
+    const short RDFS_LITERAL                        = 1105;
+    /// http://www.w3.org/2000/01/rdf-schema#member
+    const short RDFS_MEMBER                         = 1106;
+    /// http://www.w3.org/2000/01/rdf-schema#subPropertyOf
+    const short RDFS_SUBPROPERTYOF                  = 1107;
+    /// http://www.w3.org/2000/01/rdf-schema#isDefinedBy
+    const short RDFS_ISDEFINEDBY                    = 1108;
+    /// http://www.w3.org/2000/01/rdf-schema#seeAlso
+    const short RDFS_SEEALSO                        = 1109;
+    /// http://www.w3.org/2000/01/rdf-schema#Resource
+    const short RDFS_RESOURCE                       = 1110;
+    /// http://www.w3.org/2000/01/rdf-schema#Class
+    const short RDFS_CLASS                          = 1111;
+    /// http://www.w3.org/2000/01/rdf-schema#Datatype
+    const short RDFS_DATATYPE                       = 1112;
+    /// http://www.w3.org/2000/01/rdf-schema#Container
+    const short RDFS_CONTAINER                      = 1113;
+    /// http://www.w3.org/2000/01/rdf-schema#ContainerMembershipProperty
+    const short RDFS_CONTAINERMEMBERSHIPPROPERTY    = 1114;
 
     /// http://www.w3.org/2002/07/owl#Class
-    const short OWL_CLASS               = 1200;
+    const short OWL_CLASS                       = 1200;
     /// http://www.w3.org/2002/07/owl#ObjectProperty
-    const short OWL_OBJECTPROPERTY      = 1201;
+    const short OWL_OBJECTPROPERTY              = 1201;
     /// http://www.w3.org/2002/07/owl#DatatypeProperty
-    const short OWL_DATATYPEPROPERTY    = 1202;
+    const short OWL_DATATYPEPROPERTY            = 1202;
     /// http://www.w3.org/2002/07/owl#FunctionalProperty
-    const short OWL_FUNCTIONALPROPERTY  = 1203;
+    const short OWL_FUNCTIONALPROPERTY          = 1203;
+    /// http://www.w3.org/2002/07/owl#Thing
+    const short OWL_THING                       = 1204;
+    /// http://www.w3.org/2002/07/owl#Nothing
+    const short OWL_NOTHING                     = 1205;
+    /// http://www.w3.org/2002/07/owl#Individual
+    const short OWL_INDIVIDUAL                  = 1206;
+    /// http://www.w3.org/2002/07/owl#equivalentClass
+    const short OWL_EQUIVALENTCLASS             = 1207;
+    /// http://www.w3.org/2002/07/owl#equivalentProperty
+    const short OWL_EQUIVALENTPROPERTY          = 1208;
+    /// http://www.w3.org/2002/07/owl#sameAs
+    const short OWL_SAMEAS                      = 1209;
+    /// http://www.w3.org/2002/07/owl#differentFrom
+    const short OWL_DIFFERENTFROM               = 1210;
+    /// http://www.w3.org/2002/07/owl#AllDifferent
+    const short OWL_ALLDIFFERENT                = 1211;
+    /// http://www.w3.org/2002/07/owl#distinctMembers
+    const short OWL_DISTINCTMEMBERS             = 1212;
+    /// http://www.w3.org/2002/07/owl#inverseOf
+    const short OWL_INVERSEOF                   = 1213;
+    /// http://www.w3.org/2002/07/owl#TransitiveProperty
+    const short OWL_TRANSITIVEPROPERTY          = 1214;
+    /// http://www.w3.org/2002/07/owl#SymmetricProperty
+    const short OWL_SYMMETRICPROPERTY           = 1215;
+    /// http://www.w3.org/2002/07/owl#InverseFunctionalProperty
+    const short OWL_INVERSEFUNCTIONALPROPERTY   = 1216;
+    /// http://www.w3.org/2002/07/owl#Restriction
+    const short OWL_RESTRICTION                 = 1217;
+    /// http://www.w3.org/2002/07/owl#onProperty
+    const short OWL_ONPROPERTY                  = 1218;
+    /// http://www.w3.org/2002/07/owl#allValuesFrom
+    const short OWL_ALLVALUESFROM               = 1219;
+    /// http://www.w3.org/2002/07/owl#someValuesFrom
+    const short OWL_SOMEVALUESFROM              = 1220;
+    /// http://www.w3.org/2002/07/owl#minCardinality
+    const short OWL_MINCARDINALITY              = 1221;
+    /// http://www.w3.org/2002/07/owl#maxCardinality
+    const short OWL_MAXCARDINALITY              = 1222;
+    /// http://www.w3.org/2002/07/owl#cardinality
+    const short OWL_CARDINALITY                 = 1223;
+    /// http://www.w3.org/2002/07/owl#Ontology
+    const short OWL_ONTOLOGY                    = 1224;
+    /// http://www.w3.org/2002/07/owl#imports
+    const short OWL_IMPORTS                     = 1225;
+    /// http://www.w3.org/2002/07/owl#versionInfo
+    const short OWL_VERSIONINFO                 = 1226;
+    /// http://www.w3.org/2002/07/owl#priorVersion
+    const short OWL_PRIORVERSION                = 1227;
+    /// http://www.w3.org/2002/07/owl#backwardCompatibleWith
+    const short OWL_BACKWARDCOMPATIBLEWITH      = 1228;
+    /// http://www.w3.org/2002/07/owl#incompatibleWith
+    const short OWL_INCOMPATIBLEWITH            = 1229;
+    /// http://www.w3.org/2002/07/owl#DeprecatedClass
+    const short OWL_DEPRECATEDCLASS             = 1230;
+    /// http://www.w3.org/2002/07/owl#DeprecatedProperty
+    const short OWL_DEPRECATEDPROPERTY          = 1231;
+    /// http://www.w3.org/2002/07/owl#AnnotationProperty
+    const short OWL_ANNOTATIONPROPERTY          = 1232;
+    /// http://www.w3.org/2002/07/owl#OntologyProperty
+    const short OWL_ONTOLOGYPROPERTY            = 1233;
+    /// http://www.w3.org/2002/07/owl#oneOf
+    const short OWL_ONEOF                       = 1234;
+    /// http://www.w3.org/2002/07/owl#dataRange
+    const short OWL_DATARANGE                   = 1235;
+    /// http://www.w3.org/2002/07/owl#disjointWith
+    const short OWL_DISJOINTWITH                = 1236;
+    /// http://www.w3.org/2002/07/owl#unionOf
+    const short OWL_UNIONOF                     = 1237;
+    /// http://www.w3.org/2002/07/owl#complementOf
+    const short OWL_COMPLEMENTOF                = 1238;
+    /// http://www.w3.org/2002/07/owl#intersectionOf
+    const short OWL_INTERSECTIONOF              = 1239;
+    /// http://www.w3.org/2002/07/owl#hasValue
+    const short OWL_HASVALUE                    = 1240;
 
-    /// http://docs.oasis-open.org/opendocument/meta/package/common#hasPart
-    const short PKG_HASPART     = 2000;
-    /// http://docs.oasis-open.org/opendocument/meta/package/common#idref
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#hasPart
+    const short PKG_HASPART         = 2000;
+/* REMOVED
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#idref
     const short PKG_IDREF       = 2001;
-    /// http://docs.oasis-open.org/opendocument/meta/package/common#path
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#path
     const short PKG_PATH        = 2002;
-    /// http://docs.oasis-open.org/opendocument/meta/package/common#mimeType
-    const short PKG_MIMETYPE    = 2003;
-    /// http://docs.oasis-open.org/opendocument/meta/package/common#Package
-    const short PKG_PACKAGE     = 2004;
-    /// http://docs.oasis-open.org/opendocument/meta/package/common#Element
-    const short PKG_ELEMENT     = 2005;
-    /// http://docs.oasis-open.org/opendocument/meta/package/common#File
-    const short PKG_FILE        = 2006;
+*/
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#mimeType
+    const short PKG_MIMETYPE        = 2003;
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Package
+    const short PKG_PACKAGE         = 2004;
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Element
+    const short PKG_ELEMENT         = 2005;
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#File
+    const short PKG_FILE            = 2006;
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#MetadataFile
+    const short PKG_METADATAFILE    = 2007;
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/pkg#Document
+    const short PKG_DOCUMENT        = 2008;
 
-    /// http://docs.oasis-open.org/opendocument/meta/package/odf#prefix
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/odf#prefix
     const short ODF_PREFIX          = 2100;
-    /// http://docs.oasis-open.org/opendocument/meta/package/odf#suffix
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/odf#suffix
     const short ODF_SUFFIX          = 2101;
-    /// http://docs.oasis-open.org/opendocument/meta/package/odf#Element
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/odf#Element
     const short ODF_ELEMENT         = 2102;
-    /// http://docs.oasis-open.org/opendocument/meta/package/odf#ContentFile
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/odf#ContentFile
     const short ODF_CONTENTFILE     = 2103;
-    /// http://docs.oasis-open.org/opendocument/meta/package/odf#StylesFile
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/odf#StylesFile
     const short ODF_STYLESFILE      = 2104;
-    /// http://docs.oasis-open.org/opendocument/meta/package/odf#MetadataFile
+/* REMOVED
+    /// http://docs.oasis-open.org/ns/office/1.2/meta/odf#MetadataFile
     const short ODF_METADATAFILE    = 2105;
+*/
 
     /// urn:oasis:names:tc:opendocument:xmlns:text:1.0meta-field
 //    const short TEXT_META_FIELD = 3000;

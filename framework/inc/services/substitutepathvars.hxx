@@ -59,7 +59,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/link.hxx>
@@ -236,11 +236,8 @@ struct ReSubstUserVarOrder
 typedef std::list< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
 typedef std::list< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
 
-class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider      ,
-                                    public com::sun::star::lang::XServiceInfo       ,
-                                    public com::sun::star::util::XStringSubstitution,
-                                    private ThreadHelpBase                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                                    public ::cppu::OWeakObject
+class SubstitutePathVariables :     private ThreadHelpBase                          ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                                    public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringSubstitution, css::lang::XServiceInfo>
 {
     friend class SubstitutePathVariables_Impl;
 
@@ -249,8 +246,6 @@ class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider  
         virtual ~SubstitutePathVariables();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
         // XStringSubstitution

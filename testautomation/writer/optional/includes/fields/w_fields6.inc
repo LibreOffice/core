@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : fredrik.haegg@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Fields - Functions
 '*
@@ -39,33 +39,35 @@
 
 sub w_fields6
 
-    Call tFunctions_1        'Conditional text
-    Call tFunctions_2        'Hidden text
-    Call tFunctions_3        'Hidden paragraph
-    Call tFunctions_4        'Input field
-    Call tFunctions_5        'Placeholder - text
-    Call tFunctions_6        'Placeholder - table
-    Call tFunctions_7        'Placeholder - frame
-    Call tFunctions_8        'Placeholder - graphics
-    Call tFunctions_9        'Placeholder - object
-    Call tFunctions_10       'Input list - Remove
-    Call tFunctions_11       'Input list - Move up
-    Call tFunctions_12       'Input list - Move down
-    Call tFunctions_13       'Combine Character
+    Call tFunctionsConditionalText
+    Call tFunctionsHiddenText
+    Call tFunctionsHiddenParagraph
+    Call tFunctionsInputField
+    Call tFunctionsPlaceholderText
+    Call tFunctionsPlaceholderTable
+    Call tFunctionsPlaceholderFrame
+    Call tFunctionsPlaceholderGraphics
+    Call tFunctionsPlaceholderObject
+    Call tFunctionsInputlistRemove
+    Call tFunctionsInputlistMoveUp
+    Call tFunctionsInputlistMoveDown
+    Call tFunctionsCombineCharacter
 
 end sub
 
-testcase tFunctions_1
+'-----------------------------------------------------------------
 
-  Dim sName as String
-  Dim sValue() as String
+testcase tFunctionsConditionalText
+
+  Dim sName      as String
+  Dim sValue()   as String
   Dim sCondition as String
-  Dim sElse as String
-  Dim sThen as String
-  Dim sResult() as String
-  Dim iType as Integer
-  Dim i as Integer
-  Dim j as Integer
+  Dim sElse      as String
+  Dim sThen      as String
+  Dim sResult()  as String
+  Dim iType      as Integer
+  Dim i          as Integer
+  Dim j          as Integer
 
   sName      = "X"
   SCondition = "X==" + Chr(34) + "Sun" + Chr(34)
@@ -132,16 +134,16 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_2
+testcase tFunctionsHiddenText
 
-  Dim sName           as String
-  Dim sValue()        as String
-  Dim sCondition      as String
-  Dim sHiddenText     as String
-  Dim sResult()       as String
-  Dim bHiddenText     as Boolean
-  Dim i as Integer
-  Dim j as Integer
+  Dim sName       as String
+  Dim sValue()    as String
+  Dim sCondition  as String
+  Dim sHiddenText as String
+  Dim sResult()   as String
+  Dim bHiddenText as Boolean
+  Dim i           as Integer
+  Dim j           as Integer
 
   sName       = "X"
   SCondition  = "X==" + Chr(34) + "ABC" + Chr(34)
@@ -217,15 +219,16 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_3
+testcase tFunctionsHiddenParagraph
 
-  Dim sName           as String
-  Dim sValue()        as String
-  Dim sCondition      as String
-  Dim sHiddenText     as String
-  Dim sResult()       as String
-  Dim bHiddenText     as Boolean
-  Dim i , j           as Integer
+  Dim sName       as String
+  Dim sValue()    as String
+  Dim sCondition  as String
+  Dim sHiddenText as String
+  Dim sResult()   as String
+  Dim bHiddenText as Boolean
+  Dim i           as Integer
+  Dim j           as Integer
 
   sName       = "X"
   SCondition  = "X==" + Chr(34) + "ABC" + Chr(34)
@@ -304,9 +307,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_4
+testcase tFunctionsInputField
 
-  Dim sReference , sFieldContent   as String
+  Dim sReference as String
+  Dim sFieldContent as String
 
   sReference    = "NewTest"
   sFieldContent = "10000"
@@ -346,9 +350,9 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_5
+testcase tFunctionsPlaceholderText
 
-  Dim sPlaceHolder    as String
+  Dim sPlaceHolder as String
 
   sPlaceHolder = "Text"
 
@@ -380,13 +384,13 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_6
-   
+testcase tFunctionsPlaceholderTable
+
     printlog "Placeholder - Table"
     '/// <b> Placeholder - Table </b>
-    
+
     Call hNewDocument
-    
+
     Call fFormatPageWriter("TabSeite")
     Breite.SetText "15"
     Hoehe.SetText "15"
@@ -406,7 +410,7 @@ testcase tFunctions_6
     else
         Warnlog "Something wrong !"
     end if
-    
+
     '/// Insert/Fields/Other/Functions / Select "Placeholder" ,
     '/// + select Table
     Call fInsertFieldsOther("TabFunktionen")
@@ -416,42 +420,42 @@ testcase tFunctions_6
     Platzhalter.SetText "TableTableTableTableTable"
     Einfuegen.Click
     TabFunktionen.Close
-    
+
     '/// Check if the insertion is correct
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<TableTableTableTableTable>" )then
         Warnlog "Should get <TableTableTableTableTable> but get " & fGetFieldContent()
     end if
-    
+
     Call fSetToBigSize()
     Call wTypeKeys "<MOD1 Home>"
     Sleep 1
-    
+
 	Call gMouseMove(0,0,30,25)
     Call gMouseClick(30,25)
     Sleep 3
-    
+
     Kontext "TabelleEinfuegenWriter"
     if TabelleEinfuegenWriter.Exists then
         TabelleEinfuegenWriter.Cancel
     else
         Warnlog "Insert table dialog isn't up !"
     end if
-    
+
     Call hCloseDocument
 
 endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_7
+testcase tFunctionsPlaceholderFrame
 
     printlog "Placeholder - Frame"
     '/// <b> Placeholder - Frame </b>
-    
+
     Call hNewDocument
-    
+
     fFormatPageWriter("TabSeite")
     Breite.SetText "15"
     Hoehe.SetText "15"
@@ -470,7 +474,7 @@ testcase tFunctions_7
     else
        Warnlog "Something wrong !"
     end if
-    
+
     '/// Insert/Fields/Other/Functions / Select "Placeholder" ,
     '/// + select Frame
     Call fInsertFieldsOther("TabFunktionen")
@@ -480,21 +484,21 @@ testcase tFunctions_7
     Platzhalter.SetText "FrameFrameFrameFrameFrameFrame"
     Einfuegen.Click
     TabFunktionen.Close
-    
+
     '/// Check if the insertion is correct
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<FrameFrameFrameFrameFrameFrame>" )then
         Warnlog "Should get <FrameFrameFrameFrameFrameFrame> but get " & fGetFieldContent()
     end if
-    
+
     Call fSetToBigSize()
     Call wTypeKeys "<MOD1 Home>"
     Sleep 1
 	Call gMouseMove(0,0,30,25)
     Call gMouseClick(30,25)
     Sleep 3
-    
+
     try
         Kontext
         Active.SetPage TabType
@@ -504,20 +508,20 @@ testcase tFunctions_7
     catch
         Warnlog "Format/Frame dialog isn't up !"
     endcatch
-    
+
     Call hCloseDocument
 
 endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_8
+testcase tFunctionsPlaceholderGraphics
 
     printlog "Placeholder - Graphics"
     '/// <b> Placeholder - Graphics </b>
-    
+
     Call hNewDocument
-    
+
     fFormatPageWriter("TabSeite")
     Breite.SetText "15"
     Hoehe.SetText "15"
@@ -525,7 +529,7 @@ testcase tFunctions_8
     Rechts.SetText "0"
     Oben.SetText "0"
     Unten.SetText "0"
-    
+
     TabSeite.OK
     Kontext "Active"
     if Active.Exists then
@@ -537,7 +541,7 @@ testcase tFunctions_8
     else
         Warnlog "Something wrong !"
     end if
-    
+
     '/// Insert/Fields/Other/Functions / Select "Placeholder" ,
     '/// + select Graphics
     Call fInsertFieldsOther("TabFunktionen")
@@ -547,21 +551,21 @@ testcase tFunctions_8
     Platzhalter.SetText "GraphicsGraphicsGraphicsGraphicsGraphics"
     Einfuegen.Click
     TabFunktionen.Close
-    
+
     '/// Check if the insertion is correct
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<GraphicsGraphicsGraphicsGraphicsGraphics>" )then
         Warnlog "Should get <GraphicsGraphicsGraphicsGraphicsGraphics> but get " & fGetFieldContent()
     end if
-    
+
     Call fSetToBigSize()
     Call wTypeKeys "<MOD1 Home>"
     Sleep 1
 	Call gMouseMove(0,0,30,25)
     Call gMouseClick(30,25)
     Sleep 3
-    
+
     try
         Kontext "GrafikEinfuegenDlg"
         Oeffnen.Click
@@ -569,20 +573,20 @@ testcase tFunctions_8
     catch
             Warnlog "Insert picture dialog isn't up !"
     endcatch
-    
+
     Call hCloseDocument
 
 endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_9
+testcase tFunctionsPlaceholderObject
 
     printlog "Placeholder - Object"
     '/// <b> Placeholder - Object </b>
-    
+
     Call hNewDocument
-    
+
     fFormatPageWriter("TabSeite")
     Breite.SetText "15"
     Hoehe.SetText "15"
@@ -601,7 +605,7 @@ testcase tFunctions_9
     else
         Warnlog "Something wrong !"
     end if
-    
+
     '/// Insert/Fields/Other/Functions / Select "Placeholder" ,
     '/// + select object
     Call fInsertFieldsOther("TabFunktionen")
@@ -611,21 +615,21 @@ testcase tFunctions_9
     Platzhalter.SetText "ObjectObjectObjectObjectObjectObject"
     Einfuegen.Click
     TabFunktionen.Close
-    
+
     '/// Check if the insertion is correct
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Shift Right>"
     if fGetFieldContent() <> ("<ObjectObjectObjectObjectObjectObject>" )then
         Warnlog "Should get <ObjectObjectObjectObjectObjectObject> but get " & fGetFieldContent()
     end if
-    
+
     Call fSetToBigSize()
     Call wTypeKeys "<MOD1 Home>"
     Sleep 1
 	Call gMouseMove(0,0,30,25)
     Call gMouseClick(30,25)
     Sleep 3
-    
+
     try
         Kontext "OLEObjektEinfuegen"
         NeuErstellen.Check
@@ -633,16 +637,17 @@ testcase tFunctions_9
     catch
         Warnlog "Insert OLE Object dialog isn't up !"
     endcatch
-    
+
     Call hCloseDocument
 
 endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_10
+testcase tFunctionsInputlistRemove
 
-  Dim sItem1 , sItem2 as String
+  Dim sItem1 as String
+  Dim sItem2 as String
 
   sItem1 = "First" : sItem2 = "Second"
 
@@ -687,9 +692,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_11
+testcase tFunctionsInputlistMoveUp
 
-  Dim sItem1 , sItem2 as String
+  Dim sItem1 as String
+  Dim sItem2 as String
 
   sItem1 = "First" : sItem2 = "Second"
 
@@ -733,9 +739,10 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_12
+testcase tFunctionsInputlistMoveDown
 
-  Dim sItem1 , sItem2 as String
+  Dim sItem1 as String
+  Dim sItem2 as String
 
   sItem1 = "First" : sItem2 = "Second"
 
@@ -780,26 +787,25 @@ endcase
 
 '-----------------------------------------------------------------
 
-testcase tFunctions_13
+testcase tFunctionsCombineCharacter
 
-    Dim sCombineCharacter as String
-    Dim sTestFile         as String
-    
+	Dim sCombineCharacter as String
+    Dim sTestFile as String
+
     sCombineCharacter = "ABC"
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\fields\CombineTest.sxw")
-    
+
     printlog "Combine Character"
     '/// <b> Combine Character </b>
-    
+
     Call hNewDocument
-    
+
     '/// Open test file pageTest.sxw
     Call hFileOpen(sTestFile)
     Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Right>"
 
-    
     '/// Insert/Fields/Other/Functions / Select "Combine characters"
     Call fInsertFieldsOther("TabFunktionen")
     Feldtyp.Select 6   'Combine characters
@@ -807,13 +813,13 @@ testcase tFunctions_13
     Namefeld.SetText sCombineCharacter
     Einfuegen.Click
     TabFunktionen.Close
-    
+
     '/// Check if the insertion is correct
     Call wTypeKeys "<Shift Left>"
     if fGetFieldContent() <> sCombineCharacter then
         Warnlog "Should get " & sCombineCharacter & " but get " & fGetFieldContent()
     end if
-    
+
     Call wTypeKeys ( "<Shift F4>" )
     FormatAnchorToPage
     Sleep 1
@@ -822,10 +828,9 @@ testcase tFunctions_13
         Warnlog "Something wrong in combine character"
     end if
     TabPositionAndSizeWriter.Cancel
-    
+
     Call hCloseDocument
 
 endcase
 
 '-----------------------------------------------------------------
-

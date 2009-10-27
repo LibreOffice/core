@@ -52,6 +52,7 @@
 #include <canvas/debug.hxx>
 #include "dx_impltools.hxx"
 #include <vcl/sysdata.hxx>
+#include <i18npool/mslangid.hxx>
 #include "dx_textlayout_drawhelper.hxx"
 #include "dx_bitmap.hxx"
 #include "dx_canvasfont.hxx"
@@ -134,6 +135,8 @@ namespace dxcanvas
             aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
             aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
             aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+
+            aFont.SetLanguage(MsLangId::convertLocaleToLanguage(rFontRequest.Locale));
 
             // setup font color
             aFont.SetColor( aColor );

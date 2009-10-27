@@ -434,14 +434,15 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
     // erst mal schauen, ob ich diese Connection schon habe
     OQueryTableConnection* pTabConn = NULL;
     const ::std::vector<OTableConnection*>* pConnections = getTableConnections();
+    ::std::vector<OTableConnection*>::const_iterator aEnd = pConnections->end();
     ::std::vector<OTableConnection*>::const_iterator aIter = ::std::find(   pConnections->begin(),
-                                                    pConnections->end(),
+                                                    aEnd,
                                                     static_cast<const OTableConnection*>(&rNewConn)
                                                     );
-    if(aIter == pConnections->end())
+    if(aIter == aEnd )
     {
         aIter = pConnections->begin();
-        for(;aIter != pConnections->end();++aIter)
+        for(;aIter != aEnd;++aIter)
         {
             if(*static_cast<OQueryTableConnection*>(*aIter) == rNewConn)
             {
@@ -549,14 +550,15 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     TTableWindowData::value_type pNewTabWinData;
     TTableWindowData* pWindowData = getDesignView()->getController().getTableWindowData();
     TTableWindowData::iterator aWinIter = pWindowData->begin();
-    for(;aWinIter != pWindowData->end();++aWinIter)
+    TTableWindowData::iterator aWinEnd = pWindowData->end();
+    for(;aWinIter != aWinEnd;++aWinIter)
     {
         pNewTabWinData = *aWinIter;
         if (pNewTabWinData && pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == _rTableName)
             break;
     }
     if ( !bAppend )
-        bAppend = ( aWinIter == pWindowData->end() );
+        bAppend = ( aWinIter == aWinEnd );
     if ( bAppend )
         pNewTabWinData = createTableWindowData(_rComposedName, _rTableName, strAlias);
         // die TabWinData brauche ich nicht in die entsprechende Liste der DocShell eintragen, das macht ShowTabWin
@@ -626,9 +628,10 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                     OSL_ENSURE(aReferencedTable.getLength(),"Foreign key without referencedTableName");
 
                     OTableWindowMap::const_iterator aIter = pTabWins->find(aReferencedTable);
-                    if(aIter == pTabWins->end())
+                    OTableWindowMap::const_iterator aEnd  = pTabWins->end();
+                    if(aIter == aEnd)
                     {
-                        for(aIter = pTabWins->begin();aIter != pTabWins->end();++aIter)
+                        for(aIter = pTabWins->begin();aIter != aEnd;++aIter)
                         {
                             OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second);
                             OSL_ENSURE( pTabWinTmp,"TableWindow is null!" );
@@ -636,7 +639,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                                 break;
                         }
                     }
-                    if ( aIter != pTabWins->end() && pNewTabWin != aIter->second )
+                    if ( aIter != aEnd && pNewTabWin != aIter->second )
                         addConnections( this, *pNewTabWin, *static_cast<OQueryTableWindow*>(aIter->second), xFKeyColumns );
                 }
                 break;
@@ -645,7 +648,8 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                 {
                     // we have a primary key so look in our list if there exsits a key which this is refered to
                     OTableWindowMap::const_iterator aIter = pTabWins->begin();
-                    for(;aIter != pTabWins->end();++aIter)
+                    OTableWindowMap::const_iterator aEnd  = pTabWins->end();
+                    for(;aIter != aEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second);
                         if ( pTabWinTmp == pNewTabWin )
@@ -827,7 +831,8 @@ sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFie
     DBG_CHKTHIS(OQueryTableView,NULL);
     rCnt = 0;
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->begin();
-    for(;aIter != GetTabWinMap()->end();++aIter)
+    OTableWindowMap::const_iterator aEnd  = GetTabWinMap()->end();
+    for(;aIter != aEnd;++aIter)
     {
         if(static_cast<OQueryTableWindow*>(aIter->second)->ExistsField(rFieldName, rInfo))
             ++rCnt;
@@ -919,7 +924,8 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             // (ich muss ueber das Parent gehen, da nur das die Position der Scrollbars kennt)
         // dann aus der Liste der TabWins raus und verstecken
         OTableWindowMap::iterator aIter = pTabWins->begin();
-        for ( ;aIter != pTabWins->end(); ++aIter )
+        OTableWindowMap::iterator aEnd  = pTabWins->end();
+        for ( ;aIter != aEnd ; ++aIter )
             if ( aIter->second == pTabWin )
             {
                 pTabWins->erase( aIter );
@@ -943,7 +949,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         sal_Int16 nCnt = 0;
         const ::std::vector<OTableConnection*>* pTabConList = getTableConnections();
         ::std::vector<OTableConnection*>::const_iterator aIter2 = pTabConList->begin();
-        for(;aIter2 != pTabConList->end();)
+        for(;aIter2 != pTabConList->end();)// the end may change
         {
             OQueryTableConnection* pTmpEntry = static_cast<OQueryTableConnection*>(*aIter2);
             OSL_ENSURE(pTmpEntry,"OQueryTableConnection is null!");
@@ -1016,8 +1022,9 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
             // die Connections
             ::std::vector<OTableConnection*>* pTableCon = pUndoAction->GetTabConnList();
             ::std::vector<OTableConnection*>::iterator aIter = pTableCon->begin();
+            ::std::vector<OTableConnection*>::iterator aEnd = pTableCon->end();
 
-            for(;aIter != pTableCon->end();++aIter)
+            for(;aIter != aEnd;++aIter)
                 addConnection(*aIter); // add all connections from the undo action
 
             // each connection should invalidated inside addConnection so we don't need this here any longer
@@ -1069,7 +1076,8 @@ sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) con
     if (pList)
     {
         ::std::vector<OTableConnection*>::const_iterator aIter = pList->begin();
-        for(;aIter != pList->end();++aIter)
+        ::std::vector<OTableConnection*>::const_iterator aEnd = pList->end();
+        for(;aIter != aEnd;++aIter)
         {
             OQueryTableConnection* pTemp = static_cast<OQueryTableConnection*>(*aIter);
             if (pTemp->IsVisited() &&

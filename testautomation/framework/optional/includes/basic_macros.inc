@@ -40,7 +40,6 @@
 
 testcase tMakro_In_All_Apps
 
-    '///<h1>Create a module for all applications, open and close Basic-IDE</h1>
 
     dim brc as boolean
     dim cApp as string
@@ -51,21 +50,15 @@ testcase tMakro_In_All_Apps
     
     const CMACRO = "AppMakro"
     
-    '///<ul>
 
     for iApp = 1 to 7
 
         cApp = hNumericDoctype( iApp )
         printlog( cApp )
 
-        '///+<li>Open a new document</li>
         printlog( "Open a new document" )
         brc = hCreateDocument()
         
-        '///+<li>Open the BASIC Macro Organizer</li>
-        '///+<li>Create a new library for the current document</li>
-        '///+<li>Create a new module for the current document<br>
-        '///+ -&gt; The Basic IDE opens</li>
         brc = hInitBasicIde( CMACRO )
         if ( not brc ) then
             warnlog( "Could not open the BASIC Macro Organizer, aborting" )
@@ -73,19 +66,15 @@ testcase tMakro_In_All_Apps
             goto endsub
         endif
         
-        '///+<li>Close the BASIC-IDE</li>
         printlog "Close the BASIC-IDE"
         brc = hCloseBasicIde()
         
-        '///+<li>Close the navigator (Master-Doc)</li>
         printlog( "Close the navigator (Master-doc)" )
         brc = hCloseNavigator()
         
-        '///+<li>Close the document</li>
         printlog( "Close the document" )
         FileClose
 
-        '///+<li>Close the messagebox (document changed)</li>
         printlog( "Close the messagebox (document changed)" )
         kontext "messagebox"
         if ( MessageBox.Exists( 1 ) ) then
@@ -98,7 +87,6 @@ testcase tMakro_In_All_Apps
         end if
 
     next iApp
-    '///</ul>
     
 endcase
 
@@ -111,8 +99,6 @@ testcase tMakro_Dialog
         goto endsub
     endif
 
-    '///<h1>Dialogs: Macro Object Organizer, Tools/Customize</h1>
-    '///<ul>
     
     dim brc as boolean
     dim cMsg as string
@@ -128,14 +114,9 @@ testcase tMakro_Dialog
     
     
     gApplication = "WRITER"
-    '///+<li>Open a new document</li>
     printlog( "Open a new document" )
     brc = hCreateDocument()
     
-    '///+<li>Open the basic organizer</li>
-    '///+<li>Create a new library for the current document</li>
-    '///+<li>Create a new module for the current document<br>
-    '///+ -&gt; The Basic-Ide opens</li>
     printlog( "Create a new library, a new module, open Basic-Ide" )
     brc = hInitBasicIde( CMACRO )
     if ( not brc ) then
@@ -143,73 +124,59 @@ testcase tMakro_Dialog
         goto endsub
     endif
     
-    '///+<li>Close the Basic IDE</li>
     printlog( "Close the Basic-Ide" )
     kontext "BasicIDE"
     hCloseBasicIde()
     
-    '///+<li>Open the Basic Organizer</li>
     printlog( "Open the Basic Macro Organizer" )
     brc = hOpenBasicOrganizerFromDoc()
 
-    '///+<li>Select the module we created before</li>
     printlog( "Select the last Module for the current document" )
     iPos = hSelectTheLastNode( MakroAus )
     
-    '///+<li>Open the Macro Obkect Organizer (Click Organize...)</li>
     printlog( "Click Organize..." )
     Verwalten.Click()
     
-    '///+<li>Select the Modules-tab</li>
     printlog( "Select Modules-tab" )
     brc = hSelectBasicObjectOrganizerTab( 1 )
 
     
-    '///+<li>Create a new module</li>
     printlog( "Press 'new module'" )
     kontext "tabmodule"
     NeuesModul.Click()
 
     kontext "neuesmodul"
-    '///+<li>Cancel the 'New Module' dialog</li>
     printlog( "Cancel the dialog" )
     NeuesModul.Cancel()
 
-    '///+<li>Create a 'New Dialog'</li>
     brc = hSelectBasicObjectOrganizerTab( 2 )
 
     kontext "tabdialogs"
     printlog( "Press 'new dialog'" )
     NewDialog.Click()
        
-    '///+<li>Cancel the dialog</li>
     printlog( "Cancel the dialog" )
     kontext "neuerdialog"
     NeuerDialog.Cancel()
 
     kontext
-    '///+<li>Activate TabLibrary on it 'New' / 'Password' / 'Delete' / 'Append' / 'Edit'</li>
     printlog( "Select the libraries Tab" )
     brc = hSelectBasicObjectOrganizerTab( 3 )
 
     
-    '///+<li>Press 'New' on the libraries tab</li>
     printlog( "Press 'New' on the libraries tab" )
     kontext "tabbibliotheken"
     Neu.Click()
 
     kontext "neuebibliothek"
-    '///+<li>Close the dialog with 'OK'</li>
     printlog( "Close the dialog with 'OK'" )
     Call DialogTest( NeueBibliothek )
     NeueBibliothek.OK()
     
-    '///+<li>Delete the new default library</li>
     printlog( "Delete 'Library1'" )
     kontext "tabbibliotheken"
     Loeschen.Click()
     
-    '///+<li>Close the deletion warning</li>
     printlog( "Close the warning" )
     kontext "active"
     if ( Active.Exists() ) then
@@ -221,7 +188,6 @@ testcase tMakro_Dialog
         warnlog( "Deletion warning is missing" )
     endif
   
-    '///+<li>Check the number of entries in the Libraries-List, one expected</li>
     printlog( "Check the number of libraries in list" )
     kontext "tabbibliotheken"
     iLibraryItemCount = Bibliotheksliste.getItemCount()
@@ -233,12 +199,10 @@ testcase tMakro_Dialog
         endif
     endif
 
-    '///+<li>Append a library by pressing 'Append'</li>
     printlog( "Append a xlb-file" )
     kontext "tabbibliotheken"
     Hinzufuegen.Click()
 
-    '///+<li>Select a valid library and open it</li>
     printlog( "Select 'AppLibrary1/script.xlb' from the files list" 
     kontext "oeffnendlg"
     Dateiname.SetText( ConvertPath ( XLBFILE ) )
@@ -281,16 +245,13 @@ testcase tMakro_Dialog
         
     endif
 
-    '///+<li>Make sure 'Insert as Reference' is unchecked</li>
     printlog( "Ensure 'Insert as Reference' is unchecked" )
     kontext "appendlibraries"
     InsertAsReference.UnCheck()
 
-    '///+<li>Check 'Replace Existing Library'</li>
     printlog( "Check 'Replace existing library'" )
     ReplaceExistingLibraries.Check()
 
-    '///+<li>Press 'OK' to append the library</li>
     printlog( "Press 'OK' to append the library" )
     kontext "appendlibraries"
     try
@@ -299,7 +260,6 @@ testcase tMakro_Dialog
         warnlog( "#i85254# Appending libraries leads to crash" )
     endcatch
 
-    '///+<li>Check the number of entries in the Libraries-List, two expected</li>
     printlog( "Check the number of libraries in list (should be two)" )
     kontext "tabbibliotheken"
     iLibraryItemCount = Bibliotheksliste.getItemCount()
@@ -307,7 +267,6 @@ testcase tMakro_Dialog
         qaerrorlog( "#i87457# Two entries in list expected, found " & iLibraryItemCount )
     endif
 
-    '///+<li>Select 'AppLibrary1' and click 'Password'</li>
     printlog( "Select the first item" )
     Bibliotheksliste.TypeKeys( "<HOME>" )
     for iCurrentLibrary = 1 to iLibraryItemCount 
@@ -319,7 +278,6 @@ testcase tMakro_Dialog
         Bibliotheksliste.Typekeys( "<DOWN>" )
     next iCurrentLibrary
     
-    '///+<li>Click to set a password for AppLibrary1, cancel dialog</li>
     printlog( "Set a password for AppLibrary1" )
     kontext "tabbibliotheken"
     if ( Passwort.IsEnabled() ) then
@@ -330,12 +288,10 @@ testcase tMakro_Dialog
         warnlog( "Password is disabled for 'AppLibrary1'" )
     endif
 
-    '///+<li>Delete the inserted library (AppLibrary1)</li>
     printlog( "Delete 'AppLibrary1'" )
     kontext "tabbibliotheken"
     Loeschen.Click()
     
-    '///+<li>Close the warning with YES</li>
     printlog( "Close the warning with YES" )
     kontext "active"
     if ( Active.Exists() ) then
@@ -347,12 +303,10 @@ testcase tMakro_Dialog
         warnlog( "Expected confirmation dialog for delete" )
     endif
     
-    '///+<li>Click on the Edit-button -&gt; The Basic-Ide opens</li>
     kontext "tabbibliotheken"
     printlog( "Press 'edit' on 'Libraries'-tab" )
     Bearbeiten.Click()
 
-    '///+<li>Close the Basic-Ide</li>
     kontext "BasicIDE"
     if ( BasicIDE.Exists( 5 ) ) then
     
@@ -375,24 +329,20 @@ testcase tMakro_Dialog
         goto endsub
     endif
 
-    '///+<li>Open the BASIC Macro Organizer from the current document</li>
     printlog( "Open the BASIC Macro Organizer" )
     brc = hOpenBasicOrganizerFromDoc()
     
-    '///+<li>Go to the last macro in the list</li>
     printlog( "Select the last macro from the list" )
     kontext "makro"
     iPos = hSelectTheLastNode( MakroAus )
     
     try
-        '///+<li>Assign the macro by pressing 'Assign' -&gt; Tools/customize opens</li>
         printlog( "Assign the macro, Tools/customize dialog should open" )
         Zuordnen.Click ()
     catch
         warnlog( "#i106853# Assign-Button is disabled or macro is missing" )
     endcatch
 
-    '///+<li>Activate all tapages and cancel the Tools/Customize dialog</li>
     printlog( "Activate all tapages and cancel the Tools/Customize dialog" )
     
     brc = hToolsCustomizeSelectTab( "menu" )
@@ -403,12 +353,10 @@ testcase tMakro_Dialog
     brc = hToolsCustomizeSelectTab( "events" )
     brc = hToolsCustomizeSelectTab( "toolbars" )
 
-    '///+<li>Cancel Tools/Customize dialog -&gt; Back to Macro Organizer</li>
     printlog( "Cancel Tools/Customize dialog -> Macro Organizer should be open" )    
     brc = hToolsCustomizeClose( 2 )
     
     
-    '///+<li>Click to run the macro</li>
     printlog "Click to run macro"
     kontext "makro"
     try
@@ -419,7 +367,6 @@ testcase tMakro_Dialog
         Makro.close()
     endcatch
     
-    '///+<li>The macro thriggers a messagebox, close it</li>
     kontext "active"
     if ( active.exists() ) then
         cMsg = active.getText()
@@ -432,19 +379,15 @@ testcase tMakro_Dialog
         Active.OK()
     endif
     
-    '///+<li>Open Macro organizer from the current document</li>
     printlog( "Open macro organizer from the current document" )
     brc = hOpenBasicOrganizerFromDoc()
     
-    '///+<li>Select the last item in the treelist</li>
     printlog( "Select the last item in the treelist" )
     brc = hSelectTheLastNode( MakroAus )
 
-    '///+<li>Delete the module we created earlier</li>
     printlog( "Delete the new module" )
     Loeschen.Click()
     
-    '///+<li>Close the deletion warning</li>
     printlog( "Close the deletion warning" )
     kontext "active"
     if ( active.exists() ) then
@@ -456,16 +399,13 @@ testcase tMakro_Dialog
         warnlog( "No confirmation dialog for delete" )
     endif
     
-    '///+<li>Close the macro organizer</li>
     printlog( "Close the macro organizer" )
     kontext "makro"
     Makro.Close()
     
-    '///+<li>Close the document</li>
     printlog( "Close the document" )
     Call hDestroyDocument()
     
-    '///</ul>
     
 endcase
 

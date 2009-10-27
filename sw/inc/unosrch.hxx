@@ -39,7 +39,7 @@
 /******************************************************************************
  *
  ******************************************************************************/
-struct SfxItemPropertyMap;
+class SfxItemPropertySet;
 class SwXTextDocument;
 class SwSearchProperties_Impl;
 class SfxItemSet;
@@ -68,7 +68,7 @@ class SwXTextSearch : public cppu::WeakImplHelper3
     SwSearchProperties_Impl*    pReplaceProperties;
 
 
-    const SfxItemPropertyMap*   _pMap;
+    const SfxItemPropertySet*   m_pPropSet;
     sal_Bool                    bAll  : 1;
     sal_Bool                    bWord : 1;
     sal_Bool                    bBack : 1;

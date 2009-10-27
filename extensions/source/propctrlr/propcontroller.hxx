@@ -168,6 +168,7 @@ namespace pcr
         bool        m_bContainerFocusListening;
         bool        m_bSuspendingPropertyHandlers;
         bool        m_bConstructed;
+        bool        m_bBindingIntrospectee;
 
     protected:
         DECLARE_XINTERFACE()

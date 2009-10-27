@@ -107,6 +107,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
     nCntMidHyph = 0;
     nLeftScanIdx = STRING_LEN;
     nRightScanIdx = 0;
+    m_nHintEndIndex = 0;
 
     if( nStart > GetInfo().GetTxt().Len() )
     {
@@ -313,7 +314,14 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         }
     }
     pPor->Truncate();
-    delete rInf.GetRest();
+    SwLinePortion *const pRest( rInf.GetRest() );
+    if (pRest && pRest->InFldGrp() &&
+        static_cast<SwFldPortion*>(pRest)->IsNoLength())
+    {
+        // HACK: decrement again, so we pick up the suffix in next line!
+        --m_nHintEndIndex;
+    }
+    delete pRest;
     rInf.SetRest(0);
     return pPor;
 }
@@ -820,6 +828,34 @@ void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
 }
 
 /*************************************************************************
+ *                      class SwMetaPortion
+ *************************************************************************/
+
+class SwMetaPortion : public SwTxtPortion
+{
+public:
+    inline  SwMetaPortion() { SetWhichPor( POR_META ); }
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+//    OUTPUT_OPERATOR
+};
+
+//CLASSIO( SwMetaPortion )
+
+/*************************************************************************
+ *               virtual SwMetaPortion::Paint()
+ *************************************************************************/
+
+void SwMetaPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
+    if ( Width() )
+    {
+        rInf.DrawViewOpt( *this, POR_META );
+        SwTxtPortion::Paint( rInf );
+    }
+}
+
+
+/*************************************************************************
  *                      SwTxtFormatter::WhichTxtPor()
  *************************************************************************/
 
@@ -832,6 +868,10 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
     {
         if( GetFnt()->IsRef() )
             pPor = new SwRefPortion;
+        else if (GetFnt()->IsMeta())
+        {
+            pPor = new SwMetaPortion;
+        }
         else
         {
             // Erst zum Schluss !
@@ -1066,6 +1106,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
              GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) )
         {
             pPor = NewTabPortion( rInf, true );
+        }
+
+        // 11) suffix of meta-field
+        if (!pPor)
+        {
+            pPor = TryNewNoLengthPortion(rInf);
         }
 
     return pPor;
@@ -1973,6 +2019,7 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         nReformat -= 2;
 
 #ifndef QUARTZ
+#ifndef ENABLE_GRAPHITE
         // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
         // step back six(!) more characters for complex scripts
         // this is required e.g., for Khmer (thank you, Javier!)
@@ -1980,6 +2027,10 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         xub_StrLen nMaxContext = 0;
         if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
             nMaxContext = 6;
+#else
+        // Some Graphite fonts need context for scripts not marked as complex
+        static const xub_StrLen nMaxContext = 10;
+#endif
 #else
         // some fonts like Quartz's Zapfino need more context
         // TODO: query FontInfo for maximum unicode context

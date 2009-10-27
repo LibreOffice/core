@@ -68,8 +68,8 @@ interface XMultiTextMarkup
         @param aMarkups
                 a sequence of single text markups.
 
-        @see som::sun::star:text::XTextMarkup
-        @see som::sun::star:text::TextMarkupType
+        @see com::sun::star::text::XTextMarkup
+        @see com::sun::star::text::TextMarkupType
 
      */
     void commitMultiTextMarkup(

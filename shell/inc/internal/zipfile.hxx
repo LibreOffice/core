@@ -35,7 +35,9 @@
 #define _WINDOWS
 #endif
 
+
 #include <external/zlib/unzip.h>
+
 
 #include <string>
 #include <vector>
@@ -69,6 +71,9 @@ public:
     */
     static bool IsZipFile(const std::string& FileName);
 
+    static bool IsZipFile(void* stream);
+
+
     /** Returns wheter the version of the specified zip file may be uncompressed with the
           currently used zlib version or not
 
@@ -86,6 +91,7 @@ public:
     */
     static bool IsValidZipFileVersionNumber(const std::string& FileName);
 
+    static bool IsValidZipFileVersionNumber(void* stream);
 
 public:
 
@@ -102,6 +108,9 @@ public:
             with the used zlib version
     */
     ZipFile(const std::string& FileName);
+
+    ZipFile(void* stream, zlib_filefunc_def* fa);
+
 
     /** Destroys a zip file
     */

@@ -103,9 +103,12 @@ namespace reportdesign
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 ::com::sun::star::awt::Size aOldSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
-                _pShape->m_aProps.aComponent.m_nWidth = aOldSize.Width;
-                _pShape->m_aProps.aComponent.m_nHeight = aOldSize.Height;
-                _pShape->m_aProps.aComponent.m_xShape->setSize(aSize);
+                if ( aOldSize.Height != aSize.Height || aOldSize.Width != aSize.Width )
+                {
+                    _pShape->m_aProps.aComponent.m_nWidth = aOldSize.Width;
+                    _pShape->m_aProps.aComponent.m_nHeight = aOldSize.Height;
+                    _pShape->m_aProps.aComponent.m_xShape->setSize(aSize);
+                }
             }
             _pShape->set(PROPERTY_WIDTH,aSize.Width,_pShape->m_aProps.aComponent.m_nWidth);
             _pShape->set(PROPERTY_HEIGHT,aSize.Height,_pShape->m_aProps.aComponent.m_nHeight);
@@ -136,9 +139,12 @@ namespace reportdesign
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 aOldPos = _pShape->m_aProps.aComponent.m_xShape->getPosition();
-                _pShape->m_aProps.aComponent.m_nPosX = aOldPos.X;
-                _pShape->m_aProps.aComponent.m_nPosY = aOldPos.Y;
-                _pShape->m_aProps.aComponent.m_xShape->setPosition(aPosition);
+                if ( aOldPos.X != aPosition.X || aOldPos.Y != aPosition.Y )
+                {
+                    _pShape->m_aProps.aComponent.m_nPosX = aOldPos.X;
+                    _pShape->m_aProps.aComponent.m_nPosY = aOldPos.Y;
+                    _pShape->m_aProps.aComponent.m_xShape->setPosition(aPosition);
+                }
             }
             _pShape->set(PROPERTY_POSITIONX,aPosition.X,aOldPos.X);
             _pShape->set(PROPERTY_POSITIONY,aPosition.Y,aOldPos.Y);

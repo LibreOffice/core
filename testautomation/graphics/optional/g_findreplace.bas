@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -40,28 +40,27 @@
 public glLocale (15*20) as string
 
 sub main
-   Call hStatusIn ( "Graphics","g_findreplace.bas")
+    Call hStatusIn ( "Graphics","g_findreplace.bas")
 
     use "graphics\tools\id_tools.inc"
     use "graphics\optional\includes\global\g_find_replace.inc"
 
-   GetOLEDefaultNames
-   hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
+    hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
-   PrintLog "-------------------------" + gApplication + "-------------------"
-   Call tiEditSearchAndReplace
-   Call tiEditSearchAndReplaceBUGS
+    PrintLog "-------------------------" + gApplication + "-------------------"
+    Call tiEditSearchAndReplace
+    Call tiEditSearchAndReplaceBUGS
 
-   gApplication = "DRAW"
-   PrintLog "-------------------------" + gApplication + "-------------------"
-   Call tiEditSearchAndReplace
+    gApplication = "DRAW"
+    PrintLog "-------------------------" + gApplication + "-------------------"
+    Call tiEditSearchAndReplace
 
-   Call hStatusOut
+    Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   gApplication = "IMPRESS"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    gApplication = "IMPRESS"
+    Call GetUseFiles
 end sub

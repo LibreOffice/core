@@ -56,6 +56,7 @@ SLOFILES =  \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/cell.obj \
     $(SLO)$/cell2.obj \
+        $(SLO)$/clipparam.obj \
     $(SLO)$/column.obj \
     $(SLO)$/column2.obj \
     $(SLO)$/column3.obj \
@@ -108,6 +109,7 @@ SLOFILES =  \
     $(SLO)$/table4.obj \
     $(SLO)$/table5.obj \
     $(SLO)$/table6.obj \
+    $(SLO)$/tabprotection.obj \
     $(SLO)$/userdat.obj \
     $(SLO)$/validat.obj \
     $(SLO)$/postit.obj
@@ -116,6 +118,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/autonamecache.obj \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/cell2.obj \
+    $(SLO)$/clipparam.obj \
     $(SLO)$/column.obj \
     $(SLO)$/column3.obj \
     $(SLO)$/documen2.obj \
@@ -127,7 +130,9 @@ EXCEPTIONSFILES= \
     $(SLO)$/dptabdat.obj \
     $(SLO)$/global2.obj \
     $(SLO)$/table1.obj \
+    $(SLO)$/table2.obj \
     $(SLO)$/table3.obj \
+    $(SLO)$/tabprotection.obj \
     $(SLO)$/postit.obj \
     $(SLO)$/documen3.obj \
     $(SLO)$/documen5.obj \

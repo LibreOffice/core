@@ -105,7 +105,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual ::dbaccess::DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
     virtual void setTitle(const ::rtl::OUString& _sTitle);

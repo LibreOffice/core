@@ -1,12 +1,12 @@
     <node oor:name="writer_PocketWord_File" oor:op="replace" >
-        <prop oor:name="DetectService"/>
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.XMLFilterDetect</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>psw</value></prop>
-        <prop oor:name="MediaType"/>
+        <prop oor:name="MediaType"><value>application/x-pocket-word</value></prop>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>PocketWord File</value></prop>
         <prop oor:name="UIName">
             <value>Pocket Word</value>
         </prop>
-        <prop oor:name="ClipboardFormat"/>
+        <prop oor:name="ClipboardFormat"><value>doctype:pwi</value></prop>
     </node>

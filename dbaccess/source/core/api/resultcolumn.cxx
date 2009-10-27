@@ -237,64 +237,84 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
                 break;
             case PROPERTY_ID_ISSIGNED:
             {
-                sal_Bool bVal = m_xMetaData->isSigned(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_isSigned )
+                    m_isSigned.reset( m_xMetaData->isSigned(m_nPos));
+                rValue <<= *m_isSigned;
             }   break;
             case PROPERTY_ID_ISCURRENCY:
             {
-                sal_Bool bVal = m_xMetaData->isCurrency(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_isCurrency )
+                    m_isCurrency.reset( m_xMetaData->isCurrency(m_nPos));
+                rValue <<= *m_isCurrency;
             }   break;
             case PROPERTY_ID_ISSEARCHABLE:
             {
-                sal_Bool bVal = m_xMetaData->isSearchable(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_bSearchable )
+                    m_bSearchable.reset( m_xMetaData->isSearchable(m_nPos));
+                rValue <<= *m_bSearchable;
             }   break;
             case PROPERTY_ID_ISCASESENSITIVE:
             {
-                sal_Bool bVal = m_xMetaData->isCaseSensitive(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_isCaseSensitive )
+                    m_isCaseSensitive.reset( m_xMetaData->isCaseSensitive(m_nPos));
+                rValue <<= *m_isCaseSensitive;
             }   break;
             case PROPERTY_ID_ISREADONLY:
             {
-                sal_Bool bVal = m_xMetaData->isReadOnly(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_isReadOnly )
+                    m_isReadOnly.reset( m_xMetaData->isReadOnly(m_nPos));
+                rValue <<= *m_isReadOnly;
             }   break;
             case PROPERTY_ID_ISWRITABLE:
             {
-                sal_Bool bVal = m_xMetaData->isWritable(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_isWritable )
+                    m_isWritable.reset( m_xMetaData->isWritable(m_nPos));
+                rValue <<= *m_isWritable;
             }   break;
             case PROPERTY_ID_ISDEFINITELYWRITABLE:
             {
-                sal_Bool bVal = m_xMetaData->isDefinitelyWritable(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_isDefinitelyWritable )
+                    m_isDefinitelyWritable.reset( m_xMetaData->isDefinitelyWritable(m_nPos));
+                rValue <<= *m_isDefinitelyWritable;
             }   break;
             case PROPERTY_ID_ISAUTOINCREMENT:
             {
-                sal_Bool bVal = m_xMetaData->isAutoIncrement(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
+                if ( !m_isAutoIncrement )
+                    m_isAutoIncrement.reset( m_xMetaData->isAutoIncrement(m_nPos));
+                rValue <<= *m_isAutoIncrement;
             }   break;
             case PROPERTY_ID_SERVICENAME:
                 rValue <<= m_xMetaData->getColumnServiceName(m_nPos);
                 break;
             case PROPERTY_ID_LABEL:
-                rValue <<= m_xMetaData->getColumnLabel(m_nPos);
+                if ( !m_sColumnLabel )
+                    m_sColumnLabel.reset( m_xMetaData->getColumnLabel(m_nPos));
+                rValue <<= *m_sColumnLabel;
                 break;
             case PROPERTY_ID_DISPLAYSIZE:
-                rValue <<= m_xMetaData->getColumnDisplaySize(m_nPos);
+                if ( !m_nColumnDisplaySize )
+                    m_nColumnDisplaySize.reset( m_xMetaData->getColumnDisplaySize(m_nPos));
+                rValue <<= *m_nColumnDisplaySize;
                 break;
             case PROPERTY_ID_TYPE:
-                rValue <<= m_xMetaData->getColumnType(m_nPos);
+                if ( !m_nColumnType )
+                    m_nColumnType.reset( m_xMetaData->getColumnType(m_nPos));
+                rValue <<= *m_nColumnType;
                 break;
             case PROPERTY_ID_PRECISION:
-                rValue <<= m_xMetaData->getPrecision(m_nPos);
+                if ( !m_nPrecision )
+                    m_nPrecision.reset( m_xMetaData->getPrecision(m_nPos));
+                rValue <<= *m_nPrecision;
                 break;
             case PROPERTY_ID_SCALE:
-                rValue <<= m_xMetaData->getScale(m_nPos);
+                if ( !m_nScale )
+                    m_nScale.reset( m_xMetaData->getScale(m_nPos));
+                rValue <<= *m_nScale;
                 break;
             case PROPERTY_ID_ISNULLABLE:
-                rValue <<= m_xMetaData->isNullable(m_nPos);
+                if ( !m_isNullable )
+                    m_isNullable.reset( m_xMetaData->isNullable(m_nPos));
+                rValue <<= *m_isNullable;
                 break;
             case PROPERTY_ID_TYPENAME:
                 rValue <<= m_xMetaData->getColumnTypeName(m_nPos);

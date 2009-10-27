@@ -44,8 +44,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include "formstrings.hxx"
 
 #include <functional>
@@ -109,7 +111,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int16 CellBindingHelper::getControlSheetIndex( ) const
+    sal_Int16 CellBindingHelper::getControlSheetIndex( Reference< XSpreadsheet >& _out_rxSheet ) const
     {
         sal_Int16 nSheetIndex = -1;
         // every sheet has a draw page, and every draw page has a forms collection.
@@ -137,18 +139,13 @@ namespace pcr
             {
                 for ( sal_Int32 i = 0; i < xSheets->getCount(); ++i )
                 {
-                    Reference< XDrawPageSupplier > xSuppPage;
-                    xSheets->getByIndex( i ) >>= xSuppPage;
+                    Reference< XDrawPageSupplier > xSuppPage( xSheets->getByIndex( i ), UNO_QUERY_THROW );
+                    Reference< XFormsSupplier > xSuppForms( xSuppPage->getDrawPage(), UNO_QUERY_THROW );
 
-                    Reference< XFormsSupplier > xSuppForms;
-                    if ( xSuppPage.is() )
-                        xSuppForms = xSuppForms.query( xSuppPage->getDrawPage() );
-
-                    OSL_ENSURE( xSuppForms.is(), "CellBindingHelper::getControlSheetIndex: could not determine the forms supplier!" );
-
-                    if ( xSuppForms.is() && ( xSuppForms->getForms() == xFormsCollection ) )
+                    if ( xSuppForms->getForms() == xFormsCollection )
                     {   // found it
                         nSheetIndex = (sal_Int16)i;
+                        _out_rxSheet.set( xSuppPage, UNO_QUERY_THROW );
                         break;
                     }
                 }
@@ -156,7 +153,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CellBindingHelper::getControlSheetIndex: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         return nSheetIndex;
@@ -195,7 +192,8 @@ namespace pcr
         {
             try
             {
-                xConverter->setPropertyValue( PROPERTY_REFERENCE_SHEET, makeAny( (sal_Int32)getControlSheetIndex() ) );
+                Reference< XSpreadsheet > xSheet;
+                xConverter->setPropertyValue( PROPERTY_REFERENCE_SHEET, makeAny( (sal_Int32)getControlSheetIndex( xSheet ) ) );
                 xConverter->setPropertyValue( _rInputProperty, _rInputValue );
                 _rOutputValue = xConverter->getPropertyValue( _rOutputProperty );
                 bSuccess = true;

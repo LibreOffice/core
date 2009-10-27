@@ -45,9 +45,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xatom.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>
@@ -417,6 +417,14 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 
 GtkSalFrame::~GtkSalFrame()
 {
+    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); ++i )
+    {
+        if( !m_aGraphics[i].pGraphics )
+            continue;
+        m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
+        m_aGraphics[i].bInUse = false;
+    }
+
     if( m_pParent )
         m_pParent->m_aChildren.remove( this );
 
@@ -826,7 +834,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         }
         if( (nStyle & SAL_FRAME_STYLE_PARTIAL_FULLSCREEN ) )
         {
-            eType = GDK_WINDOW_TYPE_HINT_DOCK;
+            eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), true );
         }
 
@@ -1115,7 +1123,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     USHORT nIndex;
 
     // Use high contrast icons where appropriate
-    if( Application::GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         nOffsets[0] = SV_ICON_LARGE_HC_START;
         nOffsets[1] = SV_ICON_SMALL_HC_START;
@@ -1498,7 +1506,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
         if( isChild( false, true ) )
             gtk_widget_set_size_request( m_pWindow, nWidth, nHeight );
-        else
+        else if( ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) )
             gtk_window_resize( GTK_WINDOW(m_pWindow), nWidth, nHeight );
         setMinMaxSize();
     }
@@ -1600,6 +1608,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
 
     if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+        ! ( m_nState & GDK_WINDOW_STATE_MAXIMIZED ) &&
         (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
         (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
     {

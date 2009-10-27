@@ -161,7 +161,11 @@ static void ImplMakeSearchString( XubString& rStr )
 
 static void ImplMakeSearchStringFromName( XubString& rStr )
 {
-    rStr = rStr.GetToken( 0, ';' );
+    // check for features before alternate font separator
+    if (rStr.Search(':') < rStr.Search(';'))
+        rStr = rStr.GetToken( 0, ':' );
+    else
+        rStr = rStr.GetToken( 0, ';' );
     ImplMakeSearchString( rStr );
 }
 

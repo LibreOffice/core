@@ -53,15 +53,13 @@ TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
 TARFILE_ROOTDIR=hsqldb
 
 CONVERTFILES=build$/build.xml \
-            src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java
+            src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java \
+            src$/org$/hsqldb$/Library.java
 
-PATCH_FILES=patches$/accumulated_patches.patch
-
-# ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
-#                     src$/org$/hsqldb$/TxManager.java \
-#                     src$/org$/hsqldb$/lib$/LongKeyIntValueHashMap.java \
-#                     src$/org$/hsqldb$/persist$/ScaledRAFileInJar.java \
-#                     src$/org$/hsqldb$/test$/TestCollation.java
+PATCH_FILES=patches$/i96823.patch \
+            patches$/i97032.patch \
+            patches$/i103528.patch \
+            patches$/i104901.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

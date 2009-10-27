@@ -1104,7 +1104,9 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
                 // pNewObj->Move(Size(_aRect.Left(), _aRect.Top()));
 
                 pNewObj->Move(Size(0, aNewPos.Y()));
+                BOOL bChanged = rView.GetModel()->IsChanged();
                 rReportSection.getPage()->InsertObject(pNewObj);
+                rView.GetModel()->SetChanged(bChanged);
                 m_aBegDragTempList.push_back(pNewObj);
                 Rectangle aRect = pNewObj->GetLogicRect();
 
@@ -1120,16 +1122,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
 // -----------------------------------------------------------------------------
 bool OViewsWindow::isObjectInMyTempList(SdrObject *_pObj)
 {
-    ::std::vector<SdrObject*>::iterator aIter = m_aBegDragTempList.begin();
-    ::std::vector<SdrObject*>::iterator aEnd = m_aBegDragTempList.end();
-    for (; aIter != aEnd; ++aIter)
-    {
-        if (*aIter == _pObj)
-        {
-            return true;
-        }
-    }
-    return false;
+    return ::std::find(m_aBegDragTempList.begin(),m_aBegDragTempList.end(),_pObj) != m_aBegDragTempList.end();
 }
 
 // -----------------------------------------------------------------------------
@@ -1552,7 +1545,6 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bo
         const long nSectionHeight = (*aIter)->PixelToLogic((*aIter)->GetOutputSizePixel()).Height();
         aRealMousePos.Y() -= nSectionHeight;
     }
-
 #if 0
 #if OSL_DEBUG_LEVEL > 0
     // TEST TEST TEST TEST

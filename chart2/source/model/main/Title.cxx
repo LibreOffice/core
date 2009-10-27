@@ -225,14 +225,14 @@ namespace chart
 
 Title::Title( uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 Title::Title( const Title & rOther ) :
         MutexContainer(),
         impl::Title_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     CloneHelper::CloneRefSequence< uno::Reference< chart2::XFormattedString > >(
         rOther.m_aStrings, m_aStrings );

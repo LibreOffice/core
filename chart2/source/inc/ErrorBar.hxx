@@ -50,6 +50,10 @@
 namespace chart
 {
 
+OOO_DLLPUBLIC_CHARTTOOLS    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createErrorBar(
+    const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
+
 namespace impl
 {
 typedef ::cppu::WeakImplHelper6<
@@ -62,7 +66,7 @@ typedef ::cppu::WeakImplHelper6<
     ErrorBar_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS ErrorBar :
+class ErrorBar :
         public MutexContainer,
         public impl::ErrorBar_Base,
         public ::property::OPropertySet

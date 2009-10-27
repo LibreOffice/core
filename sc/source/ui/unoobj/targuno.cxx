@@ -66,9 +66,9 @@ sal_uInt16 nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
     SCSTR_CONTENT_DBAREA        // SC_LINKTARGETTYPE_DBAREA
 };
 
-const SfxItemPropertyMap* lcl_GetLinkTargetMap()
+const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
 {
-    static SfxItemPropertyMap aLinkTargetMap_Impl[] =
+    static SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((const uno::Reference<awt::XBitmap>*)0),   beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((const ::rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },

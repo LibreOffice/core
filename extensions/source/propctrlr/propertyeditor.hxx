@@ -107,7 +107,7 @@ namespace pcr
         sal_uInt16                  GetCurPage();
         void                        ClearAll();
 
-        void                        SetPropertyValue(const ::rtl::OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue );
+        void                        SetPropertyValue(const ::rtl::OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue, bool _bUnknownValue );
         ::com::sun::star::uno::Any  GetPropertyValue(const ::rtl::OUString& rEntryName ) const;
         sal_uInt16                  GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >

@@ -34,7 +34,6 @@
 #include "macros.hxx"
 #include "XYDataInterpreter.hxx"
 #include "CartesianCoordinateSystem.hxx"
-#include "Scaling.hxx"
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"

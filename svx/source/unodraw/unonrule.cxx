@@ -50,7 +50,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/graph.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <toolkit/unohlp.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>

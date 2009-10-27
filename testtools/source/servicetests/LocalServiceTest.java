@@ -44,8 +44,8 @@ public final class LocalServiceTest extends TestBase {
                         = Bootstrap.createInitialComponentContext(null);
                     XMultiComponentFactory serviceManager
                         = context.getServiceManager();
-                    ((XSet) UnoRuntime.queryInterface(
-                        XSet.class, serviceManager)).insert(new TestService());
+                    UnoRuntime.queryInterface(XSet.class, serviceManager).
+                        insert(new TestService());
                     return serviceManager.createInstanceWithContext(
                         "testtools.servicetests.TestService2", context);
                 }

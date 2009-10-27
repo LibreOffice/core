@@ -30,60 +30,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#include <MQueryHelper.hxx>
 
+#include "MQueryHelper.hxx"
 #include "MTypeConverter.hxx"
+#include "MConnection.hxx"
+#include "MNSDeclares.hxx"
+#include "MLdapAttributeMap.hxx"
+
 #include <connectivity/dbexception.hxx>
-#ifndef _CONNECTIVITY_MOZAB_BCONNECTION_HXX_
-#include <MConnection.hxx>
-#endif
 
 #include "resource/mozab_res.hrc"
-#include "MNSDeclares.hxx"
 
 using namespace connectivity::mozab;
-
-
-enum
-{
-        index_FirstName=0,
-        index_LastName,
-        index_DisplayName,
-        index_NickName,
-        index_PrimaryEmail,
-        index_SecondEmail,
-        index_PreferMailFormat,
-        index_WorkPhone,
-        index_HomePhone,
-        index_FaxNumber,
-        index_PagerNumber,
-        index_CellularNumber,
-        index_HomeAddress,
-        index_HomeAddress2,
-        index_HomeCity,
-        index_HomeState,
-        index_HomeZipCode,
-        index_HomeCountry,
-        index_WorkAddress,
-        index_WorkAddress2,
-        index_WorkCity,
-        index_WorkState,
-        index_WorkZipCode,
-        index_WorkCountry,
-        index_JobTitle,
-        index_Department,
-        index_Company,
-        index_WebPage1,
-        index_WebPage2,
-        index_BirthYear,
-        index_BirthMonth,
-        index_BirthDay,
-        index_Custom1,
-        index_Custom2,
-        index_Custom3,
-        index_Custom4,
-        index_Notes
-};
 
 
 NS_IMPL_THREADSAFE_ISUPPORTS1(connectivity::mozab::MQueryHelper,nsIAbDirectoryQueryResultListener)
@@ -101,8 +59,6 @@ MQueryHelperResultEntry::MQueryHelperResultEntry()
 
 MQueryHelperResultEntry::~MQueryHelperResultEntry()
 {
-
-
     OSL_TRACE("IN MQueryHelperResultEntry::~MQueryHelperResultEntry()\n");
     OSL_TRACE("OUT MQueryHelperResultEntry::~MQueryHelperResultEntry()\n");
 
@@ -117,39 +73,31 @@ MQueryHelperResultEntry::getCard()
 {
     return m_Card;
 }
-void
-MQueryHelperResultEntry::insert( const rtl::OUString &key, rtl::OUString &value )
+void MQueryHelperResultEntry::insert( const rtl::OString &key, rtl::OUString &value )
 {
-    m_Fields.insert( fieldMap::value_type( key, value ) );
+    m_Fields[ key ] = value;
 }
 
-rtl::OUString
-MQueryHelperResultEntry::getValue( const rtl::OUString &key ) const
+rtl::OUString MQueryHelperResultEntry::getValue( const rtl::OString &key ) const
 {
-    fieldMap::const_iterator  iter;
-
-    iter = m_Fields.find( key );
-
-    if ( iter == m_Fields.end() ) {
+    FieldMap::const_iterator iter = m_Fields.find( key );
+    if ( iter == m_Fields.end() )
+    {
         return rtl::OUString();
-    } else {
-        return (*iter).second;
+    }
+    else
+    {
+        return iter->second;
     }
 }
 
-rtl::OUString
-MQueryHelperResultEntry::setValue( const rtl::OUString &key, const rtl::OUString & rValue)
+void MQueryHelperResultEntry::setValue( const rtl::OString &key, const rtl::OUString & rValue)
 {
-    m_Fields.erase(key);
-    m_Fields.insert( fieldMap::value_type( key, rValue ) );
-    return rValue;
+    m_Fields[ key ] = rValue;
 }
 //
 // class MQueryHelper
 //
-// MIME-types.
-static char PreferMailFormatTypes[2][11] = {"text/plain",
-                        "text/html"};
 MQueryHelper::MQueryHelper()
     :m_nIndex( 0 )
     ,m_bHasMore( sal_True )
@@ -238,16 +186,16 @@ MQueryHelper::waitForResultOrComplete(  )
     }
     if (times >= 20 &&  rv == ::osl::Condition::result_timeout ) {
         OSL_TRACE("waitForResultOrComplete() : Timeout!");
-        setError( STR_TIMEOUT_WAITING );
+        m_aError.setResId( STR_TIMEOUT_WAITING );
         return sal_False;
     }
 
     if ( isError() ) {
         OSL_TRACE("waitForResultOrComplete() : Error returned!");
-        setError( STR_ERR_EXECUTING_QUERY );
+        m_aError.setResId( STR_ERR_EXECUTING_QUERY );
         return sal_False;
     }
-    resetError();
+    m_aError.reset();
     OSL_TRACE("  Out : waitForResultOrComplete()");
     return sal_True;
 }
@@ -473,7 +421,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         nsCOMPtr<nsIAbCard> card(do_QueryInterface(cardSupports, &rv));
         NS_ENSURE_SUCCESS(rv, rv);
 
-            getCardValues(card);
+        getCardValues(card);
     }
     nsMemory::Free(name);
 
@@ -484,56 +432,13 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
     return(NS_OK);
 }
 
+// -----------------------------------------------------------------------------
 void MQueryHelper::notifyQueryError()
 {
     m_bQueryComplete = sal_True ;
     notifyResultOrComplete() ;
 }
 
-static const ::rtl::OUString& getAttribute(PRUint32 index)
-{
-    static const ::rtl::OUString sAttributeNames[] =
-    {
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FirstName")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LastName")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DisplayName")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NickName")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PrimaryEmail")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SecondEmail")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PreferMailFormat")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkPhone")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomePhone")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FaxNumber")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PagerNumber")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CellularNumber")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeAddress")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeAddress2")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeCity")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeState")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeZipCode")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("HomeCountry")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkAddress")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkAddress2")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkCity")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkState")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkZipCode")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WorkCountry")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("JobTitle")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Department")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Company")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WebPage1")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WebPage2")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BirthYear")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BirthMonth")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BirthDay")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom1")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom2")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom3")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Custom4")),
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Notes"))
-    };
-    return sAttributeNames[index];
-}
 const char * getAddrURI(const nsIAbDirectory*  directory)
 {
     nsresult retCode;
@@ -583,7 +488,7 @@ nsIAbCard * getUpdatedCard( nsIAbCard*  card)
 #define ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory)  \
     if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked(NULL))   \
     {   \
-        setError( STR_MOZILLA_IS_RUNNIG_NO_CHANGES ); \
+        m_aError.setResId( STR_MOZILLA_IS_RUNNIG_NO_CHANGES ); \
         return sal_False;   \
     }
 
@@ -620,7 +525,7 @@ sal_Int32 MQueryHelper::commitCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
     }
     //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
-        setError( STR_FOREIGN_PROCESS_CHANGED_AB );
+        m_aError.setResId( STR_FOREIGN_PROCESS_CHANGED_AB );
 
     return !(NS_FAILED(rv));
 }
@@ -668,7 +573,7 @@ sal_Int32 MQueryHelper::deleteCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
         resEntry->setRowStates(RowStates_Deleted);
     //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
-        setError( STR_FOREIGN_PROCESS_CHANGED_AB );
+        m_aError.setResId( STR_FOREIGN_PROCESS_CHANGED_AB );
     return !(NS_FAILED(rv));
 }
 
@@ -677,137 +582,17 @@ sal_Bool MQueryHelper::setCardValues(const sal_Int32 rowIndex)
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
     if (!resEntry)
     {
-        setError( STR_CANT_FIND_ROW );
+        m_aError.setResId( STR_CANT_FIND_ROW );
         return sal_False;
     }
     nsIAbCard *card=resEntry->getCard();
     if (!card)
     {
-        setError( STR_CANT_FIND_CARD_FOR_ROW );
+        m_aError.setResId( STR_CANT_FIND_CARD_FOR_ROW );
         return sal_False;
     }
 
-    ::rtl::OUString sValue;
-
-    getCardAttributeAndValue(getAttribute(index_FirstName),sValue,resEntry);
-    card->SetFirstName(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_LastName),sValue,resEntry);
-    card->SetLastName(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_DisplayName),sValue,resEntry);
-    card->SetDisplayName(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_NickName),sValue,resEntry);
-    card->SetNickName(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_PrimaryEmail),sValue,resEntry);
-    card->SetPrimaryEmail(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_SecondEmail),sValue,resEntry);
-    card->SetSecondEmail(sValue.getStr());
-
-    unsigned int format;
-    ::rtl::OUString prefMailValue;
-    getCardAttributeAndValue(getAttribute(index_WorkPhone),prefMailValue,resEntry);
-    for(format=2;format >0;format--)
-    {
-         if (! prefMailValue.compareTo(
-              ::rtl::OUString::createFromAscii(PreferMailFormatTypes[format-1]) ) )
-            break;
-    }
-    card->SetPreferMailFormat(format);
-
-    getCardAttributeAndValue(getAttribute(index_WorkPhone),sValue,resEntry);
-    card->SetWorkPhone(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_HomePhone),sValue,resEntry);
-    card->SetHomePhone(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_FaxNumber),sValue,resEntry);
-    card->SetFaxNumber(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_PagerNumber),sValue,resEntry);
-    card->SetPagerNumber(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_CellularNumber),sValue,resEntry);
-    card->SetCellularNumber(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_HomeAddress),sValue,resEntry);
-    card->SetHomeAddress(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_HomeAddress2),sValue,resEntry);
-    card->SetHomeAddress2(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_HomeCity),sValue,resEntry);
-    card->SetHomeCity(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_HomeState),sValue,resEntry);
-    card->SetHomeState(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_HomeZipCode),sValue,resEntry);
-    card->SetHomeZipCode(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_HomeCountry),sValue,resEntry);
-    card->SetHomeCountry(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WorkAddress),sValue,resEntry);
-    card->SetWorkAddress(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WorkAddress2),sValue,resEntry);
-    card->SetWorkAddress2(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WorkCity),sValue,resEntry);
-    card->SetWorkCity(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WorkState),sValue,resEntry);
-    card->SetWorkState(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WorkZipCode),sValue,resEntry);
-    card->SetWorkZipCode(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WorkCountry),sValue,resEntry);
-    card->SetWorkCountry(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_JobTitle),sValue,resEntry);
-    card->SetJobTitle(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_Department),sValue,resEntry);
-    card->SetDepartment(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_Company),sValue,resEntry);
-    card->SetCompany(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WebPage1),sValue,resEntry);
-    card->SetWebPage1(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_WebPage2),sValue,resEntry);
-    card->SetWebPage2(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_BirthYear),sValue,resEntry);
-    card->SetBirthYear(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_BirthMonth),sValue,resEntry);
-    card->SetBirthMonth(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_BirthDay),sValue,resEntry);
-    card->SetBirthDay(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_Custom1),sValue,resEntry);
-    card->SetCustom1(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_Custom2),sValue,resEntry);
-    card->SetCustom2(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_Custom3),sValue,resEntry);
-    card->SetCustom3(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_Custom4),sValue,resEntry);
-    card->SetCustom4(sValue.getStr());
-
-    getCardAttributeAndValue(getAttribute(index_Notes),sValue,resEntry);
-    card->SetNotes(sValue.getStr());
-
+    MLdapAttributeMap::fillCardFromResult( *card, *resEntry );
     return sal_True;
 }
 
@@ -821,142 +606,7 @@ void MQueryHelper::getCardValues(nsIAbCard *card,sal_Int32 rowIndex)
     else
         resEntry = new MQueryHelperResultEntry();
 
-    nsXPIDLString sValue;
-
-    card->GetFirstName(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_FirstName),sValue,resEntry);
-
-    card->GetLastName(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_LastName),sValue,resEntry);
-
-    card->GetDisplayName(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_DisplayName),sValue,resEntry);
-
-    card->GetNickName(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_NickName),sValue,resEntry);
-
-    card->GetPrimaryEmail(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_PrimaryEmail),sValue,resEntry);
-
-    card->GetSecondEmail(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_SecondEmail),sValue,resEntry);
-
-    unsigned int format = 0;
-    card->GetPreferMailFormat(&format);
-    ::rtl::OUString prefMailValue;
-    switch(format)
-    {
-        case nsIAbPreferMailFormat::html:
-            prefMailValue = ::rtl::OUString::createFromAscii(PreferMailFormatTypes[1]);
-            break;
-         case nsIAbPreferMailFormat::plaintext:
-            prefMailValue = ::rtl::OUString::createFromAscii(PreferMailFormatTypes[0]);
-            break;
-         case nsIAbPreferMailFormat::unknown:
-         default:
-            prefMailValue = ::rtl::OUString::createFromAscii(PreferMailFormatTypes[0]);
-            break;
-
-    }
-    resEntry->insert( getAttribute(index_PreferMailFormat), prefMailValue );
-
-    card->GetWorkPhone(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WorkPhone),sValue,resEntry);
-
-    card->GetHomePhone(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_HomePhone),sValue,resEntry);
-
-    card->GetFaxNumber(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_FaxNumber),sValue,resEntry);
-
-    card->GetPagerNumber(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_PagerNumber),sValue,resEntry);
-
-    card->GetCellularNumber(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_CellularNumber),sValue,resEntry);
-
-    card->GetHomeAddress(getter_Copies(sValue));
-    PRInt32 offset;
-    nsXPIDLString space;
-    space.Assign(NS_LITERAL_STRING(" "));
-    while ((offset = sValue.FindChar('\r')) >= 0) sValue.Replace(offset, 1, space);
-    while ((offset = sValue.FindChar('\n')) >= 0) sValue.Replace(offset, 1, space);
-    addCardAttributeAndValue(getAttribute(index_HomeAddress),sValue,resEntry);
-
-    card->GetHomeAddress2(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_HomeAddress2),sValue,resEntry);
-
-    card->GetHomeCity(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_HomeCity),sValue,resEntry);
-
-    card->GetHomeState(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_HomeState),sValue,resEntry);
-
-    card->GetHomeZipCode(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_HomeZipCode),sValue,resEntry);
-
-    card->GetHomeCountry(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_HomeCountry),sValue,resEntry);
-
-    card->GetWorkAddress(getter_Copies(sValue));
-    while ((offset = sValue.FindChar('\r')) >= 0) sValue.Replace(offset, 1, space);
-    while ((offset = sValue.FindChar('\n')) >= 0) sValue.Replace(offset, 1, space);
-    addCardAttributeAndValue(getAttribute(index_WorkAddress),sValue,resEntry);
-
-    card->GetWorkAddress2(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WorkAddress2),sValue,resEntry);
-
-    card->GetWorkCity(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WorkCity),sValue,resEntry);
-
-    card->GetWorkState(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WorkState),sValue,resEntry);
-
-    card->GetWorkZipCode(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WorkZipCode),sValue,resEntry);
-
-    card->GetWorkCountry(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WorkCountry),sValue,resEntry);
-
-    card->GetJobTitle(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_JobTitle),sValue,resEntry);
-
-    card->GetDepartment(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_Department),sValue,resEntry);
-
-    card->GetCompany(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_Company),sValue,resEntry);
-
-    card->GetWebPage1(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WebPage1),sValue,resEntry);
-
-    card->GetWebPage2(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_WebPage2),sValue,resEntry);
-
-    card->GetBirthYear(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_BirthYear),sValue,resEntry);
-
-    card->GetBirthMonth(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_BirthMonth),sValue,resEntry);
-
-    card->GetBirthDay(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_BirthDay),sValue,resEntry);
-
-    card->GetCustom1(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_Custom1),sValue,resEntry);
-
-    card->GetCustom2(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_Custom2),sValue,resEntry);
-
-    card->GetCustom3(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_Custom3),sValue,resEntry);
-
-    card->GetCustom4(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_Custom4),sValue,resEntry);
-
-    card->GetNotes(getter_Copies(sValue));
-    addCardAttributeAndValue(getAttribute(index_Notes),sValue,resEntry);
-
+    MLdapAttributeMap::fillResultFromCard( *resEntry, *card );
     resEntry->setCard(card);
     if (!rowIndex)
         append( resEntry );
@@ -967,7 +617,7 @@ sal_Bool MQueryHelper::resyncRow(sal_Int32 rowIndex)
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
     if (!resEntry)
     {
-        setError( STR_CANT_FIND_ROW );
+        m_aError.setResId( STR_CANT_FIND_ROW );
         return sal_False;
     }
     nsIAbCard *card=resEntry->getCard();
@@ -975,21 +625,8 @@ sal_Bool MQueryHelper::resyncRow(sal_Int32 rowIndex)
     getCardValues(card,rowIndex);
     return sal_True;
 }
-void MQueryHelper::addCardAttributeAndValue(const ::rtl::OUString& sName, nsXPIDLString Value, MQueryHelperResultEntry *resEntry)
-{
-    nsAutoString temp(Value) ;
-    ::rtl::OUString attrValue;
-    MTypeConverter::nsStringToOUString( temp, attrValue );
-    resEntry->insert( sName, attrValue );
-}
-
-void MQueryHelper::getCardAttributeAndValue(const ::rtl::OUString& sName, ::rtl::OUString &ouValue, MQueryHelperResultEntry *resEntry)
-{
-    ouValue = resEntry->getValue( sName);
-}
-
 // -------------------------------------------------------------------------
-sal_Int32           MQueryHelper::createNewCard()
+sal_Int32 MQueryHelper::createNewCard()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     nsresult rv;

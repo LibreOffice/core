@@ -54,6 +54,7 @@
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HDL_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #endif
+#include <com/sun/star/sdbc/XBatchExecution.hpp>
 #ifndef _COM_SUN_STAR_SDBC_XGENERATEDRESULTSET_HPP_
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 #endif
@@ -72,9 +73,8 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
+
+#include <cppuhelper/implbase3.hxx>
 
 //************************************************************
 //  OStatementBase
@@ -171,8 +171,9 @@ protected:
 //************************************************************
 //  OStatement
 //************************************************************
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::sdbc::XStatement
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::sdbc::XStatement
                             ,   ::com::sun::star::lang::XServiceInfo
+                            ,   ::com::sun::star::sdbc::XBatchExecution
                             >   OStatement_IFACE;
 class OStatement    :public OStatementBase
                     ,public OStatement_IFACE
@@ -202,6 +203,13 @@ public:
 
     // OComponentHelper
     virtual void SAL_CALL disposing();
+
+    // XBatchExecution
+    virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    using OStatementBase::addBatch;
 
 private:
     /** does escape processing for the given SQL command, if the our EscapeProcessing

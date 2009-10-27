@@ -401,11 +401,11 @@ public:
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;
 
-    /** Copy upper left of this matrix to mRes matrix.
-        This matrix's dimensions must be greater or equal to the mRes matrix
-        dimensions.
-     */
-    void MatCopyUpperLeft( ScMatrix& mRes) const;
+//UNUSED2009-05 /** Copy upper left of this matrix to mRes matrix.
+//UNUSED2009-05     This matrix's dimensions must be greater or equal to the mRes matrix
+//UNUSED2009-05     dimensions.
+//UNUSED2009-05  */
+//UNUSED2009-05 void MatCopyUpperLeft( ScMatrix& mRes) const;
 
     // Convert ScInterpreter::CompareMat values (-1,0,1) to boolean values
     void CompareEqual();

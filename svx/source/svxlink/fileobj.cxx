@@ -121,37 +121,6 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
             // relativen Datei Links aufzuloesen!!!! Wird ueber den
             // LinkManager und damit von dessen Storage erledigt.
             rData <<= rtl::OUString( sFileNm );
-
-/*
-===========================================================================
-JP 28.02.96: noch eine Baustelle:
-                Idee: hier das Medium und die DocShell anlegen, Doc laden
-                      und ueber OLE-SS (GetObj(...)) den Bereich als
-                      PseudoObject erfragen. Dieses mit den Daten oder
-                      dessen Daten verschicken.
-
-===========================================================================
-
-            SfxMedium aMed( aFileNm.GetFull(), STREAM_READ, TRUE );
-            aMed.DownLoad();        // nur mal das Medium anfassen (DownLoaden)
-
-            if( aMed.IsStorage() )
-                pSvData->SetData( SvStorageRef( aMed.GetStorage() ),
-                                    TRANSFER_COPY );
-            else
-            {
-                SvStream* pStream = aMed.GetInStream();
-                if( !pStream )
-                    return FALSE;
-
-                UINT32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
-                pStream->Seek( STREAM_SEEK_TO_BEGIN );
-
-                void* pData = SvMemAlloc( nLen );
-                pStream->Read( pData, nLen );
-                pSvData->SetData( pData, nLen, TRANSFER_MOVE );
-            }
-*/
         }
         break;
 

@@ -34,10 +34,6 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/doc/d_node.hxx>
-#include <ary/doc/d_hypertext.hxx>
-
-
-
 
 namespace ary
 {
@@ -46,11 +42,6 @@ namespace doc
 
 Documentation::Documentation()
     :   pData(0)
-{
-}
-
-Documentation::Documentation(DYN Node & pass_data)
-    :   pData(&pass_data)
 {
 }
 

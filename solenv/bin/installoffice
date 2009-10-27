@@ -1,13 +1,10 @@
+#!/bin/bash
 #*************************************************************************
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: installoffice,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -27,7 +24,6 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-#!/bin/bash
 EXIT_SUCCESS=0
 EXIT_FAILURE=1
 EXIT_ERROR=2
@@ -47,6 +43,8 @@ usage() {
         echo "[-d] installation with debug output" >&2
         echo "" >&2
         echo "[-a] the office will be patched to run without FirstStartWizard" >&2
+        echo "" >&2
+        echo "[-i] impress should open documents without autopilot" >&2
         exit $EXIT_FAILURE
 }
 
@@ -63,7 +61,7 @@ fi
 DESTPATH=/tmp/$USER
 PARAM=""
 
-while getopts ':mt:acdhot' OPTION ; do
+while getopts ':mt:aicdhot' OPTION ; do
         case $OPTION in
         d)        PARAM="$PARAM -debug true"
                 ;;
@@ -72,6 +70,8 @@ while getopts ':mt:acdhot' OPTION ; do
         o)        PARAM="$PARAM -ooo true"
                 ;;
         a)        PARAM="$PARAM -autorun true"
+                ;;
+        i)        PARAM="$PARAM -autoimpress true"
                 ;;
         t)        DESTPATH="$OPTARG"
                 ;;
@@ -93,7 +93,10 @@ LOCALUNPACKDIR=$DESTPATH/unpack
 
 export LOCALINSTALLDIR
 export LOCALUNPACKDIR
+echo "export LOCALINSTALLDIR"
+echo "export LOCALUNPACKDIR"
 
+unset LD_LIBRARY_PATH
 unset FORCE2ARCHIVE
 
 echo "### $SOLARENV/bin/installoffice.pl $PARAM -cleanup true $@"

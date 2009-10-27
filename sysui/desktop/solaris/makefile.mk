@@ -49,7 +49,7 @@ TARGET=solaris
 PKGFILES = $(BIN)$/pkg$/{$(PRODUCTLIST)}-desktop-integration.tar.gz
    
 PKGDATESTRING = $(shell @date -u +%Y.%m.%d)
-PKGARCH=sparc,i386
+PKGARCH=all
 
 FASPAC=`test -f $(SOLARBINDIR)/faspac-so.sh && echo "/sbin/sh" || echo "echo"`
 
@@ -125,7 +125,9 @@ $(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
     @-$(RM) $(BIN)$/$(@:f)
     @$(MKDIRHIER) $(@:d)
     pkgmk -l 1073741824 -r . -f $(MISC)$/$(@:b:b:s/-/ /:1)$/prototype -o -d $(PKGDIR) ARCH=$(PKGARCH) VERSION=$(PKGVERSION.$(@:b:s/-/ /:1)),REV=$(PKGREV).$(PKGDATESTRING) 
+.IF "$(DONTCOMPRESS)"==""
     $(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)$(PRODUCTVERSIONSHORT)-desktop-int
+.ENDIF # "$(DONTCOMPRESS)"==""
     @tar -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)$(PRODUCTVERSIONSHORT)-desktop-int | gzip > $@
     @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)$(PRODUCTVERSIONSHORT)-desktop-int
 

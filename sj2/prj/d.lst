@@ -1,9 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\sj2
-..\%__SRC%\class\classes.jar %_DEST%\bin%_EXT%\classes.jar
-..\inc\sjapplet.hxx %_DEST%\inc%_EXT%\sj2\sjapplet.hxx
-
-..\%__SRC%\lib\sj.lib %_DEST%\lib%_EXT%\sj.lib
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\slb\sj.lib %_DEST%\lib%_EXT%\xsj.lib
-..\%__SRC%\bin\j?????_g.dll %_DEST%\bin%_EXT%\j?????_g.dll

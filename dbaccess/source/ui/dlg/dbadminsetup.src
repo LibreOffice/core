@@ -78,7 +78,6 @@ ModalDialog DLG_DATABASE_WIZARD
 
     };
 
-
     String STR_PAGETITLE_TEXT
     {
         Text[ en-US ]  = "Set up a connection to text files" ;
@@ -133,6 +132,11 @@ ModalDialog DLG_DATABASE_WIZARD
     String STR_PAGETITLE_AUTHENTIFICATION
     {
         Text[ en-US ] = "Set up user authentication" ;
+    };
+
+    String STR_PAGETITLE_MYSQL_NATIVE
+    {
+        Text [ en-US ] = "Set up MySQL server data";
     };
 
     String STR_PAGETITLE_FINAL
@@ -198,7 +202,7 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
     {
         Pos = MAP_APPFONT (START_X + 6 , 115 )  ;
         Size = MAP_APPFONT ( 205 , 9 ) ;
-        Text[ en-US ] = "Connect native" ;
+        Text[ en-US ] = "Connect directly" ;
         Hide = TRUE ;
     };
 
@@ -340,11 +344,6 @@ TabPage PAGE_DBWIZARD_FINAL
     };
 };
 
-
-
-
-
-
 TabPage PAGE_DBWIZARD_MYSQL_JDBC
 {
     SVLook = TRUE ;
@@ -358,16 +357,19 @@ TabPage PAGE_DBWIZARD_MYSQL_JDBC
         Text[ en-US ] = "Set up connection to a MySQL database using JDBC" ;
     };
 
-    String STR_MYSQLJDBC_HELPTEXT{
+    String STR_MYSQLJDBC_HELPTEXT
+    {
         Text[ en-US ] = "Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings.";
     };
 
-    String STR_MYSQL_DRIVERCLASSTEXT{
+    String STR_MYSQL_DRIVERCLASSTEXT
+    {
         Text [  en-US  ] = "MySQL JDBC d~river class:";
     };
 
 
-    String STR_MYSQL_DEFAULT{
+    String STR_MYSQL_DEFAULT
+    {
         Text[ en-US ] = "Default: 3306";
     };
 
@@ -377,25 +379,25 @@ TabPage PAGE_DBWIZARD_MYSQL_JDBC
 TabPage PAGE_DBWIZARD_MYSQL_NATIVE
 {
     SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Pos = MAP_APPFONT ( 0, 0 ) ;
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE ;
 
-
-    String STR_MYSQLJDBC_HEADERTEXT
+    FixedText FT_SETUP_WIZARD_HEADER
     {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
         Text[ en-US ] = "Set up connection to a MySQL database" ;
+        WordBreak = TRUE;
     };
 
-    String STR_MYSQLJDBC_HELPTEXT{
-        Text[ en-US ] = "Please enter the required information to connect to a MySQL database.";
+    FixedText FT_SETUP_WIZARD_HELP
+    {
+        Pos = MAP_APPFONT ( START_X , INIT_Y ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 3 * FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Please enter the required information to connect to a MySQL database.";
+        WordBreak = TRUE;
     };
-
-    String STR_MYSQL_DEFAULT{
-        Text[ en-US ] = "Default: 3306";
-    };
-
-    AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_JDBC_ET_MYSQLDBNAME)
 };
 
 

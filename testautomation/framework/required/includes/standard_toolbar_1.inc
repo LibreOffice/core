@@ -39,58 +39,44 @@
 
 testcase tStandardBar_1
 
-    printlog "************************************************************"
     printlog "Check the 'Standardbar' in all applications"
-    printlog "************************************************************"
 
-    '///<h1>Update test for the Standard Bar in all applications</h1>
-
-    '///<ul>
     gApplication = "WRITER"
     hNewDocument()
     kontext "DocumentWriter"
     DocumentWriter.maximize()
     hCloseDocument()
 
-    '///+<li>Open a writer-doc and check if the Standardbar does exist</li>
     Printlog " - WRITER: check if Standardbar exists"
     gApplication = "WRITER"
     hAccessStandardBar()
 
-    '///+<li>Open a calc-doc and check if the Standardbar does exist</li>
     Printlog " - CALC: check if Standardbar exists"
     gApplication = "CALC"
     hAccessStandardBar()
 
-    '///+<li>Open a impress-doc and check if the Standardbar does exist</li>
     Printlog " - IMPRESS: check if Standardbar exists"
     gApplication = "IMPRESS"
     hAccessStandardBar()
 
-    '///+<li>Open a draw-doc and check if the Standardbar does exist</li>
     Printlog " - DRAW: check if Standardbar exists"
     gApplication = "DRAW"
     hAccessStandardBar()
 
-    '///+<li>Open a HTML-doc and check if the Standardbar does exist</li>
     Printlog " - HTML: check if Standardbar exists"
     gApplication = "HTML"
     hAccessStandardBar()
 
-    '///+<li>Open a math-doc and check if the Standardbar does exist</li>
     Printlog " - MATH: check if Standardbar exists"
     gApplication = "MATH"
     hAccessStandardBar()
 
-    '///+<li>Open a master-doc and check if the Standardbar does exist</li>
     Printlog " - GLOBALDOC: check if Standardbar exists"
     gApplication = "MASTERDOCUMENT"
     hAccessStandardBar()
 
-    '///+<li>Go back to a writer document</li>
     gApplication = "WRITER"
 
-    '///</ul>
 
 endcase
 

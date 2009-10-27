@@ -130,7 +130,7 @@ namespace connectivity
             */
             virtual OResultSet* createResulSet();
 
-            sal_Int32 getRowCount () throw( ::com::sun::star::sdbc::SQLException);
+            SQLLEN getRowCount () throw( ::com::sun::star::sdbc::SQLException);
 
 
             void disposeResultSet();

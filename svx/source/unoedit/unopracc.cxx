@@ -63,8 +63,8 @@ using namespace ::com::sun::star;
 //
 //------------------------------------------------------------------------
 
-SvxAccessibleTextPropertySet::SvxAccessibleTextPropertySet( const SvxEditSource* pEditSrc, const SfxItemPropertyMap* pPropMap )
-    : SvxUnoTextRangeBase( pEditSrc, pPropMap )
+SvxAccessibleTextPropertySet::SvxAccessibleTextPropertySet( const SvxEditSource* pEditSrc, const SvxItemPropertySet* pPropSet )
+    : SvxUnoTextRangeBase( pEditSrc, pPropSet )
 {
 }
 

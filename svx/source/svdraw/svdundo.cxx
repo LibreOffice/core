@@ -1179,9 +1179,15 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
     if (bNewTextAvailable && rView.AreObjectsMarked())
     {
         const SdrMarkList& rML=rView.GetMarkedObjectList();
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
-        rView.BegUndo(aStr);
+
+        const bool bUndo = rView.IsUndoEnabled();
+        if( bUndo )
+        {
+            XubString aStr;
+            ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
+            rView.BegUndo(aStr);
+        }
+
         ULONG nAnz=rML.GetMarkCount();
         for (ULONG nm=0; nm<nAnz; nm++)
         {
@@ -1189,14 +1195,18 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj2);
             if (pTextObj!=NULL)
             {
-                rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
+                if( bUndo )
+                    rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
+
                 OutlinerParaObject* pText1=pNewText;
                 if (pText1!=NULL)
                     pText1 = new OutlinerParaObject(*pText1);
                 pTextObj->SetOutlinerParaObject(pText1);
             }
         }
-        rView.EndUndo();
+
+        if( bUndo )
+            rView.EndUndo();
     }
 }
 
@@ -1207,6 +1217,95 @@ bool SdrUndoObjSetText::CanSdrRepeat(SdrView& rView) const
         bOk=TRUE;
     }
     return bOk;
+}
+
+// --> OD 2009-07-09 #i73249#
+SdrUndoObjStrAttr::SdrUndoObjStrAttr( SdrObject& rNewObj,
+                                      const ObjStrAttrType eObjStrAttr,
+                                      const String& sOldStr,
+                                      const String& sNewStr)
+    : SdrUndoObj( rNewObj ),
+      meObjStrAttr( eObjStrAttr ),
+      msOldStr( sOldStr ),
+      msNewStr( sNewStr )
+{
+}
+
+void SdrUndoObjStrAttr::Undo()
+{
+    ImpShowPageOfThisObject();
+
+    switch ( meObjStrAttr )
+    {
+        case OBJ_NAME:
+        {
+            pObj->SetName( msOldStr );
+        }
+        break;
+        case OBJ_TITLE:
+        {
+            pObj->SetTitle( msOldStr );
+        }
+        break;
+        case OBJ_DESCRIPTION:
+        {
+            pObj->SetDescription( msOldStr );
+        }
+        break;
+    }
+}
+
+void SdrUndoObjStrAttr::Redo()
+{
+    switch ( meObjStrAttr )
+    {
+        case OBJ_NAME:
+        {
+            pObj->SetName( msNewStr );
+        }
+        break;
+        case OBJ_TITLE:
+        {
+            pObj->SetTitle( msNewStr );
+        }
+        break;
+        case OBJ_DESCRIPTION:
+        {
+            pObj->SetDescription( msNewStr );
+        }
+        break;
+    }
+
+    ImpShowPageOfThisObject();
+}
+
+String SdrUndoObjStrAttr::GetComment() const
+{
+    String aStr;
+    switch ( meObjStrAttr )
+    {
+        case OBJ_NAME:
+        {
+            ImpTakeDescriptionStr( STR_UndoObjName, aStr );
+            aStr += sal_Unicode(' ');
+            aStr += sal_Unicode('\'');
+            aStr += msNewStr;
+            aStr += sal_Unicode('\'');
+        }
+        break;
+        case OBJ_TITLE:
+        {
+            ImpTakeDescriptionStr( STR_UndoObjTitle, aStr );
+        }
+        break;
+        case OBJ_DESCRIPTION:
+        {
+            ImpTakeDescriptionStr( STR_UndoObjDescription, aStr );
+        }
+        break;
+    }
+
+    return aStr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1715,6 +1814,15 @@ SdrUndoAction* SdrUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_
 {
     return new SdrUndoObjSetText( rNewObj, nText );
 }
+
+SdrUndoAction* SdrUndoFactory::CreateUndoObjectStrAttr( SdrObject& rObject,
+                                                        SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
+                                                        String sOldStr,
+                                                        String sNewStr )
+{
+    return new SdrUndoObjStrAttr( rObject, eObjStrAttrType, sOldStr, sNewStr );
+}
+
 
 // layer
 SdrUndoAction* SdrUndoFactory::CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)

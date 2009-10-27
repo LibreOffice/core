@@ -109,6 +109,8 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
     inline  BOOL IsRelName() const          { return Flags.bRelName; }
 
     inline  BOOL Valid() const;
+    /// In external references nTab is -1
+    inline  bool ValidExternal() const;
 
             void SmartRelAbs( const ScAddress& rPos );
             void CalcRelFromAbs( const ScAddress& rPos );
@@ -147,6 +149,13 @@ inline BOOL ScSingleRefData::Valid() const
             nTab >= 0 && nTab <= MAXTAB;
 }
 
+inline bool ScSingleRefData::ValidExternal() const
+{
+    return  nCol >= 0 && nCol <= MAXCOL &&
+            nRow >= 0 && nRow <= MAXROW &&
+            nTab == -1;
+}
+
 
 struct ScComplexRefData         // Complex reference (a range) into the sheet
 {
@@ -181,6 +190,10 @@ struct ScComplexRefData         // Complex reference (a range) into the sheet
         { return Ref1.IsDeleted() || Ref2.IsDeleted(); }
     inline  BOOL Valid() const
         { return Ref1.Valid() && Ref2.Valid(); }
+    /** In external references nTab is -1 for the start tab and -1 for the end
+        tab if one sheet, or >=0 if more than one sheets. */
+    inline  bool ValidExternal() const;
+
     /// Absolute references have to be up-to-date when calling this!
     void PutInOrder();
     inline  BOOL operator==( const ScComplexRefData& r ) const
@@ -191,5 +204,13 @@ struct ScComplexRefData         // Complex reference (a range) into the sheet
     ScComplexRefData& Extend( const ScSingleRefData & rRef, const ScAddress & rPos );
     ScComplexRefData& Extend( const ScComplexRefData & rRef, const ScAddress & rPos );
 };
+
+inline bool ScComplexRefData::ValidExternal() const
+{
+    return Ref1.ValidExternal() &&
+        Ref2.nCol >= 0 && Ref2.nCol <= MAXCOL &&
+        Ref2.nRow >= 0 && Ref2.nRow <= MAXROW &&
+        Ref2.nTab >= Ref1.nTab;
+}
 
 #endif

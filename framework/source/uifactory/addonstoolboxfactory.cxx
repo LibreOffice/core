@@ -76,19 +76,6 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3                    (    AddonsToolBoxFactory                                            ,
-                                            OWeakObject                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                       ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIElementFactory )
-                                        )
-
-DEFINE_XTYPEPROVIDER_3                  (   AddonsToolBoxFactory                            ,
-                                            css::lang::XTypeProvider                        ,
-                                            css::lang::XServiceInfo                         ,
-                                            ::com::sun::star::ui::XUIElementFactory
-                                        )
-
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   AddonsToolBoxFactory                            ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TOOLBARFACTORY                      ,
@@ -101,9 +88,7 @@ AddonsToolBoxFactory::AddonsToolBoxFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( xServiceManager->createInstance(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
-                        UNO_QUERY )
+    , m_xModuleManager( xServiceManager->createInstance(SERVICENAME_MODULEMANAGER),UNO_QUERY )
 {
 }
 

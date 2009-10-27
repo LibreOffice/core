@@ -411,7 +411,9 @@ void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
     if ( pFrm->IsInTab() )
         pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFmt() );
     else
-        pThis->GetDoc()->Insert( *pThis->GetCrsr(), aDesc, 0 );
+    {
+        pThis->GetDoc()->InsertPoolItem( *pThis->GetCrsr(), aDesc, 0 );
+    }
 
     pThis->EndAllAction();
 }

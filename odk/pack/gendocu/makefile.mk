@@ -37,6 +37,7 @@ TARGET=gendocu
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 CPPDOCREFNAME="UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) C/C++ API Reference"
 JAVADOCREFNAME="UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"
@@ -119,4 +120,8 @@ $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
 $(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES)
     -$(MKDIRHIER) $(@:d)        
     $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
+.ENDIF
+
+.ELSE
+pseudo:
 .ENDIF

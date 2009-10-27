@@ -51,7 +51,7 @@ CDEFS+= -DPROFILER
 #CFLAGS +:= /Ox /Ot					# THIS IS IMPORTANT
 
 
-
+.IF "$(L10N_framework)"==""
 SLOFILES =	\
     $(SLO)$/cachedprimitivebase.obj \
     $(SLO)$/canvascustomspritehelper.obj \
@@ -95,7 +95,7 @@ DEFLIB1NAME	=$(TARGET)
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS += $(WINMMLIB) $(KERNEL32LIB)
 .ENDIF
-
+.ENDIF
 
 # ==========================================================================
 

@@ -254,6 +254,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                     ULONG nCount = rMarkList.GetMarkCount();
 
+                    const bool bUndo = mpDrawView->IsUndoEnabled();
+
                     for (ULONG i=0; i<nCount; i++)
                     {
                         SfxItemSet aAttr(GetDoc()->GetPool());
@@ -269,15 +271,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                             if (rFillStyle.GetValue() == XFILL_NONE)
                             {
-                                // Vorlage hat keine Fuellung,
-                                // daher hart attributieren: Fuellung setzen
-                                if (!bMergeUndo)
+                                if( bUndo )
                                 {
-                                    bMergeUndo = TRUE;
-                                    pUndoManager->EnterListAction( String(), String() );
-                                    mpDrawView->BegUndo();
+                                    // Vorlage hat keine Fuellung,
+                                    // daher hart attributieren: Fuellung setzen
+                                    if (!bMergeUndo)
+                                    {
+                                        bMergeUndo = TRUE;
+                                        pUndoManager->EnterListAction( String(), String() );
+                                        mpDrawView->BegUndo();
+                                    }
+
+                                    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
                                 }
-                                mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
 
                                 aAttr.Put(XFillStyleItem(XFILL_SOLID));
                                 aAttr.Put(XFillColorItem(String(), COL_WHITE));

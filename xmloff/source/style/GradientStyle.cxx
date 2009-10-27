@@ -201,7 +201,7 @@ sal_Bool XMLGradientStyleImport::importXML(
         case XML_TOK_GRADIENT_ANGLE:
             {
                 sal_Int32 nValue;
-                SvXMLUnitConverter::convertNumber( nValue, rStrValue, 0, 360 );
+                SvXMLUnitConverter::convertNumber( nValue, rStrValue, 0, 3600 );
                 aGradient.Angle = sal_Int16( nValue );
             }
             break;

@@ -39,7 +39,7 @@
 #include <libxml/tree.h>
 #include <libxml/entities.h>
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 

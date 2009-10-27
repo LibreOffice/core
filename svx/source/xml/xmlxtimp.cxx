@@ -394,7 +394,7 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const uno::Reference< X
 
             if( aMedium.IsStorage() )
             {
-                uno::Reference < embed::XStorage > xStorage( aMedium.GetStorage(), uno::UNO_QUERY_THROW );
+                uno::Reference < embed::XStorage > xStorage( aMedium.GetStorage( sal_False ), uno::UNO_QUERY_THROW );
 
                 const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
                 xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );

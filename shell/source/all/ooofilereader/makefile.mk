@@ -35,6 +35,7 @@ TARGET=ooofilereader
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -65,7 +66,7 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
 LIB1FILES=$(SLB)$/zipfile.lib\
           $(SLB)$/xmlparser.lib
-
+          
 .IF "$(BUILD_X64)"!=""
 SLOFILES_X64=$(SLO_X64)$/basereader.obj\
          $(SLO_X64)$/metainforeader.obj\

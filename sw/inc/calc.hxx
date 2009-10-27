@@ -188,7 +188,7 @@ class SwCalc
     xub_StrLen  nCommandPos;
 
     SwDoc&      rDoc;
-    LocaleDataWrapper* pLclData;
+    const LocaleDataWrapper* pLclData;
     CharClass*  pCharClass;
 
     USHORT      nListPor;

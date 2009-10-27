@@ -40,7 +40,7 @@ class Inflater
 {
 protected:
     sal_Bool                bFinish, bFinished, bSetParams, bNeedDict;
-    sal_Int32               nOffset, nLength;
+    sal_Int32               nOffset, nLength, nLastInflateError;
     z_stream*               pStream;
     com::sun::star::uno::Sequence < sal_Int8 >  sInBuffer;
     sal_Int32   doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
@@ -53,6 +53,8 @@ public:
     sal_Bool SAL_CALL finished(  );
     sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void SAL_CALL end(  );
+
+    sal_Int32 getLastInflateError() { return nLastInflateError; }
 };
 
 #endif

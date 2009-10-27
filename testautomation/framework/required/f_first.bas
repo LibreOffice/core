@@ -40,8 +40,13 @@
 
 sub main
 
+    ' Disable sleep() calls. If you encounter unexpected test interruptions
+    ' you should try to outcomment this or set the value to FALSE.
+    GLOBAL_USE_NEW_SLEEP = TRUE
+
     use "framework\required\includes\first.inc"
     use "framework\required\includes\graphics_import.inc"
+    use "global\required\includes\g_option_application.inc"
     
     call hStatusIn ("framework", "f_first.bas")
     call tAllNew
@@ -52,7 +57,8 @@ sub main
     call tJava
     
     gApplication = "WRITER"
-    call tToolsOptionsTest
+    call tToolsOptionsTestFirst
+    call tToolsOptionsImprovementProgram
     call tDatabaseCheck
     call tHelpRegistration
     call hStatusOut   

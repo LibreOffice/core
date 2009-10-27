@@ -42,7 +42,9 @@
 #include <svx/linkmgr.hxx>
 #include <swtypes.hxx>
 #include <undobj.hxx>
+#include <unoobj.hxx>
 #include <rtl/random.h>
+
 
 SV_IMPL_REF( SwServerObject )
 
@@ -85,9 +87,13 @@ namespace
         const SwPaM aEndPaM(rEnd);
         io_pDoc->StartUndo(UNDO_UI_REPLACE, NULL);
         if(ch_start != aStartMark)
-            io_pDoc->Insert(aStartPaM, aStartMark);
+        {
+            io_pDoc->InsertString(aStartPaM, aStartMark);
+        }
         if(aEndMark && ch_end != aEndMark)
-            io_pDoc->Insert(aEndPaM, aEndMark);
+        {
+            io_pDoc->InsertString(aEndPaM, aEndMark);
+        }
         io_pDoc->EndUndo(UNDO_UI_REPLACE, NULL);
     };
 }
@@ -190,6 +196,7 @@ namespace sw { namespace mark
         const ::rtl::OUString& rName,
         const ::rtl::OUString& rShortName)
         : DdeBookmark(aPaM)
+        , ::sfx2::Metadatable()
         , m_aCode(rCode)
         , m_sShortName(rShortName)
     {
@@ -205,6 +212,54 @@ namespace sw { namespace mark
         }
         io_pDoc->SetModified();
     }
+
+    // ::sfx2::Metadatable
+    ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
+    {
+        SwDoc *const pDoc( GetMarkPos().GetDoc() );
+        OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
+        return pDoc->GetXmlIdRegistry();
+    }
+
+    bool Bookmark::IsInClipboard() const
+    {
+        SwDoc *const pDoc( GetMarkPos().GetDoc() );
+        OSL_ENSURE(pDoc, "Bookmark::IsInClipboard: no doc?");
+        return pDoc->IsClipBoard();
+    }
+
+    bool Bookmark::IsInUndo() const
+    {
+        return false;
+    }
+
+    bool Bookmark::IsInContent() const
+    {
+        SwDoc *const pDoc( GetMarkPos().GetDoc() );
+        OSL_ENSURE(pDoc, "Bookmark::IsInContent: no doc?");
+        return !pDoc->IsInHeaderFooter( SwNodeIndex(GetMarkPos().nNode) );
+    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
+        Bookmark::MakeUnoObject()
+    {
+        // re-use existing SwXBookmark
+        SwClientIter iter( *this );
+        SwClient * pClient( iter.First( TYPE( SwXBookmark ) ) );
+        while (pClient) {
+            SwXBookmark *const pBookmark( dynamic_cast<SwXBookmark*>(pClient) );
+            if (pBookmark && pBookmark->GetCoreObject() == this) {
+                return pBookmark;
+            }
+            pClient = iter.Next();
+        }
+
+        // create new SwXBookmark
+        SwDoc *const pDoc( GetMarkPos().GetDoc() );
+        OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
+        return new SwXBookmark(this, pDoc);
+    }
+
 
     Fieldmark::Fieldmark(const SwPaM& rPaM)
         : MarkBase(rPaM, MarkBase::GenerateNewName(our_sNamePrefix))

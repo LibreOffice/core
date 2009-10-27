@@ -51,26 +51,18 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <vector>
 
 namespace framework
 {
 
-class StatusIndicatorInterfaceWrapper :   public ::com::sun::star::lang::XTypeProvider       ,
-                                          public ::com::sun::star::task::XStatusIndicator    ,
-                                          public ::cppu::OWeakObject
+class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper1< ::com::sun::star::task::XStatusIndicator>
 {
     public:
         StatusIndicatorInterfaceWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rStatusIndicatorImpl );
         virtual ~StatusIndicatorInterfaceWrapper();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
-        //---------------------------------------------------------------------------------------------------------
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
         //  XStatusIndicator

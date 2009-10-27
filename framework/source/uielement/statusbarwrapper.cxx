@@ -80,8 +80,7 @@ namespace framework
 StatusBarWrapper::StatusBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
     )
- :  UIConfigElementWrapperBase( UIElementType::STATUSBAR ),
-    m_xServiceFactory( xServiceManager )
+ :  UIConfigElementWrapperBase( UIElementType::STATUSBAR,xServiceManager )
 {
 }
 
@@ -185,53 +184,6 @@ void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException )
         {
         }
     }
-}
-
-void SAL_CALL StatusBarWrapper::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException )
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( xSettings.is() )
-    {
-        // Create a copy of the data if the container is not const
-        Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
-        if ( xReplace.is() )
-            m_xConfigData = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
-        else
-            m_xConfigData = xSettings;
-
-        if ( m_xConfigSource.is() && m_bPersistent )
-        {
-            ::rtl::OUString aResourceURL( m_aResourceURL );
-            Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
-
-            aLock.unlock();
-
-            try
-            {
-                xUICfgMgr->replaceSettings( aResourceURL, m_xConfigData );
-            }
-            catch( NoSuchElementException& )
-            {
-            }
-        }
-    }
-}
-
-Reference< XIndexAccess > SAL_CALL StatusBarWrapper::getSettings( sal_Bool bWriteable ) throw ( RuntimeException )
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( bWriteable )
-        return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
-    else
-        return m_xConfigData;
 }
 
 Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( RuntimeException )
