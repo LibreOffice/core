@@ -48,7 +48,7 @@
 #include "sdmod.hxx"
 
 #include "fuformatpaintbrush.hxx"
-#include "DrawView.hxx"
+#include "drawview.hxx"
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
 #include "FrameView.hxx"
@@ -111,7 +111,6 @@ BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if(mpView&&mpWindow)
     {
-        BOOL bTextEdit = FALSE;
         SdrViewEvent aVEvt;
         SdrHitKind eHit = mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
