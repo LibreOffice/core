@@ -71,7 +71,7 @@ public final class TestAcquire {
     private static void execClient(XComponentContext context, String url)
         throws Exception
     {
-        XTest test = (XTest) UnoRuntime.queryInterface(
+        XTest test = UnoRuntime.queryInterface(
             XTest.class, UnoUrlResolver.create(context).resolve(url));
 
         WaitUnreachable u;
@@ -184,7 +184,7 @@ public final class TestAcquire {
         throws Exception
     {
         XAcceptor acceptor = Acceptor.create(context);
-        XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+        XBridgeFactory factory = UnoRuntime.queryInterface(
             XBridgeFactory.class,
             context.getServiceManager().createInstanceWithContext(
                 "com.sun.star.bridge.BridgeFactory", context));

@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,37 +29,23 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-
-PRJNAME=io
-TARGET = textinstream.uno
-ENABLE_EXCEPTIONS=TRUE
+PRJ=..$/..$/..$/..
+PRJNAME=offapi
+TARGET=cssoffice
+PACKAGE=com$/sun$/star$/office
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-DLLPRE =
 
-SLOFILES= \
-    $(SLO)$/TextInputStream.obj
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP = tinstrm.map
+# ------------------------------------------------------------------------
 
-SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(CPPUHELPERLIB) 
+IDLFILES=\
+    XAnnotation.idl\
+    XAnnotationEnumeration.idl\
+    XAnnotationAccess.idl
 
-SHL1DEPN=
-SHL1IMPLIB=		i$(TARGET)
-SHL1LIBS=		$(SLB)$/$(TARGET).lib
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1RPATH=      URELIB
+# ------------------------------------------------------------------
 
-DEF1NAME=		$(SHL1TARGET)
-
-# --- Targets ------------------------------------------------------
-.ENDIF 		# L10N_framework
-
-.INCLUDE :	target.mk
+.INCLUDE :  target.mk
+.INCLUDE :  $(PRJ)$/util$/target.pmk
