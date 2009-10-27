@@ -69,7 +69,7 @@ sub usage
 {
     print <<Ende;
 ----------------------------------------------------------------------
-$prog V1.0 (c) Sun Microsystems 2008
+$prog V1.0 (c) Sun Microsystems 2009
 This program installs a Windows Installer installation set
 without using msiexec.exe. The installation is comparable
 with an administrative installation using the Windows Installer
@@ -513,6 +513,116 @@ sub extract_tables_from_database
     }
 }
 
+########################################################
+# Check, if this installation set contains
+# internal cabinet files included into the msi
+# database.
+########################################################
+
+sub check_for_internal_cabfiles
+{
+    my ($cabfilehash) = @_;
+
+    my $contains_internal_cabfiles = 0;
+    my %allcabfileshash = ();
+
+    foreach my $filename ( keys %{$cabfilehash} )
+    {
+        if ( $filename =~ /^\s*\#/ )     # starting with a hash
+        {
+            $contains_internal_cabfiles = 1;
+            # setting real filename without hash as key and name with hash as value
+            my $realfilename = $filename;
+            $realfilename =~ s/^\s*\#//;
+            $allcabfileshash{$realfilename} = $filename;
+        }
+    }
+
+    return ( $contains_internal_cabfiles, \%allcabfileshash );
+}
+
+#################################################################
+# Exclude all cab files from the msi database.
+#################################################################
+
+sub extract_cabs_from_database
+{
+    my ($msidatabase, $allcabfiles) = @_;
+
+    my $infoline = "";
+    my $fullsuccess = 1;
+    my $msidb = "msidb.exe";    # Has to be in the path
+
+    my @all_excluded_cabfiles = ();
+
+    if( $^O =~ /cygwin/i )
+    {
+        $msidatabase = qx{cygpath -w "$msidatabase"};
+        $msidatabase =~ s/\\/\\\\/g;
+        $msidatabase =~ s/\s*$//g;
+    }
+    else
+    {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $msidatabase =~ s/\//\\\\/g;
+    }
+
+    foreach my $onefile ( keys %{$allcabfiles} )
+    {
+        my $systemcall = $msidb . " -d " . $msidatabase . " -x " . $onefile;
+         system($systemcall);
+         push(@all_excluded_cabfiles, $onefile);
+    }
+
+    \@all_excluded_cabfiles;
+}
+
+################################################################################
+# Collect all DiskIds to the corresponding cabinet files from Media.idt.
+################################################################################
+
+sub analyze_media_file
+{
+    my ($filecontent) = @_;
+
+    my %diskidhash = ();
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if ( $i < 3 ) { next; }
+
+        if ( ${$filecontent}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my $diskid = $1;
+            my $cabfile = $4;
+
+            $diskidhash{$cabfile} = $diskid;
+        }
+    }
+
+    return \%diskidhash;
+}
+
+sub analyze_customaction_file
+{
+    my ($filecontent) = @_;
+
+    my $register_extensions_exists = 0;
+
+    my %table = ();
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if ( ${$filecontent}[$i] =~ /^\s*RegisterExtensions\s+/ )
+        {
+            $register_extensions_exists = 1;
+            last;
+        }
+    }
+
+    return $register_extensions_exists;
+}
+
 ################################################################################
 # Analyzing the content of Directory.idt
 #################################################################################
@@ -930,6 +1040,10 @@ sub register_one_extension
         $localextension =~ s/\\/\\\\/g;
     }
 
+    if ( $^O =~ /cygwin/i ) {
+        $executable = "./" . $executable;
+    }
+
     my $systemcall = $executable . " add --shared --verbose " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
 
     print "... $systemcall\n";
@@ -1153,8 +1267,35 @@ create_directory($helperdir);
 
 # Get File.idt, Component.idt and Directory.idt from database
 
-my $tablelist = "File Directory Component";
+my $tablelist = "File Directory Component Media CustomAction";
 extract_tables_from_database($databasepath, $helperdir, $tablelist);
+
+# Set unpackdir
+my $unpackdir = $helperdir . $separator . "unpack";
+create_directory($unpackdir);
+
+# Reading media table to check for internal cabinet files
+my $filename = $helperdir . $separator . "Media.idt";
+if ( ! -f $filename ) { exit_program("ERROR: Could not find required file: $filename !"); }
+my $filecontent = read_file($filename);
+my $cabfilehash = analyze_media_file($filecontent);
+
+# Check, if there are internal cab files
+my ( $contains_internal_cabfiles, $all_internal_cab_files) = check_for_internal_cabfiles($cabfilehash);
+
+if ( $contains_internal_cabfiles )
+{
+    # Set unpackdir
+    my $cabdir = $helperdir . $separator . "internal_cabs";
+    create_directory($cabdir);
+    my $from = cwd();
+    chdir($cabdir);
+    # Exclude all cabinet files from database
+    my $all_excluded_cabs = extract_cabs_from_database($databasepath, $all_internal_cab_files);
+    print "Unpacking files from internal cabinet file(s)\n";
+    foreach my $cabfile ( @{$all_excluded_cabs} ) { unpack_cabinet_file($cabfile, $unpackdir); }
+    chdir($from);
+}
 
 # Unpack all cab files into $helperdir, cab files must be located next to msi database
 my $installdir = $databasepath;
@@ -1166,11 +1307,7 @@ make_absolute_filename_to_relative_filename(\$databasefilename);
 
 my $cabfiles = find_file_with_file_extension("cab", $installdir);
 
-if ( $#{$cabfiles} < 0 ) { exit_program("ERROR: Did not find any cab file in directory $installdir"); }
-
-# Set unpackdir
-my $unpackdir = $helperdir . $separator . "unpack";
-create_directory($unpackdir);
+if (( $#{$cabfiles} < 0 ) && ( ! $contains_internal_cabfiles )) { exit_program("ERROR: Did not find any cab file in directory $installdir"); }
 
 print "Unpacking files from cabinet file(s)\n";
 for ( my $i = 0; $i <= $#{$cabfiles}; $i++ )
@@ -1180,8 +1317,8 @@ for ( my $i = 0; $i <= $#{$cabfiles}; $i++ )
 }
 
 # Reading tables
-my $filename = $helperdir . $separator . "Directory.idt";
-my $filecontent = read_file($filename);
+$filename = $helperdir . $separator . "Directory.idt";
+$filecontent = read_file($filename);
 my $dirhash = analyze_directory_file($filecontent);
 
 $filename = $helperdir . $separator . "Component.idt";
@@ -1203,8 +1340,16 @@ my $msidatabase = $targetdir . $separator . $databasefilename;
 my $copyreturn = copy($databasepath, $msidatabase);
 if ( ! $copyreturn) { exit_program("ERROR: Could not copy $source to $dest\n"); }
 
-# Registering extensions
-register_extensions($unopkgfile, $extensions, $temppath);
+# Reading tables
+$filename = $helperdir . $separator . "CustomAction.idt";
+$filecontent = read_file($filename);
+my $register_extensions_exists = analyze_customaction_file($filecontent);
+
+if ( $register_extensions_exists )
+{
+    # Registering extensions
+    register_extensions($unopkgfile, $extensions, $temppath);
+}
 
 # Saving info in Summary Information Stream of msi database (required for following patches)
 if ( $msiinfo_available ) { write_sis_info($msidatabase); }
