@@ -131,11 +131,6 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 
 SdModule::~SdModule()
 {
-    // Mark the module in the global AppData structure as deleted.
-    SdModule** ppShellPointer = (SdModule**)GetAppData(SHL_DRAW);
-    if (ppShellPointer != NULL)
-        (*ppShellPointer) = NULL;
-
     delete pSearchItem;
 
     if( pNumberFormatter )
@@ -151,6 +146,13 @@ SdModule::~SdModule()
             Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
         }
     }
+
+    mpResourceContainer.reset();
+
+    // Mark the module in the global AppData structure as deleted.
+    SdModule** ppShellPointer = (SdModule**)GetAppData(SHL_DRAW);
+    if (ppShellPointer != NULL)
+        (*ppShellPointer) = NULL;
 
     delete mpErrorHdl;
     delete static_cast< VirtualDevice* >( mpVirtualRefDevice );

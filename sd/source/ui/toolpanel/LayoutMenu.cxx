@@ -917,8 +917,13 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 if (GetShellManager() != NULL)
                     GetShellManager()->MoveToTop(this);
                 if (rEvent.IsMouseEvent())
-                    mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
-                        SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
+                {
+                    // Do not show the context menu when the mouse was not
+                    // pressed over an item.
+                    if (GetItemId(rEvent.GetMousePosPixel()) > 0)
+                        mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
+                            SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
+                }
                 else
                 {
                     // When the command event was not caused by a mouse
