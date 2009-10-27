@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: embedhlp.hxx,v $
- * $Revision: 1.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -131,6 +128,13 @@ namespace svt
         BOOL            is() const { return mxObj.is(); }
 
         BOOL            IsChart() const;
+
+        // #i104867#
+        // Provides a graphic version number for the fetchable Graphic during this object's lifetime. Internally,
+        // that number is incremented at each change of the Graphic. This mechanism is needed to identify if a
+        // remembered Graphic (e.g. primitives) has changed compared to the current one, but without actively
+        // fetching the Graphic what would be too expensive e.g. for charts
+        sal_uInt32 getGraphicVersion() const;
         void            SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM );//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     };
 }

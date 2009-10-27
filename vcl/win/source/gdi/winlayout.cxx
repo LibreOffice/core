@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: winlayout.cxx,v $
- * $Revision: 1.113.6.9 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -1385,7 +1382,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         mpScriptItems = NULL;
         if( nRC != E_OUTOFMEMORY )
             return false;
-        if( nItemCapacity > (nSubStringEnd - mnSubStringMin) )
+        if( nItemCapacity > (nSubStringEnd - mnSubStringMin) + 16 )
             return false;
     }
 
