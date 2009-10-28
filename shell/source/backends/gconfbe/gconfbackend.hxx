@@ -174,10 +174,11 @@ class GconfBackend : public BackendBase {
             const uno::Reference<backend::XBackendChangesListener>& xListener,
             const rtl::OUString& aComponent)
                 throw (::com::sun::star::uno::RuntimeException);
-
+// currently not used
+#if 0
         //Notify all listener of component change
         void notifyListeners(const rtl::OUString& aGconfKey);
-
+#endif
     protected:
         /**
           Service constructor from a service factory.

@@ -76,9 +76,6 @@ public:
     xml_parser(const XML_Char* EncodingName = 0);
 
     //########################################################
-    xml_parser(const XML_Char* EncodingName, XML_Char NamespaceSeparator);
-
-    //########################################################
     ~xml_parser();
 
     //########################################################
@@ -126,10 +123,6 @@ public:
     /** Returns the currently used document handler or null if
         no document handler was set before. */
     i_xml_parser_event_handler* get_document_handler() const;
-
-    //############################################
-    void set_encoding(const XML_Char* Encoding);
-
 private:
 
     void init();
