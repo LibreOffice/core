@@ -62,10 +62,10 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
         if ( bEnable ) then
             mitAutopilotStarten.check()
-            printlog( CFN & "Enable Impress Autopilot" )
+            if ( VERBOSE ) then printlog( CFN & "Enable Impress Autopilot" )
         else
             mitAutopilotStarten.uncheck()
-            printlog( CFN & "Disable Impress Autopilot" )
+            if ( VERBOSE ) then printlog( CFN & "Disable Impress Autopilot" )
         endif
 
         '///+<li>Return Status of Checkbox (checked=TRUE)</li>
@@ -95,22 +95,19 @@ end function
 function hCloseNavigator() as boolean
 
     '///<h3>Function to close the navigator</h3>
-    '///<i>Starting point: Any document</i>
-    '///<ul>
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCloseNavigator::"
     
     if ( VERBOSE ) then printlog( CFN & "Enter" )
     
-    '///+<li>close the navigator if found</li>
     Kontext "Navigator"
     if ( Navigator.Exists() ) then
         Navigator.Close()
-        printlog( CFN & "Closed Navigator" )
+        Navigator.notExists( 2 )
+        if ( VERBOSE ) then printlog( CFN & "Closed Navigator" )
     else
-        printlog( CFN & "Navigator not present" )
+        if ( VERBOSE ) then printlog( CFN & "Navigator not present" )
     endif
     
-    '///+<li>verify that the navigator is indeed closed, return true on success</li>
     Kontext "Navigator"
     if ( Navigator.exists() ) then
         hCloseNavigator() = false
@@ -120,7 +117,6 @@ function hCloseNavigator() as boolean
     endif
     
     if ( VERBOSE ) then printlog( CFN & "Exit" )
-    '///</ul>
 
 end function
 
@@ -281,7 +277,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
         if ( bWarn ) then
             warnlog ( CFN & "The focus is not on the expected document" )
         else
-            printlog( CFN & "The focus is not on the expected document" )
+            if ( VERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
         endif
         
         printlog( CFN & "Expected: " & cString )
@@ -302,36 +298,16 @@ end function
 
 function hCreateDocument() as boolean
 
-    '///<h3>Create anew document, extends hNewDocument()</h3>
-    '///<i>Starting point: Any document</i><br>
-    '///<i>Note: When calling this function with gApplication "BACKGROUND" the
-    '///+ function will actually close one document to get to the backing window</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing, valid gApplication must be set</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if a new document was created successfully</li>
-    '///+<li>FALSE if anything went wrong</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-
+    '///<h3>Create anew document, extends hNewDocument() by providing a returnvalue</h3>
+    ' TRUE = New document created, FALSE = Failed to create a new document '
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCreateDocument::"
 
     dim iDocCountBefore as integer 
     dim iDocCountAfter as integer
 
-    '///+<li>Retrieve the number of open documents</li>
     iDocCountBefore = getDocumentCount
     if ( VERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
 
-    '///+<li>Special treatment if gApplication = BACKGROUND (virtual gApplication)</li>
     if ( ucase( gApplication ) = "BACKGROUND" ) then
     	do while( getDocumentCount > 0 )
     	    hCloseDocument()
@@ -339,21 +315,15 @@ function hCreateDocument() as boolean
         hCreateDocument() = true
     else
     
-        '///+<li>Open a new document using hNewDocument()</li>
         call hNewDocument()
-
-        '///+<li>Retrieve the number of open documents</li>
         iDocCountAfter = getDocumentCount()
-
-        '///+<li>Verify that there is exactly one more document than before</li>
         if ( iDocCountAfter = ( iDocCountBefore + 1 ) ) then
             hCreateDocument() = true
         else
             hCreateDocument() = false
         endif
     endif
-    printlog( CFN & "New document created. Open: " & iDocCountAfter )
-    '///</ul>
+    if ( VERBOSE ) then printlog( CFN & "New document created. Open: " & iDocCountAfter )
     
 end function
 
@@ -484,9 +454,7 @@ function hInitSingleDoc() as boolean
     '///<u>Description:</u>
     '///<ul>
     '///+<li>Close all documents until we are on the backing window</li>
-    do while ( getDocumentCount > 0 ) 
-        call hCloseDocument()
-    loop
+    hFileCloseAll()
     
     '///+<li>Save the previous gApplication</li>
     cOldApplication = gApplication
@@ -539,9 +507,7 @@ function hInitBackingMode() as boolean
     '///<u>Description:</u>
     '///<ul>
     '///+<li>Close all documents until we are on the backing window</li>
-    do while ( getDocumentCount > 0 ) 
-        hCloseDocument()
-    loop
+    hFileCloseAll()
     
     '///+<li>verify that we do not have any open documents left (redundant check)</li>
     if ( getDocumentCount = 0 ) then

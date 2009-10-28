@@ -43,6 +43,9 @@ testcase tStandardBar_5
     '///<h1>Update test: Configure the Standard Bar via Tools/Customize</h1>
     '///<ul>
     
+    warnlog( "#i106370# - Test disabled, cannot switch tabpage on Tools/Customize dialog" )
+    goto endsub
+    
     '///+<li>open a new document</li>
     hCreateDocument()
     

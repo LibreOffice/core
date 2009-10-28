@@ -193,8 +193,7 @@ function hToolsCustomizeClose( iMode as integer  ) as boolean
     '///<ul>
     
     const CFN = "hToolsCustomizeClose::"
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
 
     kontext 
 
@@ -213,8 +212,11 @@ function hToolsCustomizeClose( iMode as integer  ) as boolean
     end select
     '///</ol>
     
+    
+    
     '///+<li>Verify that the dialog has indeed been closed</li>
     kontext "TabCustomizeEvents"
+    TabCustomize.notExists( 3 )
     if ( TabCustomizeEvents.exists() ) then
         brc = false
     endif
