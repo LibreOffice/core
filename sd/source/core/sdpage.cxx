@@ -2883,7 +2883,7 @@ bool SdPage::checkVisibility(
                     }
                 }
             } // check for placeholders on master
-            else if( pCheckPage->IsMasterPage() && ( pVisualizedPage != pCheckPage ) )
+            else if( (eKind != PRESOBJ_NONE) && pCheckPage->IsMasterPage() && ( pVisualizedPage != pCheckPage ) )
             {
                 // presentation objects on master slide are always invisible if slide is shown.
                 return false;
