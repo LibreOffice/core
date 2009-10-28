@@ -1322,7 +1322,8 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
                 SwTxtNode& rTxtNode = static_cast<SwTxtNode&>(rNode);
                 // setze den bei allen TextNode in der Tabelle den TableNode
                 // als StartNode
-                rTxtNode.pStartOfSection = pTblNd;
+// FIXME: this is setting wrong node StartOfSections in nested tables.
+//                rTxtNode.pStartOfSection = pTblNd;
                 // remove PageBreaks/PageDesc/ColBreak
                 const SwAttrSet* pSet = rTxtNode.GetpSwAttrSet();
                 if( pSet )
@@ -1400,7 +1401,6 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
                     if( aCellNodeIdx.GetNode().IsStartNode() )
                         aCellNodeIdx = SwNodeIndex( *aCellNodeIdx.GetNode().EndOfSectionNode() );
                 }
-
 
                 // Section der Box zuweisen
                 pBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );

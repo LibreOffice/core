@@ -312,6 +312,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 #ifndef PRODUCT
     SwRedline aCopy( *pNewRedl );
 #endif
+    bool bError = true;
     _CHECK_REDLINE( this )
 
     if( IsRedlineOn() && !IsShowOriginal( eRedlineMode ) &&
@@ -431,6 +432,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 pRedlineTbl->Insert( pRedl );
                             }
 
+                            bError = false;
                             bDelete = true;
                         }
                         else if( (( POS_BEFORE == eCmpPos &&
@@ -446,6 +448,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             pRedlineTbl->Remove( n );
                             pRedlineTbl->Insert( pRedl );
 
+                            bError = false;
                             bDelete = true;
                         }
                         else if ( POS_OUTSIDE == eCmpPos )
@@ -1108,7 +1111,8 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 
                     case POS_EQUAL:
                     case POS_INSIDE:
-                        delete pNewRedl, pNewRedl = 0;
+                        // TODO Check if there is any side effect
+                        //delete pNewRedl, pNewRedl = 0;
                         break;
 
                     case POS_OUTSIDE:
@@ -1271,7 +1275,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
     }
     _CHECK_REDLINE( this )
 
-    return 0 != pNewRedl;
+    return ( 0 != pNewRedl ) || !bError;
 }
 
 void SwDoc::CompressRedlines()

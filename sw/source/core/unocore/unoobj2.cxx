@@ -1192,6 +1192,12 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     pMark(NULL)
 {
+    SwTable* pTable = SwTable::FindTable( &rTblFmt );
+    SwTableNode* pTblNode = pTable->GetTableNode( );
+    SwPosition aPosition( *pTblNode );
+    SwPaM aPam( aPosition );
+
+    _CreateNewBookmark( aPam );
 }
 
 SwXTextRange::~SwXTextRange()
