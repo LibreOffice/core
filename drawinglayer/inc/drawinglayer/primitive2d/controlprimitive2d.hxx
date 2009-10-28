@@ -47,63 +47,74 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** ControlPrimitive2D class
+
+            Base class for ControlPrimitive handling. It decoposes to a
+            graphical representation (Bitmap data) of the control. This
+            representation is limited to a quadratic pixel maximum defined
+            in the applicatin settings.
+         */
         class ControlPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            // object's base data
+            /// object's base data
             basegfx::B2DHomMatrix                                                   maTransform;
             com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >    mxControlModel;
 
-            // the created an cached awt::XControl
+            /// the created an cached awt::XControl
             com::sun::star::uno::Reference< com::sun::star::awt::XControl >         mxXControl;
 
-            // the last used scaling, used from getDecomposition for buffering
+            /// the last used scaling, used from getDecomposition for buffering
             basegfx::B2DVector                                                      maLastViewScaling;
 
-            // used from getXControl() to create a local awt::XControl which is remembered in mxXControl
-            // and from thereon always used and returned by getXControl()
+            /** used from getXControl() to create a local awt::XControl which is remembered in mxXControl
+                and from thereon always used and returned by getXControl()
+             */
             void createXControl();
 
-            // single local decompositions, used from create2DDecomposition()
+            /// single local decompositions, used from create2DDecomposition()
             Primitive2DReference createBitmapDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
             Primitive2DReference createPlaceholderDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         protected:
-            // local decomposition
+            /// local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             ControlPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel);
 
-            // constructor with an additional XControl as parameter to allow to hand it over at incarnation time
-            // if it exists. This will avoid to create a 2nd one on demand in createXControl()
-            // and thus double the XControls.
+            /** constructor with an additional XControl as parameter to allow to hand it over at incarnation time
+                if it exists. This will avoid to create a 2nd one on demand in createXControl()
+                and thus double the XControls.
+             */
             ControlPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel,
                 const com::sun::star::uno::Reference< com::sun::star::awt::XControl >& rxXControl);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& getControlModel() const { return mxControlModel; }
 
-            // mxControl access. This will on demand create the awt::XControl using createXControl()
-            // if it does not exist. It may already have been created or even handed over at
-            // incarnation
+            /** mxControl access. This will on demand create the awt::XControl using createXControl()
+                if it does not exist. It may already have been created or even handed over at
+                incarnation
+             */
             const com::sun::star::uno::Reference< com::sun::star::awt::XControl >& getXControl() const;
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // Overload standard getDecomposition call to be view-dependent here
+            /// Overload standard getDecomposition call to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d

@@ -66,15 +66,24 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** TextLayouterDevice class
+
+            This helper class exists to isolate all accesses to VCL
+            text formatting/handling functionality for primitive implementations.
+            When in the future FontHandling may move to an own library independent
+            from VCL, primitives will be prepared.
+         */
         class TextLayouterDevice
         {
-            // internally used VirtualDevice
+            /// internally used VirtualDevice
             VirtualDevice&                  mrDevice;
 
         public:
+            /// constructor/destructor
             TextLayouterDevice();
             ~TextLayouterDevice();
 
+            /// tooling methods
             void setFont(const Font& rFont);
             void setFontAttributes(
                 const FontAttributes& rFontAttributes,
@@ -116,11 +125,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // Create a VCL-Font based on the definitions in FontAttributes
-        // and the given FontScaling. The FontScaling defines the FontHeight
-        // (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
-        // both defines FontStretching, where no stretching happens at
-        // fFontScaleY == fFontScaleX
+        /** Create a VCL-Font based on the definitions in FontAttributes
+            and the given FontScaling. The FontScaling defines the FontHeight
+            (fFontScaleY) and the FontWidth (fFontScaleX). The combination of
+            both defines FontStretching, where no stretching happens at
+            fFontScaleY == fFontScaleX
+         */
         Font getVclFontFromFontAttributes(
             const FontAttributes& rFontAttributes,
             double fFontScaleX,
@@ -128,10 +138,11 @@ namespace drawinglayer
             double fFontRotation,
             const ::com::sun::star::lang::Locale & rLocale);
 
-        // Generate FontAttributes DataSet derived from the given VCL-Font.
-        // The FontScaling with fFontScaleY, fFontScaleX relationship (see
-        // above) will be set in return parameter o_rSize to allow further
-        // processing
+        /** Generate FontAttributes DataSet derived from the given VCL-Font.
+            The FontScaling with fFontScaleY, fFontScaleX relationship (see
+            above) will be set in return parameter o_rSize to allow further
+            processing
+         */
         FontAttributes getFontAttributesFromVclFont(
             basegfx::B2DVector& o_rSize,
             const Font& rFont,

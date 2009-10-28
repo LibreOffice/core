@@ -47,35 +47,53 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** WrongSpellPrimitive2D class
+
+            This is a helper primitive to hold evtl. WrongSpell visualisations
+            in the sequence of primitives. The primitive holds this information
+            separated form the TextPortions to where it belongs to tot expand the
+            TextSimplePortionPrimitive2D more as needed.
+
+            A renderer who does not want to visualize this (if contained at all)
+            can detect and ignore this primitive. If it's decomposition is used,
+            it will be visualized as red wavelines.
+
+            The geometric definition defines a line on the X-Axis (no Y-coordinates)
+            which will when transformed by Transformation, create the coordinate data.
+         */
         class WrongSpellPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// geometry definition
             basegfx::B2DHomMatrix                           maTransformation;
             double                                          mfStart;
             double                                          mfStop;
+
+            /// color (usually red)
             basegfx::BColor                                 maColor;
 
         protected:
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             WrongSpellPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransformation,
                 double fStart,
                 double fStop,
                 const basegfx::BColor& rColor);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
             double getStart() const { return mfStart; }
             double getStop() const { return mfStop; }
             const basegfx::BColor& getColor() const { return maColor; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

@@ -45,23 +45,39 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** MaskPrimitive2D class
+
+            This is the central masking primitive. It's a grouping
+            primitive and contains a PolyPolygon which defines the visible
+            area. Only visualisation parts of the Child primitive sequence
+            inside of the mask PolyPolygon is defined to be visible.
+
+            This primitive should be handled by a renderer. If it is not handled,
+            it decomposes to it's Child content, and thus the visualisation would
+            contaiun no clips.
+
+            The geometrc range of this primitive is completely defined by the Mask
+            PolyPolygon since by definition nothing outside of the mask is visible.
+         */
         class MaskPrimitive2D : public GroupPrimitive2D
         {
         private:
+            /// the mask PolyPolygon
             basegfx::B2DPolyPolygon                 maMask;
 
         public:
+            /// constructor
             MaskPrimitive2D(
                 const basegfx::B2DPolyPolygon& rMask,
                 const Primitive2DSequence& rChildren);
 
-            // get data
+            /// data read access
             const basegfx::B2DPolyPolygon& getMask() const { return maMask; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

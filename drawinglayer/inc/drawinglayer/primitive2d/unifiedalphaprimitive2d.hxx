@@ -44,26 +44,37 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** UnifiedAlphaPrimitive2D class
+
+            This primitive encapsualtes a child hierarchy and defines
+            that it shall be visualized with the given transparency. That
+            transparency is unique for all contained geometry, so that
+            e.g. overlapping polygons in the child geometry will not show
+            regions of combined transparency, but be all rendered with the
+            defined, single transparency.
+         */
         class UnifiedAlphaPrimitive2D : public GroupPrimitive2D
         {
         private:
-            double                              mfAlpha; // unified transparence
+            /// the unified alpha transparence
+            double                              mfAlpha;
 
         public:
+            /// constructor
             UnifiedAlphaPrimitive2D(
                 const Primitive2DSequence& rChildren,
                 double fAlpha);
 
-            // get data
+            /// data read access
             double getAlpha() const { return mfAlpha; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            //  create decomposition
+            /// create decomposition
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

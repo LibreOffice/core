@@ -40,37 +40,51 @@
 #include <basegfx/color/bcolor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// MarkerPrimitive2D class
+// PointArrayPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** PointArrayPrimitive2D class
+
+            This primitive defines single,discrete 'pixels' for the given
+            positions in the given color. This makes it view-dependent since
+            the logic size of a 'pixel' depends on the view transformation.
+
+            This is one of the non-decomposable primitives, so a renderer
+            should proccess it (Currently it is only used for grid visualisation,
+            but this may change).
+         */
         class PointArrayPrimitive2D : public BasePrimitive2D
         {
         private:
+            /// the array of positions
             std::vector< basegfx::B2DPoint >                maPositions;
+
+            /// the color to use
             basegfx::BColor                                 maRGBColor;
 
-            // #i96669# add simple range buffering for this primitive
+            /// #i96669# add simple range buffering for this primitive
             basegfx::B2DRange                               maB2DRange;
 
         public:
+            /// constructor
             PointArrayPrimitive2D(
                 const std::vector< basegfx::B2DPoint >& rPositions,
                 const basegfx::BColor& rRGBColor);
 
-            // get data
+            /// data read access
             const std::vector< basegfx::B2DPoint >& getPositions() const { return maPositions; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

@@ -41,38 +41,55 @@
 #include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// MarkerPrimitive2D class
+// MarkerArrayPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** MarkerArrayPrimitive2D class
+
+            This primtive defines an array of markers. Their size is defined
+            in pixels and independent from the view transformation which makes
+            this primitive highly view-dependent. It is also transformation
+            invariant, so that the bitmap is always visualized unscaled and
+            unrotated.
+            It is used e.g. for grid position visualisation. The given Bitmap
+            (with alpha) is defined to be visible centered at each of the given
+            positions.
+            It decomposes to the needed number of BitmapPrimitive2D's, so it would
+            be efficient to handle it directly in a renderer.
+         */
         class MarkerArrayPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// the positions for the marker
             std::vector< basegfx::B2DPoint >                maPositions;
+
+            /// the marker definintion to visualize
             BitmapEx                                        maMarker;
 
         protected:
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             MarkerArrayPrimitive2D(
                 const std::vector< basegfx::B2DPoint >& rPositions,
                 const BitmapEx& rMarker);
 
-            // get data
+            /// data read access
             const std::vector< basegfx::B2DPoint >& getPositions() const { return maPositions; }
             const BitmapEx& getMarker() const { return maMarker; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

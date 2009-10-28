@@ -46,33 +46,45 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** PolyPolygonMaterialPrimitive3D class
+
+            This primitive defines a planar 3D PolyPolygon filled with a single color.
+            This is one of the non-decomposable primitives, so a renderer
+            should proccess it.
+
+            It is assumed here that the PolyPolgon is a single plane in 3D.
+         */
         class PolyPolygonMaterialPrimitive3D : public BasePrimitive3D
         {
         private:
+            /// the PolyPolygon geometry
             basegfx::B3DPolyPolygon                     maPolyPolygon;
+
+            /// the fill parameters
             attribute::MaterialAttribute3D              maMaterial;
 
-            // bitfield
+            /// bitfield
             unsigned                                    mbDoubleSided : 1;
 
         public:
+            /// constructor
             PolyPolygonMaterialPrimitive3D(
                 const basegfx::B3DPolyPolygon& rPolyPolygon,
                 const attribute::MaterialAttribute3D& rMaterial,
                 bool bDoubleSided);
 
-            // get data
+            /// data read access
             const basegfx::B3DPolyPolygon& getB3DPolyPolygon() const { return maPolyPolygon; }
             const attribute::MaterialAttribute3D& getMaterial() const { return maMaterial; }
             bool getDoubleSided() const { return mbDoubleSided; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

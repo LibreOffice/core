@@ -44,17 +44,25 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** SdrSpherePrimitive3D class
+
+            This 3D primitive expands the SdrPrimitive3D to a 3D sphere definition.
+            The sphere is implicitely in unit coordinates and the given transformation
+            defines it's geometry in space.
+         */
         class SdrSpherePrimitive3D : public SdrPrimitive3D
         {
         private:
+            /// additional geometry definitions
             sal_uInt32                                  mnHorizontalSegments;
             sal_uInt32                                  mnVerticalSegments;
 
         protected:
-            // local decomposition.
+            /// local decomposition.
             virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
+            /// constructor
             SdrSpherePrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
@@ -63,17 +71,17 @@ namespace drawinglayer
                 sal_uInt32 nHorizontalSegments,
                 sal_uInt32 nVerticalSegments);
 
-            // data access
+            /// data read access
             sal_uInt32 getHorizontalSegments() const { return mnHorizontalSegments; }
             sal_uInt32 getVerticalSegments() const { return mnVerticalSegments; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

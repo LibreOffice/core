@@ -40,41 +40,56 @@
 #include <drawinglayer/attribute/fillattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// FillbitmapPrimitive2D class
+// FillHatchPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** FillHatchPrimitive2D class
+
+            This class defines a hatch filling for a rectangular area. The
+            Range is defined by the Transformation, the hatch by the FillHatchAttribute.
+            If the background is to be filled, a flag in FillHatchAttribute is set and
+            the BColor defines the background color.
+
+            The decomposition will deliver the hatch lines.
+         */
         class FillHatchPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// the geometric definition
             basegfx::B2DRange                       maObjectRange;
+
+            /// the hatch definition
             attribute::FillHatchAttribute           maFillHatch;
+
+            /// hatch background color (if used)
             basegfx::BColor                         maBColor;
 
         protected:
-            // local decomposition.
+            /// local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             FillHatchPrimitive2D(
                 const basegfx::B2DRange& rObjectRange,
                 const basegfx::BColor& rBColor,
                 const attribute::FillHatchAttribute& rFillHatch);
 
-            // get data
+            /// data read access
             const basegfx::B2DRange& getObjectRange() const { return maObjectRange; }
             const attribute::FillHatchAttribute& getFillHatch() const { return maFillHatch; }
             const basegfx::BColor& getBColor() const { return maBColor; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

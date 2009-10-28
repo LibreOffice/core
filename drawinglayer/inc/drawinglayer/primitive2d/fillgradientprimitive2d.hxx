@@ -46,32 +46,44 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** FillGradientPrimitive2D class
+
+            This class defines a gradient filling for a rectangular area. The
+            Range is defined by the Transformation, the gradient by the FillGradientAttribute.
+
+            The decomposition will deliver the decomposed gradient, e.g. for an ellipse
+            gradient the various ellipses in various color steps will be created.
+         */
         class FillGradientPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// the geometric definition
             basegfx::B2DRange                       maObjectRange;
+
+            /// the gradient definition
             attribute::FillGradientAttribute        maFillGradient;
 
         protected:
-            // local decomposition.
+            /// local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             FillGradientPrimitive2D(
                 const basegfx::B2DRange& rObjectRange,
                 const attribute::FillGradientAttribute& rFillGradient);
 
-            // get data
+            /// data read access
             const basegfx::B2DRange& getObjectRange() const { return maObjectRange; }
             const attribute::FillGradientAttribute& getFillGradient() const { return maFillGradient; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

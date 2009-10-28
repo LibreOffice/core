@@ -55,7 +55,10 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // This is used for both underline and overline
+        /** FontUnderline definition
+
+            This is used for both underline and overline
+         */
         enum FontUnderline
         {
             FONT_UNDERLINE_NONE,
@@ -78,6 +81,7 @@ namespace drawinglayer
             FONT_UNDERLINE_BOLDWAVE
         };
 
+        /** FontStrikeout definition */
         enum FontStrikeout
         {
             FONT_STRIKEOUT_NONE,
@@ -88,6 +92,7 @@ namespace drawinglayer
             FONT_STRIKEOUT_X
         };
 
+        /** FontEmphasisMark definition */
         enum FontEmphasisMark
         {
             FONT_EMPHASISMARK_NONE,
@@ -97,6 +102,7 @@ namespace drawinglayer
             FONT_EMPHASISMARK_ACCENT
         };
 
+        /** FontRelief definition */
         enum FontRelief
         {
             FONT_RELIEF_NONE,
@@ -104,9 +110,17 @@ namespace drawinglayer
             FONT_RELIEF_ENGRAVED
         };
 
+        /** TextDecoratedPortionPrimitive2D class
+
+            This primitive expands the TextSimplePortionPrimitive2D by common
+            decorations used in the office. It can be decomposed and will create
+            a TextSimplePortionPrimitive2D and all the contained decorations (if used)
+            as geometry.
+         */
         class TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
         {
         private:
+            /// decoration definitions
             basegfx::BColor                             maOverlineColor;
             basegfx::BColor                             maTextlineColor;
             FontUnderline                               meFontOverline;
@@ -115,14 +129,14 @@ namespace drawinglayer
             FontEmphasisMark                            meFontEmphasisMark;
             FontRelief                                  meFontRelief;
 
-            // bitfield
+            /// bitfield
             unsigned                                    mbUnderlineAbove : 1;
             unsigned                                    mbWordLineMode : 1;
             unsigned                                    mbEmphasisMarkAbove : 1;
             unsigned                                    mbEmphasisMarkBelow : 1;
             unsigned                                    mbShadow : 1;
 
-            // helper methods
+            /// helper methods
             void impCreateTextLine(
                 std::vector< Primitive2DReference >& rTarget,
                 basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
@@ -150,13 +164,14 @@ namespace drawinglayer
                 basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans) const;
 
         protected:
-            // local decomposition.
+            /// local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             TextDecoratedPortionPrimitive2D(
 
-                // TextSimplePortionPrimitive2D parameters
+                /// TextSimplePortionPrimitive2D parameters
                 const basegfx::B2DHomMatrix& rNewTransform,
                 const String& rText,
                 xub_StrLen aTextPosition,
@@ -166,7 +181,7 @@ namespace drawinglayer
                 const ::com::sun::star::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,
 
-                // local parameters
+                /// local parameters
                 const basegfx::BColor& rOverlineColor,
                 const basegfx::BColor& rTextlineColor,
                 FontUnderline eFontOverline = FONT_UNDERLINE_NONE,
@@ -180,7 +195,7 @@ namespace drawinglayer
                 FontRelief eFontRelief = FONT_RELIEF_NONE,
                 bool bShadow = false);
 
-            // get data
+            /// data read access
             FontUnderline getFontOverline() const { return meFontOverline; }
             FontUnderline getFontUnderline() const { return meFontUnderline; }
             FontStrikeout getFontStrikeout() const { return meFontStrikeout; }
@@ -188,20 +203,19 @@ namespace drawinglayer
             FontRelief getFontRelief() const { return meFontRelief; }
             basegfx::BColor getOverlineColor() const { return maOverlineColor; }
             basegfx::BColor getTextlineColor() const { return maTextlineColor; }
-
             bool getUnderlineAbove() const { return mbUnderlineAbove; }
             bool getWordLineMode() const { return mbWordLineMode; }
             bool getEmphasisMarkAbove() const { return mbEmphasisMarkAbove; }
             bool getEmphasisMarkBelow() const { return mbEmphasisMarkBelow; }
             bool getShadow() const { return mbShadow; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

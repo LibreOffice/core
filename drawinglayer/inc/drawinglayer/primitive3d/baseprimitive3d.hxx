@@ -76,7 +76,9 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        /** Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+        /** BasePrimitive3D class
+
+            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
 
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information.
@@ -85,6 +87,8 @@ namespace drawinglayer
 
             - PolygonHairlinePrimitive3D (for 3D hairlines)
             - PolyPolygonMaterialPrimitive3D (for 3D filled plane polygons)
+
+            That's all for 3D!
          */
         class BasePrimitive3D
         :   private boost::noncopyable,
@@ -144,7 +148,9 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        /** Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+        /** BufferedDecompositionPrimitive3D class
+
+            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
 
             The description/functionality is identical with the 2D case in baseprimitive2d.hxx,
             please see there for detailed information
@@ -191,23 +197,24 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        // get B3DRange from a given Primitive3DReference
+        /// get B3DRange from a given Primitive3DReference
         basegfx::B3DRange getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
-        // get range3D from a given Primitive3DSequence
+        /// get range3D from a given Primitive3DSequence
         basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
-        // compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
-        // and using compare operator
+        /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
+            and using compare operator
+         */
         bool arePrimitive3DReferencesEqual(const Primitive3DReference& rA, const Primitive3DReference& rB);
 
-        // compare two Primitive3DReferences for equality, uses arePrimitive3DReferencesEqual internally
+        /// compare two Primitive3DReferences for equality, uses arePrimitive3DReferencesEqual internally
         bool arePrimitive3DSequencesEqual(const Primitive3DSequence& rA, const Primitive3DSequence& rB);
 
-        // concatenate sequence
+        /// concatenate sequence
         void appendPrimitive3DSequenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DSequence& rSource);
 
-        // concatenate single Primitive3D
+        /// concatenate single Primitive3D
         void appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource);
 
     } // end of namespace primitive3d

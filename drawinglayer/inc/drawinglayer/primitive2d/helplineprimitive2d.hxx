@@ -47,32 +47,52 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** HelplineStyle2D definition
+
+            The available styles of Helplines
+        */
         enum HelplineStyle2D
         {
             HELPLINESTYLE2D_POINT,
             HELPLINESTYLE2D_LINE
         };
 
+        /** HelplinePrimitive2D class
+
+            This primitive provides a view-dependent helpline definition. The Helpline
+            is defined by a line equation (Point and vector) and a style. When the style
+            is a line, dependent from Viewport the visible part of that Helpline is
+            constructed. For Point, a cross is constructed. This primitive is highly
+            view-dependent.
+
+            The visualisation uses the two given colors to create a dashed line with
+            the given dash length.
+         */
         class HelplinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// Helpline geometry definition
             basegfx::B2DPoint                               maPosition;
             basegfx::B2DVector                              maDirection;
             HelplineStyle2D                                 meStyle;
+
+            /// Helpline style definition
             basegfx::BColor                                 maRGBColA;
             basegfx::BColor                                 maRGBColB;
             double                                          mfDiscreteDashLength;
 
-            // the last used object to view transformtion and the last Viewport,
-            // used from getDecomposition for decide buffering
+            /** the last used object to view transformtion and the last Viewport,
+                used from getDecomposition for decide buffering
+             */
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
             basegfx::B2DRange                               maLastViewport;
 
         protected:
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             HelplinePrimitive2D(
                 const basegfx::B2DPoint& rPosition,
                 const basegfx::B2DVector& rDirection,
@@ -81,7 +101,7 @@ namespace drawinglayer
                 const basegfx::BColor& aRGBColB,
                 double fDiscreteDashLength);
 
-            // get data
+            /// data read access
             const basegfx::B2DPoint getPosition() const { return maPosition; }
             const basegfx::B2DVector getDirection() const { return maDirection; }
             HelplineStyle2D getStyle() const { return meStyle; }
@@ -89,13 +109,13 @@ namespace drawinglayer
             const basegfx::BColor& getRGBColB() const { return maRGBColB; }
             double getDiscreteDashLength() const { return mfDiscreteDashLength; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // Overload standard getDecomposition call to be view-dependent here
+            /// Overload standard getDecomposition call to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d

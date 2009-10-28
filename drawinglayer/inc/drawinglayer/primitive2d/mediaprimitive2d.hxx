@@ -46,38 +46,55 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** MediaPrimitive2D class
+
+            This is a unified primitive for Media visualisation, e.g. animations
+            or sounds. It's geometry is defined by Transform. For conveinience,
+            it also contains a discrete border size (aka Pixels) which will be added
+            if used. This makes it a view-dependent primitive. It also gets a filled
+            background and the decomposition will try to create a graphic representation
+            if te content (defined by the URL), e.g. a still frome for animated stuff.
+         */
         class MediaPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// the geometry definition
             basegfx::B2DHomMatrix                       maTransform;
+
+            /// the content definition
             rtl::OUString                               maURL;
+
+            /// style: background color
             basegfx::BColor                             maBackgroundColor;
+
+            /// discrete border (in 'pixels')
             sal_uInt32                                  mnDiscreteBorder;
 
         protected:
-            // local decomposition
+            /// local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             MediaPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
                 const rtl::OUString& rURL,
                 const basegfx::BColor& rBackgroundColor,
                 sal_uInt32 nDiscreteBorder);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const rtl::OUString& getURL() const { return maURL; }
             const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
             sal_uInt32 getDiscreteBorder() const { return mnDiscreteBorder; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

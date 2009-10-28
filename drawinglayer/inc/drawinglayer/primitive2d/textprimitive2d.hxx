@@ -60,15 +60,20 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** FontAttributes class
+
+            This attribute class is able to hold all parameters needed/used
+            to completely define the parametrisation of a text portion.
+         */
         class FontAttributes
         {
         private:
-            // core data
+            /// core data
             String                                      maFamilyName;       // Font Family Name
             String                                      maStyleName;        // Font Style Name
             sal_uInt16                                  mnWeight;           // Font weight
 
-            // bitfield
+            /// bitfield
             unsigned                                    mbSymbol : 1;       // Symbol Font Flag
             unsigned                                    mbVertical : 1;     // Vertical Text Flag
             unsigned                                    mbItalic : 1;       // Italic Flag
@@ -78,6 +83,7 @@ namespace drawinglayer
             // TODO: pair kerning and CJK kerning
 
         public:
+            /// constructor
             FontAttributes(
                 const String& rFamilyName,
                 const String& rStyleName,
@@ -100,10 +106,10 @@ namespace drawinglayer
             {
             }
 
-            // compare operator
+            /// compare operator
             bool operator==(const FontAttributes& rCompare) const;
 
-            // data access
+            /// data read access
             const String& getFamilyName() const { return maFamilyName; }
             const String& getStyleName() const { return maStyleName; }
             sal_uInt16 getWeight() const { return mnWeight; }
@@ -123,26 +129,52 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** TextSimplePortionPrimitive2D class
+
+            This is the basic primitive for representing a text portion. It contains
+            all needed information. If it is not handled by a renderer, it's decomposition
+            will provide the text PolyPolygon outlines as filled polygons, correctly
+            transformed.
+
+            To get better text quality, it is suggested to handle tis primitive directly
+            in a renderer. In that case, e.g. hintings on the system can be supported.
+         */
         class TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            basegfx::B2DHomMatrix                   maTextTransform;    // text range transformation from unit range ([0.0 .. 1.0]) to text range
-            String                                  maText;             // the text, used from maTextPosition up to maTextPosition + maTextLength
-            xub_StrLen                              maTextPosition;     // the index from where on maText is used
-            xub_StrLen                              maTextLength;       // the length for maText usage, starting from maTextPosition
-            ::std::vector< double >                 maDXArray;          // the DX array scale-independent in unit coordinates
-            FontAttributes                          maFontAttributes;   // the font to use
-            ::com::sun::star::lang::Locale          maLocale;           // the Locale for the text
-            basegfx::BColor                         maFontColor;        // font color
+            /// text range transformation from unit range ([0.0 .. 1.0]) to text range
+            basegfx::B2DHomMatrix                   maTextTransform;
 
-            // #i96669# add simple range buffering for this primitive
+            /// The text, used from maTextPosition up to maTextPosition + maTextLength
+            String                                  maText;
+
+            /// The index from where on maText is used
+            xub_StrLen                              maTextPosition;
+
+            /// The length for maText usage, starting from maTextPosition
+            xub_StrLen                              maTextLength;
+
+            /// The DX array scale-independent in unit coordinates
+            ::std::vector< double >                 maDXArray;
+
+            /// The font to use
+            FontAttributes                          maFontAttributes;
+
+            /// The Locale for the text
+            ::com::sun::star::lang::Locale          maLocale;
+
+            /// font color
+            basegfx::BColor                         maFontColor;
+
+            /// #i96669# add simple range buffering for this primitive
             basegfx::B2DRange                       maB2DRange;
 
         protected:
-            // local decomposition.
+            /// local decomposition.
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             TextSimplePortionPrimitive2D(
                 const basegfx::B2DHomMatrix& rNewTransform,
                 const String& rText,
@@ -153,12 +185,13 @@ namespace drawinglayer
                 const ::com::sun::star::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor);
 
-            // helpers
-            // get text outlines as polygons and their according ObjectTransformation. Handles all
-            // the necessary VCL outline extractins, scaling adaptions and other stuff.
+            /// helpers
+            /** get text outlines as polygons and their according ObjectTransformation. Handles all
+                the necessary VCL outline extractins, scaling adaptions and other stuff.
+             */
             void getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const;
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
             const String& getText() const { return maText; }
             xub_StrLen getTextPosition() const { return maTextPosition; }
@@ -168,13 +201,13 @@ namespace drawinglayer
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

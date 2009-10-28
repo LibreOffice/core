@@ -52,39 +52,59 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AnimatedSwitchPrimitive2D class
+
+            This is the basic class for simple, animated primitives. The basic idea
+            is to have an animation definition (AnimationEntry) who's basic
+            functionality is to return a state value for any given animation time in
+            the range of [0.0 .. 1.0]. Depending on the state, the decomposition
+            calculates an index, which of the members of the child vector is to
+            be visualized.
+
+            An example: For blinking, the Child vector should exist of two entries;
+            for values of [0.0 .. 0.5] the first, else the last entry will be used.
+            This mechanism is not limited to two entries, though.
+         */
         class AnimatedSwitchPrimitive2D : public GroupPrimitive2D
         {
         private:
-            // the animation definition which allows translation of a point in time
-            // to an animation state [0.0 .. 1.0]. This member contains a cloned
-            // definition and is owned by this implementation
+            /**
+                The animation definition which allows translation of a point in time
+                to an animation state [0.0 .. 1.0]. This member contains a cloned
+                definition and is owned by this implementation.
+             */
             animation::AnimationEntry*                      mpAnimationEntry;
 
-            // bitfield
-            // flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
-            // between both types if they are on/off
+            /// bitfield
+            /** flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
+                between both types if they are on/off
+             */
             unsigned                                        mbIsTextAnimation : 1;
 
         public:
+            /// constructor
             AnimatedSwitchPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
+
+            /// destructor - needed due to mpAnimationEntry
             virtual ~AnimatedSwitchPrimitive2D();
 
-            // get data
+            /// data read access
             const animation::AnimationEntry& getAnimationEntry() const { return *mpAnimationEntry; }
             bool isTextAnimation() const { return mbIsTextAnimation; }
             bool isGraphicAnimation() const { return !isTextAnimation(); }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // The getDecomposition is overloaded here since the decompose is dependent of the point in time,
-            // so the default implementation is nut useful here, it needs to be handled locally
+            /** The getDecomposition is overloaded here since the decompose is dependent of the point in time,
+                so the default implementation is nut useful here, it needs to be handled locally
+             */
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d
@@ -96,19 +116,26 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AnimatedBlinkPrimitive2D class
+
+            Basically the same mechanism as in AnimatedSwitchPrimitive2D, but the
+            decomposition is specialized in delivering the children in the
+            range [0.0.. 0.5] and an empty sequence else
+         */
         class AnimatedBlinkPrimitive2D : public AnimatedSwitchPrimitive2D
         {
         protected:
         public:
+            /// constructor
             AnimatedBlinkPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
 
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d
@@ -120,24 +147,32 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AnimatedInterpolatePrimitive2D class
+
+            Specialized on multi-step animations based on matrix transformations. The
+            Child sequelce will be embedded in a matrix transformation. That transformation
+            will be linearly combined from the decomposed values and the animation value
+            to allow a smooth animation.
+         */
         class AnimatedInterpolatePrimitive2D : public AnimatedSwitchPrimitive2D
         {
         private:
-            // the transformations
+            /// the transformations
             std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >        maMatrixStack;
 
         protected:
         public:
+            /// constructor
             AnimatedInterpolatePrimitive2D(
                 const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
 
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

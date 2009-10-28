@@ -52,13 +52,20 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** PolygonStrokePrimitive3D class
+
+            This 3D primitive extends a 3D hairline to a 3D tube which is
+            e.g. used for fat lines in 3D. It's decomposition will create all
+            3D objects needed for the line tubes and the edge roundings
+            in full 3D.
+         */
         class PolygonTubePrimitive3D : public PolygonHairlinePrimitive3D
         {
         private:
-            // hold the last decompositon since it's expensive
+            /// hold the last decompositon since it's expensive
             Primitive3DSequence                         maLast3DDecomposition;
 
-            // visualisation parameters
+            /// visualisation parameters
             double                                      mfRadius;
             double                                      mfDegreeStepWidth;
             double                                      mfMiterMinimumAngle;
@@ -72,10 +79,11 @@ namespace drawinglayer
             const Primitive3DSequence& getLast3DDecomposition() const { return maLast3DDecomposition; }
             void setLast3DDecomposition(const Primitive3DSequence& rNew) { maLast3DDecomposition = rNew; }
 
-            // local decomposition.
+            /// local decomposition.
             Primitive3DSequence impCreate3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
+            /// constructor
             PolygonTubePrimitive3D(
                 const basegfx::B3DPolygon& rPolygon,
                 const basegfx::BColor& rBColor,
@@ -83,13 +91,13 @@ namespace drawinglayer
                 double fDegreeStepWidth = 10.0 * F_PI180,
                 double fMiterMinimumAngle = 15.0 * F_PI180);
 
-            // get data
+            /// data read access
             double getRadius() const { return mfRadius; }
             double getDegreeStepWidth() const { return mfDegreeStepWidth; }
             double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
             basegfx::B2DLineJoin getLineJoin() const { return maLineJoin; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             /** local decomposition. Use own buffering since we are not derived from
@@ -97,7 +105,7 @@ namespace drawinglayer
              */
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

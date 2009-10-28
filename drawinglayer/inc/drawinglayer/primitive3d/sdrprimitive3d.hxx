@@ -47,43 +47,49 @@
 
 namespace drawinglayer
 {
-    /** base class for the more complicated geometric primitives, so
+    /** SdrPrimitive3D class
+
+        Base class for the more complicated geometric primitives, so
         derive from buffered primitive to allow overloading of
-        create3DDecomposition there
+        create3DDecomposition there.
      */
     namespace primitive3d
     {
         class SdrPrimitive3D : public BufferedDecompositionPrimitive3D
         {
         private:
+            /// object surface attributes
             basegfx::B3DHomMatrix                       maTransform;
             basegfx::B2DVector                          maTextureSize;
             attribute::SdrLineFillShadowAttribute       maSdrLFSAttribute;
             attribute::Sdr3DObjectAttribute             maSdr3DObjectAttribute;
 
         protected:
-            // Standard implementation for primitive3D which
-            // will use maTransform as range and expand by evtl. line width / 2
+            /** Standard implementation for primitive3D which
+                will use maTransform as range and expand by evtl. line width / 2
+             */
             basegfx::B3DRange getStandard3DRange() const;
 
-            // implementation for primitive3D which
-            // will use given Slice3Ds and expand by evtl. line width / 2
+            /** implementation for primitive3D which
+                will use given Slice3Ds and expand by evtl. line width / 2
+             */
             basegfx::B3DRange get3DRangeFromSlices(const Slice3DVector& rSlices) const;
 
         public:
+            /// constructor
             SdrPrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
                 const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
-            // data access
+            /// data read access
             const basegfx::B3DHomMatrix& getTransform() const { return maTransform; }
             const basegfx::B2DVector& getTextureSize() const { return maTextureSize; }
             const attribute::SdrLineFillShadowAttribute& getSdrLFSAttribute() const { return maSdrLFSAttribute; }
             const attribute::Sdr3DObjectAttribute getSdr3DObjectAttribute() const { return maSdr3DObjectAttribute; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
         };
     } // end of namespace primitive3d

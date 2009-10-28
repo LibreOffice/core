@@ -44,7 +44,9 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        /** Baseclass for all grouping 3D primitives
+        /** GroupPrimitive3D class
+
+            Baseclass for all grouping 3D primitives
 
             The description/functionality is identical with the 2D case in groupprimitive2d.hxx,
             please see there for detailed information.
@@ -64,23 +66,23 @@ namespace drawinglayer
         class GroupPrimitive3D : public BasePrimitive3D
         {
         private:
-            // the children. Declared private since this shall never be changed at all after construction
+            /// the children. Declared private since this shall never be changed at all after construction
             Primitive3DSequence                             maChildren;
 
         public:
-            // constructor
+            /// constructor
             GroupPrimitive3D(const Primitive3DSequence& rChildren);
 
-            // data access
+            /// data read access
             Primitive3DSequence getChildren() const { return maChildren; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==( const BasePrimitive3D& rPrimitive ) const;
 
-            // local decomposition. Implementation will just return children
+            /// local decomposition. Implementation will just return children
             virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

@@ -44,12 +44,23 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** HitTestPrimitive2D class
+
+            This is a helper class which encapsulates geometry that should be
+            painted XOR, e.g. old cursor visualisations. It decomposes to
+            it's content, so when not supporting it, the contained geometry
+            will be visualized normally.
+            Unfortunately this is still needed, but hard to support on various
+            systems. XOR painting needs read access to the target, so modern
+            graphic systems tend to not support it anymore.
+         */
         class InvertPrimitive2D : public GroupPrimitive2D
         {
         public:
+            /// constructor
             InvertPrimitive2D(const Primitive2DSequence& rChildren);
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

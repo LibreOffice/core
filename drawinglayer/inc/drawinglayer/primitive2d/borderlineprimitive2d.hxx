@@ -46,25 +46,41 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** BorderLinePrimitive2D class
+
+            This is the basic primitive to build frames around objects, e.g. tables.
+            It defines a single or double line from Start to nd using the LeftWidth,
+            Distance and RightWidth definitions.
+            The LineStart/End overlap is defined by the Extend(Inner|Outer)(Start|End)
+            definitions.
+         */
         class BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// the line definition
             basegfx::B2DPoint                               maStart;
             basegfx::B2DPoint                               maEnd;
+
+            /// the widths of single/double line
             double                                          mfLeftWidth;
             double                                          mfDistance;
             double                                          mfRightWidth;
+
+            /// edge overlap sizes
             double                                          mfExtendInnerStart;
             double                                          mfExtendInnerEnd;
             double                                          mfExtendOuterStart;
             double                                          mfExtendOuterEnd;
+
+            /// the line color
             basegfx::BColor                                 maRGBColor;
 
-            // bitfield
+            /// bitfield
+            /// flags to influence inside/outside creation
             unsigned                                        mbCreateInside : 1;
             unsigned                                        mbCreateOutside : 1;
 
-            // helpers
+            /// local helpers
             double getCorrectedLeftWidth() const
             {
                 return basegfx::fTools::equal(1.0, mfLeftWidth) ? 0.0 : mfLeftWidth;
@@ -106,10 +122,11 @@ namespace drawinglayer
             }
 
         protected:
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             BorderLinePrimitive2D(
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
@@ -124,7 +141,7 @@ namespace drawinglayer
                 bool bCreateOutside,
                 const basegfx::BColor& rRGBColor);
 
-            // get data
+            /// data read access
             const basegfx::B2DPoint& getStart() const { return maStart; }
             const basegfx::B2DPoint& getEnd() const { return maEnd; }
             double getLeftWidth() const { return mfLeftWidth; }
@@ -138,10 +155,10 @@ namespace drawinglayer
             bool getCreateOutside() const { return mbCreateOutside; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

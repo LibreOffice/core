@@ -46,35 +46,48 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AnimatedInterpolatePrimitive2D class
+
+            This primitive is defined to fill the whole visible Viewport with
+            the given color (and thus decomposes to a filled polygon). This
+            makes it a view-depnendent primitive by definition. It only has
+            a valid decomposition if a valid Viewport is given in the
+            ViewInformation2D at decomposition time.
+
+            It will try to buffer it's last decomposition using maLastViewport
+            to detect changes in the get2DDecomposition call.
+         */
         class BackgroundColorPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
+            /// the fill color to use
             basegfx::BColor                             maBColor;
 
-            // the last used viewInformation, used from getDecomposition for buffering
+            /// the last used viewInformation, used from getDecomposition for buffering
             basegfx::B2DRange                           maLastViewport;
 
         protected:
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             BackgroundColorPrimitive2D(
                 const basegfx::BColor& rBColor);
 
-            // get data
+            /// data read access
             const basegfx::BColor& getBColor() const { return maBColor; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get 2d range
+            /// get B2Drange
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // Overload standard getDecomposition call to be view-dependent here
+            /// Overload standard getDecomposition call to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d

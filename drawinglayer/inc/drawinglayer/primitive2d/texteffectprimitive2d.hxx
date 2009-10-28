@@ -45,6 +45,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** TextEffectStyle2D definition */
         enum TextEffectStyle2D
         {
             TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT,
@@ -54,50 +55,59 @@ namespace drawinglayer
             TEXTEFFECTSTYLE2D_OUTLINE
         };
 
+        /** TextEffectPrimitive2D class
+
+            This primitive embeds text primitives (normally, as can be seen can
+            also be used for any other primitives) which have some TextEffect applied
+            and create the needed geometry and embedding on decomposition.
+        */
         class TextEffectPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            // the text content
+            /// the text (or other) content
             Primitive2DSequence                             maTextContent;
 
-            // the style to apply, the direction and the rotation center
+            /// the style to apply, the direction and the rotation center
             const basegfx::B2DPoint                         maRotationCenter;
             double                                          mfDirection;
             TextEffectStyle2D                               meTextEffectStyle2D;
 
-            // the last used object to view transformtion used from getDecomposition
-            // for decide buffering
+            /** the last used object to view transformtion used from getDecomposition
+                for decide buffering
+             */
             basegfx::B2DHomMatrix                           maLastObjectToViewTransformation;
 
         protected:
-            // create local decomposition
+            /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// construcor
             TextEffectPrimitive2D(
                 const Primitive2DSequence& rTextContent,
                 const basegfx::B2DPoint& rRotationCenter,
                 double fDirection,
                 TextEffectStyle2D eTextEffectStyle2D);
 
-            // get data
+            /// data read access
             const Primitive2DSequence& getTextContent() const { return maTextContent; }
             const basegfx::B2DPoint& getRotationCenter() const { return maRotationCenter; }
             double getDirection() const { return mfDirection; }
             TextEffectStyle2D getTextEffectStyle2D() const { return meTextEffectStyle2D; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // own get range implementation to solve more effective. Content is by definition displaced
-            // by a fixed discrete unit, thus the contained geometry needs only once be asked for it's
-            // own basegfx::B2DRange
+            /** own get range implementation to solve more effective. Content is by definition displaced
+                by a fixed discrete unit, thus the contained geometry needs only once be asked for it's
+                own basegfx::B2DRange
+             */
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // Overload standard getDecomposition call to be view-dependent here
+            /// Overload standard getDecomposition call to be view-dependent here
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d

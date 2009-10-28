@@ -44,17 +44,28 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** SdrPolyPolygonPrimitive3D class
+
+            This 3D primitive defines a PolyPolgon in space which may have
+            Line- and FillStyles and extra 3D surface attributes. It is assumed
+            that the given 3D PolyPolgon (which may contain texture and normal
+            information) is planar in 3D.
+
+            The decomposition will include all needed 3D data for visualisation,
+            including FatLines and fill styles.
+         */
         class SdrPolyPolygonPrimitive3D : public SdrPrimitive3D
         {
         private:
-            // the polyPolygon evtl with normals and texture coordinates
+            /// the planar polyPolygon evtl with normals and texture coordinates
             basegfx::B3DPolyPolygon                 maPolyPolygon3D;
 
         protected:
-            // local decomposition.
+            /// local decomposition.
             virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
+            /// constructor
             SdrPolyPolygonPrimitive3D(
                 const basegfx::B3DPolyPolygon& rPolyPolygon3D,
                 const basegfx::B3DHomMatrix& rTransform,
@@ -62,16 +73,16 @@ namespace drawinglayer
                 const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
-            // data access
+            /// data access
             const basegfx::B3DPolyPolygon& getPolyPolygon3D() const { return maPolyPolygon3D; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

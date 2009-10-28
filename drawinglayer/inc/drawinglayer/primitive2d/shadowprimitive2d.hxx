@@ -46,32 +46,50 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** ShadowPrimitive2D class
+
+            This primitive defines a generic shadow geometry construction
+            for 2D objects. It decomposes to a TransformPrimitive2D embedded
+            into a ModifiedColorPrimitive2D.
+
+            It's for primtive usage convenience, so that not everyone has
+            to implement the generic shadow construction by himself.
+
+            The same geometry as sequence of primitives is used as geometry and
+            as shadow. Since these are RefCounted Uno-Api objects, no extra objects
+            are needed for the shadow itself; all the local decompositions of the
+            original geometry can be reused from the renderer for shadow visualisation.
+        */
         class ShadowPrimitive2D : public GroupPrimitive2D
         {
         private:
+            /// the shadow transformation, normally just an offset
             basegfx::B2DHomMatrix                   maShadowTransform;
+
+            /// the shadow color to which all geometry is to be forced
             basegfx::BColor                         maShadowColor;
 
         public:
+            /// constructor
             ShadowPrimitive2D(
                 const basegfx::B2DHomMatrix& rShadowTransform,
                 const basegfx::BColor& rShadowColor,
                 const Primitive2DSequence& rChildren);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }
             const basegfx::BColor& getShadowColor() const { return maShadowColor; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            //  create decomposition
+            ///  create decomposition
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

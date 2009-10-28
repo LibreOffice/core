@@ -46,6 +46,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** ChartPrimitive2D class
+
+            This is a helper primitive which decomposes to the ChartMetaFile
+            visualisation. It is used to allow specific renderers to do something
+            direct for visualising the chart.
+         */
         class ChartPrimitive2D : public GroupPrimitive2D
         {
         private:

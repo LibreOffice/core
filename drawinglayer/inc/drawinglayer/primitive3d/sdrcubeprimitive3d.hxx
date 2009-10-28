@@ -44,26 +44,33 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** SdrCubePrimitive3D class
+
+            This 3D primitive expands the SdrPrimitive3D to a 3D cube definition.
+            The cube is implicitely in unit coordinates and the given transformation
+            defines it's geometry in space.
+         */
         class SdrCubePrimitive3D : public SdrPrimitive3D
         {
         protected:
-            // local decomposition.
+            /// local decomposition.
             virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
+            /// constructor
             SdrCubePrimitive3D(
                 const basegfx::B3DHomMatrix& rTransform,
                 const basegfx::B2DVector& rTextureSize,
                 const attribute::SdrLineFillShadowAttribute& rSdrLFSAttribute,
                 const attribute::Sdr3DObjectAttribute& rSdr3DObjectAttribute);
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

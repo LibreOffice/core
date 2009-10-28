@@ -76,7 +76,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+        /** BasePrimitive2D class
+
+            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
 
             This class is strongly virtual due to the lack of getPrimitiveID() implementation.
             This is by purpose, this base class shall not be incarnated and be used directly as
@@ -201,7 +203,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
+        /** BufferedDecompositionPrimitive2D class
+
+            Baseclass for all C++ implementations of com::sun::star::graphic::XPrimitive2D
             which want to buffer the decomoposition result
 
             Buffering the decomposition is the most-used buffering and is thus used my most
@@ -270,23 +274,24 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // get B2DRange from a given Primitive2DReference
+        /// get B2DRange from a given Primitive2DReference
         basegfx::B2DRange getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
-        // get B2DRange from a given Primitive2DSequence
+        /// get B2DRange from a given Primitive2DSequence
         basegfx::B2DRange getB2DRangeFromPrimitive2DSequence(const Primitive2DSequence& rCandidate, const geometry::ViewInformation2D& aViewInformation);
 
-        // compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
-        // and using compare operator
+        /** compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
+            and using compare operator
+         */
         bool arePrimitive2DReferencesEqual(const Primitive2DReference& rA, const Primitive2DReference& rB);
 
-        // compare two Primitive2DReferences for equality, uses arePrimitive2DReferencesEqual internally
+        /// compare two Primitive2DReferences for equality, uses arePrimitive2DReferencesEqual internally
         bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB);
 
-        // concatenate sequence
+        /// concatenate sequence
         void appendPrimitive2DSequenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DSequence& rSource);
 
-        // concatenate single Primitive2D
+        /// concatenate single Primitive2D
         void appendPrimitive2DReferenceToPrimitive2DSequence(Primitive2DSequence& rDest, const Primitive2DReference& rSource);
 
     } // end of namespace primitive2d

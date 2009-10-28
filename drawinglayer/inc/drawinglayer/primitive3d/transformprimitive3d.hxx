@@ -45,26 +45,37 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** TransformPrimitive3D class
+
+            This is one of the basic grouping 3D primitives and it provides
+            embedding a sequence of primitives (a geometry) into a
+            3D transformation.
+
+            Please see the description for TransformPrimitive2D since these
+            primitives are pretty similar.
+         */
         class TransformPrimitive3D : public GroupPrimitive3D
         {
         private:
+            // the 3D transformation to apply
             basegfx::B3DHomMatrix                   maTransformation;
 
         public:
+            /// constructor
             TransformPrimitive3D(
                 const basegfx::B3DHomMatrix& rTransformation,
                 const Primitive3DSequence& rChildren);
 
-            // get data
+            /// data read access
             const basegfx::B3DHomMatrix& getTransformation() const { return maTransformation; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

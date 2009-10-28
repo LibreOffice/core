@@ -46,17 +46,29 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** ShadowPrimitive3D class
+
+            This 3D grouping primitive is used to define a shadow for
+            3d geometry by embedding it. The shadow of 3D objects are
+            2D polygons, so the shadow transformation is a 2D transformation.
+
+            If the Shadow3D flag is set, the shadow definition has to be
+            combined with the scene and camera definition to create the correct
+            projected shadow 2D-Polygons.
+         */
         class ShadowPrimitive3D : public GroupPrimitive3D
         {
         protected:
+            /// 2D shadow definition
             basegfx::B2DHomMatrix                   maShadowTransform;
             basegfx::BColor                         maShadowColor;
             double                                  mfShadowTransparence;
 
-            // bitfield
+            /// bitfield
             unsigned                                mbShadow3D : 1;
 
         public:
+            /// constructor
             ShadowPrimitive3D(
                 const basegfx::B2DHomMatrix& rShadowTransform,
                 const basegfx::BColor& rShadowColor,
@@ -64,16 +76,16 @@ namespace drawinglayer
                 bool bShadow3D,
                 const Primitive3DSequence& rChildren);
 
-            // get data
+            /// data read access
             const basegfx::B2DHomMatrix& getShadowTransform() const { return maShadowTransform; }
             const basegfx::BColor& getShadowColor() const { return maShadowColor; }
             double getShadowTransparence() const { return mfShadowTransparence; }
             bool getShadow3D() const { return mbShadow3D; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

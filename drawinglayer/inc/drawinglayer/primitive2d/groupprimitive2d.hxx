@@ -45,7 +45,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** Baseclass for all grouping 2D primitives
+        /** GroupPrimitive2D class
+
+            Baseclass for all grouping 2D primitives
 
             The grouping primitive in it's basic form is capable of holding
             a child primitive content and returns it on decomposition on default.
@@ -78,23 +80,23 @@ namespace drawinglayer
         class GroupPrimitive2D : public BasePrimitive2D
         {
         private:
-            // the children. Declared private since this shall never be changed at all after construction
+            /// the children. Declared private since this shall never be changed at all after construction
             Primitive2DSequence                             maChildren;
 
         public:
-            // constructor
+            /// constructor
             GroupPrimitive2D(const Primitive2DSequence& rChildren);
 
-            // data access
+            /// data read access
             const Primitive2DSequence& getChildren() const { return maChildren; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
 
-            // local decomposition. Implementation will just return children
+            /// local decomposition. Implementation will just return children
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d
