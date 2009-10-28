@@ -263,7 +263,8 @@ namespace connectivity
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
 
-                ::rtl::OUString sProperties( RTL_CONSTASCII_USTRINGPARAM( "properties" ) );
+                const ::rtl::OUString sProperties( RTL_CONSTASCII_USTRINGPARAM( "properties" ) );
+                ::rtl::OUString sMessage;
                 try
                 {
                     if ( !bIsNewDatabase && xStorage->isStreamElement(sProperties) )
@@ -288,8 +289,7 @@ namespace connectivity
                                             || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
                                         {
                                             ::connectivity::SharedResources aResources;
-                                            const ::rtl::OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
-                                            ::dbtools::throwGenericSQLException(sMessage ,*this);
+                                            sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
                                         }
                                         break;
                                     }
@@ -301,6 +301,10 @@ namespace connectivity
                 }
                 catch(Exception&)
                 {
+                }
+                if ( sMessage.getLength() )
+                {
+                    ::dbtools::throwGenericSQLException(sMessage ,*this);
                 }
 
                 // readonly?
