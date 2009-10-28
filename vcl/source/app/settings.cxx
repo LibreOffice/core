@@ -41,6 +41,8 @@
 #include "vcl/configsettings.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/unohelp.hxx"
+#include "vcl/bitmapex.hxx"
+#include "vcl/impimagetree.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/collatorwrapper.hxx"
 #include "unotools/configmgr.hxx"
@@ -759,12 +761,12 @@ ULONG StyleSettings::GetCurrentSymbolsStyle() const
     // style selected in Tools -> Options... -> OpenOffice.org -> View
     ULONG nStyle = GetSymbolsStyle();
 
-    if ( nStyle == STYLE_SYMBOLS_AUTO )
+    if ( nStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nStyle) ) )
     {
         // the preferred style can be read from the desktop setting by the desktop native widgets modules
         ULONG nPreferredStyle = GetPreferredSymbolsStyle();
 
-        if ( nPreferredStyle == STYLE_SYMBOLS_AUTO )
+        if ( nPreferredStyle == STYLE_SYMBOLS_AUTO || ( !CheckSymbolStyle (nPreferredStyle) ) )
         {
 
             // use a hardcoded desktop-specific fallback if no preferred style has been detected
@@ -780,7 +782,10 @@ ULONG StyleSettings::GetCurrentSymbolsStyle() const
             nPreferredStyle = snFallbackDesktopStyle;
         }
 
-        nStyle = GetHighContrastMode()? STYLE_SYMBOLS_HICONTRAST: nPreferredStyle;
+        if (GetHighContrastMode() && CheckSymbolStyle (STYLE_SYMBOLS_HICONTRAST) )
+            nStyle = STYLE_SYMBOLS_HICONTRAST;
+        else
+            nStyle = nPreferredStyle;
     }
 
     return nStyle;
@@ -816,7 +821,40 @@ ULONG StyleSettings::GetAutoSymbolsStyle() const
             nRet = STYLE_SYMBOLS_CRYSTAL;
     }
 
+    // falback to any existing style
+    if ( ! CheckSymbolStyle (nRet) )
+    {
+        for ( ULONG n = 0 ; n <= STYLE_SYMBOLS_THEMES_MAX  ; n++ )
+        {
+            ULONG nStyleToCheck = n;
+
+            // auto is not a real theme => can't be fallback
+            if ( nStyleToCheck == STYLE_SYMBOLS_AUTO )
+                continue;
+
+            // will check hicontrast in the end
+            if ( nStyleToCheck == STYLE_SYMBOLS_HICONTRAST )
+                continue;
+            if ( nStyleToCheck == STYLE_SYMBOLS_THEMES_MAX )
+                nStyleToCheck = STYLE_SYMBOLS_HICONTRAST;
+
+            if ( CheckSymbolStyle ( nStyleToCheck ) )
+            {
+                nRet = nStyleToCheck;
+                n = STYLE_SYMBOLS_THEMES_MAX;
+            }
+        }
+    }
+
     return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+bool StyleSettings::CheckSymbolStyle( ULONG nStyle ) const
+{
+    static ImplImageTreeSingletonRef aImageTree;
+    return aImageTree->checkStyle( ImplSymbolsStyleToName( nStyle ) );
 }
 
 // -----------------------------------------------------------------------
