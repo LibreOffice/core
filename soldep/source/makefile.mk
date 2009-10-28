@@ -36,7 +36,7 @@ TARGET=soldep
 
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  $(PRJ)$/util$/perl.mk
+#.INCLUDE :  $(PRJ)$/util$/perl.mk
 .INCLUDE :  settings.mk
 
 # fixme, code is not yet 64 bit clean

@@ -6,9 +6,9 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: unxlngs.mk,v $
+# $RCSfile: unxlngs3904.mk,v $
 #
-# $Revision: 1.27 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,12 +29,12 @@
 #
 #*************************************************************************
 
-# mk file for Unix Linux Sparc using GCC, please make generic modifications to unxlng.mk
+# mk file for Unix Linux s390 using GCC, please make generic modifications to unxlng.mk
 
-ASM=$(CC)
-AFLAGS=-Wa,-K,PIC -c $(CDEFS)
-CDEFAULTOPT=-Os
 PICSWITCH:=-fPIC
 .INCLUDE : unxlng.mk
-CDEFS+=-DSPARC
-DLLPOSTFIX=ls
+CDEFS+=-DS390
+CFLAGS+=-fsigned-char -fno-omit-frame-pointer
+CFLAGSCC+=-fsigned-char
+CFLAGSCXX+=-fsigned-char
+DLLPOSTFIX=l3
