@@ -781,6 +781,30 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
         m_aSystemFont.Enable( FALSE );
     }
 
+    const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    // remove non-installed icon themes
+    if( aIconStyleLB.GetEntryCount() == STYLE_SYMBOLS_THEMES_MAX )
+    {
+        // do not check 0th item == auto; it is not a real theme
+        aIconStyleItemId[0] = 0;
+        ULONG nItem = 1;
+        for ( ULONG n=0; ++n < STYLE_SYMBOLS_THEMES_MAX; )
+        {
+            if ( aStyleSettings.CheckSymbolStyle( n ) )
+            {
+                // existing style => save the item id
+                aIconStyleItemId[n] = nItem++;
+            }
+            else
+            {
+                // non-existing style => remove item;
+                aIconStyleLB.RemoveEntry( nItem );
+                aIconStyleItemId[n] = 0;
+            }
+        }
+    }
+
     // add real theme name to 'auto' theme, e.g. 'auto' => 'auto (classic)'
     if( aIconStyleLB.GetEntryCount() > 1 )
     {
@@ -788,19 +812,14 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
         aAutoStr += ::rtl::OUString::createFromAscii( " (" );
 
-        switch( Application::GetSettings().GetStyleSettings().GetAutoSymbolsStyle() )
-        {
-            case STYLE_SYMBOLS_DEFAULT:     aAutoStr += aIconStyleLB.GetEntry( 1 ); break;
-            case STYLE_SYMBOLS_INDUSTRIAL:  aAutoStr += aIconStyleLB.GetEntry( 2 ); break;
-            case STYLE_SYMBOLS_CRYSTAL:     aAutoStr += aIconStyleLB.GetEntry( 3 ); break;
-            case STYLE_SYMBOLS_TANGO:       aAutoStr += aIconStyleLB.GetEntry( 4 ); break;
-            case STYLE_SYMBOLS_CLASSIC:     aAutoStr += aIconStyleLB.GetEntry( 5 ); break;
-            case STYLE_SYMBOLS_HICONTRAST:  aAutoStr += aIconStyleLB.GetEntry( 6 ); break;
-        }
+        ULONG nAutoStyle = aStyleSettings.GetAutoSymbolsStyle();
+        if ( aIconStyleItemId[nAutoStyle] )
+            aAutoStr += aIconStyleLB.GetEntry( aIconStyleItemId[nAutoStyle] );
 
         aIconStyleLB.RemoveEntry( 0 );
         aIconStyleLB.InsertEntry( aAutoStr += ::rtl::OUString::createFromAscii( ")" ), 0 );
-        aIconStyleLB.SetSeparatorPos( aIconStyleLB.GetEntryCount() - 2 );
+        // separate auto and other icon themes
+        aIconStyleLB.SetSeparatorPos( 0 );
     }
 }
 
@@ -879,20 +898,16 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
     UINT16 nStyleLB_NewSelection = aIconStyleLB.GetSelectEntryPos();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
-        sal_Int16 eSet = SFX_SYMBOLS_STYLE_AUTO;
-        switch( nStyleLB_NewSelection )
+        // find the style name in the aIconStyleItemId table
+        // items from the non-installed icon themes were removed
+        for ( ULONG n=0; n < STYLE_SYMBOLS_THEMES_MAX; n++ )
         {
-            case 0: eSet = SFX_SYMBOLS_STYLE_AUTO;       break;
-            case 1: eSet = SFX_SYMBOLS_STYLE_DEFAULT;    break;
-            case 2: eSet = SFX_SYMBOLS_STYLE_HICONTRAST; break;
-            case 3: eSet = SFX_SYMBOLS_STYLE_INDUSTRIAL; break;
-            case 4: eSet = SFX_SYMBOLS_STYLE_CRYSTAL;    break;
-            case 5: eSet = SFX_SYMBOLS_STYLE_TANGO;      break;
-            case 6: eSet = SFX_SYMBOLS_STYLE_CLASSIC;    break;
-            default:
-                DBG_ERROR( "OfaViewTabPage::FillItemSet(): This state of aIconStyleLB should not be possible!" );
+            if ( aIconStyleItemId[n] == nStyleLB_NewSelection )
+            {
+                aMiscOptions.SetSymbolsStyle( n );
+                n = STYLE_SYMBOLS_THEMES_MAX;
+            }
         }
-        aMiscOptions.SetSymbolsStyle( eSet );
     }
 
     BOOL bAppearanceChanged = FALSE;
@@ -1064,18 +1079,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     aIconSizeLB.SaveValue();
 
     if( aMiscOptions.GetSymbolsStyle() != SFX_SYMBOLS_STYLE_AUTO )
-    {
-        switch ( aMiscOptions.GetCurrentSymbolsStyle() )
-        {
-            case SFX_SYMBOLS_STYLE_DEFAULT:    nStyleLB_InitialSelection = 1; break;
-            case SFX_SYMBOLS_STYLE_HICONTRAST: nStyleLB_InitialSelection = 2; break;
-            case SFX_SYMBOLS_STYLE_INDUSTRIAL: nStyleLB_InitialSelection = 3; break;
-            case SFX_SYMBOLS_STYLE_CRYSTAL:    nStyleLB_InitialSelection = 4; break;
-            case SFX_SYMBOLS_STYLE_TANGO:      nStyleLB_InitialSelection = 5; break;
-            case SFX_SYMBOLS_STYLE_CLASSIC:    nStyleLB_InitialSelection = 6; break;
-            default:                           nStyleLB_InitialSelection = 0; break;
-        }
-    }
+        nStyleLB_InitialSelection = aIconStyleItemId[aMiscOptions.GetCurrentSymbolsStyle()];
 
     aIconStyleLB.SelectEntryPos( nStyleLB_InitialSelection );
     aIconStyleLB.SaveValue();
