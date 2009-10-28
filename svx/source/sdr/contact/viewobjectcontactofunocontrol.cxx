@@ -565,14 +565,6 @@ namespace sdr { namespace contact {
         */
         bool    isControlVisible() const { return impl_isControlVisible_nofail(); }
 
-        /** determines whether the instance belongs to a given OutputDevice
-            @precond
-                The instance knows the device it belongs to, or can determine it.
-                If this is not the case, you will notice an assertion, and the method will
-                return false.
-        */
-        bool    belongsToDevice( const OutputDevice* _pDevice ) const;
-
         /// creates an XControl for the given device and SdrUnoObj
         static bool
                 createControlForDevice(
@@ -1418,31 +1410,33 @@ namespace sdr { namespace contact {
         VOCGuard aGuard( *this );
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementReplaced: where did this come from?" );
 
-        if ( m_aControl == Event.ReplacedElement )
-        {
-            Reference< XControl > xNewControl( Event.Element, UNO_QUERY );
-            DBG_ASSERT( xNewControl.is(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: invalid new control!" );
-            if ( !xNewControl.is() )
-                return;
+        if ( ! ( m_aControl == Event.ReplacedElement ) )
+            return;
 
-            ENSURE_OR_THROW( m_pOutputDeviceForWindow, "calling this without /me having an output device should be impossible." );
+        Reference< XControl > xNewControl( Event.Element, UNO_QUERY );
+        DBG_ASSERT( xNewControl.is(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: invalid new control!" );
+        if ( !xNewControl.is() )
+            return;
 
-            DBG_ASSERT( xNewControl->getModel() == m_aControl.getModel(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: another model at the new control?" );
-            // another model should - in the drawing layer - also imply another SdrUnoObj, which
-            // should also result in new ViewContact, and thus in new ViewObjectContacts
+        ENSURE_OR_THROW( m_pOutputDeviceForWindow, "calling this without /me having an output device should be impossible." );
 
-            impl_switchControlListening_nothrow( false );
+        DBG_ASSERT( xNewControl->getModel() == m_aControl.getModel(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: another model at the new control?" );
+        // another model should - in the drawing layer - also imply another SdrUnoObj, which
+        // should also result in new ViewContact, and thus in new ViewObjectContacts
 
-            ControlHolder aNewControl( xNewControl );
-            aNewControl.setZoom( m_aControl.getZoom() );
-            aNewControl.setPosSize( m_aControl.getPosSize() );
-            aNewControl.setDesignMode( impl_isControlDesignMode_nothrow() );
+        impl_switchControlListening_nothrow( false );
 
-            m_aControl = xNewControl;
-            m_bControlIsVisible = m_aControl.isVisible();
+        ControlHolder aNewControl( xNewControl );
+        aNewControl.setZoom( m_aControl.getZoom() );
+        aNewControl.setPosSize( m_aControl.getPosSize() );
+        aNewControl.setDesignMode( impl_isControlDesignMode_nothrow() );
 
-            impl_switchControlListening_nothrow( true );
-        }
+        m_aControl = xNewControl;
+        m_bControlIsVisible = m_aControl.isVisible();
+
+        impl_switchControlListening_nothrow( true );
+
+        m_pAntiImpl->onControlChangedOrModified( ViewObjectContactOfUnoControl::ImplAccess() );
     }
 
     //--------------------------------------------------------------------
@@ -1668,14 +1662,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl::propertyChange()
     {
-        // graphical invalidate at all views
-        ActionChanged();
-
-        // #i93318# flush Primitive2DSequence to force recreation with updated XControlModel
-        // since e.g. background color has changed and existing decompositions are possibly no
-        // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
-        // since it only has a uno reference to the XControlModel
-        flushPrimitive2DSequence();
+        impl_onControlChangedOrModified();
     }
 
     //--------------------------------------------------------------------
@@ -1701,6 +1688,19 @@ namespace sdr { namespace contact {
                 }
             }
         }
+    }
+
+    //--------------------------------------------------------------------
+    void ViewObjectContactOfUnoControl::impl_onControlChangedOrModified()
+    {
+        // graphical invalidate at all views
+        ActionChanged();
+
+        // #i93318# flush Primitive2DSequence to force recreation with updated XControlModel
+        // since e.g. background color has changed and existing decompositions are possibly no
+        // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
+        // since it only has a uno reference to the XControlModel
+        flushPrimitive2DSequence();
     }
 
     //====================================================================
