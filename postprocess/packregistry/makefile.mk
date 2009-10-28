@@ -487,24 +487,23 @@ ALLTAR: \
     $(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd \
     $(MISC)/lang/registry_{$(alllangiso)}.xcd
 
-$(MY_XCDS): packregistry.xslt
-
 $(MISC)/%.xcd .ERRREMOVE: $(MISC)/%.list
-    $(XSLTPROC) --nonet -o $@ packregistry.xslt $<
+    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt $<
 
 $(MISC)/%.list: makefile.mk
     - $(RM) $@
     echo '<list>' $(foreach,i,$(MY_DEPS_$(@:b)) '<dependency file="$i"/>') \
         $(foreach,i,$(MY_FILES_$(@:b)) '<filename>$i</filename>') '</list>' > $@
 
-$(MISC)/lang/Langpack-%.xcd .ERRREMOVE: 'packregistry.xslt'
+$(MISC)/lang/Langpack-%.xcd .ERRREMOVE:
     $(MKDIRHIER) $(@:d)
     - $(RM) $(MISC)/$(@:b).list
     echo '<list><dependency file="main"/>\
         <filename>$(MY_MOD)/$(@:b).xcu</filename></list>' > $(MISC)/$(@:b).list
-    $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)/$(@:b).list
+    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
+        $(MISC)/$(@:b).list
 
-$(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE: 'packregistry.xslt'
+$(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE:
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
@@ -513,9 +512,10 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE: 'packregistry.xslt'
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
         find $(@:b).unzip -name \*.xcu -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
-    $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)/$(@:b).list
+    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
+        $(MISC)/$(@:b).list
 
-$(MISC)/lang/registry_%.xcd .ERRREMOVE: packregistry.xslt
+$(MISC)/lang/registry_%.xcd .ERRREMOVE:
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
@@ -528,4 +528,5 @@ $(MISC)/lang/registry_%.xcd .ERRREMOVE: packregistry.xslt
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
         find $(@:b).unzip fcfg_drivers_$*.unzip -name \*.xcu -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
-    $(XSLTPROC) --nonet -o $@ packregistry.xslt $(MISC)/$(@:b).list
+    $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
+        $(MISC)/$(@:b).list
