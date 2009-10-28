@@ -467,21 +467,13 @@ testcase tPrintOptions()
         
         printlog( "Application specific controls" )    
         select case( gApplication )
-        case "WRITER", "HTML", "MASTERDOCUMENT"
-
-            cb_test( PaperTrayFromPrefsWriter, false, "" )
-
-        case "CALC"
-        
-            printlog( "Calc does not have any options in this section" )
-            
-        case "IMPRESS", "DRAW"
+        case "WRITER", "HTML", "MASTERDOCUMENT", "IMPRESS", "DRAW"
 
             cb_test( PaperTrayFromPrefs, false, "" )
 
-        case "MATH"
+        case "CALC", "MATH"
         
-            printlog( "Math does not have any options in this section" )
+            printlog( "Calc and Math do not have any options in this section" )
             
         case default
         

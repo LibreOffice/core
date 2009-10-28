@@ -160,8 +160,7 @@ CancelButton HID_DLGDEPOT_0_CMDCANCEL_HISTORY
             PrintToFile                 .HelpId:vcl:PrintDialog:OptPage:ToFile
             PrintAsSingleJobs           .HelpId:vcl:PrintDialog:OptPage:SingleJobs
             PrintReverse                .HelpId:vcl:PrintDialog:OptPage:Reverse
-            PaperTrayFromPrefs          .HelpId:vcl:PrintDialog:PaperTray:CheckBox    
-            PaperTrayFromPrefsWriter    .HelpId:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
+            PaperTrayFromPrefs          .HelpId:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
 
 *PurchaseStarOffice HID_LICENSING_DIALOG
 TabPurchase HID_TP_PURCHASE
