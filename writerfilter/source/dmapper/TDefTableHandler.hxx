@@ -56,6 +56,10 @@ private:
     ::std::vector< ::com::sun::star::table::BorderLine >    m_aRightBorderLines;
     ::std::vector< ::com::sun::star::table::BorderLine >    m_aTopBorderLines;
     ::std::vector< ::com::sun::star::table::BorderLine >    m_aBottomBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aInsideHBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aInsideVBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTl2brBorderLines;
+    ::std::vector< ::com::sun::star::table::BorderLine >    m_aTr2blBorderLines;
 
     //values of the current border
     sal_Int32                                           m_nLineWidth;

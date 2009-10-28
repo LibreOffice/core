@@ -276,6 +276,11 @@ class WRITERFILTER_DLLPUBLIC TableData
     typedef ::std::vector<RowPointer_t> Rows;
 
     /**
+       the table properties
+     */
+    PropertiesPointer mpTableProps;
+
+    /**
        the data of the rows of the table
     */
     Rows mRows;
@@ -347,6 +352,22 @@ public:
     void insertCellProperties(unsigned int i, PropertiesPointer pProps)
     {
         mpRow->insertCellProperties(i, pProps);
+    }
+
+    void insertTableProperties( PropertiesPointer pProps )
+    {
+        if ( mpTableProps.get( ) )
+            mpTableProps->insert( pProps );
+        else
+            mpTableProps = pProps;
+    }
+
+    /**
+      Return the table properties.
+     */
+    PropertiesPointer getTableProperties( )
+    {
+        return mpTableProps;
     }
 
     /**

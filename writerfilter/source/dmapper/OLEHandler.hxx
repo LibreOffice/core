@@ -38,6 +38,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 
+#include <com/sun/star/drawing/XShape.hpp>
+
 namespace com{ namespace sun{ namespace star{
     namespace embed{
         class XEmbeddedObject;
@@ -72,6 +74,9 @@ class WRITERFILTER_DLLPRIVATE OLEHandler : public Properties
 
     sal_Int32                   m_nDxaOrig;
     sal_Int32                   m_nDyaOrig;
+    sal_Int32                   m_nWrapMode;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
 
     ::com::sun::star::awt::Size m_aShapeSize;
     ::com::sun::star::awt::Point m_aShapePosition;
@@ -86,6 +91,10 @@ public:
     // Properties
     virtual void attribute(Id Name, Value & val);
     virtual void sprm(Sprm & sprm);
+
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getShape( ) { return m_xShape; };
+
+    inline bool isOLEObject( ) { return m_xInputStream.is( ); };
 
     ::rtl::OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument );
 

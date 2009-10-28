@@ -28,6 +28,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include "PageBordersHandler.hxx"
+
 #include <dmapper/DomainMapper.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
@@ -177,6 +179,10 @@ DomainMapper::~DomainMapper()
             uno::Reference< document::XEventBroadcaster > xBroadcaster(xIndexesSupplier, uno::UNO_QUERY);
             xBroadcaster->addEventListener(uno::Reference< document::XEventListener >(new ModelEventListener));
         }
+
+
+        // Apply the document settings after everything else
+        m_pImpl->GetSettingsTable()->ApplyProperties( m_pImpl->GetTextDocument( ) );
     }
     catch( const uno::Exception& rEx )
     {
@@ -552,8 +558,8 @@ void DomainMapper::attribute(Id nName, Value & val)
             //if the style is a user defined style then it must have an ISTD - built-in styles might not have it
             StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
             ::rtl::OUString sValue = ::rtl::OUString::valueOf(nIntValue, 16);
-            const StyleSheetEntry* pEntry = pStyleSheets->FindStyleSheetByISTD(sValue);
-            if(pEntry)
+            const StyleSheetEntryPtr pEntry = pStyleSheets->FindStyleSheetByISTD(sValue);
+            if( pEntry.get( ) )
             {
                 bool bParaStyle = (pEntry->nStyleTypeCode == STYLE_TYPE_PARA);
                 if(bParaStyle)
@@ -1882,12 +1888,12 @@ void DomainMapper::attribute(Id nName, Value & val)
             /* WRITERFILTERSTATUS: done: 80, planned: 0.5, spent: 0.2 */
             //TODO: autospacing depends on some document property (called fDontUseHTMLAutoSpacing in old ww8 filter) 100 or 280 twip
             //and should be set to 0 on start of page
-            m_pImpl->GetTopContext()->Insert( PROP_TOP_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_TOP_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
         break;
         case NS_ooxml::LN_CT_Spacing_afterAutospacing:
             /* WRITERFILTERSTATUS: done: 80, planned: 0.5, spent: 0.2 */
             //TODO: autospacing depends on some document property (called fDontUseHTMLAutoSpacing in old ww8 filter) 100 or 280 twip
-            m_pImpl->GetTopContext()->Insert( PROP_BOTTOM_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
+            m_pImpl->GetTopContext()->Insert( PROP_PARA_BOTTOM_MARGIN, false, uno::makeAny( AUTO_PARA_SPACING ) );
         break;
         case NS_ooxml::LN_CT_SmartTagRun_uri:
         case NS_ooxml::LN_CT_SmartTagRun_element:
@@ -1926,13 +1932,6 @@ void DomainMapper::attribute(Id nName, Value & val)
             //afterwards the adding of the binary data.
             m_pImpl->GetGraphicImport( IMPORT_AS_DETECTED_INLINE )->attribute(nName, val);
             m_pImpl->ImportGraphic( val.getProperties(), IMPORT_AS_DETECTED_INLINE );
-            if( m_pImpl->IsInShapeContext() )
-            {
-                //imported text from temporary shape needs to be copied to the real shape
-                uno::Reference< drawing::XShape > xShape;
-                val.getAny() >>= xShape;
-                m_pImpl->CopyTemporaryShapeText( xShape );
-            }
         }
         break;
         case NS_ooxml::LN_CT_FramePr_dropCap:
@@ -2090,18 +2089,11 @@ void DomainMapper::attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_Markup_id:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            m_pImpl->SetCurrentRedlineId( sStringValue );
+            m_pImpl->SetCurrentRedlineId( nIntValue );
         break;
         case NS_ooxml::LN_token:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->SetCurrentRedlineToken( nIntValue );
-        break;
-        case NS_ooxml::LN_mark_shape:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            if( nIntValue )
-                m_pImpl->PopShapeContext();
-            else
-                m_pImpl->PushShapeContext();
         break;
         case NS_ooxml::LN_CT_LineNumber_countBy:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
@@ -2144,6 +2136,9 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Color_themeShade:
             //unsupported
         break;
+    case NS_ooxml::LN_endtrackchange:
+        m_pImpl->RemoveCurrentRedline( );
+    break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -2625,6 +2620,15 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         break;  // sprmPPropRMark
     case NS_sprm::LN_POutLvl:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        {
+            if( m_pImpl->IsStyleSheetImport() )
+            {
+                sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
+
+                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
+                pStyleSheetPropertyMap->SetOutlineLevel( nLvl );
+            }
+        }
         break;  // sprmPOutLvl
     case NS_sprm::LN_PFBiDi:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -3877,6 +3881,20 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         }
     }
     break;
+    case NS_ooxml::LN_EG_SectPrContents_pgBorders:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if( pProperties.get( ) && pSectionContext )
+        {
+            PageBordersHandlerPtr pHandler( new PageBordersHandler );
+            pProperties->resolve( *pHandler );
+
+            // Set the borders to the context and apply them to the styles
+            pHandler->SetBorders( pSectionContext );
+            pSectionContext->SetBorderParams( pHandler->GetDisplayOffset( ) );
+        }
+    }
+    break;
 
     case NS_ooxml::LN_CT_PPrBase_pStyle:
     {
@@ -3886,20 +3904,31 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         const ::rtl::OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
         if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sConvertedStyleName ));
-        const StyleSheetEntry* pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
+        const StyleSheetEntryPtr pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
         //apply numbering to paragraph if it was set at the style
-        OSL_ENSURE( pEntry, "no style sheet found" );
+        OSL_ENSURE( pEntry.get(), "no style sheet found" );
         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
+
         if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
-            rContext->Insert( PROP_NUMBERING_RULES, true, uno::makeAny(m_pImpl->GetListTable()->GetNumberingRules(pStyleSheetProperties->GetListId())), false);
+            rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny(
+                        m_pImpl->GetListTable( )->GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
+
         if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
             rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
     break;
     case NS_ooxml::LN_EG_RPrBase_rStyle:
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-        if (m_pImpl->GetTopContext())
-            m_pImpl->GetTopContext()->Insert( PROP_CHAR_STYLE_NAME, true, uno::makeAny( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true )));
+        {
+            rtl::OUString sConvertedName( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true ) );
+            // First check if the style exists in the document.
+            StyleSheetEntryPtr pEntry = m_pImpl->GetStyleSheetTable( )->FindStyleSheetByStyleName( sConvertedName );
+            bool bExists = pEntry.get( ) && ( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR );
+
+            // Add the property if the style exists
+            if ( bExists && m_pImpl->GetTopContext() )
+                m_pImpl->GetTopContext()->Insert( PROP_CHAR_STYLE_NAME, true, uno::makeAny( sConvertedName ) );
+        }
     break;
     case NS_ooxml::LN_CT_TblPrBase_tblCellMar: //cell margins
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -4036,16 +4065,16 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         }
     }
     break;
+    case NS_ooxml::LN_paratrackchange:
+        m_pImpl->StartParaChange( );
     case NS_ooxml::LN_trackchange:
         /* WRITERFILTERSTATUS: done: 100, planned: 5, spent: 0 */
     case NS_ooxml::LN_EG_RPrContent_rPrChange:
         /* WRITERFILTERSTATUS: done: 100, planned: 5, spent: 0 */
     {
+        m_pImpl->AddNewRedline( );
         resolveSprmProps( rSprm );
         // now the properties author, date and id should be available
-        ::rtl::OUString sAuthor = m_pImpl->GetCurrentRedlineAuthor();
-        ::rtl::OUString sDate = m_pImpl->GetCurrentRedlineDate();
-        ::rtl::OUString sId = m_pImpl->GetCurrentRedlineId();
         sal_Int32 nToken = m_pImpl->GetCurrentRedlineToken();
         switch( nToken & 0xffff )
         {
@@ -4054,6 +4083,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             case ooxml::OOXML_del : break;
             default: OSL_ENSURE( false, "redline token other than mod, ins or del" );
         }
+        m_pImpl->EndParaChange( );
     }
     break;
     case NS_ooxml::LN_CT_RPrChange_rPr:
@@ -4062,15 +4092,21 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     /* WRITERFILTERSTATUS: done: 0, planned: 4, spent: 0 */
     case NS_ooxml::LN_object:
     {
+#if DEBUG
+        clog << "DomainMapper: LN_object" << endl;
+#endif
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if( pProperties.get())
+        if( pProperties.get( ) )
         {
             OLEHandlerPtr pOLEHandler( new OLEHandler );
             pProperties->resolve(*pOLEHandler);
-            ::rtl::OUString sStreamName = pOLEHandler->copyOLEOStream( m_pImpl->GetTextDocument() );
-            if(sStreamName.getLength())
+            if ( pOLEHandler->isOLEObject( ) )
             {
-                m_pImpl->appendOLE( sStreamName, pOLEHandler );
+                ::rtl::OUString sStreamName = pOLEHandler->copyOLEOStream( m_pImpl->GetTextDocument() );
+                if( sStreamName.getLength() )
+                {
+                    m_pImpl->appendOLE( sStreamName, pOLEHandler );
+                }
             }
         }
     }
@@ -4099,7 +4135,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_ooxml::LN_CT_Lvl_pStyle:
         //TODO: numbering style should apply current numbering level - not yet supported
     break;
-
     default:
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -4225,19 +4260,36 @@ void DomainMapper::endParagraphGroup()
 #endif
 }
 
+void DomainMapper::startShape( uno::Reference< drawing::XShape > xShape )
+{
+    m_pImpl->PushShapeContext( xShape );
+}
+
+void DomainMapper::endShape( )
+{
+    m_pImpl->PopShapeContext( );
+}
+
 /*-- 13.06.2007 16:15:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper::PushStyleSheetProperties( PropertyMapPtr pStyleProperties )
+void DomainMapper::PushStyleSheetProperties( PropertyMapPtr pStyleProperties, bool bAffectTableMngr )
 {
     m_pImpl->PushStyleProperties( pStyleProperties );
+    if ( bAffectTableMngr )
+        m_pImpl->getTableManager( ).SetStyleProperties( pStyleProperties );
 }
 /*-- 13.06.2007 16:15:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper::PopStyleSheetProperties()
+void DomainMapper::PopStyleSheetProperties( bool bAffectTableMngr )
 {
     m_pImpl->PopProperties( CONTEXT_STYLESHEET );
+    if ( bAffectTableMngr )
+    {
+        PropertyMapPtr emptyPtr;
+        m_pImpl->getTableManager( ).SetStyleProperties( emptyPtr );
+    }
 }
 /*-- 28.01.2008 14:52:33---------------------------------------------------
 
@@ -4484,10 +4536,13 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
         break;
     case NS_ooxml::LN_NUMBERING:
     case NS_rtf::LN_LISTTABLE:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        {
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
 
-        //the same for list tables
-        ref->resolve( *m_pImpl->GetListTable() );
+            //the same for list tables
+            ref->resolve( *m_pImpl->GetListTable() );
+            m_pImpl->GetListTable( )->CreateNumberingRules( );
+        }
         break;
     case NS_rtf::LN_LFOTABLE:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
@@ -4496,6 +4551,9 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
         break;
     case NS_ooxml::LN_THEMETABLE:
         ref->resolve ( *m_pImpl->GetThemeTable() );
+    break;
+    case NS_ooxml::LN_SETTINGS:
+        ref->resolve( *m_pImpl->GetSettingsTable( ) );
     break;
     default:
         OSL_ENSURE( false, "which table is to be filled here?");

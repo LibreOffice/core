@@ -275,6 +275,10 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         case 21:
             eCodeIdx = double1;//  60 Twips for us
             break;
+        case 0:
+        case 255:
+            eCodeIdx = none;
+            break;
         default:
             eCodeIdx = single0;
             break;
@@ -305,7 +309,8 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         /*13*/  { DOUBLE_LINE7_OUT, DOUBLE_LINE7_IN, DOUBLE_LINE7_DIST },
         /*14*/  { DOUBLE_LINE8_OUT, DOUBLE_LINE8_IN, DOUBLE_LINE8_DIST },
         /*15*/  { DOUBLE_LINE9_OUT, DOUBLE_LINE9_IN, DOUBLE_LINE9_DIST },
-        /*16*/  { DOUBLE_LINE10_OUT,DOUBLE_LINE10_IN,DOUBLE_LINE10_DIST}
+        /*16*/  { DOUBLE_LINE10_OUT,DOUBLE_LINE10_IN,DOUBLE_LINE10_DIST},
+        /*17*/  { 0, 0, 0 }
     };
 
     rToFill.Color = nLineColor;

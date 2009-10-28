@@ -39,7 +39,6 @@
 namespace writerfilter {
 namespace dmapper
 {
-using namespace std;
 
 struct ThemeTable_Impl;
 

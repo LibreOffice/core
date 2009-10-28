@@ -63,6 +63,7 @@ private:
     sal_Int32       m_nLineDistance;
     bool            m_bOOXML;
 
+    bool                                        m_aFilledLines[BORDER_COUNT];
     ::com::sun::star::table::BorderLine         m_aBorderLines[BORDER_COUNT];
 
 public:

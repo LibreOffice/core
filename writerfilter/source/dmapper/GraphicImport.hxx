@@ -51,12 +51,16 @@ namespace com{ namespace sun { namespace star {
     {
         class XShape;
     }
+    namespace beans
+    {
+        class PropertyValue;
+        typedef ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > PropertyValues;
+    }
 }}}
 
 namespace writerfilter {
 namespace dmapper
 {
-using namespace std;
 class GraphicImport_Impl;
 class DomainMapper;
 
@@ -79,6 +83,9 @@ class WRITERFILTER_DLLPRIVATE GraphicImport : public Properties, public Table
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> m_xShape;
     void ProcessShapeOptions(Value & val);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > createGraphicObject(
+            const ::com::sun::star::beans::PropertyValues& aMediaProperties );
 
 public:
     explicit GraphicImport(::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    xComponentContext,
@@ -112,6 +119,8 @@ public:
     virtual void substream(Id name,
                            ::writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void info(const string & info);
+    virtual void startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    virtual void endShape( );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > GetGraphicObject();
     bool    IsGraphic() const;

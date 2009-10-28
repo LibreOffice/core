@@ -647,6 +647,15 @@ void FontTable::substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
 void FontTable::info(const string& )
 {
 }
+
+void FontTable::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > )
+{
+}
+
+void FontTable::endShape( )
+{
+}
+
 /*-- 21.06.2006 11:21:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/

@@ -30,6 +30,8 @@
 #ifndef INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 #define INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 
+#include "TablePropertiesHandler.hxx"
+
 #include <resourcemodel/TableManager.hxx>
 #include <PropertyMap.hxx>
 #include <StyleSheetTable.hxx>
@@ -38,10 +40,11 @@
 
 namespace writerfilter {
 namespace dmapper {
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > Handle_t;
-typedef TableManager<Handle_t , TablePropertyMapPtr > DomainMapperTableManager_Base_t;
+
 class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 {
+    typedef boost::shared_ptr< std::vector<sal_Int32> > IntVectorPtr;
+
     sal_uInt32      m_nRow;
     sal_uInt32      m_nCell;
     sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
@@ -51,8 +54,11 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     ::rtl::OUString m_sTableStyleName;
     PropertyMapPtr  m_pTableStyleTextProperies;
 
-    ::std::vector<sal_Int32>  m_aTableGrid;
-    ::std::vector<sal_Int32>  m_aGridSpans;
+    ::std::vector< IntVectorPtr >  m_aTableGrid;
+    ::std::vector< IntVectorPtr >  m_aGridSpans;
+
+    TablePropertiesHandler   *m_pTablePropsHandler;
+    PropertyMapPtr            m_pStyleProps;
 
     virtual void clearData();
 
@@ -61,15 +67,56 @@ public:
     DomainMapperTableManager(bool bOOXML);
     virtual ~DomainMapperTableManager();
 
+    // use this method to avoid adding the properties for the table
+    // but in the provided properties map.
+    inline void SetStyleProperties( PropertyMapPtr pProperties ) { m_pStyleProps = pProperties; };
+
     virtual bool sprm(Sprm & rSprm);
+
+    virtual void startLevel( );
+    virtual void endLevel( );
 
     virtual void endOfCellAction();
     virtual void endOfRowAction();
+
+    IntVectorPtr getCurrentGrid( );
+    IntVectorPtr getCurrentSpans( );
 
     const ::rtl::OUString& getTableStyleName() const { return m_sTableStyleName; }
     /// copy the text properties of the table style and its parent into pContext
     void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
 
+    inline virtual void cellProps(TablePropertyMapPtr pProps)
+    {
+        if ( m_pStyleProps.get( ) )
+            m_pStyleProps->insert( pProps, true );
+        else
+           DomainMapperTableManager_Base_t::cellProps( pProps );
+    };
+
+    inline virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps)
+    {
+        if ( m_pStyleProps.get( ) )
+            m_pStyleProps->insert( pProps, true );
+        else
+           DomainMapperTableManager_Base_t::cellPropsByCell( i, pProps );
+    };
+
+    inline virtual void insertRowProps(TablePropertyMapPtr pProps)
+    {
+        if ( m_pStyleProps.get( ) )
+            m_pStyleProps->insert( pProps, true );
+        else
+           DomainMapperTableManager_Base_t::insertRowProps( pProps );
+    };
+
+    inline virtual void insertTableProps(TablePropertyMapPtr pProps)
+    {
+        if ( m_pStyleProps.get( ) )
+            m_pStyleProps->insert( pProps, true );
+        else
+           DomainMapperTableManager_Base_t::insertTableProps( pProps );
+    };
 };
 
 }}
