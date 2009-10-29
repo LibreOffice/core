@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include <osl/mutex.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -1094,8 +1095,8 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
         m_xParser->setFilter( rQuery );
         ::rtl::OUString aQuery = m_xParser->getFilter();
         Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
-        aPropertySet->setPropertyValue( C2U( "Filter" ), makeAny( aQuery ) );
-        aPropertySet->setPropertyValue( C2U( "ApplyFilter" ), makeAny( sal_True ) );
+        xFormProps->setPropertyValue( C2U( "Filter" ), makeAny( aQuery ) );
+        xFormProps->setPropertyValue( C2U( "ApplyFilter" ), makeAny( sal_True ) );
         reload();
     }
     catch(Exception& e )
