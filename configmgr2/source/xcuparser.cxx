@@ -622,15 +622,6 @@ void XcuParser::handleUnknownGroupProp(
             css::uno::Reference< css::uno::XInterface >());
     }
     switch (operation) {
-    case OPERATION_MODIFY:
-        throw css::uno::RuntimeException(
-            (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "invalid modify of extension prop ")) +
-             name +
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-             reader.getUrl()),
-            css::uno::Reference< css::uno::XInterface >());
     case OPERATION_REPLACE:
     case OPERATION_FUSE:
         {
@@ -658,8 +649,10 @@ void XcuParser::handleUnknownGroupProp(
             }
         }
         break;
-    case OPERATION_REMOVE:
-        // ignore unknown (presumably extension) properties
+    default:
+        OSL_TRACE(
+            "ignoring modify or remove of unknown (presumably extension)"
+            " property");
         state_.push(State());
         break;
     }
@@ -949,21 +942,17 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
     switch (op) {
     case OPERATION_MODIFY:
         if (i == set->getMembers().end()) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "invalid modify of unknown set member node ")) +
-                 name + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" in ")) +
-                 reader.getUrl()),
-                css::uno::Reference< css::uno::XInterface >());
-        }
-        state_.push(
-            State(
-                i->second,
-                (state_.top().locked ||
-                 finalizedLayer < valueParser_.getLayer())));
-        if (!modificationPath_.empty()) {
-            modificationPath_.push_back(name);
+            OSL_TRACE("ignoring modify of unknown set member node");
+            state_.push(State());
+        } else {
+            state_.push(
+                State(
+                    i->second,
+                    (state_.top().locked ||
+                     finalizedLayer < valueParser_.getLayer())));
+            if (!modificationPath_.empty()) {
+                modificationPath_.push_back(name);
+            }
         }
         break;
     case OPERATION_REPLACE:
