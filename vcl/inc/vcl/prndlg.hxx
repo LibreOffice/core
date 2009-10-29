@@ -213,8 +213,8 @@ namespace vcl
         PrintPreviewWindow                      maPreviewWindow;
         NumericField                            maPageEdit;
         FixedText                               maNumPagesText;
-        PushButton                              maForwardBtn;
         PushButton                              maBackwardBtn;
+        PushButton                              maForwardBtn;
 
         TabControl                              maTabCtrl;
         NUpTabPage                              maNUpPage;
