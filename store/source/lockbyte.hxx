@@ -128,26 +128,6 @@ public:
      */
     storeError flush();
 
-    /**
-        @param  nOffset [in]
-        @param  nBytes [in]
-        @return store_E_None upon success
-                store_E_LockingViolation
-     */
-    storeError lockRange (
-        sal_uInt32 nOffset,
-        sal_uInt32 nBytes);
-
-    /**
-        @param  nOffset [in]
-        @param  nBytes [in]
-        @return store_E_None upon success
-                store_E_LockingViolation
-     */
-    storeError unlockRange (
-        sal_uInt32 nOffset,
-        sal_uInt32 nBytes);
-
 private:
     /** Implementation (abstract).
      */
@@ -180,16 +160,6 @@ private:
         sal_uInt32 nSize) = 0;
 
     virtual storeError flush_Impl() = 0;
-
-#ifdef STORE_FEATURE_LOCKING
-    virtual storeError lockRange_Impl (
-        sal_uInt32 nOffset,
-        sal_uInt32 nBytes) = 0;
-
-    virtual storeError unlockRange_Impl (
-        sal_uInt32 nOffset,
-        sal_uInt32 nBytes) = 0;
-#endif /* STORE_FEATURE_LOCKING */
 };
 
 /*========================================================================

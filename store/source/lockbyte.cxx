@@ -156,40 +156,6 @@ storeError ILockBytes::flush()
     return flush_Impl();
 }
 
-storeError ILockBytes::lockRange (sal_uInt32 nOffset, sal_uInt32 nBytes)
-{
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::lockRange(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    sal_uInt64 size = nOffset + nBytes;
-    if (size > SAL_MAX_UINT32)
-        return store_E_CantSeek;
-
-#ifdef STORE_FEATURE_LOCKING
-    return lockRange_Impl (nOffset, nBytes);
-#else
-    return store_E_None; // E_Unsupported
-#endif /* STORE_FEATURE_LOCKING */
-}
-
-storeError ILockBytes::unlockRange (sal_uInt32 nOffset, sal_uInt32 nBytes)
-{
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::unlockRange(): invalid Offset");
-    if (nOffset == STORE_PAGE_NULL)
-        return store_E_CantSeek;
-
-    sal_uInt64 size = nOffset + nBytes;
-    if (size > SAL_MAX_UINT32)
-        return store_E_CantSeek;
-
-#ifdef STORE_FEATURE_LOCKING
-    return unlockRange_Impl (nOffset, nBytes);
-#else
-    return store_E_None; // E_Unsupported
-#endif /* STORE_FEATURE_LOCKING */
-}
-
 /*========================================================================
  *
  * FileLockBytes implementation.
