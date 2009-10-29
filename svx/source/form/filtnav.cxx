@@ -322,8 +322,8 @@ TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 //========================================================================
 class FmFilterAdapter : public ::cppu::WeakImplHelper1< XFilterControllerListener >
 {
-    Reference< XIndexAccess >   m_xControllers;
     FmFilterModel*              m_pModel;
+    Reference< XIndexAccess >   m_xControllers;
 
 public:
     FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers);
