@@ -132,7 +132,9 @@ SLOFILES = \
     $(SLO)$/xmlsignature_nssimpl.obj \
     $(SLO)$/x509certificate_nssimpl.obj \
     $(SLO)$/seinitializer_nssimpl.obj \
-    $(SLO)$/xsec_nss.obj
+    $(SLO)$/xsec_nss.obj \
+        $(SLO)$/secerror.obj
+
 
     
 .ENDIF

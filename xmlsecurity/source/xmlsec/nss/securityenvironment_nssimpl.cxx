@@ -36,6 +36,7 @@
 #include "nssrenam.h"
 #include "cert.h"
 #include "secerr.h"
+#include "ocsp.h"
 
 #include <sal/config.h>
 #include "securityenvironment_nssimpl.hxx"
@@ -64,6 +65,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <vector>
 #include "boost/scoped_array.hpp"
+
+#include "secerror.hxx"
 
 // MM : added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
@@ -762,9 +765,9 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         throw RuntimeException() ;
     }
 
-    OSL_TRACE("[xmlsecurity] Start verification of certificate: %s",
+    OSL_TRACE("[xmlsecurity] Start verification of certificate: \n %s \n",
               OUStringToOString(
-                  aCert->getIssuerName(), osl_getThreadTextEncoding()).getStr());
+                  aCert->getSubjectName(), osl_getThreadTextEncoding()).getStr());
 
 
     xcert = reinterpret_cast<X509Certificate_NssImpl*>(
@@ -773,12 +776,15 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         throw RuntimeException() ;
     }
 
+    //ToDo CERT_PKIXVerifyCert does not take a db as argument. It will therefore
+    //internally use CERT_GetDefaultCertDB
+    //Make sure m_pHandler is the default DB
+    CERTCertDBHandle * certDb = m_pHandler != NULL ? m_pHandler : CERT_GetDefaultCertDB();
     cert = xcert->getNssCert() ;
     if( cert != NULL )
     {
 
         //prepare the intermediate certificates
-        CERTCertDBHandle * certDb = m_pHandler != NULL ? m_pHandler : CERT_GetDefaultCertDB();
         for (sal_Int32 i = 0; i < intermediateCerts.getLength(); i++)
         {
             Sequence<sal_Int8> der = intermediateCerts[i]->getEncoded();
@@ -807,61 +813,114 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         }
 
 
-        int64 timeboundary ;
         SECStatus status ;
 
-        //Get the system clock time
-        timeboundary = PR_Now() ;
-        SECCertificateUsage usage = 0;
-
-        // create log
-
-        CERTVerifyLog realLog;
-        CERTVerifyLog *log;
-
-        log = &realLog;
+        CERTVerifyLog log;
+        log.arena = PORT_NewArena(512);
+        log.head = log.tail = NULL;
+        log.count = 0;
 
 
-        log->count = 0;
-        log->head = NULL;
-        log->tail = NULL;
-        log->arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
+        CERT_EnableOCSPChecking(certDb);
+        CERT_DisableOCSPDefaultResponder(certDb);
+        CERTValOutParam cvout[5];
+        CERTValInParam cvin[4];
 
-        //CERTVerifyLog *log;
-        //PRArenaPool *arena;
+        cvin[0].type = cert_pi_useAIACertFetch;
+        cvin[0].value.scalar.b = PR_TRUE;
 
-        //arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
-        //log = PORT_ArenaZNew( arena, CERTVerifyLog );
-        //log->arena = arena;
+        PRUint64 revFlagsLeaf[2];
+        PRUint64 revFlagsChain[2];
+        CERTRevocationFlags rev;
+        rev.leafTests.number_of_defined_methods = 2;
+        rev.leafTests.cert_rev_flags_per_method = revFlagsLeaf;
+        //the flags are defined in cert.h
+        //We check both leaf and chain.
+        //It is enough if one revocation method has fresh info,
+        //but at least one must have some. Otherwise validation fails.
+        rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.leafTests.number_of_preferred_methods = 0;
+        rev.leafTests.preferred_methods = NULL;
+        rev.leafTests.cert_rev_method_independent_flags =
+            CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST
+            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
+
+        rev.chainTests.number_of_defined_methods = 2;
+        rev.chainTests.cert_rev_flags_per_method = revFlagsChain;
+        rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.chainTests.cert_rev_flags_per_method[cert_revocation_method_ocsp] =
+            CERT_REV_M_TEST_USING_THIS_METHOD
+            | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
+        rev.chainTests.number_of_preferred_methods = 0;
+        rev.chainTests.preferred_methods = NULL;
+        rev.chainTests.cert_rev_method_independent_flags =
+            CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST
+            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
+
+        cvin[1].type = cert_pi_revocationFlags;
+        cvin[1].value.pointer.revocation = &rev;
+        // does not work
+//         cvin[2].type = cert_pi_keyusage;
+//         cvin[2].value.scalar.ui = KU_DIGITAL_SIGNATURE;
+        cvin[2].type = cert_pi_end;
+
+        cvout[0].type = cert_po_trustAnchor;
+        cvout[0].value.pointer.cert = NULL;
+        cvout[1].type = cert_po_errorLog;
+        cvout[1].value.pointer.log = &log;
+        cvout[2].type = cert_po_usages;
+        cvout[2].value.scalar.usages = 0;
+        cvout[3].type = cert_po_keyUsage;
+        cvout[3].value.scalar.usages = 0;
+        cvout[4].type = cert_po_end;
+
+
         validity = csss::CertificateValidity::INVALID;
 
-        if( m_pHandler != NULL )
-        {
-            //JL: We must not pass a particular usage in the requiredUsages argument (the 4th) because,
-            //then ONLY these are verified. For example, we pass
-            //certificateUsageSSLClient | certificateUsageSSLServer. Then checking a certificate which
-            // is a valid certificateUsageEmailSigner but no certificateUsageSSLClient | certificateUsageSSLServer
-            //will result in CertificateValidity::INVALID.
-            //Only if the argument "requiredUsages" has a value (other than zero)
-            //then the function will return SECFailure in case
-            //the certificate is not suitable for the provided usage. That is, in the previous
-            //example the function returns SECFailure.
-            status = CERT_VerifyCertificate(
-                m_pHandler, ( CERTCertificate* )cert, PR_TRUE,
-                (SECCertificateUsage)0, timeboundary , NULL, log, &usage);
-        }
-        else
-        {
-            status = CERT_VerifyCertificate(
-                CERT_GetDefaultCertDB(), ( CERTCertificate* )cert,
-                PR_TRUE, (SECCertificateUsage)0, timeboundary ,NULL, log, &usage);
-        }
+
+        //never use the following usages because they are not checked properly
+        // certificateUsageUserCertImport
+        // certificateUsageVerifyCA
+        // certificateUsageAnyCA
+        // certificateUsageProtectedObjectSigner
+
+
+
+
+        SECCertificateUsage usage =
+            certificateUsageEmailSigner |
+            certificateUsageEmailRecipient |
+            certificateUsageSSLCA |
+            certificateUsageSSLServer |
+            certificateUsageSSLClient |
+            certificateUsageStatusResponder;
+
+        fprintf(stderr,"### usage %x \n", (int) usage);
+        fprintf(stderr,"### usage %d\n", (int) (certificateUsageSSLCA | certificateUsageSSLServer));
+        status = CERT_PKIXVerifyCert(const_cast<CERTCertificate *>(cert), 0,
+                                     cvin, cvout, NULL);
+
+//             //JL: We must not pass a particular usage in the requiredUsages argument (the 4th) because,
+//             //then ONLY these are verified. For example, we pass
+//             //certificateUsageSSLClient | certificateUsageSSLServer. Then checking a certificate which
+//             // is a valid certificateUsageEmailSigner but no certificateUsageSSLClient | certificateUsageSSLServer
+//             //will result in CertificateValidity::INVALID.
+//             //Only if the argument "requiredUsages" has a value (other than zero)
+//             //then the function will return SECFailure in case
+//             //the certificate is not suitable for the provided usage. That is, in the previous
+//             //example the function returns SECFailure.
+
 
         if( status == SECSuccess )
         {
-            // JL & TKR : certificateUsageUserCertImport,
-            // certificateUsageVerifyCA and certificateUsageAnyCA dont check the chain
-
+            OSL_TRACE("[xmlsecurity] CERT_PKIXVerifyCert returned SECSuccess.");
             //When an intermediate or root certificate is checked then we expect the usage
             //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
             //the button "This certificate can identify websites" is checked. If for example only
@@ -871,58 +930,38 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             //certificate path view the end certificate will be shown as valid but the others
             //will be displayed as invalid.
 
-            if (usage & certificateUsageEmailSigner
-                || usage & certificateUsageEmailRecipient
-                || usage & certificateUsageSSLCA
-                || usage & certificateUsageSSLServer
-                || usage & certificateUsageSSLClient
-                // || usage & certificateUsageUserCertImport
-                // || usage & certificateUsageVerifyCA
-                || usage & certificateUsageStatusResponder )
-                // || usage & certificateUsageAnyCA )
-                validity = csss::CertificateValidity::VALID;
-            else
-                validity = csss::CertificateValidity::INVALID;
+            validity = csss::CertificateValidity::VALID;
+            CERTCertificate * issuerCert = cvout[0].value.pointer.cert;
+            if (issuerCert)
+            {
+                OSL_TRACE("[xmlsecurity] Root certificate: %s \n", issuerCert->subjectName);
+                CERT_DestroyCertificate(issuerCert);
+            };
+
+            OSL_TRACE("[xmlsecurity] Usage: %X \n", cvout[2].value.scalar.usages);
+            OSL_TRACE("[xmlsecurity] Key usage: %X \n", cvout[3].value.scalar.usages);
 
         }
-        // always check what kind of error occured, even SECStatus says Success
-        //JL: When we call CERT_VerifyCertificate whit the parameter requiredUsages == 0 then all
-        //possible usages are checked. Then there are certainly usages for which the certificate
-        //is not intended. For these usages there will be NO flag set in the argument returnedUsages
-        // (the last arg) and there will be error codes set in the log. Therefore we cannot
-        //set the CertificateValidity to INVALID because there is a log entry.
-//         CERTVerifyLogNode *logNode = 0;
+        else
+        {
+#if OSL_DEBUG_LEVEL > 1
+            PRIntn err = PR_GetError();
+            fprintf(stderr, "Error: , %d = %s\n", err, getCertError(err));
+#endif
+            /* Display validation results */
+            if ( log.count > 0)
+            {
+                CERTVerifyLogNode *node = NULL;
+#if OSL_DEBUG_LEVEL > 1
+                printChainFailure(stderr, &log);
+#endif
+                for (node = log.head; node; node = node->next) {
+                    if (node->cert)
+                        CERT_DestroyCertificate(node->cert);
+                }
+            }
 
-//         logNode = log->head;
-//         while ( logNode != NULL )
-//         {
-//             sal_Int32 errorCode = 0;
-//             errorCode = logNode->error;
-
-//             switch ( errorCode )
-//             {
-//                 // JL & TKR: Any error are treated as invalid because we cannot say that we get all occurred errors from NSS
-// /*
-//                 case ( SEC_ERROR_REVOKED_CERTIFICATE ):
-//                     validity |= csss::CertificateValidity::REVOKED;
-//                 break;
-//                 case ( SEC_ERROR_EXPIRED_CERTIFICATE ):
-//                     validity |= csss::CertificateValidity::TIME_INVALID;
-//                 break;
-//                 case ( SEC_ERROR_CERT_USAGES_INVALID):
-//                     validity |= csss::CertificateValidity::INVALID;
-//                 break;
-//                 case ( SEC_ERROR_UNTRUSTED_ISSUER ):
-//                 case ( SEC_ERROR_UNTRUSTED_CERT ):
-//                     validity |= csss::CertificateValidity::UNTRUSTED;
-//                 break;
-//  */
-//                 default:
-//                     validity |= csss::CertificateValidity::INVALID;
-//                 break;
-//             }
-//             logNode = logNode->next;
-//        }
+        }
     }
     else
     {

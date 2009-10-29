@@ -112,7 +112,7 @@ struct InitNSSInitialize
             bInitialized = nsscrypto_initialize(m_sProfile.getStr(), bNSSInit);
             if (bNSSInit)
                 atexit(nsscrypto_finalize );
-            return & bInitialized;
+             return & bInitialized;
 
         }
 };
