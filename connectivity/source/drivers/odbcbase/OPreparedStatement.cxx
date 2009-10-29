@@ -343,6 +343,10 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,
         case SQL_NUMERIC:
             ++nRealSize;
             break;
+        case SQL_BINARY:
+        case SQL_VARBINARY:
+            nRealSize=1;    //dummy buffer, binary data isn't copied
+            break;
         default:
             break;
     }
