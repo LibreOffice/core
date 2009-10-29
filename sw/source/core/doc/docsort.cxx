@@ -471,26 +471,31 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             AppendUndo( pRedlUndo );
         }
 
-        // nBeg ist der Start vom sortierten Bereich
+        // nBeg is start of sorted range
         SwNodeIndex aSttIdx( GetNodes(), nBeg );
 
-        // der Kopierte Bereich ist das Geloeschte
-        AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ), true);
+        // the copied range is deleted
+        SwRedline *const pDeleteRedline(
+            new SwRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ));
 
-        // das sortierte ist das Eingefuegte
+        // pRedlPam points to nodes that may be deleted (hidden) by
+        // AppendRedline, so adjust it beforehand to prevent ASSERT
         pRedlPam->GetPoint()->nNode = aSttIdx;
         SwCntntNode* pCNd = aSttIdx.GetNode().GetCntntNode();
         pRedlPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
+        AppendRedline(pDeleteRedline, true);
+
+        // the sorted range is inserted
         AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
 
         if( pRedlUndo )
         {
-
             SwNodeIndex aInsEndIdx( pRedlPam->GetMark()->nNode, -1 );
             pRedlPam->GetMark()->nNode = aInsEndIdx;
-            SwCntntNode* pCNd = pRedlPam->GetMark()->nNode.GetNode().GetCntntNode();
-            pRedlPam->GetMark()->nContent.Assign( pCNd, pCNd->Len() );
+            SwCntntNode *const pPrevNode =
+                pRedlPam->GetMark()->nNode.GetNode().GetCntntNode();
+            pRedlPam->GetMark()->nContent.Assign( pPrevNode, pPrevNode->Len() );
 
             pRedlUndo->SetValues( *pRedlPam );
         }
