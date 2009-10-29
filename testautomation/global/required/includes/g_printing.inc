@@ -41,7 +41,7 @@ private const MSG1 = "Incorrect default setting: "
 
 '*******************************************************************************
 
-sub PrintingResources()
+sub g_printing()
 
     call tPrintCommon()
     call tPrintGeneral()
