@@ -545,6 +545,8 @@ protected:
 public:
     DisclosureButton( Window* pParent, WinBits nStyle = 0 );
     DisclosureButton( Window* pParent, const ResId& rResId );
+
+    virtual void    KeyInput( const KeyEvent& rKEvt );
 };
 
 #endif  // _SV_BUTTON_HXX

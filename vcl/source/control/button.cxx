@@ -4457,3 +4457,22 @@ void DisclosureButton::ImplDrawCheckBoxState()
         DrawImage( aOff, *pImg, nStyle );
     }
 }
+
+// -----------------------------------------------------------------------
+
+void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
+{
+    KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if( !aKeyCode.GetModifier()  &&
+        ( ( aKeyCode.GetCode() == KEY_ADD ) ||
+          ( aKeyCode.GetCode() == KEY_SUBTRACT ) )
+        )
+    {
+        Check( aKeyCode.GetCode() == KEY_ADD );
+    }
+    else
+        Button::KeyInput( rKEvt );
+}
+
+
