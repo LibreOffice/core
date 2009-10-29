@@ -184,6 +184,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL addChildController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _ChildController ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setContext( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext >& _context ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (::com::sun::star::uno::RuntimeException);
@@ -302,6 +303,13 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException )
 {
     m_aActivateListeners.removeInterface(l);
+}
+
+//------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& /*_ChildController*/ ) throw( RuntimeException, IllegalArgumentException )
+{
+    // not supported
+    throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 }
 
 //------------------------------------------------------------------
@@ -604,15 +612,9 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
     // check for our additional interfaces
     Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
 
-    // check for the base controllers interfaces
+    // check for our aggregate (implementing the XFormController)
     if (!aRet.hasValue())
-    {
-        // check for our aggregate (implementing the XFormController)
-        if (!aRet.hasValue())
-        {
-            aRet = m_xFormControllerImpl->queryAggregation(_rType);
-        }
-    }
+        aRet = m_xFormControllerImpl->queryAggregation(_rType);
 
     // no more to offer
     return aRet;
@@ -1341,16 +1343,6 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( Runtim
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::disposing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::disposing" );
-    // and dispose the aggregate
-    if (m_xFormControllerImpl.is())
-    {
-        Reference< XComponent >  xAggComp;
-        m_xFormControllerImpl->queryAggregation(::getCppuType(&xAggComp)) >>= xAggComp;
-        if (xAggComp.is())
-            xAggComp->dispose();
-    }
-
     // the base class
     SbaXDataBrowserController_Base::OGenericUnoController::disposing();
 
