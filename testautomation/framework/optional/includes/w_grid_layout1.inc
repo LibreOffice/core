@@ -271,7 +271,7 @@ testcase  tGridDisplay_1
             printing.cancel()
             Printing.notExists( 5 )
         endif
-        
+
         kontext "Active"
         if active.exists(5) then
             qaErrorLog active.getText()
@@ -552,7 +552,7 @@ testcase tObjectsTest_1
     hCloseNavigator
 
     Kontext
-    FormatAnchorAsCharacter 
+    FormatAnchorAsCharacter
     WaitSlot()
 
 
