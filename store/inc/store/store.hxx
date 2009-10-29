@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: store.hxx,v $
- * $Revision: 1.5 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -29,7 +26,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORE_HXX_
-#define _STORE_STORE_HXX_ "$Revision: 1.5 $"
+#define _STORE_STORE_HXX_
 
 #include "sal/types.h"
 #include "rtl/ustring.hxx"
@@ -242,7 +239,7 @@ public:
             (void) store_acquireHandle (rhs.m_hImpl);
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
-        m_hImpl = rOther.m_hImpl;
+        m_hImpl = rhs.m_hImpl;
         return *this;
     }
 

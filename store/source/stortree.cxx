@@ -205,25 +205,10 @@ storeError OStoreBTreeNodeObject::split (
     if (!rxPageL->querySplit())
         return store_E_None;
 
-    // Save PageDescriptor.
-    OStorePageDescriptor aDescr (xPage->m_aDescr);
-    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
-    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
-
-    // Acquire Lock.
-    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
-    // [Begin PageL Lock (NYI)]
-
     // Construct right page.
     PageHolderObject< page > xPageR;
     if (!xPageR.construct (rBIOS.allocator()))
-    {
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
         return store_E_OutOfMemory;
-    }
 
     // Split right page off left page.
     xPageR->split (*rxPageL);
@@ -231,12 +216,9 @@ storeError OStoreBTreeNodeObject::split (
 
     // Allocate right page.
     self aNodeR (xPageR.get());
-    eErrCode = rBIOS.allocate (aNodeR);
+    storeError eErrCode = rBIOS.allocate (aNodeR);
     if (eErrCode != store_E_None)
-    {
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
         return eErrCode;
-    }
 
     // Truncate left page.
     rxPageL->truncate (rxPageL->capacityCount() / 2);
@@ -245,35 +227,14 @@ storeError OStoreBTreeNodeObject::split (
     self aNodeL (rxPageL.get());
     eErrCode = rBIOS.saveObjectAt (aNodeL, aNodeL.location());
     if (eErrCode != store_E_None)
-    {
-        // Must not happen.
-        OSL_TRACE("OStoreBTreeNodeObject::split(): save() failed");
-
-        // Release Lock and Leave.
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
         return eErrCode;
-    }
-
-    // [End PageL Lock (NYI)]
 
     // Insert right page.
     OStorePageLink aLink (xPageR->location());
     xPage->insert (nIndexL + 1, T(xPageR->m_pData[0].m_aKey, aLink));
 
-    // Save this page.
-    eErrCode = rBIOS.saveObjectAt (*this, location());
-    if (eErrCode != store_E_None)
-    {
-        // Must not happen.
-        OSL_TRACE("OStoreBTreeNodeObject::split(): save() failed");
-
-        // Release Lock and Leave.
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-        return eErrCode;
-    }
-
-    // Release Lock and Leave.
-    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+    // Save this page and leave.
+    return rBIOS.saveObjectAt (*this, location());
 }
 
 /*
@@ -287,43 +248,25 @@ storeError OStoreBTreeNodeObject::remove (
     PageHolderObject< page > xImpl (m_xPage);
     page & rPage = (*xImpl);
 
-    // Save PageDescriptor.
-    OStorePageDescriptor aDescr (rPage.m_aDescr);
-    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
-    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
-
-    // Acquire Lock.
-    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Check depth.
+    storeError eErrCode = store_E_None;
     if (rPage.depth())
     {
         // Check link entry.
         T const aEntryL (rPage.m_pData[nIndexL]);
         if (!(rEntryL.compare (aEntryL) == T::COMPARE_EQUAL))
-        {
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
             return store_E_InvalidAccess;
-        }
 
         // Load link node.
         self aNodeL;
         eErrCode = rBIOS.loadObjectAt (aNodeL, aEntryL.m_aLink.location());
         if (eErrCode != store_E_None)
-        {
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
             return eErrCode;
-        }
 
         // Recurse: remove from link node.
         eErrCode = aNodeL.remove (0, rEntryL, rBIOS);
         if (eErrCode != store_E_None)
-        {
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
             return eErrCode;
-        }
 
         // Check resulting link node usage.
         PageHolderObject< page > xPageL (aNodeL.get());
@@ -333,10 +276,7 @@ storeError OStoreBTreeNodeObject::remove (
             OStorePageData aPageHead;
             eErrCode = rBIOS.free (aPageHead, xPageL->location());
             if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
                 return eErrCode;
-            }
 
             // Remove index.
             rPage.remove (nIndexL);
@@ -373,10 +313,7 @@ storeError OStoreBTreeNodeObject::remove (
     {
         // Check leaf entry.
         if (!(rEntryL.compare (rPage.m_pData[nIndexL]) == T::COMPARE_EQUAL))
-        {
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
             return store_E_NotExists;
-        }
 
         // Save leaf entry.
         rEntryL = rPage.m_pData[nIndexL];
@@ -391,19 +328,10 @@ storeError OStoreBTreeNodeObject::remove (
     {
         // Save this page.
         eErrCode = rBIOS.saveObjectAt (*this, location());
-        if (eErrCode != store_E_None)
-        {
-            // Must not happen.
-            OSL_TRACE("OStoreBTreeNodeObject::remove(): save() failed");
-
-            // Release Lock and Leave.
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            return eErrCode;
-        }
     }
 
-    // Release Lock and Leave.
-    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+    // Done.
+    return eErrCode;
 }
 
 /*========================================================================
@@ -457,33 +385,17 @@ storeError OStoreBTreeRootObject::change (
     PageHolderObject< page > xPage (m_xPage);
     (void) testInvariant("OStoreBTreeRootObject::change(): enter");
 
-    // Save PageDescriptor.
-    OStorePageDescriptor aDescr (xPage->m_aDescr);
-    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
-    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
-
     // Save root location.
     sal_uInt32 const nRootAddr = xPage->location();
 
-    // Acquire Lock.
-    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Construct new root.
     if (!rxPageL.construct (rBIOS.allocator()))
-    {
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
         return store_E_OutOfMemory;
-    }
 
     // Save this as prev root.
-    eErrCode = rBIOS.allocate (*this);
+    storeError eErrCode = rBIOS.allocate (*this);
     if (eErrCode != store_E_None)
-    {
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
         return store_E_OutOfMemory;
-    }
 
     // Setup new root.
     rxPageL->depth (xPage->depth() + 1);
@@ -500,22 +412,13 @@ storeError OStoreBTreeRootObject::change (
 
     // Save this as new root.
     eErrCode = rBIOS.saveObjectAt (*this, nRootAddr);
-    if (eErrCode != store_E_None)
-    {
-        // Must not happen.
-        OSL_TRACE("OStoreBTreeRootObject::change(): save() failed");
-
-        // Release Lock and Leave.
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-        return eErrCode;
-    }
 
     // Flush for robustness.
     (void) rBIOS.flush();
 
-    // Done. Release Lock and Leave.
+    // Done.
     (void) testInvariant("OStoreBTreeRootObject::change(): leave");
-    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+    return eErrCode;
 }
 
 /*

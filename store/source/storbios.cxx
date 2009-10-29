@@ -697,22 +697,8 @@ storeError OStorePageBIOS::verify (SuperPage *&rpSuper)
  */
 storeError OStorePageBIOS::repair (SuperPage *&rpSuper)
 {
-    // Acquire Lock.
-    storeError eErrCode = acquireLock (0, SuperPage::theSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Verify SuperBlock page (with repair).
-    eErrCode = verify (rpSuper);
-    if (eErrCode != store_E_None)
-    {
-        // Failure.
-        releaseLock (0, SuperPage::theSize);
-        return eErrCode;
-    }
-
-    // ReleaseLock.
-    return releaseLock (0, SuperPage::theSize);
+    return verify (rpSuper);
 }
 
 /*
@@ -729,29 +715,16 @@ storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
         return store_E_InvalidParameter;
     nPageSize = ((nPageSize + STORE_MINIMUM_PAGESIZE - 1) & ~(STORE_MINIMUM_PAGESIZE - 1));
 
-    // Acquire Lock.
-    storeError eErrCode = acquireLock (0, nPageSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Allocate SuperBlock page.
     delete m_pSuper, m_pSuper = 0;
     if ((m_pSuper = new(nPageSize) SuperPage(nPageSize)) == 0)
-    {
-        // Cleanup and fail.
-        releaseLock (0, nPageSize);
         return store_E_OutOfMemory;
-    }
     m_pSuper->guard();
 
     // Create initial page (w/ SuperBlock).
-    eErrCode = m_xLockBytes->writeAt (0, m_pSuper, nPageSize);
+    storeError eErrCode = m_xLockBytes->writeAt (0, m_pSuper, nPageSize);
     if (eErrCode != store_E_None)
-    {
-        // Cleanup and fail.
-        releaseLock (0, nPageSize);
         return eErrCode;
-    }
 
 #ifdef STORE_FEATURE_COMMIT
     // Commit.
@@ -763,9 +736,7 @@ storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
 
     // Adjust modified state.
     m_bModified = (eErrCode != store_E_None);
-
-    // Release Lock and finish.
-    return releaseLock (0, nPageSize);
+    return eErrCode;
 }
 
 /*
@@ -857,36 +828,6 @@ storeError OStorePageBIOS::initialize (
         eErrCode = PageCache_createInstance (m_xCache, rnPageSize);
     }
     return eErrCode;
-}
-
-/*
- * acquireLock.
- * Low Level: Precond: initialized, exclusive access.
- */
-storeError OStorePageBIOS::acquireLock (
-    sal_uInt32 nAddr, sal_uInt32 nSize)
-{
-    // Check precond.
-    if (!m_xLockBytes.is())
-        return store_E_InvalidAccess;
-
-    // Acquire Lock.
-    return m_xLockBytes->lockRange (nAddr, nSize);
-}
-
-/*
- * releaseLock.
- * Low Level: Precond: initialized, exclusive access.
- */
-storeError OStorePageBIOS::releaseLock (
-    sal_uInt32 nAddr, sal_uInt32 nSize)
-{
-    // Check precond.
-    if (!m_xLockBytes.is())
-        return store_E_InvalidAccess;
-
-    // Release Lock.
-    return m_xLockBytes->unlockRange (nAddr, nSize);
 }
 
 /*
@@ -1034,18 +975,10 @@ storeError OStorePageBIOS::allocate (
     if (!m_bWriteable)
         return store_E_AccessViolation;
 
-    // Acquire SuperBlock Lock.
-    storeError eErrCode = acquireLock (0, SuperPage::theSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Load SuperBlock and require good health.
-    eErrCode = verify (m_pSuper);
+    storeError eErrCode = verify (m_pSuper);
     if (eErrCode != store_E_None)
-    {
-        releaseLock (0, SuperPage::theSize);
         return eErrCode;
-    }
 
     // Check allocation.
     if (eAlloc != ALLOCATE_EOF)
@@ -1061,10 +994,7 @@ storeError OStorePageBIOS::allocate (
             // Load PageHead.
             eErrCode = peek (aPageHead);
             if (eErrCode != store_E_None)
-            {
-                releaseLock (0, SuperPage::theSize);
                 return eErrCode;
-            }
 
             // Verify FreeList head.
             OSL_PRECOND(
@@ -1078,9 +1008,6 @@ storeError OStorePageBIOS::allocate (
 
                 // Save SuperBlock page.
                 eErrCode = m_pSuper->save (*this);
-
-                // Release SuperBlock Lock.
-                releaseLock (0, SuperPage::theSize);
 
                 // Recovery: Allocate from EOF.
                 if (eErrCode == store_E_None)
@@ -1096,12 +1023,9 @@ storeError OStorePageBIOS::allocate (
             // Save page at PageHead location.
             eErrCode = saveObjectAt_Impl (rPage, aPageHead.location());
             if (eErrCode != store_E_None)
-            {
-                releaseLock (0, SuperPage::theSize);
                 return eErrCode;
-            }
 
-            // Save SuperBlock page.
+            // Save SuperBlock page and finish.
             m_pSuper->m_aSuperTwo.unusedRemove (aListHead);
             m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
 
@@ -1109,9 +1033,7 @@ storeError OStorePageBIOS::allocate (
             OSL_POSTCOND(
                 eErrCode == store_E_None,
                 "OStorePageBIOS::allocate(): SuperBlock save failed");
-
-            // Release SuperBlock Lock and finish.
-            return releaseLock (0, SuperPage::theSize);
+            return eErrCode;
         }
     }
 
@@ -1119,10 +1041,7 @@ storeError OStorePageBIOS::allocate (
     sal_uInt32 nPhysLen = STORE_PAGE_NULL;
     eErrCode = m_xLockBytes->getSize (nPhysLen);
     if (eErrCode != store_E_None)
-    {
-        releaseLock (0, SuperPage::theSize);
         return eErrCode;
-    }
 
     // Obtain logical EOF.
     OStorePageDescriptor aDescr (m_pSuper->m_aSuperTwo.m_aDescr);
@@ -1141,10 +1060,7 @@ storeError OStorePageBIOS::allocate (
             // Mark SuperBlock modified.
             eErrCode = m_pSuper->modified (*this);
             if (eErrCode != store_E_None)
-            {
-                releaseLock (0, SuperPage::theSize);
                 return eErrCode;
-            }
         }
 
         // Resize.
@@ -1153,21 +1069,15 @@ storeError OStorePageBIOS::allocate (
 
         eErrCode = m_xLockBytes->setSize (nPhysLen);
         if (eErrCode != store_E_None)
-        {
-            releaseLock (0, SuperPage::theSize);
             return eErrCode;
-        }
     }
 
     // Save page at logical EOF.
     eErrCode = saveObjectAt_Impl (rPage, nLogLen);
     if (eErrCode != store_E_None)
-    {
-        releaseLock (0, SuperPage::theSize);
         return eErrCode;
-    }
 
-    // Save SuperBlock page.
+    // Save SuperBlock page and finish.
     nLogLen += store::ntohs(aDescr.m_nSize);
     aDescr.m_nAddr = store::htonl(nLogLen);
 
@@ -1178,9 +1088,7 @@ storeError OStorePageBIOS::allocate (
     OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::allocate(): SuperBlock save failed");
-
-    // Release SuperBlock Lock and finish.
-    return releaseLock (0, SuperPage::theSize);
+    return eErrCode;
 }
 
 /*
@@ -1198,18 +1106,10 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
     if (!m_bWriteable)
         return store_E_AccessViolation;
 
-    // Acquire SuperBlock Lock.
-    storeError eErrCode = acquireLock (0, SuperPage::theSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Load SuperBlock and require good health.
-    eErrCode = verify (m_pSuper);
+    storeError eErrCode = verify (m_pSuper);
     if (eErrCode != store_E_None)
-    {
-        releaseLock (0, SuperPage::theSize);
         return eErrCode;
-    }
 
     // Load PageHead.
     OStorePageData aPageHead(OStorePageData::theSize);
@@ -1217,10 +1117,7 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
 
     eErrCode = peek (aPageHead);
     if (eErrCode != store_E_None)
-    {
-        releaseLock (0, SuperPage::theSize);
         return eErrCode;
-    }
 
     // Invalidate cache.
     (void) m_xCache->removePageAt (nAddr);
@@ -1234,12 +1131,9 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
     // Save PageHead.
     eErrCode = poke (aPageHead);
     if (eErrCode != store_E_None)
-    {
-        releaseLock (0, SuperPage::theSize);
         return eErrCode;
-    }
 
-    // Save SuperBlock page.
+    // Save SuperBlock page and finish.
     m_pSuper->m_aSuperTwo.unusedInsert (aListHead);
     m_pSuper->m_aSuperOne = m_pSuper->m_aSuperTwo;
 
@@ -1247,9 +1141,7 @@ storeError OStorePageBIOS::free (OStorePageData & /* rData */, sal_uInt32 nAddr)
     OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::free(): SuperBlock save failed");
-
-    // Release SuperBlock Lock and finish.
-    return releaseLock (0, SuperPage::theSize);
+    return eErrCode;
 }
 
 /*

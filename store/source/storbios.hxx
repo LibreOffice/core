@@ -83,16 +83,6 @@ public:
         return m_xAllocator;
     }
 
-    /** acquireLock.
-     */
-    storeError acquireLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
-    /** releaseLock.
-     */
-    storeError releaseLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
     /** read.
      */
     storeError read (

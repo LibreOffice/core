@@ -436,17 +436,8 @@ storeError OStoreIndirectionPageObject::truncate (
     if (!(nSingle < nLimit))
         return store_E_InvalidAccess;
 
-    // Save PageDescriptor.
-    OStorePageDescriptor aDescr (rPage.m_aDescr);
-    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
-    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
-
-    // Acquire Lock.
-    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Truncate.
+    storeError eErrCode = store_E_None;
     for (sal_uInt16 i = nLimit; i > nSingle; i--)
     {
         // Obtain data page location.
@@ -457,10 +448,7 @@ storeError OStoreIndirectionPageObject::truncate (
             OStorePageData aPageHead;
             eErrCode = rBIOS.free (aPageHead, nAddr);
             if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
                 return eErrCode;
-            }
 
             // Clear pointer to data page.
             rPage.m_pData[i - 1] = STORE_PAGE_NULL;
@@ -473,19 +461,10 @@ storeError OStoreIndirectionPageObject::truncate (
     {
         // Save this page.
         eErrCode = rBIOS.saveObjectAt (*this, location());
-        if (eErrCode != store_E_None)
-        {
-            // Must not happen.
-            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
-
-            // Release Lock and Leave.
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            return eErrCode;
-        }
     }
 
-    // Release Lock and Leave.
-    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+    // Done.
+    return eErrCode;
 }
 
 /*
@@ -504,26 +483,14 @@ storeError OStoreIndirectionPageObject::truncate (
     if (!((nDouble < nLimit) && (nSingle < nLimit)))
         return store_E_InvalidAccess;
 
-    // Save PageDescriptor.
-    OStorePageDescriptor aDescr (rPage.m_aDescr);
-    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
-    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
-
-    // Acquire Lock.
-    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Truncate.
+    storeError eErrCode = store_E_None;
     for (sal_uInt16 i = nLimit; i > nDouble + 1; i--)
     {
         // Truncate single indirect page to zero direct pages.
         eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[i - 1]), 0, rBIOS);
         if (eErrCode != store_E_None)
-        {
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
             return eErrCode;
-        }
 
         // Clear pointer to single indirect page.
         rPage.m_pData[i - 1] = STORE_PAGE_NULL;
@@ -533,10 +500,7 @@ storeError OStoreIndirectionPageObject::truncate (
     // Truncate last single indirect page to 'nSingle' direct pages.
     eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[nDouble]), nSingle, rBIOS);
     if (eErrCode != store_E_None)
-    {
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
         return eErrCode;
-    }
 
     // Check for complete truncation.
     if (nSingle == 0)
@@ -551,19 +515,10 @@ storeError OStoreIndirectionPageObject::truncate (
     {
         // Save this page.
         eErrCode = rBIOS.saveObjectAt (*this, location());
-        if (eErrCode != store_E_None)
-        {
-            // Must not happen.
-            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
-
-            // Release Lock and Leave.
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            return eErrCode;
-        }
     }
 
-    // Release Lock and Leave.
-    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+    // Done.
+    return eErrCode;
 }
 
 /*
@@ -583,26 +538,14 @@ storeError OStoreIndirectionPageObject::truncate (
     if (!((nTriple < nLimit) && (nDouble < nLimit) && (nSingle < nLimit)))
         return store_E_InvalidAccess;
 
-    // Save PageDescriptor.
-    OStorePageDescriptor aDescr (rPage.m_aDescr);
-    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
-    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
-
-    // Acquire Lock.
-    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-
     // Truncate.
+    storeError eErrCode = store_E_None;
     for (sal_uInt16 i = nLimit; i > nTriple + 1; i--)
     {
         // Truncate double indirect page to zero single indirect pages.
         eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[i - 1]), 0, 0, rBIOS);
         if (eErrCode != store_E_None)
-        {
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
             return eErrCode;
-        }
 
         // Clear pointer to double indirect page.
         rPage.m_pData[i - 1] = STORE_PAGE_NULL;
@@ -612,10 +555,7 @@ storeError OStoreIndirectionPageObject::truncate (
     // Truncate last double indirect page to 'nDouble', 'nSingle' pages.
     eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[nTriple]), nDouble, nSingle, rBIOS);
     if (eErrCode != store_E_None)
-    {
-        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
         return eErrCode;
-    }
 
     // Check for complete truncation.
     if ((nDouble + nSingle) == 0)
@@ -630,19 +570,10 @@ storeError OStoreIndirectionPageObject::truncate (
     {
         // Save this page.
         eErrCode = rBIOS.saveObjectAt (*this, location());
-        if (eErrCode != store_E_None)
-        {
-            // Must not happen.
-            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
-
-            // Release Lock and Leave.
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            return eErrCode;
-        }
     }
 
-    // Release Lock and Leave.
-    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+    // Done.
+    return eErrCode;
 }
 
 /*========================================================================
@@ -1132,8 +1063,8 @@ storeError OStoreDirectoryPageObject::truncate (
             if (nAddr == STORE_PAGE_NULL) continue;
 
             // Free data page.
-            OStoreDataPageData aData;
-            eErrCode = rBIOS.free (aData, nAddr);
+            OStorePageData aPageHead;
+            eErrCode = rBIOS.free (aPageHead, nAddr);
             if (eErrCode != store_E_None)
                 break;
 
