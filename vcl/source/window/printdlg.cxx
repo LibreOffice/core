@@ -83,15 +83,22 @@ void PrintDialog::PrintPreviewWindow::Resize()
     aNewSize.Height() -= 2;
     Size aScaledSize;
     double fScale = 1.0;
-    if( maOrigSize.Width() > maOrigSize.Height() )
+
+    // #i106435# catch corner case of Size(0,0)
+    Size aOrigSize( maOrigSize );
+    if( aOrigSize.Width() < 1 )
+        aOrigSize.Width() = aNewSize.Width();
+    if( aOrigSize.Height() < 1 )
+        aOrigSize.Height() = aNewSize.Height();
+    if( aOrigSize.Width() > aOrigSize.Height() )
     {
-        aScaledSize = Size( aNewSize.Width(), aNewSize.Width() * maOrigSize.Height() / maOrigSize.Width() );
+        aScaledSize = Size( aNewSize.Width(), aNewSize.Width() * aOrigSize.Height() / aOrigSize.Width() );
         if( aScaledSize.Height() > aNewSize.Height() )
             fScale = double(aNewSize.Height())/double(aScaledSize.Height());
     }
     else
     {
-        aScaledSize = Size( aNewSize.Height() * maOrigSize.Width() / maOrigSize.Height(), aNewSize.Height() );
+        aScaledSize = Size( aNewSize.Height() * aOrigSize.Width() / aOrigSize.Height(), aNewSize.Height() );
         if( aScaledSize.Width() > aNewSize.Width() )
             fScale = double(aNewSize.Width())/double(aScaledSize.Width());
     }
@@ -125,7 +132,12 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
                        (aSize.Height() - aPreviewSize.Height()) / 2 );
 
         const Size aLogicSize( maPageVDev.PixelToLogic( aPreviewSize, MapMode( MAP_100TH_MM ) ) );
-        double fScale = double(aLogicSize.Width())/double(maOrigSize.Width());
+        Size aOrigSize( maOrigSize );
+        if( aOrigSize.Width() < 1 )
+            aOrigSize.Width() = aLogicSize.Width();
+        if( aOrigSize.Height() < 1 )
+            aOrigSize.Height() = aLogicSize.Height();
+        double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
 
 
         maPageVDev.Erase();
