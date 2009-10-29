@@ -1628,6 +1628,17 @@ void FormController::impl_onModify()
 //------------------------------------------------------------------------------
 void FormController::implts_ensureEmptyFilterRow_nothrow()
 {
+    // TODO:
+    // strictly, this method should not be needed. There is no compelling reason why a FormController must always
+    // have an empty filter row (or, in API terminology, an empty disjunctive term). Except ... the implementation
+    // probably cannot cope with an empty filter row container.
+    // Before the UNOiization of the FormController, the responsibility between ensuring the empty row was
+    // shared between the form controller and the filter navigator, which of course is nonsense. In the course
+    // of the UNOization, this was changed so that now the FormController is responsible alone.
+    // However, ideally, the FormController should not expect this empty row, and be able to work with no row at all.
+    // It would then be the responsibility of the UI (aka the filter navigator), to always ensure this empty row,
+    // if it really needs it.
+
     // SYNCHRONIZED -->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
