@@ -685,7 +685,15 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
+            SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, nSlot, sal_False );
+            if ( !pShowItem )
+                GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
+            else
+            {
+                sal_Bool bShow = pShowItem->GetValue();
+                GetViewShell()->GetViewFrame()->ShowChildWindow( nSlot, bShow );
+            }
+
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
@@ -857,6 +865,15 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             GetImpl()->startFiltering();
             rReq.Done();
+
+            // initially open the filter navigator, the whole form based filter is pretty useless without it
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
+            const SfxPoolItem* pArgs[] =
+            {
+                &aIdentifierItem, NULL
+            };
+            GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
+                                      pArgs, rReq.GetModifier() );
         }   break;
     }
 }

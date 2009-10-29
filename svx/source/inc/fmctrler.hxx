@@ -66,6 +66,7 @@
 #include <com/sun/star/form/XDatabaseParameterBroadcaster2.hpp>
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFilterController.hpp>
 #include <com/sun/star/form/XFormControllerListener.hpp>
 #include <com/sun/star/form/XGridControlListener.hpp>
 #include <com/sun/star/form/XLoadListener.hpp>
@@ -100,9 +101,9 @@
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -127,7 +128,8 @@ namespace svxform
     class ControlBorderManager;
     struct FmFieldInfo;
 
-    typedef ::comphelper::WeakComponentImplHelper21 <   ::com::sun::star::form::runtime::XFormController
+    typedef ::comphelper::WeakComponentImplHelper22 <   ::com::sun::star::form::runtime::XFormController
+                                                    ,   ::com::sun::star::form::runtime::XFilterController
                                                     ,   ::com::sun::star::awt::XFocusListener
                                                     ,   ::com::sun::star::form::XLoadListener
                                                     ,   ::com::sun::star::beans::XPropertyChangeListener
@@ -185,7 +187,8 @@ namespace svxform
                                     m_aErrorListeners,
                                     m_aDeleteListeners,
                                     m_aRowSetApproveListeners,
-                                    m_aParameterListeners;
+                                    m_aParameterListeners,
+                                    m_aFilterListeners;
 
         FmFormControllers           m_aChilds;
         FmFilterControls            m_aFilterControls;
@@ -282,6 +285,19 @@ namespace svxform
 
         using OPropertySetHelper::getFastPropertyValue;
 
+        // XFilterController
+        virtual ::sal_Int32 SAL_CALL getFilterComponents() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getDisjunctiveTerms() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addFilterControllerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterControllerListener >& _Listener ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL removeFilterControllerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterControllerListener >& _Listener ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL setPredicateExpression( ::sal_Int32 _Component, ::sal_Int32 _Term, const ::rtl::OUString& _PredicateExpression ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getFilterComponent( ::sal_Int32 _Component ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL getPredicateExpressions() throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL appendEmptyDisjunctiveTerm() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getActiveTerm() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setActiveTerm( ::sal_Int32 _ActiveTerm ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
     // XElementAccess
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType(void) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL hasElements(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -351,6 +367,7 @@ namespace svxform
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>& l) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL addChildController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _ChildController ) throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setContext( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext >& _context ) throw (::com::sun::star::uno::RuntimeException);
@@ -428,26 +445,6 @@ namespace svxform
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
             ) const;
-
-    public:
-    // access to the controls for filtering
-        const FmFilterControls& getFilterControls() const {return m_aFilterControls;}
-
-    // access to the current filter rows
-        const FmFilterRows& getFilterRows() const {return m_aFilters;}
-        FmFilterRows& getFilterRows() {return m_aFilters;}
-
-        // just decr. the positions no notifications for the view
-        void decrementCurrentFilterPosition()
-        {
-            DBG_ASSERT(m_nCurrentFilterPosition, "Invalid Position");
-            --m_nCurrentFilterPosition;
-        }
-
-        SVX_DLLPUBLIC void setCurrentFilterPosition(sal_Int32 nPos);
-        sal_Int32 getCurrentFilterPosition() const {return m_nCurrentFilterPosition;}
-
-        void addChild( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxChildController );
 
     protected:
         // FmDispatchInterceptor
@@ -538,8 +535,17 @@ namespace svxform
         void    implInvalidateCurrentControlDependentFeatures();
 
         bool    impl_isDisposed_nofail() const { return FormController_BASE::rBHelper.bDisposed; }
+        void    impl_checkDisposed_throw() const;
 
         void    impl_onModify();
+
+        /** ensures that m_aFilters contains at least one empty row
+        */
+        void    implts_ensureEmptyFilterRow_nothrow();
+
+        /** adds an empty filter row to m_aFilters, and notifies our listeners
+        */
+        void    impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rClearBeforeNotify );
 
         sal_Bool isLocked() const {return m_bLocked;}
         sal_Bool determineLockState() const;

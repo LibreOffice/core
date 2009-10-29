@@ -2948,7 +2948,15 @@ void FmXFormShell::startFiltering()
     m_bFilterMode = sal_True;
 
     m_pShell->UIFeatureChanged();
-    m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
+    SfxViewFrame* pViewFrame = m_pShell->GetViewShell()->GetViewFrame();
+    pViewFrame->GetBindings().InvalidateShell( *m_pShell );
+
+    if  (   pViewFrame->KnowsChildWindow( SID_FM_FILTER_NAVIGATOR )
+        &&  !pViewFrame->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
+        )
+    {
+        pViewFrame->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -2994,7 +3002,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
     Reference< XControlContainer> xContainer;
     if (getActiveController() == m_xExternalViewController)
     {
-        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::startFiltering : inconsistent : active external controller, but noone triggered this !");
+        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::stopFiltering : inconsistent : active external controller, but noone triggered this !");
         xContainer = m_xExtViewTriggerController->getContainer();
     }
     else
@@ -3131,7 +3139,7 @@ void FmXFormShell::clearFilter()
     Reference< XControlContainer> xContainer;
     if (getActiveController() == m_xExternalViewController)
     {
-        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::startFiltering : inconsistent : active external controller, but noone triggered this !");
+        DBG_ASSERT(m_xExtViewTriggerController.is(), "FmXFormShell::clearFilter : inconsistent : active external controller, but noone triggered this !");
         xContainer = m_xExtViewTriggerController->getContainer();
     }
     else

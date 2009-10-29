@@ -88,15 +88,16 @@ namespace svxform
 //........................................................................
 
     /** === begin UNO using === **/
-    using ::com::sun::star::awt::XTextComponent;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::awt::XTextListener;
     using ::com::sun::star::awt::TextEvent;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::form::runtime::XFormController;
+    using ::com::sun::star::form::runtime::XFilterController;
+    using ::com::sun::star::form::runtime::XFilterControllerListener;
+    using ::com::sun::star::form::runtime::FilterEvent;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::form::XForm;
@@ -110,6 +111,11 @@ namespace svxform
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::sdb::SQLContext;
     using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::awt::XTextComponent;
+    using ::com::sun::star::uno::Sequence;
     /** === end UNO using === **/
 
 //========================================================================
@@ -153,8 +159,8 @@ TYPEINIT1(FmParentData, FmFilterData);
 //------------------------------------------------------------------------
 FmParentData::~FmParentData()
 {
-    for (::std::vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
-         i != m_aChilds.end(); i++)
+    for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
+         i != m_aChildren.end(); i++)
         delete (*i);
 }
 
@@ -180,16 +186,17 @@ Image FmFormItem::GetImage( BmpColorMode _eMode ) const
 //========================================================================
 TYPEINIT1(FmFilterItems, FmParentData);
 //------------------------------------------------------------------------
-FmFilterItem* FmFilterItems::Find(const Reference< XTextComponent > & _xText) const
+FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterItems::Find" );
-    for (::std::vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
-         i != m_aChilds.end(); ++i)
+    for (   ::std::vector< FmFilterData* >::const_iterator i = m_aChildren.begin();
+            i != m_aChildren.end();
+            ++i
+        )
     {
-        FmFilterItem* pCond = PTR_CAST(FmFilterItem, *i);
-        DBG_ASSERT(pCond, "Wrong element in container");
-        if (_xText == pCond->GetTextComponent())
-            return pCond;
+        FmFilterItem* pCondition = PTR_CAST( FmFilterItem, *i );
+        DBG_ASSERT( pCondition, "FmFilterItems::Find: Wrong element in container!" );
+        if ( _nFilterComponentIndex == pCondition->GetComponentIndex() )
+            return pCondition;
     }
     return NULL;
 }
@@ -197,7 +204,6 @@ FmFilterItem* FmFilterItems::Find(const Reference< XTextComponent > & _xText) co
 //------------------------------------------------------------------------
 Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterItems::GetImage" );
     static Image aImage;
     static Image aImage_HC;
 
@@ -215,16 +221,15 @@ Image FmFilterItems::GetImage( BmpColorMode _eMode ) const
 //========================================================================
 TYPEINIT1(FmFilterItem, FmFilterData);
 //------------------------------------------------------------------------
-FmFilterItem::FmFilterItem(const Reference< XMultiServiceFactory >& _rxFactory,
-                           FmFilterItems* pParent,
-                     const ::rtl::OUString& aFieldName,
-                     const ::rtl::OUString& aText,
-                     const Reference< XTextComponent > & _xText)
+FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
+                            FmFilterItems* pParent,
+                            const ::rtl::OUString& aFieldName,
+                            const ::rtl::OUString& aText,
+                            const sal_Int32 _nComponentIndex )
           :FmFilterData(_rxFactory,pParent, aText)
           ,m_aFieldName(aFieldName)
-          ,m_xText(_xText)
+          ,m_nComponentIndex( _nComponentIndex )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterItems::FmFilterItem" );
 }
 
 //------------------------------------------------------------------------
@@ -274,17 +279,6 @@ public:
 TYPEINIT1( FmFilterInsertedHint, FmFilterHint );
 
 //========================================================================
-class FmFilterReplacedHint : public FmFilterHint
-{
-public:
-    TYPEINFO();
-    FmFilterReplacedHint(FmFilterData* pData)
-        :FmFilterHint(pData){}
-
-};
-TYPEINIT1( FmFilterReplacedHint, FmFilterHint );
-
-//========================================================================
 class FmFilterRemovedHint : public FmFilterHint
 {
 public:
@@ -327,9 +321,8 @@ TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 //========================================================================
 // class FmFilterAdapter, Listener an den FilterControls
 //========================================================================
-class FmFilterAdapter : public ::cppu::WeakImplHelper1< XTextListener >
+class FmFilterAdapter : public ::cppu::WeakImplHelper1< XFilterControllerListener >
 {
-    FmFilterControls        m_aFilterControls;
     FmFilterModel*          m_pModel;
 
 public:
@@ -338,82 +331,36 @@ public:
 // XEventListener
     virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException );
 
-// XTextListener
-    virtual void SAL_CALL textChanged(const TextEvent& e) throw( RuntimeException );
+// XFilterControllerListener
+    virtual void SAL_CALL predicateExpressionChanged( const FilterEvent& _Event ) throw (RuntimeException);
+    virtual void SAL_CALL disjunctiveTermRemoved( const FilterEvent& _Event ) throw (RuntimeException);
+    virtual void SAL_CALL disjunctiveTermAdded( const FilterEvent& _Event ) throw (RuntimeException);
 
 // helpers
     void dispose() throw( RuntimeException );
 
-    void InsertElements(const Reference< XIndexAccess >& xControllers);
-    void RemoveElement(const Reference< XTextComponent > & xText);
+    void InsertElements( const Reference< XIndexAccess >& xControllers );
 
-    Reference< XPropertySet > getField(const Reference< XTextComponent > & xText) const;
     void setText(sal_Int32 nPos,
         const FmFilterItem* pFilterItem,
         const ::rtl::OUString& rText);
-    void DeleteItemsByText(::std::vector<FmFilterData*>& rItems, const Reference< XTextComponent > & xText);
-    Reference< XForm > findForm(const Reference< XChild >& xChild);
 };
 
 //------------------------------------------------------------------------
 FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers)
                  :m_pModel(pModel)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::FmFilterAdapter" );
     InsertElements(xControllers);
-
-    // listen on all controls as text listener
-    for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
-        iter != m_aFilterControls.end(); iter++)
-        (*iter).first->addTextListener(this);
 }
 
 //------------------------------------------------------------------------
 void FmFilterAdapter::dispose() throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::dispose" );
-    // clear the filter control map
-    for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
-         iter != m_aFilterControls.end(); iter++)
-         (*iter).first->removeTextListener(this);
-
-    m_aFilterControls.clear();
-}
-
-//------------------------------------------------------------------------------
-// delete all items relate to the control
-void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& _rItems,
-                                        const Reference< XTextComponent > & xText)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::DeleteItemsByText" );
-    for (::std::vector<FmFilterData*>::reverse_iterator i = _rItems.rbegin();
-        // link problems with operator ==
-        i.base() != _rItems.rend().base(); i++)
-    {
-        FmFilterItems* pFilterItems = PTR_CAST(FmFilterItems, *i);
-        if (pFilterItems)
-        {
-            FmFilterItem* pFilterItem = pFilterItems->Find(xText);
-            if (pFilterItem)
-            {
-                // remove the condition
-                ::std::vector<FmFilterData*>& rItems = pFilterItems->GetChilds();
-                ::std::vector<FmFilterData*>::iterator j = ::std::find(rItems.begin(), rItems.end(), pFilterItem);
-                if (j != rItems.end())
-                    m_pModel->Remove(j, pFilterItem);
-            }
-            continue;
-        }
-        FmFormItem* pFormItem = PTR_CAST(FmFormItem, *i);
-        if (pFormItem)
-            DeleteItemsByText(pFormItem->GetChilds(), xText);
-    }
 }
 
 //------------------------------------------------------------------------
 void FmFilterAdapter::InsertElements(const Reference< XIndexAccess >& xControllers)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::InsertElements" );
     for (sal_Int32 i = 0, nLen = xControllers->getCount(); i < nLen; ++i)
     {
         Reference< XIndexAccess > xElement;
@@ -422,42 +369,11 @@ void FmFilterAdapter::InsertElements(const Reference< XIndexAccess >& xControlle
         // Insert the Elements of the controller
         InsertElements(xElement);
 
-        // store the filter controls
-        FormController* pController = FormController::getImplementation( xElement );
-        DBG_ASSERT( pController, "FmFilterAdapter::InsertElements: no controller!" );
-
-        const FmFilterControls& rControls = pController->getFilterControls();
-        for (FmFilterControls::const_iterator iter = rControls.begin(); iter != rControls.end(); ++iter )
-            m_aFilterControls.insert(*iter);
+        Reference< XFilterController > xController( xElement, UNO_QUERY );
+        OSL_ENSURE( xController.is(), "FmFilterAdapter::InsertElements: no XFilterController, cannot sync data!" );
+        if ( xController.is() )
+            xController->addFilterControllerListener( this );
     }
-}
-
-//------------------------------------------------------------------------------
-void FmFilterAdapter::RemoveElement(const Reference< XTextComponent > & xText)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::RemoveElement" );
-    if (xText.is())
-    {
-        // alle Level durchlaufen und eintraege entfernen
-        if (m_pModel)
-            DeleteItemsByText(m_pModel->GetChilds(), xText);
-
-        FmFilterControls::iterator iter = m_aFilterControls.find(xText);
-        if (iter != m_aFilterControls.end())
-            m_aFilterControls.erase(iter);
-    }
-}
-
-//------------------------------------------------------------------------
-Reference< XPropertySet >   FmFilterAdapter::getField(const Reference< XTextComponent > & xText) const
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::getField" );
-    Reference< XPropertySet >   xField;
-    FmFilterControls::const_iterator i = m_aFilterControls.find(xText);
-    if (i != m_aFilterControls.end())
-        xField = (*i).second;
-
-    return xField;
 }
 
 //------------------------------------------------------------------------
@@ -465,31 +381,16 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
                               const FmFilterItem* pFilterItem,
                               const ::rtl::OUString& rText)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::setText" );
-    // set the text for the text component
-    Reference< XTextComponent > xText(pFilterItem->GetTextComponent());
-    xText->setText(rText);
+    FmFormItem* pFormItem = PTR_CAST( FmFormItem, pFilterItem->GetParent()->GetParent() );
 
-    // get the controller of the text component and its filter rows
-    FmFormItem* pFormItem = PTR_CAST(FmFormItem,pFilterItem->GetParent()->GetParent());
-    FormController* pController = FormController::getImplementation( pFormItem->GetController() );
-    DBG_ASSERT( pController, "FmFilterAdapter::setText: no controller!" );
-    FmFilterRows& rRows = pController->getFilterRows();
-
-    DBG_ASSERT(nRowPos < (sal_Int32)rRows.size(), "wrong row pos");
-    // Suchen der aktuellen Row
-    FmFilterRow& rRow = rRows[nRowPos];
-
-    // do we have a new filter
-    if (rText.getLength())
-        rRow[xText] = rText;
-    else
+    try
     {
-        // do we have the control in the row
-        FmFilterRow::iterator iter = rRow.find(xText);
-        // erase the entry out of the row
-        if (iter != rRow.end())
-            rRow.erase(iter);
+        Reference< XFilterController > xController( pFormItem->GetController(), UNO_QUERY_THROW );
+        xController->setPredicateExpression( pFilterItem->GetComponentIndex(), nRowPos, rText );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -498,73 +399,153 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 //------------------------------------------------------------------------
 void SAL_CALL FmFilterAdapter::disposing(const EventObject& e) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::disposing" );
-    Reference< XTextComponent > xText(e.Source,UNO_QUERY);
-    if (xText.is())
-        RemoveElement(xText);
 }
 
-// XTextListener
 //------------------------------------------------------------------------
-Reference< XForm > FmFilterAdapter::findForm(const Reference< XChild >& xChild)
+namespace
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::findForm" );
-    Reference< XForm > xForm;
-    if (xChild.is())
+    ::rtl::OUString lcl_getLabelName_nothrow( const Reference< XControl >& _rxControl )
     {
-        xForm = Reference< XForm >(xChild->getParent(), UNO_QUERY);
-        if (!xForm.is())
-            xForm = findForm(Reference< XChild >(xChild->getParent(), UNO_QUERY));
-    }
-    return xForm;
-}
-
-// XTextListener
-//------------------------------------------------------------------------
-void FmFilterAdapter::textChanged(const TextEvent& e) throw( RuntimeException )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterAdapter::textChanged" );
-    // Find the according formitem in the
-    Reference< XControl > xControl(e.Source, UNO_QUERY);
-    if (!m_pModel || !xControl.is())
-        return;
-
-    Reference< XForm > xForm(findForm(Reference< XChild >(xControl->getModel(), UNO_QUERY)));
-    if (!xForm.is())
-        return;
-
-    FmFormItem* pFormItem = m_pModel->Find(m_pModel->m_aChilds, xForm);
-    if (pFormItem)
-    {
-        Reference< XTextComponent > xText(e.Source, UNO_QUERY);
-        FmFilterItems* pFilter = PTR_CAST(FmFilterItems, pFormItem->GetChilds()[pFormItem->GetCurrentPosition()]);
-        FmFilterItem* pFilterItem = pFilter->Find(xText);
-        if (pFilterItem)
+        ::rtl::OUString sLabelName;
+        try
         {
-            if (xText->getText().getLength())
-            {
-                pFilterItem->SetText(xText->getText());
-                // UI benachrichtigen
-                FmFilterTextChangedHint aChangeHint(pFilterItem);
-                m_pModel->Broadcast( aChangeHint );
-            }
-            else
-            {
-                // no text anymore so remove the condition
-                m_pModel->Remove(pFilterItem);
-            }
+            Reference< XControl > xControl( _rxControl, UNO_SET_THROW );
+            Reference< XPropertySet > xModel( xControl->getModel(), UNO_QUERY_THROW );
+            sLabelName = getLabelName( xModel );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sLabelName;
+    }
+
+    Reference< XPropertySet > lcl_getBoundField_nothrow( const Reference< XControl >& _rxControl )
+    {
+        Reference< XPropertySet > xField;
+        try
+        {
+            Reference< XControl > xControl( _rxControl, UNO_SET_THROW );
+            Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
+            xField.set( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return xField;
+    }
+}
+
+// XFilterControllerListener
+//------------------------------------------------------------------------
+void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) throw( RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( !m_pModel )
+        return;
+
+    // the controller which sent the event
+    Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XForm > xForm( xController->getModel(), UNO_QUERY_THROW );
+
+    FmFormItem* pFormItem = m_pModel->Find( m_pModel->m_aChildren, xForm );
+    OSL_ENSURE( pFormItem, "FmFilterAdapter::predicateExpressionChanged: don't know this form!" );
+    if ( !pFormItem )
+        return;
+
+    const sal_Int32 nActiveTerm( xFilterController->getActiveTerm() );
+
+    FmFilterItems* pFilter = PTR_CAST( FmFilterItems, pFormItem->GetChildren()[ nActiveTerm ] );
+    FmFilterItem* pFilterItem = pFilter->Find( _Event.FilterComponent );
+    if ( pFilterItem )
+    {
+        if ( _Event.PredicateExpression.getLength())
+        {
+            pFilterItem->SetText( _Event.PredicateExpression );
+            // UI benachrichtigen
+            FmFilterTextChangedHint aChangeHint(pFilterItem);
+            m_pModel->Broadcast( aChangeHint );
         }
         else
         {
-            // searching the component by field name
-            ::rtl::OUString aFieldName = getLabelName(Reference< XPropertySet > (Reference< XControl > (xText, UNO_QUERY)->getModel(),UNO_QUERY));
-
-            pFilterItem = new FmFilterItem(m_pModel->getORB(),pFilter, aFieldName, xText->getText(), xText);
-            m_pModel->Insert(pFilter->GetChilds().end(), pFilterItem);
+            // no text anymore so remove the condition
+            m_pModel->Remove(pFilterItem);
         }
-        m_pModel->CheckIntegrity(pFormItem);
     }
+    else
+    {
+        // searching the component by field name
+        ::rtl::OUString aFieldName( lcl_getLabelName_nothrow( xFilterController->getFilterComponent( _Event.FilterComponent ) ) );
+
+        pFilterItem = new FmFilterItem( m_pModel->getORB(), pFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent );
+        m_pModel->Insert(pFilter->GetChildren().end(), pFilterItem);
+    }
+    m_pModel->CheckIntegrity(pFormItem);
 }
+
+//------------------------------------------------------------------------
+void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XForm > xForm( xController->getModel(), UNO_QUERY_THROW );
+
+    FmFormItem* pFormItem = m_pModel->Find( m_pModel->m_aChildren, xForm );
+    OSL_ENSURE( pFormItem, "FmFilterAdapter::disjunctiveTermRemoved: don't know this form!" );
+    if ( !pFormItem )
+        return;
+
+    ::std::vector< FmFilterData* >& rTermItems = pFormItem->GetChildren();
+    const bool bValidIndex = ( _Event.DisjunctiveTerm >= 0 ) && ( _Event.DisjunctiveTerm < rTermItems.size() );
+    OSL_ENSURE( bValidIndex, "FmFilterAdapter::disjunctiveTermRemoved: invalid term index!" );
+    if ( !bValidIndex )
+        return;
+
+    // if the first term was removed, then the to-be first term needs its text updated
+    if ( _Event.DisjunctiveTerm == 0 )
+    {
+        rTermItems[1]->SetText( String( SVX_RES( RID_STR_FILTER_FILTER_FOR ) ) );
+        FmFilterTextChangedHint aChangeHint( rTermItems[1] );
+        m_pModel->Broadcast( aChangeHint );
+    }
+
+    // finally remove the entry from the model
+    m_pModel->Remove( rTermItems.begin() + _Event.DisjunctiveTerm );
+}
+
+//------------------------------------------------------------------------
+void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    Reference< XFormController > xController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XFilterController > xFilterController( _Event.Source, UNO_QUERY_THROW );
+    Reference< XForm > xForm( xController->getModel(), UNO_QUERY_THROW );
+
+    FmFormItem* pFormItem = m_pModel->Find( m_pModel->m_aChildren, xForm );
+    OSL_ENSURE( pFormItem, "FmFilterAdapter::disjunctiveTermAdded: don't know this form!" );
+    if ( !pFormItem )
+        return;
+
+    const sal_Int32 nInsertPos = _Event.DisjunctiveTerm;
+    bool bValidIndex = ( nInsertPos >= 0 ) && ( nInsertPos <= pFormItem->GetChildren().size() );
+    if ( !bValidIndex )
+    {
+        OSL_ENSURE( false, "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );
+        return;
+    }
+
+    const ::std::vector< FmFilterData* >::iterator insertPos = pFormItem->GetChildren().begin() + nInsertPos;
+
+    FmFilterItems* pFilterItems = new FmFilterItems( m_pModel->getORB(), pFormItem, String( SVX_RES( RID_STR_FILTER_FILTER_OR ) ) );
+    m_pModel->Insert( insertPos, pFilterItems );
+}
+
 
 //========================================================================
 // class FmFilterModel
@@ -578,7 +559,6 @@ FmFilterModel::FmFilterModel(const Reference< XMultiServiceFactory >& _rxFactory
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::FmFilterModel" );
 }
 
 //------------------------------------------------------------------------
@@ -590,7 +570,6 @@ FmFilterModel::~FmFilterModel()
 //------------------------------------------------------------------------
 void FmFilterModel::Clear()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Clear" );
     // notify
     FilterClearingHint aClearedHint;
     Broadcast( aClearedHint );
@@ -607,18 +586,17 @@ void FmFilterModel::Clear()
     m_xController    = NULL;
     m_xControllers   = NULL;
 
-    for (::std::vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
-         i != m_aChilds.end(); i++)
+    for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
+         i != m_aChildren.end(); i++)
         delete (*i);
 
-    m_aChilds.clear();
+    m_aChildren.clear();
 }
 
 //------------------------------------------------------------------------
 void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Update" );
-    if ((XFormController*) xCurrent.get() == (XFormController*) m_xController.get())
+    if ( xCurrent == m_xController )
         return;
 
     if (!xControllers.is())
@@ -628,7 +606,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const
     }
 
     // there is only a new current controller
-    if ((XIndexAccess*)m_xControllers.get() != (XIndexAccess*)xControllers.get())
+    if ( m_xControllers != xControllers )
     {
         Clear();
 
@@ -651,68 +629,86 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const
 //------------------------------------------------------------------------
 void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmParentData* pParent)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Update" );
-    sal_Int32 nCount = xControllers->getCount();
-    for (sal_Int32 i = 0; i < nCount; i++)
+    try
     {
-        Reference< XFormController >  xController;
-        xControllers->getByIndex(i) >>= xController;
-        Reference< XPropertySet >   xModelAsSet(xController->getModel(), UNO_QUERY);
-        ::rtl::OUString aName = ::comphelper::getString(xModelAsSet->getPropertyValue(FM_PROP_NAME));
-
-        // Insert a new ::com::sun::star::form
-        FmFormItem* pFormItem = new FmFormItem(m_xORB,pParent, xController, aName);
-        Insert(pParent->GetChilds().end(), pFormItem);
-
-        // And now insert the filters for the form
-        FormController* pController = FormController::getImplementation( pFormItem->GetController() );
-        DBG_ASSERT( pController, "FmFilterAdapter::Update: no controller!" );
-
-        INT32 nPos = pController->getCurrentFilterPosition();
-        pFormItem->SetCurrentPosition(nPos);
-
-        String aTitle(SVX_RES(RID_STR_FILTER_FILTER_FOR));
-        const FmFilterRows& rRows = pController->getFilterRows();
-        for (FmFilterRows::const_iterator iter = rRows.begin(); iter != rRows.end(); ++iter)
+        sal_Int32 nCount = xControllers->getCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            const FmFilterRow& rRow = *iter;
-            // now add the filter rows
-            // One Row always exists
+            Reference< XFormController > xController( xControllers->getByIndex(i), UNO_QUERY_THROW );
 
-            FmFilterItems* pFilterItems = new FmFilterItems(m_xORB,pFormItem, aTitle);
-            Insert(pFormItem->GetChilds().end(), pFilterItems);
-            for (FmFilterRow::const_iterator iter1 = rRow.begin(); iter1 != rRow.end(); ++iter1)
+            Reference< XPropertySet > xFormProperties( xController->getModel(), UNO_QUERY_THROW );
+            ::rtl::OUString aName;
+            OSL_VERIFY( xFormProperties->getPropertyValue( FM_PROP_NAME ) >>= aName );
+
+            // Insert a new item for the form
+            FmFormItem* pFormItem = new FmFormItem( m_xORB, pParent, xController, aName );
+            Insert( pParent->GetChildren().end(), pFormItem );
+
+            Reference< XFilterController > xFilterController( pFormItem->GetFilterController(), UNO_SET_THROW );
+
+            // insert the existing filters for the form
+            String aTitle( SVX_RES( RID_STR_FILTER_FILTER_FOR ) );
+
+            Sequence< Sequence< ::rtl::OUString > > aExpressions = xFilterController->getPredicateExpressions();
+            for (   const Sequence< ::rtl::OUString >* pConjunctionTerm = aExpressions.getConstArray();
+                    pConjunctionTerm != aExpressions.getConstArray() + aExpressions.getLength();
+                    ++pConjunctionTerm
+                )
             {
-                // insert new and conditons
-                ::rtl::OUString aFieldName = getLabelName(Reference< XPropertySet > (Reference< XControl > ((*iter1).first, UNO_QUERY)->getModel(),UNO_QUERY));
-                FmFilterItem* pANDCondition = new FmFilterItem(m_xORB,pFilterItems, aFieldName, (*iter1).second, (*iter1).first);
-                Insert(pFilterItems->GetChilds().end(), pANDCondition);
-            }
-            // title for the next conditions
-            aTitle = SVX_RES(RID_STR_FILTER_FILTER_OR);
-        }
+                // we always display one row, even if there's no term to be displayed
+                FmFilterItems* pFilterItems = new FmFilterItems( m_xORB, pFormItem, aTitle );
+                Insert( pFormItem->GetChildren().end(), pFilterItems );
 
-        // now add dependent controllers
-        Reference< XIndexAccess >   xControllerAsIndex(xController, UNO_QUERY);
-        Update(xControllerAsIndex, pFormItem);
+                const Sequence< ::rtl::OUString >& rDisjunction( *pConjunctionTerm );
+                for (   const ::rtl::OUString* pDisjunctiveTerm = rDisjunction.getConstArray();
+                        pDisjunctiveTerm != rDisjunction.getConstArray() + rDisjunction.getLength();
+                        ++pDisjunctiveTerm
+                    )
+                {
+                    if ( pDisjunctiveTerm->getLength() == 0 )
+                        // no condition for this particular component in this particular conjunction term
+                        continue;
+
+                    const sal_Int32 nComponentIndex = pDisjunctiveTerm - rDisjunction.getConstArray();
+
+                    // determine the display name of the control
+                    const Reference< XControl > xFilterControl( xFilterController->getFilterComponent( nComponentIndex ) );
+                    const ::rtl::OUString sDisplayName( lcl_getLabelName_nothrow( xFilterControl ) );
+
+                    // insert a new entry
+                    FmFilterItem* pANDCondition = new FmFilterItem( m_xORB, pFilterItems, sDisplayName, *pDisjunctiveTerm, nComponentIndex );
+                    Insert( pFilterItems->GetChildren().end(), pANDCondition );
+                }
+
+                // title for the next conditions
+                aTitle = SVX_RES( RID_STR_FILTER_FILTER_OR );
+            }
+
+            // now add dependent controllers
+            Reference< XIndexAccess > xControllerAsIndex( xController, UNO_QUERY );
+            Update( xControllerAsIndex, pFormItem );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
 //------------------------------------------------------------------------
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XFormController > & xController) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); i++)
     {
         FmFormItem* pForm = PTR_CAST(FmFormItem,*i);
         if (pForm)
         {
-            if ((XFormController*)xController.get() == (XFormController*)pForm->GetController().get())
+            if ( xController == pForm->GetController() )
                 return pForm;
             else
             {
-                pForm = Find(pForm->GetChilds(), xController);
+                pForm = Find(pForm->GetChildren(), xController);
                 if (pForm)
                     return pForm;
             }
@@ -724,7 +720,6 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 //------------------------------------------------------------------------
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XForm >& xForm) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Find" );
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
          i != rItems.end(); i++)
     {
@@ -735,7 +730,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
                 return pForm;
             else
             {
-                pForm = Find(pForm->GetChilds(), xForm);
+                pForm = Find(pForm->GetChildren(), xForm);
                 if (pForm)
                     return pForm;
             }
@@ -747,56 +742,74 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 //------------------------------------------------------------------------
 void FmFilterModel::SetCurrentController(const Reference< XFormController > & xCurrent)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::SetCurrentController" );
-    if ((XFormController*) xCurrent.get() == (XFormController*) m_xController.get())
+    if ( xCurrent == m_xController )
         return;
 
     m_xController = xCurrent;
 
-    FmFormItem* pItem = Find(m_aChilds, xCurrent);
-    if (pItem)
+    FmFormItem* pItem = Find( m_aChildren, xCurrent );
+    if ( !pItem )
+        return;
+
+    try
     {
-        if ( (USHORT)pItem->GetChilds().size() > pItem->GetCurrentPosition() )
-            SetCurrentItems( static_cast< FmFilterItems* >( pItem->GetChilds()[ pItem->GetCurrentPosition() ] ) );
+        Reference< XFilterController > xFilterController( m_xController, UNO_QUERY_THROW );
+        const sal_Int32 nActiveTerm( xFilterController->getActiveTerm() );
+        if ( pItem->GetChildren().size() > (size_t)nActiveTerm )
+        {
+            SetCurrentItems( static_cast< FmFilterItems* >( pItem->GetChildren()[ nActiveTerm ] ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
+void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::AppendFilterItems" );
-    DBG_ASSERT(pFormItem, "AppendFilterItems(): no form item present");
+    OSL_ENSURE( false, "FmFilterModel::AppendFilterItems: this should be dead code!" );
+        // Before the UNOization of hte FormController, the controller implementation itself
+        // did not care for keeping at least one empty filter row. With the changes done now,
+        // it should be impossible to get a FormController to *not* have at least one empty
+        // filter row.
+        // Since the task of this method here was to ensure the controller *has* an empty row,
+        // this means the method should not be needed anymore. However, it's left here for the moment,
+        // to be on the safe side ...
+        // If the assertion above fires, then it needs to be investigated at which place the
+        // FormController failed to fulfill its contract of having at least one empty filter row
+        // all the time.
 
-    FmFilterItems* pFilterItems = new FmFilterItems(m_xORB,pFormItem, ::rtl::OUString(String(SVX_RES(RID_STR_FILTER_FILTER_OR))));
     // insert the condition behind the last filter items
     ::std::vector<FmFilterData*>::reverse_iterator iter;
-    for (iter = pFormItem->GetChilds().rbegin();
-        // link problems with operator ==
-        iter.base() != pFormItem->GetChilds().rend().base(); iter++)
+    for (   iter = _rFormItem.GetChildren().rbegin();
+            iter != _rFormItem.GetChildren().rend();
+            ++iter
+        )
     {
         if ((*iter)->ISA(FmFilterItems))
             break;
     }
-    sal_Int32 nInsertPos = iter.base() - pFormItem->GetChilds().rend().base();
-    ::std::vector<FmFilterData*>::iterator i = pFormItem->GetChilds().begin() + nInsertPos;
 
-    Insert(i, pFilterItems);
-
-    // do we need a new row
-    FormController* pController = FormController::getImplementation( pFormItem->GetController() );
-    DBG_ASSERT( pController, "FmFilterAdapter::AppendFilterItems: no controller!" );
-    FmFilterRows& rRows = pController->getFilterRows();
-
-    // determine the filter position
-    if (nInsertPos >= (sal_Int32)rRows.size())
-        rRows.push_back(FmFilterRow());
+    sal_Int32 nInsertPos = iter.base() - _rFormItem.GetChildren().begin();
+    // delegate this to the FilterController, it will notify us, which will let us update our model
+    try
+    {
+        Reference< XFilterController > xFilterController( _rFormItem.GetFilterController(), UNO_SET_THROW );
+        if ( nInsertPos >= xFilterController->getDisjunctiveTerms() )
+            xFilterController->appendEmptyDisjunctiveTerm();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------------
 void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Insert" );
-    ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChilds();
+    ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChildren();
     sal_Int32 nPos = rPos == rItems.end() ? LIST_APPEND : rPos - rItems.begin();
     rItems.insert(rPos, pData);
 
@@ -808,9 +821,8 @@ void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, F
 //------------------------------------------------------------------------
 void FmFilterModel::Remove(FmFilterData* pData)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Remove" );
     FmParentData* pParent = pData->GetParent();
-    ::std::vector<FmFilterData*>& rItems = pParent->GetChilds();
+    ::std::vector<FmFilterData*>& rItems = pParent->GetChildren();
 
     // erase the item from the model
     ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pData);
@@ -820,80 +832,32 @@ void FmFilterModel::Remove(FmFilterData* pData)
     if (pData->ISA(FmFilterItems))
     {
         FmFormItem* pFormItem = (FmFormItem*)pParent;
-        FormController* pController = FormController::getImplementation( pFormItem->GetController() );
-        DBG_ASSERT( pController, "FmFilterAdapter::Remove: no controller!" );
-        FmFilterRows& rRows = pController->getFilterRows();
 
-        // how many entries do we have
-        // it's the last row than we just empty it
-        if (nPos == (sal_Int32)(rRows.size() - 1))
+        try
         {
-            // remove all childs and stay current
-            ::std::vector<FmFilterData*>& rChilds = ((FmFilterItems*)pData)->GetChilds();
-            while (!rChilds.empty())
+            Reference< XFilterController > xFilterController( pFormItem->GetFilterController(), UNO_SET_THROW );
+
+            bool bEmptyLastTerm = ( ( nPos == 0 ) && xFilterController->getDisjunctiveTerms() == 1 );
+            if ( bEmptyLastTerm )
             {
-                ::std::vector<FmFilterData*>::iterator j = rChilds.end();
-                j--;
-
-                // we stay on the level so delete each item explizit to clean the controls
-                sal_Int32 nParentPos = j - rChilds.begin();
-                // EmptyText removes the filter
-                FmFilterItem* pFilterItem = PTR_CAST(FmFilterItem, *j);
-                m_pAdapter->setText(nParentPos, pFilterItem, ::rtl::OUString());
-                Remove(j, pFilterItem);
-            }
-        }
-        else // delete the row
-        {
-            // if the row is on the current position we have to away from that position.
-            // than we can delete it
-            if (nPos == pFormItem->GetCurrentPosition())
-            {
-                ::std::vector<FmFilterData*>::iterator j = i;
-
-                // give a new current postion
-                if (nPos < (sal_Int32)(rRows.size() - 1))
-                    // set it to the next row
-                    ++j;
-                else
-                    // set it to the previous row
-                    --j;
-
-                // if necessary we have the formItem for the current controller
-                // than we have to adjust the data displayed in the form
-                pFormItem->SetCurrentPosition(j - rItems.begin());
-                pController->setCurrentFilterPosition(j - rItems.begin());
-
-                // Keep the view consistent and force and new painting
-                FmFilterTextChangedHint aChangeHint(*j);
-                Broadcast( aChangeHint );
-            }
-
-            // now delete the entry
-            // before deleting we have to shift the current position of the form if necessary
-            if (nPos < pFormItem->GetCurrentPosition())
-            {
-                pFormItem->SetCurrentPosition(pFormItem->GetCurrentPosition() - 1);
-                pController->decrementCurrentFilterPosition();
-
-                // is it the first row, than the nex row has to recieve a different name
-                if (nPos == 0)
+                // remove all children (by setting an empty predicate expression)
+                ::std::vector< FmFilterData* >& rChildren = ((FmFilterItems*)pData)->GetChildren();
+                while ( !rChildren.empty() )
                 {
-                    // ensure that the text labels are consistent
-                    rItems[1]->SetText(String(SVX_RES(RID_STR_FILTER_FILTER_FOR)));
-                    FmFilterTextChangedHint aChangeHint(rItems[1]);
-                    Broadcast( aChangeHint );
+                    ::std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
+                    FmFilterItem* pFilterItem = PTR_CAST( FmFilterItem, *removePos );
+                    m_pAdapter->setText( nPos, pFilterItem, ::rtl::OUString() );
+                    Remove( removePos );
                 }
             }
-
-            // delete it
-            rRows.erase(rRows.begin() + nPos);
-
-            // and keep the controller consistent
-            DBG_ASSERT(rRows.size() != 0, "wrong row size");
-
-            // and remove it from the model
-            Remove(i, pData);
+            else
+            {
+                xFilterController->removeDisjunctiveTerm( nPos );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     else // FormItems can not be deleted
@@ -906,26 +870,26 @@ void FmFilterModel::Remove(FmFilterData* pData)
         else
         {
             // find the position of the father within his father
-            ::std::vector<FmFilterData*>& rParentParentItems = pData->GetParent()->GetParent()->GetChilds();
+            ::std::vector<FmFilterData*>& rParentParentItems = pData->GetParent()->GetParent()->GetChildren();
             ::std::vector<FmFilterData*>::iterator j = ::std::find(rParentParentItems.begin(), rParentParentItems.end(), pFilterItem->GetParent());
             DBG_ASSERT(j != rParentParentItems.end(), "FmFilterModel::Remove(): unknown Item");
             sal_Int32 nParentPos = j - rParentParentItems.begin();
 
             // EmptyText removes the filter
             m_pAdapter->setText(nParentPos, pFilterItem, ::rtl::OUString());
-            Remove(i, pData);
+            Remove( i );
         }
     }
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::Remove(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
+void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Remove" );
-    ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChilds();
-    rItems.erase(rPos);
+    // remove from parent's child list
+    FmFilterData* pData = *rPos;
+    pData->GetParent()->GetChildren().erase( rPos );
 
-    // UI benachrichtigen
+    // notify the view, this will remove the actual SvLBoxEntry
     FmFilterRemovedHint aRemoveHint( pData );
     Broadcast( aRemoveHint );
 
@@ -935,46 +899,58 @@ void FmFilterModel::Remove(const ::std::vector<FmFilterData*>::iterator& rPos, F
 //------------------------------------------------------------------------
 sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniString& rErrorMsg) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::ValidateText" );
-    // check the input
-    Reference< XPropertySet >   xField(m_pAdapter->getField(pItem->GetTextComponent()));
-
-    OStaticDataAccessTools aStaticTools;
-    Reference< XConnection > xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet > (m_xController->getModel(), UNO_QUERY)));
-    Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
-
-    Reference< XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
-    xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
-
-    ::rtl::OUString aErr, aTxt(rText);
-    ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(aErr, aTxt, xFormatter, xField);
-    rErrorMsg = aErr;
-    rText = aTxt;
-    if (xParseNode.is())
+    FmFormItem* pFormItem = PTR_CAST( FmFormItem, pItem->GetParent()->GetParent() );
+    try
     {
-        ::rtl::OUString aPreparedText;
-        Locale aAppLocale = Application::GetSettings().GetUILocale();
-        xParseNode->parseNodeToPredicateStr(
-            aPreparedText, xConnection, xFormatter, xField, aAppLocale, '.', getParseContext() );
-        rText = aPreparedText;
-        return sal_True;
+        Reference< XFormController > xFormController( pFormItem->GetController() );
+        // obtain the connection of the form belonging to the controller
+        OStaticDataAccessTools aStaticTools;
+        Reference< XRowSet > xRowSet( xFormController->getModel(), UNO_QUERY_THROW );
+        Reference< XConnection > xConnection( aStaticTools.getRowSetConnection( xRowSet ) );
+
+        // obtain a number formatter for this connection
+        // TODO: shouldn't this be cached?
+        Reference< XNumberFormatsSupplier > xFormatSupplier = aStaticTools.getNumberFormats( xConnection, sal_True );
+        Reference< XNumberFormatter > xFormatter( m_xORB->createInstance( FM_NUMBER_FORMATTER ), UNO_QUERY );
+        xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
+
+        // get the field (database column) which the item is responsible for
+        Reference< XFilterController > xFilterController( xFormController, UNO_QUERY_THROW );
+        Reference< XPropertySet > xField( lcl_getBoundField_nothrow( xFilterController->getFilterComponent( pItem->GetComponentIndex() ) ), UNO_SET_THROW );
+
+        // parse the given text as filter predicate
+        ::rtl::OUString aErr, aTxt( rText );
+        ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( aErr, aTxt, xFormatter, xField );
+        rErrorMsg = aErr;
+        rText = aTxt;
+        if ( xParseNode.is() )
+        {
+            ::rtl::OUString aPreparedText;
+            Locale aAppLocale = Application::GetSettings().GetUILocale();
+            xParseNode->parseNodeToPredicateStr(
+                aPreparedText, xConnection, xFormatter, xField, aAppLocale, '.', getParseContext() );
+            rText = aPreparedText;
+            return sal_True;
+        }
     }
-    else
-        return sal_False;
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return sal_False;
 }
 
 //------------------------------------------------------------------------
 void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::Append" );
-    Insert(pItems->GetChilds().end(), pFilterItem);
+    Insert(pItems->GetChildren().end(), pFilterItem);
 }
 
 //------------------------------------------------------------------------
 void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::SetTextForItem" );
-    ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChilds();
+    ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChildren();
     ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
     sal_Int32 nParentPos = i - rItems.begin();
 
@@ -994,7 +970,6 @@ void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& r
 //------------------------------------------------------------------------
 void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::SetCurrentItems" );
     if (m_pCurrentItems == pCurrent)
         return;
 
@@ -1002,21 +977,26 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
     if (pCurrent)
     {
         FmFormItem* pFormItem = (FmFormItem*)pCurrent->GetParent();
-        ::std::vector<FmFilterData*>& rItems = pFormItem->GetChilds();
+        ::std::vector<FmFilterData*>& rItems = pFormItem->GetChildren();
         ::std::vector<FmFilterData*>::const_iterator i = ::std::find(rItems.begin(), rItems.end(), pCurrent);
 
         if (i != rItems.end())
         {
             // determine the filter position
             sal_Int32 nPos = i - rItems.begin();
-            FormController* pController = FormController::getImplementation( pFormItem->GetController() );
-            DBG_ASSERT( pController, "FmFilterAdapter::SetCurrentItems: no controller!" );
-            pController->setCurrentFilterPosition(nPos);
-            pFormItem->SetCurrentPosition(nPos);
+            try
+            {
+                Reference< XFilterController > xFilterController( pFormItem->GetFilterController(), UNO_SET_THROW );
+                xFilterController->setActiveTerm( nPos );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
 
-            if ((XFormController*)m_xController.get() != (XFormController*)pFormItem->GetController().get())
+            if ( m_xController != pFormItem->GetController() )
                 // calls SetCurrentItems again
-                SetCurrentController(pFormItem->GetController());
+                SetCurrentController( pFormItem->GetController() );
             else
                 m_pCurrentItems = pCurrent;
         }
@@ -1035,19 +1015,20 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
 //------------------------------------------------------------------------
 void FmFilterModel::CheckIntegrity(FmParentData* pItem)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterModel::CheckIntegrity" );
     // checks whether for each form there's one free level for input
 
-    ::std::vector<FmFilterData*>& rItems = pItem->GetChilds();
+    ::std::vector< FmFilterData* >& rItems = pItem->GetChildren();
     sal_Bool bAppendLevel = sal_False;
 
-    for (::std::vector<FmFilterData*>::iterator i = rItems.begin();
-         i != rItems.end(); i++)
+    for (   ::std::vector<FmFilterData*>::iterator i = rItems.begin();
+            i != rItems.end();
+            ++i
+        )
     {
         FmFilterItems* pItems = PTR_CAST(FmFilterItems, *i);
         if (pItems)
         {
-            bAppendLevel = !pItems->GetChilds().empty();
+            bAppendLevel = !pItems->GetChildren().empty();
             continue;
         }
 
@@ -1058,8 +1039,14 @@ void FmFilterModel::CheckIntegrity(FmParentData* pItem)
             continue;
         }
     }
-    if (bAppendLevel)
-        AppendFilterItems((FmFormItem*)pItem);
+
+    if ( bAppendLevel )
+    {
+        FmFormItem* pFormItem = PTR_CAST( FmFormItem, pItem );
+        OSL_ENSURE( pFormItem, "FmFilterModel::CheckIntegrity: no FmFormItem, but a FmFilterItems child?" );
+        if ( pFormItem )
+            AppendFilterItems( *pFormItem );
+    }
 }
 
 //========================================================================
@@ -1081,25 +1068,31 @@ void FmFilterItemsString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nF
 {
     FmFilterItems* pRow = (FmFilterItems*)pEntry->GetUserData();
     FmFormItem* pForm = (FmFormItem*)pRow->GetParent();
-    // current filter is significant painted
-    if (pForm->GetChilds()[pForm->GetCurrentPosition()] == pRow)
-    {
-        Color aLineColor(rDev.GetLineColor());
-        Rectangle aRect(rPos, GetSize(&rDev, pEntry ));
-        Point aFirst(rPos.X(), aRect.Bottom() - 6);
-        Point aSecond(aFirst.X() + 2, aFirst.Y() + 3);
 
-        rDev.SetLineColor(rDev.GetTextColor());
-        rDev.DrawLine(aFirst, aSecond);
+    // current filter is significant painted
+    const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ] == pRow;
+    if ( bIsCurrentFilter )
+    {
+        rDev.Push( PUSH_LINECOLOR );
+
+        rDev.SetLineColor( rDev.GetTextColor() );
+
+        Rectangle aRect( rPos, GetSize( &rDev, pEntry ) );
+        Point aFirst( rPos.X(), aRect.Bottom() - 6 );
+        Point aSecond(aFirst .X() + 2, aFirst.Y() + 3 );
+
+        rDev.DrawLine( aFirst, aSecond );
 
         aFirst = aSecond;
         aFirst.X() += 1;
         aSecond.X() += 6;
         aSecond.Y() -= 5;
 
-        rDev.DrawLine(aFirst, aSecond);
-        rDev.SetLineColor( aLineColor );
+        rDev.DrawLine( aFirst, aSecond );
+
+        rDev.Pop();
     }
+
     rDev.DrawText( Point(rPos.X() + nxDBmp, rPos.Y()), GetText() );
 }
 
@@ -1180,7 +1173,6 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   ,m_aTimerCounter( 0 )
                   ,m_aDropActionType( DA_SCROLLUP )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::FmFilterNavigator" );
     SetHelpId( HID_FILTER_NAVIGATOR );
 
     {
@@ -1223,14 +1215,12 @@ FmFilterNavigator::~FmFilterNavigator()
 //------------------------------------------------------------------------
 void FmFilterNavigator::Clear()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Clear" );
     m_pModel->Clear();
 }
 
 //------------------------------------------------------------------------
 void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControllers, const Reference< XFormController > & xCurrent)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::UpdateContent" );
     if (xCurrent == m_pModel->GetCurrentController())
         return;
 
@@ -1258,7 +1248,6 @@ void FmFilterNavigator::UpdateContent(const Reference< XIndexAccess > & xControl
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::EditingEntry" );
     m_pEditingCurrently = pEntry;
     if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
         return sal_False;
@@ -1269,7 +1258,6 @@ sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelec
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::EditedEntry" );
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_pEditingCurrently = NULL;
 
@@ -1361,7 +1349,6 @@ IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
 //------------------------------------------------------------------------
 sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::AcceptDrop" );
     Point aDropPos = rEvt.maPosPixel;
 
     // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
@@ -1389,7 +1376,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
                 bNeedTrigger = sal_True;
             }
             else
-            {   // auf einem Entry mit Childs, der nicht aufgeklappt ist ?
+            {   // is it an entry whith children, and not yet expanded?
                 SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
                 if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                 {
@@ -1468,7 +1455,6 @@ namespace
 //------------------------------------------------------------------------
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::ExecuteDrop" );
     // ware schlecht, wenn nach dem Droppen noch gescrollt wird ...
     if (m_aDropActionTimer.IsActive())
         m_aDropActionTimer.Stop();
@@ -1502,7 +1488,6 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
                                   const Image& rImg2,
                                                                   SvLBoxButtonKind eButtonKind)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::InitEntry" );
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pString = NULL;
 
@@ -1518,7 +1503,6 @@ void FmFilterNavigator::InitEntry(SvLBoxEntry* pEntry,
 //------------------------------------------------------------------------
 sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Select" );
     if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
         return sal_True;
 
@@ -1554,7 +1538,6 @@ sal_Bool FmFilterNavigator::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
 //------------------------------------------------------------------------
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Notify" );
     if (rHint.ISA(FmFilterInsertedHint))
     {
         FmFilterInsertedHint* pHint = (FmFilterInsertedHint*)&rHint;
@@ -1588,7 +1571,6 @@ void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 //------------------------------------------------------------------------
 SvLBoxEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::FindEntry" );
     SvLBoxEntry* pEntry = NULL;
     if (pItem)
     {
@@ -1605,7 +1587,6 @@ SvLBoxEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 //------------------------------------------------------------------------
 void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Insert" );
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
 
     // insert the item
@@ -1621,7 +1602,6 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
 //------------------------------------------------------------------------
 void FmFilterNavigator::Remove(FmFilterData* pItem)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Remove" );
     // der Entry zu den Daten
     SvLBoxEntry* pEntry = FindEntry(pItem);
 
@@ -1635,7 +1615,6 @@ void FmFilterNavigator::Remove(FmFilterData* pItem)
 // -----------------------------------------------------------------------------
 FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::getSelectedFilterItems" );
     // be sure that the data is only used within only one form!
     FmFormItem* pFirstItem = NULL;
 
@@ -1670,35 +1649,35 @@ FmFormItem* FmFilterNavigator::getSelectedFilterItems(::std::vector<FmFilterItem
 // -----------------------------------------------------------------------------
 void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::insertFilterItem" );
     ::std::vector<FmFilterItem*>::const_iterator aEnd = _rFilterList.end();
-    for (::std::vector<FmFilterItem*>::const_iterator i = _rFilterList.begin(); i != aEnd; ++i)
+    for (   ::std::vector< FmFilterItem* >::const_iterator i = _rFilterList.begin();
+            i != aEnd;
+            ++i
+        )
     {
-        if ((*i)->GetParent() == _pTargetItems)
+        FmFilterItem* pLookupItem( *i );
+        if ( pLookupItem->GetParent() == _pTargetItems )
             continue;
-        else
+
+        FmFilterItem* pFilterItem = _pTargetItems->Find( pLookupItem->GetComponentIndex() );
+        String aText = pLookupItem->GetText();
+        if ( !pFilterItem )
         {
-            FmFilterItem* pFilterItem = _pTargetItems->Find((*i)->GetTextComponent());
-            String aText = (*i)->GetText();
-            if ( !pFilterItem )
-            {
-                pFilterItem = new FmFilterItem(m_pModel->getORB(),_pTargetItems, (*i)->GetFieldName(), aText, (*i)->GetTextComponent());
-                m_pModel->Append(_pTargetItems, pFilterItem);
-            }
-
-            if ( !_bCopy )
-                m_pModel->Remove(*i);
-
-            // now set the text for the new dragged item
-            m_pModel->SetTextForItem(pFilterItem, aText);
+            pFilterItem = new FmFilterItem( m_pModel->getORB(), _pTargetItems, pLookupItem->GetFieldName(), aText, pLookupItem->GetComponentIndex() );
+            m_pModel->Append( _pTargetItems, pFilterItem );
         }
+
+        if ( !_bCopy )
+            m_pModel->Remove( pLookupItem );
+
+        // now set the text for the new dragged item
+        m_pModel->SetTextForItem( pFilterItem, aText );
     }
-    m_pModel->CheckIntegrity((FmFormItem*)_pTargetItems->GetParent());
+    m_pModel->CheckIntegrity( (FmFormItem*)_pTargetItems->GetParent() );
 }
 //------------------------------------------------------------------------------
 void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::StartDrag" );
     EndSelection();
 
     // be sure that the data is only used within a only one form!
@@ -1716,7 +1695,6 @@ void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
 //------------------------------------------------------------------------------
 void FmFilterNavigator::Command( const CommandEvent& rEvt )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::Command" );
     sal_Bool bHandled = sal_False;
     switch (rEvt.GetCommand())
     {
@@ -1761,8 +1739,8 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
             {
                 // don't delete the only empty row of a form
                 FmFilterItems* pFilterItems = PTR_CAST(FmFilterItems, aSelectList[0]);
-                if (pFilterItems && pFilterItems->GetChilds().empty()
-                    && pFilterItems->GetParent()->GetChilds().size() == 1)
+                if (pFilterItems && pFilterItems->GetChildren().empty()
+                    && pFilterItems->GetParent()->GetChildren().size() == 1)
                     aSelectList.clear();
             }
 
@@ -1819,7 +1797,6 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
 // -----------------------------------------------------------------------------
 SvLBoxEntry* FmFilterNavigator::getNextEntry(SvLBoxEntry* _pStartWith)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::getNextEntry" );
     SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : LastSelected();
     pEntry = Next(pEntry);
     // we need the next filter entry
@@ -1830,7 +1807,6 @@ SvLBoxEntry* FmFilterNavigator::getNextEntry(SvLBoxEntry* _pStartWith)
 // -----------------------------------------------------------------------------
 SvLBoxEntry* FmFilterNavigator::getPrevEntry(SvLBoxEntry* _pStartWith)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::getPrevEntry" );
     SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : FirstSelected();
     pEntry = Prev(pEntry);
     // check if the previous entry is a filter, if so get the next prev
@@ -1846,81 +1822,91 @@ SvLBoxEntry* FmFilterNavigator::getPrevEntry(SvLBoxEntry* _pStartWith)
 //------------------------------------------------------------------------
 void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::KeyInput" );
     const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
-    if (    rKeyCode.IsMod1()
-        &&  rKeyCode.IsMod2()
-        && !rKeyCode.IsShift()
-        && ( rKeyCode.GetCode() == KEY_UP || rKeyCode.GetCode() == KEY_DOWN )
-        )
+
+    switch ( rKeyCode.GetCode() )
     {
+    case KEY_UP:
+    case KEY_DOWN:
+    {
+        if ( !rKeyCode.IsMod1() || !rKeyCode.IsMod2() || rKeyCode.IsShift() )
+            break;
+
         ::std::vector<FmFilterItem*> aItemList;
-        if ( getSelectedFilterItems(aItemList) )
+        if ( !getSelectedFilterItems( aItemList ) )
+            break;
+
+        ::std::mem_fun1_t<SvLBoxEntry*,FmFilterNavigator,SvLBoxEntry*> getter = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
+        if ( rKeyCode.GetCode() == KEY_UP )
+            getter = ::std::mem_fun(&FmFilterNavigator::getPrevEntry);
+
+        SvLBoxEntry* pTarget = getter( this, NULL );
+        if ( !pTarget )
+            break;
+
+        FmFilterItems* pTargetItems = getTargetItems( pTarget );
+        if ( !pTargetItems )
+            break;
+
+        ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
+        sal_Bool bNextTargetItem = sal_True;
+        while ( bNextTargetItem )
         {
-            ::std::mem_fun1_t<SvLBoxEntry*,FmFilterNavigator,SvLBoxEntry*> aGetEntry = ::std::mem_fun(&FmFilterNavigator::getNextEntry);
-            if ( rKeyCode.GetCode() == KEY_UP )
-                aGetEntry = ::std::mem_fun(&FmFilterNavigator::getPrevEntry);
-
-            SvLBoxEntry* pTarget = aGetEntry(this,NULL);
-
-            if ( pTarget )
+            ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
+            for (; i != aEnd; ++i)
             {
-                FmFilterItems* pTargetItems = getTargetItems(pTarget);
-                if ( pTargetItems )
+                if ( (*i)->GetParent() == pTargetItems )
                 {
-                    ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
-                    sal_Bool bNextTargetItem = sal_True;
-                    while ( bNextTargetItem )
-                    {
-                        ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
-                        for (; i != aEnd; ++i)
-                        {
-                            if ( (*i)->GetParent() == pTargetItems )
-                            {
-                                pTarget = aGetEntry(this,pTarget);
-                                if ( !pTarget )
-                                    return;
-                                pTargetItems = getTargetItems(pTarget);
-                                break;
-                            }
-                            else
-                            {
-                                FmFilterItem* pFilterItem = pTargetItems->Find((*i)->GetTextComponent());
-                                // we found the text component so jump above
-                                if ( pFilterItem )
-                                {
-                                    pTarget = aGetEntry(this,pTarget);
-                                    if ( !pTarget )
-                                        return;
-                                    pTargetItems = getTargetItems(pTarget);
-                                    break;
-                                }
-                            }
-                        }
-                        bNextTargetItem = i != aEnd && pTargetItems;
-                    }
-                    if ( pTargetItems )
-                    {
-                        insertFilterItem(aItemList,pTargetItems);
+                    pTarget = getter(this,pTarget);
+                    if ( !pTarget )
                         return;
+                    pTargetItems = getTargetItems( pTarget );
+                    break;
+                }
+                else
+                {
+                    FmFilterItem* pFilterItem = pTargetItems->Find( (*i)->GetComponentIndex() );
+                    // we found the text component so jump above
+                    if ( pFilterItem )
+                    {
+                        pTarget = getter( this, pTarget );
+                        if ( !pTarget )
+                            return;
+
+                        pTargetItems = getTargetItems( pTarget );
+                        break;
                     }
                 }
             }
+            bNextTargetItem = i != aEnd && pTargetItems;
+        }
+
+        if ( pTargetItems )
+        {
+            insertFilterItem( aItemList, pTargetItems );
+            return;
         }
     }
-    else if (rKeyCode.GetCode() == KEY_DELETE && !rKeyCode.GetModifier())
+    break;
+
+    case KEY_DELETE:
     {
-        if (!IsSelected(First()) || GetEntryCount() > 1)
+        if ( rKeyCode.GetModifier() )
+            break;
+
+        if ( !IsSelected( First() ) || GetEntryCount() > 1 )
             DeleteSelection();
         return;
     }
+    break;
+    }
+
     SvTreeListBox::KeyInput(rKEvt);
 }
 
 //------------------------------------------------------------------------------
 void FmFilterNavigator::DeleteSelection()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigator::DeleteSelection" );
     // to avoid the deletion of an entry twice (e.g. deletion of a parent and afterward
     // the deletion of it's child, i have to shrink the selecton list
     ::std::vector<SvLBoxEntry*> aEntryList;
@@ -1945,6 +1931,7 @@ void FmFilterNavigator::DeleteSelection()
         i.base() != aEntryList.rend().base(); i++)
     {
         m_pModel->Remove((FmFilterData*)(*i)->GetUserData());
+        Update();
     }
 
     // now check if we need to insert new items
@@ -1960,7 +1947,6 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
                      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
                      ,SfxControllerItem( SID_FM_FILTER_NAVIGATOR_CONTROL, *_pBindings )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::FmFilterNavigatorWin" );
     SetHelpId( HID_FILTER_NAVIGATOR_WIN );
 
     m_pNavigator = new FmFilterNavigator( this );
@@ -1978,7 +1964,6 @@ FmFilterNavigatorWin::~FmFilterNavigatorWin()
 //-----------------------------------------------------------------------
 void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::UpdateContent" );
     if (!pFormShell)
         m_pNavigator->UpdateContent( NULL, NULL );
     else
@@ -2003,7 +1988,6 @@ void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
 //-----------------------------------------------------------------------
 void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::StateChanged" );
     if( !pState  || SID_FM_FILTER_NAVIGATOR_CONTROL != nSID )
         return;
 
@@ -2019,7 +2003,6 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
 //-----------------------------------------------------------------------
 sal_Bool FmFilterNavigatorWin::Close()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::Close" );
     if ( m_pNavigator && m_pNavigator->IsEditingActive() )
         m_pNavigator->EndEditing();
 
@@ -2034,7 +2017,6 @@ sal_Bool FmFilterNavigatorWin::Close()
 //-----------------------------------------------------------------------
 void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::FillInfo" );
     SfxDockingWindow::FillInfo( rInfo );
     rInfo.bVisible = sal_False;
 }
@@ -2042,7 +2024,6 @@ void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 //-----------------------------------------------------------------------
 Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::CalcDockingSize" );
     if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
         return Size();
 
@@ -2052,7 +2033,6 @@ Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 //-----------------------------------------------------------------------
 SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::CheckAlignment" );
     switch (eAlign)
     {
         case SFX_ALIGN_LEFT:
@@ -2069,7 +2049,6 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
 //------------------------------------------------------------------------
 void FmFilterNavigatorWin::Resize()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::Resize" );
     SfxDockingWindow::Resize();
 
     Size aLogOutputSize = PixelToLogic( GetOutputSizePixel(), MAP_APPFONT );
@@ -2085,7 +2064,6 @@ void FmFilterNavigatorWin::Resize()
 // -----------------------------------------------------------------------------
 void FmFilterNavigatorWin::GetFocus()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFilterNavigatorWin::GetFocus" );
     // oj #97405#
     if ( m_pNavigator )
         m_pNavigator->GrabFocus();

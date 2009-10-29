@@ -385,13 +385,13 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FormCon
     xController->activateTabOrder();
     xController->addActivateListener( m_pViewImpl );
 
-    if ( _pParent )
-        _pParent->addChild( xController );
+    if ( xParentController.is() )
+        xParentController->addChildController( xController );
     else
     {
         m_aControllerList.push_back(xController);
 
-        xController->setParent( xParentController );
+        xController->setParent( *this );
 
         // attaching the events
         Reference< XEventAttacherManager > xEventManager( xForm->getParent(), UNO_QUERY );
