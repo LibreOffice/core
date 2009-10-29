@@ -322,6 +322,21 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // reset last page property
     i_pController->setLastPage( sal_False );
 
+    // update "PageRange" property inferring from other properties:
+    // case 1: "Pages" set from UNO API ->
+    //         setup "Print Selection" and insert "PageRange" attribute
+    // case 2: "All pages" is selected
+    //         update "Page range" attribute to have a sensible default,
+    //         but leave "All" as selected
+
+    // "Pages" attribute from API is now equivalent to "PageRange"
+    // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
+    // Argh ! That sure needs cleaning up
+    beans::PropertyValue* pContentVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
+    if( ! pContentVal )
+        pContentVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+
+    // case 1: UNO API has set "Pages"
     beans::PropertyValue* pPagesVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) );
     if( pPagesVal )
     {
@@ -332,13 +347,33 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             // "Pages" attribute from API is now equivalent to "PageRange"
             // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
             // Argh ! That sure needs cleaning up
-            beans::PropertyValue* pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
-            if( ! pVal )
-                pVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
-            if( pVal )
+            if( pContentVal )
             {
-                pVal->Value = makeAny( sal_Int32( 1 ) );
+                pContentVal->Value = makeAny( sal_Int32( 1 ) );
                 i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), pPagesVal->Value );
+            }
+        }
+    }
+    // case 2: is "All" selected ?
+    else if( pContentVal )
+    {
+        sal_Int32 nContent = -1;
+        if( pContentVal->Value >>= nContent )
+        {
+            if( nContent == 0 )
+            {
+                sal_Int32 nPages = i_pController->getPageCount();
+                if( nPages > 0 )
+                {
+                    rtl::OUStringBuffer aBuf( 32 );
+                    aBuf.appendAscii( "1" );
+                    if( nPages > 1 )
+                    {
+                        aBuf.appendAscii( "-" );
+                        aBuf.append( nPages );
+                    }
+                    i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), makeAny( aBuf.makeStringAndClear() ) );
+                }
             }
         }
     }
