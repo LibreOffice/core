@@ -46,6 +46,7 @@ BEGIN
     $savetemppath = "";
     $msiinfo_available = 0;
     $path_displayed = 0;
+    $localmsidbpath = "";
 
     $plat = $^O;
 
@@ -150,6 +151,31 @@ sub controlparameter
 }
 
 #############################################################################
+# The program msidb.exe can be located next to the Perl program. Then it is
+# not neccessary to find it in the PATH variable.
+#############################################################################
+
+sub check_local_msidb
+{
+    my $msidbname = "msidb.exe";
+    my $perlprogramm = $0;
+    my $path = $perlprogramm;
+    get_path_from_fullqualifiedname(\$path);
+    $path =~ s/\\\s*$//;
+    $path =~ s/\/\s*$//;
+
+    my $msidbpath = "";
+    if ( $path =~ /^\s*$/ ) { $msidbpath = $msidbname; }
+    else { $msidbpath = $path . $separator . $msidbname; }
+
+    if ( -f $msidbpath )
+    {
+        $localmsidbpath = $msidbpath;
+        print "Using $msidbpath (next to \"admin.pl\")\n";
+    }
+}
+
+#############################################################################
 # Converting a string list with separator $listseparator
 # into an array
 #############################################################################
@@ -198,7 +224,8 @@ sub check_system_path
     }
     my $patharrayref = convert_stringlist_into_array(\$pathvariable, $local_pathseparator);
 
-    my @needed_files_in_path = ("msidb.exe", "expand.exe");
+    my @needed_files_in_path = ("expand.exe");
+    if ( $localmsidbpath eq "" ) { push(@needed_files_in_path, "msidb.exe"); } # not found locally -> search in path
     my @optional_files_in_path = ("msiinfo.exe");
 
     print("\nChecking required files:\n");
@@ -486,6 +513,7 @@ sub extract_tables_from_database
     my ($fullmsidatabasepath, $workdir, $tablelist) = @_;
 
     my $msidb = "msidb.exe";    # Has to be in the path
+    if ( $localmsidbpath ) { $msidb = $localmsidbpath; }
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
@@ -552,6 +580,7 @@ sub extract_cabs_from_database
     my $infoline = "";
     my $fullsuccess = 1;
     my $msidb = "msidb.exe";    # Has to be in the path
+    if ( $localmsidbpath ) { $msidb = $localmsidbpath; }
 
     my @all_excluded_cabfiles = ();
 
@@ -1256,6 +1285,7 @@ $starttime = time();
 
 getparameter();
 controlparameter();
+check_local_msidb();
 check_system_path();
 my $temppath = get_temppath();
 
