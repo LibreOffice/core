@@ -397,7 +397,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 
 // XEventListener
 //------------------------------------------------------------------------
-void SAL_CALL FmFilterAdapter::disposing(const EventObject& e) throw( RuntimeException )
+void SAL_CALL FmFilterAdapter::disposing(const EventObject& /*e*/) throw( RuntimeException )
 {
 }
 
@@ -501,7 +501,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
         return;
 
     ::std::vector< FmFilterData* >& rTermItems = pFormItem->GetChildren();
-    const bool bValidIndex = ( _Event.DisjunctiveTerm >= 0 ) && ( _Event.DisjunctiveTerm < rTermItems.size() );
+    const bool bValidIndex = ( _Event.DisjunctiveTerm >= 0 ) && ( (size_t)_Event.DisjunctiveTerm < rTermItems.size() );
     OSL_ENSURE( bValidIndex, "FmFilterAdapter::disjunctiveTermRemoved: invalid term index!" );
     if ( !bValidIndex )
         return;
@@ -533,7 +533,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
         return;
 
     const sal_Int32 nInsertPos = _Event.DisjunctiveTerm;
-    bool bValidIndex = ( nInsertPos >= 0 ) && ( nInsertPos <= pFormItem->GetChildren().size() );
+    bool bValidIndex = ( nInsertPos >= 0 ) && ( (size_t)nInsertPos <= pFormItem->GetChildren().size() );
     if ( !bValidIndex )
     {
         OSL_ENSURE( false, "FmFilterAdapter::disjunctiveTermAdded: invalid index!" );

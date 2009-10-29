@@ -1047,7 +1047,6 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
         throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
     // if the to-be-deleted row is our current row, we need to shift
-    sal_Int32 nNewFilterPosition( m_nCurrentFilterPosition );
     if ( _Term == m_nCurrentFilterPosition )
     {
         if ( m_nCurrentFilterPosition < sal_Int32( m_aFilters.size() - 1 ) )
@@ -2854,7 +2853,6 @@ void FormController::cursorMoved(const EventObject& /*event*/) throw( RuntimeExc
     // toggle the locking ?
     if (m_bLocked != determineLockState())
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
         m_bLocked = !m_bLocked;
         setLocks();
         if (isListeningForChanges())
@@ -3958,6 +3956,7 @@ void SAL_CALL FormController::removeParameterListener(const Reference< XDatabase
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent& aEvent) throw( RuntimeException )
 {
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
@@ -3990,10 +3989,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
             pParamRequest->addContinuation(pAbort);
 
             // handle the request
-            {
-                ::vos::OGuard aGuard(Application::GetSolarMutex());
-                m_xInteractionHandler->handle(xParamRequest);
-            }
+            m_xInteractionHandler->handle(xParamRequest);
 
             if (!pParamValues->wasSelected())
                 // canceled
