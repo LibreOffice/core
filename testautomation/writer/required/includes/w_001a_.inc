@@ -49,7 +49,11 @@ sub w_001a_
     Call tFileTemplatesEdit
 
     Call tFilePagePreview
-    Call tFilePrint
+    Call tPrintCommon()
+    Call tPrintGeneral()
+    Call tPrintApplication()
+    Call tPrintLayout()
+    Call tPrintOptions()
     Call tFilePrinterSetup
 
     'Writer Master Document
@@ -360,12 +364,12 @@ testcase tFilePagePreview
                 QAErrorlog "No default printer!"
                 Active.ok
                 Sleep 1
-                Kontext "DruckenDlg"
-                if DruckenDlg.Exists then DruckenDlg.Cancel
+                Kontext "Printing"
+                if Printing.Exists then Printing.Cancel
             else
                 printlog " Close 'Print' dialog with cancel"
-                Kontext "DruckenDlg"
-                DruckenDlg.Cancel
+                Kontext "Printing"
+                Printing.Cancel
             end if
 
             printlog " Click 'Print options page preview' in toolbar"
@@ -384,97 +388,6 @@ testcase tFilePagePreview
         end if
     end if
     printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tFilePrint
-    PrintLog " Open new document"
-    Call hNewDocument
-
-    PrintLog " File / Print"
-    FilePrint
-
-    Kontext "Active"
-    WaitSlot(1000)
-    if Active.Exists then
-        if Active.GetRT = 304 then
-            QAErrorlog "No Default Printer!"
-            Active.Ok
-            Kontext "DruckenDlg"
-            if DruckenDlg.Exists then DruckenDlg.Cancel
-            Call hCloseDocument
-            goto endsub
-        end if
-    end if
-    Kontext "DruckenDlg"
-    if DruckenDlg.Exists then
-        PrintLog " In printer dialog click 'Options'"
-        Zusaetze.Click
-        Sleep 1
-
-        Kontext "DruckerZusaetzeWriter"
-        PrintLog " Close 'Print options' with 'Cancel'"
-        DruckerZusaetzeWriter.Cancel
-        Kontext "DruckenDlg"
-
-        if gPlatGroup = "unx" then
-            if NOT Eigenschaften.IsEnabled AND gPlatform = "osx" then
-                QAErrorlog "#i81545#-macport File -> Print|Printer Settings: Properties button disabled"
-                Kontext "DruckenDlg"
-                DruckenDlg.Cancel
-                Call hCloseDocument
-                goto endsub
-            end if
-            PrintLog " On Unix-Platforms select 'Properties"
-            Eigenschaften.Click
-            sleep (3)
-            Kontext "TabSPAPaper"
-            if NOT TabSPAPaper.Exists then
-                Kontext "TabSPADevice"
-                if NOT TabSPADevice.Exists then
-                    Warnlog "#i88799# - Non functional options-button in Print-dialog."
-                else
-                    Kontext
-                    Active.Setpage TabSPAPaper
-                    Kontext "TabSPAPaper"
-                    Call DialogTest ( TabSPAPaper )
-
-                    printlog( "ALLES WIRD GUT!" )
-                    Kontext
-                    Active.Setpage TabSPADevice
-                    Kontext "TabSPADevice"
-                    Call DialogTest ( TabSPADevice )
-
-                    PrintLog " Cancel Printer Properties' (only unix)"
-                    TabSPADevice.Cancel
-                end if
-            else
-                Kontext
-                Active.Setpage TabSPAPaper
-                Kontext "TabSPAPaper"
-                Call DialogTest ( TabSPAPaper )
-
-                printlog( "ALLES WIRD GUT!" )
-                Kontext
-                Active.Setpage TabSPADevice
-                Kontext "TabSPADevice"
-                Call DialogTest ( TabSPADevice )
-
-                PrintLog " Cancel Printer Properties' (only unix)"
-                TabSPADevice.Cancel
-            end if
-        end if
-        Kontext "DruckenDlg"
-        Call DialogTest ( DruckenDlg )
-        PrintLog " Close 'Print' dialog"
-        DruckenDlg.Cancel
-    else
-        Warnlog "Print dialog is not up !"
-    end if
-
-    PrintLog " Close active document"
     Call hCloseDocument
 endcase
 
@@ -552,12 +465,12 @@ testcase tMasterDocFilePagePreview
                 QAErrorlog "No default printer!"
                 Active.ok
                 Sleep 1
-                Kontext "DruckenDlg"
-                if DruckenDlg.Exists then DruckenDlg.Cancel
+                Kontext "Printing"
+                if Printing.Exists then Printing.Cancel
             else
                 printlog " Close 'Print' dialog with cancel"
-                Kontext "DruckenDlg"
-                DruckenDlg.Cancel
+                Kontext "Printing"
+                Printing.Cancel
             end if
 
             printlog " Click 'Print options page preview' in toolbar"
