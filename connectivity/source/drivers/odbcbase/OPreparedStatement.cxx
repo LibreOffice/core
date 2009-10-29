@@ -321,16 +321,6 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
     setInt (parameterIndex, value);
 }
 // -------------------------------------------------------------------------
-#define PREP_BIND_PARAM(_ty,_jt) \
-    OTools::bindParameter(m_pConnection,                                \
-                                m_aStatementHandle,                     \
-                                parameterIndex,                         \
-                                bindBuf,                                \
-                                getLengthBuf(parameterIndex),           \
-                                (SWORD)_jt,                                 \
-                                sal_False,m_pConnection->useOldDateFormat(),_pData,(Reference <XInterface>)*this,getOwnConnection()->getTextEncoding())
-
-
 void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,sal_Int32 _nSize,void* _pData)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -568,6 +558,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
     setParameter(parameterIndex,DataType::BINARY,x.getLength(),(void*)&x);
+    boundParams[parameterIndex-1].setSequence(x); // this assures that the sequence stays alive
 }
 // -------------------------------------------------------------------------
 
