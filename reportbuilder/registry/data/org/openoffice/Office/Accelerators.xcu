@@ -62,6 +62,13 @@
           </prop>
         </node>
 
+        <node oor:name="F8_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:AddField</value>
+          </prop>
+        </node>
+
         <node oor:name="ESCAPE" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
