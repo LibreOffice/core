@@ -119,6 +119,7 @@ int ProcessHandler::readPIDFromFile()
         if (fscanf(in, "%d", &nPID) != 1)
         {
             // fprintf(stderr, "warning: (testshl.cxx) can't read own pid.\n");
+            fclose(in);
             return 0;
             // exit(0);
         }
