@@ -39,8 +39,13 @@
 #include <tchar.h>
 #endif
 
+#ifdef _AMD64_
+#define MODULE_NAME TEXT("shlxthdl_x64.dll")
+#define MODULE_NAME_FILTER TEXT("ooofilt_x64.dll")
+#else
 #define MODULE_NAME TEXT("shlxthdl.dll")
 #define MODULE_NAME_FILTER TEXT("ooofilt.dll")
+#endif
 
 #define COLUMN_HANDLER_DESCRIPTIVE_NAME    TEXT("OpenOffice.org Column Handler")
 #define INFOTIP_HANDLER_DESCRIPTIVE_NAME   TEXT("OpenOffice.org Infotip Handler")
