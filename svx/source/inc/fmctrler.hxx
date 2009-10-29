@@ -528,10 +528,6 @@ namespace svxform
 
         void    impl_onModify();
 
-        /** ensures that m_aFilterRows contains at least one empty row
-        */
-        void    implts_ensureEmptyFilterRow_nothrow();
-
         /** adds the given filter row to m_aFilterRows, setting m_nCurrentFilterPosition to 0 if the newly added
             row is the first one.
 

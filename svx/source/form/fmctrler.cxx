@@ -1062,9 +1062,6 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
     aGuard.clear();
     // <-- SYNCHRONIZED
 
-    // ensure there's an empty row (perhaps we just removed the last empty row)
-    implts_ensureEmptyFilterRow_nothrow();
-
     m_aFilterListeners.notifyEach( &XFilterControllerListener::disjunctiveTermRemoved, aEvent );
 }
 
@@ -1530,9 +1527,6 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
         aGuard.clear();
         // <-- SYNCHRONIZED
 
-        // ensure there's an empty row (perhaps we just filled the previously empty row)
-        implts_ensureEmptyFilterRow_nothrow();
-
         // notify the changed filter expression
         m_aFilterListeners.notifyEach( &XFilterControllerListener::predicateExpressionChanged, aEvent );
     }
@@ -1625,39 +1619,6 @@ void FormController::impl_addFilterRow( const FmFilterRow& _row )
         OSL_ENSURE( m_nCurrentFilterPosition == -1, "FormController::impl_addFilterRow: inconsistency!" );
         m_nCurrentFilterPosition = 0;
     }
-}
-
-//------------------------------------------------------------------------------
-void FormController::implts_ensureEmptyFilterRow_nothrow()
-{
-    // TODO:
-    // strictly, this method should not be needed. There is no compelling reason why a FormController must always
-    // have an empty filter row (or, in API terminology, an empty disjunctive term). Except ... the implementation
-    // probably cannot cope with an empty filter row container.
-    // Before the UNOiization of the FormController, the responsibility between ensuring the empty row was
-    // shared between the form controller and the filter navigator, which of course is nonsense. In the course
-    // of the UNOization, this was changed so that now the FormController is responsible alone.
-    // However, ideally, the FormController should not expect this empty row, and be able to work with no row at all.
-    // It would then be the responsibility of the UI (aka the filter navigator), to always ensure this empty row,
-    // if it really needs it.
-
-    // SYNCHRONIZED -->
-    ::osl::ClearableMutexGuard aGuard( m_aMutex );
-    impl_checkDisposed_throw();
-
-    // do we have an empty row?
-    for (   FmFilterRows::const_iterator pos = m_aFilterRows.begin();
-            pos != m_aFilterRows.end();
-            ++pos
-        )
-    {
-        if ( pos->empty() )
-            // all fine, found one
-            return;
-    }
-
-    impl_appendEmptyFilterRow( aGuard );
-    // <-- SYNCHRONIZED
 }
 
 //------------------------------------------------------------------------------
@@ -3278,8 +3239,6 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
     {
         m_aFilterComponents.push_back( field->xText );
     }
-
-    implts_ensureEmptyFilterRow_nothrow();
 }
 
 //------------------------------------------------------------------------------

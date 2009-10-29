@@ -488,7 +488,9 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
         pFilterItem = new FmFilterItem( m_pModel->getORB(), pFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent );
         m_pModel->Insert(pFilter->GetChildren().end(), pFilterItem);
     }
-    m_pModel->CheckIntegrity(pFormItem);
+
+    // ensure there's one empty term in the filter, just in case the active term was previously empty
+    m_pModel->EnsureEmptyFilterRows( *pFormItem );
 }
 
 //------------------------------------------------------------------------
@@ -521,6 +523,9 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& _Event
 
     // finally remove the entry from the model
     m_pModel->Remove( rTermItems.begin() + _Event.DisjunctiveTerm );
+
+    // ensure there's one empty term in the filter, just in case the currently removed one was the last empty one
+    m_pModel->EnsureEmptyFilterRows( *pFormItem );
 }
 
 //------------------------------------------------------------------------
@@ -550,7 +555,6 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
     FmFilterItems* pFilterItems = new FmFilterItems( m_pModel->getORB(), pFormItem, String( SVX_RES( RID_STR_FILTER_FILTER_OR ) ) );
     m_pModel->Insert( insertPos, pFilterItems );
 }
-
 
 //========================================================================
 // class FmFilterModel
@@ -625,7 +629,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const
         m_pAdapter->acquire();
 
         SetCurrentController(xCurrent);
-        CheckIntegrity(this);
+        EnsureEmptyFilterRows( *this );
     }
     else
         SetCurrentController(xCurrent);
@@ -774,18 +778,6 @@ void FmFilterModel::SetCurrentController(const Reference< XFormController > & xC
 //------------------------------------------------------------------------
 void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 {
-    OSL_ENSURE( false, "FmFilterModel::AppendFilterItems: this should be dead code!" );
-        // Before the UNOization of hte FormController, the controller implementation itself
-        // did not care for keeping at least one empty filter row. With the changes done now,
-        // it should be impossible to get a FormController to *not* have at least one empty
-        // filter row.
-        // Since the task of this method here was to ensure the controller *has* an empty row,
-        // this means the method should not be needed anymore. However, it's left here for the moment,
-        // to be on the safe side ...
-        // If the assertion above fires, then it needs to be investigated at which place the
-        // FormController failed to fulfill its contract of having at least one empty filter row
-        // all the time.
-
     // insert the condition behind the last filter items
     ::std::vector<FmFilterData*>::reverse_iterator iter;
     for (   iter = _rFormItem.GetChildren().rbegin();
@@ -1018,37 +1010,36 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::CheckIntegrity(FmParentData* pItem)
+void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
 {
     // checks whether for each form there's one free level for input
+    ::std::vector< FmFilterData* >& rChildren = _rItem.GetChildren();
+    sal_Bool bAppendLevel = _rItem.ISA( FmFormItem );
 
-    ::std::vector< FmFilterData* >& rItems = pItem->GetChildren();
-    sal_Bool bAppendLevel = sal_False;
-
-    for (   ::std::vector<FmFilterData*>::iterator i = rItems.begin();
-            i != rItems.end();
+    for (   ::std::vector<FmFilterData*>::iterator i = rChildren.begin();
+            i != rChildren.end();
             ++i
         )
     {
         FmFilterItems* pItems = PTR_CAST(FmFilterItems, *i);
-        if (pItems)
+        if ( pItems && pItems->GetChildren().empty() )
         {
-            bAppendLevel = !pItems->GetChildren().empty();
-            continue;
+            bAppendLevel = sal_False;
+            break;
         }
 
         FmFormItem* pFormItem = PTR_CAST(FmFormItem, *i);
         if (pFormItem)
         {
-            CheckIntegrity(pFormItem);
+            EnsureEmptyFilterRows( *pFormItem );
             continue;
         }
     }
 
     if ( bAppendLevel )
     {
-        FmFormItem* pFormItem = PTR_CAST( FmFormItem, pItem );
-        OSL_ENSURE( pFormItem, "FmFilterModel::CheckIntegrity: no FmFormItem, but a FmFilterItems child?" );
+        FmFormItem* pFormItem = PTR_CAST( FmFormItem, &_rItem );
+        OSL_ENSURE( pFormItem, "FmFilterModel::EnsureEmptyFilterRows: no FmFormItem, but a FmFilterItems child?" );
         if ( pFormItem )
             AppendFilterItems( *pFormItem );
     }
@@ -1595,13 +1586,15 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
 
     // insert the item
-    SvLBoxEntry* pParentEntry = FindEntry(pParent);
+    SvLBoxEntry* pParentEntry = FindEntry( pParent );
     SvLBoxEntry* pNewEntry = InsertEntry(pItem->GetText(), pItem->GetImage(), pItem->GetImage(), pParentEntry, sal_False, nPos, pItem );
     if ( pNewEntry )
     {
         SetExpandedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
         SetCollapsedEntryBmp( pNewEntry, pItem->GetImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
     }
+    if ( pParentEntry )
+        Expand( pParentEntry );
 }
 
 //------------------------------------------------------------------------
@@ -1678,8 +1671,10 @@ void FmFilterNavigator::insertFilterItem(const ::std::vector<FmFilterItem*>& _rF
         // now set the text for the new dragged item
         m_pModel->SetTextForItem( pFilterItem, aText );
     }
-    m_pModel->CheckIntegrity( (FmFormItem*)_pTargetItems->GetParent() );
+
+    m_pModel->EnsureEmptyFilterRows( *_pTargetItems->GetParent() );
 }
+
 //------------------------------------------------------------------------------
 void FmFilterNavigator::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
@@ -1936,11 +1931,7 @@ void FmFilterNavigator::DeleteSelection()
         i.base() != aEntryList.rend().base(); i++)
     {
         m_pModel->Remove((FmFilterData*)(*i)->GetUserData());
-        Update();
     }
-
-    // now check if we need to insert new items
-    m_pModel->CheckIntegrity(m_pModel);
 }
 // -----------------------------------------------------------------------------
 

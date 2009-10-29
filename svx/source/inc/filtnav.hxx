@@ -204,7 +204,7 @@ public:
 
     void Remove(FmFilterData* pFilterItem);
     void AppendFilterItems( FmFormItem& _rItem );
-    void CheckIntegrity(FmParentData* pItem);
+    void EnsureEmptyFilterRows( FmParentData& _rItem );
 
 protected:
     void Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
