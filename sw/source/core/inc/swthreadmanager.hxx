@@ -76,8 +76,8 @@ class SwThreadManager
         bool StartingOfThreadsSuspended();
 
     private:
-        static SwThreadManager* mpThreadManager;
-        static osl::Mutex* mpGetManagerMutex;
+        static bool mbThreadManagerInstantiated;
+        friend struct InitInstance;
 
         ThreadManager* mpThreadManagerImpl;
 
