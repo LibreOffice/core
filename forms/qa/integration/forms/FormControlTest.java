@@ -33,7 +33,7 @@ import com.sun.star.awt.XImageProducer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.form.XFormController;
+import com.sun.star.form.runtime.XFormController;
 import com.sun.star.form.XImageProducerSupplier;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.lang.EventObject;
