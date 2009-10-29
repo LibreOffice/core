@@ -75,6 +75,16 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
 }
 
+void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
+{
+    // react on settings changed
+    if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
+    {
+        maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+    }
+    Window::DataChanged( i_rDCEvt );
+}
+
 void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize( GetSizePixel() );
@@ -1568,6 +1578,14 @@ void PrintDialog::setupOptionalUI()
     SetOutputSizePixel( aSz );
 }
 
+void PrintDialog::DataChanged( const DataChangedEvent& i_rDCEvt )
+{
+    // react on settings changed
+    if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
+        checkControlDependencies();
+    ModalDialog::DataChanged( i_rDCEvt );
+}
+
 void PrintDialog::checkControlDependencies()
 {
     if( maJobPage.maCopyCountField.GetValue() > 1 )
@@ -1576,12 +1594,21 @@ void PrintDialog::checkControlDependencies()
         maJobPage.maCollateBox.Enable( FALSE );
 
     Image aImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateImg : maJobPage.maNoCollateImg );
-    if( GetSettings().GetStyleSettings().GetFieldColor().IsDark() )
-        aImg = maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateHCImg : maJobPage.maNoCollateHCImg;
+    Image aHCImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateHCImg : maJobPage.maNoCollateHCImg );
+    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+
+    Size aImgSize( aImg.GetSizePixel() );
+    Size aHCImgSize( aHCImg.GetSizePixel() );
+
+    if( aHCImgSize.Width() > aImgSize.Width() )
+        aImgSize.Width() = aHCImgSize.Width();
+    if( aHCImgSize.Height() > aImgSize.Height() )
+        aImgSize.Height() = aHCImgSize.Height();
 
     // adjust size of image
-    maJobPage.maCollateImage.SetSizePixel( aImg.GetSizePixel() );
-    maJobPage.maCollateImage.SetImage( aImg );
+    maJobPage.maCollateImage.SetSizePixel( aImgSize );
+    maJobPage.maCollateImage.SetImage( bHC ? aHCImg : aImg );
+    maJobPage.maCollateImage.SetModeImage( aHCImg, BMP_COLOR_HIGHCONTRAST );
 
     // enable setup button only for printers that can be setup
     bool bHaveSetup = maPController->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );

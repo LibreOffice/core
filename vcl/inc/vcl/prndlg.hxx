@@ -67,6 +67,7 @@ namespace vcl
             virtual void Paint( const Rectangle& rRect );
             virtual void Command( const CommandEvent& );
             virtual void Resize();
+            virtual void DataChanged( const DataChangedEvent& );
 
             void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString&,
                              sal_Int32 i_nDPIX, sal_Int32 i_nDPIY
@@ -269,6 +270,7 @@ namespace vcl
 
         virtual void Resize();
         virtual void Command( const CommandEvent& );
+        virtual void DataChanged( const DataChangedEvent& );
 
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );
