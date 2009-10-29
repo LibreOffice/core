@@ -117,7 +117,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             if ( 0 < (nTmp = aInter.Top() - aTmp.Top()) )
             {
                 const long nOldVal = aTmp.Height();
-                aTmp.SSize().Height() = nTmp;
+                aTmp.Height(nTmp);
                 InsertRect( aTmp, i, bDel );
                 aTmp.Height( nOldVal );
             }

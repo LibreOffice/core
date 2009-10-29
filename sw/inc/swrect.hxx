@@ -35,10 +35,8 @@ class SvStream;
 
 class SwRect
 {
-    long nX;
-    long nY;
-    long nWidth;
-    long nHeight;
+    Point m_Point;
+    Size m_Size;
 
 
 public:
@@ -177,137 +175,133 @@ typedef void (SwRect:: *SwRectSetPos)( const Point& );
 //---------------------------------- Set-Methoden
 inline void SwRect::Chg( const Point& rNP, const Size &rNS )
 {
-    nX      = rNP.X();      nY      = rNP.Y();
-    nWidth  = rNS.Width();  nHeight = rNS.Height();
+    m_Point = rNP;
+    m_Size = rNS;
 }
 inline void SwRect::Pos(  const Point& rNew )
 {
-    nX = rNew.X(); nY = rNew.Y();
+    m_Point = rNew;
 }
 inline void SwRect::Pos( const long nNewX, const long nNewY )
 {
-    nX = nNewX; nY = nNewY;
+    m_Point.setX(nNewX);
+    m_Point.setY(nNewY);
 }
 inline void SwRect::SSize( const Size&  rNew  )
 {
-    nWidth = rNew.Width(); nHeight = rNew.Height();
+    m_Size = rNew;
 }
 inline void SwRect::SSize( const long nNewHeight, const long nNewWidth )
 {
-    nWidth = nNewWidth; nHeight = nNewHeight;
+    m_Size.setWidth(nNewWidth);
+    m_Size.setHeight(nNewHeight);
 }
 inline void SwRect::Width(  long nNew )
 {
-    nWidth = nNew;
+    m_Size.setWidth(nNew);
 }
 inline void SwRect::Height( long nNew )
 {
-    nHeight = nNew;
+    m_Size.setHeight(nNew);
 }
 inline void SwRect::Left( const long nLeft )
 {
-    nWidth += nX - nLeft;
-    nX = nLeft;
+    m_Size.Width() += m_Point.getX() - nLeft;
+    m_Point.setX(nLeft);
 }
 inline void SwRect::Right( const long nRight )
 {
-    nWidth = nRight - nX + 1;
+    m_Size.setWidth(nRight - m_Point.getX() + 1);
 }
 inline void SwRect::Top( const long nTop )
 {
-    nHeight += nY - nTop;
-    nY = nTop;
+    m_Size.Height() += m_Point.getY() - nTop;
+    m_Point.setY(nTop);
 }
 inline void SwRect::Bottom( const long nBottom )
 {
-    nHeight = nBottom - nY + 1;
+    m_Size.setHeight(nBottom - m_Point.getY() + 1);
 }
 
 //----------------------------------- Get-Methoden
 inline const Point &SwRect::Pos()  const
 {
-    return *(Point*)(&nX);
+    return m_Point;
 }
 inline Point &SwRect::Pos()
 {
-    return *(Point*)(&nX);
+    return m_Point;
 }
 inline const Size  &SwRect::SSize() const
 {
-    return *(Size*)(&nWidth);
+    return m_Size;
 }
 inline Size  &SwRect::SSize()
 {
-    return *(Size*)(&nWidth);
+    return m_Size;
 }
 inline long SwRect::Width()  const
 {
-    return nWidth;
+    return m_Size.Width();
 }
 inline long SwRect::Height() const
 {
-    return nHeight;
+    return m_Size.Height();
 }
 inline long SwRect::Left()   const
 {
-    return nX;
+    return m_Point.X();
 }
 inline long SwRect::Right()  const
 {
-    return nWidth ? nX + nWidth - 1 : nX;
+    return m_Size.getWidth() ? m_Point.getX() + m_Size.getWidth() - 1 : m_Point.getX();
 }
 inline long SwRect::Top()    const
 {
-    return nY;
+    return m_Point.Y();
 }
 inline long SwRect::Bottom() const
 {
-    return nHeight ? nY + nHeight - 1 : nY;
+    return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
 }
 
 //----------------------------------- operatoren
 inline SwRect &SwRect::operator = ( const SwRect &rRect )
 {
-    nX = rRect.Left();
-    nY = rRect.Top();
-    nWidth  = rRect.Width();
-    nHeight = rRect.Height();
+    m_Point = rRect.m_Point;
+    m_Size = rRect.m_Size;
     return *this;
 }
 inline BOOL SwRect::operator == ( const SwRect& rRect ) const
 {
-    return (nX      == rRect.Left()  &&
-            nY      == rRect.Top()   &&
-            nWidth  == rRect.Width() &&
-            nHeight == rRect.Height());
+    return (m_Point == rRect.m_Point && m_Size == rRect.m_Size);
 }
 inline BOOL SwRect::operator != ( const SwRect& rRect ) const
 {
-    return (nX      != rRect.Left()  ||
-            nY      != rRect.Top()   ||
-            nWidth  != rRect.Width() ||
-            nHeight != rRect.Height());
+    return (m_Point != rRect.m_Point || m_Size != rRect.m_Size);
 }
 
 inline SwRect &SwRect::operator+=( const Point &rPt )
 {
-    nX += rPt.X(); nY += rPt.Y();
+    m_Point += rPt;
     return *this;
 }
 inline SwRect &SwRect::operator-=( const Point &rPt )
 {
-    nX -= rPt.X(); nY -= rPt.Y();
+    m_Point -= rPt;
     return *this;
 }
 
 inline SwRect &SwRect::operator+=( const Size &rSz )
 {
-    nWidth += rSz.Width(); nHeight += rSz.Height();
+    m_Size.Width() += rSz.Width();
+    m_Size.Height() += rSz.Height();
     return *this;
 }
 inline SwRect &SwRect::operator-=( const Size &rSz )
 {
-    nWidth -= rSz.Width(); nHeight -= rSz.Height();
+    m_Size.Width() -= rSz.Width();
+    m_Size.Height() -= rSz.Height();
     return *this;
 }
 
@@ -315,10 +309,10 @@ inline SwRect &SwRect::operator-=( const Size &rSz )
 //--------------------------- Sonstiges
 inline Rectangle SwRect::SVRect() const
 {
-    ASSERT( nWidth && nHeight, "SVRect() ohne Widht oder Height" );
-    return Rectangle( nX, nY,
-                      nX + nWidth - 1,      //Right()
-                      nY + nHeight - 1 );   //Bottom()
+    ASSERT( !IsEmpty(), "SVRect() without Width or Height" );
+    return Rectangle( m_Point.getX(), m_Point.getY(),
+        m_Point.getX() + m_Size.getWidth() - 1,         //Right()
+        m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
 }
 
 inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
@@ -328,51 +322,44 @@ inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
 
 inline BOOL SwRect::HasArea() const
 {
-    return nHeight && nWidth;
+    return !IsEmpty();
 }
 inline BOOL SwRect::IsEmpty() const
 {
-    return !(nHeight && nWidth);
+    return !(m_Size.getHeight() && m_Size.getWidth());
 }
 inline void SwRect::Clear()
 {
-    nX = nY = nWidth = nHeight = 0;
+    m_Point.setX(0);
+    m_Point.setY(0);
+    m_Size.setWidth(0);
+    m_Size.setHeight(0);
 }
 
 //-------------------------- CToren
 inline SwRect::SwRect() :
-    nX( 0 ),
-    nY( 0 ),
-    nWidth ( 0 ),
-    nHeight( 0 )
+    m_Point( 0, 0 ),
+    m_Size( 0, 0 )
 {
 }
 inline SwRect::SwRect( const SwRect &rRect ) :
-    nX( rRect.Left() ),
-    nY( rRect.Top()  ),
-    nWidth ( rRect.Width()  ),
-    nHeight( rRect.Height() )
+    m_Point( rRect.m_Point ),
+    m_Size( rRect.m_Size )
 {
 }
 inline SwRect::SwRect( const Point& rLT, const Size&  rSize ) :
-    nX( rLT.X() ),
-    nY( rLT.Y() ),
-    nWidth ( rSize.Width() ),
-    nHeight( rSize.Height())
+    m_Point( rLT ),
+    m_Size( rSize )
 {
 }
 inline SwRect::SwRect( const Point& rLT, const Point& rRB ) :
-    nX( rLT.X() ),
-    nY( rLT.Y() ),
-    nWidth ( rRB.X() - rLT.X() + 1 ),
-    nHeight( rRB.Y() - rLT.Y() + 1 )
+    m_Point( rLT ),
+    m_Size( rRB.X() - rLT.X() + 1, rRB.Y() - rLT.Y() + 1 )
 {
 }
 inline SwRect::SwRect( long X, long Y, long W, long H ) :
-    nX( X ),
-    nY( Y ),
-    nWidth ( W ),
-    nHeight( H )
+    m_Point( X, Y ),
+    m_Size( W, H )
 {
 }
 
