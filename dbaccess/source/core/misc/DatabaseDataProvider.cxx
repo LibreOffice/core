@@ -584,7 +584,8 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     {
         xChartData->setData(uno::Sequence< uno::Sequence<double> >());
         xChartData->setColumnDescriptions(uno::Sequence< ::rtl::OUString >());
-        m_xInternal->deleteSequence(0);
+        if ( m_xInternal->hasDataByRangeRepresentation(::rtl::OUString::valueOf(sal_Int32(0))) )
+            m_xInternal->deleteSequence(0);
     }
 
     uno::Sequence< ::rtl::OUString > aColumns;
