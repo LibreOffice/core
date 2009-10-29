@@ -328,7 +328,7 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu
         # Inet-wnt.xcu must come after Inet.xcu
 .ELSE
-ERROR: unknown-GUIBASE
+ERROR : unknown-GUIBASE
 .END
 .IF "$(OS)" == "WNT" || "$(OS)" == "LINUX" || \
         ("$(OS)" == "SOLARIS" && "$(CPU)" == "S") || "$(OS)" == "NETBSD"
@@ -478,24 +478,28 @@ MY_FILES_ogltrans = \
     $(MY_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
 .END
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
+.INCLUDE : settings.mk
+.INCLUDE : target.mk
 
-ALLTAR: \
+ALLTAR : \
     $(MY_XCDS) \
     $(MISC)/lang/Langpack-{$(alllangiso)}.xcd \
     $(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd \
     $(MISC)/lang/registry_{$(alllangiso)}.xcd
 
-$(MISC)/%.xcd .ERRREMOVE: $(MISC)/%.list
+{$(MY_XCDS)} : $$(MY_FILES_$$(@:b))
+
+$(MISC)/%.xcd .ERRREMOVE : $(MISC)/%.list
     $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt $<
 
-$(MISC)/%.list: makefile.mk
+$(MISC)/%.list : makefile.mk
     - $(RM) $@
     echo '<list>' $(foreach,i,$(MY_DEPS_$(@:b)) '<dependency file="$i"/>') \
         $(foreach,i,$(MY_FILES_$(@:b)) '<filename>$i</filename>') '</list>' > $@
 
-$(MISC)/lang/Langpack-%.xcd .ERRREMOVE:
+$(MISC)/lang/Langpack-{$(alllangiso)}.xcd : $(MY_MOD)/$$(@:b).xcu
+
+$(MISC)/lang/Langpack-%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
     - $(RM) $(MISC)/$(@:b).list
     echo '<list><dependency file="main"/>\
@@ -503,7 +507,9 @@ $(MISC)/lang/Langpack-%.xcd .ERRREMOVE:
     $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
         $(MISC)/$(@:b).list
 
-$(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE:
+$(MISC)/lang/fcfg_langpack_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip
+
+$(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
@@ -515,7 +521,10 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE:
     $(XSLTPROC) --nonet -o $@ $(SOLARENV)/bin/packregistry.xslt \
         $(MISC)/$(@:b).list
 
-$(MISC)/lang/registry_%.xcd .ERRREMOVE:
+$(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip \
+        $(SOLARPCKDIR)/fcfg_drivers_$$(@:b:s/registry_//).zip
+
+$(MISC)/lang/registry_%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
