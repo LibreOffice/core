@@ -532,7 +532,7 @@ testcase tWriterUIChangesTest11
                 QAErrorLog "No Default-Printer!"
                 Kontext "Printing"
                 if ( Printing.exists( 1 ) ) then
-                    DruckenDlg.Cancel
+                    Printing.cancel()
                 endif
             end if
         else
