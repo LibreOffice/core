@@ -39,6 +39,8 @@
 #include <com/sun/star/form/XDatabaseParameterBroadcaster2.idl>
 #include <com/sun/star/form/XFormControllerListener.idl>
 #include <com/sun/star/task/XInteractionHandler.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/form/runtime/XFilterController.idl>
 
 //=============================================================================
 
@@ -244,6 +246,8 @@ interface XFormControllerContext;
     @see ::com::sun::star::form::component:Form
     @see ::com::sun::star::form::binding::BindableControlModel
     @see ::com::sun::star::sdb::DataSource::Settings
+
+    @since OpenOffice.org 3.3
  */
 interface XFormController
 {
@@ -306,12 +310,20 @@ interface XFormController
 
     /** allows switching the form controller to different operation modes.
 
+        <a name="mode_selector"></a>
         <p>The two modes usually (but not necessarily) supported by a form controller are the <code>DataMode</code>
         and the <code>FilterMode</code>, where the former is the usual modus operandi for displaying and modifying
         data, and the latter is a special mode to enter a filter for the database form which the controller is
         responsible for.</p>
     */
     interface ::com::sun::star::util::XModeSelector;
+
+    /** allows controlling the filter mode.
+
+        <p>If the form controller supports a <a href="#mode_selector">form based filter mode</a>, then it shall also
+        support the <type>XFilterController</type> interface, which allows controlling this mode.</p>
+    */
+    [optional] interface XFilterController;
 
     /** denotes the instance which is used to implement operations on the form which the controller
         works for.
@@ -335,12 +347,21 @@ interface XFormController
     /** adds the specified listener to receive notifications whenever the activation state of
         the controller changes.
      */
-    void addActivateListener( [in] com::sun::star::form::XFormControllerListener _Listener );
+    void addActivateListener( [in] ::com::sun::star::form::XFormControllerListener _Listener );
 
     /** removes the specified listener from the list of components to receive notifications whenever the activation
         state of the controller changes.
      */
-    void removeActivateListener( [in] com::sun::star::form::XFormControllerListener _Listener );
+    void removeActivateListener( [in] ::com::sun::star::form::XFormControllerListener _Listener );
+
+    /** adds a controller to the list of child controllers
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given controller is <NULL/>, or cannot rightfully be a child controller. Since controllers
+            mirror the hierarchy of the forms the are responsible for, this means that the form of the given
+            child controller must be a child of the controller at which the method is invoked.
+    */
+    void addChildController( [in] XFormController _ChildController )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
 //=============================================================================
