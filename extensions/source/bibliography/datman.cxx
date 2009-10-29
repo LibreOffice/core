@@ -1091,20 +1091,16 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
         return;
     try
     {
-        m_xParser->setFilter(rQuery);
-        ::rtl::OUString aQuery=m_xParser->getFilter();
-        Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
-        Any aVal; aVal <<= aQuery;
-        aPropertySet->setPropertyValue(C2U("Filter"), aVal);
-        BOOL bVal = sal_True;
-        aVal.setValue(&bVal, ::getBooleanCppuType());
-        aPropertySet->setPropertyValue(C2U("ApplyFilter"), aVal);
+        m_xParser->setFilter( rQuery );
+        ::rtl::OUString aQuery = m_xParser->getFilter();
+        Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
+        aPropertySet->setPropertyValue( C2U( "Filter" ), makeAny( aQuery ) );
+        aPropertySet->setPropertyValue( C2U( "ApplyFilter" ), makeAny( sal_True ) );
         reload();
     }
     catch(Exception& e )
     {
-        (void) e;   // make compiler happy
-        DBG_ERROR("::setFilterOnActiveDataSource: something went wrong !");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 
@@ -1116,18 +1112,12 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
     ::rtl::OUString aQueryString;
     try
     {
-        Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
-        Any aQuery=aPropertySet->getPropertyValue(C2U("Filter"));
-
-        if(aQuery.getValueType() == ::getCppuType((::rtl::OUString*)0))
-        {
-            aQueryString=*(::rtl::OUString*)aQuery.getValue();
-        }
+        Reference< XPropertySet > xFormProps( m_xForm, UNO_QUERY_THROW );
+        OSL_VERIFY( xFormProps->getPropertyValue( C2U( "Filter" ) ) >>= aQueryString );
     }
-    catch(Exception& e )
+    catch( const Exception& )
     {
-        (void) e;   // make compiler happy
-        DBG_ERROR("::getFilterOnActiveDataSource: something went wrong !");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 
