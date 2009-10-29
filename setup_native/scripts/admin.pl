@@ -160,7 +160,9 @@ sub check_local_msidb
     my $msidbname = "msidb.exe";
     my $perlprogramm = $0;
     my $path = $perlprogramm;
+
     get_path_from_fullqualifiedname(\$path);
+
     $path =~ s/\\\s*$//;
     $path =~ s/\/\s*$//;
 
@@ -413,7 +415,7 @@ sub get_path_from_fullqualifiedname
 
     if ( $$longfilenameref =~ /\Q$separator\E/ )    # Is there a separator in the path? Otherwise the path is empty.
     {
-        if ( $$longfilenameref =~ /^\s*(\S.*\S\Q$separator\E)(\S.+\S?)/ )
+        if ( $$longfilenameref =~ /^\s*(\S.*\Q$separator\E)(\S.+\S?)/ )
         {
             $$longfilenameref = $1;
         }
