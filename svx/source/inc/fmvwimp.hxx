@@ -74,9 +74,6 @@ FORWARD_DECLARE_INTERFACE(awt,XWindow)
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 FORWARD_DECLARE_INTERFACE(util,XNumberFormats)
 
-namespace svxform {
-    class FormController;
-}
 class FmXFormView;
 
 namespace svx {
@@ -127,8 +124,9 @@ public:
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >  getController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm ) const;
-    void setController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
-                        ::svxform::FormController* pParent = NULL);
+    void setController(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxParentController );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  getControlContainer() const { return m_xControlContainer; }
     void updateTabOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
     void dispose();

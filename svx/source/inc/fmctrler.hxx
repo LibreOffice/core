@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fmctrler.hxx,v $
- * $Revision: 1.24 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -79,7 +76,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
 #include <com/sun/star/sdb/XRowSetApproveListener.hpp>
@@ -101,9 +97,9 @@
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -115,7 +111,6 @@ struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::u
     }
 };
 
-typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, FmXTextComponentLess> FmFilterControls;
 typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::rtl::OUString, FmXTextComponentLess> FmFilterRow;
 typedef ::std::vector< FmFilterRow > FmFilterRows;
 typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > > FmFormControllers;
@@ -125,10 +120,11 @@ class Window;
 
 namespace svxform
 {
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > >    FilterComponents;
     class ControlBorderManager;
     struct FmFieldInfo;
 
-    typedef ::comphelper::WeakComponentImplHelper22 <   ::com::sun::star::form::runtime::XFormController
+    typedef ::comphelper::WeakComponentImplHelper21 <   ::com::sun::star::form::runtime::XFormController
                                                     ,   ::com::sun::star::form::runtime::XFilterController
                                                     ,   ::com::sun::star::awt::XFocusListener
                                                     ,   ::com::sun::star::form::XLoadListener
@@ -144,7 +140,6 @@ namespace svxform
                                                     ,   ::com::sun::star::form::XDatabaseParameterListener
                                                     ,   ::com::sun::star::lang::XServiceInfo
                                                     ,   ::com::sun::star::form::XResetListener
-                                                    ,   ::com::sun::star::lang::XUnoTunnel
                                                     ,   ::com::sun::star::frame::XDispatch
                                                     ,   ::com::sun::star::awt::XMouseListener
                                                     ,   ::com::sun::star::form::validation::XFormComponentValidityListener
@@ -191,8 +186,8 @@ namespace svxform
                                     m_aFilterListeners;
 
         FmFormControllers           m_aChilds;
-        FmFilterControls            m_aFilterControls;
-        FmFilterRows                m_aFilters;
+        FilterComponents            m_aFilterComponents;
+        FmFilterRows                m_aFilterRows;
 
         Timer                       m_aTabActivationTimer;
         Timer                       m_aFeatureInvalidationTimer;
@@ -236,18 +231,12 @@ namespace svxform
         DECLARE_STL_VECTOR(FmXDispatchInterceptorImpl*, Interceptors);
         Interceptors    m_aControlDispatchInterceptors;
 
-    protected:
-        ~FormController();
-
     public:
         FormController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB );
 
-    // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-        SVX_DLLPUBLIC static FormController* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
-
     protected:
+        ~FormController();
+
     // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL acquire() throw ();
@@ -539,11 +528,19 @@ namespace svxform
 
         void    impl_onModify();
 
-        /** ensures that m_aFilters contains at least one empty row
+        /** ensures that m_aFilterRows contains at least one empty row
         */
         void    implts_ensureEmptyFilterRow_nothrow();
 
-        /** adds an empty filter row to m_aFilters, and notifies our listeners
+        /** adds the given filter row to m_aFilterRows, setting m_nCurrentFilterPosition to 0 if the newly added
+            row is the first one.
+
+            @precond
+                our mutex is locked
+        */
+        void    impl_addFilterRow( const FmFilterRow& _row );
+
+        /** adds an empty filter row to m_aFilterRows, and notifies our listeners
         */
         void    impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rClearBeforeNotify );
 

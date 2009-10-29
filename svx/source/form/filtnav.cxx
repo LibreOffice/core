@@ -33,7 +33,6 @@
 
 
 #include "filtnav.hxx"
-#include "fmctrler.hxx"
 #include "fmexch.hxx"
 #include "fmhelp.hrc"
 #include "fmitems.hxx"
@@ -323,7 +322,8 @@ TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 //========================================================================
 class FmFilterAdapter : public ::cppu::WeakImplHelper1< XFilterControllerListener >
 {
-    FmFilterModel*          m_pModel;
+    Reference< XIndexAccess >   m_xControllers;
+    FmFilterModel*              m_pModel;
 
 public:
     FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers);
@@ -339,7 +339,7 @@ public:
 // helpers
     void dispose() throw( RuntimeException );
 
-    void InsertElements( const Reference< XIndexAccess >& xControllers );
+    void AddOrRemoveListener( const Reference< XIndexAccess >& _rxControllers, const bool _bAdd );
 
     void setText(sal_Int32 nPos,
         const FmFilterItem* pFilterItem,
@@ -348,31 +348,36 @@ public:
 
 //------------------------------------------------------------------------
 FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers)
-                 :m_pModel(pModel)
+    :m_pModel( pModel )
+    ,m_xControllers( xControllers )
 {
-    InsertElements(xControllers);
+    AddOrRemoveListener( m_xControllers, true );
 }
 
 //------------------------------------------------------------------------
 void FmFilterAdapter::dispose() throw( RuntimeException )
 {
+    AddOrRemoveListener( m_xControllers, false );
 }
 
 //------------------------------------------------------------------------
-void FmFilterAdapter::InsertElements(const Reference< XIndexAccess >& xControllers)
+void FmFilterAdapter::AddOrRemoveListener( const Reference< XIndexAccess >& _rxControllers, const bool _bAdd )
 {
-    for (sal_Int32 i = 0, nLen = xControllers->getCount(); i < nLen; ++i)
+    for (sal_Int32 i = 0, nLen = _rxControllers->getCount(); i < nLen; ++i)
     {
-        Reference< XIndexAccess > xElement;
-        xControllers->getByIndex(i) >>= xElement;
+        Reference< XIndexAccess > xElement( _rxControllers->getByIndex(i), UNO_QUERY );
 
-        // Insert the Elements of the controller
-        InsertElements(xElement);
+        // step down
+        AddOrRemoveListener( xElement, _bAdd );
 
+        // handle this particular controller
         Reference< XFilterController > xController( xElement, UNO_QUERY );
         OSL_ENSURE( xController.is(), "FmFilterAdapter::InsertElements: no XFilterController, cannot sync data!" );
         if ( xController.is() )
-            xController->addFilterControllerListener( this );
+            if ( _bAdd )
+                xController->addFilterControllerListener( this );
+            else
+                xController->removeFilterControllerListener( this );
     }
 }
 

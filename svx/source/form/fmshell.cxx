@@ -690,7 +690,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
             else
             {
-                sal_Bool bShow = pShowItem->GetValue();
+                const sal_Bool bShow = pShowItem->GetValue();
                 GetViewShell()->GetViewFrame()->ShowChildWindow( nSlot, bShow );
             }
 
@@ -868,12 +868,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
             // initially open the filter navigator, the whole form based filter is pretty useless without it
             SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
-            const SfxPoolItem* pArgs[] =
-            {
-                &aIdentifierItem, NULL
-            };
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
-                                      pArgs, rReq.GetModifier() );
+                &aIdentifierItem, NULL );
         }   break;
     }
 }

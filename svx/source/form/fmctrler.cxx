@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fmctrler.cxx,v $
- * $Revision: 1.71 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -137,6 +134,7 @@ namespace svxform
     using ::com::sun::star::lang::IndexOutOfBoundsException;
     using ::com::sun::star::sdb::XInteractionSupplyParameters;
     using ::com::sun::star::awt::XTextComponent;
+    using ::com::sun::star::awt::XTextListener;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::frame::XDispatch;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -569,7 +567,7 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
                   ,m_aToggleEvent( LINK( this, FormController, OnToggleAutoFields ) )
                   ,m_aActivationEvent( LINK( this, FormController, OnActivated ) )
                   ,m_aDeactivationEvent( LINK( this, FormController, OnDeactivated ) )
-                  ,m_nCurrentFilterPosition(0)
+                  ,m_nCurrentFilterPosition(-1)
                   ,m_bCurrentRecordModified(sal_False)
                   ,m_bCurrentRecordNew(sal_False)
                   ,m_bLocked(sal_False)
@@ -690,39 +688,6 @@ Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException)
     );
 }
 
-// -----------------------------------------------------------------------------
-// XUnoTunnel
-Sequence< sal_Int8 > FormController::getUnoTunnelImplementationId()
-{
-    static ::cppu::OImplementationId * pId = NULL;
-    if ( !pId )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pId )
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-//------------------------------------------------------------------------------
-FormController* FormController::getImplementation( const Reference< XInterface >& _rxComponent )
-{
-    Reference< XUnoTunnel > xTunnel( _rxComponent, UNO_QUERY );
-    if ( xTunnel.is() )
-        return reinterpret_cast< FormController* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
-    return NULL;
-}
-//------------------------------------------------------------------------------
-sal_Int64 SAL_CALL FormController::getSomething(Sequence<sal_Int8> const& rId)throw( RuntimeException )
-{
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return reinterpret_cast< sal_Int64 >( this );
-
-    return sal_Int64();
-}
-
 // XServiceInfo
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FormController::supportsService(const ::rtl::OUString& ServiceName) throw( RuntimeException )
@@ -782,25 +747,53 @@ Sequence< ::rtl::OUString> FormController::getSupportedServiceNames_Static(void)
 }
 
 // -----------------------------------------------------------------------------
+namespace
+{
+    struct ResetComponentText : public ::std::unary_function< Reference< XTextComponent >, void >
+    {
+        void operator()( const Reference< XTextComponent >& _rxText )
+        {
+            _rxText->setText( ::rtl::OUString() );
+        }
+    };
+
+    struct RemoveComponentTextListener : public ::std::unary_function< Reference< XTextComponent >, void >
+    {
+        RemoveComponentTextListener( const Reference< XTextListener >& _rxListener )
+            :m_xListener( _rxListener )
+        {
+        }
+
+        void operator()( const Reference< XTextComponent >& _rxText )
+        {
+            _rxText->removeTextListener( m_xListener );
+        }
+
+    private:
+        Reference< XTextListener >  m_xListener;
+    };
+}
+
+// -----------------------------------------------------------------------------
 void FormController::impl_setTextOnAllFilter_throw()
 {
     // reset the text for all controls
-    for (   FmFilterControls::const_iterator iter = m_aFilterControls.begin();
-            iter != m_aFilterControls.end();
-            ++iter
-        )
-        iter->first->setText( ::rtl::OUString() );
+    ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), ResetComponentText() );
+
+    if ( m_aFilterRows.empty() )
+        // nothing to do anymore
+        return;
 
     if ( m_nCurrentFilterPosition < 0 )
         return;
 
     // set the text for all filters
-    OSL_ENSURE( m_aFilters.size() > (size_t)m_nCurrentFilterPosition,
+    OSL_ENSURE( m_aFilterRows.size() > (size_t)m_nCurrentFilterPosition,
         "FormController::impl_setTextOnAllFilter_throw: m_nCurrentFilterPosition too big" );
 
-    if ( (size_t)m_nCurrentFilterPosition < m_aFilters.size() )
+    if ( (size_t)m_nCurrentFilterPosition < m_aFilterRows.size() )
     {
-        FmFilterRow& rRow = m_aFilters[ m_nCurrentFilterPosition ];
+        FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
         for (   FmFilterRow::const_iterator iter2 = rRow.begin();
                 iter2 != rRow.end();
                 ++iter2
@@ -849,39 +842,47 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                 ::rtl::OUString aQuote( xMetaData->getIdentifierQuoteString() );
 
                 // now add the filter rows
-                for ( FmFilterRows::const_iterator row = m_aFilters.begin(); row != m_aFilters.end(); ++row )
+                try
                 {
-                    const FmFilterRow& rRow = *row;
-
-                    if ( rRow.empty() )
-                        continue;
-
-                    if ( aFilter.getLength() )
-                        aFilter.appendAscii( " OR " );
-
-                    aFilter.appendAscii( "( " );
-                    for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
+                    for ( FmFilterRows::const_iterator row = m_aFilterRows.begin(); row != m_aFilterRows.end(); ++row )
                     {
-                        // get the field of the controls map
-                        Reference< XTextComponent > xText = condition->first;
-                        Reference< XPropertySet > xField = m_aFilterControls.find( xText )->second;
-                        DBG_ASSERT( xField.is(), "FormController::getFastPropertyValue: no field found!" );
-                        if ( condition != rRow.begin() )
-                            aFilter.appendAscii( " AND " );
+                        const FmFilterRow& rRow = *row;
 
-                        ::rtl::OUString sFilterValue( condition->second );
+                        if ( rRow.empty() )
+                            continue;
 
-                        ::rtl::OUString sErrorMsg, sCriteria;
-                        ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
-                        OSL_ENSURE( xParseNode.is(), "FormController::getFastPropertyValue: could not parse the field value predicate!" );
-                        if ( xParseNode.is() )
+                        if ( aFilter.getLength() )
+                            aFilter.appendAscii( " OR " );
+
+                        aFilter.appendAscii( "( " );
+                        for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
                         {
-                            // don't use a parse context here, we need it unlocalized
-                            xParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
-                            aFilter.append( sCriteria );
+                            // get the field of the controls map
+                            Reference< XControl > xControl( condition->first, UNO_QUERY_THROW );
+                            Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
+                            Reference< XPropertySet > xField( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
+                            if ( condition != rRow.begin() )
+                                aFilter.appendAscii( " AND " );
+
+                            ::rtl::OUString sFilterValue( condition->second );
+
+                            ::rtl::OUString sErrorMsg, sCriteria;
+                            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
+                            OSL_ENSURE( xParseNode.is(), "FormController::getFastPropertyValue: could not parse the field value predicate!" );
+                            if ( xParseNode.is() )
+                            {
+                                // don't use a parse context here, we need it unlocalized
+                                xParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
+                                aFilter.append( sCriteria );
+                            }
                         }
+                        aFilter.appendAscii( " )" );
                     }
-                    aFilter.appendAscii( " )" );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                    aFilter.setLength(0);
                 }
             }
             rValue <<= aFilter.makeStringAndClear();
@@ -947,7 +948,7 @@ void SAL_CALL FormController::removeFilterControllerListener( const Reference< X
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    return m_aFilterControls.size();
+    return m_aFilterComponents.size();
 }
 
 //------------------------------------------------------------------------------
@@ -956,7 +957,7 @@ void SAL_CALL FormController::removeFilterControllerListener( const Reference< X
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    return m_aFilters.size();
+    return m_aFilterRows.size();
 }
 
 //------------------------------------------------------------------------------
@@ -968,15 +969,10 @@ void SAL_CALL FormController::setPredicateExpression( ::sal_Int32 _Component, ::
     if ( ( _Component < 0 ) || ( _Component >= getFilterComponents() ) || ( _Term < 0 ) || ( _Term >= getDisjunctiveTerms() ) )
         throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-    FmFilterControls::const_iterator componentPos( m_aFilterControls.begin() );
-    while ( _Component > 0 )
-        ++componentPos, --_Component;
-    // TODO: make m_aFilterControls a vector
-
-    Reference< XTextComponent > xText( componentPos->first );
+    Reference< XTextComponent > xText( m_aFilterComponents[ _Component ] );
     xText->setText( _PredicateExpression );
 
-    FmFilterRow& rFilterRow = m_aFilters[ _Term ];
+    FmFilterRow& rFilterRow = m_aFilterRows[ _Term ];
     if ( _PredicateExpression.getLength() )
         rFilterRow[ xText ] = _PredicateExpression;
     else
@@ -992,11 +988,7 @@ Reference< XControl > FormController::getFilterComponent( ::sal_Int32 _Component
     if ( ( _Component < 0 ) || ( _Component >= getFilterComponents() ) )
         throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-    FmFilterControls::const_iterator componentPos( m_aFilterControls.begin() );
-    while ( _Component > 0 )
-        ++componentPos, --_Component;
-
-    return Reference< XControl >( componentPos->first, UNO_QUERY );
+    return Reference< XControl >( m_aFilterComponents[ _Component ], UNO_QUERY );
 }
 
 //------------------------------------------------------------------------------
@@ -1005,23 +997,23 @@ Sequence< Sequence< ::rtl::OUString > > FormController::getPredicateExpressions(
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    Sequence< Sequence< ::rtl::OUString > > aExpressions( m_aFilters.size() );
+    Sequence< Sequence< ::rtl::OUString > > aExpressions( m_aFilterRows.size() );
     sal_Int32 termIndex = 0;
-    for (   FmFilterRows::const_iterator row = m_aFilters.begin();
-            row != m_aFilters.end();
+    for (   FmFilterRows::const_iterator row = m_aFilterRows.begin();
+            row != m_aFilterRows.end();
             ++row, ++termIndex
         )
     {
         const FmFilterRow& rRow( *row );
 
-        Sequence< ::rtl::OUString > aConjunction( m_aFilterControls.size() );
+        Sequence< ::rtl::OUString > aConjunction( m_aFilterComponents.size() );
         sal_Int32 componentIndex = 0;
-        for (   FmFilterControls::const_iterator comp = m_aFilterControls.begin();
-                comp != m_aFilterControls.end();
+        for (   FilterComponents::const_iterator comp = m_aFilterComponents.begin();
+                comp != m_aFilterComponents.end();
                 ++comp, ++componentIndex
             )
         {
-            FmFilterRow::const_iterator predicate = rRow.find( comp->first );
+            FmFilterRow::const_iterator predicate = rRow.find( *comp );
             if ( predicate != rRow.end() )
                 aConjunction[ componentIndex ] = predicate->second;
         }
@@ -1042,25 +1034,24 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
     if ( ( _Term < 0 ) || ( _Term >= getDisjunctiveTerms() ) )
         throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
 
-    if ( ( _Term == 0 ) && ( m_aFilters.size() == 1 ) )
-        // not allowed to remove the one and only last term
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
-
     // if the to-be-deleted row is our current row, we need to shift
     if ( _Term == m_nCurrentFilterPosition )
     {
-        if ( m_nCurrentFilterPosition < sal_Int32( m_aFilters.size() - 1 ) )
+        if ( m_nCurrentFilterPosition < sal_Int32( m_aFilterRows.size() - 1 ) )
             ++m_nCurrentFilterPosition;
         else
             --m_nCurrentFilterPosition;
     }
 
-    FmFilterRows::iterator pos = m_aFilters.begin() + _Term;
-    m_aFilters.erase( pos );
+    FmFilterRows::iterator pos = m_aFilterRows.begin() + _Term;
+    m_aFilterRows.erase( pos );
 
     // adjust m_nCurrentFilterPosition if the removed row preceeded it
     if ( _Term < m_nCurrentFilterPosition )
         --m_nCurrentFilterPosition;
+
+    OSL_POSTCOND( ( m_nCurrentFilterPosition < 0 ) == ( m_aFilterRows.empty() ),
+        "FormController::removeDisjunctiveTerm: inconsistency!" );
 
     // update the texts in the filter controls
     impl_setTextOnAllFilter_throw();
@@ -1223,7 +1214,7 @@ void FormController::disposing(void)
 
     m_pControlBorderManager->restoreAll();
 
-    m_aFilters.clear();
+    m_aFilterRows.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xActiveControl = NULL;
@@ -1505,14 +1496,17 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
         Reference< XTextComponent >  xText(e.Source,UNO_QUERY);
         ::rtl::OUString aText = xText->getText();
 
+        if ( m_aFilterRows.empty() )
+            appendEmptyDisjunctiveTerm();
+
         // Suchen der aktuellen Row
-        if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilters.size() ) || ( m_nCurrentFilterPosition < 0 ) )
+        if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
         {
             OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
             return;
         }
 
-        FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
+        FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
 
         // do we have a new filter
         if (aText.getLength())
@@ -1529,11 +1523,8 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
         // multiplex the event to our FilterControllerListeners
         FilterEvent aEvent;
         aEvent.Source = *this;
-        aEvent.FilterComponent = 0;
+        aEvent.FilterComponent = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xText ) - m_aFilterComponents.begin();
         aEvent.DisjunctiveTerm = getActiveTerm();
-        FmFilterControls::const_iterator lookup( m_aFilterControls.begin() );
-        while ( lookup != m_aFilterControls.end() && ( lookup->first != xText ) )
-            ++lookup, ++aEvent.FilterComponent;
         aEvent.PredicateExpression = aText;
 
         aGuard.clear();
@@ -1625,6 +1616,18 @@ void FormController::impl_onModify()
 }
 
 //------------------------------------------------------------------------------
+void FormController::impl_addFilterRow( const FmFilterRow& _row )
+{
+    m_aFilterRows.push_back( _row );
+
+    if ( m_aFilterRows.size() == 1 )
+    {   // that's the first row ever
+        OSL_ENSURE( m_nCurrentFilterPosition == -1, "FormController::impl_addFilterRow: inconsistency!" );
+        m_nCurrentFilterPosition = 0;
+    }
+}
+
+//------------------------------------------------------------------------------
 void FormController::implts_ensureEmptyFilterRow_nothrow()
 {
     // TODO:
@@ -1643,8 +1646,8 @@ void FormController::implts_ensureEmptyFilterRow_nothrow()
     impl_checkDisposed_throw();
 
     // do we have an empty row?
-    for (   FmFilterRows::const_iterator pos = m_aFilters.begin();
-            pos != m_aFilters.end();
+    for (   FmFilterRows::const_iterator pos = m_aFilterRows.begin();
+            pos != m_aFilterRows.end();
             ++pos
         )
     {
@@ -1661,12 +1664,12 @@ void FormController::implts_ensureEmptyFilterRow_nothrow()
 void FormController::impl_appendEmptyFilterRow( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
 {
     // SYNCHRONIZED -->
-    m_aFilters.push_back( FmFilterRow() );
+    impl_addFilterRow( FmFilterRow() );
 
     // notify the listeners
     FilterEvent aEvent;
     aEvent.Source = *this;
-    aEvent.DisjunctiveTerm = (sal_Int32)m_aFilters.size() - 1;
+    aEvent.DisjunctiveTerm = (sal_Int32)m_aFilterRows.size() - 1;
     _rClearBeforeNotify.clear();
     // <-- SYNCHRONIZED
     m_aFilterListeners.notifyEach( &XFilterControllerListener::disjunctiveTermAdded, aEvent );
@@ -2085,11 +2088,8 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
             m_aTabActivationTimer.Stop();
 
         // clear the filter map
-        for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
-             iter != m_aFilterControls.end(); ++iter)
-            (*iter).first->removeTextListener(this);
-
-        m_aFilterControls.clear();
+        ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
+        m_aFilterComponents.clear();
 
         // einsammeln der Controls
         const Reference< XControl >* pControls = m_aControls.getConstArray();
@@ -2594,13 +2594,9 @@ void FormController::removeControl(const Reference< XControl > & xControl)
         }
     }
 
-    if (m_aFilterControls.size())
-    {
-        Reference< XTextComponent >  xText(xControl, UNO_QUERY);
-        FmFilterControls::iterator iter = m_aFilterControls.find(xText);
-        if (iter != m_aFilterControls.end())
-            m_aFilterControls.erase(iter);
-    }
+    FilterComponents::iterator componentPos = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xControl );
+    if ( componentPos != m_aFilterComponents.end() )
+        m_aFilterComponents.erase( componentPos );
 
     implControlRemoved( xControl, m_bDetachEvents );
 
@@ -2916,8 +2912,8 @@ void SAL_CALL FormController::elementInserted(const ContainerEvent& evt) throw( 
                 if (xText.is() && xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
                     ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                 {
-                    m_aFilterControls[xText] = xField;
-                    xText->addTextListener(this);
+                    m_aFilterComponents.push_back( xText );
+                    xText->addTextListener( this );
                 }
             }
         }
@@ -2959,10 +2955,10 @@ void SAL_CALL FormController::elementRemoved(const ContainerEvent& evt) throw( R
     // are we in filtermode and a XModeSelector has inserted an element
     else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())
     {
-        Reference< XTextComponent >  xText(xControl, UNO_QUERY);
-        FmFilterControls::iterator iter = m_aFilterControls.find(xText);
-        if (iter != m_aFilterControls.end())
-            m_aFilterControls.erase(iter);
+        FilterComponents::iterator componentPos = ::std::find(
+            m_aFilterComponents.begin(), m_aFilterComponents.end(), xControl );
+        if ( componentPos != m_aFilterComponents.end() )
+            m_aFilterComponents.erase( componentPos );
     }
 }
 
@@ -3270,19 +3266,20 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
             if (aRow.empty())
                 continue;
 
-            m_aFilters.push_back(aRow);
+            impl_addFilterRow( aRow );
         }
     }
 
     // now set the filter controls
-    for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
-         iter != rFieldInfos.end(); iter++)
+    for (   ::std::vector<FmFieldInfo>::iterator field = rFieldInfos.begin();
+            field != rFieldInfos.end();
+            ++field
+        )
     {
-        m_aFilterControls[(*iter).xText] = (*iter).xField;
+        m_aFilterComponents.push_back( field->xText );
     }
 
-    // add an empty row
-    m_aFilters.push_back(FmFilterRow());
+    implts_ensureEmptyFilterRow_nothrow();
 }
 
 //------------------------------------------------------------------------------
@@ -3453,11 +3450,8 @@ void FormController::stopFiltering()
     sal_Int32 nControlCount = aControlsCopy.getLength();
 
     // clear the filter control map
-    for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
-         iter != m_aFilterControls.end(); iter++)
-         (*iter).first->removeTextListener(this);
-
-    m_aFilterControls.clear();
+    ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
+    m_aFilterComponents.clear();
 
     for ( sal_Int32 i = nControlCount; i > 0; )
     {
@@ -3507,8 +3501,8 @@ void FormController::stopFiltering()
 
     m_bDetachEvents = sal_True;
 
-    m_aFilters.clear();
-    m_nCurrentFilterPosition = 0;
+    m_aFilterRows.clear();
+    m_nCurrentFilterPosition = -1;
 
     // release the locks if possible
     // lock all controls which are not used for filtering

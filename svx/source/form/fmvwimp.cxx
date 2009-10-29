@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "fmctrler.hxx"
 #include "fmdocumentclassification.hxx"
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
@@ -84,6 +83,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/container/XContainer.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/enumhelper.hxx>
@@ -199,7 +199,7 @@ FmXPageViewWinRec::FmXPageViewWinRec( const ::comphelper::ComponentContext& _rCo
             {
                 Reference< XForm > xForm( xForms->getByIndex(i), UNO_QUERY );
                 if ( xForm.is() )
-                    setController( xForm );
+                    setController( xForm, NULL );
             }
         }
         catch( const Exception& )
@@ -352,9 +352,8 @@ Reference< XFormController >  FmXPageViewWinRec::getController( const Reference<
 }
 
 //------------------------------------------------------------------------
-void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FormController* _pParent )
+void FmXPageViewWinRec::setController(const Reference< XForm > & xForm, const Reference< XFormController >& _rxParentController )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::setController" );
     DBG_ASSERT( xForm.is(), "FmXPageViewWinRec::setController: there should be a form!" );
     Reference< XIndexAccess >  xFormCps(xForm, UNO_QUERY);
     if (!xFormCps.is())
@@ -363,13 +362,16 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FormCon
     Reference< XTabControllerModel >  xTabOrder(xForm, UNO_QUERY);
 
     // create a form controller
-    FormController* pController = new FormController( m_aContext.getLegacyServiceFactory() );
-    Reference< XFormController > xController( pController );
+    Reference< XFormController > xController( m_aContext.createComponent( FM_FORM_CONTROLLER ), UNO_QUERY );
+    if ( !xController.is() )
+    {
+        ShowServiceNotAvailableError( m_pWindow, FM_FORM_CONTROLLER, sal_True );
+        return;
+    }
 
-    Reference< XFormController > xParentController( _pParent );
     Reference< XInteractionHandler > xHandler;
-    if ( xParentController.is() )
-        xHandler = xParentController->getInteractionHandler();
+    if ( _rxParentController.is() )
+        xHandler = _rxParentController->getInteractionHandler();
     else
     {
         // TODO: should we create a default handler? Not really necessary, since the
@@ -385,8 +387,8 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FormCon
     xController->activateTabOrder();
     xController->addActivateListener( m_pViewImpl );
 
-    if ( xParentController.is() )
-        xParentController->addChildController( xController );
+    if ( _rxParentController.is() )
+        _rxParentController->addChildController( xController );
     else
     {
         m_aControllerList.push_back(xController);
@@ -405,7 +407,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FormCon
     for (sal_uInt32 i = 0; i < nLength; i++)
     {
         if ( xFormCps->getByIndex(i) >>= xSubForm )
-            setController(xSubForm, pController);
+            setController( xSubForm, xController );
     }
 }
 
@@ -430,18 +432,12 @@ void FmXPageViewWinRec::updateTabOrder( const Reference< XForm >& _rxForm )
             // if it's a sub form, then we must ensure there exist TabControllers
             // for all its ancestors, too
             Reference< XForm > xParentForm( _rxForm->getParent(), UNO_QUERY );
-            FormController* pFormController = NULL;
             // there is a parent form -> look for the respective controller
+            Reference< XFormController > xParentController;
             if ( xParentForm.is() )
-                xTabCtrl = Reference< XTabController >( getController( xParentForm ), UNO_QUERY );
+                xParentController.set( getController( xParentForm ), UNO_QUERY );
 
-            if ( xTabCtrl.is() )
-            {
-                Reference< XUnoTunnel > xTunnel( xTabCtrl, UNO_QUERY_THROW );
-                pFormController = reinterpret_cast< FormController* >( xTunnel->getSomething( FormController::getUnoTunnelImplementationId() ) );
-            }
-
-            setController( _rxForm, pFormController );
+            setController( _rxForm, xParentController );
         }
     }
     catch( const Exception& )
