@@ -879,8 +879,13 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             rtl::math::setNan( &fVal );
             if (bSign)
             {
-                reinterpret_cast< sal_math_Double * >(&fVal)->w32_parts.msw
-                    |= 0x80000000; // create negative NaN
+                union {
+                    double sd;
+                    sal_math_Double md;
+                } m;
+                m.sd = fVal;
+                m.md.w32_parts.msw |= 0x80000000; // create negative NaN
+                fVal = m.sd;
                 bSign = false; // don't negate again
             }
             // Eat any further digits:

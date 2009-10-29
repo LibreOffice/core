@@ -820,8 +820,8 @@ void SAL_CALL rtl_bootstrap_set (
     rtl_uString * pValue
 ) SAL_THROW_EXTERN_C()
 {
-    OUString const & name = *reinterpret_cast< OUString const * >( &pName );
-    OUString const & value = *reinterpret_cast< OUString const * >( &pValue );
+    const OUString name( pName );
+    const OUString value( pValue );
 
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
 

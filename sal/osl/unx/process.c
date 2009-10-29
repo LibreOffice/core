@@ -269,7 +269,7 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
     cmptr->cmsg_level = SOL_SOCKET;
     cmptr->cmsg_type = SCM_RIGHTS;
     cmptr->cmsg_len = CONTROLLEN;
-    *(int*)CMSG_DATA(cmptr) = SocketFD;
+    memcpy(CMSG_DATA(cmptr), &SocketFD, sizeof(int));
 
 #endif
 
@@ -360,7 +360,7 @@ static oslSocket receiveFdPipe(int PipeFD)
          ( msghdr.msg_controllen == CONTROLLEN ) )
     {
         OSL_TRACE("receiveFdPipe : received '%i' bytes\n",nRead);
-        newfd = *(int*)CMSG_DATA(cmptr);
+        memcpy(&newfd, CMSG_DATA(cmptr), sizeof(int));
     }
 #endif
     else
