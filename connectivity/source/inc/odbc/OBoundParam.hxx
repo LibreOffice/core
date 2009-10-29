@@ -119,6 +119,11 @@ namespace connectivity
                 paramInputStreamLen = len;
             }
 
+            void setSequence(const ::com::sun::star::uno::Sequence< sal_Int8 >& _aSequence)
+            {
+                aSequence = _aSequence;
+            }
+
             //--------------------------------------------------------------------
             // getInputStream
             // Gets the input stream for the bound parameter
@@ -191,6 +196,7 @@ namespace connectivity
                                         // data is in native format.
 
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> paramInputStream;
+            ::com::sun::star::uno::Sequence< sal_Int8 > aSequence;
                                         // When an input stream is
                                         // bound to a parameter, the
                                         // input stream is saved
