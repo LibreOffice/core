@@ -73,7 +73,8 @@
 #define _STR_IMPRESS_PRINT_UI_PAGE_RANGE                 40
 #define _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE          41
 #define _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE_HELP     42
+#define _STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE             43
 
-#define _STR_DRAW_PRINT_UI_IS_PRINT_NAME                 43
-#define _STR_DRAW_PRINT_UI_IS_PRINT_NAME_HELP            44
+#define _STR_DRAW_PRINT_UI_IS_PRINT_NAME                 44
+#define _STR_DRAW_PRINT_UI_IS_PRINT_NAME_HELP            45
 

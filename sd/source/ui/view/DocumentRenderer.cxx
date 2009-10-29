@@ -634,7 +634,9 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt( rtl::OUString(),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE_HELP),
                                 aPrintRangeName,
-                                CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE),
+                                CreateChoice(mbImpress
+                                             ? _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
+                                             : _STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE),
                                 0 )
                             );
             // create a an Edit dependent on "Pages" selected

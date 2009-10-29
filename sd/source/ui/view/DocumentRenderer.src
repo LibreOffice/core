@@ -285,4 +285,14 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
             < "Print only the currently selected content."; >;
         };
     };
+
+    StringArray _STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE
+    {
+        ItemList [ en-US ] =
+        {
+            < "~All pages"; >;
+            < "Pa~ges"; >;
+            < "Se~lection"; >;
+        };
+    };
 };
