@@ -146,12 +146,16 @@ testcase tPrintGeneral()
         Details.click() ' open
         Details.click() ' close
         
-        Properties.click()
-        kontext "TabSPAPaper"
-        if ( TabSPAPaper.exists( 2 ) ) then
-            TabSPAPaper.close()
+        if ( gPlatGroup = "unx" ) then
+            Properties.click()
+            kontext "TabSPAPaper"
+            if ( TabSPAPaper.exists( 2 ) ) then
+                TabSPAPaper.close()
+            else
+                warnlog( "Printer properties did not open." )
+            endif
         else
-            warnlog( "Printer properties did not open." )
+            printlog( "Skipping printer proerties on Windows (no SPAdmin)")
         endif
 
         kontext "TabPrintGeneral"
