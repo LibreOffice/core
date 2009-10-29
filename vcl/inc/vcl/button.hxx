@@ -437,6 +437,7 @@ protected:
 
     SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
+    SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
 public:
     SAL_DLLPRIVATE void         ImplCheck();
     SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();

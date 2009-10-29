@@ -4419,7 +4419,7 @@ void DisclosureButton::ImplDrawCheckBoxState()
     if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
     if ( ImplGetButtonState() & BUTTON_DRAW_DEFAULT )   nState |= CTRL_STATE_DEFAULT;
     if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
-    if ( IsMouseOver() && aStateRect.IsInside( GetPointerPosPixel() ) )
+    if ( IsMouseOver() && GetMouseRect().IsInside( GetPointerPosPixel() ) )
         nState |= CTRL_STATE_ROLLOVER;
 
     if( ! DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
