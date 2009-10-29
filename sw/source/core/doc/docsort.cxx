@@ -386,7 +386,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         {
             if( bUndo )
             {
-                pRedlUndo = new SwUndoRedlineSort( rPaM, rOpt );
+                pRedlUndo = new SwUndoRedlineSort( *pRedlPam,rOpt );
                 DoUndo( FALSE );
             }
             // erst den Bereich kopieren, dann
@@ -483,6 +483,17 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         pRedlPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
         AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
+
+        if( pRedlUndo )
+        {
+
+            SwNodeIndex aInsEndIdx( pRedlPam->GetMark()->nNode, -1 );
+            pRedlPam->GetMark()->nNode = aInsEndIdx;
+            SwCntntNode* pCNd = pRedlPam->GetMark()->nNode.GetNode().GetCntntNode();
+            pRedlPam->GetMark()->nContent.Assign( pCNd, pCNd->Len() );
+
+            pRedlUndo->SetValues( *pRedlPam );
+        }
 
         if( pRedlUndo )
             pRedlUndo->SetOffset( aSttIdx );
