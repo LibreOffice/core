@@ -403,8 +403,8 @@ testcase tPrintLayout()
         select case( gApplication )
         case "WRITER", "HTML", "MASTERDOCUMENT"
 
-            if ( PrintBrochureRTL.isEnabled() ) then
-                warnlog( "<Brochure> listbox should be disabled" )
+            if ( NOT PrintBrochureRTL.isEnabled() ) then
+                warnlog( "<Brochure> listbox should be enabled" )
             endif
             
             Brochure.check()
@@ -417,8 +417,8 @@ testcase tPrintLayout()
             
         case "IMPRESS", "DRAW"
 
-            if ( BrochurePageSides.isEnabled() ) then
-                warnlog( "<Page sides> listbox should be disabled" )
+            if ( Not BrochurePageSides.isEnabled() ) then
+                warnlog( "#i106426# <Page sides> listbox should be enabled" )
             endif
             Brochure.check()
             lb_test( BrochurePageSides, 3, 1, "" )
