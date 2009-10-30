@@ -30,30 +30,17 @@
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #define _DBACORE_DEFINITIONCOLUMN_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
-#include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _DBA_COREAPI_COLUMN_HXX_
 #include "column.hxx"
-#endif
-#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include "columnsettings.hxx"
+
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/container/XChild.hpp>
+
 #include <comphelper/IdPropArrayHelper.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 
 namespace dbaccess
@@ -79,9 +66,9 @@ namespace dbaccess
         sal_Int32               m_nPrecision;
         sal_Int32               m_nScale;
         sal_Int32               m_nIsNullable;
-        sal_Bool                m_bAutoIncrement : 1;
-        sal_Bool                m_bRowVersion : 1;
-        sal_Bool                m_bCurrency : 1;
+        sal_Bool                m_bAutoIncrement;
+        sal_Bool                m_bRowVersion;
+        sal_Bool                m_bCurrency;
     //  </properties>
     public:
         OTableColumnDescriptor():m_nType(::com::sun::star::sdbc::DataType::SQLNULL)
@@ -133,12 +120,10 @@ namespace dbaccess
         using OColumn::getFastPropertyValue;
     };
 
-    /**
-     *  describes a column of an existing table. The informations for the column are
-     *  retrieved in a generic way using the meta data of a connection.
+    /** describes a column of a table or query
      */
-    class OTableColumn : public OTableColumnDescriptor,
-                         public ::comphelper::OPropertyArrayUsageHelper < OTableColumn >
+    class OTableColumn  :public OTableColumnDescriptor
+                        ,public ::comphelper::OPropertyArrayUsageHelper < OTableColumn >
     {
         friend class ODBTable;
 
