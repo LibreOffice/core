@@ -37,10 +37,9 @@
 HID$(TNR)FILES=$(foreach,i,$(SRC$(TNR)FILES:f) $(SRS)/$(i:s/.src/.hid/))
 HIDSRS$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(SRS))/$(SRS$(TNR)NAME)_srs.hid
 $(HIDSRS$(TNR)PARTICLE) : $(HID$(TNR)FILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @-$(RM) $@
-    $(TYPE) $(mktmp  $(subst,/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
+    $(COMMAND_ECHO)$(TYPE) $(mktmp  $(subst,/,/ $(HID$(TNR)FILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDSRS$(TNR)PARTICLE)
@@ -50,20 +49,20 @@ ALLTAR : $(HIDSRS$(TNR)PARTICLE)
 $(MISC)/$(TARGET).$(SRS$(TNR)NAME).dprr: $(LOCALIZE_ME_DEST)
 
 $(MISC)/$(TARGET).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
     @@-$(RM) $(MISC)/$(TARGET).$(SRS$(TNR)NAME).dprr
-    $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS$(TNR)NAME).srs} -fo=$@ -p=$(TARGET) $(SRC$(TNR)FILES)
+    $(COMMAND_ECHO)$(RSC) $(VERBOSITY) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)/$(SRS$(TNR)NAME).srs} -fo=$@ -p=$(TARGET) $(SRC$(TNR)FILES)
 
 .IF "$(WITH_LANG)"!=""
 
 $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)/$(TARGET)/$i) : $$(@:f) $(LOCALIZESDF)  
-    -$(MKDIR) $(@:d)
-    -$(RM) $@
-    -$(MKDIRHIER) $(COMMONMISC)$/$(PRJNAME)
-    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
-    $(RENAME) $@.$(INPATH) $@
-    -$(RM) $@.$(INPATH)
+    @echo "Making:   " $(@:f)
+    $(COMMAND_ECHO)-$(MKDIR) $(@:d)
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)-$(MKDIRHIER)  $(COMMONMISC)$/$(PRJNAME)
+    $(COMMAND_ECHO)$(WRAPCMD) $(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+    $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
+    $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
 
 $(SRS)/$(SRS$(TNR)NAME).srs: $(LOCALIZE_ME_DEST)
 
@@ -71,17 +70,16 @@ $(SRS)/$(SRS$(TNR)NAME).srs: $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)/$(TARGE
 .ELSE			# "$(WITH_LANG)"!=""
 $(SRS)/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
 .ENDIF			# "$(WITH_LANG)"!=""
-    @echo ------------------------------
-    @echo Making: $@
-    $(RSC) -presponse @$(mktmp \
+    @echo "Making:   " $(@:f)
+    $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
         $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) \
         $(INCLUDE) $(RSCDEFS) $(RSCUPDVERDEF) \
         -fp=$@.$(INPATH) \
         $< \
     )
-    -$(RM) $@
-    $(RENAME) $@.$(INPATH) $@
-    -$(RM) $@.$(INPATH)
+    $(COMMAND_ECHO)-$(RM) $@
+    $(COMMAND_ECHO)$(RENAME) $@.$(INPATH) $@
+    $(COMMAND_ECHO)-$(RM) $@.$(INPATH)
 
 .ENDIF          # "$(SRS$(TNR)NAME)"!=""
 
