@@ -238,7 +238,7 @@ testcase tPrintGeneral()
                     warnlog( "<Arrange slides> should be enabled for Handouts" )
                 endif
 
-                lb_test( SlidesPerPage, 6, 1, "" )
+                lb_test( SlidesPerPage, 6, 0, "" )
                 lb_test( ArrangeSlides, 2, 1, "" )
                 
             endif
