@@ -65,7 +65,6 @@ LIB1OBJFILES= \
     $(SLO)$/fmtextcontrolshell.obj \
     $(SLO)$/ParseContext.obj			\
     $(SLO)$/typeconversionclient.obj    \
-    $(SLO)$/confirmdelete.obj      \
     $(SLO)$/dbtoolsclient.obj      \
     $(SLO)$/sqlparserclient.obj      \
     $(SLO)$/dataaccessdescriptor.obj      \

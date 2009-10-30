@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "confirmdelete.hxx"
 #include "fmcontrolbordermanager.hxx"
 #include "fmcontrollayout.hxx"
 #include "formcontroller.hxx"
@@ -202,6 +201,7 @@ namespace svxform
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::form::runtime::FormOperations;
     using ::com::sun::star::container::XContainer;
+    using ::com::sun::star::sdbc::SQLWarning;
     /** === end UNO using === **/
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
@@ -4033,22 +4033,53 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
         aEvt.Source = *this;
         return ((XConfirmDeleteListener*)aIter.next())->confirmDelete(aEvt);
     }
-    else
-    {
-        // default handling
-        UniString aTitle;
-        sal_Int32 nLength = aEvent.Rows;
-        if (nLength > 1)
-        {
-            aTitle = SVX_RES(RID_STR_DELETECONFIRM_RECORDS);
-            aTitle.SearchAndReplace('#', String::CreateFromInt32(nLength));
-        }
-        else
-            aTitle = SVX_RES(RID_STR_DELETECONFIRM_RECORD);
+    // default handling: instantiate an interaction handler and let it handle the request
 
-        ConfirmDeleteDialog aDlg(getDialogParentWindow(), aTitle);
-        return RET_YES == aDlg.Execute();
+    String sTitle;
+    sal_Int32 nLength = aEvent.Rows;
+    if ( nLength > 1 )
+    {
+        sTitle = SVX_RES( RID_STR_DELETECONFIRM_RECORDS );
+        sTitle.SearchAndReplace( '#', String::CreateFromInt32( nLength ) );
     }
+    else
+        sTitle = SVX_RES( RID_STR_DELETECONFIRM_RECORD );
+
+    try
+    {
+        if ( !ensureInteractionHandler() )
+            return sal_False;
+
+        // two continuations allowed: Yes and No
+        OInteractionApprove* pApprove = new OInteractionApprove;
+        OInteractionDisapprove* pDisapprove = new OInteractionDisapprove;
+
+        // the request
+        SQLWarning aWarning;
+        aWarning.Message = sTitle;
+        SQLWarning aDetails;
+        aDetails.Message = String( SVX_RES( RID_STR_DELETECONFIRM ) );
+        aWarning.NextException <<= aDetails;
+
+        OInteractionRequest* pRequest = new OInteractionRequest( makeAny( aWarning ) );
+        Reference< XInteractionRequest > xRequest( pRequest );
+
+        // some knittings
+        pRequest->addContinuation( pApprove );
+        pRequest->addContinuation( pDisapprove );
+
+        // handle the request
+        m_xInteractionHandler->handle( xRequest );
+
+        if ( pApprove->wasSelected() )
+            return sal_True;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return sal_False;
 }
 
 //------------------------------------------------------------------------------
