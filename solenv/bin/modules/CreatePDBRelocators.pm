@@ -43,30 +43,49 @@ package CreatePDBRelocators;
 
 use strict;
 use File::Basename;
+use SourceConfig;
+
+sub new
+{
+    my $Object = shift;
+    my $solarversion = shift;
+    my $self = {};
+    my @repositories;
+
+    if (!defined ($solarversion)) {
+        $solarversion = $ENV{SOLARVERSION};
+    }
+    if ( !$solarversion ) {
+        print STDERR "can't determine SOLARVERSION.\n";
+        exit (1);
+    }
+
+    $self->{SOLARVERSION} = $solarversion;
+
+    my $SourceConfigObj = SourceConfig->new();
+    @repositories = $SourceConfigObj->get_repositories();
+
+    if (!scalar @repositories) {
+        print STDERR "no repository and no working directory found.\n";
+        exit (2);
+    }
+    $self->{REPOSITORIES} = \@repositories;
+    bless($self, $Object);
+    return $self;
+}
 
 sub create_pdb_relocators
 {
+    my $self = shift;
     my $inpath   = shift;
     my $milestone    = shift;
     my $pre      = shift;
 
-    my $solarversion = $ENV{SOLARVERSION};
-    if ( !$solarversion ) {
-        print STDERR "can't determine SOLARVERSION.\n";
-        return undef;
-    }
-
-    my $o = $ENV{SRC_ROOT};
-    if ( !$o ) {
-        print STDERR "can't determine SOLAR_SRC.\n";
-        return undef;
-    }
-
+    my $solarversion = $self->{SOLARVERSION};
     my $root_dir = "$solarversion/$inpath";
 
     # sanitize path
     $root_dir =~ s/\\/\//g;
-    $o =~ s/\\/\//g;
     my $pdb_dir = $root_dir . "/pdb.$pre$milestone";
     my $pdb_so_dir = $root_dir . "/pdb.$pre$milestone/so";
 
@@ -86,42 +105,60 @@ sub create_pdb_relocators
 
     # collect files
     my @pdb_files;
-    collect_files( $o, $inpath, \@pdb_files);
+    foreach my $repository (@{$self->{REPOSITORIES}}) {
+        my $o = $self->{SOLARVERSION} . "/$repository";
+        $repository =~ s/(.*?)\.(.*)/$1/;
+        $self->collect_files( $o, $inpath, \@pdb_files);
 
-    foreach (@pdb_files) {
-        my $relocator = basename($_) . ".location";
-        /$o\/(.*)/i;
+        foreach (@pdb_files) {
+            my $relocator = basename($_) . ".location";
+            /$o\/(.*)/i;
 
-        my $src_location = $1;
+            my $src_location = $1;
 
-        my $location = "";
-        my $target = "";
-        if ( $src_location =~ /\/so\// )
-        {
-            $location = "../../../src.$milestone/" . $src_location;
-            $target = "$pdb_dir/so/$relocator";
+            my $location = "";
+            my $target = "";
+            if ( $src_location =~ /\/so\// )
+            {
+                $location = "../../../$repository.$milestone/" . $src_location;
+                $target = "$pdb_dir/so/$relocator";
+            }
+            else
+            {
+                $location = "../../$repository.$milestone/" . $src_location;
+                $target = "$pdb_dir/$relocator";
+            }
+
+            if ( !open(RELOCATOR, ">$target") ) {
+                print STDERR "can't write file '$target'\n";
+                return undef;
+            }
+            print RELOCATOR "$location\n";
+            close(RELOCATOR);
         }
-        else
-        {
-            $location = "../../src.$milestone/" . $src_location;
-            $target = "$pdb_dir/$relocator";
-        }
-
-        if ( !open(RELOCATOR, ">$target") ) {
-            print STDERR "can't write file '$target'\n";
-            return undef;
-        }
-        print RELOCATOR "$location\n";
-        close(RELOCATOR);
     }
     return 1;
 }
 
+sub collect_files_from_all_repositories
+{
+    my $self = shift;
+    my ($platform, $filesref) = @_;
+    my $repository;
+    my $ret;
+    foreach $repository (@{$self->{REPOSITORIES}}) {
+        my $srcdir = $self->{SOLARVERSION} . "/$repository";
+        $ret |= $self->collect_files ($srcdir, $platform, $filesref);
+    }
+    return $ret;
+}
+
 sub collect_files
 {
+    my $self = shift;
     my ($srcdir, $platform, $filesref) = @_;
     my $template = "$srcdir/*/$platform";
-    if ( $^O eq 'MSWin32' ) {
+    if ( $ENV{GUI} eq "WNT" ) {
         # collect all pdb files on o:
         # regular glob does not work with two wildcard on WNT
         my @bin    = glob("$template/bin/*.pdb");
@@ -145,8 +182,8 @@ sub collect_files
         my @mac_lib = glob("$template/lib/*.dylib*");
         my @mac_lib_so = glob("$template/lib/so/*.dylib*");
         # collect all binary executables on o:
-        my @bin = find_binary_execs("$template/bin");
-        my @bin_so = find_binary_execs("$template/bin/so");
+        my @bin = $self->find_binary_execs("$template/bin");
+        my @bin_so = $self->find_binary_execs("$template/bin/so");
         @$filesref = (@lib, @lib_so, @mac_lib, @mac_lib_so, @bin, @bin_so);
     }
     return 1;
@@ -154,6 +191,7 @@ sub collect_files
 
 sub find_binary_execs
 {
+    my $self = shift;
     my $path = shift;
     my @files = glob("$path/*");
     my @execs = grep(-x $_, @files);
