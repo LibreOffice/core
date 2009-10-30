@@ -1,3 +1,4 @@
+'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '*
@@ -372,14 +373,6 @@ testcase tFilePagePreview
                 Printing.Cancel
             end if
 
-            printlog " Click 'Print options page preview' in toolbar"
-            Kontext "PreviewObjectbar"
-            Skalierung.Click
-            printlog " Close 'Print Options' dialog with cancel"
-            Kontext "DruckOptionen"
-            Call DialogTest ( DruckOptionen )
-            DruckOptionen.Cancel
-
             printlog " Close Page Preview with button 'Close Preview' in toolbar"
             Kontext "PreviewObjectbar"
             SeitenansichtSchliessen.Click
@@ -472,14 +465,6 @@ testcase tMasterDocFilePagePreview
                 Kontext "Printing"
                 Printing.Cancel
             end if
-
-            printlog " Click 'Print options page preview' in toolbar"
-            Kontext "PreviewObjectbar"
-            Skalierung.Click
-            printlog " Close 'Print Options' dialog with cancel"
-            Kontext "DruckOptionen"
-            Call DialogTest ( DruckOptionen )
-            DruckOptionen.Cancel
 
             printlog " Close Page Preview with button 'Close Preview' in toolbar"
             Kontext "PreviewObjectbar"
