@@ -99,7 +99,6 @@ LIB5FILES=\
     $(SLB)$/form-core.lib \
     $(SLB)$/gal.lib \
     $(SLB)$/items-core.lib \
-    $(SLB)$/msfilter-core.lib \
     $(SLB)$/options-core.lib
 
 LIB6TARGET= $(SLB)$/$(TARGET)_6.lib
@@ -112,6 +111,7 @@ LIB6FILES=\
     $(SLB)$/svdraw-core.lib \
     $(SLB)$/svxlink.lib \
     $(SLB)$/svxrtf-core.lib    \
+    $(SLB)$/svxrtf.lib
     $(SLB)$/table-core.lib \
     $(SLB)$/tbxctrls-core.lib  \
     $(SLB)$/toolbars.lib \
@@ -119,13 +119,6 @@ LIB6FILES=\
     $(SLB)$/unoedit-core.lib   \
     $(SLB)$/xml.lib \
     $(SLB)$/xout.lib
-
-# Objects needed for the svxmsfilter library.
-LIB7TARGET= $(SLB)$/$(TARGET)_7.lib
-LIB7FILES=\
-    $(SLB)$/msfilter-msfilter.lib \
-    $(SLB)$/svdraw-msfilter.lib \
-    $(SLB)$/svxrtf.lib
 
 HELPIDFILES=    ..$/inc$/helpid.hrc
 
@@ -250,37 +243,6 @@ SHL3STDLIBS+= \
              $(SHLWAPILIB) \
              $(ADVAPI32LIB)
 .ENDIF # WNT
-
-# svxmsfilter library
-SHL4TARGET= svxmsfilter$(DLLPOSTFIX)
-SHL4IMPLIB= isvxmsfilter
-SHL4USE_EXPORTS=name
-SHL4DEPN=$(SHL1TARGETN)
-SHL4LIBS= $(LIB7TARGET)
-
-SHL4STDLIBS= \
-             $(SVXCORELIB) \
-             $(SFX2LIB) \
-             $(XMLOFFLIB) \
-             $(GOODIESLIB) \
-             $(BASEGFXLIB) \
-             $(BASICLIB) \
-             $(SVTOOLLIB) \
-             $(TKLIB) \
-             $(VCLLIB) \
-             $(SVLLIB) \
-             $(SOTLIB) \
-             $(UNOTOOLSLIB) \
-             $(TOOLSLIB) \
-             $(XMLSCRIPTLIB) \
-             $(COMPHELPERLIB) \
-             $(CPPUHELPERLIB) \
-             $(CPPULIB) \
-             $(SALLIB)
-
-SHL4DEF=	$(MISC)$/$(SHL4TARGET).def
-DEF4NAME=	$(SHL4TARGET)
-DEFLIB4NAME=$(TARGET)_7
 
 # ------------------------------------------------------------------------------
 
