@@ -32,7 +32,6 @@
 #include "precompiled_svx.hxx"
 #include <comphelper/stl_types.hxx>
 #include <svx/svdobj.hxx>
-#include "fmtools.hxx"
 #include "fmservs.hxx"
 
 #ifndef _FM_FMOBJFAC_HXX

@@ -33,7 +33,7 @@
 
 #include "formcontrolling.hxx"
 #include "fmurl.hxx"
-#include <svx/svxids.hrc>
+#include "svx/svxids.hrc"
 #include "fmprop.hrc"
 #include "fmtools.hxx"
 

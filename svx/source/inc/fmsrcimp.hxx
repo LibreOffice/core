@@ -32,18 +32,27 @@
 #define _FMSRCIMP_HXX
 
 #include "fmtools.hxx"
-#include <vos/thread.hxx>
-#include <osl/mutex.hxx>
-#include <com/sun/star/awt/XTextComponent.hpp>
+#include "svx/svxdllapi.h"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
+/** === end UNO includes === **/
+
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include "svx/svxdllapi.h"
+#include <vos/thread.hxx>
+
+#ifndef _SVSTDARR_ULONGS
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
+#endif
 
 // ===================================================================================================
 // Hilfsstrukturen

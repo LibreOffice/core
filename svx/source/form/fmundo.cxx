@@ -30,7 +30,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include "fmundo.hxx"
+#include "fmtools.hxx"
+#include "fmpgeimp.hxx"
+#include "svx/dbtoolsclient.hxx"
+#include "svditer.hxx"
+#include "fmobj.hxx"
+#include "fmprop.hrc"
+#include "fmresids.hrc"
+#include "svx/fmglob.hxx"
+#include "svx/dialmgr.hxx"
+#include "svx/fmmodel.hxx"
+#include "svx/fmpage.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -43,18 +55,7 @@
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 /** === end UNO includes === **/
 
-#ifndef _FM_FMMODEL_HXX
-#include <svx/fmmodel.hxx>
-#endif
-#include "fmtools.hxx"
-#include <svx/fmpage.hxx>
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
 #include <rtl/logfile.hxx>
-#include <svx/dialmgr.hxx>
-#include "fmpgeimp.hxx"
-#include "svx/dbtoolsclient.hxx"
 #include <svtools/macitem.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
@@ -63,13 +64,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/event.hxx>
-#include "svditer.hxx"
-#include "fmobj.hxx"
 #include <osl/mutex.hxx>
-#include <svx/fmglob.hxx>
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
+#include <vos/mutex.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
@@ -300,6 +296,42 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 }
 
 //------------------------------------------------------------------------------
+namespace
+{
+    sal_Bool lcl_searchElement(const Reference< XIndexAccess>& xCont, const Reference< XInterface >& xElement)
+    {
+        if (!xCont.is() || !xElement.is())
+            return sal_False;
+
+        sal_Int32 nCount = xCont->getCount();
+        Reference< XInterface > xComp;
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
+            try
+            {
+                xCont->getByIndex(i) >>= xComp;
+                if (xComp.is())
+                {
+                    if ( xElement == xComp )
+                        return sal_True;
+                    else
+                    {
+                        Reference< XIndexAccess> xCont2(xComp, UNO_QUERY);
+                        if (xCont2.is() && lcl_searchElement(xCont2, xElement))
+                            return sal_True;
+                    }
+                }
+            }
+            catch(const Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return sal_False;
+    }
+}
+
+//------------------------------------------------------------------------------
 void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXUndoEnvironment::Inserted" );
@@ -325,7 +357,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                 Reference< XIndexContainer > xNewParent;
                 Reference< XForm >           xForm;
                 sal_Int32 nPos = -1;
-                if ( searchElement( xForms, xObjectParent ) )
+                if ( lcl_searchElement( xForms, xObjectParent ) )
                 {
                     // the form which was the parent of the object when it was removed is still
                     // part of the form component hierachy of the current page

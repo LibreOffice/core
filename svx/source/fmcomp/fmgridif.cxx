@@ -34,14 +34,15 @@
 #include "fmgridif.hxx"
 #include "fmprop.hrc"
 #include "fmservs.hxx"
-#include "fmtools.hxx"
 #include "fmurl.hxx"
+#include "fmtools.hxx"
 #include "formcontrolfactory.hxx"
 #include "gridcell.hxx"
 #include "sdbdatacolumn.hxx"
 #include "svx/fmgridcl.hxx"
 #include "svx/svxids.hrc"
 
+/** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -52,6 +53,8 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
+/** === end UNO includes === **/
 
 #include <comphelper/container.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -1118,7 +1121,7 @@ namespace fmgridif
 {
     const ::rtl::OUString getDataModeIdentifier()
     {
-        static ::rtl::OUString s_sDataModeIdentifier = DATA_MODE;
+        static ::rtl::OUString s_sDataModeIdentifier = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
         return s_sDataModeIdentifier;
     }
 }
@@ -2457,7 +2460,7 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
     m_aMode = Mode;
 
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
-    if (Mode == FILTER_MODE)
+    if ( Mode == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) ) )
         pGrid->SetFilterMode(sal_True);
     else
     {
@@ -2480,8 +2483,8 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
     {
         aModes.realloc(2);
         ::rtl::OUString* pModes = aModes.getArray();
-        pModes[0] = DATA_MODE;
-        pModes[1] = FILTER_MODE;
+        pModes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+        pModes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) );
     }
     return aModes;
 }

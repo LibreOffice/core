@@ -34,7 +34,8 @@
 #include <tools/debug.hxx>
 #include <comphelper/types.hxx>
 #include "fmservs.hxx"
-#include "fmtools.hxx"
+
+using namespace ::com::sun::star::uno;
 
 //------------------------------------------------------------------------------
 const ::comphelper::StringSequence& getColumnTypes()
@@ -55,6 +56,36 @@ const ::comphelper::StringSequence& getColumnTypes()
         pNames[TYPE_TIMEFIELD] = FM_COL_TIMEFIELD;
     }
     return aColumnTypes;
+}
+
+//------------------------------------------------------------------
+// Vergleichen von PropertyInfo
+extern "C" int
+#if defined( WNT )
+ __cdecl
+#endif
+#if defined( ICC ) && defined( OS2 )
+_Optlink
+#endif
+    NameCompare(const void* pFirst, const void* pSecond)
+{
+    return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);
+}
+
+namespace
+{
+    //------------------------------------------------------------------------------
+    sal_Int32 lcl_findPos(const ::rtl::OUString& aStr, const Sequence< ::rtl::OUString>& rList)
+    {
+        const ::rtl::OUString* pStrList = rList.getConstArray();
+        ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(::rtl::OUString),
+            &NameCompare);
+
+        if (pResult)
+            return (pResult - pStrList);
+        else
+            return -1;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -79,7 +110,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
         const ::comphelper::StringSequence& rColumnTypes = getColumnTypes();
-        nTypeId = findPos(aColumnType, rColumnTypes);
+        nTypeId = lcl_findPos(aColumnType, rColumnTypes);
     }
     return nTypeId;
 }

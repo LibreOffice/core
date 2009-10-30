@@ -54,7 +54,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
-#include <fmtools.hxx>
 #include <rtl/logfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>

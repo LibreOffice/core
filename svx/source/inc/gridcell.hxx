@@ -35,7 +35,6 @@
 
 #include "sqlparserclient.hxx"
 #include "typeconversionclient.hxx"
-#include "fmtools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/XColumn.hpp>
@@ -51,6 +50,7 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/form/XChangeBroadcaster.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/propmultiplex.hxx>

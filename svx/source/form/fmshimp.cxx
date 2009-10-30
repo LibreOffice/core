@@ -39,7 +39,6 @@
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "fmtextcontrolshell.hxx"
-#include "fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmurl.hxx"
 #include "fmvwimp.hxx"
@@ -87,6 +86,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/beans/XIntrospection.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
@@ -110,6 +110,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+#include <vos/mutex.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -278,6 +279,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::script;
 using namespace ::svxform;
 using namespace ::svx;
 
@@ -286,7 +288,7 @@ using namespace ::svx;
 //==============================================================================
 namespace
 {
-    //....................................................................
+    //..........................................................................
     void collectInterfacesFromMarkList( const SdrMarkList& _rMarkList, InterfaceBag& /* [out] */ _rInterfaces )
     {
         _rInterfaces.clear();
@@ -322,6 +324,198 @@ namespace
             if ( pGroupIterator )
                 delete pGroupIterator;
         }
+    }
+
+    //..........................................................................
+    sal_Int16 GridView2ModelPos(const Reference< XIndexAccess>& rColumns, sal_Int16 nViewPos)
+    {
+        try
+        {
+            if (rColumns.is())
+            {
+                // loop through all columns
+                sal_Int16 i;
+                Reference< XPropertySet> xCur;
+                for (i=0; i<rColumns->getCount(); ++i)
+                {
+                    rColumns->getByIndex(i) >>= xCur;
+                    if (!::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+                    {
+                        // for every visible col : if nViewPos is greater zero, decrement it, else we
+                        // have found the model position
+                        if (!nViewPos)
+                            break;
+                        else
+                            --nViewPos;
+                    }
+                }
+                if (i<rColumns->getCount())
+                    return i;
+            }
+        }
+        catch(const Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return (sal_Int16)-1;
+    }
+
+    //..........................................................................
+    Sequence< ::rtl::OUString> getEventMethods(const Type& type)
+    {
+        typelib_InterfaceTypeDescription *pType=0;
+        type.getDescription( (typelib_TypeDescription**)&pType);
+
+        if(!pType)
+            return Sequence< ::rtl::OUString>();
+
+        Sequence< ::rtl::OUString> aNames(pType->nMembers);
+        ::rtl::OUString* pNames = aNames.getArray();
+        for(sal_Int32 i=0;i<pType->nMembers;i++,++pNames)
+        {
+            // the decription reference
+            typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
+            // the description for the reference
+            typelib_TypeDescription* pMemberDescription = NULL;
+            typelib_typedescriptionreference_getDescription(&pMemberDescription, pMemberDescriptionReference);
+            if (pMemberDescription)
+            {
+                typelib_InterfaceMemberTypeDescription* pRealMemberDescription =
+                    reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
+                *pNames = pRealMemberDescription->pMemberName;
+            }
+        }
+        typelib_typedescription_release( (typelib_TypeDescription *)pType );
+        return aNames;
+    }
+
+    //..........................................................................
+    void TransferEventScripts(const Reference< XControlModel>& xModel, const Reference< XControl>& xControl,
+        const Sequence< ScriptEventDescriptor>& rTransferIfAvailable)
+    {
+        // first check if we have a XEventAttacherManager for the model
+        Reference< XChild> xModelChild(xModel, UNO_QUERY);
+        if (!xModelChild.is())
+            return; // nothing to do
+
+        Reference< XEventAttacherManager> xEventManager(xModelChild->getParent(), UNO_QUERY);
+        if (!xEventManager.is())
+            return; // nothing to do
+
+        if (!rTransferIfAvailable.getLength())
+            return; // nothing to do
+
+        // check for the index of the model within it's parent
+        Reference< XIndexAccess> xParentIndex(xModelChild->getParent(), UNO_QUERY);
+        if (!xParentIndex.is())
+            return; // nothing to do
+        sal_Int32 nIndex = getElementPos(xParentIndex, xModel);
+        if (nIndex<0 || nIndex>=xParentIndex->getCount())
+            return; // nothing to do
+
+        // then we need informations about the listeners supported by the control and the model
+        Sequence< Type> aModelListeners;
+        Sequence< Type> aControlListeners;
+
+        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
+        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
+
+        if (xModelIntrospection.is() && xModel.is())
+        {
+            Any aModel(makeAny(xModel));
+            aModelListeners = xModelIntrospection->inspect(aModel)->getSupportedListeners();
+        }
+
+        if (xControlIntrospection.is() && xControl.is())
+        {
+            Any aControl(makeAny(xControl));
+            aControlListeners = xControlIntrospection->inspect(aControl)->getSupportedListeners();
+        }
+
+        sal_Int32 nMaxNewLen = aModelListeners.getLength() + aControlListeners.getLength();
+        if (!nMaxNewLen)
+            return; // the model and the listener don't support any listeners (or we were unable to retrieve these infos)
+
+        Sequence< ScriptEventDescriptor>    aTransferable(nMaxNewLen);
+        ScriptEventDescriptor* pTransferable = aTransferable.getArray();
+
+        const ScriptEventDescriptor* pCurrent = rTransferIfAvailable.getConstArray();
+        sal_Int32 i,j,k;
+        for (i=0; i<rTransferIfAvailable.getLength(); ++i, ++pCurrent)
+        {
+            // search the model/control idl classes for the event described by pCurrent
+            for (   Sequence< Type>* pCurrentArray = &aModelListeners;
+                    pCurrentArray;
+                    pCurrentArray = (pCurrentArray == &aModelListeners) ? &aControlListeners : NULL
+                )
+            {
+                const Type* pCurrentListeners = pCurrentArray->getConstArray();
+                for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
+                {
+                    UniString aListener = (*pCurrentListeners).getTypeName();
+                    xub_StrLen nTokens = aListener.GetTokenCount('.');
+                    if (nTokens)
+                        aListener = aListener.GetToken(nTokens - 1, '.');
+
+                    if (aListener == pCurrent->ListenerType.getStr())
+                        // the current ScriptEventDescriptor doesn't match the current listeners class
+                        continue;
+
+                    // now check the methods
+                    Sequence< ::rtl::OUString> aMethodsNames = getEventMethods(*pCurrentListeners);
+                    const ::rtl::OUString* pMethodsNames = aMethodsNames.getConstArray();
+                    for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
+                    {
+                        if ((*pMethodsNames).compareTo(pCurrent->EventMethod) != COMPARE_EQUAL)
+                            // the current ScriptEventDescriptor doesn't match the current listeners current method
+                            continue;
+
+                        // we can transfer the script event : the model (control) supports it
+                        *pTransferable = *pCurrent;
+                        ++pTransferable;
+                        break;
+                    }
+                    if (k<aMethodsNames.getLength())
+                        break;
+                }
+            }
+        }
+
+        sal_Int32 nRealNewLen = pTransferable - aTransferable.getArray();
+        aTransferable.realloc(nRealNewLen);
+
+        xEventManager->registerScriptEvents(nIndex, aTransferable);
+    }
+
+    //------------------------------------------------------------------------------
+    ::rtl::OUString getServiceNameByControlType(sal_Int16 nType)
+    {
+        switch (nType)
+        {
+            case OBJ_FM_EDIT            : return FM_COMPONENT_TEXTFIELD;
+            case OBJ_FM_BUTTON          : return FM_COMPONENT_COMMANDBUTTON;
+            case OBJ_FM_FIXEDTEXT       : return FM_COMPONENT_FIXEDTEXT;
+            case OBJ_FM_LISTBOX         : return FM_COMPONENT_LISTBOX;
+            case OBJ_FM_CHECKBOX        : return FM_COMPONENT_CHECKBOX;
+            case OBJ_FM_RADIOBUTTON     : return FM_COMPONENT_RADIOBUTTON;
+            case OBJ_FM_GROUPBOX        : return FM_COMPONENT_GROUPBOX;
+            case OBJ_FM_COMBOBOX        : return FM_COMPONENT_COMBOBOX;
+            case OBJ_FM_GRID            : return FM_COMPONENT_GRIDCONTROL;
+            case OBJ_FM_IMAGEBUTTON     : return FM_COMPONENT_IMAGEBUTTON;
+            case OBJ_FM_FILECONTROL     : return FM_COMPONENT_FILECONTROL;
+            case OBJ_FM_DATEFIELD       : return FM_COMPONENT_DATEFIELD;
+            case OBJ_FM_TIMEFIELD       : return FM_COMPONENT_TIMEFIELD;
+            case OBJ_FM_NUMERICFIELD    : return FM_COMPONENT_NUMERICFIELD;
+            case OBJ_FM_CURRENCYFIELD   : return FM_COMPONENT_CURRENCYFIELD;
+            case OBJ_FM_PATTERNFIELD    : return FM_COMPONENT_PATTERNFIELD;
+            case OBJ_FM_HIDDEN          : return FM_COMPONENT_HIDDENCONTROL;
+            case OBJ_FM_IMAGECONTROL    : return FM_COMPONENT_IMAGECONTROL;
+            case OBJ_FM_FORMATTEDFIELD  : return FM_COMPONENT_FORMATTEDFIELD;
+            case OBJ_FM_SCROLLBAR       : return FM_SUN_COMPONENT_SCROLLBAR;
+            case OBJ_FM_SPINBUTTON      : return FM_SUN_COMPONENT_SPINBUTTON;
+            case OBJ_FM_NAVIGATIONBAR   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
+        }
+        return ::rtl::OUString();
     }
 
 }
@@ -4136,6 +4330,44 @@ IMPL_LINK( FmXFormShell, OnLoadForms, FmFormPage*, /*_pPage*/ )
     return 0L;
 }
 
+//------------------------------------------------------------------------------
+namespace
+{
+    sal_Bool lcl_isLoadable( const Reference< XInterface >& _rxLoadable )
+    {
+        // determines whether a form should be loaded or not
+        // if there is no datasource or connection there is no reason to load a form
+        Reference< XPropertySet > xSet( _rxLoadable, UNO_QUERY );
+        if ( !xSet.is() )
+            return sal_False;
+        try
+        {
+            Reference< XConnection > xConn;
+            if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
+                return sal_True;
+
+            // is there already a active connection
+            xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConn;
+            if ( xConn.is() )
+                return sal_True;
+
+            ::rtl::OUString sPropertyValue;
+            OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DATASOURCE ) >>= sPropertyValue );
+            if ( sPropertyValue.getLength() )
+                return sal_True;
+
+            OSL_VERIFY( xSet->getPropertyValue( FM_PROP_URL ) >>= sPropertyValue );
+            if ( sPropertyValue.getLength() )
+                return sal_True;
+        }
+        catch(const Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sal_False;
+    }
+}
+
 //------------------------------------------------------------------------
 void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /* FORMS_LOAD | FORMS_SYNC */ )
 {
@@ -4180,7 +4412,7 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
                 {
                     if ( 0 == ( _nBehaviour & FORMS_UNLOAD ) )
                     {
-                        if ( ::isLoadable( xForm ) && !xForm->isLoaded() )
+                        if ( lcl_isLoadable( xForm ) && !xForm->isLoaded() )
                             xForm->load();
                     }
                     else

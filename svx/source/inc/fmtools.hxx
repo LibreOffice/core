@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fmtools.hxx,v $
- * $Revision: 1.27 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -29,6 +26,9 @@
  ************************************************************************/
 #ifndef _SVX_FMTOOLS_HXX
 #define _SVX_FMTOOLS_HXX
+
+#include "fmprop.hrc"
+#include "svx/svxdllapi.h"
 
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
@@ -65,36 +65,18 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <vcl/wintypes.hxx>
-#include <vos/mutex.hxx>
-
-#ifndef _SVSTDARR_ULONGS
-#define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
-#endif
-#include <sfx2/ctrlitem.hxx>
-#include <tools/link.hxx>
-#include <tools/date.hxx>
-#include <tools/time.hxx>
-#include <tools/datetime.hxx>
-
-#include "fmprop.hrc"
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
-#include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase3.hxx>
+
+#include <vcl/wintypes.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/component.hxx>
-
-#include <svx/svxdllapi.h>
 
 #include <set>
 
@@ -111,21 +93,7 @@ SVX_DLLPUBLIC void displayException(const ::com::sun::star::sdb::SQLContext&, Wi
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::uno::Any&, Window* _pParent = NULL);
 
-// Kopieren von Persistenten Objecten
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> cloneUsingProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>& _xObj);
-
-sal_Int32 findPos(const ::rtl::OUString& aStr, const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList);
-
-// Suchen in einer Indexliste nach einem Element
-sal_Bool  searchElement(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& xCont, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElement);
-
 sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& xCont, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElement);
-String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xElement);
-String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xElement, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rTopLevelElement);
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> getElementFromAccessPath(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xParent, const String& _rRelativePath);
-
-
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel> getXModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xIface);
 
 SVX_DLLPUBLIC ::rtl::OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
 
@@ -230,9 +198,7 @@ protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
 };
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener> FmXDisposeMultiplexer_x;
 //==============================================================================
-
 
 class FmXDisposeMultiplexer :public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener>
 {
@@ -252,18 +218,10 @@ public:
 
 //  ==================================================================
 
-::rtl::OUString     getServiceNameByControlType(sal_Int16 nType);
-    // get a service name to create a model of the given type (OBJ_FM_...)
 sal_Int16       getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
-void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl,
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>& rTransferIfAvailable);
-
-sal_Int16   GridView2ModelPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nViewPos);
-
 //==================================================================
-sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xLoad);
 sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
     // checks if the ::com::sun::star::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
 

@@ -61,7 +61,6 @@
 #include <svx/fmpage.hxx>
 #include <svx/fmshell.hxx>
 #include "fmpgeimp.hxx"
-#include "fmtools.hxx"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmprop.hrc"

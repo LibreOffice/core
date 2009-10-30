@@ -48,7 +48,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>
 #include <vcl/dockwin.hxx>
-#include "fmtools.hxx"
 #include "fmexch.hxx"
 #include <connectivity/sqlparse.hxx>
 #include "fmexch.hxx"

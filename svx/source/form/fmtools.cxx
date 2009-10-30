@@ -30,83 +30,74 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/sdbcx/Privilege.hpp>
-#include <com/sun/star/lang/Locale.hpp>
+
+#include "fmprop.hrc"
+#include "fmservs.hxx"
 #include "fmtools.hxx"
 #include "svx/dbtoolsclient.hxx"
-#include "fmservs.hxx"
-#include <svx/fmglob.hxx>
-#include <vcl/stdtext.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
+#include "svx/fmglob.hxx"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <wchar.h>
-#include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdb/XResultSetAccess.hpp>
-#include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/script/XEventAttacherManager.hpp>
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/LineEndFormat.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/util/Language.hpp>
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/io/XPersistObject.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdb/XResultSetAccess.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/awt/LineEndFormat.hpp>
-#include <com/sun/star/form/XGridColumnFactory.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
+#include <com/sun/star/util/Language.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+/** === end UNO includes === **/
 
-
-#include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <basic/sbxvar.hxx>
+#include <comphelper/container.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+#include <comphelper/uno3.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
-#include <vcl/svapp.hxx>
-
-#ifndef _SVX_FMPROP_HRC
-#include "fmprop.hrc"
-#endif
 #include <sfx2/bindings.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
-#include <cppuhelper/servicefactory.hxx>
-#include <comphelper/types.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/container.hxx>
-#include <connectivity/dbtools.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/extract.hxx>
-#include <comphelper/uno3.hxx>
-#include <connectivity/dbexception.hxx>
-#include <comphelper/extract.hxx>
-#include <cppuhelper/typeprovider.hxx>
+#include <toolkit/unohlp.hxx>
+#include <tools/debug.hxx>
+#include <tools/string.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
+
 #include <algorithm>
-#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -204,106 +195,8 @@ void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Windo
 }
 
 //------------------------------------------------------------------------------
-Reference< XInterface > cloneUsingProperties(const Reference< ::com::sun::star::io::XPersistObject>& _xObj)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::cloneUsingProperties" );
-    if (!_xObj.is())
-        return Reference< XInterface >();
-
-    // create a new object
-    ::rtl::OUString aObjectService = _xObj->getServiceName();
-    Reference< ::com::sun::star::beans::XPropertySet> xDestSet(::comphelper::getProcessServiceFactory()->createInstance(aObjectService), UNO_QUERY);
-    if (!xDestSet.is())
-    {
-        DBG_ERROR("cloneUsingProperties : could not instantiate an object of the given type !");
-        return Reference< XInterface >();
-    }
-    // transfer properties
-    Reference< XPropertySet > xSourceSet(_xObj, UNO_QUERY);
-    Reference< XPropertySetInfo > xSourceInfo( xSourceSet->getPropertySetInfo());
-    Sequence< Property> aSourceProperties = xSourceInfo->getProperties();
-    Reference< XPropertySetInfo > xDestInfo( xDestSet->getPropertySetInfo());
-    Sequence< Property> aDestProperties = xDestInfo->getProperties();
-    int nDestLen = aDestProperties.getLength();
-
-    Property* pSourceProps = aSourceProperties.getArray();
-    Property* pSourceEnd = pSourceProps + aSourceProperties.getLength();
-    Property* pDestProps = aDestProperties.getArray();
-
-    for (; pSourceProps != pSourceEnd; ++pSourceProps)
-    {
-        ::com::sun::star::beans::Property* pResult = ::std::lower_bound(
-                pDestProps,
-                pDestProps + nDestLen,
-                pSourceProps->Name,
-                ::comphelper::PropertyStringLessFunctor()
-            );
-
-        if  (   ( pResult != pDestProps + nDestLen )
-            &&  ( pResult->Name == pSourceProps->Name )
-            &&  ( pResult->Attributes == pSourceProps->Attributes )
-            &&  ( (pResult->Attributes &  PropertyAttribute::READONLY ) == 0 )
-            &&  ( pResult->Type.equals( pSourceProps->Type ) )
-            )
-        {   // Attribute/type are the same and the prop isn't readonly
-            try
-            {
-                xDestSet->setPropertyValue(pResult->Name, xSourceSet->getPropertyValue(pResult->Name));
-            }
-            catch(IllegalArgumentException e)
-            {
-                (void)e;
-#ifdef DBG_UTIL
-                ::rtl::OString sMessage("cloneUsingProperties : could not transfer the value for property \"");
-                sMessage = sMessage + ::rtl::OString(pResult->Name.getStr(), pResult->Name.getLength(), RTL_TEXTENCODING_ASCII_US);
-                sMessage = sMessage + '\"';
-                DBG_ERROR(sMessage);
-#endif
-            }
-
-        }
-    }
-
-    return xDestSet.get();
-}
-
-//------------------------------------------------------------------------------
-sal_Bool searchElement(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::searchElement" );
-    if (!xCont.is() || !xElement.is())
-        return sal_False;
-
-    sal_Int32 nCount = xCont->getCount();
-    Reference< XInterface > xComp;
-    for (sal_Int32 i = 0; i < nCount; i++)
-    {
-        try
-        {
-            xCont->getByIndex(i) >>= xComp;
-            if (xComp.is())
-            {
-                if ( xElement == xComp )
-                    return sal_True;
-                else
-                {
-                    Reference< ::com::sun::star::container::XIndexAccess> xCont2(xComp, UNO_QUERY);
-                    if (xCont2.is() && searchElement(xCont2, xElement))
-                        return sal_True;
-                }
-            }
-        }
-        catch(Exception&)
-        {
-        }
-    }
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
 sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getElementPos" );
     sal_Int32 nIndex = -1;
     if (!xCont.is())
         return nIndex;
@@ -333,127 +226,6 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
         }
     }
     return nIndex;
-}
-
-//------------------------------------------------------------------
-String getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getFormComponentAccessPath" );
-    Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
-    Reference< ::com::sun::star::container::XIndexAccess> xParent;
-    if (xChild.is())
-        xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
-
-    // while the current content is a form
-    String sReturn;
-    String sCurrentIndex;
-    while (xChild.is())
-    {
-        // get the content's relative pos within it's parent container
-        sal_Int32 nPos = getElementPos(xParent, xChild);
-
-        // prepend this current relaive pos
-        sCurrentIndex = String::CreateFromInt32(nPos);
-        if (sReturn.Len() != 0)
-        {
-            sCurrentIndex += '\\';
-            sCurrentIndex += sReturn;
-        }
-
-        sReturn = sCurrentIndex;
-
-        // travel up
-        if (::comphelper::query_interface((Reference< XInterface >)xParent,xChild))
-            xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
-    }
-
-    _rTopLevelElement = xParent;
-    return sReturn;
-}
-
-//------------------------------------------------------------------
-String getFormComponentAccessPath(const Reference< XInterface >& _xElement)
-{
-    Reference< XInterface > xDummy;
-    return getFormComponentAccessPath(_xElement, xDummy);
-}
-
-//------------------------------------------------------------------------------
-Reference< XInterface > getElementFromAccessPath(const Reference< ::com::sun::star::container::XIndexAccess>& _xParent, const String& _rRelativePath)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getElementFromAccessPath" );
-    if (!_xParent.is())
-        return Reference< XInterface >();
-    Reference< ::com::sun::star::container::XIndexAccess> xContainer(_xParent);
-    Reference< XInterface > xElement( _xParent);
-
-    String sPath(_rRelativePath);
-    while (sPath.Len() && xContainer.is())
-    {
-        xub_StrLen nSepPos = sPath.Search((sal_Unicode)'\\');
-
-        String sIndex(sPath.Copy(0, (nSepPos == STRING_NOTFOUND) ? sPath.Len() : nSepPos));
-        //  DBG_ASSERT(sIndex.IsNumeric(), "getElementFromAccessPath : invalid path !");
-
-        sPath = sPath.Copy((nSepPos == STRING_NOTFOUND) ? sPath.Len() : nSepPos+1);
-
-        ::cppu::extractInterface(xElement, xContainer->getByIndex(sIndex.ToInt32()));
-        xContainer = Reference< ::com::sun::star::container::XIndexAccess>::query(xElement);
-    }
-
-    if (sPath.Len() != 0)
-        // the loop terminated because an element wasn't a container, but we stil have a path -> the path is invalid
-        xElement = NULL;
-
-    return xElement;
-}
-
-//------------------------------------------------------------------
-// Vergleichen von PropertyInfo
-extern "C" int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-    NameCompare(const void* pFirst, const void* pSecond)
-{
-    return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 findPos(const ::rtl::OUString& aStr, const Sequence< ::rtl::OUString>& rList)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::findPos" );
-    const ::rtl::OUString* pStrList = rList.getConstArray();
-    ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(::rtl::OUString),
-        &NameCompare);
-
-    if (pResult)
-        return (pResult - pStrList);
-    else
-        return -1;
-}
-
-//------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XModel> getXModel(const Reference< XInterface >& xIface)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getXModel" );
-    Reference< ::com::sun::star::frame::XModel> xModel(xIface, UNO_QUERY);
-    if (xModel.is())
-        return xModel;
-    else
-    {
-        Reference< ::com::sun::star::container::XChild> xChild(xIface, UNO_QUERY);
-        if (xChild.is())
-        {
-            Reference< XInterface > xParent( xChild->getParent());
-            return getXModel(xParent);
-        }
-        else
-            return NULL;
-    }
 }
 
 //------------------------------------------------------------------
@@ -687,242 +459,6 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
 
     DBG_ERROR("::getControlTypeByObject : unknown object type !");
     return OBJ_FM_CONTROL;
-}
-
-//------------------------------------------------------------------------------
-::rtl::OUString getServiceNameByControlType(sal_Int16 nType)
-{
-    switch (nType)
-    {
-        case OBJ_FM_EDIT            : return FM_COMPONENT_TEXTFIELD;
-        case OBJ_FM_BUTTON          : return FM_COMPONENT_COMMANDBUTTON;
-        case OBJ_FM_FIXEDTEXT       : return FM_COMPONENT_FIXEDTEXT;
-        case OBJ_FM_LISTBOX         : return FM_COMPONENT_LISTBOX;
-        case OBJ_FM_CHECKBOX        : return FM_COMPONENT_CHECKBOX;
-        case OBJ_FM_RADIOBUTTON     : return FM_COMPONENT_RADIOBUTTON;
-        case OBJ_FM_GROUPBOX        : return FM_COMPONENT_GROUPBOX;
-        case OBJ_FM_COMBOBOX        : return FM_COMPONENT_COMBOBOX;
-        case OBJ_FM_GRID            : return FM_COMPONENT_GRIDCONTROL;
-        case OBJ_FM_IMAGEBUTTON     : return FM_COMPONENT_IMAGEBUTTON;
-        case OBJ_FM_FILECONTROL     : return FM_COMPONENT_FILECONTROL;
-        case OBJ_FM_DATEFIELD       : return FM_COMPONENT_DATEFIELD;
-        case OBJ_FM_TIMEFIELD       : return FM_COMPONENT_TIMEFIELD;
-        case OBJ_FM_NUMERICFIELD    : return FM_COMPONENT_NUMERICFIELD;
-        case OBJ_FM_CURRENCYFIELD   : return FM_COMPONENT_CURRENCYFIELD;
-        case OBJ_FM_PATTERNFIELD    : return FM_COMPONENT_PATTERNFIELD;
-        case OBJ_FM_HIDDEN          : return FM_COMPONENT_HIDDENCONTROL;
-        case OBJ_FM_IMAGECONTROL    : return FM_COMPONENT_IMAGECONTROL;
-        case OBJ_FM_FORMATTEDFIELD  : return FM_COMPONENT_FORMATTEDFIELD;
-        case OBJ_FM_SCROLLBAR       : return FM_SUN_COMPONENT_SCROLLBAR;
-        case OBJ_FM_SPINBUTTON      : return FM_SUN_COMPONENT_SPINBUTTON;
-        case OBJ_FM_NAVIGATIONBAR   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
-    }
-    return ::rtl::OUString();
-}
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> getEventMethods(const Type& type)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getEventMethods" );
-    typelib_InterfaceTypeDescription *pType=0;
-    type.getDescription( (typelib_TypeDescription**)&pType);
-
-    if(!pType)
-        return Sequence< ::rtl::OUString>();
-
-    Sequence< ::rtl::OUString> aNames(pType->nMembers);
-    ::rtl::OUString* pNames = aNames.getArray();
-    for(sal_Int32 i=0;i<pType->nMembers;i++,++pNames)
-    {
-        // the decription reference
-        typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
-        // the description for the reference
-        typelib_TypeDescription* pMemberDescription = NULL;
-        typelib_typedescriptionreference_getDescription(&pMemberDescription, pMemberDescriptionReference);
-        if (pMemberDescription)
-        {
-            typelib_InterfaceMemberTypeDescription* pRealMemberDescription =
-                reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
-            *pNames = pRealMemberDescription->pMemberName;
-        }
-    }
-    typelib_typedescription_release( (typelib_TypeDescription *)pType );
-    return aNames;
-}
-
-
-//------------------------------------------------------------------------------
-void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>& xModel, const Reference< ::com::sun::star::awt::XControl>& xControl,
-    const Sequence< ::com::sun::star::script::ScriptEventDescriptor>& rTransferIfAvailable)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::TransferEventScripts" );
-    // first check if we have a XEventAttacherManager for the model
-    Reference< ::com::sun::star::container::XChild> xModelChild(xModel, UNO_QUERY);
-    if (!xModelChild.is())
-        return; // nothing to do
-
-    Reference< ::com::sun::star::script::XEventAttacherManager> xEventManager(xModelChild->getParent(), UNO_QUERY);
-    if (!xEventManager.is())
-        return; // nothing to do
-
-    if (!rTransferIfAvailable.getLength())
-        return; // nothing to do
-
-    // check for the index of the model within it's parent
-    Reference< ::com::sun::star::container::XIndexAccess> xParentIndex(xModelChild->getParent(), UNO_QUERY);
-    if (!xParentIndex.is())
-        return; // nothing to do
-    sal_Int32 nIndex = getElementPos(xParentIndex, xModel);
-    if (nIndex<0 || nIndex>=xParentIndex->getCount())
-        return; // nothing to do
-
-    // then we need informations about the listeners supported by the control and the model
-    Sequence< Type> aModelListeners;
-    Sequence< Type> aControlListeners;
-
-    Reference< ::com::sun::star::beans::XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
-    Reference< ::com::sun::star::beans::XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
-
-    if (xModelIntrospection.is() && xModel.is())
-    {
-        Any aModel(makeAny(xModel));
-        aModelListeners = xModelIntrospection->inspect(aModel)->getSupportedListeners();
-    }
-
-    if (xControlIntrospection.is() && xControl.is())
-    {
-        Any aControl(makeAny(xControl));
-        aControlListeners = xControlIntrospection->inspect(aControl)->getSupportedListeners();
-    }
-
-    sal_Int32 nMaxNewLen = aModelListeners.getLength() + aControlListeners.getLength();
-    if (!nMaxNewLen)
-        return; // the model and the listener don't support any listeners (or we were unable to retrieve these infos)
-
-    Sequence< ::com::sun::star::script::ScriptEventDescriptor>  aTransferable(nMaxNewLen);
-    ::com::sun::star::script::ScriptEventDescriptor* pTransferable = aTransferable.getArray();
-
-    const ::com::sun::star::script::ScriptEventDescriptor* pCurrent = rTransferIfAvailable.getConstArray();
-    sal_Int32 i,j,k;
-    for (i=0; i<rTransferIfAvailable.getLength(); ++i, ++pCurrent)
-    {
-        // search the model/control idl classes for the event described by pCurrent
-        for (   Sequence< Type>* pCurrentArray = &aModelListeners;
-                pCurrentArray;
-                pCurrentArray = (pCurrentArray == &aModelListeners) ? &aControlListeners : NULL
-            )
-        {
-            const Type* pCurrentListeners = pCurrentArray->getConstArray();
-            for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
-            {
-                UniString aListener = (*pCurrentListeners).getTypeName();
-                xub_StrLen nTokens = aListener.GetTokenCount('.');
-                if (nTokens)
-                    aListener = aListener.GetToken(nTokens - 1, '.');
-
-                if (aListener == pCurrent->ListenerType.getStr())
-                    // the current ::com::sun::star::script::ScriptEventDescriptor doesn't match the current listeners class
-                    continue;
-
-                // now check the methods
-                Sequence< ::rtl::OUString> aMethodsNames = getEventMethods(*pCurrentListeners);
-                const ::rtl::OUString* pMethodsNames = aMethodsNames.getConstArray();
-                for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
-                {
-                    if ((*pMethodsNames).compareTo(pCurrent->EventMethod) != COMPARE_EQUAL)
-                        // the current ::com::sun::star::script::ScriptEventDescriptor doesn't match the current listeners current method
-                        continue;
-
-                    // we can transfer the script event : the model (control) supports it
-                    *pTransferable = *pCurrent;
-                    ++pTransferable;
-                    break;
-                }
-                if (k<aMethodsNames.getLength())
-                    break;
-            }
-        }
-    }
-
-    sal_Int32 nRealNewLen = pTransferable - aTransferable.getArray();
-    aTransferable.realloc(nRealNewLen);
-
-    xEventManager->registerScriptEvents(nIndex, aTransferable);
-}
-
-//------------------------------------------------------------------------------
-sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nViewPos)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::GridView2ModelPos" );
-    try
-    {
-        if (rColumns.is())
-        {
-            // loop through all columns
-            sal_Int16 i;
-            Reference< ::com::sun::star::beans::XPropertySet> xCur;
-            for (i=0; i<rColumns->getCount(); ++i)
-            {
-                rColumns->getByIndex(i) >>= xCur;
-                if (!::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
-                {
-                    // for every visible col : if nViewPos is greater zero, decrement it, else we
-                    // have found the model position
-                    if (!nViewPos)
-                        break;
-                    else
-                        --nViewPos;
-                }
-            }
-            if (i<rColumns->getCount())
-                return i;
-        }
-    }
-    catch(const Exception&)
-    {
-        DBG_ERROR("GridView2ModelPos Exception occured!");
-    }
-    return (sal_Int16)-1;
-}
-
-//==============================================================================
-//==============================================================================
-
-//------------------------------------------------------------------------------
-sal_Bool isLoadable( const Reference< XInterface >& _rxLoadable )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::isLoadable" );
-    // determines whether a form should be loaded or not
-    // if there is no datasource or connection there is no reason to load a form
-    Reference< XPropertySet > xSet( _rxLoadable, UNO_QUERY );
-    if ( xSet.is() )
-    {
-        try
-        {
-            Reference< XConnection > xConn;
-            if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
-                return sal_True;
-
-            // is there already a active connection
-            xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConn;
-            if ( xConn.is() )
-                return sal_True;
-
-            ::rtl::OUString sPropertyValue;
-            OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DATASOURCE ) >>= sPropertyValue );
-            if ( sPropertyValue.getLength() )
-                return sal_True;
-
-            OSL_VERIFY( xSet->getPropertyValue( FM_PROP_URL ) >>= sPropertyValue );
-            if ( sPropertyValue.getLength() )
-                return sal_True;
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR( "isLoadable: caught an exception!" );
-        }
-
-    }
-    return sal_False;
 }
 
 //------------------------------------------------------------------------------

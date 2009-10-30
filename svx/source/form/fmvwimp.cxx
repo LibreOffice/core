@@ -38,7 +38,6 @@
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
-#include "fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmvwimp.hxx"
 #include "formcontrolfactory.hxx"
@@ -96,6 +95,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
+#include <vos/mutex.hxx>
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
