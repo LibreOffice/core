@@ -49,6 +49,7 @@
 
 #include "comphelper/processfactory.hxx"
 #include "comphelper/sequenceashashmap.hxx"
+#include "comphelper/configurationhelper.hxx"
 
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -737,6 +738,41 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                     //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
                     Any value( xNameAccess->getByName(rtl::OUString::createFromAscii(pNode)) );
                     sURL = value.get<rtl::OUString> ();
+
+                    // extend the URLs with Office locale argument
+                    INetURLObject aURLObj( sURL );
+
+                    rtl::OUString sParam = aURLObj.GetParam();
+                    rtl::OUStringBuffer aURLBuf( sParam );
+                    if ( sParam.getLength() > 0 )
+                        aURLBuf.appendAscii( "&" );
+                    aURLBuf.appendAscii( "lang=" );
+
+                    // read locale from configuration
+                    ::rtl::OUString sLocale;
+                    ::rtl::OUString sPackage = ::rtl::OUString::createFromAscii("org.openoffice.Setup");
+                    ::rtl::OUString sRelPath = ::rtl::OUString::createFromAscii("L10N");
+                    ::rtl::OUString sKey     = ::rtl::OUString::createFromAscii("ooLocale");
+
+                    try
+                    {
+                        ::comphelper::ConfigurationHelper::readDirectKey(comphelper::getProcessServiceFactory(),
+                                                                         sPackage,
+                                                                         sRelPath,
+                                                                         sKey,
+                                                                         ::comphelper::ConfigurationHelper::E_READONLY) >>= sLocale;
+                    }
+                    catch(const com::sun::star::uno::RuntimeException& exRun)
+                        { throw exRun; }
+                    catch(const com::sun::star::uno::Exception&)
+                    { sLocale = ::rtl::OUString::createFromAscii("en-US"); }
+
+                    aURLBuf.append(sLocale);
+
+                    sParam = aURLBuf.makeStringAndClear();
+
+                    aURLObj.SetParam( sParam );
+                    sURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
                     Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                         comphelper::getProcessServiceFactory()->createInstance(
