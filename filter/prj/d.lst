@@ -48,3 +48,9 @@ mkdir: %_DEST%\bin%_EXT%\pdfimport
 ..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
 ..\%__SRC%\misc\filters\modulepacks\fcfg_*.xcu %_DEST%\xml%_EXT%\registry\spool\fcfg_*.xcu
 ..\%COMMON_OUTDIR%\bin\fcfg_langpack_*.zip %_DEST%\pck%_EXT%\fcfg_langpack_*.zip
+
+mkdir: %_DEST%\inc%_EXT%\filter
+mkdir: %_DEST%\inc%_EXT%\filter\msfilter
+..\inc\filter\msfilter\*.hxx %_DEST%\inc%_EXT%\filter\msfilter\*.hxx
+..\inc\filter\msfilter\*.h %_DEST%\inc%_EXT%\filter\msfilter\*.h
+
