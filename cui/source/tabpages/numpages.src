@@ -1,0 +1,910 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: numpages.src,v $
+ * $Revision: 1.64.242.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include <helpid.hrc>
+#include <numpages.hrc>
+
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage                                                               */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_SVXPAGE_PICK_BULLET
+{
+    HelpID = HID_SVXPAGE_PICK_BULLET ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedLine FL_VALUES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Selection" ;
+    };
+    Control VS_VALUES
+    {
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
+        Size = MAP_APPFONT ( 242 , 167 ) ;
+        TabStop = TRUE ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage                                                               */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_SVXPAGE_PICK_SINGLE_NUM
+{
+    HelpID = HID_SVXPAGE_PICK_SINGLE_NUM ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedLine FL_VALUES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Selection" ;
+    };
+    Control VS_VALUES
+    {
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
+        Size = MAP_APPFONT ( 242 , 167 ) ;
+        TabStop = TRUE ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage                                                               */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_SVXPAGE_PICK_NUM
+{
+    HelpID = HID_SVXPAGE_PICK_NUM;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedLine FL_VALUES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Selection" ;
+    };
+    Control VS_VALUES
+    {
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
+        Size = MAP_APPFONT ( 242 , 167 ) ;
+        TabStop = TRUE ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage                                                               */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_SVXPAGE_PICK_BMP
+{
+    HelpID = HID_SVXPAGE_PICK_BMP;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedLine FL_VALUES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Selection" ;
+    };
+    Control VS_VALUES
+    {
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
+        Size = MAP_APPFONT ( 242 , 152 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    CheckBox CB_LINKED
+    {
+        Pos = MAP_APPFONT ( 9 , 169 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Link graphics";
+    };
+    FixedText FT_ERROR
+    {
+        Pos = MAP_APPFONT ( 9 , 14 ) ;
+        Size = MAP_APPFONT ( 242 , 30 ) ;
+        Text [ en-US ] = "The Gallery theme 'Bullets' is empty (no graphics)." ;
+        Hide = TRUE ;
+        WordBreak = TRUE ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage Numerierungsoptionen                                          */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_SVXPAGE_NUM_OPTIONS
+{
+    HelpID = HID_SVXPAGE_NUM_OPTIONS ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedText FT_LEVEL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Level" ;
+    };
+    MultiListBox LB_LEVEL
+    {
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 26 , 154 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+        Border = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    FixedLine FL_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Format" ;
+    };
+    FixedText FT_FMT
+    {
+        Pos = MAP_APPFONT ( 50 , 27 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
+        Text [ en-US ] = "~Numbering" ;
+    };
+    ListBox LB_FMT
+    {
+        Pos = MAP_APPFONT ( 103 , 25 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList [ en-US ] =
+        {
+            < "1, 2, 3, ... " ;                 4/*SVX_NUM_ARABIC              */; > ;
+            < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+            < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
+            < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+            < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+            < "Graphics" ;                  8/*SVX_NUM_BITMAP              */; > ;
+            < "Linked graphics" ;           0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "None" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "Native Numbering" ;                      12 /*NATIVE_NUMBERING                   */; > ;
+            < "А, Б, .., Аа, Аб, ... (Bulgarian)" ;     38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */; > ;
+            < "а, б, .., аа, аб, ... (Bulgarian)" ;     39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */; > ;
+            < "А, Б, .., Аа, Бб, ... (Bulgarian)" ;     40 /*CHARS_CYRILLIC_UPPER_LETTER_N_BG   */; > ;
+            < "а, б, .., аа, бб, ... (Bulgarian)" ;     41 /*CHARS_CYRILLIC_LOWER_LETTER_N_BG   */; > ;
+            < "А, Б, .., Аа, Аб, ... (Russian)" ;       42 /*CHARS_CYRILLIC_UPPER_LETTER_RU     */; > ;
+            < "а, б, .., аа, аб, ... (Russian)" ;       43 /*CHARS_CYRILLIC_LOWER_LETTER_RU     */; > ;
+            < "А, Б, .., Аа, Бб, ... (Russian)" ;       44 /*CHARS_CYRILLIC_UPPER_LETTER_N_RU   */; > ;
+            < "а, б, .., аа, бб, ... (Russian)" ;       45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */; > ;
+            < "А, Б, .., Аа, Аб, ... (Serbian)" ;       48 /*CHARS_CYRILLIC_UPPER_LETTER_SR     */; > ;
+            < "а, б, .., аа, аб, ... (Serbian)" ;       49 /*CHARS_CYRILLIC_LOWER_LETTER_SR     */; > ;
+            < "А, Б, .., Аа, Бб, ... (Serbian)" ;       50 /*CHARS_CYRILLIC_UPPER_LETTER_N_SR   */; > ;
+            < "а, б, .., аа, бб, ... (Serbian)" ;       51 /*CHARS_CYRILLIC_LOWER_LETTER_N_SR   */; > ;
+
+        };
+    };
+    FixedText FT_PREFIX
+    {
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Before" ;
+        Left = TRUE ;
+    };
+    Edit ED_PREFIX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 41 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        MaxTextLength = 50 ;
+    };
+    FixedText FT_SUFFIX
+    {
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "After" ;
+        Left = TRUE ;
+    };
+    Edit ED_SUFFIX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 57 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        MaxTextLength = 50 ;
+    };
+    FixedText FT_CHARFMT
+    {
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Character Style" ;
+    };
+    ListBox LB_CHARFMT
+    {
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 73 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
+    };
+    FixedText FT_BUL_COLOR
+    {
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Color";
+    };
+    ListBox LB_BUL_COLOR
+    {
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 73 ) ;
+        Size = MAP_APPFONT ( 67 , 100 ) ;
+        Hide = TRUE;
+    };
+    FixedText FT_BUL_REL_SIZE
+    {
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "~Relative size";
+    };
+    MetricField MF_BUL_REL_SIZE
+    {
+        Pos = MAP_APPFONT ( 103 , 89 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        Border = TRUE ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText  = "%" ;
+        SpinSize = 1 ;
+        Minimum = 1;
+        Maximum = 250;
+        Hide = TRUE;
+    };
+    FixedText FT_ALL_LEVEL
+    {
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Show sublevels" ;
+    };
+    NumericField NF_ALL_LEVEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 89 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 10 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 10 ;
+    };
+    FixedText FT_START
+    {
+        Pos = MAP_APPFONT ( 50 , 107 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Start at" ;
+        Left = TRUE ;
+    };
+    NumericField ED_START
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 105 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 65535 ;
+        Value = 1 ;
+        First = 0 ;
+        Last = 65535 ;
+    };
+    FixedText FT_ALIGN
+    {
+        Pos = MAP_APPFONT ( 50 , 135 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Alignment" ;
+        Hide = TRUE;
+    };
+    ListBox LB_ALIGN
+    {
+        Pos = MAP_APPFONT ( 103 , 133 ) ;
+        Size = MAP_APPFONT ( 40 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE;
+        StringList [ en-US ] =
+        {
+            < "Left" ; > ;
+            < "Centered" ; > ;
+            < "Right" ; > ;
+        };
+    };
+    String STR_BULLET
+    {
+        Text [ en-US ] = "Character" ;
+    };
+    PushButton PB_BULLET
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 105 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Text = "..." ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_BITMAP
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Graphics" ;
+    };
+    MenuButton MB_BITMAP
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 41 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        ButtonMenu = Menu
+        {
+            ItemList  =
+            {
+                MenuItem
+                {
+                    Identifier = MN_GRAPHIC_DLG ;
+                     //                    HelpID = HID_NUM_NAMED_NUMS ;
+                    Text [ en-US ] = "From file..." ;
+                };
+                MenuItem
+                {
+                    Identifier = MN_GALLERY ;
+                    Text [ en-US ] = "Gallery";
+                };
+            };
+        };
+        Text [ en-US ] = "Select..." ;
+    };
+    FixedText FT_SIZE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 61 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Width" ;
+    };
+    MetricField MF_WIDTH
+    {
+        Pos = MAP_APPFONT ( 103 , 59 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+        Hide = TRUE ;
+    };
+    FixedText FT_MULT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Height" ;
+    };
+    MetricField MF_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 103 , 75 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+        Hide = TRUE ;
+    };
+    CheckBox CB_RATIO
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "Keep ratio" ;
+    };
+    FixedText FT_ORIENT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 105 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Alignment" ;
+    };
+    ListBox LB_ORIENT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 103 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList [ en-US ] =
+        {
+            < "Top of baseline" ; > ;
+            < "Center of baseline" ; > ;
+            < "Bottom of baseline" ; > ;
+            < "Top of character" ; > ;
+            < "Center of character" ; > ;
+            < "Bottom of character" ; > ;
+            < "Top of line" ; > ;
+            < "Center of line" ; > ;
+            < "Bottom of line" ; > ;
+        };
+    };
+    FixedLine FL_SAME_LEVEL
+    {
+        Pos = MAP_APPFONT ( 47 , 156 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
+        Text [ en-US ] = "All levels" ;
+    };
+    CheckBox CB_SAME_LEVEL
+    {
+        Pos = MAP_APPFONT ( 53 , 167 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Text [ en-US ] = "~Consecutive numbering" ;
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 179 , 25 ) ;
+        Size = MAP_APPFONT ( 69 , 154 ) ;
+        Border = TRUE ;
+    };
+    String ST_POPUP_EMPTY_ENTRY
+    {
+        Text [ en-US ] = "There are no graphics in the 'Bullets' Gallery theme.";
+    };
+
+};
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage Positionen                                                    */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_SVXPAGE_NUM_POSITION
+{
+    HelpID = HID_SVXPAGE_NUM_POSITION ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedText FT_LEVEL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 50, 8 ) ;
+        Text [ en-US ] = "Level" ;
+    };
+    MultiListBox LB_LEVEL
+    {
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 26 , 154 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+        Border = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    FixedLine FL_POSITION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "Position and spacing" ;
+    };
+    FixedText FT_BORDERDIST
+    {
+        Pos = MAP_APPFONT ( 50 , 27 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text [ en-US ] = "Indent" ;
+    };
+    MetricField MF_BORDERDIST
+    {
+        Pos = MAP_APPFONT ( 198 , 25 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -1999 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+    };
+    CheckBox CB_RELATIVE
+    {
+        Pos = MAP_APPFONT ( 198 , 41 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Text [ en-US ] = "Relati~ve" ;
+    };
+    FixedText FT_INDENT
+    {
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Width of numbering" ;
+    };
+    MetricField MF_INDENT
+    {
+        Pos = MAP_APPFONT ( 198 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_NUMDIST
+    {
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Minimum space numbering <-> text" ;
+    };
+    MetricField MF_NUMDIST
+    {
+        Pos = MAP_APPFONT ( 198 , 73 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ALIGN
+    {
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "N~umbering alignment" ;
+    };
+    ListBox LB_ALIGN
+    {
+        Pos = MAP_APPFONT ( 198 , 89 ) ;
+        Size = MAP_APPFONT ( 40 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Left" ; > ;
+            < "Centered" ; > ;
+            < "Right" ; > ;
+        };
+    };
+    FixedText FT_LABEL_FOLLOWED_BY
+    {
+        Pos = MAP_APPFONT ( 50 , 27 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text [ en-US ] = "Numbering followed by" ;
+    };
+    ListBox LB_LABEL_FOLLOWED_BY
+    {
+        Pos = MAP_APPFONT ( 198 , 25 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Tab stop" ; > ;
+            < "Space" ; > ;
+            < "Nothing" ; > ;
+        };
+    };
+    FixedText FT_LISTTAB
+    {
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
+        Right = TRUE ;
+        Text [ en-US ] = "at" ;
+    };
+    MetricField MF_LISTTAB
+    {
+        Pos = MAP_APPFONT ( 198 , 41 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_ALIGN_2
+    {
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+    };
+    ListBox LB_ALIGN_2
+    {
+        Pos = MAP_APPFONT ( 198 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_ALIGNED_AT
+    {
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Aligned at" ;
+    };
+    MetricField MF_ALIGNED_AT
+    {
+        Pos = MAP_APPFONT ( 198 , 73 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -1999 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_INDENT_AT
+    {
+        Pos = MAP_APPFONT ( 50 , 91 ) ;
+        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Text [ en-US ] = "Indent at" ;
+    };
+    MetricField MF_INDENT_AT
+    {
+        Pos = MAP_APPFONT ( 198 , 89 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -1999 ;
+        Maximum = 1999 ;
+        DecimalDigits = 2 ;
+        Value = 0 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 1999 ;
+        SpinSize = 5 ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_STANDARD
+    {
+        Pos = MAP_APPFONT ( 198 , 165 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Default" ;
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 50 , 113 ) ;
+        Size = MAP_APPFONT ( 143 , 67 ) ;
+        Border = TRUE ;
+    };
+};
+
+String RID_STR_EDIT_GRAPHIC
+{
+    Text [ en-US ] = "Link" ;
+};
+String RID_STR_FULLNUMS_1 { Text = "1.|1.1|a)|61589|61589" ; };
+String RID_STR_FULLNUMS_2 { Text = "1.|a)|61589|61589|61589" ; };
+String RID_STR_FULLNUMS_3 { Text = "1.|(a)|i.|A.|61589" ; };
+String RID_STR_FULLNUMS_4 { Text = "1.|1.|1.|1.|1." ; };
+String RID_STR_FULLNUMS_5 { Text = "I.|A.|i.|a)|61589" ; };
+String RID_STR_FULLNUMS_6 { Text = "A.|I.|a.|i.|61589" ; };
+String RID_STR_FULLNUMS_7 { Text = "1|1.1|1.1.1|1.1.1.1|1.1.1.1.1" ; };
+String RID_STR_FULLNUMS_8 { Text = "61487|61488|61485|61589|61589" ; };
+String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
+
+String RID_SVXSTR_BULLET_DESCRIPTION_0
+{
+    Text [en-US] = "Solid small circular bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_1
+{
+    Text [en-US] = "Solid large circular bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_2
+{
+    Text [en-US] = "Solid diamond bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_3
+{
+    Text [en-US] = "Solid large square bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_4
+{
+    Text [en-US] = "Right pointing arrow bullets filled out";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_5
+{
+    Text [en-US] = "Right pointing arrow bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_6
+{
+    Text [en-US] = "Check mark bullets";
+};
+String RID_SVXSTR_BULLET_DESCRIPTION_7
+{
+    Text [en-US] = "Tick mark bullets";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_0
+{
+    Text [en-US] = "Number 1) 2) 3)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_1
+{
+    Text [en-US] = "Number 1. 2. 3.";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_2
+{
+    Text [en-US] = "Number (1) (2) (3)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_3
+{
+    Text [en-US] = "Uppercase Roman number I. II. III.";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_4
+{
+    Text [en-US] = "Uppercase letter A) B) C)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_5
+{
+    Text [en-US] = "Lowercase letter a) b) c)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_6
+{
+    Text [en-US] = "Lowercase letter (a) (b) (c)";
+};
+String RID_SVXSTR_SINGLENUM_DESCRIPTION_7
+{
+    Text [en-US] = "Lowercase Roman number i. ii. iii.";
+};
+
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_0
+{
+    Text [en-US] = "Numeric, numeric, lowercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_1
+{
+    Text [en-US] = "Numeric, lowercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_2
+{
+    Text [en-US] = "Numeric, lowercase letters, lowercase Roman, uppercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_3
+{
+    Text [en-US] = "Numeric";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_4
+{
+    Text [en-US] = "Uppercase Roman, uppercase letters, lowercase Roman, lowercase letters, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_5
+{
+    Text [en-US] = "Uppercase letters, uppercase Roman, lowercase letters, lowercase Roman, solid small circular bullet";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_6
+{
+    Text [en-US] = "Numeric with all sublevels";
+};
+String RID_SVXSTR_OUTLINENUM_DESCRIPTION_7
+{
+    Text [en-US] = "Right pointing bullet, right pointing arrow bullet, solid diamond bullet, solid small circular bullet";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

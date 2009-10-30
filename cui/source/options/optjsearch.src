@@ -1,0 +1,223 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: optjsearch.src,v $
+ * $Revision: 1.40 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <helpid.hrc>
+#include <svx/dialogs.hrc>
+
+#include "optjsearch.hrc"
+
+
+TabPage RID_SVXPAGE_JSEARCH_OPTIONS
+{
+    HelpId = HID_SVXPAGE_JSEARCH_OPTIONS ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_TREAT_AS_EQUAL
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 248, 8 );
+        Text [ en-US ] = "Treat as equal";
+    };
+    CheckBox CB_MATCH_CASE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~uppercase/lowercase";
+    };
+    CheckBox CB_MATCH_FULL_HALF_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~full-width/half-width forms";
+    };
+    CheckBox CB_MATCH_HIRAGANA_KATAKANA
+    {
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~hiragana/katakana";
+    };
+    CheckBox CB_MATCH_CONTRACTIONS
+    {
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~contractions (yo-on, sokuon)";
+    };
+    CheckBox CB_MATCH_MINUS_DASH_CHOON
+    {
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~minus/dash/cho-on";
+    };
+    CheckBox CB_MATCH_REPEAT_CHAR_MARKS
+    {
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "'re~peat character' marks";
+    };
+    CheckBox CB_MATCH_VARIANT_FORM_KANJI
+    {
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~variant-form kanji (itaiji)";
+    };
+    CheckBox CB_MATCH_OLD_KANA_FORMS
+    {
+        Pos = MAP_APPFONT ( 12 , 112) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~old Kana forms";
+    };
+    CheckBox CB_MATCH_DIZI_DUZU
+    {
+        Pos = MAP_APPFONT ( 136 , 14 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~di/zi, du/zu";
+    };
+    CheckBox CB_MATCH_BAVA_HAFA
+    {
+        Pos = MAP_APPFONT ( 136 , 28 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~ba/va, ha/fa";
+    };
+    CheckBox CB_MATCH_TSITHICHI_DHIZI
+    {
+        Pos = MAP_APPFONT ( 136 , 42 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~tsi/thi/chi, dhi/zi";
+    };
+    CheckBox CB_MATCH_HYUFYU_BYUVYU
+    {
+        Pos = MAP_APPFONT ( 136 , 56 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "h~yu/fyu, byu/vyu";
+    };
+    CheckBox CB_MATCH_SESHE_ZEJE
+    {
+        Pos = MAP_APPFONT ( 136 , 70 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~se/she, ze/je";
+    };
+    CheckBox CB_MATCH_IAIYA
+    {
+        Pos = MAP_APPFONT ( 136 , 84 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~ia/iya (piano/piyano)";
+    };
+    CheckBox CB_MATCH_KIKU
+    {
+        Pos = MAP_APPFONT ( 136 , 98 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~ki/ku (tekisuto/tekusuto)";
+    };
+    CheckBox CB_MATCH_PROLONGED_SOUNDMARK
+    {
+        Pos = MAP_APPFONT ( 136 , 112 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "Prolon~ged vowels (ka-/kaa)";
+    };
+    FixedLine FL_IGNORE
+    {
+        Pos = MAP_APPFONT( 6, 128 );
+        Size = MAP_APPFONT( 248, 8 );
+        Text [ en-US ] = "Ignore";
+    };
+    CheckBox CB_IGNORE_PUNCTUATION
+    {
+        Pos = MAP_APPFONT ( 12 , 139 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "Pu~nctuation characters";
+    };
+    CheckBox CB_IGNORE_WHITESPACES
+    {
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "~Whitespace characters";
+    };
+    CheckBox CB_IGNORE_MIDDLE_DOT
+    {
+        Pos = MAP_APPFONT ( 136 , 139 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "Midd~le dots";
+    };
+    Text [ en-US ] = "Searching in Japanese";
+};
+// end TabPage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

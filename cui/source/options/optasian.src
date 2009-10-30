@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: optasian.src,v $
+ * $Revision: 1.48 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <optasian.hrc>
+#include <sfx2/sfx.hrc>
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+
+TabPage RID_SVXPAGE_ASIAN_LAYOUT
+{
+    HelpId = HID_OPTIONS_ASIAN_LAYOUT ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    FixedLine GB_KERNING
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Kerning";
+    };
+    RadioButton RB_CHAR_KERNING
+    {
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text [ en-US ] = "~Western characters only";
+    };
+    RadioButton RB_CHAR_PUNCT
+    {
+        Pos = MAP_APPFONT ( 12, 27 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text [ en-US ] = "Western ~text and Asian punctuation";
+    };
+    FixedLine GB_CHAR_DIST
+    {
+        Pos = MAP_APPFONT ( 6, 43 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Character spacing";
+    };
+    RadioButton RB_NO_COMP
+    {
+        Pos = MAP_APPFONT ( 12, 54 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text [ en-US ] = "~No compression";
+    };
+    RadioButton RB_PUNCT_COMP
+    {
+        Pos = MAP_APPFONT ( 12, 67) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text [ en-US ] = "~Compress punctuation only";
+    };
+    RadioButton RB_PUNCT_KANA_COMP
+    {
+        Pos = MAP_APPFONT ( 12, 80 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text [ en-US ] = "Compress ~punctuation and Japanese Kana";
+    };
+    FixedLine GB_START_END
+    {
+        Pos = MAP_APPFONT ( 6, 96 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "First and last characters";
+    };
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 109 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "~Language";
+    };
+    ListBox LB_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 95 , 107 ) ;
+        Size = MAP_APPFONT ( 80 , 48 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+    CheckBox CB_STANDARD
+    {
+        Pos = MAP_APPFONT ( 180, 109 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text [ en-US ] = "~Default";
+    };
+    FixedText FT_START
+    {
+        Pos = MAP_APPFONT ( 12 , 125 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "Not at start of line:";
+    };
+    Edit ED_START
+    {
+        Pos = MAP_APPFONT ( 95 , 123 ) ;
+        Size = MAP_APPFONT ( 159 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_END
+    {
+        Pos = MAP_APPFONT ( 12 , 141 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "Not at end of line:";
+    };
+    Edit ED_END
+    {
+        Pos = MAP_APPFONT ( 95 , 139 ) ;
+        Size = MAP_APPFONT ( 159 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_HINT
+    {
+        Pos = MAP_APPFONT ( 12 , 155 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;
+        Text [ en-US ] = "Without user-defined line break symbols";
+    };
+    Text [ en-US ] = "Proxy";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,856 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: autocdlg.src,v $
+ * $Revision: 1.14 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+#include <svx/svxids.hrc>
+#include "autocdlg.hrc"
+#include <svx/dialogs.hrc>
+#include "helpid.hrc"
+
+ // pragma -------------------------------------------------------------------
+/**************************************************************************/
+/*                                                                        */
+/*  TabDialog RID_OFA_AUTOCORR_DLG                                        */
+/*                                                                        */
+/**************************************************************************/
+TabDialog RID_OFA_AUTOCORR_DLG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text [ en-US ] = "AutoCorrect" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_AUTOCORR_REPLACE ;
+                Text [ en-US ] = "Replace" ;
+            };
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_AUTOCORR_EXCEPT ;
+                Text [ en-US ] = "Exceptions" ;
+            };
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_AUTOCORR_OPTIONS ;
+                Text [ en-US ] = "Options" ;
+            };
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_AUTOFMT_APPLY ;
+                Text [ en-US ] = "Options" ;
+            };
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_AUTOCORR_QUOTE ;
+                Text [ en-US ] = "Custom Quotes" ;
+            };
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_AUTOCOMPLETE_OPTIONS ;
+                Text [ en-US ] = "Word Completion";
+            };
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_SMARTTAG_OPTIONS ;
+                Text [ en-US ] = "Smart Tags";
+            };
+        };
+    };
+    FixedText FT_LANG
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 140 , 8 ) ;
+
+        Left = TRUE ;
+        Text [ en-US ] = "Replacements and exceptions for language:";
+    };
+    ListBox LB_LANG
+    {
+        Pos = MAP_APPFONT ( 150 , 3 ) ;
+        Size = MAP_APPFONT ( 60 , 100 ) ;
+        DropDown = TRUE;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+};
+#define COMMON_CLB_ENTRIES \
+    String ST_USE_REPLACE \
+    { \
+        Text [ en-US ] = "Use replacement table" ; \
+    }; \
+    String ST_CPTL_STT_WORD \
+    { \
+        Text [ en-US ] = "Correct TWo INitial CApitals" ; \
+    }; \
+    String ST_CPTL_STT_SENT \
+    { \
+        Text [ en-US ] = "Capitalize first letter of every sentence" ; \
+    }; \
+    String ST_BOLD_UNDER \
+    { \
+        Text [ en-US ] = "Automatic *bold* and _underline_" ; \
+    }; \
+    String STR_NO_DBL_SPACES \
+    { \
+        Text [ en-US ] = "Ignore double spaces" ; \
+    }; \
+    String ST_DETECT_URL \
+    { \
+        Text [ en-US ] = "URL Recognition" ; \
+    }; \
+    String ST_ORDINAL \
+    { \
+        Text [ en-US ] = "Replace 1st... with 1^st..." ; \
+    }; \
+    String ST_FRACTION \
+    { \
+        Text [ en-US ] = "Replace 1/2 ... with Â½ ..." ; \
+    }; \
+    String ST_DASH \
+    { \
+        Text [ en-US ] = "Replace dashes" ; \
+    };
+
+/**************************************************************************/
+/*                                                                        */
+/*  Beschreibung: Autokorrektur-Optionen                                  */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_AUTOCORR_OPTIONS
+{
+    HelpId = HID_OFAPAGE_AUTOCORR_OPTIONS ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text [ en-US ] = "Settings" ;
+    Control CLB_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 173 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    COMMON_CLB_ENTRIES
+};
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_AUTOFMT_APPLY
+{
+    HelpID = HID_OFAPAGE_AUTOFMT_OPTIONS ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Control CLB_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 149 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_EDIT
+    {
+        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Edit..." ;
+        TabStop = TRUE ;
+    };
+    String STR_HEADER1
+    {
+        Text [ en-US ] = "[M]" ;
+    };
+    String STR_HEADER2
+    {
+        Text [ en-US ] = "[T]" ;
+    };
+    FixedText FT_HEADER1_EXPLANATION
+    {
+        Pos = MAP_APPFONT ( 80 , 159 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
+        Text [ en-US ] = "[M]: Replace while modifying existing text" ;
+    };
+    FixedText FT_HEADER2_EXPLANATION
+    {
+        Pos = MAP_APPFONT ( 80 , 171 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
+        Text [ en-US ] = "[T]: AutoFormat/AutoCorrect while typing" ;
+    };
+    COMMON_CLB_ENTRIES
+    String ST_DEL_EMPTY_PARA
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Leere Absätze entfernen : Leere Absõtze entfernen */
+        Text [ en-US ] = "Remove blank paragraphs" ;
+    };
+    String ST_TYPO
+    {
+        Text [ en-US ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
+    };
+    String ST_USER_STYLE
+    {
+        Text [ en-US ] = "Replace Custom Styles" ;
+    };
+    String ST_BULLET
+    {
+        Text [ en-US ] = "Replace bullets with: " ;
+    };
+    String ST_RIGHT_MARGIN
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Zusammenfassen von einzeiligen Absätzen ab : Zusammenfassen von einzeiligen Absõtzen ab */
+         //        Text [ norwegian_wrong ] = "+++Combine single line paragraphs at" ;
+         //        Text [ swedish_wrong ] = ~Kombinera enradiga stycken B738vid " ;
+        Text [ en-US ] = "Combine single line paragraphs if length greater than" ;
+    };
+    String STR_NUM
+    {
+        Text [ en-US ] = "Apply numbering - symbol: " ;
+    };
+    String STR_BORDER
+    {
+        Text [ en-US ] = "Apply border" ;
+    };
+    String STR_TABLE
+    {
+        Text [ en-US ] = "Create table" ;
+    };
+    String STR_REPLACE_TEMPLATES
+    {
+        Text [ en-US ] = "Apply Styles" ;
+    };
+    String STR_DEL_SPACES_AT_STT_END
+    {
+        Text [ en-US ] = "Delete spaces and tabs at beginning and end of paragraph";
+    };
+    String STR_DEL_SPACES_BETWEEN_LINES
+    {
+        Text [ en-US ] = "Delete spaces and tabs at end and start of line";
+    };
+};
+
+ModalDialog RID_OFADLG_PRCNT_SET
+{
+    HelpID = SID_AUTOFORMAT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 155 , 43 ) ;
+    Moveable = TRUE ;
+    FixedLine FL_PRCNT
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 87 , 8 ) ;
+        Text [ en-US ] = "Minimum size" ;
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 99 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 99 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MetricField ED_RIGHT_MARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 7 , 14 ) ;
+        Size = MAP_APPFONT ( 31 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Value = 77 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        First = 10 ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    Text [ en-US ] = "Combine" ;
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*  Beschreibung: Ersetzungstabelle                                       */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_AUTOCORR_REPLACE
+{
+    HelpId = HID_OFAPAGE_AUTOCORR_REPLACE ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    FixedText FT_SHORT
+    {
+        Pos = MAP_APPFONT ( 7 , 3 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Repla~ce" ;
+        Left = TRUE ;
+    };
+    Edit ED_SHORT
+    {
+        Pos = MAP_APPFONT ( 7 , 13 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_REPLACE
+    {
+        Pos = MAP_APPFONT ( 71 , 3 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
+        Text [ en-US ] = "~With:" ;
+        Left = TRUE ;
+    };
+    Edit ED_REPLACE
+    {
+        Pos = MAP_APPFONT ( 71 , 13 ) ;
+        Size = MAP_APPFONT ( 123 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    CheckBox CB_TEXT_ONLY
+    {
+        Pos = MAP_APPFONT ( 140 , 3 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Text only" ;
+    };
+    PushButton PB_NEW_REPLACE
+    {
+        Pos = MAP_APPFONT ( 198 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~New" ;
+    };
+    PushButton PB_DELETE_REPLACE
+    {
+        Pos = MAP_APPFONT ( 198 , 32 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    Control TLB_REPLACE
+    {
+        HelpId = HID_OFACTL_AUTOCORR_REPLACE ;
+        Pos = MAP_APPFONT ( 7 , 29 ) ;
+        Size = MAP_APPFONT ( 187 , 150 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    String STR_MODIFY
+    {
+        Text [ en-US ] = "~Replace" ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  Beschreibung: Ausnahmelisten                                          */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_AUTOCORR_EXCEPT
+{
+    HelpId = HID_OFAPAGE_AUTOCORR_EXCEPT ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    FixedLine FL_ABBREV
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text [ en-US ] = "Abbreviations (no subsequent capital)" ;
+    };
+    Edit ED_ABBREV
+    {
+        Pos = MAP_APPFONT ( 7 , 14 ) ;
+        Size = MAP_APPFONT ( 123 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    ListBox LB_ABBREV
+    {
+        Pos = MAP_APPFONT ( 7 , 30 ) ;
+        Size = MAP_APPFONT ( 123 , 58 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        SORT = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton PB_NEWABBREV
+    {
+        Pos = MAP_APPFONT ( 198 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text [ en-US ] = "~New" ;
+    };
+    PushButton PB_DELABBREV
+    {
+        Pos = MAP_APPFONT ( 198 , 31 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    CheckBox CB_AUTOABBREV
+    {
+        Pos = MAP_APPFONT ( 137 , 78 ) ;
+        Size = MAP_APPFONT ( 111 , 10 ) ;
+        Text [ en-US ] = "~AutoInclude";
+        Text [ en-US ] = "~AutoInclude" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_DOUBLECAPS
+    {
+        Pos = MAP_APPFONT ( 4 , 94 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text [ en-US ] = "Words with TWo INitial CApitals" ;
+    };
+    Edit ED_DOUBLE_CAPS
+    {
+        Pos = MAP_APPFONT ( 7 , 105 ) ;
+        Size = MAP_APPFONT ( 123 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    ListBox LB_DOUBLE_CAPS
+    {
+        Pos = MAP_APPFONT ( 7 , 120 ) ;
+        Size = MAP_APPFONT ( 123 , 59 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        SORT = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton PB_NEWDOUBLECAPS
+    {
+        Pos = MAP_APPFONT ( 198 , 105 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Disable = TRUE ;
+        Text [ en-US ] = "Ne~w" ;
+    };
+    PushButton PB_DELDOUBLECAPS
+    {
+        Pos = MAP_APPFONT ( 198 , 122 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Disable = TRUE ;
+        Text [ en-US ] = "Dele~te" ;
+    };
+    CheckBox CB_AUTOCAPS
+    {
+        Pos = MAP_APPFONT ( 137 , 169 ) ;
+        Size = MAP_APPFONT ( 111 , 10 ) ;
+        Text [ en-US ] = "A~utoInclude";
+        Text [ en-US ] = "A~utoInclude" ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  Beschreibung: Typografische Anfuehrungszeichen                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_AUTOCORR_QUOTE
+{
+    HelpId = HID_OFAPAGE_AUTOCORR_QUOTE ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Custom Quotes" ;
+    FixedLine FL_SINGLE
+    {
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text [ en-US ] = "Single quotes" ;
+    };
+    Checkbox CB_SGL_TYPO
+    {
+        Pos = MAP_APPFONT ( 7 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text [ en-US ] = "Repla~ce" ;
+    };
+    FixedText FT_SGL_STARTQUOTE
+    {
+        Pos = MAP_APPFONT ( 7 , 30 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
+        Text [ en-US ] = "~Start quote:" ;
+    };
+    PushButton PB_SGL_STARTQUOTE
+    {
+        Pos = MAP_APPFONT ( 105 , 28 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Text = "\'" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_SGSTEX
+    {
+        Pos = MAP_APPFONT ( 124 , 30 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+    };
+    FixedText FT_SGL_ENDQUOTE
+    {
+        Pos = MAP_APPFONT ( 7 , 46 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
+        Text [ en-US ] = "~End quote:" ;
+    };
+    PushButton PB_SGL_ENDQUOTE
+    {
+        Pos = MAP_APPFONT ( 105 , 44 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Text = "\'" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_SGENEX
+    {
+        Pos = MAP_APPFONT ( 124 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+    };
+    PushButton PB_SGL_STD
+    {
+        Pos = MAP_APPFONT ( 198 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Default" ;
+    };
+    FixedLine FL_DOUBLE
+    {
+        Pos = MAP_APPFONT ( 4 , 83 ) ;
+        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Text [ en-US ] = "Double quotes" ;
+    };
+    CheckBox CB_TYPO
+    {
+        Pos = MAP_APPFONT ( 7 , 94 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Repl~ace" ;
+    };
+    FixedText FT_STARTQUOTE
+    {
+        Pos = MAP_APPFONT ( 7 , 110 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
+        Text [ en-US ] = "Start q~uote:" ;
+    };
+    PushButton PB_STARTQUOTE
+    {
+        Pos = MAP_APPFONT ( 105 , 108 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Text = "\"" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DBSTEX
+    {
+        Pos = MAP_APPFONT ( 124 , 110 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+    };
+    FixedText FT_ENDQUOTE
+    {
+        Pos = MAP_APPFONT ( 7 , 126 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text [ en-US ] = "E~nd quote:" ;
+    };
+    PushButton PB_ENDQUOTE
+    {
+        Pos = MAP_APPFONT ( 105 , 124 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Text = "\"" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DBECEX
+    {
+        Pos = MAP_APPFONT ( 124 , 126 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+    };
+    PushButton PB_DBL_STD
+    {
+        Pos = MAP_APPFONT ( 195 , 143 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "De~fault" ;
+    };
+    String STR_CHANGE_START
+    {
+        Text [ en-US ] = "Start quote" ;
+    };
+    String STR_CHANGE_END
+    {
+        Text [ en-US ] = "End quote" ;
+    };
+    String ST_STANDARD
+    {
+        Text [ en-US ] = "Default" ;
+    };
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*  Beschreibung: automatische Wortergänzung                              */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
+{
+    HelpId = HID_OFAPAGE_AUTOCOMPLETE_OPTIONS ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    CheckBox CB_ACTIV
+    {
+        Pos = MAP_APPFONT( 4, 3 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Enable word ~completion";
+    };
+    CheckBox CB_APPEND_SPACE
+    {
+        Pos = MAP_APPFONT( 10, 17 );
+        Size = MAP_APPFONT( 110, 10 );
+        Text [ en-US ] = "~Append space";
+    };
+    CheckBox CB_AS_TIP
+    {
+        Pos = MAP_APPFONT( 10, 31 );
+        Size = MAP_APPFONT( 110, 10 );
+        Text [ en-US ] = "~Show as tip";
+    };
+    CheckBox CB_COLLECT
+    {
+        Pos = MAP_APPFONT( 4, 45 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "C~ollect words";
+    };
+    CheckBox CB_REMOVE_LIST
+    {
+        Pos = MAP_APPFONT( 10, 59 );
+        Size = MAP_APPFONT( 110, 40 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "~When closing a document, remove the words collected from it from the list";
+    };
+    FixedText FT_EXPAND_KEY
+    {
+        Pos = MAP_APPFONT( 4, 102 );
+        Size = MAP_APPFONT( 116, 8 );
+        Text [ en-US ] = "Acc~ept with";
+    };
+    ListBox DCB_EXPAND_KEY
+    {
+        Pos = MAP_APPFONT( 4, 113 );
+        Size = MAP_APPFONT( 116, 60 );
+        TabStop = TRUE;
+        DropDown = TRUE;
+        Group = TRUE;
+        Sort = FALSE;
+    };
+    FixedText FT_MIN_WORDLEN
+    {
+        Pos = MAP_APPFONT( 4, 129 );
+        Size = MAP_APPFONT( 116, 8 );
+        Text [ en-US ] = "Mi~n. word length";
+    };
+    NumericField NF_MIN_WORDLEN
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 4, 140 );
+        Size = MAP_APPFONT( 30, 12 );
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Value = 10 ;
+        Minimum = 5 ;
+        First = 5 ;
+        Last = 100 ;
+        Maximum = 100 ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_MAX_ENTRIES
+    {
+        Pos = MAP_APPFONT( 4, 156 );
+        Size = MAP_APPFONT( 116, 8 );
+        Text [ en-US ] = "~Max. entries";
+    };
+    NumericField NF_MAX_ENTRIES
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 4, 167 );
+        Size = MAP_APPFONT( 30, 12 );
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Value = 500 ;
+        Maximum = 10000;
+        Last = 10000 ;
+        First = 50 ;
+        Minimum = 50;
+        SpinSize = 25 ;
+    };
+    MultiListBox LB_ENTRIES
+    {
+        Pos = MAP_APPFONT( 127, 3 );
+        Size = MAP_APPFONT( 121, 158 );
+        TabStop = TRUE;
+        DropDown = FALSE;
+        Group = TRUE;
+        Border = TRUE;
+        Sort = TRUE;
+    };
+    PushButton PB_ENTRIES
+    {
+        Pos = MAP_APPFONT( 127, 165 );
+        Size = MAP_APPFONT( 121, 14 );
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Delete Entry";
+    };
+    Text [ en-US ] = "Word Completion";
+};
+
+
+/**************************************************************************/
+/*                                                                        */
+/*  Beschreibung: Smart Tag Options                                       */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_SMARTTAG_OPTIONS
+{
+    HelpId = HID_OFAPAGE_SMARTTAG_OPTIONS ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Smart Tags";
+
+    CheckBox CB_SMARTTAGS
+    {
+        Pos = MAP_APPFONT( 4, 3 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Label text with smart tags";
+    };
+
+    FixedText FT_SMARTTAGS
+    {
+        Pos = MAP_APPFONT( 12, 15 );
+        Size = MAP_APPFONT( 116, 8 );
+        Text [ en-US ] = "Currently installed smart tags";
+    };
+
+    Control LB_SMARTTAGS
+    {
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 172 , 154 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    PushButton PB_SMARTTAGS
+    {
+        Pos = MAP_APPFONT ( 188 , 25 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "Properties...";
+    };
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

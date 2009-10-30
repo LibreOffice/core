@@ -1,0 +1,431 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: border.src,v $
+ * $Revision: 1.64 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+#include "border.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // define ---------------------------------------------------------------
+#define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
+ // RID_SVXPAGE_BORDER ---------------------------------------------------
+TabPage RID_SVXPAGE_BORDER
+{
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Helpid = HID_BORDER ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Borders" ;
+    FixedLine FL_BORDER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "Line arrangement" ;
+    };
+    FixedText FT_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 12, 14) ;
+        Size = MAP_APPFONT ( 64, 8) ;
+        Text [ en-US ] = "~Default";
+    };
+    Control WIN_PRESETS
+    {
+        HelpId = HID_BORDER_CTL_PRESETS ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 61 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_USERDEF
+    {
+        Pos = MAP_APPFONT (12 , 41) ;
+        Size = MAP_APPFONT ( 64, 8) ;
+        Text [ en-US ] = "~User-defined";
+    };
+    Control WIN_FRAMESEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 61 , 65 ) ;
+        TabStop = TRUE ;
+        Text = "Border control";
+    };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 77 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 104 ) ;
+        Vert = TRUE ;
+    };
+    FixedLine FL_LINE
+    {
+        Pos = MAP_APPFONT ( 82 , 3 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
+        Text [ en-US ] = "Line" ;
+    };
+    FixedText FT_STYLE
+    {
+        Pos = MAP_APPFONT ( 88, 14) ;
+        Size = MAP_APPFONT ( 77, 8) ;
+        Text [ en-US ] = "St~yle";
+    };
+    ListBox LB_LINESTYLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 25 ) ;
+        Size = MAP_APPFONT ( 74 , 66 ) ;
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 88, 95 ) ;
+        Size = MAP_APPFONT ( 77, 8 ) ;
+        Text [ en-US ] = "~Color";
+    };
+    ListBox LB_LINECOLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 106 ) ;
+        Size = MAP_APPFONT ( 74 , 68 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 166 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 104 ) ;
+        Vert = TRUE ;
+    };
+    FixedText FT_LEFT
+    {
+        Pos = MAP_APPFONT ( 177 , 16 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Text [ en-US ] = "~Left";
+    };
+    MetricField MF_LEFT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 213 , 14 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    FixedText FT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 177 , 32 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Text [ en-US ] = "Right";
+    };
+    MetricField MF_RIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 213 , 30 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    FixedText FT_TOP
+    {
+        Pos = MAP_APPFONT ( 177 , 48 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Text [ en-US ] = "~Top";
+    };
+    MetricField MF_TOP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 213 , 46 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    FixedText FT_BOTTOM
+    {
+        Pos = MAP_APPFONT ( 177 , 64 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
+        Text [ en-US ] = "~Bottom";
+    };
+    MetricField MF_BOTTOM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 213 , 62 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    CheckBox CB_SYNC
+    {
+        Pos = MAP_APPFONT ( 177 , 78 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text [ en-US ] = "Synchronize";
+    };
+    FixedLine FL_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 171 , 3 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
+        Text [ en-US ] = "Spacing to contents";
+    };
+
+    FixedText FT_SHADOWPOS
+    {
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Size = MAP_APPFONT ( 74 , 8 ) ;
+        Text [ en-US ] = "~Position" ;
+    };
+    Control WIN_SHADOWS
+    {
+        HelpId = HID_BORDER_CTL_SHADOWS ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Size = MAP_APPFONT ( 74 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_SHADOWSIZE
+    {
+        Pos = MAP_APPFONT ( 88 , 133 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Distan~ce";
+    };
+    MetricField ED_SHADOWSIZE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 144 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+        First = 100 ;
+        Last = 5000 ;
+        Maximum = 5000 ;
+        Minimum = 50 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+    };
+    FixedText FT_SHADOWCOLOR
+    {
+        Pos = MAP_APPFONT ( 177 , 133 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "C~olor" ;
+    };
+    ListBox LB_SHADOWCOLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 144 ) ;
+        Size = MAP_APPFONT ( 74 , 68 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    FixedLine FL_SHADOW
+    {
+        Pos = MAP_APPFONT ( 6 , 123 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Shadow style" ;
+    };
+    FixedLine FL_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Properties" ;
+    };
+    CheckBox  CB_MERGEWITHNEXT
+    {
+        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "~Merge with next paragraph" ;
+    };
+    CheckBox  CB_MERGEADJACENTBORDERS
+    {
+        Pos = MAP_APPFONT ( 12 , 173 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "~Merge adjacent line styles" ;
+    };
+
+#define _PREVIEW_IDLIST_                \
+        IdList =                        \
+        {                               \
+            IID_PRE_CELL_NONE ;         \
+            IID_PRE_CELL_ALL ;          \
+            IID_PRE_CELL_LR ;           \
+            IID_PRE_CELL_TB ;           \
+            IID_PRE_CELL_L ;            \
+            IID_PRE_CELL_DIAG ;         \
+            IID_PRE_HOR_NONE ;          \
+            IID_PRE_HOR_OUTER ;         \
+            IID_PRE_HOR_HOR ;           \
+            IID_PRE_HOR_ALL ;           \
+            IID_PRE_HOR_OUTER2 ;        \
+            IID_PRE_VER_NONE ;          \
+            IID_PRE_VER_OUTER ;         \
+            IID_PRE_VER_VER ;           \
+            IID_PRE_VER_ALL ;           \
+            IID_PRE_VER_OUTER2 ;        \
+            IID_PRE_TABLE_NONE ;        \
+            IID_PRE_TABLE_OUTER ;       \
+            IID_PRE_TABLE_OUTERH ;      \
+            IID_PRE_TABLE_ALL ;         \
+            IID_PRE_TABLE_OUTER2 ;      \
+        };                              \
+        IdCount = { 21 ; };
+
+    ImageList IL_PRE_BITMAPS
+    {
+        Prefix = "pr";
+        MaskColor = STD_MASKCOLOR ;
+        _PREVIEW_IDLIST_
+    };
+    ImageList ILH_PRE_BITMAPS
+    {
+        Prefix = "prh";
+        MaskColor = STD_MASKCOLOR ;
+        _PREVIEW_IDLIST_
+    };
+
+#define _SHADOW_IDLIST_             \
+        IdList =                    \
+        {                           \
+            IID_SHADOWNONE ;        \
+            IID_SHADOW_BOT_RIGHT ;  \
+            IID_SHADOW_BOT_LEFT ;   \
+            IID_SHADOW_TOP_RIGHT ;  \
+            IID_SHADOW_TOP_LEFT ;   \
+        };                          \
+        IdCount = { 5 ; };
+
+    ImageList IL_SDW_BITMAPS
+    {
+        Prefix = "sh";
+        MaskColor = STD_MASKCOLOR ;
+        _SHADOW_IDLIST_
+    };
+    ImageList ILH_SDW_BITMAPS
+    {
+        Prefix = "shh";
+        MaskColor = STD_MASKCOLOR ;
+        _SHADOW_IDLIST_
+    };
+};
+
+String RID_SVXSTR_TABLE_PRESET_NONE
+{
+    Text [ en-US ] = "Set No Borders" ;
+};
+String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
+{
+    Text [ en-US ] = "Set Outer Border Only" ;
+};
+String RID_SVXSTR_TABLE_PRESET_OUTERHORI
+{
+    Text [ en-US ] = "Set Outer Border and Horizontal Lines" ;
+};
+String RID_SVXSTR_TABLE_PRESET_OUTERALL
+{
+    Text [ en-US ] = "Set Outer Border and All Inner Lines" ;
+};
+String RID_SVXSTR_TABLE_PRESET_OUTERINNER
+{
+    Text [ en-US ] = "Set Outer Border Without Changing Inner Lines" ;
+};
+String RID_SVXSTR_PARA_PRESET_DIAGONAL
+{
+    Text [ en-US ] = "Set Diagonal Lines Only" ;
+};
+String RID_SVXSTR_PARA_PRESET_ALL
+{
+    Text [ en-US ] = "Set All Four Borders" ;
+};
+String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
+{
+    Text [ en-US ] = "Set Left and Right Borders Only" ;
+};
+String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
+{
+    Text [ en-US ] = "Set Top and Bottom Borders Only" ;
+};
+String RID_SVXSTR_PARA_PRESET_ONLYLEFT
+{
+    Text [ en-US ] = "Set Left Border Only" ;
+};
+String RID_SVXSTR_HOR_PRESET_ONLYHOR
+{
+    Text [ en-US ] = "Set Top and Bottom Borders, and All Inner Lines";
+};
+String RID_SVXSTR_VER_PRESET_ONLYVER
+{
+    Text [ en-US ] = "Set Left and Right Borders, and All Inner Lines";
+};
+String RID_SVXSTR_SHADOW_STYLE_NONE
+{
+    Text [ en-US ] = "No Shadow" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
+{
+    Text [ en-US ] = "Cast Shadow to Bottom Right" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
+{
+    Text [ en-US ] = "Cast Shadow to Top Right" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
+{
+    Text [ en-US ] = "Cast Shadow to Bottom Left" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
+{
+    Text [ en-US ] = "Cast Shadow to Top Left" ;
+};
+
+// **********************************************************************

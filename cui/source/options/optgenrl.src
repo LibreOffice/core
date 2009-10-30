@@ -1,0 +1,333 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: optgenrl.src,v $
+ * $Revision: 1.57 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// include ------------------------------------------------------------------
+
+#include <sfx2/sfx.hrc>
+
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+#include "optgenrl.hrc"
+
+// RID_SFXPAGE_GENERAL ------------------------------------------------------
+
+TabPage RID_SFXPAGE_GENERAL
+{
+    HelpId = HID_OPTIONS_GENERAL ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text [ en-US ] = "User Data" ;
+    FixedText FT_COMPANY
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 0 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Company" ;
+    };
+    Edit ED_COMPANY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 0 ) ) ;
+        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "First/Last ~name/Initials" ;
+    };
+    FixedText FT_NAME_RUSS
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Hide = TRUE;
+        Text [ en-US ] = "Last Name/First name/Father's name/Initials";
+    };
+    FixedText FT_NAME_EASTERN
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Hide = TRUE;
+        Text [ en-US ] = "Last/First ~name/Initials" ;
+    };
+    Edit ED_FATHERNAME
+    {
+        Border = TRUE ;
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( MID , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
+    };
+    Edit ED_FIRSTNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-8+HSPACE , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
+    };
+    Edit ED_SHORTNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+2* ( NAMELEN-8+HSPACE ) , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+2* ( NAMELEN-8+HSPACE ) ) , LINEH ) ;
+    };
+    FixedText FT_STREET
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Street" ;
+    };
+    FixedText FT_STREET_RUSS
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Hide = TRUE;
+        Text [ en-US ] = "Street/Apartment number";
+    };
+    Edit ED_STREET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
+    };
+    Edit ED_APARTMENTNR
+    {
+        Border = TRUE ;
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( MID , LINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
+    };
+    FixedText FT_CITY
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "Zip/City";
+    };
+    Edit ED_PLZ
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( 24 , LINEH ) ;
+    };
+    Edit ED_CITY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID + 24 + HSPACE , LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( RIGHT - ( MID + 24 + HSPACE ) , LINEH ) ;
+    };
+    Edit ED_US_CITY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( 90 , LINEH ) ;
+    };
+    Edit ED_US_STATE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID + 90 + HSPACE, LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( 30 , LINEH ) ;
+    };
+    Edit ED_US_ZIPCODE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID + 90 + HSPACE + 30 + HSPACE, LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( RIGHT - ( MID + 90 + HSPACE + 30 + HSPACE ) , LINEH ) ;
+    };
+    FixedText FT_COUNTRY
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 4 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "Country/Region";
+    };
+    Edit ED_COUNTRY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 4 ) ) ;
+        Size = MAP_APPFONT ( RIGHT - MID , LINEH ) ;
+    };
+    FixedText FT_TITLEPOS
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 5 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "~Title/Position" ;
+    };
+    Edit ED_TITLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 5 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
+    };
+    Edit ED_POSITION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 5 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
+    };
+    FixedText FT_PHONE
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 6 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        Text [ en-US ] = "Tel. (Home/Work)" ;
+        LeftLabel = TRUE ;
+    };
+    Edit ED_TELPRIVAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 6 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
+    };
+    Edit ED_TELCOMPANY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 6 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
+    };
+    FixedText FT_FAXMAIL
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 7 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text [ en-US ] = "Fa~x / E-mail" ;
+    };
+    Edit ED_FAX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 7 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
+    };
+    Edit ED_EMAIL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 7 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
+    };
+    FixedLine GB_ADDRESS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Address " ;
+    };
+    CheckBox CB_USEDATA
+    {
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Use data for document properties";
+    };
+
+     // extra Resourcen f"ur die amerikanische Postadresse
+    String STR_US_STATE
+    {
+        Text [ en-US ] = "City/State/Zip";
+    };
+    String STR_QUERY_REG
+    {
+        Text [ en-US ] = "Note that street, Zip code and city are used to generate the registration key. You will not be able to change the user data again until the registration has been carried out. Do you want to modify the user data now?";
+    };
+};
+
+// RID_SVXQB_CHANGEDATA ---------------------------------------------------
+
+QueryBox RID_SVXQB_CHANGEDATA
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "The User Data have been changed.\nNote that, if you continue, the registration key will become invalid.\nTherefore, a new registration key is needed within 30 days.\nYou can find the registration form in the menu Help - Registration...\nDo you really want to change your User Data?";
+};
+
+ // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
+
+StringArray RID_SVXSTR_FIELDUNIT_TABLE
+{
+    ItemList [ en-US ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Inch" ; FUNIT_INCH ; > ;
+        < "Foot" ; FUNIT_FOOT ; > ;
+        < "Miles" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    };
+
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

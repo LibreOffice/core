@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: paragrph.hrc,v $
+ * $Revision: 1.19 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_PARAGRPH_HRC
+#define _SVX_PARAGRPH_HRC
+
+// StandardTabPage ----------------------------------------------------------
+
+#define FT_LEFTINDENT           10
+#define ED_LEFTINDENT           11
+#define FT_FLINEINDENT          12
+#define ED_FLINEINDENT          13
+#define FT_RIGHTINDENT          14
+#define ED_RIGHTINDENT          15
+#define FL_INDENT                       16
+
+#define FT_TOPDIST                      20
+#define ED_TOPDIST                      21
+#define FT_BOTTOMDIST           22
+#define ED_BOTTOMDIST           23
+#define FL_DIST                         24
+
+#define BTN_LEFTALIGN           30
+#define BTN_RIGHTALIGN          31
+#define BTN_CENTERALIGN         32
+#define BTN_JUSTIFYALIGN        33
+#define FL_ALIGN                        34
+#define FL_VERTALIGN                    35
+#define LB_VERTALIGN                    36
+#define FL_VERTEX                       37
+#define CB_SNAP                         38
+#define FT_VERTALIGN                    39
+
+
+#define LB_LINEDIST                     40
+#define FT_LINEDIST                     41
+#define ED_LINEDISTPERCENT      42
+#define ED_LINEDISTMETRIC       43
+#define FL_LINEDIST                     44
+#define WN_EXAMPLE                      46
+
+#define CB_AUTO                         48
+#define FT_LASTLINE                     49
+#define LB_LASTLINE                     50
+#define CB_EXPAND                       51
+#define ST_LINEDIST_ABS                 52
+#define ST_LEFTALIGN_ASIAN              53
+#define ST_RIGHTALIGN_ASIAN             54
+
+// ExtendedTabPage ----------------------------------------------------------
+
+#define BTN_HYPHEN                      50
+#define ED_HYPHENBEFORE         52
+#define FT_HYPHENBEFORE         53
+#define ED_HYPHENAFTER          55
+#define FT_HYPHENAFTER          56
+#define FL_HYPHEN                       57
+
+#define BTN_PAGEBREAK           60
+#define FT_BREAKTYPE            61
+#define LB_BREAKTYPE            62
+#define FT_BREAKPOSITION        63
+#define LB_BREAKPOSITION        64
+#define BTN_PAGECOLL            65
+#define LB_PAGECOLL                     66
+#define BTN_KEEPTOGETHER        67
+#define BTN_WIDOWS                      68
+#define ED_WIDOWS                       69
+#define FT_WIDOWS                       70
+#define BTN_ORPHANS                     71
+#define ED_ORPHANS                      72
+#define FT_ORPHANS                      73
+#define FL_OPTIONS                      74
+#define FT_PAGENUM                      75
+#define ED_PAGENUM                      76
+#define FL_BREAKS                       77
+
+#define CB_KEEPTOGETHER                 80
+#define FT_MAXHYPH                      81
+#define ED_MAXHYPH                      83
+
+#define CB_REGISTER                     84
+#define FL_REGISTER                     85
+#define FL_PROPERTIES                   90
+#define FT_TEXTDIRECTION                91
+#define LB_TEXTDIRECTION                92
+
+
+//asian typography
+#define FL_AS_OPTIONS                   1
+#define CB_AS_HANG_PUNC                 2
+
+#define CB_AS_FORBIDDEN                 4
+
+#define CB_AS_SCRIPT_SPACE              7
+
+#endif
+

@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: optctl.src,v $
+ * $Revision: 1.20.254.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "optctl.hrc"
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+
+#include <sfx2/sfx.hrc>
+
+TabPage RID_SVXPAGE_OPTIONS_CTL
+{
+    HelpId = HID_OPTIONS_CTL ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+       Text [ en-US ] = "Complex Text Layout" ;
+    FixedLine FL_SEQUENCECHECKING
+    {
+        Pos = MAP_APPFONT ( 6, ROW_0 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "Sequence checking";
+    };
+    CheckBox CB_SEQUENCECHECKING
+    {
+        Pos = MAP_APPFONT ( 12, ROW_1 ) ;
+        Size = MAP_APPFONT ( 236 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Text [ en-US ] = "Use se~quence checking";
+    };
+    CheckBox CB_RESTRICTED
+    {
+        Pos = MAP_APPFONT ( 18, ROW_2 );
+        Size = MAP_APPFONT ( 236, RSC_CD_CHECKBOX_HEIGHT );
+        Text[ en-US ] = "Restricted";
+    };
+    CheckBox CB_TYPE_REPLACE
+    {
+        Pos = MAP_APPFONT ( 18, ROW_2+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y );
+        Size = MAP_APPFONT ( 236, RSC_CD_CHECKBOX_HEIGHT );
+        Text[ en-US ] = "~Type and replace";
+    };
+    FixedLine FL_CURSORCONTROL
+    {
+        Pos = MAP_APPFONT ( 6, ROW_3 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "Cursor control";
+    };
+    FixedText FT_MOVEMENT
+    {
+        Pos = MAP_APPFONT ( 12, ROW_5 ) ;
+        Size = MAP_APPFONT ( 90 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Movement";
+    };
+    RadioButton RB_MOVEMENT_LOGICAL
+    {
+        Pos = MAP_APPFONT ( 105, ROW_4 ) ;
+        Size = MAP_APPFONT ( 69 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "Lo~gical";
+    };
+    RadioButton RB_MOVEMENT_VISUAL
+    {
+        Pos = MAP_APPFONT ( 177, ROW_4 ) ;
+        Size = MAP_APPFONT ( 69 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "~Visual";
+    };
+    FixedLine FL_GENERAL
+    {
+        Pos = MAP_APPFONT ( 6, ROW_6 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "General options";
+    };
+    FixedText FT_NUMERALS
+    {
+        Pos = MAP_APPFONT ( 12, ROW_8 ) ;
+        Size = MAP_APPFONT ( 90 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Numerals";
+    };
+    ListBox LB_NUMERALS
+    {
+        Pos = MAP_APPFONT ( 105, ROW_7 ) ;
+        Size = MAP_APPFONT ( 69 , 3*RSC_CD_DROPDOWN_HEIGHT ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+        StringList [ en-US ]=
+        {
+            < "Arabic" ; > ;
+            < "Hindi" ; > ;
+            < "System" ; > ;
+            < "Context" ; > ;
+        };
+    };
+};

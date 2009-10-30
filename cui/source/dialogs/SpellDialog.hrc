@@ -1,0 +1,58 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: SpellDialog.hrc,v $
+ * $Revision: 1.6 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define FT_SUGGESTION   31
+#define LB_SUGGESTION   32
+#define FT_NOTINDICT    33
+#define ED_NEWWORD      34
+#define FT_LANGUAGE     35
+#define LB_LANGUAGE     36
+#define PB_IGNORE       37
+#define PB_IGNOREALL    38
+#define MB_ADDTODICT    39
+#define PB_CHANGE       40
+#define PB_CHANGEALL    41
+#define PB_AUTOCORR     42
+#define GB_BACKGROUND   43
+#define PB_OPTIONS      44
+#define PB_HELP         45
+#define PB_UNDO         46
+#define PB_CLOSE        47
+#define ST_NOSUGGESTIONS 48
+#define ST_RESUME       50
+#define ST_SPELLING                 51
+#define ST_SPELLING_AND_GRAMMAR     52
+#define ST_SPELLING_AND_GRAMMAR_VENDORNAME  53
+#define CB_CHECK_GRAMMAR            54
+#define PB_EXPLAIN                  55
+#define IMG_VENDOR                  56
+#define IMG_DEFAULT_VENDOR          57
+#define IMG_DEFAULT_VENDOR_HC       58
+#define PB_IGNORERULE               59

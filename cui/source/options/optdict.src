@@ -1,0 +1,282 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: optdict.src,v $
+ * $Revision: 1.31 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <sfx2/sfx.hrc>
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+#include "optdict.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SFXDLG_NEWDICT ----------------------------------------------------
+ModalDialog RID_SFXDLG_NEWDICT
+{
+    HelpId = HID_OPTIONS_DICT_NEW ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 213 , 66 ) ;
+    Moveable = TRUE ;
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
+    Text [ en-US ] = "New Dictionary" ;
+    FixedText FT_DICTNAME
+    {
+        Pos = MAP_APPFONT ( 11 , 15 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Name" ;
+        LeftLabel = TRUE ;
+    };
+    Edit ED_DICTNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        MaxTextLength = 32 ;
+    };
+    FixedText FT_DICTLANG
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Language" ;
+        LeftLabel = TRUE ;
+    };
+    ListBox LB_DICTLANG
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 30 ) ;
+        Size = MAP_APPFONT ( 90 , 66 ) ;
+        DropDown = TRUE ;
+    };
+    CheckBox BTN_EXCEPT
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text [ en-US ] = "~Exception (-)" ;
+    };
+    FixedLine GB_NEWDICT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 145 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
+        /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
+        Text [ en-US ] = "Dictionary" ;
+    };
+    OKButton BTN_NEWDICT_OK
+    {
+        Pos = MAP_APPFONT ( 157 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Disable = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_NEWDICT_ESC
+    {
+        Pos = MAP_APPFONT ( 157 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_NEWDICT_HLP
+    {
+        Pos = MAP_APPFONT ( 157 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+ // RID_SFXDLG_EDITDICT ---------------------------------------------------
+ModalDialog RID_SFXDLG_EDITDICT
+{
+    HelpId = HID_OPTIONS_DICT_EDIT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 270, 161 );
+
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
+    Text [ en-US ] = "Edit Custom Dictionary" ;
+
+    Moveable = TRUE ;
+    FixedText FT_BOOK
+    {
+        Pos = MAP_APPFONT ( 12 , 10 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text [ en-US ] = "~Book" ;
+    };
+    ListBox LB_ALLDICTS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 9 ) ;
+        Size = MAP_APPFONT ( 121 , 62 ) ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_DICTLANG
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text [ en-US ] = "~Language" ;
+    };
+    ListBox LB_DICTLANG
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 25 ) ;
+        Size = MAP_APPFONT ( 121 , 66 ) ;
+        DropDown = TRUE ;
+    };
+
+    FixedLine GB_EDITDICTS
+    {
+        Pos = MAP_APPFONT( 1, 1 );
+        Size = MAP_APPFONT( 268, 138 );
+        Hide=TRUE;
+    };
+
+    FixedText FT_WORD
+    {
+        Pos = MAP_APPFONT ( 13 , 46 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Word";
+    };
+    Edit ED_WORD
+    {
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_REPLACE
+    {
+        Pos = MAP_APPFONT ( 84 , 46 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Replace ~By:";
+    };
+
+    Edit ED_REPLACE
+    {
+        Pos = MAP_APPFONT ( 83 , 56 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    PushButton PB_NEW_REPLACE
+    {
+        Pos = MAP_APPFONT ( 209 , 56 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~New" ;
+    };
+    PushButton PB_DELETE_REPLACE
+    {
+        Pos = MAP_APPFONT ( 209 , 71 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    Control TLB_REPLACE
+    {
+        HelpId = HID_OPTIONS_DICT_EDIT_ENTRIES_LIST;
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 191 , 58 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    String STR_MODIFY
+    {
+        Text [ en-US ] = "~Replace" ;
+    };
+
+
+
+    HelpButton BTN_EDITHELP
+    {
+        Pos = MAP_APPFONT( 145, 143 );
+        Size = MAP_APPFONT( 55, 14 );
+    };
+
+    CancelButton BTN_EDITCLOSE
+    {
+        Pos = MAP_APPFONT ( 209 , 143 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+
+        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
+        Text [ en-US ] = "~Close" ;
+    };
+};
+
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_OPT_DOUBLE_DICTS
+{
+    Text [ en-US ] = "The specified name already exists.\nPlease enter a new name." ;
+};
+ // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
+QueryBox RID_SFXQB_SET_LANGUAGE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
+    Message [ en-US ] = "Do you want to change the '%1' dictionary language?" ;
+};
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
