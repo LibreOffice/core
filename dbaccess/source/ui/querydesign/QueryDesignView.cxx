@@ -1395,7 +1395,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine);
     //------------------------------------------------------------------------------
@@ -1432,7 +1432,11 @@ namespace
                 if ( SQL_ISRULE(pChild,search_condition) )
                     eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                {
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, nLevel,bHaving, i == 0 ? false : bAddOrOnOneLine);
+                    if ( !bAddOrOnOneLine)
+                        nLevel++;
+                }
             }
         }
         else
@@ -1466,7 +1470,7 @@ namespace
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
-                                    const sal_uInt16 nLevel,
+                                    sal_uInt16& nLevel,
                                     sal_Bool bHaving,
                                     bool bAddOrOnOneLine)
     {
@@ -1480,10 +1484,18 @@ namespace
         // Runde Klammern
         if (SQL_ISRULE(pCondition,boolean_primary))
         {
-            sal_uInt16 nLevel2 = nLevel;
             // check if we have to put the or criteria on one line.
-            bool bMustAddOrOnOneLine = CheckOrCriteria(pCondition->getChild(1),NULL);
-            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,bMustAddOrOnOneLine );
+            const  ::connectivity::OSQLParseNode* pSearchCondition = pCondition->getChild(1);
+            bool bMustAddOrOnOneLine = CheckOrCriteria(pSearchCondition,NULL);
+            if ( SQL_ISRULE( pSearchCondition, search_condition) ) // we have a or
+            {
+                _pSelectionBrw->DuplicateConditionLevel( nLevel);
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(0), nLevel,bHaving,bMustAddOrOnOneLine );
+                ++nLevel;
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition->getChild(2), nLevel,bHaving,bMustAddOrOnOneLine );
+            }
+            else
+                eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pSearchCondition, nLevel,bHaving,bMustAddOrOnOneLine );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
         else if ( SQL_ISRULE(pCondition,boolean_term) )
