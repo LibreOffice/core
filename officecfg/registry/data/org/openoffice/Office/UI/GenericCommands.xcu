@@ -2713,7 +2713,7 @@
             </node>
             <node oor:name=".uno:ChineseConversion" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Chinese translation...</value>
+                    <value xml:lang="en-US">Chinese Conversion...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertListbox" oor:op="replace">

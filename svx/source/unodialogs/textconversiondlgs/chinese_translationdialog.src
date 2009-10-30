@@ -68,7 +68,7 @@ ModalDialog DLG_CHINESETRANSLATION
     Moveable = TRUE ;
     SVLook = TRUE;
 
-    Text [ en-US ] = "Chinese Translation";
+    Text [ en-US ] = "Chinese Conversion";
 
     FixedLine FL_DIRECTION
     {
