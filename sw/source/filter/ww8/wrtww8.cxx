@@ -58,8 +58,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/hyznitem.hxx>
 #include <svx/langitem.hxx>
-#include <svx/msoleexp.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msoleexp.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
@@ -114,7 +114,8 @@
 #include <sfx2/docfile.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <osl/time.h>
 #include <rtl/random.h>
 #include "WW8Sttbf.hxx"
@@ -2813,7 +2814,7 @@ namespace
 {
     const ULONG WW_BLOCKSIZE = 0x200;
 
-    void EncryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void EncryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         ULONG nLen = rIn.Tell();
@@ -3049,7 +3050,7 @@ void WW8Export::ExportDocument_Impl()
         for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
             aPassword[nChar] = sUniPassword.GetChar(nChar);
 
-        svx::MSCodec_Std97 aCtx;
+        msfilter::MSCodec_Std97 aCtx;
         aCtx.InitKey(aPassword, aDocId);
 
         SvStream *pStrmTemp, *pTableStrmTemp, *pDataStrmTemp;
@@ -3343,9 +3344,21 @@ SwWW8Writer::~SwWW8Writer()
 {
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ULONG SAL_CALL SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, BOOL bSaveInto, const String& rStorageName )
+{
+    SvxImportMSVBasic aTmp( rDoc, rStor );
+    return aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName );
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName, rBaseURL );
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ULONG SAL_CALL GetSaveWarningOfMSVBAStorage_ww8(  SfxObjectShell &rDocS )
+{
+    return SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( rDocS );
 }
 
 bool WW8_WrPlcFtnEdn::WriteTxt( WW8Export& rWrt )

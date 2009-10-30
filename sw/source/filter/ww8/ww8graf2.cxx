@@ -44,7 +44,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/opaqitem.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>

@@ -75,7 +75,7 @@
 #include <svx/outliner.hxx>         // #79453#
 #include <svx/frmdiritem.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <grfatr.hxx>           // class SwCropGrf
 #include <fmtornt.hxx>
 #include <fmtcntnt.hxx>

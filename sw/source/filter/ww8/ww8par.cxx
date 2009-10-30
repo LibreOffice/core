@@ -60,13 +60,13 @@
 // --> OD 2005-02-28 #i43427#
 #include <svx/opaqitem.hxx>
 // <--
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xflclit.hxx>
@@ -4216,7 +4216,7 @@ namespace
 
 #define WW_BLOCKSIZE 0x200
 
-    void DecryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         ULONG nLen = rIn.Tell();
@@ -4233,7 +4233,7 @@ namespace
         }
     }
 
-    void DecryptXOR(svx::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
+    void DecryptXOR(msfilter::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
     {
         ULONG nSt = rIn.Tell();
         rIn.Seek(STREAM_SEEK_TO_END);
@@ -4366,7 +4366,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     for (xub_StrLen nChar = 0; nChar < sPassword.Len(); ++nChar )
                         aPassword[nChar] = sPassword.GetChar(nChar);
 
-                    svx::MSCodec_XorWord95 aCtx;
+                    msfilter::MSCodec_XorWord95 aCtx;
                     aCtx.InitKey(aPassword);
                     if (aCtx.VerifyKey(pWwFib->nKey, pWwFib->nHash))
                     {
@@ -4424,7 +4424,7 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     sal_uInt8 aSaltHash[ 16 ];
                     pTableStream->Read(aSaltHash, 16);
 
-                    svx::MSCodec_Std97 aCtx;
+                    msfilter::MSCodec_Std97 aCtx;
                     aCtx.InitKey(aPassword, aDocId);
                     if (aCtx.VerifyKey(aSaltData, aSaltHash))
                     {

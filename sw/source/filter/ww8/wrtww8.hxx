@@ -44,7 +44,7 @@
 
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"

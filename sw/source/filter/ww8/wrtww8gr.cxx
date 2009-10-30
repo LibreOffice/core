@@ -49,7 +49,7 @@
 #include <svx/boxitem.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/shaditem.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
 #include <svx/ulspitem.hxx>
 #include <svx/fhgtitem.hxx>

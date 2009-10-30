@@ -4,7 +4,8 @@ MSWORD_1_0 {
                 ExportRTF;
                 ImportDOC;
                 ExportDOC;
-
+                SaveOrDelMSVBAStorage;
+                GetSaveWarningOfMSVBAStorage;
         local:
                 *;
 };

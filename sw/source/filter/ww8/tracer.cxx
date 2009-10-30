@@ -34,7 +34,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <tools/urlobj.hxx>         //INetURLObject
 #include <sfx2/docfile.hxx>         //SfxMedium
-#include <svx/msfiltertracer.hxx>   //MSFilterTracer
+#include <filter/msfilter/msfiltertracer.hxx>   //MSFilterTracer
 #include "tracer.hxx"               //sw::log::Tracer
 
 using rtl::OUString;

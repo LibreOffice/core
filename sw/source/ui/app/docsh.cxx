@@ -57,7 +57,6 @@
 #include <svx/srchitem.hxx>
 #include <svx/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/svxmsbas.hxx>
 #include <svtools/soerr.hxx>
 #include <sot/clsids.hxx>
 #include <basic/basmgr.hxx>
@@ -381,8 +380,7 @@ BOOL SwDocShell::Save()
                     //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
                     //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                        nVBWarning = SvxImportMSVBasic::
-                                        GetSaveWarningOfMSVBAStorage( *this );
+                        nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
                     pDoc->SetContainsMSVBasic( FALSE );
                 }
 
@@ -500,8 +498,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             //SvxImportMSVBasic aTmp( *this, pIo->GetStorage() );
             //aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
             if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
-                nVBWarning = SvxImportMSVBasic::
-                                GetSaveWarningOfMSVBAStorage( *this );
+                nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
             pDoc->SetContainsMSVBasic( FALSE );
         }
 
@@ -598,8 +595,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             DBG_ASSERT( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
-                SvxImportMSVBasic aTmp( *this, *xStg );
-                nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave, String::CreateFromAscii("Macros") );
+                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, String::CreateFromAscii("Macros") );
                 xStg->Commit();
                 pDoc->SetContainsMSVBasic( TRUE );
             }

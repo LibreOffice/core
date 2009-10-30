@@ -75,7 +75,7 @@
 #include <svx/crsditem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/postitem.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <errhdl.hxx>
 #include <unoobj.hxx>
 #include <doc.hxx>

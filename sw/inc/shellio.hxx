@@ -637,6 +637,8 @@ public:
 
 typedef Reader* (*FnGetReader)();
 typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
+ULONG SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, BOOL, const String& );
+ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
 struct SwReaderWriterEntry
 {
