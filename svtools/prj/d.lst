@@ -76,6 +76,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\accessibletableprovider.hxx %_DEST%\inc%_EXT%\svtools\accessibletableprovider.hxx
 ..\inc\svtools\AccessibleBrowseBoxObjType.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxObjType.hxx
 ..\inc\svtools\accessiblefactory.hxx %_DEST%\inc%_EXT%\svtools\accessiblefactory.hxx
+..\inc\svtools\accessibletable.hxx %_DEST%\inc%_EXT%\svtools\accessibletable.hxx
 ..\inc\svtools\textwindowpeer.hxx %_DEST%\inc%_EXT%\svtools\textwindowpeer.hxx
 ..\inc\imgdef.hxx %_DEST%\inc%_EXT%\svtools\imgdef.hxx
 ..\inc\inetdef.hxx %_DEST%\inc%_EXT%\svtools\inetdef.hxx
@@ -311,6 +312,8 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 
 ..\inc\textwindowaccessibility.hxx %_DEST%\inc%_EXT%\svtools\textwindowaccessibility.hxx
 
+..\inc\docpasswdrequest.hxx %_DEST%\inc%_EXT%\svtools\docpasswdrequest.hxx
+..\inc\docmspasswdrequest.hxx %_DEST%\inc%_EXT%\svtools\docmspasswdrequest.hxx
 ..\inc\fontsubstconfig.hxx %_DEST%\inc%_EXT%\svtools\fontsubstconfig.hxx
 ..\inc\apearcfg.hxx %_DEST%\inc%_EXT%\svtools\apearcfg.hxx
 ..\inc\fltrcfg.hxx %_DEST%\inc%_EXT%\svtools\fltrcfg.hxx

@@ -30,6 +30,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/seleng.hxx>
 #include <svtools/table/tabledatawindow.hxx>
+#include <svtools/accessibletable.hxx>
+#include "svtaccessiblefactory.hxx"
 //........................................................................
 
 namespace svt { namespace table
@@ -38,6 +40,8 @@ namespace svt { namespace table
 
     class TableControl_Impl;
     class TableDataWindow;
+    class AccessibleTableControl_Impl;
+
     //====================================================================
     //= TableControl
     //====================================================================
@@ -55,10 +59,11 @@ namespace svt { namespace table
 
         The control supports the concept of a <em>current</em> (or <em>active</em>
         cell).
+        The control supports supports accessibility, this is encapsulated in IAccessibleTable
 
         // TODO: scrolling?
     */
-    class TableControl : public Control
+    class TableControl : public Control, public IAccessibleTable
     {
     private:
         DECL_LINK( ImplMouseButtonDownHdl, MouseEvent* );
@@ -66,6 +71,8 @@ namespace svt { namespace table
 
         TableControl_Impl*  m_pImpl;
     public:
+        ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
+
         TableControl( Window* _pParent, WinBits _nStyle );
         ~TableControl();
 
@@ -88,11 +95,11 @@ namespace svt { namespace table
                 if there is no active cell, e.g. because the table does
                 not contain any rows or columns.
         */
-        RowPos  GetCurrentRow() const;
+        sal_Int32 GetCurrentRow() const;
 
         /** returns the row, which contains the input point*/
 
-        RowPos  GetCurrentRow (const Point& rPoint);
+        ColPos  GetCurrentRow (const Point& rPoint);
 
         /** retrieves the current column
 
@@ -103,7 +110,7 @@ namespace svt { namespace table
                 if there is no active cell, e.g. because the table does
                 not contain any rows or columns.
         */
-        ColPos  GetCurrentColumn() const;
+        sal_Int32  GetCurrentColumn() const;
 
         /** activates the cell at the given position
 
@@ -113,7 +120,7 @@ namespace svt { namespace table
                 or impossibility to execute the move at all (for instance because
                 of invalid coordinates).
         */
-        bool    GoTo( ColPos _nColumn, RowPos _nRow );
+        bool    GoTo( ColPos _nColumnPos, RowPos _nRow);
 
         /** moves the active cell to the given column, by keeping the active row
 
@@ -147,24 +154,89 @@ namespace svt { namespace table
         void InvalidateDataWindow(RowPos _nRowStart, bool _bRemoved);
         /**gets the vector, which contains the selected rows
         */
-        std::vector<RowPos> getSelectedRows();
+        std::vector<sal_Int32>& GetSelectedRows();
         /**after removing a row, updates the vector which contains the selected rows
             if the row, which should be removed, is selected, it will be erased from the vector
         */
         void removeSelectedRow(RowPos _nRowPos);
         SelectionEngine* getSelEngine();
         TableDataWindow* getDataWindow();
-   // protected:
+
         // Window overridables
         virtual void        GetFocus();
         virtual void        LoseFocus();
         virtual void        KeyInput( const KeyEvent& rKEvt );
         //virtual long      Notify(NotifyEvent& rNEvt);
 
+            /** Creates and returns the accessible object of the whole BrowseBox. */
+        virtual XACC CreateAccessible();
+        virtual XACC CreateAccessibleControl( sal_Int32 _nIndex );
+        virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
+        virtual sal_Bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
+        virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
+        virtual void FillAccessibleStateSet(
+            ::utl::AccessibleStateSetHelper& rStateSet,
+            AccessibleTableControlObjType eObjType ) const;
+
+        //// Window
+        virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow );
+        virtual void GrabFocus();
+        virtual XACC GetAccessible( BOOL bCreate = TRUE );
+        virtual Window* GetAccessibleParentWindow() const;
+        virtual Window* GetWindowInstance();
+        virtual sal_Int32 GetAccessibleControlCount() const;
+        virtual sal_Bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint );
+        virtual long GetRowCount() const;
+        virtual long GetColumnCount() const;
+        virtual sal_Bool HasRowHeader() const;
+        virtual sal_Int32 GetSelectedRowCount() const;
+        virtual bool IsRowSelected( long _nRow ) const;
+        virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint );
+        virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE );
+        virtual Rectangle calcTableRect( BOOL _bOnScreen = TRUE );
+        virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
+        virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
+        virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const;
+        virtual ::rtl::OUString GetRowDescription( sal_Int32 _nRow ) const;
+        virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const;
+        virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const;
+        virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const;
+        virtual ::rtl::OUString GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
+        virtual sal_Bool HasRowHeader();
+        virtual sal_Bool HasColHeader();
+        virtual sal_Bool isAccessibleAlive( ) const;
+        virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
+
+
+    protected:
+    /// retrieves the XAccessible implementation associated with the GridControl instance
+    ::svt::IAccessibleFactory&   getAccessibleFactory();
+
     private:
         TableControl();                                 // never implemented
         TableControl( const TableControl& );            // never implemented
         TableControl& operator=( const TableControl& ); // never implemented
+    };
+
+    class AccessibleTableControl_Impl
+    {
+        public:
+            AccessibleFactoryAccess m_aFactoryAccess;
+            IAccessibleTableControl*   m_pAccessible;
+
+        public:
+            AccessibleTableControl_Impl() : m_pAccessible(NULL)
+            {
+            }
+
+
+            /// @see AccessibleTableControl::getTableRowHeader
+            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                getAccessibleTableHeader( AccessibleTableControlObjType _eObjType );
+            /// @see AccessibleTableControl::getTable
+            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                getAccessibleTable( );
+
     };
 
 //........................................................................

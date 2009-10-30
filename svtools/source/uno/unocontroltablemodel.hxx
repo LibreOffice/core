@@ -43,25 +43,48 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <com/sun/star/awt/grid/XGridColumn.hpp>
 //#include <toolkit/helper/listenermultiplexer.hxx>
 
 
 using namespace ::svt::table;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt::grid;
+
+class UnoControlTableColumn : public IColumnModel
+    {
+    private:
+        ColumnID        m_nID;
+        String          m_sName;
+        bool            m_bIsResizable;
+        TableMetrics    m_nWidth;
+        TableMetrics    m_nMinWidth;
+        TableMetrics    m_nMaxWidth;
+
+    public:
+        UnoControlTableColumn(Reference<XGridColumn>);
+
+        // IColumnModel overridables
+        virtual ColumnID        getID() const;
+        virtual bool            setID( const ColumnID _nID );
+        virtual String          getName() const;
+        virtual void            setName( const String& _rName );
+        virtual bool            isResizable() const;
+        virtual void            setResizable( bool _bResizable );
+        virtual TableMetrics    getWidth() const;
+        virtual void            setWidth( TableMetrics _nWidth );
+        virtual TableMetrics    getMinWidth() const;
+        virtual void            setMinWidth( TableMetrics _nMinWidth );
+        virtual TableMetrics    getMaxWidth() const;
+        virtual void            setMaxWidth( TableMetrics _nMaxWidth );
+    };
 
     struct UnoControlTableModel_Impl;
 
-    class UnoControlTableModel : public ITableModel, public ::cppu::ImplInheritanceHelper2< VCLXWindow, ::com::sun::star::awt::grid::XGridControl,
-                                 ::com::sun::star::awt::grid::XGridDataListener>
+    class UnoControlTableModel : public ITableModel
     {
     private:
         UnoControlTableModel_Impl*     m_pImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >m_xDataModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >m_xColumnModel;
-        bool m_bHasColumnHeaders;
-        bool m_bHasRowHeaders;
-        bool m_bVScroll;
-        bool m_bHScroll;
-        //MouseListenerMultiplexer m_aMouseListeners;
 
     public:
         UnoControlTableModel();
@@ -103,6 +126,7 @@ using namespace ::svt::table;
         virtual void                addTableModelListener( const PTableModelListener& listener );
         virtual void                removeTableModelListener( const PTableModelListener& listener );
         virtual PColumnModel        getColumnModel( ColPos column );
+        virtual std::vector<PColumnModel>& getColumnModel();
         virtual PColumnModel        getColumnModelByID( ColumnID id );
         virtual PTableRenderer      getRenderer() const;
         virtual PTableInputHandler  getInputHandler() const;
@@ -112,59 +136,59 @@ using namespace ::svt::table;
         virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight, int actHeight) const;
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const;
         virtual void                setCellContent(std::vector<std::vector<rtl::OUString> > cellContent);
-        virtual std::vector<std::vector<rtl::OUString> >        getCellContent();
+        virtual std::vector<std::vector<rtl::OUString> >&       getCellContent();
         virtual void                setRowHeaderName(std::vector<rtl::OUString> cellColumnContent);
-        virtual std::vector<rtl::OUString>  getRowHeaderName();
+        virtual std::vector<rtl::OUString>& getRowHeaderName();
 
-        //XGridDataListener overridables
-        virtual void SAL_CALL rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL rowRemoved(const ::com::sun::star::awt::grid::GridDataEvent & Event) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL dataChanged(const ::com::sun::star::awt::grid::GridDataEvent & Event) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+    //  //XGridDataListener overridables
+    //  virtual void SAL_CALL rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event) throw (::com::sun::star::uno::RuntimeException);
+    //  virtual void SAL_CALL rowRemoved(const ::com::sun::star::awt::grid::GridDataEvent & Event) throw (::com::sun::star::uno::RuntimeException);
+    //  virtual void SAL_CALL dataChanged(const ::com::sun::star::awt::grid::GridDataEvent & Event) throw (::com::sun::star::uno::RuntimeException);
+    //  virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { VCLXWindow::acquire(); }
-    void                                        SAL_CALL release() throw()  { VCLXWindow::release(); }
+    //::com::sun::star::uno::Any                    SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    //void                                      SAL_CALL acquire() throw()  { VCLXWindow::acquire(); }
+    //void                                      SAL_CALL release() throw()  { VCLXWindow::release(); }
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+ //   // ::com::sun::star::lang::XTypeProvider
+    //::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >    SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    //::com::sun::star::uno::Sequence< sal_Int8 >                       SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
-    //::com::sun::star::awt::grid::XGridControl
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > SAL_CALL getColumnModel(  ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >& model ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > SAL_CALL getDataModel(  ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setDataModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >& model ) throw (::com::sun::star::uno::RuntimeException);
+    ////::com::sun::star::awt::grid::XGridControl
+    //::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > SAL_CALL getColumnModel(  ) throw (::com::sun::star::uno::RuntimeException);
+ //   void SAL_CALL setColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >& model ) throw (::com::sun::star::uno::RuntimeException);
+ //   ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > SAL_CALL getDataModel(  ) throw (::com::sun::star::uno::RuntimeException);
+ //   void SAL_CALL setDataModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >& model ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::sal_Int32 SAL_CALL getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getMaxSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertIndexIntervall(::sal_Int32 start, ::sal_Int32 length) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeIndexIntervall(::sal_Int32 start, ::sal_Int32 end) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getSelection() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isCellEditable() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL selectRow(::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL selectColumn(::sal_Int32 x) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
+    //virtual ::sal_Int32 SAL_CALL getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
+    //virtual ::sal_Int32 SAL_CALL getMaxSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL insertIndexIntervall(::sal_Int32 start, ::sal_Int32 length) throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL removeIndexIntervall(::sal_Int32 start, ::sal_Int32 end) throw (::com::sun::star::uno::RuntimeException);
+    //virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getSelection() throw (::com::sun::star::uno::RuntimeException);
+    //virtual ::sal_Bool SAL_CALL isCellEditable() throw (::com::sun::star::uno::RuntimeException);
+    //virtual ::sal_Bool SAL_CALL isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException);
+    //virtual ::sal_Bool SAL_CALL isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL selectRow(::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL selectColumn(::sal_Int32 x) throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
+    //virtual ::sal_Int32 SAL_CALL getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
 
-    //void SAL_CALL addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener ) throw(::com::sun::star::uno::RuntimeException);
-    //void SAL_CALL removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener ) throw(::com::sun::star::uno::RuntimeException);
-    //::com::sun::star::awt::XMouseListener
-    /*
-    virtual void SAL_CALL mousePressed( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseReleased( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseEntered( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseExited( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
-    */
+    ////void SAL_CALL addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener ) throw(::com::sun::star::uno::RuntimeException);
+    ////void SAL_CALL removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener ) throw(::com::sun::star::uno::RuntimeException);
+    ////::com::sun::star::awt::XMouseListener
+    ///*
+    //virtual void SAL_CALL mousePressed( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL mouseReleased( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL mouseEntered( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL mouseExited( const ::com::sun::star::awt::MouseEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    //*/
 
-    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
-    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    void SAL_CALL setVisible(sal_Bool bVisible) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setFocus() throw(::com::sun::star::uno::RuntimeException);
+ //   void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+ //   ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+    //static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    //void SAL_CALL setVisible(sal_Bool bVisible) throw(::com::sun::star::uno::RuntimeException);
+    //void SAL_CALL setFocus() throw(::com::sun::star::uno::RuntimeException);
     };
 
     inline void UnoControlTableModel::SetColumnWidth( ColPos _nColumn, TableMetrics _nWidth100thMM )
