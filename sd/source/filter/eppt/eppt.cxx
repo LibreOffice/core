@@ -58,10 +58,11 @@
 #include <tools/zcodec.hxx>
 #include <svx/svxenum.hxx>
 #include <sot/storinfo.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/wmf.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <svx/flditem.hxx>
 #include <sfx2/docinf.hxx>
 
@@ -2578,5 +2579,40 @@ extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rS
     }
 
     return bStatus;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
+{
+    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
+    SvxImportMSVBasic aMSVBas( rDocShell, *xDest, FALSE, FALSE );
+    aMSVBas.SaveOrDelMSVBAStorage( TRUE, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+
+    SvStorageRef xOverhead = xDest->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+    if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
+    {
+        SvStorageRef xOverhead2 = xOverhead->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+        if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
+        {
+            SvStorageStreamRef xTemp = xOverhead2->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
+            if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
+            {
+                UINT32 nLen = xTemp->GetSize();
+                if ( nLen )
+                {
+                    char* pTemp = new char[ nLen ];
+                    if ( pTemp )
+                    {
+                        xTemp->Seek( STREAM_SEEK_TO_BEGIN );
+                        xTemp->Read( pTemp, nLen );
+                        pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
+                        pBas->ObjectOwnsMemory( TRUE );
+                        return TRUE;
+                    }
+                }
+            }
+        }
+    }
+
+    return FALSE;
 }
 

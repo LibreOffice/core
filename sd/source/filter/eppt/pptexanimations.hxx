@@ -38,7 +38,7 @@
 #include "../ppt/pptanimations.hxx"
 #endif
 #include <pptexsoundcollection.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>

@@ -32,6 +32,7 @@
 #define _PPTATOM_HXX_
 
 #include <svx/msdffdef.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 
 class SvStream;
 

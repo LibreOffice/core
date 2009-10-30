@@ -37,7 +37,7 @@
 #include <vcl/wrkwin.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svxids.hrc>
-#include <svx/svdfppt.hxx>
+#include <filter/msfilter/svdfppt.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
