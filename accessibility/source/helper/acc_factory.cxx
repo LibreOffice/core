@@ -72,6 +72,8 @@
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <accessibility/extended/AccessibleGridControl.hxx>
+#include <svtools/accessibletable.hxx>
 
 #include <floatingwindowaccessible.hxx>
 
@@ -94,6 +96,7 @@ inline bool hasFloatingChild(Window *pWindow)
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::accessibility;
     using namespace ::svt;
+    using namespace ::svt::table;
 
     //================================================================
     //= IAccessibleFactory
@@ -148,6 +151,12 @@ inline bool hasFloatingChild(Window *pWindow)
             createAccessibleBrowseBox(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
                 IAccessibleTableProvider& _rBrowseBox
+            ) const;
+
+        virtual IAccessibleTableControl*
+            createAccessibleTableControl(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+                IAccessibleTable& _rTable
             ) const;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
@@ -411,6 +420,13 @@ inline bool hasFloatingChild(Window *pWindow)
         return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
     }
 
+        //--------------------------------------------------------------------
+    IAccessibleTableControl* AccessibleFactory::createAccessibleTableControl(
+        const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
+    {
+        return new AccessibleGridControlAccess( _rxParent, _rTable );
+    }
+
     //--------------------------------------------------------------------
     Reference< XAccessible > AccessibleFactory::createAccessibleIconChoiceCtrl(
         SvtIconChoiceCtrl& _rIconCtrl, const Reference< XAccessible >& _xParent ) const
@@ -437,6 +453,30 @@ inline bool hasFloatingChild(Window *pWindow)
     {
         return new AccessibleListBox( _rListBox, _xParent );
     }
+
+    ////--------------------------------------------------------------------
+ //   Reference< XAccessible > AccessibleFactory::createAccessibleTableHeader(
+ //       const Reference< XAccessible >& rxParent, IAccessibleTable& _rOwningTable, AccessibleTableControlObjType _eObjType) const
+ //   {
+ //       return new AccessibleGridControlHeader( rxParent, _rOwningTable, _eObjType);
+ //   }
+
+    ////--------------------------------------------------------------------
+ //   Reference< XAccessible > AccessibleFactory::createAccessibleTableCell(
+ //       const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable,
+ //       const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowId, sal_uInt16 _nColId ) const
+ //   {
+ //       return new AccessibleGridControlTableCell( _rxParent, _rTable, _xFocusWindow,
+ //           _nRowId, _nColId);
+ //   }
+    ////--------------------------------------------------------------------
+ //   Reference< XAccessible > AccessibleFactory::createAccessibleTableHeaderCell(
+ //       sal_Int32 _nRowId, const Reference< XAccessible >& rxParent, IAccessibleTable& _rTable,
+ //       const Reference< XWindow >& _xFocusWindow, AccessibleTableControlObjType _eObjType) const
+ //   {
+ //       return new AccessibleGridControlHeaderCell( _nRowId, rxParent, _rTable,
+ //           _xFocusWindow, _eObjType);
+ //   }
 
     //--------------------------------------------------------------------
     Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(

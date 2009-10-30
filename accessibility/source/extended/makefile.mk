@@ -64,7 +64,14 @@ SLOFILES=\
     $(SLO)$/listboxaccessible.obj			\
     $(SLO)$/accessiblebrowseboxcell.obj     \
     $(SLO)$/accessibleeditbrowseboxcell.obj \
-    $(SLO)$/textwindowaccessibility.obj
+    $(SLO)$/textwindowaccessibility.obj \
+    $(SLO)$/AccessibleGridControlBase.obj \
+    $(SLO)$/AccessibleGridControl.obj \
+    $(SLO)$/AccessibleGridControlTableBase.obj	\
+    $(SLO)$/AccessibleGridControlHeader.obj \
+    $(SLO)$/AccessibleGridControlTableCell.obj	\
+    $(SLO)$/AccessibleGridControlHeaderCell.obj	\
+    $(SLO)$/AccessibleGridControlTable.obj		
 
 # --- Targets -------------------------------------------------------
 
