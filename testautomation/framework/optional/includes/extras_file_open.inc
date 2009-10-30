@@ -45,6 +45,8 @@ private const MAX_FILE_COUNT = 3000 ' the max number of templates or samples
 
 testcase tOpenObjectsWithFileDialog( cCategory as string )
 
+    printlog( "Open templates and samples using the file open dialog" )
+
     const CFN = "tOpenObjectsWithFileDialog::"   
 
 
@@ -75,9 +77,15 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
         cOfficePath = gOfficeBasisPath
     else
         cOfficePath = mid( gOfficeBasisPath, len( gNetzOfficePath ) + 1 )
+        if ( FileExists( cOfficePath ) ) then
+            printlog( "Using: " & cOfficePath )
+        else
+            warnlog( "Test script error: Invalid Office path: " & cOfficePath )
+            goto endsub
+        endif
     endif
-    printlog( "Using: " & cOfficePath )
     
+    printlog( "Build path to templates/samples directory" )
     select case cCategory
     case "SAMPLES"    : sRootPath = cOfficePath & "share\samples\" & gISOLang
                         sRootPathFallback = "/opt/openoffice.org/basis3.0/share/samples/" & gISOLang
@@ -92,10 +100,10 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
    
     sRootPath = convertpath( sRootPath )
    
-    if ( dir( sRootPath ) = "" ) then
+    if ( NOT FileExists( sRootPath ) ) then
         qaerrorlog( "Root Path does not exist: " & sRootPath )
         sRootPath = sRootPathFallback
-        if ( dir( sRootPathFallback ) = "" ) then
+        if ( NOT FileExists( sRootPathFallback ) ) then
             warnlog( "No usable office root path found. Aborting test" )
             goto endsub
         printlog( "Using hard coded fallback" )
@@ -104,10 +112,12 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
 
     printlog( "Using path..: " & sRootPath )
     printlog( "Using filter: " & sFilter   )
+
+    printlog( "Retrieve filelist from directory" )
     GetAllFileList ( sRootPath, sFilter, lsFile() )
     hListDelete( lsFile(), 1 )
 
-    ' Remove .lock-files
+    printlog( "Remove posible .lock-files from list" )
     iTemplateCount   = listCount( lsFile() )
     iCurrentTemplate = 1
     while( iCurrentTemplate <= iTemplateCount ) 
@@ -119,7 +129,7 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
         endif
     wend
 
-    ' do not test wizard related files
+    printlog( "Remove Wizard related files from list" )
     iTemplateCount   = listCount( lsFile() )
     iCurrentTemplate = 1
     while( iCurrentTemplate <= iTemplateCount ) 
@@ -131,6 +141,7 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
         endif
     wend
 
+    printlog( "Files to be loaded:" )
     hListPrint ( lsFile() , "" , "" )
     if ( listcount( lsfile() ) = 1 ) then
         if ( gProductName = "OpenOffice.org" ) then
@@ -140,6 +151,8 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
     	    warnlog( "Filelist seems to be incomplete. GetAllFileList() failed!" )
     	    goto endsub
     	endif
+    else
+        printlog( "List of samples/templates appears to be valid" )
     endif
 
     iTemplateCount = listCount( lsFile() )
@@ -151,41 +164,53 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
         ' sFileIn holds the file we currently work with
         sFileIn = lsFile( iCurrentTemplate )
         
-        brc = hFileOpen( sFileIn ) 
-        brc = hHandleActivesOnLoad( 0 , 2 )
+        printlog( "Load: " & sFileIn )
+        hFileOpen( sFileIn ) 
         
+        printlog( "Handle known dialogs" )
+        hHandleActivesOnLoad( 0 , 2 )
+        
+        printlog( "Check for Filter Selection dialog" )
         Kontext "FilterAuswahl"        
         if ( FilterAuswahl.exists( 1 ) ) then
             warnlog( "Loading failed, ASCII filter dialog present" )
             FilterAuswahl.cancel()
-            while( getDocumentCount > 0 ) 
-                hDestroyDocument()
-            wend
+            hFileCloseAll()
         else
         
-            brc = hCloseNavigator()
+            printlog( "Close navigator, if open" )
+            hCloseNavigator()
     
-            ' Build the filename
             sFileOut = cCategory & "_" & iCurrentTemplate
             sFileOut = convertpath( sPathOut & sFileOut ) 
-          
-            brc = hFileSaveAsKill( sFileOut )
+            
+            printlog( "Saving file to: " & sFileOut )
+            hFileSaveAsKill( sFileOut )
     
             ' note: this is delayed, because the dialogs take time to pop up
             '       even while the dialog is visible, we can work with the doc.
-            brc = hHandleInitialDialogs()
+            printlog( "Handle known dialogs" )
+            hHandleInitialDialogs()
             
-            brc = hDestroyDocument()
+            printlog( "Close document" )
+            hDestroyDocument()
           
-            brc = hFileOpen( sFileOut )
-            brc = hHandleActivesOnLoad( 0 , 2 )
-            brc = hCloseNavigator()
+            printlog( "Load document again" )
+            hFileOpen( sFileOut )
+            
+            printlog( "Handle known dialogs" )
+            hHandleActivesOnLoad( 0 , 2 )
+            
+            printlog( "Close navigator, if open" )
+            hCloseNavigator()
     
-            brc = hDestroyDocument()
+            printlog( "Close document" )
+            hDestroyDocument()
         
         endif
   
-        brc = hDeleteFile( sFileOut )
+        printlog( "Delete file" )
+        hDeleteFile( sFileOut )
         
     next iCurrentTemplate
    

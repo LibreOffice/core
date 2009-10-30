@@ -39,6 +39,7 @@
 
 testcase tVerifyFilterNames
 
+    printlog( "Verify filternames listed in the file open dialog" )
     
     if ( gIsoLang <> "en-US" ) then
         qaerrorlog( "No testing for non-US languages" )
@@ -77,12 +78,14 @@ testcase tVerifyFilterNames
     dim cFileOut as string
         cFileOut = hGetWorkPath() & cFile
     
-    
+    printlog( "Create a new document" )
     hCreateDocument()
     
+    printlog( "Open the File Open dialog" )
     FileOpen
     Kontext "OeffnenDlg"
 
+    printlog( "Read the filterlist (en_US only), compare against a reference" )
     if ( OeffnenDlg.exists( 1 ) ) then    
     
         iFilterCount = DateiTyp.getItemCount()
@@ -101,7 +104,7 @@ testcase tVerifyFilterNames
             try
                 asFilterNames( iCurrentItem ) = DateiTyp.getItemText( iCurrentItem )
             catch
-                printlog( "Test broke at pos: " & iCurrentItem )
+                printlog( "Problem encountered at pos: " & iCurrentItem )
             endcatch
             
         next iCurrentItem
@@ -113,7 +116,8 @@ testcase tVerifyFilterNames
     else
         warnlog( "File Open dialog not present." )
     endif
-    
+
+    printlog( "Close the document" )    
     hDestroyDocument()
     
     if ( iErr <> 0 ) then
