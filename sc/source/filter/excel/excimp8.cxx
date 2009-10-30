@@ -56,7 +56,7 @@
 #include <svx/crsditem.hxx>
 #include <svx/flditem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>

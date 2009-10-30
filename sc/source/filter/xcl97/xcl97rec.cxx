@@ -63,7 +63,7 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/eeitem.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

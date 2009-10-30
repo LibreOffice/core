@@ -55,7 +55,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/unomid.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 #include "global.hxx"
 #include "xlconst.hxx"

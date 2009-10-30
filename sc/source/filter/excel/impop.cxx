@@ -33,7 +33,7 @@
 
 #include "imp_op.hxx"
 
-#include <svx/countryid.hxx>
+#include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -731,12 +731,12 @@ void ImportExcel::Country( void )
     maStrm >> nUICountry >> nDocCountry;
 
     // Store system language in XclRoot
-    LanguageType eLanguage = ::svx::ConvertCountryToLanguage( static_cast< ::svx::CountryId >( nDocCountry ) );
+    LanguageType eLanguage = ::msfilter::ConvertCountryToLanguage( static_cast< ::msfilter::CountryId >( nDocCountry ) );
     if( eLanguage != LANGUAGE_DONTKNOW )
         SetDocLanguage( eLanguage );
 
     // Set Excel UI language in add-in name translator
-    eLanguage = ::svx::ConvertCountryToLanguage( static_cast< ::svx::CountryId >( nUICountry ) );
+    eLanguage = ::msfilter::ConvertCountryToLanguage( static_cast< ::msfilter::CountryId >( nUICountry ) );
     if( eLanguage != LANGUAGE_DONTKNOW )
         SetUILanguage( eLanguage );
 }

@@ -189,7 +189,7 @@ SHL6STDLIBS= \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXCORELIB)		\
-    $(SVXMSFILTERLIB)		\
+    $(MSFILTERLIB)		\
     $(SVXLIB)		\
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \

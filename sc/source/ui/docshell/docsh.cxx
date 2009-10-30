@@ -63,7 +63,6 @@
 #include <sfx2/topfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/srchitem.hxx>
-#include <svx/svxmsbas.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>

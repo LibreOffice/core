@@ -38,7 +38,7 @@
 #include "excrecds.hxx"
 
 #include <map>
-#include <svx/countryid.hxx>
+#include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -456,7 +456,7 @@ XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     /*  #i31530# set document country as UI country too -
         needed for correct behaviour of number formats. */
     mnUICountry = mnDocCountry = static_cast< sal_uInt16 >(
-        ::svx::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
+        ::msfilter::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
 }
 
 void XclExpCountry::WriteBody( XclExpStream& rStrm )

@@ -39,7 +39,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 
 #include "scerrors.hxx"
 #include "scextopt.hxx"
