@@ -112,7 +112,16 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
 #ifdef OWN_DEBUG_PRINT
             MessageBoxA(NULL, pActiveXPath, "Library Path", MB_OK | MB_ICONINFORMATION);
 #endif
-            ( *pNativeProc )( nMode, InstallForAllUser, InstallFor64Bit, pActiveXPath );
+            int nLen = strlen( pActiveXPath );
+            int nRemoveLen = strlen( "\\so_activex.dll" );
+            if ( nLen > nRemoveLen )
+            {
+                char* pProgramPath = reinterpret_cast<char*>( malloc( nLen - nRemoveLen + 1 ) );
+                strncpy( pProgramPath, pActiveXPath, nLen - nRemoveLen );
+                pProgramPath[ nLen - nRemoveLen ] = 0;
+
+                ( *pNativeProc )( nMode, InstallForAllUser, InstallFor64Bit, pProgramPath );
+            }
         }
 
         FreeLibrary( hModule );
