@@ -232,17 +232,19 @@ dim sPagesToPrint as STRING
             end if
         end if
         printlog "Check if print dialog exists"
-        Kontext "DruckenDlg"
-        if DruckenDlg.Exists(2) then
-            Seiten.check
+        Kontext "Printing"
+        if Printing.Exists(2) then
+            Kontext "TabPrintGeneral"
+            PrintPages.check
             printlog "Check for string '1-12' in pages textbox"
-            sPagesToPrint = SeitenText.getText
+            sPagesToPrint = PageRange.getText
             if sPagesToPrint = "1-12" then
                 printlog "    OK, expected number of pages for output"
             else
                 warnlog "Unexpected number of pages for print output: " & sPagesToPrint & " -> Check this out!"
             end if
-            DruckenDlg.Cancel
+            Kontext "Printing"
+            Printing.Cancel
         else
             qaErrorlog "OOPS, are you sure that a printer is configured at all?"
         end if

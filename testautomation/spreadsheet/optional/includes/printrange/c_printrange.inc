@@ -266,14 +266,16 @@ testcase tAddPrintRange
      Active.ok
     end if
     
-    Kontext "DruckenDlg"
-   	Seiten.check
-    if SeitenText.GetText = "1-3" then
+    Kontext "Printing"
+    Kontext "TabPrintGeneral"
+    PrintPages.check
+    if PageRange.GetText = "1-3" then
    	   printlog "+ Pages to print as expected"
     else
-   	   warnlog "Expected pages to print are <1-3>, but we got: " & SeitenText.GetText
+   	   warnlog "Expected pages to print are <1-3>, but we got: " & PageRange.GetText
     end if
-   	DruckenDlg.Cancel
+    	Kontext "Printing"
+   	Printing.Cancel
     sleep(2)
     call hCloseDocument
 endcase
@@ -870,9 +872,9 @@ testcase tEmptyRangeMessagebox
         goto endsub
     end if
     
-    Kontext "DruckenDlg"
-    if DruckenDlg.Exists( 2 ) then
-    	DruckenDlg.Cancel
+    Kontext "Printing"
+    if Printing.Exists( 2 ) then
+    	Printing.Cancel
     end if
     sleep 2
 
@@ -916,9 +918,9 @@ testcase tEmptyRangeMessagebox
         goto endsub
     end if
 
-	kontext "DruckenDlg"
-	if DruckenDlg.Exists( 2 ) then
-		DruckenDlg.Cancel
+    kontext "Printing"
+    if Printing.Exists( 2 ) then
+    	Printing.Cancel
     end if    
     printlog "Close document"
     call hCloseDocument
