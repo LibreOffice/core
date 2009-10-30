@@ -270,8 +270,6 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >                  m_xExternalDisplayedForm;       // the form which the external view is based on
 
-    FmXDispatchInterceptorImpl*     m_pExternalViewInterceptor;
-
     mutable ::svxform::DocumentType
                     m_eDocumentType;        /// the type of document we're living in
     sal_Int16       m_nLockSlotInvalidation;

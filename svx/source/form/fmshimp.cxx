@@ -43,7 +43,6 @@
 #include "fmundo.hxx"
 #include "fmurl.hxx"
 #include "fmvwimp.hxx"
-#include "formcontrolling.hxx"
 #include "formtoolbars.hxx"
 #include "gridcols.hxx"
 #include "svditer.hxx"
@@ -502,7 +501,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         ,m_pTextShell( new ::svx::FmTextControlShell( _pViewFrame ) )
         ,m_aActiveControllerFeatures( ::comphelper::getProcessServiceFactory(), this )
         ,m_aNavControllerFeatures( ::comphelper::getProcessServiceFactory(), this )
-        ,m_pExternalViewInterceptor( NULL )
         ,m_eDocumentType( eUnknownDocumentType )
         ,m_nLockSlotInvalidation( 0 )
         ,m_bHadPropertyBrowserInDesignMode( sal_False )
@@ -796,14 +794,6 @@ void FmXFormShell::disposing()
         // got a chance to commit or reject any changes. So in case we're here and there
         // are still uncommitted changes, the user explicitly wanted this.
         // 2002-11-11 - 104702 - fs@openoffice.org
-
-    // dispose our interceptor helpers
-    if (m_pExternalViewInterceptor)
-    {
-        m_pExternalViewInterceptor->dispose();
-        m_pExternalViewInterceptor->release();
-        m_pExternalViewInterceptor = NULL;
-    }
 
     m_pTextShell->dispose();
 
@@ -2941,7 +2931,7 @@ void FmXFormShell::startFiltering()
         {
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode(FILTER_MODE);
+                xModeSelector->setMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) ) );
         }
     }
 
@@ -3048,7 +3038,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
 
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode(DATA_MODE);
+                xModeSelector->setMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) ) );
         }
         if (bSave)  // execute the filter
         {
@@ -3564,28 +3554,8 @@ void FmXFormShell::CreateExternalView()
             xClear->dispatch(aClearURL, Sequence< PropertyValue>());
     }
 
-    // interception of slots of the external view
-    if (m_pExternalViewInterceptor)
-    {   // already intercepting ...
-        if (m_pExternalViewInterceptor->getIntercepted() != xExternalViewFrame)
-        {   // ... but another frame -> create a new interceptor
-            m_pExternalViewInterceptor->dispose();
-            m_pExternalViewInterceptor->release();
-            m_pExternalViewInterceptor = NULL;
-        }
-    }
-
-    if (!m_pExternalViewInterceptor)
-    {
-        Reference< ::com::sun::star::frame::XDispatchProviderInterception> xSupplier(xExternalViewFrame, UNO_QUERY);
-        ::rtl::OUString sInterceptorScheme = FMURL_FORMSLOTS_PREFIX;
-        sInterceptorScheme += ::rtl::OUString::createFromAscii("*");
-//      m_pExternalViewInterceptor = new FmXDispatchInterceptorImpl(xSupplier, this, 1, Sequence< ::rtl::OUString >(&sInterceptorScheme, 1));
-//      m_pExternalViewInterceptor->acquire();
-        // TODO: re-implement this in a easier way than before: We need an interceptor at the xSupplier, which
-        // forwards all queryDispatch requests to the FormController instance for which this "external view"
-        // was triggered
-    }
+    // TODO: We need an interceptor at the xSupplier, which forwards all queryDispatch requests to the FormController
+    // instance for which this "external view" was triggered
 
     // get the dispatch interface of the frame so we can communicate (interceptable) with the controller
     Reference< ::com::sun::star::frame::XDispatchProvider> xCommLink(xExternalViewFrame, UNO_QUERY);

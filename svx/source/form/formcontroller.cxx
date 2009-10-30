@@ -31,21 +31,16 @@
 #include "confirmdelete.hxx"
 #include "fmcontrolbordermanager.hxx"
 #include "fmcontrollayout.hxx"
-#include "fmctrler.hxx"
-#include "fmdispatch.hxx"
+#include "formcontroller.hxx"
+#include "formfeaturedispatcher.hxx"
 #include "fmdocumentclassification.hxx"
+#include "formcontrolling.hxx"
 #include "fmprop.hrc"
+#include "svx/dialmgr.hxx"
 #include "fmresids.hrc"
 #include "fmservs.hxx"
-#include "fmshimp.hxx"
-#include "fmtools.hxx"
 #include "fmurl.hxx"
-#include "svx/dialmgr.hxx"
-#include "svx/fmshell.hxx"
-#include "svx/fmview.hxx"
-#include "svx/sdrpagewindow.hxx"
-#include "svx/svdpagv.hxx"
-#include "trace.hxx"
+#include "fmtools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/FocusChangeReason.hpp>
@@ -69,6 +64,13 @@
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/form/runtime/FormOperations.hpp>
+#include <com/sun/star/form/runtime/FormFeature.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XColumn.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/enumhelper.hxx>
@@ -81,9 +83,6 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
@@ -91,6 +90,7 @@
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
@@ -121,7 +121,6 @@ namespace svxform
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::sdbcx::XColumnsSupplier;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::XInterface;
@@ -167,7 +166,6 @@ namespace svxform
     using ::com::sun::star::form::validation::XValidatableFormComponent;
     using ::com::sun::star::form::XLoadable;
     using ::com::sun::star::script::XEventAttacherManager;
-    using ::com::sun::star::container::XContainer;
     using ::com::sun::star::form::XBoundControl;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::awt::TextEvent;
@@ -202,11 +200,14 @@ namespace svxform
     using ::com::sun::star::frame::FeatureStateEvent;
     using ::com::sun::star::form::runtime::XFormControllerContext;
     using ::com::sun::star::task::XInteractionHandler;
+    using ::com::sun::star::form::runtime::FormOperations;
+    using ::com::sun::star::container::XContainer;
     /** === end UNO using === **/
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace FocusChangeReason = ::com::sun::star::awt::FocusChangeReason;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
+    namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
 //==============================================================================
 // ColumnInfo
@@ -528,7 +529,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
 IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisParam*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    for ( ::std::set< sal_Int32 >::const_iterator aLoop = m_aInvalidFeatures.begin();
+    for ( ::std::set< sal_Int16 >::const_iterator aLoop = m_aInvalidFeatures.begin();
           aLoop != m_aInvalidFeatures.end();
           ++aLoop
         )
@@ -551,8 +552,8 @@ DBG_NAME( FormController )
 FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB )
                   :FormController_BASE( m_aMutex )
                   ,OPropertySetHelper( FormController_BASE::rBHelper )
-                  ,OSQLParserClient(_rxORB)
-                  ,m_xORB(_rxORB)
+                  ,OSQLParserClient( _rxORB )
+                  ,m_aContext( _rxORB )
                   ,m_aActivateListeners(m_aMutex)
                   ,m_aModifyListeners(m_aMutex)
                   ,m_aErrorListeners(m_aMutex)
@@ -561,8 +562,8 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
                   ,m_aParameterListeners(m_aMutex)
                   ,m_aFilterListeners(m_aMutex)
                   ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
-                  ,m_aControllerFeatures( _rxORB, this )
-                  ,m_aMode( DATA_MODE )
+                  ,m_xFormOperations()
+                  ,m_aMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) ) )
                   ,m_aLoadEvent( LINK( this, FormController, OnLoad ) )
                   ,m_aToggleEvent( LINK( this, FormController, OnToggleAutoFields ) )
                   ,m_aActivationEvent( LINK( this, FormController, OnActivated ) )
@@ -589,7 +590,7 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
     {
         {
             m_xAggregate = Reference< XAggregation >(
-                m_xORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.TabController" ) ),
+                m_aContext.createComponent( "com.sun.star.awt.TabController" ),
                 UNO_QUERY
             );
             DBG_ASSERT( m_xAggregate.is(), "FormController::FormController : could not create my aggregate !" );
@@ -627,6 +628,10 @@ FormController::~FormController()
         m_aFeatureInvalidationTimer.Stop();
 
     disposeAllFeaturesAndDispatchers();
+
+    if ( m_xFormOperations.is() )
+        m_xFormOperations->dispose();
+    m_xFormOperations.clear();
 
     // Freigeben der Aggregation
     if ( m_xAggregate.is() )
@@ -831,9 +836,8 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
             if (xConnection.is())
             {
                 Reference< XDatabaseMetaData> xMetaData(xConnection->getMetaData());
-                Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
-                Reference< XNumberFormatter> xFormatter(m_xORB
-                                ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+                Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats( xConnection, sal_True ) );
+                Reference< XNumberFormatter> xFormatter( m_aContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY_THROW );
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
                 Reference< XColumnsSupplier> xSupplyCols(m_xModelAsIndex, UNO_QUERY);
@@ -890,7 +894,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
         break;
 
         case FM_ATTR_FORM_OPERATIONS:
-            rValue <<= m_aControllerFeatures->getFormOperations();
+            rValue <<= m_xFormOperations;
             break;
     }
 }
@@ -1185,7 +1189,6 @@ void FormController::disposeAllFeaturesAndDispatchers() SAL_THROW(())
         }
     }
     m_aFeatureDispatchers.clear();
-    m_aControllerFeatures.dispose();
 }
 
 //-----------------------------------------------------------------------------
@@ -1243,6 +1246,10 @@ void FormController::disposing(void)
 
     disposeAllFeaturesAndDispatchers();
 
+    if ( m_xFormOperations.is() )
+        m_xFormOperations->dispose();
+    m_xFormOperations.clear();
+
     if (m_bDBConnection)
         unload();
 
@@ -1252,7 +1259,6 @@ void FormController::disposing(void)
 
     ::comphelper::disposeComponent( m_xComposer );
 
-    m_xORB              = NULL;
     m_bDBConnection = sal_False;
 }
 
@@ -1462,7 +1468,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                     {
                         ::rtl::OUString sServiceName;
                         OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
-                        Reference< XControl > xNewControl( m_xORB->createInstance( sServiceName ), UNO_QUERY );
+                        Reference< XControl > xNewControl( m_aContext.createComponent( sServiceName ), UNO_QUERY );
                         replaceControl( xControl, xNewControl );
                     }
                 }
@@ -1656,8 +1662,6 @@ sal_Bool FormController::determineLockState() const
 //------------------------------------------------------------------------------
 void FormController::focusGained(const FocusEvent& e) throw( RuntimeException )
 {
-    TRACE_RANGE( "FormController::focusGained" );
-
     // SYNCHRONIZED -->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -1725,22 +1729,33 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException )
 
         if (!m_bFiltering && m_bCycle && (e.FocusFlags & FocusChangeReason::AROUND) && m_xCurrentControl.is())
         {
-            if ( e.FocusFlags & FocusChangeReason::FORWARD )
+            SQLErrorEvent aErrorEvent;
+            OSL_ENSURE( m_xFormOperations.is(), "FormController::focusGained: hmm?" );
+                // should have been created in setModel
+            try
             {
-                if ( m_aControllerFeatures->isEnabled( SID_FM_RECORD_NEXT ) )
-                    m_aControllerFeatures->moveRight();
+                if ( e.FocusFlags & FocusChangeReason::FORWARD )
+                {
+                    if ( m_xFormOperations.is() && m_xFormOperations->isEnabled( FormFeature::MoveToNext ) )
+                        m_xFormOperations->execute( FormFeature::MoveToNext );
+                }
+                else // backward
+                {
+                    if ( m_xFormOperations.is() && m_xFormOperations->isEnabled( FormFeature::MoveToPrevious ) )
+                        m_xFormOperations->execute( FormFeature::MoveToPrevious );
+                }
             }
-            else // backward
+            catch ( const Exception& )
             {
-                if ( m_aControllerFeatures->isEnabled( SID_FM_RECORD_PREV ) )
-                    m_aControllerFeatures->moveLeft();
+                // don't handle this any further. That's an ... admissible error.
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
 
     // Immer noch ein und dasselbe Control
-    if  (   (m_xActiveControl.get() == xControl.get())
-        &&  (xControl.get() == m_xCurrentControl.get())
+    if  (   ( m_xActiveControl == xControl )
+        &&  ( xControl == m_xCurrentControl )
         )
     {
         DBG_ASSERT(m_xCurrentControl.is(), "Kein CurrentControl selektiert");
@@ -1885,9 +1900,14 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model) th
             Reference< XDatabaseParameterBroadcaster >  xParamBroadcaster(m_xModelAsIndex, UNO_QUERY);
             if (xParamBroadcaster.is())
                 xParamBroadcaster->removeParameterListener(this);
+
         }
 
         disposeAllFeaturesAndDispatchers();
+
+        if ( m_xFormOperations.is() )
+            m_xFormOperations->dispose();
+        m_xFormOperations.clear();
 
         // set the new model wait for the load event
         if (m_xTabController.is())
@@ -1904,7 +1924,9 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model) th
 
         if (m_xModelAsIndex.is())
         {
-            m_aControllerFeatures.assign( this );
+            // re-create m_xFormOperations
+            m_xFormOperations.set( FormOperations::createWithFormController( m_aContext.getUNOContext(), this ), UNO_SET_THROW );
+            m_xFormOperations->setFeatureInvalidation( this );
 
             // adding load and ui interaction listeners
             Reference< XLoadable >  xForm(Model, UNO_QUERY);
@@ -2971,7 +2993,7 @@ Reference< XFormOperations > SAL_CALL FormController::getFormOperations() throw 
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    return m_aControllerFeatures->getFormOperations();
+    return m_xFormOperations;
 }
 
 //------------------------------------------------------------------------------
@@ -3125,11 +3147,10 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         // need to parse criteria localized
         OStaticDataAccessTools aStaticTools;
         Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
-        Reference< XNumberFormatter> xFormatter(m_xORB
-                        ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+        Reference< XNumberFormatter> xFormatter( m_aContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY );
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILocale();
-        LocaleDataWrapper aLocaleWrapper(m_xORB,aAppLocale);
+        LocaleDataWrapper aLocaleWrapper( m_aContext.getLegacyServiceFactory(), aAppLocale );
 
         // retrieving the filter
         const Sequence < PropertyValue >* pRow = aFilterRows.getConstArray();
@@ -3271,8 +3292,7 @@ void FormController::startFiltering()
     // the control we have to activate after replacement
     Reference< XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
     Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
-    Reference< XNumberFormatter >  xFormatter(m_xORB
-                        ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+    Reference< XNumberFormatter >  xFormatter( m_aContext.createComponent( "com.sun.star.util.NumberFormatter" ), UNO_QUERY );
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     // structure for storing the field info
@@ -3290,7 +3310,7 @@ void FormController::startFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode(FILTER_MODE);
+                xSelector->setMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) ) );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3350,10 +3370,7 @@ void FormController::startFiltering()
                     aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "NumberFormatter" ), makeAny( xFormatter ) );
                     aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "ControlModel" ), makeAny( xModel ) );
                     Reference< XControl > xFilterControl(
-                        m_xORB->createInstanceWithArguments(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.form.control.FilterControl" ),
-                            aCreationArgs
-                        ),
+                        m_aContext.createComponentWithArguments( "com.sun.star.form.control.FilterControl", aCreationArgs ),
                         UNO_QUERY
                     );
                     DBG_ASSERT( xFilterControl.is(), "FormController::startFiltering: could not create a filter control!" );
@@ -3423,7 +3440,7 @@ void FormController::stopFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode(DATA_MODE);
+                xSelector->setMode( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) ) );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3447,7 +3464,7 @@ void FormController::stopFiltering()
                 {
                     ::rtl::OUString sServiceName;
                     OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
-                    Reference< XControl > xNewControl( m_xORB->createInstance( sServiceName ), UNO_QUERY );
+                    Reference< XControl > xNewControl( m_aContext.createComponent( sServiceName ), UNO_QUERY );
                     replaceControl( xControl, xNewControl );
                 }
             }
@@ -3488,7 +3505,7 @@ void FormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExcept
 
     m_aMode = Mode;
 
-    if (Mode == FILTER_MODE)
+    if ( Mode.equalsAscii( "FilterMode" ) )
         startFiltering();
     else
         stopFiltering();
@@ -3522,8 +3539,8 @@ Sequence< ::rtl::OUString > SAL_CALL FormController::getSupportedModes(void) thr
     {
         aModes.realloc(2);
         ::rtl::OUString* pModes = aModes.getArray();
-        pModes[0] = DATA_MODE;
-        pModes[1] = FILTER_MODE;
+        pModes[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) );
+        pModes[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) );
     }
     return aModes;
 }
@@ -4035,12 +4052,12 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
 }
 
 //------------------------------------------------------------------------------
-void FormController::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures )
+void SAL_CALL FormController::invalidateFeatures( const Sequence< ::sal_Int16 >& _Features ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // for now, just copy the ids of the features, because ....
-    ::std::copy( _rFeatures.begin(), _rFeatures.end(),
-        ::std::insert_iterator< ::std::set< sal_Int32 > >( m_aInvalidFeatures, m_aInvalidFeatures.begin() )
+    ::std::copy( _Features.getConstArray(), _Features.getConstArray() + _Features.getLength(),
+        ::std::insert_iterator< ::std::set< sal_Int16 > >( m_aInvalidFeatures, m_aInvalidFeatures.begin() )
     );
 
     // ... we will do the real invalidation asynchronously
@@ -4049,8 +4066,26 @@ void FormController::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFea
 }
 
 //------------------------------------------------------------------------------
+void SAL_CALL FormController::invalidateAllFeatures(  ) throw (RuntimeException)
+{
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+    Sequence< sal_Int16 > aInterceptedFeatures( m_aFeatureDispatchers.size() );
+    ::std::transform(
+        m_aFeatureDispatchers.begin(),
+        m_aFeatureDispatchers.end(),
+        aInterceptedFeatures.getArray(),
+        ::std::select1st< DispatcherContainer::value_type >()
+    );
+
+    aGuard.clear();
+    if ( aInterceptedFeatures.getLength() )
+        invalidateFeatures( aInterceptedFeatures );
+}
+
+//------------------------------------------------------------------------------
 Reference< XDispatch >
-FormController::interceptedQueryDispatch(sal_uInt16 /*_nId*/, const URL& aURL,
+FormController::interceptedQueryDispatch( const URL& aURL,
                                             const ::rtl::OUString& /*aTargetFrameName*/, sal_Int32 /*nSearchFlags*/)
                                             throw( RuntimeException )
 {
@@ -4065,18 +4100,19 @@ FormController::interceptedQueryDispatch(sal_uInt16 /*_nId*/, const URL& aURL,
         xReturn = static_cast< XDispatch* >( this );
 
     // dispatches of FormSlot-URLs we have to translate
-    if ( !xReturn.is() && m_aControllerFeatures.isAssigned() )
+    if ( !xReturn.is() && m_xFormOperations.is() )
     {
         // find the slot id which corresponds to the URL
-        sal_Int32 nFeatureId = ::svx::FeatureSlotTranslation::getControllerFeatureSlotIdForURL( aURL.Main );
-        if ( nFeatureId > 0 )
+        sal_Int32 nFeatureSlotId = ::svx::FeatureSlotTranslation::getControllerFeatureSlotIdForURL( aURL.Main );
+        sal_Int16 nFormFeature = ( nFeatureSlotId != -1 ) ? ::svx::FeatureSlotTranslation::getFormFeatureForSlotId( nFeatureSlotId ) : -1;
+        if ( nFormFeature > 0 )
         {
             // get the dispatcher for this feature, create if necessary
-            DispatcherContainer::const_iterator aDispatcherPos = m_aFeatureDispatchers.find( nFeatureId );
+            DispatcherContainer::const_iterator aDispatcherPos = m_aFeatureDispatchers.find( nFormFeature );
             if ( aDispatcherPos == m_aFeatureDispatchers.end() )
             {
                 aDispatcherPos = m_aFeatureDispatchers.insert(
-                    DispatcherContainer::value_type( nFeatureId, new ::svx::OSingleFeatureDispatcher( aURL, nFeatureId, *m_aControllerFeatures, m_aMutex ) )
+                    DispatcherContainer::value_type( nFormFeature, new ::svx::OSingleFeatureDispatcher( aURL, nFormFeature, m_xFormOperations, m_aMutex ) )
                 ).first;
             }
 
@@ -4171,12 +4207,11 @@ Reference< XDispatchProviderInterceptor >  FormController::createInterceptor(con
     }
 #endif
 
-    ::rtl::OUString sInterceptorScheme(RTL_CONSTASCII_USTRINGPARAM("*"));
-    FmXDispatchInterceptorImpl* pInterceptor = new FmXDispatchInterceptorImpl(_xInterception, this, 0, Sequence< ::rtl::OUString >(&sInterceptorScheme, 1));
+    DispatchInterceptionMultiplexer* pInterceptor = new DispatchInterceptionMultiplexer( _xInterception, this );
     pInterceptor->acquire();
-    m_aControlDispatchInterceptors.insert(m_aControlDispatchInterceptors.end(), pInterceptor);
+    m_aControlDispatchInterceptors.insert( m_aControlDispatchInterceptors.end(), pInterceptor );
 
-    return (XDispatchProviderInterceptor*)pInterceptor;
+    return pInterceptor;
 }
 
 //------------------------------------------------------------------------------
@@ -4187,10 +4222,8 @@ bool FormController::ensureInteractionHandler()
     if ( m_bAttemptedHandlerCreation )
         return false;
     m_bAttemptedHandlerCreation = true;
-    if ( !m_xORB.is() )
-        return false;
 
-    m_xInteractionHandler.set( m_xORB->createInstance( SRV_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+    m_xInteractionHandler.set( m_aContext.createComponent( (::rtl::OUString)SRV_SDB_INTERACTION_HANDLER ), UNO_QUERY );
     OSL_ENSURE( m_xInteractionHandler.is(), "FormController::ensureInteractionHandler: could not create an interaction handler!" );
     return m_xInteractionHandler.is();
 }
@@ -4223,7 +4256,7 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
     }
 
     // log off the interception from it's interception object
-    FmXDispatchInterceptorImpl* pInterceptorImpl = *aIter;
+    DispatchInterceptionMultiplexer* pInterceptorImpl = *aIter;
     pInterceptorImpl->dispose();
     pInterceptorImpl->release();
 
@@ -4234,12 +4267,12 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
 //--------------------------------------------------------------------
 void FormController::implInvalidateCurrentControlDependentFeatures()
 {
-    ::std::vector< sal_Int32 > aCurrentControlDependentFeatures;
+    Sequence< sal_Int16 > aCurrentControlDependentFeatures(4);
 
-    aCurrentControlDependentFeatures.push_back( SID_FM_SORTUP );
-    aCurrentControlDependentFeatures.push_back( SID_FM_SORTDOWN );
-    aCurrentControlDependentFeatures.push_back( SID_FM_AUTOFILTER );
-    aCurrentControlDependentFeatures.push_back( SID_FM_REFRESH_FORM_CONTROL );
+    aCurrentControlDependentFeatures[0] = FormFeature::SortAscending;
+    aCurrentControlDependentFeatures[1] = FormFeature::SortDescending;
+    aCurrentControlDependentFeatures[2] = FormFeature::AutoFilter;
+    aCurrentControlDependentFeatures[3] = FormFeature::RefreshCurrentControl;
 
     invalidateFeatures( aCurrentControlDependentFeatures );
 }

@@ -27,30 +27,18 @@
 #ifndef _SVX_FMCTRLER_HXX
 #define _SVX_FMCTRLER_HXX
 
-#include "fmtools.hxx"
-#include "formcontrolling.hxx"
-#include "sqlparserclient.hxx"
 #include "delayedevent.hxx"
+#include "formdispatchinterceptor.hxx"
+#include "sqlparserclient.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XTabController.hpp>
-#include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/awt/XTextListener.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/container/ContainerEvent.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -90,6 +78,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/sqlparse.hxx>
@@ -97,9 +86,9 @@
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -124,7 +113,7 @@ namespace svxform
     class ControlBorderManager;
     struct FmFieldInfo;
 
-    typedef ::comphelper::WeakComponentImplHelper21 <   ::com::sun::star::form::runtime::XFormController
+    typedef ::comphelper::WeakComponentImplHelper22 <   ::com::sun::star::form::runtime::XFormController
                                                     ,   ::com::sun::star::form::runtime::XFilterController
                                                     ,   ::com::sun::star::awt::XFocusListener
                                                     ,   ::com::sun::star::form::XLoadListener
@@ -145,6 +134,7 @@ namespace svxform
                                                     ,   ::com::sun::star::form::validation::XFormComponentValidityListener
                                                     ,   ::com::sun::star::task::XInteractionHandler
                                                     ,   ::com::sun::star::form::XGridControlListener
+                                                    ,   ::com::sun::star::form::runtime::XFeatureInvalidation
                                                     >   FormController_BASE;
 
     //==================================================================
@@ -154,12 +144,11 @@ namespace svxform
     class SAL_DLLPRIVATE FormController :public ::comphelper::OBaseMutex
                                         ,public FormController_BASE
                                         ,public ::cppu::OPropertySetHelper
-                                        ,public FmDispatchInterceptor
+                                        ,public DispatchInterceptor
                                         ,public ::comphelper::OAggregationArrayUsageHelper< FormController >
                                         ,public ::svxform::OSQLParserClient
-                                        ,public ::svx::IControllerFeatureInvalidation
     {
-        typedef ::std::map  <   sal_Int32,
+        typedef ::std::map  <   sal_Int16,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
                             >   DispatcherContainer;
 
@@ -169,7 +158,7 @@ namespace svxform
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>        m_xModelAsIndex;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>  m_xModelAsManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xParent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+        ::comphelper::ComponentContext                                                      m_aContext;
         // Composer used for checking filter conditions
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >       m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >             m_xInteractionHandler;
@@ -195,9 +184,10 @@ namespace svxform
         ::svxform::ControlBorderManager*
                                     m_pControlBorderManager;
 
-        ::svx::ControllerFeatures   m_aControllerFeatures;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >
+                                    m_xFormOperations;
         DispatcherContainer         m_aFeatureDispatchers;
-        ::std::set< sal_Int32 >     m_aInvalidFeatures;     // for asynchronous feature invalidation
+        ::std::set< sal_Int16 >     m_aInvalidFeatures;     // for asynchronous feature invalidation
 
         ::rtl::OUString             m_aMode;
 
@@ -228,7 +218,7 @@ namespace svxform
 
         // as we want to intercept dispatches of _all_ controls we're responsible for, and an object implementing
         // the ::com::sun::star::frame::XDispatchProviderInterceptor interface can intercept only _one_ objects dispatches, we need a helper class
-        DECLARE_STL_VECTOR(FmXDispatchInterceptorImpl*, Interceptors);
+        DECLARE_STL_VECTOR(DispatchInterceptionMultiplexer*, Interceptors);
         Interceptors    m_aControlDispatchInterceptors;
 
     public:
@@ -426,7 +416,11 @@ namespace svxform
         virtual sal_Bool SAL_CALL approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL resetted(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
 
-    // method for registration
+        // XFeatureInvalidation
+        virtual void SAL_CALL invalidateFeatures( const ::com::sun::star::uno::Sequence< ::sal_Int16 >& Features ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL invalidateAllFeatures(  ) throw (::com::sun::star::uno::RuntimeException);
+
+// method for registration
         static  ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static(void);
 
         // comphelper::OPropertyArrayUsageHelper
@@ -436,22 +430,20 @@ namespace svxform
             ) const;
 
     protected:
-        // FmDispatchInterceptor
+        // DispatchInterceptor
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>
-        interceptedQueryDispatch(sal_uInt16 _nId,const ::com::sun::star::util::URL& aURL,
-                                const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags)
-                                throw( ::com::sun::star::uno::RuntimeException );
-
-        // IControllerFeatureInvalidation
-        virtual void invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures );
+            interceptedQueryDispatch(
+                    const ::com::sun::star::util::URL& aURL,
+                    const ::rtl::OUString& aTargetFrameName,
+                    sal_Int32 nSearchFlags
+                )   throw( ::com::sun::star::uno::RuntimeException );
 
         virtual ::osl::Mutex* getInterceptorMutex() { return &m_aMutex; }
 
         /// update all our dispatchers
         void    updateAllDispatchers() const;
 
-        /** disposes all dispatchers in m_aFeatureDispatchers, empties m_aFeatureDispatchers,
-            and disposes m_aControllerFeatures
+        /** disposes all dispatchers in m_aFeatureDispatchers, and empties m_aFeatureDispatchers
         */
         void    disposeAllFeaturesAndDispatchers() SAL_THROW(());
 

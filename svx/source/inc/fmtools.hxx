@@ -48,7 +48,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -93,8 +92,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/component.hxx>
 
 #include <svx/svxdllapi.h>
@@ -113,9 +110,6 @@ void displayException(const ::com::sun::star::sdbc::SQLWarning&, Window* _pParen
 SVX_DLLPUBLIC void displayException(const ::com::sun::star::sdb::SQLContext&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, Window* _pParent = NULL);
 void displayException(const ::com::sun::star::uno::Any&, Window* _pParent = NULL);
-
-#define DATA_MODE   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataMode" ) )
-#define FILTER_MODE rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterMode" ) )
 
 // Kopieren von Persistenten Objecten
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> cloneUsingProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>& _xObj);
@@ -258,107 +252,6 @@ public:
 
 //  ==================================================================
 
-//========================================================================
-//= dispatch interception helper classes
-//========================================================================
-
-//------------------------------------------------------------------------
-//- FmDispatchInterceptor
-//------------------------------------------------------------------------
-class FmDispatchInterceptor
-{
-public:
-    FmDispatchInterceptor() { }
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> interceptedQueryDispatch(sal_uInt16 _nId,
-        const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException ) = 0;
-
-    virtual ::osl::Mutex* getInterceptorMutex() = 0;
-};
-
-//------------------------------------------------------------------------
-//- FmXDispatchInterceptorImpl
-//------------------------------------------------------------------------
-typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::frame::XDispatchProviderInterceptor
-                                        ,   ::com::sun::star::lang::XEventListener
-                                        ,   ::com::sun::star::frame::XInterceptorInfo
-                                        >   FmXDispatchInterceptorImpl_BASE;
-
-class FmXDispatchInterceptorImpl : public FmXDispatchInterceptorImpl_BASE
-{
-    ::osl::Mutex                    m_aFallback;
-
-    // the component which's dispatches we're intercepting
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProviderInterception>
-                    m_xIntercepted;
-    sal_Bool        m_bListening;
-
-    // the real interceptor
-    FmDispatchInterceptor*          m_pMaster;
-
-    // chaining
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xSlaveDispatcher;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xMasterDispatcher;
-
-    // our id
-    sal_Int16                       m_nId;
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                                    m_aInterceptedURLSchemes;
-
-    virtual ~FmXDispatchInterceptorImpl();
-
-public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception> getIntercepted() const { return m_xIntercepted; }
-
-public:
-    FmXDispatchInterceptorImpl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept,
-        FmDispatchInterceptor* _pMaster,
-        sal_Int16 _nId,
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > _rInterceptedSchemes /// if not empty, this will be used for getInterceptedURLs
-    );
-
-    // StarOne
-    DECLARE_UNO3_DEFAULTS(FmXDispatchInterceptorImpl, FmXDispatchInterceptorImpl_BASE);
-    //  virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-    //  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-
-
-    // ::com::sun::star::frame::XDispatchProvider
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::frame::XDispatchProviderInterceptor
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewDispatchProvider ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSupplier ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::frame::XInterceptorInfo
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getInterceptedURLs(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
-
-    // OComponentHelper
-    virtual void SAL_CALL disposing();
-
-protected:
-    void ImplDetach();
-
-    ::osl::Mutex&       getAccessSafety()
-    {
-        if (m_pMaster && m_pMaster->getInterceptorMutex())
-            return *m_pMaster->getInterceptorMutex();
-        return m_aFallback;
-    }
-};
-
-//==================================================================
-// ...
-//==================================================================
 ::rtl::OUString     getServiceNameByControlType(sal_Int16 nType);
     // get a service name to create a model of the given type (OBJ_FM_...)
 sal_Int16       getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject);
