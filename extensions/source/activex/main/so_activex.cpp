@@ -16,7 +16,7 @@
 
 #include <comphelper\documentconstants.hxx>
 
-#define MY_DEBUG 1
+// #define MY_DEBUG 1
 
 CComModule _Module;
 
