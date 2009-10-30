@@ -249,6 +249,7 @@ bool LayoutManager::UIElement::operator< ( const LayoutManager::UIElement& aUIEl
 
 LayoutManager::UIElement& LayoutManager::UIElement::operator= ( const LayoutManager::UIElement& rUIElement )
 {
+    if (this == &rUIElement) { return *this; }
     m_aType             = rUIElement.m_aType;
     m_aName             = rUIElement.m_aName;
     m_aUIName           = rUIElement.m_aUIName;
