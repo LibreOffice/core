@@ -41,7 +41,6 @@
 ' #1 tiFileVersion (sFileIn as string)
 ' #1 tiFilePassword
 ' #1 tiFileTemplates
-' #1 tiFilePrint
 ' #1 tmFileNewFromTemplate
 ' #1 tmFileOpen
 ' #1 tmFileClose
@@ -468,30 +467,6 @@ testcase tiFileTemplates
         Warnlog "- There are problems with File-Template-Save"
     endcatch
     WaitSlot (1000)
-    Call hCloseDocument
-endcase
-
-testcase tiFilePrint
-    Call hNewDocument
-    FilePrint
-    WaitSlot (1000)
-    kontext
-    if active.exists(5) then
-        active.ok
-        qaerrorlog "There is no printer available - please install one on your system!"
-    end if
-    WaitSlot (2000)
-    Kontext "DruckenDlg"
-    Call DialogTest (DruckenDlg)
-    WaitSlot (2000)
-    Zusaetze.Click
-
-    Kontext "DruckerZusaetzeDraw"
-    Call DialogTest (DruckerZusaetzeDraw)
-    DruckerZusaetzeDraw.Cancel
-    Kontext "DruckenDlg"
-    DruckenDlg.Cancel
-    WaitSlot (2000)
     Call hCloseDocument
 endcase
 
