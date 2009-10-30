@@ -47,19 +47,25 @@ static const char *psymbol      = "GetVersionInfo";
 
 void usage()
 {
-    fprintf(stderr, "usage: %s <dllname>\n", pprog_name);
+    fprintf(stderr, "usage: %s [-s] <dllname>\n", pprog_name);
     return;
 }
 
 int main(int argc, char *argv[])
 {
     int     rc;
+    int     silent=0;
     void    *phandle;
     char    *(*pfun)(void);
 
-    if ( argc < 2 || argc > 3) {
+    if ( argc < 2 || argc > 4) {
         usage();
         return 1;
+    }
+
+    if ( !strcmp(argv[1],"-s") ) {
+        silent = 1;
+        ++argv, --argc;
     }
 
     if ( (rc = access( argv[1], R_OK )) == -1 ) {
@@ -68,12 +74,12 @@ int main(int argc, char *argv[])
         return 2;
     }
 
-    printf("Checking DLL %s ...", argv[1]);
+    if (!silent) printf("Checking DLL %s ...", argv[1]);
     fflush(stdout);
 
     if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL ) {
         if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL ) {
-            printf(": ok\n");
+            if (!silent) printf(": ok\n");
         }
         else
         {
