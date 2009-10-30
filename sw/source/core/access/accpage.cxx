@@ -129,8 +129,9 @@ void SwAccessiblePage::_InvalidateFocus()
 }
 
 SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
-                                    const SwFrm* pFrame ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
+                                    const SwFrm* pFrame )
+    : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
+    , bIsSelected( sal_False )
 {
     DBG_ASSERT( pFrame != NULL, "need frame" );
     DBG_ASSERT( pInitMap != NULL, "need map" );

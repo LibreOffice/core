@@ -101,6 +101,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
     pMulti = NULL;
 
     bOnceMore = sal_False;
+    bFlyInCntBase = sal_False;
     bChanges = sal_False;
     bTruncLines = sal_False;
     nCntEndHyph = 0;

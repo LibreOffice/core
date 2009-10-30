@@ -101,6 +101,11 @@ SwFrm::SwFrm( SwModify *pMod ) :
     pNext( 0 ),
     pPrev( 0 ),
     pDrawObjs( 0 )
+    , bInfBody( FALSE )
+    , bInfTab ( FALSE )
+    , bInfFly ( FALSE )
+    , bInfFtn ( FALSE )
+    , bInfSct ( FALSE )
 {
 #ifndef PRODUCT
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;

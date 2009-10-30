@@ -2739,12 +2739,14 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             rtl::OUString aHoriOrientPropStr( RTL_CONSTASCII_USTRINGPARAM("HoriOrient") );
             uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
             sal_Int16 eHoriOrient;
-            aHoriOrient >>= eHoriOrient;
-            if ( eHoriOrient != text::HoriOrientation::NONE )
+            if (aHoriOrient >>= eHoriOrient) // may be void
             {
-                eHoriOrient = text::HoriOrientation::NONE;
-                aHoriOrient <<= eHoriOrient;
-                setPropertyValue( aHoriOrientPropStr, aHoriOrient );
+                if ( eHoriOrient != text::HoriOrientation::NONE )
+                {
+                    eHoriOrient = text::HoriOrientation::NONE;
+                    aHoriOrient <<= eHoriOrient;
+                    setPropertyValue( aHoriOrientPropStr, aHoriOrient );
+                }
             }
             // set x-position attribute
             aHoriPos <<= _aPosition.X;
@@ -2767,12 +2769,14 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
             rtl::OUString aVertOrientPropStr( RTL_CONSTASCII_USTRINGPARAM("VertOrient") );
             uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
             sal_Int16 eVertOrient;
-            aVertOrient >>= eVertOrient;
-            if ( eVertOrient != text::VertOrientation::NONE )
+            if (aVertOrient >>= eVertOrient) // may be void
             {
-                eVertOrient = text::VertOrientation::NONE;
-                aVertOrient <<= eVertOrient;
-                setPropertyValue( aVertOrientPropStr, aVertOrient );
+                if ( eVertOrient != text::VertOrientation::NONE )
+                {
+                    eVertOrient = text::VertOrientation::NONE;
+                    aVertOrient <<= eVertOrient;
+                    setPropertyValue( aVertOrientPropStr, aVertOrient );
+                }
             }
             // set y-position attribute
             aVertPos <<= _aPosition.Y;

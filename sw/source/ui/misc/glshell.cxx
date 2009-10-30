@@ -154,10 +154,10 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
  --------------------------------------------------------------------*/
 
 
-SwGlosDocShell::SwGlosDocShell( sal_Bool bNewShow)
-    :
-    SwDocShell( bShow ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
-    ,bShow ( bNewShow )
+SwGlosDocShell::SwGlosDocShell(sal_Bool bNewShow)
+    : SwDocShell( (bNewShow)
+            ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
+    , bShow ( bNewShow )
 {
     SetHelpId(SW_GLOSDOCSHELL);
 }
