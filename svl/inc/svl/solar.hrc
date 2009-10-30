@@ -194,17 +194,11 @@
 #define HID_EXTENSIONS_START        (HID_LIB_START+1000)
 #define HID_EXTENSIONS_END          (HID_LIB_START+1099)
 
-#define HID_SO2_START               (HID_LIB_START+1100)
-#define HID_SO2_END                 (HID_LIB_START+1149)
+#define HID_CUI_START               (HID_LIB_START+1100)
+#define HID_CUI_END                 (HID_LIB_START+1699)
 
-#define HID_MAIL_START              (HID_LIB_START+1150)
-#define HID_MAIL_END                (HID_LIB_START+1199)
-
-#define HID_INET_START              (HID_LIB_START+1200)
-#define HID_INET_END                (HID_LIB_START+1259)
-
-#define HID_OFA_START               (HID_LIB_START+1260)
-#define HID_OFA_END                 (HID_LIB_START+1399)
+#define HID_OFA_START               (HID_LIB_START+1760)
+#define HID_OFA_END                 (HID_LIB_START+1999)
 
 #define HID_HELP_START              (HID_LIB_START+2000)
 #define HID_HELP_END                (HID_LIB_START+2050)
@@ -278,8 +272,8 @@
 #define HID_OBJ_START               (HID_START+30000)
 #define HID_OBJ_END                 (HID_START+32767)
 
-#define HID_SIM_START               (HID_OBJ_START+   0)
-#define HID_SIM_END                 (HID_OBJ_START+ 239)
+#define HID_CUI3_START              (HID_OBJ_START+   0)
+#define HID_CUI3_END                (HID_OBJ_START+ 239)
 
 #define HID_AVMEDIA_START           (HID_OBJ_START+ 240)
 #define HID_AVMEDIA_END             (HID_OBJ_START+ 255)
