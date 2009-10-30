@@ -42,6 +42,10 @@
 #include "galctrl.hxx"
 #include "AccessibleStringWrap.hxx"
 #include <svx/svxfont.hxx>
+#include "galobj.hxx"
+#include <avmedia/mediawindow.hxx>
+#include "gallery.hrc"
+#include <svx/impgrf.hxx>
 
 // -----------
 // - Defines -
@@ -80,6 +84,28 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
 
 GalleryPreview::~GalleryPreview()
 {
+}
+
+
+bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
+{
+    bool bRet = true;
+    Graphic aGraphic;
+    if( ::avmedia::MediaWindow::isMediaURL( _aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ) )
+    {
+        aGraphic = BitmapEx( GAL_RESID( RID_SVXBMP_GALLERY_MEDIA ) );
+    }
+    else
+    {
+        GraphicFilter*  pFilter = GetGrfFilter();
+        GalleryProgress aProgress( pFilter );
+        if( pFilter->ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
+            bRet = false;
+    }
+
+    SetGraphic( aGraphic );
+    Invalidate();
+    return bRet;
 }
 
 // ------------------------------------------------------------------------

@@ -39,6 +39,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfile.hxx>
 #include "gallery.hxx"
+#include "gallery.hrc"
 #include "galmisc.hxx"
 #include "galtheme.hxx"
 #include "gallery1.hxx"
@@ -919,3 +920,7 @@ void Gallery::ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener )
             ImplDeleteCachedTheme( pTheme );
     }
 }
+
+BOOL GalleryThemeEntry::IsDefault() const
+{ return( ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) ) ); }
+

@@ -59,7 +59,10 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-
+#include "galobj.hxx"
+#include <svx/gallery1.hxx>
+#include "galtheme.hrc"
+#include <vcl/lstbox.hxx>
 #include "gallerydrawmodel.hxx"
 
 // --------------
@@ -1574,3 +1577,26 @@ SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme )
 {
     return rTheme.ReadData( rIn );
 }
+
+void GalleryTheme::ImplSetModified( BOOL bModified )
+{ pThm->SetModified( bModified ); }
+
+const String& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
+const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL(); }
+const INetURLObject& GalleryTheme::GetSdgURL() const { return pThm->GetSdgURL(); }
+const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL(); }
+UINT32 GalleryTheme::GetId() const { return pThm->GetId(); }
+void GalleryTheme::SetId( UINT32 nNewId, BOOL bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
+BOOL GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
+BOOL GalleryTheme::IsImported() const { return pThm->IsImported(); }
+BOOL GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
+BOOL GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
+BOOL GalleryTheme::IsModified() const { return pThm->IsModified(); }
+const String& GalleryTheme::GetName() const { return IsImported() ? aImportName : pThm->GetThemeName(); }
+
+void GalleryTheme::InsertAllThemes( ListBox& rListBox )
+{
+    for( USHORT i = RID_GALLERYSTR_THEME_FIRST; i <= RID_GALLERYSTR_THEME_LAST; i++ )
+        rListBox.InsertEntry( String( GAL_RESID( i ) ) );
+}
+

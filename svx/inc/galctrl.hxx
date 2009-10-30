@@ -95,6 +95,7 @@ public:
                         ~GalleryPreview();
 
     void                SetGraphic( const Graphic& rGraphic ) { aGraphicObj.SetGraphic( rGraphic ); }
+    bool                SetGraphic( const INetURLObject& );
     void                PreviewMedia( const INetURLObject& rURL );
 };
 

@@ -361,6 +361,9 @@ class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory
 public:
     static SvxAbstractDialogFactory* Create();
 
+    // define dtor as this will create typeinfo in svx library
+    virtual                             ~SvxAbstractDialogFactory();
+
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             sal_uInt32 nResId,
@@ -382,8 +385,7 @@ public:
                                             HangulHanjaConversion::ConversionDirection _ePrimaryDirection,
                                             sal_uInt32 nResId) = 0;
 
-    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent,  //add for FmShowColsDialog
-                                             sal_uInt32 nResId) = 0 ;
+    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent ) = 0;
 
     virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( Window* pParent,  //add for SvxZoomDialog
                                             const SfxItemSet& rCoreSet,
@@ -394,23 +396,17 @@ public:
                                             svx::SpellDialogChildWindow* pSpellChildWindow )=0;
 
     virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( Window* pParent,  //add for ActualizeProgress
-                                            GalleryTheme* pThm,
-                                            sal_uInt32 nResId) = 0;
+                                            GalleryTheme* pThm ) = 0;
     virtual AbstractSearchProgress * CreateSearchProgressDialog( Window* pParent,  //add for SearchProgress
-                                            const INetURLObject& rStartURL,
-                                            sal_uInt32 nResId) = 0;
-    virtual AbstractTakeProgress * CreateTakeProgressDialog( Window* pParent,  //add for TakeProgress
-                                            sal_uInt32 nResId) = 0;
+                                            const INetURLObject& rStartURL ) = 0;
+    virtual AbstractTakeProgress * CreateTakeProgressDialog( Window* pParent ) = 0;
     virtual AbstractTitleDialog * CreateTitleDialog( Window* pParent,  //add for TitleDialog
-                                             const String& rOldText,
-                                            sal_uInt32 nResId) = 0;
+                                             const String& rOldText ) = 0;
     virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( Window* pParent,  //add for SvxZoomDialog
-                                            GalleryTheme* pThm,
-                                            sal_uInt32 nResId) = 0;
+                                            GalleryTheme* pThm ) = 0;
     virtual VclAbstractDialog2 * CreateGalleryThemePropertiesDialog( Window* pParent,  //add for GalleryThemeProperties
                                             ExchangeData* pData,
-                                            SfxItemSet* pItemSet,
-                                            sal_uInt32 nResId) = 0;
+                                            SfxItemSet* pItemSet ) = 0;
     virtual AbstractURLDlg * CreateURLDialog( Window* pParent,
                                             const String& rURL, const String& rAltText, const String& rDescription,
                                             const String& rTarget, const String& rName,
@@ -448,8 +444,7 @@ public:
                                                             const SfxItemSet& rOptionsSet, USHORT nUniqueId,
                                                             INT32 nInitialFlags,
                                                             sal_uInt32 nResId) = 0; //add for SvxJSearchOptionsDialog
-    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( Window* pParent,
-                                                            sal_uInt32 nResId) = 0; //add for FmInputRecordNoDialog
+    virtual AbstractFmInputRecordNoDialog * CreateFmInputRecordNoDialog( Window* pParent ) = 0;
     virtual AbstractSvxNewDictionaryDialog* CreateSvxNewDictionaryDialog( Window* pParent,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl,
                                             sal_uInt32 nResId ) = 0; //add for SvxNewDictionaryDialog

@@ -42,7 +42,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
-#include <EnhancedCustomShapeFunctionParser.hxx>
+#include <svx/EnhancedCustomShapeFunctionParser.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
@@ -52,6 +52,7 @@
 #define DFF_CUSTOMSHAPE_EXCH            4
 
 class SdrModel;
+class SdrObject;
 class SfxItemSet;
 struct SvxMSDffVertPair;
 struct SvxMSDffCalculationData;

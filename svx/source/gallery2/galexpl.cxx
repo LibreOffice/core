@@ -37,6 +37,7 @@
 #include "galtheme.hxx"
 #include "galbrws.hxx"
 #include "gallery.hxx"
+#include "galobj.hxx"
 
 // -----------
 // - Statics -

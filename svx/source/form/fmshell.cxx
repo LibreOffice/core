@@ -795,7 +795,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    ::std::auto_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL, RID_SVX_DLG_INPUTRECORDNO ) );
+                    ::std::auto_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
                     DBG_ASSERT( dlg.get(), "Dialogdiet fail!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )

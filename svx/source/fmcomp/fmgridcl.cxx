@@ -892,7 +892,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL, RID_SVX_DLG_SHOWGRIDCOLUMNS);
+                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL);
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();

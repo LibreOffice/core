@@ -39,6 +39,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 
+#include "fmprop.hrc"
 
 #include "fmundo.hxx"
 #include "fmhelp.hrc"

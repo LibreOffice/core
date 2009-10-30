@@ -22,12 +22,28 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\sdi\svxitems.sdi %_DEST%\inc%_EXT%\svx\svxitems.sdi
 ..\sdi\xoitems.sdi %_DEST%\inc%_EXT%\svx\xoitems.sdi
 
+..\source\inc\fmsrccfg.hxx %_DEST%\inc%_EXT%\svx\fmsrccfg.hxx
+..\source\inc\fmsrcimp.hxx %_DEST%\inc%_EXT%\svx\fmsrcimp.hxx
+..\source\inc\fmtools.hxx %_DEST%\inc%_EXT%\svx\fmtools.hxx
+..\inc\galtheme.hxx %_DEST%\inc%_EXT%\svx\galtheme.hxx
+..\inc\galmisc.hxx %_DEST%\inc%_EXT%\svx\galmisc.hxx
+..\inc\galctrl.hxx %_DEST%\inc%_EXT%\svx\galctrl.hxx
+..\inc\gallery1.hxx %_DEST%\inc%_EXT%\svx\gallery1.hxx
+
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
 ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
 ..\%__SRC%\inc\globlmn.hrc %_DEST%\inc%_EXT%\svx\globlmn.hrc
 ..\source\inc\fmresids.hrc %_DEST%\inc%_EXT%\svx\fmresids.hrc
 ..\source\items\boxobj.hxx %_DEST%\inc%_EXT%\svx\boxobj.hxx
 ..\source\dialog\hyprlink.hxx %_DEST%\inc%_EXT%\svx\hyprlink.hxx
+
+../source/customshapes/EnhancedCustomShapeTypeNames.hxx %_DEST%\inc%_EXT%\svx\EnhancedCustomShapeTypeNames.hxx
+../source/customshapes/EnhancedCustomShapeGeometry.hxx %_DEST%\inc%_EXT%\svx\EnhancedCustomShapeGeometry.hxx
+../inc/svx/EnhancedCustomShapeFunctionParser.hxx %_DEST%\inc%_EXT%\svx\EnhancedCustomShapeFunctionParser.hxx
+../source/customshapes/EnhancedCustomShape2d.hxx %_DEST%\inc%_EXT%\svx\EnhancedCustomShape2d.hxx
+../inc/xattr.hxx %_DEST%\inc%_EXT%\svx\xattr.hxx
+../inc/svdglob.hxx %_DEST%\inc%_EXT%\svx\svdglob.hxx
+../source/svdraw/svditext.hxx %_DEST%\inc%_EXT%\svx\svditext.hxx
 
 ..\inc\AccessibleSelectionBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleSelectionBase.hxx
 ..\inc\AccessibleStaticTextBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleStaticTextBase.hxx

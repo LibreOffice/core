@@ -79,7 +79,7 @@
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
-#include "fmprop.hrc"
+//#include "fmprop.hrc"
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>

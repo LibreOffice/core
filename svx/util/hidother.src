@@ -33,6 +33,7 @@
 #include "../inc/fmhelp.hrc"
 #include "../source/cui/svuidlg.hrc"
 
+hidspecial HID_GALLERY_PREVIEW              { HelpID = HID_GALLERY_PREVIEW; };
 hidspecial SID_GALLERY_IMPORTTHEME          { HelpID = SID_GALLERY_IMPORTTHEME; };
 hidspecial HID_GALLERY_NEW_THEME            { HelpID = HID_GALLERY_NEW_THEME; };
 hidspecial HID_GALLERY_WINDOW               { HelpID = HID_GALLERY_WINDOW; };

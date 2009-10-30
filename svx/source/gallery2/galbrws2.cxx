@@ -47,11 +47,14 @@
 #include "impgrf.hxx"
 #include <svx/brshitem.hxx>
 #include "helpid.hrc"
+#include "gallery.hxx"
+#include "galobj.hxx"
 #include "gallery1.hxx"
 #include "galtheme.hxx"
+#include "galctrl.hxx"
 #include "galmisc.hxx"
-#include "galdlg.hxx"
 #include "galbrws2.hxx"
+#include "gallery.hrc"
 #include <vcl/svapp.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
@@ -1014,7 +1017,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle, RID_SVXDLG_GALLERY_TITLE );
+                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle );
                         DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                         if( aDlg->Execute() == RET_OK )//CHINA001 if( aDlg.Execute() == RET_OK )
                         {

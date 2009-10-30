@@ -57,7 +57,6 @@ SRC1FILES =  \
         frmdirlbox.src \
         frmsel.src \
         hdft.src \
-        hyperdlg.src \
         hyphen.src \
         hyprlink.src \
         imapdlg.src \
@@ -129,7 +128,6 @@ LIB2OBJFILES= \
         $(SLO)$/passwd.obj \
         $(SLO)$/pfiledlg.obj \
         $(SLO)$/prtqry.obj \
-        $(SLO)$/radiobtnbox.obj \
         $(SLO)$/relfld.obj \
         $(SLO)$/rlrcitem.obj \
         $(SLO)$/rubydialog.obj \
@@ -166,12 +164,3 @@ SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 .INCLUDE :  target.mk
 
-$(INCCOM)$/cuilib.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    $(RM) $@
-    echo \#define DLL_NAME \"libcui$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE
-    echo $(EMQ)#define DLL_NAME $(EMQ)"cui$(DLLPOSTFIX)$(DLLPOST)$(EMQ)" >$@
-.ENDIF
-
-$(SLO)$/svxdlg.obj : $(INCCOM)$/cuilib.hxx

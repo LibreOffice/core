@@ -110,8 +110,8 @@ LIB6FILES=\
     $(SLB)$/properties.lib \
     $(SLB)$/svdraw-core.lib \
     $(SLB)$/svxlink.lib \
-    $(SLB)$/svxrtf-core.lib    \
-    $(SLB)$/svxrtf.lib
+    $(SLB)$/svxrtf-core.lib \
+    $(SLB)$/svxrtf.lib \
     $(SLB)$/table-core.lib \
     $(SLB)$/tbxctrls-core.lib  \
     $(SLB)$/toolbars.lib \
@@ -198,51 +198,9 @@ SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 DEFLIB2NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3 $(TARGET)_4
 
-# cui
-SHL3TARGET= cui$(DLLPOSTFIX)
-SHL3VERSIONMAP= cui.map
-SHL3IMPLIB=icui
-SHL3DEPN=$(SHL2TARGETN)
-
-SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
-DEF3NAME=	$(SHL3TARGET)
-
-SHL3LIBS=	$(SLB)$/cui.lib
-
-SHL3STDLIBS= \
-            $(SVXCORELIB) \
-            $(SVXLIB) \
-            $(AVMEDIALIB) \
-            $(SFX2LIB) \
-            $(GOODIESLIB) \
-            $(BASEGFXLIB) \
-            $(BASICLIB) \
-            $(LNGLIB) \
-            $(SVTOOLLIB) \
-            $(TKLIB) \
-            $(VCLLIB) \
-            $(SVLLIB) \
-            $(UNOTOOLSLIB) \
-            $(TOOLSLIB) \
-            $(I18NISOLANGLIB) \
-            $(COMPHELPERLIB) \
-            $(UCBHELPERLIB) \
-            $(CPPUHELPERLIB)        \
-            $(CPPULIB) \
-            $(VOSLIB) \
-            $(SALLIB) \
-            $(JVMFWKLIB) \
-            $(ICUUCLIB)
-
 .IF "$(debug)$(dbgutil)"!=""
 SHL2STDLIBS += $(CPPUHELPERLIB)
 .ENDIF # "$(debug)$(dbgutil)"!=""
-
-.IF "$(GUI)"=="WNT"
-SHL3STDLIBS+= \
-             $(SHLWAPILIB) \
-             $(ADVAPI32LIB)
-.ENDIF # WNT
 
 # ------------------------------------------------------------------------------
 
@@ -252,9 +210,7 @@ SRSFILELIST=\
         $(SRS)$/editeng.srs \
         $(SRS)$/outliner.srs \
         $(SRS)$/dialogs.srs \
-        $(SRS)$/cui.srs \
         $(SRS)$/drawdlgs.srs \
-        $(SRS)$/cuidrawdlgs.srs \
         $(SRS)$/mnuctrls.srs \
         $(SRS)$/stbctrls.srs \
         $(SRS)$/tbxctrls.srs \

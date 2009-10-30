@@ -37,12 +37,40 @@
 #include <svl/hint.hxx>
 #include <svtools/transfer.hxx>
 #include <svx/svdobj.hxx>
-#include "galobj.hxx"
 #include <com/sun/star/uno/Reference.h>
-#ifndef _COM_SUN_STAR_AWT_XPROGRESSMONITOR_HPP
 #include <com/sun/star/awt/XProgressMonitor.hpp>
-#endif
 #include "svx/svxdllapi.h"
+#include <tools/date.hxx>
+#include <tools/time.hxx>
+
+// ------------
+// - Forwards -
+// ------------
+
+class GalleryTheme;
+
+// ----------------
+// - ExchangeData -
+// ----------------
+
+struct ExchangeData
+{
+    GalleryTheme*   pTheme;
+    String          aEditedTitle;
+    Date            aThemeChangeDate;
+    Time            aThemeChangeTime;
+};
+
+enum SgaObjKind
+{
+    SGA_OBJ_NONE = 0,   // Abstraktes Objekt
+    SGA_OBJ_BMP = 1,    // Bitmap-Objekt
+    SGA_OBJ_SOUND = 2,  // Sound-Objekt
+    SGA_OBJ_VIDEO = 3,  // Video-Objekt
+    SGA_OBJ_ANIM = 4,   // Animations-Objekt
+    SGA_OBJ_SVDRAW = 5, // Svdraw-Objekt
+    SGA_OBJ_INET = 6    // Grafik aus dem Internet
+};
 
 // -----------
 // - Defines -

@@ -61,23 +61,8 @@
 #define HID_FM_PROPDLG_TAB_GENERAL              (HID_FORM_DLG_START +   6)
 #define HID_FM_PROPDLG_TAB_DATA                 (HID_FORM_DLG_START +   7)
 #define HID_FM_PROPDLG_TAB_EVT                  (HID_FORM_DLG_START +   8)
-#define HID_FM_DLG_SEARCH                       (HID_FORM_DLG_START +   9)
 
-#define HID_SEARCH_TEXT                         (HID_FORM_DLG_START +  10)
-#define HID_SEARCH_ALLFIELDS                    (HID_FORM_DLG_START +  11)
 #define HID_SEARCH_SINGLEFIELD                  (HID_FORM_DLG_START +  12)
-#define HID_SEARCH_FIELDSELECTION               (HID_FORM_DLG_START +  13)
-#define HID_SEARCH_POSITION                     (HID_FORM_DLG_START +  14)
-#define HID_SEARCH_FORMATTER                    (HID_FORM_DLG_START +  15)
-#define HID_SEARCH_CASE                         (HID_FORM_DLG_START +  16)
-#define HID_SEARCH_BACKWARD                     (HID_FORM_DLG_START +  17)
-#define HID_SEARCH_STARTOVER                    (HID_FORM_DLG_START +  18)
-#define HID_SEARCH_WILDCARD                     (HID_FORM_DLG_START +  19)
-#define HID_SEARCH_REGULAR                      (HID_FORM_DLG_START +  20)
-#define HID_SEARCH_APPROX                       (HID_FORM_DLG_START +  21)
-#define HID_SEARCH_APPROXSETTINGS               (HID_FORM_DLG_START +  22)
-#define HID_SEARCH_BTN_SEARCH                   (HID_FORM_DLG_START +  23)
-#define HID_SEARCH_BTN_CLOSE                    (HID_FORM_DLG_START +  24)
 
 #define HID_TABORDER_CONTROLS                   (HID_FORM_DLG_START +  25)
 
@@ -91,8 +76,6 @@
 #define HID_GRID_TRAVEL_NEW                     (HID_FORM_DLG_START +  32)
 #define HID_GRID_TRAVEL_ABSOLUTE                (HID_FORM_DLG_START +  33)
 #define HID_GRID_NUMBEROFRECORDS                (HID_FORM_DLG_START +  34)
-
-#define UID_SEARCH_RECORDSTATUS                 (HID_FORM_DLG_START +  35)
 
 #define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
 #define UID_ABSOLUTE_RECORD_WINDOW              (HID_FORM_DLG_START +  38)

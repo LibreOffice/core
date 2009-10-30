@@ -36,7 +36,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"
-#include "gallery.hrc"
+//#include "gallery.hrc"
 
 #include <cstdio>
 #include <list>
@@ -81,7 +81,7 @@ public:
 
     BOOL                    IsImported() const { return bImported; }
     BOOL                    IsReadOnly() const { return bReadOnly; }
-    BOOL                    IsDefault() const { return( ( nId > 0 ) && ( nId != ( RID_GALLERYSTR_THEME_MYTHEME - RID_GALLERYSTR_THEME_START ) ) ); }
+    BOOL                    IsDefault() const;
 
     BOOL                    IsHidden() const { return aName.SearchAscii( "private://gallery/hidden/" ) == 0; }
 

@@ -42,13 +42,17 @@
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
 #include <sot/storage.hxx>
-#include "galobj.hxx"
-#include "galmisc.hxx"
-#include "gallery1.hxx"
+#include <svx/svdmodel.hxx>
+//#include <svx/galobj.hxx>
+#include <svx/galmisc.hxx>
+//#include <svx/gallery1.hxx>
 
 // -----------------
 // - GalleryObject -
 // -----------------
+// --------------
+// - SgaObjKind -
+// --------------
 
 struct GalleryObject
 {
@@ -59,6 +63,11 @@ struct GalleryObject
 };
 
 DECLARE_LIST( GalleryObjectList, GalleryObject* )
+
+class GalleryThemeEntry;
+class SgaObject;
+class FmFormModel;
+class ListBox;
 
 // -----------------
 // - GalDragParams -
@@ -116,7 +125,7 @@ private:
     ULONG                       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const { return aObjectList.GetPos( pObj ); }
     INetURLObject               ImplGetURL( const GalleryObject* pObject ) const;
     INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFormat = CVT_UNKNOWN );
-    void                        ImplSetModified( BOOL bModified ) { pThm->SetModified( bModified ); }
+    void                        ImplSetModified( BOOL bModified );
     void                        ImplBroadcast( ULONG nUpdatePos );
 
                                 GalleryTheme();
@@ -136,20 +145,20 @@ public:
     SVX_DLLPUBLIC BOOL                      RemoveObject( ULONG nPos );
     BOOL                        ChangeObjectPos( ULONG nOldPos, ULONG nNewPos );
 
-    const String&               GetName() const { return IsImported() ? aImportName : pThm->GetThemeName(); }
-    const String&               GetRealName() const { return pThm->GetThemeName(); }
+    SVX_DLLPUBLIC const String& GetName() const;
+    const String&               GetRealName() const;
     const String&               GetImportName() const { return aImportName; }
     void                        SetImportName(const String& rImportName) { aImportName = rImportName; }
 
     const String&               GetDestDir() const { return m_aDestDir; }
     void                        SetDestDir(const String& rDestDir) { m_aDestDir = rDestDir; }
 
-    const INetURLObject&        GetThmURL() const { return pThm->GetThmURL(); }
-    const INetURLObject&        GetSdgURL() const { return pThm->GetSdgURL(); }
-    const INetURLObject&        GetSdvURL() const { return pThm->GetSdvURL(); }
+    const INetURLObject&        GetThmURL() const;
+    SVX_DLLPUBLIC const INetURLObject&      GetSdgURL() const;
+    const INetURLObject&        GetSdvURL() const;
 
-    UINT32                      GetId() const { return pThm->GetId(); }
-    void                        SetId( UINT32 nNewId, BOOL bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
+    SVX_DLLPUBLIC UINT32        GetId() const;
+    void                        SetId( UINT32 nNewId, BOOL bResetThemeName );
 
     void                        SetDragging( BOOL bSet ) { bDragging = bSet; }
     BOOL                        IsDragging() const { return bDragging; }
@@ -164,12 +173,12 @@ public:
     void                        SetDragPos( ULONG nPos ) { nDragPos = nPos; }
     ULONG                       GetDragPos() const { return nDragPos; }
 
-    BOOL                        IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
+    BOOL                        IsThemeNameFromResource() const;
 
-    BOOL                        IsImported() const { return pThm->IsImported(); }
-    BOOL                        IsReadOnly() const { return pThm->IsReadOnly(); }
-    BOOL                        IsDefault() const { return pThm->IsDefault(); }
-    BOOL                        IsModified() const { return pThm->IsModified(); }
+    SVX_DLLPUBLIC BOOL          IsImported() const;
+    SVX_DLLPUBLIC BOOL          IsReadOnly() const;
+    SVX_DLLPUBLIC BOOL          IsDefault() const;
+    BOOL                        IsModified() const;
 
     SVX_DLLPUBLIC void                      Actualize( const Link& rActualizeLink, GalleryProgress* pProgress = NULL );
     void                        AbortActualize() { bAbortActualize = TRUE; }
@@ -216,6 +225,7 @@ public:
 
     SvStream&                   WriteData( SvStream& rOut ) const;
     SvStream&                   ReadData( SvStream& rIn );
+    static SVX_DLLPUBLIC void   InsertAllThemes( ListBox& rListBox );
 };
 
 SvStream& operator<<( SvStream& rOut, const GalleryTheme& rTheme );

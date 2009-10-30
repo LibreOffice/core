@@ -1,7 +1,0 @@
-CUI_1_0 {
-    global:
-    CreateDialogFactory;
-        GetSpecialCharsForEdit;
-    local:
-        *;
-};

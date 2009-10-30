@@ -38,15 +38,11 @@
 #include <svx/fmmodel.hxx>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
-#ifndef _SV_SVAPP_HXX_
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX_
 #include <vcl/graph.hxx>
-#endif
 #include <svl/itemprop.hxx>
 #include <svl/itempool.hxx>
-
+#include "galobj.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HDL_
 #include <com/sun/star/beans/PropertyState.hpp>

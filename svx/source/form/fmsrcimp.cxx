@@ -69,9 +69,6 @@
 #include "fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>
 
-#ifndef _FMSEARCH_HRC
-#include "fmsearch.hrc"
-#endif
 #include <comphelper/numbers.hxx>
 #include <unotools/syslocale.hxx>
 
