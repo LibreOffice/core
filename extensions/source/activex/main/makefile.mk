@@ -152,7 +152,7 @@ SHL1STDLIBS_X64+=\
 SHL1OBJS_X64=$(SLOFILES_X64)
 SHL1DEF_X64=$(TARGET).def
 
-.IF "$(debug)" != ""
+.IF "$(USE_STLP_DEBUG)" != ""
     SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atlsd.lib
 .ELSE
     SHL1STDLIBS_X64+= $(ATL_LIB)$/amd64$/atls.lib
@@ -175,4 +175,3 @@ $(MISC)$/envsettings.h : makefile.mk
 .ELSE			# "$(USE_SHELL)"!="4nt"
     echo #define MISC .\..\$(INPATH)\misc > $@
 .ENDIF			# "$(USE_SHELL)"!="4nt"
-
