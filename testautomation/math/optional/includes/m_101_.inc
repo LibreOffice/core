@@ -550,20 +550,25 @@ testcase tFilePrint
     '/// print file ///'
     try
         Fileprint
-        sleep 2
         kontext
         if active.exists(2) then
             active.ok
             qaerrorlog "There is no printer available - please install one on your system!"
-            sleep 2
-            Kontext "DruckenDlg"
-            DruckenDlg.cancel
+            Kontext "Printing"
+            if ( Printing.exists( 2 ) ) then
+                Printing.cancel
+            else
+                warnlog( "Printing dialog did not open" )
+            endif
         else
-            sleep 2
-            Kontext "DruckenDlg"
-            DruckenDlg.Ok
+            Kontext "Printing"
+            if ( Printing.exists( 2 ) ) then
+                Printing.ok
+            else
+                warnlog( "Printing dialog did not open" )
+            endif
         endif
-        sleep 2
+
         kontext
         if active.exists(2) then
             active.ok
