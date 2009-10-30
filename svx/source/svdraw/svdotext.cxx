@@ -1772,7 +1772,8 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // break up matrix
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;
-    double fRotate, fShearX;
+    double fRotate(0.0);
+    double fShearX(0.0);
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
