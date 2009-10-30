@@ -39,9 +39,6 @@
 
 testcase tUpdtCustomize( cApp as string )
 
-    warnlog( "#i106370# - Test disabled, cannot switch tabpage on Tools/Customize dialog" )
-    goto endsub
-
     printlog( "Tools/Customize dialog" )
     const CLOSE_METHOD = 1 ' 1 = Cancel button
 

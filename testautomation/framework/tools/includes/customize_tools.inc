@@ -114,9 +114,6 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
     '///+<li>Switch to one of the four available tabpages</li>
     '///<ol>
     kontext
-    active.setPage
-
-    kontext
     
     try
 
@@ -216,7 +213,7 @@ function hToolsCustomizeClose( iMode as integer  ) as boolean
     
     '///+<li>Verify that the dialog has indeed been closed</li>
     kontext "TabCustomizeEvents"
-    TabCustomize.notExists( 3 )
+    TabCustomizeEvents.notExists( 3 )
     if ( TabCustomizeEvents.exists() ) then
         brc = false
     endif

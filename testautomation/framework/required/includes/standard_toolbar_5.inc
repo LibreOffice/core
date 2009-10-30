@@ -33,72 +33,51 @@
 '*
 '* owner : joerg.skottke@sun.com
 '*
-'* short description : global update test (Standardbar)
+'* short description : Customize toolbar
 '*
 '\***************************************************************************
 
 
 testcase tStandardBar_5
     
-    '///<h1>Update test: Configure the Standard Bar via Tools/Customize</h1>
-    '///<ul>
+    printlog( "Customize toolbar" )
     
-    warnlog( "#i106370# - Test disabled, cannot switch tabpage on Tools/Customize dialog" )
-    goto endsub
-    
-    '///+<li>open a new document</li>
     hCreateDocument()
     
-    '///+<li>open context menu on Standardbar and select the 2'th item (Customize)</li>
-    printlog "Customize ..."
-
     kontext "standardbar"
     Standardbar.OpenContextmenu()
     waitslot
     hMenuselectNr( 2 )
     waitslot
     
-    '///+<li>Select all tabpages ( Menu, Keyboard, Toolbars, Events )</li>
-    '///<ol>
-    '///+<li>Menu</li>
     hToolsCustomizeSelectTab( "menu" )
     call dialogtest( TabCustomizeMenu )
 
-    '///+<li>Keyboard</li>
     hToolsCustomizeSelectTab( "keyboard" )
     call dialogtest( Tabtastatur )
     
-    '///+<li>Toolbars</li>
     hToolsCustomizeSelectTab( "toolbars" )
     call dialogtest( TabCustomizeToolbars )
     
-    '///+<li>Events</li>
     hToolsCustomizeSelectTab( "events" )
     call dialogtest( TabCustomizeEvents )
     
-    '///+<li>Click on 'OK' at Event-Tabpage</li>
     kontext "tabcustomizeevents"
     TabCustomizeEvents.OK()
-    '///</ol>
     
-    '///+<li>Open context menu on Standardbar and select the 2nd item (Customize Toolbar)</li>
     kontext "standardbar"
     Standardbar.OpenContextmenu()
     waitslot
     hMenuselectNr (2)
     waitslot
     
-    '///+<li>Close the Customize-Toolbars-Dialog with OK</li>
     kontext "tabcustomizetoolbars"
     TabCustomizeToolbars.OK()
     
-    '///+<li>Reset the StandardBar to defaults</li>
     printlog "Reset"
     hResetStandardBar()
     
-    '///+<li>close the document</li>
     hDestroyDocument()
-    '///</ul>
     
 endcase
 
