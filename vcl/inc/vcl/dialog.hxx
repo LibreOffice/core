@@ -65,6 +65,7 @@ private:
     SAL_DLLPRIVATE         Dialog (const Dialog &);
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &);
 
+    DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void* );
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
