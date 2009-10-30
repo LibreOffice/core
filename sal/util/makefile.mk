@@ -163,6 +163,12 @@ SHL1STDLIBS+=-lcrypt
 .ENDIF
 .ENDIF
 
+# #i105898# required for LD_PRELOAD libsalalloc_malloc.so
+#           if sal is linked with -Bsymbolic-functions
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
+SHL1LINKFLAGS+=-Wl,--dynamic-list=salalloc.list
+.ENDIF # .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
+
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 
 .IF "$(linkinc)" != ""
