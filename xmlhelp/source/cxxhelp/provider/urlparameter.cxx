@@ -1071,6 +1071,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         ugblData = &userData;
 
+        xmlInitParser();
         xmlRegisterInputCallbacks(zipMatch, zipOpen, zipRead, uriClose);
         xmlRegisterInputCallbacks(helpMatch, helpOpen, helpRead, uriClose);
         xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
