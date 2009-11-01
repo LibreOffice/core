@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -32,32 +32,30 @@
 MKFILENAME:=RULES.MK
 
 $(OBJ)/%.obj : %.cxx
-    @echo ------------------------------
     @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx
-.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
-.IF "$(noadjust)"==""
-    $(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
-.ENDIF          # "$(noadjust)"==""
-.ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""
-    $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
+    $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)/$*.o $(CFLAGSINCXX)$(PWD)/$*.cxx
+.IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
+.IF "$(noadjust)"==""   
+    $(COMMAND_ECHO)$(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
+.ENDIF          # "$(noadjust)"==""   
+.ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
+    @$(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
     @@-$(RM) $@
 .IF "$(COM)"=="GCC"
-    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx 
+    $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx 
 .ELSE
-    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx
+    $(COMMAND_ECHO)$(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)/$*.obj $(CFLAGSINCXX)$(PWD)/$*.cxx
 .ENDIF
 .ENDIF
 .IF "$(nodep)"==""
-    $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< ) > $(MISC)/o_$(@:f:s/.obj/.dpcc/)
+    $(COMMAND_ECHO)$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< ) > $(MISC)/o_$(@:f:s/.obj/.dpcc/)
     @noop $(assign DEPS_MADE+:=o_$(@:f:s/.obj/.dpcc/))
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : %.cpp
-    @echo ------------------------------
     @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -80,7 +78,6 @@ $(OBJ)/%.obj : %.cpp
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : %.cc
-    @echo ------------------------------
     @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -162,7 +159,6 @@ $(SLO)/precompiled_ex.% .PHONY:
 .ENDIF			# "$(ENABLE_PCH)"!=""
 
 $(SLO)/%.obj : %.cxx
-    @echo ------------------------------
     @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(ENABLE_PCH)"!="" # && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 # just a helper var
@@ -202,7 +198,6 @@ $(SLO)/%.obj : %.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : %.cpp
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
@@ -229,7 +224,6 @@ $(SLO)/%.obj : %.cpp
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.cxx
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
@@ -255,7 +249,6 @@ $(SLO)/%.obj : $(MISC)/%.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.cc
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
@@ -273,7 +266,6 @@ $(SLO)/%.obj : $(MISC)/%.cc
 .ENDIF
 
 $(OBJ)/%.obj : $(MISC)/%.cxx
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
@@ -299,7 +291,6 @@ $(OBJ)/%.obj : $(MISC)/%.cxx
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : %.c
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
 .IF "$(TEST)"!=""
@@ -318,7 +309,9 @@ $(OBJ)/%.obj : %.c
 .IF "$(COM)"=="GCC"
     $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)/$*.obj $*.c
 .ELSE
+  .IF "$(VERBOSE)" == "TRUE"
     -@echo Cflags: $(CFLAGS) $(INCLUDE)
+  .ENDIF
     $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)/$*.obj $*.c
 .ENDIF
 .ENDIF
@@ -328,7 +321,6 @@ $(OBJ)/%.obj : %.c
 .ENDIF			# "$(nodep)"==""
 
 $(OBJ)/%.obj : $(MISC)/%.c
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -351,7 +343,6 @@ $(OBJ)/%.obj : $(MISC)/%.c
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : $(MISC)/%.c
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -369,14 +360,12 @@ $(SLO)/%.obj : $(MISC)/%.c
 .ENDIF
 .ENDIF
 .IF "$(nodep)"==""
-    $(TYPE) $(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< ) 
     $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< ) > $(MISC)/s_$(@:f:s/.obj/.dpcc/)
 # avoid _version objects (see tg_shl.mk) - quite hacky...
     @noop $(!eq,$@,$(@:s/_version.obj/.obj/) $(NULL) $(assign DEPS_MADE+:=s_$(@:f:s/.obj/.dpcc/)))
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : %.c
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -400,7 +389,6 @@ $(SLO)/%.obj : %.c
 
 # Objective-C files
 $(OBJ)/%.obj : %.m
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TEST)"!=""
@@ -416,7 +404,6 @@ $(OBJ)/%.obj : %.m
 
 # Objective-C files
 $(OBJ)/%.obj : $(MISC)/%.m
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -428,7 +415,6 @@ $(OBJ)/%.obj : $(MISC)/%.m
 
 # Objective-C files
 $(SLO)/%.obj : $(MISC)/%.m
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -440,7 +426,6 @@ $(SLO)/%.obj : $(MISC)/%.m
 
 # Objective-C files
 $(SLO)/%.obj : %.m
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -457,7 +442,6 @@ not_existing/o_%.dpcc : %.c;@noop $(assign all_local_obj+:=$<)
 
 # Objective-C++ files
 $(OBJ)/%.obj : %.mm
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TEST)"!=""
@@ -477,7 +461,6 @@ $(OBJ)/%.obj : %.mm
 
 # Objective-C++ files
 $(OBJ)/%.obj : $(MISC)/%.mm
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -493,7 +476,6 @@ $(OBJ)/%.obj : $(MISC)/%.mm
 
 # Objective-C++ files
 $(SLO)/%.obj : $(MISC)/%.mm
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -509,7 +491,6 @@ $(SLO)/%.obj : $(MISC)/%.mm
 
 # Objective-C++ files
 $(SLO)/%.obj : %.mm
-    @echo ------------------------------
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
@@ -658,7 +639,6 @@ $(MISC)/%.dpj :
 .ENDIF			# "$(nodep)"==""
 
 $(SLO)/%.obj : %.asm
-       @echo ------------------------------
        @echo Making: $@
 .IF "$(COM)"=="GCC"
 .IF "$(ASM)"=="ml"
@@ -686,7 +666,6 @@ $(SLO)/%.obj : %.asm
 .ENDIF
 
 $(OBJ)/%.obj : %.asm
-       @echo ------------------------------
        @echo Making: $@
 .IF "$(COM)"=="GCC"
 .IF "$(ASM)"=="ml"
@@ -716,7 +695,6 @@ $(OUT)/ucrdoc/$(IDLPACKAGE)/%.urd : %.idl
 
 # generate hid files
 $(SRS)/%.hid : %.src
-    @echo ------------------------------
     @echo Making hid $@
     $(AUGMENT_LIBRARY_PATH) $(PERL) $(SOLARENV)/bin/mhids.pl $*.src $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
 
@@ -745,6 +723,7 @@ $(MISC)/%.sh : %.sh
 # merge targets
 .IF "$(WITH_LANG)"!=""
 $(COMMONMISC)/$(TARGET)/%.ulf : %.ulf
+    @echo "Making:   " $(@:f)
     -$(MKDIR) $(@:d)
     -$(RM) $@
     $(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all

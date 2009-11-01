@@ -376,7 +376,9 @@ verbose*=$(VERBOSE)
 .ENDIF
 
 .IF "$(verbose)"!=""
-VERBOSE*=$(verbose)
+# normalize: "false" (any upper/lower case) and "0" mean FALSE, everything else means TRUE
+VERBOSE_IS_FALSE:=$(or $(eq,"$(verbose:u)","FALSE" "false"  ) $(eq,"$(verbose)","0" "false"  ))
+VERBOSE!:=$(eq,"$(VERBOSE_IS_FALSE)","t" FALSE TRUE)
 .ENDIF
 
 .IF "$(SOLARLANG)" != ""
@@ -970,6 +972,19 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/rscdep
 .ELSE # "$(make_srs_deps)"!=""
 RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
 .ENDIF # "$(make_srs_deps)"!=""
+
+.IF "$(VERBOSE)" == "TRUE"
+    VERBOSITY=-verbose
+.ELSE
+    COMMAND_ECHO=@
+    .IF "$(VERBOSE)" == "FALSE"
+        VERBOSITY=-quiet
+        ZIP_VERBOSITY=-q
+        TRANSEX_VERBOSITY=-QQ
+        CFGEX_VERBOSITY=-QQ
+        ULFEX_VERBOSITY=-QQ
+    .ENDIF
+.ENDIF # "$(VERBOSE)" == "TRUE"
 
 #new
 RSCUPDVER=$(RSCREVISION)
