@@ -75,6 +75,24 @@ WindowsCustomAction gid_Customaction_Regactivexdll2
 	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "RemoveExistingProducts");
 End
 
+WindowsCustomAction gid_Customaction_Reg64dll1
+	Name = "Reg64dll";
+	Typ = "65";
+	Source = "reg64msi.dll";
+	Target = "InstallReg64";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed and VersionNT64", "end");
+End
+
+WindowsCustomAction gid_Customaction_Reg64dll2
+	Name = "Reg64dll";
+	Typ = "65";
+	Source = "reg64msi.dll";
+	Target = "DeinstallReg64";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Installed and VersionNT64", "end");
+End
+
 WindowsCustomAction gid_Customaction_Jfregcadll1
 	Name = "Jfregcadll1";
 	Typ = "65";
