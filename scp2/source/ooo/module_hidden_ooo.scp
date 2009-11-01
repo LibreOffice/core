@@ -410,8 +410,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Reg4allmsdoc,
 	gid_File_Lib_Qslnkmsi,
 	gid_File_Lib_Sdqsmsi,
-	gid_File_Lib_OOoFilt,
-	gid_File_Lib_OOoFiltProxy,
 	gid_File_Lib_Instooofiltmsi,
 	gid_File_Lib_Smplmail,
 	gid_File_Lib_Gconfebe,
