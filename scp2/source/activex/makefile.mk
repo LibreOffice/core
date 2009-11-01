@@ -41,6 +41,10 @@ TARGETTYPE=CUI
 
 .INCLUDE :	settings.mk
 
+.IF "$(BUILD_X64)"!=""
+SCPDEFS+=-DBUILD_X64
+.ENDIF
+
 SCP_PRODUCT_TYPE=osl
 
 .IF "$(GUI)"=="WNT"
