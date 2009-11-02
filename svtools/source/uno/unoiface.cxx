@@ -54,7 +54,6 @@
 
 #include <svtools/svtreebx.hxx>
 #include "treecontrolpeer.hxx"
-//#include "vclxgridcontrol.hxx"
 #include "svtxgridcontrol.hxx"
 #include <svtools/table/tablecontrol.hxx>
 
@@ -172,10 +171,6 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
     {
         if ( pParent )
         {
-            //::svt::table::TableControl* m_pTable = new ::svt::table::TableControl(pParent, nWinBits);
-            //UnoControlTableModel* pModel = new UnoControlTableModel();
-            //*ppNewComp = pModel;
-            //pWindow = m_pTable;
             pWindow = new ::svt::table::TableControl(pParent, nWinBits);
             *ppNewComp = new SVTXGridControl;
         }

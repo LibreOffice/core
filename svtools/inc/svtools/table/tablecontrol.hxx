@@ -59,7 +59,7 @@ namespace svt { namespace table
 
         The control supports the concept of a <em>current</em> (or <em>active</em>
         cell).
-        The control supports supports accessibility, this is encapsulated in IAccessibleTable
+        The control supports accessibility, this is encapsulated in IAccessibleTable
 
         // TODO: scrolling?
     */

@@ -107,6 +107,15 @@ namespace svt
                 return NULL;
             }
 
+            virtual table::IAccessibleTableControl*
+                createAccessibleTableControl(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& /*_rxParent*/,
+                    table::IAccessibleTable& /*_rTable*/
+                ) const
+            {
+                return NULL;
+            }
+
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                 createAccessibleIconChoiceCtrl(
                     SvtIconChoiceCtrl& /*_rIconCtrl*/,
